@@ -896,7 +896,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
 	                  The_GetSuffix ());
-	       Msg_WriteMsgAuthor (&UsrDat,true);
+	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
 	    HTM_TD_End ();
 
 	    /* Center status */
@@ -1343,7 +1343,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 /***** Center requester *****/
 	 HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
 		       The_GetSuffix ());
-	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
+	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
 	 HTM_TD_End ();
 
 	 /***** Center status *****/

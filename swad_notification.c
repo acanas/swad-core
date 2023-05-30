@@ -528,7 +528,7 @@ void Ntf_ShowMyNotifications (void)
 		  HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
 		                ClassAuthor,The_GetSuffix (),
 		                ClassBg,The_GetSuffix ());
-		     Msg_WriteMsgAuthor (&UsrDat,true);
+		     Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
 		  HTM_TD_End ();
 
 		  /* Write location */

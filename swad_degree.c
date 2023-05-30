@@ -481,7 +481,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	                  The_GetSuffix ());
-	       Msg_WriteMsgAuthor (&UsrDat,true);
+	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
 	    HTM_TD_End ();
 
 	    /* Degree status */
@@ -608,7 +608,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 	 /***** Degree requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 		       The_GetSuffix ());
-	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
+	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
 	 HTM_TD_End ();
 
 	 /***** Degree status *****/

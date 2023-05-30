@@ -6336,6 +6336,63 @@ unsigned Usr_GetTotalNumberOfUsers (void)
   }
 
 /*****************************************************************************/
+/******************** Write the author of a message/post/ ********************/
+/*****************************************************************************/
+// Input: UsrDat must hold user's data
+
+void Usr_WriteAuthor (struct Usr_Data *UsrDat,Cns_Enabled_t Enabled)
+  {
+   extern const char *Txt_Unknown_or_without_photo;
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
+     {
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC30x40",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
+     };
+   bool WriteAuthor;
+
+   /***** Write author name or don't write it? *****/
+   WriteAuthor = false;
+   if (Enabled == Cns_ENABLED)
+      if (UsrDat->UsrCod > 0)
+         WriteAuthor = true;
+
+   /***** Begin table and row *****/
+   HTM_TABLE_BeginPadding (2);
+      HTM_TR_Begin (NULL);
+
+	 /***** Begin first column with author's photo
+		(if author has a web page, put a link to it) *****/
+	 HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
+	    if (WriteAuthor)
+	       Pho_ShowUsrPhotoIfAllowed (UsrDat,
+					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	    else
+	       Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
+			    ClassPhoto[Gbl.Prefs.PhotoShape]);
+	 HTM_TD_End ();
+
+	 /***** Second column with user name (if author has a web page, put a link to it) *****/
+	 if (WriteAuthor)
+	   {
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
+		  Usr_WriteFirstNameBRSurnames (UsrDat);
+	       HTM_DIV_End ();
+	   }
+	 else
+	    HTM_TD_Begin ("class=\"LM\"");
+
+	 /***** End second column *****/
+	 HTM_TD_End ();
+
+      /***** End row and table *****/
+      HTM_TR_End ();
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
 /********************* Write the author of an assignment *********************/
 /*****************************************************************************/
 

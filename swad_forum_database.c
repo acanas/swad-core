@@ -969,11 +969,11 @@ void For_DB_InsertPstIntoDisabled (long PstCod)
 /*********************** Get if a forum post is disabled *********************/
 /*****************************************************************************/
 
-bool For_DB_GetIfPstIsDisabled (long PstCod)
+Cns_Enabled_t For_DB_GetIfPstIsEnabled (long PstCod)
   {
    /***** Trivial check: post code should be > 0 *****/
    if (PstCod <= 0)
-      return true;
+      return Cns_DISABLED;
 
    /***** Get if post is disabled from database *****/
    return
@@ -982,7 +982,8 @@ bool For_DB_GetIfPstIsDisabled (long PstCod)
 		   "(SELECT *"
 		     " FROM for_disabled"
 		    " WHERE PstCod=%ld)",
-		   PstCod);	// Post is enabled if it does not appear in table of disabled posts
+		   PstCod) ? Cns_DISABLED :
+			     Cns_ENABLED;	// Post is enabled if it does not appear in table of disabled posts
   }
 
 /*****************************************************************************/

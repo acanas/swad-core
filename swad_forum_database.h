@@ -98,7 +98,7 @@ void For_DB_RemoveExpiredClipboards (void);
 
 //--------------------------- Disabled posts ----------------------------------
 void For_DB_InsertPstIntoDisabled (long PstCod);
-bool For_DB_GetIfPstIsDisabled (long PstCod);
+Cns_Enabled_t For_DB_GetIfPstIsEnabled (long PstCod);
 void For_DB_RemovePstFromDisabled (long PstCod);
 void For_DB_RemoveDisabledPstsInThread (long ThrCod);
 

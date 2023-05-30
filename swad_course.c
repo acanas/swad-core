@@ -1251,7 +1251,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	                  The_GetSuffix ());
-	       Msg_WriteMsgAuthor (&UsrDat,true);
+	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
 	    HTM_TD_End ();
 
 	    /* Course status */
@@ -1371,7 +1371,7 @@ static void Crs_PutFormToCreateCourse (void)
 	 /***** Course requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 		       The_GetSuffix ());
-	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true);
+	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
 	 HTM_TD_End ();
 
 	 /***** Course status *****/

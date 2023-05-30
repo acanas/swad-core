@@ -2091,7 +2091,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	 Msg_WriteMsgAuthor (&UsrDat,true);
+	 Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
       HTM_TD_End ();
 
       /***** Subject *****/
@@ -2291,63 +2291,6 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
    /***** End cell *****/
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/************************ Write the author of a message **********************/
-/*****************************************************************************/
-// Input: UsrDat must hold user's data
-
-void Msg_WriteMsgAuthor (struct Usr_Data *UsrDat,bool Enabled)
-  {
-   extern const char *Txt_Unknown_or_without_photo;
-   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
-     {
-      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC30x40",
-      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
-      [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
-      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
-     };
-   bool WriteAuthor;
-
-   /***** Write author name or don't write it? *****/
-   WriteAuthor = false;
-   if (Enabled)
-      if (UsrDat->UsrCod > 0)
-         WriteAuthor = true;
-
-   /***** Begin table and row *****/
-   HTM_TABLE_BeginPadding (2);
-      HTM_TR_Begin (NULL);
-
-	 /***** Begin first column with author's photo
-		(if author has a web page, put a link to it) *****/
-	 HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
-	    if (WriteAuthor)
-	       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-	    else
-	       Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
-			    ClassPhoto[Gbl.Prefs.PhotoShape]);
-	 HTM_TD_End ();
-
-	 /***** Second column with user name (if author has a web page, put a link to it) *****/
-	 if (WriteAuthor)
-	   {
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
-		  Usr_WriteFirstNameBRSurnames (UsrDat);
-	       HTM_DIV_End ();
-	   }
-	 else
-	    HTM_TD_Begin ("class=\"LM\"");
-
-	 /***** End second column *****/
-	 HTM_TD_End ();
-
-      /***** End row and table *****/
-      HTM_TR_End ();
-   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

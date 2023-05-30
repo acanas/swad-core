@@ -146,7 +146,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
      {
       HTM_DIV_Begin ("class=\"CM\"");
 	 Pag_WriteLinksToPages (WhatPaginate,Pagination,Context,Cod,
-				true,NULL,"PAG_TXT",false);	// !!!!!!!!!!!!!!!!!!!!!!!!!!
+				Cns_ENABLED,NULL,"PAG_TXT",false);	// !!!!!!!!!!!!!!!!!!!!!!!!!!
       HTM_DIV_End ();
      }
   }
@@ -158,7 +158,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pag_Pagination *Pagination,
                             const void *Context,long Cod,
-                            bool FirstMsgEnabled,
+                            Cns_Enabled_t FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent)
   {
@@ -281,10 +281,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	   }
 	 else
 	    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-	 if (FirstMsgEnabled)
-	    HTM_Txt (Subject);
-	 else
-	    HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
+	 switch (FirstMsgEnabled)
+	   {
+	    case Cns_DISABLED:
+	       HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
+	       break;
+	    case Cns_ENABLED:
+	       HTM_Txt (Subject);
+	       break;
+	   }
 	 if (LinkToPagCurrent)
 	   {
 	    HTM_BUTTON_End ();
