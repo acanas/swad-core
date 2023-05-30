@@ -380,7 +380,7 @@ void Pho_SendPhotoUsr (void)
 void Pho_RecMyPhotoDetFaces (void)
   {
    /***** Receive my photo and detect faces on it *****/
-   if (!Pho_ReceivePhotoAndDetectFaces (true,&Gbl.Usrs.Me.UsrDat))
+   if (!Pho_ReceivePhotoAndDetectFaces (Usr_ME,&Gbl.Usrs.Me.UsrDat))
       Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);	// Request my photograph again
 
    /***** Show my record and other data *****/
@@ -402,7 +402,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       /***** Receive photo *****/
-      if (!Pho_ReceivePhotoAndDetectFaces (false,&Gbl.Usrs.Other.UsrDat))
+      if (!Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
          Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
 
       /***** Show another user's record card *****/
@@ -732,7 +732,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
      }
    NumFaces.Total = NumFaces.Green + NumFaces.Red;
 
-   /***** Begin alert to the user about the number of faces detected in the image*****/
+   /***** Begin alert to the user about the number of faces detected in the image *****/
    if (NumFaces.Total == 0)
       Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
    else if (NumFaces.Total == 1)
