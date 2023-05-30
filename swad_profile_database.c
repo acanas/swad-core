@@ -41,17 +41,22 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 void Prf_DB_CreateUsrFigures (long UsrCod,const struct Prf_UsrFigures *UsrFigures,
-                              bool CreatingMyOwnAccount)
+                              Usr_MeOrOther_t MeOrOther)
   {
    char SubQueryFirstClickTime[64];
 
-   if (CreatingMyOwnAccount)
-      // This is the first click
-      Str_Copy (SubQueryFirstClickTime,"NOW()",sizeof (SubQueryFirstClickTime) - 1);
-   else
-      snprintf (SubQueryFirstClickTime,sizeof (SubQueryFirstClickTime),
-                "FROM_UNIXTIME(%ld)",
-	        (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
+   switch (MeOrOther)
+     {
+      case Usr_ME:
+	 // This is the first click
+	 Str_Copy (SubQueryFirstClickTime,"NOW()",sizeof (SubQueryFirstClickTime) - 1);
+	 break;
+      case Usr_OTHER:
+	 snprintf (SubQueryFirstClickTime,sizeof (SubQueryFirstClickTime),
+		   "FROM_UNIXTIME(%ld)",
+		   (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
+	 break;
+     }
 
    DB_QueryINSERT ("can not create user's figures",
 		   "INSERT INTO usr_figures"

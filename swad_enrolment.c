@@ -1663,8 +1663,7 @@ static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
 
       /* User does not exist in database; list of IDs is initialized */
       UsrDat->IDs.List[0].Confirmed = true;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
-      Acc_CreateNewUsr (UsrDat,
-                        false);	// I am NOT creating my own account
+      Acc_CreateNewUsr (UsrDat,Usr_OTHER);
      }
 
    /***** Register user in current course in database *****/
@@ -2793,8 +2792,7 @@ void Enr_CreateNewUsr1 (void)
 
       /***** Create user *****/
       Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = true;	// User's ID will be stored as confirmed
-      Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,
-                        false);	// I am NOT creating my own account
+      Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,Usr_OTHER);
 
       /***** Register user in current course in database *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected

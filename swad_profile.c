@@ -1100,7 +1100,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
 /******************* Create user's figures for a new user ********************/
 /*****************************************************************************/
 
-void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
+void Prf_CreateNewUsrFigures (long UsrCod,Usr_MeOrOther_t MeOrOther)
   {
    struct Prf_UsrFigures UsrFigures;
 
@@ -1113,7 +1113,7 @@ void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
    UsrFigures.NumMessagesSent = 0;	// set number of messages sent to 0
 
    /***** Create user's figures *****/
-   Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,CreatingMyOwnAccount);
+   Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,MeOrOther);
   }
 
 /*****************************************************************************/

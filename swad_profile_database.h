@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 void Prf_DB_CreateUsrFigures (long UsrCod,const struct Prf_UsrFigures *UsrFigures,
-                              bool CreatingMyOwnAccount);
+                              Usr_MeOrOther_t MeOrOther);
 void Prf_DB_UpdateFirstClickTimeUsr (long UsrCod,time_t FirstClickTimeUTC);
 void Prf_DB_UpdateNumClicksUsr (long UsrCod,int NumClicks);
 void Prf_DB_UpdateNumTimelinePubsUsr (long UsrCod,int NumTimelinePubs);

@@ -68,7 +68,7 @@ void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures);
 void Prf_CalculateFigures (void);
 bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures);
 
-void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount);
+void Prf_CreateNewUsrFigures (long UsrCod,Usr_MeOrOther_t MeOrOther);
 
 void Prf_GetAndShowRankingClicks (void);
 void Prf_GetAndShowRankingTimelinePubs (void);

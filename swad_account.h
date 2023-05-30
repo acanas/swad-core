@@ -56,7 +56,7 @@ void Acc_ShowFormChgMyAccount (void);
 void Acc_ShowFormChgOtherUsrAccount (void);
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args);
 bool Acc_CreateMyNewAccountAndLogIn (void);
-void Acc_CreateNewUsr (struct Usr_Data *UsrDat,bool CreatingMyOwnAccount);
+void Acc_CreateNewUsr (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther);
 void Acc_AfterCreationNewAccount (void);
 
 void Acc_GetUsrCodAndRemUsrGbl (void);

@@ -610,8 +610,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
                 sizeof (Gbl.Usrs.Me.UsrDat.Password) - 1);
 
       /***** User does not exist in the platform, so create him/her! *****/
-      Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
-                        true);	// I am creating my own account
+      Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,Usr_ME);
 
       /***** Save nickname *****/
       Nck_DB_UpdateNick (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArr);
@@ -723,7 +722,7 @@ static bool Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WIT
 // UsrDat->UsrCod must be <= 0
 // UsrDat->UsrDat.IDs must contain a list of IDs for the new user
 
-void Acc_CreateNewUsr (struct Usr_Data *UsrDat,bool CreatingMyOwnAccount)
+void Acc_CreateNewUsr (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther)
   {
    char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
@@ -758,7 +757,7 @@ void Acc_CreateNewUsr (struct Usr_Data *UsrDat,bool CreatingMyOwnAccount)
    Fil_CreateDirIfNotExists (PathRelUsr);
 
    /***** Create user's figures *****/
-   Prf_CreateNewUsrFigures (UsrDat->UsrCod,CreatingMyOwnAccount);
+   Prf_CreateNewUsrFigures (UsrDat->UsrCod,MeOrOther);
   }
 
 /*****************************************************************************/
