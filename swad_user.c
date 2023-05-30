@@ -2436,7 +2436,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
 	       row = mysql_fetch_row (mysql_res);
 	       Str_Copy (Text,row[0],sizeof (Text) - 1);
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				 Text,Cns_MAX_BYTES_TEXT,false);        // Se convierte of HTML a HTML respetuoso
+				 Text,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 	      }
 	    else
 	       Text[0] = '\0';
@@ -3110,7 +3110,8 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 	 Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
 			     Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
-			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
+			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,
+			   Str_REMOVE_SPACES);
 	}
       else
 	 Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],

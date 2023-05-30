@@ -112,7 +112,7 @@ void Log_LogAccess (const char *Comments)
 	{
 	 Str_Copy (CommentsDB,Comments,MaxLength);
 	 Str_ChangeFormat (Str_FROM_TEXT,Str_TO_TEXT,
-			   CommentsDB,MaxLength,true);	// Avoid SQL injection
+			   CommentsDB,MaxLength,Str_REMOVE_SPACES);	// Avoid SQL injection
 	 Log_DB_LogComments (LogCod,CommentsDB);
 	 free (CommentsDB);
 	}

@@ -1754,7 +1754,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		       {
 			Str_Copy (Text,row[0],sizeof (Text));
 			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-					  Text,Cns_MAX_BYTES_TEXT,false);
+					  Text,Cns_MAX_BYTES_TEXT,
+					  Str_DONT_REMOVE_SPACES);
 			HTM_Txt (Text);
 		       }
 		     else
@@ -3337,8 +3338,9 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm
 	      }
 	    else if (UsrDat->Comments[0])
 	      {
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,     // Convert from HTML to rigorous HTML
-				 UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 UsrDat->Comments,Cns_MAX_BYTES_TEXT,
+				 Str_DONT_REMOVE_SPACES);
 	       HTM_Txt (UsrDat->Comments);
 	      }
 	   }

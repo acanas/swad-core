@@ -391,7 +391,7 @@ void Ann_ReceiveAnnouncement (void)
 
    /* Get the content of the announcement */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_TEXT,
-                              Str_TO_RIGOROUS_HTML,true);
+                              Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
 
    /* Get users who can view this announcement */
    Roles = Rol_GetSelectedRoles ();

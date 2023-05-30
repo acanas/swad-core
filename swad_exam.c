@@ -584,7 +584,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	               The_GetColorRows ());
       Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
                      Exams->Exam.Hidden ? "DAT_LIGHT" :

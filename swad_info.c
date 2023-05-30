@@ -1443,7 +1443,8 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
 	 /***** Convert to respectful HTML and insert links *****/
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
+			   TxtHTML,Cns_MAX_BYTES_LONG_TEXT,
+			   Str_DONT_REMOVE_SPACES);
 	 ALn_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
 	 /***** Write text *****/
@@ -1769,9 +1770,9 @@ void Inf_RecAndChangePlainTxtInfo (void)
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
    Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,sizeof (Txt_MarkdownFormat) - 1);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
-                     Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
+                     Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
-                     Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
+                     Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
    Inf_DB_SetInfoTxt (Txt_HTMLFormat,Txt_MarkdownFormat);
@@ -1808,9 +1809,9 @@ void Inf_RecAndChangeRichTxtInfo (void)
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
    Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,sizeof (Txt_MarkdownFormat) - 1);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
-                     Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
+                     Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
-                     Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
+                     Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
    Inf_DB_SetInfoTxt (Txt_HTMLFormat,Txt_MarkdownFormat);

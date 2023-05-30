@@ -196,7 +196,7 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
      {
       Str_Copy (UserAgentDB,UserAgent,MaxBytes);
       Str_ChangeFormat (Str_FROM_TEXT,Str_TO_TEXT,
-			UserAgentDB,MaxBytes,true);
+			UserAgentDB,MaxBytes,Str_REMOVE_SPACES);
      }
    else
       UserAgentDB[0] = '\0';

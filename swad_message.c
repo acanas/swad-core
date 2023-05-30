@@ -205,7 +205,7 @@ void Msg_FormMsgUsrs (void)
    /***** Get possible hidden subject and content of the message *****/
    Par_GetParHTML ("HiddenSubject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
    Par_GetParAndChangeFormat ("HiddenContent",Content,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_TO_TEXT,false);
+                              Str_TO_TEXT,Str_DONT_REMOVE_SPACES);
 
    /***** Show a form to compose a message to users *****/
    Msg_PutFormMsgUsrs (&Messages,Content);
@@ -753,7 +753,7 @@ void Msg_RecMsgFromUsr (void)
 
    /* Get body */
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_DONT_CHANGE,false);
+                              Str_DONT_CHANGE,Str_DONT_REMOVE_SPACES);
 
    /* Get parameter that indicates if the message is a reply to a previous message */
    if ((IsReply = Par_GetParBool ("IsReply")))
@@ -792,7 +792,7 @@ void Msg_RecMsgFromUsr (void)
      {
       /* Show the form again, with the subject and the message filled */
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                        Content,Cns_MAX_BYTES_LONG_TEXT,true);
+                        Content,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
       Msg_PutFormMsgUsrs (&Messages,Content);
       return;
      }
@@ -813,7 +813,7 @@ void Msg_RecMsgFromUsr (void)
    /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK], that holds the list of the
 	  recipients, creating a received message for each recipient *****/
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_RIGOROUS_HTML,
-                     Content,Cns_MAX_BYTES_LONG_TEXT,false);
+                     Content,Cns_MAX_BYTES_LONG_TEXT,Str_DONT_REMOVE_SPACES);
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    NumRecipients = 0;
    while (*Ptr)

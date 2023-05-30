@@ -628,7 +628,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	               The_GetColorRows ());
       Gam_DB_GetGameTxt (Games->Game.GamCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
                      Games->Game.Hidden ? "DAT_LIGHT" :

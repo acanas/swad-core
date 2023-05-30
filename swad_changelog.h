@@ -629,11 +629,12 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.118.10 (2023-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 22.118.11 (2023-05-30)"
 #define CSS_FILE		"swad22.118.5.css"
 #define JS_FILE			"swad22.49.js"
 /*
-	Version 22.118.10:May 30, 2023  Draw logo in head even if it does not exist. (337363 lines)
+	Version 22.118.11:May 30, 2023  Code refactoring in strings. (337391 lines)
+	Version 22.118.10:May 30, 2023  Draw logo in head even if it does not exist. (337359 lines)
 	Version 22.118.9: May 30, 2023  Code refactoring in user account. (337363 lines)
 	Version 22.118.8: May 30, 2023  Fixed bugs in users. (337361 lines)
 	Version 22.118.7: May 30, 2023  Fixed bug in photo processing. Reported by Emilio Alemán Carmona. (337364 lines)

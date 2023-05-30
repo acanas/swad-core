@@ -724,7 +724,8 @@ For example the string "Nueva++de+San+Ant%F3n"
 #define Str_MAX_BYTES_SPECIAL_CHAR (256 - 1)
 
 void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
-                       char *Str,size_t MaxLengthStr,bool RemoveLeadingAndTrailingSpaces)
+                       char *Str,size_t MaxLengthStr,
+                       Str_RemoveSpaces_t RemoveLeadingAndTrailingSpaces)
   {
    char *StrDst;
    char *PtrSrc;
@@ -1185,7 +1186,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
       free (StrDst);
      }
 
-   if (RemoveLeadingAndTrailingSpaces)
+   if (RemoveLeadingAndTrailingSpaces == Str_REMOVE_SPACES)
      {
       /***** Remove leading spaces *****/
       Str_RemoveLeadingSpacesHTML (Str);

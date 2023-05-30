@@ -2147,7 +2147,8 @@ static void Brw_GetParsPathInTreeAndFileName (void)
       // File names with heading and trailing spaces are allowed
       if (Par_GetParAndChangeFormat (Brw_FileTypeParName[FileType],
                                      Gbl.FileBrowser.FilFolLnk.Name,
-                                     NAME_MAX,Str_TO_TEXT,false))
+                                     NAME_MAX,Str_TO_TEXT,
+                                     Str_DONT_REMOVE_SPACES))
 	{
 	 Gbl.FileBrowser.FilFolLnk.Type = FileType;
 

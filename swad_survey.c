@@ -647,7 +647,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       /* Text of the survey */
       Svy_DB_GetSurveyTxt (Surveys->Svy.SvyCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
                      Surveys->Svy.Status.Hidden ? "DAT_LIGHT" :
@@ -2881,7 +2881,7 @@ static void Svy_WriteQstStem (const char *Stem)
       Err_NotEnoughMemoryExit ();
    Str_Copy (HeadingRigorousHTML,Stem,Length);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     HeadingRigorousHTML,Length,false);
+                     HeadingRigorousHTML,Length,Str_DONT_REMOVE_SPACES);
 
    /* Write the stem */
    HTM_Txt (HeadingRigorousHTML);
@@ -2935,7 +2935,8 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 
 	    Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      SvyQst->AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER,false);
+			      SvyQst->AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER,
+			      Str_DONT_REMOVE_SPACES);
 
 	    /* Selectors and label with the letter of the answer */
 	    HTM_TR_Begin (NULL);
@@ -3305,7 +3306,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
          /* Get possible parameter with the user's comment */
          snprintf (ParName,sizeof (ParName),"Com%010u",(unsigned) QstCod);
          Par_GetParAndChangeFormat (ParName,Comments,Cns_MAX_BYTES_TEXT,
-                                    Str_TO_RIGOROUS_HTML,true);
+                                    Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
          if (Comments[0])
             Svy_DB_CreateComments (QstCod,Comments);
         }

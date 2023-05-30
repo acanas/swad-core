@@ -78,6 +78,13 @@ typedef enum
    Str_TO_MARKDOWN,
    } Str_ChangeTo_t;
 
+typedef enum
+  {
+   Str_DONT_REMOVE_SPACES,
+   Str_REMOVE_SPACES,
+  } Str_RemoveSpaces_t;
+
+
 /*****************************************************************************/
 /***************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -106,7 +113,8 @@ void Str_SetDecimalPointToLocal (void);
 
 void Str_AddStrToQuery (char *Query,const char *Str,size_t SizeOfQuery);
 void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
-                       char *Str,size_t MaxLengthStr,bool RemoveLeadingAndTrailingSpaces);
+                       char *Str,size_t MaxLengthStr,
+                       Str_RemoveSpaces_t RemoveLeadingAndTrailingSpaces);
 void Str_RemoveLeadingSpacesHTML (char *Str);
 void Str_RemoveTrailingSpacesHTML (char *Str);
 void Str_RemoveLeadingZeros (char *Str);

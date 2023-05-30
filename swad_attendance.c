@@ -519,7 +519,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       /* Text of the attendance event */
       Att_DB_GetEventDescription (Events->Event.AttCod,Description);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+			Description,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
       if (ShowOnlyThisAttEventComplete)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
@@ -1790,7 +1790,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 else				// Show without form
 	   {
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      CommentStd,Cns_MAX_BYTES_TEXT,false);
+			      CommentStd,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 	    HTM_Txt (CommentStd);
 	   }
       HTM_TD_End ();
@@ -1813,7 +1813,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 else	if (Event->CommentTchVisible)	// Show without form
 	   {
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      CommentTch,Cns_MAX_BYTES_TEXT,false);
+			      CommentTch,Cns_MAX_BYTES_TEXT,
+			      Str_DONT_REMOVE_SPACES);
 	    HTM_Txt (CommentTch);
 	   }
       HTM_TD_End ();
@@ -3209,7 +3210,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 		     if (ShowCommentStd)
 		       {
 			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-					  CommentStd,Cns_MAX_BYTES_TEXT,false);
+					  CommentStd,Cns_MAX_BYTES_TEXT,
+					  Str_DONT_REMOVE_SPACES);
 			HTM_DT_Begin ();
 			   HTM_TxtColon (Txt_Student_comment);
 			HTM_DT_End ();
@@ -3220,7 +3222,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 		     if (ShowCommentTch)
 		       {
 			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-					  CommentTch,Cns_MAX_BYTES_TEXT,false);
+					  CommentTch,Cns_MAX_BYTES_TEXT,
+					  Str_DONT_REMOVE_SPACES);
 			HTM_DT_Begin ();
 			   HTM_TxtColon (Txt_Teachers_comment);
 			HTM_DT_End ();

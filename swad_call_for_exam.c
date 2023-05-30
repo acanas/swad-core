@@ -1248,7 +1248,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CallsForExams->CallForExam.Place,
-				    Cns_MAX_BYTES_TEXT,false);
+				    Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 		  HTM_Txt (CallsForExams->CallForExam.Place);
 		 }
 	    HTM_TD_End ();
@@ -1279,7 +1279,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	      {
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CallsForExams->CallForExam.Mode,
-				 Cns_MAX_BYTES_TEXT,false);
+				 Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 	       HTM_Txt (CallsForExams->CallForExam.Mode);
 	      }
 	    HTM_TD_End ();
@@ -1311,7 +1311,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CallsForExams->CallForExam.Structure,
-				    Cns_MAX_BYTES_TEXT,false);
+				    Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 		  HTM_Txt (CallsForExams->CallForExam.Structure);
 		 }
 	    HTM_TD_End ();
@@ -1343,7 +1343,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CallsForExams->CallForExam.DocRequired,
-				    Cns_MAX_BYTES_TEXT,false);
+				    Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 		  HTM_Txt (CallsForExams->CallForExam.DocRequired);
 		 }
 	    HTM_TD_End ();
@@ -1375,7 +1375,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CallsForExams->CallForExam.MatRequired,
-				    Cns_MAX_BYTES_TEXT,false);
+				    Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 		  HTM_Txt (CallsForExams->CallForExam.MatRequired);
 		 }
 	    HTM_TD_End ();
@@ -1407,7 +1407,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CallsForExams->CallForExam.MatAllowed,
-				    Cns_MAX_BYTES_TEXT,false);
+				    Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 		  HTM_Txt (CallsForExams->CallForExam.MatAllowed);
 		 }
 	    HTM_TD_End ();
@@ -1439,7 +1439,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CallsForExams->CallForExam.OtherInfo,
-				    Cns_MAX_BYTES_TEXT,false);
+				    Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 		  HTM_Txt (CallsForExams->CallForExam.OtherInfo);
 		 }
 	    HTM_TD_End ();

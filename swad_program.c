@@ -689,7 +689,7 @@ static void Prg_WriteItemText (long ItmCod,bool IsHidden)
    /* Text */
    Prg_DB_GetItemTxt (ItmCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-		     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
 		  The_GetSuffix (),

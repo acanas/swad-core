@@ -565,7 +565,8 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			      /* Convert stem from text to HTML (in database stem is stored in HTML) */
 			      Str_Copy (Question.Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
 			      Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-						Question.Stem,Cns_MAX_BYTES_TEXT,true);
+						Question.Stem,Cns_MAX_BYTES_TEXT,
+						Str_REMOVE_SPACES);
 			     }
 			   break;	// Only first element "stem"
 			  }
@@ -581,7 +582,8 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			      /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
 			      Str_Copy (Question.Feedback,FeedbackElem->Content,Cns_MAX_BYTES_TEXT);
 			      Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-						Question.Feedback,Cns_MAX_BYTES_TEXT,true);
+						Question.Feedback,Cns_MAX_BYTES_TEXT,
+						Str_REMOVE_SPACES);
 			     }
 			   break;	// Only first element "feedback"
 			  }
@@ -772,7 +774,8 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 			/* Convert answer from text to HTML (in database answer text is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 			                  Question->Answer.Options[NumOpt].Text,
-			                  Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
+			                  Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,
+			                  Str_REMOVE_SPACES);
 		       }
 		     break;	// Only first element "text"
 		    }
@@ -791,7 +794,8 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 			/* Convert feedback from text to HTML (in database answer feedback is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 			                  Question->Answer.Options[NumOpt].Feedback,
-			                  Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
+			                  Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,
+			                  Str_REMOVE_SPACES);
 		       }
 		     break;	// Only first element "feedback"
 		    }
@@ -987,7 +991,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 		     Str_Copy (AnswerText,Question->Answer.Options[NumOpt].Text,
 			       AnswerTextLength);
 		     Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				       AnswerText,AnswerTextLength,false);
+				       AnswerText,AnswerTextLength,
+				       Str_DONT_REMOVE_SPACES);
 
 		     /* Convert the feedback, that is in HTML, to rigorous HTML */
 		     AnswerFeedbackLength = 0;
@@ -1003,7 +1008,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 				     Question->Answer.Options[NumOpt].Feedback,
 				     AnswerFeedbackLength);
 			   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-					     AnswerFeedback,AnswerFeedbackLength,false);
+					     AnswerFeedback,AnswerFeedbackLength,
+					     Str_DONT_REMOVE_SPACES);
 			  }
 
 		     HTM_TR_Begin (NULL);

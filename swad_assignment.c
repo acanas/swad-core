@@ -571,7 +571,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       /* Text of the assignment */
       Asg_DB_GetAssignmentTxtByCod (Assignments->Asg.AsgCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       if (PrintView)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");

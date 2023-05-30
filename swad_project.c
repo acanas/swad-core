@@ -1786,7 +1786,8 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	{
 	 /* Change text format */
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+			   Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,
+			   Str_DONT_REMOVE_SPACES);
 	 switch (Projects->View)
 	   {
 	    case Prj_PRINT_ONE_PROJECT:
@@ -2280,7 +2281,7 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Projects,
 
       /***** Change text format *****/
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+			TxtField,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       switch (Projects->View)
 	{
 	 case Prj_LIST_PROJECTS:
@@ -2628,7 +2629,7 @@ static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
 
    /***** Change format *****/
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+                     TxtField,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 
    /***** Write text *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
@@ -4565,7 +4566,8 @@ static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
 	 HTM_TD_Begin ("colspan=\"8\" class=\"LT PAR DAT_%s %s\"",
 		       The_GetSuffix (),The_GetColorRows ());
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      Rubric.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+			      Rubric.Txt,Cns_MAX_BYTES_TEXT,
+			      Str_DONT_REMOVE_SPACES);
 	    ALn_InsertLinks (Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
 	    HTM_Txt (Rubric.Txt);
 	 HTM_TD_End ();

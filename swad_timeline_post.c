@@ -310,7 +310,7 @@ static long TmlPst_ReceivePost (void)
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_TO_RIGOROUS_HTML,true);
+                              Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Content.Media);

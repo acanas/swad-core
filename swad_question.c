@@ -684,7 +684,8 @@ void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	    Err_NotEnoughMemoryExit ();
 	 Str_Copy (FeedbackRigorousHTML,Feedback,FeedbackLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   FeedbackRigorousHTML,FeedbackLength,false);
+			   FeedbackRigorousHTML,FeedbackLength,
+			   Str_DONT_REMOVE_SPACES);
 
 	 /***** Write the feedback *****/
 	 HTM_DIV_Begin ("class=\"%s_%s\"",
@@ -1692,7 +1693,8 @@ void Qst_ChangeFormatAnswersText (struct Qst_Question *Question)
       if (Question->Answer.Options[NumOpt].Text[0])
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   Question->Answer.Options[NumOpt].Text,
-			   Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+			   Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,
+			   Str_DONT_REMOVE_SPACES);
   }
 
 void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question)
@@ -1708,7 +1710,8 @@ void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question)
 	 if (Question->Answer.Options[NumOpt].Feedback[0])
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			      Question->Answer.Options[NumOpt].Feedback,
-			      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+			      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,
+			      Str_DONT_REMOVE_SPACES);
   }
 
 /*****************************************************************************/
@@ -2699,7 +2702,8 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
       if (Question->Tags.Txt[NumTag][0])
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                           Question->Tags.Txt[NumTag],Tag_MAX_BYTES_TAG,true);
+                           Question->Tags.Txt[NumTag],Tag_MAX_BYTES_TAG,
+                           Str_REMOVE_SPACES);
          /* Check if not repeated */
          for (NumTagRead = 0;
               NumTagRead < NumTag;

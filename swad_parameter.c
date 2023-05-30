@@ -912,7 +912,7 @@ unsigned Par_GetParText (const char *ParName,char *ParValue,size_t MaxBytes)
   {
    return Par_GetParAndChangeFormat (ParName,ParValue,MaxBytes,
                                      Str_TO_TEXT,
-                                     true);	// Remove leading and trailing spaces
+                                     Str_REMOVE_SPACES);
   }
 
 /*****************************************************************************/
@@ -970,7 +970,7 @@ bool Par_GetParBool (const char *ParName)
 unsigned Par_GetParHTML (const char *ParName,char *ParValue,size_t MaxBytes)
   {
    return Par_GetParAndChangeFormat (ParName,ParValue,MaxBytes,
-                                     Str_TO_HTML,true);
+                                     Str_TO_HTML,Str_REMOVE_SPACES);
   }
 
 /*****************************************************************************/
@@ -984,7 +984,7 @@ unsigned Par_GetParMultiToText (const char *ParName,char *ParValue,size_t MaxByt
                                    ParValue,MaxBytes,NULL);
 
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                     ParValue,MaxBytes,true);
+                     ParValue,MaxBytes,Str_REMOVE_SPACES);
    return NumTimes;
   }
 
@@ -994,7 +994,8 @@ unsigned Par_GetParMultiToText (const char *ParName,char *ParValue,size_t MaxByt
 // Return the number of parameters found
 
 unsigned Par_GetParAndChangeFormat (const char *ParName,char *ParValue,size_t MaxBytes,
-                                    Str_ChangeTo_t ChangeTo,bool RemoveLeadingAndTrailingSpaces)
+                                    Str_ChangeTo_t ChangeTo,
+                                    Str_RemoveSpaces_t RemoveLeadingAndTrailingSpaces)
   {
    unsigned NumTimes = Par_GetPar (Par_PARAM_SINGLE,ParName,
                                    ParValue,MaxBytes,NULL);

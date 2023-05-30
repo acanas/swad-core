@@ -2848,7 +2848,7 @@ void For_ReceiveForumPost (void)
 
    /***** Get message body *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_TO_RIGOROUS_HTML,false);
+                              Str_TO_RIGOROUS_HTML,Str_DONT_REMOVE_SPACES);
 
    /***** Initialize media *****/
    Med_MediaConstructor (&Media);

@@ -1429,7 +1429,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
       /***** Write plain text into text buffer *****/
       /* Convert to respectful HTML and insert links */
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);		// Convert from HTML to recpectful HTML
+                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
       /* Write text */

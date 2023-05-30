@@ -441,7 +441,8 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
       else
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+			Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,
+			Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR DAT_%s\"",The_GetSuffix ());
 	 HTM_Txt (Rubrics->Rubric.Txt);

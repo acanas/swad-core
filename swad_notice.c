@@ -148,7 +148,7 @@ void Not_ReceiveNotice (void)
 
    /***** Get the text of the notice *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_TEXT,
-                              Str_TO_RIGOROUS_HTML,true);
+                              Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
 
    /***** Create a new notice in database *****/
    NotCod = Not_DB_InsertNotice (Content);
