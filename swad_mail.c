@@ -1344,8 +1344,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
 void May_NewMyUsrEmail (void)
   {
    /***** Remove user's email *****/
-   Mai_ChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,
-		    true);	// It's me
+   Mai_ChangeUsrEmail (&Gbl.Usrs.Me.UsrDat,Usr_ME);
 
    /***** Show my account again *****/
    Acc_ShowFormChgMyAccount ();

@@ -961,7 +961,7 @@ void Acc_RemoveMyAccount (void)
       Msg_DB_MoveUnusedMsgsContentToDeleted ();
      }
    else
-      Acc_AskIfRemoveUsrAccount (true);
+      Acc_AskIfRemoveUsrAccount (Usr_ME);
   }
 
 void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,

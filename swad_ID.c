@@ -458,8 +458,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change ID *****/
-	 ID_ShowFormChangeUsrID (Usr_ME,
-				 IShouldFillInID);
+	 ID_ShowFormChangeUsrID (Usr_ME,IShouldFillInID);
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -681,8 +680,7 @@ static void ID_PutParsRemoveOtherID (void *ID)
 void ID_RemoveMyUsrID (void)
   {
    /***** Remove user's ID *****/
-   ID_RemoveUsrID (&Gbl.Usrs.Me.UsrDat,
-		   true);	// It's me
+   ID_RemoveUsrID (&Gbl.Usrs.Me.UsrDat,Usr_ME);
 
    /***** Update list of IDs *****/
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
@@ -778,8 +776,7 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 void ID_NewMyUsrID (void)
   {
    /***** New user's ID *****/
-   ID_ChangeUsrID (&Gbl.Usrs.Me.UsrDat,
-		true);	// It's me
+   ID_ChangeUsrID (&Gbl.Usrs.Me.UsrDat,Usr_ME);
 
    /***** Update list of IDs *****/
    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Me.UsrDat);
