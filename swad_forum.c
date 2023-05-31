@@ -906,14 +906,30 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    extern const char *Txt_FORUM_Post_banned;
    extern const char *Txt_FORUM_Post_X_banned;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
+   static const char *Icon[Cns_NUM_DISABLED_ENABLED] =
+     {
+      [Cns_DISABLED] = "eye-slash.svg",
+      [Cns_ENABLED ] = "eye.svg",
+     };
+   static Ico_Color_t Color[Cns_NUM_DISABLED_ENABLED] =
+     {
+      [Cns_DISABLED] = Ico_RED,
+      [Cns_ENABLED ] = Ico_GREEN,
+     };
+   static const char **TxtAllowedBanned[Cns_NUM_DISABLED_ENABLED] =
+     {
+      [Cns_DISABLED] = &Txt_FORUM_Post_X_banned,
+      [Cns_ENABLED ] = &Txt_FORUM_Post_X_allowed,
+     };
    struct Usr_Data UsrDat;
    time_t CreatTimeUTC;	// Creation time of a post
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
-   Cns_Enabled_t Enabled;
+   Cns_DisabledOrEnabled_t DisabledOrEnabled;
    char *Title;
+   Act_Action_t NextAction;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -922,13 +938,13 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    Med_MediaConstructor (&Media);
 
    /***** Check if post is enabled *****/
-   Enabled = For_DB_GetIfPstIsEnabled (Forums->PstCod);
+   DisabledOrEnabled = For_DB_GetIfPstIsDisabledOrEnabled (Forums->PstCod);
 
    /***** Get data of post *****/
    For_GetPstData (Forums->PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
                    Subject,OriginalContent,&Media);
 
-   if (Enabled == Cns_ENABLED)
+   if (DisabledOrEnabled == Cns_ENABLED)
       /* Return this subject as last subject */
       Str_Copy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
 
@@ -964,7 +980,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                     NewPst ? "MSG_BG_NEW" :
 	  	             "MSG_BG",
 	  	    The_GetSuffix ());
-         switch (Enabled)
+         switch (DisabledOrEnabled)
            {
             case Cns_DISABLED:
                HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
@@ -986,29 +1002,18 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
 	 if (ICanModerateForum)
 	   {
-	    Frm_BeginFormAnchor (Enabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
-					                  For_ActionsEnbPstFor[Forums->Forum.Type],
-				 For_FORUM_POSTS_SECTION_ID);
+	    NextAction = DisabledOrEnabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
+					                    For_ActionsEnbPstFor[Forums->Forum.Type];
+	    Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
 	       For_PutParsForum (Forums);
-	       Ico_PutIconLink (Enabled == Cns_ENABLED ? "eye.svg" :
-							 "eye-slash.svg",
-				Enabled == Cns_ENABLED ? Ico_GREEN :
-							 Ico_RED,
-				Enabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
-							 For_ActionsEnbPstFor[Forums->Forum.Type]);
+	       Ico_PutIconLink (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],NextAction);
 	    Frm_EndForm ();
 	   }
 	 else
 	   {
-	    if (asprintf (&Title,Enabled == Cns_ENABLED ? Txt_FORUM_Post_X_allowed :
-							  Txt_FORUM_Post_X_banned,
-			  PstNum) < 0)
+	    if (asprintf (&Title,*TxtAllowedBanned[DisabledOrEnabled],PstNum) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Ico_PutIcon (Enabled == Cns_ENABLED ? "eye.svg" :
-						   "eye-slash.svg",
-			 Enabled == Cns_ENABLED ? Ico_GREEN :
-						  Ico_RED,
-			 Title,
+	    Ico_PutIcon (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],Title,
 			 "ICO_HIDDEN ICO16x16");
 	    free (Title);
 	   }
@@ -1030,15 +1035,15 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-         Usr_WriteAuthor (&UsrDat,Enabled);
-	 if (Enabled == Cns_ENABLED)
+         Usr_WriteAuthor (&UsrDat,DisabledOrEnabled);
+	 if (DisabledOrEnabled == Cns_ENABLED)
 	    /* Write number of posts from this user */
 	    For_WriteNumberOfPosts (Forums,UsrDat.UsrCod);
       HTM_TD_End ();
 
       /***** Write post content *****/
       HTM_TD_Begin ("class=\"LT MSG_TXT_%s\"",The_GetSuffix ());
-         switch (Enabled)
+         switch (DisabledOrEnabled)
            {
             case Cns_DISABLED:
 	       HTM_Txt (Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
@@ -2402,7 +2407,7 @@ void For_GetThreadData (struct For_Thread *Thr)
    for (Order  = (Dat_StartEndTime_t) 0;
 	Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	Order++)
-      Thr->Enabled[Order] = For_DB_GetIfPstIsEnabled (Thr->PstCod[Order]);
+      Thr->Enabled[Order] = For_DB_GetIfPstIsDisabledOrEnabled (Thr->PstCod[Order]);
 
    /***** Get number of posts in this thread *****/
    Thr->NumPosts = For_DB_GetNumPstsInThr (Thr->ThrCod);

@@ -6340,7 +6340,8 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 /*****************************************************************************/
 // Input: UsrDat must hold user's data
 
-void Usr_WriteAuthor (struct Usr_Data *UsrDat,Cns_Enabled_t Enabled)
+void Usr_WriteAuthor (struct Usr_Data *UsrDat,
+                      Cns_DisabledOrEnabled_t DisabledOrEnabled)
   {
    extern const char *Txt_Unknown_or_without_photo;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -6354,7 +6355,7 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,Cns_Enabled_t Enabled)
 
    /***** Write author name or don't write it? *****/
    WriteAuthor = false;
-   if (Enabled == Cns_ENABLED)
+   if (DisabledOrEnabled == Cns_ENABLED)
       if (UsrDat->UsrCod > 0)
          WriteAuthor = true;
 

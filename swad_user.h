@@ -433,7 +433,8 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsers (void);
 
-void Usr_WriteAuthor (struct Usr_Data *UsrDat,Cns_Enabled_t Enabled);
+void Usr_WriteAuthor (struct Usr_Data *UsrDat,
+                      Cns_DisabledOrEnabled_t DisabledOrEnabled);
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
 
 void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows);

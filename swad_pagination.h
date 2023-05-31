@@ -84,7 +84,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pag_Pagination *Pagination,
                             const void *Context,long Cod,
-                            Cns_Enabled_t FirstMsgEnabled,
+                            Cns_DisabledOrEnabled_t FirstMsgEnabled,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent);
 void Pag_PutParPagNum (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);

@@ -158,7 +158,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             struct Pag_Pagination *Pagination,
                             const void *Context,long Cod,
-                            Cns_Enabled_t FirstMsgEnabled,
+                            Cns_DisabledOrEnabled_t FirstMsgDisabledOrEnabled,
 			    const char *Subject,const char *ClassTxt,
                             bool LinkToPagCurrent)
   {
@@ -281,7 +281,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	   }
 	 else
 	    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
-	 switch (FirstMsgEnabled)
+	 switch (FirstMsgDisabledOrEnabled)
 	   {
 	    case Cns_DISABLED:
 	       HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);

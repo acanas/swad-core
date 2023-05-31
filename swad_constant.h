@@ -119,10 +119,11 @@ typedef enum
    Cns_FULL_NAME,
   } Cns_ShrtOrFullName_t;
 
+#define Cns_NUM_DISABLED_ENABLED 2
 typedef enum
   {
    Cns_DISABLED,
    Cns_ENABLED,
-  } Cns_Enabled_t;
+  } Cns_DisabledOrEnabled_t;
 
 #endif
