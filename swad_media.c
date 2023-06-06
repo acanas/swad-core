@@ -1739,41 +1739,42 @@ static void Med_ShowYoutube (const struct Med_Media *Media,const char *ClassMedi
   {
    /***** Check if YouTube code exists *****/
    if (Media->Name[0])	// YouTube code
-     {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
+      switch (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies)
         {
-	 /***** Show linked external media *****/
-	 // Example of code given by YouTube:
-	 // <iframe width="560" height="315"
-	 // 	src="https://www.youtube.com/embed/xu9IbeF9CBw"
-	 // 	frameborder="0"
-	 // 	allow="accelerometer; autoplay; encrypted-media;
-	 // 	gyroscope; picture-in-picture" allowfullscreen>
-	 // </iframe>
-	 /* Begin container */
-	 HTM_DIV_Begin ("class=\"MED_VIDEO_CONT\"");
+	 case Coo_REFUSE:
+	    /***** Alert to inform about third party cookies *****/
+	    Med_AlertThirdPartyCookies ();
+	    break;
+	 case Coo_ACCEPT:
+	    /***** Show linked external media *****/
+	    // Example of code given by YouTube:
+	    // <iframe width="560" height="315"
+	    // 	src="https://www.youtube.com/embed/xu9IbeF9CBw"
+	    // 	frameborder="0"
+	    // 	allow="accelerometer; autoplay; encrypted-media;
+	    // 	gyroscope; picture-in-picture" allowfullscreen>
+	    // </iframe>
+	    /* Begin container */
+	    HTM_DIV_Begin ("class=\"MED_VIDEO_CONT\"");
 
-	    /* iframe for video */
-	    HTM_TxtF ("<iframe src=\"https://www.youtube.com/embed/%s\""
-		      " frameborder=\"0\""
-		      " allow=\"accelerometer; autoplay; encrypted-media;"
-		      " gyroscope; picture-in-picture\""
-		      " allowfullscreen=\"allowfullscreen\""
-		      " class=\"%s\"",
-		      Media->Name,ClassMedia);
-	    if (Media->Title)
-	       if (Media->Title[0])
-		  HTM_TxtF (" title=\"%s\"",Media->Title);
-	    HTM_Txt (">"
-		     "</iframe>");
+	       /* iframe for video */
+	       HTM_TxtF ("<iframe src=\"https://www.youtube.com/embed/%s\""
+			 " frameborder=\"0\""
+			 " allow=\"accelerometer; autoplay; encrypted-media;"
+			 " gyroscope; picture-in-picture\""
+			 " allowfullscreen=\"allowfullscreen\""
+			 " class=\"%s\"",
+			 Media->Name,ClassMedia);
+	       if (Media->Title)
+		  if (Media->Title[0])
+		     HTM_TxtF (" title=\"%s\"",Media->Title);
+	       HTM_Txt (">"
+			"</iframe>");
 
-	 /* End container */
-	 HTM_DIV_End ();
+	    /* End container */
+	    HTM_DIV_End ();
+	    break;
         }
-      else
-         /***** Alert to inform about third party cookies *****/
-	 Med_AlertThirdPartyCookies ();
-     }
   }
 
 /*****************************************************************************/
@@ -1784,40 +1785,41 @@ static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia)
   {
    /***** Check if embed URL exists *****/
    if (Media->URL[0])	// Embed URL
-     {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
+      switch (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies)
         {
-	 /***** Show linked external media *****/
-	 // Example of code given by Slideshare:
-	 // <iframe src="//www.slideshare.net/slideshow/embed_code/key/yngasD9sIZ7GQV"
-	 // 	width="595" height="485" frameborder="0"
-	 // 	marginwidth="0" marginheight="0" scrolling="no"
-	 // 	style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;"
-	 // 	allowfullscreen>
-	 // </iframe>
-	 /* Begin container */
-	 HTM_DIV_Begin ("class=\"MED_EMBED_CONT\"");
+	 case Coo_REFUSE:
+	    /***** Alert to inform about third party cookies *****/
+	    Med_AlertThirdPartyCookies ();
+	    break;
+	 case Coo_ACCEPT:
+	    /***** Show linked external media *****/
+	    // Example of code given by Slideshare:
+	    // <iframe src="//www.slideshare.net/slideshow/embed_code/key/yngasD9sIZ7GQV"
+	    // 	width="595" height="485" frameborder="0"
+	    // 	marginwidth="0" marginheight="0" scrolling="no"
+	    // 	style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;"
+	    // 	allowfullscreen>
+	    // </iframe>
+	    /* Begin container */
+	    HTM_DIV_Begin ("class=\"MED_EMBED_CONT\"");
 
-	    /* iframe for external media */
-	    HTM_TxtF ("<iframe src=\"%s\""
-		      " frameborder=\"0\""
-		      " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
-		      " allowfullscreen=\"allowfullscreen\""
-		      " class=\"%s\"",
-		      Media->URL,ClassMedia);
-	    if (Media->Title)
-	       if (Media->Title[0])
-		  HTM_TxtF (" title=\"%s\"",Media->Title);
-	    HTM_Txt (">"
-		     "</iframe>");
+	       /* iframe for external media */
+	       HTM_TxtF ("<iframe src=\"%s\""
+			 " frameborder=\"0\""
+			 " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
+			 " allowfullscreen=\"allowfullscreen\""
+			 " class=\"%s\"",
+			 Media->URL,ClassMedia);
+	       if (Media->Title)
+		  if (Media->Title[0])
+		     HTM_TxtF (" title=\"%s\"",Media->Title);
+	       HTM_Txt (">"
+			"</iframe>");
 
-	 /* End container */
-	 HTM_DIV_End ();
+	    /* End container */
+	    HTM_DIV_End ();
+	    break;
         }
-      else
-         /***** Alert to inform about third party cookies *****/
-	 Med_AlertThirdPartyCookies ();
-     }
   }
 
 /*****************************************************************************/

@@ -633,7 +633,7 @@ TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la ho
 #define CSS_FILE		"swad22.120.css"
 #define JS_FILE			"swad22.49.js"
 /*
-	Version 22.120.2: Jun 07, 2023  Code refactoring related to cookies and hidden-visible. (337640 lines)
+	Version 22.120.2: Jun 07, 2023  Code refactoring related to cookies and hidden-visible. (337642 lines)
 	Version 22.120.1: Jun 06, 2023  Translation of messages about cookies. (337620 lines)
 	Version 22.120:   Jun 06, 2023  Code refactoring related to hidden-visible. (337561 lines)
 	Version 22.119:   Jun 06, 2023  Code refactoring related to hidden-visible. (337588 lines)
