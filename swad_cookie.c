@@ -142,20 +142,34 @@ void Coo_ChangeMyPrefsCookies (void)
 void Coo_GetAndShowNumUsrsPerCookies (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_cookies;
+   extern const char *Txt_Do_not_accept_third_party_cookies;
+   extern const char *Txt_Accept_third_party_cookies;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Cookies;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   static const struct
+   static struct
      {
-      char InDB;
-      char *Icon;
+      const char InDB;
+      const char *Icon;
       Ico_Color_t Color;
-      char *Title;
+      const char **Title;
      } Accepted[2] =
      {
-      [false] = {'N',"times.svg",Ico_RED  ,"Don't accept third party cookies"},	// TODO: Need translation!!!!
-      [true ] = {'Y',"check.svg",Ico_GREEN,"Accept third party cookies"}	// TODO: Need translation!!!!
+      [false] =
+        {
+         .InDB  = 'N',
+         .Icon  = "times.svg",
+         .Color = Ico_RED,
+         .Title = &Txt_Do_not_accept_third_party_cookies
+        },
+      [true ] =
+	{
+	 .InDB  = 'Y',
+	 .Icon  = "check.svg",
+	 .Color = Ico_GREEN,
+	 .Title = &Txt_Accept_third_party_cookies
+	}
      };
    unsigned i;
    char *SubQuery;
@@ -199,7 +213,7 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
 
 	    HTM_TD_Begin ("class=\"CM\"");
                Ico_PutIcon (Accepted[i].Icon,Accepted[i].Color,
-                            Accepted[i].Title,"ICOx16");
+                            *Accepted[i].Title,"ICOx16");
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());

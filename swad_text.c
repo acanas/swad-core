@@ -565,6 +565,29 @@ const char *Txt_Absents =
 	"Devams&inodot;z";
 #endif
 
+const char *Txt_Accept_third_party_cookies =
+#if   L==1	// ca
+	"Accepta cookies de tercers";
+#elif L==2	// de
+	"Akzeptieren Sie Cookies von Drittanbietern";
+#elif L==3	// en
+	"Accept third-party cookies";
+#elif L==4	// es
+	"Aceptar cookies de terceros";
+#elif L==5	// fr
+	"Accepter les cookies de tiers";
+#elif L==6	// gn
+	"Emone&itilde; umi cookie mbohap&yacute;ha tapicha rehegua";
+#elif L==7	// it
+	"Accettare i cookie di terze parti";
+#elif L==8	// pl
+	"Zaakceptuj pliki cookie stron trzecich";
+#elif L==9	// pt
+	"Aceitar cookies de terceiros";
+#elif L==10	// tr
+	"&Uuml;&ccedil;&uuml;nc&uuml; taraf tan&inodot;mlama bilgilerini kabul et";
+#endif
+
 const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites =
 #if   L==1	// ca
 	"Accepta cookies de tercers"
@@ -582,20 +605,20 @@ const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other
 	"Accepter les cookies de tiers"
 	" pour afficher le contenu multim&eacute;dia d'autres sites Web";
 #elif L==6	// gn
-	"Aceptar cookies de terceros"
-	" para ver contenido multimedia de otros sitios web";	// Okoteve traducción
+	"Eacepta umi cookie mbohap&yacute;ha rehegua"
+	" ehecha ha&gtilde;ua contenido multimedia ambue p&aacute;gina web-gui";
 #elif L==7	// it
-	"Accetta i cookie di terze parti"
+	"Accettare i cookie di terze parti"
 	" per visualizzare contenuti multimediali da altri siti Web";
 #elif L==8	// pl
-	"Akceptuj pliki cookie innych firm,"
-	" aby wy&sacute;wietla&cacute; tre&sacute;ci multimedialne z innych stron internetowych";
+	"Zaakceptuj pliki cookie stron trzecich,"
+	" aby przegl&aogon;da&cacute; tre&sacute;ci multimedialne z innych stron internetowych";
 #elif L==9	// pt
-	"Aceite cookies de terceiros"
+	"Aceitar cookies de terceiros"
 	" para visualizar conte&uacute;do multimídia de outros sites";
 #elif L==10	// tr
-	"Accept third-party cookies"
-	" to view multimedia content from other websites";	// Çeviri lazim!
+	"Di&gbreve;er web sitelerinden multimedya i&ccedil;eri&gbreve;ini g&ouml;r&uuml;nt&uuml;lemek i&ccedil;in"
+	" &uuml;&ccedil;&uuml;nc&uuml; taraf tan&inodot;mlama bilgilerini kabul edin";
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_center =
@@ -9086,6 +9109,29 @@ const char *Txt_distributed_by =
 	"distribu&iacute;do por";
 #elif L==10	// tr
 	"distributed by";	// Çeviri lazim!
+#endif
+
+const char *Txt_Do_not_accept_third_party_cookies =
+#if   L==1	// ca
+	"No accepteu cookies de tercers";
+#elif L==2	// de
+	"Akzeptieren Sie keine Cookies von Drittanbietern";
+#elif L==3	// en
+	"Do no accept third-party cookies";
+#elif L==4	// es
+	"No aceptar cookies de terceros";
+#elif L==5	// fr
+	"Ne pas accepter les cookies tiers";
+#elif L==6	// gn
+	"Ani reacepta umi cookie mbohap&yacute;ha tapicha rehegua";
+#elif L==7	// it
+	"Non accettare i cookie di terze parti";
+#elif L==8	// pl
+	"Nie akceptuj plik&oacute;w cookie stron trzecich";
+#elif L==9	// pt
+	"N&atilde;o aceitar cookies de terceiros";
+#elif L==10	// tr
+	"&Uuml;&ccedil;&uuml;nc&uuml; taraf tan&inodot;mlama bilgilerini kabul etmeyin";
 #endif
 
 const char *Txt_Do_not_show_again =
