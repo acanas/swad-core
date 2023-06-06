@@ -93,7 +93,8 @@ static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
 static void Ban_PutParBanCod (void *BanCod);
-static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide);
+static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,
+                                  Cns_HiddenOrVisible_t HiddenOrVisible);
 
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
                               Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -293,7 +294,7 @@ void Ban_GetBannerDataByCod (struct Ban_Banner *Ban)
    MYSQL_RES *mysql_res;
 
    /***** Clear data *****/
-   Ban->Hidden = false;
+   Ban->HiddenOrVisible = Cns_VISIBLE;
    Ban->ShrtName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
 
    /***** Check if banner code is correct *****/
@@ -340,7 +341,8 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongBannerExit ();
 
    /***** Get if the banner is hidden (row[1]) *****/
-   Ban->Hidden = (row[1][0] == 'Y');
+   Ban->HiddenOrVisible = (row[1][0] == 'Y') ? Cns_HIDDEN :
+					       Cns_VISIBLE;
 
    /***** Get short name (row[2]), full name (row[3]),
           image (row[4]) and URL (row[5]) of the banner *****/
@@ -381,10 +383,15 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidBan,	// Visible ==> action to hide
-      [true ] = ActUnhBan,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhBan,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidBan,	// Visible ==> action to hide
+     };
+   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DAT_LIGHT",
+      [Cns_VISIBLE] = "DAT",
      };
    unsigned NumBan;
    struct Ban_Banner *Ban;
@@ -422,13 +429,12 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 						  Ban_PutParBanCod,
 						  &Banners->BanCodToEdit,
-						  Ban->Hidden);
+						  Ban->HiddenOrVisible);
 	    HTM_TD_End ();
 
 	    /* Banner code */
 	    HTM_TD_Begin ("class=\"RM %s_%s\"",
-			  Ban->Hidden ? "DAT_LIGHT" :
-					"DAT",
+			  DataClass[Ban->HiddenOrVisible],
 			  The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Ban->BanCod);
@@ -527,10 +533,10 @@ void Ban_RemoveBanner (void)
   }
 
 /*****************************************************************************/
-/**************************** Show a hidden banner ***************************/
+/************************** Unhide a hidden banner ***************************/
 /*****************************************************************************/
 
-void Ban_ShowBanner (void)
+void Ban_UnhideBanner (void)
   {
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
 
@@ -538,7 +544,7 @@ void Ban_ShowBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Set banner as visible *****/
-   Ban_ShowOrHideBanner (Ban,false);
+   Ban_ShowOrHideBanner (Ban,Cns_VISIBLE);
   }
 
 /*****************************************************************************/
@@ -553,14 +559,15 @@ void Ban_HideBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Set banner as hidden *****/
-   Ban_ShowOrHideBanner (Ban,true);
+   Ban_ShowOrHideBanner (Ban,Cns_HIDDEN);
   }
 
 /*****************************************************************************/
 /*************** Change hiddeness of banner in the database ******************/
 /*****************************************************************************/
 
-static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
+static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,
+                                  Cns_HiddenOrVisible_t HiddenOrVisible)
   {
    /***** Get banner code *****/
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
@@ -569,8 +576,8 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
    Ban_GetBannerDataByCod (Ban);
 
    /***** Mark file as hidden/visible in database *****/
-   if (Ban->Hidden != Hide)
-      Ban_DB_HideOrUnhideBanner (Ban->BanCod,Hide);
+   if (Ban->HiddenOrVisible != HiddenOrVisible)
+      Ban_DB_HideOrUnhideBanner (Ban->BanCod,HiddenOrVisible);
   }
 
 /*****************************************************************************/
@@ -1033,7 +1040,7 @@ static void Ban_ResetBanner (struct Ban_Banner *Ban)
   {
    /***** Reset banner *****/
    Ban->BanCod      = -1L;
-   Ban->Hidden      = true;
+   Ban->HiddenOrVisible = Cns_HIDDEN;
    Ban->ShrtName[0] = '\0';
    Ban->FullName[0] = '\0';
    Ban->Img[0]      = '\0';

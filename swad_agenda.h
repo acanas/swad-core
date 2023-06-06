@@ -45,13 +45,14 @@ struct Agd_Event
    long AgdCod;
    long UsrCod;
    bool Public;
-   bool Hidden;
+   Cns_HiddenOrVisible_t HiddenOrVisible;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    Dat_TimeStatus_t TimeStatus;
    char Title[Agd_MAX_BYTES_EVENT + 1];
    char Location[Agd_MAX_BYTES_LOCATION + 1];
   };
 
+#define Agd_NUM_PAST_FUTURE_EVENTS 2
 typedef enum
   {
    Agd_PAST___EVENTS = 0,	// Events until yesterday (included)
@@ -60,6 +61,7 @@ typedef enum
 #define Agd_DEFAULT_PAST___EVENTS	(0 << Agd_PAST___EVENTS)	// off
 #define Agd_DEFAULT_FUTURE_EVENTS	(1 << Agd_FUTURE_EVENTS)	// on
 
+#define Agd_NUM_PRIVAT_PUBLIC_EVENTS 2
 typedef enum
   {
    Agd_PRIVAT_EVENTS = 0,
@@ -68,13 +70,8 @@ typedef enum
 #define Agd_DEFAULT_PRIVAT_EVENTS	(1 << Agd_PRIVAT_EVENTS)	// on
 #define Agd_DEFAULT_PUBLIC_EVENTS	(1 << Agd_PUBLIC_EVENTS)	// on
 
-typedef enum
-  {
-   Agd_HIDDEN_EVENTS = 0,
-   Agd_VISIBL_EVENTS = 1,
-  } Agd_HiddenVisiblEvents_t;
-#define Agd_DEFAULT_HIDDEN_EVENTS	(0 << Agd_HIDDEN_EVENTS)	// off
-#define Agd_DEFAULT_VISIBL_EVENTS	(1 << Agd_VISIBL_EVENTS)	// on
+#define Agd_DEFAULT_HIDDEN_EVENTS	(0 << Cns_HIDDEN)	// off
+#define Agd_DEFAULT_VISIBL_EVENTS	(1 << Cns_VISIBLE)	// on
 
 #define Agd_ORDER_DEFAULT Dat_STR_TIME
 

@@ -2309,8 +2309,8 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 Att_GetEventDataFromRow (row,&Event);
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) Event.AttCod;
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = Event.Hidden ? 1 :
-										        0;
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (Event.HiddenOrVisible == Cns_HIDDEN) ? 1 :
+										                                 0;
          Gbl.Usrs.Other.UsrDat.UsrCod = Event.UsrCod;
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.CrsCod))	// Get some user's data from database
            {
@@ -2485,8 +2485,8 @@ int swad__sendAttendanceEvent (struct soap *soap,
      }
 
    /* Is event hidden? */
-   Event.Hidden = (hidden ? true :
-	                  false);
+   Event.HiddenOrVisible = (hidden ? Cns_HIDDEN :
+	                             Cns_VISIBLE);
 
    /* User's code (really not used) */
    Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -4703,8 +4703,8 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Get directory tree into XML file */
    XML_WriteStartFile (XML,"tree",false);
-   if (!Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_IS_FOLDER,
-                                                  Gbl.FileBrowser.FilFolLnk.Full)) // If root folder is visible
+   if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_IS_FOLDER,
+                                                 Gbl.FileBrowser.FilFolLnk.Full) == Cns_VISIBLE)
       API_ListDir (XML,1,
                    Gbl.FileBrowser.Priv.PathRootFolder,
                    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
@@ -4818,7 +4818,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
        Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP)
       if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
-                                                    Gbl.FileBrowser.FilFolLnk.Full))
+                                                    Gbl.FileBrowser.FilFolLnk.Full) == Cns_HIDDEN)
 	 return false;
 
    /***** XML row *****/

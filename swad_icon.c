@@ -296,24 +296,25 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
 				  "cog.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[2],const char *Anchor,
+void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[Cns_NUM_HIDDEN_VISIBLE],
+                                        const char *Anchor,
                                         void (*FuncPars) (void *Args),void *Args,
-                                        bool Hidden)
+                                        Cns_HiddenOrVisible_t HiddenOrVisible)
   {
-   static const char *Icon[2] =
+   static const char *Icon[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = "eye.svg",		// visible ==> icon to hide
-      [true ] = "eye-slash.svg",	// hidden ==> icon to unhide
+      [Cns_HIDDEN ] = "eye-slash.svg",	// hidden ==> icon to unhide
+      [Cns_VISIBLE] = "eye.svg",	// visible ==> icon to hide
      };
-   static Ico_Color_t Color[2] =
+   static Ico_Color_t Color[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = Ico_GREEN,		// visible ==> green icon to hide
-      [true ] = Ico_RED,		// hidden ==> red icon to unhide
+      [Cns_HIDDEN ] = Ico_RED,		// hidden ==> red icon to unhide
+      [Cns_VISIBLE] = Ico_GREEN,	// visible ==> green icon to hide
      };
 
-   Lay_PutContextualLinkOnlyIcon (NextAction[Hidden],Anchor,
+   Lay_PutContextualLinkOnlyIcon (NextAction[HiddenOrVisible],Anchor,
                                   FuncPars,Args,
-				  Icon[Hidden],Color[Hidden]);
+				  Icon[HiddenOrVisible],Color[HiddenOrVisible]);
   }
 
 void Ico_PutContextualIconToExpand (const Act_Action_t NextAction,const char *Anchor,

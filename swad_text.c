@@ -57,6 +57,7 @@
 #include <stddef.h>		// For NULL
 
 #include "swad_action.h"
+#include "swad_agenda.h"
 #include "swad_assignment.h"
 #include "swad_browser.h"
 #include "swad_building.h"
@@ -1270,7 +1271,7 @@ const char *Txt_Administer_one_user =
 	"Administer one user";		// Çeviri lazim!
 #endif
 
-const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
+const char *Txt_AGENDA_PAST___FUTURE_EVENTS[Agd_NUM_PAST_FUTURE_EVENTS] =
 	{
 	// Agd_PAST___EVENTS
 #if   L==1	// ca
@@ -1368,9 +1369,9 @@ const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 #endif
 	};
 
-const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
+const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[Cns_NUM_HIDDEN_VISIBLE] =
 	{
-	// Agd_HIDDEN_EVENTS
+	// Cns_HIDDEN
 #if   L==1	// ca
 	"Esdeveniments ocults"
 #elif L==2	// de
@@ -1393,7 +1394,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 	"Gizli etkinlikler"
 #endif
 	,
-	// Agd_VISIBL_EVENTS
+	// Cns_VISIBLE
 #if   L==1	// ca
 	"Esdeveniments visibles"
 #elif L==2	// de

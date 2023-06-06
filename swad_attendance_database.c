@@ -254,8 +254,8 @@ long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%c','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
-				Event->Hidden ? 'Y' :
-					        'N',
+				Event->HiddenOrVisible == Cns_HIDDEN ? 'Y' :
+								       'N',
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Event->TimeUTC[Dat_STR_TIME],
 				Event->TimeUTC[Dat_END_TIME],
@@ -281,8 +281,8 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
 		          "Txt='%s'"
 		   " WHERE AttCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-                   Event->Hidden ? 'Y' :
-        	                   'N',
+		   Event->HiddenOrVisible == Cns_HIDDEN ? 'Y' :
+							  'N',
                    Event->TimeUTC[Dat_STR_TIME],
                    Event->TimeUTC[Dat_END_TIME],
                    Event->CommentTchVisible ? 'Y' :

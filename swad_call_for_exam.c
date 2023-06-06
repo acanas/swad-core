@@ -1472,10 +1472,10 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 static void Cfe_PutIconsCallForExam (void *CallsForExams)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidCfe,	// Visible ==> action to hide
-      [true ] = ActUnhCfe,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhCfe,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidCfe,	// Visible ==> action to hide
      };
 
    if (CallsForExams)

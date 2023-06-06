@@ -216,10 +216,10 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
       [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_BOX NOTICE_BOX_WIDE",
       [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
      };
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidAnn,	// Visible ==> action to hide
-      [true ] = ActUnhAnn,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhAnn,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidAnn,	// Visible ==> action to hide
      };
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
@@ -236,7 +236,8 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 	 /***** Icon to hide/unhide the announcement *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
 					    Ann_PutParAnnCod,&Announcement->AnnCod,
-					    Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT);
+					    (Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT) ? Cns_HIDDEN :
+												  Cns_VISIBLE);
 	}
 
       /***** Write the subject of the announcement *****/

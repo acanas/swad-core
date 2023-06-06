@@ -3155,10 +3155,10 @@ static Prj_Order_t Prj_GetParPrjOrder (void)
 static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
                                          const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidPrj,	// Visible ==> action to hide
-      [true ] = ActUnhPrj,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhPrj,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidPrj,	// Visible ==> action to hide
      };
 
    if (Prj_CheckIfICanEditProject (&Projects->Prj))

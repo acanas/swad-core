@@ -123,7 +123,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 	StartEndTime++)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
    Session->Title[0]                 = '\0';
-   Session->Hidden		     = false;
+   Session->HiddenOrVisible	     = Cns_VISIBLE;
    Session->Open	             = false;
    Session->ShowUsrResults           = false;
   };
@@ -426,10 +426,10 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
 					       const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidExaSes,	// Visible ==> action to hide
-      [true ] = ActUnhExaSes,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhExaSes,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidExaSes,	// Visible ==> action to hide
      };
 
    Exams->Exam.ExaCod = Session->ExaCod;
@@ -447,7 +447,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 	 /***** Icon to hide/unhide the exam session *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					    ExaSes_PutParsEdit,Exams,
-					    Session->Hidden);
+					    Session->HiddenOrVisible);
 
 	 /***** Icon to edit the exam session *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,
@@ -466,7 +466,7 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
   {
    /***** Session author (teacher) *****/
    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-      Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
+      Usr_WriteAuthor1Line (Session->UsrCod,Session->HiddenOrVisible);
    HTM_TD_End ();
   }
 
@@ -477,23 +477,31 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
                                                unsigned UniqueId)
   {
+   static const char *DateGreenClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
+      [Cns_VISIBLE] = "DATE_GREEN",
+     };
+   static const char *DateRedClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_RED_LIGHT",
+      [Cns_VISIBLE] = "DATE_RED",
+     };
    Dat_StartEndTime_t StartEndTime;
-   const char *Color;
+   const char *DateClass;
    char *Id;
 
    for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      Color = Session->Open ? (Session->Hidden ? "DATE_GREEN_LIGHT":
-					         "DATE_GREEN") :
-			      (Session->Hidden ? "DATE_RED_LIGHT":
-					         "DATE_RED");
+      DateClass = Session->Open ? DateGreenClass[Session->HiddenOrVisible] :
+			          DateRedClass[Session->HiddenOrVisible];
 
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-		    Id,Color,The_GetSuffix (),The_GetColorRows ());
+		    Id,DateClass,The_GetSuffix (),The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x6);
@@ -512,6 +520,11 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
+   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
+      [Cns_VISIBLE] = "ASG_TITLE",
+     };
 
    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
@@ -525,8 +538,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	       HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									     Txt_Resume,
 					"class=\"LT BT_LINK %s_%s\"",
-					Session->Hidden ? "ASG_TITLE_LIGHT" :
-							  "ASG_TITLE",
+					TitleClass[Session->HiddenOrVisible],
 					The_GetSuffix ());
 		  HTM_Txt (Session->Title);
 	       HTM_BUTTON_End ();
@@ -535,8 +547,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	 else
 	   {
 	    HTM_SPAN_Begin ("class=\"%s_%s\"",
-			    Session->Hidden ? "ASG_TITLE_LIGHT" :
-					      "ASG_TITLE",
+			    TitleClass[Session->HiddenOrVisible],
 			    The_GetSuffix ());
 	       HTM_Txt (Session->Title);
 	    HTM_SPAN_End ();
@@ -560,6 +571,11 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
+   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
+      [Cns_VISIBLE] = "ASG_GRP",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -570,9 +586,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  Session->Hidden ? "ASG_GRP_LIGHT":
-			            "ASG_GRP",
-		  The_GetSuffix ());
+                  GroupClass[Session->HiddenOrVisible],The_GetSuffix ());
 
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);
@@ -757,7 +771,8 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongExamExit ();
 
    /* Get whether the session is hidden (row[2]) */
-   Session->Hidden = (row[2][0] == 'Y');
+   Session->HiddenOrVisible = (row[2][0] == 'Y') ? Cns_HIDDEN :
+						   Cns_VISIBLE;
 
    /* Get session teacher (row[3]) */
    Session->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1261,8 +1276,8 @@ bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
   {
    /***** 1. Sessions in hidden exams are not accesible
           2. Hidden or closed sessions are not accesible *****/
-   if (Exam->Hidden ||
-       Session->Hidden ||
+   if (Exam->HiddenOrVisible == Cns_HIDDEN ||
+       Session->HiddenOrVisible == Cns_HIDDEN ||
        !Session->Open)
       return false;
 

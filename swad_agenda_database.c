@@ -116,11 +116,11 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
 	   }
 	 switch (Agenda->HiddenVisiblEvents)
 	   {
-	    case (1 << Agd_HIDDEN_EVENTS):
+	    case (1 << Cns_HIDDEN):
 	       Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='Y'",
 			 sizeof (HiddenVisiblEventsSubQuery) - 1);	// Hidden events
 	       break;
-	    case (1 << Agd_VISIBL_EVENTS):
+	    case (1 << Cns_VISIBLE):
 	       Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
 			 sizeof (HiddenVisiblEventsSubQuery) - 1);	// Visible events
 	       break;

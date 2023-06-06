@@ -126,4 +126,11 @@ typedef enum
    Cns_ENABLED,
   } Cns_DisabledOrEnabled_t;
 
+#define Cns_NUM_HIDDEN_VISIBLE 2
+typedef enum
+  {
+   Cns_HIDDEN,
+   Cns_VISIBLE,
+  } Cns_HiddenOrVisible_t;
+
 #endif

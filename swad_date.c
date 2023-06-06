@@ -57,17 +57,14 @@ extern struct Globals Gbl;
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS] =
+const char *Dat_TimeStatusClass[Dat_NUM_TIME_STATUS][Cns_NUM_HIDDEN_VISIBLE] =
   {
-   [Dat_PAST   ] = "DATE_RED",
-   [Dat_PRESENT] = "DATE_GREEN",
-   [Dat_FUTURE ] = "DATE_BLUE",
-  };
-const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
-  {
-   [Dat_PAST   ] = "DATE_RED_LIGHT",
-   [Dat_PRESENT] = "DATE_GREEN_LIGHT",
-   [Dat_FUTURE ] = "DATE_BLUE_LIGHT",
+   [Dat_PAST   ][Cns_HIDDEN ] = "DATE_RED_LIGHT",
+   [Dat_PAST   ][Cns_VISIBLE] = "DATE_RED",
+   [Dat_PRESENT][Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
+   [Dat_PRESENT][Cns_VISIBLE] = "DATE_GREEN",
+   [Dat_FUTURE ][Cns_HIDDEN ] = "DATE_BLUE_LIGHT",
+   [Dat_FUTURE ][Cns_VISIBLE] = "DATE_BLUE",
   };
 
 /*****************************************************************************/

@@ -45,7 +45,7 @@
 struct Ban_Banner
   {
    long BanCod;
-   bool Hidden;
+   Cns_HiddenOrVisible_t HiddenOrVisible;
    char ShrtName[Ban_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Ban_MAX_BYTES_FULL_NAME + 1];
    char Img[Ban_MAX_BYTES_IMAGE + 1];
@@ -63,7 +63,7 @@ void Ban_PutIconToViewBanners (void);
 
 void Ban_GetBannerDataByCod (struct Ban_Banner *Ban);
 void Ban_RemoveBanner (void);
-void Ban_ShowBanner (void);
+void Ban_UnhideBanner (void);
 void Ban_HideBanner (void);
 void Ban_RenameBannerShort (void);
 void Ban_RenameBannerFull (void);

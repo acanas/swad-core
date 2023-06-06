@@ -183,7 +183,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->TimeUTC[Dat_STR_TIME] = (time_t) 0;
    Exam->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Exam->Title[0]                = '\0';
-   Exam->Hidden                  = false;
+   Exam->HiddenOrVisible         = Cns_VISIBLE;
    Exam->NumSets                 = 0;
    Exam->NumQsts                 = 0;
    Exam->NumSess                 = 0;
@@ -455,11 +455,36 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Sessions;
+   static const char *DateGreenClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
+      [Cns_VISIBLE] = "DATE_GREEN",
+     };
+   static const char *DateRedClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_RED_LIGHT",
+      [Cns_VISIBLE] = "DATE_RED",
+     };
+   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
+      [Cns_VISIBLE] = "ASG_TITLE",
+     };
+   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
+      [Cns_VISIBLE] = "ASG_GRP",
+     };
+   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DAT_LIGHT",
+      [Cns_VISIBLE] = "DAT",
+     };
    char *Anchor;
    static unsigned UniqueId = 0;
    char *Id;
    Dat_StartEndTime_t StartEndTime;
-   const char *Color;
+   const char *DateClass;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Build anchor string *****/
@@ -489,16 +514,14 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	{
 	 if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Color = Exams->Exam.NumOpenSess ? (Exams->Exam.Hidden ? "DATE_GREEN_LIGHT":
-								 "DATE_GREEN") :
-					   (Exams->Exam.Hidden ? "DATE_RED_LIGHT":
-								 "DATE_RED");
+	 DateClass = Exams->Exam.NumOpenSess ? DateGreenClass[Exams->Exam.HiddenOrVisible] :
+					       DateRedClass[Exams->Exam.HiddenOrVisible];
 	 if (ShowOnlyThisExam)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,Color,The_GetSuffix ());
+			  Id,DateClass,The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,Color,The_GetSuffix (),The_GetColorRows ());
+			  Id,DateClass,The_GetSuffix (),The_GetColorRows ());
 	 if (Exams->Exam.TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Exams->Exam.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -518,8 +541,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 Frm_BeginForm (ActSeeOneExa);
 	    Exa_PutPars (Exams);
 	    HTM_BUTTON_Submit_Begin (Txt_View_exam,"class=\"LT BT_LINK %s_%s\"",
-				     Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":
-							  "ASG_TITLE",
+				     TitleClass[Exams->Exam.HiddenOrVisible],
 				     The_GetSuffix ());
 	       HTM_Txt (Exams->Exam.Title);
 	    HTM_BUTTON_End ();
@@ -528,8 +550,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     Exams->Exam.Hidden ? "ASG_GRP_LIGHT" :
-					  "ASG_GRP",
+                     GroupClass[Exams->Exam.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Sets_of_questions);
 	 HTM_Unsigned (Exams->Exam.NumSets);
@@ -538,7 +559,8 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	 HTM_Double (Exams->Exam.MaxGrade);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Result_visibility);
-	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,Exams->Exam.Hidden);
+	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,
+	                             Exams->Exam.HiddenOrVisible);
       HTM_DIV_End ();
 
       /***** Number of sessions in exam *****/
@@ -550,8 +572,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
       Frm_BeginForm (ActSeeOneExa);
 	 Exa_PutPars (Exams);
 	 HTM_BUTTON_Submit_Begin (Txt_Sessions,"class=\"LT BT_LINK %s_%s\"",
-				  Exams->Exam.Hidden ? "ASG_TITLE_LIGHT":
-						       "ASG_TITLE",
+				  TitleClass[Exams->Exam.HiddenOrVisible],
 				  The_GetSuffix ());
 	    if (ShowOnlyThisExam)
 	       HTM_TxtColonNBSP (Txt_Sessions);
@@ -587,8 +608,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     Exams->Exam.Hidden ? "DAT_LIGHT" :
-					  "DAT",
+                     DataClass[Exams->Exam.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -642,7 +662,7 @@ static void Exa_PutIconsEditingOneExam (void *Exams)
 
 static void Exa_WriteAuthor (struct Exa_Exam *Exam)
   {
-   Usr_WriteAuthor1Line (Exam->UsrCod,Exam->Hidden);
+   Usr_WriteAuthor1Line (Exam->UsrCod,Exam->HiddenOrVisible);
   }
 
 /*****************************************************************************/
@@ -661,10 +681,10 @@ static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder)
 static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidExa,	// Visible ==> action to hide
-      [true ] = ActUnhExa,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhExa,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidExa,	// Visible ==> action to hide
      };
    static const Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
@@ -683,7 +703,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       /***** Icon to hide/unhide exam *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Exa_PutPars,Exams,
-					 Exams->Exam.Hidden);
+					 Exams->Exam.HiddenOrVisible);
 
       /***** Icon to edit exam *****/
       Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
@@ -894,7 +914,8 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
       Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the exam is hidden (row[2]) */
-      Exam->Hidden = (row[2][0] == 'Y');
+      Exam->HiddenOrVisible = (row[2][0] == 'Y') ? Cns_HIDDEN :
+						   Cns_VISIBLE;
 
       /* Get author of the exam (row[3]) */
       Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);

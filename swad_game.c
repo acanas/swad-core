@@ -198,7 +198,7 @@ void Gam_ResetGame (struct Gam_Game *Game)
    Game->NumQsts                 = 0;
    Game->NumMchs                 = 0;
    Game->NumUnfinishedMchs       = 0;
-   Game->Hidden                  = false;
+   Game->HiddenOrVisible         = Cns_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -499,11 +499,36 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Matches;
+   static const char *DateGreenClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
+      [Cns_VISIBLE] = "DATE_GREEN",
+     };
+   static const char *DateRedClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_RED_LIGHT",
+      [Cns_VISIBLE] = "DATE_RED",
+     };
+   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
+      [Cns_VISIBLE] = "ASG_TITLE",
+     };
+   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
+      [Cns_VISIBLE] = "ASG_GRP",
+     };
+   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DAT_LIGHT",
+      [Cns_VISIBLE] = "DAT",
+     };
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
    Dat_StartEndTime_t StartEndTime;
-   const char *Color;
+   const char *DateClass;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Set anchor string *****/
@@ -533,16 +558,14 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	{
 	 if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Color = Games->Game.NumUnfinishedMchs ? (Games->Game.Hidden ? "DATE_GREEN_LIGHT":
-								       "DATE_GREEN") :
-						 (Games->Game.Hidden ? "DATE_RED_LIGHT":
-								       "DATE_RED");
+	 DateClass = Games->Game.NumUnfinishedMchs ? DateGreenClass[Games->Game.HiddenOrVisible] :
+						     DateRedClass[Games->Game.HiddenOrVisible];
 	 if (ShowOnlyThisGame)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,Color,The_GetSuffix ());
+			  Id,DateClass,The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,Color,The_GetSuffix (),The_GetColorRows ());
+			  Id,DateClass,The_GetSuffix (),The_GetColorRows ());
 	 if (Games->Game.TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Games->Game.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -562,8 +585,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 Frm_BeginForm (ActSeeOneGam);
 	    Gam_PutPars (Games);
 	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"LT BT_LINK %s_%s\"",
-				     Games->Game.Hidden ? "ASG_TITLE_LIGHT":
-							  "ASG_TITLE",
+				     TitleClass[Games->Game.HiddenOrVisible],
 				     The_GetSuffix ());
 	       HTM_Txt (Games->Game.Title);
 	    HTM_BUTTON_End ();
@@ -572,9 +594,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     Games->Game.Hidden ? "ASG_GRP_LIGHT" :
-				          "ASG_GRP",
-		     The_GetSuffix ());
+                     GroupClass[Games->Game.HiddenOrVisible],The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Games->Game.NumQsts);
 	 HTM_BR ();
@@ -582,7 +602,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 HTM_Double (Games->Game.MaxGrade);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Result_visibility);
-	 TstVis_ShowVisibilityIcons (Games->Game.Visibility,Games->Game.Hidden);
+	 TstVis_ShowVisibilityIcons (Games->Game.Visibility,
+	                             Games->Game.HiddenOrVisible);
       HTM_DIV_End ();
 
       /***** Number of matches in game *****/
@@ -594,8 +615,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       Frm_BeginForm (ActSeeOneGam);
 	 Gam_PutPars (Games);
 	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"LT BT_LINK %s_%s\"",
-	                          Games->Game.Hidden ? "ASG_TITLE_LIGHT":
-						       "ASG_TITLE",
+	                          TitleClass[Games->Game.HiddenOrVisible],
 				  The_GetSuffix ());
 	    if (ShowOnlyThisGame)
 	       HTM_TxtColonNBSP (Txt_Matches);
@@ -631,9 +651,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     Games->Game.Hidden ? "DAT_LIGHT" :
-					  "DAT",
-		     The_GetSuffix ());
+                     DataClass[Games->Game.HiddenOrVisible],The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
@@ -686,7 +704,7 @@ static void Gam_PutIconsEditingOneGame (void *Games)
 
 static void Gam_WriteAuthor (struct Gam_Game *Game)
   {
-   Usr_WriteAuthor1Line (Game->UsrCod,Game->Hidden);
+   Usr_WriteAuthor1Line (Game->UsrCod,Game->HiddenOrVisible);
   }
 
 /*****************************************************************************/
@@ -705,10 +723,10 @@ static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder)
 static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidGam,	// Visible ==> action to hide
-      [true ] = ActUnhGam,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhGam,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidGam,	// Visible ==> action to hide
      };
    static const Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
@@ -727,7 +745,7 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
       /***** Icon to unhide/hide game *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Gam_PutPars,Games,
-					 Games->Game.Hidden);
+					 Games->Game.HiddenOrVisible);
 
       /***** Icon to edit game *****/
       Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,
@@ -950,7 +968,8 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
       Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the game is hidden (row[2]) */
-      Game->Hidden = (row[2][0] == 'Y');
+      Game->HiddenOrVisible = (row[2][0] == 'Y') ? Cns_HIDDEN :
+						   Cns_VISIBLE;
 
       /* Get author of the game (row[3]) */
       Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);

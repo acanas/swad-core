@@ -467,6 +467,16 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    bool PrintView)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
+   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
+      [Cns_VISIBLE] = "ASG_TITLE",
+     };
+   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DAT_LIGHT",
+      [Cns_VISIBLE] = "DAT",
+     };
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -500,18 +510,18 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	 if (PrintView)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s\"",
 			  Id,
-			  Assignments->Asg.Hidden ? (Assignments->Asg.Open ? "DATE_GREEN_LIGHT" :
-									     "DATE_RED_LIGHT") :
-						    (Assignments->Asg.Open ? "DATE_GREEN" :
-									     "DATE_RED"),
+			  Assignments->Asg.HiddenOrVisible == Cns_HIDDEN ? (Assignments->Asg.Open ? "DATE_GREEN_LIGHT" :
+									                            "DATE_RED_LIGHT") :
+						                           (Assignments->Asg.Open ? "DATE_GREEN" :
+									                            "DATE_RED"),
 			  The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
 			  Id,
-			  Assignments->Asg.Hidden ? (Assignments->Asg.Open ? "DATE_GREEN_LIGHT" :
-									     "DATE_RED_LIGHT") :
-						    (Assignments->Asg.Open ? "DATE_GREEN" :
-									     "DATE_RED"),
+			  Assignments->Asg.HiddenOrVisible == Cns_HIDDEN ? (Assignments->Asg.Open ? "DATE_GREEN_LIGHT" :
+									                            "DATE_RED_LIGHT") :
+						                           (Assignments->Asg.Open ? "DATE_GREEN" :
+									                            "DATE_RED"),
 			  The_GetSuffix (),
 			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Assignments->Asg.TimeUTC[StartEndTime],
@@ -532,8 +542,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	    Asg_PutPars (Assignments);
 	    HTM_BUTTON_Submit_Begin (Txt_Actions[ActSeeOneAsg],
 	                             "class=\"LT BT_LINK %s_%s\"",
-				     Assignments->Asg.Hidden ? "ASG_TITLE_LIGHT" :
-						               "ASG_TITLE",
+				     TitleClass[Assignments->Asg.HiddenOrVisible],
 				     The_GetSuffix ());
 	       HTM_Txt (Assignments->Asg.Title);
 	    HTM_BUTTON_End ();
@@ -581,8 +590,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Assignments->Asg);
 
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     Assignments->Asg.Hidden ? "DAT_LIGHT" :
-				               "DAT",
+                     DataClass[Assignments->Asg.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -604,7 +612,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg)
   {
-   Usr_WriteAuthor1Line (Asg->UsrCod,Asg->Hidden);
+   Usr_WriteAuthor1Line (Asg->UsrCod,Asg->HiddenOrVisible);
   }
 
 /*****************************************************************************/
@@ -615,9 +623,9 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
   {
    extern const char *Txt_Folder;
    Act_Action_t NextAction;
-   bool ICanSendFiles = !Asg->Hidden &&			// It's visible (not hidden)
-                         Asg->Open &&			// It's open (inside dates)
-                         Asg->IBelongToCrsOrGrps;	// I belong to course or groups
+   bool ICanSendFiles = Asg->HiddenOrVisible == Cns_VISIBLE &&	// It's visible (not hidden)
+                        Asg->Open &&				// It's open (inside dates)
+                        Asg->IBelongToCrsOrGrps;		// I belong to course or groups
 
    /***** Folder icon *****/
    if (!PrintView &&	// Not print view
@@ -702,10 +710,10 @@ Dat_StartEndTime_t Asg_GetParAsgOrder (void)
 static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidAsg,	// Visible ==> action to hide
-      [true ] = ActUnhAsg,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhAsg,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidAsg,	// Visible ==> action to hide
      };
 
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -719,7 +727,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 	 /***** Icon to hide/unhide assignment *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					    Asg_PutPars,Assignments,
-					    Assignments->Asg.Hidden);
+					    Assignments->Asg.HiddenOrVisible);
 
 	 /***** Icon to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
@@ -881,7 +889,8 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
       Asg->AsgCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get whether the assignment is hidden or not (row[1]) */
-      Asg->Hidden = (row[1][0] == 'Y');
+      Asg->HiddenOrVisible = (row[1][0] == 'Y') ? Cns_HIDDEN :
+						  Cns_VISIBLE;
 
       /* Get author of the assignment (row[2]) */
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -915,7 +924,7 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
    if (Asg->AsgCod <= 0)	// If > 0 ==> keep value
       Asg->AsgCod = -1L;
    Asg->AsgCod = -1L;
-   Asg->Hidden = false;
+   Asg->HiddenOrVisible = Cns_VISIBLE;
    Asg->UsrCod = -1L;
    Asg->TimeUTC[Dat_STR_TIME] =
    Asg->TimeUTC[Dat_END_TIME] = (time_t) 0;
@@ -1555,6 +1564,11 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
+   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
+      [Cns_VISIBLE] = "ASG_GRP",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -1565,8 +1579,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  Asg->Hidden ? "ASG_GRP_LIGHT" :
-        	                "ASG_GRP",
+                  GroupClass[Asg->HiddenOrVisible],
         	  The_GetSuffix ());
 
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :

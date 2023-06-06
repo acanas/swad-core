@@ -79,7 +79,7 @@ struct Gam_Game
    unsigned Visibility;		// Visibility of results
    char Title[Gam_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Hidden;			// Game is hidden
+   Cns_HiddenOrVisible_t HiddenOrVisible;	// Game is hidden or visible?
    unsigned NumQsts;		// Number of questions in the game
    unsigned NumMchs;		// Number of matches in the game
    unsigned NumUnfinishedMchs;	// Number of unfinished matches in the game

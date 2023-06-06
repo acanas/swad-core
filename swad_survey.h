@@ -53,7 +53,7 @@ struct Svy_Survey
    unsigned NumUsrs;	// Number of distinct users who have already answered the survey
    struct
      {
-      bool Hidden;		// Survey is hidden
+      Cns_HiddenOrVisible_t HiddenOrVisible;	// Survey is hidden or visible?
       bool Open;		// Start date <= now <= end date
       bool IAmLoggedWithAValidRoleToAnswer;	// I am logged with a valid role to answer this survey
       bool IBelongToScope;	// I belong to the scope of this survey

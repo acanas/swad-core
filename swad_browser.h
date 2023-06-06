@@ -29,6 +29,7 @@
 
 #include <linux/limits.h>	// For PATH_MAX
 
+#include "swad_constant.h"
 #include "swad_course.h"
 #include "swad_form.h"
 #include "swad_group.h"
@@ -219,7 +220,8 @@ void Brw_RcvFileInFileBrwClassic (void);
 void Brw_RecLinkFileBrowser (void);
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
-bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path);
+Cns_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,
+                                                                const char *Path);
 void Brw_ShowFileMetadata (void);
 
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);

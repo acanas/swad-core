@@ -206,9 +206,9 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
 
 static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2];
+   extern const char *Txt_AGENDA_PAST___FUTURE_EVENTS[Agd_NUM_PAST_FUTURE_EVENTS];
    Agd_Past__FutureEvents_t PstFut;
-   static const char *Icon[2] =
+   static const char *Icon[Agd_NUM_PAST_FUTURE_EVENTS] =
      {
       [Agd_PAST___EVENTS] = "calendar-minus.svg",
       [Agd_FUTURE_EVENTS] = "calendar-plus.svg",
@@ -247,7 +247,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
      {
       const char *Icon;
       Ico_Color_t Color;
-     } Icon[2] =
+     } Icon[Agd_NUM_PRIVAT_PUBLIC_EVENTS] =
      {
       [Agd_PRIVAT_EVENTS] = {"lock.svg"  ,Ico_RED  },
       [Agd_PUBLIC_EVENTS] = {"unlock.svg",Ico_GREEN},
@@ -280,33 +280,33 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2];
-   Agd_HiddenVisiblEvents_t HidVis;
+   extern const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[Cns_NUM_HIDDEN_VISIBLE];
+   Cns_HiddenOrVisible_t HiddenOrVisible;
    static const struct
      {
       const char *Icon;
       Ico_Color_t Color;
-     } Icon[2] =
+     } Icon[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [Agd_HIDDEN_EVENTS] = {"eye-slash.svg",Ico_RED  },
-      [Agd_VISIBL_EVENTS] = {"eye.svg"      ,Ico_GREEN},
+      [Cns_HIDDEN ] = {"eye-slash.svg",Ico_RED  },
+      [Cns_VISIBLE] = {"eye.svg"      ,Ico_GREEN},
      };
 
    Set_BeginOneSettingSelector ();
-   for (HidVis  = Agd_HIDDEN_EVENTS;
-	HidVis <= Agd_VISIBL_EVENTS;
-	HidVis++)
+   for (HiddenOrVisible  = Cns_HIDDEN;
+	HiddenOrVisible <= Cns_VISIBLE;
+	HiddenOrVisible++)
      {
-      Set_BeginPref ((Agenda->HiddenVisiblEvents & (1 << HidVis)));
+      Set_BeginPref ((Agenda->HiddenVisiblEvents & (1 << HiddenOrVisible)));
 	 Frm_BeginForm (ActSeeMyAgd);
 	    Agd_PutParsMyAgenda (Agenda->Past__FutureEvents,
 				 Agenda->PrivatPublicEvents,
-				 Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
+				 Agenda->HiddenVisiblEvents ^ (1 << HiddenOrVisible),	// Toggle
 				 Agenda->SelectedOrder,
 				 Agenda->CurrentPage,
 				 -1L);
-	    Ico_PutSettingIconLink (Icon[HidVis].Icon,Icon[HidVis].Color,
-				    Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
+	    Ico_PutSettingIconLink (Icon[HiddenOrVisible].Icon,Icon[HiddenOrVisible].Color,
+				    Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HiddenOrVisible]);
 	 Frm_EndForm ();
       Set_EndPref ();
      }
@@ -360,8 +360,8 @@ static unsigned Agd_GetParsHiddenVisiblEvents (void)
   {
    return (unsigned) Par_GetParUnsignedLong (ParHiddenVisiblName,
 					     0,
-					     (1 << Agd_HIDDEN_EVENTS) |
-					     (1 << Agd_VISIBL_EVENTS),
+					     (1 << Cns_HIDDEN) |
+					     (1 << Cns_VISIBLE),
 					     Agd_DEFAULT_HIDDEN_EVENTS |
 					     Agd_DEFAULT_VISIBL_EVENTS);
   }
@@ -748,8 +748,17 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
 static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
                               Agd_AgendaType_t AgendaType,long AgdCod)
   {
-   extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
-   extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
+   extern const char *Dat_TimeStatusClass[Dat_NUM_TIME_STATUS][Cns_NUM_HIDDEN_VISIBLE];
+   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
+      [Cns_VISIBLE] = "ASG_TITLE",
+     };
+   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DAT_LIGHT",
+      [Cns_VISIBLE] = "DAT",
+     };
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -788,8 +797,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
 		       Id,
-		       AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
-					 Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
+		       Dat_TimeStatusClass[AgdEvent.TimeStatus][AgdEvent.HiddenOrVisible],
 		       The_GetSuffix (),
 		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
@@ -803,8 +811,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 HTM_ARTICLE_Begin (Anchor);
 	    HTM_SPAN_Begin ("class=\"%s_%s\"",
-			    AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
-					      "ASG_TITLE",
+			    TitleClass[AgdEvent.HiddenOrVisible],
 			    The_GetSuffix ());
 	       HTM_Txt (AgdEvent.Title);
 	    HTM_SPAN_End ();
@@ -814,8 +821,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       /* Location */
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 HTM_SPAN_Begin ("class=\"%s_%s\"",
-	                 AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
-					   "ASG_TITLE",
+			 TitleClass[AgdEvent.HiddenOrVisible],
 		         The_GetSuffix ());
 	    HTM_Txt (AgdEvent.Location);
 	 HTM_SPAN_End ();
@@ -842,8 +848,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       /* Text of the event */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
 	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-	                AgdEvent.Hidden ? "DAT_LIGHT" :
-	                	          "DAT",
+	                DataClass[AgdEvent.HiddenOrVisible],
 	                The_GetSuffix ());
 	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -867,10 +872,10 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
                                            struct Agd_Event *AgdEvent,
                                            const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidEvtMyAgd,	// Visible ==> action to hide
-      [true ] = ActUnhEvtMyAgd,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhEvtMyAgd,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidEvtMyAgd,	// Visible ==> action to hide
      };
 
    Agenda->AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
@@ -882,7 +887,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
    /***** Icon to hide/unhide event *****/
    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 				      Agd_PutCurrentParsMyAgenda,Agenda,
-				      AgdEvent->Hidden);
+				      AgdEvent->HiddenOrVisible);
 
    /***** Icon to edit event *****/
    Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,NULL,
@@ -1087,7 +1092,8 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
       /* Get whether the event is public or not (row[1])
          and whether it is hidden or not (row[2])  */
       AgdEvent->Public = (row[1][0] == 'Y');
-      AgdEvent->Hidden = (row[2][0] == 'Y');
+      AgdEvent->HiddenOrVisible = (row[2][0] == 'Y') ? Cns_HIDDEN :
+	                                               Cns_VISIBLE;
 
       /* Get start date (row[3]) and end date (row[4]) in UTC time */
       AgdEvent->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
@@ -1107,7 +1113,7 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
       /***** Clear all event data *****/
       AgdEvent->AgdCod                = -1L;
       AgdEvent->Public                = false;
-      AgdEvent->Hidden                = false;
+      AgdEvent->HiddenOrVisible       = Cns_VISIBLE;
       AgdEvent->TimeUTC[Dat_STR_TIME] =
       AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;
       AgdEvent->TimeStatus            = Dat_FUTURE;

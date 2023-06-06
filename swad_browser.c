@@ -354,39 +354,6 @@ static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
-static const Act_Action_t Brw_ActHideUnhide[Brw_NUM_TYPES_FILE_BROWSER][2] =
-  {
-   [Brw_UNKNOWN     ] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_SHOW_DOC_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_SHOW_MRK_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_DOC_CRS] = {[false] = ActHidDocCrs	,[true] = ActUnhDocCrs	},
-   [Brw_ADMI_SHR_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_SHR_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_WRK_USR] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_WRK_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_MRK_CRS] = {[false] = ActHidMrkCrs	,[true] = ActUnhMrkCrs	},
-   [Brw_ADMI_BRF_USR] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_SHOW_DOC_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_DOC_GRP] = {[false] = ActHidDocGrp	,[true] = ActUnhDocGrp	},
-   [Brw_SHOW_MRK_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_MRK_GRP] = {[false] = ActHidMrkGrp	,[true] = ActUnhMrkGrp	},
-   [Brw_ADMI_ASG_USR] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_ASG_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_SHOW_DOC_DEG] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_DOC_DEG] = {[false] = ActHidDocDeg	,[true] = ActUnhDocDeg	},
-   [Brw_SHOW_DOC_CTR] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_DOC_CTR] = {[false] = ActHidDocCtr	,[true] = ActUnhDocCtr	},
-   [Brw_SHOW_DOC_INS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_DOC_INS] = {[false] = ActHidDocIns	,[true] = ActUnhDocIns	},
-   [Brw_ADMI_SHR_DEG] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_SHR_CTR] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_SHR_INS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_TCH_CRS] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_TCH_GRP] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_DOC_PRJ] = {[false] = ActUnk	,[true] = ActUnk	},
-   [Brw_ADMI_ASS_PRJ] = {[false] = ActUnk	,[true] = ActUnk	},
-  };
-
 static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1110,20 +1077,21 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   Brw_IconTree_t IconThisRow);
 static void Brw_IndentDependingOnLevel (unsigned Level);
 static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *RowId,
-                                       bool Hidden);
+                                       Cns_HiddenOrVisible_t HiddenOrVisible);
 static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *RowId,
-                                         bool Hidden);
+                                         Cns_HiddenOrVisible_t HiddenOrVisible);
 
-static void Brw_PutIconHideUnhide (const char *Anchor,bool RowSetAsHidden);
+static void Brw_PutIconHideUnhide (const char *Anchor,
+                                   Cns_HiddenOrVisible_t HiddenOrVisible);
 static bool Brw_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
                                Brw_IconTree_t IconSubtree);
 static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *RowId,
-			                  bool Open,bool Hidden);
+			                  bool Open,Cns_HiddenOrVisible_t HiddenOrVisible);
 static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
-				       bool Open,bool Hidden);
+				       bool Open,Cns_HiddenOrVisible_t HiddenOrVisible);
 
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata *FileMetadata);
@@ -4038,7 +4006,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                      Brw_IconTree_t IconThisRow)
   {
    char *Anchor;
-   bool RowSetAsHidden = false;
+   Cns_HiddenOrVisible_t HiddenOrVisible = Cns_VISIBLE;
    bool RowSetAsPublic = false;
    bool LightStyle = false;
    bool IsRecent = false;
@@ -4075,18 +4043,23 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (SeeDocsZone || AdminDocsZone ||
        SeeMarks    || AdminMarks)
      {
-      RowSetAsHidden = Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
-                                                                 Gbl.FileBrowser.FilFolLnk.Full);
-      if (RowSetAsHidden && Level && (SeeDocsZone || SeeMarks))
+      HiddenOrVisible = Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
+                                                                  Gbl.FileBrowser.FilFolLnk.Full);
+      if (HiddenOrVisible == Cns_HIDDEN && Level && (SeeDocsZone || SeeMarks))
          return false;
       if (AdminDocsZone || AdminMarks)
         {
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-	    Gbl.FileBrowser.HiddenLevels[Level] = RowSetAsHidden;
-         if (RowSetAsHidden)	// this row is marked as hidden
-            LightStyle = true;
-         else			// this row is not marked as hidden
-            LightStyle = Brw_CheckIfAnyHigherLevelIsHidden (Level);
+	    Gbl.FileBrowser.HiddenLevels[Level] = (HiddenOrVisible == Cns_HIDDEN);
+	 switch (HiddenOrVisible)
+	   {
+	    case Cns_HIDDEN:	// this row is marked as hidden
+               LightStyle = true;
+	       break;
+	    case Cns_VISIBLE:	// this row is not marked as hidden
+               LightStyle = Brw_CheckIfAnyHigherLevelIsHidden (Level);
+	       break;
+	   }
         }
      }
 
@@ -4216,7 +4189,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
 	    /* Put icon to hide/unhide file or folder */
 	    if (AdminDocsZone || AdminMarks)
-	       Brw_PutIconHideUnhide (Anchor,RowSetAsHidden);
+	       Brw_PutIconHideUnhide (Anchor,HiddenOrVisible);
 
 	    /***** File or folder icon *****/
 	    switch (Gbl.FileBrowser.FilFolLnk.Type)
@@ -4266,7 +4239,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 	     !SeeMarks &&				// Do not ZIP folders when seeing marks
-	     !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
+	     !(SeeDocsZone && HiddenOrVisible == Cns_HIDDEN))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	    Brw_PutButtonToDownloadZIPOfAFolder ();
       HTM_TD_End ();
      }
@@ -4280,7 +4253,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    The_ChangeRowColor ();
 
-   if (RowSetAsHidden && (SeeDocsZone || SeeMarks))
+   if (HiddenOrVisible == Cns_HIDDEN && (SeeDocsZone || SeeMarks))
       return false;
    return true;
   }
@@ -4449,20 +4422,20 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
 		  case Brw_ICON_TREE_EXPAND:
 		     /***** Visible icon to expand folder *****/
 		     Brw_PutIconToExpandFolder (FileBrowserId,RowId,
-						false);	// Visible
+						Cns_VISIBLE);
 
 		     /***** Hidden icon to contract folder *****/
 		     Brw_PutIconToContractFolder (FileBrowserId,RowId,
-						  true);	// Hidden
+						  Cns_HIDDEN);
 		     break;
 		  case Brw_ICON_TREE_CONTRACT:
 		     /***** Hidden icon to expand folder *****/
 		     Brw_PutIconToExpandFolder (FileBrowserId,RowId,
-						true);	// Hidden
+						Cns_HIDDEN);
 
 		     /***** Visible icon to contract folder *****/
 		     Brw_PutIconToContractFolder (FileBrowserId,RowId,
-						  false);	// Visible
+						  Cns_VISIBLE);
 		     break;
 		 }
 	    HTM_TD_End ();
@@ -4495,17 +4468,22 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 /*****************************************************************************/
 
 static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *RowId,
-                                       bool Hidden)
+                                       Cns_HiddenOrVisible_t HiddenOrVisible)
   {
    char JavaScriptFuncToExpandFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Begin container *****/
-   if (Hidden)
-      HTM_DIV_Begin ("id=\"expand_%s_%s\" style=\"display:none;\"",
-                     FileBrowserId,RowId);
-   else
-      HTM_DIV_Begin ("id=\"expand_%s_%s\"",
-                     FileBrowserId,RowId);
+   switch (HiddenOrVisible)
+     {
+      case Cns_HIDDEN:
+	 HTM_DIV_Begin ("id=\"expand_%s_%s\" class=\"NOT_SHOWN\"",
+			FileBrowserId,RowId);
+	 break;
+      case Cns_VISIBLE:
+	 HTM_DIV_Begin ("id=\"expand_%s_%s\"",
+			FileBrowserId,RowId);
+	 break;
+     }
 
    /***** Form and icon *****/
    snprintf (JavaScriptFuncToExpandFolder,sizeof (JavaScriptFuncToExpandFolder),
@@ -4528,17 +4506,22 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 /*****************************************************************************/
 
 static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *RowId,
-                                         bool Hidden)
+                                         Cns_HiddenOrVisible_t HiddenOrVisible)
   {
    char JavaScriptFuncToContractFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Begin container *****/
-   if (Hidden)
-      HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
-	             FileBrowserId,RowId);
-   else
-      HTM_DIV_Begin ("id=\"contract_%s_%s\"",
-                     FileBrowserId,RowId);
+   switch (HiddenOrVisible)
+     {
+      case Cns_HIDDEN:
+	 HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
+			FileBrowserId,RowId);
+	 break;
+      case Cns_VISIBLE:
+	 HTM_DIV_Begin ("id=\"contract_%s_%s\"",
+			FileBrowserId,RowId);
+	 break;
+     }
 
    /***** Form and icon *****/
    snprintf (JavaScriptFuncToContractFolder,sizeof (JavaScriptFuncToContractFolder),
@@ -4560,12 +4543,46 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 /************* Put link and icon to hide/unhide file or folder ***************/
 /*****************************************************************************/
 
-static void Brw_PutIconHideUnhide (const char *Anchor,bool RowSetAsHidden)
+static void Brw_PutIconHideUnhide (const char *Anchor,
+                                   Cns_HiddenOrVisible_t HiddenOrVisible)
   {
+   static const Act_Action_t Brw_ActHideUnhide[Brw_NUM_TYPES_FILE_BROWSER][Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Brw_UNKNOWN     ] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_SHOW_DOC_CRS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_SHOW_MRK_CRS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_DOC_CRS] = {[Cns_HIDDEN] = ActUnhDocCrs	,[Cns_VISIBLE] = ActHidDocCrs	},
+      [Brw_ADMI_SHR_CRS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_SHR_GRP] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_WRK_USR] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_WRK_CRS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_MRK_CRS] = {[Cns_HIDDEN] = ActUnhMrkCrs	,[Cns_VISIBLE] = ActHidMrkCrs	},
+      [Brw_ADMI_BRF_USR] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_SHOW_DOC_GRP] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_DOC_GRP] = {[Cns_HIDDEN] = ActUnhDocGrp	,[Cns_VISIBLE] = ActHidDocGrp	},
+      [Brw_SHOW_MRK_GRP] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_MRK_GRP] = {[Cns_HIDDEN] = ActUnhMrkGrp	,[Cns_VISIBLE] = ActHidMrkGrp	},
+      [Brw_ADMI_ASG_USR] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_ASG_CRS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_SHOW_DOC_DEG] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_DOC_DEG] = {[Cns_HIDDEN] = ActUnhDocDeg	,[Cns_VISIBLE] = ActHidDocDeg	},
+      [Brw_SHOW_DOC_CTR] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_DOC_CTR] = {[Cns_HIDDEN] = ActUnhDocCtr	,[Cns_VISIBLE] = ActHidDocCtr	},
+      [Brw_SHOW_DOC_INS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_DOC_INS] = {[Cns_HIDDEN] = ActUnhDocIns	,[Cns_VISIBLE] = ActHidDocIns	},
+      [Brw_ADMI_SHR_DEG] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_SHR_CTR] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_SHR_INS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_TCH_CRS] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_TCH_GRP] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_DOC_PRJ] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+      [Brw_ADMI_ASS_PRJ] = {[Cns_HIDDEN] = ActUnk	,[Cns_VISIBLE] = ActUnk		},
+     };
+
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
       Ico_PutContextualIconToHideUnhide (Brw_ActHideUnhide[Gbl.FileBrowser.Type],Anchor,
 					 Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
-					 RowSetAsHidden);
+					 HiddenOrVisible);
    HTM_TD_End ();
   }
 
@@ -4634,24 +4651,24 @@ static void Brw_PutIconFolder (unsigned Level,
 	    /***** Visible icon with folder closed *****/
 	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
 					  false,	// Closed
-					  false);	// Visible
+					  Cns_VISIBLE);
 
 	    /***** Hidden icon with folder open *****/
 	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
 					  true,	// Open
-					  true);	// Hidden
+					  Cns_HIDDEN);
 	   }
 	 else
 	   {
 	    /***** Hidden icon with folder closed *****/
 	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
 					  false,	// Closed
-					  true);	// Hidden
+					  Cns_HIDDEN);
 
 	    /***** Visible icon with folder open *****/
 	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
 					  true,	// Open
-					  false);	// Visible
+					  Cns_VISIBLE);
 	   }
 	}
 
@@ -4664,18 +4681,21 @@ static void Brw_PutIconFolder (unsigned Level,
 /*****************************************************************************/
 
 static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *RowId,
-			                  bool Open,bool Hidden)
+			                  bool Open,Cns_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *Txt_Folder;
+   static const char *Class[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "NOT_SHOWN ",
+      [Cns_VISIBLE] = "",
+    };
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\" %s",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s%s\"",
 		  Open ? "open" :
 			 "closed",
 		  FileBrowserId,RowId,
-		  The_GetColorRows (),
-                  Hidden ? " style=\"display:none;\"" :
-			   "");
+                  Class[HiddenOrVisible],The_GetColorRows ());
 
       /***** Icon *****/
       Ico_PutIcon (Open ? "folder-open-yellow.png" :
@@ -4692,16 +4712,20 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
 /*****************************************************************************/
 
 static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
-				       bool Open,bool Hidden)
+				       bool Open,Cns_HiddenOrVisible_t HiddenOrVisible)
   {
+   static const char *Class[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "NOT_SHOWN ",
+      [Cns_VISIBLE] = "",
+    };
+
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\" %s",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s%s\"",
 		  Open ? "open" :
 			 "closed",
 		  FileBrowserId,RowId,
-		  The_GetColorRows (),
-                  Hidden ? " style=\"display:none;\"" :
-			   "");
+		  Class[HiddenOrVisible],The_GetColorRows ());
 
       /***** Form and icon *****/
       Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
@@ -7427,11 +7451,12 @@ void Brw_SetDocumentAsHidden (void)
 /** Check if a file / folder from the documents zone is set as hidden in DB **/
 /*****************************************************************************/
 
-bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path)
+Cns_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,
+                                                                const char *Path)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool IsHidden = false;
+   Cns_HiddenOrVisible_t HiddenOrVisible;
 
    /***** Get if a file or folder is hidden from database *****/
    if (Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (&mysql_res,Path))
@@ -7440,16 +7465,20 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
       row = mysql_fetch_row (mysql_res);
 
       /* File is hidden? (row[0]) */
-      IsHidden = (row[0][0] == 'Y');
+      HiddenOrVisible = (row[0][0] == 'Y') ? Cns_HIDDEN :
+	                                     Cns_VISIBLE;
      }
    else
+     {
       Brw_DB_AddPath (-1L,FileType,
                        Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
+      HiddenOrVisible = Cns_VISIBLE;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return IsHidden;
+   return HiddenOrVisible;
   }
 
 /*****************************************************************************/
@@ -8936,7 +8965,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 	 if (Gbl.FileBrowser.Asg.AsgCod <= 0)	// If folder does not correspond to any assignment
 	    return true;			// Folder can be removed or renamed
 
-	 if (Gbl.FileBrowser.Asg.Hidden)	// If assignment is hidden
+	 if (Gbl.FileBrowser.Asg.HiddenOrVisible == Cns_HIDDEN)
 	    return false;			// Do not edit anything in hidden assigments
 
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER && // The main folder of an assignment
@@ -9023,7 +9052,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (Gbl.FileBrowser.Asg.AsgCod <= 0)	// If folder does not correspond to any assignment
 	    return false;			// Do not create anything out of assignments
 
-	 if (Gbl.FileBrowser.Asg.Hidden)	// If assignment is hidden
+	 if (Gbl.FileBrowser.Asg.HiddenOrVisible == Cns_HIDDEN)
 	    return false;			// Do not create anything in hidden assigments
 
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment

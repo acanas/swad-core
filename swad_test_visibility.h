@@ -50,7 +50,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,bool Hidden);
+void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
+                                 Cns_HiddenOrVisible_t HiddenOrVisible);
 void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility);
 unsigned TstVis_GetVisibilityFromForm (void);
 unsigned TstVis_GetVisibilityFromStr (const char *Str);

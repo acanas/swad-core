@@ -6374,7 +6374,8 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,
 			    ClassPhoto[Gbl.Prefs.PhotoShape]);
 	 HTM_TD_End ();
 
-	 /***** Second column with user name (if author has a web page, put a link to it) *****/
+	 /***** Second column with user name
+	        (if author has a web page, put a link to it) *****/
 	 if (WriteAuthor)
 	   {
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -6384,8 +6385,6 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,
 	   }
 	 else
 	    HTM_TD_Begin ("class=\"LM\"");
-
-	 /***** End second column *****/
 	 HTM_TD_End ();
 
       /***** End row and table *****/
@@ -6397,7 +6396,7 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,
 /********************* Write the author of an assignment *********************/
 /*****************************************************************************/
 
-void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
+void Usr_WriteAuthor1Line (long UsrCod,Cns_HiddenOrVisible_t HiddenOrVisible)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -6405,6 +6404,11 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
       [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
+     };
+   static const char *MsgClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "MSG_AUT_LIGHT",
+      [Cns_VISIBLE] = "MSG_AUT",
      };
    bool ShowPhoto = false;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -6427,9 +6431,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 
    /***** Write name *****/
    HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s_%s\"",
-                  Hidden ? "MSG_AUT_LIGHT" :
-        	           "MSG_AUT",
-        	  The_GetSuffix ());
+                  MsgClass[HiddenOrVisible],The_GetSuffix ());
       HTM_Txt (UsrDat.FullName);
    HTM_DIV_End ();
 

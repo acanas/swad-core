@@ -443,7 +443,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
    char PathFileInTree[PATH_MAX + 1];
    struct stat FileStatus;
    Brw_FileType_t FileType;
-   bool Hidden;
+   Cns_HiddenOrVisible_t HiddenOrVisible;
    bool SeeDocsZone = Gbl.FileBrowser.Type == Brw_SHOW_DOC_INS ||
                       Gbl.FileBrowser.Type == Brw_SHOW_DOC_CTR ||
                       Gbl.FileBrowser.Type == Brw_SHOW_DOC_DEG ||
@@ -479,35 +479,38 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	       FileType = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
 									 Brw_IS_FILE;	// It's a file
 
-	    Hidden = (SeeDocsZone || SeeMarks) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,PathFileInTree) :
-						 false;
+	    HiddenOrVisible = (SeeDocsZone ||
+		               SeeMarks) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
+		                                                                     PathFileInTree) :
+					   Cns_VISIBLE;
 
-	    if (!Hidden)	// If file/folder is not hidden
-	      {
-	       if (FileType == Brw_IS_FOLDER)	// It's a directory
-		 {
-		  FullSize += (unsigned long long) FileStatus.st_size;
+	    if (HiddenOrVisible == Cns_VISIBLE)	// If file/folder is visible
+	       switch (FileType)
+	         {
+		  case Brw_IS_FOLDER:
+		     FullSize += (unsigned long long) FileStatus.st_size;
 
-		  /***** Create clone of subdirectory *****/
-		  if (mkdir (PathFileClone,(mode_t) 0xFFF))
-		     Err_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
+		     /***** Create clone of subdirectory *****/
+		     if (mkdir (PathFileClone,(mode_t) 0xFFF))
+			Err_ShowErrorAndExit ("Can not create temporary subfolder for compression.");
 
-		  /***** Clone subtree starting at this this directory *****/
-		  FullSize += ZIP_CloneDir (PathFile,PathFileClone,PathFileInTree);
-		 }
-	       else if (FileType == Brw_IS_FILE ||
-			FileType == Brw_IS_LINK)	// It's a regular file
-		 {
-		  FullSize += (unsigned long long) FileStatus.st_size;
+		     /***** Clone subtree starting at this this directory *****/
+		     FullSize += ZIP_CloneDir (PathFile,PathFileClone,PathFileInTree);
+		     break;
+		  case Brw_IS_FILE:
+		  case Brw_IS_LINK:
+		     FullSize += (unsigned long long) FileStatus.st_size;
 
-		  /***** Create a symbolic link (clone) to original file *****/
-		  if (symlink (PathFile,PathFileClone) != 0)
-		     Err_ShowErrorAndExit ("Can not create temporary link for compression.");
+		     /***** Create a symbolic link (clone) to original file *****/
+		     if (symlink (PathFile,PathFileClone) != 0)
+			Err_ShowErrorAndExit ("Can not create temporary link for compression.");
 
-		  /***** Update number of my views of this file *****/
-		  Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (PathFileInTree,false));	// Any file, public or not
-		 }
-	      }
+		     /***** Update number of my views of this file *****/
+		     Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (PathFileInTree,false));	// Any file, public or not
+		     break;
+		  default:
+		     break;
+	         }
 	   }
      }
    else

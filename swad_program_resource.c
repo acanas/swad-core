@@ -351,7 +351,8 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    Item->Resource.Hierarchy.RscInd = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the program item is hidden (row(3)) *****/
-   Item->Resource.Hierarchy.Hidden = (row[3][0] == 'Y');
+   Item->Resource.Hierarchy.HiddenOrVisible = (row[3][0] == 'Y') ? Cns_HIDDEN :
+								   Cns_VISIBLE;
 
    /***** Get link type and code (row[4], row[5]) *****/
    Item->Resource.Link.Type = Rsc_GetTypeFromString (row[4]);
@@ -507,10 +508,10 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidPrgRsc,	// Visible ==> action to hide
-      [true ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidPrgRsc,	// Visible ==> action to hide
      };
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_Visible;
@@ -530,7 +531,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
 	 if (NumRsc < NumResources)
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,PrgRsc_RESOURCE_SECTION_ID,
 					       PrgRsc_PutParRscCod,&Item->Resource.Hierarchy.RscCod,
-					       Item->Resource.Hierarchy.Hidden);
+					       Item->Resource.Hierarchy.HiddenOrVisible);
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 

@@ -402,6 +402,31 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Txt_Users;
    extern const char *Txt_Answer_survey;
    extern const char *Txt_View_results;
+   static const char *DateGreenClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
+      [Cns_VISIBLE] = "DATE_GREEN",
+     };
+   static const char *DateRedClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_RED_LIGHT",
+      [Cns_VISIBLE] = "DATE_RED",
+     };
+   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
+      [Cns_VISIBLE] = "ASG_TITLE",
+     };
+   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
+      [Cns_VISIBLE] = "ASG_GRP",
+     };
+   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DAT_LIGHT",
+      [Cns_VISIBLE] = "DAT",
+     };
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -446,18 +471,14 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
-		       Surveys->Svy.Status.Hidden ? (Surveys->Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-										"DATE_RED_LIGHT") :
-						    (Surveys->Svy.Status.Open ? "DATE_GREEN" :
-										"DATE_RED"),
+		       Surveys->Svy.Status.Open ? DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+						  DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix ());
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
-		       Surveys->Svy.Status.Hidden ? (Surveys->Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-										"DATE_RED_LIGHT") :
-						    (Surveys->Svy.Status.Open ? "DATE_GREEN" :
-										"DATE_RED"),
+		       Surveys->Svy.Status.Open ? DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+						  DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix (),
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_STR_TIME],
@@ -472,18 +493,14 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
-		       Surveys->Svy.Status.Hidden ? (Surveys->Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-										"DATE_RED_LIGHT") :
-						    (Surveys->Svy.Status.Open ? "DATE_GREEN" :
-										"DATE_RED"),
+		       Surveys->Svy.Status.Open ? DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+						  DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix ());
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
-		       Surveys->Svy.Status.Hidden ? (Surveys->Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-										"DATE_RED_LIGHT") :
-						    (Surveys->Svy.Status.Open ? "DATE_GREEN" :
-										"DATE_RED"),
+		       Surveys->Svy.Status.Open ? DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+						  DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix (),
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_END_TIME],
@@ -506,8 +523,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    Grp_PutParWhichGroups (&WhichGroups);
 	    Pag_PutParPagNum (Pag_SURVEYS,Surveys->CurrentPage);
 	    HTM_BUTTON_Submit_Begin (Txt_View_survey,"class=\"LT BT_LINK %s_%s\"",
-				     Surveys->Svy.Status.Hidden ? "ASG_TITLE_LIGHT" :
-								  "ASG_TITLE",
+				     TitleClass[Surveys->Svy.Status.HiddenOrVisible],
 				     The_GetSuffix ());
 	       HTM_Txt (Surveys->Svy.Title);
 	    HTM_BUTTON_End ();
@@ -516,8 +532,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Number of questions and number of distinct users who have already answered this survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-		     Surveys->Svy.Status.Hidden ? "ASG_GRP_LIGHT" :
-						  "ASG_GRP",
+		     GroupClass[Surveys->Svy.Status.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Surveys->Svy.NumQsts);
@@ -595,8 +610,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Scope of the survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     Surveys->Svy.Status.Hidden ? "ASG_GRP_LIGHT" :
-						  "ASG_GRP",
+		     GroupClass[Surveys->Svy.Status.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Scope);
 	 switch (Surveys->Svy.Scope)
@@ -627,8 +641,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
       /* Users' roles who can answer the survey */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     Surveys->Svy.Status.Hidden ? "ASG_GRP_LIGHT" :
-                				  "ASG_GRP",
+		     GroupClass[Surveys->Svy.Status.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_TxtColon (Txt_Users);
 	 HTM_BR ();
@@ -650,8 +663,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     Surveys->Svy.Status.Hidden ? "DAT_LIGHT" :
-						  "DAT",
+                     DataClass[Surveys->Svy.Status.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -715,7 +727,7 @@ static void Svy_PutIconsOneSvy (void *Surveys)
 
 static void Svy_WriteAuthor (struct Svy_Survey *Svy)
   {
-   Usr_WriteAuthor1Line (Svy->UsrCod,Svy->Status.Hidden);
+   Usr_WriteAuthor1Line (Svy->UsrCod,Svy->Status.HiddenOrVisible);
   }
 
 /*****************************************************************************/
@@ -734,37 +746,48 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
    extern const char *Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey;
    extern const char *Txt_SURVEY_You_have_already_answered;
    extern const char *Txt_SURVEY_You_have_not_answered;
+   static const char *Class[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "STATUS_RED_LIGHT",
+      [Cns_VISIBLE] = "STATUS_GREEN",
+     };
+   static const char **TxtHiddenOrVisible[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = &Txt_Hidden_survey,
+      [Cns_VISIBLE] = &Txt_Visible_survey,
+     };
+   static const char *StatusGreenClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
+      [Cns_VISIBLE] = "DATE_GREEN",
+     };
+   static const char *StatusRedClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "DATE_RED_LIGHT",
+      [Cns_VISIBLE] = "DATE_RED",
+     };
 
    /***** Begin list with items of status *****/
    HTM_UL_Begin (NULL);
 
       /* Write whether survey is visible or hidden */
-      if (Svy->Status.Hidden)
-	{
-	 HTM_LI_Begin ("class=\"STATUS_RED_LIGHT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Hidden_survey);
-	}
-      else
-	{
-	 HTM_LI_Begin ("class=\"STATUS_GREEN_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Visible_survey);
-	}
+      HTM_LI_Begin ("class=\"%s_%s\"",
+		    Class[Svy->Status.HiddenOrVisible],The_GetSuffix ());
+         HTM_Txt (*TxtHiddenOrVisible[Svy->Status.HiddenOrVisible]);
       HTM_LI_End ();
 
       /* Write whether survey is open or closed */
       if (Svy->Status.Open)
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_GREEN_LIGHT" :
-				            "STATUS_GREEN",
+		       StatusGreenClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_Open_survey);
 	}
       else
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_RED_LIGHT" :
-				            "STATUS_RED",
+		       StatusRedClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_Closed_survey);
 	}
@@ -774,16 +797,14 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
       if (Svy->Status.IAmLoggedWithAValidRoleToAnswer)
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_GREEN_LIGHT" :
-				            "STATUS_GREEN",
+		       StatusGreenClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_SURVEY_Type_of_user_allowed);
 	}
       else
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_RED_LIGHT" :
-				            "STATUS_RED",
+		       StatusRedClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_SURVEY_Type_of_user_not_allowed);
 	}
@@ -793,16 +814,14 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
       if (Svy->Status.IBelongToScope)
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_GREEN_LIGHT" :
-				            "STATUS_GREEN",
+		       StatusGreenClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
 	}
       else
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_RED_LIGHT" :
-					    "STATUS_RED",
+		       StatusRedClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
 	}
@@ -812,16 +831,14 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
       if (Svy->Status.IHaveAnswered)
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_GREEN_LIGHT" :
-					    "STATUS_GREEN",
+		       StatusGreenClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_SURVEY_You_have_already_answered);
 	}
       else
 	{
 	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       Svy->Status.Hidden ? "STATUS_RED_LIGHT" :
-				            "STATUS_RED",
+		       StatusRedClass[Svy->Status.HiddenOrVisible],
 		       The_GetSuffix ());
 	    HTM_Txt (Txt_SURVEY_You_have_not_answered);
 	}
@@ -860,10 +877,10 @@ void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder)
 static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
                                          const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[2] =
+   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
      {
-      [false] = ActHidSvy,	// Visible ==> action to hide
-      [true ] = ActUnhSvy,	// Hidden ==> action to unhide
+      [Cns_HIDDEN ] = ActUnhSvy,	// Hidden ==> action to unhide
+      [Cns_VISIBLE] = ActHidSvy,	// Visible ==> action to hide
      };
 
    if (Surveys->Svy.Status.ICanEdit)
@@ -879,7 +896,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
       /***** Icon to hide/unhide survey *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Svy_PutPars,Surveys,
-					 Surveys->Svy.Status.Hidden);
+					 Surveys->Svy.Status.HiddenOrVisible);
 
       /***** Icon to edit survey *****/
       Ico_PutContextualIconToEdit (ActEdiOneSvy,NULL,
@@ -1147,7 +1164,8 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->Cod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get whether the survey is hidden (row[3]) */
-      Svy->Status.Hidden = (row[3][0] == 'Y');
+      Svy->Status.HiddenOrVisible = (row[3][0] == 'Y') ? Cns_HIDDEN :
+							 Cns_VISIBLE;
 
       /* Get roles (row[4]) */
       if (sscanf (row[4],"%u",&Svy->Roles) != 1)
@@ -1206,7 +1224,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 
       /* Can I answer survey? */
       Svy->Status.ICanAnswer = ( Svy->NumQsts != 0) &&
-                                !Svy->Status.Hidden &&
+                                 Svy->Status.HiddenOrVisible == Cns_VISIBLE &&
                                  Svy->Status.Open &&
                                  Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
                                  Svy->Status.IBelongToScope &&
@@ -1217,18 +1235,18 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-            Svy->Status.ICanViewResults  =  ( Svy->Scope == HieLvl_CRS ||
-        	                             Svy->Scope == HieLvl_DEG ||
-        	                             Svy->Scope == HieLvl_CTR ||
-        	                             Svy->Scope == HieLvl_INS ||
-        	                             Svy->Scope == HieLvl_CTY ||
-        	                             Svy->Scope == HieLvl_SYS) &&
-        	                           ( Svy->NumQsts != 0) &&
-                                            !Svy->Status.Hidden &&
-                                             Svy->Status.Open &&
-                                             Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                             Svy->Status.IBelongToScope &&
-                                             Svy->Status.IHaveAnswered;
+            Svy->Status.ICanViewResults  = (Svy->Scope == HieLvl_CRS ||
+        	                            Svy->Scope == HieLvl_DEG ||
+        	                            Svy->Scope == HieLvl_CTR ||
+        	                            Svy->Scope == HieLvl_INS ||
+        	                            Svy->Scope == HieLvl_CTY ||
+        	                            Svy->Scope == HieLvl_SYS) &&
+        	                           (Svy->NumQsts != 0) &&
+                                            Svy->Status.HiddenOrVisible == Cns_VISIBLE &&
+                                            Svy->Status.Open &&
+                                            Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
+                                            Svy->Status.IBelongToScope &&
+                                            Svy->Status.IHaveAnswered;
             Svy->Status.ICanViewComments = false;
             Svy->Status.ICanEdit         = false;
             break;
@@ -1313,7 +1331,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->Title[0]              = '\0';
       Svy->NumQsts               = 0;
       Svy->NumUsrs               = 0;
-      Svy->Status.Hidden                          = false;
+      Svy->Status.HiddenOrVisible                 = Cns_VISIBLE;
       Svy->Status.Open                            = false;
       Svy->Status.IAmLoggedWithAValidRoleToAnswer = false;
       Svy->Status.IBelongToScope                  = false;
@@ -1659,13 +1677,13 @@ void Svy_ReqCreatOrEditSvy (void)
       Surveys.Svy.Title[0] = '\0';
       Surveys.Svy.NumQsts = 0;
       Surveys.Svy.NumUsrs = 0;
-      Surveys.Svy.Status.Hidden = false;
-      Surveys.Svy.Status.Open = true;
+      Surveys.Svy.Status.HiddenOrVisible  = Cns_VISIBLE;
+      Surveys.Svy.Status.Open		  = true;
       Surveys.Svy.Status.IAmLoggedWithAValidRoleToAnswer = false;
-      Surveys.Svy.Status.IBelongToScope = false;
-      Surveys.Svy.Status.IHaveAnswered = false;
-      Surveys.Svy.Status.ICanAnswer = false;
-      Surveys.Svy.Status.ICanViewResults = false;
+      Surveys.Svy.Status.IBelongToScope   = false;
+      Surveys.Svy.Status.IHaveAnswered    = false;
+      Surveys.Svy.Status.ICanAnswer	  = false;
+      Surveys.Svy.Status.ICanViewResults  = false;
       Surveys.Svy.Status.ICanViewComments = false;
      }
    else
@@ -2144,6 +2162,11 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
+   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
+     {
+      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
+      [Cns_VISIBLE] = "ASG_GRP",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -2154,9 +2177,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  Svy->Status.Hidden ? "ASG_GRP_LIGHT" :
-                	               "ASG_GRP",
-        	  The_GetSuffix ());
+                  GroupClass[Svy->Status.HiddenOrVisible],The_GetSuffix ());
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);
 
