@@ -38,6 +38,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_HTML.h"
 #include "swad_icon.h"
 #include "swad_layout.h"
@@ -68,6 +69,20 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
   {
    [Ico_ICON_SET_AWESOME] = "Awesome",
    [Ico_ICON_SET_NUVOLA ] = "Nuvola",
+  };
+
+struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE] =
+  {
+   [HidVis_HIDDEN ] =
+     {
+      .Icon  = "eye-slash.svg",
+      .Color = Ico_RED
+     },
+   [HidVis_VISIBLE] =
+     {
+      .Icon = "eye.svg",
+      .Color = Ico_GREEN
+     }
   };
 
 /*****************************************************************************/
@@ -296,25 +311,15 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
 				  "cog.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[Cns_NUM_HIDDEN_VISIBLE],
+void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE],
                                         const char *Anchor,
                                         void (*FuncPars) (void *Args),void *Args,
-                                        Cns_HiddenOrVisible_t HiddenOrVisible)
+                                        HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   static const char *Icon[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "eye-slash.svg",	// hidden ==> icon to unhide
-      [Cns_VISIBLE] = "eye.svg",	// visible ==> icon to hide
-     };
-   static Ico_Color_t Color[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = Ico_RED,		// hidden ==> red icon to unhide
-      [Cns_VISIBLE] = Ico_GREEN,	// visible ==> green icon to hide
-     };
-
    Lay_PutContextualLinkOnlyIcon (NextAction[HiddenOrVisible],Anchor,
                                   FuncPars,Args,
-				  Icon[HiddenOrVisible],Color[HiddenOrVisible]);
+				  Ico_HiddenVisible[HiddenOrVisible].Icon,
+				  Ico_HiddenVisible[HiddenOrVisible].Color);
   }
 
 void Ico_PutContextualIconToExpand (const Act_Action_t NextAction,const char *Anchor,

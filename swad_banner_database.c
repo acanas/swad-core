@@ -156,13 +156,13 @@ void Ban_DB_CreateBanner (const struct Ban_Banner *Ban)
 /**************************** Hide/unhide a banner ***************************/
 /*****************************************************************************/
 
-void Ban_DB_HideOrUnhideBanner (long BanCod,Cns_HiddenOrVisible_t HiddenOrVisible)
+void Ban_DB_HideOrUnhideBanner (long BanCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide banner",
 		   "UPDATE ban_banners"
 		     " SET Hidden='%c'"
 		   " WHERE BanCod=%ld",
-		   HiddenOrVisible == Cns_HIDDEN ? 'Y' :
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
 						   'N',
 		   BanCod);
   }

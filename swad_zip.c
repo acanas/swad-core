@@ -443,7 +443,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
    char PathFileInTree[PATH_MAX + 1];
    struct stat FileStatus;
    Brw_FileType_t FileType;
-   Cns_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
    bool SeeDocsZone = Gbl.FileBrowser.Type == Brw_SHOW_DOC_INS ||
                       Gbl.FileBrowser.Type == Brw_SHOW_DOC_CTR ||
                       Gbl.FileBrowser.Type == Brw_SHOW_DOC_DEG ||
@@ -482,9 +482,9 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	    HiddenOrVisible = (SeeDocsZone ||
 		               SeeMarks) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
 		                                                                     PathFileInTree) :
-					   Cns_VISIBLE;
+					   HidVis_VISIBLE;
 
-	    if (HiddenOrVisible == Cns_VISIBLE)	// If file/folder is visible
+	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
 	       switch (FileType)
 	         {
 		  case Brw_IS_FOLDER:

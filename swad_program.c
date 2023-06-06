@@ -40,6 +40,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_pagination.h"
@@ -74,7 +75,7 @@ struct Level
   {
    unsigned Number;	// Numbers for each level from 1 to maximum level
    bool Expanded;	// If each level from 1 to maximum level is expanded
-   Cns_HiddenOrVisible_t HiddenOrVisible;	// If each level...
+   HidVis_HiddenOrVisible_t HiddenOrVisible;	// If each level...
 						// ...from 1 to maximum level...
 						// ...is hidden or visible
   };
@@ -127,7 +128,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               long SelectedRscCod);
 static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
                                              bool Expanded,bool Editing);
-static void Prg_WriteItemText (long ItmCod,Cns_HiddenOrVisible_t HiddenOrVisible);
+static void Prg_WriteItemText (long ItmCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void Prg_WriteRowToCreateItem (long ParentItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level);
 static void Prg_FreeTitleClass (char *TitleClass);
@@ -143,12 +144,12 @@ static void Prg_WriteNumItem (unsigned Level);
 static void Prg_WriteNumNewItem (unsigned Level);
 
 static void Prg_SetExpandedLevel (unsigned Level,bool Expanded);
-static void Prg_SetHiddenLevel (unsigned Level,Cns_HiddenOrVisible_t HiddenOrVisible);
+static void Prg_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOrVisible);
 static bool Prg_GetExpandedLevel (unsigned Level);
-static Cns_HiddenOrVisible_t Prg_GetHiddenLevel (unsigned Level);
+static HidVis_HiddenOrVisible_t Prg_GetHiddenLevel (unsigned Level);
 
 static bool Prg_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel);
-static Cns_HiddenOrVisible_t Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
+static HidVis_HiddenOrVisible_t Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
                                           unsigned NumItem,
@@ -466,6 +467,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               long SelectedItmCod,
                               long SelectedRscCod)
   {
+   extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
    static unsigned UniqueId = 0;
    static bool EditingProgram[Prg_NUM_LISTING_TYPES] =
      {
@@ -487,12 +489,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       [false] = "",			// Not expanded
       [true ] = " rowspan=\"2\"",	// Expanded
      };
-   static const char *PrgClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = " PRG_HIDDEN",
-      [Cns_VISIBLE] = "",
-     };
-   Cns_HiddenOrVisible_t HiddenOrVisible = Cns_HIDDEN;	// Initialized to avoid warning
+   HidVis_HiddenOrVisible_t HiddenOrVisible = HidVis_HIDDEN;	// Initialized to avoid warning
    char *Id;
    unsigned ColSpan;
    unsigned NumCol;
@@ -504,15 +501,15 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    Prg_SetHiddenLevel (Item->Hierarchy.Level,Item->Hierarchy.HiddenOrVisible);
    switch (Item->Hierarchy.HiddenOrVisible)
      {
-      case Cns_HIDDEN:	// this item is marked as hidden
-         HiddenOrVisible = Cns_HIDDEN;
+      case HidVis_HIDDEN:	// this item is marked as hidden
+         HiddenOrVisible = HidVis_HIDDEN;
 	 break;
-      case Cns_VISIBLE:	// this item is not marked as hidden
+      case HidVis_VISIBLE:	// this item is not marked as hidden
          HiddenOrVisible = Prg_CheckIfAnyHigherLevelIsHidden (Item->Hierarchy.Level);
 	 break;
      }
 
-   if (EditingProgram[ListingType] || HiddenOrVisible == Cns_VISIBLE)
+   if (EditingProgram[ListingType] || HiddenOrVisible == HidVis_VISIBLE)
      {
       /***** Increase number in level *****/
       Prg_IncreaseNumberInLevel (Item->Hierarchy.Level);
@@ -557,7 +554,8 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 HTM_TD_Begin ("class=\"PRG_NUM %s\"%s",
 	               The_GetColorRows (),RowSpan[Expanded]);
 	    HTM_DIV_Begin ("class=\"RT %s%s\"",
-			   TitleClass,PrgClass[HiddenOrVisible]);
+			   TitleClass,
+			   HidVis_PrgClass[HiddenOrVisible]);
 	       Prg_WriteNumItem (Item->Hierarchy.Level);
 	    HTM_DIV_End ();
 	 HTM_TD_End ();
@@ -579,7 +577,8 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	    if (HighlightItem)
 	       HTM_ARTICLE_Begin (Prg_ITEM_SECTION_ID);
 	    HTM_DIV_Begin ("class=\"LT %s%s\"",
-			   TitleClass,PrgClass[HiddenOrVisible]);
+			   TitleClass,
+			   HidVis_PrgClass[HiddenOrVisible]);
 	       HTM_Txt (Item->Title);
 	    HTM_DIV_End ();
 	    if (HighlightItem)
@@ -607,7 +606,8 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 			   Id,
 			   Item->Open ? "DATE_GREEN" :
 					"DATE_RED",
-			   The_GetSuffix (),PrgClass[HiddenOrVisible]);
+			   The_GetSuffix (),
+			   HidVis_PrgClass[HiddenOrVisible]);
 	       Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					     true,true,false,0x6);
@@ -688,13 +688,9 @@ static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
 /**************************** Show item text *********************************/
 /*****************************************************************************/
 
-static void Prg_WriteItemText (long ItmCod,Cns_HiddenOrVisible_t HiddenOrVisible)
+static void Prg_WriteItemText (long ItmCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   static const char *PrgClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = " PRG_HIDDEN",
-      [Cns_VISIBLE] = "",
-     };
+   extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /* Text */
@@ -703,7 +699,8 @@ static void Prg_WriteItemText (long ItmCod,Cns_HiddenOrVisible_t HiddenOrVisible
 		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-		  The_GetSuffix (),PrgClass[HiddenOrVisible]);
+		  The_GetSuffix (),
+		  HidVis_PrgClass[HiddenOrVisible]);
       HTM_Txt (Txt);
    HTM_DIV_End ();
   }
@@ -909,7 +906,7 @@ static void Prg_SetExpandedLevel (unsigned Level,bool Expanded)
       Prg_Gbl.Levels[Level].Expanded = Expanded;
   }
 
-static void Prg_SetHiddenLevel (unsigned Level,Cns_HiddenOrVisible_t HiddenOrVisible)
+static void Prg_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    if (Prg_Gbl.Levels)
       Prg_Gbl.Levels[Level].HiddenOrVisible = HiddenOrVisible;
@@ -927,16 +924,16 @@ static bool Prg_GetExpandedLevel (unsigned Level)
    return false;
   }
 
-static Cns_HiddenOrVisible_t Prg_GetHiddenLevel (unsigned Level)
+static HidVis_HiddenOrVisible_t Prg_GetHiddenLevel (unsigned Level)
   {
    /* Level 0 (root) is always visible */
    if (Level == 0)
-      return Cns_VISIBLE;
+      return HidVis_VISIBLE;
 
    if (Prg_Gbl.Levels)
       return Prg_Gbl.Levels[Level].HiddenOrVisible;
 
-   return Cns_VISIBLE;
+   return HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -956,17 +953,17 @@ static bool Prg_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel)
    return true;	// None is contracted. All are expanded
   }
 
-static Cns_HiddenOrVisible_t Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
+static HidVis_HiddenOrVisible_t Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
   {
    unsigned Level;
 
    for (Level = 1;
 	Level < CurrentLevel;
 	Level++)
-      if (Prg_GetHiddenLevel (Level) == Cns_HIDDEN)
-         return Cns_HIDDEN;
+      if (Prg_GetHiddenLevel (Level) == HidVis_HIDDEN)
+         return HidVis_HIDDEN;
 
-   return Cns_VISIBLE;	// None is hidden. All are visible.
+   return HidVis_VISIBLE;	// None is hidden. All are visible.
   }
 
 /*****************************************************************************/
@@ -979,10 +976,10 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
                                           bool HighlightItem)
   {
    extern const char *Txt_Movement_not_allowed;
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhPrgItm,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidPrgItm,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhPrgItm,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidPrgItm,	// Visible ==> action to hide
      };
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -1191,8 +1188,8 @@ void Prg_GetListItems (void)
          Prg_Gbl.List.Items[NumItem].Level  = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the program item is hidden or not (row[3]) */
-	 Prg_Gbl.List.Items[NumItem].HiddenOrVisible = (row[3][0] == 'Y') ? Cns_HIDDEN :
-									    Cns_VISIBLE;
+	 Prg_Gbl.List.Items[NumItem].HiddenOrVisible = (row[3][0] == 'Y') ? HidVis_HIDDEN :
+									    HidVis_VISIBLE;
         }
      }
 
@@ -1260,8 +1257,8 @@ static void Prg_GetItemDataFromRow (MYSQL_RES **mysql_res,
       Item->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get whether the program item is hidden or not (row[3]) */
-      Item->Hierarchy.HiddenOrVisible = (row[3][0] == 'Y') ? Cns_HIDDEN :
-							     Cns_VISIBLE;
+      Item->Hierarchy.HiddenOrVisible = (row[3][0] == 'Y') ? HidVis_HIDDEN :
+							     HidVis_VISIBLE;
 
       /* Get author of the program item (row[4]) */
       Item->UsrCod = Str_ConvertStrCodToLongCod (row[4]);
@@ -1310,7 +1307,7 @@ void Prg_ResetItem (struct Prg_Item *Item)
    Item->Hierarchy.ItmCod = -1L;
    Item->Hierarchy.ItmInd = 0;
    Item->Hierarchy.Level  = 0;
-   Item->Hierarchy.HiddenOrVisible = Cns_VISIBLE;
+   Item->Hierarchy.HiddenOrVisible = HidVis_VISIBLE;
    Item->UsrCod = -1L;
    Item->TimeUTC[Dat_STR_TIME] =
    Item->TimeUTC[Dat_END_TIME] = (time_t) 0;
@@ -1323,7 +1320,7 @@ void Prg_ResetResource (struct Prg_Item *Item)
   {
    Item->Resource.Hierarchy.RscCod = -1L;
    Item->Resource.Hierarchy.RscInd = 0;
-   Item->Resource.Hierarchy.HiddenOrVisible = Cns_VISIBLE;
+   Item->Resource.Hierarchy.HiddenOrVisible = HidVis_VISIBLE;
    Item->Resource.Link.Type = Rsc_NONE;
    Item->Resource.Link.Cod  = -1L;
    Item->Resource.Title[0] = '\0';

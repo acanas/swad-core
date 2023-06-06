@@ -41,6 +41,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
@@ -57,14 +58,16 @@ extern struct Globals Gbl;
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *Dat_TimeStatusClass[Dat_NUM_TIME_STATUS][Cns_NUM_HIDDEN_VISIBLE] =
+const char *Dat_TimeStatusClass[Dat_NUM_TIME_STATUS][HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [Dat_PAST   ][Cns_HIDDEN ] = "DATE_RED_LIGHT",
-   [Dat_PAST   ][Cns_VISIBLE] = "DATE_RED",
-   [Dat_PRESENT][Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
-   [Dat_PRESENT][Cns_VISIBLE] = "DATE_GREEN",
-   [Dat_FUTURE ][Cns_HIDDEN ] = "DATE_BLUE_LIGHT",
-   [Dat_FUTURE ][Cns_VISIBLE] = "DATE_BLUE",
+   [Dat_PAST   ][HidVis_HIDDEN ] = "DATE_RED_LIGHT",
+   [Dat_PAST   ][HidVis_VISIBLE] = "DATE_RED",
+
+   [Dat_PRESENT][HidVis_HIDDEN ] = "DATE_GREEN_LIGHT",
+   [Dat_PRESENT][HidVis_VISIBLE] = "DATE_GREEN",
+
+   [Dat_FUTURE ][HidVis_HIDDEN ] = "DATE_BLUE_LIGHT",
+   [Dat_FUTURE ][HidVis_VISIBLE] = "DATE_BLUE",
   };
 
 /*****************************************************************************/

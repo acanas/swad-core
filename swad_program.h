@@ -42,7 +42,7 @@ struct Prg_ResourceHierarchy
   {
    long RscCod;
    unsigned RscInd;	// 1, 2, 3...
-   Cns_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
   };
 
 #define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
@@ -53,7 +53,7 @@ struct Prg_ItemHierarchy
    long ItmCod;
    unsigned ItmInd;	// 1, 2, 3...
    unsigned Level;
-   Cns_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
   };
 
 struct Prg_Item

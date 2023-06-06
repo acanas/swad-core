@@ -51,7 +51,7 @@ struct Att_Event
    /* Fields stored in database */
    long AttCod;
    long CrsCod;
-   Cns_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;

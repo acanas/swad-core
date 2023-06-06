@@ -39,6 +39,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_link.h"
@@ -94,7 +95,7 @@ static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
 static void Ban_PutParBanCod (void *BanCod);
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,
-                                  Cns_HiddenOrVisible_t HiddenOrVisible);
+                                  HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
                               Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -294,7 +295,7 @@ void Ban_GetBannerDataByCod (struct Ban_Banner *Ban)
    MYSQL_RES *mysql_res;
 
    /***** Clear data *****/
-   Ban->HiddenOrVisible = Cns_VISIBLE;
+   Ban->HiddenOrVisible = HidVis_VISIBLE;
    Ban->ShrtName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
 
    /***** Check if banner code is correct *****/
@@ -341,8 +342,8 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongBannerExit ();
 
    /***** Get if the banner is hidden (row[1]) *****/
-   Ban->HiddenOrVisible = (row[1][0] == 'Y') ? Cns_HIDDEN :
-					       Cns_VISIBLE;
+   Ban->HiddenOrVisible = (row[1][0] == 'Y') ? HidVis_HIDDEN :
+					       HidVis_VISIBLE;
 
    /***** Get short name (row[2]), full name (row[3]),
           image (row[4]) and URL (row[5]) of the banner *****/
@@ -383,16 +384,12 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhBan,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidBan,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhBan,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidBan,	// Visible ==> action to hide
      };
-   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "DAT_LIGHT",
-      [Cns_VISIBLE] = "DAT",
-     };
+   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
@@ -434,7 +431,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 
 	    /* Banner code */
 	    HTM_TD_Begin ("class=\"RM %s_%s\"",
-			  DataClass[Ban->HiddenOrVisible],
+			  HidVis_DataClass[Ban->HiddenOrVisible],
 			  The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Ban->BanCod);
@@ -544,7 +541,7 @@ void Ban_UnhideBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Set banner as visible *****/
-   Ban_ShowOrHideBanner (Ban,Cns_VISIBLE);
+   Ban_ShowOrHideBanner (Ban,HidVis_VISIBLE);
   }
 
 /*****************************************************************************/
@@ -559,7 +556,7 @@ void Ban_HideBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Set banner as hidden *****/
-   Ban_ShowOrHideBanner (Ban,Cns_HIDDEN);
+   Ban_ShowOrHideBanner (Ban,HidVis_HIDDEN);
   }
 
 /*****************************************************************************/
@@ -567,7 +564,7 @@ void Ban_HideBanner (void)
 /*****************************************************************************/
 
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,
-                                  Cns_HiddenOrVisible_t HiddenOrVisible)
+                                  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    /***** Get banner code *****/
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
@@ -1040,7 +1037,7 @@ static void Ban_ResetBanner (struct Ban_Banner *Ban)
   {
    /***** Reset banner *****/
    Ban->BanCod      = -1L;
-   Ban->HiddenOrVisible = Cns_HIDDEN;
+   Ban->HiddenOrVisible = HidVis_HIDDEN;
    Ban->ShrtName[0] = '\0';
    Ban->FullName[0] = '\0';
    Ban->Img[0]      = '\0';

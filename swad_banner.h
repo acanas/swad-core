@@ -28,6 +28,8 @@
 /*****************************************************************************/
 
 #include "swad_constant.h"
+#include "swad_hidden_visible.h"
+#include "swad_string.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -45,7 +47,7 @@
 struct Ban_Banner
   {
    long BanCod;
-   Cns_HiddenOrVisible_t HiddenOrVisible;
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
    char ShrtName[Ban_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Ban_MAX_BYTES_FULL_NAME + 1];
    char Img[Ban_MAX_BYTES_IMAGE + 1];

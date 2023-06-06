@@ -42,6 +42,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
@@ -3155,10 +3156,10 @@ static Prj_Order_t Prj_GetParPrjOrder (void)
 static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
                                          const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhPrj,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidPrj,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhPrj,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidPrj,	// Visible ==> action to hide
      };
 
    if (Prj_CheckIfICanEditProject (&Projects->Prj))

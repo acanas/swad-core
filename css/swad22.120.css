@@ -2830,6 +2830,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_GREEN_PINK		{color:#246600; font-size:12pt;}
 .DAT_GREEN_DARK		{color:#80c040; font-size:12pt;}
 
+.DAT_GREEN_LIGHT_WHITE,
+.DAT_GREEN_LIGHT_GREY,
+.DAT_GREEN_LIGHT_PURPLE,
+.DAT_GREEN_LIGHT_BLUE,
+.DAT_GREEN_LIGHT_YELLOW,
+.DAT_GREEN_LIGHT_PINK	{color:rgba( 36,102,  0,0.3); font-size:12pt;}
+.DAT_GREEN_LIGHT_DARK	{color:rgba(128,192, 64,0.3); font-size:12pt;}
+
 .DAT_RED_WHITE,
 .DAT_RED_GREY,
 .DAT_RED_PURPLE,
@@ -2837,6 +2845,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_RED_YELLOW,
 .DAT_RED_PINK		{color:#660000; font-size:12pt;}
 .DAT_RED_DARK		{color:#ff8080; font-size:12pt;}
+
+.DAT_RED_LIGHT_WHITE,
+.DAT_RED_LIGHT_GREY,
+.DAT_RED_LIGHT_PURPLE,
+.DAT_RED_LIGHT_BLUE,
+.DAT_RED_LIGHT_YELLOW,
+.DAT_RED_LIGHT_PINK		{color:rgba(102,  0,  0,0.3); font-size:12pt;}
+.DAT_RED_LIGHT_DARK		{color:rgba(255,128,128,0.3); font-size:12pt;}
 
 .NOWRAP	{white-space:nowrap;}
 .BOLD	{font-weight:bold;}
@@ -3220,38 +3236,6 @@ legend {font-size:12pt;}
 .ASG_LST_DATE_RED_YELLOW,
 .ASG_LST_DATE_RED_PINK		{color:#660000; font-size:11pt; white-space:nowrap;}
 .ASG_LST_DATE_RED_DARK		{color:#ff8080; font-size:11pt; white-space:nowrap;}
-
-.STATUS_GREEN_WHITE,
-.STATUS_GREEN_GREY,
-.STATUS_GREEN_PURPLE,
-.STATUS_GREEN_BLUE,
-.STATUS_GREEN_YELLOW,
-.STATUS_GREEN_PINK		{color:#246600; font-size:12pt;}
-.STATUS_GREEN_DARK		{color:#80c040; font-size:12pt;}
-
-.STATUS_GREEN_LIGHT_WHITE,
-.STATUS_GREEN_LIGHT_GREY,
-.STATUS_GREEN_LIGHT_PURPLE,
-.STATUS_GREEN_LIGHT_BLUE,
-.STATUS_GREEN_LIGHT_YELLOW,
-.STATUS_GREEN_LIGHT_PINK	{color:rgba( 36,102,  0,0.3); font-size:12pt;}
-.STATUS_GREEN_LIGHT_DARK	{color:rgba(128,192, 64,0.3); font-size:12pt;}
-
-.STATUS_RED_WHITE,
-.STATUS_RED_GREY,
-.STATUS_RED_PURPLE,
-.STATUS_RED_BLUE,
-.STATUS_RED_YELLOW,
-.STATUS_RED_PINK		{color:#660000; font-size:12pt;}
-.STATUS_RED_DARK		{color:#ff8080; font-size:12pt;}
-
-.STATUS_RED_LIGHT_WHITE,
-.STATUS_RED_LIGHT_GREY,
-.STATUS_RED_LIGHT_PURPLE,
-.STATUS_RED_LIGHT_BLUE,
-.STATUS_RED_LIGHT_YELLOW,
-.STATUS_RED_LIGHT_PINK		{color:rgba(102,  0,  0,0.3); font-size:12pt;}
-.STATUS_RED_LIGHT_DARK		{color:rgba(255,128,128,0.3); font-size:12pt;}
 
 /********************** Number of question, project, etc. ********************/
 .BIG_INDEX_WHITE,

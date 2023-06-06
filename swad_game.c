@@ -43,6 +43,7 @@
 #include "swad_game.h"
 #include "swad_game_database.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
@@ -198,7 +199,7 @@ void Gam_ResetGame (struct Gam_Game *Game)
    Game->NumQsts                 = 0;
    Game->NumMchs                 = 0;
    Game->NumUnfinishedMchs       = 0;
-   Game->HiddenOrVisible         = Cns_VISIBLE;
+   Game->HiddenOrVisible         = HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
@@ -499,31 +500,11 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Matches;
-   static const char *DateGreenClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "DATE_GREEN_LIGHT",
-      [Cns_VISIBLE] = "DATE_GREEN",
-     };
-   static const char *DateRedClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "DATE_RED_LIGHT",
-      [Cns_VISIBLE] = "DATE_RED",
-     };
-   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
-      [Cns_VISIBLE] = "ASG_TITLE",
-     };
-   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
-      [Cns_VISIBLE] = "ASG_GRP",
-     };
-   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "DAT_LIGHT",
-      [Cns_VISIBLE] = "DAT",
-     };
+   extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -558,8 +539,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	{
 	 if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 DateClass = Games->Game.NumUnfinishedMchs ? DateGreenClass[Games->Game.HiddenOrVisible] :
-						     DateRedClass[Games->Game.HiddenOrVisible];
+	 DateClass = Games->Game.NumUnfinishedMchs ? HidVis_DateGreenClass[Games->Game.HiddenOrVisible] :
+						     HidVis_DateRedClass[Games->Game.HiddenOrVisible];
 	 if (ShowOnlyThisGame)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			  Id,DateClass,The_GetSuffix ());
@@ -585,7 +566,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 Frm_BeginForm (ActSeeOneGam);
 	    Gam_PutPars (Games);
 	    HTM_BUTTON_Submit_Begin (Txt_View_game,"class=\"LT BT_LINK %s_%s\"",
-				     TitleClass[Games->Game.HiddenOrVisible],
+				     HidVis_TitleClass[Games->Game.HiddenOrVisible],
 				     The_GetSuffix ());
 	       HTM_Txt (Games->Game.Title);
 	    HTM_BUTTON_End ();
@@ -594,7 +575,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
       /* Number of questions, maximum grade, visibility of results */
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     GroupClass[Games->Game.HiddenOrVisible],The_GetSuffix ());
+                     HidVis_GroupClass[Games->Game.HiddenOrVisible],The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Number_of_questions);
 	 HTM_Unsigned (Games->Game.NumQsts);
 	 HTM_BR ();
@@ -615,7 +596,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       Frm_BeginForm (ActSeeOneGam);
 	 Gam_PutPars (Games);
 	 HTM_BUTTON_Submit_Begin (Txt_Matches,"class=\"LT BT_LINK %s_%s\"",
-	                          TitleClass[Games->Game.HiddenOrVisible],
+	                          HidVis_TitleClass[Games->Game.HiddenOrVisible],
 				  The_GetSuffix ());
 	    if (ShowOnlyThisGame)
 	       HTM_TxtColonNBSP (Txt_Matches);
@@ -651,7 +632,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     DataClass[Games->Game.HiddenOrVisible],The_GetSuffix ());
+                     HidVis_DataClass[Games->Game.HiddenOrVisible],
+                     The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
@@ -723,10 +705,10 @@ static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder)
 static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhGam,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidGam,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhGam,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidGam,	// Visible ==> action to hide
      };
    static const Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
@@ -968,8 +950,8 @@ void Gam_GetGameDataByCod (struct Gam_Game *Game)
       Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the game is hidden (row[2]) */
-      Game->HiddenOrVisible = (row[2][0] == 'Y') ? Cns_HIDDEN :
-						   Cns_VISIBLE;
+      Game->HiddenOrVisible = (row[2][0] == 'Y') ? HidVis_HIDDEN :
+						   HidVis_VISIBLE;
 
       /* Get author of the game (row[3]) */
       Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);

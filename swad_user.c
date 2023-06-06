@@ -64,6 +64,7 @@
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_help.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
@@ -6396,7 +6397,7 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,
 /********************* Write the author of an assignment *********************/
 /*****************************************************************************/
 
-void Usr_WriteAuthor1Line (long UsrCod,Cns_HiddenOrVisible_t HiddenOrVisible)
+void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -6405,11 +6406,7 @@ void Usr_WriteAuthor1Line (long UsrCod,Cns_HiddenOrVisible_t HiddenOrVisible)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
-   static const char *MsgClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "MSG_AUT_LIGHT",
-      [Cns_VISIBLE] = "MSG_AUT",
-     };
+   extern const char *HidVis_MsgClass[HidVis_NUM_HIDDEN_VISIBLE];
    bool ShowPhoto = false;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
@@ -6431,7 +6428,7 @@ void Usr_WriteAuthor1Line (long UsrCod,Cns_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Write name *****/
    HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s_%s\"",
-                  MsgClass[HiddenOrVisible],The_GetSuffix ());
+                  HidVis_MsgClass[HiddenOrVisible],The_GetSuffix ());
       HTM_Txt (UsrDat.FullName);
    HTM_DIV_End ();
 

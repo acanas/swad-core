@@ -31,6 +31,7 @@
 
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_test_visibility.h"
@@ -40,7 +41,7 @@
 /*****************************************************************************/
 
 void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
-                                 Cns_HiddenOrVisible_t HiddenOrVisible)
+                                 HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY];
    extern const char *Txt_TST_HIDDEN_VISIBLE[2];
@@ -52,7 +53,7 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
       [TstVis_VISIBLE_EACH_QST_SCORE] = "tasks.svg",
       [TstVis_VISIBLE_TOTAL_SCORE   ] = "check-circle-regular.svg",
      };
-   static void (*Ico_PutIcon[Cns_NUM_HIDDEN_VISIBLE]) (const char *Icon,Ico_Color_t Color,const char *Title);
+   static void (*Ico_PutIcon[HidVis_NUM_HIDDEN_VISIBLE]) (const char *Icon,Ico_Color_t Color,const char *Title);
    TstVis_Visibility_t Visibility;
    bool ItemVisible;
    char *Title;

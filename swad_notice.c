@@ -41,6 +41,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_notice.h"
@@ -504,10 +505,10 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              bool Highlight)
   {
    extern const char *Txt_See_full_notice;
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhNot,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidNot,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhNot,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidNot,	// Visible ==> action to hide
      };
    static const char *ContainerClass[Not_NUM_STATUS] =
      {

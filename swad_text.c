@@ -72,6 +72,7 @@
 #include "swad_exam_log.h"
 #include "swad_figure.h"
 #include "swad_forum.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy.h"
 #include "swad_holiday.h"
 #include "swad_info.h"
@@ -1369,9 +1370,9 @@ const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 #endif
 	};
 
-const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[Cns_NUM_HIDDEN_VISIBLE] =
+const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HidVis_NUM_HIDDEN_VISIBLE] =
 	{
-	// Cns_HIDDEN
+	// HidVis_HIDDEN
 #if   L==1	// ca
 	"Esdeveniments ocults"
 #elif L==2	// de
@@ -1394,7 +1395,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[Cns_NUM_HIDDEN_VISIBLE] =
 	"Gizli etkinlikler"
 #endif
 	,
-	// Cns_VISIBLE
+	// HidVis_VISIBLE
 #if   L==1	// ca
 	"Esdeveniments visibles"
 #elif L==2	// de

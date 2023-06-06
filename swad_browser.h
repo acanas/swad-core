@@ -220,7 +220,7 @@ void Brw_RcvFileInFileBrwClassic (void);
 void Brw_RecLinkFileBrowser (void);
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
-Cns_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,
+HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,
                                                                 const char *Path);
 void Brw_ShowFileMetadata (void);
 

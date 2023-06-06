@@ -42,6 +42,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
@@ -1472,10 +1473,10 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 static void Cfe_PutIconsCallForExam (void *CallsForExams)
   {
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhCfe,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidCfe,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhCfe,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidCfe,	// Visible ==> action to hide
      };
 
    if (CallsForExams)

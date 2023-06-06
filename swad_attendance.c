@@ -44,6 +44,7 @@
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_group_database.h"
+#include "swad_hidden_visible.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
@@ -427,16 +428,10 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
                                  bool ShowOnlyThisAttEventComplete)
   {
    extern const char *Txt_View_event;
-   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
-      [Cns_VISIBLE] = "ASG_TITLE",
-     };
-   static const char *DataClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "DAT_LIGHT",
-      [Cns_VISIBLE] = "DAT",
-     };
+   extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -469,18 +464,14 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 if (ShowOnlyThisAttEventComplete)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s\"",
 			  Id,
-			  Events->Event.HiddenOrVisible == Cns_HIDDEN ? (Events->Event.Open ? "DATE_GREEN_LIGHT" :
-											      "DATE_RED_LIGHT") :
-									(Events->Event.Open ? "DATE_GREEN" :
-											      "DATE_RED"),
+			  Events->Event.Open ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
+					       HidVis_DateRedClass[Events->Event.HiddenOrVisible],
 			  The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
 			  Id,
-			  Events->Event.HiddenOrVisible == Cns_HIDDEN ? (Events->Event.Open ? "DATE_GREEN_LIGHT" :
-											      "DATE_RED_LIGHT") :
-									(Events->Event.Open ? "DATE_GREEN" :
-											      "DATE_RED"),
+			  Events->Event.Open ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
+					       HidVis_DateRedClass[Events->Event.HiddenOrVisible],
 			  The_GetSuffix (),
 			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Events->Event.TimeUTC[StartEndTime],
@@ -506,7 +497,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       else
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       HTM_SPAN_Begin ("class=\"%s_%s\"",
-		       TitleClass[Events->Event.HiddenOrVisible],
+		       HidVis_TitleClass[Events->Event.HiddenOrVisible],
 		       The_GetSuffix ());
          HTM_Unsigned (Events->Event.NumStdsTotal);
       HTM_SPAN_End ();
@@ -538,7 +529,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 Att_GetAndWriteNamesOfGrpsAssociatedToEvent (&Events->Event);
 
       HTM_DIV_Begin ("class=\"%s_%s\"",
-                     DataClass[Events->Event.HiddenOrVisible],
+                     HidVis_DataClass[Events->Event.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_Txt (Description);
       HTM_DIV_End ();
@@ -580,10 +571,10 @@ static Dat_StartEndTime_t Att_GetParAttOrder (void)
 static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
                                            const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhAtt,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidAtt,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhAtt,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidAtt,	// Visible ==> action to hide
      };
 
    if (Att_CheckIfICanEditEvents ())
@@ -751,7 +742,7 @@ static void Att_ResetEvent (struct Att_Event *Event)
       Event->NumStdsTotal = 0;
      }
    Event->CrsCod = -1L;
-   Event->HiddenOrVisible = Cns_VISIBLE;
+   Event->HiddenOrVisible = HidVis_VISIBLE;
    Event->UsrCod = -1L;
    Event->TimeUTC[Dat_STR_TIME] =
    Event->TimeUTC[Dat_END_TIME] = (time_t) 0;
@@ -771,8 +762,8 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
    Event->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get whether the attendance event is hidden or not (row[2]) *****/
-   Event->HiddenOrVisible = (row[2][0] == 'Y') ? Cns_HIDDEN :
-	                                         Cns_VISIBLE;
+   Event->HiddenOrVisible = (row[2][0] == 'Y') ? HidVis_HIDDEN :
+	                                         HidVis_VISIBLE;
 
    /***** Get author of the attendance event (row[3]) *****/
    Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1224,7 +1215,7 @@ void Att_ReceiveFormEvent (void)
 
       if (ItsANewAttEvent)
 	{
-	 ReceivedAtt.HiddenOrVisible = Cns_VISIBLE;	// New attendance events are visible by default
+	 ReceivedAtt.HiddenOrVisible = HidVis_VISIBLE;	// New attendance events are visible by default
          Att_CreateEvent (&ReceivedAtt,Description);	// Add new attendance event to database
 
          /***** Write success message *****/
@@ -1306,11 +1297,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
-   static const char *GroupClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "ASG_GRP_LIGHT",
-      [Cns_VISIBLE] = "ASG_GRP",
-     };
+   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -1321,8 +1308,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  GroupClass[Event->HiddenOrVisible],
-        	  The_GetSuffix ());
+                  HidVis_GroupClass[Event->HiddenOrVisible],The_GetSuffix ());
 
       /***** Write heading *****/
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
@@ -1845,11 +1831,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 static void Att_PutLinkEvent (struct Att_Event *Event,
 			      const char *Title,const char *Txt)
   {
-   static const char *TitleClass[Cns_NUM_HIDDEN_VISIBLE] =
-     {
-      [Cns_HIDDEN ] = "ASG_TITLE_LIGHT",
-      [Cns_VISIBLE] = "ASG_TITLE",
-     };
+   extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
@@ -1858,7 +1840,7 @@ static void Att_PutLinkEvent (struct Att_Event *Event,
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK %s_%s\"",
-			       TitleClass[Event->HiddenOrVisible],
+			       HidVis_TitleClass[Event->HiddenOrVisible],
 			       The_GetSuffix ());
 	 HTM_Txt (Txt);
       HTM_BUTTON_End ();

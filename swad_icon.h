@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_hidden_visible.h"
+
+/*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
@@ -50,6 +56,12 @@ typedef enum
    Ico_WHITE     = 4,
    Ico_YELLOW    = 5,
   } Ico_Color_t;
+
+struct Ico_IconColor
+  {
+   const char *Icon;
+   Ico_Color_t Color;
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -80,10 +92,10 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,const char *Anchor,
                                   void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
                                        void (*FuncPars) (void *Args),void *Args);
-void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[Cns_NUM_HIDDEN_VISIBLE],
+void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE],
                                         const char *Anchor,
                                         void (*FuncPars) (void *Args),void *Args,
-                                        Cns_HiddenOrVisible_t HiddenOrVisible);
+                                        HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Ico_PutContextualIconToExpand (const Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToContract (const Act_Action_t NextAction,const char *Anchor,

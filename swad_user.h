@@ -435,7 +435,7 @@ unsigned Usr_GetTotalNumberOfUsers (void);
 
 void Usr_WriteAuthor (struct Usr_Data *UsrDat,
                       Cns_DisabledOrEnabled_t DisabledOrEnabled);
-void Usr_WriteAuthor1Line (long UsrCod,Cns_HiddenOrVisible_t HiddenOrVisible);
+void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows);
 

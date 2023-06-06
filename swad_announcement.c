@@ -35,6 +35,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
@@ -216,10 +217,10 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
       [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_BOX NOTICE_BOX_WIDE",
       [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
      };
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhAnn,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidAnn,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhAnn,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidAnn,	// Visible ==> action to hide
      };
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
@@ -236,8 +237,8 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 	 /***** Icon to hide/unhide the announcement *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
 					    Ann_PutParAnnCod,&Announcement->AnnCod,
-					    (Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT) ? Cns_HIDDEN :
-												  Cns_VISIBLE);
+					    (Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT) ? HidVis_HIDDEN :
+												  HidVis_VISIBLE);
 	}
 
       /***** Write the subject of the announcement *****/

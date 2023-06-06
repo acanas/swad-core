@@ -37,6 +37,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hidden_visible.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_program.h"
@@ -351,8 +352,8 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    Item->Resource.Hierarchy.RscInd = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the program item is hidden (row(3)) *****/
-   Item->Resource.Hierarchy.HiddenOrVisible = (row[3][0] == 'Y') ? Cns_HIDDEN :
-								   Cns_VISIBLE;
+   Item->Resource.Hierarchy.HiddenOrVisible = (row[3][0] == 'Y') ? HidVis_HIDDEN :
+								   HidVis_VISIBLE;
 
    /***** Get link type and code (row[4], row[5]) *****/
    Item->Resource.Link.Type = Rsc_GetTypeFromString (row[4]);
@@ -508,10 +509,10 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources)
   {
-   static Act_Action_t ActionHideUnhide[Cns_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Cns_HIDDEN ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
-      [Cns_VISIBLE] = ActHidPrgRsc,	// Visible ==> action to hide
+      [HidVis_HIDDEN ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
+      [HidVis_VISIBLE] = ActHidPrgRsc,	// Visible ==> action to hide
      };
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_Visible;
