@@ -495,6 +495,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 	{
 	 if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
+
 	 DateClass = Exams->Exam.NumOpenSess ? HidVis_DateGreenClass[Exams->Exam.HiddenOrVisible] :
 					       HidVis_DateRedClass[Exams->Exam.HiddenOrVisible];
 	 if (ShowOnlyThisExam)

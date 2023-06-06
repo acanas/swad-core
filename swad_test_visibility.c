@@ -58,7 +58,11 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
       [HidVis_HIDDEN ] = Ico_RED,
       [HidVis_VISIBLE] = Ico_GREEN,
      };
-   static void (*Ico_PutIcon[HidVis_NUM_HIDDEN_VISIBLE]) (const char *Icon,Ico_Color_t Color,const char *Title);
+   static void (*Ico_PutIcon[HidVis_NUM_HIDDEN_VISIBLE]) (const char *Icon,Ico_Color_t Color,const char *Title) =
+     {
+      [HidVis_HIDDEN ] = Ico_PutIconOn,
+      [HidVis_VISIBLE] = Ico_PutIconOff,
+     };
    TstVis_Visibility_t Visibility;
    HidVis_HiddenOrVisible_t ItemHiddenOrVisible;
    char *Title;
