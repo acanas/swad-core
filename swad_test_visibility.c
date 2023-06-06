@@ -44,7 +44,7 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
                                  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY];
-   extern const char *Txt_TST_HIDDEN_VISIBLE[2];
+   extern const char *Txt_TST_HIDDEN_VISIBLE[HidVis_NUM_HIDDEN_VISIBLE];
    static const char *Icons[TstVis_NUM_ITEMS_VISIBILITY] =
      {
       [TstVis_VISIBLE_QST_ANS_TXT   ] = "file-alt.svg",
@@ -53,23 +53,27 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
       [TstVis_VISIBLE_EACH_QST_SCORE] = "tasks.svg",
       [TstVis_VISIBLE_TOTAL_SCORE   ] = "check-circle-regular.svg",
      };
+   static Ico_Color_t Color[HidVis_NUM_HIDDEN_VISIBLE] =
+     {
+      [HidVis_HIDDEN ] = Ico_RED,
+      [HidVis_VISIBLE] = Ico_GREEN,
+     };
    static void (*Ico_PutIcon[HidVis_NUM_HIDDEN_VISIBLE]) (const char *Icon,Ico_Color_t Color,const char *Title);
    TstVis_Visibility_t Visibility;
-   bool ItemVisible;
+   HidVis_HiddenOrVisible_t ItemHiddenOrVisible;
    char *Title;
 
    for (Visibility  = (TstVis_Visibility_t) 0;
 	Visibility <= (TstVis_Visibility_t) (TstVis_NUM_ITEMS_VISIBILITY - 1);
 	Visibility++)
      {
-      ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;
+      ItemHiddenOrVisible = ((SelectedVisibility & (1 << Visibility)) != 0) ? HidVis_VISIBLE :
+									      HidVis_HIDDEN;
       if (asprintf (&Title,"%s: %s",
 		    Txt_TST_STR_VISIBILITY[Visibility],
-		    Txt_TST_HIDDEN_VISIBLE[ItemVisible]) < 0)
+		    Txt_TST_HIDDEN_VISIBLE[ItemHiddenOrVisible]) < 0)
 	 Err_NotEnoughMemoryExit ();
-
-      Ico_PutIcon[HiddenOrVisible] (Icons[Visibility],ItemVisible ? Ico_GREEN :
-						                    Ico_RED    ,Title);
+      Ico_PutIcon[HiddenOrVisible] (Icons[Visibility],Color[ItemHiddenOrVisible],Title);
       free (Title);
      }
   }

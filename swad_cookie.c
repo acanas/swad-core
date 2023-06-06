@@ -79,19 +79,24 @@ void Coo_EditMyPrefsOnCookies (void)
 	 Frm_BeginFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
 
 	    /* Begin container */
-	    if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
-	       HTM_DIV_Begin ("class=\"DAT_STRONG_%s BG_HIGHLIGHT\"",
-	                      The_GetSuffix ());
-	    else
-	       HTM_DIV_Begin ("class=\"DAT_%s\"",
-	                      The_GetSuffix ());
+	    switch (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies)
+	      {
+	       case Coo_REFUSE:
+		  HTM_DIV_Begin ("class=\"DAT_%s\"",
+				 The_GetSuffix ());
+		  break;
+	       case Coo_ACCEPT:
+		  HTM_DIV_Begin ("class=\"DAT_STRONG_%s BG_HIGHLIGHT\"",
+				 The_GetSuffix ());
+		  break;
+	      }
 
 	    /* Check box */
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_CHECKBOX ("cookies",HTM_SUBMIT_ON_CHANGE,
 				   "value=\"Y\"%s",
-				   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies ? " checked=\"checked\"" :
-									    "");
+				   Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT ? " checked=\"checked\"" :
+									                        "");
 	       HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
 	    HTM_LABEL_End ();
 
@@ -125,7 +130,8 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args)
 void Coo_ChangeMyPrefsCookies (void)
   {
    /***** Get param with preference about third party cookies *****/
-   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies = Par_GetParBool ("cookies");
+   Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies = Par_GetParBool ("cookies") ? Coo_ACCEPT :
+									       Coo_REFUSE;
 
    /***** Store preference in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -154,16 +160,16 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
       const char *Icon;
       Ico_Color_t Color;
       const char **Title;
-     } Accepted[2] =
+     } Accepted[Coo_NUM_REFUSE_ACCEPT] =
      {
-      [false] =
+      [Coo_REFUSE] =
         {
          .InDB  = 'N',
          .Icon  = "times.svg",
          .Color = Ico_RED,
          .Title = &Txt_Do_not_accept_third_party_cookies
         },
-      [true ] =
+      [Coo_ACCEPT] =
 	{
 	 .InDB  = 'Y',
 	 .Icon  = "check.svg",
@@ -171,7 +177,7 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
 	 .Title = &Txt_Accept_third_party_cookies
 	}
      };
-   unsigned i;
+   Coo_RefuseAccept_t RefAcc;
    char *SubQuery;
    unsigned NumUsrs[Mnu_NUM_MENUS];
    unsigned NumUsrsTotal = 0;
@@ -189,39 +195,39 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
       HTM_TR_End ();
 
       /***** For each option... *****/
-      for (i = 0;
-	   i < 2;
-	   i++)
+      for (RefAcc = (Coo_RefuseAccept_t) 0;
+	   RefAcc < (Coo_RefuseAccept_t) (Coo_NUM_REFUSE_ACCEPT - 1);
+	   RefAcc++)
 	{
 	 /* Get number of users who have chosen this menu from database */
 	 if (asprintf (&SubQuery,"usr_data.ThirdPartyCookies='%c'",
-		       Accepted[i].InDB) < 0)
+		       Accepted[RefAcc].InDB) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[i] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[RefAcc] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */
-	 NumUsrsTotal += NumUsrs[i];
+	 NumUsrsTotal += NumUsrs[RefAcc];
 	}
 
       /***** Write number of users who have chosen each option *****/
-      for (i = 0;
-	   i < 2;
-	   i++)
+      for (RefAcc = (Coo_RefuseAccept_t) 0;
+	   RefAcc < (Coo_RefuseAccept_t) (Coo_NUM_REFUSE_ACCEPT - 1);
+	   RefAcc++)
 	{
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"CM\"");
-               Ico_PutIcon (Accepted[i].Icon,Accepted[i].Color,
-                            *Accepted[i].Title,"ICOx16");
+               Ico_PutIcon (Accepted[RefAcc].Icon,Accepted[RefAcc].Color,
+                            *Accepted[RefAcc].Title,"ICOx16");
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[i]);
+	       HTM_Unsigned (NumUsrs[RefAcc]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[i] * 100.0 /
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[RefAcc] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();

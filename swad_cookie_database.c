@@ -48,7 +48,7 @@ void Coo_DB_UpdateMyPrefsCookies (void)
 		   "UPDATE usr_data"
 		     " SET ThirdPartyCookies='%c'"
 		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies ? 'Y' :
-							    'N',
+		   Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT ? 'Y' :
+							                        'N',
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }

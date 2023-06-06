@@ -31,6 +31,7 @@
 
 #include "swad_action.h"
 #include "swad_constant.h"
+#include "swad_cookie.h"
 #include "swad_country.h"
 #include "swad_cryptography.h"
 #include "swad_date.h"
@@ -217,7 +218,7 @@ struct Usr_Data
       Mnu_Menu_t Menu;
       unsigned SideCols;
       PhoSha_Shape_t PhotoShape;
-      bool AcceptCookies;	// User has accepted third party cookies
+      Coo_RefuseAccept_t RefuseAcceptCookies;	// User has accepted third party cookies
      } Prefs;
   };
 

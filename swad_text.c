@@ -54466,9 +54466,9 @@ const char *Txt_TST_Answer_given_by_the_user =
 	"Answer given by the user";		// Çeviri lazim!
 #endif
 
-const char *Txt_TST_HIDDEN_VISIBLE[2] =
+const char *Txt_TST_HIDDEN_VISIBLE[HidVis_NUM_HIDDEN_VISIBLE] =
 	{
-	[false] =
+	[HidVis_HIDDEN] =
 #if   L==1	// ca
 	"ocult"
 #elif L==2	// de
@@ -54491,7 +54491,7 @@ const char *Txt_TST_HIDDEN_VISIBLE[2] =
 	"hidden"	// Çeviri lazim!
 #endif
 	,
-	[true] =
+	[HidVis_VISIBLE] =
 #if   L==1	// ca
 	"visible"
 #elif L==2	// de
