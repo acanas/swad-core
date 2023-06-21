@@ -1006,7 +1006,7 @@ void For_DB_RemoveDisabledPstsInThread (long ThrCod)
   {
    DB_QueryDELETE ("can not unban the posts of a thread of a forum",
 		   "DELETE FROM for_disabled"
-		    "USING for_posts,"
+		   " USING for_posts,"
 		          "for_disabled"
 		   " WHERE for_posts.ThrCod=%ld"
 		     " AND for_posts.PstCod=for_disabled.PstCod",
