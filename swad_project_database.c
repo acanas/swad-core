@@ -689,10 +689,10 @@ long Prj_DB_GetCrsOfPrj (long PrjCod)
 // Returns the number of courses with projects
 // in this location (all the platform, current degree or current course)
 
-unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
+unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Level)
   {
    /***** Get number of courses with projects from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 return (unsigned)
@@ -756,7 +756,7 @@ unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
 			" WHERE CrsCod=%ld",
 			Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -766,10 +766,10 @@ unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of projects in this location
 
-unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Scope)
+unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Level)
   {
    /***** Get number of projects from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -833,7 +833,7 @@ unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Scope)
 			" WHERE CrsCod=%ld",
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

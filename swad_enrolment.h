@@ -142,7 +142,7 @@ void Enr_FreeMyCourses (void);
 bool Enr_CheckIfIBelongToCrs (long CrsCod);
 void Enr_FlushCacheUsrBelongsToCrs (void);
 bool Enr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
-                                 bool CountOnlyAcceptedCourses);;
+                                 bool CountOnlyAcceptedCourses);
 void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
 bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
@@ -150,10 +150,10 @@ bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
 bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat);
 
-unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
-unsigned Enr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
+unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles);
+unsigned Enr_GetCachedNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles);
 unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
-double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
-double Enr_GetCachedAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
+double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t Role);
+double Enr_GetCachedAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t Role);
 
 #endif

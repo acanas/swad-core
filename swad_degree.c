@@ -955,7 +955,7 @@ void Deg_PutIconToViewDegrees (void)
 /************ Create a list with all degrees that have students **************/
 /*****************************************************************************/
 
-void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
+void Deg_GetListAllDegsWithStds (struct Deg_ListDegs *Degs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumDeg;
@@ -1015,7 +1015,7 @@ void Deg_GetListDegsInCurrentCtr (void)
 /*************************** Free list of degrees ****************************/
 /*****************************************************************************/
 
-void Deg_FreeListDegs (struct ListDegrees *Degs)
+void Deg_FreeListDegs (struct Deg_ListDegs *Degs)
   {
    if (Degs->Lst)
      {
@@ -1662,7 +1662,7 @@ unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
 unsigned Deg_GetCachedNumDegsWithCrss (void)
   {
    unsigned NumDegsWithCrss;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of degrees with courses from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS_WITH_CRSS,Gbl.Scope.Current,Cod,
@@ -1690,7 +1690,7 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_DEGS_WITH_TCHS,	// Teachers
      };
    unsigned NumDegsWithUsrs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of degrees with users from cache *****/
    if (!FigCch_GetFigureFromCache (FigureDegs[Role],Gbl.Scope.Current,Cod,

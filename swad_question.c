@@ -3643,7 +3643,7 @@ void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
 // Returns the number of test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,
+unsigned Qst_GetNumQuestions (HieLvl_Level_t Level,Qst_AnswerType_t AnsType,
                               struct Qst_Stats *Stats)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
@@ -3656,7 +3656,7 @@ unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,
    Stats->TotalScore = 0.0;
 
    /***** Get number of questions from database *****/
-   if (Qst_DB_GetNumQsts (&mysql_res,Scope,AnsType))
+   if (Qst_DB_GetNumQsts (&mysql_res,Level,AnsType))
      {
       /***** Get number of questions *****/
       row = mysql_fetch_row (mysql_res);

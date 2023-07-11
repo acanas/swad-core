@@ -250,10 +250,10 @@ void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 // Returns the number of courses with program items
 // in this location (all the platform, current degree or current course)
 
-unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope)
+unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Level)
   {
    /***** Get number of courses with program items from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -326,9 +326,9 @@ unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of program items in a hierarchy scope
 
-unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope)
+unsigned Prg_DB_GetNumItems (HieLvl_Level_t Level)
   {
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -392,7 +392,7 @@ unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope)
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
       default:
-         Err_WrongScopeExit ();
+         Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

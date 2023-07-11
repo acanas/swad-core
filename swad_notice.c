@@ -685,14 +685,14 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 // Returns the number of (active or obsolete) notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNotices (HieLvl_Level_t Scope,Not_Status_t Status,unsigned *NumNotif)
+unsigned Not_GetNumNotices (HieLvl_Level_t Level,Not_Status_t Status,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNotices;
 
    /***** Get number of notices from database *****/
-   if (Not_DB_GetNumNotices (&mysql_res,Scope,Status) == 1)
+   if (Not_DB_GetNumNotices (&mysql_res,Level,Status) == 1)
      {
       /***** Get number of notices *****/
       row = mysql_fetch_row (mysql_res);
@@ -726,14 +726,14 @@ unsigned Not_GetNumNotices (HieLvl_Level_t Scope,Not_Status_t Status,unsigned *N
 // Returns the number of deleted notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif)
+unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Level,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNotices;
 
    /***** Get number of notices from database *****/
-   if (Not_DB_GetNumNoticesDeleted (&mysql_res,Scope) == 1)
+   if (Not_DB_GetNumNoticesDeleted (&mysql_res,Level) == 1)
      {
       /***** Get number of notices *****/
       row = mysql_fetch_row (mysql_res);

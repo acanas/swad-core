@@ -61,7 +61,7 @@ typedef enum
   } Ins_Order_t;
 #define Ins_ORDER_DEFAULT Ins_ORDER_BY_NUM_USRS
 
-struct ListInstits
+struct Ins_ListInss
   {
    unsigned Num;		// Number of institutions
    struct Ins_Instit *Lst;	// List of institutions

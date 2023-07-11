@@ -1746,7 +1746,7 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_CTYS_WITH_TCHS,	// Teachers
      };
    unsigned NumCtysWithUsrs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of countries with users from cache *****/
    if (!FigCch_GetFigureFromCache (FigureCtys[Role],Gbl.Scope.Current,Cod,

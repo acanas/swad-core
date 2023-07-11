@@ -89,17 +89,23 @@ struct Globals
      {
       HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
       long Cod;			// Code of the current country, institution, center, degree or course
-      struct ListCountries Ctys;// List of countries
+      struct Cty_ListCtys Ctys;	// List of countries
       struct Cty_Countr Cty;	// Current country
-      struct ListInstits Inss;	// List of institutions in current country
+      struct Ins_ListInss Inss;	// List of institutions in current country
       struct Ins_Instit Ins;	// Current institution
-      struct ListCenters Ctrs;	// List of centers in current institution
+      struct Ctr_ListCtrs Ctrs;	// List of centers in current institution
       struct Ctr_Center Ctr;	// Current center
-      struct ListDegrees Degs;	// List of degrees in current center
+      struct Deg_ListDegs Degs;	// List of degrees in current center
       struct Deg_Degree Deg;	// Current degree
-      struct Crs_ListCourses Crss;	// List of courses in current degree
+      struct Crs_ListCrss Crss;	// List of courses in current degree
       struct Crs_Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
      } Hierarchy;
+   struct
+     {
+      HieLvl_Level_t Current;
+      HieLvl_Level_t Default;
+      unsigned Allowed;
+     } Scope;
    struct
      {
       bool IsWebService;	// Must generate HTML output (IsWebService==false) or SOAP-XML output (IsWebService==true)?
@@ -227,12 +233,6 @@ struct Globals
       char FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg) of the temporary file with the selected face
       Enr_RegRemOneUsrAction_t RegRemAction;	// Enrolment action
      } Usrs;
-   struct
-     {
-      HieLvl_Level_t Current;
-      HieLvl_Level_t Default;
-      unsigned Allowed;
-     } Scope;
    struct
      {
       char PathPriv[PATH_MAX + 1];	// Absolute path to the private directory of the course

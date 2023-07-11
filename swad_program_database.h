@@ -49,8 +49,8 @@ unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res);
 unsigned Prg_DB_GetItemDataByCod (MYSQL_RES **mysql_res,long ItmCod);
 void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope);
-unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope);
+unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Level);
+unsigned Prg_DB_GetNumItems (HieLvl_Level_t Level);
 
 void Prg_DB_RemoveItemRange (const struct Prg_ItemRange *ToRemove);
 void Prg_DB_RemoveCrsItems (long CrsCod);

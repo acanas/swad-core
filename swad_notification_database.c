@@ -590,7 +590,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
 			 Gbl.Hierarchy.Crs.CrsCod,
 			 (unsigned) NotifyEvent);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

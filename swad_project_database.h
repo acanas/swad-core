@@ -53,8 +53,8 @@ unsigned Prj_DB_GetUsrsInPrj (MYSQL_RES **mysql_res,
                               long PrjCod,Prj_RoleInProject_t RoleInProject);
 unsigned Prj_DB_GetMyRolesInPrj (MYSQL_RES **mysql_res,long PrjCod);
 long Prj_DB_GetCrsOfPrj (long PrjCod);
-unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope);
-unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Scope);
+unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Level);
+unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Level);
 
 void Prj_DB_RemoveUsrFromPrj (long PrjCod,Prj_RoleInProject_t RoleInPrj,long UsrCod);
 void Prj_DB_RemoveUsrFromProjects (long UsrCod);

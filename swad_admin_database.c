@@ -41,7 +41,7 @@ extern struct Globals Gbl;
 /** Insert/replace user as administrator of an institution, center or degree */
 /*****************************************************************************/
 
-void Adm_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
+void Adm_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Level,long Cod)
   {
    DB_QueryREPLACE ("can not create administrator",
 		    "REPLACE INTO usr_admins"
@@ -49,7 +49,7 @@ void Adm_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
 		    " VALUES"
 		    " (%ld,'%s',%ld)",
 		    UsrCod,
-		    Sco_GetDBStrFromScope (Scope),
+		    Hie_GetDBStrFromLevel (Level),
 		    Cod);
   }
 
@@ -68,10 +68,10 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
 			  " OR (Scope='%s' AND Cod=%ld)"
 			  " OR (Scope='%s' AND Cod=%ld))"
 		     " AND UsrCod<>%ld",
-		   Sco_GetDBStrFromScope (HieLvl_SYS),
-		   Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
-		   Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-		   Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
+		   Hie_GetDBStrFromLevel (HieLvl_SYS),
+		   Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+		   Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+		   Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -79,7 +79,7 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
 /***** Check if a user is an administrator of a degree/center/institution ****/
 /*****************************************************************************/
 
-bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod)
+bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Level,long Cod)
   {
    return
    DB_QueryEXISTS ("can not check if a user is administrator",
@@ -90,7 +90,7 @@ bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod)
 		      " AND Scope='%s'"
 		      " AND Cod=%ld)",
 		   UsrCod,
-		   Sco_GetDBStrFromScope (Scope),
+		   Hie_GetDBStrFromLevel (Level),
 		   Cod);
   }
 
@@ -108,14 +108,14 @@ bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod)
 		    " WHERE UsrCod=%ld"
 		      " AND Scope='%s')",
 		   UsrCod,
-		   Sco_GetDBStrFromScope (HieLvl_SYS));
+		   Hie_GetDBStrFromLevel (HieLvl_SYS));
    }
 
 /*****************************************************************************/
 /***** Remove user as administrator of an institution, center or degree ******/
 /*****************************************************************************/
 
-void Adm_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
+void Adm_DB_RemAdmin (long UsrCod,HieLvl_Level_t Level,long Cod)
   {
    DB_QueryDELETE ("can not remove an administrator",
 		   "DELETE FROM usr_admins"
@@ -123,7 +123,7 @@ void Adm_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
 		     " AND Scope='%s'"
 		     " AND Cod=%ld",
 		   UsrCod,
-		   Sco_GetDBStrFromScope (Scope),
+		   Hie_GetDBStrFromLevel (Level),
 		   Cod);
   }
 
@@ -143,12 +143,12 @@ void Adm_DB_RemUsrAsAdmin (long UsrCod)
 /********* Remove administrators of an institution, center or degree *********/
 /*****************************************************************************/
 
-void Adm_DB_RemAdmins (HieLvl_Level_t Scope,long Cod)
+void Adm_DB_RemAdmins (HieLvl_Level_t Level,long Cod)
   {
    DB_QueryDELETE ("can not remove administrators",
 		   "DELETE FROM usr_admins"
 		   " WHERE Scope='%s'"
 		     " AND Cod=%ld",
-                   Sco_GetDBStrFromScope (Scope),
+                   Hie_GetDBStrFromLevel (Level),
                    Cod);
   }

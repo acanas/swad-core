@@ -1577,7 +1577,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -3765,7 +3765,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	   }
          break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;
      }
   }

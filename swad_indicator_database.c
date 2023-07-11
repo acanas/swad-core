@@ -360,7 +360,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 				   "crs_courses.FullName",
 			    Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

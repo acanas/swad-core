@@ -126,7 +126,7 @@ unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
 /************* Remove all threads and posts in forums of a scope *************/
 /*****************************************************************************/
 
-void For_DB_RemoveForums (HieLvl_Level_t Scope,long HieCod)
+void For_DB_RemoveForums (HieLvl_Level_t Level,long HieCod)
   {
    static const struct
      {
@@ -156,8 +156,8 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long HieCod)
 		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_posts.ThrCod"
 		     " AND for_posts.PstCod=for_disabled.PstCod",
-	           ForumType[Scope].Usrs,
-	           ForumType[Scope].Tchs,
+	           ForumType[Level].Usrs,
+	           ForumType[Level].Tchs,
 	           HieCod);
 
    /***** Remove posts *****/
@@ -171,8 +171,8 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long HieCod)
 		      " for_threads.ForumType=%u)"
 		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_posts.ThrCod",
-	           ForumType[Scope].Usrs,
-	           ForumType[Scope].Tchs,
+	           ForumType[Level].Usrs,
+	           ForumType[Level].Tchs,
 	           HieCod);
 
    /***** Remove threads read *****/
@@ -186,8 +186,8 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long HieCod)
 		      " for_threads.ForumType=%u)"
 		     " AND for_threads.HieCod=%ld"
 		     " AND for_threads.ThrCod=for_read.ThrCod",
-	           ForumType[Scope].Usrs,
-	           ForumType[Scope].Tchs,
+	           ForumType[Level].Usrs,
+	           ForumType[Level].Tchs,
 	           HieCod);
 
    /***** Remove threads *****/
@@ -198,8 +198,8 @@ void For_DB_RemoveForums (HieLvl_Level_t Scope,long HieCod)
 		     " OR"
 		     " for_threads.ForumType=%u)"
 		     " AND HieCod=%ld",
-	           ForumType[Scope].Usrs,
-	           ForumType[Scope].Tchs,
+	           ForumType[Level].Usrs,
+	           ForumType[Level].Tchs,
 	           HieCod);
   }
 

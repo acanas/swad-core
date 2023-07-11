@@ -113,7 +113,7 @@ void Acc_PutLinkToCreateAccount (void)
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 
    Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,
-                                  NULL,NULL,
+				  NULL,NULL,
 				  "at.svg",Ico_BLACK,
 				  Txt_Actions[ActCreUsrAcc],NULL);
   }

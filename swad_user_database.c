@@ -330,7 +330,8 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
 // - Rol_NET	Non-editing teacher
 // - Rol_TCH	Teacher
 
-void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Scope,Rol_Role_t Role,char **Query)
+void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
+				    char **Query)
   {
    const char *QueryFields =
       "DISTINCT "
@@ -352,7 +353,7 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Scope,Rol_Role_t Role,char **
 		"usr_data.UsrCod";
 
    /***** Build query *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 /* Get users in courses from the whole platform */
@@ -456,7 +457,7 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Scope,Rol_Role_t Role,char **
 	 Usr_DB_BuildQueryToGetUsrsLstCrs (Query,Role);
 	 break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;
      }
 /*
@@ -662,7 +663,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 /************ Build query to get list with data of administrators ************/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
+void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
   {
    static const char *QueryFields =
       "UsrCod,"			// row[ 0]
@@ -687,7 +688,7 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
    // SELECT... WHERE UsrCod IN (SELECT...) OR UsrCod IN (SELECT...) <-- fast
    // instead of using or with different joins:
    // SELECT... WHERE (...) OR (...) <-- very slow
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:	// All admins
 	 DB_BuildQuery (Query,
@@ -739,10 +740,10 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
 				   " AND ins_instits.CtyCod=%ld)"
 			    " %s",
 			QueryFields,
-			Sco_GetDBStrFromScope (HieLvl_SYS),
-			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Cty.CtyCod,
-			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Cty.CtyCod,
-			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Cty.CtyCod,
+			Hie_GetDBStrFromLevel (HieLvl_SYS),
+			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Cty.CtyCod,
+			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Cty.CtyCod,
+			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Cty.CtyCod,
 			OrderBySubQuery);
          break;
       case HieLvl_INS:	// System admins,
@@ -778,10 +779,10 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
 			          " AND ctr_centers.InsCod=%ld)"
 			    "%s",
 			QueryFields,
-			Sco_GetDBStrFromScope (HieLvl_SYS),
-			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Ins.InsCod,
+			Hie_GetDBStrFromLevel (HieLvl_SYS),
+			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Ins.InsCod,
+			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Ins.InsCod,
 			OrderBySubQuery);
          break;
       case HieLvl_CTR:	// System admins,
@@ -814,10 +815,10 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
 			         " AND deg_degrees.CtrCod=%ld)"
 			    "%s",
 			QueryFields,
-			Sco_GetDBStrFromScope (HieLvl_SYS),
-			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Ctr.CtrCod,
+			Hie_GetDBStrFromLevel (HieLvl_SYS),
+			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Ctr.CtrCod,
 			OrderBySubQuery);
          break;
       case HieLvl_DEG:	// System admins
@@ -846,14 +847,14 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
 			          " AND Cod=%ld)"
 			    "%s",
 			QueryFields,
-			Sco_GetDBStrFromScope (HieLvl_SYS),
-			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
+			Hie_GetDBStrFromLevel (HieLvl_SYS),
+			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
 			OrderBySubQuery);
          break;
       default:        // not aplicable
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
          break;
      }
   }
@@ -862,7 +863,7 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
 /************************ Get list with data of guests ***********************/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
+void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query)
   {
    static const char *QueryFields =
       "UsrCod,"			// row[ 0]
@@ -883,7 +884,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
 		"UsrCod";
 
    /***** Build query *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 DB_BuildQuery (Query,
@@ -939,7 +940,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
 			OrderBySubQuery);
          break;
       default:        // not aplicable
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;	// Not reached
      }
   }
@@ -1082,7 +1083,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			      OrderBySubQuery);
 	       break;
 	    default:
-	       Err_WrongScopeExit ();
+	       Err_WrongHierarchyLevelExit ();
 	       break;
 	   }
          break;
@@ -1242,7 +1243,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			      OrderBySubQuery);
 	       break;
 	    default:
-	       Err_WrongScopeExit ();
+	       Err_WrongHierarchyLevelExit ();
 	       break;
 	   }
 	 break;
@@ -1371,7 +1372,7 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND %s",
 		        Gbl.Hierarchy.Crs.CrsCod,SubQuery);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -1460,7 +1461,7 @@ void Usr_DB_InsertMyLastData (void)
                      "'%s',%ld,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Sch_SEARCH_ALL,
-		   Sco_GetDBStrFromScope (Gbl.Hierarchy.Level),
+		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.Level),
 		   Gbl.Hierarchy.Cod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
@@ -1482,7 +1483,7 @@ void Usr_DB_UpdateMyLastData (void)
 			  "LastRole=%u,"
 			  "LastTime=NOW()"
 		   " WHERE UsrCod=%ld",
-		   Sco_GetDBStrFromScope (Gbl.Hierarchy.Level),
+		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.Level),
 		   Gbl.Hierarchy.Cod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,

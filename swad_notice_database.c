@@ -187,9 +187,9 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 /*****************************************************************************/
 
 unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
-                               HieLvl_Level_t Scope,Not_Status_t Status)
+                               HieLvl_Level_t Level,Not_Status_t Status)
   {
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 return (unsigned)
@@ -270,7 +270,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
                          Gbl.Hierarchy.Crs.CrsCod,
                          Status);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -280,9 +280,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
-                                      HieLvl_Level_t Scope)
+                                      HieLvl_Level_t Level)
   {
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 return (unsigned)
@@ -351,7 +351,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

@@ -224,7 +224,7 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

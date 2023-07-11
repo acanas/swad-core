@@ -1709,7 +1709,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
 unsigned Ctr_GetCachedNumCtrsWithDegs (void)
   {
    unsigned NumCtrsWithDegs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of centers with degrees from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_DEGS,Gbl.Scope.Current,Cod,
@@ -1731,7 +1731,7 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (void)
 unsigned Ctr_GetCachedNumCtrsWithCrss (void)
   {
    unsigned NumCtrsWithCrss;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of centers with courses *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_CRSS,Gbl.Scope.Current,Cod,
@@ -1759,7 +1759,7 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_CTRS_WITH_TCHS,	// Teachers
      };
    unsigned NumCtrsWithUsrs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of centers with users from cache *****/
    if (!FigCch_GetFigureFromCache (FigureCtrs[Role],Gbl.Scope.Current,Cod,

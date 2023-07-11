@@ -50,6 +50,6 @@ void HieCfg_Shortcut (bool PrintView,ParCod_Param_t ParCode,long HieCod);
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 void HieCfg_QR (ParCod_Param_t ParCode,long HieCod);
-void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
+void HieCfg_NumUsrsInCrss (HieLvl_Level_t Level,long Cod,Rol_Role_t Role);
 
 #endif

@@ -595,9 +595,9 @@ unsigned Qst_DB_GetNumQstsInCrs (long CrsCod)
 // in this location (all the platform, current degree or current course)
 
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
-                            HieLvl_Level_t Scope,Qst_AnswerType_t AnsType)
+                            HieLvl_Level_t Level,Qst_AnswerType_t AnsType)
   {
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
@@ -762,7 +762,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 			 Gbl.Hierarchy.Crs.CrsCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -773,13 +773,13 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 // Returns the number of courses with test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,
+unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
                                     Qst_AnswerType_t AnsType)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
 
    /***** Get number of courses with test questions from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
@@ -920,7 +920,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,
 			 Gbl.Hierarchy.Crs.CrsCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -931,14 +931,14 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,
 // Returns the number of courses with pluggable test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
+unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                                              Qst_AnswerType_t AnsType)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
 
    /***** Get number of courses with test questions from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
@@ -1127,7 +1127,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
 			    Qst_DB_StrAnswerTypes[AnsType],
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

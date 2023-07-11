@@ -68,8 +68,8 @@ long Svy_DB_CreateSurvey (const struct Svy_Survey *Svy,const char *Txt)
 				" ('%s',%ld,'N',%u,%ld,"
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s')",
-				Sco_GetDBStrFromScope (Svy->Scope),
-				Svy->Cod,
+				Hie_GetDBStrFromLevel (Svy->Level),
+				Svy->HieCod,
 				Svy->Roles,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Svy->TimeUTC[Dat_STR_TIME],
@@ -94,8 +94,8 @@ void Svy_DB_UpdateSurvey (const struct Svy_Survey *Svy,const char *Txt)
 	                  "Title='%s',"
 	                  "Txt='%s'"
                    " WHERE SvyCod=%ld",
-		   Sco_GetDBStrFromScope (Svy->Scope),
-		   Svy->Cod,
+		   Hie_GetDBStrFromLevel (Svy->Level),
+		   Svy->HieCod,
 		   Svy->Roles,
 		   Svy->TimeUTC[Dat_STR_TIME],
 		   Svy->TimeUTC[Dat_END_TIME],
@@ -155,7 +155,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
      };
    unsigned NumSvys;
    long Cods[HieLvl_NUM_LEVELS];
-   HieLvl_Level_t Scope;
+   HieLvl_Level_t Level;
    bool SubQueryFilled = false;
 
    /***** Set hierarchy codes *****/
@@ -167,23 +167,23 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
    Cods[HieLvl_CRS] = Gbl.Hierarchy.Crs.CrsCod;	// Course
 
    /***** Fill subqueries for system, country, institution, center and degree *****/
-   for (Scope  = HieLvl_SYS;
-	Scope <= HieLvl_DEG;
-	Scope++)
-      if (ScopesAllowed & 1 << Scope)
+   for (Level  = HieLvl_SYS;
+	Level <= HieLvl_DEG;
+	Level++)
+      if (ScopesAllowed & 1 << Level)
 	{
-	 if (asprintf (&SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
+	 if (asprintf (&SubQuery[Level],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_GetDBStrFromScope (Scope),Cods[Scope],
-		       (HiddenAllowed & 1 << Scope) ? "" :
+		       Hie_GetDBStrFromLevel (Level),Cods[Level],
+		       (HiddenAllowed & 1 << Level) ? "" :
 						      " AND Hidden='N'") < 0)
 	    Err_NotEnoughMemoryExit ();
 	 SubQueryFilled = true;
 	}
       else
         {
-	 if (asprintf (&SubQuery[Scope],"%s","") < 0)
+	 if (asprintf (&SubQuery[Level],"%s","") < 0)
 	    Err_NotEnoughMemoryExit ();
         }
 
@@ -209,7 +209,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 						")",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_GetDBStrFromScope (HieLvl_CRS),Cods[HieLvl_CRS],
+		       Hie_GetDBStrFromLevel (HieLvl_CRS),Cods[HieLvl_CRS],
 		       (HiddenAllowed & 1 << HieLvl_CRS) ? "" :
 							      " AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
@@ -220,7 +220,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 	 if (asprintf (&SubQuery[HieLvl_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_GetDBStrFromScope (HieLvl_CRS),Cods[HieLvl_CRS],
+		       Hie_GetDBStrFromLevel (HieLvl_CRS),Cods[HieLvl_CRS],
 		       (HiddenAllowed & 1 << HieLvl_CRS) ? "" :
 							      " AND Hidden='N'") < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -255,10 +255,10 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
      }
 
    /***** Free allocated memory for subqueries *****/
-   for (Scope  = HieLvl_SYS;
-	Scope <= HieLvl_CRS;
-	Scope++)
-      free (SubQuery[Scope]);
+   for (Level  = HieLvl_SYS;
+	Level <= HieLvl_CRS;
+	Level++)
+      free (SubQuery[Level]);
 
    return NumSvys;
   }
@@ -342,8 +342,8 @@ bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy)
 		      " AND Cod=%ld"
 		      " AND Title='%s'"
 		      " AND SvyCod<>%ld)",
-		   Sco_GetDBStrFromScope (Svy->Scope),
-		   Svy->Cod,
+		   Hie_GetDBStrFromLevel (Svy->Level),
+		   Svy->HieCod,
 		   Svy->Title,
 		   Svy->SvyCod);
   }
@@ -354,10 +354,10 @@ bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy)
 // Returns the number of courses with surveys for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
+unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Level)
   {
    /***** Get number of courses with surveys from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 return (unsigned)
@@ -365,7 +365,7 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
 			 "SELECT COUNT(DISTINCT Cod)"
                           " FROM svy_surveys"
                          " WHERE Scope='%s'",
-			 Sco_GetDBStrFromScope (HieLvl_CRS));
+			 Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with surveys",
@@ -382,7 +382,7 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
                           " AND crs_courses.CrsCod=svy_surveys.Cod"
                           " AND svy_surveys.Scope='%s'",
 			Gbl.Hierarchy.Cty.CtyCod,
-			Sco_GetDBStrFromScope (HieLvl_CRS));
+			Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with surveys",
@@ -397,7 +397,7 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
 		          " AND crs_courses.CrsCod=svy_surveys.Cod"
 		          " AND svy_surveys.Scope='%s'",
 		        Gbl.Hierarchy.Ins.InsCod,
-		        Sco_GetDBStrFromScope (HieLvl_CRS));
+		        Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with surveys",
@@ -410,7 +410,7 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
                           " AND crs_courses.CrsCod=svy_surveys.Cod"
                           " AND svy_surveys.Scope='%s'",
 			Gbl.Hierarchy.Ctr.CtrCod,
-			Sco_GetDBStrFromScope (HieLvl_CRS));
+			Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with surveys",
@@ -421,7 +421,7 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
                         " AND crs_courses.CrsCod=svy_surveys.Cod"
                         " AND svy_surveys.Scope='%s'",
 		 	Gbl.Hierarchy.Deg.DegCod,
-			Sco_GetDBStrFromScope (HieLvl_CRS));
+			Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with surveys",
@@ -429,10 +429,10 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
 			 " FROM svy_surveys"
 			" WHERE Scope='%s'"
 			  " AND Cod=%ld",
-			Sco_GetDBStrFromScope (HieLvl_CRS),
+			Hie_GetDBStrFromLevel (HieLvl_CRS),
 			Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -443,10 +443,10 @@ unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
 // Returns the number of surveys for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
+unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Level)
   {
    /***** Get number of surveys from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 return (unsigned)
@@ -455,7 +455,7 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
 			        "SUM(NumNotif)"			// row[1]
                           " FROM svy_surveys"
                          " WHERE Scope='%s'",
-			 Sco_GetDBStrFromScope (HieLvl_CRS));
+			 Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of surveys",
@@ -473,7 +473,7 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
                            " AND crs_courses.CrsCod=svy_surveys.Cod"
                            " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Cty.CtyCod,
-			 Sco_GetDBStrFromScope (HieLvl_CRS));
+			 Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of surveys",
@@ -489,7 +489,7 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
                            " AND crs_courses.CrsCod=svy_surveys.Cod"
                            " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Ins.InsCod,
-			 Sco_GetDBStrFromScope (HieLvl_CRS));
+			 Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of surveys",
@@ -503,7 +503,7 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
                            " AND crs_courses.CrsCod=svy_surveys.Cod"
                            " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Ctr.CtrCod,
-			 Sco_GetDBStrFromScope (HieLvl_CRS));
+			 Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of surveys",
@@ -515,7 +515,7 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
                            " AND crs_courses.CrsCod=svy_surveys.Cod"
                            " AND svy_surveys.Scope='%s'",
 			 Gbl.Hierarchy.Deg.DegCod,
-			 Sco_GetDBStrFromScope (HieLvl_CRS));
+			 Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of surveys",
@@ -524,10 +524,10 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
                           " FROM svy_surveys"
                          " WHERE svy_surveys.Scope='%s'"
                            " AND CrsCod=%ld",
-			 Sco_GetDBStrFromScope (HieLvl_CRS),
+			 Hie_GetDBStrFromLevel (HieLvl_CRS),
 			 Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -536,10 +536,10 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
 /************ Get average number of questions per course survey **************/
 /*****************************************************************************/
 
-double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
+double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Level)
   {
    /***** Get number of questions per survey from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return DB_QuerySELECTDouble ("can not get number of questions per survey",
@@ -550,7 +550,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					      " WHERE svy_surveys.Scope='%s'"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
 					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-				      Sco_GetDBStrFromScope (HieLvl_CRS));
+				      Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CTY:
          return DB_QuerySELECTDouble ("can not get number of questions per survey",
 				      "SELECT AVG(NumQsts)"
@@ -570,7 +570,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
 					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Cty.CtyCod,
-				      Sco_GetDBStrFromScope (HieLvl_CRS));
+				      Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_INS:
          return DB_QuerySELECTDouble ("can not get number of questions per survey",
 				      "SELECT AVG(NumQsts)"
@@ -588,7 +588,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
 					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ins.InsCod,
-				      Sco_GetDBStrFromScope (HieLvl_CRS));
+				      Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CTR:
          return DB_QuerySELECTDouble ("can not get number of questions per survey",
 				      "SELECT AVG(NumQsts)"
@@ -604,7 +604,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
 					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ctr.CtrCod,
-				      Sco_GetDBStrFromScope (HieLvl_CRS));
+				      Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_DEG:
          return DB_QuerySELECTDouble ("can not get number of questions per survey",
 				      "SELECT AVG(NumQsts)"
@@ -618,7 +618,7 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
 					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Deg.DegCod,
-				      Sco_GetDBStrFromScope (HieLvl_CRS));
+				      Hie_GetDBStrFromLevel (HieLvl_CRS));
       case HieLvl_CRS:
          return DB_QuerySELECTDouble ("can not get number of questions per survey",
 				      "SELECT AVG(NumQsts)"
@@ -629,9 +629,9 @@ double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 					        " AND svy_surveys.Cod=%ld"
 					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
 					   " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-				      Sco_GetDBStrFromScope (HieLvl_CRS),Gbl.Hierarchy.Crs.CrsCod);
+				      Hie_GetDBStrFromLevel (HieLvl_CRS),Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached
      }
   }
@@ -676,11 +676,11 @@ unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod)
 		      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)",
 		   SvyCod,
 		   SvyCod,
-		   Sco_GetDBStrFromScope (HieLvl_CRS),
+		   Hie_GetDBStrFromLevel (HieLvl_CRS),
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   SvyCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Sco_GetDBStrFromScope (HieLvl_CRS));
+		   Hie_GetDBStrFromLevel (HieLvl_CRS));
   }
 
 /*****************************************************************************/
@@ -700,14 +700,14 @@ void Svy_DB_RemoveSvy (long SvyCod)
 /************* (country, institution, center, degree or course) **************/
 /*****************************************************************************/
 
-void Svy_DB_RemoveSvysIn (HieLvl_Level_t Scope,long Cod)
+void Svy_DB_RemoveSvysIn (HieLvl_Level_t Level,long HieCod)
   {
    DB_QueryDELETE ("can not remove all surveys in a place on the hierarchy",
 		   "DELETE FROM svy_surveys"
 	           " WHERE Scope='%s'"
 	             " AND Cod=%ld",
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
+		   Hie_GetDBStrFromLevel (Level),
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -818,7 +818,7 @@ void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod)
 /********** (country, institution, center, degree or course)         *********/
 /*****************************************************************************/
 
-void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Scope,long Cod)
+void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Level,long HieCod)
   {
    DB_QueryDELETE ("can not remove all groups"
 	           " associated to surveys of a course",
@@ -828,8 +828,8 @@ void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Scope,long Cod)
                    " WHERE svy_surveys.Scope='%s'"
                      " AND svy_surveys.Cod=%ld"
                      " AND svy_surveys.SvyCod=svy_groups.SvyCod",
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
+		   Hie_GetDBStrFromLevel (Level),
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -1016,7 +1016,7 @@ void Svy_DB_RemoveQstsSvy (long SvyCod)
 /******** (country, institution, center, degree or course)            ********/
 /*****************************************************************************/
 
-void Svy_DB_RemoveQstsSvysIn (HieLvl_Level_t Scope,long Cod)
+void Svy_DB_RemoveQstsSvysIn (HieLvl_Level_t Level,long HieCod)
   {
    DB_QueryDELETE ("can not remove questions of surveys"
 		   " in a place on the hierarchy",
@@ -1026,8 +1026,8 @@ void Svy_DB_RemoveQstsSvysIn (HieLvl_Level_t Scope,long Cod)
                    " WHERE svy_surveys.Scope='%s'"
                      " AND svy_surveys.Cod=%ld"
                      " AND svy_surveys.SvyCod=svy_questions.SvyCod",
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
+		   Hie_GetDBStrFromLevel (Level),
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -1191,7 +1191,7 @@ void Svy_DB_RemoveAnswersSvy (long SvyCod)
 /********* (country, institution, center, degree or course)          *********/
 /*****************************************************************************/
 
-void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Scope,long Cod)
+void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Level,long HieCod)
   {
    DB_QueryDELETE ("can not remove answers of surveys"
 		   " in a place on the hierarchy",
@@ -1203,8 +1203,8 @@ void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Scope,long Cod)
                      " AND svy_surveys.Cod=%ld"
                      " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                      " AND svy_questions.QstCod=svy_answers.QstCod",
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
+		   Hie_GetDBStrFromLevel (Level),
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -1269,7 +1269,7 @@ void Svy_DB_RemoveCommentsSvy (long SvyCod)
 /********* (country, institution, center, degree or course)           ********/
 /*****************************************************************************/
 
-void Svy_DB_RemoveCommentsSvysIn (HieLvl_Level_t Scope,long Cod)
+void Svy_DB_RemoveCommentsSvysIn (HieLvl_Level_t Level,long HieCod)
   {
    DB_QueryDELETE ("can not remove comments of surveys"
 		   " in a place on the hierarchy",
@@ -1281,8 +1281,8 @@ void Svy_DB_RemoveCommentsSvysIn (HieLvl_Level_t Scope,long Cod)
                      " AND svy_surveys.Cod=%ld"
                      " AND svy_surveys.SvyCod=svy_questions.SvyCod"
                      " AND svy_questions.QstCod=svy_comments.QstCod",
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
+		   Hie_GetDBStrFromLevel (Level),
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -1348,7 +1348,7 @@ void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod)
 /************* (country, institution, center, degree or course) **************/
 /*****************************************************************************/
 
-void Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (HieLvl_Level_t Scope,long Cod)
+void Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (HieLvl_Level_t Level,long HieCod)
   {
    DB_QueryDELETE ("can not remove users"
 	           " who had answered surveys in a place on the hierarchy",
@@ -1358,6 +1358,6 @@ void Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (HieLvl_Level_t Scope,long Cod)
                    " WHERE svy_surveys.Scope='%s'"
                      " AND svy_surveys.Cod=%ld"
                      " AND svy_surveys.SvyCod=svy_users.SvyCod",
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
+		   Hie_GetDBStrFromLevel (Level),
+		   HieCod);
   }

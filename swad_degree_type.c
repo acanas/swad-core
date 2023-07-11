@@ -65,13 +65,13 @@ static struct DegTyp_DegreeType *DegTyp_EditingDegTyp = NULL;	// Static variable
 /*************************** Private prototypes ******************************/
 /*****************************************************************************/
 
-static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
+static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Level,
                                    DegTyp_Order_t DefaultOrder);
 static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder);
 
 static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
                                     Act_Action_t NextAction,
-                                    HieLvl_Level_t Scope,
+                                    HieLvl_Level_t Level,
                                     DegTyp_Order_t SelectedOrder);
 
 static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTypes);
@@ -85,7 +85,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 static void DegTyp_PutFormToCreateDegreeType (void);
 
 static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                                HieLvl_Level_t Scope,
+                                                HieLvl_Level_t Level,
                                                 DegTyp_Order_t SelectedOrder);
 static void DegTyp_PutHeadDegreeTypesForEdition (void);
 
@@ -154,7 +154,7 @@ void DegTyp_SeeDegreeTypesInStaTab (void)
                           DegTyp_ORDER_BY_NUM_DEGREES);	// Default order if not specified
   }
 
-static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
+static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Level,
                                    DegTyp_Order_t DefaultOrder)
   {
    DegTyp_Order_t SelectedOrder;
@@ -164,10 +164,10 @@ static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Scope,
    SelectedOrder = DegTyp_GetParDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
-   DegTyp_GetListDegreeTypes (&DegTypes,Scope,SelectedOrder);
+   DegTyp_GetListDegreeTypes (&DegTypes,Level,SelectedOrder);
 
    /***** List degree types *****/
-   DegTyp_ListDegreeTypes (&DegTypes,NextAction,Scope,SelectedOrder);
+   DegTyp_ListDegreeTypes (&DegTypes,NextAction,Level,SelectedOrder);
 
    /***** Free list of degree types *****/
    DegTyp_FreeListDegreeTypes (&DegTypes);
@@ -194,7 +194,7 @@ static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder)
 
 static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
                                     Act_Action_t NextAction,
-                                    HieLvl_Level_t Scope,
+                                    HieLvl_Level_t Level,
                                     DegTyp_Order_t SelectedOrder)
   {
    extern const char *Hlp_CENTER_DegreeTypes;
@@ -225,7 +225,7 @@ static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
       HTM_TABLE_BeginWideMarginPadding (2);
 
          /***** Write heading *****/
-	 DegTyp_PutHeadDegreeTypesForSeeing (NextAction,Scope,SelectedOrder);
+	 DegTyp_PutHeadDegreeTypesForSeeing (NextAction,Level,SelectedOrder);
 
 	 /***** List current degree types for seeing *****/
 	 DegTyp_ListDegreeTypesForSeeing (DegTypes);
@@ -502,7 +502,7 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 /*****************************************************************************/
 
 static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                                HieLvl_Level_t Scope,
+                                                HieLvl_Level_t Level,
                                                 DegTyp_Order_t SelectedOrder)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS];
@@ -529,7 +529,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 	    Frm_BeginForm (NextAction);
 	       if (NextAction == ActSeeUseGbl)
 		 {
-		  Figures.Scope      = Scope;
+		  Figures.Level      = Level;
 		  Figures.FigureType = Fig_DEGREE_TYPES;
 		  Fig_PutParsFigures (&Figures);
 		 }
@@ -579,14 +579,14 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
 /*****************************************************************************/
 
 void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
-                                HieLvl_Level_t Scope,DegTyp_Order_t Order)
+                                HieLvl_Level_t Level,DegTyp_Order_t Order)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumTyp;
 
    /***** Get types of degree from database *****/
-   DegTypes->Num = Deg_DB_GetDegreeTypes (&mysql_res,Scope,Order);
+   DegTypes->Num = Deg_DB_GetDegreeTypes (&mysql_res,Level,Order);
    DegTypes->Lst = NULL;
 
    /***** Get degree types *****/

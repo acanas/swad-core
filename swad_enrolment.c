@@ -3471,7 +3471,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
 
 #define Enr_DB_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
 
-unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
+unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles)
   {
    bool AnyUserInCourses;
    unsigned NumUsrs;
@@ -3496,22 +3496,22 @@ unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
 	                         (1 << Rol_TCH)));
 
    /***** Get number of users from database *****/
-   NumUsrs = Enr_DB_GetNumUsrsInCrss (Scope,Cod,Roles,AnyUserInCourses);
+   NumUsrs = Enr_DB_GetNumUsrsInCrss (Level,Cod,Roles,AnyUserInCourses);
 
-   FigCch_UpdateFigureIntoCache (Enr_GetFigureNumUsrsInCrss (Roles),Scope,Cod,
+   FigCch_UpdateFigureIntoCache (Enr_GetFigureNumUsrsInCrss (Roles),Level,Cod,
 				 FigCch_UNSIGNED,&NumUsrs);
    return NumUsrs;
   }
 
-unsigned Enr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
+unsigned Enr_GetCachedNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles)
   {
    unsigned NumUsrsInCrss;
 
    /***** Get number of users in courses from cache *****/
-   if (!FigCch_GetFigureFromCache (Enr_GetFigureNumUsrsInCrss (Roles),Scope,Cod,
+   if (!FigCch_GetFigureFromCache (Enr_GetFigureNumUsrsInCrss (Roles),Level,Cod,
                                    FigCch_UNSIGNED,&NumUsrsInCrss))
       /***** Get current number of users in courses from database and update cache *****/
-      NumUsrsInCrss = Enr_GetNumUsrsInCrss (Scope,Cod,Roles);
+      NumUsrsInCrss = Enr_GetNumUsrsInCrss (Level,Cod,Roles);
 
    return NumUsrsInCrss;
   }
@@ -3564,7 +3564,7 @@ unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
-double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
+double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
      {
@@ -3576,12 +3576,12 @@ double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role
    double AverageNumUsrsPerCrs;
 
    /***** Get number of users per course from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],Level,Cod,
                                    FigCch_DOUBLE,&AverageNumUsrsPerCrs))
      {
       /***** Get current number of users per course from database and update cache *****/
-      AverageNumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (Scope,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Scope,Cod,
+      AverageNumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (Level,Cod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Level,Cod,
                                     FigCch_DOUBLE,&AverageNumUsrsPerCrs);
      }
 
@@ -3592,7 +3592,7 @@ double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role
 /************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-double Enr_GetCachedAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
+double Enr_GetCachedAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
      {
@@ -3604,12 +3604,12 @@ double Enr_GetCachedAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role
    double AverageNumCrssPerUsr;
 
    /***** Get number of courses per user from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Level,Cod,
                                    FigCch_DOUBLE,&AverageNumCrssPerUsr))
      {
       /***** Get current number of courses per user from database and update cache *****/
-      AverageNumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (Scope,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Scope,Cod,
+      AverageNumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (Level,Cod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Level,Cod,
                                     FigCch_DOUBLE,&AverageNumCrssPerUsr);
      }
 

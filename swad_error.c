@@ -81,9 +81,9 @@ void Err_WrongActionExit (void)
 /************* Write error message and exit when wrong scope *****************/
 /*****************************************************************************/
 
-void Err_WrongScopeExit (void)
+void Err_WrongHierarchyLevelExit (void)
   {
-   Err_ShowErrorAndExit ("Wrong scope.");
+   Err_ShowErrorAndExit ("Wrong hierarchy level.");
   }
 
 /*****************************************************************************/

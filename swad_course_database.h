@@ -60,7 +60,7 @@ unsigned Crs_DB_GetNumCrssInIns (long InsCod);
 unsigned Crs_DB_GetNumCrssInCtr (long CtrCod);
 unsigned Crs_DB_GetNumCrssInDeg (long DegCod);
 unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod);
+                                    HieLvl_Level_t Level,long HieCod);
 
 unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod);
 

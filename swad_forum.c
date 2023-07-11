@@ -3330,7 +3330,7 @@ void For_GetAndShowForumStats (void)
 	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
 	    break;
 	 default:
-	    Err_WrongScopeExit ();
+	    Err_WrongHierarchyLevelExit ();
 	    break;
 	}
 

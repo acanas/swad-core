@@ -519,10 +519,10 @@ unsigned Asg_DB_GetUsrsFromAssignmentExceptMe (MYSQL_RES **mysql_res,long AsgCod
 // Returns the number of courses with assignments
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
+unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Level)
   {
    /***** Get number of courses with assignments from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 return (unsigned)
@@ -586,7 +586,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
 			" WHERE CrsCod=%ld",
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -597,10 +597,10 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
 // Returns the number of assignments
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
+unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,HieLvl_Level_t Level)
   {
    /***** Get number of assignments from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -670,7 +670,7 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
          return 0;	// Not reached
      }
   }

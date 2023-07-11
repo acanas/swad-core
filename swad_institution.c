@@ -1635,7 +1635,7 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
 unsigned Ins_GetCachedNumInssWithCtrs (void)
   {
    unsigned NumInssWithCtrs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of institutions with centers from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CTRS,Gbl.Scope.Current,Cod,
@@ -1657,7 +1657,7 @@ unsigned Ins_GetCachedNumInssWithCtrs (void)
 unsigned Ins_GetCachedNumInssWithDegs (void)
   {
    unsigned NumInssWithDegs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of institutions with degrees from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_DEGS,Gbl.Scope.Current,Cod,
@@ -1679,7 +1679,7 @@ unsigned Ins_GetCachedNumInssWithDegs (void)
 unsigned Ins_GetCachedNumInssWithCrss (void)
   {
    unsigned NumInssWithCrss;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of institutions with courses from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CRSS,Gbl.Scope.Current,Cod,
@@ -1707,7 +1707,7 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_INSS_WITH_TCHS,	// Teachers
      };
    unsigned NumInssWithUsrs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of institutions with users from cache *****/
    if (!FigCch_GetFigureFromCache (FigureInss[Role],Gbl.Scope.Current,Cod,
@@ -2010,7 +2010,7 @@ void Ins_GetAndShowInstitutionsStats (void)
 
       /***** Form to select type of list used to display degree photos *****/
       Set_GetAndUpdatePrefsAboutUsrList ();
-      Figures.Scope      = Gbl.Scope.Current;
+      Figures.Level      = Gbl.Scope.Current;
       Figures.FigureType = Fig_INSTITS;
       Usr_ShowFormsToSelectUsrListType (Fig_PutParsFigures,&Figures);
 

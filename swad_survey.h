@@ -43,8 +43,8 @@
 struct Svy_Survey
   {
    long SvyCod;
-   HieLvl_Level_t Scope;
-   long Cod;		// Country, institution, center, degree or course code
+   HieLvl_Level_t Level;
+   long HieCod;		// Country, institution, center, degree or course code
    unsigned Roles;	// Example: if survey can be made by students, Roles == (1 << Rol_STD)
    long UsrCod;
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
@@ -121,7 +121,7 @@ void Svy_ResetSurvey (void);
 void Svy_HideSurvey (void);
 void Svy_UnhideSurvey (void);
 void Svy_ReceiveFormSurvey (void);
-void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod);
+void Svy_RemoveSurveys (HieLvl_Level_t Level,long Cod);
 
 void Svy_ReqEditQuestion (void);
 void Svy_ReceiveQst (void);
@@ -131,7 +131,7 @@ void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);
 
-unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
+unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Level,unsigned *NumNotif);
 
 //-------------------------------- Figures ------------------------------------
 void Svy_GetAndShowSurveysStats (void);

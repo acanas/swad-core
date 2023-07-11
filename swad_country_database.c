@@ -334,11 +334,11 @@ unsigned Cty_DB_GetNumCtysWithCrss (void)
 /*****************************************************************************/
 
 unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod)
+                                    HieLvl_Level_t Level,long Cod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with users",

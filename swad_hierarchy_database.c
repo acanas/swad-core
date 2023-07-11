@@ -34,7 +34,7 @@
 /******************* Get number of countries with users **********************/
 /*****************************************************************************/
 
-void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Scope,long Cod)
+void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Level,long HieCod)
   {
    static const char *Format[HieLvl_NUM_LEVELS] =
      {
@@ -47,8 +47,8 @@ void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Scope,long Cod)
       [HieLvl_CRS] = "crs_users.CrsCod=%ld AND ",	// Course
      };
 
-   if (Cod > 0)
-      sprintf (SubQuery,Format[Scope],Cod);
+   if (HieCod > 0)
+      sprintf (SubQuery,Format[Level],HieCod);
    else
       SubQuery[0] = '\0';
   }
@@ -97,8 +97,8 @@ unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod)
 		      " AND usr_admins.Cod=deg_degrees.DegCod)"
 		    " ORDER BY S,"
 		              "FullName",
-		   (unsigned) HieLvl_SYS,UsrCod,Sco_GetDBStrFromScope (HieLvl_SYS),
-		   (unsigned) HieLvl_INS,UsrCod,Sco_GetDBStrFromScope (HieLvl_INS),
-		   (unsigned) HieLvl_CTR,UsrCod,Sco_GetDBStrFromScope (HieLvl_CTR),
-		   (unsigned) HieLvl_DEG,UsrCod,Sco_GetDBStrFromScope (HieLvl_DEG));
+		   (unsigned) HieLvl_SYS,UsrCod,Hie_GetDBStrFromLevel (HieLvl_SYS),
+		   (unsigned) HieLvl_INS,UsrCod,Hie_GetDBStrFromLevel (HieLvl_INS),
+		   (unsigned) HieLvl_CTR,UsrCod,Hie_GetDBStrFromLevel (HieLvl_CTR),
+		   (unsigned) HieLvl_DEG,UsrCod,Hie_GetDBStrFromLevel (HieLvl_DEG));
   }

@@ -523,22 +523,22 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
    Hie_ResetHierarchy ();
 
    /***** Copy last hierarchy scope and code to current hierarchy *****/
-   switch (Gbl.Usrs.Me.UsrLast.LastHie.Scope)
+   switch (Gbl.Usrs.Me.UsrLast.LastHie.Level)
      {
       case HieLvl_CTY:	// Country
-         Gbl.Hierarchy.Cty.CtyCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+         Gbl.Hierarchy.Cty.CtyCod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_INS:	// Institution
-         Gbl.Hierarchy.Ins.InsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+         Gbl.Hierarchy.Ins.InsCod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_CTR:	// Center
-         Gbl.Hierarchy.Ctr.CtrCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+         Gbl.Hierarchy.Ctr.CtrCod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_DEG:	// Degree
-         Gbl.Hierarchy.Deg.DegCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+         Gbl.Hierarchy.Deg.DegCod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_CRS:	// Course
-         Gbl.Hierarchy.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+         Gbl.Hierarchy.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       default:
 	 break;
@@ -760,7 +760,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		    }
 		  break;
 	       default:	// There are no administrators in other scopes
-		  Err_WrongScopeExit ();
+		  Err_WrongHierarchyLevelExit ();
 		  break;
 	      }
 	 HTM_TD_End ();
@@ -1041,7 +1041,7 @@ static void Hie_GetAndShowHierarchyWithInss (void)
       case HieLvl_CRS:
 	 break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;
      }
 
@@ -1082,7 +1082,7 @@ static void Hie_GetAndShowHierarchyWithCtrs (void)
       case HieLvl_CRS:
 	 break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;
      }
 
@@ -1127,7 +1127,7 @@ static void Hie_GetAndShowHierarchyWithDegs (void)
       case HieLvl_CRS:
 	 break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;
      }
 
@@ -1176,7 +1176,7 @@ static void Hie_GetAndShowHierarchyWithCrss (void)
       case HieLvl_CRS:
 	 break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;
      }
 
@@ -1265,7 +1265,7 @@ static void Hie_GetAndShowHierarchyTotal (void)
      case HieLvl_CRS:
 	 break;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 break;
      }
 

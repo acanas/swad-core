@@ -70,11 +70,11 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
 
 unsigned Ins_DB_GetNumInssInCty (long CtyCod);
 
-unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod);
-unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod);
-unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod);
+unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Level,long HieCod);
+unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Level,long HieCod);
+unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Level,long HieCod);
 unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod);
+                                    HieLvl_Level_t Level,long HieCod);
 
 unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod);
 bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);

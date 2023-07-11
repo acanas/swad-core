@@ -29,13 +29,6 @@
 #include "swad_banner_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
-#include "swad_global.h"
-
-/*****************************************************************************/
-/************** External global variables from others modules ****************/
-/*****************************************************************************/
-
-extern struct Globals Gbl;
 
 /*****************************************************************************/
 /************************** Get list of all banners **************************/

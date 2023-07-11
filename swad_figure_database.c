@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 void Fig_DB_UpdateUnsignedFigureIntoCache (FigCch_FigureCached_t Figure,
-                                           HieLvl_Level_t Scope,long Cod,
+                                           HieLvl_Level_t Level,long Cod,
                                            unsigned Value)
   {
    DB_QueryREPLACE ("can not update cached figure value",
@@ -43,7 +43,7 @@ void Fig_DB_UpdateUnsignedFigureIntoCache (FigCch_FigureCached_t Figure,
 		    " VALUES"
 		    " (%u,'%s',%ld,%u,'0.0')",
 		    (unsigned) Figure,
-		    Sco_GetDBStrFromScope (Scope),
+		    Hie_GetDBStrFromLevel (Level),
 		    Cod,
 		    Value);
   }
@@ -53,7 +53,7 @@ void Fig_DB_UpdateUnsignedFigureIntoCache (FigCch_FigureCached_t Figure,
 /*****************************************************************************/
 
 void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
-                                         HieLvl_Level_t Scope,long Cod,
+                                         HieLvl_Level_t Level,long Cod,
                                          double Value)
   {
    Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
@@ -63,20 +63,19 @@ void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
 		    " VALUES"
 		    " (%u,'%s',%ld,0,'%.15lg')",
 		    (unsigned) Figure,
-		    Sco_GetDBStrFromScope (Scope),
+		    Hie_GetDBStrFromLevel (Level),
 		    Cod,
 		    Value);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
-   /***** Get figure's value if cached and recent *****/
 /*****************************************************************************/
 /************************** Get figure from cache ****************************/
 /*****************************************************************************/
 
 unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
                                     FigCch_FigureCached_t Figure,
-                                    HieLvl_Level_t Scope,long Cod,
+                                    HieLvl_Level_t Level,long Cod,
                                     FigCch_Type_t Type,time_t TimeCached)
   {
    static const char *Field[FigCch_NUM_TYPES] =
@@ -94,6 +93,6 @@ unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
 		     " AND Cod=%ld"
 		     " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Field[Type],
-		   (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
+		   (unsigned) Figure,Hie_GetDBStrFromLevel (Level),Cod,
 		   TimeCached);
   }

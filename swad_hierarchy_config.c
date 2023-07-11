@@ -334,7 +334,7 @@ void HieCfg_QR (ParCod_Param_t ParCode,long HieCod)
 /************************ Number of users in courses *************************/
 /*****************************************************************************/
 
-void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
+void HieCfg_NumUsrsInCrss (HieLvl_Level_t Level,long Cod,Rol_Role_t Role)
   {
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -349,7 +349,7 @@ void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Scope,Cod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Level,Cod,
 						   Role == Rol_UNK ? (1 << Rol_STD) |
 								     (1 << Rol_NET) |
 								     (1 << Rol_TCH) :	// Any user

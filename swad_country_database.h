@@ -52,7 +52,7 @@ unsigned Cty_DB_GetNumCtysWithCtrs (void);
 unsigned Cty_DB_GetNumCtysWithDegs (void);
 unsigned Cty_DB_GetNumCtysWithCrss (void);
 unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod);
+                                    HieLvl_Level_t Level,long Cod);
 
 bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
 bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);

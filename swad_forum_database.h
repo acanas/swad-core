@@ -39,7 +39,7 @@ unsigned For_DB_GetNumThrsInForumNewerThan (const struct For_Forum *Forum,
                                             const char *Time);
 unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
                                         long UsrCod);
-void For_DB_RemoveForums (HieLvl_Level_t Scope,long HieCod);
+void For_DB_RemoveForums (HieLvl_Level_t Level,long HieCod);
 
 //------------------------------- Posts ---------------------------------------
 long For_DB_InsertForumPst (long ThrCod,long UsrCod,

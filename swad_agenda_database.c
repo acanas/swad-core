@@ -343,12 +343,12 @@ unsigned Agd_DB_GetNumEventsFromUsr (long UsrCod)
 /*****************************************************************************/
 /********************** Get number of users with events **********************/
 /*****************************************************************************/
-// Returns the number of users with events in a given scope
+// Returns the number of users with events in a given hierarchy level
 
-unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Scope)
+unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
   {
    /***** Get number of users with events from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -422,7 +422,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Scope)
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -430,12 +430,12 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Scope)
 /*****************************************************************************/
 /*************************** Get number of events ****************************/
 /*****************************************************************************/
-// Returns the number of events in a given scope
+// Returns the number of events in a given hierarchy level
 
-unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope)
+unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Level)
   {
    /***** Get number of events from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -517,7 +517,7 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope)
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

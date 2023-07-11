@@ -171,7 +171,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Crs.CrsCod);
 	    default:
-	       Err_WrongScopeExit ();
+	       Err_WrongHierarchyLevelExit ();
 	   }
 	 return 0;	// Not reached
       case Rol_GST:
@@ -314,7 +314,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) Role);
 	    default:
-	       Err_WrongScopeExit ();
+	       Err_WrongHierarchyLevelExit ();
 	   }
 	 return 0;	// Not reached
       default:
@@ -469,7 +469,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) Role);
 	    default:
-	       Err_WrongScopeExit ();
+	       Err_WrongHierarchyLevelExit ();
 	   }
 	 return 0;	// Not reached
       default:

@@ -66,7 +66,7 @@ typedef enum
   } Cty_Order_t;
 #define Cty_ORDER_DEFAULT Cty_ORDER_BY_NUM_USRS
 
-struct ListCountries
+struct Cty_ListCtys
   {
    unsigned Num;		// Number of countries
    struct Cty_Countr *Lst;	// List of countries

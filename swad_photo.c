@@ -1996,7 +1996,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
-   struct ListDegrees Degs;
+   struct Deg_ListDegs Degs;
    unsigned NumDeg;
    struct Deg_Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;

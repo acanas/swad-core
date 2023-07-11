@@ -103,7 +103,7 @@ void Att_UpdateEvent (struct Att_Event *Event,const char *Description);
 
 void Att_RemoveCrsEvents (long CrsCod);
 
-unsigned Att_GetNumEvents (HieLvl_Level_t Scope,unsigned *NumNotif);
+unsigned Att_GetNumEvents (HieLvl_Level_t Level,unsigned *NumNotif);
 
 void Att_SeeOneEvent (void);
 

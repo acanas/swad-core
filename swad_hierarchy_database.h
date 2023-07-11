@@ -33,7 +33,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Scope,long Cod);
+void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Level,long HieCod);
 unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod);
 
 #endif

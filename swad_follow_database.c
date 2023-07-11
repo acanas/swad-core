@@ -401,7 +401,7 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
 			Gbl.Hierarchy.Crs.CrsCod,
 			FieldDB[Fol]);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -508,7 +508,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached
      }
   }
@@ -663,7 +663,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
-         Err_WrongScopeExit ();
+         Err_WrongHierarchyLevelExit ();
          return 0;	// Not reached
      }
   }

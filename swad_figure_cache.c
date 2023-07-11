@@ -39,7 +39,7 @@
 /*****************************************************************************/
 
 void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
-                                   HieLvl_Level_t Scope,long Cod,
+                                   HieLvl_Level_t Level,long Cod,
                                    FigCch_Type_t Type,const void *ValuePtr)
   {
    /***** Trivial check *****/
@@ -50,11 +50,11 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
    switch (Type)
      {
       case FigCch_UNSIGNED:
-	 Fig_DB_UpdateUnsignedFigureIntoCache (Figure,Scope,Cod,
+	 Fig_DB_UpdateUnsignedFigureIntoCache (Figure,Level,Cod,
 	                                      *((unsigned *) ValuePtr));
 	 break;
       case FigCch_DOUBLE:
-	 Fig_DB_UpdateDoubleFigureIntoCache (Figure,Scope,Cod,
+	 Fig_DB_UpdateDoubleFigureIntoCache (Figure,Level,Cod,
 			                     *((double *) ValuePtr));
 	 break;
      }
@@ -66,7 +66,7 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 // Return true is figure is found (if figure is cached and recently updated)
 
 bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
-                                HieLvl_Level_t Scope,long Cod,
+                                HieLvl_Level_t Level,long Cod,
                                 FigCch_Type_t Type,void *ValuePtr)
   {
    /* The higher the level, the longer a value remains cached */
@@ -97,11 +97,11 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 
    /***** Trivial check *****/
    if (Figure == FigCch_UNKNOWN ||	// Unknown figure
-       Scope == HieLvl_UNK)		// Unknown scope
+       Level == HieLvl_UNK)		// Unknown scope
       return false;
 
    /***** Get figure's value if cached and recent *****/
-   if (Fig_DB_GetFigureFromCache (&mysql_res,Figure,Scope,Cod,Type,TimeCached[Scope]))
+   if (Fig_DB_GetFigureFromCache (&mysql_res,Figure,Level,Cod,Type,TimeCached[Level]))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

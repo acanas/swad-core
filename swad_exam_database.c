@@ -265,12 +265,12 @@ bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title)
 /*****************************************************************************/
 /********************* Get number of courses with exams **********************/
 /*****************************************************************************/
-// Returns the number of courses with exams in this location
+// Returns the number of courses with exams in a given location
 
-unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope)
+unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Level)
   {
    /***** Get number of courses with exams from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
@@ -327,7 +327,7 @@ unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope)
 			       " WHERE CrsCod=%ld",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -335,12 +335,12 @@ unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope)
 /*****************************************************************************/
 /**************************** Get number of exams ****************************/
 /*****************************************************************************/
-// Returns the number of exams in this location
+// Returns the number of exams in a given location
 
-unsigned Exa_DB_GetNumExams (HieLvl_Level_t Scope)
+unsigned Exa_DB_GetNumExams (HieLvl_Level_t Level)
   {
    /***** Get number of exams from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return DB_QueryCOUNT ("can not get number of exams",
@@ -397,7 +397,7 @@ unsigned Exa_DB_GetNumExams (HieLvl_Level_t Scope)
 			       " WHERE CrsCod=%ld",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -406,10 +406,10 @@ unsigned Exa_DB_GetNumExams (HieLvl_Level_t Scope)
 /************* Get average number of questions per course exam ***************/
 /*****************************************************************************/
 
-double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
+double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Level)
   {
    /***** Get number of questions per exam from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
@@ -490,7 +490,7 @@ double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
 					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached
      }
   }

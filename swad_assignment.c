@@ -1642,7 +1642,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 // Returns the number of assignments
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif)
+unsigned Asg_GetNumAssignments (HieLvl_Level_t Level,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1653,7 +1653,7 @@ unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif)
    *NumNotif = 0;
 
    /***** Get number of assignments from database *****/
-   if (Asg_DB_GetNumAssignments (&mysql_res,Scope))
+   if (Asg_DB_GetNumAssignments (&mysql_res,Level))
      {
       /***** Get number of assignments *****/
       row = mysql_fetch_row (mysql_res);

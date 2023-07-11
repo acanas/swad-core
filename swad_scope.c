@@ -52,7 +52,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    extern const char *Txt_Center;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
-   HieLvl_Level_t Scope;
+   HieLvl_Level_t Level;
    unsigned ScopeUnsigned;
    bool WriteScope;
    static const char **TxtScope[HieLvl_NUM_LEVELS] =
@@ -78,14 +78,14 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 		     "id=\"%s\" name=\"%s\" class=\"INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());
 
-      for (Scope  = (HieLvl_Level_t) 1;
-	   Scope <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
-	   Scope++)
-	 if ((Gbl.Scope.Allowed & (1 << Scope)))
+      for (Level  = (HieLvl_Level_t) 1;
+	   Level <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
+	   Level++)
+	 if ((Gbl.Scope.Allowed & (1 << Level)))
 	   {
 	    /* Don't put forbidden options in selectable list */
 	    WriteScope = false;
-	    switch (Scope)
+	    switch (Level)
 	      {
 	       case HieLvl_SYS:
 		  WriteScope = true;
@@ -117,13 +117,13 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 	    if (WriteScope)
 	      {
 	       /***** Write allowed option *****/
-	       ScopeUnsigned = (unsigned) Scope;
+	       ScopeUnsigned = (unsigned) Level;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			   Scope == Gbl.Scope.Current ? HTM_OPTION_SELECTED :
+			   Level == Gbl.Scope.Current ? HTM_OPTION_SELECTED :
 							HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s: %s",
-			   *TxtScope[Scope],TxtName[Scope]);
+			   *TxtScope[Level],TxtName[Level]);
 	      }
 	   }
 
@@ -134,15 +134,15 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 /********************** Put hidden parameter scope ***************************/
 /*****************************************************************************/
 
-void Sco_PutParCurrentScope (void *Scope)
+void Sco_PutParCurrentScope (void *Level)
   {
-   if (Scope)
-      Sco_PutParScope ("ScopeUsr",*((HieLvl_Level_t *) Scope));
+   if (Level)
+      Sco_PutParScope ("ScopeUsr",*((HieLvl_Level_t *) Level));
   }
 
-void Sco_PutParScope (const char *ParName,HieLvl_Level_t Scope)
+void Sco_PutParScope (const char *ParName,HieLvl_Level_t Level)
   {
-   Par_PutParUnsigned (NULL,ParName,(unsigned) Scope);
+   Par_PutParUnsigned (NULL,ParName,(unsigned) Level);
   }
 
 /*****************************************************************************/
@@ -284,27 +284,27 @@ HieLvl_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
   }
 
 /*****************************************************************************/
-/*********************** Get scope from database string **********************/
+/***************** Get hierarchy level from database string ******************/
 /*****************************************************************************/
 
-HieLvl_Level_t Sco_GetScopeFromDBStr (const char *ScopeDBStr)
+HieLvl_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr)
   {
-   HieLvl_Level_t Scope;
+   HieLvl_Level_t Level;
 
-   for (Scope  = (HieLvl_Level_t) 0;
-	Scope <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
-	Scope++)
-      if (!strcmp (Sco_GetDBStrFromScope (Scope),ScopeDBStr))
-	 return Scope;
+   for (Level  = (HieLvl_Level_t) 0;
+	Level <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
+	Level++)
+      if (!strcmp (Hie_GetDBStrFromLevel (Level),LevelDBStr))
+	 return Level;
 
    return HieLvl_UNK;
   }
 
 /*****************************************************************************/
-/*********************** Get database string from source *********************/
+/****************** Get database string from hierarchy level *****************/
 /*****************************************************************************/
 
-const char *Sco_GetDBStrFromScope (HieLvl_Level_t Scope)
+const char *Hie_GetDBStrFromLevel (HieLvl_Level_t Level)
   {
    static const char *Sco_ScopeDB[HieLvl_NUM_LEVELS] =
      {
@@ -317,17 +317,17 @@ const char *Sco_GetDBStrFromScope (HieLvl_Level_t Scope)
       [HieLvl_CRS] = "Crs",
      };
 
-   if (Scope >= HieLvl_NUM_LEVELS)
-      Scope = HieLvl_UNK;
+   if (Level >= HieLvl_NUM_LEVELS)
+      Level = HieLvl_UNK;
 
-   return Sco_ScopeDB[Scope];
+   return Sco_ScopeDB[Level];
   }
 
 /*****************************************************************************/
-/**************************** Get current scope code *************************/
+/************************** Get current hierarchy code ***********************/
 /*****************************************************************************/
 
-long Sco_GetCurrentCod (void)
+long Hie_GetCurrentCod (void)
   {
    switch (Gbl.Scope.Current)
      {
@@ -344,7 +344,7 @@ long Sco_GetCurrentCod (void)
       case HieLvl_CRS:
 	 return Gbl.Hierarchy.Crs.CrsCod;
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return -1L;	// Not reached
      }
   }

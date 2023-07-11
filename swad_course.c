@@ -598,7 +598,7 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_CRSS_WITH_TCHS,	// Teachers
      };
    unsigned NumCrssWithUsrs;
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
 
    /***** Get number of courses with users from cache *****/
    if (!FigCch_GetFigureFromCache (FigureCrss[Role],Gbl.Scope.Current,Cod,

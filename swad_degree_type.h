@@ -76,7 +76,7 @@ void DegTyp_PutIconToViewDegreeTypes (void);
 bool DegTyp_CheckIfICanCreateDegreeTypes (void);
 
 void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
-                                HieLvl_Level_t Scope,DegTyp_Order_t Order);
+                                HieLvl_Level_t Level,DegTyp_Order_t Order);
 void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes);
 
 void DegTyp_ReceiveFormNewDegreeType (void);

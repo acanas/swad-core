@@ -67,7 +67,7 @@ typedef enum
   } Ctr_Order_t;
 #define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTER
 
-struct ListCenters
+struct Ctr_ListCtrs
   {
    unsigned Num;		// Number of centers
    struct Ctr_Center *Lst;	// List of centers

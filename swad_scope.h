@@ -37,8 +37,8 @@
 /*****************************************************************************/
 
 void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange);
-void Sco_PutParCurrentScope (void *Scope);
-void Sco_PutParScope (const char *ParName,HieLvl_Level_t Scope);
+void Sco_PutParCurrentScope (void *Level);
+void Sco_PutParScope (const char *ParName,HieLvl_Level_t Level);
 void Sco_GetScope (const char *ParName);
 void Sco_AdjustScope (void);
 
@@ -46,9 +46,9 @@ void Sco_SetScopesForListingGuests (void);
 void Sco_SetScopesForListingStudents (void);
 
 HieLvl_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
-HieLvl_Level_t Sco_GetScopeFromDBStr (const char *ScopeDBStr);
-const char *Sco_GetDBStrFromScope (HieLvl_Level_t Scope);
+HieLvl_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr);
+const char *Hie_GetDBStrFromLevel (HieLvl_Level_t Level);
 
-long Sco_GetCurrentCod (void);
+long Hie_GetCurrentCod (void);
 
 #endif

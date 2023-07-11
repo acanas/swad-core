@@ -59,7 +59,7 @@ struct Deg_Degree
    char WWW[Cns_MAX_BYTES_WWW + 1];
   };
 
-struct ListDegrees
+struct Deg_ListDegs
   {
    unsigned Num;		// Number of degrees
    struct Deg_Degree *Lst;		// List of degrees
@@ -84,9 +84,9 @@ void Deg_EditDegrees (void);
 
 void Deg_PutIconToViewDegrees (void);
 
-void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs);
+void Deg_GetListAllDegsWithStds (struct Deg_ListDegs *Degs);
 void Deg_GetListDegsInCurrentCtr (void);
-void Deg_FreeListDegs (struct ListDegrees *Degs);
+void Deg_FreeListDegs (struct Deg_ListDegs *Degs);
 
 void Deg_ReceiveFormReqDeg (void);
 void Deg_ReceiveFormNewDeg (void);

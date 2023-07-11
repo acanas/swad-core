@@ -62,7 +62,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 /***************** Draw institution, center or degree logo *******************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
+void Lgo_DrawLogo (HieLvl_Level_t Level,long HieCod,const char *AltText,
                    unsigned Size,const char *Class)
   {
    static const char *HieIcon[HieLvl_NUM_LEVELS] =
@@ -82,15 +82,15 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
    bool ClassNotEmpty;
 
    /***** Path to logo *****/
-   if (HieIcon[Scope])	// Scope is correct
+   if (HieIcon[Level])	// Scope is correct
      {
-      if (Cod > 0)	// Institution, center or degree exists
+      if (HieCod > 0)	// Institution, center or degree exists
 	{
 	 /* Degree */
-	 if (Scope == HieLvl_DEG)
+	 if (Level == HieLvl_DEG)
 	   {
 	    Folder = Cfg_FOLDER_DEG;
-	    DegCod = Cod;
+	    DegCod = HieCod;
 	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_DEG_PUBLIC,
 		      (unsigned) (DegCod % 100),
@@ -98,17 +98,17 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 		      (unsigned)  DegCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
 	    if (LogoFound)
-	       Cod = DegCod;
+	       HieCod = DegCod;
 	   }
 
 	 /* Center */
-	 if (!LogoFound && Scope != HieLvl_INS)
+	 if (!LogoFound && Level != HieLvl_INS)
 	   {
 	    Folder = Cfg_FOLDER_CTR;
-	    if (Scope == HieLvl_DEG)	// && !LogoFound
-	       CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (Cod);
+	    if (Level == HieLvl_DEG)	// && !LogoFound
+	       CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (HieCod);
 	    else
-	       CtrCod = Cod;
+	       CtrCod = HieCod;
 	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_CTR_PUBLIC,
 		      (unsigned) (CtrCod % 100),
@@ -116,19 +116,19 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 		      (unsigned)  CtrCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
 	    if (LogoFound)
-	       Cod = CtrCod;
+	       HieCod = CtrCod;
 	   }
 
 	 /* Institution */
 	 if (!LogoFound)
 	   {
 	    Folder = Cfg_FOLDER_INS;
-	    if (Scope == HieLvl_DEG)		// && !LogoFound
-	       InsCod = Deg_DB_GetInsCodOfDegreeByCod (Cod);
-	    else if (Scope == HieLvl_CTR)	// && !LogoFound
-	       InsCod = Ctr_DB_GetInsCodOfCenterByCod (Cod);
+	    if (Level == HieLvl_DEG)		// && !LogoFound
+	       InsCod = Deg_DB_GetInsCodOfDegreeByCod (HieCod);
+	    else if (Level == HieLvl_CTR)	// && !LogoFound
+	       InsCod = Ctr_DB_GetInsCodOfCenterByCod (HieCod);
 	    else
-	       InsCod = Cod;
+	       InsCod = HieCod;
 	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_INS_PUBLIC,
 		      (unsigned) (InsCod % 100),
@@ -136,7 +136,7 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 		      (unsigned)  InsCod);
 	    LogoFound = Fil_CheckIfPathExists (PathLogo);
 	    if (LogoFound)
-	       Cod = InsCod;
+	       HieCod = InsCod;
 	   }
 
 	 /***** Draw logo *****/
@@ -149,10 +149,10 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 	   {
 	    if (asprintf (&URL,"%s/%s/%02u/%u/logo",
 			  Cfg_URL_SWAD_PUBLIC,Folder,
-			  (unsigned) (Cod % 100),
-			  (unsigned) Cod) < 0)
+			  (unsigned) (HieCod % 100),
+			  (unsigned) HieCod) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    if (asprintf (&Icon,"%u.png",(unsigned) Cod) < 0)
+	    if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
 	       Err_NotEnoughMemoryExit ();
 
 	    HTM_IMG (URL,Icon,AltText,
@@ -167,7 +167,7 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 	    free (URL);
 	   }
 	 else
-	    HTM_IMG (Cfg_URL_ICON_PUBLIC,HieIcon[Scope],AltText,
+	    HTM_IMG (Cfg_URL_ICON_PUBLIC,HieIcon[Level],AltText,
 		     "class=\"ICO%ux%u ICO_%s_%s"
 			     "%s%s\"",
 		     Size,Size,
@@ -185,7 +185,7 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 /************* the logo of institution, center or degree       ***************/
 /*****************************************************************************/
 
-void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope)
+void Lgo_PutIconToChangeLogo (HieLvl_Level_t Level)
   {
    static Act_Action_t Action[HieLvl_NUM_LEVELS] =
      {
@@ -198,7 +198,7 @@ void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope)
       [HieLvl_CRS] = ActUnk,		// Course
      };
 
-   Lay_PutContextualLinkOnlyIcon (Action[Scope],NULL,
+   Lay_PutContextualLinkOnlyIcon (Action[Level],NULL,
                                   NULL,NULL,
 				  "shield-alt.svg",Ico_BLACK);
   }
@@ -207,7 +207,7 @@ void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope)
 /**** Show a form for sending a logo of the institution, center or degree ****/
 /*****************************************************************************/
 
-void Lgo_RequestLogo (HieLvl_Level_t Scope)
+void Lgo_RequestLogo (HieLvl_Level_t Level)
   {
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
@@ -219,7 +219,7 @@ void Lgo_RequestLogo (HieLvl_Level_t Scope)
    char PathLogo[PATH_MAX + 1];
 
    /***** Set action depending on scope *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_INS:
 	 Cod = Gbl.Hierarchy.Ins.InsCod;
@@ -309,7 +309,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
 /******* Receive the logo of the current institution, center or degree *******/
 /*****************************************************************************/
 
-void Lgo_ReceiveLogo (HieLvl_Level_t Scope)
+void Lgo_ReceiveLogo (HieLvl_Level_t Level)
   {
    extern const char *Txt_The_file_is_not_X;
    long Cod;
@@ -322,7 +322,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Scope)
    bool WrongType = false;
 
    /***** Set variables depending on scope *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_INS:
 	 Cod = Gbl.Hierarchy.Ins.InsCod;
@@ -386,14 +386,14 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Scope)
 /******* Remove the logo of the current institution, center or degree ********/
 /*****************************************************************************/
 
-void Lgo_RemoveLogo (HieLvl_Level_t Scope)
+void Lgo_RemoveLogo (HieLvl_Level_t Level)
   {
    long Cod;
    const char *Folder;
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
 
    /***** Set variables depending on scope *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_INS:
 	 Cod = Gbl.Hierarchy.Ins.InsCod;

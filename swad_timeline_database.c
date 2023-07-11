@@ -299,7 +299,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
 			 Gbl.Hierarchy.Crs.CrsCod,
 			 (unsigned) NoteType);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -389,7 +389,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 			   " AND crs_users.UsrCod=tml_notes.UsrCod",
 			 Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

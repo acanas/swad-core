@@ -188,7 +188,7 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted);
 
-static void Usr_GetGstsLst (HieLvl_Level_t Scope);
+static void Usr_GetGstsLst (HieLvl_Level_t Level);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
@@ -360,8 +360,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
 void Usr_ResetMyLastData (void)
   {
    Gbl.Usrs.Me.UsrLast.WhatToSearch  = Sch_WHAT_TO_SEARCH_DEFAULT;
-   Gbl.Usrs.Me.UsrLast.LastHie.Scope = HieLvl_UNK;
-   Gbl.Usrs.Me.UsrLast.LastHie.Cod   = -1L;
+   Gbl.Usrs.Me.UsrLast.LastHie.Level = HieLvl_UNK;
+   Gbl.Usrs.Me.UsrLast.LastHie.HieCod   = -1L;
    Gbl.Usrs.Me.UsrLast.LastAct       = ActUnk;
    Gbl.Usrs.Me.UsrLast.LastRole      = Rol_UNK;
    Gbl.Usrs.Me.UsrLast.LastTime      = 0;
@@ -614,27 +614,27 @@ static void Usr_GetMyLastData (void)
 	 Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /* Get last hierarchy: scope (row[1]) and code (row[2]) */
-      Gbl.Usrs.Me.UsrLast.LastHie.Scope = Sco_GetScopeFromDBStr (row[1]);
-      switch (Gbl.Usrs.Me.UsrLast.LastHie.Scope)
+      Gbl.Usrs.Me.UsrLast.LastHie.Level = Hie_GetLevelFromDBStr (row[1]);
+      switch (Gbl.Usrs.Me.UsrLast.LastHie.Level)
         {
          case HieLvl_SYS:	// System
-            Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
+            Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
             break;
          case HieLvl_CTY:	// Country
          case HieLvl_INS:	// Institution
          case HieLvl_CTR:	// Center
          case HieLvl_DEG:	// Degree
          case HieLvl_CRS:	// Course
-            Gbl.Usrs.Me.UsrLast.LastHie.Cod = Str_ConvertStrCodToLongCod (row[2]);
-            if (Gbl.Usrs.Me.UsrLast.LastHie.Cod <= 0)
+            Gbl.Usrs.Me.UsrLast.LastHie.HieCod = Str_ConvertStrCodToLongCod (row[2]);
+            if (Gbl.Usrs.Me.UsrLast.LastHie.HieCod <= 0)
               {
-               Gbl.Usrs.Me.UsrLast.LastHie.Scope = HieLvl_UNK;
-               Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
+               Gbl.Usrs.Me.UsrLast.LastHie.Level = HieLvl_UNK;
+               Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
               }
             break;
          default:
-            Gbl.Usrs.Me.UsrLast.LastHie.Scope = HieLvl_UNK;
-            Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
+            Gbl.Usrs.Me.UsrLast.LastHie.Level = HieLvl_UNK;
+            Gbl.Usrs.Me.UsrLast.LastHie.HieCod = -1L;
             break;
         }
 
@@ -2015,8 +2015,8 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 // Role and action will be got from last data
 	 // only if I am in the same hierarchy location that the stored one
 	 GetRoleAndActionFromLastData =
-	    (Gbl.Hierarchy.Level == Gbl.Usrs.Me.UsrLast.LastHie.Scope &&	// The same scope...
-	     Gbl.Hierarchy.Cod   == Gbl.Usrs.Me.UsrLast.LastHie.Cod);		// ...and code in hierarchy
+	    (Gbl.Hierarchy.Level == Gbl.Usrs.Me.UsrLast.LastHie.Level &&	// The same scope...
+	     Gbl.Hierarchy.Cod   == Gbl.Usrs.Me.UsrLast.LastHie.HieCod);		// ...and code in hierarchy
 
       /***** Get role and action from last data *****/
       if (GetRoleAndActionFromLastData)
@@ -2693,15 +2693,15 @@ static void Usr_WriteUsrData (const char *BgColor,
 // - Rol_NET	Non-editing teacher
 // - Rol_TCH	Teacher
 
-void Usr_GetListUsrs (HieLvl_Level_t Scope,Rol_Role_t Role)
+void Usr_GetListUsrs (HieLvl_Level_t Level,Rol_Role_t Role)
   {
    char *Query = NULL;
 
    /***** Build query *****/
-   Usr_DB_BuildQueryToGetUsrsLst (Scope,Role,&Query);
+   Usr_DB_BuildQueryToGetUsrsLst (Level,Role,&Query);
 
    /***** Get list of users from database given a query *****/
-   Usr_GetListUsrsFromQuery (Query,Role,Scope);
+   Usr_GetListUsrsFromQuery (Query,Role,Level);
 
    /***** Free query string *****/
    free (Query);
@@ -2729,15 +2729,15 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 /************************ Get list with data of guests ***********************/
 /*****************************************************************************/
 
-static void Usr_GetGstsLst (HieLvl_Level_t Scope)
+static void Usr_GetGstsLst (HieLvl_Level_t Level)
   {
    char *Query = NULL;
 
    /***** Build query *****/
-   Usr_DB_BuildQueryToGetGstsLst (Scope,&Query);
+   Usr_DB_BuildQueryToGetGstsLst (Level,&Query);
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (Query,Rol_GST,Scope);
+   Usr_GetListUsrsFromQuery (Query,Rol_GST,Level);
 
    /***** Free query string *****/
    free (Query);
@@ -2765,7 +2765,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 /********************** Get list of users from database **********************/
 /*****************************************************************************/
 
-void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope)
+void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Level)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    MYSQL_RES *mysql_res;
@@ -2857,10 +2857,10 @@ void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope)
             switch (Role)
               {
                case Rol_UNK:	// Here Rol_UNK means any user
-		  switch (Scope)
+		  switch (Level)
 		    {
 		     case HieLvl_UNK:	// Unknown
-			Err_WrongScopeExit ();
+			Err_WrongHierarchyLevelExit ();
 			break;
 		     case HieLvl_SYS:	// System
 			// Query result has not a column with the acceptation
@@ -2895,10 +2895,10 @@ void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope)
                case Rol_STD:
                case Rol_NET:
                case Rol_TCH:
-		  switch (Scope)
+		  switch (Level)
 		    {
 		     case HieLvl_UNK:	// Unknown
-			Err_WrongScopeExit ();
+			Err_WrongHierarchyLevelExit ();
 			break;
 		     case HieLvl_SYS:	// System
 		     case HieLvl_CTY:	// Country
@@ -6332,7 +6332,7 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 	         (1 << Rol_TCH);
          return Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);	// All users in courses
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -6632,7 +6632,7 @@ static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   long Cod = Sco_GetCurrentCod ();
+   long Cod = Hie_GetCurrentCod ();
    const char *Class;
    unsigned Roles;
 

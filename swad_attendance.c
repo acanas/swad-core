@@ -1377,7 +1377,7 @@ void Att_RemoveCrsEvents (long CrsCod)
 // Returns the number of attendance events
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Att_GetNumEvents (HieLvl_Level_t Scope,unsigned *NumNotif)
+unsigned Att_GetNumEvents (HieLvl_Level_t Level,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1388,7 +1388,7 @@ unsigned Att_GetNumEvents (HieLvl_Level_t Scope,unsigned *NumNotif)
    *NumNotif = 0;
 
    /***** Get number of attendance events from database *****/
-   if (Att_DB_GetNumEvents (&mysql_res,Scope))
+   if (Att_DB_GetNumEvents (&mysql_res,Level))
      {
       /***** Get number of attendance events *****/
       row = mysql_fetch_row (mysql_res);

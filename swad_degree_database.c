@@ -77,10 +77,10 @@ void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status)
 /************************* Get number of degree types ************************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Scope)
+unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
   {
    /***** Get number of types of degree from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 return (unsigned)
@@ -140,7 +140,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Scope)
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod",
 			 Gbl.Hierarchy.Deg.DegCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -150,7 +150,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Scope)
 /*****************************************************************************/
 
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
-                                HieLvl_Level_t Scope,DegTyp_Order_t Order)
+                                HieLvl_Level_t Level,DegTyp_Order_t Order)
   {
    static const char *OrderBySubQuery[DegTyp_NUM_ORDERS] =
      {
@@ -160,7 +160,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
      };
 
    /***** Get types of degree from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
 	 /* Get
@@ -257,7 +257,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			 Gbl.Hierarchy.Deg.DegCod,
 			 OrderBySubQuery[Order]);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -465,7 +465,7 @@ unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res)
 		      " GROUP BY crs_courses.DegCod"
 		      " ORDER BY deg_degrees.ShortName",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Sco_GetDBStrFromScope (HieLvl_DEG),
+			 Hie_GetDBStrFromLevel (HieLvl_DEG),
 			 (unsigned) Hie_STATUS_BIT_PENDING);
       case Rol_SYS_ADM:
          return (unsigned)
@@ -563,11 +563,11 @@ unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
 /***************** Get current number of degrees with courses ****************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Scope,long Cod)
+unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Level,long Cod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of degrees with courses",
@@ -588,11 +588,11 @@ unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Scope,long Cod)
 /*****************************************************************************/
 
 unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod)
+                                    HieLvl_Level_t Level,long Cod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of degrees with users",

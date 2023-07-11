@@ -854,9 +854,9 @@ unsigned Att_DB_GetNumEventsInCrs (long CrsCod)
 // Returns the number of courses with attendance events
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Att_DB_GetNumCoursesWithEvents (HieLvl_Level_t Scope)
+unsigned Att_DB_GetNumCoursesWithEvents (HieLvl_Level_t Level)
   {
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
@@ -900,7 +900,7 @@ unsigned Att_DB_GetNumCoursesWithEvents (HieLvl_Level_t Scope)
 			       " WHERE CrsCod=%ld",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -909,9 +909,9 @@ unsigned Att_DB_GetNumCoursesWithEvents (HieLvl_Level_t Scope)
 /********************* Get number of attendance events ***********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
+unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Level)
   {
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -965,7 +965,7 @@ unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
 			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }

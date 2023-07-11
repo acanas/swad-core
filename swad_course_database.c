@@ -408,11 +408,11 @@ unsigned Crs_DB_GetNumCrssInDeg (long DegCod)
 /*****************************************************************************/
 
 unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod)
+                                    HieLvl_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of courses with users",

@@ -410,7 +410,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 			 FldName,
 			 FldName);
       default:
-         Err_WrongScopeExit ();
+         Err_WrongHierarchyLevelExit ();
          return 0;	// Not reached
      }
   }
@@ -559,7 +559,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Crs.CrsCod);
       default:
-         Err_WrongScopeExit ();
+         Err_WrongHierarchyLevelExit ();
          return 0;	// Not reached
      }
   }

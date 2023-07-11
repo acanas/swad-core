@@ -382,7 +382,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 		      " GROUP BY InsCod",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -435,7 +435,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -494,7 +494,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -560,7 +560,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -607,7 +607,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 		      " ORDER BY N DESC",
 			 Gbl.Hierarchy.Ins.InsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
      }
   }
@@ -656,11 +656,11 @@ unsigned Ins_DB_GetNumInssInCty (long CtyCod)
 /****************** Get number of institutions with centres ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod)
+unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with centers",
@@ -676,11 +676,11 @@ unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod)
 /****************** Get number of institutions with degrees ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod)
+unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with degrees",
@@ -698,11 +698,11 @@ unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod)
 /****************** Get number of institutions with courses ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod)
+unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with courses",
@@ -723,11 +723,11 @@ unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod)
 /*****************************************************************************/
 
 unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod)
+                                    HieLvl_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of institutions with users",

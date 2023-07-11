@@ -177,10 +177,10 @@ bool Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric)
 /*****************************************************************************/
 // Returns the number of courses with rubrics in this location
 
-unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Scope)
+unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Level)
   {
    /***** Get number of courses with rubrics from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -250,12 +250,12 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Scope)
 /*****************************************************************************/
 /*************************** Get number of rubrics ***************************/
 /*****************************************************************************/
-// Returns the number of rubrics in this location
+// Returns the number of rubrics in a given location
 
-unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Scope)
+unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Level)
   {
    /***** Get number of rubrics from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -690,10 +690,10 @@ bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criter
 /**************** Get average number of criteria per rubric ******************/
 /*****************************************************************************/
 
-double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
+double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
   {
    /***** Get number of criteria per rubric from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return
@@ -780,7 +780,7 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Scope)
 				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached
      }
   }

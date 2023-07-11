@@ -37,15 +37,15 @@
 /*****************************************************************************/
 
 void Fig_DB_UpdateUnsignedFigureIntoCache (FigCch_FigureCached_t Figure,
-                                           HieLvl_Level_t Scope,long Cod,
+                                           HieLvl_Level_t Level,long Cod,
                                            unsigned Value);
 void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
-                                         HieLvl_Level_t Scope,long Cod,
+                                         HieLvl_Level_t Level,long Cod,
                                          double Value);
 
 unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
                                     FigCch_FigureCached_t Figure,
-                                    HieLvl_Level_t Scope,long Cod,
+                                    HieLvl_Level_t Level,long Cod,
                                     FigCch_Type_t Type,time_t TimeCached);
 
 #endif

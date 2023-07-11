@@ -274,10 +274,10 @@ bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
 /*****************************************************************************/
 // Returns the number of courses with games in this location
 
-unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope)
+unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Level)
   {
    /***** Get number of courses with games from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -349,10 +349,10 @@ unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of games in this location
 
-unsigned Gam_DB_GetNumGames (HieLvl_Level_t Scope)
+unsigned Gam_DB_GetNumGames (HieLvl_Level_t Level)
   {
    /***** Get number of games from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return (unsigned)
@@ -652,10 +652,10 @@ unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
 /***************** Get average number of questions per game ******************/
 /*****************************************************************************/
 
-double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
+double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Level)
   {
    /***** Get number of questions per game from database *****/
-   switch (Scope)
+   switch (Level)
      {
       case HieLvl_SYS:
          return
@@ -742,7 +742,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 				    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 			       Gbl.Hierarchy.Crs.CrsCod);
       default:
-	 Err_WrongScopeExit ();
+	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached
      }
   }

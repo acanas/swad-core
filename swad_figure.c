@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType);
 
 static void Fig_PutParFigureType (Fig_FigureType_t FigureType);
-static void Fig_PutParScopeFig (HieLvl_Level_t ScopeFig);
+static void Fig_PutParFigScope (HieLvl_Level_t Level);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -106,8 +106,8 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 				1 << HieLvl_DEG |
 				1 << HieLvl_CRS;
 	    Gbl.Scope.Default = HieLvl_SYS;
-	    Sco_GetScope ("ScopeFig");
-	    Sco_PutSelectorScope ("ScopeFig",HTM_DONT_SUBMIT_ON_CHANGE);
+	    Sco_GetScope ("FigScope");
+	    Sco_PutSelectorScope ("FigScope",HTM_DONT_SUBMIT_ON_CHANGE);
 	 HTM_LABEL_End ();
 
 	 HTM_BR ();
@@ -152,7 +152,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    Sco_AdjustScope ();
 
    /***** Put icon to show figure *****/
-   Figures.Scope      = Gbl.Scope.Current;
+   Figures.Level      = Gbl.Scope.Current;
    Figures.FigureType = FigureType;
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
                                   Fig_PutParsFigures,&Figures,
@@ -167,7 +167,7 @@ void Fig_PutParsFigures (void *Figures)
   {
    if (Figures)
      {
-      Fig_PutParScopeFig (((struct Fig_Figures *) Figures)->Scope);
+      Fig_PutParFigScope (((struct Fig_Figures *) Figures)->Level);
       Fig_PutParFigureType (((struct Fig_Figures *) Figures)->FigureType);
      }
   }
@@ -185,9 +185,9 @@ static void Fig_PutParFigureType (Fig_FigureType_t FigureType)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutParScopeFig (HieLvl_Level_t ScopeFig)
+static void Fig_PutParFigScope (HieLvl_Level_t Level)
   {
-   Sco_PutParScope ("ScopeFig",ScopeFig);
+   Sco_PutParScope ("FigScope",Level);
   }
 
 /*****************************************************************************/

@@ -1252,7 +1252,7 @@ a:hover						/* Default ==> underlined */
 .MENU_TXT_DARK		{color:#d0d0d0;}
 
 /***************************** Users connected *******************************/
-#courseconnected
+#globalconnected, #courseconnected
 	{
 	box-sizing:border-box;
 	width:136px;
