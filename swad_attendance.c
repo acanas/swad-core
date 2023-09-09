@@ -108,6 +108,8 @@ static void Att_ResetEvent (struct Att_Event *Event);
 
 static void Att_FreeListEvents (struct Att_Events *Events);
 
+static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 static void Att_PutParAttCod (void *Events);
 
 static void Att_ShowLstGrpsToEditEvent (long AttCod);
@@ -875,31 +877,20 @@ void Att_RemoveEventFromDB (long AttCod)
   }
 
 /*****************************************************************************/
-/************************* Hide an attendance event **************************/
+/********************* Hide/unhide an attendance event ***********************/
 /*****************************************************************************/
 
 void Att_HideEvent (void)
   {
-   struct Att_Event Event;
-
-   /***** Get attendance event code *****/
-   Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
-
-   /***** Get data of the attendance event from database *****/
-   Att_GetEventDataByCodAndCheckCrs (&Event);
-
-   /***** Hide attendance event *****/
-   Att_DB_HideOrUnhideEvent (Event.AttCod,true);
-
-   /***** Show attendance events again *****/
-   Att_SeeEvents ();
+   Att_HideUnhideEvent (HidVis_HIDDEN);
   }
 
-/*****************************************************************************/
-/************************ Unhide an attendance event *************************/
-/*****************************************************************************/
-
 void Att_UnhideEvent (void)
+  {
+   Att_HideUnhideEvent (HidVis_VISIBLE);
+  }
+
+static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Att_Event Event;
 
@@ -910,7 +901,7 @@ void Att_UnhideEvent (void)
    Att_GetEventDataByCodAndCheckCrs (&Event);
 
    /***** Unhide attendance event *****/
-   Att_DB_HideOrUnhideEvent (Event.AttCod,false);
+   Att_DB_HideOrUnhideEvent (Event.AttCod,HiddenOrVisible);
 
    /***** Show attendance events again *****/
    Att_SeeEvents ();

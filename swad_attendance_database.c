@@ -297,15 +297,16 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
 /********************** Hide/unhide an attendance event **********************/
 /*****************************************************************************/
 
-void Att_DB_HideOrUnhideEvent (long AttCod,bool Hide)
+void Att_DB_HideOrUnhideEvent (long AttCod,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide assignment",
 		   "UPDATE att_events"
 		     " SET Hidden='%c'"
 		   " WHERE AttCod=%ld"
 		     " AND CrsCod=%ld",
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+						      'N',
                    AttCod,
                    Gbl.Hierarchy.Crs.CrsCod);
   }
