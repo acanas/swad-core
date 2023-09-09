@@ -42,7 +42,7 @@ extern struct Globals Gbl;
 void Bld_DB_CreateBuilding (const struct Bld_Building *Building)
   {
    DB_QueryINSERT ("can not create building",
-		   "INSERT INTO buildings"
+		   "INSERT INTO bld_buildings"
 		   " (CtrCod,ShortName,FullName,Location)"
 		   " VALUES"
 		   " (%ld,'%s','%s','%s')",
@@ -167,7 +167,7 @@ void Bld_DB_RemoveAllBuildingsInCtr (long CtrCod)
   {
    /***** Remove all buildings in center *****/
    DB_QueryDELETE ("can not remove buildings",
-		   "DELETE FROM buildings"
+		   "DELETE FROM bld_buildings"
                    " WHERE CtrCod=%ld",
 		   CtrCod);
   }

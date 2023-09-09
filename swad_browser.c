@@ -7404,8 +7404,8 @@ void Brw_SetDocumentAsVisible (void)
 
    /***** Change file to visible *****/
    if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
-                                                 Gbl.FileBrowser.FilFolLnk.Full))
-      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,false);
+                                                 Gbl.FileBrowser.FilFolLnk.Full) == HidVis_HIDDEN)
+      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,HidVis_VISIBLE);
 
    /***** Remove the affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -7427,9 +7427,9 @@ void Brw_SetDocumentAsHidden (void)
 
    /***** If the file or folder is not already set as hidden in database,
           set it as hidden *****/
-   if (!Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
-                                                  Gbl.FileBrowser.FilFolLnk.Full))
-      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,true);
+   if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
+                                                 Gbl.FileBrowser.FilFolLnk.Full) == HidVis_VISIBLE)
+      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,HidVis_HIDDEN);
 
    /***** Remove the affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -7445,7 +7445,7 @@ void Brw_SetDocumentAsHidden (void)
 /*****************************************************************************/
 
 HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,
-                                                                const char *Path)
+                                                                   const char *Path)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
