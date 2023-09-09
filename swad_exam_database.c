@@ -105,14 +105,15 @@ void Exa_DB_UpdateExam (const struct Exa_Exam *Exam,const char *Txt)
 /*************************** Hide/unhide an exam *****************************/
 /*****************************************************************************/
 
-void Exa_DB_HideOrUnhideExam (long ExaCod,bool Hide)
+void Exa_DB_HideOrUnhideExam (long ExaCod,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide exam",
 		   "UPDATE exa_exams"
 		     " SET Hidden='%c'"
 		   " WHERE ExaCod=%ld",
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+						      'N',
 		   ExaCod);
   }
 

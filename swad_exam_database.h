@@ -40,7 +40,8 @@
 //---------------------------- Exams ------------------------------------------
 long Exa_DB_CreateExam (const struct Exa_Exam *Exam,const char *Txt);
 void Exa_DB_UpdateExam (const struct Exa_Exam *Exam,const char *Txt);
-void Exa_DB_HideOrUnhideExam (long ExaCod,bool Hide);
+void Exa_DB_HideOrUnhideExam (long ExaCod,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder);
 unsigned Exa_DB_GetExamDataByCod (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);

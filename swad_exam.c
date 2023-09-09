@@ -137,7 +137,7 @@ static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (long CrsCod);
 static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromExam (long ExaCod);
 static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long CrsCod);
 
-static void Exa_HideUnhideExam (bool Hide);
+static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 				    char Txt[Cns_MAX_BYTES_TEXT + 1],
@@ -1174,28 +1174,20 @@ static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/******************************** Hide an exam ******************************/
+/***************************** Hide/unhide an exam ***************************/
 /*****************************************************************************/
 
 void Exa_HideExam (void)
   {
-   Exa_HideUnhideExam (true);
+   Exa_HideUnhideExam (HidVis_HIDDEN);
   }
-
-/*****************************************************************************/
-/******************************* Unhide an exam ******************************/
-/*****************************************************************************/
 
 void Exa_UnhideExam (void)
   {
-   Exa_HideUnhideExam (false);
+   Exa_HideUnhideExam (HidVis_VISIBLE);
   }
 
-/*****************************************************************************/
-/******************************* Unhide an exam ******************************/
-/*****************************************************************************/
-
-static void Exa_HideUnhideExam (bool Hide)
+static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Exa_Exams Exams;
 
@@ -1214,7 +1206,7 @@ static void Exa_HideUnhideExam (bool Hide)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Unhide exam *****/
-   Exa_DB_HideOrUnhideExam (Exams.Exam.ExaCod,Hide);
+   Exa_DB_HideOrUnhideExam (Exams.Exam.ExaCod,HiddenOrVisible);
 
    /***** Show exams again *****/
    Exa_ListAllExams (&Exams);
