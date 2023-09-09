@@ -96,6 +96,8 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 				          struct ExaSes_Session *Session);
 
+static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 static void ExaSes_PutFormSession (struct ExaSes_Session *Session);
 static void ExaSes_ParsFormSession (void *Session);
 
@@ -859,10 +861,20 @@ void ExaSes_RemoveSession (void)
   }
 
 /*****************************************************************************/
-/******************************** Hide a session *****************************/
+/*************************** Hide/unhide a session ***************************/
 /*****************************************************************************/
 
 void ExaSes_HideSession (void)
+  {
+   ExaSes_HideUnhideSession (HidVis_HIDDEN);
+  }
+
+void ExaSes_UnhideSession (void)
+  {
+   ExaSes_HideUnhideSession (HidVis_VISIBLE);
+  }
+
+static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Exa_Exams Exams;
    struct ExaSes_Session Session;
@@ -880,36 +892,7 @@ void ExaSes_HideSession (void)
       Err_NoPermissionExit ();
 
    /***** Hide session *****/
-   Exa_DB_HideUnhideSession (&Session,true);
-
-   /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-	                false);	// Do not put form for session
-  }
-
-/*****************************************************************************/
-/***************************** Unhide an session *****************************/
-/*****************************************************************************/
-
-void ExaSes_UnhideSession (void)
-  {
-   struct Exa_Exams Exams;
-   struct ExaSes_Session Session;
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-   Exa_ResetExam (&Exams.Exam);
-   ExaSes_ResetSession (&Session);
-
-   /***** Get and check parameters *****/
-   ExaSes_GetAndCheckPars (&Exams,&Session);
-
-   /***** Check if I can remove this exam session *****/
-   if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
-      Err_NoPermissionExit ();
-
-   /***** Unhide session *****/
-   Exa_DB_HideUnhideSession (&Session,false);
+   Exa_DB_HideUnhideSession (&Session,HiddenOrVisible);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,&Session,

@@ -1530,7 +1530,8 @@ void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session)
 /******************************** Hide a session *****************************/
 /*****************************************************************************/
 
-void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,bool Hide)
+void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide exam sessions",
 		   "UPDATE exa_sessions,"
@@ -1540,8 +1541,8 @@ void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,bool Hide)
 		     " AND exa_sessions.ExaCod=%ld"	// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",	// Extra check
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+						      'N',
 		   Session->SesCod,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
