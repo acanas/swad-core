@@ -119,6 +119,8 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent);
 
 static void Agd_FreeListEvents (struct Agd_Agenda *Agenda);
 
+static void Agd_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 /*****************************************************************************/
 /*************************** Reset agenda context ****************************/
 /*****************************************************************************/
@@ -1196,39 +1198,20 @@ void Agd_RemoveEvent (void)
   }
 
 /*****************************************************************************/
-/********************************* Hide event ********************************/
+/**************************** Hide/unhide event ******************************/
 /*****************************************************************************/
 
 void Agd_HideEvent (void)
   {
-   struct Agd_Agenda Agenda;
-   struct Agd_Event AgdEvent;
-
-   /***** Reset agenda context *****/
-   Agd_ResetAgenda (&Agenda);
-
-   /***** Get parameters *****/
-   Agd_GetPars (&Agenda,Agd_MY_AGENDA);
-
-   /***** Get event code *****/
-   AgdEvent.AgdCod = ParCod_GetAndCheckPar (ParCod_Agd);
-
-   /***** Get data of the event from database *****/
-   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetventDataByCod (&AgdEvent);
-
-   /***** Hide event *****/
-   Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,true);
-
-   /***** Show events again *****/
-   Agd_ShowMyAgenda (&Agenda);
+   Agd_HideUnhideEvent (HidVis_HIDDEN);
   }
 
-/*****************************************************************************/
-/****************************** Unhide event *********************************/
-/*****************************************************************************/
-
 void Agd_UnhideEvent (void)
+  {
+   Agd_HideUnhideEvent (HidVis_VISIBLE);
+  }
+
+static void Agd_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Agd_Agenda Agenda;
    struct Agd_Event AgdEvent;
@@ -1247,7 +1230,7 @@ void Agd_UnhideEvent (void)
    Agd_GetventDataByCod (&AgdEvent);
 
    /***** Unhide event *****/
-   Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,false);
+   Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,HiddenOrVisible);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);

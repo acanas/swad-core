@@ -275,15 +275,16 @@ void Agd_DB_UpdateEvent (const struct Agd_Event *AgdEvent,const char *Txt)
 /*************************** Hide/unhide an event ****************************/
 /*****************************************************************************/
 
-void Agd_DB_HideOrUnhideEvent (long AgdCod,long UsrCod,bool Hide)
+void Agd_DB_HideOrUnhideEvent (long AgdCod,long UsrCod,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide event",
 		   "UPDATE agd_agendas"
 		     " SET Hidden='%c'"
 		   " WHERE AgdCod=%ld"
 		     " AND UsrCod=%ld",
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+			                              'N',
 		   AgdCod,
 		   UsrCod);
   }

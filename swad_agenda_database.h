@@ -48,7 +48,8 @@ void Agd_DB_RemoveEvent (const struct Agd_Event *AgdEvent);
 
 long Agd_DB_CreateEvent (const struct Agd_Event *AgdEvent,const char *Txt);
 void Agd_DB_UpdateEvent (const struct Agd_Event *AgdEvent,const char *Txt);
-void Agd_DB_HideOrUnhideEvent (long AgdCod,long UsrCod,bool Hide);
+void Agd_DB_HideOrUnhideEvent (long AgdCod,long UsrCod,
+			       HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Agd_DB_MakeEventPublic (const struct Agd_Event *AgdEvent);
 void Agd_DB_MakeEventPrivate (const struct Agd_Event *AgdEvent);
 
