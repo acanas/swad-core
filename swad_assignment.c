@@ -89,6 +89,7 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
                                           unsigned NumAsgs);
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
 static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
+static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
@@ -1059,39 +1060,20 @@ void Asg_RemoveAssignment (void)
   }
 
 /*****************************************************************************/
-/**************************** Hide an assignment *****************************/
+/************************* Hide/unhide an assignment *************************/
 /*****************************************************************************/
 
 void Asg_HideAssignment (void)
   {
-   struct Asg_Assignments Assignments;
-
-   /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
-
-   /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
-
-   /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
-
-   /***** Get data of the assignment from database *****/
-   Asg_GetAssignmentDataByCod (&Assignments.Asg);
-
-   /***** Hide assignment *****/
-   Asg_DB_HideOrUnhideAssignment (Assignments.Asg.AsgCod,true);
-
-   /***** Show all assignments again *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_HideUnhideAssignment (HidVis_HIDDEN);
   }
 
-/*****************************************************************************/
-/**************************** Unhide an assignment ***************************/
-/*****************************************************************************/
-
 void Asg_UnhideAssignment (void)
+  {
+   Asg_HideUnhideAssignment (HidVis_VISIBLE);
+  }
+
+static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Asg_Assignments Assignments;
 
@@ -1110,7 +1092,7 @@ void Asg_UnhideAssignment (void)
    Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Unhide assignment *****/
-   Asg_DB_HideOrUnhideAssignment (Assignments.Asg.AsgCod,false);
+   Asg_DB_HideOrUnhideAssignment (Assignments.Asg.AsgCod,HiddenOrVisible);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);

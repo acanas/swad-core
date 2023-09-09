@@ -54,7 +54,8 @@ bool Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,
 
 long Asg_DB_CreateAssignment (const struct Asg_Assignment *Asg,const char *Txt);
 void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt);
-void Asg_DB_HideOrUnhideAssignment (long AsgCod,bool Hide);
+void Asg_DB_HideOrUnhideAssignment (long AsgCod,
+				    HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Asg_DB_RemoveAssignment (long AsgCod);
 
