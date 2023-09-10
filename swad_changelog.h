@@ -629,10 +629,11 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 */
-#define Log_PLATFORM_VERSION	"SWAD 22.120.15 (2023-09-10)"
+#define Log_PLATFORM_VERSION	"SWAD 22.120.16 (2023-09-10)"
 #define CSS_FILE		"swad22.120.4.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 22.120.16:Sep 10, 2023  Code refactoring in project visibility. (337575 lines)
 	Version 22.120.15:Sep 10, 2023  Code refactoring related to hidden-visible in projects. (337580 lines)
 	Version 22.120.14:Sep 10, 2023  Code refactoring related to hidden-visible in program resources. (337590 lines)
 	Version 22.120.13:Sep 10, 2023  Code refactoring related to hidden-visible in program items. (337587 lines)

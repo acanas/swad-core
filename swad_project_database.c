@@ -118,8 +118,8 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				  "'%s',FROM_UNIXTIME(%ld),'%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Prj->DptCod,
-				Prj->Hidden == Prj_HIDDEN ? 'Y' :
-							    'N',
+				Prj->Hidden == HidVis_HIDDEN ? 'Y' :
+							       'N',
 				Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 								'N',
 				Prj->NumStds,
@@ -158,8 +158,8 @@ void Prj_DB_UpdateProject (const struct Prj_Project *Prj)
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 	           Prj->DptCod,
-	           Prj->Hidden == Prj_HIDDEN ? 'Y' :
-					       'N',
+	           Prj->Hidden == HidVis_HIDDEN ? 'Y' :
+					          'N',
 	           Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 						   'N',
 	           Prj->NumStds,
@@ -286,11 +286,11 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
       case Rol_SYS_ADM:
 	 switch (Projects->Filter.Hidden)
 	   {
-	    case (1 << Prj_HIDDEN):	// Hidden projects
+	    case (1 << HidVis_HIDDEN):	// Hidden projects
 	       if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='Y'") < 0)
 		  Err_NotEnoughMemoryExit ();
 	       break;
-	    case (1 << Prj_VISIBL):	// Visible projects
+	    case (1 << HidVis_VISIBLE):	// Visible projects
 	       if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
 		  Err_NotEnoughMemoryExit ();
 	       break;

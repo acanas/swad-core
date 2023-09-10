@@ -64,15 +64,9 @@ typedef enum
   } Prj_Locked_t;
 
 /* Hidden/visible project */
-#define Prj_NUM_HIDDEN_VISIBL 2
-typedef enum
-  {
-   Prj_HIDDEN = 0,
-   Prj_VISIBL = 1,
-  } Prj_HiddenVisibl_t;
-#define Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT Prj_VISIBL
-#define Prj_FILTER_HIDDEN_DEFAULT	(1 << Prj_HIDDEN)	// on
-#define Prj_FILTER_VISIBL_DEFAULT	(1 << Prj_VISIBL)	// on
+#define Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT HidVis_VISIBLE
+#define Prj_FILTER_HIDDEN_DEFAULT	(1 << HidVis_HIDDEN)	// on
+#define Prj_FILTER_VISIBL_DEFAULT	(1 << HidVis_VISIBLE)	// on
 
 /* Faulty/faultless project */
 #define Prj_NUM_FAULTINESS 2
@@ -162,7 +156,7 @@ struct Prj_Project
    long PrjCod;
    long CrsCod;
    Prj_Locked_t Locked;
-   Prj_HiddenVisibl_t Hidden;
+   HidVis_HiddenOrVisible_t Hidden;
    Prj_AssignedNonassig_t Assigned;
    unsigned NumStds;
    Prj_Proposal_t Proposal;

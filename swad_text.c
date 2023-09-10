@@ -32006,9 +32006,9 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 #endif
 	};
 
-const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL] =
+const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE] =
 	{
-	[Prj_HIDDEN] =
+	[HidVis_HIDDEN] =
 #if   L==1	// ca
 	"Projectes ocults"
 #elif L==2	// de
@@ -32031,7 +32031,7 @@ const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL] =
 	"Hidden projects"	// Çeviri lazim!
 #endif
 	,
-	[Prj_VISIBL] =
+	[HidVis_VISIBLE] =
 #if   L==1	// ca
 	"Projectes visibles"
 #elif L==2	// de

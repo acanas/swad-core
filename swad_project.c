@@ -198,7 +198,7 @@ static void Prj_PutParFaulti (unsigned Faulti);
 static void Prj_PutParReview (unsigned Review);
 static void Prj_PutParFilterDptCod (long DptCod);
 static void Prj_GetParPreNon (struct Prj_Projects *Projects);
-static Prj_HiddenVisibl_t Prj_GetParHidVis (void);
+static unsigned Prj_GetParHidVis (void);
 static unsigned Prj_GetParFaulti (void);
 static unsigned Prj_GetParReview (void);
 static long Prj_GetParFilterDptCod (void);
@@ -700,22 +700,22 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
   {
-   extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
+   extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE];
    struct Prj_Filter Filter;
-   Prj_HiddenVisibl_t HidVis;
+   HidVis_HiddenOrVisible_t HidVis;
    static const struct
      {
       const char *Icon;
       Ico_Color_t Color;
-     } HiddenVisiblIcon[Prj_NUM_HIDDEN_VISIBL] =
+     } HiddenVisiblIcon[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Prj_HIDDEN] = {"eye-slash.svg",Ico_RED  },
-      [Prj_VISIBL] = {"eye.svg"      ,Ico_GREEN},
+      [HidVis_HIDDEN ] = {"eye-slash.svg",Ico_RED  },
+      [HidVis_VISIBLE] = {"eye.svg"      ,Ico_GREEN},
      };
 
    Set_BeginOneSettingSelector ();
-   for (HidVis  = (Prj_HiddenVisibl_t) 0;
-	HidVis <= (Prj_HiddenVisibl_t) (Prj_NUM_HIDDEN_VISIBL - 1);
+   for (HidVis  = (HidVis_HiddenOrVisible_t) 0;
+	HidVis <= (HidVis_HiddenOrVisible_t) (HidVis_NUM_HIDDEN_VISIBLE - 1);
 	HidVis++)
      {
       Set_BeginPref ((Projects->Filter.Hidden & (1 << HidVis)));
@@ -1031,20 +1031,20 @@ static void Prj_GetParPreNon (struct Prj_Projects *Projects)
                                                                 (unsigned) Prj_FILTER_NONASSIG_DEFAULT);
   }
 
-static Prj_HiddenVisibl_t Prj_GetParHidVis (void)
+static unsigned Prj_GetParHidVis (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// Students can view only visible projects
-	 return (Prj_HiddenVisibl_t) (1 << Prj_VISIBL);	// Only visible projects
+	 return (unsigned) (1 << HidVis_VISIBLE);	// Only visible projects
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 return (Prj_HiddenVisibl_t)
+	 return (unsigned)
          Par_GetParUnsignedLong (Prj_PARAM_FILTER_HID_VIS_NAME,
 				 0,
-				 (1 << Prj_HIDDEN) |
-				 (1 << Prj_VISIBL),
+				 (1 << HidVis_HIDDEN) |
+				 (1 << HidVis_VISIBLE),
 				 (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
 				 (unsigned) Prj_FILTER_VISIBL_DEFAULT);
       default:
@@ -1445,10 +1445,10 @@ static void Prj_ShowProjectRow (struct Prj_Projects *Projects)
    struct Prj_Faults Faults;
    static unsigned UniqueId = 0;
    char *Anchor = NULL;
-   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						                   "ASG_LABEL";
-   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						                   "DAT";
+   const char *ClassLabel = (Projects->Prj.Hidden == HidVis_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                      "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == HidVis_HIDDEN) ? "DAT_LIGHT" :
+						                      "DAT";
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr ((long) Projects->NumIndex,&Anchor);
@@ -1503,8 +1503,8 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    char *Id;
    Act_Action_t NextAction;
-   const char *ClassDate = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
-						                  "DATE_BLUE";
+   const char *ClassDate = (Projects->Prj.Hidden == HidVis_HIDDEN) ? "DATE_BLUE_LIGHT" :
+						                     "DATE_BLUE";
 
    /***** Write first row of data of this project *****/
    HTM_TR_Begin (NULL);
@@ -1607,8 +1607,8 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 		  Prj_PutCurrentPars (Projects);
 		  HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
 					   "class=\"LT BT_LINK %s_%s\"",
-					   Projects->Prj.Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
-										"ASG_TITLE",
+					   Projects->Prj.Hidden == HidVis_HIDDEN ? "ASG_TITLE_LIGHT" :
+										   "ASG_TITLE",
 					   The_GetSuffix ());
 		     HTM_Txt (Projects->Prj.Title);
 		  HTM_BUTTON_End ();
@@ -2008,10 +2008,10 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
    bool WriteRow;
    unsigned NumUsr;
    unsigned NumUsrs;
-   const char *ClassLabel = (Projects->Prj.Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
-						                   "ASG_LABEL";
-   const char *ClassData  = (Projects->Prj.Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-						                   "DAT";
+   const char *ClassLabel = (Projects->Prj.Hidden == HidVis_HIDDEN) ? "ASG_LABEL_LIGHT" :
+						                      "ASG_LABEL";
+   const char *ClassData  = (Projects->Prj.Hidden == HidVis_HIDDEN) ? "DAT_LIGHT" :
+						                      "DAT";
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Projects->Prj.PrjCod,RoleInPrj);
@@ -2104,8 +2104,8 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 
 			/* Write user's name */
 			HTM_TD_Begin ("class=\"LM %s_%s\"",
-			              Projects->Prj.Hidden == Prj_HIDDEN ? "MSG_AUT_LIGHT" :
-									   "MSG_AUT",
+			              Projects->Prj.Hidden == HidVis_HIDDEN ? "MSG_AUT_LIGHT" :
+									      "MSG_AUT",
 			              The_GetSuffix ());
 			   HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
 			HTM_TD_End ();
@@ -2510,10 +2510,10 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    Prj_GetProjectDataByCod (Prj);
 
    /***** Set CSS classes *****/
-   ClassDate = (Prj->Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
-					     "DATE_BLUE";
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassDate = (Prj->Hidden == HidVis_HIDDEN) ? "DATE_BLUE_LIGHT" :
+					        "DATE_BLUE";
+   ClassData = (Prj->Hidden == HidVis_HIDDEN) ? "DAT_LIGHT" :
+					        "DAT";
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2603,8 +2603,8 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData = (Prj->Hidden == HidVis_HIDDEN) ? "DAT_LIGHT" :
+					        "DAT";
 
    /***** Get data of department *****/
    Dpt.DptCod = Prj->DptCod;
@@ -2627,8 +2627,8 @@ static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData = (Prj->Hidden == HidVis_HIDDEN) ? "DAT_LIGHT" :
+					        "DAT";
 
    /***** Change format *****/
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -2650,8 +2650,8 @@ static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData = (Prj->Hidden == HidVis_HIDDEN) ? "DAT_LIGHT" :
+					        "DAT";
 
    /***** Show URL *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
@@ -2674,8 +2674,8 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData = (Prj->Hidden == HidVis_HIDDEN) ? "DAT_LIGHT" :
+					        "DAT";
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Prj->PrjCod,RoleInPrj);
@@ -3173,8 +3173,8 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
       /***** Icon to hide/unhide project *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Prj_PutCurrentPars,Projects,
-					 Projects->Prj.Hidden == Prj_HIDDEN ? HidVis_HIDDEN :
-									      HidVis_VISIBLE);
+					 Projects->Prj.Hidden == HidVis_HIDDEN ? HidVis_HIDDEN :
+									         HidVis_VISIBLE);
 
       /***** Icon to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,NULL,
@@ -3367,8 +3367,8 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	    and whether the project is assigned or not (row[5]) */
 	 Prj->Locked   = (row[3][0] == 'Y') ? Prj_LOCKED :
 					      Prj_UNLOCKED;
-	 Prj->Hidden   = (row[4][0] == 'Y') ? Prj_HIDDEN :
-					      Prj_VISIBL;
+	 Prj->Hidden   = (row[4][0] == 'Y') ? HidVis_HIDDEN :
+					      HidVis_VISIBLE;
 	 Prj->Assigned = (row[5][0] == 'Y') ? Prj_ASSIGNED :
 					      Prj_NONASSIG;
 
