@@ -194,15 +194,16 @@ void Prj_DB_AddUsrToPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,long UsrC
 /****************************** Hide a project *******************************/
 /*****************************************************************************/
 
-void Prj_DB_HideOrUnhideProject (long PrjCod,bool Hide)
+void Prj_DB_HideOrUnhideProject (long PrjCod,
+				 HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide project",
 		   "UPDATE prj_projects"
 		     " SET Hidden='%c'"
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+						      'N',
 		   PrjCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
   }

@@ -237,8 +237,8 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 	 /***** Icon to hide/unhide the announcement *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
 					    Ann_PutParAnnCod,&Announcement->AnnCod,
-					    (Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT) ? HidVis_HIDDEN :
-												  HidVis_VISIBLE);
+					    Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT ? HidVis_HIDDEN :
+												HidVis_VISIBLE);
 	}
 
       /***** Write the subject of the announcement *****/

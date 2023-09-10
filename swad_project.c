@@ -295,6 +295,8 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects);
 
 static void Prj_ResetProject (struct Prj_Project *Prj);
 
+static void Prj_HideUnhideProject (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects);
 static void Prj_PutFormProject (struct Prj_Projects *Projects,bool ItsANewProject);
 static void Prj_EditOneProjectTxtArea (const char *Id,
@@ -3171,7 +3173,8 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
       /***** Icon to hide/unhide project *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
 					 Prj_PutCurrentPars,Projects,
-					 Projects->Prj.Hidden == Prj_HIDDEN);
+					 Projects->Prj.Hidden == Prj_HIDDEN ? HidVis_HIDDEN :
+									      HidVis_VISIBLE);
 
       /***** Icon to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,NULL,
@@ -3562,45 +3565,20 @@ void Prj_RemoveProject (void)
   }
 
 /*****************************************************************************/
-/****************************** Hide a project *******************************/
+/*************************** Hide/unhide a project ***************************/
 /*****************************************************************************/
 
 void Prj_HideProject (void)
   {
-   struct Prj_Projects Projects;
-
-   /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
-
-   /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&Projects.Prj);
-
-   /***** Get parameters *****/
-   Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
-
-   /***** Get data of the project from database *****/
-   Prj_GetProjectDataByCod (&Projects.Prj);
-
-   /***** Check if I can edit this project *****/
-   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
-      Err_NoPermissionExit ();
-
-   /***** Hide project *****/
-   Prj_DB_HideOrUnhideProject (Projects.Prj.PrjCod,true);
-
-   /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Projects.Prj);
-
-   /***** Show projects again *****/
-   Prj_ShowProjects (&Projects);
+   Prj_HideUnhideProject (HidVis_HIDDEN);
   }
 
-/*****************************************************************************/
-/****************************** Unhide a project *****************************/
-/*****************************************************************************/
-
 void Prj_UnhideProject (void)
+  {
+   Prj_HideUnhideProject (HidVis_VISIBLE);
+  }
+
+static void Prj_HideUnhideProject (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Prj_Projects Projects;
 
@@ -3621,8 +3599,8 @@ void Prj_UnhideProject (void)
    if (!Prj_CheckIfICanEditProject (&Projects.Prj))
       Err_NoPermissionExit ();
 
-   /***** Unhide project *****/
-   Prj_DB_HideOrUnhideProject (Projects.Prj.PrjCod,false);
+   /***** Hide/unhide project *****/
+   Prj_DB_HideOrUnhideProject (Projects.Prj.PrjCod,HiddenOrVisible);
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Projects.Prj);

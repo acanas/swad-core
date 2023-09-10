@@ -553,7 +553,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    /***** Icon to change the status of the notice *****/
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
 				               Not_PutParNotCod,&Notice->NotCod,
-				               Notice->Status == Not_OBSOLETE_NOTICE);
+				               Notice->Status == Not_OBSOLETE_NOTICE ? HidVis_HIDDEN :
+				        					       HidVis_VISIBLE);
 	   }
 
       /* Write the date */

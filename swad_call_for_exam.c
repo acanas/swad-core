@@ -1496,7 +1496,8 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 	       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,((struct Cfe_CallsForExams *) CallsForExams)->Anchor,
 					          Cfe_PutParExaCod,
 					          &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod,
-					          ((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status == Cfe_HIDDEN_CALL_FOR_EXAM);
+					          ((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status == Cfe_HIDDEN_CALL_FOR_EXAM ? HidVis_HIDDEN :
+					        												 HidVis_VISIBLE);
 	       break;
 	    case Cfe_DELETED_CALL_FOR_EXAM:	// Not applicable here
 	       break;
