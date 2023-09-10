@@ -165,7 +165,7 @@ static void Prg_GetItemDataFromRow (MYSQL_RES **mysql_res,
                                     struct Prg_Item *Item,
                                     unsigned NumRows);
 
-static void Prg_HideOrUnhideItem (bool Hide);
+static void Prg_HideOrUnhideItem (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown);
 static bool Prg_ExchangeItemRanges (int NumItemTop,int NumItemBottom);
@@ -1453,15 +1453,15 @@ void Prg_RemoveItem (void)
 
 void Prg_HideItem (void)
   {
-   Prg_HideOrUnhideItem (true);
+   Prg_HideOrUnhideItem (HidVis_HIDDEN);
   }
 
 void Prg_UnhideItem (void)
   {
-   Prg_HideOrUnhideItem (false);
+   Prg_HideOrUnhideItem (HidVis_VISIBLE);
   }
 
-static void Prg_HideOrUnhideItem (bool Hide)
+static void Prg_HideOrUnhideItem (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Prg_Item Item;
 
@@ -1474,7 +1474,7 @@ static void Prg_HideOrUnhideItem (bool Hide)
       Err_WrongItemExit ();
 
    /***** Hide/unhide program item *****/
-   Prg_DB_HideOrUnhideItem (Item.Hierarchy.ItmCod,Hide);
+   Prg_DB_HideOrUnhideItem (Item.Hierarchy.ItmCod,HiddenOrVisible);
 
    /***** Show program items highlighting subtree *****/
    Prg_ShowAllItems (Prg_EDIT_ITEMS,Item.Hierarchy.ItmCod,-1L);

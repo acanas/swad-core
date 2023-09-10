@@ -38,7 +38,8 @@
 //--------------------------------- Items -------------------------------------
 long Prg_DB_InsertItem (const struct Prg_Item *Item,const char *Txt);
 void Prg_DB_UpdateItem (const struct Prg_Item *Item,const char *Txt);
-void Prg_DB_HideOrUnhideItem (long ItmCod,bool Hide);
+void Prg_DB_HideOrUnhideItem (long ItmCod,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Prg_DB_UpdateIndexRange (long Diff,long Begin,long End);
 void Prg_DB_LockTableItems (void);
 void Prg_DB_MoveDownItems (unsigned Index);
