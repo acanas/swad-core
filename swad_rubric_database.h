@@ -40,7 +40,6 @@
 //-------------------------------- Rubrics ------------------------------------
 long Rub_DB_CreateRubric (const struct Rub_Rubric *Rubric);
 void Rub_DB_UpdateRubric (const struct Rub_Rubric *Rubric);
-void Rub_DB_HideOrUnhideRubric (long RubCod,bool Hide);
 
 unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res);
 unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod);

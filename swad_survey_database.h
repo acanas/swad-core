@@ -40,7 +40,8 @@
 //-------------------------------- Surveys ------------------------------------
 long Svy_DB_CreateSurvey (const struct Svy_Survey *Svy,const char *Txt);
 void Svy_DB_UpdateSurvey (const struct Svy_Survey *Svy,const char *Txt);
-void Svy_DB_HideOrUnhideSurvey (long SvyCod,bool Hide);
+void Svy_DB_HideOrUnhideSurvey (long SvyCod,
+				HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
                                                      unsigned NumUsrsToBeNotifiedByEMail);
 

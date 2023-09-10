@@ -105,17 +105,18 @@ void Svy_DB_UpdateSurvey (const struct Svy_Survey *Svy,const char *Txt)
   }
 
 /*****************************************************************************/
-/****************************** Hide a project *******************************/
+/*************************** Hide/unhide a survey ****************************/
 /*****************************************************************************/
 
-void Svy_DB_HideOrUnhideSurvey (long SvyCod,bool Hide)
+void Svy_DB_HideOrUnhideSurvey (long SvyCod,
+				HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide survey",
 		   "UPDATE svy_surveys"
 		     " SET Hidden='%c'"
 		   " WHERE SvyCod=%ld",
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+						      'N',
 		   SvyCod);
   }
 

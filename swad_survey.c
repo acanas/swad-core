@@ -96,6 +96,8 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys);
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
 
+static void Svy_HideUnhideSurvey (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy);
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod);
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
@@ -1546,41 +1548,20 @@ void Svy_ResetSurvey (void)
   }
 
 /*****************************************************************************/
-/******************************** Hide a survey ******************************/
+/*************************** Hide/unhide a survey ****************************/
 /*****************************************************************************/
 
 void Svy_HideSurvey (void)
   {
-   struct Svy_Surveys Surveys;
-
-   /***** Reset surveys *****/
-   Svy_ResetSurveys (&Surveys);
-
-   /***** Get parameters *****/
-   Surveys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParWhichGroups ();
-   Surveys.CurrentPage = Pag_GetParPagNum (Pag_SURVEYS);
-
-   /***** Get survey code *****/
-   Surveys.Svy.SvyCod = ParCod_GetAndCheckPar (ParCod_Svy);
-
-   /***** Get data of the survey from database *****/
-   Svy_GetSurveyDataByCod (&Surveys.Svy);
-   if (!Surveys.Svy.Status.ICanEdit)
-      Err_NoPermissionExit ();
-
-   /***** Hide survey *****/
-   Svy_DB_HideOrUnhideSurvey (Surveys.Svy.SvyCod,true);
-
-   /***** Show surveys again *****/
-   Svy_ListAllSurveys (&Surveys);
+   Svy_HideUnhideSurvey (HidVis_HIDDEN);
   }
 
-/*****************************************************************************/
-/******************************** Show a survey ******************************/
-/*****************************************************************************/
-
 void Svy_UnhideSurvey (void)
+  {
+   Svy_HideUnhideSurvey (HidVis_VISIBLE);
+  }
+
+static void Svy_HideUnhideSurvey (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Svy_Surveys Surveys;
 
@@ -1601,7 +1582,7 @@ void Svy_UnhideSurvey (void)
       Err_NoPermissionExit ();
 
    /***** Show survey *****/
-   Svy_DB_HideOrUnhideSurvey (Surveys.Svy.SvyCod,false);
+   Svy_DB_HideOrUnhideSurvey (Surveys.Svy.SvyCod,HiddenOrVisible);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&Surveys);
