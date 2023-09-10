@@ -591,14 +591,15 @@ void Prg_DB_RemoveResource (const struct Prg_Item *Item)
 /************************ Hide/unhide an item resource ***********************/
 /*****************************************************************************/
 
-void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide)
+void Prg_DB_HideOrUnhideResource (long RscCod,
+				  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide item resource",
 		   "UPDATE prg_resources"
 		     " SET Hidden='%c'"
 		   " WHERE RscCod=%ld",
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+						      'N',
 		   RscCod);
   }
 

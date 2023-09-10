@@ -72,7 +72,8 @@ long Prg_DB_GetRscCodFromRscInd (long ItmCod,unsigned RscInd);
 
 void Prg_DB_RemoveResource (const struct Prg_Item *Item);
 
-void Prg_DB_HideOrUnhideResource (long RscCod,bool Hide);
+void Prg_DB_HideOrUnhideResource (long RscCod,
+				  HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Prg_DB_LockTableResources (void);
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd);

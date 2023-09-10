@@ -86,7 +86,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources);
 static void PrgRsc_PutParRscCod (void *RscCod);
-static void PrgRsc_HideOrUnhideResource (bool Hide);
+static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown);
 static bool PrgRsc_ExchangeResources (const struct Prg_ResourceHierarchy *Rsc1,
@@ -703,15 +703,15 @@ void PrgRsc_RemoveResource (void)
 
 void PrgRsc_HideResource (void)
   {
-   PrgRsc_HideOrUnhideResource (true);
+   PrgRsc_HideOrUnhideResource (HidVis_HIDDEN);
   }
 
 void PrgRsc_UnhideResource (void)
   {
-   PrgRsc_HideOrUnhideResource (false);
+   PrgRsc_HideOrUnhideResource (HidVis_VISIBLE);
   }
 
-static void PrgRsc_HideOrUnhideResource (bool Hide)
+static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Prg_Item Item;
 
@@ -724,7 +724,7 @@ static void PrgRsc_HideOrUnhideResource (bool Hide)
       Err_WrongResourceExit ();
 
    /***** Hide/unhide item resource *****/
-   Prg_DB_HideOrUnhideResource (Item.Resource.Hierarchy.RscCod,Hide);
+   Prg_DB_HideOrUnhideResource (Item.Resource.Hierarchy.RscCod,HiddenOrVisible);
 
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_EDIT_RESOURCES,Item.Hierarchy.ItmCod,Item.Resource.Hierarchy.RscCod);
