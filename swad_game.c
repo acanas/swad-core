@@ -135,6 +135,8 @@ static Gam_Order_t Gam_GetParOrder (void);
 
 static void Gam_RemoveGameFromAllTables (long GamCod);
 
+static void Gam_HideUnhideGame (HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 				    char Txt[Cns_MAX_BYTES_TEXT + 1],
 			            Gam_ExistingNewGame_t ExistingNewGame);
@@ -1124,40 +1126,20 @@ void Gam_RemoveCrsGames (long CrsCod)
   }
 
 /*****************************************************************************/
-/******************************** Hide a game ******************************/
+/***************************** Hide/unhide a game ****************************/
 /*****************************************************************************/
 
 void Gam_HideGame (void)
   {
-   struct Gam_Games Games;
-
-   /***** Reset games context *****/
-   Gam_ResetGames (&Games);
-
-   /***** Reset game *****/
-   Gam_ResetGame (&Games.Game);
-
-   /***** Get parameters *****/
-   if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
-      Err_WrongGameExit ();
-
-   /***** Get data of the game from database *****/
-   Gam_GetGameDataByCod (&Games.Game);
-   if (!Gam_CheckIfICanEditGames ())
-      Err_NoPermissionExit ();
-
-   /***** Hide game *****/
-   Gam_DB_HideOrUnhideGame (Games.Game.GamCod,true);
-
-   /***** Show games again *****/
-   Gam_ListAllGames (&Games);
+   Gam_HideUnhideGame (HidVis_HIDDEN);
   }
 
-/*****************************************************************************/
-/******************************** Show a game ******************************/
-/*****************************************************************************/
-
 void Gam_UnhideGame (void)
+  {
+   Gam_HideUnhideGame (HidVis_VISIBLE);
+  }
+
+static void Gam_HideUnhideGame (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    struct Gam_Games Games;
 
@@ -1177,7 +1159,7 @@ void Gam_UnhideGame (void)
       Err_NoPermissionExit ();
 
    /***** Unhide game *****/
-   Gam_DB_HideOrUnhideGame (Games.Game.GamCod,false);
+   Gam_DB_HideOrUnhideGame (Games.Game.GamCod,HiddenOrVisible);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);

@@ -96,14 +96,15 @@ void Gam_DB_UpdateGame (const struct Gam_Game *Game,const char *Txt)
 /*************************** Hide/unhide a game ******************************/
 /*****************************************************************************/
 
-void Gam_DB_HideOrUnhideGame (long GamCod,bool Hide)
+void Gam_DB_HideOrUnhideGame (long GamCod,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    DB_QueryUPDATE ("can not hide/unhide game",
 		   "UPDATE gam_games"
 		     " SET Hidden='%c'"
 		   " WHERE GamCod=%ld",
-		   Hide ? 'Y' :
-			  'N',
+		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
+						      'N',
 		   GamCod);
   }
 
