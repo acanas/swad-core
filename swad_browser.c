@@ -4515,7 +4515,8 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    switch (HiddenOrVisible)
      {
       case HidVis_HIDDEN:
-	 HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
+	 HTM_DIV_Begin ("id=\"contract_%s_%s\" class=\"NOT_SHOWN\"",
+	 // HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
 			FileBrowserId,RowId);
 	 break;
       case HidVis_VISIBLE:
@@ -7458,8 +7459,7 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_
       row = mysql_fetch_row (mysql_res);
 
       /* File is hidden? (row[0]) */
-      HiddenOrVisible = (row[0][0] == 'Y') ? HidVis_HIDDEN :
-	                                     HidVis_VISIBLE;
+      HiddenOrVisible = HidVid_GetHiddenOrVisible (row[0][0]);
      }
    else
      {

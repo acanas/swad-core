@@ -1147,8 +1147,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->HieCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get whether the survey is hidden (row[3]) */
-      Svy->Status.HiddenOrVisible = (row[3][0] == 'Y') ? HidVis_HIDDEN :
-							 HidVis_VISIBLE;
+      Svy->Status.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
       /* Get roles (row[4]) */
       if (sscanf (row[4],"%u",&Svy->Roles) != 1)
@@ -2120,15 +2119,11 @@ static void Svy_CreateGrps (long SvyCod)
 
 static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
   {
+   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
    extern const char *Txt_and;
    extern const char *Txt_The_whole_course;
-   static const char *GroupClass[HidVis_NUM_HIDDEN_VISIBLE] =
-     {
-      [HidVis_HIDDEN ] = "ASG_GRP_LIGHT",
-      [HidVis_VISIBLE] = "ASG_GRP",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -2139,7 +2134,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s_%s\"",
-                  GroupClass[Svy->Status.HiddenOrVisible],The_GetSuffix ());
+		  HidVis_GroupClass[Svy->Status.HiddenOrVisible],
+		  The_GetSuffix ());
       HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
 				       Txt_Groups);
 

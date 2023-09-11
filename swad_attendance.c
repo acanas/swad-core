@@ -764,8 +764,7 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
    Event->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get whether the attendance event is hidden or not (row[2]) *****/
-   Event->HiddenOrVisible = (row[2][0] == 'Y') ? HidVis_HIDDEN :
-	                                         HidVis_VISIBLE;
+   Event->HiddenOrVisible = HidVid_GetHiddenOrVisible (row[2][0]);
 
    /***** Get author of the attendance event (row[3]) *****/
    Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);

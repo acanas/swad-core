@@ -628,11 +628,15 @@ TODO: Emilce Barrera Mesa: Quiero preguntarte si es posible que me habilites la 
 TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita exportar en excel, cvs o pdf el listado de estudiantes y la nota optenida en el examen. Eso me ayudaría mucho a la hora de pegarlas en mi planilla de excel.
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
+TODO: Francisco Javier Fernández Baldomero: intento mandar un mensaje a un estudiante vacío sin nickname, que se debe haber creado hoy mismo otro usuario con DNI distinto y nickname
+Me sale este error, no sé si por no recordar yo la sintaxis apropiada para mandar a varios destinatarios. ¿No era así?
+"can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
-#define Log_PLATFORM_VERSION	"SWAD 23.0 (2023-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 23.0.1 (2023-09-11)"
 #define CSS_FILE		"swad22.120.4.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 23.0.1:	  Sep 11, 2023  Code refactoring related to hidden-visible. (337586 lines)
 	Version 23.0:	  Sep 11, 2023  Code refactoring related to hidden-visible. (337588 lines)
 	Version 22.120.17:Sep 10, 2023  Code refactoring related to hidden-visible in surveys. (337563 lines)
 	Version 22.120.16:Sep 10, 2023  Code refactoring in project visibility. (337575 lines)

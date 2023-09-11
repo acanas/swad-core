@@ -896,8 +896,7 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam)
       Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the exam is hidden (row[2]) */
-      Exam->HiddenOrVisible = (row[2][0] == 'Y') ? HidVis_HIDDEN :
-						   HidVis_VISIBLE;
+      Exam->HiddenOrVisible = HidVid_GetHiddenOrVisible (row[2][0]);
 
       /* Get author of the exam (row[3]) */
       Exam->UsrCod = Str_ConvertStrCodToLongCod (row[3]);

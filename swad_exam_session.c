@@ -758,8 +758,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongExamExit ();
 
    /* Get whether the session is hidden (row[2]) */
-   Session->HiddenOrVisible = (row[2][0] == 'Y') ? HidVis_HIDDEN :
-						   HidVis_VISIBLE;
+   Session->HiddenOrVisible = HidVid_GetHiddenOrVisible (row[2][0]);
 
    /* Get session teacher (row[3]) */
    Session->UsrCod = Str_ConvertStrCodToLongCod (row[3]);

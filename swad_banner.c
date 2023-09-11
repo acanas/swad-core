@@ -342,8 +342,7 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongBannerExit ();
 
    /***** Get if the banner is hidden (row[1]) *****/
-   Ban->HiddenOrVisible = (row[1][0] == 'Y') ? HidVis_HIDDEN :
-					       HidVis_VISIBLE;
+   Ban->HiddenOrVisible = HidVid_GetHiddenOrVisible (row[1][0]);
 
    /***** Get short name (row[2]), full name (row[3]),
           image (row[4]) and URL (row[5]) of the banner *****/

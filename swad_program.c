@@ -1188,8 +1188,7 @@ void Prg_GetListItems (void)
          Prg_Gbl.List.Items[NumItem].Level  = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the program item is hidden or not (row[3]) */
-	 Prg_Gbl.List.Items[NumItem].HiddenOrVisible = (row[3][0] == 'Y') ? HidVis_HIDDEN :
-									    HidVis_VISIBLE;
+	 Prg_Gbl.List.Items[NumItem].HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
         }
      }
 
@@ -1257,8 +1256,7 @@ static void Prg_GetItemDataFromRow (MYSQL_RES **mysql_res,
       Item->Hierarchy.Level = Str_ConvertStrToUnsigned (row[2]);
 
       /* Get whether the program item is hidden or not (row[3]) */
-      Item->Hierarchy.HiddenOrVisible = (row[3][0] == 'Y') ? HidVis_HIDDEN :
-							     HidVis_VISIBLE;
+      Item->Hierarchy.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
       /* Get author of the program item (row[4]) */
       Item->UsrCod = Str_ConvertStrCodToLongCod (row[4]);

@@ -352,8 +352,7 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    Item->Resource.Hierarchy.RscInd = Str_ConvertStrToUnsigned (row[2]);
 
    /***** Get whether the program item is hidden (row(3)) *****/
-   Item->Resource.Hierarchy.HiddenOrVisible = (row[3][0] == 'Y') ? HidVis_HIDDEN :
-								   HidVis_VISIBLE;
+   Item->Resource.Hierarchy.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get link type and code (row[4], row[5]) *****/
    Item->Resource.Link.Type = Rsc_GetTypeFromString (row[4]);

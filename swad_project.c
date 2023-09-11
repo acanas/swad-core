@@ -3370,8 +3370,7 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	    and whether the project is assigned or not (row[5]) */
 	 Prj->Locked   = (row[3][0] == 'Y') ? Prj_LOCKED :
 					      Prj_UNLOCKED;
-	 Prj->Hidden   = (row[4][0] == 'Y') ? HidVis_HIDDEN :
-					      HidVis_VISIBLE;
+	 Prj->Hidden   = HidVid_GetHiddenOrVisible (row[4][0]);
 	 Prj->Assigned = (row[5][0] == 'Y') ? Prj_ASSIGNED :
 					      Prj_NONASSIG;
 
