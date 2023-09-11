@@ -2310,7 +2310,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].attendanceEventCode = (int) Event.AttCod;
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (Event.HiddenOrVisible == HidVis_HIDDEN) ? 1 :
-										                                 0;
+										                                    0;
          Gbl.Usrs.Other.UsrDat.UsrCod = Event.UsrCod;
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.CrsCod))	// Get some user's data from database
            {
@@ -2497,7 +2497,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
    /* Are teacher's comments visible? */
    Event.CommentTchVisible = (commentsTeachersVisible ? true :
-	                                              false);
+	                                                false);
 
    /* Title */
    if (!title[0])

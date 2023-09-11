@@ -301,13 +301,14 @@ void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
 void Asg_DB_HideOrUnhideAssignment (long AsgCod,
 				    HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not hide/unhide assignment",
 		   "UPDATE asg_assignments"
 		     " SET Hidden='%c'"
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",
-		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-						      'N',
+		   HidVis_YN[HiddenOrVisible],
                    AsgCod,
                    Gbl.Hierarchy.Crs.CrsCod);
   }

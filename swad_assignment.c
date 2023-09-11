@@ -506,14 +506,14 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	 if (PrintView)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s\"",
 			  Id,
-			  Assignments->Asg.Open == HidVis_HIDDEN ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-						                   HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			  Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
+						  HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
 			  The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
 			  Id,
-			  Assignments->Asg.Open == HidVis_HIDDEN ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-						                   HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			  Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
+						  HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
 			  The_GetSuffix (),
 			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Assignments->Asg.TimeUTC[StartEndTime],

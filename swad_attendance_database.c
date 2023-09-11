@@ -243,6 +243,8 @@ bool Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Value,long 
 
 long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    return
    DB_QueryINSERTandReturnCode ("can not create new attendance event",
 				"INSERT INTO att_events"
@@ -254,8 +256,7 @@ long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%c','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
-				Event->HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-								       'N',
+				HidVis_YN[Event->HiddenOrVisible],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Event->TimeUTC[Dat_STR_TIME],
 				Event->TimeUTC[Dat_END_TIME],
@@ -271,6 +272,8 @@ long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
 
 void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not update attendance event",
 		   "UPDATE att_events"
 		     " SET Hidden='%c',"
@@ -281,8 +284,7 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
 		          "Txt='%s'"
 		   " WHERE AttCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   Event->HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-							  'N',
+		   HidVis_YN[Event->HiddenOrVisible],
                    Event->TimeUTC[Dat_STR_TIME],
                    Event->TimeUTC[Dat_END_TIME],
                    Event->CommentTchVisible ? 'Y' :
@@ -300,13 +302,14 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
 void Att_DB_HideOrUnhideEvent (long AttCod,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not hide/unhide assignment",
 		   "UPDATE att_events"
 		     " SET Hidden='%c'"
 		   " WHERE AttCod=%ld"
 		     " AND CrsCod=%ld",
-		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-						      'N',
+		   HidVis_YN[HiddenOrVisible],
                    AttCod,
                    Gbl.Hierarchy.Crs.CrsCod);
   }

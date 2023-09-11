@@ -91,13 +91,14 @@ void Prg_DB_UpdateItem (const struct Prg_Item *Item,const char *Txt)
 void Prg_DB_HideOrUnhideItem (long ItmCod,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not hide/unhide program item",
 		   "UPDATE prg_items"
 		     " SET Hidden='%c'"
 		   " WHERE ItmCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-						      'N',
+		   HidVis_YN[HiddenOrVisible],
 		   ItmCod,
                    Gbl.Hierarchy.Crs.CrsCod);
   }
@@ -594,12 +595,13 @@ void Prg_DB_RemoveResource (const struct Prg_Item *Item)
 void Prg_DB_HideOrUnhideResource (long RscCod,
 				  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not hide/unhide item resource",
 		   "UPDATE prg_resources"
 		     " SET Hidden='%c'"
 		   " WHERE RscCod=%ld",
-		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-						      'N',
+		   HidVis_YN[HiddenOrVisible],
 		   RscCod);
   }
 

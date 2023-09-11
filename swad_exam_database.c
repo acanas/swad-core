@@ -108,12 +108,13 @@ void Exa_DB_UpdateExam (const struct Exa_Exam *Exam,const char *Txt)
 void Exa_DB_HideOrUnhideExam (long ExaCod,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not hide/unhide exam",
 		   "UPDATE exa_exams"
 		     " SET Hidden='%c'"
 		   " WHERE ExaCod=%ld",
-		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-						      'N',
+		   HidVis_YN[HiddenOrVisible],
 		   ExaCod);
   }
 
@@ -1285,6 +1286,8 @@ void Exa_DB_RemoveAllSetAnswersFromCrs (long CrsCod)
 
 long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    return
    DB_QueryINSERTandReturnCode ("can not create exam session",
 				"INSERT exa_sessions"
@@ -1304,9 +1307,8 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				 "'%s',"		// Title
 				 "'N')",		// ShowUsrResults: Don't show user results initially
 				Session->ExaCod,
-				Session->HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-									 'N',
-				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator
+				HidVis_YN[Session->HiddenOrVisible],
+				Gbl.Usrs.Me.UsrDat.UsrCod,	// Session creator
 				Session->TimeUTC[Dat_STR_TIME],	// Start time
 				Session->TimeUTC[Dat_END_TIME],	// End time
 				Session->Title);
@@ -1318,6 +1320,8 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 
 void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    /***** Insert this new exam session into database *****/
    DB_QueryUPDATE ("can not update exam session",
 		   "UPDATE exa_sessions,"
@@ -1331,8 +1335,7 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 		     " AND exa_sessions.ExaCod=%ld"	// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",	// Extra check
-		   Session->HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-			                                    'N',
+		   HidVis_YN[Session->HiddenOrVisible],
 	           Session->TimeUTC[Dat_STR_TIME],	// Start time
 		   Session->TimeUTC[Dat_END_TIME],	// End time
 		   Session->Title,
@@ -1533,6 +1536,8 @@ void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session)
 void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+
    DB_QueryUPDATE ("can not hide exam sessions",
 		   "UPDATE exa_sessions,"
 		          "exa_exams"
@@ -1541,8 +1546,7 @@ void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,
 		     " AND exa_sessions.ExaCod=%ld"	// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		     " AND exa_exams.CrsCod=%ld",	// Extra check
-		   HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-						      'N',
+		   HidVis_YN[HiddenOrVisible],
 		   Session->SesCod,
 		   Session->ExaCod,
 		   Gbl.Hierarchy.Crs.CrsCod);

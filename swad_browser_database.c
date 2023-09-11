@@ -2276,6 +2276,7 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
 void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 				      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
+   extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -2287,8 +2288,7 @@ void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
-		     HiddenOrVisible == HidVis_HIDDEN ? 'Y' :
-			                                'N',
+		   HidVis_YN[HiddenOrVisible],
 	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Cod,
 	           ZoneUsrCod,
