@@ -464,13 +464,13 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 if (asprintf (&Id,"att_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 if (ShowOnlyThisAttEventComplete)
-	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			  Id,
 			  Events->Event.Open ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
 					       HidVis_DateRedClass[Events->Event.HiddenOrVisible],
 			  The_GetSuffix ());
 	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			  Id,
 			  Events->Event.Open ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
 					       HidVis_DateRedClass[Events->Event.HiddenOrVisible],

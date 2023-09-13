@@ -196,7 +196,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ctr->FullName),
-                               "class=\"BT_LINK\"");
+                               "class=\"BT_LINK LT\"");
       Str_FreeGoToTitle ();
 
 	 /***** Center logo and name *****/

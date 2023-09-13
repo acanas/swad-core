@@ -632,10 +632,11 @@ TODO: Francisco Javier Fernández Baldomero: intento mandar un mensaje a un estud
 Me sale este error, no sé si por no recordar yo la sintaxis apropiada para mandar a varios destinatarios. ¿No era así?
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
-#define Log_PLATFORM_VERSION	"SWAD 23.0.1 (2023-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 23.0.2 (2023-09-13)"
 #define CSS_FILE		"swad22.120.4.css"
 #define JS_FILE			"swad22.49.js"
 /*
+	Version 23.0.2:	  Sep 13, 2023  Fixed CSS in dates and listing of centers and degrees. (337587 lines)
 	Version 23.0.1:	  Sep 11, 2023  Code refactoring related to hidden-visible. (337586 lines)
 	Version 23.0:	  Sep 11, 2023  Code refactoring related to hidden-visible. (337588 lines)
 	Version 22.120.17:Sep 10, 2023  Code refactoring related to hidden-visible in surveys. (337563 lines)

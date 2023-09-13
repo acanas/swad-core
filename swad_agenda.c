@@ -783,7 +783,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	{
 	 if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LB %s_%s %s\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
 		       Dat_TimeStatusClass[AgdEvent.TimeStatus][AgdEvent.HiddenOrVisible],
 		       The_GetSuffix (),

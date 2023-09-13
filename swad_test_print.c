@@ -2293,7 +2293,7 @@ void TstPrn_ShowOnePrint (void)
 		  HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("id=\"%s\" class=\"LB DAT_%s\"",
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s\"",
 			     Id,The_GetSuffix ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,

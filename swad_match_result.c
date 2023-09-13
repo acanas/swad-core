@@ -763,7 +763,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    if (asprintf (&Id,"mch_res_time_%u_%u",
 	                  (unsigned) StartEndTime,UniqueId) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_TD_Begin ("id =\"%s\" class=\"LT DAT_%s %s\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s %s\"",
 			  Id,The_GetSuffix (),
 			  The_GetColorRows ());
 	       Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
@@ -1154,7 +1154,7 @@ void MchRes_ShowOneMchResult (void)
 
 	       if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_TD_Begin ("id=\"%s\" class=\"LB DAT_%s\"",
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s\"",
 			     Id,The_GetSuffix ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
