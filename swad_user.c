@@ -2221,9 +2221,9 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
+      /***** Show user's photo *****/
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
-	 /***** Show user's photo *****/
 	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
@@ -4301,6 +4301,9 @@ void Usr_ListAllDataGsts (void)
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	      {
+	       UsrDat.Roles.InCurrentCrs = Rol_GST;	// We know the user's role.
+							// It is not necessary to retrieve
+							// his/her role from database.
 	       UsrDat.Accepted = false;	// Guests have no courses,...
 					// ...so they have not accepted...
 					// ...inscription in any course
@@ -4502,6 +4505,9 @@ void Usr_ListAllDataStds (void)
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	      {
+	       UsrDat.Roles.InCurrentCrs = Rol_STD;	// We know the user's role.
+							// It is not necessary to retrieve
+							// his/her role from database.
 	       UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
 	       NumUsr++;
 	       Usr_WriteRowStdAllData (&UsrDat,GroupNames);
@@ -4567,6 +4573,9 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	   {
+	    UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
+						// It is not necessary to retrieve
+						// his/her role from database.
 	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role,SelectedUsrs);
 
@@ -4704,6 +4713,9 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	{
+	 UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
+						// It is not necessary to retrieve
+						// his/her role from database.
 	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	 NumUsr++;
 	 Usr_WriteRowTchAllData (&UsrDat);

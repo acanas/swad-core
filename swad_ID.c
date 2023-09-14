@@ -308,22 +308,21 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
   {
    unsigned NumID;
-   bool ICanSeeUsrID;
-   bool ICanConfirmUsrID;
-
-   ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (UsrDat);
-   ICanConfirmUsrID = ICanSeeUsrID &&
-	              (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&		// Not me
-	              !Frm_CheckIfInside () &&					// Not inside another form
-                      Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
+   bool ICanSeeUsrID     = ID_ICanSeeOtherUsrIDs (UsrDat);
+   bool ICanConfirmUsrID = ICanSeeUsrID &&
+			   Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
+			   !Frm_CheckIfInside () &&					// Not inside another form
+			   Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;
 	NumID++)
      {
+      /* If not the first ID ==> new line */
       if (NumID)
 	 HTM_BR ();
 
+      /* Write this ID */
       HTM_SPAN_Begin ("class=\"%s_%s\"",
 	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
 						          "USR_ID_NC",
@@ -334,8 +333,8 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
 	    HTM_Txt ("********");
       HTM_SPAN_End ();
 
-      if (ICanConfirmUsrID &&
-	  !UsrDat->IDs.List[NumID].Confirmed)
+      /* Put link to confirm ID? */
+      if (ICanConfirmUsrID && !UsrDat->IDs.List[NumID].Confirmed)
 	 ID_PutLinkToConfirmID (UsrDat,NumID,Anchor);
      }
   }
