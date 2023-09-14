@@ -57,7 +57,7 @@ long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,Hie_Status_t Status)
 				" VALUES"
 				" (%ld,%u,%ld,"
 				  "'%s','%s','%s')",
-				Ins->CtyCod,
+				Ins->PrtCod,
 				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Ins->ShrtName,

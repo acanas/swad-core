@@ -418,7 +418,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			  {
 			   DegTypInLst = &DegTypes->Lst[NumDegTyp];
 			   HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
-				       DegTypInLst->DegTypCod == DegInLst->DegTypCod ? HTM_OPTION_SELECTED :
+				       DegTypInLst->DegTypCod == DegInLst->TypCod ? HTM_OPTION_SELECTED :
 										       HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
 				       "%s",DegTypInLst->DegTypName);
@@ -432,7 +432,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		       NumDegTyp++)
 		    {
 		     DegTypInLst = &DegTypes->Lst[NumDegTyp];
-		     if (DegTypInLst->DegTypCod == DegInLst->DegTypCod)
+		     if (DegTypInLst->DegTypCod == DegInLst->TypCod)
 			HTM_Txt (DegTypInLst->DegTypName);
 		    }
 	    HTM_TD_End ();
@@ -579,7 +579,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  DegTypInLst = &DegTypes->Lst[NumDegTyp];
 		  HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
-			      DegTypInLst->DegTypCod == Deg_EditingDeg->DegTypCod ? HTM_OPTION_SELECTED :
+			      DegTypInLst->DegTypCod == Deg_EditingDeg->TypCod ? HTM_OPTION_SELECTED :
 										    HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",DegTypInLst->DegTypName);
@@ -788,7 +788,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    unsigned NumCrss = Crs_GetCachedNumCrssInDeg (Deg->Cod);
 
    /***** Get data of type of degree of this degree *****/
-   DegTyp.DegTypCod = Deg->DegTypCod;
+   DegTyp.DegTypCod = Deg->TypCod;
    if (!DegTyp_GetDegreeTypeDataByCod (&DegTyp))
       Err_WrongDegTypExit ();
 
@@ -1062,14 +1062,14 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set degree center */
-   Deg_EditingDeg->CtrCod = Gbl.Hierarchy.Ctr.Cod;
+   Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Ctr.Cod;
 
    /* Get degree short name and full name */
    Par_GetParText ("ShortName",Deg_EditingDeg->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
    Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
-   Deg_EditingDeg->DegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
+   Deg_EditingDeg->TypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /* Get degree WWW */
    Par_GetParText ("WWW",Deg_EditingDeg->WWW,Cns_MAX_BYTES_WWW);
@@ -1081,12 +1081,12 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 	{
 	 /***** If name of degree was in database... *****/
 	 if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",Deg_EditingDeg->ShrtName,
-	                                       -1L,Deg_EditingDeg->CtrCod))
+	                                       -1L,Deg_EditingDeg->PrtCod))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_degree_X_already_exists,
 		             Deg_EditingDeg->ShrtName);
 	 else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",Deg_EditingDeg->FullName,
-	                                            -1L,Deg_EditingDeg->CtrCod))
+	                                            -1L,Deg_EditingDeg->PrtCod))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_degree_X_already_exists,
 		             Deg_EditingDeg->FullName);
@@ -1152,8 +1152,8 @@ bool Deg_GetDegreeDataByCod (struct Deg_Degree *Deg)
    bool DegFound = false;
 
    /***** Clear data *****/
-   Deg->CtrCod          = -1L;
-   Deg->DegTypCod       = -1L;
+   Deg->PrtCod          = -1L;
+   Deg->TypCod       = -1L;
    Deg->Status          = (Hie_Status_t) 0;
    Deg->RequesterUsrCod = -1L;
    Deg->ShrtName[0]     = '\0';
@@ -1197,8 +1197,8 @@ static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongDegreeExit ();
 
    /***** Get center code (row[1]) and code of the degree type (row[2]) *****/
-   Deg->CtrCod    = Str_ConvertStrCodToLongCod (row[1]);
-   Deg->DegTypCod = Str_ConvertStrCodToLongCod (row[2]);
+   Deg->PrtCod    = Str_ConvertStrCodToLongCod (row[1]);
+   Deg->TypCod = Str_ConvertStrCodToLongCod (row[2]);
 
    /* Get course status (row[3]) */
    if (sscanf (row[3],"%u",&(Deg->Status)) != 1)
@@ -1341,7 +1341,7 @@ void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullNam
       if (strcmp (CurrentDegName,NewDegName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_DB_CheckIfDegNameExistsInCtr (ParName,NewDegName,Deg->Cod,Deg->CtrCod))
+         if (Deg_DB_CheckIfDegNameExistsInCtr (ParName,NewDegName,Deg->Cod,Deg->PrtCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_degree_X_already_exists,
 		             NewDegName);
@@ -1391,7 +1391,7 @@ void Deg_ChangeDegreeType (void)
 
    /***** Update the table of degrees changing old type by new type *****/
    Deg_DB_UpdateDegTyp (Deg_EditingDeg->Cod,NewDegTypCod);
-   Deg_EditingDeg->DegTypCod = NewDegTypCod;
+   Deg_EditingDeg->TypCod = NewDegTypCod;
 
    /***** Create alert to show the change made
           and put button to go to degree changed *****/
@@ -1770,9 +1770,9 @@ static void Deg_EditingDegreeConstructor (void)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset degree *****/
-   Deg_EditingDeg->Cod          = -1L;
-   Deg_EditingDeg->DegTypCod       = -1L;
-   Deg_EditingDeg->CtrCod          = -1L;
+   Deg_EditingDeg->Cod             = -1L;
+   Deg_EditingDeg->PrtCod          = -1L;
+   Deg_EditingDeg->TypCod       = -1L;
    Deg_EditingDeg->Status          = (Hie_Status_t) 0;
    Deg_EditingDeg->RequesterUsrCod = -1L;
    Deg_EditingDeg->ShrtName[0]     = '\0';

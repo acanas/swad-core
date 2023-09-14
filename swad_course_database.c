@@ -58,7 +58,7 @@ void Crs_DB_CreateCourse (struct Crs_Course *Crs,Hie_Status_t Status)
 				" VALUES"
 				" (%ld,%u,'%s',%u,%ld,"
 				  "'%s','%s')",
-				Crs->DegCod,
+				Crs->PrtCod,
 				Crs->Year,
 				Crs->InstitutionalCod,
 				(unsigned) Status,

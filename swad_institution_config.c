@@ -549,7 +549,7 @@ void InsCfg_ChangeInsCty (void)
    NewCty.Cod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Check if country has changed *****/
-   if (NewCty.Cod != Gbl.Hierarchy.Ins.CtyCod)
+   if (NewCty.Cod != Gbl.Hierarchy.Ins.PrtCod)
      {
       /***** Get data of the country from database *****/
       Cty_GetCountryDataByCod (&NewCty);
@@ -567,7 +567,7 @@ void InsCfg_ChangeInsCty (void)
 	{
 	 /***** Update the table changing the country of the institution *****/
 	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Ins.Cod,NewCty.Cod);
-         Gbl.Hierarchy.Ins.CtyCod =
+         Gbl.Hierarchy.Ins.PrtCod =
          Gbl.Hierarchy.Cty.Cod = NewCty.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/

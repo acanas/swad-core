@@ -59,7 +59,7 @@ long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Hie_Status_t Status)
 				" VALUES"
 				" (%ld,%ld,%u,%ld,"
 				  "'%s','%s','%s','')",
-				Ctr->InsCod,
+				Ctr->PrtCod,
 				Ctr->PlcCod,
 				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,

@@ -370,7 +370,7 @@ void DegCfg_ChangeDegCtr (void)
    NewCtr.Cod = ParCod_GetAndCheckPar (ParCod_OthCtr);
 
    /***** Check if center has changed *****/
-   if (NewCtr.Cod != Gbl.Hierarchy.Deg.CtrCod)
+   if (NewCtr.Cod != Gbl.Hierarchy.Deg.PrtCod)
      {
       /***** Get data of new center *****/
       Ctr_GetCenterDataByCod (&NewCtr);
@@ -388,7 +388,7 @@ void DegCfg_ChangeDegCtr (void)
 	{
 	 /***** Update center in table of degrees *****/
 	 Deg_DB_UpdateDegCtr (Gbl.Hierarchy.Deg.Cod,NewCtr.Cod);
-	 Gbl.Hierarchy.Deg.CtrCod =
+	 Gbl.Hierarchy.Deg.PrtCod =
 	 Gbl.Hierarchy.Ctr.Cod = NewCtr.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/

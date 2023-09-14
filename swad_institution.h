@@ -39,8 +39,8 @@
 
 struct Ins_Instit
   {
-   long Cod;
-   long CtyCod;
+   long Cod;			// Institution code
+   long PrtCod;			// Parent (country) code
    Hie_Status_t Status;		// Institution status
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];

@@ -1031,7 +1031,7 @@ void CtrCfg_ChangeCtrIns (void)
    NewIns.Cod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /***** Check if institution has changed *****/
-   if (NewIns.Cod != Gbl.Hierarchy.Ctr.InsCod)
+   if (NewIns.Cod != Gbl.Hierarchy.Ctr.PrtCod)
      {
       /***** Get data of new institution *****/
       Ins_GetInstitDataByCod (&NewIns);
@@ -1057,7 +1057,7 @@ void CtrCfg_ChangeCtrIns (void)
 	{
 	 /***** Update institution in table of centers *****/
 	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Ctr.Cod,NewIns.Cod);
-	 Gbl.Hierarchy.Ctr.InsCod =
+	 Gbl.Hierarchy.Ctr.PrtCod =
 	 Gbl.Hierarchy.Ins.Cod = NewIns.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/

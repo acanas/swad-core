@@ -551,7 +551,7 @@ bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr)
    bool CtrFound = false;
 
    /***** Clear data *****/
-   Ctr->InsCod          = -1L;
+   Ctr->PrtCod          = -1L;
    Ctr->PlcCod          = -1L;
    Ctr->Status          = (Hie_Status_t) 0;
    Ctr->RequesterUsrCod = -1L;
@@ -599,7 +599,7 @@ static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongCenterExit ();
 
    /***** Get institution code (row[1]) *****/
-   Ctr->InsCod = Str_ConvertStrCodToLongCod (row[1]);
+   Ctr->PrtCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get place code (row[2]) *****/
    Ctr->PlcCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1492,7 +1492,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set center institution */
-   Ctr_EditingCtr->InsCod = Gbl.Hierarchy.Ins.Cod;
+   Ctr_EditingCtr->PrtCod = Gbl.Hierarchy.Ins.Cod;
 
    /* Get place */
    Ctr_EditingCtr->PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
@@ -1840,7 +1840,7 @@ static void Ctr_EditingCenterConstructor (void)
 
    /***** Reset center *****/
    Ctr_EditingCtr->Cod          = -1L;
-   Ctr_EditingCtr->InsCod          = -1L;
+   Ctr_EditingCtr->PrtCod          = -1L;
    Ctr_EditingCtr->PlcCod          = -1L;
    Ctr_EditingCtr->Status          = (Hie_Status_t) 0;
    Ctr_EditingCtr->RequesterUsrCod = -1L;

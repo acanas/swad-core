@@ -484,7 +484,7 @@ void CrsCfg_ChangeCrsDeg (void)
    NewDeg.Cod = ParCod_GetAndCheckPar (ParCod_OthDeg);
 
    /***** Check if degree has changed *****/
-   if (NewDeg.Cod != Gbl.Hierarchy.Crs.DegCod)
+   if (NewDeg.Cod != Gbl.Hierarchy.Crs.PrtCod)
      {
       /***** Get data of new degree *****/
       Deg_GetDegreeDataByCod (&NewDeg);
@@ -508,7 +508,7 @@ void CrsCfg_ChangeCrsDeg (void)
 	{
 	 /***** Update degree in table of courses *****/
 	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Crs.Cod,NewDeg.Cod);
-	 Gbl.Hierarchy.Crs.DegCod =
+	 Gbl.Hierarchy.Crs.PrtCod =
 	 Gbl.Hierarchy.Deg.Cod = NewDeg.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/
@@ -558,13 +558,13 @@ void CrsCfg_ChangeCrsYear (void)
      {
       /***** If name of course was in database in the new year... *****/
       if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,
-                                                  Gbl.Hierarchy.Crs.DegCod,NewYear))
+                                                  Gbl.Hierarchy.Crs.PrtCod,NewYear))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_course_X_already_exists_in_year_Y,
 		          Gbl.Hierarchy.Crs.ShrtName,
 			  Txt_YEAR_OF_DEGREE[NewYear]);
       else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Crs.FullName,-1L,
-                                                       Gbl.Hierarchy.Crs.DegCod,NewYear))
+                                                       Gbl.Hierarchy.Crs.PrtCod,NewYear))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_course_X_already_exists_in_year_Y,
 		          Gbl.Hierarchy.Crs.FullName,

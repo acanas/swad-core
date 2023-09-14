@@ -660,7 +660,7 @@ bool Ins_GetInstitDataByCod (struct Ins_Instit *Ins)
    bool InsFound = false;
 
    /***** Clear data *****/
-   Ins->CtyCod          = -1L;
+   Ins->PrtCod          = -1L;
    Ins->Status          = (Hie_Status_t) 0;
    Ins->RequesterUsrCod = -1L;
    Ins->ShrtName[0]     =
@@ -716,7 +716,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
       Err_WrongInstitExit ();
 
    /***** Get country code (row[1]) *****/
-   Ins->CtyCod = Str_ConvertStrCodToLongCod (row[1]);
+   Ins->PrtCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get institution status (row[2]) *****/
    if (sscanf (row[2],"%u",&(Ins->Status)) != 1)
@@ -1527,7 +1527,7 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set institution country */
-   Ins_EditingIns->CtyCod = Gbl.Hierarchy.Cty.Cod;
+   Ins_EditingIns->PrtCod = Gbl.Hierarchy.Cty.Cod;
 
    /* Get institution short name */
    Par_GetParText ("ShortName",Ins_EditingIns->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
@@ -1787,11 +1787,11 @@ static void Ins_EditingInstitutionConstructor (void)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset institution *****/
-   Ins_EditingIns->Cod             = -1L;
-   Ins_EditingIns->CtyCod             = -1L;
-   Ins_EditingIns->ShrtName[0]        = '\0';
-   Ins_EditingIns->FullName[0]        = '\0';
-   Ins_EditingIns->WWW[0]             = '\0';
+   Ins_EditingIns->Cod         = -1L;
+   Ins_EditingIns->PrtCod      = -1L;
+   Ins_EditingIns->ShrtName[0] = '\0';
+   Ins_EditingIns->FullName[0] = '\0';
+   Ins_EditingIns->WWW[0]      = '\0';
   }
 
 static void Ins_EditingInstitutionDestructor (void)

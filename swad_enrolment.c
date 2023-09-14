@@ -2246,7 +2246,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 
 			Crs_GetCourseDataByCod (&Crs);
-			Deg.Cod = Crs.DegCod;
+			Deg.Cod = Crs.PrtCod;
 			Deg_GetDegreeDataByCod (&Deg);
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);

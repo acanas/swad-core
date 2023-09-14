@@ -324,7 +324,7 @@ static void DegTyp_ListDegreeTypesForSeeing (const struct DegTyp_DegTypes *DegTy
 	NumDegTyp++, The_ChangeRowColor ())
      {
       BgColor = (DegTypes->Lst[NumDegTyp].DegTypCod ==
-	         Gbl.Hierarchy.Deg.DegTypCod) ? "BG_HIGHLIGHT" :
+	         Gbl.Hierarchy.Deg.TypCod) ? "BG_HIGHLIGHT" :
                                                 The_GetColorRows ();
 
       /* Begin table row */

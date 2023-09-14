@@ -558,7 +558,7 @@ void Hie_InitHierarchy (void)
    if (Gbl.Hierarchy.Crs.Cod > 0)
      {
       if (Crs_GetCourseDataByCod (&Gbl.Hierarchy.Crs))	// Course found
-         Gbl.Hierarchy.Deg.Cod = Gbl.Hierarchy.Crs.DegCod;
+         Gbl.Hierarchy.Deg.Cod = Gbl.Hierarchy.Crs.PrtCod;
       else
          Hie_ResetHierarchy ();
      }
@@ -568,7 +568,7 @@ void Hie_InitHierarchy (void)
      {
       if (Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Deg))	// Degree found
 	{
-	 Gbl.Hierarchy.Ctr.Cod = Gbl.Hierarchy.Deg.CtrCod;
+	 Gbl.Hierarchy.Ctr.Cod = Gbl.Hierarchy.Deg.PrtCod;
          Gbl.Hierarchy.Ins.Cod = Deg_DB_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.Cod);
 	}
       else
@@ -579,7 +579,7 @@ void Hie_InitHierarchy (void)
    if (Gbl.Hierarchy.Ctr.Cod > 0)
      {
       if (Ctr_GetCenterDataByCod (&Gbl.Hierarchy.Ctr))	// Center found
-         Gbl.Hierarchy.Ins.Cod = Gbl.Hierarchy.Ctr.InsCod;
+         Gbl.Hierarchy.Ins.Cod = Gbl.Hierarchy.Ctr.PrtCod;
       else
          Hie_ResetHierarchy ();
      }
@@ -588,7 +588,7 @@ void Hie_InitHierarchy (void)
    if (Gbl.Hierarchy.Ins.Cod > 0)
      {
       if (Ins_GetInstitDataByCod (&Gbl.Hierarchy.Ins))	// Institution found
-	 Gbl.Hierarchy.Cty.Cod = Gbl.Hierarchy.Ins.CtyCod;
+	 Gbl.Hierarchy.Cty.Cod = Gbl.Hierarchy.Ins.PrtCod;
       else
          Hie_ResetHierarchy ();
      }
@@ -661,21 +661,21 @@ void Hie_InitHierarchy (void)
 void Hie_ResetHierarchy (void)
   {
    /***** Country *****/
-   Gbl.Hierarchy.Cty.Cod = -1L;
+   Gbl.Hierarchy.Cty.Cod    = -1L;
 
    /***** Institution *****/
-   Gbl.Hierarchy.Ins.Cod = -1L;
+   Gbl.Hierarchy.Ins.Cod    = -1L;
 
    /***** Center *****/
-   Gbl.Hierarchy.Ctr.Cod = -1L;
-   Gbl.Hierarchy.Ctr.InsCod = -1L;
+   Gbl.Hierarchy.Ctr.Cod    = -1L;
+   Gbl.Hierarchy.Ctr.PrtCod = -1L;
    Gbl.Hierarchy.Ctr.PlcCod = -1L;
 
    /***** Degree *****/
-   Gbl.Hierarchy.Deg.Cod = -1L;
+   Gbl.Hierarchy.Deg.Cod    = -1L;
 
    /***** Course *****/
-   Gbl.Hierarchy.Crs.Cod = -1L;
+   Gbl.Hierarchy.Crs.Cod    = -1L;
 
    /***** Hierarchy level and code *****/
    Gbl.Hierarchy.Level = HieLvl_UNK;

@@ -230,7 +230,7 @@ static void SysCfg_Map (void)
 	 Ctr_GetCenterDataByCod (&Ctr);
 
 	 /* Get data of institution */
-	 Ins.Cod = Ctr.InsCod;
+	 Ins.Cod = Ctr.PrtCod;
 	 Ins_GetInstitDataByCod (&Ins);
 
 	 /* Add marker */

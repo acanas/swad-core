@@ -4071,8 +4071,8 @@ void Rec_UpdateMyInstitution (void)
    if (Ins.Cod > 0)
      {
       Ins_GetInstitDataByCod (&Ins);
-      if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
-	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
+      if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.PrtCod)
+	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.PrtCod;
      }
 
    /* Set institution code */
@@ -4107,9 +4107,9 @@ void Rec_UpdateMyCenter (void)
    if (Ctr.Cod > 0)
      {
       Ctr_GetCenterDataByCod (&Ctr);
-      if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
+      if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.PrtCod)
 	{
-	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.InsCod;
+	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.PrtCod;
 	 Gbl.Usrs.Me.UsrDat.Tch.DptCod = -1L;
 	}
      }

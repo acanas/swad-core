@@ -44,7 +44,7 @@
 struct Ctr_Center
   {
    long Cod;			// Center code
-   long InsCod;			// Institution code
+   long PrtCod;			// Parent (institution) code
    long PlcCod;			// Place code
    Hie_Status_t Status;		// Center status
    long RequesterUsrCod;	// User code of the person who requested the creation of this center

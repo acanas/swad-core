@@ -64,8 +64,8 @@ void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status)
 				" VALUES"
 				" (%ld,%ld,%u,"
 				  "%ld,'%s','%s','%s')",
-				Deg->CtrCod,
-				Deg->DegTypCod,
+				Deg->PrtCod,
+				Deg->TypCod,
 				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Deg->ShrtName,

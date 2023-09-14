@@ -1616,7 +1616,7 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    Crs_GetCourseDataByCod (&Hie.Crs);
 
    /***** Get data of degree *****/
-   Hie.Deg.Cod = Hie.Crs.DegCod;
+   Hie.Deg.Cod = Hie.Crs.PrtCod;
    Deg_GetDegreeDataByCod (&Hie.Deg);
 
    /***** Get data of institution *****/

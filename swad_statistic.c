@@ -3314,7 +3314,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	 HTM_TD_End ();
 
 	 /* Write degree */
-	 Sta_WriteDegree (Crs.DegCod);
+	 Sta_WriteDegree (Crs.PrtCod);
 
 	 /* Write degree year */
 	 HTM_TD_Begin ("class=\"CT LOG_%s\"",The_GetSuffix ());

@@ -8796,32 +8796,32 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
       case Brw_ADMI_DOC_INS:
       case Brw_ADMI_SHR_INS:
 	 /* Cod stores the institution code */
-	 *GrpCod = -1L;
-	 *CrsCod = -1L;
-	 *DegCod = -1L;
+	 *GrpCod =
+	 *CrsCod =
+	 *DegCod =
 	 *CtrCod = -1L;
 	 *InsCod = Cod;
          break;
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
 	 /* Cod stores the center code */
-	 *GrpCod = -1L;
-	 *CrsCod = -1L;
+	 *GrpCod =
+	 *CrsCod =
 	 *DegCod = -1L;
 	 *CtrCod = Ctr.Cod = Cod;
 	 Ctr_GetCenterDataByCod (&Ctr);
-	 *InsCod = Ctr.InsCod;
+	 *InsCod = Ctr.PrtCod;
          break;
       case Brw_ADMI_DOC_DEG:
       case Brw_ADMI_SHR_DEG:
 	 /* Cod stores the degree code */
-	 *GrpCod = -1L;
+	 *GrpCod =
 	 *CrsCod = -1L;
 	 *DegCod = Deg.Cod = Cod;
 	 Deg_GetDegreeDataByCod (&Deg);
-	 *CtrCod = Ctr.Cod = Deg.CtrCod;
+	 *CtrCod = Ctr.Cod = Deg.PrtCod;
 	 Ctr_GetCenterDataByCod (&Ctr);
-	 *InsCod = Ctr.InsCod;
+	 *InsCod = Ctr.PrtCod;
          break;
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_TCH_CRS:
@@ -8833,11 +8833,11 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *GrpCod = -1L;
 	 *CrsCod = Crs.Cod = Cod;
 	 Crs_GetCourseDataByCod (&Crs);
-	 *DegCod = Deg.Cod = Crs.DegCod;
+	 *DegCod = Deg.Cod = Crs.PrtCod;
 	 Deg_GetDegreeDataByCod (&Deg);
-	 *CtrCod = Ctr.Cod = Deg.CtrCod;
+	 *CtrCod = Ctr.Cod = Deg.PrtCod;
 	 Ctr_GetCenterDataByCod (&Ctr);
-	 *InsCod = Ctr.InsCod;
+	 *InsCod = Ctr.PrtCod;
 	 break;
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
@@ -8848,11 +8848,11 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 Grp_GetGroupDataByCod (&GrpDat);
 	 *CrsCod = Crs.Cod = GrpDat.CrsCod;
 	 Crs_GetCourseDataByCod (&Crs);
-	 *DegCod = Deg.Cod = Crs.DegCod;
+	 *DegCod = Deg.Cod = Crs.PrtCod;
 	 Deg_GetDegreeDataByCod (&Deg);
-	 *CtrCod = Ctr.Cod = Deg.CtrCod;
+	 *CtrCod = Ctr.Cod = Deg.PrtCod;
 	 Ctr_GetCenterDataByCod (&Ctr);
-	 *InsCod = Ctr.InsCod;
+	 *InsCod = Ctr.PrtCod;
 	 break;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
@@ -8860,17 +8860,17 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 	 *GrpCod = -1L;
 	 *CrsCod = Crs.Cod = Prj_DB_GetCrsOfPrj (Cod);
 	 Crs_GetCourseDataByCod (&Crs);
-	 *DegCod = Deg.Cod = Crs.DegCod;
+	 *DegCod = Deg.Cod = Crs.PrtCod;
 	 Deg_GetDegreeDataByCod (&Deg);
-	 *CtrCod = Ctr.Cod = Deg.CtrCod;
+	 *CtrCod = Ctr.Cod = Deg.PrtCod;
 	 Ctr_GetCenterDataByCod (&Ctr);
-	 *InsCod = Ctr.InsCod;
+	 *InsCod = Ctr.PrtCod;
 	 break;
       default:
-	 *GrpCod = -1L;
-	 *CrsCod = -1L;
-	 *DegCod = -1L;
-	 *CtrCod = -1L;
+	 *GrpCod =
+	 *CrsCod =
+	 *DegCod =
+	 *CtrCod =
 	 *InsCod = -1L;
 	 break;
      }
