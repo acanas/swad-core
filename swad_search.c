@@ -393,23 +393,23 @@ static void Sch_SearchInDB (void)
          break;
       case HieLvl_CTY:
          sprintf (RangeQuery," AND cty_countrs.CtyCod=%ld",
-                  Gbl.Hierarchy.Cty.CtyCod);
+                  Gbl.Hierarchy.Cty.Cod);
          break;
       case HieLvl_INS:
          sprintf (RangeQuery," AND ins_instits.InsCod=%ld",
-                  Gbl.Hierarchy.Ins.InsCod);
+                  Gbl.Hierarchy.Ins.Cod);
          break;
       case HieLvl_CTR:
          sprintf (RangeQuery," AND ctr_centers.CtrCod=%ld",
-                  Gbl.Hierarchy.Ctr.CtrCod);
+                  Gbl.Hierarchy.Ctr.Cod);
          break;
       case HieLvl_DEG:
          sprintf (RangeQuery," AND deg_degrees.DegCod=%ld",
-                  Gbl.Hierarchy.Deg.DegCod);
+                  Gbl.Hierarchy.Deg.Cod);
          break;
       case HieLvl_CRS:
          sprintf (RangeQuery," AND crs_courses.CrsCod=%ld",
-                  Gbl.Hierarchy.Crs.CrsCod);
+                  Gbl.Hierarchy.Crs.Cod);
          break;
      }
 

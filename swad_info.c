@@ -225,7 +225,7 @@ void Inf_ShowInfo (void)
 
    /***** Get info source from database *****/
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-                                 Gbl.Hierarchy.Crs.CrsCod,
+                                 Gbl.Hierarchy.Crs.Cod,
                                  Gbl.Crs.Info.Type,
                                  &FromDB);
 
@@ -603,7 +603,7 @@ static bool Inf_CheckAndShowPage (void)
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathRelDirHTML);
+   Inf_BuildPathPage (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,PathRelDirHTML);
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
@@ -612,7 +612,7 @@ static bool Inf_CheckAndShowPage (void)
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
       snprintf (URL,sizeof (URL),"%s/%ld/%s/index.html",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod,
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.Cod,
 	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
       Inf_ShowPage (URL);
 
@@ -625,7 +625,7 @@ static bool Inf_CheckAndShowPage (void)
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
       snprintf (URL,sizeof (URL),"%s/%ld/%s/index.htm",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod,
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.Cod,
 	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
       Inf_ShowPage (URL);
 
@@ -684,7 +684,7 @@ static bool Inf_CheckAndShowURL (void)
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,PathFile);
 
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
@@ -729,7 +729,7 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
    TxtBuffer[0] = '\0';
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,PathFile);
 
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
@@ -860,7 +860,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Get current info source from database *****/
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-                                 Gbl.Hierarchy.Crs.CrsCod,
+                                 Gbl.Hierarchy.Crs.Cod,
                                  Gbl.Crs.Info.Type,
                                  &FromDB);
 
@@ -954,25 +954,25 @@ static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
            {
             case Inf_LECTURES:
 	       Syllabus->WhichSyllabus = Syl_LECTURES;
-               return Syl_CheckSyllabus (Syllabus,Gbl.Hierarchy.Crs.CrsCod);
+               return Syl_CheckSyllabus (Syllabus,Gbl.Hierarchy.Crs.Cod);
             case Inf_PRACTICALS:
 	       Syllabus->WhichSyllabus = Syl_PRACTICALS;
-               return Syl_CheckSyllabus (Syllabus,Gbl.Hierarchy.Crs.CrsCod);
+               return Syl_CheckSyllabus (Syllabus,Gbl.Hierarchy.Crs.Cod);
             default:
                return false;
            }
          return false;	// Not reached
       case Inf_PLAIN_TEXT:
-         return Inf_CheckPlainTxt (Gbl.Hierarchy.Crs.CrsCod,
+         return Inf_CheckPlainTxt (Gbl.Hierarchy.Crs.Cod,
                                    Gbl.Crs.Info.Type);
       case Inf_RICH_TEXT:
-         return Inf_CheckRichTxt (Gbl.Hierarchy.Crs.CrsCod,
+         return Inf_CheckRichTxt (Gbl.Hierarchy.Crs.Cod,
                                   Gbl.Crs.Info.Type);
       case Inf_PAGE:
-	 return Inf_CheckPage (Gbl.Hierarchy.Crs.CrsCod,
+	 return Inf_CheckPage (Gbl.Hierarchy.Crs.Cod,
                                Gbl.Crs.Info.Type);
       case Inf_URL:
-	 return Inf_CheckURL (Gbl.Hierarchy.Crs.CrsCod,
+	 return Inf_CheckURL (Gbl.Hierarchy.Crs.Cod,
                               Gbl.Crs.Info.Type);
      }
 
@@ -1057,7 +1057,7 @@ void Inf_FormToSendURL (Inf_Src_t InfoSrc)
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,PathFile);
 
    /***** Begin form *****/
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
@@ -1420,7 +1420,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
      };
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,
                          TxtHTML,NULL);
 
    if (TxtHTML[0])
@@ -1437,7 +1437,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
       if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
+         Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Crs.Cod);
 
       HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 
@@ -1510,7 +1510,7 @@ static bool Inf_CheckAndShowRichTxt (void)
      };
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,
                          TxtHTML,TxtMD);
 
    if (TxtMD[0])
@@ -1527,7 +1527,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
       if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
+         Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Crs.Cod);
 
       HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",
                      The_GetSuffix ());
@@ -1660,10 +1660,10 @@ void Inf_EditPlainTxtInfo (void)
 
 	 if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
 	     Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	    Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
+	    Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Crs.Cod);
 
 	 /***** Get info text from database *****/
-	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
+	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,
 			       TxtHTML,NULL);
 
 	 /***** Edition area *****/
@@ -1728,10 +1728,10 @@ void Inf_EditRichTxtInfo (void)
 
       if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
 	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	 Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
+	 Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Crs.Cod);
 
       /***** Get info text from database *****/
-      Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
+      Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,
 			    TxtHTML,NULL);
 
       /***** Edition area *****/
@@ -1849,7 +1849,7 @@ void Inf_ReceiveURLInfo (void)
    Par_GetParText ("InfoSrcURL",Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,PathFile);
 
    /***** Open file with URL *****/
    if ((FileURL = fopen (PathFile,"wb")) != NULL)
@@ -1936,7 +1936,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** Build path of directory containing web page *****/
-      Inf_BuildPathPage (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathRelDirHTML);
+      Inf_BuildPathPage (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,PathRelDirHTML);
 
       /***** End the reception of the data *****/
       if (Str_FileIs (SourceFileName,"html") ||

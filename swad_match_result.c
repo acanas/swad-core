@@ -1098,9 +1098,9 @@ void MchRes_ShowOneMchResult (void)
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Deg.DegCod,
-				 Gbl.Hierarchy.Crs.CrsCod);
+				 Gbl.Hierarchy.Ins.Cod,
+				 Gbl.Hierarchy.Deg.Cod,
+				 Gbl.Hierarchy.Crs.Cod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (10);

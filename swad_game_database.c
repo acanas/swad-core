@@ -57,7 +57,7 @@ long Gam_DB_CreateGame (const struct Gam_Game *Game,const char *Txt)
 				" VALUES"
 				" (%ld,'N',%ld,%.15lg,%u,"
 				  "'%s','%s')",
-				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Cod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Game->MaxGrade,
 				Game->Visibility,
@@ -82,7 +82,7 @@ void Gam_DB_UpdateGame (const struct Gam_Game *Game,const char *Txt)
 		          "Title='%s',"
 		          "Txt='%s'"
 		   " WHERE GamCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   Game->MaxGrade,
 		   Game->Visibility,
 	           Game->Title,
@@ -162,7 +162,7 @@ unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder)
 		      "%s"
 		" GROUP BY gam_games.GamCod"
 		" ORDER BY %s",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   HiddenSubQuery,
 		   OrderBySubQuery[SelectedOrder]);
 
@@ -197,7 +197,7 @@ unsigned Gam_DB_GetListAvailableGames (MYSQL_RES **mysql_res)
 		" ORDER BY StartTime DESC,"
 			  "EndTime DESC,"
 			  "gam_games.Title DESC",
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
    }
 
 /*****************************************************************************/
@@ -221,7 +221,7 @@ unsigned Gam_DB_GetGameDataByCod (MYSQL_RES **mysql_res,long GamCod)
 		   " WHERE gam_games.GamCod=%ld"
 		     " AND gam_games.CrsCod=%ld",	// Extra check
 		   GamCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -236,7 +236,7 @@ void Gam_DB_GetGameTitle (long GamCod,char *Title,size_t TitleSize)
 		         " WHERE GamCod=%ld"
 		           " AND CrsCod=%ld",	// Extra check
 			 GamCod,
-			 Gbl.Hierarchy.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -266,7 +266,7 @@ bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
 		    " WHERE CrsCod=%ld"
 		      " AND Title='%s'"
 		      " AND GamCod<>%ld)",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   Game->Title,
 		   Game->GamCod);
   }
@@ -300,7 +300,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
+                         Gbl.Hierarchy.Cty.Cod);
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
@@ -313,7 +313,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Ins.InsCod);
+		         Gbl.Hierarchy.Ins.Cod);
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
@@ -324,7 +324,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Level)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
+                         Gbl.Hierarchy.Ctr.Cod);
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
@@ -333,14 +333,14 @@ unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Level)
 			        "gam_games"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Deg.DegCod);
+		         Gbl.Hierarchy.Deg.Cod);
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			  " FROM gam_games"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.Cod);
       default:
 	 return 0;
      }
@@ -375,7 +375,7 @@ unsigned Gam_DB_GetNumGames (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Cty.CtyCod);
+		         Gbl.Hierarchy.Cty.Cod);
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
@@ -388,7 +388,7 @@ unsigned Gam_DB_GetNumGames (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Ins.InsCod);
+		         Gbl.Hierarchy.Ins.Cod);
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
@@ -399,7 +399,7 @@ unsigned Gam_DB_GetNumGames (HieLvl_Level_t Level)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Ctr.CtrCod);
+		         Gbl.Hierarchy.Ctr.Cod);
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
@@ -408,14 +408,14 @@ unsigned Gam_DB_GetNumGames (HieLvl_Level_t Level)
 			        "gam_games"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Deg.DegCod);
+		         Gbl.Hierarchy.Deg.Cod);
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
 			  " FROM gam_games"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.Cod);
       default:
 	 return 0;
      }
@@ -686,7 +686,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Level)
 				        " AND crs_courses.CrsCod=gam_games.CrsCod"
 				        " AND gam_games.GamCod=gam_questions.GamCod"
 				   " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-			       Gbl.Hierarchy.Cty.CtyCod);
+			       Gbl.Hierarchy.Cty.Cod);
       case HieLvl_INS:
          return
          DB_QuerySELECTDouble ("can not get number of questions per game",
@@ -703,7 +703,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Level)
 				        " AND crs_courses.CrsCod=gam_games.CrsCod"
 				        " AND gam_games.GamCod=gam_questions.GamCod"
 				   " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-			       Gbl.Hierarchy.Ins.InsCod);
+			       Gbl.Hierarchy.Ins.Cod);
       case HieLvl_CTR:
          return
          DB_QuerySELECTDouble ("can not get number of questions per game",
@@ -718,7 +718,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Level)
 				         " AND crs_courses.CrsCod=gam_games.CrsCod"
 				         " AND gam_games.GamCod=gam_questions.GamCod"
 				    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-			       Gbl.Hierarchy.Ctr.CtrCod);
+			       Gbl.Hierarchy.Ctr.Cod);
       case HieLvl_DEG:
          return
          DB_QuerySELECTDouble ("can not get number of questions per game",
@@ -731,7 +731,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Level)
 				         " AND crs_courses.CrsCod=gam_games.CrsCod"
 				         " AND gam_games.GamCod=gam_questions.GamCod"
 				    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-			       Gbl.Hierarchy.Deg.DegCod);
+			       Gbl.Hierarchy.Deg.Cod);
       case HieLvl_CRS:
          return
          DB_QuerySELECTDouble ("can not get number of questions per game",
@@ -742,7 +742,7 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Level)
 				       " WHERE gam_games.Cod=%ld"
 				         " AND gam_games.GamCod=gam_questions.GamCod"
 				    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-			       Gbl.Hierarchy.Crs.CrsCod);
+			       Gbl.Hierarchy.Crs.Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached

@@ -902,7 +902,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
      };
 
    /***** Get data of institution of this degree *****/
-   Ins.InsCod = Gbl.Hierarchy.Ins.InsCod;
+   Ins.Cod = Gbl.Hierarchy.Ins.Cod;
    Ins_GetInstitDataByCod (&Ins);
 
    /***** Build anchor string *****/
@@ -955,7 +955,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
 			       Ins.WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.FullName,64,NULL);
+	       Lgo_DrawLogo (HieLvl_INS,Ins.Cod,Ins.FullName,64,NULL);
 	       HTM_BR ();
 	       HTM_Txt (Ins.FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
@@ -1612,15 +1612,15 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Get data of course *****/
-   Hie.Crs.CrsCod = CallsForExams->CallForExam.CrsCod;
+   Hie.Crs.Cod = CallsForExams->CallForExam.CrsCod;
    Crs_GetCourseDataByCod (&Hie.Crs);
 
    /***** Get data of degree *****/
-   Hie.Deg.DegCod = Hie.Crs.DegCod;
+   Hie.Deg.Cod = Hie.Crs.DegCod;
    Deg_GetDegreeDataByCod (&Hie.Deg);
 
    /***** Get data of institution *****/
-   Hie.Ins.InsCod = Deg_DB_GetInsCodOfDegreeByCod (Hie.Deg.DegCod);
+   Hie.Ins.Cod = Deg_DB_GetInsCodOfDegreeByCod (Hie.Deg.Cod);
    Ins_GetInstitDataByCod (&Hie.Ins);
 
    /***** Convert struct date to a date string *****/

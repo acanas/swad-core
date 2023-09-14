@@ -848,7 +848,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
 	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,		// Departments in current insitution
+	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.Cod,		// Departments in current insitution
 				      Projects->Filter.DptCod,		// Selected department
 				      Prj_PAR_FILTER_DPT_COD_NAME,	// Parameter name
 				      SelectClass,			// Selector class
@@ -1414,9 +1414,9 @@ void Prj_PrintOneProject (void)
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
+			      Gbl.Hierarchy.Ins.Cod,
+			      Gbl.Hierarchy.Deg.Cod,
+			      Gbl.Hierarchy.Crs.Cod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -3770,7 +3770,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		     if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
-		     Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
+		     Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.Cod,	// Departments in current institution
 						  Projects->Prj.DptCod,	// Selected department
 						  Par_CodeStr[ParCod_Dpt],	// Parameter name
 						  SelectClass,		// Selector class

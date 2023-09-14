@@ -124,7 +124,7 @@ void Hld_SeeAllHolidays (void)
    char StrDate[Cns_MAX_BYTES_DATE + 1];
    struct Hld_Holidays Holidays;
 
-   if (Gbl.Hierarchy.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.Cod > 0)
      {
       /***** Reset places context *****/
       Hld_ResetHolidays (&Holidays);

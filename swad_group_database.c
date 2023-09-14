@@ -72,7 +72,7 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
 				" VALUES"
 				" (%ld,'%s',"
 				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
-				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Cod,
 				GrpTyp->GrpTypName,
 				GrpTyp->MandatoryEnrolment ? 'Y' :
 							     'N',
@@ -118,7 +118,7 @@ unsigned Grp_DB_GetGroupTypeDataByCod (MYSQL_RES **mysql_res,long GrpTypCod)
 		       " WHERE GrpTypCod=%ld"
 		         " AND CrsCod=%ld",	// Extra check
 		       GrpTypCod,
-		       Gbl.Hierarchy.Crs.CrsCod);
+		       Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -209,7 +209,7 @@ bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long Grp
 		    " WHERE CrsCod=%ld"
 		      " AND GrpTypName='%s'"
 		      " AND GrpTypCod<>%ld)",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   GrpTypName,
 		   GrpTypCod);
   }
@@ -278,7 +278,7 @@ unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
 			         "grp_users"
 			  " WHERE grp_groups.GrpTypCod=%ld"
 			    " AND grp_groups.GrpCod=grp_users.GrpCod)",
-		  Gbl.Hierarchy.Crs.CrsCod,
+		  Gbl.Hierarchy.Crs.Cod,
 		  (unsigned) Role,
 		  GrpTypCod);
   }
@@ -402,7 +402,7 @@ bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
 			      " AND grp_types.CrsCod=%ld))",
 		   UsrCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -481,7 +481,7 @@ unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND MustBeOpened='Y'"
 		     " AND OpenTime<=NOW()",
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -498,7 +498,7 @@ unsigned Grp_DB_CountNumGrpsInCurrentCrs (void)
 			 "grp_groups"
 		  " WHERE grp_types.CrsCod=%ld"
 		    " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
-		  Gbl.Hierarchy.Crs.CrsCod);
+		  Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -583,7 +583,7 @@ unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_
 		     " AND grp_users.UsrCod=%ld"
 		   " ORDER BY grp_types.GrpTypName,"
 			     "grp_groups.GrpName",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   UsrCod);
   }
 
@@ -606,7 +606,7 @@ unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_re
 		     " AND grp_groups.GrpCod=grp_users.GrpCod"
 		     " AND grp_users.UsrCod=%ld"
 		   " ORDER BY grp_groups.GrpName",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   GrpTypCod,
 		   UsrCod);
   }
@@ -630,7 +630,7 @@ unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql
 		     " AND grp_users.UsrCod=%ld"
 		   " ORDER BY grp_types.GrpTypName,"
 			     "grp_groups.GrpName",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -927,7 +927,7 @@ bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
      {
       if (asprintf (&SubQueryGrpTypes,"grp_types.CrsCod=%ld"
 	                              " AND grp_types.Mandatory='Y'",
-	            Gbl.Hierarchy.Crs.CrsCod) < 0)
+	            Gbl.Hierarchy.Crs.Cod) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
 
@@ -994,7 +994,7 @@ bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
 
 		  SubQueryGrpTypes,(unsigned) Rol_STD,
 		  SubQueryGrpTypes,
-		  Gbl.Hierarchy.Crs.CrsCod,(unsigned) Rol_STD,
+		  Gbl.Hierarchy.Crs.Cod,(unsigned) Rol_STD,
 		  SubQueryGrpTypes,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Free allocated memory for subquery *****/

@@ -1508,7 +1508,7 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
    if (Exam->Title[0])	// If there's an exam title
      {
       /* If title of exam was in database... */
-      if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Crs.CrsCod,
+      if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Crs.Cod,
                                            Exam->ExaCod,Exam->Title))
 	{
 	 NewExamIsCorrect = false;

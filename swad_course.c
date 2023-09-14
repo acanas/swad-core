@@ -182,7 +182,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Write link to platform *****/
-	 Highlight = (Gbl.Hierarchy.Cty.CtyCod <= 0);
+	 Highlight = (Gbl.Hierarchy.Cty.Cod <= 0);
 	 HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 				   NULL);
 	    IsLastItemInLevel[1] = true;
@@ -208,19 +208,19 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    row = mysql_fetch_row (mysql_resCty);
 
 	    /***** Get data of this institution *****/
-	    Hie.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
+	    Hie.Cty.Cod = Str_ConvertStrCodToLongCod (row[0]);
 	    if (!Cty_GetCountryDataByCod (&Hie.Cty))
 	       Err_WrongCountrExit ();
 
 	    /***** Write link to country *****/
-	    Highlight = (Gbl.Hierarchy.Ins.InsCod <= 0 &&
-			 Gbl.Hierarchy.Cty.CtyCod == Hie.Cty.CtyCod);
+	    Highlight = (Gbl.Hierarchy.Ins.Cod <= 0 &&
+			 Gbl.Hierarchy.Cty.Cod == Hie.Cty.Cod);
 	    HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 				      NULL);
 	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1);
 	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	       Frm_BeginForm (ActMyCrs);
-		  ParCod_PutPar (ParCod_Cty,Hie.Cty.CtyCod);
+		  ParCod_PutPar (ParCod_Cty,Hie.Cty.Cod);
 		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
 					   "class=\"BT_LINK FORM_IN_%s\"",
 					   The_GetSuffix ());
@@ -233,7 +233,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    /***** Get my institutions in this country *****/
 	    NumInss = Ins_DB_GetInssFromUsr (&mysql_resIns,
 	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
-					     Hie.Cty.CtyCod);
+					     Hie.Cty.Cod);
 	    for (NumIns = 0;
 		 NumIns < NumInss;
 		 NumIns++)
@@ -242,23 +242,23 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       row = mysql_fetch_row (mysql_resIns);
 
 	       /***** Get data of this institution *****/
-	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
+	       Hie.Ins.Cod = Str_ConvertStrCodToLongCod (row[0]);
 	       if (!Ins_GetInstitDataByCod (&Hie.Ins))
 		  Err_WrongInstitExit ();
 
 	       /***** Write link to institution *****/
-	       Highlight = (Gbl.Hierarchy.Ctr.CtrCod <= 0 &&
-			    Gbl.Hierarchy.Ins.InsCod == Hie.Ins.InsCod);
+	       Highlight = (Gbl.Hierarchy.Ctr.Cod <= 0 &&
+			    Gbl.Hierarchy.Ins.Cod == Hie.Ins.Cod);
 	       HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					 NULL);
 		  IsLastItemInLevel[3] = (NumIns == NumInss - 1);
 		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 		  Frm_BeginForm (ActMyCrs);
-		     ParCod_PutPar (ParCod_Ins,Hie.Ins.InsCod);
+		     ParCod_PutPar (ParCod_Ins,Hie.Ins.Cod);
 		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
 					      "class=\"BT_LINK FORM_IN_%s\"",
 					      The_GetSuffix ());
-			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,16,NULL);
+			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.Cod,Hie.Ins.ShrtName,16,NULL);
 			HTM_TxtF ("&nbsp;%s",Hie.Ins.ShrtName);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
@@ -267,7 +267,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       /***** Get my centers in this institution *****/
 	       NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_resCtr,
 	                                        Gbl.Usrs.Me.UsrDat.UsrCod,
-					        Hie.Ins.InsCod);
+					        Hie.Ins.Cod);
 	       for (NumCtr = 0;
 		    NumCtr < NumCtrs;
 		    NumCtr++)
@@ -276,23 +276,23 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  row = mysql_fetch_row (mysql_resCtr);
 
 		  /***** Get data of this center *****/
-		  Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+		  Hie.Ctr.Cod = Str_ConvertStrCodToLongCod (row[0]);
 		  if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
 		     Err_WrongCenterExit ();
 
 		  /***** Write link to center *****/
 		  Highlight = (Gbl.Hierarchy.Level == HieLvl_CTR &&
-			       Gbl.Hierarchy.Ctr.CtrCod == Hie.Ctr.CtrCod);
+			       Gbl.Hierarchy.Ctr.Cod == Hie.Ctr.Cod);
 		  HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					    NULL);
 		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1);
 		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 		     Frm_BeginForm (ActMyCrs);
-			ParCod_PutPar (ParCod_Ctr,Hie.Ctr.CtrCod);
+			ParCod_PutPar (ParCod_Ctr,Hie.Ctr.Cod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
 						 "class=\"BT_LINK FORM_IN_%s\"",
 						 The_GetSuffix ());
-			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.CtrCod,Hie.Ctr.ShrtName,16,NULL);
+			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.Cod,Hie.Ctr.ShrtName,16,NULL);
 			   HTM_TxtF ("&nbsp;%s",Hie.Ctr.ShrtName);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
@@ -301,7 +301,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  /***** Get my degrees in this center *****/
 		  NumDegs = Deg_DB_GetDegsFromUsr (&mysql_resDeg,
 		                                   Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Hie.Ctr.CtrCod);
+						   Hie.Ctr.Cod);
 		  for (NumDeg = 0;
 		       NumDeg < NumDegs;
 		       NumDeg++)
@@ -310,23 +310,23 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     row = mysql_fetch_row (mysql_resDeg);
 
 		     /***** Get data of this degree *****/
-		     Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
+		     Hie.Deg.Cod = Str_ConvertStrCodToLongCod (row[0]);
 		     if (!Deg_GetDegreeDataByCod (&Hie.Deg))
 			Err_WrongDegreeExit ();
 
 		     /***** Write link to degree *****/
 		     Highlight = (Gbl.Hierarchy.Level == HieLvl_DEG &&
-				  Gbl.Hierarchy.Deg.DegCod == Hie.Deg.DegCod);
+				  Gbl.Hierarchy.Deg.Cod == Hie.Deg.Cod);
 		     HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					       NULL);
 			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1);
 			Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 			Frm_BeginForm (ActMyCrs);
-			   ParCod_PutPar (ParCod_Deg,Hie.Deg.DegCod);
+			   ParCod_PutPar (ParCod_Deg,Hie.Deg.Cod);
 			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
 						    "class=\"BT_LINK FORM_IN_%s\"",
 						    The_GetSuffix ());
-			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,16,NULL);
+			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.Cod,Hie.Deg.ShrtName,16,NULL);
 			      HTM_TxtF ("&nbsp;%s",Hie.Deg.ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
@@ -335,7 +335,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     /***** Get my courses in this degree *****/
 		     NumCrss = Crs_DB_GetCrssFromUsr (&mysql_resCrs,
 		                                      Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Hie.Deg.DegCod);
+						      Hie.Deg.Cod);
 		     for (NumCrs = 0;
 			  NumCrs < NumCrss;
 			  NumCrs++)
@@ -344,19 +344,19 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			row = mysql_fetch_row (mysql_resCrs);
 
 			/***** Get data of this course *****/
-			Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+			Hie.Crs.Cod = Str_ConvertStrCodToLongCod (row[0]);
 			if (!Crs_GetCourseDataByCod (&Hie.Crs))
 			   Err_WrongCourseExit ();
 
 			/***** Write link to course *****/
 			Highlight = (Gbl.Hierarchy.Level == HieLvl_CRS &&
-				     Gbl.Hierarchy.Crs.CrsCod == Hie.Crs.CrsCod);
+				     Gbl.Hierarchy.Crs.Cod == Hie.Crs.Cod);
 			HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 						  NULL);
 			   IsLastItemInLevel[6] = (NumCrs == NumCrss - 1);
 			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel);
 			   Frm_BeginForm (ActMyCrs);
-			      ParCod_PutPar (ParCod_Crs,Hie.Crs.CrsCod);
+			      ParCod_PutPar (ParCod_Crs,Hie.Crs.Cod);
 			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie.Crs.ShrtName),
 						       "class=\"BT_LINK FORM_IN_%s\"",
 						       The_GetSuffix ());
@@ -367,7 +367,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   Frm_EndForm ();
 
 			   /***** Put link to register students *****/
-			   Enr_PutButtonInlineToRegisterStds (Hie.Crs.CrsCod);
+			   Enr_PutButtonInlineToRegisterStds (Hie.Crs.Cod);
 
 			HTM_LI_End ();
 		       }
@@ -630,7 +630,7 @@ void Crs_WriteSelectorOfCourse (void)
    Frm_BeginFormGoTo (ActSeeCrsInf);
 
       /***** Begin selector of course *****/
-      if (Gbl.Hierarchy.Deg.DegCod > 0)
+      if (Gbl.Hierarchy.Deg.Cod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
@@ -642,12 +642,12 @@ void Crs_WriteSelectorOfCourse (void)
 
       /***** Initial disabled option *****/
       HTM_OPTION (HTM_Type_STRING,"",
-                  Gbl.Hierarchy.Crs.CrsCod < 0 ? HTM_OPTION_SELECTED :
+                  Gbl.Hierarchy.Crs.Cod < 0 ? HTM_OPTION_SELECTED :
                 			         HTM_OPTION_UNSELECTED,
                   HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Course);
 
-      if (Gbl.Hierarchy.Deg.DegCod > 0)
+      if (Gbl.Hierarchy.Deg.Cod > 0)
 	{
 	 /***** Get courses belonging to the current degree from database *****/
 	 NumCrss = Crs_DB_GetCrssInCurrentDegBasic (&mysql_res);
@@ -665,7 +665,7 @@ void Crs_WriteSelectorOfCourse (void)
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
-			CrsCod == Gbl.Hierarchy.Crs.CrsCod ? HTM_OPTION_SELECTED :
+			CrsCod == Gbl.Hierarchy.Crs.Cod ? HTM_OPTION_SELECTED :
 							     HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);	// Short name (row[1])
@@ -689,7 +689,7 @@ void Crs_WriteSelectorOfCourse (void)
 void Crs_ShowCrssOfCurrentDeg (void)
   {
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Deg.DegCod <= 0)	// No degree selected
+   if (Gbl.Hierarchy.Deg.Cod <= 0)	// No degree selected
       return;
 
    /***** Get list of courses in this degree *****/
@@ -779,7 +779,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 			The_GetSuffix ());
 
 	 /***** Write an option when no course selected *****/
-	 if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
+	 if (Gbl.Hierarchy.Crs.Cod <= 0)	// No course selected
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 	                HTM_OPTION_SELECTED,
 	                HTM_OPTION_DISABLED,
@@ -806,7 +806,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		 }
 
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			   CrsCod == Gbl.Hierarchy.Crs.CrsCod ? HTM_OPTION_SELECTED :
+			   CrsCod == Gbl.Hierarchy.Crs.Cod ? HTM_OPTION_SELECTED :
 								HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",CrsShortName);
@@ -820,7 +820,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		when I don't belong to it *****/
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 	     !Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to it
-	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Crs.CrsCod,
+	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Crs.Cod,
 	                HTM_OPTION_SELECTED,
 	                HTM_OPTION_DISABLED,
 			"%s",Gbl.Hierarchy.Crs.ShrtName);
@@ -941,15 +941,15 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	   }
 
 	 /* Check if this course is one of my courses */
-	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "BG_HIGHLIGHT" :
+	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->Cod)) ? "BG_HIGHLIGHT" :
 				                             The_GetColorRows ();
 
 	 HTM_TR_Begin (NULL);
 
 	    /* Get number of users */
-	    NumUsrs[Rol_STD] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
-	    NumUsrs[Rol_NET] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
-	    NumUsrs[Rol_TCH] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
+	    NumUsrs[Rol_STD] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->Cod,1 << Rol_STD);
+	    NumUsrs[Rol_NET] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->Cod,1 << Rol_NET);
+	    NumUsrs[Rol_TCH] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->Cod,1 << Rol_TCH);
 	    NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
 			       NumUsrs[Rol_NET] +
 			       NumUsrs[Rol_TCH];
@@ -966,7 +966,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    /* Institutional code of the course */
 	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
 	                  TxtClassNormal,The_GetSuffix (),BgColor);
-	       HTM_Txt (Crs->InstitutionalCrsCod);
+	       HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
 	    /* Course year */
@@ -979,7 +979,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 	                  TxtClassStrong,The_GetSuffix (),BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
-		  ParCod_PutPar (ParCod_Crs,Crs->CrsCod);
+		  ParCod_PutPar (ParCod_Crs,Crs->Cod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
 					   "class=\"LM BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -1134,9 +1134,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
 	 /* Get number of users */
-	 NumUsrs[Rol_STD] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
-	 NumUsrs[Rol_NET] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
-	 NumUsrs[Rol_TCH] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
+	 NumUsrs[Rol_STD] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->Cod,1 << Rol_STD);
+	 NumUsrs[Rol_NET] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->Cod,1 << Rol_NET);
+	 NumUsrs[Rol_TCH] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->Cod,1 << Rol_TCH);
 	 NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
 	                    NumUsrs[Rol_NET] +
 			    NumUsrs[Rol_TCH];
@@ -1150,12 +1150,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else	// Crs->NumUsrs == 0 && ICanEdit
 		  Ico_PutContextualIconToRemove (ActRemCrs,NULL,
-						 Hie_PutParOtherHieCod,&Crs->CrsCod);
+						 Hie_PutParOtherHieCod,&Crs->Cod);
 	    HTM_TD_End ();
 
 	    /* Course code */
 	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
-	       HTM_Long (Crs->CrsCod);
+	       HTM_Long (Crs->Cod);
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
@@ -1163,15 +1163,15 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
-		     ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
-		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-				     Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
+		     ParCod_PutPar (ParCod_OthHie,Crs->Cod);
+		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+				     Crs->InstitutionalCod,HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_INS_CODE INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else
-		  HTM_Txt (Crs->InstitutionalCrsCod);
+		  HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
 	    /* Course year */
@@ -1179,7 +1179,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
-		  ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
+		  ParCod_PutPar (ParCod_OthHie,Crs->Cod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"OthCrsYear\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -1206,7 +1206,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsSho);
-		     ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
+		     ParCod_PutPar (ParCod_OthHie,Crs->Cod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -1222,7 +1222,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsFul);
-		     ParCod_PutPar (ParCod_OthHie,Crs->CrsCod);
+		     ParCod_PutPar (ParCod_OthHie,Crs->Cod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -1256,7 +1256,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	    /* Course status */
 	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM,
-	                                 Crs->Status,ActChgCrsSta,Crs->CrsCod,
+	                                 Crs->Status,ActChgCrsSta,Crs->Cod,
 	                                 Txt_COURSE_STATUS);
 
 	 HTM_TR_End ();
@@ -1316,8 +1316,8 @@ static void Crs_PutFormToCreateCourse (void)
 
 	 /***** Institutional code of the course *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-			    Crs_EditingCrs->InstitutionalCrsCod,
+	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+			    Crs_EditingCrs->InstitutionalCod,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_INS_CODE INPUT_%s\"",
 			    The_GetSuffix ());
@@ -1481,7 +1481,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
    /***** Get parameters from form *****/
    /* Set course degree */
    // Deg.DegCod =
-   Crs_EditingCrs->DegCod = Gbl.Hierarchy.Deg.DegCod;
+   Crs_EditingCrs->DegCod = Gbl.Hierarchy.Deg.Cod;
 
    /* Get parameters of the new course */
    Crs_GetParsNewCourse (Crs_EditingCrs);
@@ -1530,7 +1530,7 @@ static void Crs_GetParsNewCourse (struct Crs_Course *Crs)
 
    /***** Get parameters of the course from form *****/
    /* Get institutional code */
-   Par_GetParText ("InsCrsCod",Crs->InstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+   Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get year */
    Par_GetParText ("OthCrsYear",YearStr,2);
@@ -1556,7 +1556,7 @@ void Crs_RemoveCourse (void)
    Crs_EditingCourseConstructor ();
 
    /***** Get course code *****/
-   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
+   Crs_EditingCrs->Cod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the course from database *****/
    Crs_GetCourseDataByCod (Crs_EditingCrs);
@@ -1564,7 +1564,7 @@ void Crs_RemoveCourse (void)
       Err_NoPermissionExit ();
 
    /***** Check if this course has users *****/
-   if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs_EditingCrs->CrsCod,
+   if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs_EditingCrs->Cod,
 			     1 << Rol_STD |
 			     1 << Rol_NET |
 			     1 << Rol_TCH))	// Course has users ==> don't remove
@@ -1573,13 +1573,13 @@ void Crs_RemoveCourse (void)
    else					// Course has no users ==> remove it
      {
       /***** Remove course *****/
-      Crs_RemoveCourseCompletely (Crs_EditingCrs->CrsCod);
+      Crs_RemoveCourseCompletely (Crs_EditingCrs->Cod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,
 		     Crs_EditingCrs->FullName);
 
-      Crs_EditingCrs->CrsCod = -1L;	// To not showing button to go to course
+      Crs_EditingCrs->Cod = -1L;	// To not showing button to go to course
      }
   }
 
@@ -1601,10 +1601,10 @@ bool Crs_GetCourseDataByCod (struct Crs_Course *Crs)
    Crs->FullName[0] = '\0';
 
    /***** Check if course code is correct *****/
-   if (Crs->CrsCod > 0)
+   if (Crs->Cod > 0)
      {
       /***** Get data of a course from database *****/
-      if (Crs_DB_GetCourseDataByCod (&mysql_res,Crs->CrsCod)) // Course found...
+      if (Crs_DB_GetCourseDataByCod (&mysql_res,Crs->Cod)) // Course found...
 	{
 	 /***** Get data of the course *****/
 	 Crs_GetCourseDataFromRow (mysql_res,Crs);
@@ -1633,7 +1633,7 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
    row = mysql_fetch_row (mysql_res);
 
    /***** Get course code (row[0]) *****/
-   if ((Crs->CrsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+   if ((Crs->Cod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongCourseExit ();
 
    /***** Get code of degree (row[1]) *****/
@@ -1643,7 +1643,7 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
    Crs->Year = Deg_ConvStrToYear (row[2]);
 
    /***** Get institutional course code (row[3]) *****/
-   Str_Copy (Crs->InstitutionalCrsCod,row[3],sizeof (Crs->InstitutionalCrsCod) - 1);
+   Str_Copy (Crs->InstitutionalCod,row[3],sizeof (Crs->InstitutionalCod) - 1);
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
@@ -1690,7 +1690,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    if (CrsCod > 0)
      {
       /***** Get course data *****/
-      Crs.CrsCod = CrsCod;
+      Crs.Cod = CrsCod;
       Crs_GetCourseDataByCod (&Crs);
 
       /***** Remove all students in the course *****/
@@ -1787,17 +1787,17 @@ void Crs_ChangeInsCrsCod (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
-   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
+   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
+   Crs_EditingCrs->Cod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get institutional code */
-   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get data of the course */
    Crs_GetCourseDataByCod (Crs_EditingCrs);
@@ -1805,7 +1805,7 @@ void Crs_ChangeInsCrsCod (void)
       Err_NoPermissionExit ();
 
    /***** Change the institutional course code *****/
-   if (strcmp (NewInstitutionalCrsCod,Crs_EditingCrs->InstitutionalCrsCod))
+   if (strcmp (NewInstitutionalCrsCod,Crs_EditingCrs->InstitutionalCod))
      {
       Crs_UpdateInstitutionalCrsCod (Crs_EditingCrs,NewInstitutionalCrsCod);
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1837,7 +1837,7 @@ void Crs_ChangeCrsYear (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
+   Crs_EditingCrs->Cod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get parameter with year */
    Par_GetParText ("OthCrsYear",YearStr,2);
@@ -1888,11 +1888,11 @@ void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,
                                     const char *NewInstitutionalCrsCod)
   {
    /***** Update institutional course code in table of courses *****/
-   Crs_DB_UpdateInstitutionalCrsCod (Crs->CrsCod,NewInstitutionalCrsCod);
+   Crs_DB_UpdateInstitutionalCrsCod (Crs->Cod,NewInstitutionalCrsCod);
 
    /***** Copy institutional course code *****/
-   Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,
-             sizeof (Crs->InstitutionalCrsCod) - 1);
+   Str_Copy (Crs->InstitutionalCod,NewInstitutionalCrsCod,
+             sizeof (Crs->InstitutionalCod) - 1);
   }
 
 /*****************************************************************************/
@@ -1902,7 +1902,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,
 void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear)
   {
    /***** Update year/semester in table of courses *****/
-   Crs_DB_UpdateCrsYear (Crs->CrsCod,NewYear);
+   Crs_DB_UpdateCrsYear (Crs->Cod,NewYear);
 
    /***** Copy course year/semester *****/
    Crs->Year = NewYear;
@@ -1918,7 +1918,7 @@ void Crs_RenameCourseShort (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
+   Crs_EditingCrs->Cod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Crs_RenameCourse (Crs_EditingCrs,Cns_SHRT_NAME);
   }
 
@@ -1928,7 +1928,7 @@ void Crs_RenameCourseFull (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
+   Crs_EditingCrs->Cod = ParCod_GetAndCheckPar (ParCod_OthHie);
    Crs_RenameCourse (Crs_EditingCrs,Cns_FULL_NAME);
   }
 
@@ -1980,7 +1980,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
       if (strcmp (CurrentCrsName,NewCrsName))	// Different names
 	{
 	 /***** If course was in database... *****/
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParName,NewCrsName,Crs->CrsCod,
+	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParName,NewCrsName,Crs->Cod,
 						     Crs->DegCod,Crs->Year))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_course_X_already_exists,
@@ -1988,7 +1988,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 	 else
 	   {
 	    /* Update the table changing old name by new name */
-	    Crs_DB_UpdateCrsName (Crs->CrsCod,FldName,NewCrsName);
+	    Crs_DB_UpdateCrsName (Crs->Cod,FldName,NewCrsName);
 
 	    /* Create alert to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -2021,7 +2021,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = ParCod_GetAndCheckPar (ParCod_OthHie);
+   Crs_EditingCrs->Cod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get parameter with status */
    Status = Hie_GetParStatus ();	// New status
@@ -2030,7 +2030,7 @@ void Crs_ChangeCrsStatus (void)
    Crs_GetCourseDataByCod (Crs_EditingCrs);
 
    /***** Update status *****/
-   Crs_DB_UpdateCrsStatus (Crs_EditingCrs->CrsCod,Status);
+   Crs_DB_UpdateCrsStatus (Crs_EditingCrs->Cod,Status);
    Crs_EditingCrs->Status = Status;
 
    /***** Create alert to show the change made *****/
@@ -2064,15 +2064,15 @@ void Crs_ContEditAfterChgCrs (void)
 	    break;
 	 case Rol_USR:
 	    PutButtonToRequestRegistration = !Enr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-					                                  Crs_EditingCrs->CrsCod,
+					                                  Crs_EditingCrs->Cod,
 					                                  false);
             break;
 	 case Rol_STD:
 	 case Rol_NET:
 	 case Rol_TCH:
-	    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+	    if (Crs_EditingCrs->Cod != Gbl.Hierarchy.Crs.Cod)
 	       PutButtonToRequestRegistration = !Enr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-									     Crs_EditingCrs->CrsCod,
+									     Crs_EditingCrs->Cod,
 									     false);
 	    break;
 	 default:
@@ -2105,10 +2105,10 @@ void Crs_ContEditAfterChgCrs (void)
 static void Crs_PutButtonToGoToCrs (void)
   {
    // If the course being edited is different to the current one...
-   if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   if (Crs_EditingCrs->Cod != Gbl.Hierarchy.Crs.Cod)
      {
       Frm_BeginForm (ActSeeCrsInf);
-	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->CrsCod);
+	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->Cod);
 	 Btn_PutConfirmButton (Str_BuildGoToTitle (Crs_EditingCrs->ShrtName));
 	 Str_FreeGoToTitle ();
       Frm_EndForm ();
@@ -2126,8 +2126,8 @@ static void Crs_PutButtonToRegisterInCrs (void)
 
    Frm_BeginForm (ActReqSignUp);
       // If the course being edited is different to the current one...
-      if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->CrsCod);
+      if (Crs_EditingCrs->Cod != Gbl.Hierarchy.Crs.Cod)
+	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->Cod);
 
       if (asprintf (&TxtButton,Txt_Register_me_in_X,Crs_EditingCrs->ShrtName) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -2369,7 +2369,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    */
 
    /***** Get degree code (row[0]) *****/
-   if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+   if ((Deg.Cod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongDegreeExit ();
    if (!Deg_GetDegreeDataByCod (&Deg))
       Err_WrongDegreeExit ();
@@ -2385,7 +2385,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    NumUsrs = NumStds + NumNETs + NumTchs;
    ClassTxt = NumUsrs ? "DAT_STRONG" :
 	                "DAT";
-   BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "BG_HIGHLIGHT" :
+   BgColor = (CrsCod == Gbl.Hierarchy.Crs.Cod) ? "BG_HIGHLIGHT" :
                                                     The_GetColorRows ();
 
    /***** Begin row *****/
@@ -2415,11 +2415,11 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     ClassTxt,The_GetSuffix (),BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
-	    ParCod_PutPar (ParCod_Deg,Deg.DegCod);
+	    ParCod_PutPar (ParCod_Deg,Deg.Cod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
-	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT");
+	       Lgo_DrawLogo (HieLvl_DEG,Deg.Cod,Deg.ShrtName,20,"CT");
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -2612,8 +2612,8 @@ static void Crs_EditingCourseConstructor (void)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset course *****/
-   Crs_EditingCrs->CrsCod      = -1L;
-   Crs_EditingCrs->InstitutionalCrsCod[0] = '\0';
+   Crs_EditingCrs->Cod      = -1L;
+   Crs_EditingCrs->InstitutionalCod[0] = '\0';
    Crs_EditingCrs->DegCod      = -1L;
    Crs_EditingCrs->Year        = 0;
    Crs_EditingCrs->Status      = 0;

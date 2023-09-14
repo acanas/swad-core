@@ -204,27 +204,27 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t Ne
 	    case HieLvl_CTY:	// Country
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Cty.CtyCod);
+			 Gbl.Hierarchy.Cty.Cod);
 	       break;
 	    case HieLvl_INS:	// Institution
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Ins.InsCod);
+			 Gbl.Hierarchy.Ins.Cod);
 	       break;
 	    case HieLvl_CTR:	// Center
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Ctr.CtrCod);
+			 Gbl.Hierarchy.Ctr.Cod);
 	       break;
 	    case HieLvl_DEG:	// Degree
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Deg.DegCod);
+			 Gbl.Hierarchy.Deg.Cod);
 	       break;
 	    case HieLvl_CRS:	// Course
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.Cod);
 	       break;
 	    default:
 	       break;

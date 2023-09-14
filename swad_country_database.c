@@ -95,7 +95,7 @@ void Cty_DB_CreateCountry (const struct Cty_Countr *Cty)
 		   " ('%03ld','%s',''%s%s)",
                    SubQueryNam1,
                    SubQueryWWW1,
-                   Cty->CtyCod,
+                   Cty->Cod,
                    Cty->Alpha2,
 		   SubQueryNam2,
 		   SubQueryWWW2);
@@ -453,7 +453,7 @@ void Cty_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
 		   " AND ins_instits.InsCod=ctr_centers.InsCod"
 		   " AND ctr_centers.Latitude<>0"
 		   " AND ctr_centers.Longitude<>0",
-		 Gbl.Hierarchy.Cty.CtyCod) < 0)
+		 Gbl.Hierarchy.Cty.Cod) < 0)
       Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -474,7 +474,7 @@ unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res)
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND ctr_centers.Latitude<>0"
 		     " AND ctr_centers.Longitude<>0",
-		   Gbl.Hierarchy.Cty.CtyCod);
+		   Gbl.Hierarchy.Cty.Cod);
   }
 
 /*****************************************************************************/
@@ -537,7 +537,7 @@ void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBU
 		     " SET MapAttribution='%s'"
 		   " WHERE CtyCod='%03ld'",
 	           NewMapAttribution,
-	           Gbl.Hierarchy.Cty.CtyCod);
+	           Gbl.Hierarchy.Cty.Cod);
   }
 
 /*****************************************************************************/

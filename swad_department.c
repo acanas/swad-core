@@ -135,7 +135,7 @@ void Dpt_SeeAllDepts (void)
    unsigned NumTchsInsWithNoDpt;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
+   if (Gbl.Hierarchy.Ins.Cod <= 0)	// No institution selected
       return;
 
    /***** Reset departments context *****/
@@ -145,7 +145,7 @@ void Dpt_SeeAllDepts (void)
    Departments.SelectedOrder = Dpt_GetParDptOrder ();
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.InsCod);
+   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.Cod);
 
    /***** Begin box and table *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
@@ -304,17 +304,17 @@ static void Dpt_EditDepartmentsInternal (void)
    char *Title;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ins.InsCod <= 0)	// An institution must be selected
+   if (Gbl.Hierarchy.Ins.Cod <= 0)	// An institution must be selected
       return;
 
    /***** Reset departments context *****/
    Dpt_ResetDepartments (&Departments);
 
    /***** Get list of institutions *****/
-   Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
+   Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.Cod);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.InsCod);
+   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.Cod);
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
@@ -483,7 +483,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	 DptInLst = &Departments->Lst[NumDpt];
 
 	 /* Get data of institution of this department */
-	 Ins.InsCod = DptInLst->InsCod;
+	 Ins.Cod = DptInLst->InsCod;
 	 Ins_GetInstitDataByCod (&Ins);
 
 	 HTM_TR_Begin (NULL);
@@ -520,8 +520,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 			  NumIns++)
 		       {
 			InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
-			HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
-				    InsInLst->InsCod == DptInLst->InsCod ? HTM_OPTION_SELECTED :
+			HTM_OPTION (HTM_Type_LONG,&InsInLst->Cod,
+				    InsInLst->Cod == DptInLst->InsCod ? HTM_OPTION_SELECTED :
 									   HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",InsInLst->ShrtName);
@@ -848,8 +848,8 @@ static void Dpt_PutFormToCreateDepartment (void)
 		    NumIns++)
 		 {
 		  InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
-		  HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
-			     InsInLst->InsCod == Dpt_EditingDpt->InsCod ? HTM_OPTION_SELECTED :
+		  HTM_OPTION (HTM_Type_LONG,&InsInLst->Cod,
+			     InsInLst->Cod == Dpt_EditingDpt->InsCod ? HTM_OPTION_SELECTED :
 									  HTM_OPTION_UNSELECTED,
 			     HTM_OPTION_ENABLED,
 			      "%s",InsInLst->ShrtName);

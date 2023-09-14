@@ -224,13 +224,13 @@ static void SysCfg_Map (void)
 	   NumCtr++)
 	{
 	 /* Get next center */
-	 Ctr.CtrCod = DB_GetNextCode (mysql_res);
+	 Ctr.Cod = DB_GetNextCode (mysql_res);
 
 	 /* Get data of center */
 	 Ctr_GetCenterDataByCod (&Ctr);
 
 	 /* Get data of institution */
-	 Ins.InsCod = Ctr.InsCod;
+	 Ins.Cod = Ctr.InsCod;
 	 Ins_GetInstitDataByCod (&Ins);
 
 	 /* Add marker */

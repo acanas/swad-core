@@ -281,34 +281,34 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	    case HieLvl_SYS:
                break;
 	    case HieLvl_CTY:
-               if (Gbl.Hierarchy.Cty.CtyCod > 0)
+               if (Gbl.Hierarchy.Cty.Cod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.CtyCod=%ld",
-			   LogTable,Gbl.Hierarchy.Cty.CtyCod);
+			   LogTable,Gbl.Hierarchy.Cty.Cod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
                break;
 	    case HieLvl_INS:
-	       if (Gbl.Hierarchy.Ins.InsCod > 0)
+	       if (Gbl.Hierarchy.Ins.Cod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.InsCod=%ld",
-			   LogTable,Gbl.Hierarchy.Ins.InsCod);
+			   LogTable,Gbl.Hierarchy.Ins.Cod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
 	    case HieLvl_CTR:
-               if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+               if (Gbl.Hierarchy.Ctr.Cod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.CtrCod=%ld",
-			   LogTable,Gbl.Hierarchy.Ctr.CtrCod);
+			   LogTable,Gbl.Hierarchy.Ctr.Cod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
                break;
 	    case HieLvl_DEG:
-	       if (Gbl.Hierarchy.Deg.DegCod > 0)
+	       if (Gbl.Hierarchy.Deg.Cod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.DegCod=%ld",
-			   LogTable,Gbl.Hierarchy.Deg.DegCod);
+			   LogTable,Gbl.Hierarchy.Deg.Cod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
@@ -316,7 +316,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	       if (Gbl.Hierarchy.Level == HieLvl_CRS)
 		 {
 		  sprintf (SubQuery," AND %s.CrsCod=%ld",
-			   LogTable,Gbl.Hierarchy.Crs.CrsCod);
+			   LogTable,Gbl.Hierarchy.Crs.Cod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
@@ -406,7 +406,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	 break;
       case Sta_SHOW_COURSE_ACCESSES:
          sprintf (SubQuery," AND %s.CrsCod=%ld",
-                  LogTable,Gbl.Hierarchy.Crs.CrsCod);
+                  LogTable,Gbl.Hierarchy.Crs.Cod);
 	 Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 
 	 if (NumUsrsInList)

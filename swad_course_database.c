@@ -50,7 +50,7 @@ extern struct Globals Gbl;
 void Crs_DB_CreateCourse (struct Crs_Course *Crs,Hie_Status_t Status)
   {
    /***** Insert new course into pending requests *****/
-   Crs->CrsCod =
+   Crs->Cod =
    DB_QueryINSERTandReturnCode ("can not create a new course",
 				"INSERT INTO crs_courses"
 				" (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,"
@@ -60,7 +60,7 @@ void Crs_DB_CreateCourse (struct Crs_Course *Crs,Hie_Status_t Status)
 				  "'%s','%s')",
 				Crs->DegCod,
 				Crs->Year,
-				Crs->InstitutionalCrsCod,
+				Crs->InstitutionalCod,
 				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Crs->ShrtName,
@@ -94,7 +94,7 @@ unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res)
 		    " FROM crs_courses"
 		   " WHERE DegCod=%ld"
 		   " ORDER BY ShortName",
-		   Gbl.Hierarchy.Deg.DegCod);
+		   Gbl.Hierarchy.Deg.Cod);
   }
 
 /*****************************************************************************/
@@ -118,7 +118,7 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 		     " AND (Status & %u)=0"
 		   " ORDER BY Year,"
 			     "ShortName",
-		   Gbl.Hierarchy.Deg.DegCod,
+		   Gbl.Hierarchy.Deg.Cod,
 		   (unsigned) Hie_STATUS_BIT_REMOVED);	// All courses except those removed
   }
 
@@ -153,7 +153,7 @@ long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void)
 			      "SELECT DegCod"
 			       " FROM crs_courses"
 			      " WHERE CrsCod=%ld",
-			      Gbl.Hierarchy.Crs.CrsCod);
+			      Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -552,7 +552,7 @@ void Crs_DB_UpdateCrsLastClick (void)
 		    " (CrsCod,LastTime)"
 		    " VALUES"
 		    " (%ld,NOW())",
-		    Gbl.Hierarchy.Crs.CrsCod);
+		    Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/

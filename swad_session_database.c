@@ -53,11 +53,11 @@ void Ses_DB_InsertSession (Sch_WhatToSearch_t WhatToSearch)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.Hierarchy.Cty.CtyCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ctr.CtrCod,
-		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Cty.Cod,
+		   Gbl.Hierarchy.Ins.Cod,
+		   Gbl.Hierarchy.Ctr.Cod,
+		   Gbl.Hierarchy.Deg.Cod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   WhatToSearch);
   }
 
@@ -83,11 +83,11 @@ void Ses_DB_UpdateSession (void)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.Hierarchy.Cty.CtyCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ctr.CtrCod,
-		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Cty.Cod,
+		   Gbl.Hierarchy.Ins.Cod,
+		   Gbl.Hierarchy.Ctr.Cod,
+		   Gbl.Hierarchy.Deg.Cod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   Gbl.Session.Id);
   }
 

@@ -975,16 +975,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
    	   	   	// ...but not belonging to the current course *********
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
+	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.Cod))
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
+	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.Cod))
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
+	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.Cod))
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
-		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
+		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.Cod))
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 		 }
 	      }
@@ -993,16 +993,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_STD:	// Student in current course **************************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
+	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.Cod))
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
+	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.Cod))
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
+	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.Cod))
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
-		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
+		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.Cod))
 		    {
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -1016,16 +1016,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_TCH:	// Teacher in current course **************************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
+	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.Cod))
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
+	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.Cod))
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
+	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.Cod))
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
-		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
+		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.Cod))
 		    {
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -1041,16 +1041,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_DEG_ADM:	// Degree administrator *******************************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
+	 if (Gbl.Hierarchy.Cty.Cod > 0)			// Country selected
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
+	    if (Gbl.Hierarchy.Ins.Cod > 0)			// Institution selected
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Center selected
+	       if (Gbl.Hierarchy.Ctr.Cod > 0)		// Center selected
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
-		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
+		  if (Gbl.Hierarchy.Deg.Cod > 0)		// Degree selected
 		    {
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 		     *HiddenAllowed |= 1 << HieLvl_DEG;	// A degree admin can view hidden degree surveys
@@ -1062,13 +1062,13 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_CTR_ADM:	// Center administrator *******************************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
+	 if (Gbl.Hierarchy.Cty.Cod > 0)			// Country selected
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
+	    if (Gbl.Hierarchy.Ins.Cod > 0)			// Institution selected
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Center selected
+	       if (Gbl.Hierarchy.Ctr.Cod > 0)		// Center selected
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
 		  *HiddenAllowed |= 1 << HieLvl_CTR;		// A center admin can view hidden center surveys
@@ -1079,10 +1079,10 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_INS_ADM:	// Institution administrator **************************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
+	 if (Gbl.Hierarchy.Cty.Cod > 0)			// Country selected
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
+	    if (Gbl.Hierarchy.Ins.Cod > 0)			// Institution selected
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
 	       *HiddenAllowed |= 1 << HieLvl_INS;		// An institution admin can view hidden institution surveys
@@ -1092,19 +1092,19 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_SYS_ADM:	// System administrator (superuser) *******************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 1 << HieLvl_SYS;			// A system admin can view hidden system surveys
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
+	 if (Gbl.Hierarchy.Cty.Cod > 0)			// Country selected
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
 	    *HiddenAllowed |= 1 << HieLvl_CTY;			// A system admin can view hidden country surveys
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
+	    if (Gbl.Hierarchy.Ins.Cod > 0)			// Institution selected
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
 	       *HiddenAllowed |= 1 << HieLvl_INS;		// A system admin can view hidden institution surveys
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Center selected
+	       if (Gbl.Hierarchy.Ctr.Cod > 0)		// Center selected
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
 	          *HiddenAllowed |= 1 << HieLvl_CTR;		// A system admin can view hidden center surveys
-		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
+		  if (Gbl.Hierarchy.Deg.Cod > 0)		// Degree selected
 		    {
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 	             *HiddenAllowed |= 1 << HieLvl_DEG;		// A system admin can view hidden degree surveys
@@ -1958,35 +1958,35 @@ void Svy_ReceiveFormSurvey (void)
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	    Err_WrongHierarchyLevelExit ();
 	 NewSvy.Level = HieLvl_CTY;
-	 NewSvy.HieCod = Gbl.Hierarchy.Cty.CtyCod;
+	 NewSvy.HieCod = Gbl.Hierarchy.Cty.Cod;
          break;
       case HieLvl_INS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
 	    Err_WrongHierarchyLevelExit ();
 	 NewSvy.Level = HieLvl_INS;
-	 NewSvy.HieCod = Gbl.Hierarchy.Ins.InsCod;
+	 NewSvy.HieCod = Gbl.Hierarchy.Ins.Cod;
          break;
       case HieLvl_CTR:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
 	    Err_WrongHierarchyLevelExit ();
 	 NewSvy.Level = HieLvl_CTR;
-	 NewSvy.HieCod = Gbl.Hierarchy.Ctr.CtrCod;
+	 NewSvy.HieCod = Gbl.Hierarchy.Ctr.Cod;
          break;
       case HieLvl_DEG:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
 	    Err_WrongHierarchyLevelExit ();
 	 NewSvy.Level = HieLvl_DEG;
-	 NewSvy.HieCod = Gbl.Hierarchy.Deg.DegCod;
+	 NewSvy.HieCod = Gbl.Hierarchy.Deg.Cod;
          break;
       case HieLvl_CRS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
 	    Err_WrongHierarchyLevelExit ();
 	 NewSvy.Level = HieLvl_CRS;
-	 NewSvy.HieCod = Gbl.Hierarchy.Crs.CrsCod;
+	 NewSvy.HieCod = Gbl.Hierarchy.Crs.Cod;
          break;
       default:
 	 Err_WrongHierarchyLevelExit ();

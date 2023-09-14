@@ -389,9 +389,9 @@ void Asg_PrintOneAssignment (void)
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
+			      Gbl.Hierarchy.Ins.Cod,
+			      Gbl.Hierarchy.Deg.Cod,
+			      Gbl.Hierarchy.Crs.Cod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);

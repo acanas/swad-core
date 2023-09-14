@@ -429,11 +429,11 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
    /***** Initialize location in hierarchy *****/
-   Hie->Cty.CtyCod =
-   Hie->Ins.InsCod =
-   Hie->Ctr.CtrCod =
-   Hie->Deg.DegCod =
-   Hie->Crs.CrsCod = -1L;
+   Hie->Cty.Cod =
+   Hie->Ins.Cod =
+   Hie->Ctr.Cod =
+   Hie->Deg.Cod =
+   Hie->Crs.Cod = -1L;
 
    /***** Get location in hierarchy *****/
    switch (Not->Type)
@@ -441,19 +441,19 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
       case TmlNot_INS_DOC_PUB_FILE:
       case TmlNot_INS_SHA_PUB_FILE:
 	 /* Get institution data */
-	 Hie->Ins.InsCod = Not->HieCod;
+	 Hie->Ins.Cod = Not->HieCod;
 	 Ins_GetInstitDataByCod (&Hie->Ins);
 	 break;
       case TmlNot_CTR_DOC_PUB_FILE:
       case TmlNot_CTR_SHA_PUB_FILE:
 	 /* Get center data */
-	 Hie->Ctr.CtrCod = Not->HieCod;
+	 Hie->Ctr.Cod = Not->HieCod;
 	 Ctr_GetCenterDataByCod (&Hie->Ctr);
 	 break;
       case TmlNot_DEG_DOC_PUB_FILE:
       case TmlNot_DEG_SHA_PUB_FILE:
 	 /* Get degree data */
-	 Hie->Deg.DegCod = Not->HieCod;
+	 Hie->Deg.Cod = Not->HieCod;
 	 Deg_GetDegreeDataByCod (&Hie->Deg);
 	 break;
       case TmlNot_CRS_DOC_PUB_FILE:
@@ -461,7 +461,7 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
       case TmlNot_CALL_FOR_EXAM:
       case TmlNot_NOTICE:
 	 /* Get course data */
-	 Hie->Crs.CrsCod = Not->HieCod;
+	 Hie->Crs.Cod = Not->HieCod;
 	 Crs_GetCourseDataByCod (&Hie->Crs);
 	 break;
       case TmlNot_FORUM_POST:
@@ -631,28 +631,28 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	    case TmlNot_INS_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  ParCod_PutPar (ParCod_Fil,Not->Cod);
-		  if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
+		  if (Not->HieCod != Gbl.Hierarchy.Ins.Cod)	// Not the current institution
 		     ParCod_PutPar (ParCod_Ins,Not->HieCod);	// Go to another institution
 	       break;
 	    case TmlNot_CTR_DOC_PUB_FILE:
 	    case TmlNot_CTR_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  ParCod_PutPar (ParCod_Fil,Not->Cod);
-		  if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
+		  if (Not->HieCod != Gbl.Hierarchy.Ctr.Cod)	// Not the current center
 		     ParCod_PutPar (ParCod_Ctr,Not->HieCod);	// Go to another center
 		  break;
 	    case TmlNot_DEG_DOC_PUB_FILE:
 	    case TmlNot_DEG_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  ParCod_PutPar (ParCod_Fil,Not->Cod);
-		  if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
+		  if (Not->HieCod != Gbl.Hierarchy.Deg.Cod)	// Not the current degree
 		     ParCod_PutPar (ParCod_Deg,Not->HieCod);	// Go to another degree
 	       break;
 	    case TmlNot_CRS_DOC_PUB_FILE:
 	    case TmlNot_CRS_SHA_PUB_FILE:
 	       Frm_BeginForm (Tml_DefaultActions[Not->Type]);
 		  ParCod_PutPar (ParCod_Fil,Not->Cod);
-		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  if (Not->HieCod != Gbl.Hierarchy.Crs.Cod)	// Not the current course
 		     ParCod_PutPar (ParCod_Crs,Not->HieCod);	// Go to another course
 	       break;
 	    case TmlNot_CALL_FOR_EXAM:
@@ -661,7 +661,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 				    Anchor);	// Locate on this specific exam
 	       Frm_FreeAnchorStr (&Anchor);
 		  ParCod_PutPar (ParCod_Exa,Not->Cod);
-		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  if (Not->HieCod != Gbl.Hierarchy.Crs.Cod)	// Not the current course
 		     ParCod_PutPar (ParCod_Crs,Not->HieCod);	// Go to another course
 	       break;
 	    case TmlNot_POST:	// Not applicable
@@ -675,7 +675,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 				       Forums->Forum.HieCod,
 				       Forums->Thread.Selected,
 				       -1L);
-		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  if (Not->HieCod != Gbl.Hierarchy.Crs.Cod)	// Not the current course
 		     ParCod_PutPar (ParCod_Crs,Not->HieCod);		// Go to another course
 	       break;
 	    case TmlNot_NOTICE:
@@ -683,7 +683,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       Frm_BeginFormAnchor (Tml_DefaultActions[Not->Type],Anchor);
 	       Frm_FreeAnchorStr (&Anchor);
 		  ParCod_PutPar (ParCod_Not,Not->Cod);
-		  if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
+		  if (Not->HieCod != Gbl.Hierarchy.Crs.Cod)	// Not the current course
 		     ParCod_PutPar (ParCod_Crs,Not->HieCod);		// Go to another course
 	       break;
 	    default:			// Not applicable
@@ -903,21 +903,21 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
      {
       case TmlNot_INS_DOC_PUB_FILE:
       case TmlNot_INS_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Ins.InsCod;
+	 HieCod = Gbl.Hierarchy.Ins.Cod;
 	 break;
       case TmlNot_CTR_DOC_PUB_FILE:
       case TmlNot_CTR_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Ctr.CtrCod;
+	 HieCod = Gbl.Hierarchy.Ctr.Cod;
 	 break;
       case TmlNot_DEG_DOC_PUB_FILE:
       case TmlNot_DEG_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Deg.DegCod;
+	 HieCod = Gbl.Hierarchy.Deg.Cod;
 	 break;
       case TmlNot_CRS_DOC_PUB_FILE:
       case TmlNot_CRS_SHA_PUB_FILE:
       case TmlNot_CALL_FOR_EXAM:
       case TmlNot_NOTICE:
-	 HieCod = Gbl.Hierarchy.Crs.CrsCod;
+	 HieCod = Gbl.Hierarchy.Crs.Cod;
 	 break;
       default:
 	 HieCod = -1L;

@@ -262,9 +262,9 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
       /***** Write header *****/
       Lay_WriteHeaderClassPhoto (PrintView,false,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Deg.DegCod,
-				 Gbl.Hierarchy.Crs.CrsCod);
+				 Gbl.Hierarchy.Ins.Cod,
+				 Gbl.Hierarchy.Deg.Cod,
+				 Gbl.Hierarchy.Crs.Cod);
 
       /***** Preference selector to change first day of week *****/
       if (!PrintView)

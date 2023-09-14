@@ -120,7 +120,7 @@ void Plc_SeeAllPlaces (void)
    unsigned NumCtrsWithPlc = 0;
    unsigned NumCtrsInOtherPlcs;
 
-   if (Gbl.Hierarchy.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.Cod > 0)
      {
       /***** Reset places context *****/
       Plc_ResetPlaces (&Places);
@@ -214,7 +214,7 @@ void Plc_SeeAllPlaces (void)
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
+		  HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.Cod) -
 				NumCtrsWithPlc);
 	       HTM_TD_End ();
 
@@ -329,7 +329,7 @@ static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
 void Plc_PutIconToViewPlaces (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
-                                  Ins_PutParInsCod,&Gbl.Hierarchy.Ins.InsCod,
+                                  Ins_PutParInsCod,&Gbl.Hierarchy.Ins.Cod,
 				  "map-marker-alt.svg",Ico_BLACK);
   }
 

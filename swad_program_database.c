@@ -52,7 +52,7 @@ long Prg_DB_InsertItem (const struct Prg_Item *Item,const char *Txt)
 			        " (%ld,%u,%u,%ld,"
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s')",
-			        Gbl.Hierarchy.Crs.CrsCod,
+			        Gbl.Hierarchy.Crs.Cod,
 			        Item->Hierarchy.ItmInd,
 			        Item->Hierarchy.Level,
 			        Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -81,7 +81,7 @@ void Prg_DB_UpdateItem (const struct Prg_Item *Item,const char *Txt)
                    Item->Title,
                    Txt,
                    Item->Hierarchy.ItmCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+                   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -100,7 +100,7 @@ void Prg_DB_HideOrUnhideItem (long ItmCod,
 		     " AND CrsCod=%ld",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
 		   ItmCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+                   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -116,7 +116,7 @@ void Prg_DB_UpdateIndexRange (long Diff,long Begin,long End)
 		     " AND ItmInd>=%ld"
 		     " AND ItmInd<=%ld",
 		   Diff,
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   Begin,
 		   End);
   }
@@ -144,7 +144,7 @@ void Prg_DB_MoveDownItems (unsigned Index)
 		   " WHERE CrsCod=%ld"
 		     " AND ItmInd>=%u"
 		   " ORDER BY ItmInd DESC",	// Necessary to not create duplicate key (CrsCod,ItmInd)
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   Index);
   }
 
@@ -168,7 +168,7 @@ void Prg_DB_MoveLeftRightItemRange (const struct Prg_ItemRange *ToMove,
 		     " AND ItmInd>=%u"
 		     " AND ItmInd<=%u",
 		   IncDec[LeftRight],
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   ToMove->Begin,
 		   ToMove->End);
   }
@@ -203,7 +203,7 @@ unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		       "%s"
 		   " ORDER BY ItmInd",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
   }
 
@@ -228,7 +228,7 @@ unsigned Prg_DB_GetItemDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 		   " WHERE ItmCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   ItmCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -243,7 +243,7 @@ void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 		         " WHERE ItmCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 		         ItmCod,
-		         Gbl.Hierarchy.Crs.CrsCod);
+		         Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -277,7 +277,7 @@ unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
+                         Gbl.Hierarchy.Cty.Cod);
        case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
@@ -290,7 +290,7 @@ unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
+                         Gbl.Hierarchy.Ins.Cod);
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
@@ -301,7 +301,7 @@ unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Level)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
+                         Gbl.Hierarchy.Ctr.Cod);
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
@@ -310,14 +310,14 @@ unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Level)
 			        "prg_items"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
+                         Gbl.Hierarchy.Deg.Cod);
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT CrsCod)"
 			  " FROM prg_items"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.Cod);
       default:
 	 return 0;
      }
@@ -352,7 +352,7 @@ unsigned Prg_DB_GetNumItems (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
+                         Gbl.Hierarchy.Cty.Cod);
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
@@ -365,7 +365,7 @@ unsigned Prg_DB_GetNumItems (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
+                         Gbl.Hierarchy.Ins.Cod);
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
@@ -376,7 +376,7 @@ unsigned Prg_DB_GetNumItems (HieLvl_Level_t Level)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
+                         Gbl.Hierarchy.Ctr.Cod);
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
@@ -385,14 +385,14 @@ unsigned Prg_DB_GetNumItems (HieLvl_Level_t Level)
 			        "prg_items"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
+                         Gbl.Hierarchy.Deg.Cod);
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
 			  " FROM prg_items"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.Cod);
       default:
          Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -410,7 +410,7 @@ void Prg_DB_RemoveItemRange (const struct Prg_ItemRange *ToRemove)
 		   " WHERE CrsCod=%ld"
 		     " AND ItmInd>=%u"
 		     " AND ItmInd<=%u",
-                   Gbl.Hierarchy.Crs.CrsCod,
+                   Gbl.Hierarchy.Crs.Cod,
 		   ToRemove->Begin,
 		   ToRemove->End);
   }
@@ -463,7 +463,7 @@ void Prg_DB_UpdateResourceTitle (long ItmCod,long RscCod,
 	           NewTitle,
 	           RscCod,
 	           ItmCod,
-	           Gbl.Hierarchy.Crs.CrsCod);
+	           Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -497,7 +497,7 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long ItmCod,
 		   " ORDER BY prg_resources.RscInd",
 		   ItmCod,
 		   HiddenSubQuery[ShowHiddenResources],
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -521,7 +521,7 @@ unsigned Prg_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
 		     " AND prg_resources.ItmCod=prg_items.ItmCod"
 		     " AND prg_items.CrsCod=%ld",	// Extra check
 		   RscCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -585,7 +585,7 @@ void Prg_DB_RemoveResource (const struct Prg_Item *Item)
                      " AND prg_items.CrsCod=%ld",	// Extra check
 		   Item->Resource.Hierarchy.RscCod,
 		   Item->Hierarchy.ItmCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/

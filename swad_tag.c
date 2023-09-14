@@ -238,7 +238,7 @@ void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags)
          /***** Check if this tag exists for current course *****/
          if ((TagCod = Tag_DB_GetTagCodFromTagTxt (Tags->Txt[NumTag])) < 0)
             /* This tag is new for current course. Add it to tags table */
-            TagCod = Tag_DB_CreateNewTag (Gbl.Hierarchy.Crs.CrsCod,Tags->Txt[NumTag]);
+            TagCod = Tag_DB_CreateNewTag (Gbl.Hierarchy.Crs.Cod,Tags->Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
          Tag_DB_AddTagToQst (QstCod,TagCod,TagInd);

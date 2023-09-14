@@ -113,7 +113,7 @@ static void InsCfg_Configuration (bool PrintView)
    unsigned NumCtrsWithMap;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
+   if (Gbl.Hierarchy.Ins.Cod <= 0)	// No institution selected
       return;
 
    /***** Initializations *****/
@@ -155,13 +155,13 @@ static void InsCfg_Configuration (bool PrintView)
 	 /***** Shortcut to the institution *****/
 	 InsCfg_Shortcut (PrintView);
 
-	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Ins.InsCod);
+	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Ins.Cod);
 	 if (PrintView)
 	    /***** QR code with link to the institution *****/
 	    InsCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
+	    NumCtrs = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.Cod);
 
 	    /***** Number of users who claim to belong to this institution,
 		   number of centers,
@@ -177,10 +177,10 @@ static void InsCfg_Configuration (bool PrintView)
 	    InsCfg_NumDpts ();
 
 	    /***** Number of users in courses of this institution *****/
-	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_UNK);
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.Cod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.Cod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.Cod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.Cod,Rol_UNK);
 	   }
 
       /***** End table *****/
@@ -230,7 +230,7 @@ static void InsCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
 		    HieLvl_INS,				// Logo scope
-		    Gbl.Hierarchy.Ins.InsCod,		// Logo code
+		    Gbl.Hierarchy.Ins.Cod,		// Logo code
                     Gbl.Hierarchy.Ins.ShrtName,		// Logo short name
 		    Gbl.Hierarchy.Ins.FullName,		// Logo full name
 		    Gbl.Hierarchy.Ins.WWW,		// Logo www
@@ -281,7 +281,7 @@ static void InsCfg_Map (void)
 	NumCtr++)
      {
       /* Get next center */
-      Ctr.CtrCod = DB_GetNextCode (mysql_res);
+      Ctr.Cod = DB_GetNextCode (mysql_res);
 
       /* Get data of center */
       Ctr_GetCenterDataByCod (&Ctr);
@@ -337,8 +337,8 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		       NumCty++)
 		    {
 		     CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
-		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
-				 CtyInLst->CtyCod == Gbl.Hierarchy.Cty.CtyCod ? HTM_OPTION_SELECTED :
+		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->Cod,
+				 CtyInLst->Cod == Gbl.Hierarchy.Cty.Cod ? HTM_OPTION_SELECTED :
 										HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",CtyInLst->Name[Gbl.Prefs.Language]);
@@ -351,7 +351,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
-		  ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.CtyCod);
+		  ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 					   "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
@@ -408,7 +408,7 @@ static void InsCfg_WWW (bool PrintView,bool PutForm)
 
 static void InsCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Ins,Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_Shortcut (PrintView,ParCod_Ins,Gbl.Hierarchy.Ins.Cod);
   }
 
 /*****************************************************************************/
@@ -417,7 +417,7 @@ static void InsCfg_Shortcut (bool PrintView)
 
 static void InsCfg_QR (void)
   {
-   HieCfg_QR (ParCod_Ins,Gbl.Hierarchy.Ins.InsCod);
+   HieCfg_QR (ParCod_Ins,Gbl.Hierarchy.Ins.Cod);
   }
 
 /*****************************************************************************/
@@ -458,7 +458,7 @@ static void InsCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
+	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.Cod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -480,7 +480,7 @@ static void InsCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
+	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.Cod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -502,7 +502,7 @@ static void InsCfg_NumDpts (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Dpt_GetNumDptsInIns (Gbl.Hierarchy.Ins.InsCod));
+	 HTM_Unsigned (Dpt_GetNumDptsInIns (Gbl.Hierarchy.Ins.Cod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -546,29 +546,29 @@ void InsCfg_ChangeInsCty (void)
    struct Cty_Countr NewCty;
 
    /***** Get the new country code for the institution *****/
-   NewCty.CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
+   NewCty.Cod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Check if country has changed *****/
-   if (NewCty.CtyCod != Gbl.Hierarchy.Ins.CtyCod)
+   if (NewCty.Cod != Gbl.Hierarchy.Ins.CtyCod)
      {
       /***** Get data of the country from database *****/
       Cty_GetCountryDataByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.CtyCod))
+      if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.Cod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
 		          Gbl.Hierarchy.Ins.ShrtName);
-      else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Ins.FullName,-1L,NewCty.CtyCod))
+      else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Ins.FullName,-1L,NewCty.Cod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
 		          Gbl.Hierarchy.Ins.FullName);
       else
 	{
 	 /***** Update the table changing the country of the institution *****/
-	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Ins.InsCod,NewCty.CtyCod);
+	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Ins.Cod,NewCty.Cod);
          Gbl.Hierarchy.Ins.CtyCod =
-         Gbl.Hierarchy.Cty.CtyCod = NewCty.CtyCod;
+         Gbl.Hierarchy.Cty.Cod = NewCty.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
@@ -614,7 +614,7 @@ void InsCfg_ChangeInsWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ins_DB_UpdateInsWWW (Gbl.Hierarchy.Ins.InsCod,NewWWW);
+      Ins_DB_UpdateInsWWW (Gbl.Hierarchy.Ins.Cod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Ins.WWW,NewWWW,sizeof (Gbl.Hierarchy.Ins.WWW) - 1);
 
       /***** Write message to show the change made *****/

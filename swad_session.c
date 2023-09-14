@@ -183,11 +183,11 @@ bool Ses_GetSessionData (void)
                  center code (row[5]),
                  degree code (row[6]),
              and course code (row[7]) *****/
-      Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);
-      Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
-      Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-      Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
-      Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
+      Gbl.Hierarchy.Cty.Cod = Str_ConvertStrCodToLongCod (row[3]);
+      Gbl.Hierarchy.Ins.Cod = Str_ConvertStrCodToLongCod (row[4]);
+      Gbl.Hierarchy.Ctr.Cod = Str_ConvertStrCodToLongCod (row[5]);
+      Gbl.Hierarchy.Deg.Cod = Str_ConvertStrCodToLongCod (row[6]);
+      Gbl.Hierarchy.Crs.Cod = Str_ConvertStrCodToLongCod (row[7]);
 
       /***** Get last search *****/
       if (Gbl.Action.Act != ActLogOut)	// When closing session, last search will not be needed

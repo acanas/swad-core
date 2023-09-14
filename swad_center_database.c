@@ -82,7 +82,7 @@ unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		   " ORDER BY ShortName",
-		   Gbl.Hierarchy.Ins.InsCod);
+		   Gbl.Hierarchy.Ins.Cod);
   }
 
 /*****************************************************************************/
@@ -376,7 +376,7 @@ unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
 		   " FROM ctr_centers"
 		  " WHERE InsCod=%ld"
 		    " AND PlcCod=%ld",
-		  Gbl.Hierarchy.Ins.InsCod,
+		  Gbl.Hierarchy.Ins.Cod,
 		  PlcCod);
   }
 
@@ -670,7 +670,7 @@ void Ctr_DB_GetCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned 
 		 " WHERE InsCod=%ld"
 		   " AND Latitude<>0"
 		   " AND Longitude<>0",
-		 Gbl.Hierarchy.Ins.InsCod) < 0)
+		 Gbl.Hierarchy.Ins.Cod) < 0)
       Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -703,7 +703,7 @@ unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res)
 		   " WHERE InsCod=%ld"
 		     " AND Latitude<>0"
 		     " AND Longitude<>0",
-		   Gbl.Hierarchy.Ins.InsCod);
+		   Gbl.Hierarchy.Ins.Cod);
   }
 
 /*****************************************************************************/

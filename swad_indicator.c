@@ -168,7 +168,7 @@ void Ind_ReqIndicatorsCourses (void)
 		  if (asprintf (&SelectClass,"INDICATORS_INPUT INPUT_%s",
 		                The_GetSuffix ()) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
+		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.Cod,	// Departments in current insitution
 					       Indicators.DptCod,		// Selected department
 					       Par_CodeStr[ParCod_Dpt],		// Parameter name
 					       SelectClass,			// Selector class

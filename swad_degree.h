@@ -49,7 +49,7 @@
 
 struct Deg_Degree
   {
-   long DegCod;					// Degree code
+   long Cod;					// Degree code
    long DegTypCod;				// Degree type code
    long CtrCod;					// Center code
    Hie_Status_t Status;				// Degree status
@@ -62,7 +62,7 @@ struct Deg_Degree
 struct Deg_ListDegs
   {
    unsigned Num;		// Number of degrees
-   struct Deg_Degree *Lst;		// List of degrees
+   struct Deg_Degree *Lst;	// List of degrees
   };
 
 /*****************************************************************************/

@@ -1119,7 +1119,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
       if (UsrDat->InsCod > 0)
 	{
 	 /* Get institution short name and country name */
-	 Ins.InsCod = UsrDat->InsCod;
+	 Ins.Cod = UsrDat->InsCod;
 	 Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
 	 /* Write institution short name and country name */
@@ -2004,7 +2004,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
    HTM_OptionSelected_t Selected;
    HTM_OptionDisabled_t Disabled;
 
-   if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
+   if ((Deg.Cod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
       /***** Get list of all degrees *****/
       Deg_GetListAllDegsWithStds (&Degs);
@@ -2038,7 +2038,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		    NumDeg++)
 		 {
 		  /* Get time to compute average photo of this degree */
-		  EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
+		  EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].Cod);
 		  if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
 		     Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
 			       sizeof (StrEstimatedTimeToComputeAvgPhoto) - 1);
@@ -2046,16 +2046,16 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		     Dat_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
 				    EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
-		  Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod) ? HTM_OPTION_SELECTED :
+		  Selected = (Degs.Lst[NumDeg].Cod == Deg.Cod) ? HTM_OPTION_SELECTED :
 								       HTM_OPTION_UNSELECTED;
 		  if (Selected == HTM_OPTION_SELECTED)
 		     Disabled = HTM_OPTION_ENABLED;
 		  else
 		     // Too recently computed ?
-		     Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
+		     Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].Cod) >=
 				Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO ? HTM_OPTION_DISABLED :
 					                                                                HTM_OPTION_ENABLED;
-		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,
+		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].Cod,
 		              Selected,
 		              Disabled,
 			      "%s (%s: %s)",
@@ -2144,14 +2144,14 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	      NumDeg++)
 	   {
 	    /***** Get next degree *****/
-	    if ((Deg.DegCod = DB_GetNextCode (mysql_res)) < 0)
+	    if ((Deg.Cod = DB_GetNextCode (mysql_res)) < 0)
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
 	    Deg_GetDegreeDataByCod (&Deg);
 
 	    /* Get number of students and number of students with photo in this degree */
-	    Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
+	    Pho_GetNumStdsInDegree (Deg.Cod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
 
 	    if (NumStds > 0)
 	      {
@@ -2238,7 +2238,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get degree code (row[0]) */
-	    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	    if ((Deg.Cod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
@@ -2261,7 +2261,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
 		  else	// Pho_DEGREES_PRINT
 		    {
-		     Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT");
+		     Lgo_DrawLogo (HieLvl_DEG,Deg.Cod,Deg.ShrtName,20,"CT");
 		     HTM_TxtF ("&nbsp;%s",Deg.FullName);
 		    }
 	       HTM_TD_End ();
@@ -2271,7 +2271,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		    Sex++)
 		 {
 		  /***** Show average photo of students belonging to this degree *****/
-		  Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
+		  Pho_GetNumStdsInDegree (Deg.Cod,Sex,&NumStds,&NumStdsWithPhoto);
 		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
 		                The_GetSuffix (),
 		                The_GetColorRows ());
@@ -2383,7 +2383,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
-	 ParCod_PutPar (ParCod_Deg,Deg->DegCod);
+	 ParCod_PutPar (ParCod_Deg,Deg->Cod);
 	 HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Deg->FullName),
 	                          "class=\"BT_LINK\"");
 	 Str_FreeGoToTitle ();
@@ -2401,13 +2401,13 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
       snprintf (PathRelAvgPhoto,sizeof (PathRelAvgPhoto),"%s/%s/%ld_%s.jpg",
 	        Cfg_PATH_PHOTO_PUBLIC,
 	        Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
-	        Deg->DegCod,Usr_StringsSexDB[Sex]);
+	        Deg->Cod,Usr_StringsSexDB[Sex]);
       if (Fil_CheckIfPathExists (PathRelAvgPhoto))
 	{
 	 snprintf (PhotoURL,sizeof (PhotoURL),"%s/%s/%ld_%s.jpg",
 		   Cfg_URL_PHOTO_PUBLIC,
 		   Pho_StrAvgPhotoDirs[DegPhotos->TypeOfAverage],
-		   Deg->DegCod,Usr_StringsSexDB[Sex]);
+		   Deg->Cod,Usr_StringsSexDB[Sex]);
          if (SeeOrPrint == Pho_DEGREES_SEE)
            {
             /***** Hidden div to pass user's name to Javascript *****/

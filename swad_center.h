@@ -43,7 +43,7 @@
 
 struct Ctr_Center
   {
-   long CtrCod;			// Center code
+   long Cod;			// Center code
    long InsCod;			// Institution code
    long PlcCod;			// Place code
    Hie_Status_t Status;		// Center status
@@ -56,7 +56,7 @@ struct Ctr_Center
      {
       bool Valid;
       unsigned NumUsrs;
-     } NumUsrsWhoClaimToBelongToCtr;
+     } NumUsrsWhoClaimToBelong;
   };
 
 #define Ctr_NUM_ORDERS 2

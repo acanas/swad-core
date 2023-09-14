@@ -175,25 +175,25 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	      NumMyDeg++)
 	   {
 	    /* Get data of this degree */
-	    Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
+	    Deg.Cod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
 	    if (!Deg_GetDegreeDataByCod (&Deg))
 	       Err_WrongDegreeExit ();
 
 	    /* Link to the room of this degree */
 	    IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegs.Num - 1);
-	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",Deg.DegCod);
+	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",Deg.Cod);
 	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
 		      Deg.ShrtName);
 	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
 		      Txt_Degree,Deg.ShrtName);
 	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
-	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,16,NULL);
+	       Lgo_DrawLogo (HieLvl_DEG,Deg.Cod,Deg.ShrtName,16,NULL);
 	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
 	    /* Get my courses in this degree from database */
 	    NumCrss = Crs_DB_GetCrssFromUsr (&mysql_res,
 	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                     Deg.DegCod);
+	                                     Deg.Cod);
 	    for (NumCrs = 0;
 		 NumCrs < NumCrss;
 		 NumCrs++)
@@ -202,7 +202,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	       row = mysql_fetch_row (mysql_res);
 
 	       /* Get course code */
-	       if ((Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	       if ((Crs.Cod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 		 {
 		  /* Get data of this course */
 		  Crs_GetCourseDataByCod (&Crs);
@@ -210,7 +210,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		  /* Link to the room of this course */
 		  IsLastItemInLevel[2] = (NumCrs == NumCrss - 1);
 		  snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
-			    Crs.CrsCod);
+			    Crs.Cod);
 		  snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
 			    Crs.ShrtName);
 		  snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
@@ -474,7 +474,7 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this degree */
-         Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
+         Deg.Cod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
          Deg_GetDegreeDataByCod (&Deg);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),"%s",
@@ -501,7 +501,7 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this course */
-         Crs.CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
+         Crs.Cod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
          Crs_GetCourseDataByCod (&Crs);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),

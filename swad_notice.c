@@ -330,7 +330,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    switch (TypeNoticesListing)
      {
       case Not_LIST_BRIEF_NOTICES:
-	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Crs.CrsCod);
+	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Crs.Cod);
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
@@ -368,13 +368,13 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 /* Create RSS file if not exists */
 	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
 		   Cfg_PATH_CRS_PUBLIC,
-		   Gbl.Hierarchy.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+		   Gbl.Hierarchy.Crs.Cod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
 	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
 	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
 	 /* Put a link to the RSS file */
 	 HTM_DIV_Begin ("class=\"CM\"");
-	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.CrsCod);
+	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.Cod);
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
 	       Ico_PutIcon ("rss-square.svg",Ico_BLACK,"RSS","ICO16x16");
 	    HTM_A_End ();

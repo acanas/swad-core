@@ -69,9 +69,9 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
 			  " OR (Scope='%s' AND Cod=%ld))"
 		     " AND UsrCod<>%ld",
 		   Hie_GetDBStrFromLevel (HieLvl_SYS),
-		   Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
-		   Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-		   Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
+		   Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Ins.Cod,
+		   Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Ctr.Cod,
+		   Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Deg.Cod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

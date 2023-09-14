@@ -236,7 +236,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod"
 			   " AND tml_notes.NoteType=%u",
-			 Gbl.Hierarchy.Cty.CtyCod,
+			 Gbl.Hierarchy.Cty.Cod,
 			 (unsigned) NoteType);
       case HieLvl_INS:
 	 return (unsigned)
@@ -254,7 +254,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod"
 			   " AND tml_notes.NoteType=%u",
-			 Gbl.Hierarchy.Ins.InsCod,
+			 Gbl.Hierarchy.Ins.Cod,
 			 (unsigned) NoteType);
       case HieLvl_CTR:
 	 return (unsigned)
@@ -270,7 +270,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod"
 			   " AND tml_notes.NoteType=%u",
-			 Gbl.Hierarchy.Ctr.CtrCod,
+			 Gbl.Hierarchy.Ctr.Cod,
 			 (unsigned) NoteType);
       case HieLvl_DEG:
 	 return (unsigned)
@@ -284,7 +284,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod"
 			   " AND tml_notes.NoteType=%u",
-			 Gbl.Hierarchy.Deg.DegCod,
+			 Gbl.Hierarchy.Deg.Cod,
 			 (unsigned) NoteType);
       case HieLvl_CRS:
 	 return (unsigned)
@@ -296,7 +296,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
 			 " WHERE crs_users.CrsCod=%ld"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod"
 			   " AND tml_notes.NoteType=%u",
-			 Gbl.Hierarchy.Crs.CrsCod,
+			 Gbl.Hierarchy.Crs.Cod,
 			 (unsigned) NoteType);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -335,7 +335,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod",
-			 Gbl.Hierarchy.Cty.CtyCod);
+			 Gbl.Hierarchy.Cty.Cod);
       case HieLvl_INS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
@@ -351,7 +351,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod",
-			 Gbl.Hierarchy.Ins.InsCod);
+			 Gbl.Hierarchy.Ins.Cod);
       case HieLvl_CTR:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
@@ -365,7 +365,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod",
-			 Gbl.Hierarchy.Ctr.CtrCod);
+			 Gbl.Hierarchy.Ctr.Cod);
       case HieLvl_DEG:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
@@ -377,7 +377,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod",
-			 Gbl.Hierarchy.Deg.DegCod);
+			 Gbl.Hierarchy.Deg.Cod);
       case HieLvl_CRS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
@@ -387,7 +387,7 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 				"tml_notes"
 			 " WHERE crs_users.CrsCod=%ld"
 			   " AND crs_users.UsrCod=tml_notes.UsrCod",
-			 Gbl.Hierarchy.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached

@@ -371,7 +371,7 @@ void Tmt_ShowClassTimeTable (void)
    /***** Begin time table drawing *****/
    if (Timetable.Type == Tmt_COURSE_TIMETABLE)
       Lay_WriteHeaderClassPhoto (PrintView,false,
-				 Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
+				 Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Crs.Cod);
 
    if (PrintView)
       /***** Show whether only my groups or all groups are selected *****/
@@ -560,7 +560,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
       switch (Timetable->Type)
         {
          case Tmt_COURSE_TIMETABLE:
-            Tmt_WriteCrsTimeTableIntoDB (Timetable,Gbl.Hierarchy.Crs.CrsCod);
+            Tmt_WriteCrsTimeTableIntoDB (Timetable,Gbl.Hierarchy.Crs.Cod);
 	    break;
          case Tmt_TUTORING_TIMETABLE:
             Tmt_WriteUsrTimeTableIntoDB (Timetable,UsrCod);
@@ -861,7 +861,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 			/* Course code (row[6]) */
 			Tmt_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].CrsCod =
 			   (Timetable->Type == Tmt_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
-								  Gbl.Hierarchy.Crs.CrsCod);
+								  Gbl.Hierarchy.Crs.Cod);
 			/* falls through */
 			/* no break */
 		     case Tmt_TUTORING_TIMETABLE:
@@ -1433,7 +1433,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 	  (ClassType == Tmt_LECTURE ||
 	   ClassType == Tmt_PRACTICAL))
 	{
-	 Crs.CrsCod = CrsCod;
+	 Crs.Cod = CrsCod;
 	 Crs_GetCourseDataByCod (&Crs);
 	 HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
 				    Txt_unknown_removed_course);

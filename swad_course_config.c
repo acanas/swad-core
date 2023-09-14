@@ -85,7 +85,7 @@ void CrsCfg_Configuration (bool PrintView)
    bool PutFormInsCod;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
+   if (Gbl.Hierarchy.Crs.Cod <= 0)	// No course selected
       return;
 
    /***** Initializations *****/
@@ -152,10 +152,10 @@ void CrsCfg_Configuration (bool PrintView)
 	 else
 	   {
 	    /***** Number of users *****/
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,Rol_UNK);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.Cod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.Cod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.Cod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.Cod,Rol_UNK);
 
 	    /***** Indicators *****/
 	    CrsCfg_Indicators ();
@@ -198,7 +198,7 @@ static void CrsCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
 		 HieLvl_DEG,			// Logo scope
-		 Gbl.Hierarchy.Deg.DegCod,	// Logo code
+		 Gbl.Hierarchy.Deg.Cod,	// Logo code
 		 Gbl.Hierarchy.Deg.ShrtName,	// Logo short name
 		 Gbl.Hierarchy.Deg.FullName,	// Logo full name
 		 Gbl.Hierarchy.Deg.WWW,		// Logo www
@@ -242,8 +242,8 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		       NumDeg++)
 		    {
 		     DegInLst = &Gbl.Hierarchy.Degs.Lst[NumDeg];
-		     HTM_OPTION (HTM_Type_LONG,&DegInLst->DegCod,
-				 DegInLst->DegCod == Gbl.Hierarchy.Deg.DegCod ? HTM_OPTION_SELECTED :
+		     HTM_OPTION (HTM_Type_LONG,&DegInLst->Cod,
+				 DegInLst->Cod == Gbl.Hierarchy.Deg.Cod ? HTM_OPTION_SELECTED :
 										HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",DegInLst->ShrtName);
@@ -259,12 +259,12 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
-		  ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Deg.DegCod);
+		  ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Deg.Cod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Deg.ShrtName),
 					   "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
-	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
+	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Deg.ShrtName,
 			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Deg.FullName);
@@ -368,17 +368,17 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginForm (ActChgInsCrsCodCfg);
-	       HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-			       Gbl.Hierarchy.Crs.InstitutionalCrsCod,
+	       HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+			       Gbl.Hierarchy.Crs.InstitutionalCod,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"InsCrsCod\" size=\"%u\""
 			       " class=\"INPUT_INS_CODE INPUT_%s\"",
-			       Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
+			       Crs_MAX_CHARS_INSTITUTIONAL_COD,
 			       The_GetSuffix ());
 	    Frm_EndForm ();
 	   }
 	 else
-	    HTM_Txt (Gbl.Hierarchy.Crs.InstitutionalCrsCod);
+	    HTM_Txt (Gbl.Hierarchy.Crs.InstitutionalCod);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -400,7 +400,7 @@ static void CrsCfg_InternalCode (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
+	 HTM_Long (Gbl.Hierarchy.Crs.Cod);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -412,7 +412,7 @@ static void CrsCfg_InternalCode (void)
 
 static void CrsCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Crs,Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_Shortcut (PrintView,ParCod_Crs,Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -421,7 +421,7 @@ static void CrsCfg_Shortcut (bool PrintView)
 
 static void CrsCfg_QR (void)
   {
-   HieCfg_QR (ParCod_Crs,Gbl.Hierarchy.Crs.CrsCod);
+   HieCfg_QR (ParCod_Crs,Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -433,11 +433,11 @@ static void CrsCfg_Indicators (void)
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    struct Ind_IndicatorsCrs IndicatorsCrs;
-   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.CrsCod);
+   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.Cod);
    char *Title;
 
    /***** Compute indicators ******/
-   Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.CrsCod,
+   Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.Cod,
 				     NumIndicatorsFromDB,&IndicatorsCrs);
 
    /***** Number of indicators *****/
@@ -481,24 +481,24 @@ void CrsCfg_ChangeCrsDeg (void)
    struct Deg_Degree NewDeg;
 
    /***** Get parameter with degree code *****/
-   NewDeg.DegCod = ParCod_GetAndCheckPar (ParCod_OthDeg);
+   NewDeg.Cod = ParCod_GetAndCheckPar (ParCod_OthDeg);
 
    /***** Check if degree has changed *****/
-   if (NewDeg.DegCod != Gbl.Hierarchy.Crs.DegCod)
+   if (NewDeg.Cod != Gbl.Hierarchy.Crs.DegCod)
      {
       /***** Get data of new degree *****/
       Deg_GetDegreeDataByCod (&NewDeg);
 
       /***** If name of course was in database in the new degree... *****/
       if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,
-                                                  NewDeg.DegCod,Gbl.Hierarchy.Crs.Year))
+                                                  NewDeg.Cod,Gbl.Hierarchy.Crs.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year],
 			  NewDeg.FullName,
 		          Gbl.Hierarchy.Crs.ShrtName);
       else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Crs.FullName,-1L,
-                                                       NewDeg.DegCod,Gbl.Hierarchy.Crs.Year))
+                                                       NewDeg.Cod,Gbl.Hierarchy.Crs.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year],
@@ -507,9 +507,9 @@ void CrsCfg_ChangeCrsDeg (void)
       else	// Update degree in database
 	{
 	 /***** Update degree in table of courses *****/
-	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Crs.CrsCod,NewDeg.DegCod);
+	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Crs.Cod,NewDeg.Cod);
 	 Gbl.Hierarchy.Crs.DegCod =
-	 Gbl.Hierarchy.Deg.DegCod = NewDeg.DegCod;
+	 Gbl.Hierarchy.Deg.Cod = NewDeg.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/
       	 Hie_InitHierarchy ();
@@ -594,13 +594,13 @@ void CrsCfg_ChangeInsCrsCod (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
-   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
+   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Get institutional code from form *****/
-   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
+   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
 
    /***** Change the institutional course code *****/
-   if (strcmp (NewInstitutionalCrsCod,Gbl.Hierarchy.Crs.InstitutionalCrsCod))
+   if (strcmp (NewInstitutionalCrsCod,Gbl.Hierarchy.Crs.InstitutionalCod))
      {
       Crs_UpdateInstitutionalCrsCod (&Gbl.Hierarchy.Crs,NewInstitutionalCrsCod);
 

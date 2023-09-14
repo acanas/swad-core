@@ -68,7 +68,7 @@ void Tst_DB_IncreaseNumMyPrints (void)
                    " WHERE UsrCod=%ld"
                      " AND CrsCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -85,7 +85,7 @@ void Tst_DB_UpdateLastAccTst (unsigned NumQsts)
                      " AND CrsCod=%ld",
 		   NumQsts,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -105,7 +105,7 @@ unsigned Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res)
 		   TstCfg_GetConfigMinTimeNxtTstPerQst (),
 		   TstCfg_GetConfigMinTimeNxtTstPerQst (),
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -121,7 +121,7 @@ unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res)
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -137,7 +137,7 @@ void Tst_DB_SaveConfig (void)
                     " VALUES"
                     " (%ld,'%s',%u,%u,%u,"
                       "'%lu',%u)",
-		    Gbl.Hierarchy.Crs.CrsCod,
+		    Gbl.Hierarchy.Crs.Cod,
 		    Tst_DB_Pluggable[TstCfg_GetConfigPluggable ()],
 		    TstCfg_GetConfigMin (),
 		    TstCfg_GetConfigDef (),
@@ -176,7 +176,7 @@ unsigned Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res)
 		   "SELECT Pluggable"		// row[0]
 		    " FROM tst_config"
 		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/
@@ -207,7 +207,7 @@ long Tst_DB_CreatePrint (unsigned NumQsts)
 				" (%ld,%ld,NOW(),NOW(),"
 				  "%u,0,"
 				  "'N','N',0)",
-				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Cod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				NumQsts);
   }
@@ -236,7 +236,7 @@ void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print)
 			                  'N',
 		   Print->Score,
 		   Print->PrnCod,
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
@@ -287,7 +287,7 @@ unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod)
 		     " AND EndTime>=FROM_UNIXTIME(%ld)"
 		     " AND StartTime<=FROM_UNIXTIME(%ld)"
 		   " ORDER BY ExaCod",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Cod,
 		   UsrCod,
 		   (long) Dat_GetRangeTimeUTC (Dat_STR_TIME),
 		   (long) Dat_GetRangeTimeUTC (Dat_END_TIME));
@@ -313,7 +313,7 @@ unsigned Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
 		   " WHERE ExaCod=%ld"
 		     " AND CrsCod=%ld",		// Extra check
 		   PrnCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Cod);
   }
 
 /*****************************************************************************/

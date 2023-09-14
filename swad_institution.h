@@ -39,7 +39,7 @@
 
 struct Ins_Instit
   {
-   long InsCod;
+   long Cod;
    long CtyCod;
    Hie_Status_t Status;		// Institution status
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
@@ -50,7 +50,7 @@ struct Ins_Instit
      {
       bool Valid;
       unsigned NumUsrs;
-     } NumUsrsWhoClaimToBelongToIns;
+     } NumUsrsWhoClaimToBelong;
   };
 
 #define Ins_NUM_ORDERS 2

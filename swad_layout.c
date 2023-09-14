@@ -447,7 +447,7 @@ static void Lay_WritePageTitle (void)
    HTM_TITLE_Begin ();
 
       if (Par_GetMethod () == Par_METHOD_GET &&
-	  Gbl.Hierarchy.Deg.DegCod > 0)
+	  Gbl.Hierarchy.Deg.Cod > 0)
 	{
 	 HTM_TxtF ("%s &gt; %s",
 	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Deg.ShrtName);
@@ -858,7 +858,7 @@ static void Lay_WriteScriptParsAJAX (void)
       HTM_TxtF ("var refreshParamIdSes = \"ses=%s\";\n"
 		"var refreshParamCrsCod = \"crs=%ld\";\n",
 		Gbl.Session.Id,
-		Gbl.Hierarchy.Crs.CrsCod);
+		Gbl.Hierarchy.Crs.Cod);
 
       /***** Parameter to refresh connected users *****/
       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
@@ -1469,15 +1469,15 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    struct Hie_Hierarchy Hie;
 
    /***** Get data of institution *****/
-   Hie.Ins.InsCod = InsCod;
+   Hie.Ins.Cod = InsCod;
    Ins_GetInstitDataByCod (&Hie.Ins);
 
    /***** Get data of degree *****/
-   Hie.Deg.DegCod = DegCod;
+   Hie.Deg.Cod = DegCod;
    Deg_GetDegreeDataByCod (&Hie.Deg);
 
    /***** Get data of course *****/
-   Hie.Crs.CrsCod = CrsCod;
+   Hie.Crs.Cod = CrsCod;
    Crs_GetCourseDataByCod (&Hie.Crs);
 
    /***** Begin table *****/
@@ -1491,7 +1491,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie.Ins.WWW);
-	       Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,40,NULL);
+	       Lgo_DrawLogo (HieLvl_INS,Hie.Ins.Cod,Hie.Ins.ShrtName,40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
@@ -1512,7 +1512,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	      }
 	    if (DegCod > 0)
 	      {
-	       if (Hie.Ins.InsCod > 0)
+	       if (Hie.Ins.Cod > 0)
 		  HTM_Txt (" - ");
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
@@ -1542,7 +1542,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
 			       Hie.Deg.WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL);
+	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.Cod,Hie.Deg.ShrtName,40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }

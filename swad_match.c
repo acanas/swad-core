@@ -207,7 +207,7 @@ static unsigned Mch_GetParNumOpt (void);
 static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 			      long MchCod,const char *Icon,const char *Txt);
 static void Mch_PutBigButtonHidden (const char *Icon);
-static void Mch_PutBigButtonClose (void);
+// static void Mch_PutBigButtonClose (void);
 
 static void Mch_ShowWaitImage (const char *Txt);
 
@@ -1143,7 +1143,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
    /***** Ensure parameters are correct *****/
    if (Games->Game.GamCod != Match->GamCod)
       Err_WrongGameExit ();
-   if (Games->Game.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   if (Games->Game.CrsCod != Gbl.Hierarchy.Crs.Cod)
       Err_WrongGameExit ();
 
    /***** Initialize context *****/
@@ -2495,8 +2495,11 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
 	 switch (Match->Status.Showing)
 	   {
 	    case Mch_START:
-	       /* Put button to close browser tab */
-	       Mch_PutBigButtonClose ();
+	       /* Put disabled button to go back.
+	          Previously there was a button with a red cross
+	          to close the browser tab using window.close,
+	          but it no longer works in Firefox. */
+	       Mch_PutBigButtonHidden (Mch_ICON_PREVIOUS);
 	       break;
 	    default:
 	       /* Put button to go back */
@@ -2535,13 +2538,21 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
 
       /***** Right button *****/
       HTM_DIV_Begin ("class=\"MCH_BUTTON_RIGHT_CONT\"");
-	 if (Match->Status.Showing == Mch_END)	// Match over
-	    /* Put button to close browser tab */
-	    Mch_PutBigButtonClose ();
-	 else						// Match not over
-	    /* Put button to show answers */
-	    Mch_PutBigButton (ActFwdMch,"forward",Match->MchCod,
-			      Mch_ICON_NEXT,Txt_Go_forward);
+	 switch (Match->Status.Showing)
+	   {
+	    case Mch_END:	// Match over
+	       /* Put disabled button to go forward.
+	          Previously there was a button with a red cross
+	          to close the browser tab using window.close,
+	          but it no longer works in Firefox. */
+	       Mch_PutBigButtonHidden (Mch_ICON_NEXT);
+	       break;
+	    default:		// Match not over
+	       /* Put button to show answers */
+	       Mch_PutBigButton (ActFwdMch,"forward",Match->MchCod,
+				 Mch_ICON_NEXT,Txt_Go_forward);
+	       break;
+	   }
       HTM_DIV_End ();
 
    /***** End buttons container *****/
@@ -3262,12 +3273,12 @@ static void Mch_PutBigButtonHidden (const char *Icon)
 /*****************************************************************************/
 /********************** Put a big button to close window *********************/
 /*****************************************************************************/
-
+/*
 static void Mch_PutBigButtonClose (void)
   {
    extern const char *Txt_Close;
 
-   /***** Put icon with link *****/
+   ***** Put icon with link *****
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
       HTM_BUTTON_Begin (Txt_Close,
                         "class=\"BT_LINK MCH_BUTTON_ON ICO_DARKRED\""
@@ -3276,7 +3287,7 @@ static void Mch_PutBigButtonClose (void)
       HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
-
+*/
 /*****************************************************************************/
 /****************************** Show wait image ******************************/
 /*****************************************************************************/

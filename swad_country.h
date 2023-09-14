@@ -47,7 +47,7 @@
 
 struct Cty_Countr
   {
-   long CtyCod;
+   long Cod;
    char Alpha2[2 + 1];
    char Name[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
    char WWW [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
@@ -55,7 +55,7 @@ struct Cty_Countr
      {
       bool Valid;
       unsigned NumUsrs;
-     } NumUsrsWhoClaimToBelongToCty;
+     } NumUsrsWhoClaimToBelong;
   };
 
 #define Cty_NUM_ORDERS 2

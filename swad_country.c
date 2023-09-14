@@ -144,8 +144,8 @@ void Cty_SeeCtyWithPendingInss (void)
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Get country code (row[0]) */
-	    Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Cty.CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "BG_HIGHLIGHT" :
+	    Cty.Cod = Str_ConvertStrCodToLongCod (row[0]);
+	    BgColor = (Cty.Cod == Gbl.Hierarchy.Cty.Cod) ? "BG_HIGHLIGHT" :
 								 The_GetColorRows ();
 
 	    /* Get data of country */
@@ -406,7 +406,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
   {
    const char *BgColor;
 
-   BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "BG_HIGHLIGHT" :
+   BgColor = (Cty->Cod == Gbl.Hierarchy.Cty.Cod) ? "BG_HIGHLIGHT" :
 							 The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
@@ -434,31 +434,31 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
       /***** Number of institutions *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Ins_GetCachedNumInssInCty (Cty->CtyCod));
+	 HTM_Unsigned (Ins_GetCachedNumInssInCty (Cty->Cod));
       HTM_TD_End ();
 
       /***** Number of centers *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (Cty->CtyCod));
+	 HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (Cty->Cod));
       HTM_TD_End ();
 
       /***** Number of degrees *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Cty->CtyCod));
+	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Cty->Cod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Cty->CtyCod));
+	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Cty->Cod));
       HTM_TD_End ();
 
       /***** Number of users in courses *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->Cod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user
@@ -512,7 +512,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-      ParCod_PutPar (ParCod_Cty,Cty->CtyCod);
+      ParCod_PutPar (ParCod_Cty,Cty->Cod);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
@@ -623,7 +623,7 @@ void Cty_WriteScriptGoogleGeochart (void)
 	 NumUsrsCty = Cty_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Ctys.Lst[NumCty]);
 	 if (NumUsrsCty)
 	   {
-	    NumInss = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod);
+	    NumInss = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Ctys.Lst[NumCty].Cod);
 
 	    /* Write data of this country */
 	    HTM_TxtF ("	['%s', %u, %u],\n",
@@ -759,7 +759,7 @@ void Cty_GetBasicListOfCountries (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get numerical country code (row[0]) */
-         if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+         if ((Cty->Cod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongCountrExit ();
 
          /* Reset names and webs */
@@ -776,7 +776,7 @@ void Cty_GetBasicListOfCountries (void)
 		   sizeof (Cty->Name[Gbl.Prefs.Language]) - 1);
 
 	 /* Reset number of users who claim to belong to country */
-	 Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
+	 Cty->NumUsrsWhoClaimToBelong.Valid = false;
         }
      }
 
@@ -820,7 +820,7 @@ void Cty_GetFullListOfCountries (void)
          row = mysql_fetch_row (mysql_res);
 
          /* Get numerical country code (row[0]) */
-         if ((Cty->CtyCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+         if ((Cty->Cod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
@@ -838,10 +838,10 @@ void Cty_GetFullListOfCountries (void)
 	   }
 
 	 /* Get number of users who claim to belong to this country */
-	 Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
+	 Cty->NumUsrsWhoClaimToBelong.Valid = false;
 	 if (sscanf (row[1 + Lan_NUM_LANGUAGES * 2 + 1],"%u",
-		     &(Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs)) == 1)
-	    Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
+		     &(Cty->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
+	    Cty->NumUsrsWhoClaimToBelong.Valid = true;
         }
      }
 
@@ -872,7 +872,7 @@ void Cty_WriteSelectorOfCountry (void)
 
          /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-	             Gbl.Hierarchy.Cty.CtyCod < 0 ? HTM_OPTION_SELECTED :
+	             Gbl.Hierarchy.Cty.Cod < 0 ? HTM_OPTION_SELECTED :
 	        				    HTM_OPTION_UNSELECTED,
 	             HTM_OPTION_DISABLED,
 		     "[%s]",Txt_Country);
@@ -883,8 +883,8 @@ void Cty_WriteSelectorOfCountry (void)
 	      NumCty++)
 	   {
 	    CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
-	    HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
-			CtyInLst->CtyCod == Gbl.Hierarchy.Cty.CtyCod ? HTM_OPTION_SELECTED :
+	    HTM_OPTION (HTM_Type_LONG,&CtyInLst->Cod,
+			CtyInLst->Cod == Gbl.Hierarchy.Cty.Cod ? HTM_OPTION_SELECTED :
 								       HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",CtyInLst->Name[Gbl.Prefs.Language]);
@@ -941,7 +941,7 @@ bool Cty_GetCountryDataByCod (struct Cty_Countr *Cty)
    Lan_Language_t Lan;
    bool CtyFound;
 
-   if (Cty->CtyCod < 0)
+   if (Cty->Cod < 0)
       return false;
 
    /***** Clear data *****/
@@ -952,10 +952,10 @@ bool Cty_GetCountryDataByCod (struct Cty_Countr *Cty)
       Cty->Name[Lan][0] = '\0';
       Cty->WWW[Lan][0] = '\0';
      }
-   Cty->NumUsrsWhoClaimToBelongToCty.Valid = false;
+   Cty->NumUsrsWhoClaimToBelong.Valid = false;
 
    /***** Check if country code is correct *****/
-   if (Cty->CtyCod == 0)
+   if (Cty->Cod == 0)
      {
       for (Lan  = (Lan_Language_t) 1;
 	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
@@ -971,7 +971,7 @@ bool Cty_GetCountryDataByCod (struct Cty_Countr *Cty)
    // Here Cty->CtyCod > 0
 
    /***** Get data of a country from database *****/
-   CtyFound = (Cty_DB_GetCountryDataByCod (&mysql_res,Cty->CtyCod) != 0);
+   CtyFound = (Cty_DB_GetCountryDataByCod (&mysql_res,Cty->Cod) != 0);
    if (CtyFound) // Country found...
      {
       /* Get row */
@@ -1069,7 +1069,7 @@ static void Cty_ListCountriesForEdition (void)
 	   NumCty++)
 	{
 	 Cty = &Gbl.Hierarchy.Ctys.Lst[NumCty];
-	 NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
+	 NumInss = Ins_GetNumInssInCty (Cty->Cod);
 	 NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToCty (Cty);
 
 	 HTM_TR_Begin (NULL);
@@ -1080,7 +1080,7 @@ static void Cty_ListCountriesForEdition (void)
 		   NumUsrsCty)					// Country has users
 		  // Deletion forbidden
 		  Ico_PutIconRemovalNotAllowed ();
-	       else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
+	       else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty->Cod,
 					      1 << Rol_STD |
 					      1 << Rol_NET |
 					      1 << Rol_TCH))	// Country has users
@@ -1088,13 +1088,13 @@ static void Cty_ListCountriesForEdition (void)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemCty,NULL,
-						 Cty_PutParOthCtyCod,&Cty->CtyCod);
+						 Cty_PutParOthCtyCod,&Cty->Cod);
 	    HTM_TD_End ();
 
 	    /* Numerical country code (ISO 3166-1) */
 	    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
 	                  1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
-	       HTM_TxtF ("%03ld",Cty->CtyCod);
+	       HTM_TxtF ("%03ld",Cty->Cod);
 	    HTM_TD_End ();
 
 	    /* Alphabetic country code with 2 letters (ISO 3166-1) */
@@ -1134,7 +1134,7 @@ static void Cty_ListCountriesForEdition (void)
 	       /* Name */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActRenCty);
-		     ParCod_PutPar (ParCod_OthCty,Cty->CtyCod);
+		     ParCod_PutPar (ParCod_OthCty,Cty->Cod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
 				     HTM_SUBMIT_ON_CHANGE,
@@ -1146,7 +1146,7 @@ static void Cty_ListCountriesForEdition (void)
 	       /* WWW */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActChgCtyWWW);
-		     ParCod_PutPar (ParCod_OthCty,Cty->CtyCod);
+		     ParCod_PutPar (ParCod_OthCty,Cty->Cod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
@@ -1186,19 +1186,19 @@ void Cty_RemoveCountry (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get country code *****/
-   Cty_EditingCty->CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
+   Cty_EditingCty->Cod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get data of the country from database *****/
    Cty_GetCountryDataByCod (Cty_EditingCty);
 
    /***** Check if this country has users *****/
-   if (Ins_GetNumInssInCty (Cty_EditingCty->CtyCod))			// Country has institutions ==> don't remove
+   if (Ins_GetNumInssInCty (Cty_EditingCty->Cod))			// Country has institutions ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else if (Cty_GetNumUsrsWhoClaimToBelongToCty (Cty_EditingCty))	// Country has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty_EditingCty->CtyCod,
+   else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty_EditingCty->Cod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))			// Country has users
@@ -1207,10 +1207,10 @@ void Cty_RemoveCountry (void)
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
-      Svy_RemoveSurveys (HieLvl_CTY,Cty_EditingCty->CtyCod);
+      Svy_RemoveSurveys (HieLvl_CTY,Cty_EditingCty->Cod);
 
       /***** Remove country *****/
-      Cty_DB_RemoveCty (Cty_EditingCty->CtyCod);
+      Cty_DB_RemoveCty (Cty_EditingCty->Cod);
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
@@ -1225,7 +1225,7 @@ void Cty_RemoveCountry (void)
 	               Txt_Country_X_removed,
 	               Cty_EditingCty->Name[Gbl.Prefs.Language]);
 
-      Cty_EditingCty->CtyCod = -1L;	// To not showing button to go to country
+      Cty_EditingCty->Cod = -1L;	// To not showing button to go to country
      }
   }
 
@@ -1247,7 +1247,7 @@ void Cty_RenameCountry (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty_EditingCty->CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
+   Cty_EditingCty->Cod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParLanguage ();
@@ -1263,12 +1263,12 @@ void Cty_RenameCountry (void)
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      Cty_GetCountryName (Cty_EditingCty->CtyCod,Language,
+      Cty_GetCountryName (Cty_EditingCty->Cod,Language,
 			  Cty_EditingCty->Name[Language]);
       if (strcmp (Cty_EditingCty->Name[Language],NewCtyName))	// Different names
 	{
 	 /***** If country was in database... *****/
-	 if (Cty_DB_CheckIfCountryNameExists (Language,NewCtyName,Cty_EditingCty->CtyCod))
+	 if (Cty_DB_CheckIfCountryNameExists (Language,NewCtyName,Cty_EditingCty->Cod))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_country_X_already_exists,
 		             NewCtyName);
@@ -1277,7 +1277,7 @@ void Cty_RenameCountry (void)
 	    /* Update the table changing old name by new name */
 	    snprintf (FldName,sizeof (FldName),"Name_%s",
 		      Lan_STR_LANG_ID[Language]);
-	    Cty_UpdateCtyName (Cty_EditingCty->CtyCod,FldName,NewCtyName);
+	    Cty_UpdateCtyName (Cty_EditingCty->Cod,FldName,NewCtyName);
 
 	    /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1326,7 +1326,7 @@ void Cty_ChangeCtyWWW (void)
    Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty_EditingCty->CtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
+   Cty_EditingCty->Cod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParLanguage ();
@@ -1340,7 +1340,7 @@ void Cty_ChangeCtyWWW (void)
    /***** Update the table changing old WWW by new WWW *****/
    snprintf (FldName,sizeof (FldName),"Name_%s",
 	     Lan_STR_LANG_ID[Language]);
-   Cty_DB_UpdateCtyField (Cty_EditingCty->CtyCod,FldName,NewWWW);
+   Cty_DB_UpdateCtyField (Cty_EditingCty->Cod,FldName,NewWWW);
    Str_Copy (Cty_EditingCty->WWW[Language],NewWWW,
 	     sizeof (Cty_EditingCty->WWW[Language]) - 1);
 
@@ -1375,11 +1375,11 @@ void Cty_ContEditAfterChgCty (void)
 static void Cty_ShowAlertAndButtonToGoToCty (void)
   {
    // If the country being edited is different to the current one...
-   if (Cty_EditingCty->CtyCod != Gbl.Hierarchy.Cty.CtyCod)
+   if (Cty_EditingCty->Cod != Gbl.Hierarchy.Cty.Cod)
      {
       /***** Alert with button to go to couuntry *****/
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
-                                  Cty_PutParGoToCty,&Cty_EditingCty->CtyCod,
+                                  Cty_PutParGoToCty,&Cty_EditingCty->Cod,
                                   Btn_CONFIRM_BUTTON,
 				  Str_BuildGoToTitle (Cty_EditingCty->Name[Gbl.Prefs.Language]));
       Str_FreeGoToTitle ();
@@ -1422,8 +1422,8 @@ static void Cty_PutFormToCreateCountry (void)
 
 	 /***** Numerical country code (ISO 3166-1) *****/
 	 HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
-	    if (Cty_EditingCty->CtyCod > 0)
-	       snprintf (StrCtyCod,sizeof (StrCtyCod),"%03ld",Cty_EditingCty->CtyCod);
+	    if (Cty_EditingCty->Cod > 0)
+	       snprintf (StrCtyCod,sizeof (StrCtyCod),"%03ld",Cty_EditingCty->Cod);
 	    else
 	       StrCtyCod[0] = '\0';
 	    HTM_INPUT_TEXT (Par_CodeStr[ParCod_OthCty],3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1545,17 +1545,17 @@ void Cty_ReceiveFormNewCountry (void)
 
    /***** Get parameters from form *****/
    /* Get numeric country code */
-   if ((Cty_EditingCty->CtyCod = ParCod_GetPar (ParCod_OthCty)) < 0)
+   if ((Cty_EditingCty->Cod = ParCod_GetPar (ParCod_OthCty)) < 0)
      {
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_numerical_code_of_the_new_country);
       CreateCountry = false;
      }
-   else if (Cty_DB_CheckIfNumericCountryCodeExists (Cty_EditingCty->CtyCod))
+   else if (Cty_DB_CheckIfNumericCountryCodeExists (Cty_EditingCty->Cod))
      {
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_The_numerical_code_X_already_exists,
-                       Cty_EditingCty->CtyCod);
+                       Cty_EditingCty->Cod);
       CreateCountry = false;
      }
    else	// Numeric code correct
@@ -1796,7 +1796,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	      NumCty++, The_ChangeRowColor ())
 	   {
 	    /* Get next country */
-	    Cty.CtyCod = DB_GetNextCode (*mysql_res);
+	    Cty.Cod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of country */
 	    Cty_GetCountryDataByCod (&Cty);
@@ -1830,7 +1830,7 @@ static void Cty_EditingCountryConstructor (void)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset country *****/
-   Cty_EditingCty->CtyCod = -1L;
+   Cty_EditingCty->Cod = -1L;
    Cty_EditingCty->Alpha2[0] = '\0';
    for (Lan  = (Lan_Language_t) 1;
 	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
@@ -1839,7 +1839,7 @@ static void Cty_EditingCountryConstructor (void)
       Cty_EditingCty->Name[Lan][0] = '\0';
       Cty_EditingCty->WWW [Lan][0] = '\0';
      }
-   Cty_EditingCty->NumUsrsWhoClaimToBelongToCty.Valid = false;
+   Cty_EditingCty->NumUsrsWhoClaimToBelong.Valid = false;
   }
 
 static void Cty_EditingCountryDestructor (void)
@@ -1858,11 +1858,11 @@ static void Cty_EditingCountryDestructor (void)
 
 static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
   {
-   if (Cty_DB_CheckIfMapIsAvailable (Cty->CtyCod))
+   if (Cty_DB_CheckIfMapIsAvailable (Cty->Cod))
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,
-                                     Cty_PutParGoToCty,&Cty_EditingCty->CtyCod,
+                                     Cty_PutParGoToCty,&Cty_EditingCty->Cod,
 				     "map-marker-alt.svg",Ico_BLACK);
      }
   }
@@ -2035,30 +2035,30 @@ void Cty_FlushCacheNumUsrsWhoClaimToBelongToCty (void)
 unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
   {
    /***** 1. Fast check: Trivial case *****/
-   if (Cty->CtyCod <= 0)
+   if (Cty->Cod <= 0)
       return 0;
 
    /***** 2. Fast check: If already got... *****/
-   if (Cty->NumUsrsWhoClaimToBelongToCty.Valid)
-      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+   if (Cty->NumUsrsWhoClaimToBelong.Valid)
+      return Cty->NumUsrsWhoClaimToBelong.NumUsrs;
 
    /***** 3. Fast check: If cached... *****/
-   if (Cty->CtyCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod)
+   if (Cty->Cod == Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod)
      {
-      Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs;
-      Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
-      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+      Cty->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs;
+      Cty->NumUsrsWhoClaimToBelong.Valid = true;
+      return Cty->NumUsrsWhoClaimToBelong.NumUsrs;
      }
 
    /***** 4. Slow: number of users who claim to belong to an institution
                    from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = Cty->CtyCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = Cty->Cod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs =
-   Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = Cty_DB_GetNumUsrsWhoClaimToBelongToCty (Cty->CtyCod);
-   Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
+   Cty->NumUsrsWhoClaimToBelong.NumUsrs = Cty_DB_GetNumUsrsWhoClaimToBelongToCty (Cty->Cod);
+   Cty->NumUsrsWhoClaimToBelong.Valid = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs);
-   return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+   return Cty->NumUsrsWhoClaimToBelong.NumUsrs;
   }
 
 unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
@@ -2066,7 +2066,7 @@ unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
    unsigned NumUsrsCty;
 
    /***** Get number of users who claim to belong to country from cache ******/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Cty->CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Cty->Cod,
                                    FigCch_UNSIGNED,&NumUsrsCty))
       /***** Get current number of users who claim to belong to country from database and update cache ******/
       NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToCty (Cty);

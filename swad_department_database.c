@@ -202,9 +202,9 @@ unsigned Dpt_DB_GetNumTchsCurrentInsInDepartment (long DptCod)
 		    " AND crs_courses.DegCod=deg_degrees.DegCod"	// ...of a degree...
 		    " AND deg_degrees.CtrCod=ctr_centers.InsCod"	// ...of a center...
 		    " AND ctr_centers.InsCod=%ld",			// ...of the current institution
-		  Gbl.Hierarchy.Ins.InsCod,DptCod,
+		  Gbl.Hierarchy.Ins.Cod,DptCod,
 		  (unsigned) Rol_NET,(unsigned) Rol_TCH,
-		  Gbl.Hierarchy.Ins.InsCod);
+		  Gbl.Hierarchy.Ins.Cod);
   }
 
 /*****************************************************************************/

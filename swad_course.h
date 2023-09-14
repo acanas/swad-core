@@ -41,8 +41,8 @@
 
 #define Crs_MAX_COURSES_PER_USR		100 // Used in list of my courses and list of distinct courses in sent or received messages
 
-#define Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD  (16 - 1)	// 15
-#define Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD  ((Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
+#define Crs_MAX_CHARS_INSTITUTIONAL_COD  (16 - 1)	// 15
+#define Crs_MAX_BYTES_INSTITUTIONAL_COD  ((Crs_MAX_CHARS_INSTITUTIONAL_COD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
 
 #define Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS  6
 #define Crs_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS 12
@@ -54,8 +54,8 @@
 
 struct Crs_Course
   {
-   long CrsCod;
-   char InstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];	// Institutional code of the course
+   long Cod;
+   char InstitutionalCod[Crs_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the course
    long DegCod;
    unsigned Year;		// Year: 0 (optatives), 1, 2, 3...
    Hie_Status_t Status;		// Course status
@@ -66,7 +66,7 @@ struct Crs_Course
 
 struct Crs_ListCrss
   {
-   unsigned Num;	// Number of courses
+   unsigned Num;		// Number of courses
    struct Crs_Course *Lst;	// List of courses
   };
 

@@ -91,19 +91,19 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 		  WriteScope = true;
 		  break;
 	       case HieLvl_CTY:
-		  if (Gbl.Hierarchy.Cty.CtyCod > 0)
+		  if (Gbl.Hierarchy.Cty.Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_INS:
-		  if (Gbl.Hierarchy.Ins.InsCod > 0)
+		  if (Gbl.Hierarchy.Ins.Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_CTR:
-		  if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+		  if (Gbl.Hierarchy.Ctr.Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_DEG:
-		  if (Gbl.Hierarchy.Deg.DegCod > 0)
+		  if (Gbl.Hierarchy.Deg.Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_CRS:
@@ -173,19 +173,19 @@ void Sco_AdjustScope (void)
       Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == HieLvl_CRS && Gbl.Hierarchy.Crs.CrsCod <= 0)
+   if (Gbl.Scope.Current == HieLvl_CRS && Gbl.Hierarchy.Crs.Cod <= 0)
       Gbl.Scope.Current = HieLvl_DEG;
 
-   if (Gbl.Scope.Current == HieLvl_DEG && Gbl.Hierarchy.Deg.DegCod <= 0)
+   if (Gbl.Scope.Current == HieLvl_DEG && Gbl.Hierarchy.Deg.Cod <= 0)
       Gbl.Scope.Current = HieLvl_CTR;
 
-   if (Gbl.Scope.Current == HieLvl_CTR && Gbl.Hierarchy.Ctr.CtrCod <= 0)
+   if (Gbl.Scope.Current == HieLvl_CTR && Gbl.Hierarchy.Ctr.Cod <= 0)
       Gbl.Scope.Current = HieLvl_INS;
 
-   if (Gbl.Scope.Current == HieLvl_INS && Gbl.Hierarchy.Ins.InsCod <= 0)
+   if (Gbl.Scope.Current == HieLvl_INS && Gbl.Hierarchy.Ins.Cod <= 0)
       Gbl.Scope.Current = HieLvl_CTY;
 
-   if (Gbl.Scope.Current == HieLvl_CTY && Gbl.Hierarchy.Cty.CtyCod <= 0)
+   if (Gbl.Scope.Current == HieLvl_CTY && Gbl.Hierarchy.Cty.Cod <= 0)
       Gbl.Scope.Current = HieLvl_SYS;
 
    /***** Avoid forbidden scopes *****/
@@ -334,15 +334,15 @@ long Hie_GetCurrentCod (void)
       case HieLvl_SYS:
 	 return -1L;
       case HieLvl_CTY:
-	 return Gbl.Hierarchy.Cty.CtyCod;
+	 return Gbl.Hierarchy.Cty.Cod;
       case HieLvl_INS:
-	 return Gbl.Hierarchy.Ins.InsCod;
+	 return Gbl.Hierarchy.Ins.Cod;
       case HieLvl_CTR:
-	 return Gbl.Hierarchy.Ctr.CtrCod;
+	 return Gbl.Hierarchy.Ctr.Cod;
       case HieLvl_DEG:
-	 return Gbl.Hierarchy.Deg.DegCod;
+	 return Gbl.Hierarchy.Deg.Cod;
       case HieLvl_CRS:
-	 return Gbl.Hierarchy.Crs.CrsCod;
+	 return Gbl.Hierarchy.Crs.Cod;
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return -1L;	// Not reached

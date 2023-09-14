@@ -510,7 +510,7 @@ static void Rep_WriteSectionUsrInfo (void)
             CtyName);
 
    /***** User's institution *****/
-   Ins.InsCod = Gbl.Usrs.Me.UsrDat.InsCod;
+   Ins.Cod = Gbl.Usrs.Me.UsrDat.InsCod;
    Ins_GetInstitDataByCod (&Ins);
    fprintf (Rep_File,"<li>%s: %s</li>",
             Txt_Institution,
@@ -1040,11 +1040,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    struct Deg_Degree Deg;
 
    /***** Get course data *****/
-   Crs.CrsCod = CrsCod;
+   Crs.Cod = CrsCod;
    Crs_GetCourseDataByCod (&Crs);
 
    /***** Get degree data *****/
-   Deg.DegCod = Crs.DegCod;
+   Deg.Cod = Crs.DegCod;
    Deg_GetDegreeDataByCod (&Deg);
 
    /***** Begin row *****/
@@ -1052,7 +1052,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 
    if (CrsCod > 0)	// CrsCod > 0 in log ==> course selected
      {
-      if (Crs.CrsCod > 0)	// Course exists
+      if (Crs.Cod > 0)	// Course exists
 	{
 	 /***** Write course full name *****/
 	 fprintf (Rep_File,"<strong>%s</strong> -",Crs.FullName);
@@ -1067,11 +1067,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 /***** Write number of teachers / students in course *****/
 	 if (WriteNumUsrs)
 	    fprintf (Rep_File," (%u %s / %u %s)",
-		     Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
+		     Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.Cod,
 				                 1 << Rol_NET |
 					         1 << Rol_TCH),
 		     Txt_teachers_ABBREVIATION,
-		     Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
+		     Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.Cod,
 				                 1 << Rol_STD),
 		     Txt_students_ABBREVIATION);
 	}

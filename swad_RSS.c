@@ -61,7 +61,7 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
 
    /***** Create RSS directory if not exists *****/
    snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),"%s/%ld/%s",
-	     Cfg_PATH_CRS_PUBLIC,Crs->CrsCod,Cfg_RSS_FOLDER);
+	     Cfg_PATH_CRS_PUBLIC,Crs->Cod,Cfg_RSS_FOLDER);
    Fil_CreateDirIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
@@ -78,14 +78,14 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
    fprintf (FileRSS,"<channel>\n");
 
    fprintf (FileRSS,"<atom:link href=\"");
-   RSS_BuildRSSLink (RSSLink,Crs->CrsCod);
+   RSS_BuildRSSLink (RSSLink,Crs->Cod);
    fprintf (FileRSS,"%s",RSSLink);
    fprintf (FileRSS,"\" rel=\"self\" type=\"application/rss+xml\" />\n");
 
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-            Cfg_URL_SWAD_CGI,Crs->CrsCod);
+            Cfg_URL_SWAD_CGI,Crs->Cod);
    fprintf (FileRSS,"<description>%s</description>\n",
             Crs->FullName);
    fprintf (FileRSS,"<language>%s</language>\n",
@@ -99,7 +99,7 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-            Cfg_URL_SWAD_CGI,Crs->CrsCod);
+            Cfg_URL_SWAD_CGI,Crs->Cod);
    fprintf (FileRSS,"<width>112</width>\n"
                     "<height>32</height>\n"
                     "</image>\n");
@@ -153,7 +153,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Write items with active notices *****/
-   if ((NumNotices = Not_DB_GetActiveNotices (&mysql_res,Crs->CrsCod)))
+   if ((NumNotices = Not_DB_GetActiveNotices (&mysql_res,Crs->Cod)))
      {
       Usr_UsrDataConstructor (&UsrDat);
 
@@ -191,7 +191,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 
          /* Write link to the notice */
          fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-                  Cfg_URL_SWAD_CGI,Crs->CrsCod);
+                  Cfg_URL_SWAD_CGI,Crs->Cod);
 
          /* Write full content of the notice */
          Str_Copy (Content,row[3],sizeof (Content) - 1);
@@ -206,7 +206,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 
          /* Write unique string for this item */
          fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, notice #%ld</guid>\n",
-                  Cfg_URL_SWAD_CGI,Crs->CrsCod,NotCod);
+                  Cfg_URL_SWAD_CGI,Crs->Cod,NotCod);
 
          /* Write publication date */
          fprintf (FileRSS,"<pubDate>");	
@@ -271,7 +271,7 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
 
 	    /* Write link to the notice */
 	    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
-		     Cfg_URL_SWAD_CGI,Crs->CrsCod);
+		     Cfg_URL_SWAD_CGI,Crs->Cod);
 
 	    /* Write full content of the exam announcement (row[2]) */
 	    fprintf (FileRSS,"<description><![CDATA[<p><em>Fecha examen: %s</em></p>]]></description>\n",	// TODO: Need translation!
@@ -279,7 +279,7 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
 
 	    /* Write unique string for this item */
 	    fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, exam #%ld</guid>\n",
-		     Cfg_URL_SWAD_CGI,Crs->CrsCod,ExaCod);
+		     Cfg_URL_SWAD_CGI,Crs->Cod,ExaCod);
 
 	    /* Write publication date */
 	    fprintf (FileRSS,"<pubDate>");

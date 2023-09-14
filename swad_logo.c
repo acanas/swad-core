@@ -222,19 +222,19 @@ void Lgo_RequestLogo (HieLvl_Level_t Level)
    switch (Level)
      {
       case HieLvl_INS:
-	 Cod = Gbl.Hierarchy.Ins.InsCod;
+	 Cod = Gbl.Hierarchy.Ins.Cod;
 	 Folder = Cfg_FOLDER_INS;
 	 ActionRec = ActRecInsLog;
 	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoIns;
 	 break;
       case HieLvl_CTR:
-	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
+	 Cod = Gbl.Hierarchy.Ctr.Cod;
 	 Folder = Cfg_FOLDER_CTR;
 	 ActionRec = ActRecCtrLog;
 	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoCtr;
 	 break;
       case HieLvl_DEG:
-	 Cod = Gbl.Hierarchy.Deg.DegCod;
+	 Cod = Gbl.Hierarchy.Deg.Cod;
 	 Folder = Cfg_FOLDER_DEG;
 	 ActionRec = ActRecDegLog;
 	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoDeg;
@@ -325,15 +325,15 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Level)
    switch (Level)
      {
       case HieLvl_INS:
-	 Cod = Gbl.Hierarchy.Ins.InsCod;
+	 Cod = Gbl.Hierarchy.Ins.Cod;
 	 Folder = Cfg_FOLDER_INS;
 	 break;
       case HieLvl_CTR:
-	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
+	 Cod = Gbl.Hierarchy.Ctr.Cod;
 	 Folder = Cfg_FOLDER_CTR;
 	 break;
       case HieLvl_DEG:
-	 Cod = Gbl.Hierarchy.Deg.DegCod;
+	 Cod = Gbl.Hierarchy.Deg.Cod;
 	 Folder = Cfg_FOLDER_DEG;
 	 break;
       default:
@@ -396,15 +396,15 @@ void Lgo_RemoveLogo (HieLvl_Level_t Level)
    switch (Level)
      {
       case HieLvl_INS:
-	 Cod = Gbl.Hierarchy.Ins.InsCod;
+	 Cod = Gbl.Hierarchy.Ins.Cod;
 	 Folder = Cfg_FOLDER_INS;
 	 break;
       case HieLvl_CTR:
-	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
+	 Cod = Gbl.Hierarchy.Ctr.Cod;
 	 Folder = Cfg_FOLDER_CTR;
 	 break;
       case HieLvl_DEG:
-	 Cod = Gbl.Hierarchy.Deg.DegCod;
+	 Cod = Gbl.Hierarchy.Deg.Cod;
 	 Folder = Cfg_FOLDER_DEG;
 	 break;
       default:

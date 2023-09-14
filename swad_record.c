@@ -220,7 +220,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
       return;
 
    /***** Get the fields of records *****/
-   if ((Gbl.Crs.Records.LstFields.Num = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Crs.CrsCod)))
+   if ((Gbl.Crs.Records.LstFields.Num = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Crs.Cod)))
      {
       /***** Create a list of fields *****/
       if ((Gbl.Crs.Records.LstFields.Lst = calloc (Gbl.Crs.Records.LstFields.Num,
@@ -509,7 +509,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName)
    unsigned NumRow;
 
    /* Query database */
-   if ((NumRows = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Crs.CrsCod)) > 0)	// If fields found...
+   if ((NumRows = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Crs.Cod)) > 0)	// If fields found...
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)
@@ -540,7 +540,7 @@ void Rec_CreateRecordField (void)
    extern const char *Txt_Created_new_record_field_X;
 
    /***** Create the new field *****/
-   Rec_DB_CreateField (Gbl.Hierarchy.Crs.CrsCod,&Gbl.Crs.Records.Field);
+   Rec_DB_CreateField (Gbl.Hierarchy.Crs.Cod,&Gbl.Crs.Records.Field);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_record_field_X,
@@ -637,7 +637,7 @@ static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 
    unsigned Vis;
 
    /***** Get a field of a record in a course from database *****/
-   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Crs.CrsCod,FldCod) != 1)
+   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Crs.Cod,FldCod) != 1)
       Err_WrongRecordFieldExit ();
 
    /***** Get the field *****/
@@ -1655,7 +1655,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Rec_DEGREE_LOGO_SIZE);
-		     Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,
+		     Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,
 				   Gbl.Hierarchy.Deg.ShrtName,Rec_DEGREE_LOGO_SIZE,NULL);
 		  HTM_TD_End ();
 
@@ -2082,8 +2082,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    PutFormLinks = !Frm_CheckIfInside () &&					// Only if not inside another form
                   Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
 
-   Ins.InsCod = UsrDat->InsCod;
-   if (Ins.InsCod > 0)
+   Ins.Cod = UsrDat->InsCod;
+   if (Ins.Cod > 0)
       Ins_GetInstitDataByCod (&Ins);
 
    /***** Begin box and table *****/
@@ -2526,16 +2526,16 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
    HTM_TD_Begin ("rowspan=\"4\" class=\"REC_C1_TOP CM\"");
-      if (Ins->InsCod > 0)
+      if (Ins->Cod > 0)
 	{
 	 /* Form to go to the institution */
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	       ParCod_PutPar (ParCod_Ins,Ins->InsCod);
+	       ParCod_PutPar (ParCod_Ins,Ins->Cod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
-	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
+	 Lgo_DrawLogo (HieLvl_INS,Ins->Cod,Ins->ShrtName,
 		       Rec_INSTITUTION_LOGO_SIZE,NULL);
 	 if (PutFormLinks)
 	   {
@@ -2547,13 +2547,13 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 
    /***** Institution name *****/
    HTM_TD_Begin ("class=\"REC_C2_TOP REC_HEAD LM\"");
-      if (Ins->InsCod > 0)
+      if (Ins->Cod > 0)
 	{
 	 /* Form to go to the institution */
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	       ParCod_PutPar (ParCod_Ins,Ins->InsCod);
+	       ParCod_PutPar (ParCod_Ins,Ins->Cod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 HTM_Txt (Ins->FullName);
@@ -2815,7 +2815,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 			   break;
 			default:	// User does not belong to current course
 			   /* If there is a request of this user, default role is the requested role */
-			   DefaultRoleInForm = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Crs.CrsCod,
+			   DefaultRoleInForm = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Crs.Cod,
 			                                                UsrDat->UsrCod);
 
 			   switch (DefaultRoleInForm)
@@ -3197,8 +3197,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 		 NumCty++)
 	      {
 	       CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
-	       HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
-			   CtyInLst->CtyCod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
+	       HTM_OPTION (HTM_Type_LONG,&CtyInLst->Cod,
+			   CtyInLst->Cod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
 							        HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",CtyInLst->Name[Gbl.Prefs.Language]);
@@ -3390,7 +3390,7 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
                     The_GetSuffix ());
 	 if (ShowData)
-	    if (Ins->InsCod > 0)
+	    if (Ins->Cod > 0)
 	      {
 	       if (Ins->WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
@@ -3427,7 +3427,7 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
 	   {
 	    if (UsrDat->Tch.CtrCod > 0)
 	      {
-	       Ctr.CtrCod = UsrDat->Tch.CtrCod;
+	       Ctr.Cod = UsrDat->Tch.CtrCod;
 	       Ctr_GetCenterDataByCod (&Ctr);
 	       if (Ctr.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
@@ -3605,7 +3605,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 if ( Role == Rol_STD ||
 	      Role == Rol_NET ||
 	      Role == Rol_TCH ||
-	     (Role == Rol_GST && Gbl.Hierarchy.Crs.CrsCod <= 0))
+	     (Role == Rol_GST && Gbl.Hierarchy.Crs.Cod <= 0))
 	    RoleOK = true;
 	 break;
       default:
@@ -3829,8 +3829,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  NumCty++)
 		       {
 			CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
-			HTM_OPTION (HTM_Type_LONG,&CtyInLst->CtyCod,
-				    CtyInLst->CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
+			HTM_OPTION (HTM_Type_LONG,&CtyInLst->Cod,
+				    CtyInLst->Cod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
 										       HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",CtyInLst->Name[Gbl.Prefs.Language]);
@@ -3880,8 +3880,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  NumIns++)
 		       {
 			InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
-			HTM_OPTION (HTM_Type_LONG,&InsInLst->InsCod,
-				    InsInLst->InsCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
+			HTM_OPTION (HTM_Type_LONG,&InsInLst->Cod,
+				    InsInLst->Cod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
 										    HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",InsInLst->FullName);
@@ -3932,8 +3932,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			     NumCtr++)
 			  {
 			   CtrInLst = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
-			   HTM_OPTION (HTM_Type_LONG,&CtrInLst->CtrCod,
-				       CtrInLst->CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
+			   HTM_OPTION (HTM_Type_LONG,&CtrInLst->Cod,
+				       CtrInLst->Cod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
 											   HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
 				       CtrInLst->FullName);
@@ -4065,10 +4065,10 @@ void Rec_UpdateMyInstitution (void)
 
    /***** Get my institution *****/
    /* Get institution code */
-   Ins.InsCod = ParCod_GetAndCheckParMin (ParCod_OthIns,0);	// 0 (another institution) is allowed here
+   Ins.Cod = ParCod_GetAndCheckParMin (ParCod_OthIns,0);	// 0 (another institution) is allowed here
 
    /* Get country of institution */
-   if (Ins.InsCod > 0)
+   if (Ins.Cod > 0)
      {
       Ins_GetInstitDataByCod (&Ins);
       if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
@@ -4076,7 +4076,7 @@ void Rec_UpdateMyInstitution (void)
      }
 
    /* Set institution code */
-   Gbl.Usrs.Me.UsrDat.InsCod = Ins.InsCod;
+   Gbl.Usrs.Me.UsrDat.InsCod = Ins.Cod;
 
    /***** When institution changes, the center and department must be reset *****/
    NumCtrs = Ctr_GetNumCtrsInIns (Gbl.Usrs.Me.UsrDat.InsCod);
@@ -4101,10 +4101,10 @@ void Rec_UpdateMyCenter (void)
 
    /***** Get my center *****/
    /* Get center code */
-   Ctr.CtrCod = ParCod_GetAndCheckParMin (ParCod_OthCtr,0);	// 0 (another center) is allowed here
+   Ctr.Cod = ParCod_GetAndCheckParMin (ParCod_OthCtr,0);	// 0 (another center) is allowed here
 
    /* Get institution of center */
-   if (Ctr.CtrCod > 0)
+   if (Ctr.Cod > 0)
      {
       Ctr_GetCenterDataByCod (&Ctr);
       if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.InsCod)
@@ -4115,7 +4115,7 @@ void Rec_UpdateMyCenter (void)
      }
 
    /* Set center code */
-   Gbl.Usrs.Me.UsrDat.Tch.CtrCod = Ctr.CtrCod;
+   Gbl.Usrs.Me.UsrDat.Tch.CtrCod = Ctr.Cod;
 
    /***** Update institution, center and department *****/
    Acc_DB_UpdateMyInstitutionCenterDepartment ();
