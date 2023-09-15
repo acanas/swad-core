@@ -56,10 +56,10 @@ struct Crs_Course
   {
    long Cod;			// Course code
    long PrtCod;			// Parent (degree) code
-   char InstitutionalCod[Crs_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the course
    unsigned Year;		// Year: 0 (optatives), 1, 2, 3...
    Hie_Status_t Status;		// Course status
    long RequesterUsrCod;	// User code of the person who requested the creation of this course
+   char InstitutionalCod[Crs_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the course
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of course
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of course
   };

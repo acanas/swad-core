@@ -1839,7 +1839,7 @@ static void Ctr_EditingCenterConstructor (void)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset center *****/
-   Ctr_EditingCtr->Cod          = -1L;
+   Ctr_EditingCtr->Cod             = -1L;
    Ctr_EditingCtr->PrtCod          = -1L;
    Ctr_EditingCtr->PlcCod          = -1L;
    Ctr_EditingCtr->Status          = (Hie_Status_t) 0;

@@ -963,16 +963,16 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 					   "&nbsp;");
 	    HTM_TD_End ();
 
-	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
-	                  TxtClassNormal,The_GetSuffix (),BgColor);
-	       HTM_Txt (Crs->InstitutionalCod);
-	    HTM_TD_End ();
-
 	    /* Course year */
 	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
 	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
+	    HTM_TD_End ();
+
+	    /* Institutional code of the course */
+	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
+	                  TxtClassNormal,The_GetSuffix (),BgColor);
+	       HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
 	    /* Course full name */
@@ -1158,22 +1158,6 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       HTM_Long (Crs->Cod);
 	    HTM_TD_End ();
 
-	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActChgInsCrsCod);
-		     ParCod_PutPar (ParCod_OthHie,Crs->Cod);
-		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
-				     Crs->InstitutionalCod,HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_INS_CODE INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (Crs->InstitutionalCod);
-	    HTM_TD_End ();
-
 	    /* Course year */
 	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 	    if (ICanEdit)
@@ -1199,6 +1183,22 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	      }
 	    else
 	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
+	    HTM_TD_End ();
+
+	    /* Institutional code of the course */
+	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
+	       if (ICanEdit)
+		 {
+		  Frm_BeginForm (ActChgInsCrsCod);
+		     ParCod_PutPar (ParCod_OthHie,Crs->Cod);
+		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+				     Crs->InstitutionalCod,HTM_SUBMIT_ON_CHANGE,
+				     "class=\"INPUT_INS_CODE INPUT_%s\"",
+				     The_GetSuffix ());
+		  Frm_EndForm ();
+		 }
+	       else
+		  HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
 	    /* Course short name */
@@ -1314,15 +1314,6 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_Begin ("class=\"CODE\"");
 	 HTM_TD_End ();
 
-	 /***** Institutional code of the course *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
-			    Crs_EditingCrs->InstitutionalCod,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_INS_CODE INPUT_%s\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
@@ -1338,6 +1329,15 @@ static void Crs_PutFormToCreateCourse (void)
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_YEAR_OF_DEGREE[Year]);
 	    HTM_SELECT_End ();
+	 HTM_TD_End ();
+
+	 /***** Institutional code of the course *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+			    Crs_EditingCrs->InstitutionalCod,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_INS_CODE INPUT_%s\"",
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Course short name *****/
@@ -1389,16 +1389,16 @@ static void Crs_PutFormToCreateCourse (void)
 
 static void Crs_PutHeadCoursesForSeeing (void)
   {
-   extern const char *Txt_Institutional_BR_code;
    extern const char *Txt_Year_OF_A_DEGREE;
+   extern const char *Txt_Institutional_BR_code;
    extern const char *Txt_Course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
-      HTM_TH      (Txt_Institutional_BR_code          ,HTM_HEAD_CENTER);
       HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
+      HTM_TH      (Txt_Institutional_BR_code          ,HTM_HEAD_CENTER);
       HTM_TH      (Txt_Course                         ,HTM_HEAD_LEFT  );
       HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
       HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
@@ -1414,9 +1414,9 @@ static void Crs_PutHeadCoursesForSeeing (void)
 static void Crs_PutHeadCoursesForEdition (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Institutional_code;
    extern const char *Txt_optional;
    extern const char *Txt_Year_OF_A_DEGREE;
+   extern const char *Txt_Institutional_code;
    extern const char *Txt_Short_name_of_the_course;
    extern const char *Txt_Full_name_of_the_course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
@@ -1426,10 +1426,10 @@ static void Crs_PutHeadCoursesForEdition (void)
 
       HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH      (Txt_Code                           ,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
       HTM_TH_Begin (HTM_HEAD_CENTER);
 	 HTM_TxtF ("%s&nbsp;(%s)",Txt_Institutional_code,Txt_optional);
       HTM_TH_End ();
-      HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
       HTM_TH      (Txt_Short_name_of_the_course       ,HTM_HEAD_LEFT  );
       HTM_TH      (Txt_Full_name_of_the_course        ,HTM_HEAD_LEFT  );
       HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
@@ -1528,12 +1528,12 @@ static void Crs_GetParsNewCourse (struct Crs_Course *Crs)
    char YearStr[2 + 1];
 
    /***** Get parameters of the course from form *****/
-   /* Get institutional code */
-   Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
-
    /* Get year */
    Par_GetParText ("OthCrsYear",YearStr,2);
    Crs->Year = Deg_ConvStrToYear (YearStr);
+
+   /* Get institutional code */
+   Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get course short name */
    Par_GetParText ("ShortName",Crs->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
@@ -1641,15 +1641,15 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
    /***** Get year (row[2]) *****/
    Crs->Year = Deg_ConvStrToYear (row[2]);
 
-   /***** Get institutional course code (row[3]) *****/
-   Str_Copy (Crs->InstitutionalCod,row[3],sizeof (Crs->InstitutionalCod) - 1);
-
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
       Err_WrongStatusExit ();
 
    /***** Get requester user'code (row[5]) *****/
    Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
+
+   /***** Get institutional course code (row[3]) *****/
+   Str_Copy (Crs->InstitutionalCod,row[3],sizeof (Crs->InstitutionalCod) - 1);
 
    /***** Get short name (row[6]) and full name (row[7]) of the course *****/
    Str_Copy (Crs->ShrtName,row[6],sizeof (Crs->ShrtName) - 1);
@@ -2613,9 +2613,9 @@ static void Crs_EditingCourseConstructor (void)
    /***** Reset course *****/
    Crs_EditingCrs->Cod         = -1L;
    Crs_EditingCrs->PrtCod      = -1L;
-   Crs_EditingCrs->InstitutionalCod[0] = '\0';
    Crs_EditingCrs->Year        = 0;
    Crs_EditingCrs->Status      = 0;
+   Crs_EditingCrs->InstitutionalCod[0] = '\0';
    Crs_EditingCrs->ShrtName[0] = '\0';
    Crs_EditingCrs->FullName[0] = '\0';
   }
