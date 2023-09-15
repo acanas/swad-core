@@ -209,7 +209,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	    /***** Get data of this institution *****/
 	    Hie.Cty.Cod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (!Cty_GetCountryDataByCod (&Hie.Cty))
+	    if (!Cty_GetBasicCountryDataByCod (&Hie.Cty))
 	       Err_WrongCountrExit ();
 
 	    /***** Write link to country *****/
@@ -225,7 +225,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 					   "class=\"BT_LINK FORM_IN_%s\"",
 					   The_GetSuffix ());
 		     Cty_DrawCountryMap (&Hie.Cty,"ICO16x16");
-		     HTM_TxtF ("&nbsp;%s",Hie.Cty.Name[Gbl.Prefs.Language]);
+		     HTM_TxtF ("&nbsp;%s",Hie.Cty.FullName);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
 	    HTM_LI_End ();

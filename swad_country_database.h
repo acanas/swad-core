@@ -38,12 +38,15 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Cty_DB_CreateCountry (const struct Cty_Countr *Cty);
+void Cty_DB_CreateCountry (const struct Cty_Countr *Cty,
+			   char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
+			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1]);
 
 unsigned Cty_DB_GetCtysBasic (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res);
-unsigned Cty_DB_GetCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod);
+unsigned Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod);
+unsigned Cty_DB_GetNamesAndWWWsByCod (MYSQL_RES **mysql_res,long CtyCod);
 void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
 			    char CtyName[Cty_MAX_BYTES_NAME + 1]);
 

@@ -248,8 +248,8 @@ void Log_GetAndShowLastClicks (void)
 
 	 /* Get country code (row[4]) */
 	 Hie.Cty.Cod = Str_ConvertStrCodToLongCod (row[4]);
-	 Cty_GetCountryName (Hie.Cty.Cod,Gbl.Prefs.Language,
-			     Hie.Cty.Name[Gbl.Prefs.Language]);
+	 Cty_GetCountryNameInLanguage (Hie.Cty.Cod,Gbl.Prefs.Language,
+			     Hie.Cty.FullName);
 
 	 /* Get institution code (row[5]),
 	        center      code (row[6])
@@ -281,7 +281,7 @@ void Log_GetAndShowLastClicks (void)
 
 	    HTM_TD_Begin ("class=\"LC_CTY %s_%s\"",
 	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie.Cty.Name[Gbl.Prefs.Language]);		// Country
+	       HTM_Txt (Hie.Cty.FullName);				// Country
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_INS %s_%s\"",

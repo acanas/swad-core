@@ -2968,7 +2968,7 @@ static void Sta_WriteCountry (long CtyCod)
 	{
 	 /***** Get data of country *****/
 	 Cty.Cod = CtyCod;
-	 Cty_GetCountryDataByCod (&Cty);
+	 Cty_GetBasicCountryDataByCod (&Cty);
 
 	 /***** Form to go to country *****/
 	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,

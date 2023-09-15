@@ -341,7 +341,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 				 CtyInLst->Cod == Gbl.Hierarchy.Cty.Cod ? HTM_OPTION_SELECTED :
 										HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",CtyInLst->Name[Gbl.Prefs.Language]);
+				 "%s",CtyInLst->FullName);
 		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
@@ -352,13 +352,13 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
 		  ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Cty.FullName),
 					   "class=\"BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
 	    Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
 	    HTM_NBSP ();
-	    HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	    HTM_Txt (Gbl.Hierarchy.Cty.FullName);
 	    if (!PrintView)
 	      {
 		  HTM_BUTTON_End ();
@@ -552,7 +552,7 @@ void InsCfg_ChangeInsCty (void)
    if (NewCty.Cod != Gbl.Hierarchy.Ins.PrtCod)
      {
       /***** Get data of the country from database *****/
-      Cty_GetCountryDataByCod (&NewCty);
+      Cty_GetBasicCountryDataByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
       if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.Cod))
@@ -576,7 +576,7 @@ void InsCfg_ChangeInsCty (void)
 	 /***** Write message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_country_of_the_institution_X_has_changed_to_Y,
-		          Gbl.Hierarchy.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
+		          Gbl.Hierarchy.Ins.FullName,NewCty.FullName);
 	}
      }
   }

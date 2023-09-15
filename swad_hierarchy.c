@@ -233,9 +233,9 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
 	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
-	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Cty.FullName,
 	                             "class=\"BT_LINK\"");
-	       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	       HTM_Txt (Gbl.Hierarchy.Cty.FullName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
@@ -430,7 +430,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    const char *FullText[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+      [HieLvl_CTY] = Gbl.Hierarchy.Cty.FullName,
       [HieLvl_INS] = Gbl.Hierarchy.Ins.FullName,
       [HieLvl_CTR] = Gbl.Hierarchy.Ctr.FullName,
       [HieLvl_DEG] = Gbl.Hierarchy.Deg.FullName,
@@ -439,7 +439,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    const char *ShrtText[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+      [HieLvl_CTY] = Gbl.Hierarchy.Cty.FullName,
       [HieLvl_INS] = Gbl.Hierarchy.Ins.ShrtName,
       [HieLvl_CTR] = Gbl.Hierarchy.Ctr.ShrtName,
       [HieLvl_DEG] = Gbl.Hierarchy.Deg.ShrtName,
@@ -595,7 +595,7 @@ void Hie_InitHierarchy (void)
 
    /***** If country code is available, get country data *****/
    if (Gbl.Hierarchy.Cty.Cod > 0)
-      if (!Cty_GetCountryDataByCod (&Gbl.Hierarchy.Cty))		// Country not found
+      if (!Cty_GetBasicCountryDataByCod (&Gbl.Hierarchy.Cty))		// Country not found
          Hie_ResetHierarchy ();
 
    /***** Set current hierarchy level and code

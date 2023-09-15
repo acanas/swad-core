@@ -67,7 +67,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    const char *TxtName[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+      [HieLvl_CTY] = Gbl.Hierarchy.Cty.FullName,
       [HieLvl_INS] = Gbl.Hierarchy.Ins.ShrtName,
       [HieLvl_CTR] = Gbl.Hierarchy.Ctr.ShrtName,
       [HieLvl_DEG] = Gbl.Hierarchy.Deg.ShrtName,

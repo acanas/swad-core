@@ -49,8 +49,9 @@ struct Cty_Countr
   {
    long Cod;			// Country code
    char Alpha2[2 + 1];
-   char Name[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
-   char WWW [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
    struct
      {
       bool Valid;
@@ -95,14 +96,16 @@ void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutParCtyOrder (void);
 void Cty_EditCountries (void);
 void Cty_GetBasicListOfCountries (void);
-void Cty_GetFullListOfCountries (void);
 void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod);
-bool Cty_GetCountryDataByCod (struct Cty_Countr *Cty);
+bool Cty_GetBasicCountryDataByCod (struct Cty_Countr *Cty);
+void Cty_GetNamesAndWWWsByCod (struct Cty_Countr *Cty,
+			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
+			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1]);
 void Cty_FlushCacheCountryName (void);
-void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
-			 char CtyName[Cty_MAX_BYTES_NAME + 1]);
+void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
+				   char CtyName[Cty_MAX_BYTES_NAME + 1]);
 void Cty_RemoveCountry (void);
 void Cty_RenameCountry (void);
 void Cty_ChangeCtyWWW (void);

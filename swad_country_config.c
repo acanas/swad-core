@@ -113,7 +113,7 @@ static void CtyCfg_Configuration (bool PrintView)
       return;
 
    /***** Initializations *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0];
+   PutLink = !PrintView && Gbl.Hierarchy.Cty.WWW[0];
 
    /***** Begin box *****/
    if (PrintView)
@@ -226,12 +226,12 @@ static void CtyCfg_Title (bool PutLink)
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
-		      Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
-		      Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+		      Gbl.Hierarchy.Cty.WWW,
+		      Gbl.Hierarchy.Cty.FullName,
 		      The_GetSuffix ());
 
       /* Country name */
-      HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      HTM_Txt (Gbl.Hierarchy.Cty.FullName);
 
       /* End link */
       if (PutLink)
@@ -324,7 +324,7 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
    HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
-		      Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+		      Gbl.Hierarchy.Cty.WWW);
       Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
 							 "COUNTRY_MAP_SHOW");
       if (PutLink)
@@ -409,9 +409,9 @@ static void CtyCfg_Name (bool PutLink)
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (PutLink)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_STRONG_%s\"",
-			 Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
+			 Gbl.Hierarchy.Cty.WWW,
 			 The_GetSuffix ());
-	 HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	 HTM_Txt (Gbl.Hierarchy.Cty.FullName);
 	 if (PutLink)
 	    HTM_A_End ();
       HTM_TD_End ();
@@ -480,7 +480,7 @@ static void CtyCfg_NumInss (void)
 	 Frm_BeginFormGoTo (ActSeeIns);
 	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-	                  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+	                  Gbl.Hierarchy.Cty.FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
 	    free (Title);

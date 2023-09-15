@@ -1133,7 +1133,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
       else if (UsrDat->CtyCod > 0)
 	{
 	 /* Get country name */
-	 Cty_GetCountryName (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
+	 Cty_GetCountryNameInLanguage (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
 
 	 /* Write country name */
 	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"

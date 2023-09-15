@@ -197,7 +197,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    /* Select a degree */
 	    if (asprintf (&Description,Gbl.Hierarchy.Deg.Cod > 0 ? Txt_Select_or_create_another_degree_in_X :
-								      Txt_Select_or_create_one_degree_in_X,
+								   Txt_Select_or_create_one_degree_in_X,
 			  Gbl.Hierarchy.Ctr.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
@@ -209,7 +209,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    /* Select a center */
 	    if (asprintf (&Description,Gbl.Hierarchy.Ctr.Cod > 0 ? Txt_Select_or_create_another_center_in_X :
-								      Txt_Select_or_create_one_center_in_X,
+								   Txt_Select_or_create_one_center_in_X,
 			  Gbl.Hierarchy.Ins.ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
@@ -221,8 +221,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    /* Select an institution */
 	    if (asprintf (&Description,Gbl.Hierarchy.Ins.Cod > 0 ? Txt_Select_or_create_another_institution_in_X :
-								      Txt_Select_or_create_one_institution_in_X,
-			  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+								   Txt_Select_or_create_one_institution_in_X,
+			  Gbl.Hierarchy.Cty.FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActSeeIns,
@@ -232,7 +232,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	 else
 	    /* Select a country */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Cty.Cod > 0 ? Txt_Select_another_country :
-										Txt_Select_one_country,
+									     Txt_Select_one_country,
 						 ActSeeCty,
 						 Btn_CONFIRM_BUTTON,Txt_Countries);
 

@@ -55,7 +55,9 @@ extern struct Globals Gbl;
 /**************************** Create a new country ***************************/
 /*****************************************************************************/
 
-void Cty_DB_CreateCountry (const struct Cty_Countr *Cty)
+void Cty_DB_CreateCountry (const struct Cty_Countr *Cty,
+			   char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
+			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1])
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t Lan;
@@ -78,14 +80,14 @@ void Cty_DB_CreateCountry (const struct Cty_Countr *Cty)
       Str_Concat (SubQueryNam1,StrField,sizeof (SubQueryNam1) - 1);
 
       Str_Concat (SubQueryNam2,",'",sizeof (SubQueryNam2) - 1);
-      Str_Concat (SubQueryNam2,Cty->Name[Lan],sizeof (SubQueryNam2) - 1);
+      Str_Concat (SubQueryNam2,NameInSeveralLanguages[Lan],sizeof (SubQueryNam2) - 1);
       Str_Concat (SubQueryNam2,"'",sizeof (SubQueryNam2) - 1);
 
       snprintf (StrField,sizeof (StrField),",WWW_%s",Lan_STR_LANG_ID[Lan]);
       Str_Concat (SubQueryWWW1,StrField,sizeof (SubQueryWWW1) - 1);
 
       Str_Concat (SubQueryWWW2,",'",sizeof (SubQueryWWW2) - 1);
-      Str_Concat (SubQueryWWW2,Cty->WWW[Lan],sizeof (SubQueryWWW2) - 1);
+      Str_Concat (SubQueryWWW2,WWWInSeveralLanguages[Lan],sizeof (SubQueryWWW2) - 1);
       Str_Concat (SubQueryWWW2,"'",sizeof (SubQueryWWW2) - 1);
      }
    DB_QueryINSERT ("can not create country",
@@ -150,11 +152,6 @@ unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res)
 unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   char StrField[32];
-   char SubQueryNam1[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryNam2[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryWWW1[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryWWW2[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
    char *OrderBySubQuery = NULL;
    static const char *OrderBySubQueryFmt[Cty_NUM_ORDERS] =
      {
@@ -163,28 +160,8 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 	                        "Name_%s",
      };
    unsigned NumCtys;
-   Lan_Language_t Lan;
 
    /***** Get countries from database *****/
-   SubQueryNam1[0] = '\0';
-   SubQueryNam2[0] = '\0';
-   SubQueryWWW1[0] = '\0';
-   SubQueryWWW2[0] = '\0';
-   for (Lan  = (Lan_Language_t) 1;
-	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	Lan++)
-     {
-      snprintf (StrField,sizeof (StrField),"cty_countrs.Name_%s,",Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryNam1,StrField,sizeof (SubQueryNam1) - 1);
-      snprintf (StrField,sizeof (StrField),"Name_%s,",Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryNam2,StrField,sizeof (SubQueryNam2) - 1);
-
-      snprintf (StrField,sizeof (StrField),"cty_countrs.WWW_%s,",Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryWWW1,StrField,sizeof (SubQueryWWW1) - 1);
-      snprintf (StrField,sizeof (StrField),"WWW_%s,",Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryWWW2,StrField,sizeof (SubQueryWWW2) - 1);
-     }
-
    /* Build order subquery */
    if (asprintf (&OrderBySubQuery,OrderBySubQueryFmt[Gbl.Hierarchy.Ctys.SelectedOrder],
 		 Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
@@ -195,9 +172,9 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
    DB_QuerySELECT (mysql_res,"can not get countries",
 		   "(SELECT cty_countrs.CtyCod,"	// row[0]
 			   "cty_countrs.Alpha2,"	// row[1]
-			   "%s"				// row[...]
-			   "%s"				// row[...]
-			   "COUNT(*) AS NumUsrs"	// row[...]
+			   "cty_countrs.Name_%s,"	// row[2]
+			   "cty_countrs.WWW_%s,"	// row[3]
+			   "COUNT(*) AS NumUsrs"	// row[4]
 		    " FROM cty_countrs,"
 			  "usr_data"
 		   " WHERE cty_countrs.CtyCod=usr_data.CtyCod"
@@ -205,17 +182,20 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 		   " UNION "
 		   "(SELECT CtyCod,"			// row[0]
 			   "Alpha2,"			// row[1]
-			   "%s"				// row[...]
-			   "%s"				// row[...]
-			   "0 AS NumUsrs"		// row[...]
+			   "cty_countrs.Name_%s,"	// row[2]
+			   "cty_countrs.WWW_%s,"	// row[3]
+			   "0 AS NumUsrs"		// row[4]
 		    " FROM cty_countrs"
 		   " WHERE CtyCod NOT IN"
 		         " (SELECT DISTINCT "
 		                  "CtyCod"
 			    " FROM usr_data))"
 		" ORDER BY %s",
-		   SubQueryNam1,SubQueryWWW1,
-		   SubQueryNam2,SubQueryWWW2,OrderBySubQuery);
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   OrderBySubQuery);
 
    /* Free memory for subquery */
    free (OrderBySubQuery);
@@ -227,7 +207,7 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
+unsigned Cty_DB_GetBasicCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
@@ -240,6 +220,46 @@ unsigned Cty_DB_GetCountryDataByCod (MYSQL_RES **mysql_res,long CtyCod)
 		   " WHERE CtyCod='%03ld'",
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   CtyCod);
+  }
+
+/*****************************************************************************/
+/*********** Get all names and WWWs of a country given its code **************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNamesAndWWWsByCod (MYSQL_RES **mysql_res,long CtyCod)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   char StrField[32];
+   char SubQueryNam[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryWWW[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
+   Lan_Language_t Lan;
+
+   /***** Get countries from database *****/
+   SubQueryNam[0] = '\0';
+   SubQueryWWW[0] = '\0';
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	Lan++)
+     {
+      snprintf (StrField,sizeof (StrField),"Name_%s,",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryNam,StrField,sizeof (SubQueryNam) - 1);
+
+      snprintf (StrField,sizeof (StrField),
+	        Lan == Lan_NUM_LANGUAGES ? "WWW_%s" :
+					   "WWW_%s,",
+	        Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryWWW,StrField,sizeof (SubQueryWWW) - 1);
+     }
+
+   /* Query database */
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get countries",
+		   "SELECT %s"		// row[...]
+			   "%s"		// row[...]
+		    " FROM cty_countrs"
+	           " WHERE CtyCod='%03ld'",
+		   SubQueryNam,SubQueryWWW,
 		   CtyCod);
   }
 

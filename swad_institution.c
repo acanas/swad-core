@@ -293,7 +293,7 @@ static void Ins_ListInstitutions (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-                 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+                 Gbl.Hierarchy.Cty.FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
@@ -533,7 +533,7 @@ static void Ins_EditInstitutionsInternal (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-                 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+                 Gbl.Hierarchy.Cty.FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);

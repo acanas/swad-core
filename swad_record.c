@@ -3199,9 +3199,9 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 	       CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
 	       HTM_OPTION (HTM_Type_LONG,&CtyInLst->Cod,
 			   CtyInLst->Cod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
-							        HTM_OPTION_UNSELECTED,
+							     HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
-			   "%s",CtyInLst->Name[Gbl.Prefs.Language]);
+			   "%s",CtyInLst->FullName);
 	      }
 	 HTM_SELECT_End ();
       HTM_TD_End ();
@@ -3831,9 +3831,9 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			CtyInLst = &Gbl.Hierarchy.Ctys.Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&CtyInLst->Cod,
 				    CtyInLst->Cod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
+										    HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
-				    "%s",CtyInLst->Name[Gbl.Prefs.Language]);
+				    "%s",CtyInLst->FullName);
 		       }
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();

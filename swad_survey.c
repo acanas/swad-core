@@ -605,7 +605,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	       HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
 	       break;
 	    case HieLvl_CTY:	// Country
-	       HTM_TxtF ("%s&nbsp;%s",Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	       HTM_TxtF ("%s&nbsp;%s",Txt_Country,Gbl.Hierarchy.Cty.FullName);
 	       break;
 	    case HieLvl_INS:	// Institution
 	       HTM_TxtF ("%s&nbsp;%s",Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
