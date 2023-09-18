@@ -357,7 +357,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
       /***** Place *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 Plc.PlcCod = Ctr->PlcCod;
+	 Plc.PlcCod = Ctr->Specific.PlcCod;
 	 Plc_GetPlaceDataByCod (&Plc);
 	 HTM_Txt (Plc.ShrtName);
       HTM_TD_End ();
@@ -554,7 +554,7 @@ bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr)
 
    /***** Clear data *****/
    Ctr->PrtCod          = -1L;
-   Ctr->PlcCod          = -1L;
+   Ctr->Specific.PlcCod = -1L;
    Ctr->Status          = (Hie_Status_t) 0;
    Ctr->RequesterUsrCod = -1L;
    Ctr->ShrtName[0]     = '\0';
@@ -622,7 +622,7 @@ static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
    Ctr->PrtCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get place code (row[2]) *****/
-   Ctr->PlcCod = Str_ConvertStrCodToLongCod (row[2]);
+   Ctr->Specific.PlcCod = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get center status (row[3]) *****/
    if (sscanf (row[3],"%u",&(Ctr->Status)) != 1)
@@ -822,8 +822,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 				       " class=\"PLC_SEL INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"0",
-				    Ctr->PlcCod == 0 ? HTM_OPTION_SELECTED :
-						       HTM_OPTION_UNSELECTED,
+				    Ctr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
+						                HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_Another_place);
 			for (NumPlc = 0;
@@ -832,8 +832,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			  {
 			   PlcInLst = &Places->Lst[NumPlc];
 			   HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-				       PlcInLst->PlcCod == Ctr->PlcCod ? HTM_OPTION_SELECTED :
-									 HTM_OPTION_UNSELECTED,
+				       PlcInLst->PlcCod == Ctr->Specific.PlcCod ? HTM_OPTION_SELECTED :
+									          HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
 				       "%s",PlcInLst->ShrtName);
 			  }
@@ -844,7 +844,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  for (NumPlc = 0;
 		       NumPlc < Places->Num;
 		       NumPlc++)
-		     if (Places->Lst[NumPlc].PlcCod == Ctr->PlcCod)
+		     if (Places->Lst[NumPlc].PlcCod == Ctr->Specific.PlcCod)
 			HTM_Txt (Places->Lst[NumPlc].ShrtName);
 	    HTM_TD_End ();
 
@@ -1054,7 +1054,7 @@ void Ctr_ChangeCtrPlc (void)
 
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Ctr_EditingCtr->Cod,NewPlcCod);
-   Ctr_EditingCtr->PlcCod = NewPlcCod;
+   Ctr_EditingCtr->Specific.PlcCod = NewPlcCod;
 
    /***** Create alert to show the change made
 	  and put button to go to center changed *****/
@@ -1314,8 +1314,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"0",
-			   Ctr_EditingCtr->PlcCod == 0 ? HTM_OPTION_SELECTED :
-							 HTM_OPTION_UNSELECTED,
+			   Ctr_EditingCtr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
+							          HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",Txt_Another_place);
 	       for (NumPlc = 0;
@@ -1324,8 +1324,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 		 {
 		  PlcInLst = &Places->Lst[NumPlc];
 		  HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-			      PlcInLst->PlcCod == Ctr_EditingCtr->PlcCod ? HTM_OPTION_SELECTED :
-									   HTM_OPTION_UNSELECTED,
+			      PlcInLst->PlcCod == Ctr_EditingCtr->Specific.PlcCod ? HTM_OPTION_SELECTED :
+									            HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",PlcInLst->ShrtName);
 		 }
@@ -1528,7 +1528,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
    Ctr_EditingCtr->PrtCod = Gbl.Hierarchy.Ins.Cod;
 
    /* Get place */
-   Ctr_EditingCtr->PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
+   Ctr_EditingCtr->Specific.PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /* Get center short name and full name */
    Par_GetParText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
@@ -1874,7 +1874,7 @@ static void Ctr_EditingCenterConstructor (void)
    /***** Reset center *****/
    Ctr_EditingCtr->Cod             = -1L;
    Ctr_EditingCtr->PrtCod          = -1L;
-   Ctr_EditingCtr->PlcCod          = -1L;
+   Ctr_EditingCtr->Specific.PlcCod = -1L;
    Ctr_EditingCtr->Status          = (Hie_Status_t) 0;
    Ctr_EditingCtr->RequesterUsrCod = -1L;
    Ctr_EditingCtr->ShrtName[0]     = '\0';

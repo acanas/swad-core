@@ -3319,7 +3319,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	 /* Write degree year */
 	 HTM_TD_Begin ("class=\"CT LOG_%s\"",The_GetSuffix ());
 	    if (CrsOK)
-	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Year]);
+	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Specific.Year]);
 	    else
 	       HTM_Hyphen ();
 	    HTM_NBSP ();

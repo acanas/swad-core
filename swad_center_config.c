@@ -679,8 +679,8 @@ static void CtrCfg_Place (bool PutForm)
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"0",
-			      Gbl.Hierarchy.Ctr.PlcCod == 0 ? HTM_OPTION_SELECTED :
-							      HTM_OPTION_UNSELECTED,
+			      Gbl.Hierarchy.Ctr.Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
+							               HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_Another_place);
 		  for (NumPlc = 0;
@@ -689,8 +689,8 @@ static void CtrCfg_Place (bool PutForm)
 		    {
 		     PlcInLst = &Places.Lst[NumPlc];
 		     HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-				 PlcInLst->PlcCod == Gbl.Hierarchy.Ctr.PlcCod ? HTM_OPTION_SELECTED :
-										HTM_OPTION_UNSELECTED,
+				 PlcInLst->PlcCod == Gbl.Hierarchy.Ctr.Specific.PlcCod ? HTM_OPTION_SELECTED :
+											 HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",PlcInLst->ShrtName);
 		    }
@@ -703,7 +703,7 @@ static void CtrCfg_Place (bool PutForm)
 	 else	// I can not change center place
 	   {
 	    /* Text with the place name */
-	    Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
+	    Plc.PlcCod = Gbl.Hierarchy.Ctr.Specific.PlcCod;
 	    Plc_GetPlaceDataByCod (&Plc);
 	    HTM_Txt (Plc.FullName);
 	   }
@@ -1089,7 +1089,7 @@ void CtrCfg_ChangeCtrPlc (void)
 
    /***** Update place in table of centers *****/
    Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Ctr.Cod,NewPlcCod);
-   Gbl.Hierarchy.Ctr.PlcCod = NewPlcCod;
+   Gbl.Hierarchy.Ctr.Specific.PlcCod = NewPlcCod;
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_of_the_center_has_changed);

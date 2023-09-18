@@ -51,7 +51,12 @@ struct Deg_Degree
   {
    long Cod;			// Degree code
    long PrtCod;			// Parent (center) code
-   long TypCod;			// Degree type code
+   union
+     {
+      long PlcCod;		// Center place code
+      long TypCod;		// Degree type code
+      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
+     } Specific;
    Hie_Status_t Status;		// Degree status
    long RequesterUsrCod;	// User code of the person who requested the creation of this degree
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree

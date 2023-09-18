@@ -332,16 +332,16 @@ static void CrsCfg_Year (bool PutForm)
 		       Year <= Deg_MAX_YEARS_PER_DEGREE;
 		       Year++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				 Year == Gbl.Hierarchy.Crs.Year ? HTM_OPTION_SELECTED :
-								  HTM_OPTION_UNSELECTED,
+				 Year == Gbl.Hierarchy.Crs.Specific.Year ? HTM_OPTION_SELECTED :
+									   HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Txt_YEAR_OF_DEGREE[Year]);
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
 	   }
 	 else
-	    HTM_Txt (Gbl.Hierarchy.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year] :
-					      Txt_Not_applicable);
+	    HTM_Txt (Gbl.Hierarchy.Crs.Specific.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Specific.Year] :
+						       Txt_Not_applicable);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -491,17 +491,17 @@ void CrsCfg_ChangeCrsDeg (void)
 
       /***** If name of course was in database in the new degree... *****/
       if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.ShrtName,-1L,
-                                                  NewDeg.Cod,Gbl.Hierarchy.Crs.Year))
+                                                  NewDeg.Cod,Gbl.Hierarchy.Crs.Specific.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year],
+		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Specific.Year],
 			  NewDeg.FullName,
 		          Gbl.Hierarchy.Crs.ShrtName);
       else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Crs.FullName,-1L,
-                                                       NewDeg.Cod,Gbl.Hierarchy.Crs.Year))
+                                                       NewDeg.Cod,Gbl.Hierarchy.Crs.Specific.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year],
+		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Specific.Year],
 			  NewDeg.FullName,
 		          Gbl.Hierarchy.Crs.FullName);
       else	// Update degree in database

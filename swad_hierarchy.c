@@ -664,18 +664,18 @@ void Hie_ResetHierarchy (void)
    Gbl.Hierarchy.Cty.Cod    = -1L;
 
    /***** Institution *****/
-   Gbl.Hierarchy.Ins.Cod    = -1L;
+   Gbl.Hierarchy.Ins.Cod = -1L;
 
    /***** Center *****/
-   Gbl.Hierarchy.Ctr.Cod    = -1L;
-   Gbl.Hierarchy.Ctr.PrtCod = -1L;
-   Gbl.Hierarchy.Ctr.PlcCod = -1L;
+   Gbl.Hierarchy.Ctr.Cod             = -1L;
+   Gbl.Hierarchy.Ctr.PrtCod          = -1L;
+   Gbl.Hierarchy.Ctr.Specific.PlcCod = -1L;
 
    /***** Degree *****/
-   Gbl.Hierarchy.Deg.Cod    = -1L;
+   Gbl.Hierarchy.Deg.Cod = -1L;
 
    /***** Course *****/
-   Gbl.Hierarchy.Crs.Cod    = -1L;
+   Gbl.Hierarchy.Crs.Cod = -1L;
 
    /***** Hierarchy level and code *****/
    Gbl.Hierarchy.Level = HieLvl_UNK;

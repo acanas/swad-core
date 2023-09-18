@@ -926,7 +926,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	NumCrs++)
      {
       Crs = &(Gbl.Hierarchy.Crss.Lst[NumCrs]);
-      if (Crs->Year == Year)	// The year of the course is this?
+      if (Crs->Specific.Year == Year)	// The year of the course is this?
 	{
 	 ThisYearHasCourses = true;
 	 if (Crs->Status & Hie_STATUS_BIT_PENDING)
@@ -966,7 +966,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    /* Course year */
 	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
 	                  TxtClassNormal,The_GetSuffix (),BgColor);
-	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
+	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Specific.Year]);
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
@@ -1129,7 +1129,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	NumCrs++)
      {
       Crs = &(Gbl.Hierarchy.Crss.Lst[NumCrs]);
-      if (Crs->Year == Year)
+      if (Crs->Specific.Year == Year)
 	{
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
@@ -1174,15 +1174,15 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 					// because it's possible to move this course
 					// to another degree (with other active years)
 			HTM_OPTION (HTM_Type_UNSIGNED,&YearAux,
-				    YearAux == Crs->Year ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
+				    YearAux == Crs->Specific.Year ? HTM_OPTION_SELECTED :
+								    HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_YEAR_OF_DEGREE[YearAux]);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
 	      }
 	    else
-	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
+	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Specific.Year]);
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
@@ -1324,8 +1324,8 @@ static void Crs_PutFormToCreateCourse (void)
 		    Year <= Deg_MAX_YEARS_PER_DEGREE;
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-			      Year == Crs_EditingCrs->Year ? HTM_OPTION_SELECTED :
-							     HTM_OPTION_UNSELECTED,
+			      Year == Crs_EditingCrs->Specific.Year ? HTM_OPTION_SELECTED :
+								      HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_YEAR_OF_DEGREE[Year]);
 	    HTM_SELECT_End ();
@@ -1486,19 +1486,19 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
    Crs_GetParsNewCourse (Crs_EditingCrs);
 
    /***** Check if year is correct *****/
-   if (Crs_EditingCrs->Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
+   if (Crs_EditingCrs->Specific.Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       if (Crs_EditingCrs->ShrtName[0] &&
 	  Crs_EditingCrs->FullName[0])	// If there's a course name
 	{
 	 /***** If name of course was in database... *****/
 	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
-						     -1L,Crs_EditingCrs->PrtCod,Crs_EditingCrs->Year))
+						     -1L,Crs_EditingCrs->PrtCod,Crs_EditingCrs->Specific.Year))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_course_X_already_exists,
 	                     Crs_EditingCrs->ShrtName);
 	 else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
-	                                                  -1L,Crs_EditingCrs->PrtCod,Crs_EditingCrs->Year))
+	                                                  -1L,Crs_EditingCrs->PrtCod,Crs_EditingCrs->Specific.Year))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_course_X_already_exists,
 		             Crs_EditingCrs->FullName);
@@ -1516,7 +1516,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
    else	// Year not valid
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_The_year_X_is_not_allowed,
-                       Crs_EditingCrs->Year);
+                       Crs_EditingCrs->Specific.Year);
   }
 
 /*****************************************************************************/
@@ -1530,7 +1530,7 @@ static void Crs_GetParsNewCourse (struct Crs_Course *Crs)
    /***** Get parameters of the course from form *****/
    /* Get year */
    Par_GetParText ("OthCrsYear",YearStr,2);
-   Crs->Year = Deg_ConvStrToYear (YearStr);
+   Crs->Specific.Year = Deg_ConvStrToYear (YearStr);
 
    /* Get institutional code */
    Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
@@ -1592,12 +1592,12 @@ bool Crs_GetCourseDataByCod (struct Crs_Course *Crs)
    bool CrsFound = false;
 
    /***** Clear data *****/
-   Crs->PrtCod = -1L;
-   Crs->Year   = 0;
-   Crs->Status = (Hie_Status_t) 0;
+   Crs->PrtCod 		= -1L;
+   Crs->Specific.Year   = 0;
+   Crs->Status          = (Hie_Status_t) 0;
    Crs->RequesterUsrCod = -1L;
-   Crs->ShrtName[0] = '\0';
-   Crs->FullName[0] = '\0';
+   Crs->ShrtName[0]     = '\0';
+   Crs->FullName[0]     = '\0';
 
    /***** Check if course code is correct *****/
    if (Crs->Cod > 0)
@@ -1639,7 +1639,7 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
    Crs->PrtCod = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get year (row[2]) *****/
-   Crs->Year = Deg_ConvStrToYear (row[2]);
+   Crs->Specific.Year = Deg_ConvStrToYear (row[2]);
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
@@ -1904,7 +1904,7 @@ void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear)
    Crs_DB_UpdateCrsYear (Crs->Cod,NewYear);
 
    /***** Copy course year/semester *****/
-   Crs->Year = NewYear;
+   Crs->Specific.Year = NewYear;
   }
 
 /*****************************************************************************/
@@ -1980,7 +1980,7 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 	{
 	 /***** If course was in database... *****/
 	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParName,NewCrsName,Crs->Cod,
-						     Crs->PrtCod,Crs->Year))
+						     Crs->PrtCod,Crs->Specific.Year))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_course_X_already_exists,
 			     NewCrsName);
@@ -2611,13 +2611,13 @@ static void Crs_EditingCourseConstructor (void)
       Err_NotEnoughMemoryExit ();
 
    /***** Reset course *****/
-   Crs_EditingCrs->Cod         = -1L;
-   Crs_EditingCrs->PrtCod      = -1L;
-   Crs_EditingCrs->Year        = 0;
-   Crs_EditingCrs->Status      = 0;
+   Crs_EditingCrs->Cod           = -1L;
+   Crs_EditingCrs->PrtCod        = -1L;
+   Crs_EditingCrs->Specific.Year = 0;
+   Crs_EditingCrs->Status        = 0;
    Crs_EditingCrs->InstitutionalCod[0] = '\0';
-   Crs_EditingCrs->ShrtName[0] = '\0';
-   Crs_EditingCrs->FullName[0] = '\0';
+   Crs_EditingCrs->ShrtName[0]   = '\0';
+   Crs_EditingCrs->FullName[0]   = '\0';
   }
 
 static void Crs_EditingCourseDestructor (void)

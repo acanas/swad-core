@@ -183,7 +183,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    Par_GetParUnsignedLong ("Year",
 			   0,	// N.A.
 			   Deg_MAX_YEARS_PER_DEGREE,
-			   (unsigned long) Gbl.Hierarchy.Crs.Year);
+			   (unsigned long) Gbl.Hierarchy.Crs.Specific.Year);
 
    /***** Get the type of call for exam *****/
    Par_GetParText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);

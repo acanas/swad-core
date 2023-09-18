@@ -48,6 +48,12 @@
 struct Cty_Countr
   {
    long Cod;			// Country code
+   union
+     {
+      long PlcCod;		// Center place code
+      long TypCod;		// Degree type code
+      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
+     } Specific;
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Alpha2
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];

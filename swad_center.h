@@ -45,7 +45,12 @@ struct Ctr_Center
   {
    long Cod;			// Center code
    long PrtCod;			// Parent (institution) code
-   long PlcCod;			// Place code
+   union
+     {
+      long PlcCod;		// Center place code
+      long TypCod;		// Degree type code
+      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
+     } Specific;
    Hie_Status_t Status;		// Center status
    long RequesterUsrCod;	// User code of the person who requested the creation of this center
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];

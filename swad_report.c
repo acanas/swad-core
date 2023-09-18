@@ -1058,8 +1058,8 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 fprintf (Rep_File,"<strong>%s</strong> -",Crs.FullName);
 
 	 /***** Write year *****/
-	 if (Crs.Year)
-	    fprintf (Rep_File," %s",Txt_YEAR_OF_DEGREE[Crs.Year]);
+	 if (Crs.Specific.Year)
+	    fprintf (Rep_File," %s",Txt_YEAR_OF_DEGREE[Crs.Specific.Year]);
 
 	 /***** Write degree full name *****/
 	 fprintf (Rep_File," %s",Deg.FullName);
