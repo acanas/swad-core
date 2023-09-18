@@ -455,7 +455,7 @@ unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
 /*********** Get average coordinates of centers in current country ***********/
 /*****************************************************************************/
 
-void Cty_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
+void Cty_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 

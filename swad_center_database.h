@@ -46,6 +46,7 @@ unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
                                    long InsCod,Ctr_Order_t SelectedOrder);
 unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod);
+unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long CtrCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
 void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
@@ -78,8 +79,8 @@ void Ctr_DB_UpdateCtrStatus (long CtrCod,Hie_Status_t NewStatus);
 
 
 bool Ctr_DB_CheckIfMapIsAvailableInIns (long InsCod);
-void Ctr_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
-void Ctr_DB_GetCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom);
+void Ctr_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
+void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom);
 unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
 

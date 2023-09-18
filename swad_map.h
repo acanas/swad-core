@@ -57,4 +57,6 @@ double Map_GetLatitudeFromStr (char *Str);
 double Map_GetLongitudeFromStr (char *Str);
 double Map_GetAltitudeFromStr (char *Str);
 
+bool Map_CheckIfCoordAreAvailable (const struct Map_Coordinates *Coord);
+
 #endif

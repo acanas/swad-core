@@ -48,7 +48,6 @@ struct Ctr_Center
    long PlcCod;			// Place code
    Hie_Status_t Status;		// Center status
    long RequesterUsrCod;	// User code of the person who requested the creation of this center
-   struct Map_Coordinates Coord;	// Geographical coordinates
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
@@ -89,6 +88,7 @@ void Ctr_EditCenters (void);
 void Ctr_GetBasicListOfCenters (long InsCod);
 void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder);
 bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr);
+void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord);
 void Ctr_FreeListCenters (void);
 void Ctr_WriteSelectorOfCenter (void);
 void Ctr_RemoveCenter (void);
@@ -121,8 +121,6 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (void);
 unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role);
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
-
-bool Ctr_GetIfMapIsAvailable (const struct Ctr_Center *Ctr);
 
 void Ctr_GetMyCenters (void);
 void Ctr_FreeMyCenters (void);

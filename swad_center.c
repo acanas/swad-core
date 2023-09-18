@@ -86,6 +86,8 @@ static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
 static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
 				      struct Ctr_Center *Ctr,
                                       bool GetNumUsrsWhoClaimToBelongToCtr);
+static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
+				 struct Map_Coordinates *Coord);
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
 static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr);
@@ -582,6 +584,24 @@ bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr)
   }
 
 /*****************************************************************************/
+/******************** Get coordinates of center by code **********************/
+/*****************************************************************************/
+
+void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord)
+  {
+   MYSQL_RES *mysql_res;
+
+   /***** Get coordinates of a center from database *****/
+   if (Ctr_DB_GetCoordByCod (&mysql_res,CtrCod)) // Center found...
+      Ctr_GetCoordFromRow (mysql_res,Coord);
+   else
+      Coord->Latitude = Coord->Longitude = Coord->Altitude = 0.0;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /********** Get data of a center from a row resulting of a query *************/
 /*****************************************************************************/
 
@@ -611,22 +631,35 @@ static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
    /***** Get requester user's code (row[4]) *****/
    Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
-   /***** Get latitude (row[5], longitude (row[6]) and altitude (row[7])*****/
-   Ctr->Coord.Latitude  = Map_GetLatitudeFromStr  (row[5]);
-   Ctr->Coord.Longitude = Map_GetLongitudeFromStr (row[6]);
-   Ctr->Coord.Altitude  = Map_GetAltitudeFromStr  (row[7]);
+   /***** Get short name (row[5]), full name (row[6])
+          and URL (row[7]) of the center *****/
+   Str_Copy (Ctr->ShrtName,row[5],sizeof (Ctr->ShrtName) - 1);
+   Str_Copy (Ctr->FullName,row[6],sizeof (Ctr->FullName) - 1);
+   Str_Copy (Ctr->WWW     ,row[7],sizeof (Ctr->WWW     ) - 1);
 
-   /***** Get short name (row[8]), full name (row[9])
-          and URL (row[10]) of the center *****/
-   Str_Copy (Ctr->ShrtName,row[ 8],sizeof (Ctr->ShrtName) - 1);
-   Str_Copy (Ctr->FullName,row[ 9],sizeof (Ctr->FullName) - 1);
-   Str_Copy (Ctr->WWW     ,row[10],sizeof (Ctr->WWW     ) - 1);
-
-   /* Get number of users who claim to belong to this center (row[11]) */
+   /* Get number of users who claim to belong to this center (row[8]) */
    Ctr->NumUsrsWhoClaimToBelong.Valid = false;
    if (GetNumUsrsWhoClaimToBelongToCtr)
-      if (sscanf (row[11],"%u",&(Ctr->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
+      if (sscanf (row[8],"%u",&(Ctr->NumUsrsWhoClaimToBelong.NumUsrs)) == 1)
 	 Ctr->NumUsrsWhoClaimToBelong.Valid = true;
+  }
+
+/*****************************************************************************/
+/********* Get coordinares of a center from a row resulting of a query *******/
+/*****************************************************************************/
+
+static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
+				 struct Map_Coordinates *Coord)
+  {
+   MYSQL_ROW row;
+
+   /***** Get next row from result *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get latitude (row[0], longitude (row[1]) and altitude (row[2])*****/
+   Coord->Latitude  = Map_GetLatitudeFromStr  (row[0]);
+   Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
+   Coord->Altitude  = Map_GetAltitudeFromStr  (row[2]);
   }
 
 /*****************************************************************************/
@@ -1865,24 +1898,18 @@ static void Ctr_EditingCenterDestructor (void)
 
 static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr)
   {
-   if (Ctr_GetIfMapIsAvailable (Ctr))
+   struct Map_Coordinates Coord;
+
+   /***** Get coordinates of center *****/
+   Ctr_GetCoordByCod (Ctr->Cod,&Coord);
+
+   if (Map_CheckIfCoordAreAvailable (&Coord))
      {
       Ctr_EditingCtr = Ctr;	// Used to pass parameter with the code of the center
       Lay_PutContextualLinkOnlyIcon (ActSeeCtrInf,NULL,
                                      Ctr_PutParCtrCod,&Ctr_EditingCtr->Cod,
 				     "map-marker-alt.svg",Ico_BLACK);
      }
-  }
-
-/*****************************************************************************/
-/************************ Check if a center has map **************************/
-/*****************************************************************************/
-
-bool Ctr_GetIfMapIsAvailable (const struct Ctr_Center *Ctr)
-  {
-   /***** Coordinates 0, 0 means not set ==> don't show map *****/
-   return Ctr->Coord.Latitude ||
-          Ctr->Coord.Longitude;
   }
 
 /*****************************************************************************/

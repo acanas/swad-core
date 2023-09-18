@@ -79,10 +79,10 @@ static void CtrCfg_Configuration (bool PrintView);
 static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args);
 static void CtrCfg_PutIconToChangePhoto (void);
 static void CtrCfg_Title (bool PutLink);
-static void CtrCfg_Map (void);
-static void CtrCfg_Latitude (void);
-static void CtrCfg_Longitude (void);
-static void CtrCfg_Altitude (void);
+static void CtrCfg_Map (const struct Map_Coordinates *Coord);
+static void CtrCfg_Latitude (double Latitude);
+static void CtrCfg_Longitude (double Longitude);
+static void CtrCfg_Altitude (double Altitude);
 static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1]);
 static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution);
@@ -126,6 +126,7 @@ void CtrCfg_PrintConfiguration (void)
 static void CtrCfg_Configuration (bool PrintView)
   {
    extern const char *Hlp_CENTER_Information;
+   struct Map_Coordinates Coord;
    bool PutLink;
    bool PutFormIns;
    bool PutFormName;
@@ -140,6 +141,9 @@ static void CtrCfg_Configuration (bool PrintView)
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.Cod <= 0)	// No center selected
       return;
+
+   /***** Get coordinates of center *****/
+   Ctr_GetCoordByCod (Gbl.Hierarchy.Ctr.Cod,&Coord);
 
    /***** Initializations *****/
    PutLink      = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
@@ -182,9 +186,9 @@ static void CtrCfg_Configuration (bool PrintView)
 	 /***** Coordinates *****/
 	 if (PutFormCoor)
 	   {
-	    CtrCfg_Latitude ();
-	    CtrCfg_Longitude ();
-	    CtrCfg_Altitude ();
+	    CtrCfg_Latitude  (Coord.Latitude );
+	    CtrCfg_Longitude (Coord.Longitude);
+	    CtrCfg_Altitude  (Coord.Altitude );
 	   }
 
 	 /***** Center WWW *****/
@@ -220,7 +224,7 @@ static void CtrCfg_Configuration (bool PrintView)
 
    /**************************** Right part **********************************/
    /***** Check map *****/
-   MapIsAvailable = Ctr_GetIfMapIsAvailable (&Gbl.Hierarchy.Ctr);
+   MapIsAvailable = Map_CheckIfCoordAreAvailable (&Coord);
 
    /***** Check photo *****/
    snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
@@ -236,7 +240,7 @@ static void CtrCfg_Configuration (bool PrintView)
 
 	 /***** Center map *****/
 	 if (MapIsAvailable)
-	    CtrCfg_Map ();
+	    CtrCfg_Map (&Coord);
 
 	 /***** Center photo *****/
 	 if (PhotoExists)
@@ -306,7 +310,7 @@ static void CtrCfg_Title (bool PutLink)
 
 #define CtrCfg_MAP_CONTAINER_ID "ctr_mapid"
 
-static void CtrCfg_Map (void)
+static void CtrCfg_Map (const struct Map_Coordinates *Coord)
   {
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();
@@ -322,13 +326,13 @@ static void CtrCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
       /* Let's create a map with pretty Mapbox Streets tiles */
-      Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,&Gbl.Hierarchy.Ctr.Coord,16);
+      Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,Coord,16);
 
       /* Add Mapbox Streets tile layer to our map */
       Map_AddTileLayer ();
 
       /* Add marker */
-      Map_AddMarker (&Gbl.Hierarchy.Ctr.Coord);
+      Map_AddMarker (Coord);
 
       /* Add popup */
       Map_AddPopup (Gbl.Hierarchy.Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName,
@@ -341,7 +345,7 @@ static void CtrCfg_Map (void)
 /************************** Edit center coordinates **************************/
 /*****************************************************************************/
 
-static void CtrCfg_Latitude (void)
+static void CtrCfg_Latitude (double Latitude)
   {
    extern const char *Txt_Latitude;
 
@@ -358,7 +362,7 @@ static void CtrCfg_Latitude (void)
 			     -90.0,	// South Pole
 			     90.0,	// North Pole
 			     0.0,	// step="any"
-			     Gbl.Hierarchy.Ctr.Coord.Latitude,
+			     Latitude,
 			     HTM_SUBMIT_ON_CHANGE,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
@@ -369,7 +373,7 @@ static void CtrCfg_Latitude (void)
    HTM_TR_End ();
   }
 
-static void CtrCfg_Longitude (void)
+static void CtrCfg_Longitude (double Longitude)
   {
    extern const char *Txt_Longitude;
 
@@ -386,7 +390,7 @@ static void CtrCfg_Longitude (void)
 			     -180.0,	// West
 			     180.0,	// East
 			     0.0,	// step="any"
-			     Gbl.Hierarchy.Ctr.Coord.Longitude,
+			     Longitude,
 			     HTM_SUBMIT_ON_CHANGE,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
@@ -397,7 +401,7 @@ static void CtrCfg_Longitude (void)
    HTM_TR_End ();
   }
 
-static void CtrCfg_Altitude (void)
+static void CtrCfg_Altitude (double Altitude)
   {
    extern const char *Txt_Altitude;
 
@@ -414,7 +418,7 @@ static void CtrCfg_Altitude (void)
 			     -413.0,	// Dead Sea shore
 			     8848.0,	// Mount Everest
 			     0.0,	// step="any"
-			     Gbl.Hierarchy.Ctr.Coord.Altitude,
+			     Altitude,
 			     HTM_SUBMIT_ON_CHANGE,false,
 			     "class=\"INPUT_COORD INPUT_%s\""
 			     " required=\"required\"",
@@ -1123,7 +1127,6 @@ void CtrCfg_ChangeCtrLatitude (void)
 
    /***** Update database changing old latitude by new latitude *****/
    Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.Cod,"Latitude",NewLatitude);
-   Gbl.Hierarchy.Ctr.Coord.Latitude = NewLatitude;
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1144,7 +1147,6 @@ void CtrCfg_ChangeCtrLongitude (void)
 
    /***** Update database changing old longitude by new longitude *****/
    Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.Cod,"Longitude",NewLongitude);
-   Gbl.Hierarchy.Ctr.Coord.Longitude = NewLongitude;
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1165,7 +1167,6 @@ void CtrCfg_ChangeCtrAltitude (void)
 
    /***** Update database changing old altitude by new altitude *****/
    Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.Cod,"Altitude",NewAltitude);
-   Gbl.Hierarchy.Ctr.Coord.Altitude = NewAltitude;
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();

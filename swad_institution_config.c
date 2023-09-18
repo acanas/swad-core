@@ -238,7 +238,7 @@ static void InsCfg_Title (bool PutLink)
   }
 
 /*****************************************************************************/
-/****************************** Draw center map ******************************/
+/*************************** Draw institution map ****************************/
 /*****************************************************************************/
 
 #define InsCfg_MAP_CONTAINER_ID "ins_mapid"
@@ -246,11 +246,12 @@ static void InsCfg_Title (bool PutLink)
 static void InsCfg_Map (void)
   {
    MYSQL_RES *mysql_res;
-   struct Map_Coordinates InsAvgCoord;
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Ctr_Center Ctr;
+   struct Map_Coordinates Coord;
+   struct Map_Coordinates InsAvgCoord;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();
@@ -266,7 +267,7 @@ static void InsCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
    /* Let's create a map with pretty Mapbox Streets tiles */
-   Ctr_DB_GetCoordAndZoomInCurrentIns (&InsAvgCoord,&Zoom);
+   Ctr_DB_GetAvgCoordAndZoomInCurrentIns (&InsAvgCoord,&Zoom);
    Map_CreateMap (InsCfg_MAP_CONTAINER_ID,&InsAvgCoord,Zoom);
 
    /* Add Mapbox Streets tile layer to our map */
@@ -286,8 +287,11 @@ static void InsCfg_Map (void)
       /* Get data of center */
       Ctr_GetCenterDataByCod (&Ctr);
 
+      /* Get coordinates of center */
+      Ctr_GetCoordByCod (Ctr.Cod,&Coord);
+
       /* Add marker */
-      Map_AddMarker (&Ctr.Coord);
+      Map_AddMarker (&Coord);
 
       /* Add popup */
       Map_AddPopup (Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName,

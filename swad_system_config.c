@@ -188,12 +188,13 @@ static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args)
 static void SysCfg_Map (void)
   {
    MYSQL_RES *mysql_res;
-   struct Map_Coordinates CtyAvgCoord;
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
+   struct Map_Coordinates Coord;
+   struct Map_Coordinates CtyAvgCoord;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();
@@ -209,7 +210,7 @@ static void SysCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
       /* Let's create a map with pretty Mapbox Streets tiles */
-      Ctr_DB_GetCoordAndZoom (&CtyAvgCoord,&Zoom);
+      Ctr_DB_GetAvgCoordAndZoom (&CtyAvgCoord,&Zoom);
       Map_CreateMap (SysCfg_MAP_CONTAINER_ID,&CtyAvgCoord,Zoom);
 
       /* Add Mapbox Streets tile layer to our map */
@@ -229,12 +230,15 @@ static void SysCfg_Map (void)
 	 /* Get data of center */
 	 Ctr_GetCenterDataByCod (&Ctr);
 
+	 /* Get coordinates of center */
+	 Ctr_GetCoordByCod (Ctr.Cod,&Coord);
+
 	 /* Get data of institution */
 	 Ins.Cod = Ctr.PrtCod;
 	 Ins_GetInstitDataByCod (&Ins);
 
 	 /* Add marker */
-	 Map_AddMarker (&Ctr.Coord);
+	 Map_AddMarker (&Coord);
 
 	 /* Add popup */
 	 Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,

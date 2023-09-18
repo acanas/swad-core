@@ -242,3 +242,14 @@ static unsigned Map_GetZoomFromDistance (double MaxDistance)
          ((MaxDistance <  50.0 ) ?  2 :
                                     1))));
   }
+
+/*****************************************************************************/
+/********************* Check if coordinates are avilable *********************/
+/*****************************************************************************/
+
+bool Map_CheckIfCoordAreAvailable (const struct Map_Coordinates *Coord)
+  {
+   /***** Coordinates 0, 0 means not set ==> don't show map *****/
+   return Coord->Latitude ||
+          Coord->Longitude;
+  }

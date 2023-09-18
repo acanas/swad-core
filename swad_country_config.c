@@ -256,6 +256,7 @@ static void CtyCfg_Map (void)
    unsigned NumCtr;
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
+   struct Map_Coordinates Coord;
 
    /***** Leaflet CSS *****/
    Map_LeafletCSS ();
@@ -271,7 +272,7 @@ static void CtyCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
       /* Let's create a map with pretty Mapbox Streets tiles */
-      Cty_DB_GetCoordAndZoom (&CtyAvgCoord,&Zoom);
+      Cty_DB_GetAvgCoordAndZoom (&CtyAvgCoord,&Zoom);
       Map_CreateMap (CtyCfg_MAP_CONTAINER_ID,&CtyAvgCoord,Zoom);
 
       /* Add Mapbox Streets tile layer to our map */
@@ -291,12 +292,15 @@ static void CtyCfg_Map (void)
 	 /* Get data of center */
 	 Ctr_GetCenterDataByCod (&Ctr);
 
+	 /* Get coordinates of center */
+	 Ctr_GetCoordByCod (Ctr.Cod,&Coord);
+
 	 /* Get data of institution */
 	 Ins.Cod = Ctr.PrtCod;
 	 Ins_GetInstitDataByCod (&Ins);
 
 	 /* Add marker */
-	 Map_AddMarker (&Ctr.Coord);
+	 Map_AddMarker (&Coord);
 
 	 /* Add popup */
 	 Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,

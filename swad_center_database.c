@@ -93,17 +93,14 @@ unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers",
-		   "SELECT CtrCod,"		// row[ 0]
-			  "InsCod,"		// row[ 1]
-			  "PlcCod,"		// row[ 2]
-			  "Status,"		// row[ 3]
-			  "RequesterUsrCod,"	// row[ 4]
-			  "Latitude,"		// row[ 5]
-			  "Longitude,"		// row[ 6]
-			  "Altitude,"		// row[ 7]
-			  "ShortName,"		// row[ 8]
-			  "FullName,"		// row[ 9]
-			  "WWW"			// row[10]
+		   "SELECT CtrCod,"		// row[0]
+			  "InsCod,"		// row[1]
+			  "PlcCod,"		// row[2]
+			  "Status,"		// row[3]
+			  "RequesterUsrCod,"	// row[4]
+			  "ShortName,"		// row[5]
+			  "FullName,"		// row[6]
+			  "WWW"			// row[7]
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		   " ORDER BY FullName",
@@ -127,35 +124,29 @@ unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers",
-		   "(SELECT ctr_centers.CtrCod,"		// row[ 0]
-			   "ctr_centers.InsCod,"		// row[ 1]
-			   "ctr_centers.PlcCod,"		// row[ 2]
-			   "ctr_centers.Status,"		// row[ 3]
-			   "ctr_centers.RequesterUsrCod,"	// row[ 4]
-			   "ctr_centers.Latitude,"		// row[ 5]
-			   "ctr_centers.Longitude,"		// row[ 6]
-			   "ctr_centers.Altitude,"		// row[ 7]
-			   "ctr_centers.ShortName,"		// row[ 8]
-			   "ctr_centers.FullName,"		// row[ 9]
-			   "ctr_centers.WWW,"			// row[10]
-			   "COUNT(*) AS NumUsrs"		// row[11]
+		   "(SELECT ctr_centers.CtrCod,"		// row[0]
+			   "ctr_centers.InsCod,"		// row[1]
+			   "ctr_centers.PlcCod,"		// row[2]
+			   "ctr_centers.Status,"		// row[3]
+			   "ctr_centers.RequesterUsrCod,"	// row[4]
+			   "ctr_centers.ShortName,"		// row[5]
+			   "ctr_centers.FullName,"		// row[6]
+			   "ctr_centers.WWW,"			// row[7]
+			   "COUNT(*) AS NumUsrs"		// row[8]
 		    " FROM ctr_centers,usr_data"
 		   " WHERE ctr_centers.InsCod=%ld"
 		     " AND ctr_centers.CtrCod=usr_data.CtrCod"
 		" GROUP BY ctr_centers.CtrCod)"
 		   " UNION "
-		   "(SELECT CtrCod,"				// row[ 0]
-			   "InsCod,"				// row[ 1]
-			   "PlcCod,"				// row[ 2]
-			   "Status,"				// row[ 3]
-			   "RequesterUsrCod,"			// row[ 4]
-			   "Latitude,"				// row[ 5]
-			   "Longitude,"				// row[ 6]
-			   "Altitude,"				// row[ 7]
-			   "ShortName,"				// row[ 8]
-			   "FullName,"				// row[ 9]
-			   "WWW,"				// row[10]
-			   "0 AS NumUsrs"			// row[11]
+		   "(SELECT CtrCod,"				// row[0]
+			   "InsCod,"				// row[1]
+			   "PlcCod,"				// row[2]
+			   "Status,"				// row[3]
+			   "RequesterUsrCod,"			// row[4]
+			   "ShortName,"				// row[5]
+			   "FullName,"				// row[6]
+			   "WWW,"				// row[7]
+			   "0 AS NumUsrs"			// row[8]
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		     " AND CtrCod NOT IN"
@@ -218,17 +209,30 @@ unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a center",
-		   "SELECT CtrCod,"		// row[ 0]
-			  "InsCod,"		// row[ 1]
-			  "PlcCod,"		// row[ 2]
-			  "Status,"		// row[ 3]
-			  "RequesterUsrCod,"	// row[ 4]
-			  "Latitude,"		// row[ 5]
-			  "Longitude,"		// row[ 6]
-			  "Altitude,"		// row[ 7]
-			  "ShortName,"		// row[ 8]
-			  "FullName,"		// row[ 9]
-			  "WWW"			// row[10]
+		   "SELECT CtrCod,"		// row[0]
+			  "InsCod,"		// row[1]
+			  "PlcCod,"		// row[2]
+			  "Status,"		// row[3]
+			  "Altitude,"		// row[4]
+			  "ShortName,"		// row[5]
+			  "FullName,"		// row[6]
+			  "WWW"			// row[7]
+		    " FROM ctr_centers"
+		   " WHERE CtrCod=%ld",
+		   CtrCod);
+  }
+
+/*****************************************************************************/
+/******************** Get coordinates of center by code **********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long CtrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get coordinares of a center",
+		   "SELECT Latitude,"		// row[ 0]
+			  "Longitude,"		// row[ 1]
+			  "Altitude"		// row[ 2]
 		    " FROM ctr_centers"
 		   " WHERE CtrCod=%ld",
 		   CtrCod);
@@ -631,7 +635,7 @@ bool Ctr_DB_CheckIfMapIsAvailableInIns (long InsCod)
 /********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
-void Ctr_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
+void Ctr_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 
@@ -654,7 +658,7 @@ void Ctr_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
 /********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
-void Ctr_DB_GetCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom)
+void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 
