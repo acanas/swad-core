@@ -249,7 +249,7 @@ static void InsCfg_Map (void)
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ctr;
    struct Map_Coordinates Coord;
    struct Map_Coordinates InsAvgCoord;
 
@@ -313,7 +313,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
    unsigned NumCty;
-   const struct Cty_Countr *CtyInLst;
+   const struct Hie_Node *CtyInLst;
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();
@@ -547,7 +547,7 @@ void InsCfg_ChangeInsCty (void)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
-   struct Cty_Countr NewCty;
+   struct Hie_Node NewCty;
 
    /***** Get the new country code for the institution *****/
    NewCty.Cod = ParCod_GetAndCheckPar (ParCod_OthCty);

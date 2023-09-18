@@ -47,7 +47,7 @@ extern struct Globals Gbl;
 /************************** Create a new institution *************************/
 /*****************************************************************************/
 
-long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,Hie_Status_t Status)
+long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create institution",
@@ -297,11 +297,11 @@ unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod
 
 unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
   {
-   static const char *OrderBySubQuery[Ins_NUM_ORDERS] =
+   static const char *OrderBySubQuery[Hie_NUM_ORDERS] =
      {
-      [Ins_ORDER_BY_INSTITUTION] = "FullName",
-      [Ins_ORDER_BY_NUM_USRS   ] = "NumUsrs DESC,"
-	                           "FullName",
+      [Hie_ORDER_BY_NAME    ] = "FullName",
+      [Hie_ORDER_BY_NUM_USRS] = "NumUsrs DESC,"
+	                        "FullName",
      };
 
    /***** Get institutions from database *****/

@@ -38,7 +38,7 @@
 /*****************************************************************************/
 
 void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
-void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status);
+void Deg_DB_CreateDegree (struct Hie_Node *Deg,Hie_Status_t Status);
 
 unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level);
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,

@@ -77,14 +77,14 @@ typedef enum
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct Deg_Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degree being edited
+static struct Hie_Node *Deg_EditingDeg = NULL;	// Static variable to keep the degree being edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes);
-static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg);
+static bool Deg_CheckIfICanEditADegree (struct Hie_Node *Deg);
 static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes);
 static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
@@ -92,7 +92,7 @@ static void Deg_PutHeadDegreesForEdition (void);
 static void Deg_ListDegrees (void);
 static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args);
 static void Deg_PutIconToEditDegrees (void);
-static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg);
+static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg);
 
 static void Deg_EditDegreesInternal (void);
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
@@ -100,7 +100,7 @@ static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status);
 
 static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Deg_Degree *Deg);
+                                      struct Hie_Node *Deg);
 
 static void Deg_ShowAlertAndButtonToGoToDeg (void);
 
@@ -124,7 +124,7 @@ void Deg_SeeDegWithPendingCrss (void)
    MYSQL_ROW row;
    unsigned NumDegs;
    unsigned NumDeg;
-   struct Deg_Degree Deg;
+   struct Hie_Node Deg;
    const char *BgColor;
 
    /***** Get degrees with pending courses *****/
@@ -190,7 +190,7 @@ void Deg_SeeDegWithPendingCrss (void)
 /******************** Draw degree logo and name with link ********************/
 /*****************************************************************************/
 
-void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Action,
+void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
                                         const char *ClassLogo)
   {
    /***** Begin form *****/
@@ -315,7 +315,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumDeg;
-   struct Deg_Degree *DegInLst;
+   struct Hie_Node *DegInLst;
    unsigned NumDegTyp;
    struct DegTyp_DegreeType *DegTypInLst;
    char WWW[Cns_MAX_BYTES_WWW + 1];
@@ -503,7 +503,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 /************** Check if I can edit, remove, etc. a degree *******************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
+static bool Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
   {
    return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
           ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
@@ -776,7 +776,7 @@ static void Deg_PutIconToEditDegrees (void)
 /************************ List one degree for seeing *************************/
 /*****************************************************************************/
 
-static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
+static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
   {
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
@@ -955,7 +955,7 @@ void Deg_PutIconToViewDegrees (void)
 /************ Create a list with all degrees that have students **************/
 /*****************************************************************************/
 
-void Deg_GetListAllDegsWithStds (struct Deg_ListDegs *Degs)
+void Deg_GetListAllDegsWithStds (struct Hie_List *Degs)
   {
    MYSQL_RES *mysql_res;
    unsigned NumDeg;
@@ -1015,7 +1015,7 @@ void Deg_GetListDegsInCurrentCtr (void)
 /*************************** Free list of degrees ****************************/
 /*****************************************************************************/
 
-void Deg_FreeListDegs (struct Deg_ListDegs *Degs)
+void Deg_FreeListDegs (struct Hie_List *Degs)
   {
    if (Degs->Lst)
      {
@@ -1146,7 +1146,7 @@ void Deg_RemoveDegree (void)
 /*****************************************************************************/
 // Returns true if degree found
 
-bool Deg_GetDegreeDataByCod (struct Deg_Degree *Deg)
+bool Deg_GetDegreeDataByCod (struct Hie_Node *Deg)
   {
    MYSQL_RES *mysql_res;
    bool DegFound = false;
@@ -1185,7 +1185,7 @@ bool Deg_GetDegreeDataByCod (struct Deg_Degree *Deg)
 /*****************************************************************************/
 
 static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Deg_Degree *Deg)
+                                      struct Hie_Node *Deg)
   {
    MYSQL_ROW row;
 
@@ -1299,7 +1299,7 @@ void Deg_RenameDegreeFull (void)
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_renamed_as_Y;
@@ -1715,7 +1715,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
    extern const char *Txt_degrees;
    char *Title;
    unsigned NumDeg;
-   struct Deg_Degree Deg;
+   struct Hie_Node Deg;
 
    /***** Query database *****/
    if (NumDegs)

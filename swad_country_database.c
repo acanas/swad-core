@@ -55,7 +55,7 @@ extern struct Globals Gbl;
 /**************************** Create a new country ***************************/
 /*****************************************************************************/
 
-void Cty_DB_CreateCountry (const struct Cty_Countr *Cty,
+void Cty_DB_CreateCountry (const struct Hie_Node *Cty,
 			   char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1])
   {
@@ -153,10 +153,10 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char *OrderBySubQuery = NULL;
-   static const char *OrderBySubQueryFmt[Cty_NUM_ORDERS] =
+   static const char *OrderBySubQueryFmt[Hie_NUM_ORDERS] =
      {
-      [Cty_ORDER_BY_COUNTRY ] = "Name_%s",
-      [Cty_ORDER_BY_NUM_USRS] = "NumUsrs DESC,"
+      [Hie_ORDER_BY_NAME    ] = "Name_%s",
+      [Hie_ORDER_BY_NUM_USRS] = "NumUsrs DESC,"
 	                        "Name_%s",
      };
    unsigned NumCtys;

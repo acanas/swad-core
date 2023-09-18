@@ -876,7 +876,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_minute;
    extern const char *Txt_minutes;
    extern const char *Txt_Publish_call_FOR_EXAM;
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
    unsigned CurrentYear = Dat_GetCurrentYear ();
    unsigned Year;

@@ -214,7 +214,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Degree;
    unsigned NumDeg;
-   const struct Deg_Degree *DegInLst;
+   const struct Hie_Node *DegInLst;
 
    /***** Degree *****/
    HTM_TR_Begin (NULL);
@@ -368,12 +368,12 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginForm (ActChgInsCrsCodCfg);
-	       HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+	       HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 			       Gbl.Hierarchy.Crs.InstitutionalCod,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"InsCrsCod\" size=\"%u\""
 			       " class=\"INPUT_INS_CODE INPUT_%s\"",
-			       Crs_MAX_CHARS_INSTITUTIONAL_COD,
+			       Hie_MAX_CHARS_INSTITUTIONAL_COD,
 			       The_GetSuffix ());
 	    Frm_EndForm ();
 	   }
@@ -478,7 +478,7 @@ void CrsCfg_ChangeCrsDeg (void)
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
-   struct Deg_Degree NewDeg;
+   struct Hie_Node NewDeg;
 
    /***** Get parameter with degree code *****/
    NewDeg.Cod = ParCod_GetAndCheckPar (ParCod_OthDeg);
@@ -594,10 +594,10 @@ void CrsCfg_ChangeInsCrsCod (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
-   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_COD + 1];
+   char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Get institutional code from form *****/
-   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
+   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /***** Change the institutional course code *****/
    if (strcmp (NewInstitutionalCrsCod,Gbl.Hierarchy.Crs.InstitutionalCod))

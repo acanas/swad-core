@@ -41,58 +41,21 @@
 
 #define Ctr_MAX_CENTERS_PER_USR	 10 // Used in list of my centers
 
-struct Ctr_Center
-  {
-   long Cod;			// Center code
-   long PrtCod;			// Parent (institution) code
-   union
-     {
-      long PlcCod;		// Center place code
-      long TypCod;		// Degree type code
-      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
-     } Specific;
-   Hie_Status_t Status;		// Center status
-   long RequesterUsrCod;	// User code of the person who requested the creation of this center
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
-   char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct
-     {
-      bool Valid;
-      unsigned NumUsrs;
-     } NumUsrsWhoClaimToBelong;
-  };
-
-#define Ctr_NUM_ORDERS 2
-typedef enum
-  {
-   Ctr_ORDER_BY_CENTER   = 0,
-   Ctr_ORDER_BY_NUM_USRS = 1,
-  } Ctr_Order_t;
-#define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTER
-
-struct Ctr_ListCtrs
-  {
-   unsigned Num;		// Number of centers
-   struct Ctr_Center *Lst;	// List of centers
-   Ctr_Order_t SelectedOrder;	// Order of centers
-  };
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
 void Ctr_SeeCtrWithPendingDegs (void);
 
-void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Action,
+void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
                                         const char *ClassLogo);
 
 void Ctr_ShowCtrsOfCurrentIns (void);
 void Ctr_EditCenters (void);
 
 void Ctr_GetBasicListOfCenters (long InsCod);
-void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder);
-bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr);
+void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder);
+bool Ctr_GetCenterDataByCod (struct Hie_Node *Ctr);
 void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord);
 void Ctr_FreeListCenters (void);
 void Ctr_WriteSelectorOfCenter (void);
@@ -100,7 +63,7 @@ void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);
 void Ctr_RenameCenterShort (void);
 void Ctr_RenameCenterFull (void);
-void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);
@@ -134,7 +97,7 @@ void Ctr_FlushCacheUsrBelongsToCtr (void);
 bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
 
 void Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
-unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
-unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
+unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr);
+unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr);
 
 #endif

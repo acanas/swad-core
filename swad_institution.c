@@ -68,7 +68,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Ins_Instit *Ins_EditingIns = NULL;	// Static variable to keep the institution being edited
+static struct Hie_Node *Ins_EditingIns = NULL;	// Static variable to keep the institution being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -77,19 +77,18 @@ static struct Ins_Instit *Ins_EditingIns = NULL;	// Static variable to keep the 
 static void Ins_ListInstitutions (void);
 static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args);
 static void Ins_PutIconToEditInstitutions (void);
-static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns);
+static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
-static void Ins_GetParInsOrder (void);
 
 static void Ins_EditInstitutionsInternal (void);
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
 
 static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Ins_Instit *Ins,
+                                      struct Hie_Node *Ins,
                                       bool GetNumUsrsWhoClaimToBelongToIns);
 
 static void Ins_ListInstitutionsForEdition (void);
-static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins);
+static bool Ins_CheckIfICanEdit (struct Hie_Node *Ins);
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *NewInsName);
 
@@ -102,7 +101,7 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status);
 static void Ins_EditingInstitutionConstructor ();
 static void Ins_EditingInstitutionDestructor ();
 
-static void Ins_FormToGoToMap (struct Ins_Instit *Ins);
+static void Ins_FormToGoToMap (struct Hie_Node *Ins);
 
 static void Ins_GetAndShowInssOrderedByNumCtrs (void);
 static void Ins_GetAndShowInssOrderedByNumDegs (void);
@@ -111,7 +110,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void);
 static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
 static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		          const char *TxtFigure);
-static unsigned Ins_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res);
+static unsigned Ins_GetInsAndStat (struct Hie_Node *Ins,MYSQL_RES *mysql_res);
 
 /*****************************************************************************/
 /***************** List institutions with pending centers ********************/
@@ -128,7 +127,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    MYSQL_ROW row;
    unsigned NumInss = 0;
    unsigned NumIns;
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    const char *BgColor;
 
    /***** Get institutions with pending centers *****/
@@ -206,7 +205,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 /********************** Draw institution logo with link **********************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
+void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size)
   {
    bool PutLink = !Frm_CheckIfInside ();	// Don't put link to institution if already inside a form
 
@@ -228,7 +227,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
 /****************** Draw institution logo and name with link *****************/
 /*****************************************************************************/
 
-void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
+void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
                                         const char *ClassLogo)
   {
    /***** Begin form *****/
@@ -263,7 +262,7 @@ void Ins_ShowInssOfCurrentCty (void)
    if (Gbl.Hierarchy.Cty.Cod > 0)
      {
       /***** Get parameter with the type of order in the list of institutions *****/
-      Ins_GetParInsOrder ();
+      Hie_GetParHieOrder ();
 
       /***** Get list of institutions *****/
       Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Cty.Cod);
@@ -349,7 +348,7 @@ static void Ins_PutIconToEditInstitutions (void)
 /********************** List one institution for seeing **********************/
 /*****************************************************************************/
 
-static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
+static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIns)
   {
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
@@ -442,18 +441,18 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Departments_ABBREVIATION;
-   Ins_Order_t Order;
-   static HTM_HeadAlign Align[Ins_NUM_ORDERS] =
+   Hie_Order_t Order;
+   static HTM_HeadAlign Align[Hie_NUM_ORDERS] =
      {
-      [Ins_ORDER_BY_INSTITUTION] = HTM_HEAD_LEFT,
-      [Ins_ORDER_BY_NUM_USRS   ] = HTM_HEAD_RIGHT
+      [Hie_ORDER_BY_NAME    ] = HTM_HEAD_LEFT,
+      [Hie_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
      };
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      for (Order  = (Ins_Order_t) 0;
-	   Order <= (Ins_Order_t) (Ins_NUM_ORDERS - 1);
+      for (Order  = (Hie_Order_t) 0;
+	   Order <= (Hie_Order_t) (Hie_NUM_ORDERS - 1);
 	   Order++)
 	{
          HTM_TH_Begin (Align[Order]);
@@ -488,19 +487,6 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       HTM_TH_Empty (1);
 
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/******* Get parameter with the type or order in list of institutions ********/
-/*****************************************************************************/
-
-static void Ins_GetParInsOrder (void)
-  {
-   Gbl.Hierarchy.Inss.SelectedOrder = (Ins_Order_t)
-				      Par_GetParUnsignedLong ("Order",
-							      0,
-							      Ins_NUM_ORDERS - 1,
-							      (unsigned long) Ins_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -639,7 +625,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 
 void Ins_WriteInstitutionNameAndCty (long InsCod)
   {
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution short name and country name *****/
@@ -654,7 +640,7 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-bool Ins_GetInstitDataByCod (struct Ins_Instit *Ins)
+bool Ins_GetInstitDataByCod (struct Hie_Node *Ins)
   {
    MYSQL_RES *mysql_res;
    bool InsFound = false;
@@ -694,7 +680,7 @@ bool Ins_GetInstitDataByCod (struct Ins_Instit *Ins)
 /*****************************************************************************/
 
 static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Ins_Instit *Ins,
+                                      struct Hie_Node *Ins,
                                       bool GetNumUsrsWhoClaimToBelongToIns)
   {
    MYSQL_ROW row;
@@ -749,7 +735,7 @@ void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
    Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0]  = '\0';
   }
 
-void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
+void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
                                          char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    MYSQL_RES *mysql_res;
@@ -895,7 +881,7 @@ static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumIns;
-   struct Ins_Instit *Ins;
+   struct Hie_Node *Ins;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    bool ICanEdit;
@@ -1055,7 +1041,7 @@ static void Ins_ListInstitutionsForEdition (void)
 /************ Check if I can edit, remove, etc. an institution ***************/
 /*****************************************************************************/
 
-static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins)
+static bool Ins_CheckIfICanEdit (struct Hie_Node *Ins)
   {
    return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
           ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
@@ -1168,7 +1154,7 @@ void Ins_RenameInsFull (void)
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
 
-void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
@@ -1732,7 +1718,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
    extern const char *Txt_institutions;
    char *Title;
    unsigned NumIns;
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
 
    /***** List the institutions (one row per institution) *****/
    if (NumInss)
@@ -1808,7 +1794,7 @@ static void Ins_EditingInstitutionDestructor (void)
 /********************* Form to go to institution map *************************/
 /*****************************************************************************/
 
-static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
+static void Ins_FormToGoToMap (struct Hie_Node *Ins)
   {
    if (Ctr_DB_CheckIfMapIsAvailableInIns (Ins->Cod))
      {
@@ -1941,7 +1927,7 @@ void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs = 0;
   }
 
-unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
+unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins)
   {
    /***** 1. Fast check: Trivial case *****/
    if (Ins->Cod <= 0)
@@ -1970,7 +1956,7 @@ unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
    return Ins->NumUsrsWhoClaimToBelong.NumUsrs;
   }
 
-unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
+unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins)
   {
    unsigned NumUsrsIns;
 
@@ -2191,7 +2177,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
    unsigned NumOrder;
    unsigned NumberLastRow;
    unsigned NumberThisRow;
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    bool TRIsOpen = false;
 
    /***** Query database *****/
@@ -2297,7 +2283,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 /******************** Get institution data and statistic *********************/
 /*****************************************************************************/
 
-static unsigned Ins_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res)
+static unsigned Ins_GetInsAndStat (struct Hie_Node *Ins,MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
    unsigned NumberThisRow;

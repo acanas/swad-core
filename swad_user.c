@@ -2172,7 +2172,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2265,8 +2265,8 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
-   struct Ins_Instit Ins;
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ins;
+   struct Hie_Node Ctr;
    struct Dpt_Department Dpt;
 
    /***** Begin row *****/
@@ -2359,7 +2359,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char Text[Cns_MAX_BYTES_TEXT + 1];
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    bool ShowData = (Gbl.Usrs.Me.Role.Logged == Rol_TCH && UsrDat->Accepted) ||
                     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
@@ -2466,8 +2466,8 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
-   struct Ins_Instit Ins;
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ins;
+   struct Hie_Node Ctr;
    struct Dpt_Department Dpt;
    bool ShowData = (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME || UsrDat->Accepted ||
                     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
@@ -2547,7 +2547,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);

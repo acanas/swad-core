@@ -934,6 +934,19 @@ void Hie_PutParOtherHieCod (void *HieCod)
   }
 
 /*****************************************************************************/
+/****** Get parameter with the type or order in list of hierarchy nodes ******/
+/*****************************************************************************/
+
+void Hie_GetParHieOrder (void)
+  {
+   Gbl.Hierarchy.Inss.SelectedOrder = (Hie_Order_t)
+				      Par_GetParUnsignedLong ("Order",
+							      0,
+							      Hie_NUM_ORDERS - 1,
+							      (unsigned long) Hie_ORDER_DEFAULT);
+  }
+
+/*****************************************************************************/
 /*********            Get and show stats about hierarchy           ***********/
 /********* (countries, institutions, centers, degrees and courses) ***********/
 /*****************************************************************************/

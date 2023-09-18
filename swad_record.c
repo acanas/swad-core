@@ -136,7 +136,7 @@ static void Rec_PutParsStdResults (__attribute__((unused)) void *Args);
 static void Rec_PutParsWorks (__attribute__((unused)) void *Args);
 static void Rec_PutParsStudent (__attribute__((unused)) void *Args);
 static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args);
-static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks);
+static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct Usr_Data *UsrDat);
 static void Rec_ShowFullName (struct Usr_Data *UsrDat);
 static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks);
@@ -155,9 +155,9 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutF
 static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone);
 static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Ins_Instit *Ins,
+static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Hie_Node *Ins,
                                  bool ShowData);
-static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData);
+static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData);
 static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData);
 static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData);
 static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData);
@@ -2034,7 +2034,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    bool StudentInCurrentCrs;
    bool TeacherInCurrentCrs;
    bool ShowTeacherRows;
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    Act_Action_t NextAction;
 
    /***** Initializations *****/
@@ -2522,7 +2522,7 @@ static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args)
 /*********************** Show institution in record card *********************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
+static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
    HTM_TD_Begin ("rowspan=\"4\" class=\"REC_C1_TOP CM\"");
@@ -3157,7 +3157,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
    extern const char *Txt_Another_country;
    char *Label;
    unsigned NumCty;
-   const struct Cty_Countr *CtyInLst;
+   const struct Hie_Node *CtyInLst;
 
    /***** If list of countries is empty, try to get it *****/
    Cty_GetBasicListOfCountries ();
@@ -3353,7 +3353,7 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Ins_Instit *Ins,
+static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Hie_Node *Ins,
                                  bool ShowData)
   {
    /***** Institution *****/
@@ -3376,7 +3376,7 @@ static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Ins_Instit *Ins,
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
+static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
   {
    extern const char *Txt_Institution;
 
@@ -3412,7 +3412,7 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
 static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
   {
    extern const char *Txt_Center;
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ctr;
 
    /***** Center *****/
    HTM_TR_Begin (NULL);
@@ -3778,11 +3778,11 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
    unsigned NumCty;
-   const struct Cty_Countr *CtyInLst;
+   const struct Hie_Node *CtyInLst;
    unsigned NumIns;
-   const struct Ins_Instit *InsInLst;
+   const struct Hie_Node *InsInLst;
    unsigned NumCtr;
-   const struct Ctr_Center *CtrInLst;
+   const struct Hie_Node *CtrInLst;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char *Label;
    char *SelectClass;
@@ -4059,7 +4059,7 @@ void Rec_ChgCountryOfMyInstitution (void)
 
 void Rec_UpdateMyInstitution (void)
   {
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    unsigned NumCtrs;
    unsigned NumDpts;
 
@@ -4097,7 +4097,7 @@ void Rec_UpdateMyInstitution (void)
 
 void Rec_UpdateMyCenter (void)
   {
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ctr;
 
    /***** Get my center *****/
    /* Get center code */

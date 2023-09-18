@@ -45,40 +45,6 @@
 #define Cty_MAX_CHARS_NAME	(48 - 1)	// 47
 #define Cty_MAX_BYTES_NAME	((Cty_MAX_CHARS_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 767
 
-struct Cty_Countr
-  {
-   long Cod;			// Country code
-   union
-     {
-      long PlcCod;		// Center place code
-      long TypCod;		// Degree type code
-      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
-     } Specific;
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Alpha2
-   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
-   char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct
-     {
-      bool Valid;
-      unsigned NumUsrs;
-     } NumUsrsWhoClaimToBelong;
-  };
-
-#define Cty_NUM_ORDERS 2
-typedef enum
-  {
-   Cty_ORDER_BY_COUNTRY  = 0,
-   Cty_ORDER_BY_NUM_USRS = 1,
-  } Cty_Order_t;
-#define Cty_ORDER_DEFAULT Cty_ORDER_BY_NUM_USRS
-
-struct Cty_ListCtys
-  {
-   unsigned Num;		// Number of countries
-   struct Cty_Countr *Lst;	// List of countries
-   Cty_Order_t SelectedOrder;	// Order of countries
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -91,11 +57,11 @@ void Cty_ListCountries2 (void);
 
 bool Cty_CheckIfICanEditCountries (void);
 
-void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Action,
+void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
                                         const char *ClassContainer,
                                         const char *ClassMap);
-void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class);
-bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty);
+void Cty_DrawCountryMap (struct Hie_Node *Cty,const char *Class);
+bool Cty_CheckIfCountryPhotoExists (struct Hie_Node *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutParCtyOrder (void);
@@ -104,8 +70,8 @@ void Cty_GetBasicListOfCountries (void);
 void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod);
-bool Cty_GetBasicCountryDataByCod (struct Cty_Countr *Cty);
-void Cty_GetNamesAndWWWsByCod (struct Cty_Countr *Cty,
+bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Cty);
+void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1]);
 void Cty_FlushCacheCountryName (void);
@@ -141,7 +107,7 @@ unsigned Cty_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
 unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void);
 
 void Cty_FlushCacheNumUsrsWhoClaimToBelongToCty (void);
-unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
-unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
+unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Hie_Node *Cty);
+unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Hie_Node *Cty);
 
 #endif

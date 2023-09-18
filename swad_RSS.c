@@ -43,14 +43,14 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs);
-static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs);
+static void RSS_WriteNotices (FILE *FileRSS,struct Hie_Node *Crs);
+static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs);
 
 /*****************************************************************************/
 /******* Update RSS archive with active notices in the current course ********/
 /*****************************************************************************/
 
-void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
+void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
   {
    char PathRelPublRSSDir[PATH_MAX + 1];
    char PathRelPublRSSFile[PATH_MAX + 1 + NAME_MAX + 1];
@@ -139,7 +139,7 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
 /************* Write notices of a course as items of RSS file ****************/
 /*****************************************************************************/
 
-static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
+static void RSS_WriteNotices (FILE *FileRSS,struct Hie_Node *Crs)
   {
    extern const char *Txt_Notice;
    MYSQL_RES *mysql_res;
@@ -228,7 +228,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 /********** Write calls for exams of a course as items of RSS file ***********/
 /*****************************************************************************/
 
-static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
+static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs)
   {
    extern const char *Txt_Exam;
    MYSQL_RES *mysql_res;

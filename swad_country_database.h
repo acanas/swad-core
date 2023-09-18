@@ -38,7 +38,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Cty_DB_CreateCountry (const struct Cty_Countr *Cty,
+void Cty_DB_CreateCountry (const struct Hie_Node *Cty,
 			   char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1]);
 

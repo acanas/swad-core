@@ -191,8 +191,8 @@ static void SysCfg_Map (void)
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Ins_Instit Ins;
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ins;
+   struct Hie_Node Ctr;
    struct Map_Coordinates Coord;
    struct Map_Coordinates CtyAvgCoord;
 

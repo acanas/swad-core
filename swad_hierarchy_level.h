@@ -24,6 +24,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_constant.h"
+#include "swad_string.h"
+
+/*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
@@ -58,5 +65,46 @@ typedef enum
    Hie_STATUS_PENDING = 2,	// 01 (Status == Hie_STATUS_BIT_PENDING)
    Hie_STATUS_REMOVED = 3,	// 1- (Status & Hie_STATUS_BIT_REMOVED)
   } Hie_StatusTxt_t;
+
+#define Hie_MAX_CHARS_INSTITUTIONAL_COD  (16 - 1)	// 15
+#define Hie_MAX_BYTES_INSTITUTIONAL_COD  ((Hie_MAX_CHARS_INSTITUTIONAL_COD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
+
+struct Hie_Node
+  {
+   long Cod;			// Course/degree/center/institution/country code
+   long PrtCod;			// Parent code
+   union
+     {
+      long PlcCod;		// Center place code
+      long TypCod;		// Degree type code
+      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
+     } Specific;
+   Hie_Status_t Status;		// Node status
+   long RequesterUsrCod;	// User code of the person who requested the creation of this node
+   char InstitutionalCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the node
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of the node
+   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of the node
+   char WWW[Cns_MAX_BYTES_WWW + 1];
+   struct
+     {
+      bool Valid;
+      unsigned NumUsrs;
+     } NumUsrsWhoClaimToBelong;
+  };
+
+#define Hie_NUM_ORDERS 2
+typedef enum
+  {
+   Hie_ORDER_BY_NAME     = 0,
+   Hie_ORDER_BY_NUM_USRS = 1,
+  } Hie_Order_t;
+#define Hie_ORDER_DEFAULT Hie_ORDER_BY_NUM_USRS
+
+struct Hie_List
+  {
+   unsigned Num;		// Number of courses
+   struct Hie_Node *Lst;	// List of courses
+   Hie_Order_t SelectedOrder;	// Order of centers
+  };
 
 #endif

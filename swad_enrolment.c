@@ -149,7 +149,7 @@ static bool Enr_CheckIfICanRemUsrFromCrs (void);
 
 static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
-					  struct Crs_Course *Crs,
+					  struct Hie_Node *Crs,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose);
 
@@ -1773,7 +1773,7 @@ void Enr_RemAllStdsThisCrs (void)
 /*****************************************************************************/
 // Returns the numbers of students in list
 
-unsigned Enr_RemAllStdsInCrs (struct Crs_Course *Crs)
+unsigned Enr_RemAllStdsInCrs (struct Hie_Node *Crs)
   {
    unsigned NumStdsInCrs;
    unsigned NumUsr;
@@ -2111,8 +2111,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    unsigned NumReqs;
    unsigned NumReq;
    long ReqCod;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Node Deg;
+   struct Hie_Node Crs;
    struct Usr_Data UsrDat;
    bool UsrExists;
    bool UsrBelongsToCrs;
@@ -3128,7 +3128,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
 /*****************************************************************************/
 
 static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
-					  struct Crs_Course *Crs,
+					  struct Hie_Node *Crs,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose)
   {

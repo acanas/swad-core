@@ -106,7 +106,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther);
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
 void Enr_AskRemAllStdsThisCrs (void);
 void Enr_RemAllStdsThisCrs (void);
-unsigned Enr_RemAllStdsInCrs (struct Crs_Course *Crs);
+unsigned Enr_RemAllStdsInCrs (struct Hie_Node *Crs);
 void Enr_ReqSignUpInCrs (void);
 void Enr_SignUpInCrs (void);
 void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],

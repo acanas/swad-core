@@ -115,8 +115,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
    extern const char *Txt_Course;
    bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS];
    unsigned NumMyDeg;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Node Deg;
+   struct Hie_Node Crs;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -378,8 +378,8 @@ void Cht_OpenChatWindow (void)
    char UsrName[Usr_MAX_BYTES_FULL_NAME + 1];
    unsigned NumMyDeg;
    unsigned NumMyCrs;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Node Deg;
+   struct Hie_Node Crs;
    char ThisRoomCode[Cht_MAX_BYTES_ROOM_CODE + 1];
    char ThisRoomShortName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
    char ThisRoomFullName [Cht_MAX_BYTES_ROOM_FULL_NAME + 1];

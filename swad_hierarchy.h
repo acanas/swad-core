@@ -39,11 +39,11 @@
 
 struct Hie_Hierarchy
   {
-   struct Cty_Countr Cty;
-   struct Ins_Instit Ins;
-   struct Ctr_Center Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Node Cty;
+   struct Hie_Node Ins;
+   struct Hie_Node Ctr;
+   struct Hie_Node Deg;
+   struct Hie_Node Crs;
   };
 
 /*****************************************************************************/
@@ -72,6 +72,8 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
                                   const char *Txt[Hie_NUM_STATUS_TXT]);
 Hie_Status_t Hie_GetParStatus (void);
 void Hie_PutParOtherHieCod (void *HieCod);
+
+void Hie_GetParHieOrder (void);
 
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);

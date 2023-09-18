@@ -49,7 +49,7 @@ extern struct Globals Gbl;
 /***************************** Create a new center ***************************/
 /*****************************************************************************/
 
-long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Hie_Status_t Status)
+long Ctr_DB_CreateCenter (const struct Hie_Node *Ctr,Hie_Status_t Status)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create a new center",
@@ -113,12 +113,12 @@ unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod)
 /*****************************************************************************/
 
 unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
-                                              long InsCod,Ctr_Order_t SelectedOrder)
+                                              long InsCod,Hie_Order_t SelectedOrder)
   {
-   static const char *OrderBySubQuery[Ctr_NUM_ORDERS] =
+   static const char *OrderBySubQuery[Hie_NUM_ORDERS] =
      {
-      [Ctr_ORDER_BY_CENTER  ] = "FullName",
-      [Ctr_ORDER_BY_NUM_USRS] = "NumUsrs DESC,"
+      [Hie_ORDER_BY_NAME  ] = "FullName",
+      [Hie_ORDER_BY_NUM_USRS] = "NumUsrs DESC,"
 	                        "FullName",
      };
 

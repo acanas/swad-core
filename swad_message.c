@@ -1104,7 +1104,7 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
 static void Msg_GetParMsgsCrsCod (struct Msg_Messages *Messages)
   {
    extern const char *Txt_any_course;
-   struct Crs_Course Crs;
+   struct Hie_Node Crs;
 
    if ((Messages->FilterCrsCod = ParCod_GetPar (ParCod_OthCrs)) > 0)	// If origin course specified
      {
@@ -2302,7 +2302,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
   {
    extern const char *Txt_from_this_course;
    extern const char *Txt_no_course_of_origin;
-   struct Crs_Course Crs;
+   struct Hie_Node Crs;
    bool FromThisCrs = true;
    bool ThereIsOrgCrs = false;
 

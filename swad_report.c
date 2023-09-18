@@ -485,7 +485,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
 
    /***** Begin section *****/
    fprintf (Rep_File,"<section>"
@@ -1036,8 +1036,8 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_no_course_selected;
-   struct Crs_Course Crs;
-   struct Deg_Degree Deg;
+   struct Hie_Node Crs;
+   struct Hie_Node Deg;
 
    /***** Get course data *****/
    Crs.Cod = CrsCod;

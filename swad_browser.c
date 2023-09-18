@@ -8786,9 +8786,9 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *CrsCod,
                                     long *GrpCod)
   {
-   struct Ctr_Center Ctr;
-   struct Deg_Degree Deg;
-   struct Crs_Course Crs;
+   struct Hie_Node Ctr;
+   struct Hie_Node Deg;
+   struct Hie_Node Crs;
    struct GroupData GrpDat;
 
    switch (FileBrowser)
@@ -9261,7 +9261,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
 /***************** Remove the works of a user in a course ********************/
 /*****************************************************************************/
 
-void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Crs_Course *Crs)
+void Brw_RemoveUsrWorksInCrs (struct Usr_Data *UsrDat,struct Hie_Node *Crs)
   {
    char PathUsrInCrs[PATH_MAX + 1];
 
@@ -9287,7 +9287,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat)
    unsigned NumCrss;
    unsigned NumCrs;
    unsigned NumCrssWorksRemoved = 0;
-   struct Crs_Course Crs;
+   struct Hie_Node Crs;
 
    /***** Query database *****/
    NumCrss = Crs_DB_GetCrssFromUsr (&mysql_res,UsrDat->UsrCod,-1L);

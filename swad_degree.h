@@ -44,39 +44,12 @@
 #define Deg_MAX_DEGREES_PER_USR		20 // Used in list of my degrees
 
 /*****************************************************************************/
-/******************************* Public types ********************************/
-/*****************************************************************************/
-
-struct Deg_Degree
-  {
-   long Cod;			// Degree code
-   long PrtCod;			// Parent (center) code
-   union
-     {
-      long PlcCod;		// Center place code
-      long TypCod;		// Degree type code
-      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
-     } Specific;
-   Hie_Status_t Status;		// Degree status
-   long RequesterUsrCod;	// User code of the person who requested the creation of this degree
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree
-   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of degree
-   char WWW[Cns_MAX_BYTES_WWW + 1];
-  };
-
-struct Deg_ListDegs
-  {
-   unsigned Num;		// Number of degrees
-   struct Deg_Degree *Lst;	// List of degrees
-  };
-
-/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Deg_SeeDegWithPendingCrss (void);
 
-void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Action,
+void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
                                         const char *ClassLogo);
 
 void Deg_WriteSelectorOfDegree (void);
@@ -89,19 +62,19 @@ void Deg_EditDegrees (void);
 
 void Deg_PutIconToViewDegrees (void);
 
-void Deg_GetListAllDegsWithStds (struct Deg_ListDegs *Degs);
+void Deg_GetListAllDegsWithStds (struct Hie_List *Degs);
 void Deg_GetListDegsInCurrentCtr (void);
-void Deg_FreeListDegs (struct Deg_ListDegs *Degs);
+void Deg_FreeListDegs (struct Hie_List *Degs);
 
 void Deg_ReceiveFormReqDeg (void);
 void Deg_ReceiveFormNewDeg (void);
 void Deg_RemoveDegree (void);
 
-bool Deg_GetDegreeDataByCod (struct Deg_Degree *Deg);
+bool Deg_GetDegreeDataByCod (struct Hie_Node *Deg);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
 void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);

@@ -54,7 +54,7 @@ void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE
 /***************************** Create a new degree ***************************/
 /*****************************************************************************/
 
-void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status)
+void Deg_DB_CreateDegree (struct Hie_Node *Deg,Hie_Status_t Status)
   {
    Deg->Cod =
    DB_QueryINSERTandReturnCode ("can not create a new degree",

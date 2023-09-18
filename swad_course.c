@@ -84,7 +84,7 @@ extern struct Globals Gbl;
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct Crs_Course *Crs_EditingCrs = NULL;	// Static variable to keep the course being edited
+static struct Hie_Node *Crs_EditingCrs = NULL;	// Static variable to keep the course being edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -102,15 +102,15 @@ static void Crs_EditCoursesInternal (void);
 static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
-static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs);
+static bool Crs_CheckIfICanEdit (struct Hie_Node *Crs);
 static void Crs_PutFormToCreateCourse (void);
 static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status);
-static void Crs_GetParsNewCourse (struct Crs_Course *Crs);
+static void Crs_GetParsNewCourse (struct Hie_Node *Crs);
 
 static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
-				      struct Crs_Course *Crs);
+				      struct Hie_Node *Crs);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
@@ -913,7 +913,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumCrs;
-   struct Crs_Course *Crs;
+   struct Hie_Node *Crs;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
@@ -1113,7 +1113,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
-   struct Crs_Course *Crs;
+   struct Hie_Node *Crs;
    unsigned YearAux;
    unsigned NumCrs;
    struct Usr_Data UsrDat;
@@ -1191,7 +1191,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
 		     ParCod_PutPar (ParCod_OthHie,Crs->Cod);
-		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+		     HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 				     Crs->InstitutionalCod,HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_INS_CODE INPUT_%s\"",
 				     The_GetSuffix ());
@@ -1271,7 +1271,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 /************** Check if I can edit, remove, etc. a course *******************/
 /*****************************************************************************/
 
-static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
+static bool Crs_CheckIfICanEdit (struct Hie_Node *Crs)
   {
    return Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
           ((Crs->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
@@ -1333,7 +1333,7 @@ static void Crs_PutFormToCreateCourse (void)
 
 	 /***** Institutional code of the course *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_COD,
+	    HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 			    Crs_EditingCrs->InstitutionalCod,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_INS_CODE INPUT_%s\"",
@@ -1523,7 +1523,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 /************** Get the parameters of a new course from form *****************/
 /*****************************************************************************/
 
-static void Crs_GetParsNewCourse (struct Crs_Course *Crs)
+static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
   {
    char YearStr[2 + 1];
 
@@ -1533,7 +1533,7 @@ static void Crs_GetParsNewCourse (struct Crs_Course *Crs)
    Crs->Specific.Year = Deg_ConvStrToYear (YearStr);
 
    /* Get institutional code */
-   Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
+   Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get course short name */
    Par_GetParText ("ShortName",Crs->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
@@ -1586,7 +1586,7 @@ void Crs_RemoveCourse (void)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-bool Crs_GetCourseDataByCod (struct Crs_Course *Crs)
+bool Crs_GetCourseDataByCod (struct Hie_Node *Crs)
   {
    MYSQL_RES *mysql_res;
    bool CrsFound = false;
@@ -1624,7 +1624,7 @@ bool Crs_GetCourseDataByCod (struct Crs_Course *Crs)
 /*****************************************************************************/
 
 static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
-				      struct Crs_Course *Crs)
+				      struct Hie_Node *Crs)
   {
    MYSQL_ROW row;
 
@@ -1683,7 +1683,7 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 
 static void Crs_EmptyCourseCompletely (long CrsCod)
   {
-   struct Crs_Course Crs;
+   struct Hie_Node Crs;
    char PathRelCrs[PATH_MAX + 1];
 
    if (CrsCod > 0)
@@ -1786,7 +1786,7 @@ void Crs_ChangeInsCrsCod (void)
   {
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
-   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_COD + 1];
+   char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
@@ -1796,7 +1796,7 @@ void Crs_ChangeInsCrsCod (void)
    Crs_EditingCrs->Cod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get institutional code */
-   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_COD);
+   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get data of the course */
    Crs_GetCourseDataByCod (Crs_EditingCrs);
@@ -1883,7 +1883,7 @@ void Crs_ChangeCrsYear (void)
 /************* Change the institutional course code of a course **************/
 /*****************************************************************************/
 
-void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,
+void Crs_UpdateInstitutionalCrsCod (struct Hie_Node *Crs,
                                     const char *NewInstitutionalCrsCod)
   {
    /***** Update institutional course code in table of courses *****/
@@ -1898,7 +1898,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,
 /****************** Change the year/semester of a course *********************/
 /*****************************************************************************/
 
-void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear)
+void Crs_UpdateCrsYear (struct Hie_Node *Crs,unsigned NewYear)
   {
    /***** Update year/semester in table of courses *****/
    Crs_DB_UpdateCrsYear (Crs->Cod,NewYear);
@@ -1935,7 +1935,7 @@ void Crs_RenameCourseFull (void)
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
-void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_The_course_X_has_been_renamed_as_Y;
@@ -2347,7 +2347,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   struct Deg_Degree Deg;
+   struct Hie_Node Deg;
    long CrsCod;
    unsigned NumStds;
    unsigned NumNETs;

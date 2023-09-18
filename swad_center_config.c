@@ -550,7 +550,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Institution;
    unsigned NumIns;
-   const struct Ins_Instit *InsInLst;
+   const struct Hie_Node *InsInLst;
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
@@ -1029,7 +1029,7 @@ void CtrCfg_ChangeCtrIns (void)
   {
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_The_center_X_has_been_moved_to_the_institution_Y;
-   struct Ins_Instit NewIns;
+   struct Hie_Node NewIns;
 
    /***** Get parameter with institution code *****/
    NewIns.Cod = ParCod_GetAndCheckPar (ParCod_OthIns);

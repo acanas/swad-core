@@ -37,51 +37,14 @@
 
 #define Ins_MAX_INSTITS_PER_USR	 10	// Used in list of my institutions
 
-struct Ins_Instit
-  {
-   long Cod;			// Institution code
-   long PrtCod;			// Parent (country) code
-   union
-     {
-      long PlcCod;		// Center place code
-      long TypCod;		// Degree type code
-      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
-     } Specific;
-   Hie_Status_t Status;		// Institution status
-   long RequesterUsrCod;	// User code of the person who requested the creation of this institution
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
-   char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct
-     {
-      bool Valid;
-      unsigned NumUsrs;
-     } NumUsrsWhoClaimToBelong;
-  };
-
-#define Ins_NUM_ORDERS 2
-typedef enum
-  {
-   Ins_ORDER_BY_INSTITUTION = 0,
-   Ins_ORDER_BY_NUM_USRS    = 1,
-  } Ins_Order_t;
-#define Ins_ORDER_DEFAULT Ins_ORDER_BY_NUM_USRS
-
-struct Ins_ListInss
-  {
-   unsigned Num;		// Number of institutions
-   struct Ins_Instit *Lst;	// List of institutions
-   Ins_Order_t SelectedOrder;	// Order of institutions
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Ins_SeeInsWithPendingCtrs (void);
 
-void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size);
-void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
+void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size);
+void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
                                         const char *ClassLogo);
 
 void Ins_ShowInssOfCurrentCty (void);
@@ -90,9 +53,9 @@ void Ins_GetBasicListOfInstitutions (long CtyCod);
 void Ins_GetFullListOfInstitutions (long CtyCod);
 
 void Ins_WriteInstitutionNameAndCty (long InsCod);
-bool Ins_GetInstitDataByCod (struct Ins_Instit *Ins);
+bool Ins_GetInstitDataByCod (struct Hie_Node *Ins);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
-void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
+void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
                                          char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
 
 void Ins_FreeListInstitutions (void);
@@ -101,7 +64,7 @@ void Ins_WriteSelectorOfInstitution (void);
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
-void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
 void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
@@ -129,8 +92,8 @@ void Ins_FlushCacheUsrBelongsToIns (void);
 bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
 
 void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
-unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
-unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
+unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins);
+unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins);
 
 void Ins_PutParInsCod (void *InsCod);
 

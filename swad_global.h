@@ -41,6 +41,7 @@
 #include "swad_enrolment.h"
 #include "swad_file.h"
 #include "swad_group.h"
+#include "swad_hierarchy.h"
 #include "swad_mail.h"
 #include "swad_record.h"
 
@@ -89,16 +90,16 @@ struct Globals
      {
       HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
       long Cod;			// Code of the current country, institution, center, degree or course
-      struct Cty_ListCtys Ctys;	// List of countries
-      struct Cty_Countr Cty;	// Current country
-      struct Ins_ListInss Inss;	// List of institutions in current country
-      struct Ins_Instit Ins;	// Current institution
-      struct Ctr_ListCtrs Ctrs;	// List of centers in current institution
-      struct Ctr_Center Ctr;	// Current center
-      struct Deg_ListDegs Degs;	// List of degrees in current center
-      struct Deg_Degree Deg;	// Current degree
-      struct Crs_ListCrss Crss;	// List of courses in current degree
-      struct Crs_Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
+      struct Hie_List Ctys;	// List of countries
+      struct Hie_List Inss;	// List of institutions in current country
+      struct Hie_List Ctrs;	// List of centers in current institution
+      struct Hie_List Degs;	// List of degrees in current center
+      struct Hie_List Crss;	// List of courses in current degree
+      struct Hie_Node Cty;	// Current country
+      struct Hie_Node Ins;	// Current institution
+      struct Hie_Node Ctr;	// Current center
+      struct Hie_Node Deg;	// Current degree
+      struct Hie_Node Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
      } Hierarchy;
    struct
      {

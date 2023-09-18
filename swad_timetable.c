@@ -1422,7 +1422,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
   {
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
-   struct Crs_Course Crs;
+   struct Hie_Node Crs;
    struct GroupData GrpDat;
 
    /***** Begin cell *****/

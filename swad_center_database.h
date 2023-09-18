@@ -38,12 +38,12 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Hie_Status_t Status);
+long Ctr_DB_CreateCenter (const struct Hie_Node *Ctr,Hie_Status_t Status);
 
 unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod);
 unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
-                                   long InsCod,Ctr_Order_t SelectedOrder);
+                                   long InsCod,Hie_Order_t SelectedOrder);
 unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod);
 unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long CtrCod);

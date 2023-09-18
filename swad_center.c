@@ -68,7 +68,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Ctr_Center *Ctr_EditingCtr = NULL;	// Static variable to keep the center being edited
+static struct Hie_Node *Ctr_EditingCtr = NULL;	// Static variable to keep the center being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -77,20 +77,20 @@ static struct Ctr_Center *Ctr_EditingCtr = NULL;	// Static variable to keep the 
 static void Ctr_ListCenters (void);
 static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args);
 static void Ctr_PutIconToEditCenters (void);
-static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr);
+static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr);
 static void Ctr_GetParCtrOrder (void);
 
 static void Ctr_EditCentersInternal (void);
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
 
 static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
-				      struct Ctr_Center *Ctr,
+				      struct Hie_Node *Ctr,
                                       bool GetNumUsrsWhoClaimToBelongToCtr);
 static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 				 struct Map_Coordinates *Coord);
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
-static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr);
+static bool Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 
@@ -104,7 +104,7 @@ static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 static void Ctr_EditingCenterConstructor (void);
 static void Ctr_EditingCenterDestructor (void);
 
-static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr);
+static void Ctr_FormToGoToMap (struct Hie_Node *Ctr);
 
 static void Ctr_PutParCtrCod (void *CtrCod);
 
@@ -123,7 +123,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    MYSQL_ROW row;
    unsigned NumCtrs;
    unsigned NumCtr;
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ctr;
    const char *BgColor;
 
    /***** Get centers with pending degrees *****/
@@ -189,7 +189,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 /******************** Draw center logo and name with link ********************/
 /*****************************************************************************/
 
-void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Action,
+void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
                                         const char *ClassLogo)
   {
    /***** Begin form *****/
@@ -313,7 +313,7 @@ static void Ctr_PutIconToEditCenters (void)
 /************************* List one center for seeing ************************/
 /*****************************************************************************/
 
-static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
+static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
   {
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    struct Plc_Place Plc;
@@ -395,11 +395,11 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
 static void Ctr_GetParCtrOrder (void)
   {
-   Gbl.Hierarchy.Ctrs.SelectedOrder = (Ctr_Order_t)
+   Gbl.Hierarchy.Ctrs.SelectedOrder = (Hie_Order_t)
 				      Par_GetParUnsignedLong ("Order",
 							      0,
-							      Ctr_NUM_ORDERS - 1,
-							      (unsigned long) Ctr_ORDER_DEFAULT);
+							      Hie_NUM_ORDERS - 1,
+							      (unsigned long) Hie_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -433,7 +433,7 @@ static void Ctr_EditCentersInternal (void)
    Plc_GetListPlaces (&Places);
 
    /***** Get list of centers *****/
-   Gbl.Hierarchy.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTER;
+   Gbl.Hierarchy.Ctrs.SelectedOrder = Hie_ORDER_BY_NAME;
    Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.Cod,
                              Gbl.Hierarchy.Ctrs.SelectedOrder);
 
@@ -515,7 +515,7 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
+void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCtr;
@@ -547,7 +547,7 @@ void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-bool Ctr_GetCenterDataByCod (struct Ctr_Center *Ctr)
+bool Ctr_GetCenterDataByCod (struct Hie_Node *Ctr)
   {
    MYSQL_RES *mysql_res;
    bool CtrFound = false;
@@ -606,7 +606,7 @@ void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord)
 /*****************************************************************************/
 
 static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
-				      struct Ctr_Center *Ctr,
+				      struct Hie_Node *Ctr,
                                       bool GetNumUsrsWhoClaimToBelongToCtr)
   {
    MYSQL_ROW row;
@@ -753,7 +753,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumCtr;
-   struct Ctr_Center *Ctr;
+   struct Hie_Node *Ctr;
    unsigned NumPlc;
    const struct Plc_Place *PlcInLst;
    char WWW[Cns_MAX_BYTES_WWW + 1];
@@ -951,7 +951,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 /************** Check if I can edit, remove, etc. a center *******************/
 /*****************************************************************************/
 
-static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr)
+static bool Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
   {
    return  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
            ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
@@ -1090,7 +1090,7 @@ void Ctr_RenameCenterFull (void)
 /************************ Change the name of a center ************************/
 /*****************************************************************************/
 
-void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_The_center_X_has_been_renamed_as_Y;
@@ -1401,19 +1401,19 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   Ctr_Order_t Order;
-   static HTM_HeadAlign Align[Ctr_NUM_ORDERS] =
+   Hie_Order_t Order;
+   static HTM_HeadAlign Align[Hie_NUM_ORDERS] =
      {
-      [Ctr_ORDER_BY_CENTER  ] = HTM_HEAD_LEFT,
-      [Ctr_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
+      [Hie_ORDER_BY_NAME  ] = HTM_HEAD_LEFT,
+      [Hie_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
      };
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
 
-      for (Order  = (Ctr_Order_t) 0;
-	   Order <= (Ctr_Order_t) (Ctr_NUM_ORDERS - 1);
+      for (Order  = (Hie_Order_t) 0;
+	   Order <= (Hie_Order_t) (Hie_NUM_ORDERS - 1);
 	   Order++)
 	{
          HTM_TH_Begin (Align[Order]);
@@ -1817,7 +1817,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
    extern const char *Txt_centers;
    unsigned NumCtr;
    char *Title;
-   struct Ctr_Center Ctr;
+   struct Hie_Node Ctr;
 
    /***** Query database *****/
    if (NumCtrs)
@@ -1896,7 +1896,7 @@ static void Ctr_EditingCenterDestructor (void)
 /************************ Form to go to center map ***************************/
 /*****************************************************************************/
 
-static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr)
+static void Ctr_FormToGoToMap (struct Hie_Node *Ctr)
   {
    struct Map_Coordinates Coord;
 
@@ -2034,7 +2034,7 @@ void Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
   }
 
-unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
+unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr)
   {
    /***** 1. Fast check: Trivial case *****/
    if (Ctr->Cod <= 0)
@@ -2062,7 +2062,7 @@ unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
    return Ctr->NumUsrsWhoClaimToBelong.NumUsrs;
   }
 
-unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
+unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr)
   {
    unsigned NumUsrsCtr;
 

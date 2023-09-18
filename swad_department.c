@@ -465,9 +465,9 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
    struct Dpt_Department *DptInLst;
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    unsigned NumIns;
-   struct Ins_Instit *InsInLst;
+   struct Hie_Node *InsInLst;
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -814,7 +814,7 @@ static void Dpt_PutFormToCreateDepartment (void)
   {
    extern const char *Txt_Another_institution;
    unsigned NumIns;
-   const struct Ins_Instit *InsInLst;
+   const struct Hie_Node *InsInLst;
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewDpt,NULL,NULL,NULL);

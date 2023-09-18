@@ -4715,9 +4715,9 @@ const char *Txt_centers =
 	"merkezler";
 #endif
 
-const char *Txt_CENTERS_HELP_ORDER[Ctr_NUM_ORDERS] =
+const char *Txt_CENTERS_HELP_ORDER[Hie_NUM_ORDERS] =
 	{
- 	[Ctr_ORDER_BY_CENTER] =
+ 	[Hie_ORDER_BY_NAME] =
 #if   L==1	// ca
 	"Ordenar per center"
 #elif L==2	// de
@@ -4740,7 +4740,7 @@ const char *Txt_CENTERS_HELP_ORDER[Ctr_NUM_ORDERS] =
 	"Sort by center"	// Çeviri lazim!
 #endif
 	,
- 	[Ctr_ORDER_BY_NUM_USRS] =
+ 	[Hie_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
 	"Ordenar per n&ordm; d'usuaris"
 #elif L==2	// de
@@ -4787,9 +4787,9 @@ const char *Txt_Centers_of_INSTITUTION_X =	// Warning: it is very important to i
 	"Centers of %s";	// Çeviri lazim!
 #endif
 
-const char *Txt_CENTERS_ORDER[Ctr_NUM_ORDERS] =
+const char *Txt_CENTERS_ORDER[Hie_NUM_ORDERS] =
 	{
- 	[Ctr_ORDER_BY_CENTER] =
+ 	[Hie_ORDER_BY_NAME] =
 #if   L==1	// ca
 	"Center"
 #elif L==2	// de
@@ -4812,7 +4812,7 @@ const char *Txt_CENTERS_ORDER[Ctr_NUM_ORDERS] =
 	"Merkez"
 #endif
 	,
- 	[Ctr_ORDER_BY_NUM_USRS] =
+ 	[Hie_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
 	"Usuaris del center"
 #elif L==2	// de
@@ -6013,9 +6013,9 @@ const char *Txt_countries =
 	"countries";	// Çeviri lazim!
 #endif
 
-const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
+const char *Txt_COUNTRIES_HELP_ORDER[Hie_NUM_ORDERS] =
 	{
-	[Cty_ORDER_BY_COUNTRY] =
+	[Hie_ORDER_BY_NAME] =
 #if   L==1	// ca
 	"Ordenar per pa&iacute;s"
 #elif L==2	// de
@@ -6038,7 +6038,7 @@ const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
 	"Sort by country"		// Çeviri lazim!
 #endif
 	,
-	[Cty_ORDER_BY_NUM_USRS] =
+	[Hie_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
 	"Ordenar per n&ordm; d'usuaris"
 #elif L==2	// de
@@ -6085,9 +6085,9 @@ const char *Txt_Countries_with_pending_institutions =
 	"Countries with pending institutions";				// Çeviri lazim!
 #endif
 
-const char *Txt_COUNTRIES_ORDER[Cty_NUM_ORDERS] =
+const char *Txt_COUNTRIES_ORDER[Hie_NUM_ORDERS] =
 	{
-	[Cty_ORDER_BY_COUNTRY] =
+	[Hie_ORDER_BY_NAME] =
 #if   L==1	// ca
 	"Pa&iacute;s"
 #elif L==2	// de
@@ -6110,7 +6110,7 @@ const char *Txt_COUNTRIES_ORDER[Cty_NUM_ORDERS] =
 	"&Uuml;lke"
 #endif
 	,
-	[Cty_ORDER_BY_NUM_USRS] =
+	[Hie_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
 	"Usuaris del pa&iacute;s"
 #elif L==2	// de
@@ -18008,9 +18008,9 @@ const char *Txt_institutions =
 	"institutions";	// Çeviri lazim!
 #endif
 
-const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
+const char *Txt_INSTITUTIONS_HELP_ORDER[Hie_NUM_ORDERS] =
 	{
-	[Ins_ORDER_BY_INSTITUTION] =
+	[Hie_ORDER_BY_NAME] =
 #if   L==1	// ca
 	"Ordenar per instituci&oacute;"
 #elif L==2	// de
@@ -18033,7 +18033,7 @@ const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
 	"Sort by institution"			// Çeviri lazim!
 #endif
 	,
-	[Ins_ORDER_BY_NUM_USRS] =
+	[Hie_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
 	"Ordenar per nombre d'usuaris"
 #elif L==2	// de
@@ -18195,9 +18195,9 @@ const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to 
 	"Institutions of %s";	// Çeviri lazim!
 #endif
 
-const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
+const char *Txt_INSTITUTIONS_ORDER[Hie_NUM_ORDERS] =
 	{
-	[Ins_ORDER_BY_INSTITUTION] =
+	[Hie_ORDER_BY_NAME] =
 #if   L==1	// ca
 	"Instituci&oacute;"
 #elif L==2	// de
@@ -18220,7 +18220,7 @@ const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
 	"Kurum"
 #endif
 	,
-	[Ins_ORDER_BY_NUM_USRS] =
+	[Hie_ORDER_BY_NUM_USRS] =
 #if   L==1	// ca
 	"Usuaris de la instituci&oacute;"
 #elif L==2	// de

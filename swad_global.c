@@ -166,11 +166,11 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Hierarchy.Ctys.Num = 0;
    Gbl.Hierarchy.Ctys.Lst = NULL;
-   Gbl.Hierarchy.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
+   Gbl.Hierarchy.Ctys.SelectedOrder = Hie_ORDER_DEFAULT;
 
    Gbl.Hierarchy.Inss.Num = 0;
    Gbl.Hierarchy.Inss.Lst = NULL;
-   Gbl.Hierarchy.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
+   Gbl.Hierarchy.Inss.SelectedOrder = Hie_ORDER_DEFAULT;
 
    Gbl.Hierarchy.Ins.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ins.FullName[0] = '\0';
@@ -178,7 +178,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Hierarchy.Ctrs.Num = 0;
    Gbl.Hierarchy.Ctrs.Lst = NULL;
-   Gbl.Hierarchy.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
+   Gbl.Hierarchy.Ctrs.SelectedOrder = Hie_ORDER_DEFAULT;
 
    Gbl.Hierarchy.Ctr.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ctr.FullName[0] = '\0';

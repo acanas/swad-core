@@ -128,7 +128,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
-static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
+static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,
@@ -1073,7 +1073,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
                       BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
    char IdCaption[Frm_MAX_BYTES_ID + 1];
    char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
-   struct Ins_Instit Ins;
+   struct Hie_Node Ins;
    char MainDegreeShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree
    struct
@@ -1996,9 +1996,9 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
-   struct Deg_ListDegs Degs;
+   struct Hie_List Degs;
    unsigned NumDeg;
-   struct Deg_Degree Deg;
+   struct Hie_Node Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
    char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
    HTM_OptionSelected_t Selected;
@@ -2123,7 +2123,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    MYSQL_RES *mysql_res;
    unsigned long NumDeg;
    unsigned long NumDegs;
-   struct Deg_Degree Deg;
+   struct Hie_Node Deg;
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
@@ -2207,7 +2207,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
    unsigned NumDegsNotEmpty;
    int NumStds;
    int NumStdsWithPhoto;
-   struct Deg_Degree Deg;
+   struct Hie_Node Deg;
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
@@ -2351,7 +2351,7 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
 /******************* Show the average photo of a degree **********************/
 /*****************************************************************************/
 
-static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
+static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
                                            Pho_AvgPhotoSeeOrPrint_t SeeOrPrint,
                                            Usr_Sex_t Sex,

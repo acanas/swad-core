@@ -47,7 +47,7 @@ extern struct Globals Gbl;
 /************* Add a new requested course to pending requests ****************/
 /*****************************************************************************/
 
-void Crs_DB_CreateCourse (struct Crs_Course *Crs,Hie_Status_t Status)
+void Crs_DB_CreateCourse (struct Hie_Node *Crs,Hie_Status_t Status)
   {
    /***** Insert new course into pending requests *****/
    Crs->Cod =

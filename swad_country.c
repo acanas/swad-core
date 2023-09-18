@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Cty_Countr *Cty_EditingCty = NULL;	// Static variable to keep the country being edited
+static struct Hie_Node *Cty_EditingCty = NULL;	// Static variable to keep the country being edited
 long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 
 /*****************************************************************************/
@@ -68,12 +68,10 @@ long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
 /*****************************************************************************/
 
 static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable);
-static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty);
+static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty);
 
 static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args);
 static void Cty_PutIconToEditCountries (void);
-
-static void Cty_GetParCtyOrder (void);
 
 static void Cty_EditCountriesInternal (void);
 static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args);
@@ -94,7 +92,7 @@ static void Cty_PutHeadCountriesForEdition (void);
 static void Cty_EditingCountryConstructor (void);
 static void Cty_EditingCountryDestructor (void);
 
-static void Cty_FormToGoToMap (struct Cty_Countr *Cty);
+static void Cty_FormToGoToMap (struct Hie_Node *Cty);
 
 /*****************************************************************************/
 /***************** List countries with pending institutions ******************/
@@ -111,7 +109,7 @@ void Cty_SeeCtyWithPendingInss (void)
    MYSQL_ROW row;
    unsigned NumCtys;
    unsigned NumCty;
-   struct Cty_Countr Cty;
+   struct Hie_Node Cty;
    const char *BgColor;
 
    /***** Trivial check: only system admins can see countries with pending institutions *****/
@@ -201,7 +199,7 @@ void Cty_ListCountries (void)
 void Cty_ListCountries1 (void)
   {
    /***** Get parameter with the type of order in the list of countries *****/
-   Cty_GetParCtyOrder ();
+   Hie_GetParHieOrder ();
 
    /***** Get list of countries *****/
    Cty_GetFullListOfCountries ();
@@ -353,18 +351,18 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   Cty_Order_t Order;
-   static HTM_HeadAlign Align[Cty_NUM_ORDERS] =
+   Hie_Order_t Order;
+   static HTM_HeadAlign Align[Hie_NUM_ORDERS] =
      {
-      [Cty_ORDER_BY_COUNTRY ] = HTM_HEAD_LEFT,
-      [Cty_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
+      [Hie_ORDER_BY_NAME    ] = HTM_HEAD_LEFT,
+      [Hie_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
      };
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      for (Order  = (Cty_Order_t) 0;
-	   Order <= (Cty_Order_t) (Cty_NUM_ORDERS - 1);
+      for (Order  = (Hie_Order_t) 0;
+	   Order <= (Hie_Order_t) (Hie_NUM_ORDERS - 1);
 	   Order++)
 	{
          HTM_TH_Begin (Align[Order]);
@@ -404,7 +402,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 /************************ List one country for seeing ************************/
 /*****************************************************************************/
 
-static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
+static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
   {
    const char *BgColor;
 
@@ -506,7 +504,7 @@ static void Cty_PutIconToEditCountries (void)
 /********************* Draw country map and name with link *******************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Action,
+void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
                                         const char *ClassContainer,
                                         const char *ClassMap)
   {
@@ -549,7 +547,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 /***************************** Draw country map ******************************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
+void Cty_DrawCountryMap (struct Hie_Node *Cty,const char *Class)
   {
    char *URL;
    char *Icon;
@@ -574,7 +572,7 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
 /*********************** Check if country map exists *************************/
 /*****************************************************************************/
 
-bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty)
+bool Cty_CheckIfCountryPhotoExists (struct Hie_Node *Cty)
   {
    char PathMap[PATH_MAX + 1];
 
@@ -653,19 +651,6 @@ void Cty_WriteScriptGoogleGeochart (void)
   }
 
 /*****************************************************************************/
-/******** Get parameter with the type or order in list of countries **********/
-/*****************************************************************************/
-
-static void Cty_GetParCtyOrder (void)
-  {
-   Gbl.Hierarchy.Ctys.SelectedOrder = (Cty_Order_t)
-				      Par_GetParUnsignedLong ("Order",
-							      0,
-							      Cty_NUM_ORDERS - 1,
-							      (unsigned long) Cty_ORDER_DEFAULT);
-  }
-
-/*****************************************************************************/
 /******************** Put forms to edit institution types ********************/
 /*****************************************************************************/
 
@@ -687,7 +672,7 @@ static void Cty_EditCountriesInternal (void)
    extern const char *Txt_Countries;
 
    /***** Get list of countries *****/
-   Gbl.Hierarchy.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
+   Gbl.Hierarchy.Ctys.SelectedOrder = Hie_ORDER_BY_NAME;
    Cty_GetFullListOfCountries ();
 
    /***** Write menu to select country *****/
@@ -735,7 +720,7 @@ void Cty_GetBasicListOfCountries (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCty;
-   struct Cty_Countr *Cty;
+   struct Hie_Node *Cty;
    // Lan_Language_t Lan;
 
    /***** Trivial check: if list is already got, nothing to do *****/
@@ -786,7 +771,7 @@ static void Cty_GetFullListOfCountries (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCty;
-   struct Cty_Countr *Cty;
+   struct Hie_Node *Cty;
 
    /***** Trivial check: if list is already got, nothing to do *****/
    if (Gbl.Hierarchy.Ctys.Num)
@@ -841,7 +826,7 @@ void Cty_WriteSelectorOfCountry (void)
   {
    extern const char *Txt_Country;
    unsigned NumCty;
-   const struct Cty_Countr *CtyInLst;
+   const struct Hie_Node *CtyInLst;
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();
@@ -917,7 +902,7 @@ void Cty_WriteCountryName (long CtyCod)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-bool Cty_GetBasicCountryDataByCod (struct Cty_Countr *Cty)
+bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Cty)
   {
    extern const char *Txt_Another_country;
    MYSQL_RES *mysql_res;
@@ -968,7 +953,7 @@ bool Cty_GetBasicCountryDataByCod (struct Cty_Countr *Cty)
 /*********** Get all names and WWWs of a country given its code **************/
 /*****************************************************************************/
 
-void Cty_GetNamesAndWWWsByCod (struct Cty_Countr *Cty,
+void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1])
   {
@@ -1065,7 +1050,7 @@ static void Cty_ListCountriesForEdition (void)
   {
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
-   struct Cty_Countr *Cty;
+   struct Hie_Node *Cty;
    unsigned NumInss;
    unsigned NumUsrsCty;
    Lan_Language_t Lan;
@@ -1796,7 +1781,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
    extern const char *Txt_countries;
    char *Title;
    unsigned NumCty;
-   struct Cty_Countr Cty;
+   struct Hie_Node Cty;
 
    /***** Query database *****/
    if (NumCtys)
@@ -1874,7 +1859,7 @@ static void Cty_EditingCountryDestructor (void)
 /************************ Form to go to country map **************************/
 /*****************************************************************************/
 
-static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
+static void Cty_FormToGoToMap (struct Hie_Node *Cty)
   {
    if (Cty_DB_CheckIfMapIsAvailable (Cty->Cod))
      {
@@ -2050,7 +2035,7 @@ void Cty_FlushCacheNumUsrsWhoClaimToBelongToCty (void)
    Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs = 0;
   }
 
-unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
+unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Hie_Node *Cty)
   {
    /***** 1. Fast check: Trivial case *****/
    if (Cty->Cod <= 0)
@@ -2079,7 +2064,7 @@ unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
    return Cty->NumUsrsWhoClaimToBelong.NumUsrs;
   }
 
-unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
+unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Hie_Node *Cty)
   {
    unsigned NumUsrsCty;
 

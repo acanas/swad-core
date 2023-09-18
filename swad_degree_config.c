@@ -209,7 +209,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Center;
    unsigned NumCtr;
-   const struct Ctr_Center *CtrInLst;
+   const struct Hie_Node *CtrInLst;
 
    /***** Center *****/
    HTM_TR_Begin (NULL);
@@ -364,7 +364,7 @@ void DegCfg_ChangeDegCtr (void)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_moved_to_the_center_Y;
-   struct Ctr_Center NewCtr;
+   struct Hie_Node NewCtr;
 
    /***** Get parameter with center code *****/
    NewCtr.Cod = ParCod_GetAndCheckPar (ParCod_OthCtr);
