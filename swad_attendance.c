@@ -687,7 +687,7 @@ static void Att_GetEventDataByCodAndCheckCrs (struct Att_Event *Event)
   {
    if (Att_GetEventDataByCod (Event))
      {
-      if (Event->CrsCod != Gbl.Hierarchy.Crs.Cod)
+      if (Event->CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].Cod)
          Err_WrongEventExit ();
      }
    else	// Attendance event not found
@@ -950,7 +950,7 @@ void Att_ReqCreatOrEditEvent (void)
       Att_ResetEvent (&Events.Event);
 
       /* Initialize some fields */
-      Events.Event.CrsCod = Gbl.Hierarchy.Crs.Cod;
+      Events.Event.CrsCod = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
       Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Events.Event.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
       Events.Event.TimeUTC[Dat_END_TIME] = Events.Event.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
@@ -1109,7 +1109,7 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 					                                    "AttCod",
 					                                    AttCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -1336,7 +1336,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	}
       else
 	 HTM_TxtF ("%s&nbsp;%s",
-	           Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+	           Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 
    /***** End container *****/
    HTM_DIV_End ();

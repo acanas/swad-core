@@ -480,7 +480,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	    break;
 	 case Usr_GET_ROLE_IN_CURRENT_CRS:
 	    UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-							      Gbl.Hierarchy.Crs.Cod);
+							      Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 	    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
 	    break;
 	}
@@ -812,7 +812,7 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can edit users from current degree who have accepted */
-	 if (Deg_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.Hierarchy.Deg.Cod))
+	 if (Deg_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_DEG].Cod))
 	    // Degree admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -820,7 +820,7 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can edit from current center who have accepted */
-	 if (Ctr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.Hierarchy.Ctr.Cod))
+	 if (Ctr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CTR].Cod))
 	    // Center admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -828,7 +828,7 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can edit from current institution who have accepted */
-	 if (Ins_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.Hierarchy.Ins.Cod))
+	 if (Ins_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_INS].Cod))
 	    // Institution admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -855,7 +855,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return false;
 
    /***** 4. Fast check: Is he/she a student? *****/
@@ -909,7 +909,7 @@ bool Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return false;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
@@ -932,7 +932,7 @@ bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return false;
 
    /***** 4. Fast check: Am I a system admin? *****/
@@ -978,7 +978,7 @@ bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return false;
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
@@ -1025,7 +1025,7 @@ bool Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return false;
 
    /***** 4. Fast check: Am I a system admin? *****/
@@ -2006,7 +2006,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 
 	 /* Course may have changed ==> get my role in current course again */
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.Cod);
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
 	 // role and action will be got from last data
          GetRoleAndActionFromLastData = true;
@@ -4645,11 +4645,11 @@ void Usr_ListAllDataTchs (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.Cod :
-				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.Cod :
-				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.Cod :
-				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.Cod :
-				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.Cod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
 								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -5085,7 +5085,7 @@ void Usr_SeeGuests (void)
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
 		  Lay_WriteHeaderClassPhoto (false,true,
 					     (Gbl.Scope.Current == HieLvl_CTR ||
-					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.Cod :
+					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
 										 -1L,
 					     -1L,
 					     -1L);
@@ -5242,12 +5242,12 @@ void Usr_SeeStudents (void)
 					     (Gbl.Scope.Current == HieLvl_CRS ||
 					      Gbl.Scope.Current == HieLvl_DEG ||
 					      Gbl.Scope.Current == HieLvl_CTR ||
-					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.Cod :
+					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
 									      -1L,
 					     (Gbl.Scope.Current == HieLvl_CRS ||
-					      Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.Cod :
+					      Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
 									      -1L,
-					      Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.Cod :
+					      Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
 									      -1L);
 
 	       /* Set options allowed */
@@ -5370,11 +5370,11 @@ void Usr_SeeTeachers (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.Cod :
-				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.Cod :
-				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.Cod :
-				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.Cod :
-				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.Cod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
 								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -5419,12 +5419,12 @@ void Usr_SeeTeachers (void)
 					     (Gbl.Scope.Current == HieLvl_CRS ||
 					      Gbl.Scope.Current == HieLvl_DEG ||
 					      Gbl.Scope.Current == HieLvl_CTR ||
-					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.Cod :
+					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
 										 -1L,
 					     (Gbl.Scope.Current == HieLvl_CRS ||
-					      Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.Cod :
+					      Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
 										 -1L,
-					      Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.Cod :
+					      Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
 										 -1L);
 
 	       /* Set options allowed */
@@ -5957,7 +5957,7 @@ void Usr_SeeGstClassPhotoPrn (void)
       /***** Draw the guests' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == HieLvl_CTR ||
-				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.Cod :
+				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
                                                                      -1L,
 				 -1L,-1L);
       HTM_TABLE_BeginWide ();
@@ -6001,12 +6001,12 @@ void Usr_SeeStdClassPhotoPrn (void)
 				 (Gbl.Scope.Current == HieLvl_CRS ||
 				  Gbl.Scope.Current == HieLvl_DEG ||
 				  Gbl.Scope.Current == HieLvl_CTR ||
-				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.Cod :
+				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
 					                             -1L,
 				 (Gbl.Scope.Current == HieLvl_CRS ||
-				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.Cod :
+				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
 					                             -1L,
-				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.Cod :
+				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
 					                             -1L);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
@@ -6058,11 +6058,11 @@ void Usr_SeeTchClassPhotoPrn (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.Cod :
-				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.Cod :
-				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.Cod :
-				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.Cod :
-				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.Cod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
 								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -6074,12 +6074,12 @@ void Usr_SeeTchClassPhotoPrn (void)
 				 (Gbl.Scope.Current == HieLvl_CRS ||
 				  Gbl.Scope.Current == HieLvl_DEG ||
 				  Gbl.Scope.Current == HieLvl_CTR ||
-				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.Cod :
+				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
 					                             -1L,
 				 (Gbl.Scope.Current == HieLvl_CRS ||
-				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.Cod :
+				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
 					                             -1L,
-				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.Cod :
+				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
 					                             -1L);
       HTM_TABLE_BeginWide ();
 
@@ -6334,11 +6334,11 @@ unsigned Usr_GetTotalNumberOfUsers (void)
       case HieLvl_CTR:
       case HieLvl_DEG:
       case HieLvl_CRS:
-         Cod = (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.Cod :
-	       (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.Cod :
-	       (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.Cod :
-	       (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.Cod :
-	                                          Gbl.Hierarchy.Crs.Cod))));
+         Cod = (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
+	       (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
+	       (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
+	       (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
+	                                          Gbl.Hierarchy.Node[HieLvl_CRS].Cod))));
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
 	         (1 << Rol_TCH);

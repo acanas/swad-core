@@ -582,9 +582,9 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
       /***** Heading *****/
       /* Institution, degree and course */
       Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Ins.Cod,
-				 Gbl.Hierarchy.Deg.Cod,
-				 Gbl.Hierarchy.Crs.Cod);
+				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
 
       /***** Show user and time *****/
@@ -989,7 +989,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    Exa_GetExamDataByCod (&Exams.Exam);
    if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Crs.Cod)
+   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].Cod)
       Err_WrongExamExit ();
 
    /***** Get question index from form *****/

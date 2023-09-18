@@ -67,11 +67,11 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    const char *TxtName[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Cty.FullName,
-      [HieLvl_INS] = Gbl.Hierarchy.Ins.ShrtName,
-      [HieLvl_CTR] = Gbl.Hierarchy.Ctr.ShrtName,
-      [HieLvl_DEG] = Gbl.Hierarchy.Deg.ShrtName,
-      [HieLvl_CRS] = Gbl.Hierarchy.Crs.ShrtName,
+      [HieLvl_CTY] = Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
+      [HieLvl_INS] = Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,
+      [HieLvl_CTR] = Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
+      [HieLvl_DEG] = Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
+      [HieLvl_CRS] = Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName,
      };
 
    HTM_SELECT_Begin (SubmitOnChange,NULL,
@@ -91,19 +91,19 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 		  WriteScope = true;
 		  break;
 	       case HieLvl_CTY:
-		  if (Gbl.Hierarchy.Cty.Cod > 0)
+		  if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_INS:
-		  if (Gbl.Hierarchy.Ins.Cod > 0)
+		  if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_CTR:
-		  if (Gbl.Hierarchy.Ctr.Cod > 0)
+		  if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_DEG:
-		  if (Gbl.Hierarchy.Deg.Cod > 0)
+		  if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
 		     WriteScope = true;
 		  break;
 	       case HieLvl_CRS:
@@ -173,19 +173,19 @@ void Sco_AdjustScope (void)
       Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == HieLvl_CRS && Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Scope.Current == HieLvl_CRS && Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       Gbl.Scope.Current = HieLvl_DEG;
 
-   if (Gbl.Scope.Current == HieLvl_DEG && Gbl.Hierarchy.Deg.Cod <= 0)
+   if (Gbl.Scope.Current == HieLvl_DEG && Gbl.Hierarchy.Node[HieLvl_DEG].Cod <= 0)
       Gbl.Scope.Current = HieLvl_CTR;
 
-   if (Gbl.Scope.Current == HieLvl_CTR && Gbl.Hierarchy.Ctr.Cod <= 0)
+   if (Gbl.Scope.Current == HieLvl_CTR && Gbl.Hierarchy.Node[HieLvl_CTR].Cod <= 0)
       Gbl.Scope.Current = HieLvl_INS;
 
-   if (Gbl.Scope.Current == HieLvl_INS && Gbl.Hierarchy.Ins.Cod <= 0)
+   if (Gbl.Scope.Current == HieLvl_INS && Gbl.Hierarchy.Node[HieLvl_INS].Cod <= 0)
       Gbl.Scope.Current = HieLvl_CTY;
 
-   if (Gbl.Scope.Current == HieLvl_CTY && Gbl.Hierarchy.Cty.Cod <= 0)
+   if (Gbl.Scope.Current == HieLvl_CTY && Gbl.Hierarchy.Node[HieLvl_CTY].Cod <= 0)
       Gbl.Scope.Current = HieLvl_SYS;
 
    /***** Avoid forbidden scopes *****/
@@ -334,15 +334,15 @@ long Hie_GetCurrentCod (void)
       case HieLvl_SYS:
 	 return -1L;
       case HieLvl_CTY:
-	 return Gbl.Hierarchy.Cty.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_CTY].Cod;
       case HieLvl_INS:
-	 return Gbl.Hierarchy.Ins.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_INS].Cod;
       case HieLvl_CTR:
-	 return Gbl.Hierarchy.Ctr.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
       case HieLvl_DEG:
-	 return Gbl.Hierarchy.Deg.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
       case HieLvl_CRS:
-	 return Gbl.Hierarchy.Crs.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return -1L;	// Not reached

@@ -109,11 +109,11 @@ static void CtyCfg_Configuration (bool PrintView)
    unsigned NumCtrsWithMap;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Cty.Cod <= 0)		// No country selected
+   if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod <= 0)		// No country selected
       return;
 
    /***** Initializations *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Cty.WWW[0];
+   PutLink = !PrintView && Gbl.Hierarchy.Node[HieLvl_CTY].WWW[0];
 
    /***** Begin box *****/
    if (PrintView)
@@ -143,13 +143,13 @@ static void CtyCfg_Configuration (bool PrintView)
 	 /* Shortcut to the country */
 	 CtyCfg_Shortcut (PrintView);
 
-	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Cty.Cod);
+	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 	 if (PrintView)
 	    /* QR code with link to the country */
 	    CtyCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.Cod);
+	    NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 
 	    /* Number of users who claim to belong to this country,
 	       number of institutions,
@@ -165,10 +165,10 @@ static void CtyCfg_Configuration (bool PrintView)
 	    CtyCfg_NumCrss ();
 
 	    /* Number of users in courses of this country */
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Cty.Cod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Cty.Cod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Cty.Cod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Cty.Cod,Rol_UNK);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_UNK);
 	   }
 
       /* End table */
@@ -179,7 +179,7 @@ static void CtyCfg_Configuration (bool PrintView)
 
    /**************************** Right part **********************************/
    /* Check country map */
-   MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Cty);
+   MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Node[HieLvl_CTY]);
 
    if (NumCtrsWithMap || MapImageExists)
      {
@@ -226,12 +226,12 @@ static void CtyCfg_Title (bool PutLink)
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
-		      Gbl.Hierarchy.Cty.WWW,
-		      Gbl.Hierarchy.Cty.FullName,
+		      Gbl.Hierarchy.Node[HieLvl_CTY].WWW,
+		      Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
 		      The_GetSuffix ());
 
       /* Country name */
-      HTM_Txt (Gbl.Hierarchy.Cty.FullName);
+      HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CTY].FullName);
 
       /* End link */
       if (PutLink)
@@ -322,15 +322,16 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
    char *MapAttribution = NULL;
 
    /***** Get map attribution *****/
-   CtyCfg_GetMapAttr (Gbl.Hierarchy.Cty.Cod,&MapAttribution);
+   CtyCfg_GetMapAttr (Gbl.Hierarchy.Node[HieLvl_CTY].Cod,&MapAttribution);
 
    /***** Map image *****/
    HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
-		      Gbl.Hierarchy.Cty.WWW);
-      Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
-							 "COUNTRY_MAP_SHOW");
+		      Gbl.Hierarchy.Node[HieLvl_CTY].WWW);
+      Cty_DrawCountryMap (&Gbl.Hierarchy.Node[HieLvl_CTY],
+			  PrintView ? "COUNTRY_MAP_PRINT" :
+				      "COUNTRY_MAP_SHOW");
       if (PutLink)
 	 HTM_A_End ();
    HTM_DIV_End ();
@@ -413,9 +414,9 @@ static void CtyCfg_Name (bool PutLink)
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (PutLink)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_STRONG_%s\"",
-			 Gbl.Hierarchy.Cty.WWW,
+			 Gbl.Hierarchy.Node[HieLvl_CTY].WWW,
 			 The_GetSuffix ());
-	 HTM_Txt (Gbl.Hierarchy.Cty.FullName);
+	 HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CTY].FullName);
 	 if (PutLink)
 	    HTM_A_End ();
       HTM_TD_End ();
@@ -429,7 +430,7 @@ static void CtyCfg_Name (bool PutLink)
 
 static void CtyCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
+   HieCfg_Shortcut (PrintView,ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
   }
 
 /*****************************************************************************/
@@ -438,7 +439,7 @@ static void CtyCfg_Shortcut (bool PrintView)
 
 static void CtyCfg_QR (void)
   {
-   HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
+   HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
   }
 
 /*****************************************************************************/
@@ -457,7 +458,7 @@ static void CtyCfg_NumUsrs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty));
+	 HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Node[HieLvl_CTY]));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -482,13 +483,13 @@ static void CtyCfg_NumInss (void)
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
+	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-	                  Gbl.Hierarchy.Cty.FullName) < 0)
+	                  Gbl.Hierarchy.Node[HieLvl_CTY].FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.Cod));
+	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -512,7 +513,7 @@ static void CtyCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.Cod));
+	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -534,7 +535,7 @@ static void CtyCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.Cod));
+	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod));
       HTM_TD_End ();
 
    HTM_TR_End ();

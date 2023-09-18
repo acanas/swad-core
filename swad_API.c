@@ -912,21 +912,21 @@ int swad__loginBySessionKey (struct soap *soap,
       row = mysql_fetch_row (mysql_res);
 
       /***** Get course (row[2]) *****/
-      Gbl.Hierarchy.Crs.Cod = Str_ConvertStrCodToLongCod (row[2]);
-      Crs_GetCourseDataByCod (&Gbl.Hierarchy.Crs);
-      loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Crs.Cod;
-      Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Crs.FullName,
+      Gbl.Hierarchy.Node[HieLvl_CRS].Cod = Str_ConvertStrCodToLongCod (row[2]);
+      Crs_GetCourseDataByCod (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+      loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
+      Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Node[HieLvl_CRS].FullName,
                 Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      UsrFound = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod);	// Get some user's data from database
+      UsrFound = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);	// Get some user's data from database
 
       /***** Get degree (row[1]) *****/
-      Gbl.Hierarchy.Deg.Cod = Str_ConvertStrCodToLongCod (row[1]);
-      Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Deg);
-      loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Deg.Cod;
-      Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Deg.FullName,
+      Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Str_ConvertStrCodToLongCod (row[1]);
+      Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Node[HieLvl_DEG]);
+      loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
+      Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Node[HieLvl_DEG].FullName,
                 Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
      }
    else
@@ -936,7 +936,7 @@ int swad__loginBySessionKey (struct soap *soap,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Deg.Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    if (UsrFound)
      {
@@ -997,7 +997,7 @@ int swad__getAvailableRoles (struct soap *soap,
    Gbl.WebService.Function = API_getAvailableRoles;
 
    /***** Initialize hierarchy *****/
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
    Hie_InitHierarchy ();
 
    /***** Default value returned on error *****/
@@ -1217,7 +1217,7 @@ int swad__getCourseInfo (struct soap *soap,
    Gbl.WebService.Function = API_getCourseInfo;
 
    /***** Initialize hierarchy *****/
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
    Hie_InitHierarchy ();
 
    /***** Check web service key *****/
@@ -1230,12 +1230,12 @@ int swad__getCourseInfo (struct soap *soap,
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
-						   Gbl.Hierarchy.Crs.Cod,
+						   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 						   -1L)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1265,7 +1265,7 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Unknown requested info type");
    Gbl.Crs.Info.Type = InfoType;
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-                                 Gbl.Hierarchy.Crs.Cod,
+                                 Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
                                  Gbl.Crs.Info.Type,
                                  &FromDB);
    Length = strlen (NamesInWSForInfoSrc[FromDB.Src]);
@@ -1329,7 +1329,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
    *HTMLBuffer = NULL;
 
    /***** Load syllabus from XML file to list of items in memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Crs.Cod);
+   Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    if (Syl_LstItemsSyllabus.NumItems)
      {
@@ -1405,7 +1405,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
    *HTMLBuffer = NULL;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Gbl.Crs.Info.Type,
                          TxtHTML,NULL);
 
    if (TxtHTML[0])
@@ -1490,7 +1490,7 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
    *HTMLBuffer = NULL;
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Crs.Cod,Gbl.Crs.Info.Type,PathRelDirHTML);
+   Inf_BuildPathPage (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Gbl.Crs.Info.Type,PathRelDirHTML);
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
@@ -1560,7 +1560,7 @@ int swad__getUsers (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getUsers;
-   Gbl.Hierarchy.Crs.Cod = (courseCode > 0) ? (long) courseCode :
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (courseCode > 0) ? (long) courseCode :
 	                                          -1L;
 
    /***** Check web service key *****/
@@ -1573,12 +1573,12 @@ int swad__getUsers (struct soap *soap,
 
    /***** Check course *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
-						   Gbl.Hierarchy.Crs.Cod,
+						   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 						   -1L)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1594,7 +1594,7 @@ int swad__getUsers (struct soap *soap,
 				  "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Deg.Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Check requested users' role *****/
    if (userRole != API_ROLE_STUDENT &&	// Students
@@ -1641,7 +1641,7 @@ int swad__findUsers (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_findUsers;
-   Gbl.Hierarchy.Crs.Cod = (courseCode > 0) ? (long) courseCode :
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (courseCode > 0) ? (long) courseCode :
 	                                          -1L;
 
    /***** Check web service key *****/
@@ -1655,12 +1655,12 @@ int swad__findUsers (struct soap *soap,
    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
       /***** Check course *****/
       if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
-						      Gbl.Hierarchy.Crs.Cod,
+						      Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 						      -1L)) != SOAP_OK)
 	 return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1678,7 +1678,7 @@ int swad__findUsers (struct soap *soap,
 
    if (Gbl.Hierarchy.Level == HieLvl_CRS)
       /***** Get degree of current course *****/
-      Gbl.Hierarchy.Deg.Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+      Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Check requested users' role *****/
    if (userRole < API_ROLE_UNKNOWN ||
@@ -1807,7 +1807,7 @@ int swad__getGroupTypes (struct soap *soap,
    Gbl.WebService.Function = API_getGroupTypes;
 
    /***** Initialize hierarchy *****/
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
    Hie_InitHierarchy ();
 
    /***** Open groups of this course that must be opened
@@ -1823,13 +1823,13 @@ int swad__getGroupTypes (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -1921,7 +1921,7 @@ int swad__getGroups (struct soap *soap,
    Gbl.WebService.Function = API_getGroups;
 
    /***** Initialize hierarchy *****/
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
    Hie_InitHierarchy ();
 
    /***** Open groups of this course that must be opened
@@ -1937,13 +1937,13 @@ int swad__getGroups (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2048,7 +2048,7 @@ int swad__sendMyGroups (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendMyGroups;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -2059,13 +2059,13 @@ int swad__sendMyGroups (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2254,7 +2254,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getAttendanceEvents;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -2265,13 +2265,13 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2312,7 +2312,7 @@ int swad__getAttendanceEvents (struct soap *soap,
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].hidden = (Event.HiddenOrVisible == HidVis_HIDDEN) ? 1 :
 										                                    0;
          Gbl.Usrs.Other.UsrDat.UsrCod = Event.UsrCod;
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.Cod))	// Get some user's data from database
+         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 =
@@ -2434,7 +2434,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendAttendanceEvent;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -2445,13 +2445,13 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2555,7 +2555,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    if (Event.AttCod > 0)	// The event already exists
      {
       Att_GetEventDataByCod (&Event);
-      Gbl.Hierarchy.Crs.Cod = Event.CrsCod;
+      Gbl.Hierarchy.Node[HieLvl_CRS].Cod = Event.CrsCod;
      }
    else
       return soap_receiver_fault (soap,
@@ -2563,13 +2563,13 @@ int swad__removeAttendanceEvent (struct soap *soap,
 				  "Attendance event does not exist");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2623,7 +2623,7 @@ static void API_GetLstGrpsSel (const char *Groups)
 	{
 	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
-	 if (Grp_DB_CheckIfGrpBelongsToCrs (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.Hierarchy.Crs.Cod))
+	 if (Grp_DB_CheckIfGrpBelongsToCrs (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
 	    NumGrp++;
 	}
       Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;	// Update number of groups
@@ -2663,10 +2663,10 @@ int swad__getAttendanceUsers (struct soap *soap,
    /***** Get course of this attendance event *****/
    Event.AttCod = (long) attendanceEventCode;
    Att_GetEventDataByCod (&Event);
-   Gbl.Hierarchy.Crs.Cod = Event.CrsCod;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = Event.CrsCod;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -2811,10 +2811,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
    Event.AttCod = (long) attendanceEventCode;
    if (!Att_GetEventDataByCod (&Event))
       return SOAP_OK;	// return with success = 0
-   Gbl.Hierarchy.Crs.Cod = Event.CrsCod;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = Event.CrsCod;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3337,7 +3337,7 @@ int swad__sendNotice (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_sendNotice;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -3348,7 +3348,7 @@ int swad__sendNotice (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3357,12 +3357,12 @@ int swad__sendNotice (struct soap *soap,
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
-						   Gbl.Hierarchy.Crs.Cod,
+						   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 						   -1L)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Deg.Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Check if I am a teacher *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
@@ -3399,7 +3399,7 @@ int swad__getTestConfig (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getTestConfig;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -3410,7 +3410,7 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3418,7 +3418,7 @@ int swad__getTestConfig (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
@@ -3432,7 +3432,7 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Deg.Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Set default result to empty *****/
    getTestConfigOut->numQuestions =
@@ -3493,7 +3493,7 @@ int swad__getTests (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getTests;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -3504,7 +3504,7 @@ int swad__getTests (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -3512,7 +3512,7 @@ int swad__getTests (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
@@ -3526,7 +3526,7 @@ int swad__getTests (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Deg.Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Set default result to empty *****/
    getTestsOut->tagsArray.__size         = 0;
@@ -3846,7 +3846,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4029,7 +4029,7 @@ int swad__getGames (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getGames;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -4040,13 +4040,13 @@ int swad__getGames (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4085,7 +4085,7 @@ int swad__getGames (struct soap *soap,
 
 	 /* Get user's code of the user who created the game (row[1]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.Cod))	// Get some user's data from database
+         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getGamesOut->gamesArray.__ptr[NumGame].userSurname1 =
@@ -4183,7 +4183,7 @@ int swad__getMatches (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getMatches;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -4194,7 +4194,7 @@ int swad__getMatches (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
@@ -4211,7 +4211,7 @@ int swad__getMatches (struct soap *soap,
    Gam_GetGameDataByCod (&Game);
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4250,7 +4250,7 @@ int swad__getMatches (struct soap *soap,
 
 	 /* Get user's code of the user who created the game (row[1]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Crs.Cod))	// Get some user's data from database
+         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getMatchesOut->matchesArray.__ptr[NumMatch].userSurname1 =
@@ -4340,7 +4340,7 @@ int swad__getMatchStatus (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getMatchStatus;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
    Game.GamCod = (long) gameCode;
    Match.MchCod = (long) matchCode;
 
@@ -4359,7 +4359,7 @@ int swad__getMatchStatus (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
@@ -4385,7 +4385,7 @@ int swad__getMatchStatus (struct soap *soap,
 	                        "Match does not belong to game");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4463,7 +4463,7 @@ int swad__answerMatchQuestion (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_answerMatchQuestion;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
    Game.GamCod  = (long) gameCode;
    Match.MchCod = (long) matchCode;
 
@@ -4481,7 +4481,7 @@ int swad__answerMatchQuestion (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Check if course code is correct *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code must be a integer greater than 0");
@@ -4592,7 +4592,7 @@ int swad__getDirectoryTree (struct soap *soap,
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getDirectoryTree;
-   Gbl.Hierarchy.Crs.Cod = (long) courseCode;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (long) courseCode;
    Gbl.Crs.Grps.GrpCod = (long) groupCode;
 
    /***** Check web service key *****/
@@ -4603,7 +4603,7 @@ int swad__getDirectoryTree (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4612,7 +4612,7 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
-						   Gbl.Hierarchy.Crs.Cod,
+						   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 						   Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
       return ReturnCode;
 
@@ -4674,13 +4674,13 @@ int swad__getDirectoryTree (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /* Initialize path to private directory */
-   Gbl.Hierarchy.Crs.Cod = (courseCode > 0) ? (long) courseCode :
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (courseCode > 0) ? (long) courseCode :
 	                                         -1L;
    Gbl.Crs.Grps.GrpCod = (groupCode > 0) ? (long) groupCode :
 	                                   -1L;
 
    snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),"%s/%ld",
-             Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Crs.Cod);
+             Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
    Brw_InitializeFileBrowser ();
    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
 	     sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
@@ -4936,15 +4936,15 @@ int swad__getFile (struct soap *soap,
 
    /***** Set course and group codes *****/
    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
-                                  &Gbl.Hierarchy.Ins.Cod,
-                                  &Gbl.Hierarchy.Ctr.Cod,
-                                  &Gbl.Hierarchy.Deg.Cod,
-                                  &Gbl.Hierarchy.Crs.Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
                                   &Gbl.Crs.Grps.GrpCod);
    Hie_InitHierarchy ();
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -4953,7 +4953,7 @@ int swad__getFile (struct soap *soap,
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
-						   Gbl.Hierarchy.Crs.Cod,
+						   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 						   Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
       return ReturnCode;
 
@@ -5084,20 +5084,20 @@ int swad__getMarks (struct soap *soap,
 
    /***** Set course and group codes *****/
    Brw_GetCrsGrpFromFileMetadata (FileMetadata.FileBrowser,FileMetadata.Cod,
-                                  &Gbl.Hierarchy.Ins.Cod,
-                                  &Gbl.Hierarchy.Ctr.Cod,
-                                  &Gbl.Hierarchy.Deg.Cod,
-                                  &Gbl.Hierarchy.Crs.Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+                                  &Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
                                   &Gbl.Crs.Grps.GrpCod);
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
-						   Gbl.Hierarchy.Crs.Cod,
+						   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 						   Gbl.Crs.Grps.GrpCod)) != SOAP_OK)
       return ReturnCode;
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -5167,7 +5167,7 @@ int swad__getLocation (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
@@ -5218,7 +5218,7 @@ int swad__sendMyLocation (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get some of my data *****/
-   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Crs.Cod))
+   if (!API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       return soap_receiver_fault (soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");

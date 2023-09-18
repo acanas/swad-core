@@ -447,12 +447,12 @@ static void Lay_WritePageTitle (void)
    HTM_TITLE_Begin ();
 
       if (Par_GetMethod () == Par_METHOD_GET &&
-	  Gbl.Hierarchy.Deg.Cod > 0)
+	  Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
 	{
 	 HTM_TxtF ("%s &gt; %s",
-	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Deg.ShrtName);
+	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)
-	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Crs.ShrtName);
+	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 	}
       else
 	 HTM_TxtF ("%s: %s",
@@ -566,7 +566,7 @@ static void Lay_WriteScripts (void)
       HTM_SCRIPT_Begin (NULL,NULL);
 
 	 HTM_Txt ("\tvar STR_EXAM = '");
-	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Crs.FullName);
+	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 	 HTM_Txt ("';\n");
 
 	 HTM_Txt ("\tvar Hlds = [];\n");
@@ -858,7 +858,7 @@ static void Lay_WriteScriptParsAJAX (void)
       HTM_TxtF ("var refreshParamIdSes = \"ses=%s\";\n"
 		"var refreshParamCrsCod = \"crs=%ld\";\n",
 		Gbl.Session.Id,
-		Gbl.Hierarchy.Crs.Cod);
+		Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
       /***** Parameter to refresh connected users *****/
       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)

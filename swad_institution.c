@@ -168,7 +168,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	    /* Get institution code (row[0]) */
 	    Ins.Cod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ins.Cod == Gbl.Hierarchy.Ins.Cod) ? "BG_HIGHLIGHT" :
+	    BgColor = (Ins.Cod == Gbl.Hierarchy.Node[HieLvl_INS].Cod) ? "BG_HIGHLIGHT" :
 								 The_GetColorRows ();
 
 	    /* Get data of institution */
@@ -259,13 +259,13 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
 
 void Ins_ShowInssOfCurrentCty (void)
   {
-   if (Gbl.Hierarchy.Cty.Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
      {
       /***** Get parameter with the type of order in the list of institutions *****/
-      Hie_GetParHieOrder ();
+      Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder = Hie_GetParHieOrder ();
 
       /***** Get list of institutions *****/
-      Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Cty.Cod);
+      Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 
       /***** Write menu to select country *****/
       Hie_WriteMenuHierarchy ();
@@ -292,13 +292,13 @@ static void Ins_ListInstitutions (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-                 Gbl.Hierarchy.Cty.FullName) < 0)
+                 Gbl.Hierarchy.Node[HieLvl_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Gbl.Hierarchy.Inss.Num)	// There are institutions in the current country
+      if (Gbl.Hierarchy.List[HieLvl_CTY].Num)	// There are institutions in the current country
 	{
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
@@ -306,9 +306,9 @@ static void Ins_ListInstitutions (void)
 
 	    /***** Write all institutions and their nuber of users *****/
 	    for (NumIns = 0, The_ResetRowColor ();
-		 NumIns < Gbl.Hierarchy.Inss.Num;
+		 NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
 		 NumIns++, The_ChangeRowColor ())
-	       Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.Inss.Lst[NumIns]),
+	       Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns]),
 	                                        NumIns + 1);
 
 	 /***** End table *****/
@@ -365,7 +365,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = (Ins->Cod == Gbl.Hierarchy.Ins.Cod) ? "BG_HIGHLIGHT" :
+   BgColor = (Ins->Cod == Gbl.Hierarchy.Node[HieLvl_INS].Cod) ? "BG_HIGHLIGHT" :
                                                          The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
@@ -462,13 +462,13 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],
 		                           "class=\"BT_LINK\"");
-		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_INSTITUTIONS_ORDER[Order]);
 	    if (OrderSelectable)
 	      {
-		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder)
 			HTM_U_End ();
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -512,14 +512,14 @@ static void Ins_EditInstitutionsInternal (void)
    char *Title;
 
    /***** Get list of institutions *****/
-   Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Cty.Cod);
+   Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-                 Gbl.Hierarchy.Cty.FullName) < 0)
+                 Gbl.Hierarchy.Node[HieLvl_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
@@ -529,7 +529,7 @@ static void Ins_EditInstitutionsInternal (void)
       Ins_PutFormToCreateInstitution ();
 
       /***** Forms to edit current institutions *****/
-      if (Gbl.Hierarchy.Inss.Num)
+      if (Gbl.Hierarchy.List[HieLvl_CTY].Num)
 	 Ins_ListInstitutionsForEdition ();
 
    /***** End box *****/
@@ -563,23 +563,23 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
    unsigned NumIns;
 
    /***** Get institutions from database *****/
-   if ((Gbl.Hierarchy.Inss.Num = Ins_DB_GetInssInCtyOrderedByFullName (&mysql_res,CtyCod))) // Institutions found...
+   if ((Gbl.Hierarchy.List[HieLvl_CTY].Num = Ins_DB_GetInssInCtyOrderedByFullName (&mysql_res,CtyCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
-                                            sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[HieLvl_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_CTY].Num,
+                                            sizeof (*Gbl.Hierarchy.List[HieLvl_CTY].Lst))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Inss.Num;
+	   NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.Inss.Lst[NumIns],
+         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns],
                                    false);	// Don't get number of users who claim to belong to this institution
      }
    else
-      Gbl.Hierarchy.Inss.Lst = NULL;
+      Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -596,23 +596,23 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
    unsigned NumIns;
 
    /***** Get institutions from database *****/
-   if ((Gbl.Hierarchy.Inss.Num = Ins_DB_GetFullListOfInssInCty (&mysql_res,CtyCod))) // Institutions found...
+   if ((Gbl.Hierarchy.List[HieLvl_CTY].Num = Ins_DB_GetFullListOfInssInCty (&mysql_res,CtyCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
-                                            sizeof (*Gbl.Hierarchy.Inss.Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[HieLvl_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_CTY].Num,
+                                            sizeof (*Gbl.Hierarchy.List[HieLvl_CTY].Lst))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Inss.Num;
+	   NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.Inss.Lst[NumIns],
+         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns],
                                    true);	// Get number of users who claim to belong to this institution
      }
    else
-      Gbl.Hierarchy.Inss.Lst = NULL;
+      Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -794,12 +794,12 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
 
 void Ins_FreeListInstitutions (void)
   {
-   if (Gbl.Hierarchy.Inss.Lst)
+   if (Gbl.Hierarchy.List[HieLvl_CTY].Lst)
      {
       /***** Free memory used by the list of institutions *****/
-      free (Gbl.Hierarchy.Inss.Lst);
-      Gbl.Hierarchy.Inss.Num = 0;
-      Gbl.Hierarchy.Inss.Lst = NULL;
+      free (Gbl.Hierarchy.List[HieLvl_CTY].Lst);
+      Gbl.Hierarchy.List[HieLvl_CTY].Num = 0;
+      Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
      }
   }
 
@@ -820,7 +820,7 @@ void Ins_WriteSelectorOfInstitution (void)
    Frm_BeginFormGoTo (ActSeeCtr);
 
       /***** Begin selector *****/
-      if (Gbl.Hierarchy.Cty.Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
@@ -831,15 +831,15 @@ void Ins_WriteSelectorOfInstitution (void)
 			   The_GetSuffix ());
 
       HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Ins.Cod < 0 ? HTM_OPTION_SELECTED :
+		  Gbl.Hierarchy.Node[HieLvl_INS].Cod < 0 ? HTM_OPTION_SELECTED :
 						 HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Institution);
 
-      if (Gbl.Hierarchy.Cty.Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
 	{
 	 /***** Get institutions of current country *****/
-	 NumInss = Ins_DB_GetInssInCtyOrderedByShrtName (&mysql_res,Gbl.Hierarchy.Cty.Cod);
+	 NumInss = Ins_DB_GetInssInCtyOrderedByShrtName (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 
 	 /***** List institutions *****/
 	 for (NumIns = 0;
@@ -855,8 +855,8 @@ void Ins_WriteSelectorOfInstitution (void)
 
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&InsCod,
-			Gbl.Hierarchy.Ins.Cod > 0 &&
-			InsCod == Gbl.Hierarchy.Ins.Cod ? HTM_OPTION_SELECTED :
+			Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0 &&
+			InsCod == Gbl.Hierarchy.Node[HieLvl_INS].Cod ? HTM_OPTION_SELECTED :
 							     HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);
@@ -900,10 +900,10 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /***** Write all institutions *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Inss.Num;
+	   NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
 	   NumIns++)
 	{
-	 Ins = &Gbl.Hierarchy.Inss.Lst[NumIns];
+	 Ins = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
 
 	 ICanEdit = Ins_CheckIfICanEdit (Ins);
 	 NumCtrs = Ctr_GetNumCtrsInIns (Ins->Cod);
@@ -1196,7 +1196,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
         {
          /***** If institution was in database... *****/
          if (Ins_DB_CheckIfInsNameExistsInCty (ParName,NewInsName,Ins->Cod,
-                                            Gbl.Hierarchy.Cty.Cod))
+                                            Gbl.Hierarchy.Node[HieLvl_CTY].Cod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              NewInsName);
@@ -1332,7 +1332,7 @@ void Ins_ContEditAfterChgIns (void)
 static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
    // If the institution being edited is different to the current one...
-   if (Ins_EditingIns->Cod != Gbl.Hierarchy.Ins.Cod)
+   if (Ins_EditingIns->Cod != Gbl.Hierarchy.Node[HieLvl_INS].Cod)
      {
       /***** Alert with button to go to institution *****/
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
@@ -1513,7 +1513,7 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set institution country */
-   Ins_EditingIns->PrtCod = Gbl.Hierarchy.Cty.Cod;
+   Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[HieLvl_CTY].Cod;
 
    /* Get institution short name */
    Par_GetParText ("ShortName",Ins_EditingIns->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
@@ -1531,12 +1531,12 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
         {
          /***** If name of institution was in database... *****/
          if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Ins_EditingIns->ShrtName,
-                                            -1L,Gbl.Hierarchy.Cty.Cod))
+                                            -1L,Gbl.Hierarchy.Node[HieLvl_CTY].Cod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              Ins_EditingIns->ShrtName);
          else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Ins_EditingIns->FullName,
-                                                 -1L,Gbl.Hierarchy.Cty.Cod))
+                                                 -1L,Gbl.Hierarchy.Node[HieLvl_CTY].Cod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              Ins_EditingIns->FullName);

@@ -1531,7 +1531,7 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
    QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /***** Validate/unvalidate question *****/
-   Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,Gbl.Hierarchy.Crs.Cod,
+   Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
                              Validity);
 
    /***** Show current exam and its sets *****/
@@ -1552,7 +1552,7 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams->Exam);
-   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Crs.Cod)
+   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].Cod)
       Err_WrongExamExit ();
 
    /***** Get set data from database *****/

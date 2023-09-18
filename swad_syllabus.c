@@ -232,7 +232,7 @@ bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
    Syl_SetSyllabusTypeFromAction (Syllabus);
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Crs.Cod);
+   Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    switch (Gbl.Action.Act)
      {
@@ -929,7 +929,7 @@ void Syl_RemoveItemSyllabus (void)
    Syl_SetSyllabusTypeFromAction (&Syllabus);
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Crs.Cod);
+   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    Syllabus.EditionIsActive = true;
 
@@ -1006,7 +1006,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    Syl_SetSyllabusTypeFromAction (&Syllabus);
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Crs.Cod);
+   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    Syllabus.EditionIsActive = true;
 
@@ -1192,7 +1192,7 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
    Syl_SetSyllabusTypeFromAction (&Syllabus);
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Crs.Cod);
+   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    Syllabus.EditionIsActive = true;
 
@@ -1255,7 +1255,7 @@ void Syl_InsertItemSyllabus (void)
    Syl_SetSyllabusTypeFromAction (&Syllabus);
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Crs.Cod);
+   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    Syllabus.EditionIsActive = true;
 
@@ -1324,7 +1324,7 @@ void Syl_ModifyItemSyllabus (void)
    Syl_SetSyllabusTypeFromAction (&Syllabus);
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Crs.Cod);
+   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    Syllabus.EditionIsActive = true;
 

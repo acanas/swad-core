@@ -80,7 +80,7 @@ void Prj_DB_LockProjectEdition (long PrjCod)
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",
 		   PrjCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -95,7 +95,7 @@ void Prj_DB_UnlockProjectEdition (long PrjCod)
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   PrjCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -118,7 +118,7 @@ long Prj_DB_CreateProject (const struct Prj_Project *Prj)
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s','%s','%s','%s',"
 				  "'%s',FROM_UNIXTIME(%ld),'%s')",
-				Gbl.Hierarchy.Crs.Cod,
+				Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 				Prj->DptCod,
 				HidVis_YN[Prj->Hidden],
 				Prj->Assigned == Prj_ASSIGNED ? 'Y' :
@@ -173,7 +173,7 @@ void Prj_DB_UpdateProject (const struct Prj_Project *Prj)
 	           Prj->Materials,
 	           Prj->URL,
 	           Prj->PrjCod,
-	           Gbl.Hierarchy.Crs.Cod);
+	           Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -208,7 +208,7 @@ void Prj_DB_HideOrUnhideProject (long PrjCod,
 		     " AND CrsCod=%ld",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
 		   PrjCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -227,7 +227,7 @@ void Prj_DB_UpdateReview (const struct Prj_Project *Prj)
 	           Prj_DB_ReviewStatus[Prj->Review.Status],
 		   Prj->Review.Txt,
 	           Prj->PrjCod,
-	           Gbl.Hierarchy.Crs.Cod);
+	           Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -390,7 +390,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 " AND prj_users.UsrCod=%ld"
 			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			    " ORDER BY %s",
-			       Gbl.Hierarchy.Crs.Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
 			       ReviewSubQuery,
@@ -415,7 +415,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 " AND prj_users.UsrCod=%ld"
 			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			    " ORDER BY %s",
-			       Gbl.Hierarchy.Crs.Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
 			       ReviewSubQuery,
@@ -448,7 +448,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				    " AND prj_users.UsrCod IN (%s)"
 			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			       " ORDER BY %s",
-				  Gbl.Hierarchy.Crs.Cod,
+				  Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 				  AssignSubQuery,
 				  HidVisSubQuery,
 			          ReviewSubQuery,
@@ -473,7 +473,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				    " AND prj_users.UsrCod IN (%s)"
 			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			       " ORDER BY %s",
-				  Gbl.Hierarchy.Crs.Cod,
+				  Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 				  AssignSubQuery,
 				  HidVisSubQuery,
 			          ReviewSubQuery,
@@ -501,7 +501,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				   "%s"
 				   "%s"
 			    " ORDER BY %s",
-			       Gbl.Hierarchy.Crs.Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
 			       ReviewSubQuery,
@@ -520,7 +520,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				   "%s"
 				   "%s"
 			    " ORDER BY %s",
-			       Gbl.Hierarchy.Crs.Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
 			       ReviewSubQuery,
@@ -573,7 +573,7 @@ unsigned Prj_DB_GetProjectDataByCod (MYSQL_RES **mysql_res,long PrjCod)
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   PrjCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -588,7 +588,7 @@ void Prj_DB_GetProjectTitle (long PrjCod,char *Title,size_t TitleSize)
 		         " WHERE PrjCod=%ld"
 		           " AND CrsCod=%ld",	// Extra check
 			 PrjCod,
-			 Gbl.Hierarchy.Crs.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -718,7 +718,7 @@ unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Cty.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
@@ -731,7 +731,7 @@ unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ins.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
@@ -742,7 +742,7 @@ unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Level)
 			" WHERE deg_degrees.CtrCod=%ld"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ctr.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
@@ -751,14 +751,14 @@ unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Level)
 			       "prj_projects"
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Deg.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
 			"SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM prj_projects"
 			" WHERE CrsCod=%ld",
-			Gbl.Hierarchy.Crs.Cod);
+			Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -795,7 +795,7 @@ unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Cty.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -808,7 +808,7 @@ unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ins.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -819,7 +819,7 @@ unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Level)
 			" WHERE deg_degrees.CtrCod=%ld"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ctr.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -828,14 +828,14 @@ unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Level)
 			       "prj_projects"
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Deg.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
 			"SELECT COUNT(*)"
 			 " FROM prj_projects"
 			" WHERE CrsCod=%ld",
-                        Gbl.Hierarchy.Crs.Cod);
+                        Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -884,7 +884,7 @@ void Prj_DB_RemoveUsrsFromPrj (long PrjCod)
 		     " AND prj_projects.CrsCod=%ld"	// Extra check
 		     " AND prj_projects.PrjCod=prj_users.PrjCod",
 		   PrjCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -937,7 +937,7 @@ void Prj_DB_RemovePrj (long PrjCod)
 		   " WHERE PrjCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   PrjCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -963,7 +963,7 @@ void Prj_DB_UpdateNETCanCreate (const struct Prj_Projects *Projects)
 	            " (CrsCod,NETCanCreate)"
                     " VALUES"
                     " (%ld,'%c')",
-		    Gbl.Hierarchy.Crs.Cod,
+		    Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		    Projects->Config.NETCanCreate ? 'Y' :
 			                            'N');
   }
@@ -982,7 +982,7 @@ void Prj_DB_UpdateRubrics (PrjCfg_RubricType_t RubricType,
 		   "DELETE FROM prj_rubrics"
 		        " WHERE CrsCod=%ld"
 		          " AND Type='%s'",
-		   Gbl.Hierarchy.Crs.Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		   Prj_DB_RubricType[RubricType]);
 
    /***** Insert specified rubric codes of this type *****/
@@ -994,7 +994,7 @@ void Prj_DB_UpdateRubrics (PrjCfg_RubricType_t RubricType,
 		       " (CrsCod,Type,RubCod)"
 		       " VALUES"
 		       " (%ld,'%s',%ld)",
-		       Gbl.Hierarchy.Crs.Cod,
+		       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		       Prj_DB_RubricType[RubricType],
 		       ListRubCods->RubCods[RubCod]);
   }
@@ -1010,7 +1010,7 @@ unsigned Prj_DB_GetConfig (MYSQL_RES **mysql_res)
 		   "SELECT NETCanCreate"	// row[0]
 		    " FROM prj_config"
 		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -1029,7 +1029,7 @@ unsigned Prj_DB_GetRubricsOfType (MYSQL_RES **mysql_res,
 		     " AND prj_rubrics.Type='%s'"
 		     " AND prj_rubrics.RubCod=rub_rubrics.RubCod"
 		" ORDER BY rub_rubrics.Title",
-		   Gbl.Hierarchy.Crs.Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		   Prj_DB_RubricType[RubricType]);
   }
 
@@ -1047,7 +1047,7 @@ PrjCfg_RubricType_t Prj_DB_GetWichRubricFromRubCod (long RubCod)
 			  " FROM prj_rubrics"
 			 " WHERE CrsCod=%ld"
 			   " AND RubCod=%ld",
-			 Gbl.Hierarchy.Crs.Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 			 RubCod);
    return PrjCfg_GetRubricFromString (StrTypeDB);
   }

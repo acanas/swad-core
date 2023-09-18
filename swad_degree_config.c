@@ -102,11 +102,11 @@ static void DegCfg_Configuration (bool PrintView)
    bool PutFormWWW;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Deg.Cod <= 0)	// No degree selected
+   if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod <= 0)	// No degree selected
       return;
 
    /***** Initializations *****/
-   PutLink     = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
+   PutLink     = !PrintView && Gbl.Hierarchy.Node[HieLvl_DEG].WWW[0];
    PutFormCtr  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
    PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
    PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
@@ -152,10 +152,10 @@ static void DegCfg_Configuration (bool PrintView)
 	       DegCfg_NumCrss ();
 
 	       /***** Number of users *****/
-	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,Rol_TCH);
-	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,Rol_NET);
-	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,Rol_STD);
-	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,Rol_UNK);
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,Rol_TCH);
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,Rol_NET);
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,Rol_STD);
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,Rol_UNK);
 	      }
 
 	 /***** End table *****/
@@ -193,11 +193,11 @@ static void DegCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
 		    HieLvl_DEG,				// Logo scope
-		    Gbl.Hierarchy.Deg.Cod,		// Logo code
-                    Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
-		    Gbl.Hierarchy.Deg.FullName,		// Logo full name
-		    Gbl.Hierarchy.Deg.WWW,		// Logo www
-		    Gbl.Hierarchy.Deg.FullName);	// Text full name
+		    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,		// Logo code
+                    Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,		// Logo short name
+		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName,		// Logo full name
+		    Gbl.Hierarchy.Node[HieLvl_DEG].WWW,		// Logo www
+		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName);	// Text full name
   }
 
 /*****************************************************************************/
@@ -224,7 +224,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	 if (PutForm)
 	   {
 	    /* Get list of centers of the current institution */
-	    Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Ins.Cod);
+	    Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Node[HieLvl_INS].Cod);
 
 	    /* Put form to select center */
 	    Frm_BeginForm (ActChgDegCtrCfg);
@@ -233,12 +233,12 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());
 		  for (NumCtr = 0;
-		       NumCtr < Gbl.Hierarchy.Ctrs.Num;
+		       NumCtr < Gbl.Hierarchy.List[HieLvl_INS].Num;
 		       NumCtr++)
 		    {
-		     CtrInLst = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
+		     CtrInLst = &Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr];
 		     HTM_OPTION (HTM_Type_LONG,&CtrInLst->Cod,
-				 CtrInLst->Cod == Gbl.Hierarchy.Ctr.Cod ? HTM_OPTION_SELECTED :
+				 CtrInLst->Cod == Gbl.Hierarchy.Node[HieLvl_CTR].Cod ? HTM_OPTION_SELECTED :
 										HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",CtrInLst->ShrtName);
@@ -254,15 +254,15 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
-		  ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Ctr.Cod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ctr.ShrtName),
+		  ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName),
 					   "class=\"LB BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
-	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Ctr.Cod,Gbl.Hierarchy.Ctr.ShrtName,
+	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
 			  20,"LM");
 	    HTM_NBSP ();
-	    HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
+	    HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
 	    if (!PrintView)
 	      {
 		  HTM_BUTTON_End ();
@@ -283,7 +283,7 @@ static void DegCfg_FullName (bool PutForm)
    extern const char *Txt_Degree;
 
    HieCfg_FullName (PutForm,Txt_Degree,ActRenDegFulCfg,
-		    Gbl.Hierarchy.Deg.FullName);
+		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
   }
 
 /*****************************************************************************/
@@ -292,7 +292,7 @@ static void DegCfg_FullName (bool PutForm)
 
 static void DegCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenDegShoCfg,Gbl.Hierarchy.Deg.ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenDegShoCfg,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
   }
 
 /*****************************************************************************/
@@ -301,7 +301,7 @@ static void DegCfg_ShrtName (bool PutForm)
 
 static void DegCfg_WWW (bool PrintView,bool PutForm)
   {
-   HieCfg_WWW (PrintView,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Deg.WWW);
+   HieCfg_WWW (PrintView,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Node[HieLvl_DEG].WWW);
   }
 
 /*****************************************************************************/
@@ -310,7 +310,7 @@ static void DegCfg_WWW (bool PrintView,bool PutForm)
 
 static void DegCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Deg,Gbl.Hierarchy.Deg.Cod);
+   HieCfg_Shortcut (PrintView,ParCod_Deg,Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
   }
 
 /*****************************************************************************/
@@ -319,7 +319,7 @@ static void DegCfg_Shortcut (bool PrintView)
 
 static void DegCfg_QR (void)
   {
-   HieCfg_QR (ParCod_Deg,Gbl.Hierarchy.Deg.Cod);
+   HieCfg_QR (ParCod_Deg,Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
   }
 
 /*****************************************************************************/
@@ -342,12 +342,12 @@ static void DegCfg_NumCrss (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCrs);
-	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Deg.Cod);
-	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
+	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.Cod));
+	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Node[HieLvl_DEG].Cod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -370,26 +370,26 @@ void DegCfg_ChangeDegCtr (void)
    NewCtr.Cod = ParCod_GetAndCheckPar (ParCod_OthCtr);
 
    /***** Check if center has changed *****/
-   if (NewCtr.Cod != Gbl.Hierarchy.Deg.PrtCod)
+   if (NewCtr.Cod != Gbl.Hierarchy.Node[HieLvl_DEG].PrtCod)
      {
       /***** Get data of new center *****/
       Ctr_GetCenterDataByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new center *****/
-      if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.Cod,NewCtr.Cod))
+      if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,NewCtr.Cod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
-		          Gbl.Hierarchy.Deg.ShrtName);
-      else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",Gbl.Hierarchy.Deg.FullName,Gbl.Hierarchy.Deg.Cod,NewCtr.Cod))
+		          Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
+      else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",Gbl.Hierarchy.Node[HieLvl_DEG].FullName,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,NewCtr.Cod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
-		          Gbl.Hierarchy.Deg.FullName);
+		          Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
       else
 	{
 	 /***** Update center in table of degrees *****/
-	 Deg_DB_UpdateDegCtr (Gbl.Hierarchy.Deg.Cod,NewCtr.Cod);
-	 Gbl.Hierarchy.Deg.PrtCod =
-	 Gbl.Hierarchy.Ctr.Cod = NewCtr.Cod;
+	 Deg_DB_UpdateDegCtr (Gbl.Hierarchy.Node[HieLvl_DEG].Cod,NewCtr.Cod);
+	 Gbl.Hierarchy.Node[HieLvl_DEG].PrtCod =
+	 Gbl.Hierarchy.Node[HieLvl_CTR].Cod = NewCtr.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
@@ -397,8 +397,8 @@ void DegCfg_ChangeDegCtr (void)
 	 /***** Create alert to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_degree_X_has_been_moved_to_the_center_Y,
-		          Gbl.Hierarchy.Deg.FullName,
-		          Gbl.Hierarchy.Ctr.FullName);
+		          Gbl.Hierarchy.Node[HieLvl_DEG].FullName,
+		          Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
 	}
      }
   }
@@ -409,12 +409,12 @@ void DegCfg_ChangeDegCtr (void)
 
 void DegCfg_RenameDegreeShort (void)
   {
-   Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_SHRT_NAME);
+   Deg_RenameDegree (&Gbl.Hierarchy.Node[HieLvl_DEG],Cns_SHRT_NAME);
   }
 
 void DegCfg_RenameDegreeFull (void)
   {
-   Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_FULL_NAME);
+   Deg_RenameDegree (&Gbl.Hierarchy.Node[HieLvl_DEG],Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -434,8 +434,8 @@ void DegCfg_ChangeDegWWW (void)
    if (NewWWW[0])
      {
       /***** Update the table changing old WWW by new WWW *****/
-      Deg_DB_UpdateDegWWW (Gbl.Hierarchy.Deg.Cod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Deg.WWW,NewWWW,sizeof (Gbl.Hierarchy.Deg.WWW) - 1);
+      Deg_DB_UpdateDegWWW (Gbl.Hierarchy.Node[HieLvl_DEG].Cod,NewWWW);
+      Str_Copy (Gbl.Hierarchy.Node[HieLvl_DEG].WWW,NewWWW,sizeof (Gbl.Hierarchy.Node[HieLvl_DEG].WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

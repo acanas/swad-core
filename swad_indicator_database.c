@@ -180,7 +180,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND usr_data.DptCod=%ld"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Cty.Cod,
+			    Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
          else
@@ -200,7 +200,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Cty.Cod);
+			    Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
@@ -224,7 +224,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND usr_data.DptCod=%ld"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Ins.Cod,
+			    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
          else
@@ -242,7 +242,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Ins.Cod);
+			    Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       case HieLvl_CTR:
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
@@ -264,7 +264,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND usr_data.DptCod=%ld"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Ctr.Cod,
+			    Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
          else
@@ -280,7 +280,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Ctr.Cod);
+			    Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
       case HieLvl_DEG:
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
@@ -302,7 +302,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND usr_data.DptCod=%ld"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Deg.Cod,
+			    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
          else
@@ -318,7 +318,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Deg.Cod);
+			    Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
       case HieLvl_CRS:
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
@@ -341,8 +341,8 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND usr_data.DptCod=%ld"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Crs.Cod,
-			    Gbl.Hierarchy.Crs.Cod,
+			    Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			    Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 			    (unsigned) Rol_TCH,
 			    Indicators->DptCod);
          else
@@ -358,7 +358,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " ORDER BY deg_degrees.FullName,"
 				   "crs_courses.FullName",
-			    Gbl.Hierarchy.Crs.Cod);
+			    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached

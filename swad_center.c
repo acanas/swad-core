@@ -78,7 +78,6 @@ static void Ctr_ListCenters (void);
 static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args);
 static void Ctr_PutIconToEditCenters (void);
 static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr);
-static void Ctr_GetParCtrOrder (void);
 
 static void Ctr_EditCentersInternal (void);
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
@@ -152,8 +151,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	    /* Get center code (row[0]) */
 	    Ctr.Cod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ctr.Cod == Gbl.Hierarchy.Ctr.Cod) ? "BG_HIGHLIGHT" :
-								 The_GetColorRows ();
+	    BgColor = (Ctr.Cod == Gbl.Hierarchy.Node[HieLvl_CTR].Cod) ? "BG_HIGHLIGHT" :
+									The_GetColorRows ();
 
 	    /* Get data of center */
 	    Ctr_GetCenterDataByCod (&Ctr);
@@ -222,15 +221,15 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action
 void Ctr_ShowCtrsOfCurrentIns (void)
   {
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ins.Cod <= 0)		// No institution selected
+   if (Gbl.Hierarchy.Node[HieLvl_INS].Cod <= 0)		// No institution selected
       return;
 
    /***** Get parameter with the type of order in the list of centers *****/
-   Ctr_GetParCtrOrder ();
+   Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder = Hie_GetParHieOrder ();
 
    /***** Get list of centers *****/
-   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.Cod,
-                             Gbl.Hierarchy.Ctrs.SelectedOrder);
+   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+                             Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder);
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -255,13 +254,14 @@ static void Ctr_ListCenters (void)
    unsigned NumCtr;
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
+   if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
+		 Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ctr_PutIconsListingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Gbl.Hierarchy.Ctrs.Num)	// There are centers in the current institution
+      if (Gbl.Hierarchy.List[HieLvl_INS].Num)	// There are centers in the current institution
 	{
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
@@ -271,9 +271,10 @@ static void Ctr_ListCenters (void)
 
 	    /***** Write all centers and their nuber of teachers *****/
 	    for (NumCtr = 0;
-		 NumCtr < Gbl.Hierarchy.Ctrs.Num;
+		 NumCtr < Gbl.Hierarchy.List[HieLvl_INS].Num;
 		 NumCtr++)
-	       Ctr_ListOneCenterForSeeing (&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),NumCtr + 1);
+	       Ctr_ListOneCenterForSeeing (&(Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr]),
+					   NumCtr + 1);
 
 	 /***** End table *****/
 	 HTM_TABLE_End ();
@@ -331,8 +332,8 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = (Ctr->Cod == Gbl.Hierarchy.Ctr.Cod) ? "BG_HIGHLIGHT" :
-                                                         The_GetColorRows ();
+   BgColor = (Ctr->Cod == Gbl.Hierarchy.Node[HieLvl_CTR].Cod) ? "BG_HIGHLIGHT" :
+								The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -390,19 +391,6 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
   }
 
 /*****************************************************************************/
-/********** Get parameter with the type or order in list of centers **********/
-/*****************************************************************************/
-
-static void Ctr_GetParCtrOrder (void)
-  {
-   Gbl.Hierarchy.Ctrs.SelectedOrder = (Hie_Order_t)
-				      Par_GetParUnsignedLong ("Order",
-							      0,
-							      Hie_NUM_ORDERS - 1,
-							      (unsigned long) Hie_ORDER_DEFAULT);
-  }
-
-/*****************************************************************************/
 /************************** Put forms to edit centers ************************/
 /*****************************************************************************/
 
@@ -433,15 +421,16 @@ static void Ctr_EditCentersInternal (void)
    Plc_GetListPlaces (&Places);
 
    /***** Get list of centers *****/
-   Gbl.Hierarchy.Ctrs.SelectedOrder = Hie_ORDER_BY_NAME;
-   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.Cod,
-                             Gbl.Hierarchy.Ctrs.SelectedOrder);
+   Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder = Hie_ORDER_BY_NAME;
+   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+                             Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder);
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
+   if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
+		 Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ctr_PutIconsEditingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
@@ -451,7 +440,7 @@ static void Ctr_EditCentersInternal (void)
       Ctr_PutFormToCreateCenter (&Places);
 
       /***** List current centers *****/
-      if (Gbl.Hierarchy.Ctrs.Num)
+      if (Gbl.Hierarchy.List[HieLvl_INS].Num)
 	 Ctr_ListCentersForEdition (&Places);
 
    /***** End box *****/
@@ -488,21 +477,21 @@ void Ctr_GetBasicListOfCenters (long InsCod)
    unsigned NumCtr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.Ctrs.Num = Ctr_DB_GetListOfCtrsFull (&mysql_res,InsCod);
+   Gbl.Hierarchy.List[HieLvl_INS].Num = Ctr_DB_GetListOfCtrsFull (&mysql_res,InsCod);
 
-   if (Gbl.Hierarchy.Ctrs.Num) // Centers found...
+   if (Gbl.Hierarchy.List[HieLvl_INS].Num) // Centers found...
      {
       /***** Create list with centers in institution *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = calloc ((size_t) Gbl.Hierarchy.Ctrs.Num,
-                                            sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[HieLvl_INS].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_INS].Num,
+							sizeof (*Gbl.Hierarchy.List[HieLvl_INS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.List[HieLvl_INS].Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.Ctrs.Lst[NumCtr],
+         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr],
                                    false);	// Don't get number of users who claim to belong to this center
      }
 
@@ -521,21 +510,21 @@ void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder)
    unsigned NumCtr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.Ctrs.Num = Ctr_DB_GetListOfCtrsFullWithNumUsrs (&mysql_res,InsCod,SelectedOrder);
+   Gbl.Hierarchy.List[HieLvl_INS].Num = Ctr_DB_GetListOfCtrsFullWithNumUsrs (&mysql_res,InsCod,SelectedOrder);
 
-   if (Gbl.Hierarchy.Ctrs.Num) // Centers found...
+   if (Gbl.Hierarchy.List[HieLvl_INS].Num) // Centers found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.Ctrs.Lst = calloc ((size_t) Gbl.Hierarchy.Ctrs.Num,
-                                            sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[HieLvl_INS].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_INS].Num,
+							sizeof (*Gbl.Hierarchy.List[HieLvl_INS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.List[HieLvl_INS].Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.Ctrs.Lst[NumCtr],
+         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr],
                                    true);	// Get number of users who claim to belong to this center
      }
 
@@ -668,12 +657,12 @@ static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 
 void Ctr_FreeListCenters (void)
   {
-   if (Gbl.Hierarchy.Ctrs.Lst)
+   if (Gbl.Hierarchy.List[HieLvl_INS].Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free (Gbl.Hierarchy.Ctrs.Lst);
-      Gbl.Hierarchy.Ctrs.Lst = NULL;
-      Gbl.Hierarchy.Ctrs.Num = 0;
+      free (Gbl.Hierarchy.List[HieLvl_INS].Lst);
+      Gbl.Hierarchy.List[HieLvl_INS].Lst = NULL;
+      Gbl.Hierarchy.List[HieLvl_INS].Num = 0;
      }
   }
 
@@ -694,7 +683,7 @@ void Ctr_WriteSelectorOfCenter (void)
    Frm_BeginFormGoTo (ActSeeDeg);
 
       /***** Begin selector *****/
-      if (Gbl.Hierarchy.Ins.Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
@@ -704,12 +693,12 @@ void Ctr_WriteSelectorOfCenter (void)
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Ctr.Cod < 0 ? HTM_OPTION_SELECTED :
-					         HTM_OPTION_UNSELECTED,
+		  Gbl.Hierarchy.Node[HieLvl_CTR].Cod < 0 ? HTM_OPTION_SELECTED :
+							   HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Center);
 
-      if (Gbl.Hierarchy.Ins.Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
 	{
 	 /***** Get centers in current institution from database *****/
 	 NumCtrs = Ctr_DB_GetListOfCtrsInCurrentIns (&mysql_res);
@@ -726,9 +715,9 @@ void Ctr_WriteSelectorOfCenter (void)
 
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&CtrCod,
-			Gbl.Hierarchy.Ctr.Cod > 0 &&
-			CtrCod == Gbl.Hierarchy.Ctr.Cod ? HTM_OPTION_SELECTED :
-							     HTM_OPTION_UNSELECTED,
+			Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0 &&
+			CtrCod == Gbl.Hierarchy.Node[HieLvl_CTR].Cod ? HTM_OPTION_SELECTED :
+								       HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);
 	   }
@@ -774,10 +763,10 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
       /***** Write all centers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.List[HieLvl_INS].Num;
 	   NumCtr++)
 	{
-	 Ctr = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
+	 Ctr = &Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr];
 
 	 ICanEdit = Ctr_CheckIfICanEditACenter (Ctr);
 	 NumDegs = Deg_GetNumDegsInCtr (Ctr->Cod);
@@ -1134,7 +1123,8 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentCtrName,NewCtrName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns (ParName,NewCtrName,Ctr->Cod,Gbl.Hierarchy.Ins.Cod))
+         if (Ctr_DB_CheckIfCtrNameExistsInIns (ParName,NewCtrName,Ctr->Cod,
+					       Gbl.Hierarchy.Node[HieLvl_INS].Cod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_center_X_already_exists,
 			     NewCtrName);
@@ -1254,7 +1244,7 @@ void Ctr_ContEditAfterChgCtr (void)
 static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
    // If the center being edited is different to the current one...
-   if (Ctr_EditingCtr->Cod != Gbl.Hierarchy.Ctr.Cod)
+   if (Ctr_EditingCtr->Cod != Gbl.Hierarchy.Node[HieLvl_CTR].Cod)
      {
       /***** Alert with button to go to center *****/
       Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,
@@ -1423,13 +1413,13 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_CENTERS_HELP_ORDER[Order],
 					   "class=\"BT_LINK\"");
-		     if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_CENTERS_ORDER[Order]);
 	    if (OrderSelectable)
 	      {
-		     if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder)
 			HTM_U_End ();
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -1525,7 +1515,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set center institution */
-   Ctr_EditingCtr->PrtCod = Gbl.Hierarchy.Ins.Cod;
+   Ctr_EditingCtr->PrtCod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
 
    /* Get place */
    Ctr_EditingCtr->Specific.PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
@@ -1543,11 +1533,15 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
       if (Ctr_EditingCtr->WWW[0])
         {
          /***** If name of center was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",Ctr_EditingCtr->ShrtName,-1L,Gbl.Hierarchy.Ins.Cod))
+         if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",
+					       Ctr_EditingCtr->ShrtName,-1L,
+					       Gbl.Hierarchy.Node[HieLvl_INS].Cod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_center_X_already_exists,
                              Ctr_EditingCtr->ShrtName);
-         else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",Ctr_EditingCtr->FullName,-1L,Gbl.Hierarchy.Ins.Cod))
+         else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",
+						    Ctr_EditingCtr->FullName,-1L,
+						    Gbl.Hierarchy.Node[HieLvl_INS].Cod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         		     Txt_The_center_X_already_exists,
                              Ctr_EditingCtr->FullName);

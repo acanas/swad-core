@@ -204,27 +204,27 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t Ne
 	    case HieLvl_CTY:	// Country
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 	       break;
 	    case HieLvl_INS:	// Institution
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Ins.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
 	       break;
 	    case HieLvl_CTR:	// Center
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Ctr.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
 	       break;
 	    case HieLvl_DEG:	// Degree
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Deg.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
 	       break;
 	    case HieLvl_CRS:	// Course
 	       snprintf (ParLocation,sizeof (ParLocation),
 			 "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Crs.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 	       break;
 	    default:
 	       break;

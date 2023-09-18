@@ -1256,12 +1256,12 @@ void For_ShowForumList (struct For_Forums *Forums)
 	 switch (Forums->ForumSet)
 	   {
 	    case For_ONLY_CURRENT_FORUMS:
-	       if (Gbl.Hierarchy.Ins.Cod > 0)
+	       if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
 		 {
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeInsForum = true;
 		  else
-		     ICanSeeInsForum = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.Cod);
+		     ICanSeeInsForum = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[HieLvl_INS].Cod);
 		 }
 	       else
 		  ICanSeeInsForum = false;
@@ -1274,10 +1274,10 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeCtrForum = true;
 		  else
-		     ICanSeeCtrForum = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.Cod);
+		     ICanSeeCtrForum = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
 
 		  /***** Links to forums of current institution *****/
-		  if (For_WriteLinksToInsForums (Forums,Gbl.Hierarchy.Ins.Cod,
+		  if (For_WriteLinksToInsForums (Forums,Gbl.Hierarchy.Node[HieLvl_INS].Cod,
 						 true,
 						 IsLastItemInLevel) > 0)
 		     if (ICanSeeCtrForum)
@@ -1285,24 +1285,24 @@ void For_ShowForumList (struct For_Forums *Forums)
 			if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 			   ICanSeeDegForum = true;
 			else
-			   ICanSeeDegForum = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.Cod);
+			   ICanSeeDegForum = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
 
 			/***** Links to forums of current center *****/
 			if (For_WriteLinksToCtrForums (Forums,
-						       Gbl.Hierarchy.Ctr.Cod,
+						       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
 						       true,
 						       IsLastItemInLevel) > 0)
 			   if (ICanSeeDegForum)
 			      /***** Links to forums of current degree *****/
 			      if (For_WriteLinksToDegForums (Forums,
-							     Gbl.Hierarchy.Deg.Cod,
+							     Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
 							     true,
 							     IsLastItemInLevel) > 0)
 				 if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
 				     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 				    /***** Links to forums of current degree *****/
 				    For_WriteLinksToCrsForums (Forums,
-							       Gbl.Hierarchy.Crs.Cod,
+							       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 							       true,
 							       IsLastItemInLevel);
 		       }
@@ -2465,25 +2465,25 @@ void For_GetParsForums (struct For_Forums *Forums)
       case For_FORUM_INSTIT_TCHS:
 	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
 	    // If no institution specified ==> go to current institution forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Ins.Cod;
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
          break;
       case For_FORUM_CENTER_USRS:
       case For_FORUM_CENTER_TCHS:
 	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
 	    // If no center specified ==> go to current center forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Ctr.Cod;
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
 	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
 	    // If no degree specified ==> go to current degree forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Deg.Cod;
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
 	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
 	    // If no course specified ==> go to current course forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Crs.Cod;
+	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
          break;
       default:
 	 Forums->Forum.HieCod = -1L;
@@ -3292,42 +3292,42 @@ void For_GetAndShowForumStats (void)
 	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
 	    break;
 	 case HieLvl_CTY:
-	    For_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,Gbl.Hierarchy.Cty.Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,-1L,-1L,-1L,-1L,&FiguresForum);
 	    break;
 	 case HieLvl_INS:
-	    For_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.Hierarchy.Ins.Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.Hierarchy.Node[HieLvl_INS].Cod,-1L,-1L,-1L,&FiguresForum);
 	    break;
 	 case HieLvl_CTR:
-	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.Cod,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.Cod,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.Cod,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.Cod,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.Cod,-1L,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.Cod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,-1L,-1L,&FiguresForum);
 	    break;
 	 case HieLvl_DEG:
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.Cod,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.Cod,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.Cod,-1L,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.Cod,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,-1L,&FiguresForum);
 	    break;
 	 case HieLvl_CRS:
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.Cod,&FiguresForum);
-	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.Cod,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,&FiguresForum);
 	    break;
 	 default:
 	    Err_WrongHierarchyLevelExit ();

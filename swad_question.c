@@ -2726,7 +2726,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    Question->Media.Width   = Qst_IMAGE_SAVED_MAX_WIDTH;
    Question->Media.Height  = Qst_IMAGE_SAVED_MAX_HEIGHT;
    Question->Media.Quality = Qst_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (Gbl.Hierarchy.Crs.Cod,Question->QstCod,
+   Med_GetMediaFromForm (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Question->QstCod,
                          -1,	// < 0 ==> the image associated to the stem
                          &Question->Media,
                          Qst_GetMediaFromDB,
@@ -2801,7 +2801,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	       Question->Answer.Options[NumOpt].Media.Width   = Qst_IMAGE_SAVED_MAX_WIDTH;
 	       Question->Answer.Options[NumOpt].Media.Height  = Qst_IMAGE_SAVED_MAX_HEIGHT;
 	       Question->Answer.Options[NumOpt].Media.Quality = Qst_IMAGE_SAVED_QUALITY;
-	       Med_GetMediaFromForm (Gbl.Hierarchy.Crs.Cod,Question->QstCod,
+	       Med_GetMediaFromForm (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Question->QstCod,
 	                             (int) NumOpt,	// >= 0 ==> the image associated to an answer
 	                             &Question->Answer.Options[NumOpt].Media,
 				     Qst_GetMediaFromDB,
@@ -3138,7 +3138,7 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question)
    long CurrentMedCodInDB;
 
    /***** Media associated to question stem *****/
-   CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Crs.Cod,Question->QstCod,
+   CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Question->QstCod,
                                             -1);	// Get current media code associated to stem
    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Question->Media);
 
@@ -3151,7 +3151,7 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question)
 	      NumOpt < Question->Answer.NumOptions;
 	      NumOpt++)
 	   {
-	    CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Crs.Cod,Question->QstCod,
+	    CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Question->QstCod,
 						     (int) NumOpt);	// Get current media code associated to this option
 	    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Question->Answer.Options[NumOpt].Media);
 	   }
@@ -3246,7 +3246,7 @@ void Qst_RemoveSelectedQsts (void)
 	    Err_WrongQuestionExit ();
 
 	 /* Remove test question from database */
-	 Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.Cod,QstCod);
+	 Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,QstCod);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -3348,7 +3348,7 @@ void Qst_RemoveOneQst (void)
    EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
    /***** Remove test question from database *****/
-   Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.Cod,QstCod);
+   Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,QstCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -3445,7 +3445,7 @@ void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question)
       Tag_InsertTagsIntoDB (Question->QstCod,&Question->Tags);
 
       /***** Remove unused tags in current course *****/
-      Tag_DB_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.Cod);
+      Tag_DB_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
       /***** Insert answers in the answers table *****/
       Qst_InsertAnswersIntoDB (Question);

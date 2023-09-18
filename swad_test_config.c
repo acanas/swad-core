@@ -310,7 +310,7 @@ void TstCfg_GetConfig (void)
    MYSQL_RES *mysql_res;
 
    /***** Get configuration of test for current course from database *****/
-   if (Tst_DB_GetConfig (&mysql_res,Gbl.Hierarchy.Crs.Cod))
+   if (Tst_DB_GetConfig (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CRS].Cod))
       TstCfg_GetConfigDataFromRow (mysql_res);
    else
      {

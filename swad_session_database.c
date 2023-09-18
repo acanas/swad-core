@@ -53,11 +53,11 @@ void Ses_DB_InsertSession (Sch_WhatToSearch_t WhatToSearch)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.Hierarchy.Cty.Cod,
-		   Gbl.Hierarchy.Ins.Cod,
-		   Gbl.Hierarchy.Ctr.Cod,
-		   Gbl.Hierarchy.Deg.Cod,
-		   Gbl.Hierarchy.Crs.Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		   WhatToSearch);
   }
 
@@ -83,11 +83,11 @@ void Ses_DB_UpdateSession (void)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.Hierarchy.Cty.Cod,
-		   Gbl.Hierarchy.Ins.Cod,
-		   Gbl.Hierarchy.Ctr.Cod,
-		   Gbl.Hierarchy.Deg.Cod,
-		   Gbl.Hierarchy.Crs.Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		   Gbl.Session.Id);
   }
 

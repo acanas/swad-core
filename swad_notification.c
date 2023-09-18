@@ -821,22 +821,22 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      {
       if (CrsCod > 0)					// Course specified
 	{
-	 if (CrsCod != Gbl.Hierarchy.Crs.Cod)	// Not the current course
+	 if (CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].Cod)	// Not the current course
 	    ParCod_PutPar (ParCod_Crs,CrsCod);		// Go to another course
 	}
       else if (DegCod > 0)				// Degree specified
 	{
-	 if (DegCod != Gbl.Hierarchy.Deg.Cod)	// Not the current degree
+	 if (DegCod != Gbl.Hierarchy.Node[HieLvl_DEG].Cod)	// Not the current degree
 	    ParCod_PutPar (ParCod_Deg,DegCod);		// Go to another degree
 	}
       else if (CtrCod > 0)				// Center specified
 	{
-	 if (CtrCod != Gbl.Hierarchy.Ctr.Cod)	// Not the current center
+	 if (CtrCod != Gbl.Hierarchy.Node[HieLvl_CTR].Cod)	// Not the current center
 	    ParCod_PutPar (ParCod_Ctr,CtrCod);		// Go to another center
 	}
       else if (InsCod > 0)				// Institution specified
 	{
-	 if (InsCod != Gbl.Hierarchy.Ins.Cod)	// Not the current institution
+	 if (InsCod != Gbl.Hierarchy.Node[HieLvl_INS].Cod)	// Not the current institution
 	    ParCod_PutPar (ParCod_Ins,InsCod);		// Go to another institution
 	}
      }
@@ -1079,7 +1079,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.Cod,
+	 if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 				   1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
             NumUsrs = Enr_DB_GetTchsFromCurrentCrsExceptMe (&mysql_res);
@@ -1147,10 +1147,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
      }
    else
      {
-      InsCod = Gbl.Hierarchy.Ins.Cod;
-      CtrCod = Gbl.Hierarchy.Ctr.Cod;
-      DegCod = Gbl.Hierarchy.Deg.Cod;
-      CrsCod = Gbl.Hierarchy.Crs.Cod;
+      InsCod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
+      CtrCod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
+      DegCod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
+      CrsCod = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
      }
 
    if (NumUsrs) // Users found

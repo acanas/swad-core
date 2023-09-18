@@ -49,7 +49,7 @@ void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
 		    " VALUES"
 		    " (%ld,%ld,'%s',%ld,NOW())",
 		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Gbl.Hierarchy.Crs.Cod,
+		    Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		    Rsc_ResourceTypesDB[Type],
 		    Cod);
   }
@@ -67,7 +67,7 @@ unsigned Rsc_DB_GetNumResourcesInClipboard (void)
 		  " WHERE UsrCod=%ld"
 		    " AND CrsCod=%ld",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  Gbl.Hierarchy.Crs.Cod);
+		  Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -85,7 +85,7 @@ unsigned Rsc_DB_GetClipboard (MYSQL_RES **mysql_res)
 		     " AND CrsCod=%ld"
 		   " ORDER BY CopyTime",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -99,7 +99,7 @@ void Rsc_DB_RemoveClipboard (void)
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
  		   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Crs.Cod);
+                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -117,7 +117,7 @@ void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
 		     " AND Type='%s'"
 		     " AND Cod=%ld",
  		   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Crs.Cod,
+                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		   Rsc_ResourceTypesDB[Link->Type],
 		   Link->Cod);
   }

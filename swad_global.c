@@ -164,33 +164,33 @@ void Gbl_InitializeGlobals (void)
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
-   Gbl.Hierarchy.Ctys.Num = 0;
-   Gbl.Hierarchy.Ctys.Lst = NULL;
-   Gbl.Hierarchy.Ctys.SelectedOrder = Hie_ORDER_DEFAULT;
+   Gbl.Hierarchy.List[HieLvl_SYS].Num = 0;
+   Gbl.Hierarchy.List[HieLvl_SYS].Lst = NULL;
+   Gbl.Hierarchy.List[HieLvl_SYS].SelectedOrder = Hie_ORDER_DEFAULT;
 
-   Gbl.Hierarchy.Inss.Num = 0;
-   Gbl.Hierarchy.Inss.Lst = NULL;
-   Gbl.Hierarchy.Inss.SelectedOrder = Hie_ORDER_DEFAULT;
+   Gbl.Hierarchy.List[HieLvl_CTY].Num = 0;
+   Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
+   Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder = Hie_ORDER_DEFAULT;
 
-   Gbl.Hierarchy.Ins.ShrtName[0] = '\0';
-   Gbl.Hierarchy.Ins.FullName[0] = '\0';
-   Gbl.Hierarchy.Ins.WWW[0] = '\0';
+   Gbl.Hierarchy.Node[HieLvl_INS].ShrtName[0] = '\0';
+   Gbl.Hierarchy.Node[HieLvl_INS].FullName[0] = '\0';
+   Gbl.Hierarchy.Node[HieLvl_INS].WWW[0] = '\0';
 
-   Gbl.Hierarchy.Ctrs.Num = 0;
-   Gbl.Hierarchy.Ctrs.Lst = NULL;
-   Gbl.Hierarchy.Ctrs.SelectedOrder = Hie_ORDER_DEFAULT;
+   Gbl.Hierarchy.List[HieLvl_INS].Num = 0;
+   Gbl.Hierarchy.List[HieLvl_INS].Lst = NULL;
+   Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder = Hie_ORDER_DEFAULT;
 
-   Gbl.Hierarchy.Ctr.ShrtName[0] = '\0';
-   Gbl.Hierarchy.Ctr.FullName[0] = '\0';
+   Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName[0] = '\0';
+   Gbl.Hierarchy.Node[HieLvl_CTR].FullName[0] = '\0';
 
-   Gbl.Hierarchy.Degs.Num = 0;
-   Gbl.Hierarchy.Degs.Lst = NULL;
+   Gbl.Hierarchy.List[HieLvl_CTR].Num = 0;
+   Gbl.Hierarchy.List[HieLvl_CTR].Lst = NULL;
 
-   Gbl.Hierarchy.Deg.ShrtName[0] =
-   Gbl.Hierarchy.Deg.FullName[0] = '\0';
+   Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName[0] =
+   Gbl.Hierarchy.Node[HieLvl_DEG].FullName[0] = '\0';
 
-   Gbl.Hierarchy.Crs.ShrtName[0] =
-   Gbl.Hierarchy.Crs.FullName[0] = '\0';
+   Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName[0] =
+   Gbl.Hierarchy.Node[HieLvl_CRS].FullName[0] = '\0';
 
    Gbl.Crs.Info.ShowMsgMustBeRead = 0;
 
@@ -307,7 +307,7 @@ void Gbl_Cleanup (void)
    Grp_FreeListGrpTypesAndGrps ();
    Grp_FreeListCodSelectedGrps ();
    Crs_FreeListCoursesInCurrentDegree ();
-   Deg_FreeListDegs (&Gbl.Hierarchy.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.List[HieLvl_CTR]);
    Ins_FreeListInstitutions ();
    Ctr_FreeListCenters ();
    Cty_FreeListCountries ();

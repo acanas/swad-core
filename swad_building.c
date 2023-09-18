@@ -108,7 +108,7 @@ void Bld_SeeBuildings (void)
    unsigned NumBuilding;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ctr.Cod <= 0)		// No center selected
+   if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod <= 0)		// No center selected
       return;
 
    /***** Reset buildings context *****/

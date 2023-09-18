@@ -81,7 +81,9 @@ static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,
 
 void Adm_ReqAddAdmOfIns (void)
   {
-   Adm_ReqAddAdm (HieLvl_INS,Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Ins.FullName);
+   Adm_ReqAddAdm (HieLvl_INS,
+		  Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		  Gbl.Hierarchy.Node[HieLvl_INS].FullName);
   }
 
 /*****************************************************************************/
@@ -90,7 +92,9 @@ void Adm_ReqAddAdmOfIns (void)
 
 void Adm_ReqAddAdmOfCtr (void)
   {
-   Adm_ReqAddAdm (HieLvl_CTR,Gbl.Hierarchy.Ctr.Cod,Gbl.Hierarchy.Ctr.FullName);
+   Adm_ReqAddAdm (HieLvl_CTR,
+		  Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+		  Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
   }
 
 /*****************************************************************************/
@@ -99,7 +103,9 @@ void Adm_ReqAddAdmOfCtr (void)
 
 void Adm_ReqAddAdmOfDeg (void)
   {
-   Adm_ReqAddAdm (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Deg.FullName);
+   Adm_ReqAddAdm (HieLvl_DEG,
+		  Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+		  Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
   }
 
 /*****************************************************************************/
@@ -171,7 +177,9 @@ static void Adm_ReqAddAdm (HieLvl_Level_t Level,long Cod,
 
 void Adm_AddAdmToIns (void)
   {
-   Adm_AddAdm (HieLvl_INS,Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Ins.FullName);
+   Adm_AddAdm (HieLvl_INS,
+	       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+	       Gbl.Hierarchy.Node[HieLvl_INS].FullName);
   }
 
 /*****************************************************************************/
@@ -180,7 +188,9 @@ void Adm_AddAdmToIns (void)
 
 void Adm_AddAdmToCtr (void)
   {
-   Adm_AddAdm (HieLvl_CTR,Gbl.Hierarchy.Ctr.Cod,Gbl.Hierarchy.Ctr.FullName);
+   Adm_AddAdm (HieLvl_CTR,
+	       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+	       Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
   }
 
 /*****************************************************************************/
@@ -189,7 +199,9 @@ void Adm_AddAdmToCtr (void)
 
 void Adm_AddAdmToDeg (void)
   {
-   Adm_AddAdm (HieLvl_DEG,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Deg.FullName);
+   Adm_AddAdm (HieLvl_DEG,
+	       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+	       Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
   }
 
 /*****************************************************************************/
@@ -277,7 +289,8 @@ static void Adm_RegisterAdmin (struct Usr_Data *UsrDat,
 void Adm_ReqRemAdmOfIns (void)
   {
    Adm_ReqRemOrRemAdm (Enr_REQUEST_REMOVE_USR,HieLvl_INS,
-                       Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Ins.FullName);
+                       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+                       Gbl.Hierarchy.Node[HieLvl_INS].FullName);
   }
 
 /*****************************************************************************/
@@ -287,7 +300,8 @@ void Adm_ReqRemAdmOfIns (void)
 void Adm_ReqRemAdmOfCtr (void)
   {
    Adm_ReqRemOrRemAdm (Enr_REQUEST_REMOVE_USR,HieLvl_CTR,
-                       Gbl.Hierarchy.Ctr.Cod,Gbl.Hierarchy.Ctr.FullName);
+                       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+                       Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
   }
 
 /*****************************************************************************/
@@ -297,7 +311,8 @@ void Adm_ReqRemAdmOfCtr (void)
 void Adm_ReqRemAdmOfDeg (void)
   {
    Adm_ReqRemOrRemAdm (Enr_REQUEST_REMOVE_USR,HieLvl_DEG,
-                       Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Deg.FullName);
+                       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+                       Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
   }
 
 /*****************************************************************************/
@@ -307,7 +322,8 @@ void Adm_ReqRemAdmOfDeg (void)
 void Adm_RemAdmIns (void)
   {
    Adm_ReqRemOrRemAdm (Enr_REMOVE_USR,HieLvl_INS,
-                       Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Ins.FullName);
+                       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+                       Gbl.Hierarchy.Node[HieLvl_INS].FullName);
   }
 
 /*****************************************************************************/
@@ -317,7 +333,8 @@ void Adm_RemAdmIns (void)
 void Adm_RemAdmCtr (void)
   {
    Adm_ReqRemOrRemAdm (Enr_REMOVE_USR,HieLvl_CTR,
-                       Gbl.Hierarchy.Ctr.Cod,Gbl.Hierarchy.Ctr.FullName);
+                       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+                       Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
   }
 
 /*****************************************************************************/
@@ -327,7 +344,8 @@ void Adm_RemAdmCtr (void)
 void Adm_RemAdmDeg (void)
   {
    Adm_ReqRemOrRemAdm (Enr_REMOVE_USR,HieLvl_DEG,
-                       Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Deg.FullName);
+                       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+                       Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
   }
 
 /*****************************************************************************/

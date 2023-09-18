@@ -389,9 +389,9 @@ void Asg_PrintOneAssignment (void)
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
-			      Gbl.Hierarchy.Ins.Cod,
-			      Gbl.Hierarchy.Deg.Cod,
-			      Gbl.Hierarchy.Crs.Cod);
+			      Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			      Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			      Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -1296,7 +1296,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 					                                    "AsgCod",
 					                                    AsgCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -1575,7 +1575,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	      }
 	   }
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 
    HTM_DIV_End ();
 

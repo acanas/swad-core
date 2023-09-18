@@ -264,9 +264,9 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
-	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Ins.Cod);
+	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[HieLvl_INS].Cod);
 	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
-	                     Gbl.Hierarchy.Ins.ShrtName) < 0)
+	                     Gbl.Hierarchy.Node[HieLvl_INS].ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	       free (Title);

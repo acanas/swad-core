@@ -73,7 +73,7 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 Hie_Status_t Hie_GetParStatus (void);
 void Hie_PutParOtherHieCod (void *HieCod);
 
-void Hie_GetParHieOrder (void);
+Hie_Order_t Hie_GetParHieOrder (void);
 
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);

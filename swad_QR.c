@@ -185,7 +185,7 @@ void QR_ExamAnnnouncement (void)
 
       if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld",
 		    300,300,
-		    Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.Cod,
+		    Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		    Act_GetActCod (ActSeeAllCfe)) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,NULL,Txt_Link_to_call_for_exam,

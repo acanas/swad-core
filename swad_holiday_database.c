@@ -46,7 +46,7 @@ void Hld_DB_CreateHoliday (const struct Hld_Holiday *Hld)
 		   " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
-	           Gbl.Hierarchy.Ins.Cod,
+	           Gbl.Hierarchy.Node[HieLvl_INS].Cod,
 	           Hld->PlcCod,
 	           (unsigned) Hld->HldTyp,
 	           Hld->StartDate.Year,
@@ -163,10 +163,10 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
 			     " FROM plc_places"
 			    " WHERE InsCod=%ld))"
 		    " ORDER BY %s",
-		   Gbl.Hierarchy.Ins.Cod,
-		   Gbl.Hierarchy.Ins.Cod,
-		   Gbl.Hierarchy.Ins.Cod,
-		   Gbl.Hierarchy.Ins.Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
 		   OrderBySubQuery[SelectedOrder]);
   }
 
@@ -208,11 +208,11 @@ unsigned Hld_DB_GetHolidayDataByCod (MYSQL_RES **mysql_res,long HldCod)
 			     " FROM plc_places"
 			    " WHERE InsCod=%ld))",
 		   HldCod,
-		   Gbl.Hierarchy.Ins.Cod,
-		   Gbl.Hierarchy.Ins.Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
 		   HldCod,
-		   Gbl.Hierarchy.Ins.Cod,
-		   Gbl.Hierarchy.Ins.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].Cod);
   }
 
 /*****************************************************************************/

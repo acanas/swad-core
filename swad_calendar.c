@@ -217,7 +217,7 @@ void Cal_DrawCurrentMonth (void)
       HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s','%s/%s',",
 		Gbl.Prefs.FirstDayOfWeek,
 		(long) Dat_GetStartExecutionTimeUTC (),
-		Gbl.Hierarchy.Ctr.Specific.PlcCod,
+		Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod,
 		The_GetSuffix (),
 		Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
       Frm_SetParsForm (ParsStr,ActSeeCal,true);
@@ -262,9 +262,9 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
       /***** Write header *****/
       Lay_WriteHeaderClassPhoto (PrintView,false,
-				 Gbl.Hierarchy.Ins.Cod,
-				 Gbl.Hierarchy.Deg.Cod,
-				 Gbl.Hierarchy.Crs.Cod);
+				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
       /***** Preference selector to change first day of week *****/
       if (!PrintView)
@@ -286,7 +286,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	 HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s','%s/%s',",
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (long) Dat_GetStartExecutionTimeUTC (),
-		   Gbl.Hierarchy.Ctr.Specific.PlcCod,
+		   Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod,
 		   PrintView ? "true" :
 			       "false",
 		   The_GetSuffix (),

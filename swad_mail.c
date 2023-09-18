@@ -887,7 +887,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 		     Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 		  Str_Concat (StrAddresses,UsrDat.Email,sizeof (StrAddresses) - 1);
 		  HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
-			       UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
+			       UsrDat.Email,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 		     HTM_Txt (UsrDat.Email);
 		  HTM_A_End ();
 
@@ -920,7 +920,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	 HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
 		      " title=\"%s\" class=\"FORM_OUT_%s BOLD\"",
 		      Gbl.Usrs.Me.UsrDat.Email,
-		      Gbl.Hierarchy.Crs.FullName,
+		      Gbl.Hierarchy.Node[HieLvl_CRS].FullName,
 		      Gbl.Usrs.Me.UsrDat.Email,
 		      StrAddresses,
 		      Txt_Create_email_message,
@@ -1687,17 +1687,17 @@ bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
 	 return Deg_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
-	                                    Gbl.Hierarchy.Deg.Cod);
+	                                    Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can see the user's email of users from current center */
 	 return Ctr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
-	                                    Gbl.Hierarchy.Ctr.Cod);
+	                                    Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
 	 return Ins_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
-	                                    Gbl.Hierarchy.Ins.Cod);
+	                                    Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       case Rol_SYS_ADM:
 	 return true;
       default:

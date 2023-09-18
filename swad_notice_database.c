@@ -49,7 +49,7 @@ long Not_DB_InsertNotice (const char *Content)
 				" (CrsCod,UsrCod,CreatTime,Content,Status)"
 				" VALUES"
 				" (%ld,%ld,NOW(),'%s',%u)",
-				Gbl.Hierarchy.Crs.Cod,
+				Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,
 				(unsigned) Not_ACTIVE_NOTICE);
@@ -68,7 +68,7 @@ void Not_DB_ChangeNoticeStatus (long NotCod,Not_Status_t Status)
 		     " AND CrsCod=%ld",
 	           (unsigned) Status,
 	           NotCod,
-	           Gbl.Hierarchy.Crs.Cod);
+	           Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -90,7 +90,7 @@ void Not_DB_CopyNoticeToDeleted (long NotCod)
 		    " WHERE NotCod=%ld"
 		      " AND CrsCod=%ld",	// Extra check
                    NotCod,
-                   Gbl.Hierarchy.Crs.Cod);
+                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -125,7 +125,7 @@ unsigned Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   NotCod,
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -158,7 +158,7 @@ unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res)
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
 		   " ORDER BY CreatTime DESC",
-		   Gbl.Hierarchy.Crs.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/
@@ -215,7 +215,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Cty.Cod,
+                         Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
                          Status);
       case HieLvl_INS:
 	 return (unsigned)
@@ -231,7 +231,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Ins.Cod,
+                         Gbl.Hierarchy.Node[HieLvl_INS].Cod,
                          Status);
       case HieLvl_CTR:
 	 return (unsigned)
@@ -245,7 +245,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Ctr.Cod,
+                         Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
                          Status);
       case HieLvl_DEG:
 	 return (unsigned)
@@ -257,7 +257,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Deg.Cod,
+                         Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
                          Status);
       case HieLvl_CRS:
 	 return (unsigned)
@@ -267,7 +267,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			  " FROM not_notices"
 			 " WHERE CrsCod=%ld"
 			   " AND Status=%u",
-                         Gbl.Hierarchy.Crs.Cod,
+                         Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
                          Status);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -305,7 +305,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Cty.Cod);
+                         Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -319,7 +319,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Ins.Cod);
+                         Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       case HieLvl_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -331,7 +331,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			 " WHERE deg_degrees.CtrCod=%ld"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Ctr.Cod);
+                         Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
       case HieLvl_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -341,7 +341,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			        "not_deleted"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Deg.Cod);
+                         Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
       case HieLvl_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -349,7 +349,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM not_deleted"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.Cod);
+                         Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -367,7 +367,7 @@ void Not_DB_RemoveNotice (long NotCod)
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
                    NotCod,
-                   Gbl.Hierarchy.Crs.Cod);
+                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
   }
 
 /*****************************************************************************/

@@ -175,7 +175,8 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!CallsForExams->CallForExam.CrsFullName[0])
-      Str_Copy (CallsForExams->CallForExam.CrsFullName,Gbl.Hierarchy.Crs.FullName,
+      Str_Copy (CallsForExams->CallForExam.CrsFullName,
+	        Gbl.Hierarchy.Node[HieLvl_CRS].FullName,
                 sizeof (CallsForExams->CallForExam.CrsFullName) - 1);
 
    /***** Get the year *****/
@@ -183,7 +184,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    Par_GetParUnsignedLong ("Year",
 			   0,	// N.A.
 			   Deg_MAX_YEARS_PER_DEGREE,
-			   (unsigned long) Gbl.Hierarchy.Crs.Specific.Year);
+			   (unsigned long) Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year);
 
    /***** Get the type of call for exam *****/
    Par_GetParText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);
@@ -357,7 +358,7 @@ void Cfe_ReceiveCallForExam2 (void)
    TmlNot_StoreAndPublishNote (TmlNot_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
 
    /***** Show calls for exams *****/
    Cfe_ListCallsForExamsEdit ();
@@ -452,7 +453,7 @@ void Cfe_RemoveCallForExam1 (void)
    Tml_DB_MarkNoteAsUnavailable (TmlNot_CALL_FOR_EXAM,ExaCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
   }
 
 void Cfe_RemoveCallForExam2 (void)
@@ -660,7 +661,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 	   }
       else
 	 Ale_ShowAlert (Ale_INFO,Txt_No_calls_for_exams_of_X,
-			Gbl.Hierarchy.Crs.FullName);
+			Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -902,7 +903,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
      };
 
    /***** Get data of institution of this degree *****/
-   Ins.Cod = Gbl.Hierarchy.Ins.Cod;
+   Ins.Cod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
    Ins_GetInstitDataByCod (&Ins);
 
    /***** Build anchor string *****/
@@ -969,9 +970,9 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
-			       Gbl.Hierarchy.Deg.WWW,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].WWW,
 			       The_GetSuffix ());
-	       HTM_Txt (Gbl.Hierarchy.Deg.FullName);
+	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_End ();
 	    HTM_TD_End ();

@@ -338,7 +338,7 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
 			    " ORDER BY %s",
 		   CtyCod,
 		   CtyCod,
-		   OrderBySubQuery[Gbl.Hierarchy.Inss.SelectedOrder]);
+		   OrderBySubQuery[Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder]);
   }
 
 /*****************************************************************************/
@@ -368,7 +368,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -380,7 +380,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			  " FROM ctr_centers"
 			 " WHERE InsCod=%ld"
 		      " GROUP BY InsCod",
-			 Gbl.Hierarchy.Ins.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -418,7 +418,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -433,7 +433,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -475,7 +475,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -492,7 +492,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -539,7 +539,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -558,7 +558,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -592,7 +592,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			   " AND ins_instits.InsCod=usr_data.InsCod"
 		      " GROUP BY usr_data.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -605,7 +605,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			 " WHERE InsCod=%ld"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached

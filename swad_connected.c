@@ -309,14 +309,14 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    struct Con_ConnectedUsrs Usrs;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Crs.Cod <= 0)	// No course selected
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)	// No course selected
       return;
 
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
       HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
-	 Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
+	 Str_Copy (CourseName,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName,sizeof (CourseName) - 1);
 	 Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
 	 HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
       HTM_BUTTON_End ();
@@ -501,7 +501,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 
       /* Get course code (row[1]) */
       Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-	                                        Gbl.Hierarchy.Crs.Cod);
+	                                        Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
       /* Compute elapsed time from last access */
       if (sscanf (row[2],"%ld",&Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff) != 1)
@@ -657,9 +657,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    struct Usr_Data UsrDat;
    bool PutLinkToRecord = (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 	                   Gbl.Scope.Current   == HieLvl_CRS &&	// Scope is current course
-	                   (Role == Rol_STD ||				// Role is student,...
-	                    Role == Rol_NET ||				// ...non-editing teacher...
-	                    Role == Rol_TCH));				// ...or teacher
+	                   (Role == Rol_STD ||			// Role is student,...
+	                    Role == Rol_NET ||			// ...non-editing teacher...
+	                    Role == Rol_TCH));			// ...or teacher
 
    /***** Get connected users who belong to current location from database *****/
    if ((NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role)))
@@ -681,7 +681,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                                                       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
 	    /* Get course code (row[1]) */
-	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Crs.Cod);
+	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)

@@ -139,14 +139,14 @@ static void CtrCfg_Configuration (bool PrintView)
    bool PhotoExists;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ctr.Cod <= 0)	// No center selected
+   if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod <= 0)	// No center selected
       return;
 
    /***** Get coordinates of center *****/
-   Ctr_GetCoordByCod (Gbl.Hierarchy.Ctr.Cod,&Coord);
+   Ctr_GetCoordByCod (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,&Coord);
 
    /***** Initializations *****/
-   PutLink      = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
+   PutLink      = !PrintView && Gbl.Hierarchy.Node[HieLvl_CTR].WWW[0];
    PutFormIns   = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    PutFormName  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
    PutFormPlc   =
@@ -210,10 +210,10 @@ static void CtrCfg_Configuration (bool PrintView)
 	    CtrCfg_NumCrss ();
 
 	    /***** Number of users in courses of this center *****/
-	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.Cod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.Cod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.Cod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.Cod,Rol_UNK);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,Rol_UNK);
 	   }
 
       /***** End table *****/
@@ -229,9 +229,9 @@ static void CtrCfg_Configuration (bool PrintView)
    /***** Check photo *****/
    snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Ctr.Cod % 100),
-	     (unsigned)  Gbl.Hierarchy.Ctr.Cod,
-	     (unsigned)  Gbl.Hierarchy.Ctr.Cod);
+	     (unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100),
+	     (unsigned)  Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+	     (unsigned)  Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
    if (MapIsAvailable || PhotoExists)
@@ -296,12 +296,12 @@ static void CtrCfg_PutIconToChangePhoto (void)
 static void CtrCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		 HieLvl_CTR,			// Logo scope
-		 Gbl.Hierarchy.Ctr.Cod,	// Logo code
-                 Gbl.Hierarchy.Ctr.ShrtName,	// Logo short name
-		 Gbl.Hierarchy.Ctr.FullName,	// Logo full name
-		 Gbl.Hierarchy.Ctr.WWW,		// Logo www
-		 Gbl.Hierarchy.Ctr.FullName);	// Text full name
+		 HieLvl_CTR,					// Logo scope
+		 Gbl.Hierarchy.Node[HieLvl_CTR].Cod,		// Logo code
+                 Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,	// Logo short name
+		 Gbl.Hierarchy.Node[HieLvl_CTR].FullName,	// Logo full name
+		 Gbl.Hierarchy.Node[HieLvl_CTR].WWW,		// Logo www
+		 Gbl.Hierarchy.Node[HieLvl_CTR].FullName);	// Text full name
   }
 
 /*****************************************************************************/
@@ -335,7 +335,8 @@ static void CtrCfg_Map (const struct Map_Coordinates *Coord)
       Map_AddMarker (Coord);
 
       /* Add popup */
-      Map_AddPopup (Gbl.Hierarchy.Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName,
+      Map_AddPopup (Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
+		    Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,
 		    true);	// Open
 
    HTM_SCRIPT_End ();
@@ -447,21 +448,21 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
       return;
 
    /***** Get photo attribution *****/
-   CtrCfg_GetPhotoAttr (Gbl.Hierarchy.Ctr.Cod,&PhotoAttribution);
+   CtrCfg_GetPhotoAttr (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,&PhotoAttribution);
 
    /***** Photo image *****/
    HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink)
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Gbl.Hierarchy.Ctr.WWW);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Gbl.Hierarchy.Node[HieLvl_CTR].WWW);
       if (asprintf (&URL,"%s/%02u/%u",
 		    Cfg_URL_CTR_PUBLIC,
-		    (unsigned) (Gbl.Hierarchy.Ctr.Cod % 100),
-		    (unsigned) Gbl.Hierarchy.Ctr.Cod) < 0)
+		    (unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100),
+		    (unsigned) Gbl.Hierarchy.Node[HieLvl_CTR].Cod) < 0)
 	 Err_NotEnoughMemoryExit ();
       if (asprintf (&Icon,"%u.jpg",
-		    (unsigned) Gbl.Hierarchy.Ctr.Cod) < 0)
+		    (unsigned) Gbl.Hierarchy.Node[HieLvl_CTR].Cod) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
+      HTM_IMG (URL,Icon,Gbl.Hierarchy.Node[HieLvl_CTR].FullName,
 	       "class=\"%s\"",PrintView ? "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH" :
 					  "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH");
       free (Icon);
@@ -565,7 +566,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	 if (PutForm)
 	   {
 	    /* Get list of institutions of the current country */
-	    Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.Cod);
+	    Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
 
 	    /* Put form to select institution */
 	    Frm_BeginForm (ActChgCtrInsCfg);
@@ -574,13 +575,13 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());
 		  for (NumIns = 0;
-		       NumIns < Gbl.Hierarchy.Inss.Num;
+		       NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
 		       NumIns++)
 		    {
-		     InsInLst = &Gbl.Hierarchy.Inss.Lst[NumIns];
+		     InsInLst = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
 		     HTM_OPTION (HTM_Type_LONG,&InsInLst->Cod,
-				 InsInLst->Cod == Gbl.Hierarchy.Ins.Cod ? HTM_OPTION_SELECTED :
-										HTM_OPTION_UNSELECTED,
+				 InsInLst->Cod == Gbl.Hierarchy.Node[HieLvl_INS].Cod ? HTM_OPTION_SELECTED :
+										       HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",InsInLst->ShrtName);
 		    }
@@ -595,16 +596,18 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
-		  ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Ins.Cod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ins.ShrtName),
+		  ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[HieLvl_INS].ShrtName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
 
-	    Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Ins.ShrtName,
+	    Lgo_DrawLogo (HieLvl_INS,
+			  Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			  Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,
 			  20,"LM");
 	    HTM_NBSP ();
-	    HTM_Txt (Gbl.Hierarchy.Ins.FullName);
+	    HTM_Txt (Gbl.Hierarchy.Node[HieLvl_INS].FullName);
 
 	    if (!PrintView)
 	      {
@@ -626,7 +629,7 @@ static void CtrCfg_FullName (bool PutForm)
    extern const char *Txt_Center;
 
    HieCfg_FullName (PutForm,Txt_Center,ActRenCtrFulCfg,
-		    Gbl.Hierarchy.Ctr.FullName);
+		    Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
   }
 
 /*****************************************************************************/
@@ -635,7 +638,7 @@ static void CtrCfg_FullName (bool PutForm)
 
 static void CtrCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenCtrShoCfg,Gbl.Hierarchy.Ctr.ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenCtrShoCfg,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName);
   }
 
 /*****************************************************************************/
@@ -679,8 +682,8 @@ static void CtrCfg_Place (bool PutForm)
 				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"0",
-			      Gbl.Hierarchy.Ctr.Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
-							               HTM_OPTION_UNSELECTED,
+			      Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
+										    HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_Another_place);
 		  for (NumPlc = 0;
@@ -689,8 +692,8 @@ static void CtrCfg_Place (bool PutForm)
 		    {
 		     PlcInLst = &Places.Lst[NumPlc];
 		     HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-				 PlcInLst->PlcCod == Gbl.Hierarchy.Ctr.Specific.PlcCod ? HTM_OPTION_SELECTED :
-											 HTM_OPTION_UNSELECTED,
+				 PlcInLst->PlcCod == Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod ? HTM_OPTION_SELECTED :
+												      HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",PlcInLst->ShrtName);
 		    }
@@ -703,7 +706,7 @@ static void CtrCfg_Place (bool PutForm)
 	 else	// I can not change center place
 	   {
 	    /* Text with the place name */
-	    Plc.PlcCod = Gbl.Hierarchy.Ctr.Specific.PlcCod;
+	    Plc.PlcCod = Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod;
 	    Plc_GetPlaceDataByCod (&Plc);
 	    HTM_Txt (Plc.FullName);
 	   }
@@ -719,7 +722,7 @@ static void CtrCfg_Place (bool PutForm)
 
 static void CtrCfg_WWW (bool PrintView,bool PutForm)
   {
-   HieCfg_WWW (PrintView,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Ctr.WWW);
+   HieCfg_WWW (PrintView,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Node[HieLvl_CTR].WWW);
   }
 
 /*****************************************************************************/
@@ -728,7 +731,7 @@ static void CtrCfg_WWW (bool PrintView,bool PutForm)
 
 static void CtrCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Ctr,Gbl.Hierarchy.Ctr.Cod);
+   HieCfg_Shortcut (PrintView,ParCod_Ctr,Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
   }
 
 /*****************************************************************************/
@@ -737,7 +740,7 @@ static void CtrCfg_Shortcut (bool PrintView)
 
 static void CtrCfg_QR (void)
   {
-   HieCfg_QR (ParCod_Ctr,Gbl.Hierarchy.Ctr.Cod);
+   HieCfg_QR (ParCod_Ctr,Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
   }
 
 /*****************************************************************************/
@@ -756,7 +759,7 @@ static void CtrCfg_NumUsrs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
+	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Node[HieLvl_CTR]));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -781,12 +784,12 @@ static void CtrCfg_NumDegs (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Ctr.Cod);
-	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
+	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.Cod));
+	       HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Node[HieLvl_CTR].Cod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -810,7 +813,7 @@ static void CtrCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.Cod));
+	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Node[HieLvl_CTR].Cod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -957,20 +960,20 @@ void CtrCfg_ReceivePhoto (void)
    /***** Creates public directories if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PUBLIC);
    snprintf (Path,sizeof (Path),"%s/%02u",
-	     Cfg_PATH_CTR_PUBLIC,(unsigned) (Gbl.Hierarchy.Ctr.Cod % 100));
+	     Cfg_PATH_CTR_PUBLIC,(unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100));
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),"%s/%02u/%u",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Ctr.Cod % 100),
-	     (unsigned)  Gbl.Hierarchy.Ctr.Cod);
+	     (unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100),
+	     (unsigned)  Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
    snprintf (PathFileImg,sizeof (PathFileImg),"%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Ctr.Cod % 100),
-	     (unsigned)  Gbl.Hierarchy.Ctr.Cod,
-	     (unsigned)  Gbl.Hierarchy.Ctr.Cod);
+	     (unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100),
+	     (unsigned)  Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+	     (unsigned)  Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
 
    /* Call to program that makes the conversion */
    snprintf (Command,sizeof (Command),
@@ -1015,7 +1018,7 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
    Par_GetParText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hierarchy.Ctr.Cod,NewPhotoAttribution);
+   Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,NewPhotoAttribution);
 
    /***** Show the center information again *****/
    CtrCfg_ShowConfiguration ();
@@ -1035,34 +1038,34 @@ void CtrCfg_ChangeCtrIns (void)
    NewIns.Cod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /***** Check if institution has changed *****/
-   if (NewIns.Cod != Gbl.Hierarchy.Ctr.PrtCod)
+   if (NewIns.Cod != Gbl.Hierarchy.Node[HieLvl_CTR].PrtCod)
      {
       /***** Get data of new institution *****/
       Ins_GetInstitDataByCod (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
       if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",
-                                            Gbl.Hierarchy.Ctr.ShrtName,
-                                            Gbl.Hierarchy.Ctr.Cod,
+                                            Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
+                                            Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
                                             NewIns.Cod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_center_X_already_exists,
-		          Gbl.Hierarchy.Ctr.ShrtName);
+		          Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName);
       else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",
-                                                 Gbl.Hierarchy.Ctr.FullName,
-                                                 Gbl.Hierarchy.Ctr.Cod,
+                                                 Gbl.Hierarchy.Node[HieLvl_CTR].FullName,
+                                                 Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
                                                  NewIns.Cod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_center_X_already_exists,
-		          Gbl.Hierarchy.Ctr.FullName);
+		          Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
       else
 	{
 	 /***** Update institution in table of centers *****/
-	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Ctr.Cod,NewIns.Cod);
-	 Gbl.Hierarchy.Ctr.PrtCod =
-	 Gbl.Hierarchy.Ins.Cod = NewIns.Cod;
+	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,NewIns.Cod);
+	 Gbl.Hierarchy.Node[HieLvl_CTR].PrtCod =
+	 Gbl.Hierarchy.Node[HieLvl_INS].Cod = NewIns.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
@@ -1070,7 +1073,7 @@ void CtrCfg_ChangeCtrIns (void)
 	 /***** Create message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_center_X_has_been_moved_to_the_institution_Y,
-		          Gbl.Hierarchy.Ctr.FullName,NewIns.FullName);
+		          Gbl.Hierarchy.Node[HieLvl_CTR].FullName,NewIns.FullName);
 	}
      }
   }
@@ -1088,8 +1091,8 @@ void CtrCfg_ChangeCtrPlc (void)
    NewPlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /***** Update place in table of centers *****/
-   Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Ctr.Cod,NewPlcCod);
-   Gbl.Hierarchy.Ctr.Specific.PlcCod = NewPlcCod;
+   Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,NewPlcCod);
+   Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod = NewPlcCod;
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_of_the_center_has_changed);
@@ -1104,12 +1107,12 @@ void CtrCfg_ChangeCtrPlc (void)
 
 void CtrCfg_RenameCenterShort (void)
   {
-   Ctr_RenameCenter (&Gbl.Hierarchy.Ctr,Cns_SHRT_NAME);
+   Ctr_RenameCenter (&Gbl.Hierarchy.Node[HieLvl_CTR],Cns_SHRT_NAME);
   }
 
 void CtrCfg_RenameCenterFull (void)
   {
-   Ctr_RenameCenter (&Gbl.Hierarchy.Ctr,Cns_FULL_NAME);
+   Ctr_RenameCenter (&Gbl.Hierarchy.Node[HieLvl_CTR],Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1126,7 +1129,7 @@ void CtrCfg_ChangeCtrLatitude (void)
    NewLatitude = Map_GetLatitudeFromStr (LatitudeStr);
 
    /***** Update database changing old latitude by new latitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.Cod,"Latitude",NewLatitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,"Latitude",NewLatitude);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1146,7 +1149,7 @@ void CtrCfg_ChangeCtrLongitude (void)
    NewLongitude = Map_GetLongitudeFromStr (LongitudeStr);
 
    /***** Update database changing old longitude by new longitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.Cod,"Longitude",NewLongitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,"Longitude",NewLongitude);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1166,7 +1169,7 @@ void CtrCfg_ChangeCtrAltitude (void)
    NewAltitude = Map_GetAltitudeFromStr (AltitudeStr);
 
    /***** Update database changing old altitude by new altitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.Cod,"Altitude",NewAltitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,"Altitude",NewAltitude);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1189,8 +1192,9 @@ void CtrCfg_ChangeCtrWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ctr_DB_UpdateCtrWWW (Gbl.Hierarchy.Ctr.Cod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Ctr.WWW,NewWWW,sizeof (Gbl.Hierarchy.Ctr.WWW) - 1);
+      Ctr_DB_UpdateCtrWWW (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,NewWWW);
+      Str_Copy (Gbl.Hierarchy.Node[HieLvl_CTR].WWW,NewWWW,
+		sizeof (Gbl.Hierarchy.Node[HieLvl_CTR].WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

@@ -74,10 +74,10 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 	 Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,PubCod,
 				       (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 								       0),
-				       Gbl.Hierarchy.Ins.Cod,
-				       Gbl.Hierarchy.Ctr.Cod,
-				       Gbl.Hierarchy.Deg.Cod,
-				       Gbl.Hierarchy.Crs.Cod);
+				       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+				       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+				       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+				       Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
      }
 
    /***** Free memory used for user's data *****/

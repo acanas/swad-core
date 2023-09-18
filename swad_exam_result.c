@@ -1349,9 +1349,9 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 
       /***** Header *****/
       Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Ins.Cod,
-				 Gbl.Hierarchy.Deg.Cod,
-				 Gbl.Hierarchy.Crs.Cod);
+				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
       /***** Check user data *****/
       /* Get data of the user who answered the exam print */

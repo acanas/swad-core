@@ -101,7 +101,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		     " GROUP BY deg_degrees.DegTypCod",
-			 Gbl.Hierarchy.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
       case HieLvl_INS:
 	 /* Get only degree types with degrees in the current institution */
 	 return (unsigned)
@@ -114,7 +114,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		     " GROUP BY deg_degrees.DegTypCod",
-			 Gbl.Hierarchy.Ins.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
       case HieLvl_CTR:
 	 /* Get only degree types with degrees in the current center */
 	 return (unsigned)
@@ -125,7 +125,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 		        " WHERE deg_degrees.CtrCod=%ld"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		     " GROUP BY deg_degrees.DegTypCod",
-			 Gbl.Hierarchy.Ctr.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
       case HieLvl_DEG:
       case HieLvl_CRS:
 	 /* Get only degree types with degrees in the current degree */
@@ -138,7 +138,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 			       "deg_types"
 			" WHERE deg_degrees.DegCod=%ld"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod",
-			 Gbl.Hierarchy.Deg.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -206,7 +206,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Cty.Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
 			 OrderBySubQuery[Order]);
       case HieLvl_INS:
 	 /* Get only degree types with degrees in the current institution */
@@ -223,7 +223,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Ins.Cod,
+			 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
 			 OrderBySubQuery[Order]);
       case HieLvl_CTR:
 	 /* Get only degree types with degrees in the current center */
@@ -238,7 +238,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Ctr.Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
 			 OrderBySubQuery[Order]);
       case HieLvl_DEG:
       case HieLvl_CRS:
@@ -254,7 +254,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Deg.Cod,
+			 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
 			 OrderBySubQuery[Order]);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -415,7 +415,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res)
 		    " FROM deg_degrees"
 		   " WHERE CtrCod=%ld"
 		   " ORDER BY ShortName",
-		   Gbl.Hierarchy.Ctr.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
   }
 
 /*****************************************************************************/
@@ -437,7 +437,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res)
 		    " FROM deg_degrees"
 		   " WHERE CtrCod=%ld"
 		   " ORDER BY FullName",
-		   Gbl.Hierarchy.Ctr.Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
   }
 
 /*****************************************************************************/

@@ -125,7 +125,7 @@ void Hie_WriteMenuHierarchy (void)
 
       HTM_TR_End ();
 
-      if (Gbl.Hierarchy.Cty.Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
 	{
 	 /***** Write a 2nd selector
 		with the institutions of selected country *****/
@@ -141,7 +141,7 @@ void Hie_WriteMenuHierarchy (void)
 
 	 HTM_TR_End ();
 
-	 if (Gbl.Hierarchy.Ins.Cod > 0)
+	 if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
 	   {
 	    /***** Write a 3rd selector
 		   with all the centers of selected institution *****/
@@ -157,7 +157,7 @@ void Hie_WriteMenuHierarchy (void)
 
 	    HTM_TR_End ();
 
-	    if (Gbl.Hierarchy.Ctr.Cod > 0)
+	    if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
 	      {
 	       /***** Write a 4th selector
 		      with all degrees of selected center *****/
@@ -173,7 +173,7 @@ void Hie_WriteMenuHierarchy (void)
 
 	       HTM_TR_End ();
 
-	       if (Gbl.Hierarchy.Deg.Cod > 0)
+	       if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
 		 {
 		  /***** Write a 5th selector
 			 with all courses of selected degree *****/
@@ -223,7 +223,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    HTM_DIV_End ();
 
-   if (Gbl.Hierarchy.Cty.Cod > 0)		// Country selected...
+   if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)		// Country selected...
      {
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
@@ -232,10 +232,10 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Cty.Cod);
-	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Cty.FullName,
+	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
 	                             "class=\"BT_LINK\"");
-	       HTM_Txt (Gbl.Hierarchy.Cty.FullName);
+	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CTY].FullName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
@@ -258,7 +258,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_End ();
      }
 
-   if (Gbl.Hierarchy.Ins.Cod > 0)		// Institution selected...
+   if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)		// Institution selected...
      {
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
@@ -267,16 +267,16 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
-	    ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Ins.Cod);
-	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Ins.FullName,
+	    ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Node[HieLvl_INS].FullName,
 	                             "class=\"BT_LINK\"");
-	       HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
+	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_INS].ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
-   else if (Gbl.Hierarchy.Cty.Cod > 0)
+   else if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
      {
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
@@ -305,7 +305,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_End ();
      }
 
-   if (Gbl.Hierarchy.Ctr.Cod > 0)	// Center selected...
+   if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)	// Center selected...
      {
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
@@ -314,16 +314,16 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Ctr.Cod);
-	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Ctr.FullName,
+	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Node[HieLvl_CTR].FullName,
 	                             "class=\"BT_LINK\"");
-	       HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
+	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
-   else if (Gbl.Hierarchy.Ins.Cod > 0)
+   else if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
      {
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
@@ -352,7 +352,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_End ();
      }
 
-   if (Gbl.Hierarchy.Deg.Cod > 0)	// Degree selected...
+   if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)	// Degree selected...
      {
       HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
 
@@ -361,16 +361,16 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
-	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Deg.Cod);
-	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Deg.FullName,
+	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Node[HieLvl_DEG].FullName,
 	                             "class=\"BT_LINK\"");
-	       HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
+	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
-   else if (Gbl.Hierarchy.Ctr.Cod > 0)
+   else if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
      {
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_GetSuffix ());
 
@@ -401,7 +401,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    HTM_DIV_Begin ("class=\"BC%s BC_%s\"",
 		   (Gbl.Hierarchy.Level == HieLvl_CRS) ? "" :
-		  ((Gbl.Hierarchy.Deg.Cod > 0) ? " BC_SEMIOFF" :
+		  ((Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0) ? " BC_SEMIOFF" :
 						    " BC_OFF"),
 		  The_GetSuffix ());
 
@@ -430,20 +430,20 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    const char *FullText[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Cty.FullName,
-      [HieLvl_INS] = Gbl.Hierarchy.Ins.FullName,
-      [HieLvl_CTR] = Gbl.Hierarchy.Ctr.FullName,
-      [HieLvl_DEG] = Gbl.Hierarchy.Deg.FullName,
-      [HieLvl_CRS] = Gbl.Hierarchy.Crs.FullName,
+      [HieLvl_CTY] = Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
+      [HieLvl_INS] = Gbl.Hierarchy.Node[HieLvl_INS].FullName,
+      [HieLvl_CTR] = Gbl.Hierarchy.Node[HieLvl_CTR].FullName,
+      [HieLvl_DEG] = Gbl.Hierarchy.Node[HieLvl_DEG].FullName,
+      [HieLvl_CRS] = Gbl.Hierarchy.Node[HieLvl_CRS].FullName,
      };
    const char *ShrtText[HieLvl_NUM_LEVELS] =
      {
       [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Cty.FullName,
-      [HieLvl_INS] = Gbl.Hierarchy.Ins.ShrtName,
-      [HieLvl_CTR] = Gbl.Hierarchy.Ctr.ShrtName,
-      [HieLvl_DEG] = Gbl.Hierarchy.Deg.ShrtName,
-      [HieLvl_CRS] = Gbl.Hierarchy.Crs.ShrtName,
+      [HieLvl_CTY] = Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
+      [HieLvl_INS] = Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,
+      [HieLvl_CTR] = Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
+      [HieLvl_DEG] = Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
+      [HieLvl_CRS] = Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName,
      };
 
    HTM_TxtF ("<h1 id=\"main_title\" class=\"MAIN_TITLE_%s\">",
@@ -490,10 +490,10 @@ static void Hie_DrawLogo (const char *ShrtText)
      };
    static const long *LogoCode[HieLvl_NUM_LEVELS] =
      {
-      [HieLvl_INS] = &Gbl.Hierarchy.Ins.Cod,
-      [HieLvl_CTR] = &Gbl.Hierarchy.Ctr.Cod,
-      [HieLvl_DEG] = &Gbl.Hierarchy.Deg.Cod,
-      [HieLvl_CRS] = &Gbl.Hierarchy.Deg.Cod,
+      [HieLvl_INS] = &Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+      [HieLvl_CTR] = &Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+      [HieLvl_DEG] = &Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+      [HieLvl_CRS] = &Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
      };
 
    /***** Logo *****/
@@ -503,7 +503,7 @@ static void Hie_DrawLogo (const char *ShrtText)
 	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,ShrtText,"TOP_LOGO");
 	 break;
       case HieLvl_CTY:	// Country
-	 Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"TOP_LOGO");
+	 Cty_DrawCountryMap (&Gbl.Hierarchy.Node[HieLvl_CTY],"TOP_LOGO");
 	 break;
       default:
 	 Lgo_DrawLogo (LogoScope[Gbl.Hierarchy.Level],
@@ -526,19 +526,19 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
    switch (Gbl.Usrs.Me.UsrLast.LastHie.Level)
      {
       case HieLvl_CTY:	// Country
-         Gbl.Hierarchy.Cty.Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
+         Gbl.Hierarchy.Node[HieLvl_CTY].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_INS:	// Institution
-         Gbl.Hierarchy.Ins.Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
+         Gbl.Hierarchy.Node[HieLvl_INS].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_CTR:	// Center
-         Gbl.Hierarchy.Ctr.Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
+         Gbl.Hierarchy.Node[HieLvl_CTR].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_DEG:	// Degree
-         Gbl.Hierarchy.Deg.Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
+         Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       case HieLvl_CRS:	// Course
-         Gbl.Hierarchy.Crs.Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
+         Gbl.Hierarchy.Node[HieLvl_CRS].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 	 break;
       default:
 	 break;
@@ -555,75 +555,75 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
 void Hie_InitHierarchy (void)
   {
    /***** If course code is available, get course data *****/
-   if (Gbl.Hierarchy.Crs.Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod > 0)
      {
-      if (Crs_GetCourseDataByCod (&Gbl.Hierarchy.Crs))	// Course found
-         Gbl.Hierarchy.Deg.Cod = Gbl.Hierarchy.Crs.PrtCod;
+      if (Crs_GetCourseDataByCod (&Gbl.Hierarchy.Node[HieLvl_CRS]))	// Course found
+         Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Gbl.Hierarchy.Node[HieLvl_CRS].PrtCod;
       else
          Hie_ResetHierarchy ();
      }
 
    /***** If degree code is available, get degree data *****/
-   if (Gbl.Hierarchy.Deg.Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
      {
-      if (Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Deg))	// Degree found
+      if (Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Node[HieLvl_DEG]))	// Degree found
 	{
-	 Gbl.Hierarchy.Ctr.Cod = Gbl.Hierarchy.Deg.PrtCod;
-         Gbl.Hierarchy.Ins.Cod = Deg_DB_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.Cod);
+	 Gbl.Hierarchy.Node[HieLvl_CTR].Cod = Gbl.Hierarchy.Node[HieLvl_DEG].PrtCod;
+         Gbl.Hierarchy.Node[HieLvl_INS].Cod = Deg_DB_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
 	}
       else
          Hie_ResetHierarchy ();
      }
 
    /***** If center code is available, get center data *****/
-   if (Gbl.Hierarchy.Ctr.Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
      {
-      if (Ctr_GetCenterDataByCod (&Gbl.Hierarchy.Ctr))	// Center found
-         Gbl.Hierarchy.Ins.Cod = Gbl.Hierarchy.Ctr.PrtCod;
+      if (Ctr_GetCenterDataByCod (&Gbl.Hierarchy.Node[HieLvl_CTR]))	// Center found
+         Gbl.Hierarchy.Node[HieLvl_INS].Cod = Gbl.Hierarchy.Node[HieLvl_CTR].PrtCod;
       else
          Hie_ResetHierarchy ();
      }
 
    /***** If institution code is available, get institution data *****/
-   if (Gbl.Hierarchy.Ins.Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
      {
-      if (Ins_GetInstitDataByCod (&Gbl.Hierarchy.Ins))	// Institution found
-	 Gbl.Hierarchy.Cty.Cod = Gbl.Hierarchy.Ins.PrtCod;
+      if (Ins_GetInstitDataByCod (&Gbl.Hierarchy.Node[HieLvl_INS]))	// Institution found
+	 Gbl.Hierarchy.Node[HieLvl_CTY].Cod = Gbl.Hierarchy.Node[HieLvl_INS].PrtCod;
       else
          Hie_ResetHierarchy ();
      }
 
    /***** If country code is available, get country data *****/
-   if (Gbl.Hierarchy.Cty.Cod > 0)
-      if (!Cty_GetBasicCountryDataByCod (&Gbl.Hierarchy.Cty))		// Country not found
+   if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
+      if (!Cty_GetBasicCountryDataByCod (&Gbl.Hierarchy.Node[HieLvl_CTY]))		// Country not found
          Hie_ResetHierarchy ();
 
    /***** Set current hierarchy level and code
           depending on course code, degree code, etc. *****/
-   if      (Gbl.Hierarchy.Crs.Cod > 0)	// Course selected
+   if      (Gbl.Hierarchy.Node[HieLvl_CRS].Cod > 0)	// Course selected
      {
       Gbl.Hierarchy.Level = HieLvl_CRS;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Crs.Cod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
      }
-   else if (Gbl.Hierarchy.Deg.Cod > 0)	// Degree selected
+   else if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)	// Degree selected
      {
       Gbl.Hierarchy.Level = HieLvl_DEG;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Deg.Cod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
      }
-   else if (Gbl.Hierarchy.Ctr.Cod > 0)	// Center selected
+   else if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)	// Center selected
      {
       Gbl.Hierarchy.Level = HieLvl_CTR;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Ctr.Cod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
      }
-   else if (Gbl.Hierarchy.Ins.Cod > 0)	// Institution selected
+   else if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)	// Institution selected
      {
       Gbl.Hierarchy.Level = HieLvl_INS;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Ins.Cod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
      }
-   else if (Gbl.Hierarchy.Cty.Cod > 0)	// Country selected
+   else if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)	// Country selected
      {
       Gbl.Hierarchy.Level = HieLvl_CTY;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Cty.Cod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_CTY].Cod;
      }
    else
      {
@@ -636,11 +636,11 @@ void Hie_InitHierarchy (void)
      {
       /***** Paths of course directories *****/
       snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),"%s/%ld",
-	        Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Crs.Cod);
+	        Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
       snprintf (Gbl.Crs.PathRelPubl,sizeof (Gbl.Crs.PathRelPubl),"%s/%ld",
-	        Cfg_PATH_CRS_PUBLIC,Gbl.Hierarchy.Crs.Cod);
+	        Cfg_PATH_CRS_PUBLIC,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
       snprintf (Gbl.Crs.PathURLPubl,sizeof (Gbl.Crs.PathURLPubl),"%s/%ld",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.Cod);
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
       /***** If any of the course directories does not exist, create it *****/
       if (!Fil_CheckIfPathExists (Gbl.Crs.PathPriv))
@@ -661,21 +661,21 @@ void Hie_InitHierarchy (void)
 void Hie_ResetHierarchy (void)
   {
    /***** Country *****/
-   Gbl.Hierarchy.Cty.Cod    = -1L;
+   Gbl.Hierarchy.Node[HieLvl_CTY].Cod    = -1L;
 
    /***** Institution *****/
-   Gbl.Hierarchy.Ins.Cod = -1L;
+   Gbl.Hierarchy.Node[HieLvl_INS].Cod = -1L;
 
    /***** Center *****/
-   Gbl.Hierarchy.Ctr.Cod             = -1L;
-   Gbl.Hierarchy.Ctr.PrtCod          = -1L;
-   Gbl.Hierarchy.Ctr.Specific.PlcCod = -1L;
+   Gbl.Hierarchy.Node[HieLvl_CTR].Cod             = -1L;
+   Gbl.Hierarchy.Node[HieLvl_CTR].PrtCod          = -1L;
+   Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod = -1L;
 
    /***** Degree *****/
-   Gbl.Hierarchy.Deg.Cod = -1L;
+   Gbl.Hierarchy.Node[HieLvl_DEG].Cod = -1L;
 
    /***** Course *****/
-   Gbl.Hierarchy.Crs.Cod = -1L;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = -1L;
 
    /***** Hierarchy level and code *****/
    Gbl.Hierarchy.Level = HieLvl_UNK;
@@ -937,13 +937,12 @@ void Hie_PutParOtherHieCod (void *HieCod)
 /****** Get parameter with the type or order in list of hierarchy nodes ******/
 /*****************************************************************************/
 
-void Hie_GetParHieOrder (void)
+Hie_Order_t Hie_GetParHieOrder (void)
   {
-   Gbl.Hierarchy.Inss.SelectedOrder = (Hie_Order_t)
-				      Par_GetParUnsignedLong ("Order",
-							      0,
-							      Hie_NUM_ORDERS - 1,
-							      (unsigned long) Hie_ORDER_DEFAULT);
+   return (Hie_Order_t) Par_GetParUnsignedLong ("Order",
+						0,
+						Hie_NUM_ORDERS - 1,
+						(unsigned long) Hie_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1258,22 +1257,22 @@ static void Hie_GetAndShowHierarchyTotal (void)
 	 NumCrssTotal = Crs_GetCachedNumCrssInSys ();
          break;
       case HieLvl_CTY:
-	 NumInssTotal = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.Cod);
-	 NumCtrsTotal = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.Cod);
-	 NumDegsTotal = Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.Cod);
-	 NumCrssTotal = Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.Cod);
+	 NumInssTotal = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
          break;
       case HieLvl_INS:
-	 NumCtrsTotal = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.Cod);
-	 NumDegsTotal = Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.Cod);
-	 NumCrssTotal = Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.Cod);
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Node[HieLvl_INS].Cod);
          break;
       case HieLvl_CTR:
-	 NumDegsTotal = Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.Cod);
-	 NumCrssTotal = Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.Cod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
 	 break;
       case HieLvl_DEG:
-	 NumCrssTotal = Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.Cod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
 	 break;
      case HieLvl_CRS:
 	 break;

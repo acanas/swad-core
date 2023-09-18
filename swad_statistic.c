@@ -264,7 +264,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
-                 Gbl.Hierarchy.Crs.ShrtName) < 0)
+                 Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);

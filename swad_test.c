@@ -131,7 +131,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 
       /***** Get tags *****/
       if ((Questions->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
-                                                               Gbl.Hierarchy.Crs.Cod)) != 0)
+                                                               Gbl.Hierarchy.Node[HieLvl_CRS].Cod)) != 0)
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
 	 if (Tst_CheckIfNextTstAllowed ())
@@ -348,9 +348,9 @@ void Tst_AssessTest (void)
 		    NULL,NULL,
 		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	 Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.Hierarchy.Ins.Cod,
-				    Gbl.Hierarchy.Deg.Cod,
-				    Gbl.Hierarchy.Crs.Cod);
+				    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+				    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+				    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)

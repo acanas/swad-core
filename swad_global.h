@@ -90,16 +90,8 @@ struct Globals
      {
       HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
       long Cod;			// Code of the current country, institution, center, degree or course
-      struct Hie_List Ctys;	// List of countries
-      struct Hie_List Inss;	// List of institutions in current country
-      struct Hie_List Ctrs;	// List of centers in current institution
-      struct Hie_List Degs;	// List of degrees in current center
-      struct Hie_List Crss;	// List of courses in current degree
-      struct Hie_Node Cty;	// Current country
-      struct Hie_Node Ins;	// Current institution
-      struct Hie_Node Ctr;	// Current center
-      struct Hie_Node Deg;	// Current degree
-      struct Hie_Node Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
+      struct Hie_List List[HieLvl_NUM_LEVELS];	// List of child nodes of current node
+      struct Hie_Node Node[HieLvl_NUM_LEVELS];	// Current node
      } Hierarchy;
    struct
      {

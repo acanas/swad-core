@@ -108,7 +108,7 @@ void Not_ShowFormNotice (void)
 
    /***** Help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
-                  Gbl.Hierarchy.Crs.FullName);
+                  Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewNot);
@@ -155,7 +155,7 @@ void Not_ReceiveNotice (void)
    NotCod = Not_DB_InsertNotice (Content);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_created);
@@ -221,7 +221,7 @@ void Not_HideActiveNotice (void)
    Not_DB_ChangeNoticeStatus (NotCod,Not_OBSOLETE_NOTICE);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
 
    /***** Set notice to be highlighted *****/
    Gbl.Crs.Notices.HighlightNotCod = NotCod;
@@ -242,7 +242,7 @@ void Not_RevealHiddenNotice (void)
    Not_DB_ChangeNoticeStatus (NotCod,Not_ACTIVE_NOTICE);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
 
    /***** Set notice to be highlighted *****/
    Gbl.Crs.Notices.HighlightNotCod = NotCod;
@@ -302,7 +302,7 @@ void Not_RemoveNotice (void)
    Tml_DB_MarkNoteAsUnavailable (TmlNot_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
   }
 
 /*****************************************************************************/
@@ -330,7 +330,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    switch (TypeNoticesListing)
      {
       case Not_LIST_BRIEF_NOTICES:
-	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Crs.Cod);
+	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
@@ -368,13 +368,13 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 /* Create RSS file if not exists */
 	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
 		   Cfg_PATH_CRS_PUBLIC,
-		   Gbl.Hierarchy.Crs.Cod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
 	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
-	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
+	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
 
 	 /* Put a link to the RSS file */
 	 HTM_DIV_Begin ("class=\"CM\"");
-	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.Cod);
+	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
 	       Ico_PutIcon ("rss-square.svg",Ico_BLACK,"RSS","ICO16x16");
 	    HTM_A_End ();

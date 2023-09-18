@@ -2214,7 +2214,7 @@ static void Brw_SetPathFileBrowser (void)
 	    institution-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_INS_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Ins.Cod % 100));
+		   (unsigned) (Gbl.Hierarchy.Node[HieLvl_INS].Cod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
@@ -2222,8 +2222,8 @@ static void Brw_SetPathFileBrowser (void)
 	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_INS_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Ins.Cod % 100),
-		   (unsigned)  Gbl.Hierarchy.Ins.Cod);
+		   (unsigned) (Gbl.Hierarchy.Node[HieLvl_INS].Cod % 100),
+		   (unsigned)  Gbl.Hierarchy.Node[HieLvl_INS].Cod);
          break;
       case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
@@ -2235,7 +2235,7 @@ static void Brw_SetPathFileBrowser (void)
 	    center-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_CTR_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Ctr.Cod % 100));
+		   (unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current center */
@@ -2243,8 +2243,8 @@ static void Brw_SetPathFileBrowser (void)
 	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_CTR_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Ctr.Cod % 100),
-		   (unsigned)  Gbl.Hierarchy.Ctr.Cod);
+		   (unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100),
+		   (unsigned)  Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
 	 break;
       case Brw_SHOW_DOC_DEG:
       case Brw_ADMI_DOC_DEG:
@@ -2256,7 +2256,7 @@ static void Brw_SetPathFileBrowser (void)
 	    degree-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%02u",
 		   Cfg_PATH_DEG_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Deg.Cod % 100));
+		   (unsigned) (Gbl.Hierarchy.Node[HieLvl_DEG].Cod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
@@ -2264,8 +2264,8 @@ static void Brw_SetPathFileBrowser (void)
 	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_DEG_PRIVATE,
-		   (unsigned) (Gbl.Hierarchy.Deg.Cod % 100),
-		   (unsigned)  Gbl.Hierarchy.Deg.Cod);
+		   (unsigned) (Gbl.Hierarchy.Node[HieLvl_DEG].Cod % 100),
+		   (unsigned)  Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
 	 break;
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
@@ -2861,7 +2861,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"%s",
 				IsCourseZone ? " checked=\"checked\"" : "");
-	       HTM_Txt (Gbl.Hierarchy.Crs.FullName);
+	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();
 
@@ -5726,17 +5726,17 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
         {
 	 case Brw_ADMI_DOC_INS:
          case Brw_ADMI_SHR_INS:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Ins.Cod)
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Node[HieLvl_INS].Cod)
                return true;		// I am in the institution of the clipboard
             break;
 	 case Brw_ADMI_DOC_CTR:
          case Brw_ADMI_SHR_CTR:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Ctr.Cod)
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Node[HieLvl_CTR].Cod)
                return true;		// I am in the center of the clipboard
             break;
 	 case Brw_ADMI_DOC_DEG:
          case Brw_ADMI_SHR_DEG:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Deg.Cod)
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Node[HieLvl_DEG].Cod)
                return true;		// I am in the degree of the clipboard
             break;
          case Brw_ADMI_DOC_CRS:
@@ -5745,12 +5745,12 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
          case Brw_ADMI_MRK_CRS:
          case Brw_ADMI_ASG_USR:
          case Brw_ADMI_WRK_USR:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Crs.Cod)
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod)
                return true;		// I am in the course of the clipboard
             break;
 	 case Brw_ADMI_ASG_CRS:
 	 case Brw_ADMI_WRK_CRS:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Crs.Cod &&
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod &&
 	        Gbl.FileBrowser.Clipboard.WorksUsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
                return true;		// I am in the course of the clipboard
 					// I am in the student's works of the clipboard
@@ -5787,15 +5787,15 @@ long Brw_GetCodForFileBrowser (void)
       case Brw_SHOW_DOC_INS:
       case Brw_ADMI_DOC_INS:
       case Brw_ADMI_SHR_INS:
-	 return Gbl.Hierarchy.Ins.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_INS].Cod;
       case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
-	 return Gbl.Hierarchy.Ctr.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
       case Brw_SHOW_DOC_DEG:
       case Brw_ADMI_DOC_DEG:
       case Brw_ADMI_SHR_DEG:
-	 return Gbl.Hierarchy.Deg.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_TCH_CRS:
@@ -5806,7 +5806,7 @@ long Brw_GetCodForFileBrowser (void)
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_USR:
       case Brw_ADMI_WRK_CRS:
-	 return Gbl.Hierarchy.Crs.Cod;
+	 return Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
       case Brw_SHOW_DOC_GRP:
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
@@ -5951,10 +5951,10 @@ void Brw_PasteIntoFileBrowser (void)
 //	Path (file or folder):		Gbl.FileBrowser.Clipboard.FilFolLnk.Full
 // Destination:
 //	Type of file browser:		Gbl.FileBrowser.Type
-//	Possible institution:		Gbl.Hierarchy.Ins.InsCod
-//	Possible center:		Gbl.Hierarchy.Ctr.CtrCod
-//	Possible degree:		Gbl.Hierarchy.Deg.DegCod
-//	Possible course:		Gbl.Hierarchy.Crs.CrsCod
+//	Possible institution:		Gbl.Hierarchy.Node[HieLvl_INS].InsCod
+//	Possible center:		Gbl.Hierarchy.Node[HieLvl_CTR].CtrCod
+//	Possible degree:		Gbl.Hierarchy.Node[HieLvl_DEG].DegCod
+//	Possible course:		Gbl.Hierarchy.Node[HieLvl_CRS].CrsCod
 //	Possible student in works:	Gbl.Usrs.Other.UsrDat.UsrCod
 //	Path (should be a folder):	Gbl.FileBrowser.FilFolLnk.Full
 // Returns the number of files pasted
@@ -9230,7 +9230,7 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
       GrpCod = DB_GetNextCode (mysql_res);
 
       /* Remove file zones of this group */
-      Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.Cod,GrpCod);
+      Brw_RemoveGrpZones (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,GrpCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -9521,8 +9521,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
       /***** Set row color *****/
       BgColor = (CrsCod > 0 &&
-	         CrsCod == Gbl.Hierarchy.Crs.Cod) ? "BG_HIGHLIGHT" :
-                                                       The_GetColorRows ();
+	         CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod) ? "BG_HIGHLIGHT" :
+								 The_GetColorRows ();
 
       HTM_TR_Begin (NULL);
 

@@ -371,7 +371,7 @@ void Tmt_ShowClassTimeTable (void)
    /***** Begin time table drawing *****/
    if (Timetable.Type == Tmt_COURSE_TIMETABLE)
       Lay_WriteHeaderClassPhoto (PrintView,false,
-				 Gbl.Hierarchy.Ins.Cod,Gbl.Hierarchy.Deg.Cod,Gbl.Hierarchy.Crs.Cod);
+				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
    if (PrintView)
       /***** Show whether only my groups or all groups are selected *****/
@@ -560,7 +560,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
       switch (Timetable->Type)
         {
          case Tmt_COURSE_TIMETABLE:
-            Tmt_WriteCrsTimeTableIntoDB (Timetable,Gbl.Hierarchy.Crs.Cod);
+            Tmt_WriteCrsTimeTableIntoDB (Timetable,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 	    break;
          case Tmt_TUTORING_TIMETABLE:
             Tmt_WriteUsrTimeTableIntoDB (Timetable,UsrCod);
@@ -861,7 +861,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 			/* Course code (row[6]) */
 			Tmt_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].CrsCod =
 			   (Timetable->Type == Tmt_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
-								  Gbl.Hierarchy.Crs.Cod);
+								  Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 			/* falls through */
 			/* no break */
 		     case Tmt_TUTORING_TIMETABLE:
