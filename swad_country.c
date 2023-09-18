@@ -530,7 +530,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 	    /***** Write country name *****/
 	    Str_Copy (CountryName,Cty->FullName,sizeof (CountryName) - 1);
 	    HTM_TxtF ("&nbsp;%s&nbsp;",CountryName);
-	    HTM_TxtF ("(%s)",Cty->Alpha2);
+	    HTM_TxtF ("(%s)",Cty->ShrtName);
 
 	 /***** End link *****/
 	 HTM_BUTTON_End ();
@@ -557,9 +557,9 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
    /***** Draw country map *****/
    if (Cty_CheckIfCountryPhotoExists (Cty))
      {
-      if (asprintf (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->Alpha2) < 0)
+      if (asprintf (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName) < 0)
 	 Err_NotEnoughMemoryExit ();
-      if (asprintf (&Icon,"%s.png",Cty->Alpha2) < 0)
+      if (asprintf (&Icon,"%s.png",Cty->ShrtName) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,Icon,Cty->FullName,"class=\"%s\"",Class);
       free (Icon);
@@ -580,8 +580,8 @@ bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty)
 
    snprintf (PathMap,sizeof (PathMap),"%s/%s/%s.png",
 	     Cfg_PATH_ICON_COUNTRIES_PUBLIC,
-	     Cty->Alpha2,
-	     Cty->Alpha2);
+	     Cty->ShrtName,
+	     Cty->ShrtName);
    return Fil_CheckIfPathExists (PathMap);
   }
 
@@ -629,7 +629,7 @@ void Cty_WriteScriptGoogleGeochart (void)
 
 	    /* Write data of this country */
 	    HTM_TxtF ("	['%s', %u, %u],\n",
-		      Gbl.Hierarchy.Ctys.Lst[NumCty].Alpha2,NumUsrsCty,NumInss);
+		      Gbl.Hierarchy.Ctys.Lst[NumCty].ShrtName,NumUsrsCty,NumInss);
 	    if (NumUsrsCty > MaxUsrsInCountry)
 	       MaxUsrsInCountry = NumUsrsCty;
 	    NumCtysWithUsrs++;
@@ -815,7 +815,7 @@ static void Cty_GetFullListOfCountries (void)
             Err_WrongCountrExit ();
 
          /* Get Alpha-2 country code (row[1]) */
-         Str_Copy (Cty->Alpha2,row[1],sizeof (Cty->Alpha2) - 1);
+         Str_Copy (Cty->ShrtName,row[1],sizeof (Cty->ShrtName) - 1);
 
 	 /* Get the name and the web of the country in the current language */
 	 Str_Copy (Cty->FullName,row[2],sizeof (Cty->FullName) - 1);
@@ -951,7 +951,7 @@ bool Cty_GetBasicCountryDataByCod (struct Cty_Countr *Cty)
       row = mysql_fetch_row (mysql_res);
 
       /* Get Alpha-2 country code (row[0]) */
-      Str_Copy (Cty->Alpha2,row[0],sizeof (Cty->Alpha2) - 1);
+      Str_Copy (Cty->ShrtName,row[0],sizeof (Cty->ShrtName) - 1);
 
       /* Get name and WWW of the country in current language */
       Str_Copy (Cty->FullName,row[1],sizeof (Cty->FullName) - 1);
@@ -1115,7 +1115,7 @@ static void Cty_ListCountriesForEdition (void)
 	    /* Alphabetic country code with 2 letters (ISO 3166-1) */
 	    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT DAT_%s\"",
 	                  1 + Lan_NUM_LANGUAGES,The_GetSuffix ());
-	       HTM_Txt (Cty->Alpha2);
+	       HTM_Txt (Cty->ShrtName);
 	    HTM_TD_End ();
 
 	    HTM_TD_Empty (3);
@@ -1447,7 +1447,7 @@ static void Cty_PutFormToCreateCountry (void)
 
 	 /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
 	 HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
-	    HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->Alpha2,HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->ShrtName,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"2\" class=\"INPUT_%s\""
 			    " required=\"required\"",
 			    The_GetSuffix ());
@@ -1583,26 +1583,26 @@ void Cty_ReceiveFormNewCountry (void)
    else	// Numeric code correct
      {
       /* Get alphabetic-2 country code */
-      Par_GetParText ("Alpha2",Cty_EditingCty->Alpha2,2);
-      Str_ConvertToUpperText (Cty_EditingCty->Alpha2);
+      Par_GetParText ("Alpha2",Cty_EditingCty->ShrtName,2);
+      Str_ConvertToUpperText (Cty_EditingCty->ShrtName);
       for (i = 0;
 	   i < 2 && CreateCountry;
 	   i++)
-         if (Cty_EditingCty->Alpha2[i] < 'A' ||
-             Cty_EditingCty->Alpha2[i] > 'Z')
+         if (Cty_EditingCty->ShrtName[i] < 'A' ||
+             Cty_EditingCty->ShrtName[i] > 'Z')
            {
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_alphabetical_code_X_is_not_correct,
-                             Cty_EditingCty->Alpha2);
+                             Cty_EditingCty->ShrtName);
             CreateCountry = false;
            }
       if (CreateCountry)
         {
-         if (Cty_DB_CheckIfAlpha2CountryCodeExists (Cty_EditingCty->Alpha2))
+         if (Cty_DB_CheckIfAlpha2CountryCodeExists (Cty_EditingCty->ShrtName))
            {
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_alphabetical_code_X_already_exists,
-                             Cty_EditingCty->Alpha2);
+                             Cty_EditingCty->ShrtName);
             CreateCountry = false;
            }
          else	// Alphabetic code correct
@@ -1854,7 +1854,6 @@ static void Cty_EditingCountryConstructor (void)
 
    /***** Reset country *****/
    Cty_EditingCty->Cod         = -1L;
-   Cty_EditingCty->Alpha2[0]   = '\0';
    Cty_EditingCty->ShrtName[0] = '\0';
    Cty_EditingCty->FullName[0] = '\0';
    Cty_EditingCty->WWW[0]      = '\0';

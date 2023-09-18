@@ -48,8 +48,7 @@
 struct Cty_Countr
   {
    long Cod;			// Country code
-   char Alpha2[2 + 1];
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Alpha2
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct

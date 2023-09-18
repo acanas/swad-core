@@ -58,7 +58,7 @@ unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Level,long Cod);
 
 bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
-bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
+bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2);
 bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
 
 unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,

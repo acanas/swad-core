@@ -98,7 +98,7 @@ void Cty_DB_CreateCountry (const struct Cty_Countr *Cty,
                    SubQueryNam1,
                    SubQueryWWW1,
                    Cty->Cod,
-                   Cty->Alpha2,
+                   Cty->ShrtName,
 		   SubQueryNam2,
 		   SubQueryWWW2);
   }
@@ -398,7 +398,7 @@ bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
 /*************** Check if an alphabetic country code exists ******************/
 /*****************************************************************************/
 
-bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
+bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char *Alpha2)
   {
    return
    DB_QueryEXISTS ("can not check if the alphabetic code of a country already existed",
