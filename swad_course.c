@@ -153,7 +153,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *Hlp_PROFILE_Courses;
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
-   struct Hie_Hierarchy Hie;
+   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
    bool IsLastItemInLevel[1 + 6];
    bool Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
@@ -208,24 +208,24 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    row = mysql_fetch_row (mysql_resCty);
 
 	    /***** Get data of this institution *****/
-	    Hie.Cty.Cod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (!Cty_GetBasicCountryDataByCod (&Hie.Cty))
+	    Hie[HieLvl_CTY].Cod = Str_ConvertStrCodToLongCod (row[0]);
+	    if (!Cty_GetBasicCountryDataByCod (&Hie[HieLvl_CTY]))
 	       Err_WrongCountrExit ();
 
 	    /***** Write link to country *****/
 	    Highlight = (Gbl.Hierarchy.Node[HieLvl_INS].Cod <= 0 &&
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod == Hie.Cty.Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod == Hie[HieLvl_CTY].Cod);
 	    HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 				      NULL);
 	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1);
 	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	       Frm_BeginForm (ActMyCrs);
-		  ParCod_PutPar (ParCod_Cty,Hie.Cty.Cod);
+		  ParCod_PutPar (ParCod_Cty,Hie[HieLvl_CTY].Cod);
 		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
 					   "class=\"BT_LINK FORM_IN_%s\"",
 					   The_GetSuffix ());
-		     Cty_DrawCountryMap (&Hie.Cty,"ICO16x16");
-		     HTM_TxtF ("&nbsp;%s",Hie.Cty.FullName);
+		     Cty_DrawCountryMap (&Hie[HieLvl_CTY],"ICO16x16");
+		     HTM_TxtF ("&nbsp;%s",Hie[HieLvl_CTY].FullName);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
 	    HTM_LI_End ();
@@ -233,7 +233,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    /***** Get my institutions in this country *****/
 	    NumInss = Ins_DB_GetInssFromUsr (&mysql_resIns,
 	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
-					     Hie.Cty.Cod);
+	                                     Hie[HieLvl_CTY].Cod);
 	    for (NumIns = 0;
 		 NumIns < NumInss;
 		 NumIns++)
@@ -242,24 +242,27 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       row = mysql_fetch_row (mysql_resIns);
 
 	       /***** Get data of this institution *****/
-	       Hie.Ins.Cod = Str_ConvertStrCodToLongCod (row[0]);
-	       if (!Ins_GetInstitDataByCod (&Hie.Ins))
+	       Hie[HieLvl_INS].Cod = Str_ConvertStrCodToLongCod (row[0]);
+	       if (!Ins_GetInstitDataByCod (&Hie[HieLvl_INS]))
 		  Err_WrongInstitExit ();
 
 	       /***** Write link to institution *****/
 	       Highlight = (Gbl.Hierarchy.Node[HieLvl_CTR].Cod <= 0 &&
-			    Gbl.Hierarchy.Node[HieLvl_INS].Cod == Hie.Ins.Cod);
+			    Gbl.Hierarchy.Node[HieLvl_INS].Cod == Hie[HieLvl_INS].Cod);
 	       HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					 NULL);
 		  IsLastItemInLevel[3] = (NumIns == NumInss - 1);
 		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 		  Frm_BeginForm (ActMyCrs);
-		     ParCod_PutPar (ParCod_Ins,Hie.Ins.Cod);
+		     ParCod_PutPar (ParCod_Ins,Hie[HieLvl_INS].Cod);
 		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
 					      "class=\"BT_LINK FORM_IN_%s\"",
 					      The_GetSuffix ());
-			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.Cod,Hie.Ins.ShrtName,16,NULL);
-			HTM_TxtF ("&nbsp;%s",Hie.Ins.ShrtName);
+			Lgo_DrawLogo (HieLvl_INS,
+				      Hie[HieLvl_INS].Cod,
+				      Hie[HieLvl_INS].ShrtName,
+				      16,NULL);
+			HTM_TxtF ("&nbsp;%s",Hie[HieLvl_INS].ShrtName);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
 	       HTM_LI_End ();
@@ -267,7 +270,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       /***** Get my centers in this institution *****/
 	       NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_resCtr,
 	                                        Gbl.Usrs.Me.UsrDat.UsrCod,
-					        Hie.Ins.Cod);
+	                                        Hie[HieLvl_INS].Cod);
 	       for (NumCtr = 0;
 		    NumCtr < NumCtrs;
 		    NumCtr++)
@@ -276,24 +279,27 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  row = mysql_fetch_row (mysql_resCtr);
 
 		  /***** Get data of this center *****/
-		  Hie.Ctr.Cod = Str_ConvertStrCodToLongCod (row[0]);
-		  if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
+		  Hie[HieLvl_CTR].Cod = Str_ConvertStrCodToLongCod (row[0]);
+		  if (!Ctr_GetCenterDataByCod (&Hie[HieLvl_CTR]))
 		     Err_WrongCenterExit ();
 
 		  /***** Write link to center *****/
 		  Highlight = (Gbl.Hierarchy.Level == HieLvl_CTR &&
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod == Hie.Ctr.Cod);
+			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod == Hie[HieLvl_CTR].Cod);
 		  HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					    NULL);
 		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1);
 		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 		     Frm_BeginForm (ActMyCrs);
-			ParCod_PutPar (ParCod_Ctr,Hie.Ctr.Cod);
+			ParCod_PutPar (ParCod_Ctr,Hie[HieLvl_CTR].Cod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
 						 "class=\"BT_LINK FORM_IN_%s\"",
 						 The_GetSuffix ());
-			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.Cod,Hie.Ctr.ShrtName,16,NULL);
-			   HTM_TxtF ("&nbsp;%s",Hie.Ctr.ShrtName);
+			   Lgo_DrawLogo (HieLvl_CTR,
+					 Hie[HieLvl_CTR].Cod,
+					 Hie[HieLvl_CTR].ShrtName,
+					 16,NULL);
+			   HTM_TxtF ("&nbsp;%s",Hie[HieLvl_CTR].ShrtName);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
 		  HTM_LI_End ();
@@ -301,7 +307,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  /***** Get my degrees in this center *****/
 		  NumDegs = Deg_DB_GetDegsFromUsr (&mysql_resDeg,
 		                                   Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Hie.Ctr.Cod);
+		                                   Hie[HieLvl_CTR].Cod);
 		  for (NumDeg = 0;
 		       NumDeg < NumDegs;
 		       NumDeg++)
@@ -310,24 +316,27 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     row = mysql_fetch_row (mysql_resDeg);
 
 		     /***** Get data of this degree *****/
-		     Hie.Deg.Cod = Str_ConvertStrCodToLongCod (row[0]);
-		     if (!Deg_GetDegreeDataByCod (&Hie.Deg))
+		     Hie[HieLvl_DEG].Cod = Str_ConvertStrCodToLongCod (row[0]);
+		     if (!Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]))
 			Err_WrongDegreeExit ();
 
 		     /***** Write link to degree *****/
 		     Highlight = (Gbl.Hierarchy.Level == HieLvl_DEG &&
-				  Gbl.Hierarchy.Node[HieLvl_DEG].Cod == Hie.Deg.Cod);
+				  Gbl.Hierarchy.Node[HieLvl_DEG].Cod == Hie[HieLvl_DEG].Cod);
 		     HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					       NULL);
 			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1);
 			Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 			Frm_BeginForm (ActMyCrs);
-			   ParCod_PutPar (ParCod_Deg,Hie.Deg.Cod);
+			   ParCod_PutPar (ParCod_Deg,Hie[HieLvl_DEG].Cod);
 			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
 						    "class=\"BT_LINK FORM_IN_%s\"",
 						    The_GetSuffix ());
-			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.Cod,Hie.Deg.ShrtName,16,NULL);
-			      HTM_TxtF ("&nbsp;%s",Hie.Deg.ShrtName);
+			      Lgo_DrawLogo (HieLvl_DEG,
+					    Hie[HieLvl_DEG].Cod,
+					    Hie[HieLvl_DEG].ShrtName,
+					    16,NULL);
+			      HTM_TxtF ("&nbsp;%s",Hie[HieLvl_DEG].ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
 		     HTM_LI_End ();
@@ -335,7 +344,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     /***** Get my courses in this degree *****/
 		     NumCrss = Crs_DB_GetCrssFromUsr (&mysql_resCrs,
 		                                      Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Hie.Deg.Cod);
+		                                      Hie[HieLvl_DEG].Cod);
 		     for (NumCrs = 0;
 			  NumCrs < NumCrss;
 			  NumCrs++)
@@ -344,30 +353,30 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			row = mysql_fetch_row (mysql_resCrs);
 
 			/***** Get data of this course *****/
-			Hie.Crs.Cod = Str_ConvertStrCodToLongCod (row[0]);
-			if (!Crs_GetCourseDataByCod (&Hie.Crs))
+			Hie[HieLvl_CRS].Cod = Str_ConvertStrCodToLongCod (row[0]);
+			if (!Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]))
 			   Err_WrongCourseExit ();
 
 			/***** Write link to course *****/
 			Highlight = (Gbl.Hierarchy.Level == HieLvl_CRS &&
-				     Gbl.Hierarchy.Node[HieLvl_CRS].Cod == Hie.Crs.Cod);
+				     Gbl.Hierarchy.Node[HieLvl_CRS].Cod == Hie[HieLvl_CRS].Cod);
 			HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 						  NULL);
 			   IsLastItemInLevel[6] = (NumCrs == NumCrss - 1);
 			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel);
 			   Frm_BeginForm (ActMyCrs);
-			      ParCod_PutPar (ParCod_Crs,Hie.Crs.Cod);
-			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie.Crs.ShrtName),
+			      ParCod_PutPar (ParCod_Crs,Hie[HieLvl_CRS].Cod);
+			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[HieLvl_CRS].ShrtName),
 						       "class=\"BT_LINK FORM_IN_%s\"",
 						       The_GetSuffix ());
 			      Str_FreeGoToTitle ();
-				 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie.Crs.FullName,"ICO16x16");
-				 HTM_TxtF ("&nbsp;%s",Hie.Crs.ShrtName);
+				 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie[HieLvl_CRS].FullName,"ICO16x16");
+				 HTM_TxtF ("&nbsp;%s",Hie[HieLvl_CRS].ShrtName);
 			      HTM_BUTTON_End ();
 			   Frm_EndForm ();
 
 			   /***** Put link to register students *****/
-			   Enr_PutButtonInlineToRegisterStds (Hie.Crs.Cod);
+			   Enr_PutButtonInlineToRegisterStds (Hie[HieLvl_CRS].Cod);
 
 			HTM_LI_End ();
 		       }
@@ -2419,7 +2428,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
-	       Lgo_DrawLogo (HieLvl_DEG,Deg.Cod,Deg.ShrtName,20,"CT");
+	       Lgo_DrawLogo (HieLvl_DEG,
+			     Deg.Cod,
+			     Deg.ShrtName,
+			     20,"CT");
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

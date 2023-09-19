@@ -62,7 +62,9 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 /***************** Draw institution, center or degree logo *******************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (HieLvl_Level_t Level,long HieCod,const char *AltText,
+void Lgo_DrawLogo (HieLvl_Level_t Level,
+		   long HieCod,
+		   const char *AltText,
                    unsigned Size,const char *Class)
   {
    static const char *HieIcon[HieLvl_NUM_LEVELS] =

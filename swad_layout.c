@@ -1466,19 +1466,19 @@ static void Lay_WriteFootFromHTMLFile (void)
 void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod)
   {
-   struct Hie_Hierarchy Hie;
+   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
 
    /***** Get data of institution *****/
-   Hie.Ins.Cod = InsCod;
-   Ins_GetInstitDataByCod (&Hie.Ins);
+   Hie[HieLvl_INS].Cod = InsCod;
+   Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
 
    /***** Get data of degree *****/
-   Hie.Deg.Cod = DegCod;
-   Deg_GetDegreeDataByCod (&Hie.Deg);
+   Hie[HieLvl_DEG].Cod = DegCod;
+   Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
 
    /***** Get data of course *****/
-   Hie.Crs.Cod = CrsCod;
-   Crs_GetCourseDataByCod (&Hie.Crs);
+   Hie[HieLvl_CRS].Cod = CrsCod;
+   Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (10);
@@ -1490,8 +1490,11 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	    if (InsCod > 0)
 	      {
 	       if (!PrintView)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie.Ins.WWW);
-	       Lgo_DrawLogo (HieLvl_INS,Hie.Ins.Cod,Hie.Ins.ShrtName,40,NULL);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[HieLvl_INS].WWW);
+	       Lgo_DrawLogo (HieLvl_INS,
+			     Hie[HieLvl_INS].Cod,
+			     Hie[HieLvl_INS].ShrtName,
+			     40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
@@ -1505,27 +1508,27 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie.Ins.WWW,The_GetSuffix ());
-	       HTM_Txt (Hie.Ins.FullName);
+			       Hie[HieLvl_INS].WWW,The_GetSuffix ());
+	       HTM_Txt (Hie[HieLvl_INS].FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
 	    if (DegCod > 0)
 	      {
-	       if (Hie.Ins.Cod > 0)
+	       if (Hie[HieLvl_INS].Cod > 0)
 		  HTM_Txt (" - ");
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie.Deg.WWW,The_GetSuffix ());
-	       HTM_Txt (Hie.Deg.FullName);
+			       Hie[HieLvl_DEG].WWW,The_GetSuffix ());
+	       HTM_Txt (Hie[HieLvl_DEG].FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
 	    HTM_BR ();
 	    if (CrsCod > 0)
 	      {
-	       HTM_Txt (Hie.Crs.FullName);
+	       HTM_Txt (Hie[HieLvl_CRS].FullName);
 	       if (DrawingClassPhoto && !Gbl.Usrs.ClassPhoto.AllGroups)
 		 {
 		  HTM_BR ();
@@ -1541,8 +1544,11 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie.Deg.WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.Cod,Hie.Deg.ShrtName,40,NULL);
+			       Hie[HieLvl_DEG].WWW,The_GetSuffix ());
+	       Lgo_DrawLogo (HieLvl_DEG,
+			     Hie[HieLvl_DEG].Cod,
+			     Hie[HieLvl_DEG].ShrtName,
+			     40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }

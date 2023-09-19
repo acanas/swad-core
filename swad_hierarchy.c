@@ -508,7 +508,8 @@ static void Hie_DrawLogo (const char *ShrtText)
       default:
 	 Lgo_DrawLogo (LogoScope[Gbl.Hierarchy.Level],
 		       *LogoCode[Gbl.Hierarchy.Level],
-		       ShrtText,40,"TOP_LOGO");
+		       ShrtText,
+		       40,"TOP_LOGO");
 	 break;
      }
   }
@@ -676,7 +677,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    MYSQL_ROW row;
    unsigned NumRow;
    unsigned NumRows;
-   struct Hie_Hierarchy Hie;
+   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
 
    /***** Get institutions, centers, degrees admin by user from database *****/
    NumRows = Hie_DB_GetInsCtrDegAdminBy (&mysql_res,UsrCod);
@@ -713,33 +714,33 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
 		  break;
 	       case HieLvl_INS:	// Institution
-		  if ((Hie.Ins.Cod = Str_ConvertStrCodToLongCod (row[1])) > 0)
+		  if ((Hie[HieLvl_INS].Cod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of institution */
-		     Ins_GetInstitDataByCod (&Hie.Ins);
+		     Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
 
 		     /* Write institution logo and name */
-		     Ins_DrawInstitLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,"LT");
+		     Ins_DrawInstitLogoAndNameWithLink (&Hie[HieLvl_INS],ActSeeInsInf,"LT");
 		    }
 		  break;
 	       case HieLvl_CTR:	// Center
-		  if ((Hie.Ctr.Cod = Str_ConvertStrCodToLongCod (row[1])) > 0)
+		  if ((Hie[HieLvl_CTR].Cod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of center */
-		     Ctr_GetCenterDataByCod (&Hie.Ctr);
+		     Ctr_GetCenterDataByCod (&Hie[HieLvl_CTR]);
 
 		     /* Write center logo and name */
-		     Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,"LT");
+		     Ctr_DrawCenterLogoAndNameWithLink (&Hie[HieLvl_CTR],ActSeeCtrInf,"LT");
 		    }
 		  break;
 	       case HieLvl_DEG:	// Degree
-		  if ((Hie.Deg.Cod = Str_ConvertStrCodToLongCod (row[1])) > 0)
+		  if ((Hie[HieLvl_DEG].Cod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of degree */
-		     Deg_GetDegreeDataByCod (&Hie.Deg);
+		     Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
 
 		     /* Write degree logo and name */
-		     Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,"LT");
+		     Deg_DrawDegreeLogoAndNameWithLink (&Hie[HieLvl_DEG],ActSeeDegInf,"LT");
 		    }
 		  break;
 	       default:	// There are no administrators in other scopes

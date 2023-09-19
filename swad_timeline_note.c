@@ -85,11 +85,11 @@ static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
 static void TmlNot_WriteContent (const struct TmlNot_Note *Not);
 static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not);
 static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
-                                           struct Hie_Hierarchy *Hie,
+					   struct Hie_Node Hie[HieLvl_NUM_LEVELS],
                                            struct For_Forum *Forum,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
 static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
-	                                     const struct Hie_Hierarchy *Hie,
+					     struct Hie_Node Hie[HieLvl_NUM_LEVELS],
                                              const char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
 
 static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
@@ -390,7 +390,7 @@ static void TmlNot_WriteContent (const struct TmlNot_Note *Not)
 
 static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not)
   {
-   struct Hie_Hierarchy Hie;
+   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
    struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
@@ -400,14 +400,14 @@ static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not)
 
    /***** Get location in hierarchy *****/
    if (!Not->Unavailable)
-      TmlNot_GetLocationInHierarchy (Not,&Hie,&Forums.Forum,ForumName);
+      TmlNot_GetLocationInHierarchy (Not,Hie,&Forums.Forum,ForumName);
 
    /***** Write note type *****/
    TmlNot_PutFormGoToAction (Not,&Forums);
 
    /***** Write location in hierarchy *****/
    if (!Not->Unavailable)
-      TmlNot_WriteLocationInHierarchy (Not,&Hie,ForumName);
+      TmlNot_WriteLocationInHierarchy (Not,Hie,ForumName);
 
    /***** Get and write note summary *****/
    /* Get note summary */
@@ -424,16 +424,16 @@ static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not)
 /*****************************************************************************/
 
 static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
-                                           struct Hie_Hierarchy *Hie,
+					   struct Hie_Node Hie[HieLvl_NUM_LEVELS],
                                            struct For_Forum *Forum,
                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
    /***** Initialize location in hierarchy *****/
-   Hie->Cty.Cod =
-   Hie->Ins.Cod =
-   Hie->Ctr.Cod =
-   Hie->Deg.Cod =
-   Hie->Crs.Cod = -1L;
+   Hie[HieLvl_CTY].Cod =
+   Hie[HieLvl_INS].Cod =
+   Hie[HieLvl_CTR].Cod =
+   Hie[HieLvl_DEG].Cod =
+   Hie[HieLvl_CRS].Cod = -1L;
 
    /***** Get location in hierarchy *****/
    switch (Not->Type)
@@ -441,28 +441,28 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
       case TmlNot_INS_DOC_PUB_FILE:
       case TmlNot_INS_SHA_PUB_FILE:
 	 /* Get institution data */
-	 Hie->Ins.Cod = Not->HieCod;
-	 Ins_GetInstitDataByCod (&Hie->Ins);
+	 Hie[HieLvl_INS].Cod = Not->HieCod;
+	 Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
 	 break;
       case TmlNot_CTR_DOC_PUB_FILE:
       case TmlNot_CTR_SHA_PUB_FILE:
 	 /* Get center data */
-	 Hie->Ctr.Cod = Not->HieCod;
-	 Ctr_GetCenterDataByCod (&Hie->Ctr);
+	 Hie[HieLvl_CTR].Cod = Not->HieCod;
+	 Ctr_GetCenterDataByCod (&Hie[HieLvl_CTR]);
 	 break;
       case TmlNot_DEG_DOC_PUB_FILE:
       case TmlNot_DEG_SHA_PUB_FILE:
 	 /* Get degree data */
-	 Hie->Deg.Cod = Not->HieCod;
-	 Deg_GetDegreeDataByCod (&Hie->Deg);
+	 Hie[HieLvl_DEG].Cod = Not->HieCod;
+	 Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
 	 break;
       case TmlNot_CRS_DOC_PUB_FILE:
       case TmlNot_CRS_SHA_PUB_FILE:
       case TmlNot_CALL_FOR_EXAM:
       case TmlNot_NOTICE:
 	 /* Get course data */
-	 Hie->Crs.Cod = Not->HieCod;
-	 Crs_GetCourseDataByCod (&Hie->Crs);
+	 Hie[HieLvl_CRS].Cod = Not->HieCod;
+	 Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
 	 break;
       case TmlNot_FORUM_POST:
 	 /* Get forum type of the post */
@@ -481,7 +481,7 @@ static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
 /*****************************************************************************/
 
 static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
-	                                     const struct Hie_Hierarchy *Hie,
+					     struct Hie_Node Hie[HieLvl_NUM_LEVELS],
                                              const char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
    extern const char *Txt_Institution;
@@ -501,21 +501,21 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 	    /* Write location (institution) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Institution,
-	              Hie->Ins.ShrtName);
+	              Hie[HieLvl_INS].ShrtName);
 	    break;
 	 case TmlNot_CTR_DOC_PUB_FILE:
 	 case TmlNot_CTR_SHA_PUB_FILE:
 	    /* Write location (center) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Center,
-	              Hie->Ctr.ShrtName);
+	              Hie[HieLvl_CTR].ShrtName);
 	    break;
 	 case TmlNot_DEG_DOC_PUB_FILE:
 	 case TmlNot_DEG_SHA_PUB_FILE:
 	    /* Write location (degree) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Degree,
-	              Hie->Deg.ShrtName);
+	              Hie[HieLvl_DEG].ShrtName);
 	    break;
 	 case TmlNot_CRS_DOC_PUB_FILE:
 	 case TmlNot_CRS_SHA_PUB_FILE:
@@ -524,7 +524,7 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 	    /* Write location (course) in hierarchy */
 	    HTM_TxtF ("%s:&nbsp;%s",
 	              Txt_Course,
-	              Hie->Crs.ShrtName);
+	              Hie[HieLvl_CRS].ShrtName);
 	    break;
 	 case TmlNot_FORUM_POST:
 	    /* Write forum name */

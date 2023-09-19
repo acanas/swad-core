@@ -67,7 +67,10 @@ void HieCfg_Title (bool PutLink,
 		      LogoWWW,LogoFullName,The_GetSuffix ());
 
       /* Logo and name */
-      Lgo_DrawLogo (LogoScope,LogoCod,LogoShrtName,64,NULL);
+      Lgo_DrawLogo (LogoScope,
+		    LogoCod,
+		    LogoShrtName,
+		    64,NULL);
       HTM_BR ();
       HTM_Txt (TextFullName);
 

@@ -1775,15 +1775,24 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 		  break;
 	       case For_FORUM_INSTIT_USRS:
 	       case For_FORUM_INSTIT_TCHS:
-		  Lgo_DrawLogo (HieLvl_INS,Forum->HieCod,ForumName,16,NULL);
+		  Lgo_DrawLogo (HieLvl_INS,
+				Forum->HieCod,
+				ForumName,
+				16,NULL);
 		  break;
 	       case For_FORUM_CENTER_USRS:
 	       case For_FORUM_CENTER_TCHS:
-		  Lgo_DrawLogo (HieLvl_CTR,Forum->HieCod,ForumName,16,NULL);
+		  Lgo_DrawLogo (HieLvl_CTR,
+				Forum->HieCod,
+				ForumName,
+				16,NULL);
 		  break;
 	       case For_FORUM_DEGREE_USRS:
 	       case For_FORUM_DEGREE_TCHS:
-		  Lgo_DrawLogo (HieLvl_DEG,Forum->HieCod,ForumName,16,NULL);
+		  Lgo_DrawLogo (HieLvl_DEG,
+				Forum->HieCod,
+				ForumName,
+				16,NULL);
 		  break;
 	       case For_FORUM_COURSE_USRS:
 	       case For_FORUM_COURSE_TCHS:
@@ -1823,7 +1832,7 @@ void For_SetForumName (const struct For_Forum *Forum,
    extern const char *Txt_only_teachers;
    extern const char *Txt_only_teachers_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Unknown_FORUM;
-   struct Hie_Hierarchy Hie;
+   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
 
    switch (Forum->Type)
      {
@@ -1849,62 +1858,62 @@ void For_SetForumName (const struct For_Forum *Forum,
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
-	 Hie.Ins.Cod = Forum->HieCod;
-	 if (!Ins_GetInstitDataByCod (&Hie.Ins))
+	 Hie[HieLvl_INS].Cod = Forum->HieCod;
+	 if (!Ins_GetInstitDataByCod (&Hie[HieLvl_INS]))
 	    Err_WrongInstitExit ();
-         Str_Copy (ForumName,Hie.Ins.ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie[HieLvl_INS].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
-	 Hie.Ins.Cod = Forum->HieCod;
-	 if (!Ins_GetInstitDataByCod (&Hie.Ins))
+	 Hie[HieLvl_INS].Cod = Forum->HieCod;
+	 if (!Ins_GetInstitDataByCod (&Hie[HieLvl_INS]))
 	    Err_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-                   Hie.Ins.ShrtName,
+		   Hie[HieLvl_INS].ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTER_USRS:
-	 Hie.Ctr.Cod = Forum->HieCod;
-	 if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
+	 Hie[HieLvl_CTR].Cod = Forum->HieCod;
+	 if (!Ctr_GetCenterDataByCod (&Hie[HieLvl_CTR]))
 	    Err_WrongCenterExit ();
-         Str_Copy (ForumName,Hie.Ctr.ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie[HieLvl_CTR].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTER_TCHS:
-	 Hie.Ctr.Cod = Forum->HieCod;
-	 if (!Ctr_GetCenterDataByCod (&Hie.Ctr))
+	 Hie[HieLvl_CTR].Cod = Forum->HieCod;
+	 if (!Ctr_GetCenterDataByCod (&Hie[HieLvl_CTR]))
 	    Err_WrongCenterExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-                   Hie.Ctr.ShrtName,
+		   Hie[HieLvl_CTR].ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
-	 Hie.Deg.Cod = Forum->HieCod;
-	 if (!Deg_GetDegreeDataByCod (&Hie.Deg))
+	 Hie[HieLvl_DEG].Cod = Forum->HieCod;
+	 if (!Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]))
 	    Err_WrongDegreeExit ();
-         Str_Copy (ForumName,Hie.Deg.ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie[HieLvl_DEG].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
-	 Hie.Deg.Cod = Forum->HieCod;
-	 if (!Deg_GetDegreeDataByCod (&Hie.Deg))
+	 Hie[HieLvl_DEG].Cod = Forum->HieCod;
+	 if (!Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]))
 	    Err_WrongDegreeExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-                   Hie.Deg.ShrtName,
+		   Hie[HieLvl_DEG].ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_COURSE_USRS:
-	 Hie.Crs.Cod = Forum->HieCod;
-	 if (!Crs_GetCourseDataByCod (&Hie.Crs))
+	 Hie[HieLvl_CRS].Cod = Forum->HieCod;
+	 if (!Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]))
 	    Err_WrongCourseExit ();
-         Str_Copy (ForumName,Hie.Crs.ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Hie[HieLvl_CRS].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
-	 Hie.Crs.Cod = Forum->HieCod;
-	 if (!Crs_GetCourseDataByCod (&Hie.Crs))
+	 Hie[HieLvl_CRS].Cod = Forum->HieCod;
+	 if (!Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]))
 	    Err_WrongCourseExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
-                   Hie.Crs.ShrtName,
+		   Hie[HieLvl_CRS].ShrtName,
                    UseHTMLEntities ? Txt_only_teachers :
                                      Txt_only_teachers_NO_HTML[Language]);
          break;

@@ -27,7 +27,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (HieLvl_Level_t Level,long HieCod,const char *AltText,
+void Lgo_DrawLogo (HieLvl_Level_t Level,
+		   long HieCod,
+		   const char *AltText,
                    unsigned Size,const char *Class);
 void Lgo_PutIconToChangeLogo (HieLvl_Level_t Level);
 void Lgo_RequestLogo (HieLvl_Level_t Level);

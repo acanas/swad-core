@@ -1561,7 +1561,7 @@ int swad__getUsers (struct soap *soap,
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_getUsers;
    Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (courseCode > 0) ? (long) courseCode :
-	                                          -1L;
+							   -1L;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -1642,7 +1642,7 @@ int swad__findUsers (struct soap *soap,
    API_Set_gSOAP_RuntimeEnv (soap);
    Gbl.WebService.Function = API_findUsers;
    Gbl.Hierarchy.Node[HieLvl_CRS].Cod = (courseCode > 0) ? (long) courseCode :
-	                                          -1L;
+							   -1L;
 
    /***** Check web service key *****/
    if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
@@ -2862,7 +2862,7 @@ int swad__getNotifications (struct soap *soap,
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
-   struct Hie_Hierarchy Hie;
+   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -2929,13 +2929,13 @@ int swad__getNotifications (struct soap *soap,
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventTime = EventTime;
 
          /* Get course (row[7]) */
-         Hie.Crs.Cod = Str_ConvertStrCodToLongCod (row[7]);
-         Crs_GetCourseDataByCod (&Hie.Crs);
+         Hie[HieLvl_CRS].Cod = Str_ConvertStrCodToLongCod (row[7]);
+         Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
 
          /* Get user's code of the user who caused the event (row[3]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Hie.Crs.Cod))	// Get some user's data from database
+         if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Hie[HieLvl_CRS].Cod))	// Get some user's data from database
            {
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname =
                soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1);
@@ -2977,16 +2977,16 @@ int swad__getNotifications (struct soap *soap,
            }
 
          /* Get institution (row[4]) */
-         Hie.Ins.Cod = Str_ConvertStrCodToLongCod (row[4]);
-         Ins_GetInstitDataByCod (&Hie.Ins);
+         Hie[HieLvl_INS].Cod = Str_ConvertStrCodToLongCod (row[4]);
+         Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
 
          /* Get center (row[5]) */
-         Hie.Ctr.Cod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetCenterDataByCod (&Hie.Ctr);
+         Hie[HieLvl_CTR].Cod = Str_ConvertStrCodToLongCod (row[5]);
+         Ctr_GetCenterDataByCod (&Hie[HieLvl_CTR]);
 
          /* Get degree (row[6]) */
-         Hie.Deg.Cod = Str_ConvertStrCodToLongCod (row[6]);
-         Deg_GetDegreeDataByCod (&Hie.Deg);
+         Hie[HieLvl_DEG].Cod = Str_ConvertStrCodToLongCod (row[6]);
+         Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);
@@ -3005,18 +3005,18 @@ int swad__getNotifications (struct soap *soap,
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Forum,ForumName);
            }
-         else if (Hie.Crs.Cod > 0)
+         else if (Hie[HieLvl_CRS].Cod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Course,Hie.Crs.ShrtName);
-         else if (Hie.Deg.Cod > 0)
+                     Txt_Course,Hie[HieLvl_CRS].ShrtName);
+         else if (Hie[HieLvl_DEG].Cod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Degree,Hie.Deg.ShrtName);
-         else if (Hie.Ctr.Cod > 0)
+                     Txt_Degree,Hie[HieLvl_DEG].ShrtName);
+         else if (Hie[HieLvl_CTR].Cod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Center,Hie.Ctr.ShrtName);
-         else if (Hie.Ins.Cod > 0)
+                     Txt_Center,Hie[HieLvl_CTR].ShrtName);
+         else if (Hie[HieLvl_INS].Cod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Institution,Hie.Ins.ShrtName);
+                     Txt_Institution,Hie[HieLvl_INS].ShrtName);
          else
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-",
                       Ntf_MAX_BYTES_NOTIFY_LOCATION);
@@ -3029,7 +3029,7 @@ int swad__getNotifications (struct soap *soap,
          /* Get summary and content */
          ContentStr = NULL;
          Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-                                        Cod,Hie.Crs.Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                        Cod,Hie[HieLvl_CRS].Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                         true);
 
          Length = strlen (SummaryStr);

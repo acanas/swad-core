@@ -143,12 +143,12 @@ void Adm_DB_RemUsrAsAdmin (long UsrCod)
 /********* Remove administrators of an institution, center or degree *********/
 /*****************************************************************************/
 
-void Adm_DB_RemAdmins (HieLvl_Level_t Level)
+void Adm_DB_RemAdmins (HieLvl_Level_t Level,long Cod)
   {
    DB_QueryDELETE ("can not remove administrators",
 		   "DELETE FROM usr_admins"
 		   " WHERE Scope='%s'"
 		     " AND Cod=%ld",
                    Hie_GetDBStrFromLevel (Level),
-                   Gbl.Hierarchy.Node[Level].Cod);
+                   Cod);
   }

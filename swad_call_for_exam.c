@@ -956,7 +956,10 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
 			       Ins.WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_INS,Ins.Cod,Ins.FullName,64,NULL);
+	       Lgo_DrawLogo (HieLvl_INS,
+			     Ins.Cod,
+			     Ins.FullName,
+			     64,NULL);
 	       HTM_BR ();
 	       HTM_Txt (Ins.FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
@@ -1609,20 +1612,20 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    extern const char *Txt_CALL_FOR_EXAM_Material_allowed;
    extern const char *Txt_CALL_FOR_EXAM_Other_information;
    extern const char *Txt_hours_ABBREVIATION;
-   struct Hie_Hierarchy Hie;
+   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Get data of course *****/
-   Hie.Crs.Cod = CallsForExams->CallForExam.CrsCod;
-   Crs_GetCourseDataByCod (&Hie.Crs);
+   Hie[HieLvl_CRS].Cod = CallsForExams->CallForExam.CrsCod;
+   Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
 
    /***** Get data of degree *****/
-   Hie.Deg.Cod = Hie.Crs.PrtCod;
-   Deg_GetDegreeDataByCod (&Hie.Deg);
+   Hie[HieLvl_DEG].Cod = Hie[HieLvl_CRS].PrtCod;
+   Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
 
    /***** Get data of institution *****/
-   Hie.Ins.Cod = Deg_DB_GetInsCodOfDegreeByCod (Hie.Deg.Cod);
-   Ins_GetInstitDataByCod (&Hie.Ins);
+   Hie[HieLvl_INS].Cod = Deg_DB_GetInsCodOfDegreeByCod (Hie[HieLvl_DEG].Cod);
+   Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
 
    /***** Convert struct date to a date string *****/
    Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,StrExamDate);
@@ -1643,8 +1646,8 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                             "%s: %s<br />"
                             "%s: %s<br />"
                             "%s: %s",
-                 Txt_Institution,Hie.Ins.FullName,
-                 Txt_Degree,Hie.Deg.FullName,
+                 Txt_Institution,Hie[HieLvl_INS].FullName,
+                 Txt_Degree,Hie[HieLvl_DEG].FullName,
                  Txt_CALL_FOR_EXAM_Course,CallsForExams->CallForExam.CrsFullName,
                  Txt_CALL_FOR_EXAM_Year_or_semester,Txt_YEAR_OF_DEGREE[CallsForExams->CallForExam.Year],
                  Txt_CALL_FOR_EXAM_Session,CallsForExams->CallForExam.Session,

@@ -41,6 +41,6 @@ bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod);
 
 void Adm_DB_RemAdmin (long UsrCod,HieLvl_Level_t Level);
 void Adm_DB_RemUsrAsAdmin (long UsrCod);
-void Adm_DB_RemAdmins (HieLvl_Level_t Level);
+void Adm_DB_RemAdmins (HieLvl_Level_t Level,long Cod);
 
 #endif
