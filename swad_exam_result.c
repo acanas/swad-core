@@ -1348,10 +1348,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
       /***** Header *****/
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+      Lay_WriteHeaderClassPhoto (false,false);
 
       /***** Check user data *****/
       /* Get data of the user who answered the exam print */

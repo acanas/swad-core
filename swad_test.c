@@ -347,10 +347,7 @@ void Tst_AssessTest (void)
       Box_BoxBegin (NULL,Txt_Result,
 		    NULL,NULL,
 		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-	 Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+	 Lay_WriteHeaderClassPhoto (false,false);
 
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)

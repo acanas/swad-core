@@ -370,10 +370,7 @@ void Tmt_ShowClassTimeTable (void)
 
    /***** Begin time table drawing *****/
    if (Timetable.Type == Tmt_COURSE_TIMETABLE)
-      Lay_WriteHeaderClassPhoto (PrintView,false,
-				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+      Lay_WriteHeaderClassPhoto (PrintView,false);
 
    if (PrintView)
       /***** Show whether only my groups or all groups are selected *****/

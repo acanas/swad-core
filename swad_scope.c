@@ -201,20 +201,8 @@ void Sco_SetScopesForListingGuests (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
-      case Rol_CTR_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_CTR;
-	 Gbl.Scope.Default = HieLvl_CTR;
-	 break;
-      case Rol_INS_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_INS |
-		             1 << HieLvl_CTR;
-	 Gbl.Scope.Default = HieLvl_INS;
-	 break;
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-	                     1 << HieLvl_CTY |
-		             1 << HieLvl_INS |
-		             1 << HieLvl_CTR;
+	 Gbl.Scope.Allowed = 1 << HieLvl_SYS;
 	 Gbl.Scope.Default = HieLvl_SYS;
 	 break;
       default:

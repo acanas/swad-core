@@ -1463,21 +1463,32 @@ static void Lay_WriteFootFromHTMLFile (void)
 /****** Write header and footer of the class photo or academic calendar ******/
 /*****************************************************************************/
 
-void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
-                                long InsCod,long DegCod,long CrsCod)
+void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
   {
    struct Hie_Node Hie[HieLvl_NUM_LEVELS];
 
+   /***** Initialize institution, degree and course to show in header *****/
+   Hie[HieLvl_INS].Cod = (Gbl.Scope.Current == HieLvl_CRS ||
+			  Gbl.Scope.Current == HieLvl_DEG ||
+			  Gbl.Scope.Current == HieLvl_CTR ||
+			  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
+							     -1L;
+   Hie[HieLvl_DEG].Cod = (Gbl.Scope.Current == HieLvl_CRS ||
+			  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
+							     -1L;
+   Hie[HieLvl_CRS].Cod = (Gbl.Scope.Current == HieLvl_CRS) ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
+							     -1L;
+
    /***** Get data of institution *****/
-   Hie[HieLvl_INS].Cod = InsCod;
+   // Hie[HieLvl_INS].Cod = InsCod;
    Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
 
    /***** Get data of degree *****/
-   Hie[HieLvl_DEG].Cod = DegCod;
+   // Hie[HieLvl_DEG].Cod = DegCod;
    Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
 
    /***** Get data of course *****/
-   Hie[HieLvl_CRS].Cod = CrsCod;
+   // Hie[HieLvl_CRS].Cod = CrsCod;
    Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
 
    /***** Begin table *****/
@@ -1487,7 +1498,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
 	 /***** First column: institution logo *****/
 	 HTM_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
-	    if (InsCod > 0)
+	    if (Hie[HieLvl_INS].Cod > 0)
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[HieLvl_INS].WWW);
@@ -1503,7 +1514,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	 /***** Second column: class photo title *****/
 	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
 	               The_GetSuffix ());
-	    if (InsCod > 0)
+	    if (Hie[HieLvl_INS].Cod > 0)
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
@@ -1513,7 +1524,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
-	    if (DegCod > 0)
+	    if (Hie[HieLvl_DEG].Cod > 0)
 	      {
 	       if (Hie[HieLvl_INS].Cod > 0)
 		  HTM_Txt (" - ");
@@ -1526,7 +1537,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 		  HTM_A_End ();
 	      }
 	    HTM_BR ();
-	    if (CrsCod > 0)
+	    if (Hie[HieLvl_CRS].Cod > 0)
 	      {
 	       HTM_Txt (Hie[HieLvl_CRS].FullName);
 	       if (DrawingClassPhoto && !Gbl.Usrs.ClassPhoto.AllGroups)
@@ -1539,7 +1550,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
 	 /***** Third column: degree logo *****/
 	 HTM_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
-	    if (DegCod > 0)
+	    if (Hie[HieLvl_DEG].Cod > 0)
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""

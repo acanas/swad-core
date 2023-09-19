@@ -67,8 +67,7 @@ void Lay_WriteAboutZone (void);
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);
 
-void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
-                                long InsCod,long DegCod,long CrsCod);
+void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto);
 
 void Lay_AdvertisementMobile (void);
 

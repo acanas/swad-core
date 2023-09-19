@@ -1437,10 +1437,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
       if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+         Lay_WriteHeaderClassPhoto (false,false);
 
       HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 
@@ -1530,10 +1527,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
       if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+         Lay_WriteHeaderClassPhoto (false,false);
 
       HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",
                      The_GetSuffix ());
@@ -1666,10 +1660,7 @@ void Inf_EditPlainTxtInfo (void)
 
 	 if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
 	     Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	    Lay_WriteHeaderClassPhoto (false,false,
-				       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				       Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+	    Lay_WriteHeaderClassPhoto (false,false);
 
 	 /***** Get info text from database *****/
 	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Gbl.Crs.Info.Type,
@@ -1737,10 +1728,7 @@ void Inf_EditRichTxtInfo (void)
 
       if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
 	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	 Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+	 Lay_WriteHeaderClassPhoto (false,false);
 
       /***** Get info text from database *****/
       Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Gbl.Crs.Info.Type,

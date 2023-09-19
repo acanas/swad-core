@@ -261,10 +261,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	                     Hlp_START_Calendar,Box_NOT_CLOSABLE);
 
       /***** Write header *****/
-      Lay_WriteHeaderClassPhoto (PrintView,false,
-				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+      Lay_WriteHeaderClassPhoto (PrintView,false);
 
       /***** Preference selector to change first day of week *****/
       if (!PrintView)

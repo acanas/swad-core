@@ -218,10 +218,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
    Box_BoxBegin (NULL,Txt_Test,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-   Lay_WriteHeaderClassPhoto (false,false,
-			      Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-			      Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-			      Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   Lay_WriteHeaderClassPhoto (false,false);
 
    if (Print->NumQsts.All)
      {
@@ -2239,10 +2236,7 @@ void TstPrn_ShowOnePrint (void)
    Box_BoxBegin (NULL,Txt_Result,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+      Lay_WriteHeaderClassPhoto (false,false);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (10);

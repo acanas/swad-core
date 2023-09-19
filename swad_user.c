@@ -5083,12 +5083,7 @@ void Usr_SeeGuests (void)
 
 	       /***** Draw a class photo with guests *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (false,true,
-					     (Gbl.Scope.Current == HieLvl_CTR ||
-					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-										 -1L,
-					     -1L,
-					     -1L);
+		  Lay_WriteHeaderClassPhoto (false,true);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption);
@@ -5238,17 +5233,7 @@ void Usr_SeeStudents (void)
 
 	       /***** Draw a class photo with students of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (false,true,
-					     (Gbl.Scope.Current == HieLvl_CRS ||
-					      Gbl.Scope.Current == HieLvl_DEG ||
-					      Gbl.Scope.Current == HieLvl_CTR ||
-					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-									         -1L,
-					     (Gbl.Scope.Current == HieLvl_CRS ||
-					      Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-									         -1L,
-					      Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
-									         -1L);
+		  Lay_WriteHeaderClassPhoto (false,true);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);
@@ -5415,17 +5400,7 @@ void Usr_SeeTeachers (void)
 
 	       /***** Draw a class photo with teachers of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (false,true,
-					     (Gbl.Scope.Current == HieLvl_CRS ||
-					      Gbl.Scope.Current == HieLvl_DEG ||
-					      Gbl.Scope.Current == HieLvl_CTR ||
-					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-										 -1L,
-					     (Gbl.Scope.Current == HieLvl_CRS ||
-					      Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-										 -1L,
-					      Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
-										 -1L);
+		  Lay_WriteHeaderClassPhoto (false,true);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption);
@@ -5955,11 +5930,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_WriteHeaderClassPhoto (true,true,
-				 (Gbl.Scope.Current == HieLvl_CTR ||
-				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-                                                                     -1L,
-				 -1L,-1L);
+      Lay_WriteHeaderClassPhoto (true,true);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			     Rol_GST,&Gbl.Usrs.Selected,false);
@@ -5997,17 +5968,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_WriteHeaderClassPhoto (true,true,
-				 (Gbl.Scope.Current == HieLvl_CRS ||
-				  Gbl.Scope.Current == HieLvl_DEG ||
-				  Gbl.Scope.Current == HieLvl_CTR ||
-				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-					                             -1L,
-				 (Gbl.Scope.Current == HieLvl_CRS ||
-				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-					                             -1L,
-				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
-					                             -1L);
+      Lay_WriteHeaderClassPhoto (true,true);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			     Rol_STD,&Gbl.Usrs.Selected,false);
@@ -6070,17 +6031,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_WriteHeaderClassPhoto (true,true,
-				 (Gbl.Scope.Current == HieLvl_CRS ||
-				  Gbl.Scope.Current == HieLvl_DEG ||
-				  Gbl.Scope.Current == HieLvl_CTR ||
-				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-					                             -1L,
-				 (Gbl.Scope.Current == HieLvl_CRS ||
-				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-					                             -1L,
-				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
-					                             -1L);
+      Lay_WriteHeaderClassPhoto (true,true);
       HTM_TABLE_BeginWide ();
 
 	 /* List teachers and non-editing teachers */

@@ -581,11 +581,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
 
       /***** Heading *****/
       /* Institution, degree and course */
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
-
+      Lay_WriteHeaderClassPhoto (false,false);
 
       /***** Show user and time *****/
       HTM_TABLE_BeginWideMarginPadding (10);

@@ -1413,10 +1413,7 @@ void Prj_PrintOneProject (void)
    Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Write header *****/
-   Lay_WriteHeaderClassPhoto (true,false,
-			      Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-			      Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-			      Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   Lay_WriteHeaderClassPhoto (true,false);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);

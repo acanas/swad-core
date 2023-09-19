@@ -1097,10 +1097,7 @@ void MchRes_ShowOneMchResult (void)
    Box_BoxBegin (NULL,Match.Title,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+      Lay_WriteHeaderClassPhoto (false,false);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWideMarginPadding (10);
