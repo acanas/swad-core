@@ -73,7 +73,7 @@ struct Hie_Node
   {
    long Cod;			// Course/degree/center/institution/country code
    long PrtCod;			// Parent code
-   union
+   struct
      {
       long PlcCod;		// Center place code
       long TypCod;		// Degree type code

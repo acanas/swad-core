@@ -172,9 +172,18 @@ void Frm_BeginFormNoAction (void)
      }
   }
 
-void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t NextAction,
+void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
+		      Act_Action_t NextAction,
                       bool PutParLocationIfNoSession)
   {
+   static const char *ParName[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_CTY] = "cty",
+      [HieLvl_INS] = "ins",
+      [HieLvl_CTR] = "ctr",
+      [HieLvl_DEG] = "deg",
+      [HieLvl_CRS] = "crs",
+     };
    char ParAction[Frm_MAX_BYTES_PARAM_ACTION + 1];
    char ParSession[Frm_MAX_BYTES_PARAM_SESSION + 1];
    char ParLocation[Frm_MAX_BYTES_PARAM_LOCATION + 1];
@@ -193,43 +202,15 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t Ne
 	 snprintf (ParSession,sizeof (ParSession),
 		   "<input type=\"hidden\" name=\"ses\" value=\"%s\" />",
 		   Gbl.Session.Id);
-      else if (PutParLocationIfNoSession)
+      else if (PutParLocationIfNoSession && Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].Cod > 0)
 	 // Extra parameters necessary when there's no open session
-	{
-	 /* If session is open, course code will be get from session data,
+	 /* If session is open, course/degree/... code will be get from session data,
 	    but if there is not an open session, and next action is known,
-	    it is necessary to send a parameter with course code */
-	 switch (Gbl.Hierarchy.Level)
-	   {
-	    case HieLvl_CTY:	// Country
-	       snprintf (ParLocation,sizeof (ParLocation),
-			 "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
-	       break;
-	    case HieLvl_INS:	// Institution
-	       snprintf (ParLocation,sizeof (ParLocation),
-			 "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
-	       break;
-	    case HieLvl_CTR:	// Center
-	       snprintf (ParLocation,sizeof (ParLocation),
-			 "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
-	       break;
-	    case HieLvl_DEG:	// Degree
-	       snprintf (ParLocation,sizeof (ParLocation),
-			 "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
-	       break;
-	    case HieLvl_CRS:	// Course
-	       snprintf (ParLocation,sizeof (ParLocation),
-			 "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
-	       break;
-	    default:
-	       break;
-	   }
-	}
+	    it is necessary to send a parameter with course/degree/... code */
+	 snprintf (ParLocation,sizeof (ParLocation),
+		   "<input type=\"hidden\" name=\"%s\" value=\"%ld\" />",
+		   ParName[Gbl.Hierarchy.Level],
+		   Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].Cod);
      }
 
    snprintf (ParsStr,Frm_MAX_BYTES_PARAMS_STR + 1,"%s%s%s",

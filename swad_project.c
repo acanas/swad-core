@@ -3771,9 +3771,9 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[HieLvl_INS].Cod,	// Departments in current institution
-						  Projects->Prj.DptCod,	// Selected department
+						  Projects->Prj.DptCod,		// Selected department
 						  Par_CodeStr[ParCod_Dpt],	// Parameter name
-						  SelectClass,		// Selector class
+						  SelectClass,			// Selector class
 						  0,				// First option
 						  Txt_Another_department,	// Text when no department selected
 						  HTM_DONT_SUBMIT_ON_CHANGE);

@@ -197,8 +197,8 @@ void CrsCfg_PrintConfiguration (void)
 static void CrsCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		 HieLvl_DEG,			// Logo scope
-		 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,	// Logo code
+		 HieLvl_DEG,					// Logo scope
+		 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,		// Logo code
 		 Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,	// Logo short name
 		 Gbl.Hierarchy.Node[HieLvl_DEG].FullName,	// Logo full name
 		 Gbl.Hierarchy.Node[HieLvl_DEG].WWW,		// Logo www
@@ -244,7 +244,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		     DegInLst = &Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg];
 		     HTM_OPTION (HTM_Type_LONG,&DegInLst->Cod,
 				 DegInLst->Cod == Gbl.Hierarchy.Node[HieLvl_DEG].Cod ? HTM_OPTION_SELECTED :
-										HTM_OPTION_UNSELECTED,
+										       HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",DegInLst->ShrtName);
 		    }
@@ -264,7 +264,9 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 					   "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
-	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
+	    Lgo_DrawLogo (HieLvl_DEG,
+			  Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			  Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
 			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
@@ -297,7 +299,8 @@ static void CrsCfg_FullName (bool PutForm)
 
 static void CrsCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenCrsShoCfg,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenCrsShoCfg,
+		    Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
   }
 
 /*****************************************************************************/
@@ -333,7 +336,7 @@ static void CrsCfg_Year (bool PutForm)
 		       Year++)
 		     HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 				 Year == Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year ? HTM_OPTION_SELECTED :
-									   HTM_OPTION_UNSELECTED,
+											HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",Txt_YEAR_OF_DEGREE[Year]);
 	       HTM_SELECT_End ();
@@ -341,7 +344,7 @@ static void CrsCfg_Year (bool PutForm)
 	   }
 	 else
 	    HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year] :
-						       Txt_Not_applicable);
+								    Txt_Not_applicable);
       HTM_TD_End ();
 
    HTM_TR_End ();

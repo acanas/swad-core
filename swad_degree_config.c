@@ -192,10 +192,10 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 static void DegCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    HieLvl_DEG,				// Logo scope
+		    HieLvl_DEG,					// Logo scope
 		    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,		// Logo code
-                    Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,		// Logo short name
-		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName,		// Logo full name
+                    Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,	// Logo short name
+		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName,	// Logo full name
 		    Gbl.Hierarchy.Node[HieLvl_DEG].WWW,		// Logo www
 		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName);	// Text full name
   }
@@ -239,7 +239,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 		     CtrInLst = &Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr];
 		     HTM_OPTION (HTM_Type_LONG,&CtrInLst->Cod,
 				 CtrInLst->Cod == Gbl.Hierarchy.Node[HieLvl_CTR].Cod ? HTM_OPTION_SELECTED :
-										HTM_OPTION_UNSELECTED,
+										       HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",CtrInLst->ShrtName);
 		    }
@@ -259,7 +259,9 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 					   "class=\"LB BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
-	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].Cod,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
+	    Lgo_DrawLogo (HieLvl_CTR,
+			  Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			  Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
 			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
@@ -292,7 +294,8 @@ static void DegCfg_FullName (bool PutForm)
 
 static void DegCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenDegShoCfg,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenDegShoCfg,
+		    Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
   }
 
 /*****************************************************************************/
@@ -343,7 +346,8 @@ static void DegCfg_NumCrss (void)
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
-	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName) < 0)
+	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,
+			  Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	    free (Title);
@@ -435,7 +439,8 @@ void DegCfg_ChangeDegWWW (void)
      {
       /***** Update the table changing old WWW by new WWW *****/
       Deg_DB_UpdateDegWWW (Gbl.Hierarchy.Node[HieLvl_DEG].Cod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Node[HieLvl_DEG].WWW,NewWWW,sizeof (Gbl.Hierarchy.Node[HieLvl_DEG].WWW) - 1);
+      Str_Copy (Gbl.Hierarchy.Node[HieLvl_DEG].WWW,NewWWW,
+	        sizeof (Gbl.Hierarchy.Node[HieLvl_DEG].WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

@@ -2164,7 +2164,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 
    HTM_DIV_End ();
 

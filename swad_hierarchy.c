@@ -402,7 +402,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    HTM_DIV_Begin ("class=\"BC%s BC_%s\"",
 		   (Gbl.Hierarchy.Level == HieLvl_CRS) ? "" :
 		  ((Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0) ? " BC_SEMIOFF" :
-						    " BC_OFF"),
+							      " BC_OFF"),
 		  The_GetSuffix ());
 
       /***** Separator *****/
@@ -522,27 +522,8 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
    /***** Initialize all codes to -1 *****/
    Hie_ResetHierarchy ();
 
-   /***** Copy last hierarchy scope and code to current hierarchy *****/
-   switch (Gbl.Usrs.Me.UsrLast.LastHie.Level)
-     {
-      case HieLvl_CTY:	// Country
-         Gbl.Hierarchy.Node[HieLvl_CTY].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
-	 break;
-      case HieLvl_INS:	// Institution
-         Gbl.Hierarchy.Node[HieLvl_INS].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
-	 break;
-      case HieLvl_CTR:	// Center
-         Gbl.Hierarchy.Node[HieLvl_CTR].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
-	 break;
-      case HieLvl_DEG:	// Degree
-         Gbl.Hierarchy.Node[HieLvl_DEG].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
-	 break;
-      case HieLvl_CRS:	// Course
-         Gbl.Hierarchy.Node[HieLvl_CRS].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
-	 break;
-      default:
-	 break;
-     }
+   /***** Copy last hierarchy code to current hierarchy *****/
+   Gbl.Hierarchy.Node[Gbl.Usrs.Me.UsrLast.LastHie.Level].Cod = Gbl.Usrs.Me.UsrLast.LastHie.HieCod;
 
    /****** Initialize again current course, degree, center... ******/
    Hie_InitHierarchy ();
@@ -660,26 +641,28 @@ void Hie_InitHierarchy (void)
 
 void Hie_ResetHierarchy (void)
   {
-   /***** Country *****/
-   Gbl.Hierarchy.Node[HieLvl_CTY].Cod    = -1L;
-
-   /***** Institution *****/
-   Gbl.Hierarchy.Node[HieLvl_INS].Cod = -1L;
-
-   /***** Center *****/
-   Gbl.Hierarchy.Node[HieLvl_CTR].Cod             = -1L;
-   Gbl.Hierarchy.Node[HieLvl_CTR].PrtCod          = -1L;
-   Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod = -1L;
-
-   /***** Degree *****/
-   Gbl.Hierarchy.Node[HieLvl_DEG].Cod = -1L;
-
-   /***** Course *****/
-   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = -1L;
+   HieLvl_Level_t Level;
 
    /***** Hierarchy level and code *****/
    Gbl.Hierarchy.Level = HieLvl_UNK;
    Gbl.Hierarchy.Cod   = -1L;
+
+   for (Level  = (HieLvl_Level_t) 0;
+	Level <= (HieLvl_Level_t) HieLvl_NUM_LEVELS - 1;
+	Level++)
+     {
+      Gbl.Hierarchy.List[Level].Num = 0;
+      Gbl.Hierarchy.List[Level].Lst = NULL;
+      Gbl.Hierarchy.List[Level].SelectedOrder = Hie_ORDER_DEFAULT;
+      Gbl.Hierarchy.Node[Level].Cod    = -1L;
+      Gbl.Hierarchy.Node[Level].PrtCod = -1L;
+      Gbl.Hierarchy.Node[Level].ShrtName[0] =
+      Gbl.Hierarchy.Node[Level].FullName[0] = '\0';
+      Gbl.Hierarchy.Node[Level].WWW[0]      = '\0';
+     }
+   Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod = -1L;
+   Gbl.Hierarchy.Node[HieLvl_DEG].Specific.TypCod = -1L;
+   Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year   = 0;
   }
 
 /*****************************************************************************/

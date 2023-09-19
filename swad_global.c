@@ -164,34 +164,6 @@ void Gbl_InitializeGlobals (void)
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
-   Gbl.Hierarchy.List[HieLvl_SYS].Num = 0;
-   Gbl.Hierarchy.List[HieLvl_SYS].Lst = NULL;
-   Gbl.Hierarchy.List[HieLvl_SYS].SelectedOrder = Hie_ORDER_DEFAULT;
-
-   Gbl.Hierarchy.List[HieLvl_CTY].Num = 0;
-   Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
-   Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder = Hie_ORDER_DEFAULT;
-
-   Gbl.Hierarchy.Node[HieLvl_INS].ShrtName[0] = '\0';
-   Gbl.Hierarchy.Node[HieLvl_INS].FullName[0] = '\0';
-   Gbl.Hierarchy.Node[HieLvl_INS].WWW[0] = '\0';
-
-   Gbl.Hierarchy.List[HieLvl_INS].Num = 0;
-   Gbl.Hierarchy.List[HieLvl_INS].Lst = NULL;
-   Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder = Hie_ORDER_DEFAULT;
-
-   Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName[0] = '\0';
-   Gbl.Hierarchy.Node[HieLvl_CTR].FullName[0] = '\0';
-
-   Gbl.Hierarchy.List[HieLvl_CTR].Num = 0;
-   Gbl.Hierarchy.List[HieLvl_CTR].Lst = NULL;
-
-   Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName[0] =
-   Gbl.Hierarchy.Node[HieLvl_DEG].FullName[0] = '\0';
-
-   Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName[0] =
-   Gbl.Hierarchy.Node[HieLvl_CRS].FullName[0] = '\0';
-
    Gbl.Crs.Info.ShowMsgMustBeRead = 0;
 
    Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted

@@ -1325,21 +1325,18 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
      {
       /***** Check if the other user is administrator of the current institution *****/
       UsrIsInsAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-					   HieLvl_INS,
-					   Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+					      HieLvl_INS);
 
       if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
 	{
 	 /***** Check if the other user is administrator of the current center *****/
 	 UsrIsCtrAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-					      HieLvl_CTR,
-					      Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+						 HieLvl_CTR);
 
 	 if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
 	    /***** Check if the other user is administrator of the current degree *****/
 	    UsrIsDegAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-						 HieLvl_DEG,
-						 Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+						    HieLvl_DEG);
 	}
      }
 
@@ -1471,7 +1468,7 @@ static void Enr_PutActionRegOneDegAdm (bool *OptionChecked)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_DEGREE_ADMIN,OptionChecked);
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_DEG_ADMIN,OptionChecked);
       HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_degree_X,
 		Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
@@ -1485,7 +1482,7 @@ static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_center_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_CENTER_ADMIN,OptionChecked);
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_CTR_ADMIN,OptionChecked);
       HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_center_X,
 		Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
@@ -1499,7 +1496,7 @@ static void Enr_PutActionRegOneInsAdm (bool *OptionChecked)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_INSTITUTION_ADMIN,OptionChecked);
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_INS_ADMIN,OptionChecked);
       HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_institution_X,
 		Gbl.Hierarchy.Node[HieLvl_INS].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
@@ -1551,7 +1548,7 @@ static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,Usr_MeOrOther_t MeO
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_degree_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_DEGREE_ADMIN,OptionChecked);
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_DEG_ADMIN,OptionChecked);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1570,7 +1567,7 @@ static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,Usr_MeOrOther_t MeO
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_center_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_CENTER_ADMIN,OptionChecked);
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_CTR_ADMIN,OptionChecked);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1589,7 +1586,7 @@ static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,Usr_MeOrOther_t MeO
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_institution_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_INSTITUTION_ADMIN,OptionChecked);
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_INS_ADMIN,OptionChecked);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[HieLvl_INS].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -2019,13 +2016,14 @@ void Enr_RejectSignUp (void)
         {
          /* User already belongs to this course */
          Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+                        Gbl.Usrs.Other.UsrDat.FullName,
+                        Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
         }
 
       /* Remove inscription request */
       Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                  Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+				       Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
 
       /* Confirmation message */
       Ale_ShowAlert (Ale_SUCCESS,Txt_Enrolment_of_X_rejected,
@@ -2623,10 +2621,12 @@ static void Enr_ShowFormToEditOtherUsr (void)
 	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	    if (Gbl.Usrs.Other.UsrDat.Accepted)
 	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+			      Gbl.Usrs.Other.UsrDat.FullName,
+			      Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 	    else        // Enrolment not yet accepted
 	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
-			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+			      Gbl.Usrs.Other.UsrDat.FullName,
+			      Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 
 	    Rec_ShowOtherSharedRecordEditable ();
 	   }
@@ -2634,7 +2634,8 @@ static void Enr_ShowFormToEditOtherUsr (void)
 	   {
 	    Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z,
 			   Gbl.Usrs.Other.UsrDat.FullName,
-			   Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+			   Cfg_PLATFORM_SHORT_NAME,
+			   Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 
 	    Rec_ShowOtherSharedRecordEditable ();
 	   }
@@ -2969,15 +2970,15 @@ void Enr_ModifyUsr1 (void)
 	    else
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
+	 case Enr_REGISTER_ONE_DEG_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REGISTER_ONE_CENTER_ADMIN:
+	 case Enr_REGISTER_ONE_CTR_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
+	 case Enr_REGISTER_ONE_INS_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -2989,15 +2990,15 @@ void Enr_ModifyUsr1 (void)
 	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_TCH)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
+	 case Enr_REMOVE_ONE_DEG_ADMIN:
 	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REMOVE_ONE_CENTER_ADMIN:
+	 case Enr_REMOVE_ONE_CTR_ADMIN:
 	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
+	 case Enr_REMOVE_ONE_INS_ADMIN:
 	    if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -3034,14 +3035,14 @@ void Enr_ModifyUsr2 (void)
             /***** Show form to edit user again *****/
 	    Enr_ShowFormToEditOtherUsr ();
 	    break;
-	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
-	    Adm_ReqAddAdmOfDeg ();
+	 case Enr_REGISTER_ONE_DEG_ADMIN:
+	    Adm_ReqAddAdm (HieLvl_DEG);
 	    break;
-	 case Enr_REGISTER_ONE_CENTER_ADMIN:
-	    Adm_ReqAddAdmOfCtr ();
+	 case Enr_REGISTER_ONE_CTR_ADMIN:
+	    Adm_ReqAddAdm (HieLvl_CTR);
 	    break;
-	 case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
-	    Adm_ReqAddAdmOfIns ();
+	 case Enr_REGISTER_ONE_INS_ADMIN:
+	    Adm_ReqAddAdm (HieLvl_INS);
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 	    Dup_ReportUsrAsPossibleDuplicate ();
@@ -3049,13 +3050,13 @@ void Enr_ModifyUsr2 (void)
 	 case Enr_REMOVE_ONE_USR_FROM_CRS:
             Enr_ReqRemUsrFromCrs ();
 	    break;
-	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
+	 case Enr_REMOVE_ONE_DEG_ADMIN:
             Adm_ReqRemAdmOfDeg ();
 	    break;
-	 case Enr_REMOVE_ONE_CENTER_ADMIN:
+	 case Enr_REMOVE_ONE_CTR_ADMIN:
             Adm_ReqRemAdmOfCtr ();
 	    break;
-	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
+	 case Enr_REMOVE_ONE_INS_ADMIN:
             Adm_ReqRemAdmOfIns ();
 	    break;
 	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
@@ -3100,7 +3101,8 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
 
       /***** Show question and button to remove user as administrator *****/
       /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[MeOrOther],Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[MeOrOther],
+			       Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (UsrDat);

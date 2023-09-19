@@ -152,7 +152,7 @@ void Deg_SeeDegWithPendingCrss (void)
 	    /* Get degree code (row[0]) */
 	    Deg.Cod = Str_ConvertStrCodToLongCod (row[0]);
 	    BgColor = (Deg.Cod == Gbl.Hierarchy.Node[HieLvl_DEG].Cod) ? "BG_HIGHLIGHT" :
-								 The_GetColorRows ();
+								        The_GetColorRows ();
 
 	    /* Get data of degree */
 	    Deg_GetDegreeDataByCod (&Deg);
@@ -241,7 +241,7 @@ void Deg_WriteSelectorOfDegree (void)
 			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Node[HieLvl_DEG].Cod <= 0 ? HTM_OPTION_SELECTED :
-						  HTM_OPTION_UNSELECTED,
+							    HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Degree);
 
@@ -266,7 +266,7 @@ void Deg_WriteSelectorOfDegree (void)
 	    HTM_OPTION (HTM_Type_LONG,&DegCod,
 			Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0 &&
 			DegCod == Gbl.Hierarchy.Node[HieLvl_DEG].Cod ? HTM_OPTION_SELECTED :
-							     HTM_OPTION_UNSELECTED,
+								       HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);
 	   }
@@ -715,7 +715,8 @@ static void Deg_ListDegrees (void)
    unsigned NumDeg;
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
+   if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
+		 Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
@@ -804,7 +805,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       TxtClassStrong = "DAT_STRONG";
      }
    BgColor = (Deg->Cod == Gbl.Hierarchy.Node[HieLvl_DEG].Cod) ? "BG_HIGHLIGHT" :
-                                                         The_GetColorRows ();
+							        The_GetColorRows ();
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);
@@ -892,7 +893,8 @@ static void Deg_EditDegreesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
+   if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
+		 Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);

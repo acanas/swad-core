@@ -5243,12 +5243,12 @@ void Usr_SeeStudents (void)
 					      Gbl.Scope.Current == HieLvl_DEG ||
 					      Gbl.Scope.Current == HieLvl_CTR ||
 					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-									      -1L,
+									         -1L,
 					     (Gbl.Scope.Current == HieLvl_CRS ||
 					      Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-									      -1L,
+									         -1L,
 					      Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
-									      -1L);
+									         -1L);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);

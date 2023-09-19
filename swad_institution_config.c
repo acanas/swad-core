@@ -229,10 +229,10 @@ static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 static void InsCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    HieLvl_INS,				// Logo scope
+		    HieLvl_INS,					// Logo scope
 		    Gbl.Hierarchy.Node[HieLvl_INS].Cod,		// Logo code
-                    Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,		// Logo short name
-		    Gbl.Hierarchy.Node[HieLvl_INS].FullName,		// Logo full name
+                    Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,	// Logo short name
+		    Gbl.Hierarchy.Node[HieLvl_INS].FullName,	// Logo full name
 		    Gbl.Hierarchy.Node[HieLvl_INS].WWW,		// Logo www
 		    Gbl.Hierarchy.Node[HieLvl_INS].FullName);	// Text full name
   }
@@ -343,7 +343,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		     CtyInLst = &Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty];
 		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->Cod,
 				 CtyInLst->Cod == Gbl.Hierarchy.Node[HieLvl_CTY].Cod ? HTM_OPTION_SELECTED :
-										HTM_OPTION_UNSELECTED,
+										       HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",CtyInLst->FullName);
 		    }

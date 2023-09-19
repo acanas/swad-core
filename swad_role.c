@@ -109,19 +109,16 @@ void Rol_SetMyRoles (void)
      {
       /* Check if I am and administrator of current institution */
       ICanBeAdm[HieLvl_INS] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      HieLvl_INS,
-						      Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+						      HieLvl_INS);
       if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
 	{
 	 /* Check if I am and administrator of current center */
 	 ICanBeAdm[HieLvl_CTR] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							 HieLvl_CTR,
-							 Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+							 HieLvl_CTR);
 	 if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
 	    /* Check if I am and administrator of current degree */
 	    ICanBeAdm[HieLvl_DEG] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							    HieLvl_DEG,
-							    Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+							    HieLvl_DEG);
 	}
      }
 

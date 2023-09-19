@@ -2455,39 +2455,34 @@ void For_ShowThreadPosts (void)
 
 void For_GetParsForums (struct For_Forums *Forums)
   {
+   static HieLvl_Level_t Level[For_NUM_TYPES_FORUM] =
+     {
+      [For_FORUM_COURSE_USRS] = HieLvl_CRS,
+      [For_FORUM_COURSE_TCHS] = HieLvl_CRS,
+      [For_FORUM_DEGREE_USRS] = HieLvl_DEG,
+      [For_FORUM_DEGREE_TCHS] = HieLvl_DEG,
+      [For_FORUM_CENTER_USRS] = HieLvl_CTR,
+      [For_FORUM_CENTER_TCHS] = HieLvl_CTR,
+      [For_FORUM_INSTIT_USRS] = HieLvl_INS,
+      [For_FORUM_INSTIT_TCHS] = HieLvl_INS,
+      [For_FORUM_GLOBAL_USRS] = HieLvl_SYS,
+      [For_FORUM_GLOBAL_TCHS] = HieLvl_SYS,
+      [For_FORUM__SWAD__USRS] = HieLvl_SYS,
+      [For_FORUM__SWAD__TCHS] = HieLvl_SYS,
+      [For_FORUM_UNKNOWN    ] = HieLvl_SYS,
+     };
+
    /***** Set forum type *****/
    For_SetForumType (Forums);
 
    /***** Get parameter with code of institution, center, degree or course *****/
-   switch (Forums->Forum.Type)
+   if (Level[Forums->Forum.Type] == HieLvl_SYS)
+      Forums->Forum.HieCod = -1L;
+   else
      {
-      case For_FORUM_INSTIT_USRS:
-      case For_FORUM_INSTIT_TCHS:
-	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
-	    // If no institution specified ==> go to current institution forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
-         break;
-      case For_FORUM_CENTER_USRS:
-      case For_FORUM_CENTER_TCHS:
-	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
-	    // If no center specified ==> go to current center forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
-         break;
-      case For_FORUM_DEGREE_USRS:
-      case For_FORUM_DEGREE_TCHS:
-	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
-	    // If no degree specified ==> go to current degree forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
-         break;
-      case For_FORUM_COURSE_USRS:
-      case For_FORUM_COURSE_TCHS:
-	 if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
-	    // If no course specified ==> go to current course forum
-	    Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
-         break;
-      default:
-	 Forums->Forum.HieCod = -1L;
-         break;
+      if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
+	 // If no institution specified ==> go to current institution forum
+	 Forums->Forum.HieCod = Gbl.Hierarchy.Node[Level[Forums->Forum.Type]].Cod;
      }
 
    /***** Get which forums I want to see *****/

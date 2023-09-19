@@ -603,7 +603,8 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -1037,7 +1038,8 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 					                                    "SesCod",
 					                                    SesCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+				  Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 

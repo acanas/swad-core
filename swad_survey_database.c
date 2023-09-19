@@ -156,17 +156,8 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 	               "Title DESC",
      };
    unsigned NumSvys;
-   long Cods[HieLvl_NUM_LEVELS];
    HieLvl_Level_t Level;
    bool SubQueryFilled = false;
-
-   /***** Set hierarchy codes *****/
-   Cods[HieLvl_SYS] = -1L;			// System
-   Cods[HieLvl_CTY] = Gbl.Hierarchy.Node[HieLvl_CTY].Cod;	// Country
-   Cods[HieLvl_INS] = Gbl.Hierarchy.Node[HieLvl_INS].Cod;	// Institution
-   Cods[HieLvl_CTR] = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;	// Center
-   Cods[HieLvl_DEG] = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;	// Degree
-   Cods[HieLvl_CRS] = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;	// Course
 
    /***** Fill subqueries for system, country, institution, center and degree *****/
    for (Level  = HieLvl_SYS;
@@ -177,7 +168,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 	 if (asprintf (&SubQuery[Level],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Hie_GetDBStrFromLevel (Level),Cods[Level],
+		       Hie_GetDBStrFromLevel (Level),Gbl.Hierarchy.Node[Level].Cod,
 		       (HiddenAllowed & 1 << Level) ? "" :
 						      " AND Hidden='N'") < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -211,9 +202,9 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 						")",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Hie_GetDBStrFromLevel (HieLvl_CRS),Cods[HieLvl_CRS],
+		       Hie_GetDBStrFromLevel (HieLvl_CRS),Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		       (HiddenAllowed & 1 << HieLvl_CRS) ? "" :
-							      " AND Hidden='N'",
+							   " AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	    Err_NotEnoughMemoryExit ();
         }
@@ -222,9 +213,9 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
 	 if (asprintf (&SubQuery[HieLvl_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Hie_GetDBStrFromLevel (HieLvl_CRS),Cods[HieLvl_CRS],
+		       Hie_GetDBStrFromLevel (HieLvl_CRS),Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
 		       (HiddenAllowed & 1 << HieLvl_CRS) ? "" :
-							      " AND Hidden='N'") < 0)
+							   " AND Hidden='N'") < 0)
 	    Err_NotEnoughMemoryExit ();
         }
       SubQueryFilled = true;

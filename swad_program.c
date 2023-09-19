@@ -286,7 +286,8 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
      }
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_COURSE_program,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName) < 0)
+   if (asprintf (&Title,Txt_COURSE_program,
+		 Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin ("100%",Title,
                  FunctionToDrawContextualIcons[ListingType],NULL,

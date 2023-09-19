@@ -643,7 +643,7 @@ void Crs_WriteSelectorOfCourse (void)
       /***** Initial disabled option *****/
       HTM_OPTION (HTM_Type_STRING,"",
                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod < 0 ? HTM_OPTION_SELECTED :
-                			      HTM_OPTION_UNSELECTED,
+                					   HTM_OPTION_UNSELECTED,
                   HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Course);
 
@@ -666,7 +666,7 @@ void Crs_WriteSelectorOfCourse (void)
 	    HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 			CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod ? HTM_OPTION_SELECTED :
-							  HTM_OPTION_UNSELECTED,
+								       HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);	// Short name (row[1])
 	   }
@@ -807,7 +807,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			   CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod ? HTM_OPTION_SELECTED :
-							     HTM_OPTION_UNSELECTED,
+									  HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",CrsShortName);
 	      }
@@ -1043,7 +1043,8 @@ static void Crs_EditCoursesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName) < 0)
+   if (asprintf (&Title,Txt_Courses_of_DEGREE_X,
+		 Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Crs_PutIconsEditingCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
@@ -2385,7 +2386,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    ClassTxt = NumUsrs ? "DAT_STRONG" :
 	                "DAT";
    BgColor = (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod) ? "BG_HIGHLIGHT" :
-                                                    The_GetColorRows ();
+							      The_GetColorRows ();
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);

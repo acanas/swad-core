@@ -35,9 +35,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Adm_ReqAddAdmOfIns (void);
-void Adm_ReqAddAdmOfCtr (void);
-void Adm_ReqAddAdmOfDeg (void);
+void Adm_ReqAddAdm (HieLvl_Level_t Level);
 
 void Adm_AddAdmToIns (void);
 void Adm_AddAdmToCtr (void);

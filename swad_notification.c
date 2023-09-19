@@ -822,22 +822,22 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       if (CrsCod > 0)					// Course specified
 	{
 	 if (CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].Cod)	// Not the current course
-	    ParCod_PutPar (ParCod_Crs,CrsCod);		// Go to another course
+	    ParCod_PutPar (ParCod_Crs,CrsCod);			// Go to another course
 	}
       else if (DegCod > 0)				// Degree specified
 	{
 	 if (DegCod != Gbl.Hierarchy.Node[HieLvl_DEG].Cod)	// Not the current degree
-	    ParCod_PutPar (ParCod_Deg,DegCod);		// Go to another degree
+	    ParCod_PutPar (ParCod_Deg,DegCod);			// Go to another degree
 	}
       else if (CtrCod > 0)				// Center specified
 	{
 	 if (CtrCod != Gbl.Hierarchy.Node[HieLvl_CTR].Cod)	// Not the current center
-	    ParCod_PutPar (ParCod_Ctr,CtrCod);		// Go to another center
+	    ParCod_PutPar (ParCod_Ctr,CtrCod);			// Go to another center
 	}
       else if (InsCod > 0)				// Institution specified
 	{
 	 if (InsCod != Gbl.Hierarchy.Node[HieLvl_INS].Cod)	// Not the current institution
-	    ParCod_PutPar (ParCod_Ins,InsCod);		// Go to another institution
+	    ParCod_PutPar (ParCod_Ins,InsCod);			// Go to another institution
 	}
      }
 

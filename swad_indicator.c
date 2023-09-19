@@ -169,11 +169,11 @@ void Ind_ReqIndicatorsCourses (void)
 		                The_GetSuffix ()) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[HieLvl_INS].Cod,	// Departments in current insitution
-					       Indicators.DptCod,		// Selected department
-					       Par_CodeStr[ParCod_Dpt],		// Parameter name
-					       SelectClass,			// Selector class
-					       -1L,				// First option
-					       Txt_Any_department,		// Text when no department selected
+					       Indicators.DptCod,			// Selected department
+					       Par_CodeStr[ParCod_Dpt],			// Parameter name
+					       SelectClass,				// Selector class
+					       -1L,					// First option
+					       Txt_Any_department,			// Text when no department selected
 					       HTM_SUBMIT_ON_CHANGE);
 		  free (SelectClass);
 	       HTM_TD_End ();
