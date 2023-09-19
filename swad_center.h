@@ -57,7 +57,6 @@ void Ctr_GetBasicListOfCenters (long InsCod);
 void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder);
 bool Ctr_GetCenterDataByCod (struct Hie_Node *Ctr);
 void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord);
-void Ctr_FreeListCenters (void);
 void Ctr_WriteSelectorOfCenter (void);
 void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);

@@ -67,7 +67,6 @@ void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutParCtyOrder (void);
 void Cty_EditCountries (void);
 void Cty_GetBasicListOfCountries (void);
-void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod);
 bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Cty);

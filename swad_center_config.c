@@ -437,7 +437,8 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
    /***** Photo image *****/
    HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink)
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Gbl.Hierarchy.Node[HieLvl_CTR].WWW);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
+		      Gbl.Hierarchy.Node[HieLvl_CTR].WWW);
       if (asprintf (&URL,"%s/%02u/%u",
 		    Cfg_URL_CTR_PUBLIC,
 		    (unsigned) (Gbl.Hierarchy.Node[HieLvl_CTR].Cod % 100),
@@ -573,7 +574,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	    Frm_EndForm ();
 
 	    /* Free list of institutions */
-	    Ins_FreeListInstitutions ();
+	    Hie_FreeList (HieLvl_CTY);
 	   }
 	 else	// I can not move center to another institution
 	   {
@@ -769,7 +770,8 @@ static void CtrCfg_NumDegs (void)
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
-	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
+	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
+			  Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	    free (Title);
@@ -1002,7 +1004,8 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
    Par_GetParText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,NewPhotoAttribution);
+   Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+				     NewPhotoAttribution);
 
    /***** Show the center information again *****/
    CtrCfg_ShowConfiguration ();
@@ -1113,7 +1116,8 @@ void CtrCfg_ChangeCtrLatitude (void)
    NewLatitude = Map_GetLatitudeFromStr (LatitudeStr);
 
    /***** Update database changing old latitude by new latitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,"Latitude",NewLatitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       "Latitude",NewLatitude);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1133,7 +1137,8 @@ void CtrCfg_ChangeCtrLongitude (void)
    NewLongitude = Map_GetLongitudeFromStr (LongitudeStr);
 
    /***** Update database changing old longitude by new longitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,"Longitude",NewLongitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       "Longitude",NewLongitude);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1153,7 +1158,8 @@ void CtrCfg_ChangeCtrAltitude (void)
    NewAltitude = Map_GetAltitudeFromStr (AltitudeStr);
 
    /***** Update database changing old altitude by new altitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,"Altitude",NewAltitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       "Altitude",NewAltitude);
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();

@@ -930,6 +930,21 @@ Hie_Order_t Hie_GetParHieOrder (void)
   }
 
 /*****************************************************************************/
+/**************************** Free list of centers ***************************/
+/*****************************************************************************/
+
+void Hie_FreeList (HieLvl_Level_t Level)
+  {
+   if (Gbl.Hierarchy.List[Level].Lst)
+     {
+      /***** Free memory used by the list of child nodes *****/
+      free (Gbl.Hierarchy.List[Level].Lst);
+      Gbl.Hierarchy.List[Level].Lst = NULL;
+      Gbl.Hierarchy.List[Level].Num = 0;
+     }
+  }
+
+/*****************************************************************************/
 /*********            Get and show stats about hierarchy           ***********/
 /********* (countries, institutions, centers, degrees and courses) ***********/
 /*****************************************************************************/

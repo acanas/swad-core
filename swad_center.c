@@ -241,7 +241,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
    Ctr_ListCenters ();
 
    /***** Free list of centers *****/
-   Ctr_FreeListCenters ();
+   Hie_FreeList (HieLvl_INS);
   }
 
 /*****************************************************************************/
@@ -450,7 +450,7 @@ static void Ctr_EditCentersInternal (void)
    Box_BoxEnd ();
 
    /***** Free list of centers *****/
-   Ctr_FreeListCenters ();
+   Hie_FreeList (HieLvl_INS);
 
    /***** Free list of places *****/
    Plc_FreeListPlaces (&Places);
@@ -652,21 +652,6 @@ static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
    Coord->Latitude  = Map_GetLatitudeFromStr  (row[0]);
    Coord->Longitude = Map_GetLongitudeFromStr (row[1]);
    Coord->Altitude  = Map_GetAltitudeFromStr  (row[2]);
-  }
-
-/*****************************************************************************/
-/**************************** Free list of centers ***************************/
-/*****************************************************************************/
-
-void Ctr_FreeListCenters (void)
-  {
-   if (Gbl.Hierarchy.List[HieLvl_INS].Lst)
-     {
-      /***** Free memory used by the list of courses in degree *****/
-      free (Gbl.Hierarchy.List[HieLvl_INS].Lst);
-      Gbl.Hierarchy.List[HieLvl_INS].Lst = NULL;
-      Gbl.Hierarchy.List[HieLvl_INS].Num = 0;
-     }
   }
 
 /*****************************************************************************/

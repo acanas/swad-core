@@ -231,7 +231,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	    Frm_EndForm ();
 
 	    /* Free list of centers */
-	    Ctr_FreeListCenters ();
+	    Hie_FreeList (HieLvl_INS);
 	   }
 	 else	// I can not move degree to another center
 	   {

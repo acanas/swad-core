@@ -280,7 +280,7 @@ void Ins_ShowInssOfCurrentCty (void)
       Ins_ListInstitutions ();
 
       /***** Free list of institutions *****/
-      Ins_FreeListInstitutions ();
+      Hie_FreeList (HieLvl_CTY);
      }
   }
 
@@ -542,7 +542,7 @@ static void Ins_EditInstitutionsInternal (void)
    Box_BoxEnd ();
 
    /***** Free list of institutions *****/
-   Ins_FreeListInstitutions ();
+   Hie_FreeList (HieLvl_CTY);
   }
 
 /*****************************************************************************/
@@ -792,21 +792,6 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
 	     sizeof (Ins->ShrtName) - 1);
    Str_Copy (CtyName      ,Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,
 	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
-  }
-
-/*****************************************************************************/
-/************************* Free list of institutions *************************/
-/*****************************************************************************/
-
-void Ins_FreeListInstitutions (void)
-  {
-   if (Gbl.Hierarchy.List[HieLvl_CTY].Lst)
-     {
-      /***** Free memory used by the list of institutions *****/
-      free (Gbl.Hierarchy.List[HieLvl_CTY].Lst);
-      Gbl.Hierarchy.List[HieLvl_CTY].Num = 0;
-      Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
-     }
   }
 
 /*****************************************************************************/

@@ -711,7 +711,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
    Crs_ListCourses ();
 
    /***** Free list of courses in this degree *****/
-   Crs_FreeListCoursesInCurrentDegree ();
+   Hie_FreeList (HieLvl_DEG);
   }
 
 /*****************************************************************************/
@@ -744,20 +744,6 @@ static void Crs_GetListCrssInCurrentDeg (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********************* Free list of courses in this degree *******************/
-/*****************************************************************************/
-
-void Crs_FreeListCoursesInCurrentDegree (void)
-  {
-   if (Gbl.Hierarchy.List[HieLvl_DEG].Lst)
-     {
-      /***** Free memory used by the list of courses in degree *****/
-      free (Gbl.Hierarchy.List[HieLvl_DEG].Lst);
-      Gbl.Hierarchy.List[HieLvl_DEG].Lst = NULL;
-     }
   }
 
 /*****************************************************************************/
@@ -1070,10 +1056,10 @@ static void Crs_EditCoursesInternal (void)
    Box_BoxEnd ();
 
    /***** Free list of courses in this degree *****/
-   Crs_FreeListCoursesInCurrentDegree ();
+   Hie_FreeList (HieLvl_DEG);
 
    /***** Free list of degrees in this center *****/
-   Deg_FreeListDegs (&Gbl.Hierarchy.List[HieLvl_CTR]);
+   Hie_FreeList (HieLvl_CTR);
   }
 
 /*****************************************************************************/

@@ -62,6 +62,8 @@ void Hie_PutParOtherHieCod (void *HieCod);
 
 Hie_Order_t Hie_GetParHieOrder (void);
 
+void Hie_FreeList (HieLvl_Level_t Level);
+
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);
 

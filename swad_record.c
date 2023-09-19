@@ -3859,7 +3859,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
 	       /* Get list of institutions in this country */
-	       Ins_FreeListInstitutions ();
+	       Hie_FreeList (HieLvl_CTY);
 	       if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
 		  Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
 
@@ -3911,7 +3911,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
 		  /* Get list of centers in this institution */
-		  Ctr_FreeListCenters ();
+		  Hie_FreeList (HieLvl_INS);
 		  if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
 		     Ctr_GetBasicListOfCenters (Gbl.Usrs.Me.UsrDat.InsCod);
 

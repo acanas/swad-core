@@ -2070,7 +2070,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       HTM_DIV_End ();
 
       /***** Free list of all degrees with students *****/
-      Deg_FreeListDegs (&Degs);
+      Deg_FreeListAllDegsWithStds (&Degs);
      }
   }
 

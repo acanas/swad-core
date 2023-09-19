@@ -335,7 +335,7 @@ void Cty_ListCountries2 (void)
      }
 
    /***** Free list of countries *****/
-   Cty_FreeListCountries ();
+   Hie_FreeList (HieLvl_SYS);
   }
 
 /*****************************************************************************/
@@ -695,7 +695,7 @@ static void Cty_EditCountriesInternal (void)
    Box_BoxEnd ();
 
    /***** Free list of countries *****/
-   Cty_FreeListCountries ();
+   Hie_FreeList (HieLvl_SYS);
   }
 
 /*****************************************************************************/
@@ -1026,21 +1026,6 @@ void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
    Gbl.Cache.CountryName.CtyCod   = CtyCod;
    Gbl.Cache.CountryName.Language = Language;
    Str_Copy (Gbl.Cache.CountryName.CtyName,CtyName,Cty_MAX_BYTES_NAME);
-  }
-
-/*****************************************************************************/
-/*************************** Free list of countries **************************/
-/*****************************************************************************/
-
-void Cty_FreeListCountries (void)
-  {
-   if (Gbl.Hierarchy.List[HieLvl_SYS].Lst)
-     {
-      /***** Free memory used by the list of courses in institution *****/
-      free (Gbl.Hierarchy.List[HieLvl_SYS].Lst);
-      Gbl.Hierarchy.List[HieLvl_SYS].Lst = NULL;
-      Gbl.Hierarchy.List[HieLvl_SYS].Num = 0;
-     }
   }
 
 /*****************************************************************************/

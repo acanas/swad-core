@@ -338,7 +338,7 @@ static void Dpt_EditDepartmentsInternal (void)
    Dpt_FreeListDepartments (&Departments);
 
    /***** Free list of institutions *****/
-   Ins_FreeListInstitutions ();
+   Hie_FreeList (HieLvl_CTY);
   }
 
 /*****************************************************************************/

@@ -306,8 +306,8 @@ void Deg_ShowDegsOfCurrentCtr (void)
    Deg_ListDegrees ();
 
    /***** Free list of degrees and centers *****/
-   Deg_FreeListDegs (&Gbl.Hierarchy.List[HieLvl_CTR]);
-   Ctr_FreeListCenters ();
+   Hie_FreeList (HieLvl_CTR);
+   Hie_FreeList (HieLvl_INS);
   }
 
 /*****************************************************************************/
@@ -1027,7 +1027,7 @@ void Deg_GetListDegsInCurrentCtr (void)
 /*************************** Free list of degrees ****************************/
 /*****************************************************************************/
 
-void Deg_FreeListDegs (struct Hie_List *Degs)
+void Deg_FreeListAllDegsWithStds (struct Hie_List *Degs)
   {
    if (Degs->Lst)
      {

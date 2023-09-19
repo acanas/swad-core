@@ -64,7 +64,7 @@ void Deg_PutIconToViewDegrees (void);
 
 void Deg_GetListAllDegsWithStds (struct Hie_List *Degs);
 void Deg_GetListDegsInCurrentCtr (void);
-void Deg_FreeListDegs (struct Hie_List *Degs);
+void Deg_FreeListAllDegsWithStds (struct Hie_List *Degs);
 
 void Deg_ReceiveFormReqDeg (void);
 void Deg_ReceiveFormNewDeg (void);

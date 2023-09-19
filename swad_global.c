@@ -278,11 +278,11 @@ void Gbl_Cleanup (void)
    Rec_FreeListFields ();
    Grp_FreeListGrpTypesAndGrps ();
    Grp_FreeListCodSelectedGrps ();
-   Crs_FreeListCoursesInCurrentDegree ();
-   Deg_FreeListDegs (&Gbl.Hierarchy.List[HieLvl_CTR]);
-   Ins_FreeListInstitutions ();
-   Ctr_FreeListCenters ();
-   Cty_FreeListCountries ();
+   Hie_FreeList (HieLvl_DEG);
+   Hie_FreeList (HieLvl_CTR);
+   Hie_FreeList (HieLvl_INS);
+   Hie_FreeList (HieLvl_CTY);
+   Hie_FreeList (HieLvl_SYS);
 
    for (Role  = (Rol_Role_t) 0;
 	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);

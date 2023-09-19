@@ -1109,7 +1109,8 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 					                                    "AttCod",
 					                                    AttCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+				  Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -1335,8 +1336,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",
-	           Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+	           Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 
    /***** End container *****/
    HTM_DIV_End ();

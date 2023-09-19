@@ -236,7 +236,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	    Frm_EndForm ();
 
 	    /* Free list of degrees of the current center */
-	    Deg_FreeListDegs (&Gbl.Hierarchy.List[HieLvl_CTR]);
+	    Hie_FreeList (HieLvl_CTR);
 	   }
 	 else	// I can not move course to another degree
 	   {

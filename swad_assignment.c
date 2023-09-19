@@ -1293,7 +1293,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 					                                    "AsgCod",
 					                                    AsgCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+			          Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -1572,7 +1573,8 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	      }
 	   }
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+	           Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 
    HTM_DIV_End ();
 
