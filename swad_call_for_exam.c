@@ -877,7 +877,6 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_minute;
    extern const char *Txt_minutes;
    extern const char *Txt_Publish_call_FOR_EXAM;
-   struct Hie_Node Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
    unsigned CurrentYear = Dat_GetCurrentYear ();
    unsigned Year;
@@ -901,10 +900,6 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
       [Cfe_FORM_VIEW  ][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
       [Cfe_FORM_VIEW  ][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
      };
-
-   /***** Get data of institution of this degree *****/
-   Ins.Cod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
-   Ins_GetInstitDataByCod (&Ins);
 
    /***** Build anchor string *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
@@ -955,13 +950,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
-			       Ins.WWW,The_GetSuffix ());
+			       Gbl.Hierarchy.Node[HieLvl_INS].WWW,The_GetSuffix ());
 	       Lgo_DrawLogo (HieLvl_INS,
-			     Ins.Cod,
-			     Ins.FullName,
+			     Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			     Gbl.Hierarchy.Node[HieLvl_INS].FullName,
 			     64,NULL);
 	       HTM_BR ();
-	       HTM_Txt (Ins.FullName);
+	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_INS].FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_End ();
 	    HTM_TD_End ();
