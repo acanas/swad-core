@@ -56,7 +56,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Hie_DrawLogo (const char *ShrtText);
+static void Hie_DrawLogo (void);
 
 static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status);
 static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt);
@@ -427,24 +427,6 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       [HieLvl_DEG] = TabDeg,
       [HieLvl_CRS] = TabCrs,
      };
-   const char *FullText[HieLvl_NUM_LEVELS] =
-     {
-      [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
-      [HieLvl_INS] = Gbl.Hierarchy.Node[HieLvl_INS].FullName,
-      [HieLvl_CTR] = Gbl.Hierarchy.Node[HieLvl_CTR].FullName,
-      [HieLvl_DEG] = Gbl.Hierarchy.Node[HieLvl_DEG].FullName,
-      [HieLvl_CRS] = Gbl.Hierarchy.Node[HieLvl_CRS].FullName,
-     };
-   const char *ShrtText[HieLvl_NUM_LEVELS] =
-     {
-      [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
-      [HieLvl_INS] = Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,
-      [HieLvl_CTR] = Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
-      [HieLvl_DEG] = Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
-      [HieLvl_CRS] = Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName,
-     };
 
    HTM_TxtF ("<h1 id=\"main_title\" class=\"MAIN_TITLE_%s\">",
 	     The_GetSuffix ());
@@ -454,17 +436,17 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 
 	 Frm_BeginForm (ActMnu);
 	    Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NextTab[Gbl.Hierarchy.Level]);
-	    HTM_BUTTON_Submit_Begin (ShrtText[Gbl.Hierarchy.Level],
+	    HTM_BUTTON_Submit_Begin (Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName,
 				     "class=\"BT_LINK ICO_HIGHLIGHT\"");
 
 	       HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
-		     Hie_DrawLogo (ShrtText[Gbl.Hierarchy.Level]);
-		     HTM_Txt (FullText[Gbl.Hierarchy.Level]);
+		     Hie_DrawLogo ();
+		     HTM_Txt (Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].FullName);
 	       HTM_DIV_End ();
 
 	       HTM_DIV_Begin ("id=\"big_short_name\"");	// Short name
-		     Hie_DrawLogo (ShrtText[Gbl.Hierarchy.Level]);
-		     HTM_Txt (ShrtText[Gbl.Hierarchy.Level]);
+		     Hie_DrawLogo ();
+		     HTM_Txt (Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName);
 	       HTM_DIV_End ();
 
 	    HTM_BUTTON_End ();
@@ -479,7 +461,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 /********************** Draw logo in the top of the page *********************/
 /*****************************************************************************/
 
-static void Hie_DrawLogo (const char *ShrtText)
+static void Hie_DrawLogo (void)
   {
    static HieLvl_Level_t LogoScope[HieLvl_NUM_LEVELS] =
      {
@@ -493,14 +475,15 @@ static void Hie_DrawLogo (const char *ShrtText)
       [HieLvl_INS] = &Gbl.Hierarchy.Node[HieLvl_INS].Cod,
       [HieLvl_CTR] = &Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
       [HieLvl_DEG] = &Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-      [HieLvl_CRS] = &Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+      [HieLvl_CRS] = &Gbl.Hierarchy.Node[HieLvl_DEG].Cod,	// Degree code
      };
 
    /***** Logo *****/
    switch (Gbl.Hierarchy.Level)
      {
       case HieLvl_SYS:	// System
-	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,ShrtText,"TOP_LOGO");
+	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,
+		      Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName,"TOP_LOGO");
 	 break;
       case HieLvl_CTY:	// Country
 	 Cty_DrawCountryMap (&Gbl.Hierarchy.Node[HieLvl_CTY],"TOP_LOGO");
@@ -508,7 +491,7 @@ static void Hie_DrawLogo (const char *ShrtText)
       default:
 	 Lgo_DrawLogo (LogoScope[Gbl.Hierarchy.Level],
 		       *LogoCode[Gbl.Hierarchy.Level],
-		       ShrtText,
+		       Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName,
 		       40,"TOP_LOGO");
 	 break;
      }
@@ -580,37 +563,45 @@ void Hie_InitHierarchy (void)
       if (!Cty_GetBasicCountryDataByCod (&Gbl.Hierarchy.Node[HieLvl_CTY]))		// Country not found
          Hie_ResetHierarchy ();
 
+   /***** Set system data *****/
+   Str_Copy (Gbl.Hierarchy.Node[HieLvl_SYS].ShrtName,Cfg_PLATFORM_SHORT_NAME,
+	     sizeof (Gbl.Hierarchy.Node[HieLvl_SYS].ShrtName) - 1);
+   Str_Copy (Gbl.Hierarchy.Node[HieLvl_SYS].FullName,Cfg_PLATFORM_FULL_NAME ,
+	     sizeof (Gbl.Hierarchy.Node[HieLvl_SYS].FullName) - 1);
+   Str_Copy (Gbl.Hierarchy.Node[HieLvl_SYS].WWW     ,Cfg_URL_SWAD_PUBLIC    ,
+	     sizeof (Gbl.Hierarchy.Node[HieLvl_SYS].WWW     ) - 1);
+
    /***** Set current hierarchy level and code
           depending on course code, degree code, etc. *****/
    if      (Gbl.Hierarchy.Node[HieLvl_CRS].Cod > 0)	// Course selected
      {
       Gbl.Hierarchy.Level = HieLvl_CRS;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
+      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)	// Degree selected
      {
       Gbl.Hierarchy.Level = HieLvl_DEG;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
+      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)	// Center selected
      {
       Gbl.Hierarchy.Level = HieLvl_CTR;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
+      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)	// Institution selected
      {
       Gbl.Hierarchy.Level = HieLvl_INS;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
+      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)	// Country selected
      {
       Gbl.Hierarchy.Level = HieLvl_CTY;
-      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Node[HieLvl_CTY].Cod;
+      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Node[HieLvl_CTY].Cod;
      }
    else
      {
       Gbl.Hierarchy.Level = HieLvl_SYS;
-      Gbl.Hierarchy.Cod = -1L;
+      Gbl.Hierarchy.Cod   = -1L;
      }
 
    /***** Initialize paths *****/

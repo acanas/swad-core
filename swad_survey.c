@@ -397,6 +397,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_Scope;
+   extern const char *Txt_System;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Center;
@@ -410,6 +411,15 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   static const char **TxtScope[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_SYS] = &Txt_System,
+      [HieLvl_CTY] = &Txt_Country,
+      [HieLvl_INS] = &Txt_Institution,
+      [HieLvl_CTR] = &Txt_Center,
+      [HieLvl_DEG] = &Txt_Degree,
+      [HieLvl_CRS] = &Txt_Course,
+     };
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -418,6 +428,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /***** Get data of this survey *****/
    Svy_GetSurveyDataByCod (&Surveys->Svy);
+   if (Surveys->Svy.Level == HieLvl_UNK)
+      Err_WrongHierarchyLevelExit ();
 
    /***** Begin box *****/
    if (ShowOnlyThisSvyComplete)
@@ -596,30 +608,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     HidVis_GroupClass[Surveys->Svy.Status.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Scope);
-	 switch (Surveys->Svy.Level)
-	   {
-	    case HieLvl_UNK:	// Unknown
-	       Err_WrongHierarchyLevelExit ();
-	       break;
-	    case HieLvl_SYS:	// System
-	       HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
-	       break;
-	    case HieLvl_CTY:	// Country
-	       HTM_TxtF ("%s&nbsp;%s",Txt_Country,Gbl.Hierarchy.Node[HieLvl_CTY].FullName);
-	       break;
-	    case HieLvl_INS:	// Institution
-	       HTM_TxtF ("%s&nbsp;%s",Txt_Institution,Gbl.Hierarchy.Node[HieLvl_INS].ShrtName);
-	       break;
-	    case HieLvl_CTR:	// Center
-	       HTM_TxtF ("%s&nbsp;%s",Txt_Center,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName);
-	       break;
-	    case HieLvl_DEG:	// Degree
-	       HTM_TxtF ("%s&nbsp;%s",Txt_Degree,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
-	       break;
-	    case HieLvl_CRS:	// Course
-	       HTM_TxtF ("%s&nbsp;%s",Txt_Course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
-	       break;
-	   }
+	 HTM_TxtF ("%s&nbsp;%s",*TxtScope[Surveys->Svy.Level],
+		   Gbl.Hierarchy.Node[Surveys->Svy.Level].ShrtName);
       HTM_DIV_End ();
 
       /* Users' roles who can answer the survey */

@@ -29735,29 +29735,6 @@ const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_Platform =
-#if   L==1	// ca
-	"Plataforma";
-#elif L==2	// de
-	"Plattform";
-#elif L==3	// en
-	"Platform";
-#elif L==4	// es
-	"Plataforma";
-#elif L==5	// fr
-	"Plate-forme";
-#elif L==6	// gn
-	"Plataforma";	// Okoteve traducción
-#elif L==7	// it
-	"Piattaforma";
-#elif L==8	// pl
-	"Platforma";
-#elif L==9	// pt
-	"Plataforma";
-#elif L==10	// tr
-	"Platformu";
-#endif
-
 const char *Txt_Play =	// To play a game match
 #if   L==1	// ca
 	"Jugar";
@@ -45722,7 +45699,30 @@ const char *Txt_System =
 #elif L==10	// tr
 	"Platformu";
 #endif
-
+/*
+const char *Txt_Platform =
+#if   L==1	// ca
+	"Plataforma";
+#elif L==2	// de
+	"Plattform";
+#elif L==3	// en
+	"Platform";
+#elif L==4	// es
+	"Plataforma";
+#elif L==5	// fr
+	"Plate-forme";
+#elif L==6	// gn
+	"Plataforma";	// Okoteve traducción
+#elif L==7	// it
+	"Piattaforma";
+#elif L==8	// pl
+	"Platforma";
+#elif L==9	// pt
+	"Plataforma";
+#elif L==10	// tr
+	"Platformu";
+#endif
+*/
 const char *Txt_TABLE_Footer =
 #if   L==1	// ca
 	"Peu";

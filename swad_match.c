@@ -696,7 +696,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -1308,7 +1309,8 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 					                                    "MchCod",
 					                                    MchCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+				  Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 

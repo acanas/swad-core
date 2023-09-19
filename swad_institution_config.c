@@ -378,7 +378,8 @@ static void InsCfg_FullName (bool PutForm)
 
 static void InsCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenInsShoCfg,Gbl.Hierarchy.Node[HieLvl_INS].ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenInsShoCfg,
+		    Gbl.Hierarchy.Node[HieLvl_INS].ShrtName);
   }
 
 /*****************************************************************************/
@@ -387,7 +388,8 @@ static void InsCfg_ShrtName (bool PutForm)
 
 static void InsCfg_WWW (bool PrintView,bool PutForm)
   {
-   HieCfg_WWW (PrintView,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Node[HieLvl_INS].WWW);
+   HieCfg_WWW (PrintView,PutForm,ActChgInsWWWCfg,
+	       Gbl.Hierarchy.Node[HieLvl_INS].WWW);
   }
 
 /*****************************************************************************/
@@ -556,7 +558,7 @@ void InsCfg_ChangeInsCty (void)
 	 /***** Update the table changing the country of the institution *****/
 	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Node[HieLvl_INS].Cod,NewCty.Cod);
          Gbl.Hierarchy.Node[HieLvl_INS].PrtCod =
-         Gbl.Hierarchy.Node[HieLvl_CTY].Cod = NewCty.Cod;
+         Gbl.Hierarchy.Node[HieLvl_CTY].Cod    = NewCty.Cod;
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
@@ -603,7 +605,8 @@ void InsCfg_ChangeInsWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ins_DB_UpdateInsWWW (Gbl.Hierarchy.Node[HieLvl_INS].Cod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Node[HieLvl_INS].WWW,NewWWW,sizeof (Gbl.Hierarchy.Node[HieLvl_INS].WWW) - 1);
+      Str_Copy (Gbl.Hierarchy.Node[HieLvl_INS].WWW,NewWWW,
+	        sizeof (Gbl.Hierarchy.Node[HieLvl_INS].WWW) - 1);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,

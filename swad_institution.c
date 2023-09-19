@@ -1512,14 +1512,10 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
    /* Set institution country */
    Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[HieLvl_CTY].Cod;
 
-   /* Get institution short name */
+   /* Get institution short name, full name and WWW */
    Par_GetParText ("ShortName",Ins_EditingIns->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-
-   /* Get institution full name */
-   Par_GetParText ("FullName",Ins_EditingIns->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
-
-   /* Get institution WWW */
-   Par_GetParText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("FullName" ,Ins_EditingIns->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("WWW"      ,Ins_EditingIns->WWW     ,Cns_MAX_BYTES_WWW);
 
    if (Ins_EditingIns->ShrtName[0] &&
        Ins_EditingIns->FullName[0])	// If there's a institution name

@@ -64,15 +64,6 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
       [HieLvl_DEG] = &Txt_Degree,
       [HieLvl_CRS] = &Txt_Course,
      };
-   const char *TxtName[HieLvl_NUM_LEVELS] =
-     {
-      [HieLvl_SYS] = Cfg_PLATFORM_SHORT_NAME,
-      [HieLvl_CTY] = Gbl.Hierarchy.Node[HieLvl_CTY].FullName,
-      [HieLvl_INS] = Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,
-      [HieLvl_CTR] = Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,
-      [HieLvl_DEG] = Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
-      [HieLvl_CRS] = Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName,
-     };
 
    HTM_SELECT_Begin (SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\" class=\"INPUT_%s\"",
@@ -123,7 +114,8 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 							HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s: %s",
-			   *TxtScope[Level],TxtName[Level]);
+			   *TxtScope[Level],
+			   Gbl.Hierarchy.Node[Level].ShrtName);
 	      }
 	   }
 

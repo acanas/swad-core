@@ -455,8 +455,7 @@ static void Lay_WritePageTitle (void)
 	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
 	}
       else
-	 HTM_TxtF ("%s: %s",
-	           Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
+	 HTM_TxtF ("%s: %s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
 
    HTM_TITLE_End ();
   }

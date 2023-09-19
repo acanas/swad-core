@@ -148,7 +148,8 @@ void Dpt_SeeAllDepts (void)
    Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[HieLvl_INS].Cod);
 
    /***** Begin box and table *****/
-   if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
+   if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
+		 Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxTableBegin (NULL,Title,
 		      Dpt_PutIconToEditDpts,NULL,
@@ -317,7 +318,8 @@ static void Dpt_EditDepartmentsInternal (void)
    Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[HieLvl_INS].Cod);
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
+   if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
+		 Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,
                  Dpt_PutIconToViewDpts,NULL,
@@ -522,7 +524,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 			InsInLst = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&InsInLst->Cod,
 				    InsInLst->Cod == DptInLst->InsCod ? HTM_OPTION_SELECTED :
-									   HTM_OPTION_UNSELECTED,
+									HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",InsInLst->ShrtName);
 		       }
@@ -850,7 +852,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 		  InsInLst = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
 		  HTM_OPTION (HTM_Type_LONG,&InsInLst->Cod,
 			     InsInLst->Cod == Dpt_EditingDpt->InsCod ? HTM_OPTION_SELECTED :
-									  HTM_OPTION_UNSELECTED,
+								       HTM_OPTION_UNSELECTED,
 			     HTM_OPTION_ENABLED,
 			      "%s",InsInLst->ShrtName);
 		 }

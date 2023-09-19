@@ -1405,9 +1405,9 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 		  OptionsShown = true;
 		 }
 
-	     /***** Remove user as an administrator of the center *****/
-	     if (UsrIsCtrAdmin &&
-		 (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
+	    /***** Remove user as an administrator of the center *****/
+	    if (UsrIsCtrAdmin &&
+		(MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
 	      {
 	       Enr_PutActionRemUsrAsCtrAdm (&OptionChecked,MeOrOther);
 	       OptionsShown = true;
@@ -1456,7 +1456,8 @@ static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
      };
 
    Enr_RegRemOneUsrActionBegin (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,OptionChecked);
-      HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther],Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+      HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther],
+		Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
 
@@ -1957,12 +1958,13 @@ void Enr_AskIfRejectSignUp (void)
         {
          /* User already belongs to this course */
          Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+                        Gbl.Usrs.Other.UsrDat.FullName,
+                        Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
          /* Remove inscription request because it has not sense */
          Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-                                     Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+					  Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
         }
       else        // User does not belong to this course
         {

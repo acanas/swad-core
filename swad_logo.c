@@ -44,6 +44,17 @@
 #include "swad_theme.h"
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+static const char *Lgo_Folder[HieLvl_NUM_LEVELS] =
+  {
+   [HieLvl_INS] = Cfg_FOLDER_INS,
+   [HieLvl_CTR] = Cfg_FOLDER_CTR,
+   [HieLvl_DEG] = Cfg_FOLDER_DEG,
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -214,53 +225,36 @@ void Lgo_RequestLogo (HieLvl_Level_t Level)
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
-   long Cod;
-   const char *Folder;
-   Act_Action_t ActionRec;
-   void (*FunctionToDrawContextualIcons) (void *Args);
-   char PathLogo[PATH_MAX + 1];
-
-   /***** Set action depending on scope *****/
-   switch (Level)
+   static Act_Action_t ActionRec[HieLvl_NUM_LEVELS] =
      {
-      case HieLvl_INS:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
-	 Folder = Cfg_FOLDER_INS;
-	 ActionRec = ActRecInsLog;
-	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoIns;
-	 break;
-      case HieLvl_CTR:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
-	 Folder = Cfg_FOLDER_CTR;
-	 ActionRec = ActRecCtrLog;
-	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoCtr;
-	 break;
-      case HieLvl_DEG:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
-	 Folder = Cfg_FOLDER_DEG;
-	 ActionRec = ActRecDegLog;
-	 FunctionToDrawContextualIcons = Lgo_PutIconToRemoveLogoDeg;
-	 break;
-      default:
-	 return;	// Nothing to do
-     }
+      [HieLvl_INS] = ActRecInsLog,
+      [HieLvl_CTR] = ActRecCtrLog,
+      [HieLvl_DEG] = ActRecDegLog,
+     };
+   static void (*FunctionToDrawContextualIcons[HieLvl_NUM_LEVELS]) (void *Args) =
+     {
+      [HieLvl_INS] = Lgo_PutIconToRemoveLogoIns,
+      [HieLvl_CTR] = Lgo_PutIconToRemoveLogoCtr,
+      [HieLvl_DEG] = Lgo_PutIconToRemoveLogoDeg,
+     };
+   long Cod = Gbl.Hierarchy.Node[Level].Cod;
+   char PathLogo[PATH_MAX + 1];
 
    /***** Check if logo exists *****/
    snprintf (PathLogo,sizeof (PathLogo),"%s/%s/%02u/%u/logo/%u.png",
-	     Cfg_PATH_SWAD_PUBLIC,Folder,
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
 	     (unsigned) (Cod % 100),
 	     (unsigned)  Cod,
 	     (unsigned)  Cod);
-   if (!Fil_CheckIfPathExists (PathLogo))
-      FunctionToDrawContextualIcons = NULL;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Logo,
-                 FunctionToDrawContextualIcons,NULL,
+	         Fil_CheckIfPathExists (PathLogo) ? FunctionToDrawContextualIcons[Level] :
+						    NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to upload logo *****/
-      Frm_BeginForm (ActionRec);
+      Frm_BeginForm (ActionRec[Level]);
 
 	 /***** Write help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
@@ -314,8 +308,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
 void Lgo_ReceiveLogo (HieLvl_Level_t Level)
   {
    extern const char *Txt_The_file_is_not_X;
-   long Cod;
-   const char *Folder;
+   long Cod = Gbl.Hierarchy.Node[Level].Cod;
    char Path[PATH_MAX + 1];
    struct Par_Param *Par;
    char FileNameLogoSrc[PATH_MAX + 1];
@@ -323,36 +316,21 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Level)
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
    bool WrongType = false;
 
-   /***** Set variables depending on scope *****/
-   switch (Level)
-     {
-      case HieLvl_INS:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
-	 Folder = Cfg_FOLDER_INS;
-	 break;
-      case HieLvl_CTR:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
-	 Folder = Cfg_FOLDER_CTR;
-	 break;
-      case HieLvl_DEG:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
-	 Folder = Cfg_FOLDER_DEG;
-	 break;
-      default:
-	 return;	// Nothing to do
-     }
-
    /***** Creates directories if not exist *****/
-   snprintf (Path,sizeof (Path),"%s/%s",Cfg_PATH_SWAD_PUBLIC,Folder);
+   snprintf (Path,sizeof (Path),"%s/%s",
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level]);
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),"%s/%s/%02u",Cfg_PATH_SWAD_PUBLIC,Folder,
+   snprintf (Path,sizeof (Path),"%s/%s/%02u",
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
 	     (unsigned) (Cod % 100));
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u",Cfg_PATH_SWAD_PUBLIC,Folder,
+   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u",
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
 	     (unsigned) (Cod % 100),
 	     (unsigned)  Cod);
    Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u/logo",Cfg_PATH_SWAD_PUBLIC,Folder,
+   snprintf (Path,sizeof (Path),"%s/%s/%02u/%u/logo",
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
 	     (unsigned) (Cod % 100),
 	     (unsigned)  Cod);
    Fil_CreateDirIfNotExists (Path);
@@ -375,7 +353,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Level)
      {
       /* End the reception of logo in a temporary file */
       snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
-	        Cfg_PATH_SWAD_PUBLIC,Folder,
+	        Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
 	        (unsigned) (Cod % 100),
 	        (unsigned)  Cod,
 	        (unsigned)  Cod);
@@ -390,32 +368,12 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Level)
 
 void Lgo_RemoveLogo (HieLvl_Level_t Level)
   {
-   long Cod;
-   const char *Folder;
+   long Cod = Gbl.Hierarchy.Node[Level].Cod;
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
-
-   /***** Set variables depending on scope *****/
-   switch (Level)
-     {
-      case HieLvl_INS:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
-	 Folder = Cfg_FOLDER_INS;
-	 break;
-      case HieLvl_CTR:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
-	 Folder = Cfg_FOLDER_CTR;
-	 break;
-      case HieLvl_DEG:
-	 Cod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
-	 Folder = Cfg_FOLDER_DEG;
-	 break;
-      default:
-	 return;	// Nothing to do
-     }
 
    /***** Remove logo *****/
    snprintf (FileNameLogo,sizeof (FileNameLogo),"%s/%s/%02u/%u/logo/%u.png",
-	     Cfg_PATH_SWAD_PUBLIC,Folder,
+	     Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[Level],
 	     (unsigned) (Cod % 100),
 	     (unsigned)  Cod,
 	     (unsigned)  Cod);

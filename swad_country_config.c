@@ -366,13 +366,13 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
 
 static void CtyCfg_Platform (bool PrintView)
   {
-   extern const char *Txt_Platform;
+   extern const char *Txt_System;
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Platform);
+      Frm_LabelColumn ("RT",NULL,Txt_System);
 
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());

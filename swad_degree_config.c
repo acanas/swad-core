@@ -364,11 +364,17 @@ void DegCfg_ChangeDegCtr (void)
       Ctr_GetCenterDataByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new center *****/
-      if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,NewCtr.Cod))
+      if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",
+					    Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
+					    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+					    NewCtr.Cod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
 		          Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
-      else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",Gbl.Hierarchy.Node[HieLvl_DEG].FullName,Gbl.Hierarchy.Node[HieLvl_DEG].Cod,NewCtr.Cod))
+      else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",
+						 Gbl.Hierarchy.Node[HieLvl_DEG].FullName,
+						 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+						 NewCtr.Cod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
 		          Gbl.Hierarchy.Node[HieLvl_DEG].FullName);

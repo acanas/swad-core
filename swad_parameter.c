@@ -719,13 +719,6 @@ void Par_GetMainPars (void)
    char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
-   /***** Reset codes of country, institution, center, degree and course *****/
-   Gbl.Hierarchy.Node[HieLvl_CTY].Cod =
-   Gbl.Hierarchy.Node[HieLvl_INS].Cod =
-   Gbl.Hierarchy.Node[HieLvl_CTR].Cod =
-   Gbl.Hierarchy.Node[HieLvl_DEG].Cod =
-   Gbl.Hierarchy.Node[HieLvl_CRS].Cod = -1L;
-
    // First of all, get action, and session identifier.
    // So, if other parameters have been stored in the database, there will be no problems to get them.
 

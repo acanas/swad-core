@@ -407,7 +407,7 @@ static void Rep_WriteHeader (const struct Rep_Report *Report)
    /***** Begin header *****/
    fprintf (Rep_File,"<header>"
                      "<h1>");
-   fprintf (Rep_File,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
+      fprintf (Rep_File,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
    fprintf (Rep_File,"</h1>"
                      "<ul>");
 

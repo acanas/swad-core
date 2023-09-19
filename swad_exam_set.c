@@ -1531,7 +1531,8 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
    QstCod = ParCod_GetAndCheckPar (ParCod_Qst);
 
    /***** Validate/unvalidate question *****/
-   Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+   Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,
+			     Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
                              Validity);
 
    /***** Show current exam and its sets *****/

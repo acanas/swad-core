@@ -257,18 +257,18 @@ static void SysCfg_Map (void)
 
 static void SysCfg_Platform (void)
   {
-   extern const char *Txt_Platform;
+   extern const char *Txt_System;
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Platform);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_System);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-   HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }

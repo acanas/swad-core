@@ -202,7 +202,8 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 	 snprintf (ParSession,sizeof (ParSession),
 		   "<input type=\"hidden\" name=\"ses\" value=\"%s\" />",
 		   Gbl.Session.Id);
-      else if (PutParLocationIfNoSession && Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].Cod > 0)
+      else if (PutParLocationIfNoSession &&
+	       Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].Cod > 0)
 	 // Extra parameters necessary when there's no open session
 	 /* If session is open, course/degree/... code will be get from session data,
 	    but if there is not an open session, and next action is known,
