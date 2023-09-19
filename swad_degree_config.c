@@ -59,7 +59,6 @@ extern struct Globals Gbl;
 
 static void DegCfg_Configuration (bool PrintView);
 static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
-static void DegCfg_Title (bool PutLink);
 static void DegCfg_Center (bool PrintView,bool PutForm);
 static void DegCfg_FullName (bool PutForm);
 static void DegCfg_ShrtName (bool PutForm);
@@ -122,7 +121,7 @@ static void DegCfg_Configuration (bool PrintView)
 		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   DegCfg_Title (PutLink);
+   HieCfg_Title (PutLink,HieLvl_DEG);
 
       /**************************** Left part ***********************************/
       HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
@@ -183,21 +182,6 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
       Lgo_PutIconToChangeLogo (HieLvl_DEG);
-  }
-
-/*****************************************************************************/
-/******************** Show title in degree configuration *********************/
-/*****************************************************************************/
-
-static void DegCfg_Title (bool PutLink)
-  {
-   HieCfg_Title (PutLink,
-		    HieLvl_DEG,					// Logo scope
-		    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,		// Logo code
-                    Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,	// Logo short name
-		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName,	// Logo full name
-		    Gbl.Hierarchy.Node[HieLvl_DEG].WWW,		// Logo www
-		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName);	// Text full name
   }
 
 /*****************************************************************************/

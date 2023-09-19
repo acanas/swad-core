@@ -33,13 +33,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void HieCfg_Title (bool PutLink,
-		   HieLvl_Level_t LogoScope,
-		   long LogoCod,
-                   char LogoShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-		   char LogoFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1],
-		   char LogoWWW[Cns_MAX_BYTES_WWW + 1],
-		   char TextFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
+void HieCfg_Title (bool PutLink,HieLvl_Level_t LogoScope);
 void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
 void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,

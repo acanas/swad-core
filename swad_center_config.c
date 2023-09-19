@@ -78,7 +78,6 @@ extern struct Globals Gbl;
 static void CtrCfg_Configuration (bool PrintView);
 static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args);
 static void CtrCfg_PutIconToChangePhoto (void);
-static void CtrCfg_Title (bool PutLink);
 static void CtrCfg_Map (const struct Map_Coordinates *Coord);
 static void CtrCfg_Latitude (double Latitude);
 static void CtrCfg_Longitude (double Longitude);
@@ -165,7 +164,7 @@ static void CtrCfg_Configuration (bool PrintView)
 		    Hlp_CENTER_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   CtrCfg_Title (PutLink);
+   HieCfg_Title (PutLink,HieLvl_CTR);
 
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
@@ -287,21 +286,6 @@ static void CtrCfg_PutIconToChangePhoto (void)
    Lay_PutContextualLinkOnlyIcon (ActReqCtrPho,NULL,
                                   NULL,NULL,
 			          "camera.svg",Ico_BLACK);
-  }
-
-/*****************************************************************************/
-/******************** Show title in center configuration *********************/
-/*****************************************************************************/
-
-static void CtrCfg_Title (bool PutLink)
-  {
-   HieCfg_Title (PutLink,
-		 HieLvl_CTR,					// Logo scope
-		 Gbl.Hierarchy.Node[HieLvl_CTR].Cod,		// Logo code
-                 Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName,	// Logo short name
-		 Gbl.Hierarchy.Node[HieLvl_CTR].FullName,	// Logo full name
-		 Gbl.Hierarchy.Node[HieLvl_CTR].WWW,		// Logo www
-		 Gbl.Hierarchy.Node[HieLvl_CTR].FullName);	// Text full name
   }
 
 /*****************************************************************************/

@@ -60,7 +60,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args);
-static void CrsCfg_Title (bool PutLink);
 static void CrsCfg_Degree (bool PrintView,bool PutForm);
 static void CrsCfg_FullName (bool PutForm);
 static void CrsCfg_ShrtName (bool PutForm);
@@ -116,7 +115,7 @@ void CrsCfg_Configuration (bool PrintView)
 		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
-   CrsCfg_Title (PutLink);
+   HieCfg_Title (PutLink,HieLvl_CRS);
 
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
@@ -188,21 +187,6 @@ static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args)
 void CrsCfg_PrintConfiguration (void)
   {
    CrsCfg_Configuration (true);
-  }
-
-/*****************************************************************************/
-/******************** Show title in course configuration *********************/
-/*****************************************************************************/
-
-static void CrsCfg_Title (bool PutLink)
-  {
-   HieCfg_Title (PutLink,
-		 HieLvl_DEG,					// Logo scope
-		 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,		// Logo code
-		 Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,	// Logo short name
-		 Gbl.Hierarchy.Node[HieLvl_DEG].FullName,	// Logo full name
-		 Gbl.Hierarchy.Node[HieLvl_DEG].WWW,		// Logo www
-		 Gbl.Hierarchy.Node[HieLvl_CRS].FullName);	// Text full name
   }
 
 /*****************************************************************************/

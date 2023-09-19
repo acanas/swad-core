@@ -64,7 +64,6 @@ extern struct Globals Gbl;
 
 static void InsCfg_Configuration (bool PrintView);
 static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
-static void InsCfg_Title (bool PutLink);
 static void InsCfg_Map (void);
 static void InsCfg_Country (bool PrintView,bool PutForm);
 static void InsCfg_FullName (bool PutForm);
@@ -134,7 +133,7 @@ static void InsCfg_Configuration (bool PrintView)
 
 
    /***** Title *****/
-   InsCfg_Title (PutLink);
+   HieCfg_Title (PutLink,HieLvl_INS);
 
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
@@ -220,21 +219,6 @@ static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();
-  }
-
-/*****************************************************************************/
-/***************** Show title in institution configuration *******************/
-/*****************************************************************************/
-
-static void InsCfg_Title (bool PutLink)
-  {
-   HieCfg_Title (PutLink,
-		    HieLvl_INS,					// Logo scope
-		    Gbl.Hierarchy.Node[HieLvl_INS].Cod,		// Logo code
-                    Gbl.Hierarchy.Node[HieLvl_INS].ShrtName,	// Logo short name
-		    Gbl.Hierarchy.Node[HieLvl_INS].FullName,	// Logo full name
-		    Gbl.Hierarchy.Node[HieLvl_INS].WWW,		// Logo www
-		    Gbl.Hierarchy.Node[HieLvl_INS].FullName);	// Text full name
   }
 
 /*****************************************************************************/

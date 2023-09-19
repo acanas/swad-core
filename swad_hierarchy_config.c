@@ -48,14 +48,11 @@ extern struct Globals Gbl;
 /************************ Show title in configuration ************************/
 /*****************************************************************************/
 
-void HieCfg_Title (bool PutLink,
-		   HieLvl_Level_t LogoScope,
-		   long LogoCod,
-                   char LogoShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-		   char LogoFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1],
-		   char LogoWWW[Cns_MAX_BYTES_WWW + 1],
-		   char TextFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
+void HieCfg_Title (bool PutLink,HieLvl_Level_t Level)
   {
+   HieLvl_Level_t LevelLogo = (Level == HieLvl_CRS) ? HieLvl_DEG :
+						      Level;
+
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG FRAME_TITLE_%s\"",
                   The_GetSuffix ());
@@ -64,15 +61,17 @@ void HieCfg_Title (bool PutLink,
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
-		      LogoWWW,LogoFullName,The_GetSuffix ());
+		      Gbl.Hierarchy.Node[LevelLogo].WWW,
+		      Gbl.Hierarchy.Node[LevelLogo].FullName,
+		      The_GetSuffix ());
 
       /* Logo and name */
-      Lgo_DrawLogo (LogoScope,
-		    LogoCod,
-		    LogoShrtName,
+      Lgo_DrawLogo (LevelLogo,
+	            Gbl.Hierarchy.Node[LevelLogo].Cod,
+	            Gbl.Hierarchy.Node[LevelLogo].ShrtName,
 		    64,NULL);
       HTM_BR ();
-      HTM_Txt (TextFullName);
+      HTM_Txt (Gbl.Hierarchy.Node[Level].FullName);
 
       /* End link */
       if (PutLink)
