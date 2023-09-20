@@ -281,34 +281,34 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	    case HieLvl_SYS:
                break;
 	    case HieLvl_CTY:
-               if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)
+               if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.CtyCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			   LogTable,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
                break;
 	    case HieLvl_INS:
-	       if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
+	       if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.InsCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			   LogTable,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
 	    case HieLvl_CTR:
-               if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
+               if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.CtrCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+			   LogTable,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
                break;
 	    case HieLvl_DEG:
-	       if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
+	       if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.DegCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+			   LogTable,Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
@@ -316,7 +316,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	       if (Gbl.Hierarchy.Level == HieLvl_CRS)
 		 {
 		  sprintf (SubQuery," AND %s.CrsCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+			   LogTable,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
@@ -406,7 +406,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	 break;
       case Sta_SHOW_COURSE_ACCESSES:
          sprintf (SubQuery," AND %s.CrsCod=%ld",
-                  LogTable,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                  LogTable,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 	 Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 
 	 if (NumUsrsInList)

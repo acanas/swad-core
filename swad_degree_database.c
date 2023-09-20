@@ -56,7 +56,7 @@ void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE
 
 void Deg_DB_CreateDegree (struct Hie_Node *Deg,Hie_Status_t Status)
   {
-   Deg->Cod =
+   Deg->HieCod =
    DB_QueryINSERTandReturnCode ("can not create a new degree",
 				"INSERT INTO deg_degrees"
 				" (CtrCod,DegTypCod,Status,"
@@ -101,7 +101,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		     " GROUP BY deg_degrees.DegTypCod",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
       case HieLvl_INS:
 	 /* Get only degree types with degrees in the current institution */
 	 return (unsigned)
@@ -114,7 +114,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		     " GROUP BY deg_degrees.DegTypCod",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
       case HieLvl_CTR:
 	 /* Get only degree types with degrees in the current center */
 	 return (unsigned)
@@ -125,7 +125,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 		        " WHERE deg_degrees.CtrCod=%ld"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		     " GROUP BY deg_degrees.DegTypCod",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
       case HieLvl_DEG:
       case HieLvl_CRS:
 	 /* Get only degree types with degrees in the current degree */
@@ -138,7 +138,7 @@ unsigned Deg_DB_GetNumDegreeTypes (HieLvl_Level_t Level)
 			       "deg_types"
 			" WHERE deg_degrees.DegCod=%ld"
 			  " AND deg_degrees.DegTypCod=deg_types.DegTypCod",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -206,7 +206,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			 OrderBySubQuery[Order]);
       case HieLvl_INS:
 	 /* Get only degree types with degrees in the current institution */
@@ -223,7 +223,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			 OrderBySubQuery[Order]);
       case HieLvl_CTR:
 	 /* Get only degree types with degrees in the current center */
@@ -238,7 +238,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			 OrderBySubQuery[Order]);
       case HieLvl_DEG:
       case HieLvl_CRS:
@@ -254,7 +254,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegTypCod=deg_types.DegTypCod"
 		      " GROUP BY deg_degrees.DegTypCod"
 		      " ORDER BY %s",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			 OrderBySubQuery[Order]);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -415,7 +415,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res)
 		    " FROM deg_degrees"
 		   " WHERE CtrCod=%ld"
 		   " ORDER BY ShortName",
-		   Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
   }
 
 /*****************************************************************************/
@@ -437,7 +437,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res)
 		    " FROM deg_degrees"
 		   " WHERE CtrCod=%ld"
 		   " ORDER BY FullName",
-		   Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
   }
 
 /*****************************************************************************/
@@ -819,8 +819,12 @@ unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
 /******************* Check if a user belongs to a degree *********************/
 /*****************************************************************************/
 
-bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
+bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
+				    bool CountOnlyAcceptedCourses)
   {
+   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
+                                                      "");
+
    return
    DB_QueryEXISTS ("can not check if a user belongs to a degree",
 		   "SELECT EXISTS"
@@ -828,11 +832,12 @@ bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
 		     " FROM crs_users,"
 			   "crs_courses"
 		    " WHERE crs_users.UsrCod=%ld"
-		      " AND crs_users.Accepted='Y'"	// Only if user accepted
+		        "%s"
 		      " AND crs_users.CrsCod=crs_courses.CrsCod"
 		      " AND crs_courses.DegCod=%ld)",
 		   UsrCod,
-		   DegCod);
+		   SubQuery,
+		   HieCod);
   }
 
 /*****************************************************************************/

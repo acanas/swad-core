@@ -81,7 +81,8 @@ void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus);
 
 unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod);
 unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);
-bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
+bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
+				    bool CountOnlyAcceptedCourses);
 
 void Deg_DB_RemoveDegTyp (long DegTypCod);
 void Deg_DB_RemoveDeg (long DegCod);

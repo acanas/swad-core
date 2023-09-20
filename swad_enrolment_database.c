@@ -144,7 +144,7 @@ unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res)
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
+bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
                                     bool CountOnlyAcceptedCourses)
   {
    const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
@@ -158,7 +158,7 @@ bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
 		    " WHERE CrsCod=%ld"
 		      " AND UsrCod=%ld"
 			"%s)",
-		   CrsCod,
+		   HieCod,
 		   UsrCod,
 		   SubQuery);
   }
@@ -260,7 +260,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res)
 		   "SELECT UsrCod"
 		    " FROM crs_users"
 		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -275,7 +275,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
 		    " FROM crs_users"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -292,7 +292,7 @@ unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld"
 		     " AND Role=%u",	// Teachers only
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_TCH);
   }
@@ -1015,7 +1015,7 @@ long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole)
 				" (CrsCod,UsrCod,Role,RequestTime)"
 				" VALUES"
 				" (%ld,%ld,%u,NOW())",
-				Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+				Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				(unsigned) NewRole);
   }
@@ -1035,7 +1035,7 @@ void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole
 		     " AND UsrCod=%ld",
 		   (unsigned) NewRole,
 		   ReqCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1183,7 +1183,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:
 	       // Requests in degrees of this country administrated by me
@@ -1212,7 +1212,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (HieLvl_DEG),
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_CTR_ADM:
 	       // Requests in centers of this country administrated by me
@@ -1241,7 +1241,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (HieLvl_CTR),
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_INS_ADM:
 	       // Requests in institutions of this country administrated by me
@@ -1270,7 +1270,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (HieLvl_INS),
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_SYS_ADM:
 	       // Requests in any course of this country
@@ -1293,7 +1293,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
@@ -1328,7 +1328,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:
 	       // Requests in degrees of this institution administrated by me
@@ -1355,7 +1355,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (HieLvl_DEG),
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       RolesSelected);
 	    case Rol_CTR_ADM:
 	       // Requests in centers of this institution administrated by me
@@ -1381,7 +1381,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (HieLvl_CTR),
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       RolesSelected);
 	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this institution
 	    case Rol_SYS_ADM:
@@ -1403,7 +1403,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
@@ -1436,7 +1436,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:
 	       // Requests in degrees of this center administrated by me
@@ -1461,7 +1461,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       Hie_GetDBStrFromLevel (HieLvl_DEG),
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       RolesSelected);
 	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all requesters from this center
 	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this center
@@ -1482,7 +1482,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
@@ -1513,7 +1513,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all requesters from this degree
 	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all requesters from this degree
@@ -1533,7 +1533,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
@@ -1560,7 +1560,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " WHERE CrsCod=%ld"
 				 " AND ((1<<Role)&%u)<>0"
 			       " ORDER BY RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();

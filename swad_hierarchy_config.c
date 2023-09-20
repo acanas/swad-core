@@ -67,7 +67,7 @@ void HieCfg_Title (bool PutLink,HieLvl_Level_t Level)
 
       /* Logo and name */
       Lgo_DrawLogo (LevelLogo,
-	            Gbl.Hierarchy.Node[LevelLogo].Cod,
+	            Gbl.Hierarchy.Node[LevelLogo].HieCod,
 	            Gbl.Hierarchy.Node[LevelLogo].ShrtName,
 		    64,NULL);
       HTM_BR ();
@@ -266,7 +266,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
-	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
 	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 	                     Gbl.Hierarchy.Node[HieLvl_INS].ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();

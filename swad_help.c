@@ -161,7 +161,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    if (Gbl.Hierarchy.Level == HieLvl_CRS &&				// Course selected
 		Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
-	       if (!Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+	       if (!Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 						1 << Rol_STD))		// Current course probably has no students
 		 {
 		  /* Request students enrolment */
@@ -181,7 +181,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						    Btn_CONFIRM_BUTTON,Txt_My_courses);
 	   }
 
-	 if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)	// Degree selected
+	 if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)	// Degree selected
 	   {
 	    /* Select a course */
 	    if (asprintf (&Description,Gbl.Hierarchy.Level == HieLvl_CRS ? Txt_Select_create_course_in_X :
@@ -193,10 +193,10 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						 Btn_CONFIRM_BUTTON,Txt_Courses);
 	    free (Description);
 	   }
-	 else if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)	// Center selected
+	 else if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)	// Center selected
 	   {
 	    /* Select a degree */
-	    if (asprintf (&Description,Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0 ? Txt_Select_or_create_another_degree_in_X :
+	    if (asprintf (&Description,Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0 ? Txt_Select_or_create_another_degree_in_X :
 									        Txt_Select_or_create_one_degree_in_X,
 			  Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
@@ -205,10 +205,10 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						 Btn_CONFIRM_BUTTON,Txt_Degrees);
 	    free (Description);
 	   }
-	 else if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)	// Institution selected
+	 else if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)	// Institution selected
 	   {
 	    /* Select a center */
-	    if (asprintf (&Description,Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0 ? Txt_Select_or_create_another_center_in_X :
+	    if (asprintf (&Description,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0 ? Txt_Select_or_create_another_center_in_X :
 									        Txt_Select_or_create_one_center_in_X,
 			  Gbl.Hierarchy.Node[HieLvl_INS].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
@@ -217,10 +217,10 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						 Btn_CONFIRM_BUTTON,Txt_Centers);
 	    free (Description);
 	   }
-	 else if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0)	// Country selected
+	 else if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0)	// Country selected
 	   {
 	    /* Select an institution */
-	    if (asprintf (&Description,Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0 ? Txt_Select_or_create_another_institution_in_X :
+	    if (asprintf (&Description,Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0 ? Txt_Select_or_create_another_institution_in_X :
 									        Txt_Select_or_create_one_institution_in_X,
 			  Gbl.Hierarchy.Node[HieLvl_CTY].FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
@@ -231,7 +231,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   }
 	 else
 	    /* Select a country */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Node[HieLvl_CTY].Cod > 0 ? Txt_Select_another_country :
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0 ? Txt_Select_another_country :
 											  Txt_Select_one_country,
 						 ActSeeCty,
 						 Btn_CONFIRM_BUTTON,Txt_Countries);

@@ -419,19 +419,19 @@ void Ntf_ShowMyNotifications (void)
 							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
 	       /* Get institution code (row[2]) */
-	       Hie[HieLvl_INS].Cod = Str_ConvertStrCodToLongCod (row[2]);
+	       Hie[HieLvl_INS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
 	       Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
 
 		/* Get center code (row[3]) */
-	       Hie[HieLvl_CTR].Cod = Str_ConvertStrCodToLongCod (row[3]);
+	       Hie[HieLvl_CTR].HieCod = Str_ConvertStrCodToLongCod (row[3]);
 	       Ctr_GetCenterDataByCod (&Hie[HieLvl_CTR]);
 
 	       /* Get degree code (row[4]) */
-	       Hie[HieLvl_DEG].Cod = Str_ConvertStrCodToLongCod (row[4]);
+	       Hie[HieLvl_DEG].HieCod = Str_ConvertStrCodToLongCod (row[4]);
 	       Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
 
 	       /* Get course code (row[5]) */
-	       Hie[HieLvl_CRS].Cod = Str_ConvertStrCodToLongCod (row[5]);
+	       Hie[HieLvl_CRS].HieCod = Str_ConvertStrCodToLongCod (row[5]);
 	       Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
 
 	       /* Get message/post/... code (row[6]) */
@@ -488,7 +488,7 @@ void Ntf_ShowMyNotifications (void)
 		                ClassBg,The_GetSuffix ());
 		     if (PutLink)
 		       {
-			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].Cod,&UsrDat,Cod,&Forums);
+			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].HieCod,&UsrDat,Cod,&Forums);
 			PutLink = Frm_CheckIfInside ();
 		       }
 
@@ -506,7 +506,7 @@ void Ntf_ShowMyNotifications (void)
 		  HTM_TD_Begin ("class=\"LT %s_%s\"",ClassBg,The_GetSuffix ());
 		     if (PutLink)
 		       {
-			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].Cod,&UsrDat,Cod,&Forums);
+			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].HieCod,&UsrDat,Cod,&Forums);
 			PutLink = Frm_CheckIfInside ();
 
 			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
@@ -539,7 +539,7 @@ void Ntf_ShowMyNotifications (void)
 		       {
 			if (PutLink)
 			  {
-			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].Cod,&UsrDat,Cod,&Forums);
+			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].HieCod,&UsrDat,Cod,&Forums);
 			   PutLink = Frm_CheckIfInside ();
 		          }
 
@@ -563,7 +563,7 @@ void Ntf_ShowMyNotifications (void)
 		       {
 			if (PutLink)
 			  {
-			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].Cod,&UsrDat,Cod,&Forums);
+			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[HieLvl_CRS].HieCod,&UsrDat,Cod,&Forums);
 			   PutLink = Frm_CheckIfInside ();
 		          }
 
@@ -575,13 +575,13 @@ void Ntf_ShowMyNotifications (void)
 			   HTM_SPAN_Begin ("class=\"%s_%s\"",
 			                   ClassTxt,The_GetSuffix ());
 
-			if (Hie[HieLvl_CRS].Cod > 0)
+			if (Hie[HieLvl_CRS].HieCod > 0)
 			   HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie[HieLvl_CRS].ShrtName);
-			else if (Hie[HieLvl_DEG].Cod > 0)
+			else if (Hie[HieLvl_DEG].HieCod > 0)
 			   HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie[HieLvl_DEG].ShrtName);
-			else if (Hie[HieLvl_CTR].Cod > 0)
+			else if (Hie[HieLvl_CTR].HieCod > 0)
 			   HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie[HieLvl_CTR].ShrtName);
-			else if (Hie[HieLvl_INS].Cod > 0)
+			else if (Hie[HieLvl_INS].HieCod > 0)
 			   HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie[HieLvl_INS].ShrtName);
 			else
 			   HTM_Hyphen ();
@@ -614,7 +614,7 @@ void Ntf_ShowMyNotifications (void)
 		  ContentStr = NULL;
 
 		  Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-						 Cod,Hie[HieLvl_CRS].Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
+						 Cod,Hie[HieLvl_CRS].HieCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 						 false);
 		  HTM_TR_Begin (NULL);
 
@@ -821,22 +821,22 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      {
       if (CrsCod > 0)					// Course specified
 	{
-	 if (CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].Cod)	// Not the current course
+	 if (CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)	// Not the current course
 	    ParCod_PutPar (ParCod_Crs,CrsCod);			// Go to another course
 	}
       else if (DegCod > 0)				// Degree specified
 	{
-	 if (DegCod != Gbl.Hierarchy.Node[HieLvl_DEG].Cod)	// Not the current degree
+	 if (DegCod != Gbl.Hierarchy.Node[HieLvl_DEG].HieCod)	// Not the current degree
 	    ParCod_PutPar (ParCod_Deg,DegCod);			// Go to another degree
 	}
       else if (CtrCod > 0)				// Center specified
 	{
-	 if (CtrCod != Gbl.Hierarchy.Node[HieLvl_CTR].Cod)	// Not the current center
+	 if (CtrCod != Gbl.Hierarchy.Node[HieLvl_CTR].HieCod)	// Not the current center
 	    ParCod_PutPar (ParCod_Ctr,CtrCod);			// Go to another center
 	}
       else if (InsCod > 0)				// Institution specified
 	{
-	 if (InsCod != Gbl.Hierarchy.Node[HieLvl_INS].Cod)	// Not the current institution
+	 if (InsCod != Gbl.Hierarchy.Node[HieLvl_INS].HieCod)	// Not the current institution
 	    ParCod_PutPar (ParCod_Ins,InsCod);			// Go to another institution
 	}
      }
@@ -1079,7 +1079,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+	 if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 				   1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
             NumUsrs = Enr_DB_GetTchsFromCurrentCrsExceptMe (&mysql_res);
@@ -1147,10 +1147,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
      }
    else
      {
-      InsCod = Gbl.Hierarchy.Node[HieLvl_INS].Cod;
-      CtrCod = Gbl.Hierarchy.Node[HieLvl_CTR].Cod;
-      DegCod = Gbl.Hierarchy.Node[HieLvl_DEG].Cod;
-      CrsCod = Gbl.Hierarchy.Node[HieLvl_CRS].Cod;
+      InsCod = Gbl.Hierarchy.Node[HieLvl_INS].HieCod;
+      CtrCod = Gbl.Hierarchy.Node[HieLvl_CTR].HieCod;
+      DegCod = Gbl.Hierarchy.Node[HieLvl_DEG].HieCod;
+      CrsCod = Gbl.Hierarchy.Node[HieLvl_CRS].HieCod;
      }
 
    if (NumUsrs) // Users found
@@ -1339,10 +1339,10 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	           center code (row[3]),
 	           degree code (row[4]),
 	           course code (row[5]) */
-	    Hie[HieLvl_INS].Cod = Str_ConvertStrCodToLongCod (row[2]);
-	    Hie[HieLvl_CTR].Cod = Str_ConvertStrCodToLongCod (row[3]);
-	    Hie[HieLvl_DEG].Cod = Str_ConvertStrCodToLongCod (row[4]);
-	    Hie[HieLvl_CRS].Cod = Str_ConvertStrCodToLongCod (row[5]);
+	    Hie[HieLvl_INS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
+	    Hie[HieLvl_CTR].HieCod = Str_ConvertStrCodToLongCod (row[3]);
+	    Hie[HieLvl_DEG].HieCod = Str_ConvertStrCodToLongCod (row[4]);
+	    Hie[HieLvl_CRS].HieCod = Str_ConvertStrCodToLongCod (row[5]);
 
 	    /* Get data of institution, center, degree and course */
 	    Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
@@ -1386,7 +1386,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	       case Ntf_EVENT_NOTICE:
 	       case Ntf_EVENT_MESSAGE:
 	       case Ntf_EVENT_SURVEY:
-		  if (Hie[HieLvl_CRS].Cod > 0)
+		  if (Hie[HieLvl_CRS].HieCod > 0)
 		     fprintf (FileMail,"%s: %s\n",
 			      Txt_Course_NO_HTML[ToUsrLanguage],
 			      Hie[HieLvl_CRS].FullName);
@@ -1440,7 +1440,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	    *NumMails = 1;
 
 	    /* Update statistics about notifications */
-	    Ntf_UpdateNumNotifSent (Hie[HieLvl_DEG].Cod,Hie[HieLvl_CRS].Cod,NotifyEvent,
+	    Ntf_UpdateNumNotifSent (Hie[HieLvl_DEG].HieCod,Hie[HieLvl_CRS].HieCod,NotifyEvent,
 	                            *NumNotif,*NumMails);
 	   }
 

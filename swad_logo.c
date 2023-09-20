@@ -237,7 +237,7 @@ void Lgo_RequestLogo (HieLvl_Level_t Level)
       [HieLvl_CTR] = Lgo_PutIconToRemoveLogoCtr,
       [HieLvl_DEG] = Lgo_PutIconToRemoveLogoDeg,
      };
-   long Cod = Gbl.Hierarchy.Node[Level].Cod;
+   long Cod = Gbl.Hierarchy.Node[Level].HieCod;
    char PathLogo[PATH_MAX + 1];
 
    /***** Check if logo exists *****/
@@ -308,7 +308,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
 void Lgo_ReceiveLogo (HieLvl_Level_t Level)
   {
    extern const char *Txt_The_file_is_not_X;
-   long Cod = Gbl.Hierarchy.Node[Level].Cod;
+   long Cod = Gbl.Hierarchy.Node[Level].HieCod;
    char Path[PATH_MAX + 1];
    struct Par_Param *Par;
    char FileNameLogoSrc[PATH_MAX + 1];
@@ -368,7 +368,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Level)
 
 void Lgo_RemoveLogo (HieLvl_Level_t Level)
   {
-   long Cod = Gbl.Hierarchy.Node[Level].Cod;
+   long Cod = Gbl.Hierarchy.Node[Level].HieCod;
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
 
    /***** Remove logo *****/

@@ -480,7 +480,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	    break;
 	 case Usr_GET_ROLE_IN_CURRENT_CRS:
 	    UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-							      Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+							      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 	    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
 	    break;
 	}
@@ -724,10 +724,10 @@ void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat)
 
 void Usr_FlushCachesUsr (void)
   {
-   Ins_FlushCacheUsrBelongsToIns ();
-   Ctr_FlushCacheUsrBelongsToCtr ();
-   Deg_FlushCacheUsrBelongsToDeg ();
-   Enr_FlushCacheUsrBelongsToCrs ();
+   Hie_FlushCacheUsrBelongsTo (HieLvl_INS);
+   Hie_FlushCacheUsrBelongsTo (HieLvl_CTR);
+   Hie_FlushCacheUsrBelongsTo (HieLvl_DEG);
+   Hie_FlushCacheUsrBelongsTo (HieLvl_CRS);
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();
@@ -812,7 +812,9 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can edit users from current degree who have accepted */
-	 if (Deg_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_DEG].Cod))
+	 if (Hie_CheckIfUsrBelongsTo (HieLvl_DEG,UsrDat->UsrCod,
+				      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+				      true))	// count only accepted courses
 	    // Degree admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -820,7 +822,9 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can edit from current center who have accepted */
-	 if (Ctr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CTR].Cod))
+	 if (Hie_CheckIfUsrBelongsTo (HieLvl_CTR,UsrDat->UsrCod,
+				      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+				      true))	// count only accepted courses
 	    // Center admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -828,7 +832,9 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can edit from current institution who have accepted */
-	 if (Ins_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_INS].Cod))
+	 if (Hie_CheckIfUsrBelongsTo (HieLvl_INS,UsrDat->UsrCod,
+				      Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+				      true))	// count only accepted courses
 	    // Institution admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -855,7 +861,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 4. Fast check: Is he/she a student? *****/
@@ -909,7 +915,7 @@ bool Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
@@ -932,7 +938,7 @@ bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 4. Fast check: Am I a system admin? *****/
@@ -978,7 +984,7 @@ bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
@@ -1025,7 +1031,7 @@ bool Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 4. Fast check: Am I a system admin? *****/
@@ -2006,7 +2012,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 
 	 /* Course may have changed ==> get my role in current course again */
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
 	 // role and action will be got from last data
          GetRoleAndActionFromLastData = true;
@@ -2016,7 +2022,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 // only if I am in the same hierarchy location that the stored one
 	 GetRoleAndActionFromLastData =
 	    (Gbl.Hierarchy.Level == Gbl.Usrs.Me.UsrLast.LastHie.Level &&	// The same scope...
-	     Gbl.Hierarchy.Cod   == Gbl.Usrs.Me.UsrLast.LastHie.HieCod);		// ...and code in hierarchy
+	     Gbl.Hierarchy.HieCod   == Gbl.Usrs.Me.UsrLast.LastHie.HieCod);		// ...and code in hierarchy
 
       /***** Get role and action from last data *****/
       if (GetRoleAndActionFromLastData)
@@ -2240,7 +2246,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       HTM_TD_End ();
 
       /***** Write rest of main user's data *****/
-      Ins.Cod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->InsCod;
       Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
 
@@ -2290,7 +2296,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
       HTM_TD_End ();
 
       /***** Write rest of guest's main data *****/
-      Ins.Cod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->InsCod;
       Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
@@ -2301,7 +2307,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
       /***** Write the rest of the data of the guest *****/
       if (UsrDat->Tch.CtrCod > 0)
 	{
-	 Ctr.Cod = UsrDat->Tch.CtrCod;
+	 Ctr.HieCod = UsrDat->Tch.CtrCod;
 	 Ctr_GetCenterDataByCod (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2386,7 +2392,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
       HTM_TD_End ();
 
       /***** Write rest of main student's data *****/
-      Ins.Cod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->InsCod;
       Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
@@ -2495,7 +2501,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       HTM_TD_End ();
 
       /***** Write rest of main teacher's data *****/
-      Ins.Cod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->InsCod;
       Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
@@ -2506,7 +2512,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       /***** Write the rest of teacher's data *****/
       if (ShowData && UsrDat->Tch.CtrCod > 0)
 	{
-	 Ctr.Cod = UsrDat->Tch.CtrCod;
+	 Ctr.HieCod = UsrDat->Tch.CtrCod;
 	 Ctr_GetCenterDataByCod (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2579,7 +2585,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
       HTM_TD_End ();
 
       /***** Write rest of main administrator's data *****/
-      Ins.Cod = UsrDat->InsCod;
+      Ins.HieCod = UsrDat->InsCod;
       Ins_GetInstitDataByCod (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
 
@@ -4645,11 +4651,11 @@ void Usr_ListAllDataTchs (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
-				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
-				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].HieCod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].HieCod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].HieCod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].HieCod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].HieCod :
 								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -5355,11 +5361,11 @@ void Usr_SeeTeachers (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
-				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
-				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].HieCod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].HieCod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].HieCod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].HieCod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].HieCod :
 								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -6019,11 +6025,11 @@ void Usr_SeeTchClassPhotoPrn (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
-				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
-				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].Cod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].HieCod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].HieCod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].HieCod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].HieCod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Node[HieLvl_CRS].HieCod :
 								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -6285,11 +6291,11 @@ unsigned Usr_GetTotalNumberOfUsers (void)
       case HieLvl_CTR:
       case HieLvl_DEG:
       case HieLvl_CRS:
-         Cod = (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].Cod :
-	       (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].Cod :
-	       (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].Cod :
-	       (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].Cod :
-	                                          Gbl.Hierarchy.Node[HieLvl_CRS].Cod))));
+         Cod = (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Node[HieLvl_CTY].HieCod :
+	       (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Node[HieLvl_INS].HieCod :
+	       (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Node[HieLvl_CTR].HieCod :
+	       (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Node[HieLvl_DEG].HieCod :
+	                                          Gbl.Hierarchy.Node[HieLvl_CRS].HieCod))));
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
 	         (1 << Rol_TCH);

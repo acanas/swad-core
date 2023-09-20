@@ -309,7 +309,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    struct Con_ConnectedUsrs Usrs;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)	// No course selected
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)	// No course selected
       return;
 
    /***** Number of connected users who belong to course *****/
@@ -501,7 +501,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 
       /* Get course code (row[1]) */
       Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-	                                        Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+	                                        Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
       /* Compute elapsed time from last access */
       if (sscanf (row[2],"%ld",&Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff) != 1)
@@ -681,7 +681,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                                                       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
 	    /* Get course code (row[1]) */
-	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)

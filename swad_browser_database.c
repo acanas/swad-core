@@ -1504,7 +1504,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
 		      " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
@@ -1524,7 +1524,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
 		      " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
@@ -1542,7 +1542,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
 		      " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
@@ -1558,7 +1558,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND brw_files.FileBrowser IN (%u,%u)"
 			   " AND brw_files.License=%u"
 		      " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
@@ -1572,7 +1572,7 @@ unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t Lice
 			   " AND FileBrowser IN (%u,%u)"
 			   " AND License=%u"
 		      " GROUP BY Public",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			 (unsigned) Brw_ADMI_DOC_CRS,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
@@ -2120,7 +2120,7 @@ unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND asg_groups.GrpCod=grp_users.GrpCod)"
 			  ")",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   ZoneUsrCod);
   }
 
@@ -2178,7 +2178,7 @@ unsigned Brw_DB_GetGrpLastAccFileBrowser (MYSQL_RES **mysql_res,const char *Fiel
 		     " AND CrsCod=%ld",
 		   FieldNameDB,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -2763,7 +2763,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld",
 			 (unsigned) FileBrowser,
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
          break;
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
@@ -2772,7 +2772,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+                         Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
          break;
       case Brw_ADMI_DOC_DEG:
       case Brw_ADMI_SHR_DEG:
@@ -2781,7 +2781,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+                         Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
          break;
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_TCH_CRS:
@@ -2792,7 +2792,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                         Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
          break;
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
@@ -2813,7 +2813,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld",
                          MyUsrCod,(unsigned) FileBrowser,
-                         Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                         Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
          break;
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
@@ -2823,7 +2823,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			   " AND Cod=%ld"
 			   " AND WorksUsrCod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Node[HieLvl_CRS].Cod,WorksUsrCod);
+                         Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,WorksUsrCod);
          break;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
@@ -3050,14 +3050,14 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) Brw_ADMI_DOC_CRS,
 			       (unsigned) Brw_ADMI_TCH_CRS,
 			       (unsigned) Brw_ADMI_SHR_CRS,
 			       (unsigned) Brw_ADMI_ASG_USR,
 			       (unsigned) Brw_ADMI_WRK_USR,
 			       (unsigned) Brw_ADMI_MRK_CRS,
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) Brw_ADMI_DOC_GRP,
 			       (unsigned) Brw_ADMI_TCH_GRP,
 			       (unsigned) Brw_ADMI_SHR_GRP,
@@ -3086,7 +3086,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
@@ -3116,7 +3116,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
@@ -3140,7 +3140,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 	                         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
@@ -3165,7 +3165,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
@@ -3224,14 +3224,14 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) Brw_ADMI_DOC_CRS,
 			       (unsigned) Brw_ADMI_TCH_CRS,
 			       (unsigned) Brw_ADMI_SHR_CRS,
 			       (unsigned) Brw_ADMI_ASG_USR,
 			       (unsigned) Brw_ADMI_WRK_USR,
 			       (unsigned) Brw_ADMI_MRK_CRS,
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) Brw_ADMI_DOC_GRP,
 			       (unsigned) Brw_ADMI_TCH_GRP,
 			       (unsigned) Brw_ADMI_SHR_GRP,
@@ -3258,7 +3258,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
@@ -3286,7 +3286,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
@@ -3308,7 +3308,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 	                         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
@@ -3331,7 +3331,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
@@ -3386,14 +3386,14 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) Brw_ADMI_DOC_CRS,
 			       (unsigned) Brw_ADMI_TCH_CRS,
 			       (unsigned) Brw_ADMI_SHR_CRS,
 			       (unsigned) Brw_ADMI_ASG_USR,
 			       (unsigned) Brw_ADMI_WRK_USR,
 			       (unsigned) Brw_ADMI_MRK_CRS,
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) Brw_ADMI_DOC_GRP,
 			       (unsigned) Brw_ADMI_TCH_GRP,
 			       (unsigned) Brw_ADMI_SHR_GRP,
@@ -3418,7 +3418,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_DOC_GRP:
@@ -3444,7 +3444,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_ASG_USR:
@@ -3464,7 +3464,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
@@ -3485,7 +3485,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
@@ -3536,14 +3536,14 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) Brw_ADMI_DOC_CRS,
 			       (unsigned) Brw_ADMI_TCH_CRS,
 			       (unsigned) Brw_ADMI_SHR_CRS,
 			       (unsigned) Brw_ADMI_ASG_USR,
 			       (unsigned) Brw_ADMI_WRK_USR,
 			       (unsigned) Brw_ADMI_MRK_CRS,
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) Brw_ADMI_DOC_GRP,
 			       (unsigned) Brw_ADMI_TCH_GRP,
 			       (unsigned) Brw_ADMI_SHR_GRP,
@@ -3566,7 +3566,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			       " WHERE crs_courses.DegCod=%ld"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
@@ -3590,7 +3590,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
@@ -3608,7 +3608,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			       " WHERE crs_courses.DegCod=%ld"
 			         " AND crs_courses.CrsCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
@@ -3627,7 +3627,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:
@@ -3674,14 +3674,14 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) Brw_ADMI_DOC_CRS,
 			       (unsigned) Brw_ADMI_TCH_CRS,
 			       (unsigned) Brw_ADMI_SHR_CRS,
 			       (unsigned) Brw_ADMI_ASG_USR,
 			       (unsigned) Brw_ADMI_WRK_USR,
 			       (unsigned) Brw_ADMI_MRK_CRS,
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) Brw_ADMI_DOC_GRP,
 			       (unsigned) Brw_ADMI_TCH_GRP,
 			       (unsigned) Brw_ADMI_SHR_GRP,
@@ -3702,7 +3702,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			        " FROM brw_sizes"
 			       " WHERE Cod=%ld"
 			       " AND FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
@@ -3724,7 +3724,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 			         " AND grp_groups.GrpCod=brw_sizes.Cod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
@@ -3740,7 +3740,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			        " FROM brw_sizes"
 			       " WHERE Cod=%ld"
 			         " AND FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
@@ -3757,7 +3757,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			       " WHERE crs_users.CrsCod=%ld"
 			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
 			         " AND brw_sizes.FileBrowser=%u",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) FileBrowser);
 	       break;
 	    default:

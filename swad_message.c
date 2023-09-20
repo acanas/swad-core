@@ -863,10 +863,10 @@ void Msg_RecMsgFromUsr (void)
                Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
                                              (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                             0),
-                                             Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-                                             Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
-                                             Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-                                             Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                                             Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+                                             Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+                                             Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+                                             Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
             /***** Show an alert indicating that the message has been sent successfully *****/
             Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
@@ -1109,7 +1109,7 @@ static void Msg_GetParMsgsCrsCod (struct Msg_Messages *Messages)
    if ((Messages->FilterCrsCod = ParCod_GetPar (ParCod_OthCrs)) > 0)	// If origin course specified
      {
       /* Get data of course */
-      Crs.Cod = Messages->FilterCrsCod;
+      Crs.HieCod = Messages->FilterCrsCod;
       Crs_GetCourseDataByCod (&Crs);
      }
 
@@ -1280,7 +1280,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    MsgCod = Msg_DB_CreateNewMsg (Subject,Content,Media->MedCod);
 
    /***** Insert message in sent messages *****/
-   Msg_DB_CreateSntMsg (MsgCod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   Msg_DB_CreateSntMsg (MsgCod,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
    /***** Increment number of messages sent by me *****/
    Prf_DB_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2309,13 +2309,13 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
    if (CrsCod > 0)
      {
       /* Get new course code from old course code */
-      Crs.Cod = CrsCod;
+      Crs.HieCod = CrsCod;
 
       /* Get data of current degree */
       if (Crs_GetCourseDataByCod (&Crs))
         {
          ThereIsOrgCrs = true;
-         if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod)))	// Message sent from current course
+         if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)))	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	       HTM_TxtF ("(%s)",Txt_from_this_course);
@@ -2325,7 +2325,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
            {
             /* Write course, including link */
             Frm_BeginFormGoTo (ActSeeCrsInf);
-	       ParCod_PutPar (ParCod_Crs,Crs.Cod);
+	       ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 	       HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 		  HTM_Txt ("(");
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),

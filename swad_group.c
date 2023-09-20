@@ -2651,7 +2651,7 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumGrpTyp;
-   static unsigned (*Grp_DB_GetGrpTypesInCurrentCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res,long Cod) =
+   static unsigned (*Grp_DB_GetGrpTypesInCurrentCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res,long HieCod) =
     {
      [Grp_ONLY_GROUP_TYPES_WITH_GROUPS] = Grp_DB_GetGrpTypesWithGrpsInCrs,
      [Grp_ALL_GROUP_TYPES             ] = Grp_DB_GetAllGrpTypesInCrs,
@@ -2665,7 +2665,7 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    Grp_OpenGroupsAutomatically ();
 
    /***** Get group types from database *****/
-   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
    /***** Get group types *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
@@ -3041,7 +3041,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
@@ -3514,7 +3514,7 @@ static void Grp_RemoveGroupCompletely (void)
    Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Remove file zones of this group *****/
-   Brw_RemoveGrpZones (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,GrpDat.GrpCod);
+   Brw_RemoveGrpZones (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,GrpDat.GrpCod);
 
    /***** Remove this group from all assignments *****/
    Asg_DB_RemoveGroup (GrpDat.GrpCod);

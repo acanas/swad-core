@@ -275,7 +275,7 @@ void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod)
 		     " AND CrsCod=%ld",
                    FieldNameDB,GrpCod,
                    Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -291,7 +291,7 @@ void Set_DB_UpdateMyUsrListType (void)
                      " AND CrsCod=%ld",
 		   Set_DB_StringsUsrListTypes[Gbl.Usrs.Me.ListType],
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -310,7 +310,7 @@ void Set_DB_UpdateMyColsClassPhoto (void)
                         " AND CrsCod=%ld",
 		      Gbl.Usrs.ClassPhoto.Cols,
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -330,7 +330,7 @@ void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void)
 		      Gbl.Usrs.Listing.WithPhotos ? 'Y' :
 						    'N',
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -346,7 +346,7 @@ unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res)
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -362,7 +362,7 @@ unsigned Set_DB_GetMyColsClassPhoto (MYSQL_RES **mysql_res)
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -379,7 +379,7 @@ unsigned Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res)
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/

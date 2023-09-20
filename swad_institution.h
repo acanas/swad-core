@@ -87,8 +87,6 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 void Ins_GetMyInstits (void);
 void Ins_FreeMyInstits (void);
 bool Ins_CheckIfIBelongToIns (long InsCod);
-void Ins_FlushCacheUsrBelongsToIns (void);
-bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
 
 void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins);

@@ -368,7 +368,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -380,7 +380,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			  " FROM ctr_centers"
 			 " WHERE InsCod=%ld"
 		      " GROUP BY InsCod",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -418,7 +418,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -433,7 +433,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -475,7 +475,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -492,7 +492,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -539,7 +539,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -558,7 +558,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -592,7 +592,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			   " AND ins_instits.InsCod=usr_data.InsCod"
 		      " GROUP BY usr_data.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
       case HieLvl_INS:
       case HieLvl_CTR:
       case HieLvl_DEG:
@@ -605,7 +605,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			 " WHERE InsCod=%ld"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -797,8 +797,12 @@ unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod)
 /**************** Check if a user belongs to an institution ******************/
 /*****************************************************************************/
 
-bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
+bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
+				    bool CountOnlyAcceptedCourses)
   {
+   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
+                                                      "");
+
    return (DB_QueryCOUNT ("can not check if a user belongs to an institution",
 			  "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
 			   " FROM crs_users,"
@@ -806,13 +810,14 @@ bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
 				 "deg_degrees,"
 				 "ctr_centers"
 			  " WHERE crs_users.UsrCod=%ld"
-			    " AND crs_users.Accepted='Y'"	// Only if user accepted
+			      "%s"
 			    " AND crs_users.CrsCod=crs_courses.CrsCod"
 			    " AND crs_courses.DegCod=deg_degrees.DegCod"
 			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			    " AND ctr_centers.InsCod=%ld",
 			  UsrCod,
-			  InsCod) != 0);
+			  SubQuery,
+			  HieCod) != 0);
   }
 
 /*****************************************************************************/

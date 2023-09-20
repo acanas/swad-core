@@ -46,7 +46,7 @@ void Bld_DB_CreateBuilding (const struct Bld_Building *Building)
 		   " (CtrCod,ShortName,FullName,Location)"
 		   " VALUES"
 		   " (%ld,'%s','%s','%s')",
-                   Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+                   Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 		   Building->ShrtName,
 		   Building->FullName,
 		   Building->Location);
@@ -80,7 +80,7 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
 			  " FROM bld_buildings"
 		         " WHERE CtrCod=%ld"
 		         " ORDER BY %s",
-		         Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+		         Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 		         OrderBySubQuery[SelectedOrder]);
       case Bld_ONLY_SHRT_NAME:
       default:
@@ -91,7 +91,7 @@ unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
 			  " FROM bld_buildings"
 		         " WHERE CtrCod=%ld"
 		         " ORDER BY ShortName",
-		         Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+		         Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
      }
   }
 
@@ -126,7 +126,7 @@ bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long
 		    " WHERE CtrCod=%ld"
 		      " AND %s='%s'"
 		      " AND BldCod<>%ld)",
-		   Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 		   FldName,Name,
 		   BldCod);
   }

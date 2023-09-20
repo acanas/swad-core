@@ -89,7 +89,7 @@ struct Globals
    struct
      {
       HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
-      long Cod;			// Code of the current country, institution, center, degree or course
+      long HieCod;		// Code of the current country, institution, center, degree or course
       struct Hie_List List[HieLvl_NUM_LEVELS];	// List of child nodes of current node
       struct Hie_Node Node[HieLvl_NUM_LEVELS];	// Current node
      } Hierarchy;
@@ -262,7 +262,7 @@ struct Globals
       struct
         {
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser
-         long Cod;			// Code of the institution/center/degree/course/group related to the file browser with the clipboard
+         long HieCod;			// Code of the institution/center/degree/course/group related to the file browser with the clipboard
 	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
          unsigned Level;
          struct Brw_FilFolLnk FilFolLnk;
@@ -390,28 +390,10 @@ struct Globals
       struct
 	{
 	 long UsrCod;
-	 long InsCod;
-	 bool Belongs;
-	} UsrBelongsToIns;
-      struct
-	{
-	 long UsrCod;
-	 long CtrCod;
-	 bool Belongs;
-	} UsrBelongsToCtr;
-      struct
-	{
-	 long UsrCod;
-	 long DegCod;
-	 bool Belongs;
-	} UsrBelongsToDeg;
-      struct
-	{
-	 long UsrCod;
-	 long CrsCod;
+	 long HieCod;
 	 bool CountOnlyAcceptedCourses;
 	 bool Belongs;
-	} UsrBelongsToCrs;
+	} UsrBelongsTo[HieLvl_NUM_LEVELS];
       struct
 	{
 	 long UsrCod;

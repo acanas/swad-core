@@ -97,7 +97,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 	    case HieLvl_INS:		// Get connected users in the current institution
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
@@ -118,7 +118,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
 	    case HieLvl_CTR:		// Get connected users in the current center
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
@@ -137,7 +137,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
 	    case HieLvl_DEG:		// Get connected users in the current degree
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
@@ -154,7 +154,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
 	    case HieLvl_CRS:		// Get connected users in the current course
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
@@ -169,7 +169,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			       " WHERE crs_users.CrsCod=%ld"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 	    default:
 	       Err_WrongHierarchyLevelExit ();
 	   }
@@ -231,7 +231,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_INS:		// Get connected users in the current institution
 	       return (unsigned)
@@ -254,7 +254,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_CTR:		// Get connected users in the current center
 	       return (unsigned)
@@ -275,7 +275,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_DEG:		// Get connected users in the current degree
 	       return (unsigned)
@@ -294,7 +294,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_CRS:		// Get connected users in the current course
 	       return (unsigned)
@@ -311,7 +311,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) Role);
 	    default:
 	       Err_WrongHierarchyLevelExit ();
@@ -387,7 +387,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_INS:		// Show connected users in the current institution
 	       return (unsigned)
@@ -410,7 +410,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_CTR:		// Show connected users in the current center
 	       return (unsigned)
@@ -431,7 +431,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_DEG:		// Show connected users in the current degree
 	       return (unsigned)
@@ -450,7 +450,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			       (unsigned) Role);
 	    case HieLvl_CRS:		// Show connected users in the current course
 	       return (unsigned)
@@ -466,7 +466,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_users.Role=%u"
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			       (unsigned) Role);
 	    default:
 	       Err_WrongHierarchyLevelExit ();
@@ -493,7 +493,7 @@ void Con_DB_UpdateMeInConnectedList (void)
 		    " (%ld,%u,%ld,NOW())",
                     Gbl.Usrs.Me.UsrDat.UsrCod,
                     (unsigned) Gbl.Usrs.Me.Role.Logged,
-                    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/

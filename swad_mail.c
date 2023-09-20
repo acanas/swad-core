@@ -1682,22 +1682,25 @@ bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
          return Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
-	        UsrDat->Accepted;			// who accepted registration
+	        UsrDat->Accepted;				// who accepted registration
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
-	 return Deg_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
-	                                    Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+	 return Hie_CheckIfUsrBelongsTo (HieLvl_DEG,UsrDat->UsrCod,
+	                                 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+	                                 true);	// count only accepted courses
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can see the user's email of users from current center */
-	 return Ctr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
-	                                    Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+	 return Hie_CheckIfUsrBelongsTo (HieLvl_CTR,UsrDat->UsrCod,
+	                                 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+	                                 true);	// count only accepted courses
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
-	 return Ins_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
-	                                    Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+	 return Hie_CheckIfUsrBelongsTo (HieLvl_INS,UsrDat->UsrCod,
+	                                 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+	                                 true);	// count only accepted courses
       case Rol_SYS_ADM:
 	 return true;
       default:

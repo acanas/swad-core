@@ -109,7 +109,7 @@ static void CtyCfg_Configuration (bool PrintView)
    unsigned NumCtrsWithMap;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CTY].Cod <= 0)		// No country selected
+   if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod <= 0)		// No country selected
       return;
 
    /***** Initializations *****/
@@ -143,13 +143,13 @@ static void CtyCfg_Configuration (bool PrintView)
 	 /* Shortcut to the country */
 	 CtyCfg_Shortcut (PrintView);
 
-	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 	 if (PrintView)
 	    /* QR code with link to the country */
 	    CtyCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+	    NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 
 	    /* Number of users who claim to belong to this country,
 	       number of institutions,
@@ -165,10 +165,10 @@ static void CtyCfg_Configuration (bool PrintView)
 	    CtyCfg_NumCrss ();
 
 	    /* Number of users in courses of this country */
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].Cod,Rol_UNK);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,Rol_UNK);
 	   }
 
       /* End table */
@@ -287,16 +287,16 @@ static void CtyCfg_Map (void)
 	   NumCtr++)
 	{
 	 /* Get next center */
-	 Ctr.Cod = DB_GetNextCode (mysql_res);
+	 Ctr.HieCod = DB_GetNextCode (mysql_res);
 
 	 /* Get data of center */
 	 Ctr_GetCenterDataByCod (&Ctr);
 
 	 /* Get coordinates of center */
-	 Ctr_GetCoordByCod (Ctr.Cod,&Coord);
+	 Ctr_GetCoordByCod (Ctr.HieCod,&Coord);
 
 	 /* Get data of institution */
-	 Ins.Cod = Ctr.PrtCod;
+	 Ins.HieCod = Ctr.PrtCod;
 	 Ins_GetInstitDataByCod (&Ins);
 
 	 /* Add marker */
@@ -322,7 +322,7 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
    char *MapAttribution = NULL;
 
    /***** Get map attribution *****/
-   CtyCfg_GetMapAttr (Gbl.Hierarchy.Node[HieLvl_CTY].Cod,&MapAttribution);
+   CtyCfg_GetMapAttr (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,&MapAttribution);
 
    /***** Map image *****/
    HTM_DIV_Begin ("class=\"CM\"");
@@ -430,7 +430,7 @@ static void CtyCfg_Name (bool PutLink)
 
 static void CtyCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+   HieCfg_Shortcut (PrintView,ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
   }
 
 /*****************************************************************************/
@@ -439,7 +439,7 @@ static void CtyCfg_Shortcut (bool PrintView)
 
 static void CtyCfg_QR (void)
   {
-   HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+   HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
   }
 
 /*****************************************************************************/
@@ -483,13 +483,13 @@ static void CtyCfg_NumInss (void)
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].Cod);
+	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
 	                  Gbl.Hierarchy.Node[HieLvl_CTY].FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod));
+	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -513,7 +513,7 @@ static void CtyCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod));
+	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -535,7 +535,7 @@ static void CtyCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].Cod));
+	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();

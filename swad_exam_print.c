@@ -985,7 +985,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    Exa_GetExamDataByCod (&Exams.Exam);
    if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].Cod)
+   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get question index from form *****/

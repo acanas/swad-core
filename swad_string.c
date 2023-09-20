@@ -355,10 +355,10 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_TML_MENTION,UsrDat.UsrCod,PubCod,
 						   (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 										   0),
-						   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-						   Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
-						   Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-						   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+						   Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+						   Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+						   Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+						   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 		    }
 		 }
 	   }

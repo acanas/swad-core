@@ -50,7 +50,7 @@ void Adm_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Level)
 		    " (%ld,'%s',%ld)",
 		    UsrCod,
 		    Hie_GetDBStrFromLevel (Level),
-		    Gbl.Hierarchy.Node[Level].Cod);
+		    Gbl.Hierarchy.Node[Level].HieCod);
   }
 
 /*****************************************************************************/
@@ -69,9 +69,9 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
 			  " OR (Scope='%s' AND Cod=%ld))"
 		     " AND UsrCod<>%ld",
 		   Hie_GetDBStrFromLevel (HieLvl_SYS),
-		   Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-		   Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
-		   Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+		   Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+		   Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+		   Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -91,7 +91,7 @@ bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Level)
 		      " AND Cod=%ld)",
 		   UsrCod,
 		   Hie_GetDBStrFromLevel (Level),
-		   Gbl.Hierarchy.Node[Level].Cod);
+		   Gbl.Hierarchy.Node[Level].HieCod);
   }
 
 /*****************************************************************************/
@@ -124,7 +124,7 @@ void Adm_DB_RemAdmin (long UsrCod,HieLvl_Level_t Level)
 		     " AND Cod=%ld",
 		   UsrCod,
 		   Hie_GetDBStrFromLevel (Level),
-		   Gbl.Hierarchy.Node[Level].Cod);
+		   Gbl.Hierarchy.Node[Level].HieCod);
   }
 
 /*****************************************************************************/

@@ -163,7 +163,7 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
   {
    /***** Put link to register students *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
-      if (!Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+      if (!Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 				 1 << Rol_STD))	// No students in course
          Usr_ShowWarningNoUsersFound (Rol_STD);
   }
@@ -209,7 +209,7 @@ void Enr_PutLinkToRequestSignUp (void)
 void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole)
   {
    /***** Trivial check 1: current course code should be > 0 *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       Err_WrongCourseExit ();
 
    /***** Trivial check 2: check if user's role is allowed *****/
@@ -224,7 +224,7 @@ void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Update the role of a user in a course *****/
-   Rol_DB_UpdateUsrRoleInCrs (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,UsrDat->UsrCod,NewRole);
+   Rol_DB_UpdateUsrRoleInCrs (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,UsrDat->UsrCod,NewRole);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -250,7 +250,7 @@ void Enr_RegisterUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
    /***** Trivial check 1: current course code should be > 0 *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       Err_WrongCourseExit ();
 
    /***** Trivial check 2: check if user's role is allowed *****/
@@ -265,11 +265,11 @@ void Enr_RegisterUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
      }
 
    /***** Register user in current course in database *****/
-   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
                                  NewRole,KeepOrSetAccepted);
 
    /***** Register last prefs in current course in database *****/
-   Set_DB_InsertUsrInCrsSettings (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   Set_DB_InsertUsrInCrsSettings (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -306,7 +306,7 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
       Err_WrongRoleExit ();
 
    /***** Remove possible enrolment request ******/
-   Enr_RemUsrEnrolmentRequestInCrs (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   Enr_RemUsrEnrolmentRequestInCrs (UsrDat->UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
    /***** Remove old enrolment notifications before inserting the new one ******/
    Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1,UsrDat->UsrCod);
@@ -321,10 +321,10 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
       Ntf_DB_StoreNotifyEventToUsr (NotifyEvent[NewRole],UsrDat->UsrCod,-1L,
 				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 					                            0),
-				    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+				    Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+				    Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+				    Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+				    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -561,7 +561,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
 	       /* Put link to remove all students in the current course */
-	       if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+	       if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 					 1 << Rol_STD))	// This course has students
 		  Enr_PutLinkToRemAllStdsThisCrs ();
 	       break;
@@ -1321,19 +1321,19 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
    if (Gbl.Hierarchy.Level == HieLvl_CRS)
       UsrBelongsToCrs = Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
-   if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
      {
       /***** Check if the other user is administrator of the current institution *****/
       UsrIsInsAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 					      HieLvl_INS);
 
-      if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
 	{
 	 /***** Check if the other user is administrator of the current center *****/
 	 UsrIsCtrAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 						 HieLvl_CTR);
 
-	 if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
+	 if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)
 	    /***** Check if the other user is administrator of the current degree *****/
 	    UsrIsDegAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 						    HieLvl_DEG);
@@ -1350,11 +1350,11 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	 OptionsShown = true;
 	}
 
-      if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
 	{
-	 if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
+	 if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
 	   {
-	    if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
+	    if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)
 	       /***** Register user as administrator of degree *****/
 	       if (!UsrIsDegAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
 		 {
@@ -1392,11 +1392,11 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	 OptionsShown = true;
 	}
 
-      if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
 	{
-	 if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
+	 if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
 	   {
-	    if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
+	    if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
 	       /***** Remove user as an administrator of the degree *****/
 	       if (UsrIsDegAdmin &&
 	           (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
@@ -1710,7 +1710,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Hlp_USERS_Administration_remove_all_students;
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
-   unsigned NumStds = Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+   unsigned NumStds = Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 				            1 << Rol_STD);	// This course has students
 
    /***** Begin box *****/
@@ -1856,7 +1856,7 @@ void Enr_SignUpInCrs (void)
 
       /***** Try to get and old request of the same user (me) in the current course *****/
       ReqCod = Enr_DB_GetUsrEnrolmentRequestInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                                                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
       /***** Request user in current course in database *****/
       if (ReqCod > 0)	// Old request exists in database
@@ -1875,7 +1875,7 @@ void Enr_SignUpInCrs (void)
       if (RoleFromForm == Rol_TCH)
          Notify = true;
       else
-	 Notify = (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+	 Notify = (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 				         1 << Rol_TCH) != 0);	// This course has teachers
       if (Notify)
          Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
@@ -1964,11 +1964,11 @@ void Enr_AskIfRejectSignUp (void)
 
          /* Remove inscription request because it has not sense */
          Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-					  Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+					  Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
         }
       else        // User does not belong to this course
         {
-         Role = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+         Role = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
                                          Gbl.Usrs.Other.UsrDat.UsrCod);
          if (Role == Rol_STD ||
              Role == Rol_NET ||
@@ -2025,7 +2025,7 @@ void Enr_RejectSignUp (void)
 
       /* Remove inscription request */
       Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-				       Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+				       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
       /* Confirmation message */
       Ale_ShowAlert (Ale_SUCCESS,Txt_Enrolment_of_X_rejected,
@@ -2210,7 +2210,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	       ReqCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	       /* Get course code (row[1]) */
-	       Crs.Cod = Str_ConvertStrCodToLongCod (row[1]);
+	       Crs.HieCod = Str_ConvertStrCodToLongCod (row[1]);
 
 	       /* Get user code (row[2]) */
 	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -2222,9 +2222,10 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	       DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
 
 	       if (UsrExists)
-		  UsrBelongsToCrs = Enr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-								Crs.Cod,
-								false);
+		  UsrBelongsToCrs = Hie_CheckIfUsrBelongsTo (HieLvl_CRS,
+							     UsrDat.UsrCod,
+							     Crs.HieCod,
+							     false);
 	       else
 		  UsrBelongsToCrs = false;
 
@@ -2246,11 +2247,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 
 			Crs_GetCourseDataByCod (&Crs);
-			Deg.Cod = Crs.PrtCod;
+			Deg.HieCod = Crs.PrtCod;
 			Deg_GetDegreeDataByCod (&Deg);
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
-			   ParCod_PutPar (ParCod_Crs,Crs.Cod);
+			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
 						    "class=\"LT BT_LINK\"");
 			   Str_FreeGoToTitle ();
@@ -2263,7 +2264,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     /***** Number of teachers in the course *****/
 		     HTM_TD_Begin ("class=\"RT DAT_%s\"",
 		                   The_GetSuffix ());
-			HTM_Unsigned (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs.Cod,
+			HTM_Unsigned (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs.HieCod,
 							    1 << Rol_TCH));
 		     HTM_TD_End ();
 
@@ -2298,7 +2299,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			if (!NextAction[DesiredRole])
 			   Err_WrongRoleExit ();
 			Frm_BeginForm (NextAction[DesiredRole]);
-			   ParCod_PutPar (ParCod_Crs,Crs.Cod);
+			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutCreateButtonInline (Txt_Register);
 			Frm_EndForm ();
@@ -2308,7 +2309,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
 		                   The_GetSuffix ());
 			Frm_BeginForm (ActReqRejSignUp);
-			   ParCod_PutPar (ParCod_Crs,Crs.Cod);
+			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutRemoveButtonInline (Txt_Reject);
 			Frm_EndForm ();
@@ -2321,7 +2322,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		                                  ReqCod);
 		 }
 	       else        // User does not exists or user already belongs to course ==> remove pair from crs_requests table
-		  Enr_RemUsrEnrolmentRequestInCrs (UsrDat.UsrCod,Crs.Cod);
+		  Enr_RemUsrEnrolmentRequestInCrs (UsrDat.UsrCod,Crs.HieCod);
 	      }
 
 	 /* End table */
@@ -2746,7 +2747,7 @@ void Enr_AcceptRegisterMeInCrs (void)
    extern const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X;
 
    /***** Confirm my enrolment *****/
-   Enr_DB_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   Enr_DB_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
    /***** Mark all notifications about enrolment (as student or as teacher)
           in current course as removed *****/
@@ -3141,13 +3142,13 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
    if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
       /***** Remove user from all attendance events in course *****/
-      Att_DB_RemoveUsrFromCrsEvents (UsrDat->UsrCod,Crs->Cod);
+      Att_DB_RemoveUsrFromCrsEvents (UsrDat->UsrCod,Crs->HieCod);
 
       /***** Remove user from all groups in course *****/
-      Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->Cod);
+      Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->HieCod);
 
       /***** Remove user's status about reading of course information *****/
-      Inf_DB_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->Cod);
+      Inf_DB_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->HieCod);
 
       /***** Remove important production of this user in course *****/
       if (RemoveUsrWorks == Enr_REMOVE_USR_PRODUCTION)
@@ -3156,25 +3157,25 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
          Brw_RemoveUsrWorksInCrs (UsrDat,Crs);
 
 	 /* Remove tests, exams and matches results made by user in course */
-	 TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->Cod);
-	 Exa_DB_RemovePrintQstsMadeByUsrInCrs (UsrDat->UsrCod,Crs->Cod);
-	 Exa_DB_RemoveAllPrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->Cod);
-         Mch_RemoveMatchesMadeByUsrInCrs (UsrDat->UsrCod,Crs->Cod);
+	 TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
+	 Exa_DB_RemovePrintQstsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
+	 Exa_DB_RemoveAllPrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
+         Mch_RemoveMatchesMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
 	}
 
       /***** Remove fields of this user in its course record *****/
-      Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (UsrDat->UsrCod,Crs->Cod);
+      Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (UsrDat->UsrCod,Crs->HieCod);
 
       /***** Remove some information about files in course and groups *****/
-      Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (UsrDat->UsrCod,Crs->Cod);
+      Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (UsrDat->UsrCod,Crs->HieCod);
 
       /***** Set all notifications for this user in this course as removed,
              except notifications about new messages *****/
-      Ntf_DB_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->Cod);
+      Ntf_DB_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->HieCod);
 
       /***** Remove user from the tables of courses-users *****/
-      Set_DB_RemUsrFromCrsSettings (UsrDat->UsrCod,Crs->Cod);
-      Enr_DB_RemUsrFromCrs (UsrDat->UsrCod,Crs->Cod);
+      Set_DB_RemUsrFromCrsSettings (UsrDat->UsrCod,Crs->HieCod);
+      Enr_DB_RemUsrFromCrs (UsrDat->UsrCod,Crs->HieCod);
 
       /***** Flush caches *****/
       Usr_FlushCachesUsr ();
@@ -3318,41 +3319,6 @@ bool Enr_CheckIfIBelongToCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/******************** Check if a user belongs to a course ********************/
-/*****************************************************************************/
-
-void Enr_FlushCacheUsrBelongsToCrs (void)
-  {
-   Gbl.Cache.UsrBelongsToCrs.UsrCod = -1L;
-   Gbl.Cache.UsrBelongsToCrs.CrsCod = -1L;
-   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = false;
-   Gbl.Cache.UsrBelongsToCrs.Belongs = false;
-  }
-
-bool Enr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
-                                 bool CountOnlyAcceptedCourses)
-  {
-   /***** 1. Fast check: Trivial cases *****/
-   if (UsrCod <= 0 ||
-       CrsCod <= 0)
-      return false;
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Gbl.Cache.UsrBelongsToCrs.UsrCod &&
-       CrsCod == Gbl.Cache.UsrBelongsToCrs.CrsCod &&
-       CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses)
-      return Gbl.Cache.UsrBelongsToCrs.Belongs;
-
-   /***** 3. Slow check: Get if user belongs to course from database *****/
-   Gbl.Cache.UsrBelongsToCrs.UsrCod = UsrCod;
-   Gbl.Cache.UsrBelongsToCrs.CrsCod = CrsCod;
-   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
-   Gbl.Cache.UsrBelongsToCrs.Belongs = Enr_DB_CheckIfUsrBelongsToCrs (UsrCod,CrsCod,
-                                                                      CountOnlyAcceptedCourses);
-   return Gbl.Cache.UsrBelongsToCrs.Belongs;
-  }
-
-/*****************************************************************************/
 /***** Check if user belongs (no matter if he/she has accepted or not) *******/
 /***** to the current course                                           *******/
 /*****************************************************************************/
@@ -3367,7 +3333,7 @@ bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
-       Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 2. Fast check: If cached... *****/
@@ -3386,9 +3352,9 @@ bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
 
    /***** 4. Fast / slow check: Get if user belongs to current course *****/
    Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
-   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Enr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						                          Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
-						                          false);
+   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Hie_CheckIfUsrBelongsTo (HieLvl_CRS,UsrDat->UsrCod,
+						                       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+						                       false);
    return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
   }
 
@@ -3407,7 +3373,7 @@ bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
-       Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)
+       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
       return false;
 
    /***** 2. Fast check: If cached... *****/
@@ -3417,9 +3383,9 @@ bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
    /***** 3. Fast / slow check: Get if user belongs to current course
                                 and has accepted *****/
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Enr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						                               Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
-						                               true);
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Hie_CheckIfUsrBelongsTo (HieLvl_CRS,UsrDat->UsrCod,
+						                            Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+						                            true);
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }
 

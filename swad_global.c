@@ -241,10 +241,10 @@ void Gbl_InitializeGlobals (void)
    Ins_FlushCacheNumUsrsWhoClaimToBelongToIns ();
    Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
    Usr_FlushCacheUsrIsSuperuser ();
-   Ins_FlushCacheUsrBelongsToIns ();
-   Ctr_FlushCacheUsrBelongsToCtr ();
-   Deg_FlushCacheUsrBelongsToDeg ();
-   Enr_FlushCacheUsrBelongsToCrs ();
+   Hie_FlushCacheUsrBelongsTo (HieLvl_INS);
+   Hie_FlushCacheUsrBelongsTo (HieLvl_CTR);
+   Hie_FlushCacheUsrBelongsTo (HieLvl_DEG);
+   Hie_FlushCacheUsrBelongsTo (HieLvl_CRS);
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();

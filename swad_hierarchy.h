@@ -64,6 +64,10 @@ Hie_Order_t Hie_GetParHieOrder (void);
 
 void Hie_FreeList (HieLvl_Level_t Level);
 
+void Hie_FlushCacheUsrBelongsTo (HieLvl_Level_t Level);
+bool Hie_CheckIfUsrBelongsTo (HieLvl_Level_t Level,long UsrCod,long HieCod,
+                              bool CountOnlyAcceptedCourses);
+
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);
 

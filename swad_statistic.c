@@ -2967,7 +2967,7 @@ static void Sta_WriteCountry (long CtyCod)
       if (CtyCod > 0)	// Hit with a country selected
 	{
 	 /***** Get data of country *****/
-	 Cty.Cod = CtyCod;
+	 Cty.HieCod = CtyCod;
 	 Cty_GetBasicCountryDataByCod (&Cty);
 
 	 /***** Form to go to country *****/
@@ -3053,7 +3053,7 @@ static void Sta_WriteInstit (long InsCod)
    if (InsCod > 0)	// Hit with an institution selected
      {
       /***** Get data of institution *****/
-      Ins.Cod = InsCod;
+      Ins.HieCod = InsCod;
       Ins_GetInstitDataByCod (&Ins);
 
       /***** Title in cell *****/
@@ -3144,7 +3144,7 @@ static void Sta_WriteCenter (long CtrCod)
    if (CtrCod > 0)	// Hit with a center selected
      {
       /***** Get data of center *****/
-      Ctr.Cod = CtrCod;
+      Ctr.HieCod = CtrCod;
       Ctr_GetCenterDataByCod (&Ctr);
 
       /***** Title in cell *****/
@@ -3235,7 +3235,7 @@ static void Sta_WriteDegree (long DegCod)
    if (DegCod > 0)	// Hit with a degree selected
      {
       /***** Get data of degree *****/
-      Deg.Cod = DegCod;
+      Deg.HieCod = DegCod;
       Deg_GetDegreeDataByCod (&Deg);
 
       /***** Title in cell *****/
@@ -3299,7 +3299,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
       row = mysql_fetch_row (mysql_res);
 
       /* Get course code */
-      Crs.Cod = Str_ConvertStrCodToLongCod (row[0]);
+      Crs.HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of current degree */
       CrsOK = Crs_GetCourseDataByCod (&Crs);
@@ -3330,7 +3330,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	    if (CrsOK)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
-		  ParCod_PutPar (ParCod_Crs,Crs.Cod);
+		  ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs.FullName),
 		                           "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();

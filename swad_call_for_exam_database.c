@@ -55,7 +55,7 @@ long Cfe_DB_CreateCallForExam (const struct Cfe_CallForExam *CallForExam)
 				  "NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00',"
 				  "'%s','%s','%s',"
 				  "'%s','%s','%s','%s')",
-				Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+				Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 				(unsigned) Cfe_VISIBLE_CALL_FOR_EXAM,
 				CallForExam->CrsFullName,
 				CallForExam->Year,
@@ -101,7 +101,7 @@ unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND %s"
 		   " ORDER BY ExamDate DESC",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   SubQueryStatus);
   }
 
@@ -122,7 +122,7 @@ unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND Status=%u"
 		   " ORDER BY ExamDate DESC",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
   }
 
@@ -145,7 +145,7 @@ unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 		     " AND Status=%u"
 		     " AND ExamDate>=NOW()"
 		   " ORDER BY ExamDate",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
   }
 
@@ -249,7 +249,7 @@ void Cfe_DB_HideCallForExam (long ExaCod)
 		     " AND CrsCod=%ld",	// Extra check
                    (unsigned) Cfe_HIDDEN_CALL_FOR_EXAM,
                    ExaCod,
-                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -265,7 +265,7 @@ void Cfe_DB_UnhideCallForExam (long ExaCod)
 		     " AND CrsCod=%ld",	// Extra check
                    (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM,
                    ExaCod,
-                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -281,7 +281,7 @@ void Cfe_DB_MarkACallForExamAsDeleted (long ExaCod)
 		     " AND CrsCod=%ld",	// Extra check
                    (unsigned) Cfe_DELETED_CALL_FOR_EXAM,
                    ExaCod,
-                   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/

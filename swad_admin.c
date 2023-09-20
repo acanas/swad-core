@@ -87,7 +87,7 @@ void Adm_ReqAddAdm (HieLvl_Level_t Level)
      };
    bool ICanRegister;
 
-   if (Gbl.Hierarchy.Node[Level].Cod > 0)
+   if (Gbl.Hierarchy.Node[Level].HieCod > 0)
      {
       /***** Get user's identificator of the user to register as admin *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -182,7 +182,7 @@ static void Adm_AddAdm (HieLvl_Level_t Level)
   {
    bool ICanRegister;
 
-   if (Gbl.Hierarchy.Node[Level].Cod > 0)
+   if (Gbl.Hierarchy.Node[Level].HieCod > 0)
      {
       /***** Get plain user's ID of the user to add/modify *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -295,7 +295,7 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
    Usr_MeOrOther_t MeOrOther;
    bool ICanRemove;
 
-   if (Gbl.Hierarchy.Node[Level].Cod > 0)
+   if (Gbl.Hierarchy.Node[Level].HieCod > 0)
      {
       /***** Get user to be removed *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())

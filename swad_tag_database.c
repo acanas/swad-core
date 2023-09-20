@@ -138,7 +138,7 @@ void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
 		   " WHERE tst_tags.CrsCod=%ld"
 		     " AND tst_tags.TagTxt='%s'",
 		   NewTagTxt,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 		   OldTagTxt);
   }
 
@@ -158,7 +158,7 @@ void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden)
 		   TagHidden ? 'Y' :
 			       'N',
 		   TagCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -177,7 +177,7 @@ unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod)
 		     " AND tst_tags.CrsCod=%ld"
 		   " ORDER BY tst_question_tags.TagInd",
 		   QstCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -195,7 +195,7 @@ unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 				      " FROM tst_tags"
 				     " WHERE CrsCod=%ld"
 				     " ORDER BY TagTxt",
-				     Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+				     Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -230,7 +230,7 @@ bool Tag_DB_CheckIfCurrentCrsHasTestTags (void)
 		   "(SELECT *"
 		     " FROM tst_tags"
 		    " WHERE CrsCod=%ld)",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -245,7 +245,7 @@ long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
 			       " FROM tst_tags"
 			      " WHERE CrsCod=%ld"
 			        " AND TagTxt='%s'",
-			      Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+			      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 			      TagTxt);
   }
 

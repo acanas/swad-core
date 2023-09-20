@@ -247,19 +247,19 @@ void Log_GetAndShowLastClicks (void)
 	    TimeDiff = (time_t) 0;
 
 	 /* Get country code (row[4]) */
-	 Hie[HieLvl_CTY].Cod = Str_ConvertStrCodToLongCod (row[4]);
-	 Cty_GetCountryNameInLanguage (Hie[HieLvl_CTY].Cod,Gbl.Prefs.Language,
+	 Hie[HieLvl_CTY].HieCod = Str_ConvertStrCodToLongCod (row[4]);
+	 Cty_GetCountryNameInLanguage (Hie[HieLvl_CTY].HieCod,Gbl.Prefs.Language,
 				       Hie[HieLvl_CTY].FullName);
 
 	 /* Get institution code (row[5]),
 	        center      code (row[6])
 	    and degree      code (row[7]) */
-	 Hie[HieLvl_INS].Cod = Str_ConvertStrCodToLongCod (row[5]);
-	 Hie[HieLvl_CTR].Cod = Str_ConvertStrCodToLongCod (row[6]);
-	 Hie[HieLvl_DEG].Cod = Str_ConvertStrCodToLongCod (row[7]);
-	 Ins_DB_GetInsShrtName (Hie[HieLvl_INS].Cod,Hie[HieLvl_INS].ShrtName);
-	 Ctr_DB_GetShortNameOfCenterByCod (Hie[HieLvl_CTR].Cod,Hie[HieLvl_CTR].ShrtName);
-	 Deg_DB_GetShortNameOfDegreeByCod (Hie[HieLvl_DEG].Cod,Hie[HieLvl_DEG].ShrtName);
+	 Hie[HieLvl_INS].HieCod = Str_ConvertStrCodToLongCod (row[5]);
+	 Hie[HieLvl_CTR].HieCod = Str_ConvertStrCodToLongCod (row[6]);
+	 Hie[HieLvl_DEG].HieCod = Str_ConvertStrCodToLongCod (row[7]);
+	 Ins_DB_GetInsShrtName (Hie[HieLvl_INS].HieCod,Hie[HieLvl_INS].ShrtName);
+	 Ctr_DB_GetShortNameOfCenterByCod (Hie[HieLvl_CTR].HieCod,Hie[HieLvl_CTR].ShrtName);
+	 Deg_DB_GetShortNameOfDegreeByCod (Hie[HieLvl_DEG].HieCod,Hie[HieLvl_DEG].ShrtName);
 
 	 /* Print table row */
 	 HTM_TR_Begin (NULL);

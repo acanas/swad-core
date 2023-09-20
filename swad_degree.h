@@ -105,7 +105,5 @@ bool Deg_CheckIfIBelongToDeg (long DegCod);
 void Deg_GetUsrMainDeg (long UsrCod,
 		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
 		        Rol_Role_t *MaxRole);
-void Deg_FlushCacheUsrBelongsToDeg (void);
-bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
 
 #endif

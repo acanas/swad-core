@@ -206,7 +206,7 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 				      "GrpCod,"
 				      "Info,"
 				      "D DESC",
-			    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+			    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
          else
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get timetable",
@@ -240,8 +240,8 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 				      "GrpCod,"
 				      "Info,"
 				      "D DESC",
-			    Gbl.Hierarchy.Node[HieLvl_CRS].Cod,UsrCod,
-			    Gbl.Hierarchy.Node[HieLvl_CRS].Cod,UsrCod);
+			    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,UsrCod,
+			    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,UsrCod);
       case Tmt_TUTORING_TIMETABLE:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get timetable",

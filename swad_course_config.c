@@ -84,7 +84,7 @@ void CrsCfg_Configuration (bool PrintView)
    bool PutFormInsCod;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].Cod <= 0)	// No course selected
+   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)	// No course selected
       return;
 
    /***** Initializations *****/
@@ -151,10 +151,10 @@ void CrsCfg_Configuration (bool PrintView)
 	 else
 	   {
 	    /***** Number of users *****/
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].Cod,Rol_UNK);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,Rol_UNK);
 
 	    /***** Indicators *****/
 	    CrsCfg_Indicators ();
@@ -226,8 +226,8 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		       NumDeg++)
 		    {
 		     DegInLst = &Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg];
-		     HTM_OPTION (HTM_Type_LONG,&DegInLst->Cod,
-				 DegInLst->Cod == Gbl.Hierarchy.Node[HieLvl_DEG].Cod ? HTM_OPTION_SELECTED :
+		     HTM_OPTION (HTM_Type_LONG,&DegInLst->HieCod,
+				 DegInLst->HieCod == Gbl.Hierarchy.Node[HieLvl_DEG].HieCod ? HTM_OPTION_SELECTED :
 										       HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",DegInLst->ShrtName);
@@ -243,13 +243,13 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
-		  ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+		  ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName),
 					   "class=\"LT BT_LINK\"");
 		  Str_FreeGoToTitle ();
 	      }
 	    Lgo_DrawLogo (HieLvl_DEG,
-			  Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
+			  Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
 			  Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName,
 			  20,"LM");
 	    HTM_NBSP ();
@@ -387,7 +387,7 @@ static void CrsCfg_InternalCode (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Long (Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+	 HTM_Long (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -399,7 +399,7 @@ static void CrsCfg_InternalCode (void)
 
 static void CrsCfg_Shortcut (bool PrintView)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Crs,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   HieCfg_Shortcut (PrintView,ParCod_Crs,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -408,7 +408,7 @@ static void CrsCfg_Shortcut (bool PrintView)
 
 static void CrsCfg_QR (void)
   {
-   HieCfg_QR (ParCod_Crs,Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   HieCfg_QR (ParCod_Crs,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -420,11 +420,11 @@ static void CrsCfg_Indicators (void)
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    struct Ind_IndicatorsCrs IndicatorsCrs;
-   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+   int NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
    char *Title;
 
    /***** Compute indicators ******/
-   Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,
+   Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
 				     NumIndicatorsFromDB,&IndicatorsCrs);
 
    /***** Number of indicators *****/
@@ -468,24 +468,24 @@ void CrsCfg_ChangeCrsDeg (void)
    struct Hie_Node NewDeg;
 
    /***** Get parameter with degree code *****/
-   NewDeg.Cod = ParCod_GetAndCheckPar (ParCod_OthDeg);
+   NewDeg.HieCod = ParCod_GetAndCheckPar (ParCod_OthDeg);
 
    /***** Check if degree has changed *****/
-   if (NewDeg.Cod != Gbl.Hierarchy.Node[HieLvl_CRS].PrtCod)
+   if (NewDeg.HieCod != Gbl.Hierarchy.Node[HieLvl_CRS].PrtCod)
      {
       /***** Get data of new degree *****/
       Deg_GetDegreeDataByCod (&NewDeg);
 
       /***** If name of course was in database in the new degree... *****/
       if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName,-1L,
-                                                  NewDeg.Cod,Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year))
+                                                  NewDeg.HieCod,Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year],
 			  NewDeg.FullName,
 		          Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
       else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Node[HieLvl_CRS].FullName,-1L,
-                                                       NewDeg.Cod,Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year))
+                                                       NewDeg.HieCod,Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year],
@@ -494,9 +494,9 @@ void CrsCfg_ChangeCrsDeg (void)
       else	// Update degree in database
 	{
 	 /***** Update degree in table of courses *****/
-	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Node[HieLvl_CRS].Cod,NewDeg.Cod);
+	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,NewDeg.HieCod);
 	 Gbl.Hierarchy.Node[HieLvl_CRS].PrtCod =
-	 Gbl.Hierarchy.Node[HieLvl_DEG].Cod = NewDeg.Cod;
+	 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod = NewDeg.HieCod;
 
 	 /***** Initialize again current course, degree, center... *****/
       	 Hie_InitHierarchy ();

@@ -71,7 +71,7 @@ typedef enum
 
 struct Hie_Node
   {
-   long Cod;			// Course/degree/center/institution/country code
+   long HieCod;			// Course/degree/center/institution/country code
    long PrtCod;			// Parent code
    struct
      {

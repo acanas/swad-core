@@ -140,9 +140,6 @@ void Enr_ModifyUsr2 (void);
 void Enr_GetMyCourses (void);
 void Enr_FreeMyCourses (void);
 bool Enr_CheckIfIBelongToCrs (long CrsCod);
-void Enr_FlushCacheUsrBelongsToCrs (void);
-bool Enr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
-                                 bool CountOnlyAcceptedCourses);
 void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
 bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);

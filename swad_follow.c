@@ -1101,10 +1101,10 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
       Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_FOLLOWER,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 								    0),
-				    Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CTR].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_DEG].Cod,
-				    Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+				    Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+				    Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+				    Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+				    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
   }
 
 /*****************************************************************************/

@@ -46,7 +46,7 @@ void Plc_DB_CreatePlace (const struct Plc_Place *Plc)
 		   " (InsCod,ShortName,FullName)"
 		   " VALUES"
 		   " (%ld,'%s','%s')",
-                   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+                   Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
                    Plc->ShrtName,
                    Plc->FullName);
   }
@@ -104,10 +104,10 @@ unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
 			     " FROM ctr_centers"
 			    " WHERE InsCod=%ld))"
 		 " ORDER BY %s",
-		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
-		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 		   OrderBySubQuery[SelectedOrder]);
   }
 
@@ -160,7 +160,7 @@ bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
 		    " WHERE InsCod=%ld"
 		      " AND %s='%s'"
 		      " AND PlcCod<>%ld)",
-		   Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 		   FldName,Name,
 		   PlcCod);
   }

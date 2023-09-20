@@ -82,7 +82,7 @@ unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		   " ORDER BY ShortName",
-		   Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
   }
 
 /*****************************************************************************/
@@ -380,7 +380,7 @@ unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
 		   " FROM ctr_centers"
 		  " WHERE InsCod=%ld"
 		    " AND PlcCod=%ld",
-		  Gbl.Hierarchy.Node[HieLvl_INS].Cod,
+		  Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
 		  PlcCod);
   }
 
@@ -674,7 +674,7 @@ void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsign
 		 " WHERE InsCod=%ld"
 		   " AND Latitude<>0"
 		   " AND Longitude<>0",
-		 Gbl.Hierarchy.Node[HieLvl_INS].Cod) < 0)
+		 Gbl.Hierarchy.Node[HieLvl_INS].HieCod) < 0)
       Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -707,7 +707,7 @@ unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res)
 		   " WHERE InsCod=%ld"
 		     " AND Latitude<>0"
 		     " AND Longitude<>0",
-		   Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
   }
 
 /*****************************************************************************/
@@ -758,21 +758,27 @@ unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod)
 /******************* Check if a user belongs to a center *********************/
 /*****************************************************************************/
 
-bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
+bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
+				    bool CountOnlyAcceptedCourses)
   {
+   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
+                                                      "");
+
    return (DB_QueryCOUNT ("can not check if a user belongs to a center",
 			  "SELECT COUNT(DISTINCT deg_degrees.CtrCod)"
 			   " FROM crs_users,"
 				 "crs_courses,"
 				 "deg_degrees"
 			  " WHERE crs_users.UsrCod=%ld"
-			    " AND crs_users.Accepted='Y'"	// Only if user accepted
+			      "%s"
 			    " AND crs_users.CrsCod=crs_courses.CrsCod"
 			    " AND crs_courses.DegCod=deg_degrees.DegCod"
 			    " AND deg_degrees.CtrCod=%ld",
 			  UsrCod,
-			  CtrCod) != 0);
+			  SubQuery,
+			  HieCod) != 0);
   }
+
 /*****************************************************************************/
 /*********** Get number of users who claim to belong to a center *************/
 /*****************************************************************************/

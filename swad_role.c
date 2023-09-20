@@ -79,7 +79,7 @@ void Rol_SetMyRoles (void)
 
    /***** Get my role in current course if not yet filled *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_UNK)
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[HieLvl_CRS].Cod);
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
    /***** Set the user's role I am logged *****/
    Rol_GetRolesInAllCrss (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
@@ -105,17 +105,17 @@ void Rol_SetMyRoles (void)
      }
 
    /***** Check if I am administrator of current institution/center/degree *****/
-   if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
      {
       /* Check if I am and administrator of current institution */
       ICanBeAdm[HieLvl_INS] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
 						      HieLvl_INS);
-      if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
+      if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
 	{
 	 /* Check if I am and administrator of current center */
 	 ICanBeAdm[HieLvl_CTR] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
 							 HieLvl_CTR);
-	 if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
+	 if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)
 	    /* Check if I am and administrator of current degree */
 	    ICanBeAdm[HieLvl_DEG] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
 							    HieLvl_DEG);
@@ -138,34 +138,34 @@ void Rol_SetMyRoles (void)
      }
 
    /***** Check if I belong to current degree *****/
-   if (Gbl.Hierarchy.Node[HieLvl_DEG].Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	 Gbl.Usrs.Me.IBelongToCurrentDeg = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentDeg = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[HieLvl_DEG].Cod);
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentDeg = false;
 
    /***** Check if I belong to current center *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CTR].Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentDeg)
          Gbl.Usrs.Me.IBelongToCurrentCtr = true;
       else
-         Gbl.Usrs.Me.IBelongToCurrentCtr = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[HieLvl_CTR].Cod);
+         Gbl.Usrs.Me.IBelongToCurrentCtr = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentCtr = false;
 
    /***** Check if I belong to current institution *****/
-   if (Gbl.Hierarchy.Node[HieLvl_INS].Cod > 0)
+   if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCtr)
 	 Gbl.Usrs.Me.IBelongToCurrentIns = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentIns = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[HieLvl_INS].Cod);
+	 Gbl.Usrs.Me.IBelongToCurrentIns = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentIns = false;
@@ -338,7 +338,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
       return Rol_UNK;
 
    /***** 2. Fast check: is my role in current course already calculated? *****/
-   if (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod &&
+   if (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].HieCod &&
        Gbl.Cache.MyRoleInCurrentCrs.Cached)
       return Gbl.Cache.MyRoleInCurrentCrs.Role;
 
@@ -357,7 +357,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 	}
 
    /* Update my role in current course */
-   if (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].Cod)
+   if (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
      {
       Gbl.Cache.MyRoleInCurrentCrs.Role   = Role;
       Gbl.Cache.MyRoleInCurrentCrs.Cached = true;
