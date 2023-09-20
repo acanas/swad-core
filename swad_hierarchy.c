@@ -405,7 +405,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    HTM_DIV_Begin ("class=\"BC%s BC_%s\"",
 		   (Gbl.Hierarchy.Level == HieLvl_CRS) ? "" :
 		  ((Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0) ? " BC_SEMIOFF" :
-							      " BC_OFF"),
+							         " BC_OFF"),
 		  The_GetSuffix ());
 
       /***** Separator *****/
@@ -578,45 +578,45 @@ void Hie_InitHierarchy (void)
           depending on course code, degree code, etc. *****/
    if      (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod > 0)	// Course selected
      {
-      Gbl.Hierarchy.Level = HieLvl_CRS;
-      Gbl.Hierarchy.HieCod   = Gbl.Hierarchy.Node[HieLvl_CRS].HieCod;
+      Gbl.Hierarchy.Level  = HieLvl_CRS;
+      Gbl.Hierarchy.HieCod = Gbl.Hierarchy.Node[HieLvl_CRS].HieCod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)	// Degree selected
      {
-      Gbl.Hierarchy.Level = HieLvl_DEG;
-      Gbl.Hierarchy.HieCod   = Gbl.Hierarchy.Node[HieLvl_DEG].HieCod;
+      Gbl.Hierarchy.Level  = HieLvl_DEG;
+      Gbl.Hierarchy.HieCod = Gbl.Hierarchy.Node[HieLvl_DEG].HieCod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)	// Center selected
      {
-      Gbl.Hierarchy.Level = HieLvl_CTR;
-      Gbl.Hierarchy.HieCod   = Gbl.Hierarchy.Node[HieLvl_CTR].HieCod;
+      Gbl.Hierarchy.Level  = HieLvl_CTR;
+      Gbl.Hierarchy.HieCod = Gbl.Hierarchy.Node[HieLvl_CTR].HieCod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)	// Institution selected
      {
-      Gbl.Hierarchy.Level = HieLvl_INS;
-      Gbl.Hierarchy.HieCod   = Gbl.Hierarchy.Node[HieLvl_INS].HieCod;
+      Gbl.Hierarchy.Level  = HieLvl_INS;
+      Gbl.Hierarchy.HieCod = Gbl.Hierarchy.Node[HieLvl_INS].HieCod;
      }
    else if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0)	// Country selected
      {
-      Gbl.Hierarchy.Level = HieLvl_CTY;
-      Gbl.Hierarchy.HieCod   = Gbl.Hierarchy.Node[HieLvl_CTY].HieCod;
+      Gbl.Hierarchy.Level  = HieLvl_CTY;
+      Gbl.Hierarchy.HieCod = Gbl.Hierarchy.Node[HieLvl_CTY].HieCod;
      }
    else
      {
-      Gbl.Hierarchy.Level = HieLvl_SYS;
-      Gbl.Hierarchy.HieCod   = -1L;
+      Gbl.Hierarchy.Level   = HieLvl_SYS;
+      Gbl.Hierarchy.HieCod = -1L;
      }
 
    /***** Initialize paths *****/
    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
-      snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),"%s/%ld",
+      snprintf (Gbl.Crs.PathPriv   ,sizeof (Gbl.Crs.PathPriv   ),"%s/%ld",
 	        Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
       snprintf (Gbl.Crs.PathRelPubl,sizeof (Gbl.Crs.PathRelPubl),"%s/%ld",
-	        Cfg_PATH_CRS_PUBLIC,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	        Cfg_PATH_CRS_PUBLIC ,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
       snprintf (Gbl.Crs.PathURLPubl,sizeof (Gbl.Crs.PathURLPubl),"%s/%ld",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	        Cfg_URL_CRS_PUBLIC  ,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
 
       /***** If any of the course directories does not exist, create it *****/
       if (!Fil_CheckIfPathExists (Gbl.Crs.PathPriv))
@@ -639,8 +639,8 @@ void Hie_ResetHierarchy (void)
    HieLvl_Level_t Level;
 
    /***** Hierarchy level and code *****/
-   Gbl.Hierarchy.Level = HieLvl_UNK;
-   Gbl.Hierarchy.HieCod   = -1L;
+   Gbl.Hierarchy.Level  = HieLvl_UNK;
+   Gbl.Hierarchy.HieCod = -1L;
 
    for (Level  = (HieLvl_Level_t) 0;
 	Level <= (HieLvl_Level_t) HieLvl_NUM_LEVELS - 1;
@@ -649,7 +649,7 @@ void Hie_ResetHierarchy (void)
       Gbl.Hierarchy.List[Level].Num = 0;
       Gbl.Hierarchy.List[Level].Lst = NULL;
       Gbl.Hierarchy.List[Level].SelectedOrder = Hie_ORDER_DEFAULT;
-      Gbl.Hierarchy.Node[Level].HieCod    = -1L;
+      Gbl.Hierarchy.Node[Level].HieCod = -1L;
       Gbl.Hierarchy.Node[Level].PrtCod = -1L;
       Gbl.Hierarchy.Node[Level].ShrtName[0] =
       Gbl.Hierarchy.Node[Level].FullName[0] = '\0';
@@ -1296,29 +1296,29 @@ static void Hie_GetAndShowHierarchyTotal (void)
    switch (Gbl.Scope.Current)
      {
       case HieLvl_SYS:
-	 NumCtysTotal = Cty_GetCachedNumCtysInSys ();
-	 NumInssTotal = Ins_GetCachedNumInssInSys ();
-	 NumCtrsTotal = Ctr_GetCachedNumCtrsInSys ();
-	 NumDegsTotal = Deg_GetCachedNumDegsInSys ();
-	 NumCrssTotal = Crs_GetCachedNumCrssInSys ();
+	 NumCtysTotal = Hie_GetCachedNumNodesInSys (FigCch_NUM_CTYS,"cty_countrs");
+	 NumInssTotal = Hie_GetCachedNumNodesInSys (FigCch_NUM_INSS,"ins_instits");
+	 NumCtrsTotal = Hie_GetCachedNumNodesInSys (FigCch_NUM_CTRS,"ctr_centers");
+	 NumDegsTotal = Hie_GetCachedNumNodesInSys (FigCch_NUM_DEGS,"deg_degrees");
+	 NumCrssTotal = Hie_GetCachedNumNodesInSys (FigCch_NUM_CRSS,"crs_courses");
          break;
       case HieLvl_CTY:
-	 NumInssTotal = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-	 NumCtrsTotal = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-	 NumDegsTotal = Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-	 NumCrssTotal = Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumInssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumCtrsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumDegsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
          break;
       case HieLvl_INS:
-	 NumCtrsTotal = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-	 NumDegsTotal = Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-	 NumCrssTotal = Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	 NumCtrsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	 NumDegsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
          break;
       case HieLvl_CTR:
-	 NumDegsTotal = Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-	 NumCrssTotal = Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
+	 NumDegsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
+	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
 	 break;
       case HieLvl_DEG:
-	 NumCrssTotal = Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
+	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
 	 break;
      case HieLvl_CRS:
 	 break;
@@ -1335,6 +1335,64 @@ static void Hie_GetAndShowHierarchyTotal (void)
                          (int) NumCtrsTotal,
                          (int) NumDegsTotal,
 			 (int) NumCrssTotal);
+  }
+
+/*****************************************************************************/
+/**** Get total number of courses/degrees/centers/institutions/countries *****/
+/*****************************************************************************/
+
+unsigned Hie_GetCachedNumNodesInSys (FigCch_FigureCached_t Figure,
+				     const char *Table)
+  {
+   unsigned NumNodes;
+
+   /***** Get number of courses/degrees/centers/institutions/countries from cache *****/
+   if (!FigCch_GetFigureFromCache (Figure,HieLvl_SYS,-1L,
+                                   FigCch_UNSIGNED,&NumNodes))
+     {
+      /***** Get current number of courses/degrees/centers/institutions/countries
+             from database and update cache *****/
+      NumNodes = (unsigned) DB_GetNumRowsTable (Table);
+      FigCch_UpdateFigureIntoCache (Figure,HieLvl_SYS,-1L,
+                                    FigCch_UNSIGNED,&NumNodes);
+     }
+
+   return NumNodes;
+  }
+
+/*****************************************************************************/
+/**** Get total number of courses/degrees/centers/institutions in country ****/
+/*****************************************************************************/
+
+unsigned Hie_GetCachedNumNodesIn (FigCch_FigureCached_t Figure,
+				  HieLvl_Level_t Level,long HieCod)
+  {
+   static unsigned (*FunctionGetNumNodes[][HieLvl_NUM_LEVELS]) (long HieCod) =
+     {
+      /* Number of nodes in country */
+      [FigCch_NUM_INSS][HieLvl_CTY] = Ins_GetNumInssInCty,
+      [FigCch_NUM_CTRS][HieLvl_CTY] = Ctr_GetNumCtrsInCty,
+      [FigCch_NUM_DEGS][HieLvl_CTY] = Deg_GetNumDegsInCty,
+      [FigCch_NUM_CRSS][HieLvl_CTY] = Crs_GetNumCrssInCty,
+      /* Number of nodes in institution */
+      [FigCch_NUM_CTRS][HieLvl_INS] = Ctr_GetNumCtrsInIns,
+      [FigCch_NUM_DEGS][HieLvl_INS] = Deg_GetNumDegsInIns,
+      [FigCch_NUM_CRSS][HieLvl_INS] = Crs_GetNumCrssInIns,
+      /* Number of nodes in center */
+      [FigCch_NUM_DEGS][HieLvl_CTR] = Deg_GetNumDegsInCtr,
+      [FigCch_NUM_CRSS][HieLvl_CTR] = Crs_GetNumCrssInCtr,
+      /* Number of nodes in degree */
+      [FigCch_NUM_CRSS][HieLvl_DEG] = Crs_GetNumCrssInDeg,
+     };
+   unsigned NumNodes;
+
+   /***** Get number of nodes from cache *****/
+   if (!FigCch_GetFigureFromCache (Figure,Level,HieCod,
+				   FigCch_UNSIGNED,&NumNodes))
+      /***** Get current number of nodes from database and update cache *****/
+      NumNodes = FunctionGetNumNodes[Figure][Level] (HieCod);
+
+   return NumNodes;
   }
 
 /*****************************************************************************/

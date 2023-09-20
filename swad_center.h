@@ -32,6 +32,7 @@
 #include "swad_action.h"
 #include "swad_constant.h"
 #include "swad_degree.h"
+#include "swad_figure_cache.h"
 #include "swad_map.h"
 #include "swad_role_type.h"
 
@@ -70,14 +71,11 @@ void Ctr_ContEditAfterChgCtr (void);
 void Ctr_ReceiveFormReqCtr (void);
 void Ctr_ReceiveFormNewCtr (void);
 
-unsigned Ctr_GetCachedNumCtrsInSys (void);
-
 void Ctr_FlushCacheNumCtrsInCty (void);
-unsigned Ctr_GetCachedNumCtrsInCty (long CtyCod);
+unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 
 void Ctr_FlushCacheNumCtrsInIns (void);
 unsigned Ctr_GetNumCtrsInIns (long InsCod);
-unsigned Ctr_GetCachedNumCtrsInIns (long InsCod);
 
 unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
 unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod);

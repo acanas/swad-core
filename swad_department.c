@@ -990,7 +990,7 @@ unsigned Dpt_GetTotalNumberOfDepartments (void)
 
 void Dpt_FlushCacheNumDptsInIns (void)
   {
-   Gbl.Cache.NumDptsInIns.InsCod  = -1L;
+   Gbl.Cache.NumDptsInIns.HieCod  = -1L;
    Gbl.Cache.NumDptsInIns.NumDpts = 0;
   }
 
@@ -1001,11 +1001,11 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumDptsInIns.InsCod)
+   if (InsCod == Gbl.Cache.NumDptsInIns.HieCod)
       return Gbl.Cache.NumDptsInIns.NumDpts;
 
    /***** 3. Slow: number of departments of an institution from database *****/
-   Gbl.Cache.NumDptsInIns.InsCod  = InsCod;
+   Gbl.Cache.NumDptsInIns.HieCod  = InsCod;
    Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDepartmentsInInstitution (InsCod);
    return Gbl.Cache.NumDptsInIns.NumDpts;
   }

@@ -126,7 +126,7 @@ static void SysCfg_Configuration (bool PrintView)
 	 else
 	   {
 	    /***** Get number of centers *****/
-	    NumCtrs = Ctr_GetCachedNumCtrsInSys ();
+	    NumCtrs = Hie_GetCachedNumNodesInSys (FigCch_NUM_CTRS,"ctr_centers");
 
 	    /***** Number of countries,
 		   number of institutions,
@@ -309,7 +309,7 @@ static void SysCfg_NumCtys (void)
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCty);
 	    HTM_BUTTON_Submit_Begin (Txt_Countries,"class=\"LB BT_LINK\"");
-	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
+	       HTM_Unsigned (Hie_GetCachedNumNodesInSys (FigCch_NUM_CTYS,"cty_countrs"));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -333,7 +333,7 @@ static void SysCfg_NumInss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Ins_GetCachedNumInssInSys ());
+	 HTM_Unsigned (Hie_GetCachedNumNodesInSys (FigCch_NUM_INSS,"ins_instits"));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -355,7 +355,7 @@ static void SysCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Deg_GetCachedNumDegsInSys ());
+	 HTM_Unsigned (Hie_GetCachedNumNodesInSys (FigCch_NUM_DEGS,"deg_degrees"));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -377,7 +377,7 @@ static void SysCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Crs_GetCachedNumCrssInSys ());
+	 HTM_Unsigned (Hie_GetCachedNumNodesInSys (FigCch_NUM_CRSS,"crs_courses"));
       HTM_TD_End ();
 
    HTM_TR_End ();

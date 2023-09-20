@@ -31,6 +31,7 @@
 
 #include "swad_action.h"
 #include "swad_constant.h"
+#include "swad_figure_cache.h"
 #include "swad_hierarchy_level.h"
 #include "swad_role_type.h"
 #include "swad_string.h"
@@ -80,19 +81,14 @@ void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 
-unsigned Deg_GetCachedNumDegsInSys (void);
-
 void Deg_FlushCacheNumDegsInCty (void);
 unsigned Deg_GetNumDegsInCty (long CtyCod);
-unsigned Deg_GetCachedNumDegsInCty (long CtyCod);
 
 void Deg_FlushCacheNumDegsInIns (void);
 unsigned Deg_GetNumDegsInIns (long InsCod);
-unsigned Deg_GetCachedNumDegsInIns (long InsCod);
 
 void Deg_FlushCacheNumDegsInCtr (void);
 unsigned Deg_GetNumDegsInCtr (long CtrCod);
-unsigned Deg_GetCachedNumDegsInCtr (long CtrCod);
 
 unsigned Deg_GetCachedNumDegsWithCrss (void);
 unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role);

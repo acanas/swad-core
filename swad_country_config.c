@@ -149,7 +149,8 @@ static void CtyCfg_Configuration (bool PrintView)
 	    CtyCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	    NumCtrs = Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,
+						  HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 
 	    /* Number of users who claim to belong to this country,
 	       number of institutions,
@@ -489,7 +490,8 @@ static void CtyCfg_NumInss (void)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
+	       HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_INSS,
+							 HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -513,7 +515,8 @@ static void CtyCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,
+						   HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -535,7 +538,8 @@ static void CtyCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+						   HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();

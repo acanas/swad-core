@@ -98,8 +98,6 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentersForEdition (void);
 static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status);
 
-static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
-
 static void Ctr_EditingCenterConstructor (void);
 static void Ctr_EditingCenterDestructor (void);
 
@@ -369,13 +367,15 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       /***** Number of degrees *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Ctr->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,
+						HieLvl_CTR,Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Ctr->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+						HieLvl_CTR,Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
@@ -1555,65 +1555,31 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
   }
 
 /*****************************************************************************/
-/************************** Get number of centers ****************************/
-/*****************************************************************************/
-
-unsigned Ctr_GetCachedNumCtrsInSys (void)
-  {
-   unsigned NumCtrs;
-
-   /***** Get number of centers from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,HieLvl_SYS,-1L,
-				   FigCch_UNSIGNED,&NumCtrs))
-     {
-      /***** Get current number of centers from database and update cache *****/
-      NumCtrs = (unsigned) DB_GetNumRowsTable ("ctr_centers");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_SYS,-1L,
-				    FigCch_UNSIGNED,&NumCtrs);
-     }
-
-   return NumCtrs;
-  }
-
-/*****************************************************************************/
 /******************* Get number of centers in a country **********************/
 /*****************************************************************************/
 
 void Ctr_FlushCacheNumCtrsInCty (void)
   {
-   Gbl.Cache.NumCtrsInCty.CtyCod  = -1L;
+   Gbl.Cache.NumCtrsInCty.HieCod  = -1L;
    Gbl.Cache.NumCtrsInCty.NumCtrs = 0;
   }
 
-static unsigned Ctr_GetNumCtrsInCty (long CtyCod)
+unsigned Ctr_GetNumCtrsInCty (long CtyCod)
   {
    /***** 1. Fast check: Trivial case *****/
    if (CtyCod <= 0)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (CtyCod == Gbl.Cache.NumCtrsInCty.CtyCod)
+   if (CtyCod == Gbl.Cache.NumCtrsInCty.HieCod)
       return Gbl.Cache.NumCtrsInCty.NumCtrs;
 
    /***** 3. Slow: number of centers in a country from database *****/
-   Gbl.Cache.NumCtrsInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumCtrsInCty.HieCod  = CtyCod;
    Gbl.Cache.NumCtrsInCty.NumCtrs = Ctr_DB_GetNumCtrsInCty (CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_CTY,Gbl.Cache.NumCtrsInCty.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
    return Gbl.Cache.NumCtrsInCty.NumCtrs;
-  }
-
-unsigned Ctr_GetCachedNumCtrsInCty (long CtyCod)
-  {
-   unsigned NumCtrs;
-
-   /***** Get number of centers from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,HieLvl_CTY,CtyCod,
-				   FigCch_UNSIGNED,&NumCtrs))
-      /***** Get current number of centers from database and update cache *****/
-      NumCtrs = Ctr_GetNumCtrsInCty (CtyCod);
-
-   return NumCtrs;
   }
 
 /*****************************************************************************/
@@ -1622,7 +1588,7 @@ unsigned Ctr_GetCachedNumCtrsInCty (long CtyCod)
 
 void Ctr_FlushCacheNumCtrsInIns (void)
   {
-   Gbl.Cache.NumCtrsInIns.InsCod  = -1L;
+   Gbl.Cache.NumCtrsInIns.HieCod  = -1L;
    Gbl.Cache.NumCtrsInIns.NumCtrs = 0;
   }
 
@@ -1633,28 +1599,15 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumCtrsInIns.InsCod)
+   if (InsCod == Gbl.Cache.NumCtrsInIns.HieCod)
       return Gbl.Cache.NumCtrsInIns.NumCtrs;
 
    /***** 3. Slow: number of centers in an institution from database *****/
-   Gbl.Cache.NumCtrsInIns.InsCod  = InsCod;
+   Gbl.Cache.NumCtrsInIns.HieCod  = InsCod;
    Gbl.Cache.NumCtrsInIns.NumCtrs = Ctr_DB_GetNumCtrsInIns (InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_INS,Gbl.Cache.NumCtrsInIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_INS,Gbl.Cache.NumCtrsInIns.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInIns.NumCtrs);
    return Gbl.Cache.NumCtrsInIns.NumCtrs;
-  }
-
-unsigned Ctr_GetCachedNumCtrsInIns (long InsCod)
-  {
-   unsigned NumCtrs;
-
-   /***** Get number of centers from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS,HieLvl_INS,InsCod,
-				   FigCch_UNSIGNED,&NumCtrs))
-      /***** Get current number of centers from database and update cache *****/
-      NumCtrs = Ctr_GetNumCtrsInIns (InsCod);
-
-   return NumCtrs;
   }
 
 /*****************************************************************************/
@@ -1988,7 +1941,7 @@ bool Ctr_CheckIfIBelongToCtr (long CtrCod)
 
 void Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
   {
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.HieCod  = -1L;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
   }
 
@@ -2003,7 +1956,7 @@ unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr)
       return Ctr->NumUsrsWhoClaimToBelong.NumUsrs;
 
    /***** 3. Fast check: If cached... *****/
-   if (Ctr->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
+   if (Ctr->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.HieCod)
      {
       Ctr->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
       Ctr->NumUsrsWhoClaimToBelong.Valid = true;
@@ -2012,10 +1965,10 @@ unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr)
 
    /***** 4. Slow: number of users who claim to belong to a center
                    from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = Ctr->HieCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.HieCod  = Ctr->HieCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
    Ctr->NumUsrsWhoClaimToBelong.NumUsrs = Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (Ctr->HieCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs);
    return Ctr->NumUsrsWhoClaimToBelong.NumUsrs;
   }

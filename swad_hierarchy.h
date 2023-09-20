@@ -71,4 +71,9 @@ bool Hie_CheckIfUsrBelongsTo (HieLvl_Level_t Level,long UsrCod,long HieCod,
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);
 
+unsigned Hie_GetCachedNumNodesInSys (FigCch_FigureCached_t Figure,
+				     const char *Table);
+unsigned Hie_GetCachedNumNodesIn (FigCch_FigureCached_t Figure,
+				  HieLvl_Level_t Level,long HieCod);
+
 #endif

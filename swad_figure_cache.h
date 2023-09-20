@@ -111,10 +111,10 @@ typedef enum
 /*****************************************************************************/
 
 void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
-                                   HieLvl_Level_t Level,long Cod,
+                                   HieLvl_Level_t Level,long HieCod,
                                    FigCch_Type_t Type,const void *ValuePtr);
 bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
-                                HieLvl_Level_t Level,long Cod,
+                                HieLvl_Level_t Level,long HieCod,
                                 FigCch_Type_t Type,void *ValuePtr);
 
 #endif

@@ -291,70 +291,70 @@ struct Globals
      {
       struct
 	{
-	 long CtyCod;
+	 long HieCod;
 	 Lan_Language_t Language;
 	 char CtyName[Cty_MAX_BYTES_NAME + 1];
 	} CountryName;
       struct
 	{
-	 long InsCod;
+	 long HieCod;
 	 char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
 	 char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 	} InstitutionShrtNameAndCty;
       struct
         {
-	 long InsCod;
+	 long HieCod;
 	 unsigned NumDpts;
         } NumDptsInIns;
       struct
         {
          bool Valid;
-	 long CtyCod;
+	 long HieCod;
 	 unsigned NumInss;
         } NumInssInCty;
       struct
         {
-	 long CtyCod;
+	 long HieCod;
 	 unsigned NumCtrs;
         } NumCtrsInCty;
       struct
         {
-	 long InsCod;
+	 long HieCod;
 	 unsigned NumCtrs;
         } NumCtrsInIns;
       struct
         {
-	 long CtyCod;
+	 long HieCod;
 	 unsigned NumDegs;
         } NumDegsInCty;
       struct
         {
-	 long InsCod;
+	 long HieCod;
 	 unsigned NumDegs;
         } NumDegsInIns;
       struct
         {
-	 long CtrCod;
+	 long HieCod;
 	 unsigned NumDegs;
         } NumDegsInCtr;
       struct
         {
-	 long CtyCod;
+	 long HieCod;
 	 unsigned NumCrss;
         } NumCrssInCty;
       struct
         {
-	 long InsCod;
+	 long HieCod;
 	 unsigned NumCrss;
         } NumCrssInIns;
       struct
         {
-	 long CtrCod;
+	 long HieCod;
 	 unsigned NumCrss;
         } NumCrssInCtr;
       struct
         {
-	 long DegCod;
+	 long HieCod;
 	 unsigned NumCrss;
         } NumCrssInDeg;
       struct
@@ -369,17 +369,17 @@ struct Globals
         } NumUsrsWhoClaimToBelongToAnotherCty;
       struct
         {
-	 long CtyCod;
+	 long HieCod;
 	 unsigned NumUsrs;
         } NumUsrsWhoClaimToBelongToCty;
       struct
         {
-	 long InsCod;
+	 long HieCod;
 	 unsigned NumUsrs;
         } NumUsrsWhoClaimToBelongToIns;
       struct
         {
-	 long CtrCod;
+	 long HieCod;
 	 unsigned NumUsrs;
         } NumUsrsWhoClaimToBelongToCtr;
       struct

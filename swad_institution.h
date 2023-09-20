@@ -29,6 +29,7 @@
 
 #include "swad_center.h"
 #include "swad_constant.h"
+#include "swad_figure_cache.h"
 #include "swad_role_type.h"
 
 /*****************************************************************************/
@@ -71,11 +72,8 @@ void Ins_ContEditAfterChgIns (void);
 void Ins_ReceiveFormReqIns (void);
 void Ins_ReceiveFormNewIns (void);
 
-unsigned Ins_GetCachedNumInssInSys (void);
-
 void Ins_FlushCacheNumInssInCty (void);
 unsigned Ins_GetNumInssInCty (long CtyCod);
-unsigned Ins_GetCachedNumInssInCty (long CtyCod);
 
 unsigned Ins_GetCachedNumInssWithCtrs (void);
 unsigned Ins_GetCachedNumInssWithDegs (void);

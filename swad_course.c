@@ -408,33 +408,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
   }
 
 /*****************************************************************************/
-/*********************** Get total number of courses *************************/
-/*****************************************************************************/
-
-unsigned Crs_GetCachedNumCrssInSys (void)
-  {
-   unsigned NumCrss;
-
-   /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_SYS,-1L,
-                                   FigCch_UNSIGNED,&NumCrss))
-     {
-      /***** Get current number of courses from database and update cache *****/
-      NumCrss = (unsigned) DB_GetNumRowsTable ("crs_courses");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_SYS,-1L,
-                                    FigCch_UNSIGNED,&NumCrss);
-     }
-
-   return NumCrss;
-  }
-
-/*****************************************************************************/
 /****************** Get number of courses in a country ***********************/
 /*****************************************************************************/
 
 void Crs_FlushCacheNumCrssInCty (void)
   {
-   Gbl.Cache.NumCrssInCty.CtyCod  = -1L;
+   Gbl.Cache.NumCrssInCty.HieCod  = -1L;
    Gbl.Cache.NumCrssInCty.NumCrss = 0;
   }
 
@@ -445,28 +424,15 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (CtyCod == Gbl.Cache.NumCrssInCty.CtyCod)
+   if (CtyCod == Gbl.Cache.NumCrssInCty.HieCod)
       return Gbl.Cache.NumCrssInCty.NumCrss;
 
    /***** 3. Slow: number of courses in a country from database *****/
-   Gbl.Cache.NumCrssInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumCrssInCty.HieCod  = CtyCod;
    Gbl.Cache.NumCrssInCty.NumCrss = Crs_DB_GetNumCrssInCty (CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_CTY,Gbl.Cache.NumCrssInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_CTY,Gbl.Cache.NumCrssInCty.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInCty.NumCrss);
    return Gbl.Cache.NumCrssInCty.NumCrss;
-  }
-
-unsigned Crs_GetCachedNumCrssInCty (long CtyCod)
-  {
-   unsigned NumCrss;
-
-   /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_CTY,CtyCod,
-				   FigCch_UNSIGNED,&NumCrss))
-      /***** Get current number of courses from database and update cache *****/
-      NumCrss = Crs_GetNumCrssInCty (CtyCod);
-
-   return NumCrss;
   }
 
 /*****************************************************************************/
@@ -475,7 +441,7 @@ unsigned Crs_GetCachedNumCrssInCty (long CtyCod)
 
 void Crs_FlushCacheNumCrssInIns (void)
   {
-   Gbl.Cache.NumCrssInIns.InsCod  = -1L;
+   Gbl.Cache.NumCrssInIns.HieCod  = -1L;
    Gbl.Cache.NumCrssInIns.NumCrss = 0;
   }
 
@@ -486,28 +452,15 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumCrssInIns.InsCod)
+   if (InsCod == Gbl.Cache.NumCrssInIns.HieCod)
       return Gbl.Cache.NumCrssInIns.NumCrss;
 
    /***** 3. Slow: number of courses in an institution from database *****/
-   Gbl.Cache.NumCrssInIns.InsCod  = InsCod;
+   Gbl.Cache.NumCrssInIns.HieCod  = InsCod;
    Gbl.Cache.NumCrssInIns.NumCrss = Crs_DB_GetNumCrssInIns (InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_INS,Gbl.Cache.NumCrssInIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_INS,Gbl.Cache.NumCrssInIns.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInIns.NumCrss);
    return Gbl.Cache.NumCrssInIns.NumCrss;
-  }
-
-unsigned Crs_GetCachedNumCrssInIns (long InsCod)
-  {
-   unsigned NumCrss;
-
-   /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_INS,InsCod,
-				   FigCch_UNSIGNED,&NumCrss))
-      /***** Get current number of courses from database and update cache *****/
-      NumCrss = Crs_GetNumCrssInIns (InsCod);
-
-   return NumCrss;
   }
 
 /*****************************************************************************/
@@ -516,7 +469,7 @@ unsigned Crs_GetCachedNumCrssInIns (long InsCod)
 
 void Crs_FlushCacheNumCrssInCtr (void)
   {
-   Gbl.Cache.NumCrssInCtr.CtrCod  = -1L;
+   Gbl.Cache.NumCrssInCtr.HieCod  = -1L;
    Gbl.Cache.NumCrssInCtr.NumCrss = 0;
   }
 
@@ -527,30 +480,15 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (CtrCod == Gbl.Cache.NumCrssInCtr.CtrCod)
+   if (CtrCod == Gbl.Cache.NumCrssInCtr.HieCod)
       return Gbl.Cache.NumCrssInCtr.NumCrss;
 
    /***** 3. Slow: number of courses in a center from database *****/
-   Gbl.Cache.NumCrssInCtr.CtrCod  = CtrCod;
+   Gbl.Cache.NumCrssInCtr.HieCod  = CtrCod;
    Gbl.Cache.NumCrssInCtr.NumCrss = Crs_DB_GetNumCrssInCtr (CtrCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_CTR,Gbl.Cache.NumCrssInCtr.HieCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInCtr.NumCrss);
    return Gbl.Cache.NumCrssInCtr.NumCrss;
-  }
-
-unsigned Crs_GetCachedNumCrssInCtr (long CtrCod)
-  {
-   unsigned NumCrss;
-
-   /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_CTR,CtrCod,
-				   FigCch_UNSIGNED,&NumCrss))
-     {
-      /***** Get current number of courses from database and update cache *****/
-      NumCrss = Crs_GetNumCrssInCtr (CtrCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_CTR,CtrCod,
-				    FigCch_UNSIGNED,&NumCrss);
-     }
-
-   return NumCrss;
   }
 
 /*****************************************************************************/
@@ -559,7 +497,7 @@ unsigned Crs_GetCachedNumCrssInCtr (long CtrCod)
 
 void Crs_FlushCacheNumCrssInDeg (void)
   {
-   Gbl.Cache.NumCrssInDeg.DegCod  = -1L;
+   Gbl.Cache.NumCrssInDeg.HieCod  = -1L;
    Gbl.Cache.NumCrssInDeg.NumCrss = 0;
   }
 
@@ -570,28 +508,15 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (DegCod == Gbl.Cache.NumCrssInDeg.DegCod)
+   if (DegCod == Gbl.Cache.NumCrssInDeg.HieCod)
       return Gbl.Cache.NumCrssInDeg.NumCrss;
 
    /***** 3. Slow: number of courses in a degree from database *****/
-   Gbl.Cache.NumCrssInDeg.DegCod  = DegCod;
+   Gbl.Cache.NumCrssInDeg.HieCod  = DegCod;
    Gbl.Cache.NumCrssInDeg.NumCrss = Crs_DB_GetNumCrssInDeg (DegCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_DEG,Gbl.Cache.NumCrssInDeg.DegCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_DEG,Gbl.Cache.NumCrssInDeg.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInDeg.NumCrss);
    return Gbl.Cache.NumCrssInDeg.NumCrss;
-  }
-
-unsigned Crs_GetCachedNumCrssInDeg (long DegCod)
-  {
-   unsigned NumCrss;
-
-   /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_DEG,DegCod,
-				   FigCch_UNSIGNED,&NumCrss))
-      /***** Get current number of courses from database and update cache *****/
-      NumCrss = Crs_GetNumCrssInDeg (DegCod);
-
-   return NumCrss;
   }
 
 /*****************************************************************************/

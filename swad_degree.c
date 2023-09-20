@@ -796,7 +796,8 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   unsigned NumCrss = Crs_GetCachedNumCrssInDeg (Deg->HieCod);
+   unsigned NumCrss = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+					       HieLvl_DEG,Deg->HieCod);
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->Specific.TypCod;
@@ -1524,33 +1525,12 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
   }
 
 /*****************************************************************************/
-/*********************** Get total number of degrees *************************/
-/*****************************************************************************/
-
-unsigned Deg_GetCachedNumDegsInSys (void)
-  {
-   unsigned NumDegs;
-
-   /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,HieLvl_SYS,-1L,
-                                   FigCch_UNSIGNED,&NumDegs))
-     {
-      /***** Get current number of degrees from database and update cache *****/
-      NumDegs = (unsigned) DB_GetNumRowsTable ("deg_degrees");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_SYS,-1L,
-                                    FigCch_UNSIGNED,&NumDegs);
-     }
-
-   return NumDegs;
-  }
-
-/*****************************************************************************/
 /********************* Get number of degrees in a country ********************/
 /*****************************************************************************/
 
 void Deg_FlushCacheNumDegsInCty (void)
   {
-   Gbl.Cache.NumDegsInCty.CtyCod  = -1L;
+   Gbl.Cache.NumDegsInCty.HieCod  = -1L;
    Gbl.Cache.NumDegsInCty.NumDegs = 0;
   }
 
@@ -1561,28 +1541,15 @@ unsigned Deg_GetNumDegsInCty (long CtyCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (CtyCod == Gbl.Cache.NumDegsInCty.CtyCod)
+   if (CtyCod == Gbl.Cache.NumDegsInCty.HieCod)
       return Gbl.Cache.NumDegsInCty.NumDegs;
 
    /***** 3. Slow: number of degrees in a country from database *****/
-   Gbl.Cache.NumDegsInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumDegsInCty.HieCod  = CtyCod;
    Gbl.Cache.NumDegsInCty.NumDegs = Deg_DB_GetNumDegsInCty (CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_CTY,Gbl.Cache.NumDegsInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_CTY,Gbl.Cache.NumDegsInCty.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCty.NumDegs);
    return Gbl.Cache.NumDegsInCty.NumDegs;
-  }
-
-unsigned Deg_GetCachedNumDegsInCty (long CtyCod)
-  {
-   unsigned NumDegs;
-
-   /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,HieLvl_CTY,CtyCod,
-				   FigCch_UNSIGNED,&NumDegs))
-      /***** Get current number of degrees from database and update cache *****/
-      NumDegs = Deg_GetNumDegsInCty (CtyCod);
-
-   return NumDegs;
   }
 
 /*****************************************************************************/
@@ -1591,7 +1558,7 @@ unsigned Deg_GetCachedNumDegsInCty (long CtyCod)
 
 void Deg_FlushCacheNumDegsInIns (void)
   {
-   Gbl.Cache.NumDegsInIns.InsCod  = -1L;
+   Gbl.Cache.NumDegsInIns.HieCod  = -1L;
    Gbl.Cache.NumDegsInIns.NumDegs = 0;
   }
 
@@ -1602,28 +1569,15 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumDegsInIns.InsCod)
+   if (InsCod == Gbl.Cache.NumDegsInIns.HieCod)
       return Gbl.Cache.NumDegsInIns.NumDegs;
 
    /***** 3. Slow: number of degrees in an institution from database *****/
-   Gbl.Cache.NumDegsInIns.InsCod  = InsCod;
+   Gbl.Cache.NumDegsInIns.HieCod  = InsCod;
    Gbl.Cache.NumDegsInIns.NumDegs = Deg_DB_GetNumDegsInIns (InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_INS,Gbl.Cache.NumDegsInIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_INS,Gbl.Cache.NumDegsInIns.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInIns.NumDegs);
    return Gbl.Cache.NumDegsInIns.NumDegs;
-  }
-
-unsigned Deg_GetCachedNumDegsInIns (long InsCod)
-  {
-   unsigned NumDegs;
-
-   /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,HieLvl_INS,InsCod,
-				   FigCch_UNSIGNED,&NumDegs))
-      /***** Get current number of degrees from database and update cache *****/
-      NumDegs = Deg_GetNumDegsInIns (InsCod);
-
-   return NumDegs;
   }
 
 /*****************************************************************************/
@@ -1632,7 +1586,7 @@ unsigned Deg_GetCachedNumDegsInIns (long InsCod)
 
 void Deg_FlushCacheNumDegsInCtr (void)
   {
-   Gbl.Cache.NumDegsInCtr.CtrCod  = -1L;
+   Gbl.Cache.NumDegsInCtr.HieCod  = -1L;
    Gbl.Cache.NumDegsInCtr.NumDegs = 0;
   }
 
@@ -1643,28 +1597,15 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (CtrCod == Gbl.Cache.NumDegsInCtr.CtrCod)
+   if (CtrCod == Gbl.Cache.NumDegsInCtr.HieCod)
       return Gbl.Cache.NumDegsInCtr.NumDegs;
 
    /***** 3. Slow: number of degrees in a center from database *****/
-   Gbl.Cache.NumDegsInCtr.CtrCod  = CtrCod;
+   Gbl.Cache.NumDegsInCtr.HieCod  = CtrCod;
    Gbl.Cache.NumDegsInCtr.NumDegs = Deg_DB_GetNumDegsInCtr (CtrCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_CTR,Gbl.Cache.NumDegsInCtr.CtrCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_CTR,Gbl.Cache.NumDegsInCtr.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCtr.NumDegs);
    return Gbl.Cache.NumDegsInCtr.NumDegs;
-  }
-
-unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
-  {
-   unsigned NumDegs;
-
-   /***** Get number of degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS,HieLvl_CTR,CtrCod,
-				   FigCch_UNSIGNED,&NumDegs))
-      /***** Get current number of degrees from database and update cache *****/
-      NumDegs = Deg_GetNumDegsInCtr (CtrCod);
-
-   return NumDegs;
   }
 
 /*****************************************************************************/

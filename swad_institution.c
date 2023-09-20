@@ -398,19 +398,22 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       /* Number of centers in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Ctr_GetCachedNumCtrsInIns (Ins->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,
+						HieLvl_INS,Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Ins->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,
+						HieLvl_INS,Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of courses in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Ins->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+						HieLvl_INS,Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of departments in this institution */
@@ -736,7 +739,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
 
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
   {
-   Gbl.Cache.InstitutionShrtNameAndCty.InsCod      = -1L;
+   Gbl.Cache.InstitutionShrtNameAndCty.HieCod      = -1L;
    Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
    Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0]  = '\0';
   }
@@ -756,7 +759,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
      }
 
    /***** 2. Fast check: If cached... *****/
-   if (Ins->HieCod == Gbl.Cache.InstitutionShrtNameAndCty.InsCod)
+   if (Ins->HieCod == Gbl.Cache.InstitutionShrtNameAndCty.HieCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
 		sizeof (Ins->ShrtName) - 1);
@@ -766,7 +769,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
      }
 
    /***** 3. Slow: get short name and country of institution from database *****/
-   Gbl.Cache.InstitutionShrtNameAndCty.InsCod = Ins->HieCod;
+   Gbl.Cache.InstitutionShrtNameAndCty.HieCod = Ins->HieCod;
 
    if (Ins_DB_GetInsShrtNameAndCty (&mysql_res,Ins->HieCod) == 1)
      {
@@ -1549,27 +1552,6 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
   }
 
 /*****************************************************************************/
-/********************* Get total number of institutions **********************/
-/*****************************************************************************/
-
-unsigned Ins_GetCachedNumInssInSys (void)
-  {
-   unsigned NumInss;
-
-   /***** Get number of institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,HieLvl_SYS,-1L,
-                                   FigCch_UNSIGNED,&NumInss))
-     {
-      /***** Get current number of institutions from database and update cache *****/
-      NumInss = (unsigned) DB_GetNumRowsTable ("ins_instits");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,HieLvl_SYS,-1L,
-                                    FigCch_UNSIGNED,&NumInss);
-     }
-
-   return NumInss;
-  }
-
-/*****************************************************************************/
 /**************** Get number of institutions in a country ********************/
 /*****************************************************************************/
 
@@ -1582,29 +1564,16 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
   {
    /***** 1. Fast check: If cached... *****/
    if (Gbl.Cache.NumInssInCty.Valid &&
-       CtyCod == Gbl.Cache.NumInssInCty.CtyCod)
+       CtyCod == Gbl.Cache.NumInssInCty.HieCod)
       return Gbl.Cache.NumInssInCty.NumInss;
 
    /***** 2. Slow: number of institutions in a country from database *****/
-   Gbl.Cache.NumInssInCty.CtyCod  = CtyCod;
+   Gbl.Cache.NumInssInCty.HieCod  = CtyCod;
    Gbl.Cache.NumInssInCty.NumInss = Ins_DB_GetNumInssInCty (CtyCod);
    Gbl.Cache.NumInssInCty.Valid   = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Cache.NumInssInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Cache.NumInssInCty.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumInssInCty.NumInss);
    return Gbl.Cache.NumInssInCty.NumInss;
-  }
-
-unsigned Ins_GetCachedNumInssInCty (long CtyCod)
-  {
-   unsigned NumInss;
-
-   /***** Get number of institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,HieLvl_CTY,CtyCod,
-                                   FigCch_UNSIGNED,&NumInss))
-      /***** Get current number of institutions from database and update cache *****/
-      NumInss = Ins_GetNumInssInCty (CtyCod);
-
-   return NumInss;
   }
 
 /*****************************************************************************/
@@ -1886,7 +1855,7 @@ bool Ins_CheckIfIBelongToIns (long InsCod)
 
 void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void)
   {
-   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.HieCod  = -1L;
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs = 0;
   }
 
@@ -1901,7 +1870,7 @@ unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins)
       return Ins->NumUsrsWhoClaimToBelong.NumUsrs;
 
    /***** 3. Fast check: If cached... *****/
-   if (Ins->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod)
+   if (Ins->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongToIns.HieCod)
      {
       Ins->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs;
       Ins->NumUsrsWhoClaimToBelong.Valid = true;
@@ -1910,11 +1879,11 @@ unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins)
 
    /***** 4. Slow: number of users who claim to belong to an institution
                    from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = Ins->HieCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.HieCod  = Ins->HieCod;
    Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
    Ins->NumUsrsWhoClaimToBelong.NumUsrs = Ins_DB_GetNumUsrsWhoClaimToBelongToIns (Ins->HieCod);
    Ins->NumUsrsWhoClaimToBelong.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Gbl.Cache.NumUsrsWhoClaimToBelongToIns.HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs);
    return Ins->NumUsrsWhoClaimToBelong.NumUsrs;
   }
