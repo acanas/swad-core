@@ -311,7 +311,7 @@ struct Globals
          bool Valid;
 	 long HieCod;
 	 unsigned Num;
-        } FigureInHieLvl[FigCch_NUM_FIGURES][HieLvl_NUM_LEVELS];
+        } NumNodesInHieLvl[HieLvl_NUM_LEVELS][HieLvl_NUM_LEVELS];
       struct
         {
 	 bool Valid;

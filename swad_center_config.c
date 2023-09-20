@@ -775,8 +775,9 @@ static void CtrCfg_NumDegs (void)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						      HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod));
+	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
+						            HieLvl_CTR,	// ...in center
+						            Gbl.Hierarchy.Node[HieLvl_CTR].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -800,8 +801,9 @@ static void CtrCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+						      HieLvl_CTR,	// ...in center
+						      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();

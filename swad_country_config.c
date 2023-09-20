@@ -149,8 +149,9 @@ static void CtyCfg_Configuration (bool PrintView)
 	    CtyCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
-						  HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	    NumCtrs = Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
+						     HieLvl_CTY,	// ...in country
+						     Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 
 	    /* Number of users who claim to belong to this country,
 	       number of institutions,
@@ -490,8 +491,9 @@ static void CtyCfg_NumInss (void)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_INSS,
-							 HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
+	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
+							    HieLvl_CTY,	// ...in country
+							    Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -515,8 +517,9 @@ static void CtyCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						   HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
+						      HieLvl_CTY,	// ...in country
+						      Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -538,8 +541,9 @@ static void CtyCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						   HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+						      HieLvl_CTY,	// ...in country
+						      Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();

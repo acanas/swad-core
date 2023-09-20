@@ -398,22 +398,25 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       /* Number of centers in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
-						HieLvl_INS,Ins->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
+						      HieLvl_INS,	// ...in institution
+						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						HieLvl_INS,Ins->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
+						      HieLvl_INS,	// ...in institution
+						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of courses in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						HieLvl_INS,Ins->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+						      HieLvl_INS,	// ...in institution
+						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of departments in this institution */
@@ -900,7 +903,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Ins = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
 
 	 ICanEdit = Ins_CheckIfICanEdit (Ins);
-	 NumCtrs = Hie_GetFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS,Ins->HieCod);
+	 NumCtrs = Hie_GetNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS,Ins->HieCod);
 	 NumUsrsIns = Ins_GetNumUsrsWhoClaimToBelongToIns (Ins);
 	 NumUsrsInCrssOfIns = Enr_GetNumUsrsInCrss (HieLvl_INS,Ins->HieCod,
 						    1 << Rol_STD |
@@ -1067,7 +1070,7 @@ void Ins_RemoveInstitution (void)
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
       Err_NoPermissionExit ();
-   else if (Hie_GetFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS,Ins_EditingIns->HieCod))
+   else if (Hie_GetNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS,Ins_EditingIns->HieCod))
       // Institution has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
@@ -1109,9 +1112,9 @@ void Ins_RemoveInstitution (void)
       /***** Flush caches *****/
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
       Dpt_FlushCacheNumDptsInIns ();
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS);
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_INS);
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_INS);
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS);	// Number of centers in institution
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_INS);	// Number of degrees in institution
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_INS);	// Number of courses in institution
       Ins_FlushCacheNumUsrsWhoClaimToBelongToIns ();
 
       /***** Write message to show the change made *****/

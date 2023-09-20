@@ -220,20 +220,20 @@ void Gbl_InitializeGlobals (void)
    Cty_FlushCacheCountryName ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_INSS,HieLvl_CTY);
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_CTY);
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTY);
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTY);
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_INS,HieLvl_CTY);	// Number of institutions in country
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_CTY);	// Number of centers in country
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTY);	// Number of degrees in country
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_CTY);	// Number of courses in country
 
-   Dpt_FlushCacheNumDptsInIns ();
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS);
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_INS);
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_INS);
+   Dpt_FlushCacheNumDptsInIns ();				// Number of departments in institution
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS);	// Number of centers in institution
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_INS);	// Number of degrees in institution
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_INS);	// Number of courses in institution
 
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR);
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTR);
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTR);	// Number of degrees in center
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_CTR);	// Number of courses in center
 
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG);
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG);	// Number of courses in degree
 
    Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();

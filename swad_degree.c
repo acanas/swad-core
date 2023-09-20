@@ -344,7 +344,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	 DegInLst = &(Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg]);
 
 	 ICanEdit = Deg_CheckIfICanEditADegree (DegInLst);
-	 NumCrss = Hie_GetFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG,DegInLst->HieCod);
+	 NumCrss = Hie_GetNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG,DegInLst->HieCod);
 	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (HieLvl_DEG,DegInLst->HieCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
@@ -796,8 +796,9 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   unsigned NumCrss = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-					       HieLvl_DEG,Deg->HieCod);
+   unsigned NumCrss = Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+					             HieLvl_DEG,	// ...in degree
+					             Deg->HieCod);
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->Specific.TypCod;
@@ -1137,7 +1138,7 @@ void Deg_RemoveDegree (void)
    Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Check if this degree has courses *****/
-   if (Hie_GetFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG,Deg_EditingDeg->HieCod))	// Degree has courses ==> don't remove
+   if (Hie_GetNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG,Deg_EditingDeg->HieCod))	// Degree has courses ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
@@ -1278,7 +1279,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Deg_DB_RemoveDeg (DegCod);
 
    /***** Flush caches *****/
-   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG);
+   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG);	// Number of courses in degree
 
    /***** Delete all degrees in stats table not present in degrees table *****/
    Pho_DB_RemoveObsoleteStatDegrees ();

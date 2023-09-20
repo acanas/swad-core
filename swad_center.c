@@ -367,15 +367,17 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       /***** Number of degrees *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						HieLvl_CTR,Ctr->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
+						      HieLvl_CTR,	// ...in center
+						      Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						HieLvl_CTR,Ctr->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+						      HieLvl_CTR,	// ...in center
+						      Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
@@ -757,7 +759,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	 Ctr = &Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr];
 
 	 ICanEdit = Ctr_CheckIfICanEditACenter (Ctr);
-	 NumDegs = Hie_GetFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR,Ctr->HieCod);
+	 NumDegs = Hie_GetNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTR,Ctr->HieCod);
 	 NumUsrsCtr = Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
 	 NumUsrsInCrssOfCtr = Enr_GetNumUsrsInCrss (HieLvl_CTR,Ctr->HieCod,
 						    1 << Rol_STD |
@@ -958,7 +960,7 @@ void Ctr_RemoveCenter (void)
    Ctr_GetCenterDataByCod (Ctr_EditingCtr);
 
    /***** Check if this center has teachers *****/
-   if (Hie_GetFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR,Ctr_EditingCtr->HieCod))	// Center has degrees
+   if (Hie_GetNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTR,Ctr_EditingCtr->HieCod))	// Center has degrees
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center);
    else if (Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr))	// Center has users who claim to belong to it
@@ -998,8 +1000,8 @@ void Ctr_RemoveCenter (void)
       Ctr_DB_RemoveCenter (Ctr_EditingCtr->HieCod);
 
       /***** Flush caches *****/
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR);
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTR);
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTR);	// Number of degrees in center
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_CTR);	// Number of courses in center
       Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
 
       /***** Write message to show the change made *****/

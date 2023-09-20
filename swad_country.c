@@ -255,26 +255,26 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of institutions in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_INSS,
-						      HieLvl_CTY,0));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,		// Number of institutions...
+						         HieLvl_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of centers in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
-						      HieLvl_CTY,0));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,		// Number of centers...
+						         HieLvl_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of degrees in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						      HieLvl_CTY,0));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,		// Number of degrees...
+						         HieLvl_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of courses in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						      HieLvl_CTY,0));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,		// Number of courses...
+						         HieLvl_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of users in courses of other countries */
@@ -304,26 +304,26 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of institutions with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_INSS,
-						      HieLvl_CTY,-1L));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,		// Number of institutions...
+						         HieLvl_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 /* Number of centers with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
-						      HieLvl_CTY,-1L));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,		// Number of centers...
+						         HieLvl_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 /* Number of degrees with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						      HieLvl_CTY,-1L));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,		// Number of degrees...
+						         HieLvl_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 /* Number of courses with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						      HieLvl_CTY,-1L));
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,		// Number of courses...
+						         HieLvl_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -442,29 +442,33 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
       /***** Number of institutions *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_INSS,
-						   HieLvl_CTY,Cty->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
+						      HieLvl_CTY,	// ...in country
+						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of centers *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
-						   HieLvl_CTY,Cty->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
+						      HieLvl_CTY,	// ...in country
+						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of degrees *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						   HieLvl_CTY,Cty->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
+						      HieLvl_CTY,	// ...in country
+						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						   HieLvl_CTY,Cty->HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+						      HieLvl_CTY,	// ...in country
+						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of users in courses *****/
@@ -635,8 +639,9 @@ void Cty_WriteScriptGoogleGeochart (void)
 	 NumUsrsCty = Cty_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty]);
 	 if (NumUsrsCty)
 	   {
-	    NumInss = Hie_GetCachedFigureInHieLvl (FigCch_NUM_INSS,
-						  HieLvl_CTY,Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty].HieCod);
+	    NumInss = Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
+						     HieLvl_CTY,	// ...in country
+						     Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty].HieCod);
 
 	    /* Write data of this country */
 	    HTM_TxtF ("	['%s', %u, %u],\n",
@@ -1068,7 +1073,7 @@ static void Cty_ListCountriesForEdition (void)
 	   NumCty++)
 	{
 	 Cty = &Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty];
-	 NumInss = Hie_GetFigureInHieLvl (FigCch_NUM_INSS,HieLvl_CTY,Cty->HieCod);
+	 NumInss = Hie_GetNumNodesInHieLvl (HieLvl_INS,HieLvl_CTY,Cty->HieCod);
 	 NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToCty (Cty);
 
 	 HTM_TR_Begin (NULL);
@@ -1194,7 +1199,7 @@ void Cty_RemoveCountry (void)
    Cty_GetBasicCountryDataByCod (Cty_EditingCty);
 
    /***** Check if this country has users *****/
-   if (Hie_GetFigureInHieLvl (FigCch_NUM_INSS,HieLvl_CTY,Cty_EditingCty->HieCod))			// Country has institutions ==> don't remove
+   if (Hie_GetNumNodesInHieLvl (HieLvl_INS,HieLvl_CTY,Cty_EditingCty->HieCod))			// Country has institutions ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else if (Cty_GetNumUsrsWhoClaimToBelongToCty (Cty_EditingCty))	// Country has users ==> don't remove
@@ -1216,10 +1221,10 @@ void Cty_RemoveCountry (void)
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_INSS,HieLvl_CTY);
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_CTY);
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTY);
-      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTY);
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_INS,HieLvl_CTY);	// Number of institutions in country
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_CTY);	// Number of centers in country
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTY);	// Number of degrees in country
+      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_CTY);	// Number of courses in country
       Cty_FlushCacheNumUsrsWhoClaimToBelongToCty ();
 
       /***** Write message to show the change made *****/

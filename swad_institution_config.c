@@ -160,8 +160,9 @@ static void InsCfg_Configuration (bool PrintView)
 	    InsCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
-					       HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	    NumCtrs = Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
+					             HieLvl_INS,	// ...in institution
+					             Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
 
 	    /***** Number of users who claim to belong to this institution,
 		   number of centers,
@@ -449,8 +450,9 @@ static void InsCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
-						HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
+						      HieLvl_INS,	// ...in institution
+						      Gbl.Hierarchy.Node[HieLvl_INS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -472,8 +474,9 @@ static void InsCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
-						HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod));
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+						      HieLvl_INS,	// ...in institution
+						      Gbl.Hierarchy.Node[HieLvl_INS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
