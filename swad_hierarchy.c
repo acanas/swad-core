@@ -33,6 +33,7 @@
 #include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_center_database.h"
+#include "swad_course_database.h"
 #include "swad_database.h"
 #include "swad_degree_database.h"
 #include "swad_enrolment_database.h"
@@ -1303,22 +1304,22 @@ static void Hie_GetAndShowHierarchyTotal (void)
 	 NumCrssTotal = Hie_GetCachedNumNodesInSys (FigCch_NUM_CRSS,"crs_courses");
          break;
       case HieLvl_CTY:
-	 NumInssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-	 NumCtrsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-	 NumDegsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumInssTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumCtrsTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumDegsTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumCrssTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
          break;
       case HieLvl_INS:
-	 NumCtrsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-	 NumDegsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	 NumCtrsTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	 NumDegsTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	 NumCrssTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
          break;
       case HieLvl_CTR:
-	 NumDegsTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
+	 NumDegsTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
+	 NumCrssTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTR,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
 	 break;
       case HieLvl_DEG:
-	 NumCrssTotal = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
+	 NumCrssTotal = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
 	 break;
      case HieLvl_CRS:
 	 break;
@@ -1364,35 +1365,60 @@ unsigned Hie_GetCachedNumNodesInSys (FigCch_FigureCached_t Figure,
 /**** Get total number of courses/degrees/centers/institutions in country ****/
 /*****************************************************************************/
 
-unsigned Hie_GetCachedNumNodesIn (FigCch_FigureCached_t Figure,
-				  HieLvl_Level_t Level,long HieCod)
+void Hie_FlushCachedFigureInHieLvl (FigCch_FigureCached_t Figure,
+			            HieLvl_Level_t Level)
   {
-   static unsigned (*FunctionGetNumNodes[][HieLvl_NUM_LEVELS]) (long HieCod) =
-     {
-      /* Number of nodes in country */
-      [FigCch_NUM_INSS][HieLvl_CTY] = Ins_GetNumInssInCty,
-      [FigCch_NUM_CTRS][HieLvl_CTY] = Ctr_GetNumCtrsInCty,
-      [FigCch_NUM_DEGS][HieLvl_CTY] = Deg_GetNumDegsInCty,
-      [FigCch_NUM_CRSS][HieLvl_CTY] = Crs_GetNumCrssInCty,
-      /* Number of nodes in institution */
-      [FigCch_NUM_CTRS][HieLvl_INS] = Ctr_GetNumCtrsInIns,
-      [FigCch_NUM_DEGS][HieLvl_INS] = Deg_GetNumDegsInIns,
-      [FigCch_NUM_CRSS][HieLvl_INS] = Crs_GetNumCrssInIns,
-      /* Number of nodes in center */
-      [FigCch_NUM_DEGS][HieLvl_CTR] = Deg_GetNumDegsInCtr,
-      [FigCch_NUM_CRSS][HieLvl_CTR] = Crs_GetNumCrssInCtr,
-      /* Number of nodes in degree */
-      [FigCch_NUM_CRSS][HieLvl_DEG] = Crs_GetNumCrssInDeg,
-     };
+   Gbl.Cache.FigureInHieLvl[Figure][Level].Valid = false;
+  }
+
+unsigned Hie_GetCachedFigureInHieLvl (FigCch_FigureCached_t Figure,
+				      HieLvl_Level_t Level,long HieCod)
+  {
    unsigned NumNodes;
 
    /***** Get number of nodes from cache *****/
    if (!FigCch_GetFigureFromCache (Figure,Level,HieCod,
 				   FigCch_UNSIGNED,&NumNodes))
       /***** Get current number of nodes from database and update cache *****/
-      NumNodes = FunctionGetNumNodes[Figure][Level] (HieCod);
+      NumNodes = Hie_GetFigureInHieLvl (Figure,Level,HieCod);
 
    return NumNodes;
+  }
+
+unsigned Hie_GetFigureInHieLvl (FigCch_FigureCached_t Figure,
+		      	        HieLvl_Level_t Level,long HieCod)
+  {
+   static unsigned (*FunctionGetFigure[][HieLvl_NUM_LEVELS]) (long HieCod) =
+     {
+      /* Number of nodes in country */
+      [FigCch_NUM_INSS][HieLvl_CTY] = Ins_DB_GetNumInssInCty,
+      [FigCch_NUM_CTRS][HieLvl_CTY] = Ctr_DB_GetNumCtrsInCty,
+      [FigCch_NUM_DEGS][HieLvl_CTY] = Deg_DB_GetNumDegsInCty,
+      [FigCch_NUM_CRSS][HieLvl_CTY] = Crs_DB_GetNumCrssInCty,
+      /* Number of nodes in institution */
+      [FigCch_NUM_CTRS][HieLvl_INS] = Ctr_DB_GetNumCtrsInIns,
+      [FigCch_NUM_DEGS][HieLvl_INS] = Deg_DB_GetNumDegsInIns,
+      [FigCch_NUM_CRSS][HieLvl_INS] = Crs_DB_GetNumCrssInIns,
+      /* Number of nodes in center */
+      [FigCch_NUM_DEGS][HieLvl_CTR] = Deg_DB_GetNumDegsInCtr,
+      [FigCch_NUM_CRSS][HieLvl_CTR] = Crs_DB_GetNumCrssInCtr,
+      /* Number of nodes in degree */
+      [FigCch_NUM_CRSS][HieLvl_DEG] = Crs_DB_GetNumCrssInDeg,
+     };
+
+   /***** 1. Fast check: If cached... *****/
+   if (Gbl.Cache.FigureInHieLvl[Figure][Level].Valid &&
+       HieCod == Gbl.Cache.FigureInHieLvl[Figure][Level].HieCod)
+      return Gbl.Cache.FigureInHieLvl[Figure][Level].Num;
+
+   /***** 2. Slow: number of institutions in a country from database *****/
+   Gbl.Cache.FigureInHieLvl[Figure][Level].HieCod = HieCod;
+   Gbl.Cache.FigureInHieLvl[Figure][Level].Num    = FunctionGetFigure[Figure][Level] (HieCod);
+   Gbl.Cache.FigureInHieLvl[Figure][Level].Valid  = true;
+   FigCch_UpdateFigureIntoCache (Figure,Level,
+				 Gbl.Cache.FigureInHieLvl[Figure][Level].HieCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.FigureInHieLvl[Figure][Level].Num);
+   return Gbl.Cache.FigureInHieLvl[Figure][Level].Num;
   }
 
 /*****************************************************************************/

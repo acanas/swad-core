@@ -310,53 +310,8 @@ struct Globals
         {
          bool Valid;
 	 long HieCod;
-	 unsigned NumInss;
-        } NumInssInCty;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumCtrs;
-        } NumCtrsInCty;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumCtrs;
-        } NumCtrsInIns;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumDegs;
-        } NumDegsInCty;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumDegs;
-        } NumDegsInIns;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumDegs;
-        } NumDegsInCtr;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumCrss;
-        } NumCrssInCty;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumCrss;
-        } NumCrssInIns;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumCrss;
-        } NumCrssInCtr;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumCrss;
-        } NumCrssInDeg;
+	 unsigned Num;
+        } FigureInHieLvl[FigCch_NUM_FIGURES][HieLvl_NUM_LEVELS];
       struct
         {
 	 bool Valid;

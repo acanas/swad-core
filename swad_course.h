@@ -52,18 +52,6 @@
 
 void Crs_ShowIntroduction (void);
 
-void Crs_FlushCacheNumCrssInCty (void);
-unsigned Crs_GetNumCrssInCty (long CtyCod);
-
-void Crs_FlushCacheNumCrssInIns (void);
-unsigned Crs_GetNumCrssInIns (long InsCod);
-
-void Crs_FlushCacheNumCrssInCtr (void);
-unsigned Crs_GetNumCrssInCtr (long CtrCod);
-
-void Crs_FlushCacheNumCrssInDeg (void);
-unsigned Crs_GetNumCrssInDeg (long DegCod);
-
 unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role);
 
 void Crs_WriteSelectorOfCourse (void);

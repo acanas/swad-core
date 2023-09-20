@@ -71,12 +71,6 @@ void Ctr_ContEditAfterChgCtr (void);
 void Ctr_ReceiveFormReqCtr (void);
 void Ctr_ReceiveFormNewCtr (void);
 
-void Ctr_FlushCacheNumCtrsInCty (void);
-unsigned Ctr_GetNumCtrsInCty (long CtyCod);
-
-void Ctr_FlushCacheNumCtrsInIns (void);
-unsigned Ctr_GetNumCtrsInIns (long InsCod);
-
 unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
 unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod);
 unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod);

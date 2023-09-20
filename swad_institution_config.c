@@ -160,7 +160,7 @@ static void InsCfg_Configuration (bool PrintView)
 	    InsCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,
+	    NumCtrs = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
 					       HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
 
 	    /***** Number of users who claim to belong to this institution,
@@ -449,7 +449,7 @@ static void InsCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
 						HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod));
       HTM_TD_End ();
 
@@ -472,7 +472,7 @@ static void InsCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
 						HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod));
       HTM_TD_End ();
 

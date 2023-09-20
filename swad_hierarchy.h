@@ -73,7 +73,12 @@ void Hie_GetAndShowHierarchyStats (void);
 
 unsigned Hie_GetCachedNumNodesInSys (FigCch_FigureCached_t Figure,
 				     const char *Table);
-unsigned Hie_GetCachedNumNodesIn (FigCch_FigureCached_t Figure,
-				  HieLvl_Level_t Level,long HieCod);
+
+void Hie_FlushCachedFigureInHieLvl (FigCch_FigureCached_t Figure,
+			            HieLvl_Level_t Level);
+unsigned Hie_GetCachedFigureInHieLvl (FigCch_FigureCached_t Figure,
+				      HieLvl_Level_t Level,long HieCod);
+unsigned Hie_GetFigureInHieLvl (FigCch_FigureCached_t Figure,
+		      	        HieLvl_Level_t Level,long HieCod);
 
 #endif

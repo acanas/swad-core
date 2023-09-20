@@ -398,21 +398,21 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       /* Number of centers in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
 						HieLvl_INS,Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
 						HieLvl_INS,Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of courses in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
 						HieLvl_INS,Ins->HieCod));
       HTM_TD_End ();
 
@@ -900,7 +900,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Ins = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
 
 	 ICanEdit = Ins_CheckIfICanEdit (Ins);
-	 NumCtrs = Ctr_GetNumCtrsInIns (Ins->HieCod);
+	 NumCtrs = Hie_GetFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS,Ins->HieCod);
 	 NumUsrsIns = Ins_GetNumUsrsWhoClaimToBelongToIns (Ins);
 	 NumUsrsInCrssOfIns = Enr_GetNumUsrsInCrss (HieLvl_INS,Ins->HieCod,
 						    1 << Rol_STD |
@@ -1067,7 +1067,7 @@ void Ins_RemoveInstitution (void)
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
       Err_NoPermissionExit ();
-   else if (Ctr_GetNumCtrsInIns (Ins_EditingIns->HieCod))
+   else if (Hie_GetFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS,Ins_EditingIns->HieCod))
       // Institution has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
@@ -1109,9 +1109,9 @@ void Ins_RemoveInstitution (void)
       /***** Flush caches *****/
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
       Dpt_FlushCacheNumDptsInIns ();
-      Ctr_FlushCacheNumCtrsInIns ();
-      Deg_FlushCacheNumDegsInIns ();
-      Crs_FlushCacheNumCrssInIns ();
+      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS);
+      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_INS);
+      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_INS);
       Ins_FlushCacheNumUsrsWhoClaimToBelongToIns ();
 
       /***** Write message to show the change made *****/
@@ -1549,31 +1549,6 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
      }
    else	// If there is not a institution name
       Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
-  }
-
-/*****************************************************************************/
-/**************** Get number of institutions in a country ********************/
-/*****************************************************************************/
-
-void Ins_FlushCacheNumInssInCty (void)
-  {
-   Gbl.Cache.NumInssInCty.Valid = false;
-  }
-
-unsigned Ins_GetNumInssInCty (long CtyCod)
-  {
-   /***** 1. Fast check: If cached... *****/
-   if (Gbl.Cache.NumInssInCty.Valid &&
-       CtyCod == Gbl.Cache.NumInssInCty.HieCod)
-      return Gbl.Cache.NumInssInCty.NumInss;
-
-   /***** 2. Slow: number of institutions in a country from database *****/
-   Gbl.Cache.NumInssInCty.HieCod  = CtyCod;
-   Gbl.Cache.NumInssInCty.NumInss = Ins_DB_GetNumInssInCty (CtyCod);
-   Gbl.Cache.NumInssInCty.Valid   = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Cache.NumInssInCty.HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumInssInCty.NumInss);
-   return Gbl.Cache.NumInssInCty.NumInss;
   }
 
 /*****************************************************************************/

@@ -36,6 +36,7 @@
 /*****************************************************************************/
 
 // If numbers change, clean database table figures: "DELETE FROM figures;"
+#define FigCch_NUM_FIGURES 2
 typedef enum
   {
    FigCch_UNKNOWN		=  0,	// Unknown figure (do not change this constant to any value other than 0)

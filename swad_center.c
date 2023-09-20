@@ -367,14 +367,14 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       /***** Number of degrees *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
 						HieLvl_CTR,Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
 						HieLvl_CTR,Ctr->HieCod));
       HTM_TD_End ();
 
@@ -757,7 +757,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	 Ctr = &Gbl.Hierarchy.List[HieLvl_INS].Lst[NumCtr];
 
 	 ICanEdit = Ctr_CheckIfICanEditACenter (Ctr);
-	 NumDegs = Deg_GetNumDegsInCtr (Ctr->HieCod);
+	 NumDegs = Hie_GetFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR,Ctr->HieCod);
 	 NumUsrsCtr = Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
 	 NumUsrsInCrssOfCtr = Enr_GetNumUsrsInCrss (HieLvl_CTR,Ctr->HieCod,
 						    1 << Rol_STD |
@@ -958,7 +958,7 @@ void Ctr_RemoveCenter (void)
    Ctr_GetCenterDataByCod (Ctr_EditingCtr);
 
    /***** Check if this center has teachers *****/
-   if (Deg_GetNumDegsInCtr (Ctr_EditingCtr->HieCod))			// Center has degrees
+   if (Hie_GetFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR,Ctr_EditingCtr->HieCod))	// Center has degrees
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center);
    else if (Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr))	// Center has users who claim to belong to it
@@ -998,8 +998,8 @@ void Ctr_RemoveCenter (void)
       Ctr_DB_RemoveCenter (Ctr_EditingCtr->HieCod);
 
       /***** Flush caches *****/
-      Deg_FlushCacheNumDegsInCtr ();
-      Crs_FlushCacheNumCrssInCtr ();
+      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR);
+      Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTR);
       Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
 
       /***** Write message to show the change made *****/
@@ -1552,62 +1552,6 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
      }
    else	// If there is not a center name
       Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
-  }
-
-/*****************************************************************************/
-/******************* Get number of centers in a country **********************/
-/*****************************************************************************/
-
-void Ctr_FlushCacheNumCtrsInCty (void)
-  {
-   Gbl.Cache.NumCtrsInCty.HieCod  = -1L;
-   Gbl.Cache.NumCtrsInCty.NumCtrs = 0;
-  }
-
-unsigned Ctr_GetNumCtrsInCty (long CtyCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (CtyCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If cached... *****/
-   if (CtyCod == Gbl.Cache.NumCtrsInCty.HieCod)
-      return Gbl.Cache.NumCtrsInCty.NumCtrs;
-
-   /***** 3. Slow: number of centers in a country from database *****/
-   Gbl.Cache.NumCtrsInCty.HieCod  = CtyCod;
-   Gbl.Cache.NumCtrsInCty.NumCtrs = Ctr_DB_GetNumCtrsInCty (CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_CTY,Gbl.Cache.NumCtrsInCty.HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
-   return Gbl.Cache.NumCtrsInCty.NumCtrs;
-  }
-
-/*****************************************************************************/
-/**************** Get number of centers in an institution ********************/
-/*****************************************************************************/
-
-void Ctr_FlushCacheNumCtrsInIns (void)
-  {
-   Gbl.Cache.NumCtrsInIns.HieCod  = -1L;
-   Gbl.Cache.NumCtrsInIns.NumCtrs = 0;
-  }
-
-unsigned Ctr_GetNumCtrsInIns (long InsCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (InsCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumCtrsInIns.HieCod)
-      return Gbl.Cache.NumCtrsInIns.NumCtrs;
-
-   /***** 3. Slow: number of centers in an institution from database *****/
-   Gbl.Cache.NumCtrsInIns.HieCod  = InsCod;
-   Gbl.Cache.NumCtrsInIns.NumCtrs = Ctr_DB_GetNumCtrsInIns (InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_INS,Gbl.Cache.NumCtrsInIns.HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInIns.NumCtrs);
-   return Gbl.Cache.NumCtrsInIns.NumCtrs;
   }
 
 /*****************************************************************************/

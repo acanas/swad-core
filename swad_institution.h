@@ -72,9 +72,6 @@ void Ins_ContEditAfterChgIns (void);
 void Ins_ReceiveFormReqIns (void);
 void Ins_ReceiveFormNewIns (void);
 
-void Ins_FlushCacheNumInssInCty (void);
-unsigned Ins_GetNumInssInCty (long CtyCod);
-
 unsigned Ins_GetCachedNumInssWithCtrs (void);
 unsigned Ins_GetCachedNumInssWithDegs (void);
 unsigned Ins_GetCachedNumInssWithCrss (void);

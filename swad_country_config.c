@@ -149,7 +149,7 @@ static void CtyCfg_Configuration (bool PrintView)
 	    CtyCfg_QR ();
 	 else
 	   {
-	    NumCtrs = Hie_GetCachedNumNodesIn (FigCch_NUM_CTRS,
+	    NumCtrs = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CTRS,
 						  HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
 
 	    /* Number of users who claim to belong to this country,
@@ -490,7 +490,7 @@ static void CtyCfg_NumInss (void)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LT BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_INSS,
+	       HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_INSS,
 							 HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -515,7 +515,7 @@ static void CtyCfg_NumDegs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_DEGS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_DEGS,
 						   HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 
@@ -538,7 +538,7 @@ static void CtyCfg_NumCrss (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+	 HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
 						   HieLvl_CTY,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod));
       HTM_TD_End ();
 

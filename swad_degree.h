@@ -81,15 +81,6 @@ void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 
-void Deg_FlushCacheNumDegsInCty (void);
-unsigned Deg_GetNumDegsInCty (long CtyCod);
-
-void Deg_FlushCacheNumDegsInIns (void);
-unsigned Deg_GetNumDegsInIns (long InsCod);
-
-void Deg_FlushCacheNumDegsInCtr (void);
-unsigned Deg_GetNumDegsInCtr (long CtrCod);
-
 unsigned Deg_GetCachedNumDegsWithCrss (void);
 unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role);
 

@@ -220,20 +220,20 @@ void Gbl_InitializeGlobals (void)
    Cty_FlushCacheCountryName ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
-   Ins_FlushCacheNumInssInCty ();
-   Ctr_FlushCacheNumCtrsInCty ();
-   Deg_FlushCacheNumDegsInCty ();
-   Crs_FlushCacheNumCrssInCty ();
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_INSS,HieLvl_CTY);
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_CTY);
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTY);
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTY);
 
    Dpt_FlushCacheNumDptsInIns ();
-   Ctr_FlushCacheNumCtrsInIns ();
-   Deg_FlushCacheNumDegsInIns ();
-   Crs_FlushCacheNumCrssInIns ();
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CTRS,HieLvl_INS);
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_INS);
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_INS);
 
-   Deg_FlushCacheNumDegsInCtr ();
-   Crs_FlushCacheNumCrssInCtr ();
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_DEGS,HieLvl_CTR);
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_CTR);
 
-   Crs_FlushCacheNumCrssInDeg ();
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG);
 
    Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();

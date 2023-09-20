@@ -344,7 +344,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	 DegInLst = &(Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg]);
 
 	 ICanEdit = Deg_CheckIfICanEditADegree (DegInLst);
-	 NumCrss = Crs_GetNumCrssInDeg (DegInLst->HieCod);
+	 NumCrss = Hie_GetFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG,DegInLst->HieCod);
 	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (HieLvl_DEG,DegInLst->HieCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
@@ -796,7 +796,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   unsigned NumCrss = Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+   unsigned NumCrss = Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
 					       HieLvl_DEG,Deg->HieCod);
 
    /***** Get data of type of degree of this degree *****/
@@ -1137,7 +1137,7 @@ void Deg_RemoveDegree (void)
    Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Check if this degree has courses *****/
-   if (Crs_GetNumCrssInDeg (Deg_EditingDeg->HieCod))	// Degree has courses ==> don't remove
+   if (Hie_GetFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG,Deg_EditingDeg->HieCod))	// Degree has courses ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
@@ -1278,7 +1278,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Deg_DB_RemoveDeg (DegCod);
 
    /***** Flush caches *****/
-   Crs_FlushCacheNumCrssInDeg ();
+   Hie_FlushCachedFigureInHieLvl (FigCch_NUM_CRSS,HieLvl_DEG);
 
    /***** Delete all degrees in stats table not present in degrees table *****/
    Pho_DB_RemoveObsoleteStatDegrees ();
@@ -1522,90 +1522,6 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
    else
       /***** Alert *****/
       Ale_ShowAlerts (NULL);
-  }
-
-/*****************************************************************************/
-/********************* Get number of degrees in a country ********************/
-/*****************************************************************************/
-
-void Deg_FlushCacheNumDegsInCty (void)
-  {
-   Gbl.Cache.NumDegsInCty.HieCod  = -1L;
-   Gbl.Cache.NumDegsInCty.NumDegs = 0;
-  }
-
-unsigned Deg_GetNumDegsInCty (long CtyCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (CtyCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If cached... *****/
-   if (CtyCod == Gbl.Cache.NumDegsInCty.HieCod)
-      return Gbl.Cache.NumDegsInCty.NumDegs;
-
-   /***** 3. Slow: number of degrees in a country from database *****/
-   Gbl.Cache.NumDegsInCty.HieCod  = CtyCod;
-   Gbl.Cache.NumDegsInCty.NumDegs = Deg_DB_GetNumDegsInCty (CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_CTY,Gbl.Cache.NumDegsInCty.HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCty.NumDegs);
-   return Gbl.Cache.NumDegsInCty.NumDegs;
-  }
-
-/*****************************************************************************/
-/****************** Get number of degrees in an institution ******************/
-/*****************************************************************************/
-
-void Deg_FlushCacheNumDegsInIns (void)
-  {
-   Gbl.Cache.NumDegsInIns.HieCod  = -1L;
-   Gbl.Cache.NumDegsInIns.NumDegs = 0;
-  }
-
-unsigned Deg_GetNumDegsInIns (long InsCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (InsCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumDegsInIns.HieCod)
-      return Gbl.Cache.NumDegsInIns.NumDegs;
-
-   /***** 3. Slow: number of degrees in an institution from database *****/
-   Gbl.Cache.NumDegsInIns.HieCod  = InsCod;
-   Gbl.Cache.NumDegsInIns.NumDegs = Deg_DB_GetNumDegsInIns (InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_INS,Gbl.Cache.NumDegsInIns.HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInIns.NumDegs);
-   return Gbl.Cache.NumDegsInIns.NumDegs;
-  }
-
-/*****************************************************************************/
-/******************** Get number of degrees in a center **********************/
-/*****************************************************************************/
-
-void Deg_FlushCacheNumDegsInCtr (void)
-  {
-   Gbl.Cache.NumDegsInCtr.HieCod  = -1L;
-   Gbl.Cache.NumDegsInCtr.NumDegs = 0;
-  }
-
-unsigned Deg_GetNumDegsInCtr (long CtrCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (CtrCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If cached... *****/
-   if (CtrCod == Gbl.Cache.NumDegsInCtr.HieCod)
-      return Gbl.Cache.NumDegsInCtr.NumDegs;
-
-   /***** 3. Slow: number of degrees in a center from database *****/
-   Gbl.Cache.NumDegsInCtr.HieCod  = CtrCod;
-   Gbl.Cache.NumDegsInCtr.NumDegs = Deg_DB_GetNumDegsInCtr (CtrCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS,HieLvl_CTR,Gbl.Cache.NumDegsInCtr.HieCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumDegsInCtr.NumDegs);
-   return Gbl.Cache.NumDegsInCtr.NumDegs;
   }
 
 /*****************************************************************************/

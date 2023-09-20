@@ -335,7 +335,7 @@ static void DegCfg_NumCrss (void)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	    free (Title);
-	       HTM_Unsigned (Hie_GetCachedNumNodesIn (FigCch_NUM_CRSS,
+	       HTM_Unsigned (Hie_GetCachedFigureInHieLvl (FigCch_NUM_CRSS,
 						      HieLvl_DEG,Gbl.Hierarchy.Node[HieLvl_DEG].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
