@@ -4477,7 +4477,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    switch (HiddenOrVisible)
      {
       case HidVis_HIDDEN:
-	 HTM_DIV_Begin ("id=\"expand_%s_%s\" class=\"NOT_SHOWN\"",
+	 HTM_DIV_Begin ("id=\"expand_%s_%s\" style=\"display:none;\"",
 			FileBrowserId,RowId);
 	 break;
       case HidVis_VISIBLE:
@@ -4515,8 +4515,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    switch (HiddenOrVisible)
      {
       case HidVis_HIDDEN:
-	 HTM_DIV_Begin ("id=\"contract_%s_%s\" class=\"NOT_SHOWN\"",
-	 // HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
+	 HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
 			FileBrowserId,RowId);
 	 break;
       case HidVis_VISIBLE:
@@ -4686,14 +4685,15 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
 			                  bool Open,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *Txt_Folder;
-   extern const char *HidVis_ShownClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s%s\"",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\"%s",
 		  Open ? "open" :
 			 "closed",
 		  FileBrowserId,RowId,
-                  The_GetColorRows (),HidVis_ShownClass[HiddenOrVisible]);
+                  The_GetColorRows (),
+		  HidVis_ShownStyle[HiddenOrVisible]);
 
       /***** Icon *****/
       Ico_PutIcon (Open ? "folder-open-yellow.png" :
@@ -4712,14 +4712,15 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
 static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
 				       bool Open,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   extern const char *HidVis_ShownClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s%s\"",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\"%s",
 		  Open ? "open" :
 			 "closed",
 		  FileBrowserId,RowId,
-		  The_GetColorRows (),HidVis_ShownClass[HiddenOrVisible]);
+		  The_GetColorRows (),
+		  HidVis_ShownStyle[HiddenOrVisible]);
 
       /***** Form and icon *****/
       Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
