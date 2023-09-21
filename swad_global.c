@@ -237,9 +237,9 @@ void Gbl_InitializeGlobals (void)
 
    Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
-   Cty_FlushCacheNumUsrsWhoClaimToBelongToCty ();
-   Ins_FlushCacheNumUsrsWhoClaimToBelongToIns ();
-   Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
+   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_CTY);
+   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_INS);
+   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_CTR);
    Usr_FlushCacheUsrIsSuperuser ();
    Hie_FlushCacheUsrBelongsTo (HieLvl_INS);
    Hie_FlushCacheUsrBelongsTo (HieLvl_CTR);

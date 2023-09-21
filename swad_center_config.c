@@ -744,7 +744,8 @@ static void CtrCfg_NumUsrs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Node[HieLvl_CTR]));
+	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_CTR,
+								  &Gbl.Hierarchy.Node[HieLvl_CTR]));
       HTM_TD_End ();
 
    HTM_TR_End ();

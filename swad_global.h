@@ -324,19 +324,10 @@ struct Globals
         } NumUsrsWhoClaimToBelongToAnotherCty;
       struct
         {
+	 bool Valid;
 	 long HieCod;
 	 unsigned NumUsrs;
-        } NumUsrsWhoClaimToBelongToCty;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumUsrs;
-        } NumUsrsWhoClaimToBelongToIns;
-      struct
-        {
-	 long HieCod;
-	 unsigned NumUsrs;
-        } NumUsrsWhoClaimToBelongToCtr;
+        } NumUsrsWhoClaimToBelongTo[HieLvl_NUM_LEVELS];
       struct
 	{
 	 long UsrCod;

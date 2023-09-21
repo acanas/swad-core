@@ -83,10 +83,6 @@ void Ins_GetMyInstits (void);
 void Ins_FreeMyInstits (void);
 bool Ins_CheckIfIBelongToIns (long InsCod);
 
-void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
-unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins);
-unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Hie_Node *Ins);
-
 void Ins_PutParInsCod (void *InsCod);
 
 //-------------------------------- Figures ------------------------------------

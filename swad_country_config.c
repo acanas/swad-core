@@ -460,7 +460,8 @@ static void CtyCfg_NumUsrs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Node[HieLvl_CTY]));
+	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_CTY,
+							       &Gbl.Hierarchy.Node[HieLvl_CTY]));
       HTM_TD_End ();
 
    HTM_TR_End ();

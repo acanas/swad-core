@@ -33,6 +33,7 @@
 #include "swad_alert.h"
 #include "swad_box.h"
 #include "swad_center_database.h"
+#include "swad_country_database.h"
 #include "swad_course_database.h"
 #include "swad_database.h"
 #include "swad_degree_database.h"
@@ -1431,6 +1432,81 @@ unsigned Hie_GetNumNodesInHieLvl (HieLvl_Level_t LevelChildren,
 				 Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num);
    return Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num;
+  }
+
+/*****************************************************************************/
+/******** Get number of users who claim to belong to a hierarchy node ********/
+/*****************************************************************************/
+
+void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_Level_t Level)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].Valid = false;
+  }
+
+unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_Level_t Level,
+						 struct Hie_Node *Node)
+  {
+   static FigCch_FigureCached_t Figure[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_CTY] = FigCch_NUM_USRS_BELONG_CTY,
+      [HieLvl_INS] = FigCch_NUM_USRS_BELONG_INS,
+      [HieLvl_CTR] = FigCch_NUM_USRS_BELONG_CTR,
+     };
+   unsigned NumUsrs;
+
+   /***** Get number of users who claim to belong to hierarchy node from cache *****/
+   if (!FigCch_GetFigureFromCache (Figure[Level],Level,Node->HieCod,
+                                   FigCch_UNSIGNED,&NumUsrs))
+      /***** Get current number of users who claim to belong to hierarchy node
+             from database and update cache *****/
+      NumUsrs = Hie_GetNumUsrsWhoClaimToBelongTo (Level,Node);
+
+   return NumUsrs;
+  }
+
+unsigned Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl_Level_t Level,
+					   struct Hie_Node *Node)
+  {
+   static FigCch_FigureCached_t Figure[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_CTY] = FigCch_NUM_USRS_BELONG_CTY,
+      [HieLvl_INS] = FigCch_NUM_USRS_BELONG_INS,
+      [HieLvl_CTR] = FigCch_NUM_USRS_BELONG_CTR,
+     };
+   static unsigned (*FunctionToGetNumUsrsWhoClaimToBelongToFromDB[HieLvl_NUM_LEVELS]) (long HieCod) =
+     {
+      [HieLvl_CTY] = Cty_DB_GetNumUsrsWhoClaimToBelongToCty,
+      [HieLvl_INS] = Ins_DB_GetNumUsrsWhoClaimToBelongToIns,
+      [HieLvl_CTR] = Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr,
+     };
+
+   /***** 1. Fast check: Trivial case *****/
+   if (Node->HieCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If already got... *****/
+   if (Node->NumUsrsWhoClaimToBelong.Valid)
+      return Node->NumUsrsWhoClaimToBelong.NumUsrs;
+
+   /***** 3. Fast check: If cached... *****/
+   if (Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].Valid &&
+       Node->HieCod == Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].HieCod)
+     {
+      Node->NumUsrsWhoClaimToBelong.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].NumUsrs;
+      Node->NumUsrsWhoClaimToBelong.Valid = true;
+      return Node->NumUsrsWhoClaimToBelong.NumUsrs;
+     }
+
+   /***** 4. Slow: number of users who claim to belong to a hierarchy node
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].HieCod  = Node->HieCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].NumUsrs =
+   Node->NumUsrsWhoClaimToBelong.NumUsrs = FunctionToGetNumUsrsWhoClaimToBelongToFromDB[Level] (Node->HieCod);
+   Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].Valid =
+   Node->NumUsrsWhoClaimToBelong.Valid = true;
+   FigCch_UpdateFigureIntoCache (Figure[Level],Level,Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].HieCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongTo[Level].NumUsrs);
+   return Node->NumUsrsWhoClaimToBelong.NumUsrs;
   }
 
 /*****************************************************************************/

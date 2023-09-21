@@ -85,8 +85,4 @@ void Ctr_GetMyCenters (void);
 void Ctr_FreeMyCenters (void);
 bool Ctr_CheckIfIBelongToCtr (long CtrCod);
 
-void Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
-unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr);
-unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Hie_Node *Ctr);
-
 #endif

@@ -428,7 +428,8 @@ static void InsCfg_NumUsrs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Ins_GetCachedNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Node[HieLvl_INS]));
+	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_INS,
+							       &Gbl.Hierarchy.Node[HieLvl_INS]));
       HTM_TD_End ();
 
    HTM_TR_End ();

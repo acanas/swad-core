@@ -4036,7 +4036,9 @@ void Rec_ChgCountryOfMyInstitution (void)
    Gbl.Usrs.Me.UsrDat.InsCtyCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** When country changes, the institution, center and department must be reset *****/
-   NumInss = Hie_GetNumNodesInHieLvl (HieLvl_INS,HieLvl_CTY,Gbl.Usrs.Me.UsrDat.InsCtyCod);
+   NumInss = Hie_GetNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
+				      HieLvl_CTY,	// ...in country
+				      Gbl.Usrs.Me.UsrDat.InsCtyCod);
    if (NumInss)
      {
       Gbl.Usrs.Me.UsrDat.InsCod     = -1L;
@@ -4083,7 +4085,9 @@ void Rec_UpdateMyInstitution (void)
    Gbl.Usrs.Me.UsrDat.InsCod = Ins.HieCod;
 
    /***** When institution changes, the center and department must be reset *****/
-   NumCtrs = Hie_GetNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS,Gbl.Usrs.Me.UsrDat.InsCod);
+   NumCtrs = Hie_GetNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
+				      HieLvl_INS,	// ...in institution
+				      Gbl.Usrs.Me.UsrDat.InsCod);
    NumDpts = Dpt_GetNumDptsInIns (Gbl.Usrs.Me.UsrDat.InsCod);
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = (NumCtrs ? -1L : 0);
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = (NumDpts ? -1L : 0);

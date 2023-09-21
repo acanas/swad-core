@@ -96,15 +96,11 @@ void Cty_FreeMyCountrs (void);
 bool Cty_CheckIfIBelongToCty (long CtyCod);
 
 void Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
-unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void);
+unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
 
 void Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void);
-unsigned Cty_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
 unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void);
-
-void Cty_FlushCacheNumUsrsWhoClaimToBelongToCty (void);
-unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Hie_Node *Cty);
-unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Hie_Node *Cty);
+unsigned Cty_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
 
 #endif

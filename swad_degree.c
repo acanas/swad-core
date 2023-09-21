@@ -344,7 +344,9 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	 DegInLst = &(Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg]);
 
 	 ICanEdit = Deg_CheckIfICanEditADegree (DegInLst);
-	 NumCrss = Hie_GetNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG,DegInLst->HieCod);
+	 NumCrss = Hie_GetNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+					    HieLvl_DEG,	// ...in degree
+					    DegInLst->HieCod);
 	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (HieLvl_DEG,DegInLst->HieCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
@@ -1138,7 +1140,9 @@ void Deg_RemoveDegree (void)
    Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Check if this degree has courses *****/
-   if (Hie_GetNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG,Deg_EditingDeg->HieCod))	// Degree has courses ==> don't remove
+   if (Hie_GetNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
+				HieLvl_DEG,	// ...in degree
+				Deg_EditingDeg->HieCod))	// Degree has courses ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it

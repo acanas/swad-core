@@ -214,7 +214,9 @@ void Plc_SeeAllPlaces (void)
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (Hie_GetNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS,Gbl.Hierarchy.Node[HieLvl_INS].HieCod) -
+		  HTM_Unsigned (Hie_GetNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
+							 HieLvl_INS,	// ...in institution
+							 Gbl.Hierarchy.Node[HieLvl_INS].HieCod) -
 				NumCtrsWithPlc);
 	       HTM_TD_End ();
 
