@@ -329,7 +329,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		     CtyInLst = &Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty];
 		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
 				 CtyInLst->HieCod == Gbl.Hierarchy.Node[HieLvl_CTY].HieCod ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
+										             HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",CtyInLst->FullName);
 		    }
@@ -370,8 +370,7 @@ static void InsCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Institution;
 
-   HieCfg_FullName (PutForm,Txt_Institution,ActRenInsFulCfg,
-		    Gbl.Hierarchy.Node[HieLvl_INS].FullName);
+   HieCfg_FullName (PutForm,ActRenInsFulCfg,HieLvl_INS,Txt_Institution);
   }
 
 /*****************************************************************************/
@@ -380,8 +379,7 @@ static void InsCfg_FullName (bool PutForm)
 
 static void InsCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenInsShoCfg,
-		    Gbl.Hierarchy.Node[HieLvl_INS].ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenInsShoCfg,HieLvl_INS);
   }
 
 /*****************************************************************************/

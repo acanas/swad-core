@@ -268,8 +268,7 @@ static void DegCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Degree;
 
-   HieCfg_FullName (PutForm,Txt_Degree,ActRenDegFulCfg,
-		    Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
+   HieCfg_FullName (PutForm,ActRenDegFulCfg,HieLvl_DEG,Txt_Degree);
   }
 
 /*****************************************************************************/
@@ -278,8 +277,7 @@ static void DegCfg_FullName (bool PutForm)
 
 static void DegCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenDegShoCfg,
-		    Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenDegShoCfg,HieLvl_DEG);
   }
 
 /*****************************************************************************/

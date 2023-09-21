@@ -85,8 +85,8 @@ void HieCfg_Title (bool PutLink,HieLvl_Level_t Level)
 /********************** Show full name in configuration **********************/
 /*****************************************************************************/
 
-void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
-		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
+void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,HieLvl_Level_t Level,
+		      const char *Label)
   {
    /***** Full name *****/
    HTM_TR_Begin (NULL);
@@ -102,7 +102,8 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 	   {
 	    /* Form to change full name */
 	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,FullName,
+	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,
+			       Gbl.Hierarchy.Node[Level].FullName,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"FullName\""
 			       " class=\"INPUT_FULL_NAME INPUT_%s\""
@@ -111,7 +112,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit full name
-	    HTM_Txt (FullName);
+	    HTM_Txt (Gbl.Hierarchy.Node[Level].FullName);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -121,8 +122,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 /********* Show institution short name in institution configuration **********/
 /*****************************************************************************/
 
-void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
-		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
+void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,HieLvl_Level_t Level)
   {
    extern const char *Txt_Short_name;
 
@@ -140,7 +140,8 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 	   {
 	    /* Form to change short name */
 	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,ShrtName,
+	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,
+			       Gbl.Hierarchy.Node[Level].ShrtName,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"ShortName\""
 			       " class=\"INPUT_SHORT_NAME INPUT_%s\""
@@ -149,7 +150,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit short name
-	    HTM_Txt (ShrtName);
+	    HTM_Txt (Gbl.Hierarchy.Node[Level].ShrtName);
       HTM_TD_End ();
 
    HTM_TR_End ();

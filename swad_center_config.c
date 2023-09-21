@@ -613,8 +613,7 @@ static void CtrCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Center;
 
-   HieCfg_FullName (PutForm,Txt_Center,ActRenCtrFulCfg,
-		    Gbl.Hierarchy.Node[HieLvl_CTR].FullName);
+   HieCfg_FullName (PutForm,ActRenCtrFulCfg,HieLvl_CTR,Txt_Center);
   }
 
 /*****************************************************************************/
@@ -623,7 +622,7 @@ static void CtrCfg_FullName (bool PutForm)
 
 static void CtrCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenCtrShoCfg,Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenCtrShoCfg,HieLvl_CTR);
   }
 
 /*****************************************************************************/

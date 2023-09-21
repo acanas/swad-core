@@ -273,8 +273,7 @@ static void CrsCfg_FullName (bool PutForm)
   {
    extern const char *Txt_Course;
 
-   HieCfg_FullName (PutForm,Txt_Course,ActRenCrsFulCfg,
-		       Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+   HieCfg_FullName (PutForm,ActRenCrsFulCfg,HieLvl_CRS,Txt_Course);
   }
 
 /*****************************************************************************/
@@ -283,8 +282,7 @@ static void CrsCfg_FullName (bool PutForm)
 
 static void CrsCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenCrsShoCfg,
-		    Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+   HieCfg_ShrtName (PutForm,ActRenCrsShoCfg,HieLvl_CRS);
   }
 
 /*****************************************************************************/
