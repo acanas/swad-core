@@ -27,13 +27,13 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (HieLvl_Level_t Level,
+void Lgo_DrawLogo (Hie_Level_t Level,
 		   long HieCod,
 		   const char *AltText,
                    unsigned Size,const char *Class);
-void Lgo_PutIconToChangeLogo (HieLvl_Level_t Level);
-void Lgo_RequestLogo (HieLvl_Level_t Level);
-void Lgo_ReceiveLogo (HieLvl_Level_t Level);
-void Lgo_RemoveLogo (HieLvl_Level_t Level);
+void Lgo_PutIconToChangeLogo (Hie_Level_t Level);
+void Lgo_RequestLogo (Hie_Level_t Level);
+void Lgo_ReceiveLogo (Hie_Level_t Level);
+void Lgo_RemoveLogo (Hie_Level_t Level);
 
 #endif

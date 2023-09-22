@@ -162,7 +162,7 @@ void Roo_SeeRooms (void)
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod <= 0)		// No center selected
+   if (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)		// No center selected
       return;
 
    /***** Reset rooms context *****/
@@ -476,7 +476,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
    unsigned NumRoom;
 
    /***** Get rooms from database *****/
-   if ((Rooms->Num = Roo_DB_GetListRooms (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+   if ((Rooms->Num = Roo_DB_GetListRooms (&mysql_res,Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                                           WhichData,Rooms->SelectedOrder))) // Rooms found...
      {
       /***** Create list with courses in center *****/
@@ -1099,7 +1099,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentClaName,NewClaName))	// Different names
         {
          /***** If room was in database... *****/
-         if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+         if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                                            Roo_EditingRoom->RooCod,
                                            ParName,NewClaName))
             Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1359,12 +1359,12 @@ void Roo_ReceiveFormNewRoom (void)
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
       /***** If name of room was in database... *****/
-      if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,-1L,
+      if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,-1L,
                                         "ShortName",Roo_EditingRoom->ShrtName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_room_X_already_exists,
                           Roo_EditingRoom->ShrtName);
-      else if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,-1L,
+      else if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,-1L,
                                              "FullName",Roo_EditingRoom->FullName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_room_X_already_exists,
@@ -1392,7 +1392,7 @@ static void Roo_CreateRoom (struct Roo_Room *Room)
       Room->Type = Roo_NO_TYPE;
 
    /***** Create a new room *****/
-   Room->RooCod = Roo_DB_CreateRoom (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,Room);
+   Room->RooCod = Roo_DB_CreateRoom (Gbl.Hierarchy.Node[Hie_CTR].HieCod,Room);
 
    /***** Create MAC address *****/
    if (Room->MACnum)

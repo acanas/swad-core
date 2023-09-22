@@ -30,7 +30,7 @@
 #include "swad_follow.h"
 #include "swad_follow_database.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -319,13 +319,13 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the total number of following/followers",
 			"SELECT COUNT(DISTINCT %s)"
 			 " FROM usr_follow",
 			FieldDB[Fol]);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the total number of following/followers",
 			"SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -342,9 +342,9 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			FieldDB[Fol],
-			Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			FieldDB[Fol]);
-      case HieLvl_INS:
+      case Hie_INS:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the total number of following/followers",
 			"SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -359,9 +359,9 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			FieldDB[Fol],
-			Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			FieldDB[Fol]);
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the total number of following/followers",
 			"SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -374,9 +374,9 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			FieldDB[Fol],
-			Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			FieldDB[Fol]);
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the total number of following/followers",
 			"SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -387,9 +387,9 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			FieldDB[Fol],
-			Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			FieldDB[Fol]);
-      case HieLvl_CRS:
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the total number of following/followers",
 			"SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -398,7 +398,7 @@ unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
 			" WHERE crs_users.CrsCod=%ld"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			FieldDB[Fol],
-			Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			FieldDB[Fol]);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -414,7 +414,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
 				      "SELECT AVG(N)"
 				       " FROM (SELECT COUNT(%s) AS N"
@@ -422,7 +422,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
 	                              "SELECT AVG(N)"
 				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
@@ -440,10 +440,10 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
-				      Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+				      Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
-      case HieLvl_INS:
+      case Hie_INS:
 	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
 				      "SELECT AVG(N)"
 				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
@@ -459,10 +459,10 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
-				      Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+				      Gbl.Hierarchy.Node[Hie_INS].HieCod,
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
 				      "SELECT AVG(N)"
 				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
@@ -476,10 +476,10 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
-				      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+				      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
 				      "SELECT AVG(N)"
 				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
@@ -491,10 +491,10 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
-				      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+				      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
-      case HieLvl_CRS:
+      case Hie_CRS:
 	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
 				      "SELECT AVG(N)"
 				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
@@ -504,7 +504,7 @@ double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      FieldDB[Fol],
-				      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+				      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				      FieldDB[Fol],
 				      FieldDB[1 - Fol]);
       default:
@@ -561,7 +561,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT FollowedCod,"					// row[0]
@@ -571,7 +571,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC,"
 			        "FollowedCod"
 			 " LIMIT 100");
-      case HieLvl_CTY:
+      case Hie_CTY:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -592,8 +592,8 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -612,8 +612,8 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -630,8 +630,8 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC,"
 		                "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+			 Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -646,8 +646,8 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -660,7 +660,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
          break;
       default:
          Err_WrongHierarchyLevelExit ();

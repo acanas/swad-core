@@ -108,22 +108,22 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 
    switch (Gbl.Hierarchy.Level)
      {
-      case HieLvl_SYS:	// System
+      case Hie_SYS:	// System
          Permission = ActLst_Actions[Action].PermissionSys;
 	 break;
-      case HieLvl_CTY:	// Country selected
+      case Hie_CTY:	// Country selected
          Permission = ActLst_Actions[Action].PermissionCty;
 	 break;
-      case HieLvl_INS:	// Institution selected
+      case Hie_INS:	// Institution selected
          Permission = ActLst_Actions[Action].PermissionIns;
 	 break;
-      case HieLvl_CTR:	// Center selected
+      case Hie_CTR:	// Center selected
          Permission = ActLst_Actions[Action].PermissionCtr;
 	 break;
-      case HieLvl_DEG:	// Degree selected
+      case Hie_DEG:	// Degree selected
          Permission = ActLst_Actions[Action].PermissionDeg;
 	 break;
-      case HieLvl_CRS:	// Course selected
+      case Hie_CRS:	// Course selected
 	 Permission = Gbl.Usrs.Me.IBelongToCurrentCrs ? ActLst_Actions[Action].PermissionCrsIfIBelong :
 							ActLst_Actions[Action].PermissionCrsIfIDontBelong;
 	 break;
@@ -230,18 +230,18 @@ const char *Act_GetActionText (Act_Action_t Action)
 
 void Act_AdjustActionWhenNoUsrLogged (void)
   {
-   static const Act_Action_t Actions[HieLvl_NUM_LEVELS] =
+   static const Act_Action_t Actions[Hie_NUM_LEVELS] =
      {
-      [HieLvl_UNK] = ActUnk, 		// Unknown
-      [HieLvl_SYS] = ActFrmLogIn,	// System
-      [HieLvl_CTY] = ActSeeCtyInf,	// Country
-      [HieLvl_INS] = ActSeeInsInf,	// Institution
-      [HieLvl_CTR] = ActSeeCtrInf,	// Center
-      [HieLvl_DEG] = ActSeeDegInf,	// Degree
-      [HieLvl_CRS] = ActSeeCrsInf,	// Course
+      [Hie_UNK] = ActUnk, 		// Unknown
+      [Hie_SYS] = ActFrmLogIn,	// System
+      [Hie_CTY] = ActSeeCtyInf,	// Country
+      [Hie_INS] = ActSeeInsInf,	// Institution
+      [Hie_CTR] = ActSeeCtrInf,	// Center
+      [Hie_DEG] = ActSeeDegInf,	// Degree
+      [Hie_CRS] = ActSeeCrsInf,	// Course
      };
 
-   if (Gbl.Hierarchy.Level >= HieLvl_NUM_LEVELS)
+   if (Gbl.Hierarchy.Level >= Hie_NUM_LEVELS)
       Gbl.Hierarchy.Level = ActUnk;
 
    Gbl.Action.Act = Actions[Gbl.Hierarchy.Level];

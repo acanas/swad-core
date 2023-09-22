@@ -41,7 +41,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hidden_visible.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -287,7 +287,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_COURSE_program,
-		 Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName) < 0)
+		 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin ("100%",Title,
                  FunctionToDrawContextualIcons[ListingType],NULL,

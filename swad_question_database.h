@@ -47,10 +47,10 @@ unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
                                float lowerScore,float upperScore);
 unsigned Qst_DB_GetNumQstsInCrs (long CrsCod);
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
-                            HieLvl_Level_t Level,Qst_AnswerType_t AnsType);
-unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
+                            Hie_Level_t Level,Qst_AnswerType_t AnsType);
+unsigned Qst_DB_GetNumCrssWithQsts (Hie_Level_t Level,
                                     Qst_AnswerType_t AnsType);
-unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
+unsigned Qst_DB_GetNumCrssWithPluggableQsts (Hie_Level_t Level,
                                              Qst_AnswerType_t AnsType);
 
 unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,

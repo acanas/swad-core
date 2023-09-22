@@ -1,4 +1,4 @@
-// swad_hierarchy_level.h: hierarchy levels: system, institution, center, degree, course
+// swad_hierarchy_type.h: hierarchy levels: system, institution, center, degree, course
 
 #ifndef _SWAD_HIE_LVL
 #define _SWAD_HIE_LVL
@@ -34,19 +34,20 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-// Levels in the hierarchy
-#define HieLvl_NUM_LEVELS	7
+// ------------------------- Levels in the hierarchy --------------------------
+#define Hie_NUM_LEVELS	7
 typedef enum
   {
-   HieLvl_UNK = 0,	// Unknown
-   HieLvl_SYS = 1,	// System
-   HieLvl_CTY = 2,	// Country
-   HieLvl_INS = 3,	// Institution
-   HieLvl_CTR = 4,	// Center
-   HieLvl_DEG = 5,	// Degree
-   HieLvl_CRS = 6,	// Course
-  } HieLvl_Level_t;
+   Hie_UNK = 0,	// Unknown
+   Hie_SYS = 1,	// System
+   Hie_CTY = 2,	// Country
+   Hie_INS = 3,	// Institution
+   Hie_CTR = 4,	// Center
+   Hie_DEG = 5,	// Degree
+   Hie_CRS = 6,	// Course
+  } Hie_Level_t;
 
+// -------------- Status of a hierarchy node after its creation ---------------
 typedef enum
   {
    Hie_STATUS_BIT_PENDING = (1 << 0),	// Requested, but not yet activated
@@ -66,8 +67,15 @@ typedef enum
    Hie_STATUS_REMOVED = 3,	// 1- (Status & Hie_STATUS_BIT_REMOVED)
   } Hie_StatusTxt_t;
 
+// Hierarchy node
 #define Hie_MAX_CHARS_INSTITUTIONAL_COD  (16 - 1)	// 15
 #define Hie_MAX_BYTES_INSTITUTIONAL_COD  ((Hie_MAX_CHARS_INSTITUTIONAL_COD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
+
+#define Hie_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
+#define Hie_MAX_BYTES_SHRT_NAME	((Hie_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
+
+#define Hie_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
+#define Hie_MAX_BYTES_FULL_NAME	((Hie_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Hie_Node
   {
@@ -82,8 +90,8 @@ struct Hie_Node
    Hie_Status_t Status;		// Node status
    long RequesterUsrCod;	// User code of the person who requested the creation of this node
    char InstitutionalCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the node
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of the node
-   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of the node
+   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of the node
+   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of the node
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct
      {
@@ -92,6 +100,7 @@ struct Hie_Node
      } NumUsrsWhoClaimToBelong;
   };
 
+// ----------------------- List of children nodes -----------------------------
 #define Hie_NUM_ORDERS 2
 typedef enum
   {
@@ -102,9 +111,9 @@ typedef enum
 
 struct Hie_List
   {
-   unsigned Num;		// Number of courses
-   struct Hie_Node *Lst;	// List of courses
-   Hie_Order_t SelectedOrder;	// Order of centers
+   unsigned Num;		// Number of nodes
+   struct Hie_Node *Lst;	// List of nodes
+   Hie_Order_t SelectedOrder;	// Listing order
   };
 
 #endif

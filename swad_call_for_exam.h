@@ -62,7 +62,7 @@ struct Cfe_CallForExam
   {
    long CrsCod;
    Cfe_Status_t Status;
-   char CrsFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char CrsFullName[Hie_MAX_BYTES_FULL_NAME + 1];
    unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
    char Session[Cfe_MAX_BYTES_SESSION + 1];	// Exam session is june, september, etc.
    struct Dat_Date CallDate;

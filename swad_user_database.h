@@ -54,11 +54,11 @@ unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
                                       Usr_GetPrefs_t GetPrefs);
 unsigned Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
 bool Usr_DB_FindStrInUsrsNames (const char *Str);
-void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
+void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t Level,Rol_Role_t Role,
 				    char **Query);
 void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role);
-void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query);
-void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query);
+void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t Level,char **Query);
+void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t Level,char **Query);
 void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query);
 void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query);
 unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);

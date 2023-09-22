@@ -48,9 +48,9 @@ extern struct Globals Gbl;
 /************************ Show title in configuration ************************/
 /*****************************************************************************/
 
-void HieCfg_Title (bool PutLink,HieLvl_Level_t Level)
+void HieCfg_Title (bool PutLink,Hie_Level_t Level)
   {
-   HieLvl_Level_t LevelLogo = (Level == HieLvl_CRS) ? HieLvl_DEG :
+   Hie_Level_t LevelLogo = (Level == Hie_CRS) ? Hie_DEG :
 						      Level;
 
    /***** Begin container *****/
@@ -85,7 +85,7 @@ void HieCfg_Title (bool PutLink,HieLvl_Level_t Level)
 /********************** Show full name in configuration **********************/
 /*****************************************************************************/
 
-void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,HieLvl_Level_t Level,
+void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level,
 		      const char *Label)
   {
    /***** Full name *****/
@@ -102,7 +102,7 @@ void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,HieLvl_Level_t Level,
 	   {
 	    /* Form to change full name */
 	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,
+	       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,
 			       Gbl.Hierarchy.Node[Level].FullName,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"FullName\""
@@ -122,7 +122,7 @@ void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,HieLvl_Level_t Level,
 /********* Show institution short name in institution configuration **********/
 /*****************************************************************************/
 
-void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,HieLvl_Level_t Level)
+void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level)
   {
    extern const char *Txt_Short_name;
 
@@ -140,7 +140,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,HieLvl_Level_t Level)
 	   {
 	    /* Form to change short name */
 	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,
+	       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,
 			       Gbl.Hierarchy.Node[Level].ShrtName,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"ShortName\""
@@ -267,9 +267,9 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
-	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
-	                     Gbl.Hierarchy.Node[HieLvl_INS].ShrtName) < 0)
+	                     Gbl.Hierarchy.Node[Hie_INS].ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_BUTTON_Submit_Begin (Title,"class=\"LB BT_LINK\"");
 	       free (Title);
@@ -337,7 +337,7 @@ void HieCfg_QR (ParCod_Param_t ParCode,long HieCod)
 /************************ Number of users in courses *************************/
 /*****************************************************************************/
 
-void HieCfg_NumUsrsInCrss (HieLvl_Level_t Level,long Cod,Rol_Role_t Role)
+void HieCfg_NumUsrsInCrss (Hie_Level_t Level,long Cod,Rol_Role_t Role)
   {
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];

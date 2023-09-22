@@ -29,7 +29,7 @@
 
 #include <stdbool.h>		// For boolean type
 
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -112,10 +112,10 @@ typedef enum
 /*****************************************************************************/
 
 void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
-                                   HieLvl_Level_t Level,long HieCod,
+                                   Hie_Level_t Level,long HieCod,
                                    FigCch_Type_t Type,const void *ValuePtr);
 bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
-                                HieLvl_Level_t Level,long HieCod,
+                                Hie_Level_t Level,long HieCod,
                                 FigCch_Type_t Type,void *ValuePtr);
 
 #endif

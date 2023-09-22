@@ -47,7 +47,7 @@
 #include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_institution_database.h"
@@ -168,8 +168,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	    /* Get institution code (row[0]) */
 	    Ins.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ins.HieCod == Gbl.Hierarchy.Node[HieLvl_INS].HieCod) ? "BG_HIGHLIGHT" :
-								        The_GetColorRows ();
+	    BgColor = (Ins.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? "BG_HIGHLIGHT" :
+								              The_GetColorRows ();
 
 	    /* Get data of institution */
 	    Ins_GetInstitDataByCod (&Ins);
@@ -215,7 +215,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size)
 	 ParCod_PutPar (ParCod_Ins,Ins->HieCod);
 	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
      }
-   Lgo_DrawLogo (HieLvl_INS,
+   Lgo_DrawLogo (Hie_INS,
 		 Ins->HieCod,
 		 Ins->FullName,
 		 Size,NULL);
@@ -243,7 +243,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
       Str_FreeGoToTitle ();
 
 	 /***** Institution logo and name *****/
-	 Lgo_DrawLogo (HieLvl_INS,
+	 Lgo_DrawLogo (Hie_INS,
 		       Ins->HieCod,
 		       Ins->ShrtName,
 		       16,ClassLogo);
@@ -265,13 +265,13 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
 
 void Ins_ShowInssOfCurrentCty (void)
   {
-   if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0)
+   if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
      {
       /***** Get parameter with the type of order in the list of institutions *****/
-      Gbl.Hierarchy.List[HieLvl_INS].SelectedOrder = Hie_GetParHieOrder ();
+      Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_GetParHieOrder ();
 
       /***** Get list of institutions *****/
-      Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+      Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
       /***** Write menu to select country *****/
       Hie_WriteMenuHierarchy ();
@@ -280,7 +280,7 @@ void Ins_ShowInssOfCurrentCty (void)
       Ins_ListInstitutions ();
 
       /***** Free list of institutions *****/
-      Hie_FreeList (HieLvl_CTY);
+      Hie_FreeList (Hie_CTY);
      }
   }
 
@@ -298,13 +298,13 @@ static void Ins_ListInstitutions (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-                 Gbl.Hierarchy.Node[HieLvl_CTY].FullName) < 0)
+                 Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Gbl.Hierarchy.List[HieLvl_CTY].Num)	// There are institutions in the current country
+      if (Gbl.Hierarchy.List[Hie_CTY].Num)	// There are institutions in the current country
 	{
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
@@ -312,9 +312,9 @@ static void Ins_ListInstitutions (void)
 
 	    /***** Write all institutions and their nuber of users *****/
 	    for (NumIns = 0, The_ResetRowColor ();
-		 NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
+		 NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 		 NumIns++, The_ChangeRowColor ())
-	       Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns]),
+	       Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns]),
 	                                        NumIns + 1);
 
 	 /***** End table *****/
@@ -371,8 +371,8 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = (Ins->HieCod == Gbl.Hierarchy.Node[HieLvl_INS].HieCod) ? "BG_HIGHLIGHT" :
-							        The_GetColorRows ();
+   BgColor = (Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? "BG_HIGHLIGHT" :
+							              The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -391,31 +391,31 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       /***** Number of users who claim to belong to this institution *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_INS,Ins));
+	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_INS,Ins));
       HTM_TD_End ();
 
       /***** Other stats *****/
       /* Number of centers in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
-						      HieLvl_INS,	// ...in institution
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+						      Hie_INS,	// ...in institution
 						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
-						      HieLvl_INS,	// ...in institution
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
+						      Hie_INS,	// ...in institution
 						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of courses in this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
-						      HieLvl_INS,	// ...in institution
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+						      Hie_INS,	// ...in institution
 						      Ins->HieCod));
       HTM_TD_End ();
 
@@ -428,7 +428,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       /* Number of users in courses of this institution */
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->HieCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_INS,Ins->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user);
@@ -474,13 +474,13 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],
 		                           "class=\"BT_LINK\"");
-		     if (Order == Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[Hie_CTY].SelectedOrder)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_INSTITUTIONS_ORDER[Order]);
 	    if (OrderSelectable)
 	      {
-		     if (Order == Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[Hie_CTY].SelectedOrder)
 			HTM_U_End ();
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -524,14 +524,14 @@ static void Ins_EditInstitutionsInternal (void)
    char *Title;
 
    /***** Get list of institutions *****/
-   Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+   Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-                 Gbl.Hierarchy.Node[HieLvl_CTY].FullName) < 0)
+                 Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
@@ -541,14 +541,14 @@ static void Ins_EditInstitutionsInternal (void)
       Ins_PutFormToCreateInstitution ();
 
       /***** Forms to edit current institutions *****/
-      if (Gbl.Hierarchy.List[HieLvl_CTY].Num)
+      if (Gbl.Hierarchy.List[Hie_CTY].Num)
 	 Ins_ListInstitutionsForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of institutions *****/
-   Hie_FreeList (HieLvl_CTY);
+   Hie_FreeList (Hie_CTY);
   }
 
 /*****************************************************************************/
@@ -575,23 +575,23 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
    unsigned NumIns;
 
    /***** Get institutions from database *****/
-   if ((Gbl.Hierarchy.List[HieLvl_CTY].Num = Ins_DB_GetInssInCtyOrderedByFullName (&mysql_res,CtyCod))) // Institutions found...
+   if ((Gbl.Hierarchy.List[Hie_CTY].Num = Ins_DB_GetInssInCtyOrderedByFullName (&mysql_res,CtyCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.List[HieLvl_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_CTY].Num,
-							sizeof (*Gbl.Hierarchy.List[HieLvl_CTY].Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[Hie_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTY].Num,
+							sizeof (*Gbl.Hierarchy.List[Hie_CTY].Lst))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
+	   NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns],
+         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
                                    false);	// Don't get number of users who claim to belong to this institution
      }
    else
-      Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
+      Gbl.Hierarchy.List[Hie_CTY].Lst = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -608,23 +608,23 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
    unsigned NumIns;
 
    /***** Get institutions from database *****/
-   if ((Gbl.Hierarchy.List[HieLvl_CTY].Num = Ins_DB_GetFullListOfInssInCty (&mysql_res,CtyCod))) // Institutions found...
+   if ((Gbl.Hierarchy.List[Hie_CTY].Num = Ins_DB_GetFullListOfInssInCty (&mysql_res,CtyCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
-      if ((Gbl.Hierarchy.List[HieLvl_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_CTY].Num,
-							sizeof (*Gbl.Hierarchy.List[HieLvl_CTY].Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[Hie_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTY].Num,
+							sizeof (*Gbl.Hierarchy.List[Hie_CTY].Lst))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
+	   NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns],
+         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
                                    true);	// Get number of users who claim to belong to this institution
      }
    else
-      Gbl.Hierarchy.List[HieLvl_CTY].Lst = NULL;
+      Gbl.Hierarchy.List[Hie_CTY].Lst = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -638,7 +638,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 void Ins_WriteInstitutionNameAndCty (long InsCod)
   {
    struct Hie_Node Ins;
-   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution short name and country name *****/
    Ins.HieCod = InsCod;
@@ -742,13 +742,11 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
 
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
   {
-   Gbl.Cache.InstitutionShrtNameAndCty.HieCod      = -1L;
-   Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
-   Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0]  = '\0';
+   Gbl.Cache.InstitutionShrtNameAndCty.Valid = false;
   }
 
 void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
-                                         char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
+                                         char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -762,12 +760,13 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
      }
 
    /***** 2. Fast check: If cached... *****/
-   if (Ins->HieCod == Gbl.Cache.InstitutionShrtNameAndCty.HieCod)
+   if (Gbl.Cache.InstitutionShrtNameAndCty.Valid &&
+       Ins->HieCod == Gbl.Cache.InstitutionShrtNameAndCty.HieCod)
      {
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
 		sizeof (Ins->ShrtName) - 1);
       Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
-		Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+		Hie_MAX_BYTES_FULL_NAME);
       return;
      }
 
@@ -797,7 +796,8 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
 	     sizeof (Ins->ShrtName) - 1);
    Str_Copy (CtyName      ,Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,
-	     Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+	     Hie_MAX_BYTES_FULL_NAME);
+   Gbl.Cache.InstitutionShrtNameAndCty.Valid = true;
   }
 
 /*****************************************************************************/
@@ -817,7 +817,7 @@ void Ins_WriteSelectorOfInstitution (void)
    Frm_BeginFormGoTo (ActSeeCtr);
 
       /***** Begin selector *****/
-      if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0)
+      if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
@@ -828,15 +828,15 @@ void Ins_WriteSelectorOfInstitution (void)
 			   The_GetSuffix ());
 
       HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Node[HieLvl_INS].HieCod < 0 ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
+		  Gbl.Hierarchy.Node[Hie_INS].HieCod < 0 ? HTM_OPTION_SELECTED :
+							      HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Institution);
 
-      if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0)
+      if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
 	{
 	 /***** Get institutions of current country *****/
-	 NumInss = Ins_DB_GetInssInCtyOrderedByShrtName (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	 NumInss = Ins_DB_GetInssInCtyOrderedByShrtName (&mysql_res,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
 	 /***** List institutions *****/
 	 for (NumIns = 0;
@@ -852,9 +852,9 @@ void Ins_WriteSelectorOfInstitution (void)
 
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&InsCod,
-			Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0 &&
-			InsCod == Gbl.Hierarchy.Node[HieLvl_INS].HieCod ? HTM_OPTION_SELECTED :
-								       HTM_OPTION_UNSELECTED,
+			Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
+			InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
+								          HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);
 	   }
@@ -897,17 +897,17 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /***** Write all institutions *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
+	   NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 	   NumIns++)
 	{
-	 Ins = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
+	 Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 
 	 ICanEdit = Ins_CheckIfICanEdit (Ins);
-	 NumCtrs = Hie_GetNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
-					    HieLvl_INS,	// ...in institution
+	 NumCtrs = Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+					    Hie_INS,	// ...in institution
 					    Ins->HieCod);
-	 NumUsrsIns = Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl_INS,Ins);
-	 NumUsrsInCrssOfIns = Enr_GetNumUsrsInCrss (HieLvl_INS,Ins->HieCod,
+	 NumUsrsIns = Hie_GetNumUsrsWhoClaimToBelongTo (Hie_INS,Ins);
+	 NumUsrsInCrssOfIns = Enr_GetNumUsrsInCrss (Hie_INS,Ins->HieCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
 						    1 << Rol_TCH);	// Any user
@@ -934,7 +934,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Institution logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-	       Lgo_DrawLogo (HieLvl_INS,
+	       Lgo_DrawLogo (Hie_INS,
 			     Ins->HieCod,
 			     Ins->ShrtName,
 			     20,NULL);
@@ -946,7 +946,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		 {
 		  Frm_BeginForm (ActRenInsSho);
 		     ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+		     HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -962,7 +962,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	      {
 	       Frm_BeginForm (ActRenInsFul);
 		  ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
+		  HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1072,15 +1072,17 @@ void Ins_RemoveInstitution (void)
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
       Err_NoPermissionExit ();
-   else if (Hie_GetNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS,Ins_EditingIns->HieCod))
+   else if (Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+				     Hie_INS,	// ...in institution
+				     Ins_EditingIns->HieCod))
       // Institution has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
-   else if (Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl_INS,Ins_EditingIns))
+   else if (Hie_GetNumUsrsWhoClaimToBelongTo (Hie_INS,Ins_EditingIns))
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
-   else if (Enr_GetNumUsrsInCrss (HieLvl_INS,Ins_EditingIns->HieCod,
+   else if (Enr_GetNumUsrsInCrss (Hie_INS,Ins_EditingIns->HieCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))	// Any user
@@ -1090,10 +1092,10 @@ void Ins_RemoveInstitution (void)
    else	// Institution has no users ==> remove it
      {
       /***** Remove all threads and posts in forums of the institution *****/
-      For_DB_RemoveForums (HieLvl_INS,Ins_EditingIns->HieCod);
+      For_DB_RemoveForums (Hie_INS,Ins_EditingIns->HieCod);
 
       /***** Remove surveys of the institution *****/
-      Svy_RemoveSurveys (HieLvl_INS,Ins_EditingIns->HieCod);
+      Svy_RemoveSurveys (Hie_INS,Ins_EditingIns->HieCod);
 
       /***** Remove information related to files in institution *****/
       Brw_DB_RemoveInsFiles (Ins_EditingIns->HieCod);
@@ -1106,7 +1108,7 @@ void Ins_RemoveInstitution (void)
       Fil_RemoveTree (PathIns);
 
       /***** Remove administrators of this institution *****/
-      Adm_DB_RemAdmins (HieLvl_INS,Ins_EditingIns->HieCod);
+      Adm_DB_RemAdmins (Hie_INS,Ins_EditingIns->HieCod);
 
       /***** Remove institution *****/
       Ins_DB_RemoveInstitution (Ins_EditingIns->HieCod);
@@ -1114,10 +1116,10 @@ void Ins_RemoveInstitution (void)
       /***** Flush caches *****/
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
       Dpt_FlushCacheNumDptsInIns ();
-      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS);	// Number of centers in institution
-      Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_INS);	// Number of degrees in institution
-      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_INS);	// Number of courses in institution
-      Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_INS);
+      Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_INS);	// Number of centers in institution
+      Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_INS);	// Number of degrees in institution
+      Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_INS);	// Number of courses in institution
+      Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_INS);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1165,20 +1167,20 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
    const char *FldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;	// Initialized to avoid warning
    char *CurrentInsName = NULL;	// Initialized to avoid warning
-   char NewInsName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char NewInsName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParName = "ShortName";
          FldName = "ShortName";
-         MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
          CurrentInsName = Ins->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParName = "FullName";
          FldName = "FullName";
-         MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
+         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
          CurrentInsName = Ins->FullName;
          break;
      }
@@ -1198,7 +1200,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
         {
          /***** If institution was in database... *****/
          if (Ins_DB_CheckIfInsNameExistsInCty (ParName,NewInsName,Ins->HieCod,
-                                            Gbl.Hierarchy.Node[HieLvl_CTY].HieCod))
+                                            Gbl.Hierarchy.Node[Hie_CTY].HieCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              NewInsName);
@@ -1334,7 +1336,7 @@ void Ins_ContEditAfterChgIns (void)
 static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
    // If the institution being edited is different to the current one...
-   if (Ins_EditingIns->HieCod != Gbl.Hierarchy.Node[HieLvl_INS].HieCod)
+   if (Ins_EditingIns->HieCod != Gbl.Hierarchy.Node[Hie_INS].HieCod)
      {
       /***** Alert with button to go to institution *****/
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
@@ -1382,7 +1384,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-	    Lgo_DrawLogo (HieLvl_INS,
+	    Lgo_DrawLogo (Hie_INS,
 			  -1L,
 			  "",
 			  20,NULL);
@@ -1390,7 +1392,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1399,7 +1401,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
+	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1518,11 +1520,11 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set institution country */
-   Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[HieLvl_CTY].HieCod;
+   Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[Hie_CTY].HieCod;
 
    /* Get institution short name, full name and WWW */
-   Par_GetParText ("ShortName",Ins_EditingIns->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Ins_EditingIns->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Ins_EditingIns->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Ins_EditingIns->FullName,Hie_MAX_BYTES_FULL_NAME);
    Par_GetParText ("WWW"      ,Ins_EditingIns->WWW     ,Cns_MAX_BYTES_WWW);
 
    if (Ins_EditingIns->ShrtName[0] &&
@@ -1532,12 +1534,12 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
         {
          /***** If name of institution was in database... *****/
          if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Ins_EditingIns->ShrtName,
-					       -1L,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod))
+					       -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              Ins_EditingIns->ShrtName);
          else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Ins_EditingIns->FullName,
-						    -1L,Gbl.Hierarchy.Node[HieLvl_CTY].HieCod))
+						    -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              Ins_EditingIns->FullName);
@@ -2113,7 +2115,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 			                         "class=\"LM BT_LINK\"");
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
-			      Lgo_DrawLogo (HieLvl_INS,
+			      Lgo_DrawLogo (Hie_INS,
 					    Ins.HieCod,
 					    Ins.ShrtName,
 					    40,NULL);

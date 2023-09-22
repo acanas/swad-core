@@ -31,7 +31,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_action.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_institution.h"
 #include "swad_language.h"
 #include "swad_role_type.h"

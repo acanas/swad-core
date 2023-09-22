@@ -66,7 +66,7 @@ long Rub_DB_CreateRubric (const struct Rub_Rubric *Rubric)
 				" (CrsCod,UsrCod,Title,Txt)"
 				" VALUES"
 				" (%ld,%ld,'%s','%s')",
-				Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Rubric->Title,
 				Rubric->Txt);
@@ -84,7 +84,7 @@ void Rub_DB_UpdateRubric (const struct Rub_Rubric *Rubric)
 		          "Title='%s',"
 		          "Txt='%s'"
 		   " WHERE RubCod=%ld",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	           Rubric->Title,
 	           Rubric->Txt,
 	           Rubric->RubCod);
@@ -102,7 +102,7 @@ unsigned Rub_DB_GetListRubrics (MYSQL_RES **mysql_res)
 		    " FROM rub_rubrics"
 		   " WHERE CrsCod=%ld"
 		   " ORDER BY Title",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -121,7 +121,7 @@ unsigned Rub_DB_GetRubricDataByCod (MYSQL_RES **mysql_res,long RubCod)
 		   " WHERE RubCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   RubCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -136,7 +136,7 @@ void Rub_DB_GetRubricTitle (long RubCod,char *Title,size_t TitleSize)
 		         " WHERE RubCod=%ld"
 		           " AND CrsCod=%ld",	// Extra check
 			 RubCod,
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -167,7 +167,7 @@ bool Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric)
 		    " WHERE CrsCod=%ld"
 		      " AND Title='%s'"
 		      " AND RubCod<>%ld)",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Rubric->Title,
 		   Rubric->RubCod);
   }
@@ -177,17 +177,17 @@ bool Rub_DB_CheckIfSimilarRubricExists (const struct Rub_Rubric *Rubric)
 /*****************************************************************************/
 // Returns the number of courses with rubrics in this location
 
-unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Level)
+unsigned Rub_DB_GetNumCoursesWithRubrics (Hie_Level_t Level)
   {
    /***** Get number of courses with rubrics from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with rubrics",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			  " FROM rub_rubrics");
-      case HieLvl_CTY:
+      case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with rubrics",
 			 "SELECT COUNT(DISTINCT rub_rubrics.CrsCod)"
@@ -201,8 +201,8 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-                         Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+                         Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with rubrics",
 			 "SELECT COUNT(DISTINCT rub_rubrics.CrsCod)"
@@ -214,8 +214,8 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-		         Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+		         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with rubrics",
 			 "SELECT COUNT(DISTINCT rub_rubrics.CrsCod)"
@@ -225,8 +225,8 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Level)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-                         Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+                         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with rubrics",
 			 "SELECT COUNT(DISTINCT rub_rubrics.CrsCod)"
@@ -234,14 +234,14 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Level)
 			        "rub_rubrics"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-		         Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+		         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with rubrics",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			  " FROM rub_rubrics"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
 	 return 0;
      }
@@ -252,17 +252,17 @@ unsigned Rub_DB_GetNumCoursesWithRubrics (HieLvl_Level_t Level)
 /*****************************************************************************/
 // Returns the number of rubrics in a given location
 
-unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Level)
+unsigned Rub_DB_GetNumRubrics (Hie_Level_t Level)
   {
    /***** Get number of rubrics from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of rubrics",
                          "SELECT COUNT(*)"
 			  " FROM rub_rubrics");
-      case HieLvl_CTY:
+      case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of rubrics",
                          "SELECT COUNT(*)"
@@ -276,8 +276,8 @@ unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-		         Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+		         Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of rubrics",
                          "SELECT COUNT(*)"
@@ -289,8 +289,8 @@ unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-		         Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+		         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of rubrics",
                          "SELECT COUNT(*)"
@@ -300,8 +300,8 @@ unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Level)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-		         Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+		         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of rubrics",
                          "SELECT COUNT(*)"
@@ -309,14 +309,14 @@ unsigned Rub_DB_GetNumRubrics (HieLvl_Level_t Level)
 			        "rub_rubrics"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=rub_rubrics.CrsCod",
-		         Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+		         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of rubrics",
                          "SELECT COUNT(*)"
 			  " FROM rub_rubrics"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
 	 return 0;
      }
@@ -683,19 +683,19 @@ bool Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criter
 		   Criterion->RubCod,
 		   Title,
 		   Criterion->CriCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
 /**************** Get average number of criteria per rubric ******************/
 /*****************************************************************************/
 
-double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
+double Rub_DB_GetNumCriteriaPerRubric (Hie_Level_t Level)
   {
    /***** Get number of criteria per rubric from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
@@ -704,7 +704,7 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
 					      "rub_criteria"
 				       " WHERE rub_rubrics.RubCod=rub_criteria.RubCod"
 				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable");
-      case HieLvl_CTY:
+      case Hie_CTY:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
@@ -722,8 +722,8 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
 				        " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				        " AND rub_rubrics.RubCod=rub_criteria.RubCod"
 				   " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+			       Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
@@ -739,8 +739,8 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
 				        " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				        " AND rub_rubrics.RubCod=rub_criteria.RubCod"
 				   " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
-			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+			       Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
@@ -754,8 +754,8 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
 				         " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				         " AND rub_rubrics.RubCod=rub_criteria.RubCod"
 				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
@@ -767,8 +767,8 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
 				         " AND crs_courses.CrsCod=rub_rubrics.CrsCod"
 				         " AND rub_rubrics.RubCod=rub_criteria.RubCod"
 				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
          return
          DB_QuerySELECTDouble ("can not get number of criteria per rubric",
 			       "SELECT AVG(NumCriteria)"
@@ -778,7 +778,7 @@ double Rub_DB_GetNumCriteriaPerRubric (HieLvl_Level_t Level)
 				       " WHERE rub_rubrics.CrsCod=%ld"
 				         " AND rub_rubrics.RubCod=rub_criteria.RubCod"
 				    " GROUP BY rub_criteria.RubCod) AS NumCriteriaTable",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached

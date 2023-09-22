@@ -43,7 +43,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hidden_visible.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_notification.h"
@@ -848,7 +848,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
 	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[HieLvl_INS].HieCod,		// Departments in current insitution
+	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,		// Departments in current insitution
 				      Projects->Filter.DptCod,		// Selected department
 				      Prj_PAR_FILTER_DPT_COD_NAME,	// Parameter name
 				      SelectClass,			// Selector class
@@ -2729,8 +2729,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 
 void Prj_FlushCacheMyRolesInProject (void)
   {
-   Gbl.Cache.MyRolesInProject.PrjCod         = -1L;
-   Gbl.Cache.MyRolesInProject.RolesInProject = 0;
+   Gbl.Cache.MyRolesInProject.Valid = false;
   }
 
 unsigned Prj_GetMyRolesInProject (long PrjCod)
@@ -2747,7 +2746,8 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
       return 0;
 
    /***** 2. Fast check: Is my role in project already calculated *****/
-   if (PrjCod == Gbl.Cache.MyRolesInProject.PrjCod)
+   if (Gbl.Cache.MyRolesInProject.Valid &&
+       PrjCod == Gbl.Cache.MyRolesInProject.PrjCod)
       return Gbl.Cache.MyRolesInProject.RolesInProject;
 
    /***** 3. Slow check: Get my role in project from database.
@@ -2765,6 +2765,7 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
 	 Gbl.Cache.MyRolesInProject.RolesInProject |= (1 << RoleInPrj);
      }
    DB_FreeMySQLResult (&mysql_res);
+   Gbl.Cache.MyRolesInProject.Valid = true;
 
    return Gbl.Cache.MyRolesInProject.RolesInProject;
   }
@@ -3767,7 +3768,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		     if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
-		     Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[HieLvl_INS].HieCod,	// Departments in current institution
+		     Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
 						  Projects->Prj.DptCod,		// Selected department
 						  Par_CodeStr[ParCod_Dpt],	// Parameter name
 						  SelectClass,			// Selector class

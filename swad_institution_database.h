@@ -28,7 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_constant.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_map.h"
 #include "swad_role_type.h"
 #include "swad_search.h"
@@ -44,7 +44,7 @@ void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewInsNam
 void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod);
-void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod);
 bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
                                        const char *Name,
@@ -68,13 +68,14 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                             const char *RangeQuery);
 
+unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long SysCod);
 unsigned Ins_DB_GetNumInssInCty (long CtyCod);
 
-unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Level,long HieCod);
-unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Level,long HieCod);
-unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Level,long HieCod);
+unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t Level,long HieCod);
+unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t Level,long HieCod);
+unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t Level,long HieCod);
 unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Level,long HieCod);
+                                    Hie_Level_t Level,long HieCod);
 
 unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod);
 bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,

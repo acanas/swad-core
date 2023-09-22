@@ -40,7 +40,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_log.h"
@@ -255,16 +255,16 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order the lists of users of this course *****/
-   Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
-   Usr_GetListUsrs (HieLvl_CRS,Rol_NET);
-   Usr_GetListUsrs (HieLvl_CRS,Rol_TCH);
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_NET);
+   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
-                 Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName) < 0)
+                 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
@@ -542,13 +542,13 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-				   1 << HieLvl_CTY |
-				   1 << HieLvl_INS |
-				   1 << HieLvl_CTR |
-				   1 << HieLvl_DEG |
-				   1 << HieLvl_CRS;
-	       Gbl.Scope.Default = HieLvl_SYS;
+	       Gbl.Scope.Allowed = 1 << Hie_SYS |
+				   1 << Hie_CTY |
+				   1 << Hie_INS |
+				   1 << Hie_CTR |
+				   1 << Hie_DEG |
+				   1 << Hie_CRS;
+	       Gbl.Scope.Default = Hie_SYS;
 	       Sco_GetScope ("ScopeSta");
 	       Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
@@ -615,7 +615,7 @@ void Sta_PutLinkToCourseHits (void)
   {
    extern const char *Txt_Visits_to_course;
 
-   if (Gbl.Hierarchy.Level == HieLvl_CRS)		// Course selected
+   if (Gbl.Hierarchy.Level == Hie_CRS)		// Course selected
       switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_NET:
@@ -821,13 +821,13 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 					      (unsigned long) Sta_ROLE_DEFAULT);
 
 	 /***** Get users range for access statistics *****/
-	 Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-			     1 << HieLvl_CTY |
-			     1 << HieLvl_INS |
-			     1 << HieLvl_CTR |
-			     1 << HieLvl_DEG |
-			     1 << HieLvl_CRS;
-	 Gbl.Scope.Default = HieLvl_SYS;
+	 Gbl.Scope.Allowed = 1 << Hie_SYS |
+			     1 << Hie_CTY |
+			     1 << Hie_INS |
+			     1 << Hie_CTR |
+			     1 << Hie_DEG |
+			     1 << Hie_CRS;
+	 Gbl.Scope.Default = Hie_SYS;
 	 Sco_GetScope ("ScopeSta");
 
 	 /***** Show form again *****/
@@ -900,16 +900,16 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    NumDays = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
                                          Dat_GetRangeDate (Dat_END_TIME));
    ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == HieLvl_CRS)  ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == HieLvl_DEG   ||
-			                                             Gbl.Scope.Current == HieLvl_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == HieLvl_CTR   ||
-			                                             Gbl.Scope.Current == HieLvl_DEG   ||
-			                                             Gbl.Scope.Current == HieLvl_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == HieLvl_INS   ||
-			                                             Gbl.Scope.Current == HieLvl_CTR   ||
-			                                             Gbl.Scope.Current == HieLvl_DEG   ||
-			                                             Gbl.Scope.Current == HieLvl_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == Hie_CRS)  ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Hie_DEG   ||
+			                                             Gbl.Scope.Current == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Hie_CTR   ||
+			                                             Gbl.Scope.Current == Hie_DEG   ||
+			                                             Gbl.Scope.Current == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Hie_INS   ||
+			                                             Gbl.Scope.Current == Hie_CTR   ||
+			                                             Gbl.Scope.Current == Hie_DEG   ||
+			                                             Gbl.Scope.Current == Hie_CRS)) ||
 			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {

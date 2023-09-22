@@ -51,7 +51,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_holiday.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
@@ -447,12 +447,12 @@ static void Lay_WritePageTitle (void)
    HTM_TITLE_Begin ();
 
       if (Par_GetMethod () == Par_METHOD_GET &&
-	  Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)
+	  Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	{
 	 HTM_TxtF ("%s &gt; %s",
-	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Node[HieLvl_DEG].ShrtName);
-	 if (Gbl.Hierarchy.Level == HieLvl_CRS)
-	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	           Cfg_PLATFORM_SHORT_NAME,Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
+	 if (Gbl.Hierarchy.Level == Hie_CRS)
+	    HTM_TxtF (" &gt; %s",Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 	}
       else
 	 HTM_TxtF ("%s: %s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
@@ -565,7 +565,7 @@ static void Lay_WriteScripts (void)
       HTM_SCRIPT_Begin (NULL,NULL);
 
 	 HTM_Txt ("\tvar STR_EXAM = '");
-	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	 HTM_Txt ("';\n");
 
 	 HTM_Txt ("\tvar Hlds = [];\n");
@@ -857,7 +857,7 @@ static void Lay_WriteScriptParsAJAX (void)
       HTM_TxtF ("var refreshParamIdSes = \"ses=%s\";\n"
 		"var refreshParamCrsCod = \"crs=%ld\";\n",
 		Gbl.Session.Id,
-		Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
       /***** Parameter to refresh connected users *****/
       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
@@ -1118,7 +1118,7 @@ static void Lay_ShowLeftColumn (void)
    Cal_DrawCurrentMonth ();
 
    /***** Notices (yellow notes) *****/
-   if (Gbl.Hierarchy.Level == HieLvl_CRS)
+   if (Gbl.Hierarchy.Level == Hie_CRS)
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
 		       -1L);	// No notice highlighted
   }
@@ -1149,12 +1149,12 @@ static void Lay_ShowRightColumn (void)
      }
 
    /***** Number of connected users in the current course *****/
-   if (Gbl.Hierarchy.Level == HieLvl_CRS)	// There is a course selected
+   if (Gbl.Hierarchy.Level == Hie_CRS)	// There is a course selected
      {
       HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
 	 HTM_LEGEND (Txt_Connected_PLURAL);
 	 HTM_DIV_Begin ("id=\"courseconnected\"");	// Used for AJAX based refresh
-	    Gbl.Scope.Current = HieLvl_CRS;
+	    Gbl.Scope.Current = Hie_CRS;
 	    Con_ShowConnectedUsrsBelongingToCurrentCrs ();
 	 HTM_DIV_End ();				// Used for AJAX based refresh
       HTM_FIELDSET_End ();
@@ -1357,7 +1357,7 @@ void Lay_RefreshNotifsAndConnected (void)
   {
    unsigned NumUsr;
    bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-                        Gbl.Hierarchy.Level == HieLvl_CRS;	// Right column visible && There is a course selected
+                        Gbl.Hierarchy.Level == Hie_CRS;	// Right column visible && There is a course selected
    pid_t PID = Prc_GetPID ();
 
    /***** Sometimes, someone must do this work,
@@ -1407,7 +1407,7 @@ void Lay_RefreshNotifsAndConnected (void)
    HTM_Txt ("|");
    if (ShowConnected)
      {
-      Gbl.Scope.Current = HieLvl_CRS;
+      Gbl.Scope.Current = Hie_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
      }
    HTM_Txt ("|");
@@ -1464,31 +1464,24 @@ static void Lay_WriteFootFromHTMLFile (void)
 
 void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
   {
-   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
+   struct Hie_Node Hie[Hie_NUM_LEVELS];
 
    /***** Initialize institution, degree and course to show in header *****/
-   Hie[HieLvl_INS].HieCod = (Gbl.Scope.Current == HieLvl_CRS ||
-			  Gbl.Scope.Current == HieLvl_DEG ||
-			  Gbl.Scope.Current == HieLvl_CTR ||
-			  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Node[HieLvl_INS].HieCod :
-							     -1L;
-   Hie[HieLvl_DEG].HieCod = (Gbl.Scope.Current == HieLvl_CRS ||
-			  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Node[HieLvl_DEG].HieCod :
-							     -1L;
-   Hie[HieLvl_CRS].HieCod = (Gbl.Scope.Current == HieLvl_CRS) ? Gbl.Hierarchy.Node[HieLvl_CRS].HieCod :
-							     -1L;
+   Hie[Hie_INS].HieCod = (Gbl.Scope.Current == Hie_CRS ||
+			     Gbl.Scope.Current == Hie_DEG ||
+			     Gbl.Scope.Current == Hie_CTR ||
+			     Gbl.Scope.Current == Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+							        -1L;
+   Hie[Hie_DEG].HieCod = (Gbl.Scope.Current == Hie_CRS ||
+			     Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+							        -1L;
+   Hie[Hie_CRS].HieCod = (Gbl.Scope.Current == Hie_CRS) ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
+							        -1L;
 
-   /***** Get data of institution *****/
-   // Hie[HieLvl_INS].Cod = InsCod;
-   Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
-
-   /***** Get data of degree *****/
-   // Hie[HieLvl_DEG].Cod = DegCod;
-   Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
-
-   /***** Get data of course *****/
-   // Hie[HieLvl_CRS].Cod = CrsCod;
-   Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
+   /***** Get data of institution, degree and course *****/
+   Ins_GetInstitDataByCod (&Hie[Hie_INS]);
+   Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
+   Crs_GetCourseDataByCod (&Hie[Hie_CRS]);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (10);
@@ -1497,13 +1490,13 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 
 	 /***** First column: institution logo *****/
 	 HTM_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
-	    if (Hie[HieLvl_INS].HieCod > 0)
+	    if (Hie[Hie_INS].HieCod > 0)
 	      {
 	       if (!PrintView)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[HieLvl_INS].WWW);
-	       Lgo_DrawLogo (HieLvl_INS,
-			     Hie[HieLvl_INS].HieCod,
-			     Hie[HieLvl_INS].ShrtName,
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[Hie_INS].WWW);
+	       Lgo_DrawLogo (Hie_INS,
+			     Hie[Hie_INS].HieCod,
+			     Hie[Hie_INS].ShrtName,
 			     40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1513,32 +1506,32 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 	 /***** Second column: class photo title *****/
 	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
 	               The_GetSuffix ());
-	    if (Hie[HieLvl_INS].HieCod > 0)
+	    if (Hie[Hie_INS].HieCod > 0)
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie[HieLvl_INS].WWW,The_GetSuffix ());
-	       HTM_Txt (Hie[HieLvl_INS].FullName);
+			       Hie[Hie_INS].WWW,The_GetSuffix ());
+	       HTM_Txt (Hie[Hie_INS].FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
-	    if (Hie[HieLvl_DEG].HieCod > 0)
+	    if (Hie[Hie_DEG].HieCod > 0)
 	      {
-	       if (Hie[HieLvl_INS].HieCod > 0)
+	       if (Hie[Hie_INS].HieCod > 0)
 		  HTM_Txt (" - ");
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie[HieLvl_DEG].WWW,The_GetSuffix ());
-	       HTM_Txt (Hie[HieLvl_DEG].FullName);
+			       Hie[Hie_DEG].WWW,The_GetSuffix ());
+	       HTM_Txt (Hie[Hie_DEG].FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
 	      }
 	    HTM_BR ();
-	    if (Hie[HieLvl_CRS].HieCod > 0)
+	    if (Hie[Hie_CRS].HieCod > 0)
 	      {
-	       HTM_Txt (Hie[HieLvl_CRS].FullName);
+	       HTM_Txt (Hie[Hie_CRS].FullName);
 	       if (DrawingClassPhoto && !Gbl.Usrs.ClassPhoto.AllGroups)
 		 {
 		  HTM_BR ();
@@ -1549,15 +1542,15 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 
 	 /***** Third column: degree logo *****/
 	 HTM_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
-	    if (Hie[HieLvl_DEG].HieCod > 0)
+	    if (Hie[Hie_DEG].HieCod > 0)
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
-			       Hie[HieLvl_DEG].WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_DEG,
-			     Hie[HieLvl_DEG].HieCod,
-			     Hie[HieLvl_DEG].ShrtName,
+			       Hie[Hie_DEG].WWW,The_GetSuffix ());
+	       Lgo_DrawLogo (Hie_DEG,
+			     Hie[Hie_DEG].HieCod,
+			     Hie[Hie_DEG].ShrtName,
 			     40,NULL);
 	       if (!PrintView)
 		  HTM_A_End ();

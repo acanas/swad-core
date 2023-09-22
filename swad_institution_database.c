@@ -148,7 +148,7 @@ unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod)
 /*********** Get the short name of an institution from its code **************/
 /*****************************************************************************/
 
-void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
+void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: institution code should be > 0 *****/
    if (InsCod <= 0)
@@ -158,7 +158,7 @@ void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SH
      }
 
    /***** Get short name of institution from database *****/
-   DB_QuerySELECTString (ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME,
+   DB_QuerySELECTString (ShrtName,Hie_MAX_BYTES_SHRT_NAME,
 			 "can not get the short name of an institution",
 			 "SELECT ShortName"
 			  " FROM ins_instits"
@@ -338,7 +338,7 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
 			    " ORDER BY %s",
 		   CtyCod,
 		   CtyCod,
-		   OrderBySubQuery[Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder]);
+		   OrderBySubQuery[Gbl.Hierarchy.List[Hie_CTY].SelectedOrder]);
   }
 
 /*****************************************************************************/
@@ -349,7 +349,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -357,7 +357,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			  " FROM ctr_centers"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC");
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -368,11 +368,11 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -380,7 +380,7 @@ unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
 			  " FROM ctr_centers"
 			 " WHERE InsCod=%ld"
 		      " GROUP BY InsCod",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -395,7 +395,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -405,7 +405,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC");
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -418,11 +418,11 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -433,7 +433,7 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -448,7 +448,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -460,7 +460,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC");
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -475,11 +475,11 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -492,7 +492,7 @@ unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -508,7 +508,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
    /***** Get institutions ordered by number of users in courses *****/
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"			// row[0]
@@ -522,7 +522,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC");
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"			// row[0]
@@ -539,11 +539,11 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"			// row[0]
@@ -558,7 +558,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.CrsCod=crs_users.CrsCod"
 		      " GROUP BY ctr_centers.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -573,7 +573,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -582,7 +582,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			 " WHERE InsCod>0"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC");
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT usr_data.InsCod,"	// row[0]
@@ -592,11 +592,11 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			   " AND ins_instits.InsCod=usr_data.InsCod"
 		      " GROUP BY usr_data.InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -605,7 +605,7 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
 			 " WHERE InsCod=%ld"
 		      " GROUP BY InsCod"
 		      " ORDER BY N DESC",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -639,6 +639,15 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/******************* Get number of institutions in system ********************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long SysCod)
+  {
+   return (unsigned) DB_GetNumRowsTable ("ins_instits");
+  }
+
+/*****************************************************************************/
 /**************** Get number of institutions in a country ********************/
 /*****************************************************************************/
 
@@ -656,7 +665,7 @@ unsigned Ins_DB_GetNumInssInCty (long CtyCod)
 /****************** Get number of institutions with centres ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Level,long HieCod)
+unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
@@ -676,7 +685,7 @@ unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Level,long HieCod)
 /****************** Get number of institutions with degrees ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Level,long HieCod)
+unsigned Ins_DB_GetNumInssWithDegs (Hie_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
@@ -698,7 +707,7 @@ unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Level,long HieCod)
 /****************** Get number of institutions with courses ******************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Level,long HieCod)
+unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
@@ -723,7 +732,7 @@ unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Level,long HieCod)
 /*****************************************************************************/
 
 unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Level,long HieCod)
+                                    Hie_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 

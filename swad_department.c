@@ -135,7 +135,7 @@ void Dpt_SeeAllDepts (void)
    unsigned NumTchsInsWithNoDpt;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod <= 0)	// No institution selected
+   if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)	// No institution selected
       return;
 
    /***** Reset departments context *****/
@@ -145,11 +145,11 @@ void Dpt_SeeAllDepts (void)
    Departments.SelectedOrder = Dpt_GetParDptOrder ();
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
    /***** Begin box and table *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
-		 Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
+		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxTableBegin (NULL,Title,
 		      Dpt_PutIconToEditDpts,NULL,
@@ -305,21 +305,21 @@ static void Dpt_EditDepartmentsInternal (void)
    char *Title;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod <= 0)	// An institution must be selected
+   if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)	// An institution must be selected
       return;
 
    /***** Reset departments context *****/
    Dpt_ResetDepartments (&Departments);
 
    /***** Get list of institutions *****/
-   Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+   Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+   Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
-		 Gbl.Hierarchy.Node[HieLvl_INS].FullName) < 0)
+		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,
                  Dpt_PutIconToViewDpts,NULL,
@@ -340,7 +340,7 @@ static void Dpt_EditDepartmentsInternal (void)
    Dpt_FreeListDepartments (&Departments);
 
    /***** Free list of institutions *****/
-   Hie_FreeList (HieLvl_CTY);
+   Hie_FreeList (Hie_CTY);
   }
 
 /*****************************************************************************/
@@ -518,10 +518,10 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		                 HTM_OPTION_ENABLED,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
-			  NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
+			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 			  NumIns++)
 		       {
-			InsInLst = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
+			InsInLst = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&InsInLst->HieCod,
 				    InsInLst->HieCod == DptInLst->InsCod ? HTM_OPTION_SELECTED :
 									HTM_OPTION_UNSELECTED,
@@ -536,7 +536,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenDptSho);
 		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,DptInLst->ShrtName,
+		  HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,DptInLst->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -547,7 +547,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenDptFul);
 		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,DptInLst->FullName,
+		  HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,DptInLst->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -690,20 +690,20 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FldName = NULL;	// Initialized to avoid warning
    size_t MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentDptName = NULL;	// Initialized to avoid warning
-   char NewDptName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char NewDptName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParName = "ShortName";
          FldName = "ShortName";
-         MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
          CurrentDptName = Dpt_EditingDpt->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParName = "FullName";
          FldName = "FullName";
-         MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
+         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
          CurrentDptName = Dpt_EditingDpt->FullName;
          break;
      }
@@ -846,10 +846,10 @@ static void Dpt_PutFormToCreateDepartment (void)
 			   HTM_OPTION_ENABLED,
 			   "%s",Txt_Another_institution);
 	       for (NumIns = 0;
-		    NumIns < Gbl.Hierarchy.List[HieLvl_CTY].Num;
+		    NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 		    NumIns++)
 		 {
-		  InsInLst = &Gbl.Hierarchy.List[HieLvl_CTY].Lst[NumIns];
+		  InsInLst = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 		  HTM_OPTION (HTM_Type_LONG,&InsInLst->HieCod,
 			     InsInLst->HieCod == Dpt_EditingDpt->InsCod ? HTM_OPTION_SELECTED :
 								       HTM_OPTION_UNSELECTED,
@@ -861,7 +861,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Department short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -870,7 +870,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Department full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -937,10 +937,10 @@ void Dpt_ReceiveFormNewDpt (void)
    Dpt_EditingDpt->InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /* Get department short name */
-   Par_GetParText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Dpt_EditingDpt->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get department full name */
-   Par_GetParText ("FullName",Dpt_EditingDpt->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Dpt_EditingDpt->FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get department WWW */
    Par_GetParText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
@@ -990,8 +990,7 @@ unsigned Dpt_GetTotalNumberOfDepartments (void)
 
 void Dpt_FlushCacheNumDptsInIns (void)
   {
-   Gbl.Cache.NumDptsInIns.HieCod  = -1L;
-   Gbl.Cache.NumDptsInIns.NumDpts = 0;
+   Gbl.Cache.NumDptsInIns.Valid = false;
   }
 
 unsigned Dpt_GetNumDptsInIns (long InsCod)
@@ -1001,12 +1000,14 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
       return 0;
 
    /***** 2. Fast check: If cached... *****/
-   if (InsCod == Gbl.Cache.NumDptsInIns.HieCod)
+   if (Gbl.Cache.NumDptsInIns.Valid &&
+       InsCod == Gbl.Cache.NumDptsInIns.HieCod)
       return Gbl.Cache.NumDptsInIns.NumDpts;
 
    /***** 3. Slow: number of departments of an institution from database *****/
    Gbl.Cache.NumDptsInIns.HieCod  = InsCod;
    Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDepartmentsInInstitution (InsCod);
+   Gbl.Cache.NumDptsInIns.Valid = true;
    return Gbl.Cache.NumDptsInIns.NumDpts;
   }
 

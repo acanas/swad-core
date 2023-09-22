@@ -57,7 +57,7 @@ void Ins_WriteInstitutionNameAndCty (long InsCod);
 bool Ins_GetInstitDataByCod (struct Hie_Node *Ins);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
-                                         char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
+                                         char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
 
 void Ins_WriteSelectorOfInstitution (void);
 

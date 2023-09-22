@@ -38,7 +38,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_holiday.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
@@ -217,7 +217,7 @@ void Cal_DrawCurrentMonth (void)
       HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s','%s/%s',",
 		Gbl.Prefs.FirstDayOfWeek,
 		(long) Dat_GetStartExecutionTimeUTC (),
-		Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod,
+		Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
 		The_GetSuffix (),
 		Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
       Frm_SetParsForm (ParsStr,ActSeeCal,true);
@@ -283,7 +283,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	 HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s','%s/%s',",
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (long) Dat_GetStartExecutionTimeUTC (),
-		   Gbl.Hierarchy.Node[HieLvl_CTR].Specific.PlcCod,
+		   Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
 		   PrintView ? "true" :
 			       "false",
 		   The_GetSuffix (),
@@ -309,7 +309,7 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
 				 NULL,NULL);
 
    /***** View holidays *****/
-   if (Gbl.Hierarchy.Level == HieLvl_INS)		// Institution selected
+   if (Gbl.Hierarchy.Level == Hie_INS)		// Institution selected
       Hld_PutIconToSeeHlds ();
   }
 

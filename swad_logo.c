@@ -47,11 +47,11 @@
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-static const char *Lgo_Folder[HieLvl_NUM_LEVELS] =
+static const char *Lgo_Folder[Hie_NUM_LEVELS] =
   {
-   [HieLvl_INS] = Cfg_FOLDER_INS,
-   [HieLvl_CTR] = Cfg_FOLDER_CTR,
-   [HieLvl_DEG] = Cfg_FOLDER_DEG,
+   [Hie_INS] = Cfg_FOLDER_INS,
+   [Hie_CTR] = Cfg_FOLDER_CTR,
+   [Hie_DEG] = Cfg_FOLDER_DEG,
   };
 
 /*****************************************************************************/
@@ -73,16 +73,16 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 /***************** Draw institution, center or degree logo *******************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (HieLvl_Level_t Level,
+void Lgo_DrawLogo (Hie_Level_t Level,
 		   long HieCod,
 		   const char *AltText,
                    unsigned Size,const char *Class)
   {
-   static const char *HieIcon[HieLvl_NUM_LEVELS] =
+   static const char *HieIcon[Hie_NUM_LEVELS] =
      {
-      [HieLvl_INS] = "university.svg",
-      [HieLvl_CTR] = "building.svg",
-      [HieLvl_DEG] = "graduation-cap.svg",
+      [Hie_INS] = "university.svg",
+      [Hie_CTR] = "building.svg",
+      [Hie_DEG] = "graduation-cap.svg",
      };
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
@@ -100,7 +100,7 @@ void Lgo_DrawLogo (HieLvl_Level_t Level,
       if (HieCod > 0)	// Institution, center or degree exists
 	{
 	 /* Degree */
-	 if (Level == HieLvl_DEG)
+	 if (Level == Hie_DEG)
 	   {
 	    Folder = Cfg_FOLDER_DEG;
 	    DegCod = HieCod;
@@ -115,10 +115,10 @@ void Lgo_DrawLogo (HieLvl_Level_t Level,
 	   }
 
 	 /* Center */
-	 if (!LogoFound && Level != HieLvl_INS)
+	 if (!LogoFound && Level != Hie_INS)
 	   {
 	    Folder = Cfg_FOLDER_CTR;
-	    if (Level == HieLvl_DEG)	// && !LogoFound
+	    if (Level == Hie_DEG)	// && !LogoFound
 	       CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (HieCod);
 	    else
 	       CtrCod = HieCod;
@@ -136,9 +136,9 @@ void Lgo_DrawLogo (HieLvl_Level_t Level,
 	 if (!LogoFound)
 	   {
 	    Folder = Cfg_FOLDER_INS;
-	    if (Level == HieLvl_DEG)		// && !LogoFound
+	    if (Level == Hie_DEG)		// && !LogoFound
 	       InsCod = Deg_DB_GetInsCodOfDegreeByCod (HieCod);
-	    else if (Level == HieLvl_CTR)	// && !LogoFound
+	    else if (Level == Hie_CTR)	// && !LogoFound
 	       InsCod = Ctr_DB_GetInsCodOfCenterByCod (HieCod);
 	    else
 	       InsCod = HieCod;
@@ -198,17 +198,17 @@ void Lgo_DrawLogo (HieLvl_Level_t Level,
 /************* the logo of institution, center or degree       ***************/
 /*****************************************************************************/
 
-void Lgo_PutIconToChangeLogo (HieLvl_Level_t Level)
+void Lgo_PutIconToChangeLogo (Hie_Level_t Level)
   {
-   static Act_Action_t Action[HieLvl_NUM_LEVELS] =
+   static Act_Action_t Action[Hie_NUM_LEVELS] =
      {
-      [HieLvl_UNK] = ActUnk,		// Unknown
-      [HieLvl_SYS] = ActUnk,		// System
-      [HieLvl_CTY] = ActUnk,		// Country
-      [HieLvl_INS] = ActReqInsLog,	// Institution
-      [HieLvl_CTR] = ActReqCtrLog,	// Center
-      [HieLvl_DEG] = ActReqDegLog,	// Degree
-      [HieLvl_CRS] = ActUnk,		// Course
+      [Hie_UNK] = ActUnk,		// Unknown
+      [Hie_SYS] = ActUnk,		// System
+      [Hie_CTY] = ActUnk,		// Country
+      [Hie_INS] = ActReqInsLog,	// Institution
+      [Hie_CTR] = ActReqCtrLog,	// Center
+      [Hie_DEG] = ActReqDegLog,	// Degree
+      [Hie_CRS] = ActUnk,		// Course
      };
 
    Lay_PutContextualLinkOnlyIcon (Action[Level],NULL,
@@ -220,22 +220,22 @@ void Lgo_PutIconToChangeLogo (HieLvl_Level_t Level)
 /**** Show a form for sending a logo of the institution, center or degree ****/
 /*****************************************************************************/
 
-void Lgo_RequestLogo (HieLvl_Level_t Level)
+void Lgo_RequestLogo (Hie_Level_t Level)
   {
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
-   static Act_Action_t ActionRec[HieLvl_NUM_LEVELS] =
+   static Act_Action_t ActionRec[Hie_NUM_LEVELS] =
      {
-      [HieLvl_INS] = ActRecInsLog,
-      [HieLvl_CTR] = ActRecCtrLog,
-      [HieLvl_DEG] = ActRecDegLog,
+      [Hie_INS] = ActRecInsLog,
+      [Hie_CTR] = ActRecCtrLog,
+      [Hie_DEG] = ActRecDegLog,
      };
-   static void (*FunctionToDrawContextualIcons[HieLvl_NUM_LEVELS]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Hie_NUM_LEVELS]) (void *Args) =
      {
-      [HieLvl_INS] = Lgo_PutIconToRemoveLogoIns,
-      [HieLvl_CTR] = Lgo_PutIconToRemoveLogoCtr,
-      [HieLvl_DEG] = Lgo_PutIconToRemoveLogoDeg,
+      [Hie_INS] = Lgo_PutIconToRemoveLogoIns,
+      [Hie_CTR] = Lgo_PutIconToRemoveLogoCtr,
+      [Hie_DEG] = Lgo_PutIconToRemoveLogoDeg,
      };
    long Cod = Gbl.Hierarchy.Node[Level].HieCod;
    char PathLogo[PATH_MAX + 1];
@@ -305,7 +305,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
 /******* Receive the logo of the current institution, center or degree *******/
 /*****************************************************************************/
 
-void Lgo_ReceiveLogo (HieLvl_Level_t Level)
+void Lgo_ReceiveLogo (Hie_Level_t Level)
   {
    extern const char *Txt_The_file_is_not_X;
    long Cod = Gbl.Hierarchy.Node[Level].HieCod;
@@ -366,7 +366,7 @@ void Lgo_ReceiveLogo (HieLvl_Level_t Level)
 /******* Remove the logo of the current institution, center or degree ********/
 /*****************************************************************************/
 
-void Lgo_RemoveLogo (HieLvl_Level_t Level)
+void Lgo_RemoveLogo (Hie_Level_t Level)
   {
    long Cod = Gbl.Hierarchy.Node[Level].HieCod;
    char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file

@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 void Fig_DB_UpdateUnsignedFigureIntoCache (FigCch_FigureCached_t Figure,
-                                           HieLvl_Level_t Level,long HieCod,
+                                           Hie_Level_t Level,long HieCod,
                                            unsigned Value)
   {
    DB_QueryREPLACE ("can not update cached figure value",
@@ -53,7 +53,7 @@ void Fig_DB_UpdateUnsignedFigureIntoCache (FigCch_FigureCached_t Figure,
 /*****************************************************************************/
 
 void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
-                                         HieLvl_Level_t Level,long HieCod,
+                                         Hie_Level_t Level,long HieCod,
                                          double Value)
   {
    Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
@@ -75,7 +75,7 @@ void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
 
 unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
                                     FigCch_FigureCached_t Figure,
-                                    HieLvl_Level_t Level,long HieCod,
+                                    Hie_Level_t Level,long HieCod,
                                     FigCch_Type_t Type,time_t TimeCached)
   {
    static const char *Field[FigCch_NUM_TYPES] =

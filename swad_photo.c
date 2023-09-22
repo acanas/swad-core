@@ -49,7 +49,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
@@ -1072,9 +1072,9 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
                       BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
    char IdCaption[Frm_MAX_BYTES_ID + 1];
-   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
    struct Hie_Node Ins;
-   char MainDegreeShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+   char MainDegreeShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree
    struct
      {
@@ -2261,7 +2261,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
 		  else	// Pho_DEGREES_PRINT
 		    {
-		     Lgo_DrawLogo (HieLvl_DEG,
+		     Lgo_DrawLogo (Hie_DEG,
 				   Deg.HieCod,
 				   Deg.ShrtName,
 				   20,"CT");
@@ -2368,7 +2368,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
    unsigned PhotoHeight;
    char PathRelAvgPhoto[PATH_MAX + 1];
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
-   char PhotoCaption[1024 + Cns_HIERARCHY_MAX_BYTES_SHRT_NAME];
+   char PhotoCaption[1024 + Hie_MAX_BYTES_SHRT_NAME];
    bool ShowDegPhoto;
    char IdCaption[Frm_MAX_BYTES_ID + 1];
 

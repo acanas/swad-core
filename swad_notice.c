@@ -42,7 +42,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hidden_visible.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_notice.h"
 #include "swad_notice_database.h"
@@ -108,7 +108,7 @@ void Not_ShowFormNotice (void)
 
    /***** Help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
-                  Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+                  Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewNot);
@@ -155,7 +155,7 @@ void Not_ReceiveNotice (void)
    NotCod = Not_DB_InsertNotice (Content);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_created);
@@ -221,7 +221,7 @@ void Not_HideActiveNotice (void)
    Not_DB_ChangeNoticeStatus (NotCod,Not_OBSOLETE_NOTICE);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 
    /***** Set notice to be highlighted *****/
    Gbl.Crs.Notices.HighlightNotCod = NotCod;
@@ -242,7 +242,7 @@ void Not_RevealHiddenNotice (void)
    Not_DB_ChangeNoticeStatus (NotCod,Not_ACTIVE_NOTICE);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 
    /***** Set notice to be highlighted *****/
    Gbl.Crs.Notices.HighlightNotCod = NotCod;
@@ -302,7 +302,7 @@ void Not_RemoveNotice (void)
    Tml_DB_MarkNoteAsUnavailable (TmlNot_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
   }
 
 /*****************************************************************************/
@@ -323,14 +323,14 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    char RSSLink[Cns_MAX_BYTES_WWW + 1];
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Level != HieLvl_CRS)	// No course selected
+   if (Gbl.Hierarchy.Level != Hie_CRS)	// No course selected
       return;
 
    /***** Get notices from database *****/
    switch (TypeNoticesListing)
      {
       case Not_LIST_BRIEF_NOTICES:
-	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
@@ -368,13 +368,13 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 /* Create RSS file if not exists */
 	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
 		   Cfg_PATH_CRS_PUBLIC,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
 	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
-	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 
 	 /* Put a link to the RSS file */
 	 HTM_DIV_Begin ("class=\"CM\"");
-	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
 	       Ico_PutIcon ("rss-square.svg",Ico_BLACK,"RSS","ICO16x16");
 	    HTM_A_End ();
@@ -686,7 +686,7 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 // Returns the number of (active or obsolete) notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNotices (HieLvl_Level_t Level,Not_Status_t Status,unsigned *NumNotif)
+unsigned Not_GetNumNotices (Hie_Level_t Level,Not_Status_t Status,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -727,7 +727,7 @@ unsigned Not_GetNumNotices (HieLvl_Level_t Level,Not_Status_t Status,unsigned *N
 // Returns the number of deleted notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Level,unsigned *NumNotif)
+unsigned Not_GetNumNoticesDeleted (Hie_Level_t Level,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

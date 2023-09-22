@@ -604,7 +604,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 	}
       else
 	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+		   Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -926,7 +926,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams->Exam);
-   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
+   if (Exams->Exam.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get set data from database *****/
@@ -1039,7 +1039,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 					                                    SesCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-				  Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -1086,7 +1086,7 @@ void ExaSes_ReqCreatOrEditSes (void)
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
-   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
+   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get session data *****/
@@ -1132,7 +1132,7 @@ void ExaSes_ReceiveFormSession (void)
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
-   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
+   if (Exams.Exam.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get session data from database *****/

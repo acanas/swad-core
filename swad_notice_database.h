@@ -44,9 +44,9 @@ unsigned Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod);
 unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res);
 unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
-                               HieLvl_Level_t Level,Not_Status_t Status);
+                               Hie_Level_t Level,Not_Status_t Status);
 unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
-                                      HieLvl_Level_t Level);
+                                      Hie_Level_t Level);
 
 void Not_DB_RemoveNotice (long NotCod);
 void Not_DB_RemoveCrsNotices (long CrsCod);

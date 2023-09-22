@@ -82,7 +82,7 @@ unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		   " ORDER BY ShortName",
-		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_INS].HieCod);
   }
 
 /*****************************************************************************/
@@ -260,7 +260,7 @@ long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod)
 /*************** Get the short name of a center from its code ****************/
 /*****************************************************************************/
 
-void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
+void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: center code should be > 0 *****/
    if (CtrCod <= 0)
@@ -270,7 +270,7 @@ void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_M
      }
 
    /***** Get the short name of a center from database *****/
-   DB_QuerySELECTString (ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME,
+   DB_QuerySELECTString (ShrtName,Hie_MAX_BYTES_SHRT_NAME,
 			 "can not get the short name of a center",
 		         "SELECT ShortName"
 			  " FROM ctr_centers"
@@ -339,6 +339,15 @@ unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/********************** Get number of centers in system **********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsInSys (__attribute__((unused)) long SysCod)
+  {
+   return (unsigned) DB_GetNumRowsTable ("ctr_centers");
+  }
+
+/*****************************************************************************/
 /******************** Get number of centers in a country *********************/
 /*****************************************************************************/
 
@@ -380,7 +389,7 @@ unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
 		   " FROM ctr_centers"
 		  " WHERE InsCod=%ld"
 		    " AND PlcCod=%ld",
-		  Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+		  Gbl.Hierarchy.Node[Hie_INS].HieCod,
 		  PlcCod);
   }
 
@@ -437,7 +446,7 @@ unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod)
 /********************* Get number of centers with degrees ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithDegs (HieLvl_Level_t Level,long Cod)
+unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t Level,long Cod)
   {
    char SubQuery[128];
 
@@ -459,7 +468,7 @@ unsigned Ctr_DB_GetNumCtrsWithDegs (HieLvl_Level_t Level,long Cod)
 /********************* Get number of centers with courses ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithCrss (HieLvl_Level_t Level,long Cod)
+unsigned Ctr_DB_GetNumCtrsWithCrss (Hie_Level_t Level,long Cod)
   {
    char SubQuery[128];
 
@@ -484,7 +493,7 @@ unsigned Ctr_DB_GetNumCtrsWithCrss (HieLvl_Level_t Level,long Cod)
 /*****************************************************************************/
 
 unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Level,long Cod)
+                                    Hie_Level_t Level,long Cod)
   {
    char SubQuery[128];
 
@@ -674,7 +683,7 @@ void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsign
 		 " WHERE InsCod=%ld"
 		   " AND Latitude<>0"
 		   " AND Longitude<>0",
-		 Gbl.Hierarchy.Node[HieLvl_INS].HieCod) < 0)
+		 Gbl.Hierarchy.Node[Hie_INS].HieCod) < 0)
       Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -707,7 +716,7 @@ unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res)
 		   " WHERE InsCod=%ld"
 		     " AND Latitude<>0"
 		     " AND Longitude<>0",
-		   Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_INS].HieCod);
   }
 
 /*****************************************************************************/

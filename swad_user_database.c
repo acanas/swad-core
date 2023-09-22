@@ -330,7 +330,7 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
 // - Rol_NET	Non-editing teacher
 // - Rol_TCH	Teacher
 
-void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
+void Usr_DB_BuildQueryToGetUsrsLst (Hie_Level_t Level,Rol_Role_t Role,
 				    char **Query)
   {
    const char *QueryFields =
@@ -355,7 +355,7 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
    /***** Build query *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 /* Get users in courses from the whole platform */
 	 DB_BuildQuery (Query,
 		        "SELECT %s"
@@ -368,7 +368,7 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
 		        (unsigned) Role,
 		        OrderBySubQuery);
 	 break;
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 /* Get users in courses from the current country */
 	 DB_BuildQuery (Query,
 			"SELECT %s"
@@ -388,10 +388,10 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
 			   " %s",
 			QueryFields,
 			(unsigned) Role,
-			Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			OrderBySubQuery);
 	 break;
-      case HieLvl_INS:
+      case Hie_INS:
 	 /* Get users in courses from the current institution */
 	 DB_BuildQuery (Query,
 			"SELECT %s"
@@ -409,10 +409,10 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
 			   " %s",
 			QueryFields,
 			(unsigned) Role,
-			Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			OrderBySubQuery);
 	 break;
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 /* Get users in courses from the current center */
 	 DB_BuildQuery (Query,
 			"SELECT %s"
@@ -431,9 +431,9 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
 			          "usr_data.UsrCod",
 			QueryFields,
 			(unsigned) Role,
-			Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
+			Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 	 break;
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 /* Get users in courses from the current degree */
 	 DB_BuildQuery (Query,
 			"SELECT %s"
@@ -450,9 +450,9 @@ void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Level,Rol_Role_t Role,
 			          "usr_data.UsrCod",
 			QueryFields,
 			(unsigned) Role,
-			Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
+			Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 	 break;
-      case HieLvl_CRS:
+      case Hie_CRS:
 	 /* Get users from the current course */
 	 Usr_DB_BuildQueryToGetUsrsLstCrs (Query,Role);
 	 break;
@@ -507,8 +507,8 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
    row[ 8]: usr_data.PhotoVisibility
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
-   row[11]: crs_users.Role	(only if Scope == HieLvl_CRS)
-   row[12]: crs_users.Accepted	(only if Scope == HieLvl_CRS)
+   row[11]: crs_users.Role	(only if Scope == Hie_CRS)
+   row[12]: crs_users.Accepted	(only if Scope == Hie_CRS)
    */
 
    /***** If there are no groups selected, don't do anything *****/
@@ -537,7 +537,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 	                " WHERE FromUsrCod=%ld)"
 	          " AND crs_users.UsrCod=usr_data.UsrCod",        // Do not get banned users
       	        QueryFields,
-                Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+                Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                 (unsigned) Role,
                 Gbl.Usrs.Me.UsrDat.UsrCod);
    else
@@ -549,7 +549,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 	          " AND crs_users.Role=%u"
 	          " AND crs_users.UsrCod=usr_data.UsrCod",
 	        QueryFields,
-                Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+                Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                 (unsigned) Role);
 
    /***** Select users in selected groups *****/
@@ -663,7 +663,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 /************ Build query to get list with data of administrators ************/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
+void Usr_DB_BuildQueryToGetAdmsLst (Hie_Level_t Level,char **Query)
   {
    static const char *QueryFields =
       "UsrCod,"			// row[ 0]
@@ -690,7 +690,7 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
    // SELECT... WHERE (...) OR (...) <-- very slow
    switch (Level)
      {
-      case HieLvl_SYS:	// All admins
+      case Hie_SYS:	// All admins
 	 DB_BuildQuery (Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -702,7 +702,7 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
 			QueryFields,
 			OrderBySubQuery);
          break;
-      case HieLvl_CTY:	// System admins
+      case Hie_CTY:	// System admins
 			// and admins of the institutions, centers and degrees in the current country
          DB_BuildQuery (Query,
                         "SELECT %s"
@@ -740,13 +740,13 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
 				   " AND ins_instits.CtyCod=%ld)"
 			    " %s",
 			QueryFields,
-			Hie_GetDBStrFromLevel (HieLvl_SYS),
-			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			Hie_GetDBStrFromLevel (Hie_SYS),
+			Hie_GetDBStrFromLevel (Hie_INS),Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			Hie_GetDBStrFromLevel (Hie_CTR),Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			Hie_GetDBStrFromLevel (Hie_DEG),Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			OrderBySubQuery);
          break;
-      case HieLvl_INS:	// System admins,
+      case Hie_INS:	// System admins,
 			// admins of the current institution,
 			// and admins of the centers and degrees in the current institution
          DB_BuildQuery (Query,
@@ -779,13 +779,13 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
 			          " AND ctr_centers.InsCod=%ld)"
 			    "%s",
 			QueryFields,
-			Hie_GetDBStrFromLevel (HieLvl_SYS),
-			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			Hie_GetDBStrFromLevel (Hie_SYS),
+			Hie_GetDBStrFromLevel (Hie_INS),Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			Hie_GetDBStrFromLevel (Hie_CTR),Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			Hie_GetDBStrFromLevel (Hie_DEG),Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			OrderBySubQuery);
          break;
-      case HieLvl_CTR:	// System admins,
+      case Hie_CTR:	// System admins,
 			// admins of the current institution,
 			// admins and the current center,
 			// and admins of the degrees in the current center
@@ -815,13 +815,13 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
 			         " AND deg_degrees.CtrCod=%ld)"
 			    "%s",
 			QueryFields,
-			Hie_GetDBStrFromLevel (HieLvl_SYS),
-			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			Hie_GetDBStrFromLevel (Hie_SYS),
+			Hie_GetDBStrFromLevel (Hie_INS),Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			Hie_GetDBStrFromLevel (Hie_CTR),Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			Hie_GetDBStrFromLevel (Hie_DEG),Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			OrderBySubQuery);
          break;
-      case HieLvl_DEG:	// System admins
+      case Hie_DEG:	// System admins
 			// and admins of the current institution, center or degree
          DB_BuildQuery (Query,
 			"SELECT %s"
@@ -847,10 +847,10 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
 			          " AND Cod=%ld)"
 			    "%s",
 			QueryFields,
-			Hie_GetDBStrFromLevel (HieLvl_SYS),
-			Hie_GetDBStrFromLevel (HieLvl_INS),Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_CTR),Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
-			Hie_GetDBStrFromLevel (HieLvl_DEG),Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			Hie_GetDBStrFromLevel (Hie_SYS),
+			Hie_GetDBStrFromLevel (Hie_INS),Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			Hie_GetDBStrFromLevel (Hie_CTR),Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			Hie_GetDBStrFromLevel (Hie_DEG),Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			OrderBySubQuery);
          break;
       default:        // not aplicable
@@ -863,7 +863,7 @@ void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Level,char **Query)
 /************************ Get list with data of guests ***********************/
 /*****************************************************************************/
 
-void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query)
+void Usr_DB_BuildQueryToGetGstsLst (Hie_Level_t Level,char **Query)
   {
    static const char *QueryFields =
       "UsrCod,"			// row[ 0]
@@ -886,7 +886,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query)
    /***** Build query *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 DB_BuildQuery (Query,
          		"SELECT %s"
          	 	 " FROM usr_data"
@@ -897,7 +897,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query)
 			QueryFields,
 			OrderBySubQuery);
          break;
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 DB_BuildQuery (Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -909,11 +909,11 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query)
 			         " FROM crs_users)"
 			    "%s",
 			QueryFields,
-			Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
-			Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			OrderBySubQuery);
          break;
-      case HieLvl_INS:
+      case Hie_INS:
 	 DB_BuildQuery (Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -923,10 +923,10 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query)
 			         " FROM crs_users)"
 			    "%s",
 			QueryFields,
-			Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			OrderBySubQuery);
          break;
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 DB_BuildQuery (Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -936,7 +936,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Level,char **Query)
 			         " FROM crs_users)"
 			    "%s",
 			QueryFields,
-			Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			OrderBySubQuery);
          break;
       default:        // not aplicable
@@ -981,7 +981,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
       case Rol_UNK:	// Here Rol_UNK means any rol (role does not matter)
 	 switch (Gbl.Scope.Current)
 	   {
-	    case HieLvl_SYS:
+	    case Hie_SYS:
 	       /* Search users from the whole platform */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -990,7 +990,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			      QueryFields,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_CTY:
+	    case Hie_CTY:
 	       /* Search users in courses from the current country */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1009,10 +1009,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND ins_instits.CtyCod=%ld"
 			        " AND %s",
 			      QueryFields,
-			      Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			      Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_INS:
+	    case Hie_INS:
 	       /* Search users in courses from the current institution */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1029,10 +1029,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND ctr_centers.InsCod=%ld"
 			        " AND %s",
 			      QueryFields,
-			      Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			      Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_CTR:
+	    case Hie_CTR:
 	       /* Search users in courses from the current center */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1047,10 +1047,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND deg_degrees.CtrCod=%ld"
 			        " AND %s",
 			      QueryFields,
-			      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_DEG:
+	    case Hie_DEG:
 	       /* Search users in courses from the current degree */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1063,10 +1063,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND crs_courses.DegCod=%ld"
 			        " AND %s",
 			      QueryFields,
-			      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_CRS:
+	    case Hie_CRS:
 	       /* Search users in courses from the current course */
 	       DB_BuildQuery (Query,
 			      "SELECT %s,"
@@ -1079,7 +1079,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND crs_users.CrsCod=%ld"
 			        " AND %s",
 			      QueryFields,
-			      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			      OrderBySubQuery);
 	       break;
 	    default:
@@ -1126,7 +1126,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	   }
 	 switch (Gbl.Scope.Current)
 	   {
-	    case HieLvl_SYS:
+	    case Hie_SYS:
 	       /* Search users in courses from the whole platform */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1140,7 +1140,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			      SubQueryRole,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_CTY:
+	    case Hie_CTY:
 	       /* Search users in courses from the current country */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1161,10 +1161,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND %s",
 			      QueryFields,
 			      SubQueryRole,
-			      Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			      Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_INS:
+	    case Hie_INS:
 	       /* Search users in courses from the current institution */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1183,10 +1183,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND %s",
 			      QueryFields,
 			      SubQueryRole,
-			      Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			      Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_CTR:
+	    case Hie_CTR:
 	       /* Search users in courses from the current center */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1203,10 +1203,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND %s",
 			      QueryFields,
 			      SubQueryRole,
-			      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_DEG:
+	    case Hie_DEG:
 	       /* Search users in courses from the current degree */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
@@ -1221,10 +1221,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND %s",
 			      QueryFields,
 			      SubQueryRole,
-			      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			      OrderBySubQuery);
 	       break;
-	    case HieLvl_CRS:
+	    case Hie_CRS:
 	       /* Search users in courses from the current course */
 	       DB_BuildQuery (Query,
 			      "SELECT %s,"
@@ -1239,7 +1239,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			        " AND %s",
 			      QueryFields,
 			      SubQueryRole,
-			      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			      OrderBySubQuery);
 	       break;
 	    default:
@@ -1294,14 +1294,14 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(*)"
 		         " FROM usr_data"
 		        " WHERE %s",
 		        SubQuery);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -1318,8 +1318,8 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND crs_courses.CrsCod=crs_users.CrsCod"
 		          " AND crs_users.UsrCod=usr_data.UsrCod"
 		          " AND %s",
-		        Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,SubQuery);
-      case HieLvl_INS:
+		        Gbl.Hierarchy.Node[Hie_CTY].HieCod,SubQuery);
+      case Hie_INS:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -1334,8 +1334,8 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND crs_courses.CrsCod=crs_users.CrsCod"
 		          " AND crs_users.UsrCod=usr_data.UsrCod"
 		          " AND %s",
-		        Gbl.Hierarchy.Node[HieLvl_INS].HieCod,SubQuery);
-      case HieLvl_CTR:
+		        Gbl.Hierarchy.Node[Hie_INS].HieCod,SubQuery);
+      case Hie_CTR:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -1348,8 +1348,8 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND crs_courses.CrsCod=crs_users.CrsCod"
 		          " AND crs_users.UsrCod=usr_data.UsrCod"
 		          " AND %s",
-		        Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,SubQuery);
-      case HieLvl_DEG:
+		        Gbl.Hierarchy.Node[Hie_CTR].HieCod,SubQuery);
+      case Hie_DEG:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -1360,8 +1360,8 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND crs_courses.CrsCod=crs_users.CrsCod"
 		          " AND crs_users.UsrCod=usr_data.UsrCod"
 		          " AND %s",
-		        Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,SubQuery);
-      case HieLvl_CRS:
+		        Gbl.Hierarchy.Node[Hie_DEG].HieCod,SubQuery);
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -1370,7 +1370,7 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		        " WHERE crs_users.CrsCod=%ld"
 		          " AND crs_users.UsrCod=usr_data.UsrCod"
 		          " AND %s",
-		        Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,SubQuery);
+		        Gbl.Hierarchy.Node[Hie_CRS].HieCod,SubQuery);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -1462,7 +1462,7 @@ void Usr_DB_InsertMyLastData (void)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Sch_SEARCH_ALL,
 		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.Level),
-		   Gbl.Hierarchy.HieCod,
+		   Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].HieCod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   (long) (time_t) 0);	// The user never accessed to notifications
@@ -1484,7 +1484,7 @@ void Usr_DB_UpdateMyLastData (void)
 			  "LastTime=NOW()"
 		   " WHERE UsrCod=%ld",
 		   Hie_GetDBStrFromLevel (Gbl.Hierarchy.Level),
-		   Gbl.Hierarchy.HieCod,
+		   Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].HieCod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);

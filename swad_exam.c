@@ -49,7 +49,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hidden_visible.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
@@ -1508,7 +1508,7 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
    if (Exam->Title[0])	// If there's an exam title
      {
       /* If title of exam was in database... */
-      if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+      if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                                            Exam->ExaCod,Exam->Title))
 	{
 	 NewExamIsCorrect = false;

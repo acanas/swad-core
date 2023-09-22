@@ -33,7 +33,7 @@
 #include "swad_constant.h"
 #include "swad_degree.h"
 #include "swad_figure_cache.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_user.h"
 
 /*****************************************************************************/

@@ -45,7 +45,7 @@
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_icon.h"
 #include "swad_link.h"
 #include "swad_parameter.h"
@@ -201,7 +201,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.ClassPhoto.AllGroups = true;
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
-   Gbl.Scope.Current = HieLvl_CRS;
+   Gbl.Scope.Current = Hie_CRS;
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 
@@ -220,31 +220,31 @@ void Gbl_InitializeGlobals (void)
    Cty_FlushCacheCountryName ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_INS,HieLvl_CTY);	// Number of institutions in country
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_CTY);	// Number of centers in country
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTY);	// Number of degrees in country
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_CTY);	// Number of courses in country
+   Hie_FlushCachedNumNodesInHieLvl (Hie_INS,Hie_CTY);	// Number of institutions in country
+   Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_CTY);	// Number of centers in country
+   Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_CTY);	// Number of degrees in country
+   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_CTY);	// Number of courses in country
 
    Dpt_FlushCacheNumDptsInIns ();				// Number of departments in institution
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_INS);	// Number of centers in institution
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_INS);	// Number of degrees in institution
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_INS);	// Number of courses in institution
+   Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_INS);	// Number of centers in institution
+   Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_INS);	// Number of degrees in institution
+   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_INS);	// Number of courses in institution
 
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTR);	// Number of degrees in center
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_CTR);	// Number of courses in center
+   Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_CTR);	// Number of degrees in center
+   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_CTR);	// Number of courses in center
 
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG);	// Number of courses in degree
+   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_DEG);	// Number of courses in degree
 
    Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
-   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_CTY);
-   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_INS);
-   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_CTR);
+   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTY);
+   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_INS);
+   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTR);
    Usr_FlushCacheUsrIsSuperuser ();
-   Hie_FlushCacheUsrBelongsTo (HieLvl_INS);
-   Hie_FlushCacheUsrBelongsTo (HieLvl_CTR);
-   Hie_FlushCacheUsrBelongsTo (HieLvl_DEG);
-   Hie_FlushCacheUsrBelongsTo (HieLvl_CRS);
+   Hie_FlushCacheUsrBelongsTo (Hie_INS);
+   Hie_FlushCacheUsrBelongsTo (Hie_CTR);
+   Hie_FlushCacheUsrBelongsTo (Hie_DEG);
+   Hie_FlushCacheUsrBelongsTo (Hie_CRS);
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();
@@ -278,11 +278,11 @@ void Gbl_Cleanup (void)
    Rec_FreeListFields ();
    Grp_FreeListGrpTypesAndGrps ();
    Grp_FreeListCodSelectedGrps ();
-   Hie_FreeList (HieLvl_DEG);
-   Hie_FreeList (HieLvl_CTR);
-   Hie_FreeList (HieLvl_INS);
-   Hie_FreeList (HieLvl_CTY);
-   Hie_FreeList (HieLvl_SYS);
+   Hie_FreeList (Hie_DEG);
+   Hie_FreeList (Hie_CTR);
+   Hie_FreeList (Hie_INS);
+   Hie_FreeList (Hie_CTY);
+   Hie_FreeList (Hie_SYS);
 
    for (Role  = (Rol_Role_t) 0;
 	Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);

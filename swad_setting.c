@@ -422,7 +422,7 @@ void Set_GetMyColsClassPhotoFromDB (void)
 
    /***** If user logged and course selected... *****/
    if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+       Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
       /***** Get number of columns in class photo from database *****/
       if (Set_DB_GetMyColsClassPhoto (&mysql_res))
@@ -521,7 +521,7 @@ void Set_GetMyPrefAboutListWithPhotosFromDB (void)
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
 
    /***** If no user logged or not course selected... *****/
-   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
+   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Node[Hie_CRS].HieCod)
      {
       /***** Get if listing of users must show photos from database *****/
       if (Set_DB_GetMyPrefAboutListWithPhotosPhoto (&mysql_res))

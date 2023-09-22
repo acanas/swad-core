@@ -1516,7 +1516,7 @@ static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics)
 
    /***** Get rubric data from database *****/
    Rub_GetRubricDataByCod (&Rubrics->Rubric);
-   if (Rubrics->Rubric.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
+   if (Rubrics->Rubric.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongRubricExit ();
 
    /***** Get criterion data from database *****/

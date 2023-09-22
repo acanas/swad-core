@@ -47,7 +47,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_language.h"
@@ -131,7 +131,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 
       /***** Get tags *****/
       if ((Questions->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
-                                                               Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)) != 0)
+                                                               Gbl.Hierarchy.Node[Hie_CRS].HieCod)) != 0)
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
 	 if (Tst_CheckIfNextTstAllowed ())

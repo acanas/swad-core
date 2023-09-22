@@ -887,7 +887,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 		     Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 		  Str_Concat (StrAddresses,UsrDat.Email,sizeof (StrAddresses) - 1);
 		  HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
-			       UsrDat.Email,Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+			       UsrDat.Email,Gbl.Hierarchy.Node[Hie_CRS].FullName);
 		     HTM_Txt (UsrDat.Email);
 		  HTM_A_End ();
 
@@ -920,7 +920,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	 HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
 		      " title=\"%s\" class=\"FORM_OUT_%s BOLD\"",
 		      Gbl.Usrs.Me.UsrDat.Email,
-		      Gbl.Hierarchy.Node[HieLvl_CRS].FullName,
+		      Gbl.Hierarchy.Node[Hie_CRS].FullName,
 		      Gbl.Usrs.Me.UsrDat.Email,
 		      StrAddresses,
 		      Txt_Create_email_message,
@@ -1686,20 +1686,20 @@ bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
-	 return Hie_CheckIfUsrBelongsTo (HieLvl_DEG,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+	 return Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
+	                                 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 	                                 true);	// count only accepted courses
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can see the user's email of users from current center */
-	 return Hie_CheckIfUsrBelongsTo (HieLvl_CTR,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+	 return Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
+	                                 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 	                                 true);	// count only accepted courses
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
-	 return Hie_CheckIfUsrBelongsTo (HieLvl_INS,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+	 return Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
+	                                 Gbl.Hierarchy.Node[Hie_INS].HieCod,
 	                                 true);	// count only accepted courses
       case Rol_SYS_ADM:
 	 return true;

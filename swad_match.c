@@ -697,7 +697,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 	}
       else
 	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+		   Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -1144,7 +1144,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
    /***** Ensure parameters are correct *****/
    if (Games->Game.GamCod != Match->GamCod)
       Err_WrongGameExit ();
-   if (Games->Game.CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
+   if (Games->Game.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongGameExit ();
 
    /***** Initialize context *****/
@@ -1310,7 +1310,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 					                                    MchCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-				  Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 

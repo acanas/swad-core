@@ -43,8 +43,8 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod);
 long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void);
 void Crs_DB_GetShortNamesByCod (long CrsCod,
-                                char CrsShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-                                char DegShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+                                char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1],
+                                char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1]);
 bool Crs_DB_CheckIfCrsCodExists (long CrsCod);
 bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,long CrsCod,
                                              long DegCod,unsigned Year);
@@ -55,12 +55,13 @@ unsigned Crs_DB_SearchCrss (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                             const char *RangeQuery);
 
+unsigned Crs_DB_GetNumCrssInSys (__attribute__((unused)) long SysCod);
 unsigned Crs_DB_GetNumCrssInCty (long CtyCod);
 unsigned Crs_DB_GetNumCrssInIns (long InsCod);
 unsigned Crs_DB_GetNumCrssInCtr (long CtrCod);
 unsigned Crs_DB_GetNumCrssInDeg (long DegCod);
 unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Level,long HieCod);
+                                    Hie_Level_t Level,long HieCod);
 
 unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod);
 

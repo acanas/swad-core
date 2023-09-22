@@ -34,7 +34,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"

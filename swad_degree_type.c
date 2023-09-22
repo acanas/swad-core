@@ -44,7 +44,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
@@ -65,13 +65,13 @@ static struct DegTyp_DegreeType *DegTyp_EditingDegTyp = NULL;	// Static variable
 /*************************** Private prototypes ******************************/
 /*****************************************************************************/
 
-static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Level,
+static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Level,
                                    DegTyp_Order_t DefaultOrder);
 static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder);
 
 static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
                                     Act_Action_t NextAction,
-                                    HieLvl_Level_t Level,
+                                    Hie_Level_t Level,
                                     DegTyp_Order_t SelectedOrder);
 
 static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTypes);
@@ -85,7 +85,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 static void DegTyp_PutFormToCreateDegreeType (void);
 
 static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                                HieLvl_Level_t Level,
+                                                Hie_Level_t Level,
                                                 DegTyp_Order_t SelectedOrder);
 static void DegTyp_PutHeadDegreeTypesForEdition (void);
 
@@ -109,7 +109,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
-   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
@@ -144,7 +144,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 
 void DegTyp_SeeDegreeTypesInDegTab (void)
   {
-   DegTyp_SeeDegreeTypes (ActSeeDegTyp,HieLvl_SYS,
+   DegTyp_SeeDegreeTypes (ActSeeDegTyp,Hie_SYS,
                           DegTyp_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
   }
 
@@ -154,7 +154,7 @@ void DegTyp_SeeDegreeTypesInStaTab (void)
                           DegTyp_ORDER_BY_NUM_DEGREES);	// Default order if not specified
   }
 
-static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,HieLvl_Level_t Level,
+static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Level,
                                    DegTyp_Order_t DefaultOrder)
   {
    DegTyp_Order_t SelectedOrder;
@@ -194,7 +194,7 @@ static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder)
 
 static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
                                     Act_Action_t NextAction,
-                                    HieLvl_Level_t Level,
+                                    Hie_Level_t Level,
                                     DegTyp_Order_t SelectedOrder)
   {
    extern const char *Hlp_CENTER_DegreeTypes;
@@ -248,7 +248,7 @@ void DegTyp_GetAndEditDegreeTypes (void)
   {
    struct DegTyp_DegTypes DegTypes;
 
-   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
    DegTyp_EditDegreeTypes (&DegTypes);
    DegTyp_FreeListDegreeTypes (&DegTypes);
   }
@@ -324,7 +324,7 @@ static void DegTyp_ListDegreeTypesForSeeing (const struct DegTyp_DegTypes *DegTy
 	NumDegTyp++, The_ChangeRowColor ())
      {
       BgColor = (DegTypes->Lst[NumDegTyp].DegTypCod ==
-	         Gbl.Hierarchy.Node[HieLvl_DEG].Specific.TypCod) ? "BG_HIGHLIGHT" :
+	         Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod) ? "BG_HIGHLIGHT" :
 								   The_GetColorRows ();
 
       /* Begin table row */
@@ -375,7 +375,7 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
-   if (Gbl.Hierarchy.Level == HieLvl_CTR &&	// Only editable if center tab is visible
+   if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if center tab is visible
        DegTyp_CheckIfICanCreateDegreeTypes ())
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,
 				   NULL,NULL);
@@ -502,7 +502,7 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 /*****************************************************************************/
 
 static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                                HieLvl_Level_t Level,
+                                                Hie_Level_t Level,
                                                 DegTyp_Order_t SelectedOrder)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS];
@@ -579,7 +579,7 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
 /*****************************************************************************/
 
 void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
-                                HieLvl_Level_t Level,DegTyp_Order_t Order)
+                                Hie_Level_t Level,DegTyp_Order_t Order)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -856,7 +856,7 @@ void DegTyp_ContEditAfterChgDegTyp (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
    DegTyp_EditDegreeTypesInternal (&DegTypes);
    DegTyp_FreeListDegreeTypes (&DegTypes);
 

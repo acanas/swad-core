@@ -37,8 +37,8 @@ struct Dpt_Department
   {
    long DptCod;
    long InsCod;
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
    unsigned NumTchs;	// Non-editing teachers and teachers
   };

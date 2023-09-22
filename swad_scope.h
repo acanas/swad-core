@@ -29,7 +29,7 @@
 
 #include <stdbool.h>		// For boolean type
 
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 
 /*****************************************************************************/
@@ -38,16 +38,16 @@
 
 void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange);
 void Sco_PutParCurrentScope (void *Level);
-void Sco_PutParScope (const char *ParName,HieLvl_Level_t Level);
+void Sco_PutParScope (const char *ParName,Hie_Level_t Level);
 void Sco_GetScope (const char *ParName);
 void Sco_AdjustScope (void);
 
 void Sco_SetScopesForListingGuests (void);
 void Sco_SetScopesForListingStudents (void);
 
-HieLvl_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
-HieLvl_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr);
-const char *Hie_GetDBStrFromLevel (HieLvl_Level_t Level);
+Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
+Hie_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr);
+const char *Hie_GetDBStrFromLevel (Hie_Level_t Level);
 
 long Hie_GetCurrentCod (void);
 

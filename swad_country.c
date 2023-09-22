@@ -44,7 +44,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
@@ -145,7 +145,7 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	    /* Get country code (row[0]) */
 	    Cty.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Cty.HieCod == Gbl.Hierarchy.Node[HieLvl_CTY].HieCod) ? "BG_HIGHLIGHT" :
+	    BgColor = (Cty.HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? "BG_HIGHLIGHT" :
 									The_GetColorRows ();
 
 	    /* Get data of country */
@@ -199,7 +199,7 @@ void Cty_ListCountries (void)
 void Cty_ListCountries1 (void)
   {
    /***** Get parameter with the type of order in the list of countries *****/
-   Gbl.Hierarchy.List[HieLvl_CTY].SelectedOrder = Hie_GetParHieOrder ();
+   Gbl.Hierarchy.List[Hie_CTY].SelectedOrder = Hie_GetParHieOrder ();
 
    /***** Get list of countries *****/
    Cty_GetFullListOfCountries ();
@@ -226,9 +226,9 @@ void Cty_ListCountries2 (void)
 
       /***** Write all countries and their number of users and institutions *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[HieLvl_SYS].Num;
+	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 	   NumCty++)
-	 Cty_ListOneCountryForSeeing (&Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty],NumCty + 1);
+	 Cty_ListOneCountryForSeeing (&Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty],NumCty + 1);
 
       /***** Separation row *****/
       HTM_TR_Begin (NULL);
@@ -255,31 +255,31 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of institutions in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,		// Number of institutions...
-						         HieLvl_CTY,0));	// ...in other countries
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,		// Number of institutions...
+						         Hie_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of centers in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,		// Number of centers...
-						         HieLvl_CTY,0));	// ...in other countries
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,		// Number of centers...
+						         Hie_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of degrees in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,		// Number of degrees...
-						         HieLvl_CTY,0));	// ...in other countries
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,		// Number of degrees...
+						         Hie_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of courses in other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,		// Number of courses...
-						         HieLvl_CTY,0));	// ...in other countries
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,		// Number of courses...
+						         Hie_CTY,0));	// ...in other countries
 	 HTM_TD_End ();
 
 	 /* Number of users in courses of other countries */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,0,
+	    HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,0,
 						      1 << Rol_STD |
 						      1 << Rol_NET |
 						      1 << Rol_TCH));	// Any user
@@ -304,26 +304,26 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of institutions with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,		// Number of institutions...
-						         HieLvl_CTY,-1L));	// ...with unknown country
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,		// Number of institutions...
+						         Hie_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 /* Number of centers with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,		// Number of centers...
-						         HieLvl_CTY,-1L));	// ...with unknown country
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,		// Number of centers...
+						         Hie_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 /* Number of degrees with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,		// Number of degrees...
-						         HieLvl_CTY,-1L));	// ...with unknown country
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,		// Number of degrees...
+						         Hie_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 /* Number of courses with unknown country */
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,		// Number of courses...
-						         HieLvl_CTY,-1L));	// ...with unknown country
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,		// Number of courses...
+						         Hie_CTY,-1L));	// ...with unknown country
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -343,7 +343,7 @@ void Cty_ListCountries2 (void)
      }
 
    /***** Free list of countries *****/
-   Hie_FreeList (HieLvl_SYS);
+   Hie_FreeList (Hie_SYS);
   }
 
 /*****************************************************************************/
@@ -380,13 +380,13 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],
 					   "class=\"BT_LINK\"");
-		     if (Order == Gbl.Hierarchy.List[HieLvl_SYS].SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[Hie_SYS].SelectedOrder)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_COUNTRIES_ORDER[Order]);
 	    if (OrderSelectable)
 	      {
-		     if (Order == Gbl.Hierarchy.List[HieLvl_SYS].SelectedOrder)
+		     if (Order == Gbl.Hierarchy.List[Hie_SYS].SelectedOrder)
 			HTM_U_End ();
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -414,7 +414,7 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
   {
    const char *BgColor;
 
-   BgColor = (Cty->HieCod == Gbl.Hierarchy.Node[HieLvl_CTY].HieCod) ? "BG_HIGHLIGHT" :
+   BgColor = (Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? "BG_HIGHLIGHT" :
 							        The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
@@ -436,45 +436,45 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
       /***** Number of users who claim to belong to this country *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_CTY,Cty));
+	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,Cty));
       HTM_TD_End ();
 
       /***** Number of institutions *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
-						      HieLvl_CTY,	// ...in country
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
+						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of centers *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CTR,	// Number of centers...
-						      HieLvl_CTY,	// ...in country
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of degrees *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_DEG,	// Number of degrees...
-						      HieLvl_CTY,	// ...in country
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
+						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
-						      HieLvl_CTY,	// ...in country
+	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of users in courses *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
                     The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->HieCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,Cty->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user
@@ -633,20 +633,20 @@ void Cty_WriteScriptGoogleGeochart (void)
 
       /***** Write all countries and their number of users and institutions *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[HieLvl_SYS].Num;
+	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 	   NumCty++)
 	{
-	 NumUsrsCty = Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_CTY,
-							      &Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty]);
+	 NumUsrsCty = Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,
+							      &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty]);
 	 if (NumUsrsCty)
 	   {
-	    NumInss = Hie_GetCachedNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
-						     HieLvl_CTY,	// ...in country
-						     Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty].HieCod);
+	    NumInss = Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
+						     Hie_CTY,	// ...in country
+						     Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty].HieCod);
 
 	    /* Write data of this country */
 	    HTM_TxtF ("	['%s', %u, %u],\n",
-		      Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty].ShrtName,
+		      Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty].ShrtName,
 		      NumUsrsCty,NumInss);
 	    if (NumUsrsCty > MaxUsrsInCountry)
 	       MaxUsrsInCountry = NumUsrsCty;
@@ -692,7 +692,7 @@ static void Cty_EditCountriesInternal (void)
    extern const char *Txt_Countries;
 
    /***** Get list of countries *****/
-   Gbl.Hierarchy.List[HieLvl_SYS].SelectedOrder = Hie_ORDER_BY_NAME;
+   Gbl.Hierarchy.List[Hie_SYS].SelectedOrder = Hie_ORDER_BY_NAME;
    Cty_GetFullListOfCountries ();
 
    /***** Write menu to select country *****/
@@ -707,14 +707,14 @@ static void Cty_EditCountriesInternal (void)
       Cty_PutFormToCreateCountry ();
 
       /***** Forms to edit current countries *****/
-      if (Gbl.Hierarchy.List[HieLvl_SYS].Num)
+      if (Gbl.Hierarchy.List[Hie_SYS].Num)
 	 Cty_ListCountriesForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of countries *****/
-   Hie_FreeList (HieLvl_SYS);
+   Hie_FreeList (Hie_SYS);
   }
 
 /*****************************************************************************/
@@ -744,23 +744,23 @@ void Cty_GetBasicListOfCountries (void)
    // Lan_Language_t Lan;
 
    /***** Trivial check: if list is already got, nothing to do *****/
-   if (Gbl.Hierarchy.List[HieLvl_SYS].Num)
+   if (Gbl.Hierarchy.List[Hie_SYS].Num)
       return;
 
    /***** Get countries from database *****/
-   if ((Gbl.Hierarchy.List[HieLvl_SYS].Num = Cty_DB_GetCtysBasic (&mysql_res))) // Countries found...
+   if ((Gbl.Hierarchy.List[Hie_SYS].Num = Cty_DB_GetCtysBasic (&mysql_res))) // Countries found...
      {
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.List[HieLvl_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_SYS].Num,
-							sizeof (*Gbl.Hierarchy.List[HieLvl_SYS].Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_SYS].Num,
+							sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[HieLvl_SYS].Num;
+	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 	   NumCty++)
         {
-         Cty = &(Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty]);
+         Cty = &(Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty]);
 
          /* Get next country */
          row = mysql_fetch_row (mysql_res);
@@ -794,23 +794,23 @@ static void Cty_GetFullListOfCountries (void)
    struct Hie_Node *Cty;
 
    /***** Trivial check: if list is already got, nothing to do *****/
-   if (Gbl.Hierarchy.List[HieLvl_SYS].Num)
+   if (Gbl.Hierarchy.List[Hie_SYS].Num)
       return;
 
    /***** Get countries from database *****/
-   if ((Gbl.Hierarchy.List[HieLvl_SYS].Num = Cty_DB_GetCtysFull (&mysql_res))) // Countries found...
+   if ((Gbl.Hierarchy.List[Hie_SYS].Num = Cty_DB_GetCtysFull (&mysql_res))) // Countries found...
      {
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.List[HieLvl_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_SYS].Num,
-							sizeof (*Gbl.Hierarchy.List[HieLvl_SYS].Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_SYS].Num,
+							sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[HieLvl_SYS].Num;
+	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 	   NumCty++)
         {
-         Cty = &(Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty]);
+         Cty = &(Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty]);
 
          /* Get next country */
          row = mysql_fetch_row (mysql_res);
@@ -861,19 +861,19 @@ void Cty_WriteSelectorOfCountry (void)
 
          /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-	             Gbl.Hierarchy.Node[HieLvl_CTY].HieCod < 0 ? HTM_OPTION_SELECTED :
+	             Gbl.Hierarchy.Node[Hie_CTY].HieCod < 0 ? HTM_OPTION_SELECTED :
 	        					      HTM_OPTION_UNSELECTED,
 	             HTM_OPTION_DISABLED,
 		     "[%s]",Txt_Country);
 
 	 /***** List countries *****/
 	 for (NumCty = 0;
-	      NumCty < Gbl.Hierarchy.List[HieLvl_SYS].Num;
+	      NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 	      NumCty++)
 	   {
-	    CtyInLst = &Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty];
+	    CtyInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 	    HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
-			CtyInLst->HieCod == Gbl.Hierarchy.Node[HieLvl_CTY].HieCod ? HTM_OPTION_SELECTED :
+			CtyInLst->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_OPTION_SELECTED :
 									      HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",CtyInLst->FullName);
@@ -1017,9 +1017,7 @@ void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 
 void Cty_FlushCacheCountryName (void)
   {
-   Gbl.Cache.CountryName.HieCod     = -1L;
-   Gbl.Cache.CountryName.Language   = Lan_LANGUAGE_UNKNOWN;
-   Gbl.Cache.CountryName.CtyName[0] = '\0';
+   Gbl.Cache.CountryName.Valid = false;
   }
 
 void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
@@ -1033,7 +1031,8 @@ void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
      }
 
    /***** 2. Fast check: If cached... *****/
-   if (CtyCod   == Gbl.Cache.CountryName.HieCod &&
+   if (Gbl.Cache.CountryName.Valid &&
+       CtyCod   == Gbl.Cache.CountryName.HieCod &&
        Language == Gbl.Cache.CountryName.Language)
      {
       Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,Cty_MAX_BYTES_NAME);
@@ -1045,6 +1044,7 @@ void Cty_GetCountryNameInLanguage (long CtyCod,Lan_Language_t Language,
    Gbl.Cache.CountryName.HieCod   = CtyCod;
    Gbl.Cache.CountryName.Language = Language;
    Str_Copy (Gbl.Cache.CountryName.CtyName,CtyName,Cty_MAX_BYTES_NAME);
+   Gbl.Cache.CountryName.Valid = true;
   }
 
 /*****************************************************************************/
@@ -1070,14 +1070,14 @@ static void Cty_ListCountriesForEdition (void)
 
       /***** Write all countries *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[HieLvl_SYS].Num;
+	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 	   NumCty++)
 	{
-	 Cty = &Gbl.Hierarchy.List[HieLvl_SYS].Lst[NumCty];
-	 NumInss = Hie_GetNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
-					    HieLvl_CTY,	// ...in country
+	 Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+	 NumInss = Hie_GetNumNodesInHieLvl (Hie_INS,	// Number of institutions...
+					    Hie_CTY,	// ...in country
 					    Cty->HieCod);
-	 NumUsrsCty = Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl_CTY,Cty);
+	 NumUsrsCty = Hie_GetNumUsrsWhoClaimToBelongTo (Hie_CTY,Cty);
 
 	 HTM_TR_Begin (NULL);
 
@@ -1087,7 +1087,7 @@ static void Cty_ListCountriesForEdition (void)
 		   NumUsrsCty)					// Country has users
 		  // Deletion forbidden
 		  Ico_PutIconRemovalNotAllowed ();
-	       else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty->HieCod,
+	       else if (Enr_GetNumUsrsInCrss (Hie_CTY,Cty->HieCod,
 					      1 << Rol_STD |
 					      1 << Rol_NET |
 					      1 << Rol_TCH))	// Country has users
@@ -1202,15 +1202,15 @@ void Cty_RemoveCountry (void)
    Cty_GetBasicCountryDataByCod (Cty_EditingCty);
 
    /***** Check if this country has users *****/
-   if (Hie_GetNumNodesInHieLvl (HieLvl_INS,	// Number of institutions...
-				HieLvl_CTY,	// ...in country
+   if (Hie_GetNumNodesInHieLvl (Hie_INS,	// Number of institutions...
+				Hie_CTY,	// ...in country
 				Cty_EditingCty->HieCod))			// Country has institutions ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl_CTY,Cty_EditingCty))	// Country has users ==> don't remove
+   else if (Hie_GetNumUsrsWhoClaimToBelongTo (Hie_CTY,Cty_EditingCty))	// Country has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty_EditingCty->HieCod,
+   else if (Enr_GetNumUsrsInCrss (Hie_CTY,Cty_EditingCty->HieCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))			// Country has users
@@ -1219,18 +1219,18 @@ void Cty_RemoveCountry (void)
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
-      Svy_RemoveSurveys (HieLvl_CTY,Cty_EditingCty->HieCod);
+      Svy_RemoveSurveys (Hie_CTY,Cty_EditingCty->HieCod);
 
       /***** Remove country *****/
       Cty_DB_RemoveCty (Cty_EditingCty->HieCod);
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
-      Hie_FlushCachedNumNodesInHieLvl (HieLvl_INS,HieLvl_CTY);	// Number of institutions in country
-      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CTR,HieLvl_CTY);	// Number of centers in country
-      Hie_FlushCachedNumNodesInHieLvl (HieLvl_DEG,HieLvl_CTY);	// Number of degrees in country
-      Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_CTY);	// Number of courses in country
-      Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_CTY);
+      Hie_FlushCachedNumNodesInHieLvl (Hie_INS,Hie_CTY);	// Number of institutions in country
+      Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_CTY);	// Number of centers in country
+      Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_CTY);	// Number of degrees in country
+      Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_CTY);	// Number of courses in country
+      Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTY);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1382,7 +1382,7 @@ void Cty_ContEditAfterChgCty (void)
 static void Cty_ShowAlertAndButtonToGoToCty (void)
   {
    // If the country being edited is different to the current one...
-   if (Cty_EditingCty->HieCod != Gbl.Hierarchy.Node[HieLvl_CTY].HieCod)
+   if (Cty_EditingCty->HieCod != Gbl.Hierarchy.Node[Hie_CTY].HieCod)
      {
       /***** Alert with button to go to couuntry *****/
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
@@ -1656,12 +1656,12 @@ unsigned Cty_GetCachedNumCtysWithInss (void)
    unsigned NumCtysWithInss;
 
    /***** Get number of countries with institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_INSS,HieLvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_INSS,Hie_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithInss))
      {
       /***** Get current number of countries with institutions from cache *****/
       NumCtysWithInss = Cty_DB_GetNumCtysWithInss ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,HieLvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,Hie_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithInss);
      }
 
@@ -1677,12 +1677,12 @@ unsigned Cty_GetCachedNumCtysWithCtrs (void)
    unsigned NumCtysWithCtrs;
 
    /***** Get number of countries with centers from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,HieLvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithCtrs))
      {
       /***** Get current number of countries with centers from database and update cache *****/
       NumCtysWithCtrs = Cty_DB_GetNumCtysWithCtrs ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,HieLvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCtrs);
      }
 
@@ -1698,12 +1698,12 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
    unsigned NumCtysWithDegs;
 
    /***** Get number of countries with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,HieLvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithDegs))
      {
       /***** Get current number of countries with degrees from database and update cache *****/
       NumCtysWithDegs = Cty_DB_GetNumCtysWithDegs ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,HieLvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithDegs);
      }
 
@@ -1719,12 +1719,12 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
    unsigned NumCtysWithCrss;
 
    /***** Get number of countries with courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CRSS,HieLvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithCrss))
      {
       /***** Get current number of countries with courses from database and update cache *****/
       NumCtysWithCrss = Cty_DB_GetNumCtysWithCrss ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,HieLvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCrss);
      }
 
@@ -1953,7 +1953,7 @@ unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void)
    unsigned NumUsrs;
 
    /***** Get number of user who don't claim to belong to any country from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,-1L,
 				   FigCch_UNSIGNED,&NumUsrs))
       /***** Get current number of user who don't claim to belong to any country from database and update cache *****/
       NumUsrs = Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
@@ -1971,7 +1971,7 @@ unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
                    from database *****/
    Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs = Cty_DB_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
    Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,-1L,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs);
    return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
   }
@@ -1990,7 +1990,7 @@ unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void)
    unsigned NumUsrsCty;
 
    /***** Get number of users who claim to belong to another country form cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,0,
                                    FigCch_UNSIGNED,&NumUsrsCty))
       /***** Get current number of users who claim to belong to another country from database and update cache *****/
       NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToAnotherCty ();
@@ -2008,7 +2008,7 @@ unsigned Cty_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
                    from database *****/
    Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs = Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty ();
    Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_CTY,0,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs);
    return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
   }

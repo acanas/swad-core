@@ -163,7 +163,7 @@ void Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_NotifyEvent_t NotifyEvent)
 		   (unsigned) Ntf_STATUS_BIT_READ,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) NotifyEvent,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -211,7 +211,7 @@ void Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,l
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
 	              ToUsrCod,
 	              (unsigned) NotifyEvent,
-		      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -513,7 +513,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get the number"
 				    " of notifications by email",
@@ -522,7 +522,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
 			  " FROM sta_notifications"
 			 " WHERE NotifyEvent=%u",
 			 (unsigned) NotifyEvent);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get the number"
 				    " of notifications by email",
@@ -537,9 +537,9 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
 			   " AND sta_notifications.NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			 (unsigned) NotifyEvent);
-      case HieLvl_INS:
+      case Hie_INS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get the number"
 				    " of notifications by email",
@@ -552,9 +552,9 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
 			   " AND sta_notifications.NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			 (unsigned) NotifyEvent);
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get the number"
 				    " of notifications by email",
@@ -565,9 +565,9 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
 			   " AND sta_notifications.NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			 (unsigned) NotifyEvent);
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get the number"
 				    " of notifications by email",
@@ -576,9 +576,9 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
 			  " FROM sta_notifications"
 			 " WHERE DegCod=%ld"
 			   " AND NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			 (unsigned) NotifyEvent);
-      case HieLvl_CRS:
+      case Hie_CRS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get the number"
 				    " of notifications by email",
@@ -587,7 +587,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEven
 			  " FROM sta_notifications"
 			 " WHERE CrsCod=%ld"
 			   " AND NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			 (unsigned) NotifyEvent);
       default:
 	 Err_WrongHierarchyLevelExit ();

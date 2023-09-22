@@ -43,7 +43,7 @@
 #include "swad_form.h"
 #include "swad_forum_database.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_log_database.h"
@@ -303,11 +303,11 @@ bool Prf_ShowUserProfile (struct Usr_Data *UsrDat)
 
       /***** Shared record card *****/
       if (MeOrOther == Usr_OTHER &&		// If not me...
-	  Gbl.Hierarchy.Level == HieLvl_CRS)	// ...and a course is selected
+	  Gbl.Hierarchy.Level == Hie_CRS)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
 	 UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-	                                                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	                                                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
 	 /* Get if user has accepted enrolment in current course */
 	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
@@ -858,7 +858,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
 
    /***** Rank in form to go to ranking *****/
    Frm_BeginForm (ActSeeUseGbl);
-      Sco_PutParScope ("ScopeSta",HieLvl_SYS);
+      Sco_PutParScope ("ScopeSta",Hie_SYS);
       Par_PutParUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
       if (asprintf (&Title,"#%u %s %u",
 		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)

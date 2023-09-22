@@ -34,7 +34,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -347,18 +347,18 @@ unsigned Agd_DB_GetNumEventsFromUsr (long UsrCod)
 /*****************************************************************************/
 // Returns the number of users with events in a given hierarchy level
 
-unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
+unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t Level)
   {
    /***** Get number of users with events from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT UsrCod)"
 			 " FROM agd_agendas"
 		        " WHERE UsrCod>0");
-      case HieLvl_CTY:
+      case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -374,8 +374,8 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-		        Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-       case HieLvl_INS:
+		        Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+       case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -389,8 +389,8 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+                        Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -402,8 +402,8 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+                        Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -413,8 +413,8 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+                        Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -422,7 +422,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
 			       "agd_agendas"
 			" WHERE crs_users.CrsCod=%ld"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -434,18 +434,18 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Level)
 /*****************************************************************************/
 // Returns the number of events in a given hierarchy level
 
-unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Level)
+unsigned Agd_DB_GetNumEvents (Hie_Level_t Level)
   {
    /***** Get number of events from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
 			 " FROM agd_agendas"
 			" WHERE UsrCod>0");
-      case HieLvl_CTY:
+      case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -463,8 +463,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Level)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+                        Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -480,8 +480,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Level)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+                        Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -495,8 +495,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Level)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+                        Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -508,8 +508,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Level)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+                        Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -517,7 +517,7 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Level)
 			       "agd_agendas"
 			" WHERE crs_users.CrsCod=%ld"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached

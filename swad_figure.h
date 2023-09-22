@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -76,7 +76,7 @@ typedef enum
 
 struct Fig_Figures
   {
-   HieLvl_Level_t Level;
+   Hie_Level_t Level;
    Fig_FigureType_t FigureType;
   };
 

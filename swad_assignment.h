@@ -105,7 +105,7 @@ void Asg_UnhideAssignment (void);
 void Asg_ReceiveFormAssignment (void);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
-unsigned Asg_GetNumAssignments (HieLvl_Level_t Level,unsigned *NumNotif);
+unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif);
 
 //-------------------------------- Figures ------------------------------------
 void Asg_GetAndShowAssignmentsStats (void);

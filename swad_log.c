@@ -204,7 +204,7 @@ void Log_GetAndShowLastClicks (void)
    Act_Action_t Action;
    const char *ClassRow;
    time_t TimeDiff;
-   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
+   struct Hie_Node Hie[Hie_NUM_LEVELS];
 
    /***** Get last clicks from database *****/
    NumClicks = Log_DB_GetLastClicks (&mysql_res);
@@ -247,19 +247,19 @@ void Log_GetAndShowLastClicks (void)
 	    TimeDiff = (time_t) 0;
 
 	 /* Get country code (row[4]) */
-	 Hie[HieLvl_CTY].HieCod = Str_ConvertStrCodToLongCod (row[4]);
-	 Cty_GetCountryNameInLanguage (Hie[HieLvl_CTY].HieCod,Gbl.Prefs.Language,
-				       Hie[HieLvl_CTY].FullName);
+	 Hie[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (row[4]);
+	 Cty_GetCountryNameInLanguage (Hie[Hie_CTY].HieCod,Gbl.Prefs.Language,
+				       Hie[Hie_CTY].FullName);
 
 	 /* Get institution code (row[5]),
 	        center      code (row[6])
 	    and degree      code (row[7]) */
-	 Hie[HieLvl_INS].HieCod = Str_ConvertStrCodToLongCod (row[5]);
-	 Hie[HieLvl_CTR].HieCod = Str_ConvertStrCodToLongCod (row[6]);
-	 Hie[HieLvl_DEG].HieCod = Str_ConvertStrCodToLongCod (row[7]);
-	 Ins_DB_GetInsShrtName (Hie[HieLvl_INS].HieCod,Hie[HieLvl_INS].ShrtName);
-	 Ctr_DB_GetShortNameOfCenterByCod (Hie[HieLvl_CTR].HieCod,Hie[HieLvl_CTR].ShrtName);
-	 Deg_DB_GetShortNameOfDegreeByCod (Hie[HieLvl_DEG].HieCod,Hie[HieLvl_DEG].ShrtName);
+	 Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[5]);
+	 Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[6]);
+	 Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[7]);
+	 Ins_DB_GetInsShrtName (Hie[Hie_INS].HieCod,Hie[Hie_INS].ShrtName);
+	 Ctr_DB_GetShortNameOfCenterByCod (Hie[Hie_CTR].HieCod,Hie[Hie_CTR].ShrtName);
+	 Deg_DB_GetShortNameOfDegreeByCod (Hie[Hie_DEG].HieCod,Hie[Hie_DEG].ShrtName);
 
 	 /* Print table row */
 	 HTM_TR_Begin (NULL);
@@ -281,22 +281,22 @@ void Log_GetAndShowLastClicks (void)
 
 	    HTM_TD_Begin ("class=\"LC_CTY %s_%s\"",
 	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[HieLvl_CTY].FullName);			// Country
+	       HTM_Txt (Hie[Hie_CTY].FullName);			// Country
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_INS %s_%s\"",
 	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[HieLvl_INS].ShrtName);			// Institution
+	       HTM_Txt (Hie[Hie_INS].ShrtName);			// Institution
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_CTR %s_%s\"",
 	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[HieLvl_CTR].ShrtName);			// Center
+	       HTM_Txt (Hie[Hie_CTR].ShrtName);			// Center
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_DEG %s_%s\"",
 	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[HieLvl_DEG].ShrtName);			// Degree
+	       HTM_Txt (Hie[Hie_DEG].ShrtName);			// Degree
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_ACT %s_%s\"",

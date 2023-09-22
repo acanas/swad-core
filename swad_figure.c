@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType);
 
 static void Fig_PutParFigureType (Fig_FigureType_t FigureType);
-static void Fig_PutParFigScope (HieLvl_Level_t Level);
+static void Fig_PutParFigScope (Hie_Level_t Level);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -99,13 +99,13 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 	 /***** Compute stats for anywhere, degree or course? *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Scope);
-	    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-				1 << HieLvl_CTY |
-				1 << HieLvl_INS |
-				1 << HieLvl_CTR |
-				1 << HieLvl_DEG |
-				1 << HieLvl_CRS;
-	    Gbl.Scope.Default = HieLvl_SYS;
+	    Gbl.Scope.Allowed = 1 << Hie_SYS |
+				1 << Hie_CTY |
+				1 << Hie_INS |
+				1 << Hie_CTR |
+				1 << Hie_DEG |
+				1 << Hie_CRS;
+	    Gbl.Scope.Default = Hie_SYS;
 	    Sco_GetScope ("FigScope");
 	    Sco_PutSelectorScope ("FigScope",HTM_DONT_SUBMIT_ON_CHANGE);
 	 HTM_LABEL_End ();
@@ -148,7 +148,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    struct Fig_Figures Figures;
 
    /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
-   Gbl.Scope.Default = HieLvl_CRS;
+   Gbl.Scope.Default = Hie_CRS;
    Sco_AdjustScope ();
 
    /***** Put icon to show figure *****/
@@ -185,7 +185,7 @@ static void Fig_PutParFigureType (Fig_FigureType_t FigureType)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutParFigScope (HieLvl_Level_t Level)
+static void Fig_PutParFigScope (Hie_Level_t Level)
   {
    Sco_PutParScope ("FigScope",Level);
   }

@@ -40,7 +40,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_logo.h"
@@ -187,7 +187,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
 		      Txt_Degree,Deg.ShrtName);
 	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
-	       Lgo_DrawLogo (HieLvl_DEG,
+	       Lgo_DrawLogo (Hie_DEG,
 			     Deg.HieCod,
 			     Deg.ShrtName,
 			     16,NULL);

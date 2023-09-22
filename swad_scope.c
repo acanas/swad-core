@@ -52,25 +52,25 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    extern const char *Txt_Center;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
-   HieLvl_Level_t Level;
+   Hie_Level_t Level;
    unsigned ScopeUnsigned;
    bool WriteScope;
-   static const char **TxtScope[HieLvl_NUM_LEVELS] =
+   static const char **TxtScope[Hie_NUM_LEVELS] =
      {
-      [HieLvl_SYS] = &Txt_System,
-      [HieLvl_CTY] = &Txt_Country,
-      [HieLvl_INS] = &Txt_Institution,
-      [HieLvl_CTR] = &Txt_Center,
-      [HieLvl_DEG] = &Txt_Degree,
-      [HieLvl_CRS] = &Txt_Course,
+      [Hie_SYS] = &Txt_System,
+      [Hie_CTY] = &Txt_Country,
+      [Hie_INS] = &Txt_Institution,
+      [Hie_CTR] = &Txt_Center,
+      [Hie_DEG] = &Txt_Degree,
+      [Hie_CRS] = &Txt_Course,
      };
 
    HTM_SELECT_Begin (SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\" class=\"INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());
 
-      for (Level  = (HieLvl_Level_t) 1;
-	   Level <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
+      for (Level  = (Hie_Level_t) 1;
+	   Level <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
 	   Level++)
 	 if ((Gbl.Scope.Allowed & (1 << Level)))
 	   {
@@ -78,27 +78,27 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 	    WriteScope = false;
 	    switch (Level)
 	      {
-	       case HieLvl_SYS:
+	       case Hie_SYS:
 		  WriteScope = true;
 		  break;
-	       case HieLvl_CTY:
-		  if (Gbl.Hierarchy.Node[HieLvl_CTY].HieCod > 0)
+	       case Hie_CTY:
+		  if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
 		     WriteScope = true;
 		  break;
-	       case HieLvl_INS:
-		  if (Gbl.Hierarchy.Node[HieLvl_INS].HieCod > 0)
+	       case Hie_INS:
+		  if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
 		     WriteScope = true;
 		  break;
-	       case HieLvl_CTR:
-		  if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
+	       case Hie_CTR:
+		  if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 		     WriteScope = true;
 		  break;
-	       case HieLvl_DEG:
-		  if (Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0)
+	       case Hie_DEG:
+		  if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 		     WriteScope = true;
 		  break;
-	       case HieLvl_CRS:
-		  if (Gbl.Hierarchy.Level == HieLvl_CRS)
+	       case Hie_CRS:
+		  if (Gbl.Hierarchy.Level == Hie_CRS)
 		     WriteScope = true;
 		  break;
 	       default:
@@ -129,10 +129,10 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 void Sco_PutParCurrentScope (void *Level)
   {
    if (Level)
-      Sco_PutParScope ("ScopeUsr",*((HieLvl_Level_t *) Level));
+      Sco_PutParScope ("ScopeUsr",*((Hie_Level_t *) Level));
   }
 
-void Sco_PutParScope (const char *ParName,HieLvl_Level_t Level)
+void Sco_PutParScope (const char *ParName,Hie_Level_t Level)
   {
    Par_PutParUnsigned (NULL,ParName,(unsigned) Level);
   }
@@ -144,11 +144,11 @@ void Sco_PutParScope (const char *ParName,HieLvl_Level_t Level)
 void Sco_GetScope (const char *ParName)
   {
    /***** Get parameter with scope *****/
-   Gbl.Scope.Current = (HieLvl_Level_t)
+   Gbl.Scope.Current = (Hie_Level_t)
 	               Par_GetParUnsignedLong (ParName,
                                                0,
-                                               HieLvl_NUM_LEVELS - 1,
-                                               (unsigned long) HieLvl_UNK);
+                                               Hie_NUM_LEVELS - 1,
+                                               (unsigned long) Hie_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/
    Sco_AdjustScope ();
@@ -161,28 +161,28 @@ void Sco_GetScope (const char *ParName)
 void Sco_AdjustScope (void)
   {
    /***** Is scope is unknow, use default scope *****/
-   if (Gbl.Scope.Current == HieLvl_UNK)
+   if (Gbl.Scope.Current == Hie_UNK)
       Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == HieLvl_CRS && Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
-      Gbl.Scope.Current = HieLvl_DEG;
+   if (Gbl.Scope.Current == Hie_CRS && Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
+      Gbl.Scope.Current = Hie_DEG;
 
-   if (Gbl.Scope.Current == HieLvl_DEG && Gbl.Hierarchy.Node[HieLvl_DEG].HieCod <= 0)
-      Gbl.Scope.Current = HieLvl_CTR;
+   if (Gbl.Scope.Current == Hie_DEG && Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0)
+      Gbl.Scope.Current = Hie_CTR;
 
-   if (Gbl.Scope.Current == HieLvl_CTR && Gbl.Hierarchy.Node[HieLvl_CTR].HieCod <= 0)
-      Gbl.Scope.Current = HieLvl_INS;
+   if (Gbl.Scope.Current == Hie_CTR && Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)
+      Gbl.Scope.Current = Hie_INS;
 
-   if (Gbl.Scope.Current == HieLvl_INS && Gbl.Hierarchy.Node[HieLvl_INS].HieCod <= 0)
-      Gbl.Scope.Current = HieLvl_CTY;
+   if (Gbl.Scope.Current == Hie_INS && Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)
+      Gbl.Scope.Current = Hie_CTY;
 
-   if (Gbl.Scope.Current == HieLvl_CTY && Gbl.Hierarchy.Node[HieLvl_CTY].HieCod <= 0)
-      Gbl.Scope.Current = HieLvl_SYS;
+   if (Gbl.Scope.Current == Hie_CTY && Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0)
+      Gbl.Scope.Current = Hie_SYS;
 
    /***** Avoid forbidden scopes *****/
    if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
-      Gbl.Scope.Current = HieLvl_UNK;
+      Gbl.Scope.Current = Hie_UNK;
   }
 
 /*****************************************************************************/
@@ -194,12 +194,12 @@ void Sco_SetScopesForListingGuests (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_SYS;
-	 Gbl.Scope.Default = HieLvl_SYS;
+	 Gbl.Scope.Allowed = 1 << Hie_SYS;
+	 Gbl.Scope.Default = Hie_SYS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = HieLvl_UNK;
+      	 Gbl.Scope.Default = Hie_UNK;
 	 break;
      }
   }
@@ -210,40 +210,40 @@ void Sco_SetScopesForListingGuests (void)
 
 void Sco_SetScopesForListingStudents (void)
   {
-   Gbl.Scope.Default = HieLvl_CRS;
+   Gbl.Scope.Default = Hie_CRS;
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 Gbl.Scope.Allowed = 1 << HieLvl_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_CRS;
 	 break;
       case Rol_DEG_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_DEG |
-		             1 << HieLvl_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       case Rol_CTR_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_CTR |
-		             1 << HieLvl_DEG |
-		             1 << HieLvl_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_CTR |
+		             1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       case Rol_INS_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_INS |
-		             1 << HieLvl_CTR |
-		             1 << HieLvl_DEG |
-		             1 << HieLvl_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_INS |
+		             1 << Hie_CTR |
+		             1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-	                     1 << HieLvl_CTY |
-		             1 << HieLvl_INS |
-		             1 << HieLvl_CTR |
-		             1 << HieLvl_DEG |
-		             1 << HieLvl_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_SYS |
+	                     1 << Hie_CTY |
+		             1 << Hie_INS |
+		             1 << Hie_CTR |
+		             1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = HieLvl_UNK;
+      	 Gbl.Scope.Default = Hie_UNK;
 	 break;
      }
   }
@@ -252,53 +252,53 @@ void Sco_SetScopesForListingStudents (void)
 /*********************** Get scope from unsigned string **********************/
 /*****************************************************************************/
 
-HieLvl_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
+Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
   {
    unsigned UnsignedNum;
 
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < HieLvl_NUM_LEVELS)
-         return (HieLvl_Level_t) UnsignedNum;
+      if (UnsignedNum < Hie_NUM_LEVELS)
+         return (Hie_Level_t) UnsignedNum;
 
-   return HieLvl_UNK;
+   return Hie_UNK;
   }
 
 /*****************************************************************************/
 /***************** Get hierarchy level from database string ******************/
 /*****************************************************************************/
 
-HieLvl_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr)
+Hie_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr)
   {
-   HieLvl_Level_t Level;
+   Hie_Level_t Level;
 
-   for (Level  = (HieLvl_Level_t) 0;
-	Level <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
+   for (Level  = (Hie_Level_t) 0;
+	Level <= (Hie_Level_t) (Hie_NUM_LEVELS - 1);
 	Level++)
       if (!strcmp (Hie_GetDBStrFromLevel (Level),LevelDBStr))
 	 return Level;
 
-   return HieLvl_UNK;
+   return Hie_UNK;
   }
 
 /*****************************************************************************/
 /****************** Get database string from hierarchy level *****************/
 /*****************************************************************************/
 
-const char *Hie_GetDBStrFromLevel (HieLvl_Level_t Level)
+const char *Hie_GetDBStrFromLevel (Hie_Level_t Level)
   {
-   static const char *Sco_ScopeDB[HieLvl_NUM_LEVELS] =
+   static const char *Sco_ScopeDB[Hie_NUM_LEVELS] =
      {
-      [HieLvl_UNK] = "Unk",
-      [HieLvl_SYS] = "Sys",
-      [HieLvl_CTY] = "Cty",
-      [HieLvl_INS] = "Ins",
-      [HieLvl_CTR] = "Ctr",
-      [HieLvl_DEG] = "Deg",
-      [HieLvl_CRS] = "Crs",
+      [Hie_UNK] = "Unk",
+      [Hie_SYS] = "Sys",
+      [Hie_CTY] = "Cty",
+      [Hie_INS] = "Ins",
+      [Hie_CTR] = "Ctr",
+      [Hie_DEG] = "Deg",
+      [Hie_CRS] = "Crs",
      };
 
-   if (Level >= HieLvl_NUM_LEVELS)
-      Level = HieLvl_UNK;
+   if (Level >= Hie_NUM_LEVELS)
+      Level = Hie_UNK;
 
    return Sco_ScopeDB[Level];
   }
@@ -311,12 +311,12 @@ long Hie_GetCurrentCod (void)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
-      case HieLvl_CTY:
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
+      case Hie_SYS:
+      case Hie_CTY:
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
 	 return Gbl.Hierarchy.Node[Gbl.Scope.Current].HieCod;
       default:
 	 Err_WrongHierarchyLevelExit ();

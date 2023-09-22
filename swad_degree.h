@@ -32,7 +32,7 @@
 #include "swad_action.h"
 #include "swad_constant.h"
 #include "swad_figure_cache.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_role_type.h"
 #include "swad_string.h"
 
@@ -90,7 +90,7 @@ void Deg_GetMyDegrees (void);
 void Deg_FreeMyDegrees (void);
 bool Deg_CheckIfIBelongToDeg (long DegCod);
 void Deg_GetUsrMainDeg (long UsrCod,
-		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+		        char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
 		        Rol_Role_t *MaxRole);
 
 #endif

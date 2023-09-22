@@ -151,7 +151,7 @@ void Deg_SeeDegWithPendingCrss (void)
 
 	    /* Get degree code (row[0]) */
 	    Deg.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Deg.HieCod == Gbl.Hierarchy.Node[HieLvl_DEG].HieCod) ? "BG_HIGHLIGHT" :
+	    BgColor = (Deg.HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? "BG_HIGHLIGHT" :
 								        The_GetColorRows ();
 
 	    /* Get data of degree */
@@ -203,7 +203,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action
       Str_FreeGoToTitle ();
 
 	 /***** Degree logo and name *****/
-	 Lgo_DrawLogo (HieLvl_DEG,
+	 Lgo_DrawLogo (Hie_DEG,
 		       Deg->HieCod,
 		       Deg->ShrtName,
 		       16,ClassLogo);
@@ -233,7 +233,7 @@ void Deg_WriteSelectorOfDegree (void)
    Frm_BeginFormGoTo (ActSeeCrs);
 
       /***** Begin selector of degree *****/
-      if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
+      if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\"",
 			   The_GetSuffix ());
@@ -243,12 +243,12 @@ void Deg_WriteSelectorOfDegree (void)
 			   " disabled=\"disabled\"",
 			   The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Node[HieLvl_DEG].HieCod <= 0 ? HTM_OPTION_SELECTED :
+		  Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0 ? HTM_OPTION_SELECTED :
 							    HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Degree);
 
-      if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod > 0)
+      if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
 	 /***** Get degrees belonging to the current center from database *****/
 	 NumDegs = Deg_DB_GetDegsOfCurrentCtrBasic (&mysql_res);
@@ -267,8 +267,8 @@ void Deg_WriteSelectorOfDegree (void)
 
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&DegCod,
-			Gbl.Hierarchy.Node[HieLvl_DEG].HieCod > 0 &&
-			DegCod == Gbl.Hierarchy.Node[HieLvl_DEG].HieCod ? HTM_OPTION_SELECTED :
+			Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 &&
+			DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
 								       HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);
@@ -292,11 +292,11 @@ void Deg_WriteSelectorOfDegree (void)
 void Deg_ShowDegsOfCurrentCtr (void)
   {
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CTR].HieCod <= 0)	// No center selected
+   if (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)	// No center selected
       return;
 
    /***** Get list of centers and degrees *****/
-   Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+   Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Node[Hie_INS].HieCod);
    Deg_GetListDegsInCurrentCtr ();
 
    /***** Write menu to select country, institution and center *****/
@@ -306,8 +306,8 @@ void Deg_ShowDegsOfCurrentCtr (void)
    Deg_ListDegrees ();
 
    /***** Free list of degrees and centers *****/
-   Hie_FreeList (HieLvl_CTR);
-   Hie_FreeList (HieLvl_INS);
+   Hie_FreeList (Hie_CTR);
+   Hie_FreeList (Hie_INS);
   }
 
 /*****************************************************************************/
@@ -338,16 +338,16 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
       /***** List the degrees *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.Hierarchy.List[HieLvl_CTR].Num;
+	   NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
 	   NumDeg++)
 	{
-	 DegInLst = &(Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg]);
+	 DegInLst = &(Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]);
 
 	 ICanEdit = Deg_CheckIfICanEditADegree (DegInLst);
-	 NumCrss = Hie_GetNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
-					    HieLvl_DEG,	// ...in degree
+	 NumCrss = Hie_GetNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+					    Hie_DEG,	// ...in degree
 					    DegInLst->HieCod);
-	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (HieLvl_DEG,DegInLst->HieCod,
+	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (Hie_DEG,DegInLst->HieCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
 						    1 << Rol_TCH);	// Any user
@@ -372,7 +372,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",DegInLst->FullName);
-	       Lgo_DrawLogo (HieLvl_DEG,
+	       Lgo_DrawLogo (Hie_DEG,
 			     DegInLst->HieCod,
 			     DegInLst->ShrtName
 			     ,20,NULL);
@@ -384,7 +384,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
 		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,DegInLst->ShrtName,
+		     HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,DegInLst->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -400,7 +400,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
 		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
-		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,DegInLst->FullName,
+		     HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,DegInLst->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -554,7 +554,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
-	    Lgo_DrawLogo (HieLvl_DEG,
+	    Lgo_DrawLogo (Hie_DEG,
 			  -1L,
 			  "",
 			  20,NULL);
@@ -562,7 +562,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -571,7 +571,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
+	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -727,13 +727,13 @@ static void Deg_ListDegrees (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
-		 Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
+		 Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Gbl.Hierarchy.List[HieLvl_CTR].Num)	// There are degrees in the current center
+      if (Gbl.Hierarchy.List[Hie_CTR].Num)	// There are degrees in the current center
 	{
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
@@ -743,9 +743,9 @@ static void Deg_ListDegrees (void)
 
 	    /***** List the degrees *****/
 	    for (NumDeg = 0;
-		 NumDeg < Gbl.Hierarchy.List[HieLvl_CTR].Num;
+		 NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
 		 NumDeg++)
-	       Deg_ListOneDegreeForSeeing (&(Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg]),
+	       Deg_ListOneDegreeForSeeing (&(Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]),
 					   NumDeg + 1);
 
 	 /***** End table *****/
@@ -798,8 +798,8 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   unsigned NumCrss = Hie_GetCachedNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
-					             HieLvl_DEG,	// ...in degree
+   unsigned NumCrss = Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+					             Hie_DEG,	// ...in degree
 					             Deg->HieCod);
 
    /***** Get data of type of degree of this degree *****/
@@ -817,7 +817,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = (Deg->HieCod == Gbl.Hierarchy.Node[HieLvl_DEG].HieCod) ? "BG_HIGHLIGHT" :
+   BgColor = (Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? "BG_HIGHLIGHT" :
 							        The_GetColorRows ();
 
    /***** Begin table row *****/
@@ -859,7 +859,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       /***** Number of users in courses of this degree *****/
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_DEG,Deg->HieCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_DEG,Deg->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user
@@ -897,7 +897,7 @@ static void Deg_EditDegreesInternal (void)
    char *Title;
 
    /***** Get list of degree types *****/
-   DegTyp_GetListDegreeTypes (&DegTypes,HieLvl_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
 
    /***** Get list of degrees in the current center *****/
    Deg_GetListDegsInCurrentCtr ();
@@ -907,19 +907,19 @@ static void Deg_EditDegreesInternal (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
-		 Gbl.Hierarchy.Node[HieLvl_CTR].ShrtName) < 0)
+		 Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Deg_DB_GetNumDegreeTypes (HieLvl_SYS))
+      if (Deg_DB_GetNumDegreeTypes (Hie_SYS))
 	{
 	 /***** Put a form to create a new degree *****/
 	 Deg_PutFormToCreateDegree (&DegTypes);
 
 	 /***** Forms to edit current degrees *****/
-	 if (Gbl.Hierarchy.List[HieLvl_CTR].Num)
+	 if (Gbl.Hierarchy.List[Hie_CTR].Num)
 	    Deg_ListDegreesForEdition (&DegTypes);
 	}
       else	// No degree types
@@ -1006,21 +1006,21 @@ void Deg_GetListDegsInCurrentCtr (void)
    unsigned NumDeg;
 
    /***** Get degrees of the current center from database *****/
-   Gbl.Hierarchy.List[HieLvl_CTR].Num = Deg_DB_GetDegsOfCurrentCtrFull (&mysql_res);
+   Gbl.Hierarchy.List[Hie_CTR].Num = Deg_DB_GetDegsOfCurrentCtrFull (&mysql_res);
 
    /***** Count number of rows in result *****/
-   if (Gbl.Hierarchy.List[HieLvl_CTR].Num) // Degrees found...
+   if (Gbl.Hierarchy.List[Hie_CTR].Num) // Degrees found...
      {
       /***** Create list with degrees of this center *****/
-      if ((Gbl.Hierarchy.List[HieLvl_CTR].Lst = calloc ((size_t) Gbl.Hierarchy.List[HieLvl_CTR].Num,
-                                                        sizeof (*Gbl.Hierarchy.List[HieLvl_CTR].Lst))) == NULL)
+      if ((Gbl.Hierarchy.List[Hie_CTR].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTR].Num,
+                                                        sizeof (*Gbl.Hierarchy.List[Hie_CTR].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this center *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.Hierarchy.List[HieLvl_CTR].Num;
+	   NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
 	   NumDeg++)
-         Deg_GetDegreeDataFromRow (mysql_res,&Gbl.Hierarchy.List[HieLvl_CTR].Lst[NumDeg]);
+         Deg_GetDegreeDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1078,11 +1078,11 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set degree center */
-   Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Node[HieLvl_CTR].HieCod;
+   Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 
    /* Get degree short name and full name */
-   Par_GetParText ("ShortName",Deg_EditingDeg->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Deg_EditingDeg->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
    Deg_EditingDeg->Specific.TypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
@@ -1140,8 +1140,8 @@ void Deg_RemoveDegree (void)
    Deg_GetDegreeDataByCod (Deg_EditingDeg);
 
    /***** Check if this degree has courses *****/
-   if (Hie_GetNumNodesInHieLvl (HieLvl_CRS,	// Number of courses...
-				HieLvl_DEG,	// ...in degree
+   if (Hie_GetNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+				Hie_DEG,	// ...in degree
 				Deg_EditingDeg->HieCod))	// Degree has courses ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
@@ -1261,10 +1261,10 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove all threads and posts in forums of the degree *****/
-   For_DB_RemoveForums (HieLvl_DEG,DegCod);
+   For_DB_RemoveForums (Hie_DEG,DegCod);
 
    /***** Remove surveys of the degree *****/
-   Svy_RemoveSurveys (HieLvl_DEG,DegCod);
+   Svy_RemoveSurveys (Hie_DEG,DegCod);
 
    /***** Remove information related to files in degree *****/
    Brw_DB_RemoveDegFiles (DegCod);
@@ -1277,13 +1277,13 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   Adm_DB_RemAdmins (HieLvl_DEG,DegCod);
+   Adm_DB_RemAdmins (Hie_DEG,DegCod);
 
    /***** Remove the degree *****/
    Deg_DB_RemoveDeg (DegCod);
 
    /***** Flush caches *****/
-   Hie_FlushCachedNumNodesInHieLvl (HieLvl_CRS,HieLvl_DEG);	// Number of courses in degree
+   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_DEG);	// Number of courses in degree
 
    /***** Delete all degrees in stats table not present in degrees table *****/
    Pho_DB_RemoveObsoleteStatDegrees ();
@@ -1326,20 +1326,20 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;	// Initialized to avoid warning
    char *CurrentDegName = NULL;	// Initialized to avoid warning
-   char NewDegName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char NewDegName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParName = "ShortName";
          FldName = "ShortName";
-         MaxBytes = Cns_HIERARCHY_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
          CurrentDegName = Deg->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParName = "FullName";
          FldName = "FullName";
-         MaxBytes = Cns_HIERARCHY_MAX_BYTES_FULL_NAME;
+         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
          CurrentDegName = Deg->FullName;
          break;
      }
@@ -1515,7 +1515,7 @@ void Deg_ContEditAfterChgDeg (void)
 static void Deg_ShowAlertAndButtonToGoToDeg (void)
   {
    // If the degree being edited is different to the current one...
-   if (Deg_EditingDeg->HieCod != Gbl.Hierarchy.Node[HieLvl_DEG].HieCod)
+   if (Deg_EditingDeg->HieCod != Gbl.Hierarchy.Node[Hie_DEG].HieCod)
      {
       /***** Alert with button to go to degree *****/
       Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,
@@ -1751,7 +1751,7 @@ bool Deg_CheckIfIBelongToDeg (long DegCod)
 /*****************************************************************************/
 
 void Deg_GetUsrMainDeg (long UsrCod,
-		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+		        char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
 		        Rol_Role_t *MaxRole)
   {
    MYSQL_RES *mysql_res;
@@ -1763,7 +1763,7 @@ void Deg_GetUsrMainDeg (long UsrCod,
       row = mysql_fetch_row (mysql_res);
 
       /* Get degree name (row[0]) */
-      Str_Copy (ShrtName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+      Str_Copy (ShrtName,row[0],Hie_MAX_BYTES_SHRT_NAME);
 
       /* Get maximum role (row[1]) */
       *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);

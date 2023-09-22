@@ -290,7 +290,7 @@ static void Grp_EditGroupTypes (void)
 	 Grp_ListGroupTypesForEdition ();
       else	// No group types found in this course
 	 Ale_ShowAlert (Ale_INFO,Txt_There_are_no_types_of_group_in_the_course_X,
-			Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+			Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -319,7 +319,7 @@ static void Grp_EditGroups (const struct Roo_Rooms *Rooms)
 	 Grp_ListGroupsForEdition (Rooms);
       else	// There are group types, but there aren't groups
 	 Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
-			Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+			Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1757,7 +1757,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
    else	// This course has no groups
       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
-                     Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+                     Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2665,7 +2665,7 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    Grp_OpenGroupsAutomatically ();
 
    /***** Get group types from database *****/
-   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Get group types *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
@@ -3000,8 +3000,7 @@ void Grp_GetGroupDataByCod (struct GroupData *GrpDat)
 
 void Grp_FlushCacheIBelongToGrp (void)
   {
-   Gbl.Cache.IBelongToGrp.GrpCod = -1L;
-   Gbl.Cache.IBelongToGrp.IBelong = false;
+   Gbl.Cache.IBelongToGrp.Valid = false;
   }
 
 bool Grp_GetIfIBelongToGrp (long GrpCod)
@@ -3011,12 +3010,14 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
       return false;
 
    /***** 2. Fast check: Is already calculated if I belong to group? *****/
-   if (GrpCod == Gbl.Cache.IBelongToGrp.GrpCod)
+   if (Gbl.Cache.IBelongToGrp.Valid &&
+       GrpCod == Gbl.Cache.IBelongToGrp.GrpCod)
       return Gbl.Cache.IBelongToGrp.IBelong;
 
    /***** 3. Slow check: Get if I belong to a group from database *****/
    Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
    Gbl.Cache.IBelongToGrp.IBelong = Grp_DB_CheckIfIBelongToGrp (GrpCod);
+   Gbl.Cache.IBelongToGrp.Valid = true;
    return Gbl.Cache.IBelongToGrp.IBelong;
   }
 
@@ -3026,8 +3027,7 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
 
 void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
   {
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = -1L;
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = false;
   }
 
 bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
@@ -3041,7 +3041,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)
+   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
       return false;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
@@ -3054,7 +3054,8 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
 
    /***** 6. Fast check: Is already calculated if user shares
                          any group in the current course with me? *****/
-   if (UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod)
+   if (Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid &&
+       UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod)
       return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
 
    /***** 7. Fast / slow check: Does he/she belong to the current course? *****/
@@ -3062,6 +3063,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = true;
       return false;
      }
 
@@ -3070,6 +3072,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = true;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = true;
       return true;
      }
 
@@ -3079,6 +3082,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
    /* Check if user shares any group with me */
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat->UsrCod);
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Valid = true;
    return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
   }
 
@@ -3514,7 +3518,7 @@ static void Grp_RemoveGroupCompletely (void)
    Grp_GetGroupDataByCod (&GrpDat);
 
    /***** Remove file zones of this group *****/
-   Brw_RemoveGrpZones (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,GrpDat.GrpCod);
+   Brw_RemoveGrpZones (Gbl.Hierarchy.Node[Hie_CRS].HieCod,GrpDat.GrpCod);
 
    /***** Remove this group from all assignments *****/
    Asg_DB_RemoveGroup (GrpDat.GrpCod);

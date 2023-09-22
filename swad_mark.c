@@ -41,7 +41,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_mark.h"
@@ -566,10 +566,10 @@ void Mrk_ShowMyMarks (void)
         }
       else				// Course zone
         {
-	 if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				   1 << Rol_STD))	// If there are students in this course
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Enr_DB_GetRamdomStdFromCrs (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Enr_DB_GetRamdomStdFromCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else

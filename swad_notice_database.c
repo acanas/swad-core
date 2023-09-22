@@ -49,7 +49,7 @@ long Not_DB_InsertNotice (const char *Content)
 				" (CrsCod,UsrCod,CreatTime,Content,Status)"
 				" VALUES"
 				" (%ld,%ld,NOW(),'%s',%u)",
-				Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,
 				(unsigned) Not_ACTIVE_NOTICE);
@@ -68,7 +68,7 @@ void Not_DB_ChangeNoticeStatus (long NotCod,Not_Status_t Status)
 		     " AND CrsCod=%ld",
 	           (unsigned) Status,
 	           NotCod,
-	           Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	           Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -90,7 +90,7 @@ void Not_DB_CopyNoticeToDeleted (long NotCod)
 		    " WHERE NotCod=%ld"
 		      " AND CrsCod=%ld",	// Extra check
                    NotCod,
-                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -125,7 +125,7 @@ unsigned Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   NotCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -158,7 +158,7 @@ unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res)
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
 		   " ORDER BY CreatTime DESC",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -187,11 +187,11 @@ unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
 /*****************************************************************************/
 
 unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
-                               HieLvl_Level_t Level,Not_Status_t Status)
+                               Hie_Level_t Level,Not_Status_t Status)
   {
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -199,7 +199,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			  " FROM not_notices"
 			 " WHERE Status=%u",
                          Status);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -215,9 +215,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+                         Gbl.Hierarchy.Node[Hie_CTY].HieCod,
                          Status);
-      case HieLvl_INS:
+      case Hie_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -231,9 +231,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+                         Gbl.Hierarchy.Node[Hie_INS].HieCod,
                          Status);
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -245,9 +245,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+                         Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                          Status);
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -257,9 +257,9 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+                         Gbl.Hierarchy.Node[Hie_DEG].HieCod,
                          Status);
-      case HieLvl_CRS:
+      case Hie_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -267,7 +267,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			  " FROM not_notices"
 			 " WHERE CrsCod=%ld"
 			   " AND Status=%u",
-                         Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+                         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                          Status);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -280,17 +280,17 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
-                                      HieLvl_Level_t Level)
+                                      Hie_Level_t Level)
   {
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM not_deleted");
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -305,8 +305,8 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+                         Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -319,8 +319,8 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+                         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -331,8 +331,8 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			 " WHERE deg_degrees.CtrCod=%ld"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+                         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
@@ -341,15 +341,15 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
 			        "not_deleted"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+                         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM not_deleted"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -367,7 +367,7 @@ void Not_DB_RemoveNotice (long NotCod)
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
                    NotCod,
-                   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

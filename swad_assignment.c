@@ -1294,7 +1294,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 					                                    AsgCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-			          Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+			          Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -1574,7 +1574,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	   }
       else
 	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-	           Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	           Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -1622,7 +1622,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 // Returns the number of assignments
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Asg_GetNumAssignments (HieLvl_Level_t Level,unsigned *NumNotif)
+unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

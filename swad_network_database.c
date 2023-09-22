@@ -122,7 +122,7 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
    /***** Get number of users with a web / social network *****/
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -132,7 +132,7 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 		      " GROUP BY Web"
 		      " ORDER BY N DESC,"
 			        "Web");
-      case HieLvl_CTY:
+      case Hie_CTY:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -153,8 +153,8 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 		      " GROUP BY usr_webs.Web"
 		      " ORDER BY N DESC,"
 			        "usr_webs.Web",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -173,8 +173,8 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 		      " GROUP BY usr_webs.Web"
 		      " ORDER BY N DESC,"
 			        "usr_webs.Web",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -191,8 +191,8 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 		      " GROUP BY usr_webs.Web"
 		      " ORDER BY N DESC,"
 			        "usr_webs.Web",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+			 Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -207,8 +207,8 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 		      " GROUP BY usr_webs.Web"
 		      " ORDER BY N DESC,"
 			        "usr_webs.Web",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -221,7 +221,7 @@ unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res)
 		      " GROUP BY usr_webs.Web"
 		      " ORDER BY N DESC,"
 			        "usr_webs.Web",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
          break;
       default:
 	 Err_WrongHierarchyLevelExit ();

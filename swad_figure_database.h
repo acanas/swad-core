@@ -30,22 +30,22 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_figure_cache.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Fig_DB_UpdateUnsignedFigureIntoCache (FigCch_FigureCached_t Figure,
-                                           HieLvl_Level_t Level,long HieCod,
+                                           Hie_Level_t Level,long HieCod,
                                            unsigned Value);
 void Fig_DB_UpdateDoubleFigureIntoCache (FigCch_FigureCached_t Figure,
-                                         HieLvl_Level_t Level,long HieCod,
+                                         Hie_Level_t Level,long HieCod,
                                          double Value);
 
 unsigned Fig_DB_GetFigureFromCache (MYSQL_RES **mysql_res,
                                     FigCch_FigureCached_t Figure,
-                                    HieLvl_Level_t Level,long HieCod,
+                                    Hie_Level_t Level,long HieCod,
                                     FigCch_Type_t Type,time_t TimeCached);
 
 #endif

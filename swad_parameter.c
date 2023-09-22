@@ -842,44 +842,44 @@ void Par_GetMainPars (void)
    Par_GetParText (Par_CodeStr[ParCod_Cty],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
-      Gbl.Hierarchy.Node[HieLvl_CTY].HieCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.Hierarchy.Node[HieLvl_INS].HieCod =
-      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod =
-      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod =
-      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod = -1L;
+      Gbl.Hierarchy.Node[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Node[Hie_INS].HieCod =
+      Gbl.Hierarchy.Node[Hie_CTR].HieCod =
+      Gbl.Hierarchy.Node[Hie_DEG].HieCod =
+      Gbl.Hierarchy.Node[Hie_CRS].HieCod = -1L;
      }
 
    /***** Get institution if exists (from menu) *****/
    Par_GetParText (Par_CodeStr[ParCod_Ins],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
-      Gbl.Hierarchy.Node[HieLvl_INS].HieCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod =
-      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod =
-      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod = -1L;
+      Gbl.Hierarchy.Node[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Node[Hie_CTR].HieCod =
+      Gbl.Hierarchy.Node[Hie_DEG].HieCod =
+      Gbl.Hierarchy.Node[Hie_CRS].HieCod = -1L;
      }
 
    /***** Get center if exists (from menu) *****/
    Par_GetParText (Par_CodeStr[ParCod_Ctr],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
-      Gbl.Hierarchy.Node[HieLvl_CTR].HieCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod =
-      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod = -1L;
+      Gbl.Hierarchy.Node[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Node[Hie_DEG].HieCod =
+      Gbl.Hierarchy.Node[Hie_CRS].HieCod = -1L;
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
    Par_GetParText (Par_CodeStr[ParCod_Deg],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
-      Gbl.Hierarchy.Node[HieLvl_DEG].HieCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod = -1L;	// Reset possible course from session
+      Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Node[Hie_CRS].HieCod = -1L;	// Reset possible course from session
      }
 
    /***** Get numerical course code if exists (from menu) *****/
    Par_GetParText (Par_CodeStr[ParCod_Crs],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
-      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
+      Gbl.Hierarchy.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
    /***** Get tab to activate *****/
    Gbl.Action.Tab = TabUnk;

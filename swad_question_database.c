@@ -89,7 +89,7 @@ long Qst_DB_CreateQst (const struct Qst_Question *Question)
 					     "%ld,"	// MedCod
 					     "0,"	// NumHits
 					     "0)",	// Score
-				Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Qst_DB_StrAnswerTypes[Question->Answer.Type],
 				Question->Answer.Shuffle ? 'Y' :
 							   'N',
@@ -123,7 +123,7 @@ void Qst_DB_UpdateQst (const struct Qst_Question *Question)
 					"",
 		   Question->Media.MedCod,
 		   Question->QstCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -165,7 +165,7 @@ void Qst_DB_UpdateQstShuffle (long QstCod,bool Shuffle)
 		   Shuffle ? 'Y' :
 			     'N',
 		   QstCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -290,7 +290,7 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
 
    Str_Concat (Query," WHERE tst_questions.CrsCod=",
                Qst_MAX_BYTES_QUERY_QUESTIONS);
-   snprintf (CrsCodStr,sizeof (CrsCodStr),"%ld",Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+   snprintf (CrsCodStr,sizeof (CrsCodStr),"%ld",Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Str_Concat (Query,CrsCodStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
    Str_Concat (Query," AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Qst_MAX_BYTES_QUERY_QUESTIONS);
@@ -441,9 +441,9 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 	       " AND tst_questions.QstCod=tst_question_tags.QstCod"
 	       " AND tst_question_tags.TagCod=tst_tags.TagCod"
 	       " AND tst_tags.CrsCod=%ld",
-	     Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
-	     Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
-	     Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	     Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	     Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    if (!Questions->Tags.All) // User has not selected all tags
      {
@@ -595,11 +595,11 @@ unsigned Qst_DB_GetNumQstsInCrs (long CrsCod)
 // in this location (all the platform, current degree or current course)
 
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
-                            HieLvl_Level_t Level,Qst_AnswerType_t AnsType)
+                            Hie_Level_t Level,Qst_AnswerType_t AnsType)
   {
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -616,7 +616,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 			  " FROM tst_questions"
 			 " WHERE AnsType='%s'",
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CTY:
+      case Hie_CTY:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -633,7 +633,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
                               " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                               " AND deg_degrees.DegCod=crs_courses.DegCod"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+			    Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
          return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -651,9 +651,9 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_INS:
+      case Hie_INS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -668,7 +668,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
                               " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                               " AND deg_degrees.DegCod=crs_courses.DegCod"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+			    Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
          return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -684,9 +684,9 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CTR:
+      case Hie_CTR:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -699,7 +699,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
                             " WHERE deg_degrees.CtrCod=%ld"
                               " AND deg_degrees.DegCod=crs_courses.DegCod"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
+			    Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 
          return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -713,9 +713,9 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_DEG:
+      case Hie_DEG:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -726,7 +726,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
         	                   "tst_questions"
                             " WHERE crs_courses.DegCod=%ld"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
+			    Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -738,9 +738,9 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CRS:
+      case Hie_CRS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -749,7 +749,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
         		           "SUM(Score)"		// row[2]
         	             " FROM tst_questions"
                             " WHERE CrsCod=%ld",
-			    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
          return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get number of test questions",
@@ -759,7 +759,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 			  " FROM tst_questions"
 			 " WHERE CrsCod=%ld"
 			   " AND AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -773,7 +773,7 @@ unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
 // Returns the number of courses with test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
+unsigned Qst_DB_GetNumCrssWithQsts (Hie_Level_t Level,
                                     Qst_AnswerType_t AnsType)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
@@ -781,7 +781,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
    /***** Get number of courses with test questions from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -794,7 +794,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
 			  " FROM tst_questions"
 			 " WHERE AnsType='%s'",
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CTY:
+      case Hie_CTY:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -809,7 +809,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
                               " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                               " AND deg_degrees.DegCod=crs_courses.DegCod"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+			    Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -825,9 +825,9 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_INS:
+      case Hie_INS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -840,7 +840,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
                               " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
                               " AND deg_degrees.DegCod=crs_courses.DegCod"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
+			    Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
          return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -854,9 +854,9 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CTR:
+      case Hie_CTR:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -867,7 +867,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
                             " WHERE deg_degrees.CtrCod=%ld"
                               " AND deg_degrees.DegCod=crs_courses.DegCod"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
+			    Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 
          return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -879,9 +879,9 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_DEG:
+      case Hie_DEG:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -890,7 +890,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
         	                   "tst_questions"
                             " WHERE crs_courses.DegCod=%ld"
                               " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
+			    Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 
          return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -900,16 +900,16 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
 			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CRS:
+      case Hie_CRS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
         		    "SELECT COUNT(DISTINCT CrsCod)"
         	             " FROM tst_questions"
                             " WHERE CrsCod=%ld",
-			    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
          return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with test questions",
@@ -917,7 +917,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
 			  " FROM tst_questions"
 			 " WHERE CrsCod=%ld"
 			   " AND AnsType='%s'",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			 Qst_DB_StrAnswerTypes[AnsType]);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -931,7 +931,7 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Level,
 // Returns the number of courses with pluggable test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
+unsigned Qst_DB_GetNumCrssWithPluggableQsts (Hie_Level_t Level,
                                              Qst_AnswerType_t AnsType)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
@@ -940,7 +940,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
    /***** Get number of courses with test questions from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -961,7 +961,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
 			  " AND tst_config.pluggable='%s'",
 			Qst_DB_StrAnswerTypes[AnsType],
 			Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_CTY:
+      case Hie_CTY:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -979,7 +979,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND crs_courses.CrsCod=tst_questions.CrsCod"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			    Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
@@ -999,10 +999,10 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND tst_questions.AnsType='%s'"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			    Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_INS:
+      case Hie_INS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -1018,7 +1018,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND crs_courses.CrsCod=tst_questions.CrsCod"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			    Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
@@ -1036,10 +1036,10 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND tst_questions.AnsType='%s'"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			    Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_CTR:
+      case Hie_CTR:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -1053,7 +1053,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND crs_courses.CrsCod=tst_questions.CrsCod"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			    Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
@@ -1069,10 +1069,10 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND tst_questions.AnsType='%s'"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			    Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_DEG:
+      case Hie_DEG:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -1084,7 +1084,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND crs_courses.CrsCod=tst_questions.CrsCod"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			    Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
@@ -1098,10 +1098,10 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND tst_questions.AnsType='%s'"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			    Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_CRS:
+      case Hie_CRS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -1111,7 +1111,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                             " WHERE tst_questions.CrsCod=%ld"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
@@ -1123,7 +1123,7 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Level,
                               " AND tst_questions.AnsType='%s'"
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
 			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       default:
@@ -1237,7 +1237,7 @@ unsigned Qst_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
 		   " WHERE QstCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
 		   QstCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1287,7 +1287,7 @@ unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,
 		   " WHERE CrsCod=%ld"
 		     " AND AnsType='%s'"
 		     " AND Stem='%s'",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Qst_DB_StrAnswerTypes[Question->Answer.Type],
 		   Question->Stem);
   }

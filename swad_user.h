@@ -227,7 +227,7 @@ struct Usr_Last
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    struct
      {
-      HieLvl_Level_t Level;	// Course, degree, center, etc.
+      Hie_Level_t Level;	// Course, degree, center, etc.
       long HieCod;		// Course code, degree code, center code, etc.
      } LastHie;
    Act_Action_t LastAct;
@@ -352,13 +352,13 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct Usr_SelectedUsrs *SelectedUsrs);
 
-void Usr_GetListUsrs (HieLvl_Level_t Level,Rol_Role_t Role);
+void Usr_GetListUsrs (Hie_Level_t Level,Rol_Role_t Role);
 
 void Usr_SearchListUsrs (Rol_Role_t Role);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 
-void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Level);
+void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Level);
 
 void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
                                    const struct Usr_InList *UsrInList);

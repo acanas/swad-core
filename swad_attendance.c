@@ -45,7 +45,7 @@
 #include "swad_group.h"
 #include "swad_group_database.h"
 #include "swad_hidden_visible.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_pagination.h"
@@ -687,7 +687,7 @@ static void Att_GetEventDataByCodAndCheckCrs (struct Att_Event *Event)
   {
    if (Att_GetEventDataByCod (Event))
      {
-      if (Event->CrsCod != Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)
+      if (Event->CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
          Err_WrongEventExit ();
      }
    else	// Attendance event not found
@@ -950,7 +950,7 @@ void Att_ReqCreatOrEditEvent (void)
       Att_ResetEvent (&Events.Event);
 
       /* Initialize some fields */
-      Events.Event.CrsCod = Gbl.Hierarchy.Node[HieLvl_CRS].HieCod;
+      Events.Event.CrsCod = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
       Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Events.Event.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
       Events.Event.TimeUTC[Dat_END_TIME] = Events.Event.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
@@ -1110,7 +1110,7 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 					                                    AttCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-				  Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -1337,7 +1337,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	}
       else
 	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-	           Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName);
+	           Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -1368,7 +1368,7 @@ void Att_RemoveCrsEvents (long CrsCod)
 // Returns the number of attendance events
 // in this location (all the platform, the current degree or the current course)
 
-unsigned Att_GetNumEvents (HieLvl_Level_t Level,unsigned *NumNotif)
+unsigned Att_GetNumEvents (Hie_Level_t Level,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1556,7 +1556,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Attendance,
@@ -1983,7 +1983,7 @@ void Att_RegisterStudentsInEvent (void)
 
    /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STD] *****/
    /* Get list of students in the groups selected */
-   Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)	// If there are students in the groups selected...
      {

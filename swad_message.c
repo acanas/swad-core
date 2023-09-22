@@ -47,7 +47,7 @@
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_media.h"
@@ -259,9 +259,9 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
       /***** Get and order lists of users from this course *****/
-      Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
-      Usr_GetListUsrs (HieLvl_CRS,Rol_NET);
-      Usr_GetListUsrs (HieLvl_CRS,Rol_TCH);
+      Usr_GetListUsrs (Hie_CRS,Rol_STD);
+      Usr_GetListUsrs (Hie_CRS,Rol_NET);
+      Usr_GetListUsrs (Hie_CRS,Rol_TCH);
       NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +	// Students
 	             Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +	// Non-editing teachers
 		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;		// Teachers
@@ -527,7 +527,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
    char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    unsigned ColSpan;
-   bool StdsAndTchsWritten = Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
+   bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
                              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
@@ -863,10 +863,10 @@ void Msg_RecMsgFromUsr (void)
                Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
                                              (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                             0),
-                                             Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
-                                             Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
-                                             Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
-                                             Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+                                             Gbl.Hierarchy.Node[Hie_INS].HieCod,
+                                             Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+                                             Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+                                             Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
             /***** Show an alert indicating that the message has been sent successfully *****/
             Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
@@ -1280,7 +1280,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    MsgCod = Msg_DB_CreateNewMsg (Subject,Content,Media->MedCod);
 
    /***** Insert message in sent messages *****/
-   Msg_DB_CreateSntMsg (MsgCod,Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+   Msg_DB_CreateSntMsg (MsgCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Increment number of messages sent by me *****/
    Prf_DB_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2315,7 +2315,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
       if (Crs_GetCourseDataByCod (&Crs))
         {
          ThereIsOrgCrs = true;
-         if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Node[HieLvl_CRS].HieCod)))	// Message sent from current course
+         if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)))	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	       HTM_TxtF ("(%s)",Txt_from_this_course);

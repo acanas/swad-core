@@ -164,7 +164,7 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
    /***** Get countries from database *****/
    /* Build order subquery */
    if (asprintf (&OrderBySubQuery,
-		 OrderBySubQueryFmt[Gbl.Hierarchy.List[HieLvl_SYS].SelectedOrder],
+		 OrderBySubQueryFmt[Gbl.Hierarchy.List[Hie_SYS].SelectedOrder],
 		 Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
       Err_NotEnoughMemoryExit ();
 
@@ -283,6 +283,15 @@ void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
   }
 
 /*****************************************************************************/
+/******************** Get number of countries in system **********************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumCtysInSys (__attribute__((unused)) long SysCod)
+  {
+   return (unsigned) DB_GetNumRowsTable ("cty_countrs");
+  }
+
+/*****************************************************************************/
 /***************** Get number of countries with institutions *****************/
 /*****************************************************************************/
 
@@ -355,7 +364,7 @@ unsigned Cty_DB_GetNumCtysWithCrss (void)
 /*****************************************************************************/
 
 unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Level,long Cod)
+                                    Hie_Level_t Level,long Cod)
   {
    char SubQuery[128];
 
@@ -474,7 +483,7 @@ void Cty_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
 		   " AND ins_instits.InsCod=ctr_centers.InsCod"
 		   " AND ctr_centers.Latitude<>0"
 		   " AND ctr_centers.Longitude<>0",
-		 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod) < 0)
+		 Gbl.Hierarchy.Node[Hie_CTY].HieCod) < 0)
       Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -495,7 +504,7 @@ unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res)
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND ctr_centers.Latitude<>0"
 		     " AND ctr_centers.Longitude<>0",
-		   Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CTY].HieCod);
   }
 
 /*****************************************************************************/
@@ -558,7 +567,7 @@ void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBU
 		     " SET MapAttribution='%s'"
 		   " WHERE CtyCod='%03ld'",
 	           NewMapAttribution,
-	           Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
+	           Gbl.Hierarchy.Node[Hie_CTY].HieCod);
   }
 
 /*****************************************************************************/

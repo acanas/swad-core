@@ -44,7 +44,7 @@
 #include "swad_global.h"
 #include "swad_hidden_visible.h"
 #include "swad_hierarchy.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
@@ -172,11 +172,11 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    ExaCod = ParCod_GetPar (ParCod_Exa);
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Hie_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!CallsForExams->CallForExam.CrsFullName[0])
       Str_Copy (CallsForExams->CallForExam.CrsFullName,
-	        Gbl.Hierarchy.Node[HieLvl_CRS].FullName,
+	        Gbl.Hierarchy.Node[Hie_CRS].FullName,
                 sizeof (CallsForExams->CallForExam.CrsFullName) - 1);
 
    /***** Get the year *****/
@@ -184,7 +184,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    Par_GetParUnsignedLong ("Year",
 			   0,	// N.A.
 			   Deg_MAX_YEARS_PER_DEGREE,
-			   (unsigned long) Gbl.Hierarchy.Node[HieLvl_CRS].Specific.Year);
+			   (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].Specific.Year);
 
    /***** Get the type of call for exam *****/
    Par_GetParText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);
@@ -358,7 +358,7 @@ void Cfe_ReceiveCallForExam2 (void)
    TmlNot_StoreAndPublishNote (TmlNot_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
 
    /***** Show calls for exams *****/
    Cfe_ListCallsForExamsEdit ();
@@ -453,7 +453,7 @@ void Cfe_RemoveCallForExam1 (void)
    Tml_DB_MarkNoteAsUnavailable (TmlNot_CALL_FOR_EXAM,ExaCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[HieLvl_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
   }
 
 void Cfe_RemoveCallForExam2 (void)
@@ -661,7 +661,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 	   }
       else
 	 Ale_ShowAlert (Ale_INFO,Txt_No_calls_for_exams_of_X,
-			Gbl.Hierarchy.Node[HieLvl_CRS].FullName);
+			Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -950,13 +950,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
-			       Gbl.Hierarchy.Node[HieLvl_INS].WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (HieLvl_INS,
-			     Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
-			     Gbl.Hierarchy.Node[HieLvl_INS].FullName,
+			       Gbl.Hierarchy.Node[Hie_INS].WWW,The_GetSuffix ());
+	       Lgo_DrawLogo (Hie_INS,
+			     Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			     Gbl.Hierarchy.Node[Hie_INS].FullName,
 			     64,NULL);
 	       HTM_BR ();
-	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_INS].FullName);
+	       HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_End ();
 	    HTM_TD_End ();
@@ -968,9 +968,9 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].WWW,
+			       Gbl.Hierarchy.Node[Hie_DEG].WWW,
 			       The_GetSuffix ());
-	       HTM_Txt (Gbl.Hierarchy.Node[HieLvl_DEG].FullName);
+	       HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_End ();
 	    HTM_TD_End ();
@@ -1001,7 +1001,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
-		  HTM_INPUT_TEXT ("CrsName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
+		  HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"CrsName\" size=\"30\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1607,20 +1607,20 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    extern const char *Txt_CALL_FOR_EXAM_Material_allowed;
    extern const char *Txt_CALL_FOR_EXAM_Other_information;
    extern const char *Txt_hours_ABBREVIATION;
-   struct Hie_Node Hie[HieLvl_NUM_LEVELS];
+   struct Hie_Node Hie[Hie_NUM_LEVELS];
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Get data of course *****/
-   Hie[HieLvl_CRS].HieCod = CallsForExams->CallForExam.CrsCod;
-   Crs_GetCourseDataByCod (&Hie[HieLvl_CRS]);
+   Hie[Hie_CRS].HieCod = CallsForExams->CallForExam.CrsCod;
+   Crs_GetCourseDataByCod (&Hie[Hie_CRS]);
 
    /***** Get data of degree *****/
-   Hie[HieLvl_DEG].HieCod = Hie[HieLvl_CRS].PrtCod;
-   Deg_GetDegreeDataByCod (&Hie[HieLvl_DEG]);
+   Hie[Hie_DEG].HieCod = Hie[Hie_CRS].PrtCod;
+   Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
 
    /***** Get data of institution *****/
-   Hie[HieLvl_INS].HieCod = Deg_DB_GetInsCodOfDegreeByCod (Hie[HieLvl_DEG].HieCod);
-   Ins_GetInstitDataByCod (&Hie[HieLvl_INS]);
+   Hie[Hie_INS].HieCod = Deg_DB_GetInsCodOfDegreeByCod (Hie[Hie_DEG].HieCod);
+   Ins_GetInstitDataByCod (&Hie[Hie_INS]);
 
    /***** Convert struct date to a date string *****/
    Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,StrExamDate);
@@ -1641,8 +1641,8 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                             "%s: %s<br />"
                             "%s: %s<br />"
                             "%s: %s",
-                 Txt_Institution,Hie[HieLvl_INS].FullName,
-                 Txt_Degree,Hie[HieLvl_DEG].FullName,
+                 Txt_Institution,Hie[Hie_INS].FullName,
+                 Txt_Degree,Hie[Hie_DEG].FullName,
                  Txt_CALL_FOR_EXAM_Course,CallsForExams->CallForExam.CrsFullName,
                  Txt_CALL_FOR_EXAM_Year_or_semester,Txt_YEAR_OF_DEGREE[CallsForExams->CallForExam.Year],
                  Txt_CALL_FOR_EXAM_Session,CallsForExams->CallForExam.Session,

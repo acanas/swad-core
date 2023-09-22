@@ -33,7 +33,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 
 /*****************************************************************************/
@@ -176,13 +176,13 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 		      Act_Action_t NextAction,
                       bool PutParLocationIfNoSession)
   {
-   static const char *ParName[HieLvl_NUM_LEVELS] =
+   static const char *ParName[Hie_NUM_LEVELS] =
      {
-      [HieLvl_CTY] = "cty",
-      [HieLvl_INS] = "ins",
-      [HieLvl_CTR] = "ctr",
-      [HieLvl_DEG] = "deg",
-      [HieLvl_CRS] = "crs",
+      [Hie_CTY] = "cty",
+      [Hie_INS] = "ins",
+      [Hie_CTR] = "ctr",
+      [Hie_DEG] = "deg",
+      [Hie_CRS] = "crs",
      };
    char ParAction[Frm_MAX_BYTES_PARAM_ACTION + 1];
    char ParSession[Frm_MAX_BYTES_PARAM_SESSION + 1];

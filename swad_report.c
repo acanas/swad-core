@@ -39,7 +39,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_log_database.h"
@@ -484,7 +484,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
    struct Hie_Node Ins;
 
    /***** Begin section *****/
@@ -1067,11 +1067,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 /***** Write number of teachers / students in course *****/
 	 if (WriteNumUsrs)
 	    fprintf (Rep_File," (%u %s / %u %s)",
-		     Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.HieCod,
+		     Enr_GetCachedNumUsrsInCrss (Hie_CRS,Crs.HieCod,
 				                 1 << Rol_NET |
 					         1 << Rol_TCH),
 		     Txt_teachers_ABBREVIATION,
-		     Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.HieCod,
+		     Enr_GetCachedNumUsrsInCrss (Hie_CRS,Crs.HieCod,
 				                 1 << Rol_STD),
 		     Txt_students_ABBREVIATION);
 	}

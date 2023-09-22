@@ -27,24 +27,24 @@
 
 #include "swad_database.h"
 #include "swad_hierarchy_database.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_scope.h"
 
 /*****************************************************************************/
 /******************* Get number of countries with users **********************/
 /*****************************************************************************/
 
-void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Level,long HieCod)
+void Hie_DB_BuildSubquery (char SubQuery[128],Hie_Level_t Level,long HieCod)
   {
-   static const char *Format[HieLvl_NUM_LEVELS] =
+   static const char *Format[Hie_NUM_LEVELS] =
      {
-      [HieLvl_UNK] = "",				// Unknown
-      [HieLvl_SYS] = "",				// System
-      [HieLvl_CTY] = "ins_instits.CtyCod=%ld AND ",	// Country
-      [HieLvl_INS] = "ctr_centers.InsCod=%ld AND ",	// Institution
-      [HieLvl_CTR] = "deg_degrees.CtrCod=%ld AND ",	// Center
-      [HieLvl_DEG] = "crs_courses.DegCod=%ld AND ",	// Degree
-      [HieLvl_CRS] = "crs_users.CrsCod=%ld AND ",	// Course
+      [Hie_UNK] = "",				// Unknown
+      [Hie_SYS] = "",				// System
+      [Hie_CTY] = "ins_instits.CtyCod=%ld AND ",	// Country
+      [Hie_INS] = "ctr_centers.InsCod=%ld AND ",	// Institution
+      [Hie_CTR] = "deg_degrees.CtrCod=%ld AND ",	// Center
+      [Hie_DEG] = "crs_courses.DegCod=%ld AND ",	// Degree
+      [Hie_CRS] = "crs_users.CrsCod=%ld AND ",	// Course
      };
 
    if (HieCod > 0)
@@ -97,8 +97,8 @@ unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod)
 		      " AND usr_admins.Cod=deg_degrees.DegCod)"
 		    " ORDER BY S,"
 		              "FullName",
-		   (unsigned) HieLvl_SYS,UsrCod,Hie_GetDBStrFromLevel (HieLvl_SYS),
-		   (unsigned) HieLvl_INS,UsrCod,Hie_GetDBStrFromLevel (HieLvl_INS),
-		   (unsigned) HieLvl_CTR,UsrCod,Hie_GetDBStrFromLevel (HieLvl_CTR),
-		   (unsigned) HieLvl_DEG,UsrCod,Hie_GetDBStrFromLevel (HieLvl_DEG));
+		   (unsigned) Hie_SYS,UsrCod,Hie_GetDBStrFromLevel (Hie_SYS),
+		   (unsigned) Hie_INS,UsrCod,Hie_GetDBStrFromLevel (Hie_INS),
+		   (unsigned) Hie_CTR,UsrCod,Hie_GetDBStrFromLevel (Hie_CTR),
+		   (unsigned) Hie_DEG,UsrCod,Hie_GetDBStrFromLevel (Hie_DEG));
   }

@@ -44,7 +44,7 @@
 #include "swad_game_database.h"
 #include "swad_global.h"
 #include "swad_hidden_visible.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
 #include "swad_match_database.h"

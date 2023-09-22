@@ -260,7 +260,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res)
 		   "SELECT UsrCod"
 		    " FROM crs_users"
 		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -275,7 +275,7 @@ unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
 		    " FROM crs_users"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld",
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -292,7 +292,7 @@ unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod<>%ld"
 		     " AND Role=%u",	// Teachers only
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Rol_TCH);
   }
@@ -442,7 +442,7 @@ unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 #define Enr_DB_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
 
-unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles,
+unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles,
                                   bool AnyUserInCourses)
   {
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -499,7 +499,7 @@ unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles,
    /***** Get number of users from database *****/
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
          if (AnyUserInCourses)	// Any user
             return (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -513,7 +513,7 @@ unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles,
 			   " WHERE Role"
 			       "%s",
 			   SubQueryRoles);
-      case HieLvl_CTY:
+      case Hie_CTY:
          if (AnyUserInCourses)	// Any user
             return (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -547,7 +547,7 @@ unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles,
 			       "%s",
 			   Cod,
 			   SubQueryRoles);
-      case HieLvl_INS:
+      case Hie_INS:
          if (AnyUserInCourses)	// Any user
             return (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -577,7 +577,7 @@ unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles,
 			       "%s",
 			   Cod,
 			   SubQueryRoles);
-      case HieLvl_CTR:
+      case Hie_CTR:
          if (AnyUserInCourses)	// Any user
             return (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -603,7 +603,7 @@ unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles,
 			       "%s",
 			   Cod,
 			   SubQueryRoles);
-      case HieLvl_DEG:
+      case Hie_DEG:
          if (AnyUserInCourses)	// Any user
             return (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -625,7 +625,7 @@ unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Level,long Cod,unsigned Roles,
 			       "%s",
 			  Cod,
 			  SubQueryRoles);
-      case HieLvl_CRS:
+      case Hie_CRS:
          if (AnyUserInCourses)	// Any user
             return (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -670,11 +670,11 @@ unsigned Enr_DB_GetNumUsrsNotBelongingToAnyCrs (void)
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
-double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t Role)
+double Enr_DB_GetAverageNumUsrsPerCrs (Hie_Level_t Level,long Cod,Rol_Role_t Role)
   {
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -689,7 +689,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 						 " WHERE Role=%u"
 					      " GROUP BY CrsCod) AS NumUsrsTable",
 					 (unsigned) Role);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -724,7 +724,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_INS:
+      case Hie_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -755,7 +755,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -782,7 +782,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -805,8 +805,8 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					      " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_CRS:
-	 return (double) Enr_GetNumUsrsInCrss (HieLvl_CRS,Cod,
+      case Hie_CRS:
+	 return (double) Enr_GetNumUsrsInCrss (Hie_CRS,Cod,
 				               Role == Rol_UNK ? 1 << Rol_STD |
 							         1 << Rol_NET |
 							         1 << Rol_TCH :	// Any user
@@ -822,11 +822,11 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 /************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t Role)
+double Enr_DB_GetAverageNumCrssPerUsr (Hie_Level_t Level,long Cod,Rol_Role_t Role)
   {
    switch (Level)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -841,7 +841,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 						 " WHERE Role=%u"
 					      " GROUP BY UsrCod) AS NumCrssTable",
 					 (unsigned) Role);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -876,7 +876,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_INS:
+      case Hie_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -907,7 +907,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					       " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -934,7 +934,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -957,7 +957,7 @@ double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Level,long Cod,Rol_Role_t 
 					      " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case HieLvl_CRS:
+      case Hie_CRS:
          return 1.0;
       default:
          Err_WrongHierarchyLevelExit ();
@@ -1015,7 +1015,7 @@ long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole)
 				" (CrsCod,UsrCod,Role,RequestTime)"
 				" VALUES"
 				" (%ld,%ld,%u,NOW())",
-				Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				(unsigned) NewRole);
   }
@@ -1035,7 +1035,7 @@ void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole
 		     " AND UsrCod=%ld",
 		   (unsigned) NewRole,
 		   ReqCod,
-		   Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1047,7 +1047,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:                // Show requesters for the whole platform
+      case Hie_SYS:                // Show requesters for the whole platform
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_TCH:
@@ -1087,7 +1087,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (HieLvl_DEG),
+			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_DEG),
 			       RolesSelected);
 	    case Rol_CTR_ADM:
 	       // Requests in all centers administrated by me
@@ -1109,7 +1109,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (HieLvl_CTR),
+			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_CTR),
 			       RolesSelected);
 	    case Rol_INS_ADM:
 	       // Requests in all institutions administrated by me
@@ -1133,7 +1133,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (HieLvl_INS),
+			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_INS),
 			       RolesSelected);
 	   case Rol_SYS_ADM:
 	       // All requests
@@ -1153,7 +1153,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 	       return 0;	// Not reached
 	   }
 	 break;
-      case HieLvl_CTY:                // Show requesters for the current country
+      case Hie_CTY:                // Show requesters for the current country
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_TCH:
@@ -1183,7 +1183,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:
 	       // Requests in degrees of this country administrated by me
@@ -1211,8 +1211,8 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
-			       Hie_GetDBStrFromLevel (HieLvl_DEG),
-			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			       Hie_GetDBStrFromLevel (Hie_DEG),
+			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_CTR_ADM:
 	       // Requests in centers of this country administrated by me
@@ -1240,8 +1240,8 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
-			       Hie_GetDBStrFromLevel (HieLvl_CTR),
-			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			       Hie_GetDBStrFromLevel (Hie_CTR),
+			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_INS_ADM:
 	       // Requests in institutions of this country administrated by me
@@ -1269,8 +1269,8 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
-			       Hie_GetDBStrFromLevel (HieLvl_INS),
-			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			       Hie_GetDBStrFromLevel (Hie_INS),
+			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       RolesSelected);
 	    case Rol_SYS_ADM:
 	       // Requests in any course of this country
@@ -1293,14 +1293,14 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
 	       return 0;	// Not reached
 	   }
 	 return 0;		// Not reached
-      case HieLvl_INS:                // Show requesters for the current institution
+      case Hie_INS:                // Show requesters for the current institution
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_TCH:
@@ -1328,7 +1328,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:
 	       // Requests in degrees of this institution administrated by me
@@ -1354,8 +1354,8 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
-			       Hie_GetDBStrFromLevel (HieLvl_DEG),
-			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			       Hie_GetDBStrFromLevel (Hie_DEG),
+			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       RolesSelected);
 	    case Rol_CTR_ADM:
 	       // Requests in centers of this institution administrated by me
@@ -1380,8 +1380,8 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (HieLvl_CTR),
-			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			       Gbl.Usrs.Me.UsrDat.UsrCod,Hie_GetDBStrFromLevel (Hie_CTR),
+			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       RolesSelected);
 	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this institution
 	    case Rol_SYS_ADM:
@@ -1403,14 +1403,14 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
 	       return 0;	// Not reached
 	   }
 	 return 0;		// Not reached
-      case HieLvl_CTR:                // Show requesters for the current center
+      case Hie_CTR:                // Show requesters for the current center
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_TCH:
@@ -1436,7 +1436,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:
 	       // Requests in degrees of this center administrated by me
@@ -1460,8 +1460,8 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
-			       Hie_GetDBStrFromLevel (HieLvl_DEG),
-			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			       Hie_GetDBStrFromLevel (Hie_DEG),
+			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			       RolesSelected);
 	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all requesters from this center
 	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this center
@@ -1482,14 +1482,14 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
 	       return 0;	// Not reached
 	   }
 	 return 0;		// Not reached
-      case HieLvl_DEG:        // Show requesters for the current degree
+      case Hie_DEG:        // Show requesters for the current degree
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_TCH:
@@ -1513,7 +1513,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " ORDER BY crs_requests.RequestTime DESC",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
 			       (unsigned) Rol_TCH,
-			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			       RolesSelected);
 	    case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all requesters from this degree
 	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all requesters from this degree
@@ -1533,14 +1533,14 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 				 " AND crs_courses.CrsCod=crs_requests.CrsCod"
 				 " AND ((1<<crs_requests.Role)&%u)<>0"
 			       " ORDER BY crs_requests.RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();
 	       return 0;	// Not reached
 	   }
 	 return 0;		// Not reached
-      case HieLvl_CRS:        // Show requesters for the current course
+      case Hie_CRS:        // Show requesters for the current course
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_TCH:	// If I am logged as teacher of this course   , I can view all requesters from this course
@@ -1560,7 +1560,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       " WHERE CrsCod=%ld"
 				 " AND ((1<<Role)&%u)<>0"
 			       " ORDER BY RequestTime DESC",
-			       Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       RolesSelected);
 	    default:
 	       Err_NoPermissionExit ();

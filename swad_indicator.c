@@ -43,7 +43,7 @@
 #include "swad_form.h"
 #include "swad_forum_database.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_indicator.h"
 #include "swad_indicator_database.h"
@@ -168,7 +168,7 @@ void Ind_ReqIndicatorsCourses (void)
 		  if (asprintf (&SelectClass,"INDICATORS_INPUT INPUT_%s",
 		                The_GetSuffix ()) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[HieLvl_INS].HieCod,	// Departments in current insitution
+		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current insitution
 					       Indicators.DptCod,			// Selected department
 					       Par_CodeStr[ParCod_Dpt],			// Parameter name
 					       SelectClass,				// Selector class
@@ -242,17 +242,17 @@ void Ind_ReqIndicatorsCourses (void)
 static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators)
   {
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-	               1 << HieLvl_CTY |
-		       1 << HieLvl_INS |
-		       1 << HieLvl_CTR |
-		       1 << HieLvl_DEG |
-		       1 << HieLvl_CRS;
-   Gbl.Scope.Default = HieLvl_CRS;
+   Gbl.Scope.Allowed = 1 << Hie_SYS |
+	               1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
+   Gbl.Scope.Default = Hie_CRS;
    Sco_GetScope ("ScopeInd");
 
    /***** Get degree type code *****/
-   Indicators->DegTypCod = (Gbl.Scope.Current == HieLvl_SYS) ?
+   Indicators->DegTypCod = (Gbl.Scope.Current == Hie_SYS) ?
 	                   ParCod_GetPar (ParCod_OthDegTyp) :	// -1L (any degree type) is allowed here
                            -1L;
 
@@ -828,10 +828,10 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		     break;
 		  case Ind_INDICATORS_FULL:
 		     /* Get number of users */
-		     NumTchs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
+		     NumTchs = Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
 						     1 << Rol_NET |	// Non-editing teachers
 						     1 << Rol_TCH);	// Teachers
-		     NumStds = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
+		     NumStds = Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
 						     1 << Rol_STD);	// Students
 
 		     HTM_TR_Begin (NULL);

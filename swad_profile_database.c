@@ -268,7 +268,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT UsrCod,"		// row[0]
@@ -284,7 +284,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 			 FldName,
 			 FldName,
 			 FldName);
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -310,10 +310,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FldName,
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			 FldName,
 			 FldName);
-      case HieLvl_INS:
+      case Hie_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -337,10 +337,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FldName,
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			 FldName,
 			 FldName);
-      case HieLvl_CTR:
+      case Hie_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -362,10 +362,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FldName,
-			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			 FldName,
 			 FldName);
-      case HieLvl_DEG:
+      case Hie_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -385,10 +385,10 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FldName,
-			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+			 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			 FldName,
 			 FldName);
-      case HieLvl_CRS:
+      case Hie_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -406,7 +406,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FldName)
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
 			 FldName,
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod,
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			 FldName,
 			 FldName);
       default:
@@ -423,7 +423,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
   {
    switch (Gbl.Scope.Current)
      {
-      case HieLvl_SYS:
+      case Hie_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT UsrCod,"						// row[0]
@@ -438,7 +438,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 		      " ORDER BY NumClicksPerDay DESC,"
 			        "UsrCod"
 			 " LIMIT 100");
-      case HieLvl_CTY:
+      case Hie_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -465,8 +465,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 		      " ORDER BY NumClicksPerDay DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_CTY].HieCod);
-      case HieLvl_INS:
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      case Hie_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -491,8 +491,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 		      " ORDER BY NumClicksPerDay DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_INS].HieCod);
-      case HieLvl_CTR:
+			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
+      case Hie_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -515,8 +515,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 		      " ORDER BY NumClicksPerDay DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_CTR].HieCod);
-      case HieLvl_DEG:
+			 Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      case Hie_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -537,8 +537,8 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 		      " ORDER BY NumClicksPerDay DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
-      case HieLvl_CRS:
+			 Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+      case Hie_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT DISTINCT "
@@ -557,7 +557,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 		      " ORDER BY NumClicksPerDay DESC,"
 			        "usr_figures.UsrCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       default:
          Err_WrongHierarchyLevelExit ();
          return 0;	// Not reached

@@ -95,13 +95,6 @@ so that all calculations should be performed by the preprocessor with integers.
 #define Cns_MAX_DECIMAL_DIGITS_LONGLONG		(1 + Cns_MAX_DECIMAL_DIGITS_ULONGLONG)
 #define Cns_MAX_DECIMAL_DIGITS_INT128		(1 + Cns_MAX_DECIMAL_DIGITS_UINT128  )
 
-/* Hierarchy names */
-#define Cns_HIERARCHY_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
-#define Cns_HIERARCHY_MAX_BYTES_SHRT_NAME	((Cns_HIERARCHY_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Cns_HIERARCHY_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
-#define Cns_HIERARCHY_MAX_BYTES_FULL_NAME	((Cns_HIERARCHY_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/

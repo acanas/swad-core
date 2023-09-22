@@ -62,29 +62,26 @@ void Hie_PutParOtherHieCod (void *HieCod);
 
 Hie_Order_t Hie_GetParHieOrder (void);
 
-void Hie_FreeList (HieLvl_Level_t Level);
+void Hie_FreeList (Hie_Level_t Level);
 
-void Hie_FlushCacheUsrBelongsTo (HieLvl_Level_t Level);
-bool Hie_CheckIfUsrBelongsTo (HieLvl_Level_t Level,long UsrCod,long HieCod,
+void Hie_FlushCacheUsrBelongsTo (Hie_Level_t Level);
+bool Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
                               bool CountOnlyAcceptedCourses);
 
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);
 
-unsigned Hie_GetCachedNumNodesInSys (FigCch_FigureCached_t Figure,
-				     const char *Table);
+void Hie_FlushCachedNumNodesInHieLvl (Hie_Level_t LevelChildren,
+		      		      Hie_Level_t LevelParent);
+unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t LevelChildren,
+		      		        Hie_Level_t LevelParent,long HieCod);
+unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
+		      	          Hie_Level_t LevelParent,long HieCod);
 
-void Hie_FlushCachedNumNodesInHieLvl (HieLvl_Level_t LevelChildren,
-		      		      HieLvl_Level_t LevelParent);
-unsigned Hie_GetCachedNumNodesInHieLvl (HieLvl_Level_t LevelChildren,
-		      		        HieLvl_Level_t LevelParent,long HieCod);
-unsigned Hie_GetNumNodesInHieLvl (HieLvl_Level_t LevelChildren,
-		      	          HieLvl_Level_t LevelParent,long HieCod);
-
-void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (HieLvl_Level_t Level);
-unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (HieLvl_Level_t Level,
+void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t Level);
+unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
 						 struct Hie_Node *Node);
-unsigned Hie_GetNumUsrsWhoClaimToBelongTo (HieLvl_Level_t Level,
+unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
 					   struct Hie_Node *Node);
 
 #endif

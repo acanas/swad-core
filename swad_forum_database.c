@@ -126,21 +126,21 @@ unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
 /************* Remove all threads and posts in forums of a scope *************/
 /*****************************************************************************/
 
-void For_DB_RemoveForums (HieLvl_Level_t Level,long HieCod)
+void For_DB_RemoveForums (Hie_Level_t Level,long HieCod)
   {
    static const struct
      {
       For_ForumType_t Usrs;
       For_ForumType_t Tchs;
-     } ForumType[HieLvl_NUM_LEVELS] =
+     } ForumType[Hie_NUM_LEVELS] =
      {
-      [HieLvl_UNK] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
-      [HieLvl_SYS] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Not removable
-      [HieLvl_CTY] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
-      [HieLvl_INS] = {For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},
-      [HieLvl_CTR] = {For_FORUM_CENTER_USRS,For_FORUM_CENTER_TCHS},
-      [HieLvl_DEG] = {For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},
-      [HieLvl_CRS] = {For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},
+      [Hie_UNK] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
+      [Hie_SYS] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Not removable
+      [Hie_CTY] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
+      [Hie_INS] = {For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},
+      [Hie_CTR] = {For_FORUM_CENTER_USRS,For_FORUM_CENTER_TCHS},
+      [Hie_DEG] = {For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},
+      [Hie_CRS] = {For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},
      };
 
    /***** Remove disabled posts *****/

@@ -41,7 +41,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_hierarchy_level.h"
+#include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_log.h"
 #include "swad_parameter.h"
@@ -127,7 +127,7 @@ void Con_ShowConnectedUsrs (void)
       HTM_FIELDSET_End ();
 
       /***** Show connected users in the current location *****/
-      if (Gbl.Scope.Current != HieLvl_UNK)
+      if (Gbl.Scope.Current != Hie_UNK)
 	{
 	 HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
 	    HTM_LEGEND (Txt_Connected_PLURAL);
@@ -232,13 +232,13 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
   {
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&	// Right column visible
-       Gbl.Hierarchy.Level == HieLvl_CRS &&		// Course selected
+       Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
        (Gbl.Usrs.Me.IBelongToCurrentCrs ||		// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
       Gbl.Usrs.Connected.NumUsrs       = 0;
       Gbl.Usrs.Connected.NumUsrsToList = 0;
-      Gbl.Scope.Current = HieLvl_CRS;
+      Gbl.Scope.Current = Hie_CRS;
 
       /***** Number of teachers *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
@@ -305,18 +305,18 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
   {
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
-   char CourseName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+   char CourseName[Hie_MAX_BYTES_SHRT_NAME + 1];
    struct Con_ConnectedUsrs Usrs;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[HieLvl_CRS].HieCod <= 0)	// No course selected
+   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)	// No course selected
       return;
 
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
       HTM_BUTTON_Submit_Begin (Txt_Connected_users,"class=\"BT_LINK\"");
-	 Str_Copy (CourseName,Gbl.Hierarchy.Node[HieLvl_CRS].ShrtName,sizeof (CourseName) - 1);
+	 Str_Copy (CourseName,Gbl.Hierarchy.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
 	 Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
 	 HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
       HTM_BUTTON_End ();
@@ -398,7 +398,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
 	       Frm_BeginForm (ActLstCon);
-		  Sco_PutParScope ("ScopeCon",HieLvl_CRS);
+		  Sco_PutParScope ("ScopeCon",Hie_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
 		                   Txt_Connected_users,
 				   "class=\"ICO16x16 ICO_HIGHLIGHT ICO_BLACK_%s\"",
@@ -501,7 +501,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 
       /* Get course code (row[1]) */
       Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-	                                        Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	                                        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
       /* Compute elapsed time from last access */
       if (sscanf (row[2],"%ld",&Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff) != 1)
@@ -655,8 +655,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    time_t TimeDiff;
    const char *ClassTxt;
    struct Usr_Data UsrDat;
-   bool PutLinkToRecord = (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
-	                   Gbl.Scope.Current   == HieLvl_CRS &&	// Scope is current course
+   bool PutLinkToRecord = (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+	                   Gbl.Scope.Current   == Hie_CRS &&	// Scope is current course
 	                   (Role == Rol_STD ||			// Role is student,...
 	                    Role == Rol_NET ||			// ...non-editing teacher...
 	                    Role == Rol_TCH));			// ...or teacher
@@ -681,7 +681,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
                                                       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
            {
 	    /* Get course code (row[1]) */
-	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)

@@ -94,7 +94,7 @@ unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res)
 		    " FROM crs_courses"
 		   " WHERE DegCod=%ld"
 		   " ORDER BY ShortName",
-		   Gbl.Hierarchy.Node[HieLvl_DEG].HieCod);
+		   Gbl.Hierarchy.Node[Hie_DEG].HieCod);
   }
 
 /*****************************************************************************/
@@ -118,7 +118,7 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 		     " AND (Status & %u)=0"
 		   " ORDER BY Year,"
 			     "ShortName",
-		   Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
+		   Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 		   (unsigned) Hie_STATUS_BIT_REMOVED);	// All courses except those removed
   }
 
@@ -153,7 +153,7 @@ long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void)
 			      "SELECT DegCod"
 			       " FROM crs_courses"
 			      " WHERE CrsCod=%ld",
-			      Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+			      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -161,8 +161,8 @@ long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void)
 /*****************************************************************************/
 
 void Crs_DB_GetShortNamesByCod (long CrsCod,
-                                char CrsShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-                                char DegShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
+                                char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1],
+                                char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -185,8 +185,8 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
      {
       /***** Get the course short name and degree short name *****/
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (CrsShortName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-      Str_Copy (DegShortName,row[1],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+      Str_Copy (CrsShortName,row[0],Hie_MAX_BYTES_SHRT_NAME);
+      Str_Copy (DegShortName,row[1],Hie_MAX_BYTES_SHRT_NAME);
      }
 
    /***** Free structure that stores the query result *****/
@@ -336,6 +336,15 @@ unsigned Crs_DB_SearchCrss (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/********************** Get number of courses in system **********************/
+/*****************************************************************************/
+
+unsigned Crs_DB_GetNumCrssInSys (__attribute__((unused)) long SysCod)
+  {
+   return (unsigned) DB_GetNumRowsTable ("crs_courses");
+  }
+
+/*****************************************************************************/
 /******************** Get number of courses in a country *********************/
 /*****************************************************************************/
 
@@ -408,7 +417,7 @@ unsigned Crs_DB_GetNumCrssInDeg (long DegCod)
 /*****************************************************************************/
 
 unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Level,long HieCod)
+                                    Hie_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
@@ -552,7 +561,7 @@ void Crs_DB_UpdateCrsLastClick (void)
 		    " (CrsCod,LastTime)"
 		    " VALUES"
 		    " (%ld,NOW())",
-		    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+		    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

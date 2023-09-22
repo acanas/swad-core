@@ -88,15 +88,14 @@ struct Globals
      } Action;
    struct
      {
-      HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
-      long HieCod;		// Code of the current country, institution, center, degree or course
-      struct Hie_List List[HieLvl_NUM_LEVELS];	// List of child nodes of current node
-      struct Hie_Node Node[HieLvl_NUM_LEVELS];	// Current node
+      Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
+      struct Hie_List List[Hie_NUM_LEVELS];	// List of child nodes of current node
+      struct Hie_Node Node[Hie_NUM_LEVELS];	// Current node
      } Hierarchy;
    struct
      {
-      HieLvl_Level_t Current;
-      HieLvl_Level_t Default;
+      Hie_Level_t Current;
+      Hie_Level_t Default;
       unsigned Allowed;
      } Scope;
    struct
@@ -294,44 +293,48 @@ struct Globals
 	 long HieCod;
 	 Lan_Language_t Language;
 	 char CtyName[Cty_MAX_BYTES_NAME + 1];
+         bool Valid;
 	} CountryName;
       struct
 	{
 	 long HieCod;
-	 char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-	 char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+	 char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+	 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
+         bool Valid;
 	} InstitutionShrtNameAndCty;
       struct
         {
 	 long HieCod;
 	 unsigned NumDpts;
-        } NumDptsInIns;
+          bool Valid;
+       } NumDptsInIns;
       struct
         {
-         bool Valid;
 	 long HieCod;
 	 unsigned Num;
-        } NumNodesInHieLvl[HieLvl_NUM_LEVELS][HieLvl_NUM_LEVELS];
+         bool Valid;
+        } NumNodesInHieLvl[Hie_NUM_LEVELS][Hie_NUM_LEVELS];
       struct
         {
-	 bool Valid;
 	 unsigned NumUsrs;
+	 bool Valid;
         } NumUsrsWhoDontClaimToBelongToAnyCty;
       struct
         {
-	 bool Valid;
 	 unsigned NumUsrs;
+	 bool Valid;
         } NumUsrsWhoClaimToBelongToAnotherCty;
       struct
         {
-	 bool Valid;
 	 long HieCod;
 	 unsigned NumUsrs;
-        } NumUsrsWhoClaimToBelongTo[HieLvl_NUM_LEVELS];
+	 bool Valid;
+        } NumUsrsWhoClaimToBelongTo[Hie_NUM_LEVELS];
       struct
 	{
 	 long UsrCod;
 	 bool IsSuperuser;
+	 bool Valid;
 	} UsrIsSuperuser;
       struct
 	{
@@ -339,54 +342,63 @@ struct Globals
 	 long HieCod;
 	 bool CountOnlyAcceptedCourses;
 	 bool Belongs;
-	} UsrBelongsTo[HieLvl_NUM_LEVELS];
+	 bool Valid;
+	} UsrBelongsTo[Hie_NUM_LEVELS];
       struct
 	{
 	 long UsrCod;
 	 bool Belongs;
+	 bool Valid;
 	} UsrBelongsToCurrentCrs;
       struct
 	{
 	 long UsrCod;
 	 bool Accepted;
+	 bool Valid;
 	} UsrHasAcceptedInCurrentCrs;
       struct
 	{
 	 long UsrCod;
 	 bool SharesAnyOfMyCrs;
+	 bool Valid;
 	} UsrSharesAnyOfMyCrs;
       struct
 	{
 	 long GrpCod;
 	 bool IBelong;
+	 bool Valid;
 	} IBelongToGrp;
       struct
 	{
 	 long UsrCod;
 	 bool Shares;
+	 bool Valid;
 	} UsrSharesAnyOfMyGrpsInCurrentCrs;
       struct
 	{
 	 long UsrCod;
 	 long CrsCod;
 	 Rol_Role_t Role;
+	 bool Valid;
 	} RoleUsrInCrs;
       struct
 	{
-	 bool Cached;
 	 Rol_Role_t Role;
+	 bool Valid;
 	} MyRoleInCurrentCrs;
       struct
 	{
 	 long PrjCod;
 	 unsigned RolesInProject;
+	 bool Valid;
 	} MyRolesInProject;
       struct
         {
 	 long UsrCod;
 	 unsigned NumFollowing;
 	 unsigned NumFollowers;
-        } Follow;
+ 	 bool Valid;
+       } Follow;
      } Cache;
   };
 

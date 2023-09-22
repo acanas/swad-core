@@ -48,7 +48,7 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod);
 unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long CtrCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
-void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
 				       long CtrCod,long InsCod);
@@ -57,16 +57,17 @@ unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                             const char *RangeQuery);
 
+unsigned Ctr_DB_GetNumCtrsInSys (__attribute__((unused)) long SysCod);
 unsigned Ctr_DB_GetNumCtrsInCty (long CtyCod);
 unsigned Ctr_DB_GetNumCtrsInIns (long InsCod);
 unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod);
 unsigned Ctr_DB_GetNumCtrsWithMap (void);
 unsigned Ctr_DB_GetNumCtrsWithMapInCty (long CtyCod);
 unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod);
-unsigned Ctr_DB_GetNumCtrsWithDegs (HieLvl_Level_t Level,long Cod);
-unsigned Ctr_DB_GetNumCtrsWithCrss (HieLvl_Level_t Level,long Cod);
+unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t Level,long Cod);
+unsigned Ctr_DB_GetNumCtrsWithCrss (Hie_Level_t Level,long Cod);
 unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Level,long Cod);
+                                    Hie_Level_t Level,long Cod);
 
 void Ctr_DB_UpdateCtrIns (long CtrCod,long NewInsCod);
 void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod);

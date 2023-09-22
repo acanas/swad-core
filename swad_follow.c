@@ -268,9 +268,7 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
 
 void Fol_FlushCacheFollow (void)
   {
-   Gbl.Cache.Follow.UsrCod = -1L;
-   Gbl.Cache.Follow.NumFollowing =
-   Gbl.Cache.Follow.NumFollowers = 0;
+   Gbl.Cache.Follow.Valid = false;
   }
 
 void Fol_GetNumFollow (long UsrCod,
@@ -284,7 +282,8 @@ void Fol_GetNumFollow (long UsrCod,
      }
 
    /***** 2. Fast check: Is number of following already calculated? *****/
-   if (UsrCod == Gbl.Cache.Follow.UsrCod)
+   if (Gbl.Cache.Follow.Valid &&
+       UsrCod == Gbl.Cache.Follow.UsrCod)
      {
       *NumFollowing = Gbl.Cache.Follow.NumFollowing;
       *NumFollowers = Gbl.Cache.Follow.NumFollowers;
@@ -295,6 +294,7 @@ void Fol_GetNumFollow (long UsrCod,
    Gbl.Cache.Follow.UsrCod = UsrCod;
    *NumFollowing = Gbl.Cache.Follow.NumFollowing = Fol_DB_GetNumFollowing (UsrCod);
    *NumFollowers = Gbl.Cache.Follow.NumFollowers = Fol_DB_GetNumFollowers (UsrCod);
+   Gbl.Cache.Follow.Valid = true;
   }
 
 /*****************************************************************************/
@@ -1101,10 +1101,10 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
       Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_FOLLOWER,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 								    0),
-				    Gbl.Hierarchy.Node[HieLvl_INS].HieCod,
-				    Gbl.Hierarchy.Node[HieLvl_CTR].HieCod,
-				    Gbl.Hierarchy.Node[HieLvl_DEG].HieCod,
-				    Gbl.Hierarchy.Node[HieLvl_CRS].HieCod);
+				    Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				    Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				    Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+				    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

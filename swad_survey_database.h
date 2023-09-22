@@ -54,13 +54,13 @@ void Svy_DB_GetSurveyTitle (long SvyCod,char *Title,size_t TitleSize);
 unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);
-unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Level);
-unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Level);
-double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Level);
+unsigned Svy_DB_GetNumCrssWithCrsSurveys (Hie_Level_t Level);
+unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,Hie_Level_t Level);
+double Svy_DB_GetNumQstsPerCrsSurvey (Hie_Level_t Level);
 unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod);
 
 void Svy_DB_RemoveSvy (long SvyCod);
-void Svy_DB_RemoveSvysIn (HieLvl_Level_t Level,long HieCod);
+void Svy_DB_RemoveSvysIn (Hie_Level_t Level,long HieCod);
 
 //---------------------------- Surveys groups ---------------------------------
 void Svy_DB_CreateGrp (long SvyCod,long GrpCod);
@@ -71,7 +71,7 @@ bool Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
 void Svy_DB_RemoveGroupsOfType (long GrpTypCod);
 void Svy_DB_RemoveGroup (long GrpCod);
 void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod);
-void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Level,long HieCod);
+void Svy_DB_RemoveGrpsSvysIn (Hie_Level_t Level,long HieCod);
 
 //--------------------------- Surveys questions -------------------------------
 long Svy_DB_CreateQuestion (long SvyCod,
@@ -91,7 +91,7 @@ unsigned Svy_DB_GetLastQstInd (MYSQL_RES **mysql_res,long SvyCod);
 
 void Svy_DB_RemoveQst (long QstCod);
 void Svy_DB_RemoveQstsSvy (long SvyCod);
-void Svy_DB_RemoveQstsSvysIn (HieLvl_Level_t Level,long HieCod);
+void Svy_DB_RemoveQstsSvysIn (Hie_Level_t Level,long HieCod);
 
 //---------------------------- Surveys answers --------------------------------
 void Svy_DB_CreateAnswer (long QstCod,unsigned AnsInd,const char *Text);
@@ -106,7 +106,7 @@ Svy_AnswerType_t Svy_DB_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB
 void Svy_DB_RemoveAnswerQst (long QstCod,unsigned AnsInd);
 void Svy_DB_RemoveAnswersQst (long QstCod);
 void Svy_DB_RemoveAnswersSvy (long SvyCod);
-void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Level,long HieCod);
+void Svy_DB_RemoveAnswersSvysIn (Hie_Level_t Level,long HieCod);
 
 //---------------------------- Surveys comments -------------------------------
 void Svy_DB_CreateComments (long QstCod,const char *Comments);
@@ -114,7 +114,7 @@ unsigned Svy_DB_GetCommentsQst (MYSQL_RES **mysql_res,long QstCod);
 
 void Svy_DB_RemoveCommentsQst (long QstCod);
 void Svy_DB_RemoveCommentsSvy (long SvyCod);
-void Svy_DB_RemoveCommentsSvysIn (HieLvl_Level_t Level,long HieCod);
+void Svy_DB_RemoveCommentsSvysIn (Hie_Level_t Level,long HieCod);
 
 //--------------------- Users who have answered surveys -----------------------
 void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod);
@@ -123,6 +123,6 @@ bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod);
 unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
 
 void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod);
-void Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (HieLvl_Level_t Level,long HieCod);
+void Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (Hie_Level_t Level,long HieCod);
 
 #endif
