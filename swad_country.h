@@ -82,11 +82,6 @@ void Cty_ChangeCtyWWW (void);
 void Cty_ContEditAfterChgCty (void);
 void Cty_ReceiveFormNewCountry (void);
 
-unsigned Cty_GetCachedNumCtysWithInss (void);
-unsigned Cty_GetCachedNumCtysWithCtrs (void);
-unsigned Cty_GetCachedNumCtysWithDegs (void);
-unsigned Cty_GetCachedNumCtysWithCrss (void);
-
 unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role);
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);

@@ -1559,72 +1559,6 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
   }
 
 /*****************************************************************************/
-/***************** Get number of institutions with centers *******************/
-/*****************************************************************************/
-
-unsigned Ins_GetCachedNumInssWithCtrs (void)
-  {
-   unsigned NumInssWithCtrs;
-   long Cod = Hie_GetCurrentCod ();
-
-   /***** Get number of institutions with centers from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CTRS,Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumInssWithCtrs))
-     {
-      /***** Get current number of institutions with centers from database and update cache *****/
-      NumInssWithCtrs = Ins_DB_GetNumInssWithCtrs (Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CTRS,Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumInssWithCtrs);
-     }
-
-   return NumInssWithCtrs;
-  }
-
-/*****************************************************************************/
-/****************** Get number of institutions with degrees ******************/
-/*****************************************************************************/
-
-unsigned Ins_GetCachedNumInssWithDegs (void)
-  {
-   unsigned NumInssWithDegs;
-   long Cod = Hie_GetCurrentCod ();
-
-   /***** Get number of institutions with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_DEGS,Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumInssWithDegs))
-     {
-      /***** Get current number of institutions with degrees from database and update cache *****/
-      NumInssWithDegs = Ins_DB_GetNumInssWithDegs (Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_DEGS,Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumInssWithDegs);
-     }
-
-   return NumInssWithDegs;
-  }
-
-/*****************************************************************************/
-/****************** Get number of institutions with courses ******************/
-/*****************************************************************************/
-
-unsigned Ins_GetCachedNumInssWithCrss (void)
-  {
-   unsigned NumInssWithCrss;
-   long Cod = Hie_GetCurrentCod ();
-
-   /***** Get number of institutions with courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CRSS,Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumInssWithCrss))
-     {
-      /***** Get current number of institutions with courses from database and update cache *****/
-      NumInssWithCrss = Ins_DB_GetNumInssWithCrss (Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumInssWithCrss);
-     }
-
-   return NumInssWithCrss;
-  }
-
-/*****************************************************************************/
 /****************** Get number of institutions with users ********************/
 /*****************************************************************************/
 
@@ -1637,15 +1571,15 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role)
       [Rol_TCH] = FigCch_NUM_INSS_WITH_TCHS,	// Teachers
      };
    unsigned NumInssWithUsrs;
-   long Cod = Hie_GetCurrentCod ();
+   long HieCod = Hie_GetCurrentCod ();
 
    /***** Get number of institutions with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureInss[Role],Gbl.Scope.Current,Cod,
+   if (!FigCch_GetFigureFromCache (FigureInss[Role],Gbl.Scope.Current,HieCod,
 				   FigCch_UNSIGNED,&NumInssWithUsrs))
      {
       /***** Get current number of institutions with users from database and update cache *****/
-      NumInssWithUsrs = Ins_DB_GetNumInnsWithUsrs (Role,Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigureInss[Role],Gbl.Scope.Current,Cod,
+      NumInssWithUsrs = Ins_DB_GetNumInnsWithUsrs (Role,Gbl.Scope.Current,HieCod);
+      FigCch_UpdateFigureIntoCache (FigureInss[Role],Gbl.Scope.Current,HieCod,
 				    FigCch_UNSIGNED,&NumInssWithUsrs);
      }
 

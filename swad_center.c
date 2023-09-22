@@ -1628,50 +1628,6 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
   }
 
 /*****************************************************************************/
-/********************* Get number of centers with degrees ********************/
-/*****************************************************************************/
-
-unsigned Ctr_GetCachedNumCtrsWithDegs (void)
-  {
-   unsigned NumCtrsWithDegs;
-   long Cod = Hie_GetCurrentCod ();
-
-   /***** Get number of centers with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_DEGS,Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumCtrsWithDegs))
-     {
-      /***** Get current number of centers with degrees from database and update cache *****/
-      NumCtrsWithDegs = Ctr_DB_GetNumCtrsWithDegs (Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_DEGS,Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumCtrsWithDegs);
-     }
-
-   return NumCtrsWithDegs;
-  }
-
-/*****************************************************************************/
-/********************* Get number of centers with courses ********************/
-/*****************************************************************************/
-
-unsigned Ctr_GetCachedNumCtrsWithCrss (void)
-  {
-   unsigned NumCtrsWithCrss;
-   long Cod = Hie_GetCurrentCod ();
-
-   /***** Get number of centers with courses *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_CRSS,Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumCtrsWithCrss))
-     {
-      /***** Get number of centers with courses *****/
-      NumCtrsWithCrss = Ctr_DB_GetNumCtrsWithCrss (Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_CRSS,Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumCtrsWithCrss);
-     }
-
-   return NumCtrsWithCrss;
-  }
-
-/*****************************************************************************/
 /********************* Get number of centers with users **********************/
 /*****************************************************************************/
 
@@ -1683,20 +1639,20 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role)
       [Rol_NET] = FigCch_NUM_CTRS_WITH_NETS,	// Non-editing teachers
       [Rol_TCH] = FigCch_NUM_CTRS_WITH_TCHS,	// Teachers
      };
-   unsigned NumCtrsWithUsrs;
-   long Cod = Hie_GetCurrentCod ();
+   unsigned NumNodesWithUsrs;
+   long HieCod = Hie_GetCurrentCod ();
 
    /***** Get number of centers with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCtrs[Role],Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumCtrsWithUsrs))
+   if (!FigCch_GetFigureFromCache (FigureCtrs[Role],Gbl.Scope.Current,HieCod,
+				   FigCch_UNSIGNED,&NumNodesWithUsrs))
      {
       /***** Get current number of centers with users from database and update cache *****/
-      NumCtrsWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (Role,Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigureCtrs[Role],Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumCtrsWithUsrs);
+      NumNodesWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (Role,Gbl.Scope.Current,HieCod);
+      FigCch_UpdateFigureIntoCache (FigureCtrs[Role],Gbl.Scope.Current,HieCod,
+				    FigCch_UNSIGNED,&NumNodesWithUsrs);
      }
 
-   return NumCtrsWithUsrs;
+   return NumNodesWithUsrs;
   }
 
 /*****************************************************************************/

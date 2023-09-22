@@ -78,6 +78,10 @@ unsigned Hie_GetCachedNumNodesInHieLvl (Hie_Level_t LevelChildren,
 unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
 		      	          Hie_Level_t LevelParent,long HieCod);
 
+unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
+					    Hie_Level_t LevelParent,
+					    Hie_Level_t LevelGrandChildren);
+
 void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t Level);
 unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
 						 struct Hie_Node *Node);

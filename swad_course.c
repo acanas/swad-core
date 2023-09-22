@@ -419,20 +419,20 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
       [Rol_NET] = FigCch_NUM_CRSS_WITH_NETS,	// Non-editing teachers
       [Rol_TCH] = FigCch_NUM_CRSS_WITH_TCHS,	// Teachers
      };
-   unsigned NumCrssWithUsrs;
-   long Cod = Hie_GetCurrentCod ();
+   unsigned NumNodesWithUsrs;
+   long HieCod = Hie_GetCurrentCod ();
 
    /***** Get number of courses with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCrss[Role],Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumCrssWithUsrs))
+   if (!FigCch_GetFigureFromCache (FigureCrss[Role],Gbl.Scope.Current,HieCod,
+				   FigCch_UNSIGNED,&NumNodesWithUsrs))
      {
       /***** Get current number of courses with users from database and update cache *****/
-      NumCrssWithUsrs = Crs_DB_GetNumCrssWithUsrs (Role,Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigureCrss[Role],Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumCrssWithUsrs);
+      NumNodesWithUsrs = Crs_DB_GetNumCrssWithUsrs (Role,Gbl.Scope.Current,HieCod);
+      FigCch_UpdateFigureIntoCache (FigureCrss[Role],Gbl.Scope.Current,HieCod,
+				    FigCch_UNSIGNED,&NumNodesWithUsrs);
      }
 
-   return NumCrssWithUsrs;
+   return NumNodesWithUsrs;
   }
 
 /*****************************************************************************/

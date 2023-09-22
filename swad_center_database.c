@@ -446,11 +446,11 @@ unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod)
 /********************* Get number of centers with degrees ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t Level,long Cod)
+unsigned Ctr_DB_GetNumCtrsWithDegs (Hie_Level_t Level,long HieCod)
   {
    char SubQuery[128];
 
-   Hie_DB_BuildSubquery (SubQuery,Level,Cod);
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
 
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with degrees",

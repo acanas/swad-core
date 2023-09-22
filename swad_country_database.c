@@ -295,7 +295,8 @@ unsigned Cty_DB_GetNumCtysInSys (__attribute__((unused)) long SysCod)
 /***************** Get number of countries with institutions *****************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithInss (void)
+unsigned Cty_DB_GetNumCtysWithInss (__attribute__((unused)) Hie_Level_t Level,
+				    __attribute__((unused)) long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with institutions",
@@ -309,7 +310,8 @@ unsigned Cty_DB_GetNumCtysWithInss (void)
 /******************* Get number of countries with centers ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithCtrs (void)
+unsigned Cty_DB_GetNumCtysWithCtrs (__attribute__((unused)) Hie_Level_t Level,
+				    __attribute__((unused)) long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with centers",
@@ -325,7 +327,8 @@ unsigned Cty_DB_GetNumCtysWithCtrs (void)
 /******************* Get number of countries with degrees ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithDegs (void)
+unsigned Cty_DB_GetNumCtysWithDegs (__attribute__((unused)) Hie_Level_t Level,
+				    __attribute__((unused)) long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with degrees",
@@ -343,7 +346,8 @@ unsigned Cty_DB_GetNumCtysWithDegs (void)
 /******************* Get number of countries with courses ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithCrss (void)
+unsigned Cty_DB_GetNumCtysWithCrss (__attribute__((unused)) Hie_Level_t Level,
+				    __attribute__((unused)) long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with courses",

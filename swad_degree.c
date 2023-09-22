@@ -1530,28 +1530,6 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
   }
 
 /*****************************************************************************/
-/********************* Get number of centers with courses ********************/
-/*****************************************************************************/
-
-unsigned Deg_GetCachedNumDegsWithCrss (void)
-  {
-   unsigned NumDegsWithCrss;
-   long Cod = Hie_GetCurrentCod ();
-
-   /***** Get number of degrees with courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS_WITH_CRSS,Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumDegsWithCrss))
-     {
-      /***** Get current number of degrees with courses from database and update cache *****/
-      NumDegsWithCrss = Deg_DB_GetNumDegsWithCrss (Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS_WITH_CRSS,Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumDegsWithCrss);
-     }
-
-   return NumDegsWithCrss;
-  }
-
-/*****************************************************************************/
 /********************* Get number of degrees with users **********************/
 /*****************************************************************************/
 
@@ -1563,20 +1541,20 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
       [Rol_NET] = FigCch_NUM_DEGS_WITH_NETS,	// Non-editing teachers
       [Rol_TCH] = FigCch_NUM_DEGS_WITH_TCHS,	// Teachers
      };
-   unsigned NumDegsWithUsrs;
-   long Cod = Hie_GetCurrentCod ();
+   unsigned NumNodesWithUsrs;
+   long HieCod = Hie_GetCurrentCod ();
 
    /***** Get number of degrees with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureDegs[Role],Gbl.Scope.Current,Cod,
-				   FigCch_UNSIGNED,&NumDegsWithUsrs))
+   if (!FigCch_GetFigureFromCache (FigureDegs[Role],Gbl.Scope.Current,HieCod,
+				   FigCch_UNSIGNED,&NumNodesWithUsrs))
      {
       /***** Get current number of degrees with users from database and update cache *****/
-      NumDegsWithUsrs = Deg_DB_GetNumDegsWithUsrs (Role,Gbl.Scope.Current,Cod);
-      FigCch_UpdateFigureIntoCache (FigureDegs[Role],Gbl.Scope.Current,Cod,
-				    FigCch_UNSIGNED,&NumDegsWithUsrs);
+      NumNodesWithUsrs = Deg_DB_GetNumDegsWithUsrs (Role,Gbl.Scope.Current,HieCod);
+      FigCch_UpdateFigureIntoCache (FigureDegs[Role],Gbl.Scope.Current,HieCod,
+				    FigCch_UNSIGNED,&NumNodesWithUsrs);
      }
 
-   return NumDegsWithUsrs;
+   return NumNodesWithUsrs;
   }
 
 /*****************************************************************************/

@@ -72,9 +72,6 @@ void Ins_ContEditAfterChgIns (void);
 void Ins_ReceiveFormReqIns (void);
 void Ins_ReceiveFormNewIns (void);
 
-unsigned Ins_GetCachedNumInssWithCtrs (void);
-unsigned Ins_GetCachedNumInssWithDegs (void);
-unsigned Ins_GetCachedNumInssWithCrss (void);
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);

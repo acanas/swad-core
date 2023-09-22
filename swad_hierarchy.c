@@ -1079,7 +1079,7 @@ static void Hie_GetAndShowHierarchyWithInss (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Cty_GetCachedNumCtysWithInss ();
+	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_INS);
          break;
       case Hie_CTY:
       case Hie_INS:
@@ -1117,11 +1117,11 @@ static void Hie_GetAndShowHierarchyWithCtrs (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Cty_GetCachedNumCtysWithCtrs ();
-	 /* falls through */
-	 /* no break */
+	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_CTR);
+	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_SYS,Hie_CTR);
+	 break;
       case Hie_CTY:
-	 NumNodes[Hie_INS] = (int) Ins_GetCachedNumInssWithCtrs ();
+	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_CTY,Hie_CTR);
          break;
       case Hie_INS:
       case Hie_CTR:
@@ -1158,15 +1158,16 @@ static void Hie_GetAndShowHierarchyWithDegs (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Cty_GetCachedNumCtysWithDegs ();
-	 /* falls through */
-	 /* no break */
+	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_DEG);
+	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_SYS,Hie_DEG);
+         NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_SYS,Hie_DEG);
+	 break;
       case Hie_CTY:
-	 NumNodes[Hie_INS] = (int) Ins_GetCachedNumInssWithDegs ();
-	 /* falls through */
-	 /* no break */
+	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_CTY,Hie_DEG);
+         NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_CTY,Hie_DEG);
+	 break;
       case Hie_INS:
-         NumNodes[Hie_CTR] = (int) Ctr_GetCachedNumCtrsWithDegs ();
+         NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_INS,Hie_DEG);
          break;
       case Hie_CTR:
       case Hie_DEG:
@@ -1202,19 +1203,22 @@ static void Hie_GetAndShowHierarchyWithCrss (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Cty_GetCachedNumCtysWithCrss ();
-	 /* falls through */
-	 /* no break */
+	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_CRS);
+	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_SYS,Hie_CRS);
+	 NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_SYS,Hie_CRS);
+	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_SYS,Hie_CRS);
+	 break;
       case Hie_CTY:
-	 NumNodes[Hie_INS] = (int) Ins_GetCachedNumInssWithCrss ();
-	 /* falls through */
-	 /* no break */
+	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_CTY,Hie_CRS);
+	 NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_CTY,Hie_CRS);
+	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_CTY,Hie_CRS);
+	 break;
       case Hie_INS:
-         NumNodes[Hie_CTR] = (int) Ctr_GetCachedNumCtrsWithCrss ();
-	 /* falls through */
-	 /* no break */
+	 NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_INS,Hie_CRS);
+	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_INS,Hie_CRS);
+	 break;
       case Hie_CTR:
-	 NumNodes[Hie_DEG] = (int) Deg_GetCachedNumDegsWithCrss ();
+	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_CTR,Hie_CRS);
 	 break;
       case Hie_DEG:
       case Hie_CRS:
@@ -1338,6 +1342,65 @@ unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
 				 Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].HieCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num);
    return Gbl.Cache.NumNodesInHieLvl[LevelChildren][LevelParent].Num;
+  }
+
+/*****************************************************************************/
+/***** Get number of children nodes in parent node with children nodes *********************/
+/*****************************************************************************/
+
+unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
+					    Hie_Level_t LevelParent,
+					    Hie_Level_t LevelGrandChildren)
+  {
+   static FigCch_FigureCached_t Figure[Hie_NUM_LEVELS][Hie_NUM_LEVELS] =
+     {
+     // Child Grandchild
+      [Hie_CTY][Hie_INS] = FigCch_NUM_CTYS_WITH_INSS,
+      [Hie_CTY][Hie_CTR] = FigCch_NUM_CTYS_WITH_CTRS,
+      [Hie_CTY][Hie_DEG] = FigCch_NUM_CTYS_WITH_DEGS,
+      [Hie_CTY][Hie_CRS] = FigCch_NUM_CTYS_WITH_CRSS,
+
+      [Hie_INS][Hie_CTR] = FigCch_NUM_INSS_WITH_CTRS,
+      [Hie_INS][Hie_DEG] = FigCch_NUM_INSS_WITH_DEGS,
+      [Hie_INS][Hie_CRS] = FigCch_NUM_INSS_WITH_CRSS,
+
+      [Hie_CTR][Hie_DEG] = FigCch_NUM_CTRS_WITH_DEGS,
+      [Hie_CTR][Hie_CRS] = FigCch_NUM_CTRS_WITH_CRSS,
+
+      [Hie_DEG][Hie_CRS] = FigCch_NUM_DEGS_WITH_CRSS,
+     };
+   static unsigned (*FunctionGetFigure[Hie_NUM_LEVELS][Hie_NUM_LEVELS]) (Hie_Level_t Level,long HieCod) =
+     {
+     // Child Grandchild
+      [Hie_CTY][Hie_INS] = Cty_DB_GetNumCtysWithInss,
+      [Hie_CTY][Hie_CTR] = Cty_DB_GetNumCtysWithCtrs,
+      [Hie_CTY][Hie_DEG] = Cty_DB_GetNumCtysWithDegs,
+      [Hie_CTY][Hie_CRS] = Cty_DB_GetNumCtysWithCrss,
+
+      [Hie_INS][Hie_CTR] = Ins_DB_GetNumInssWithCtrs,
+      [Hie_INS][Hie_DEG] = Ins_DB_GetNumInssWithDegs,
+      [Hie_INS][Hie_CRS] = Ins_DB_GetNumInssWithCrss,
+
+      [Hie_CTR][Hie_DEG] = Ctr_DB_GetNumCtrsWithDegs,
+      [Hie_CTR][Hie_CRS] = Ctr_DB_GetNumCtrsWithCrss,
+
+      [Hie_DEG][Hie_CRS] = Deg_DB_GetNumDegsWithCrss,
+     };
+   unsigned NumNodes;
+
+   /***** Get number of centers with degrees from cache *****/
+   if (!FigCch_GetFigureFromCache (Figure[LevelChildren][LevelGrandChildren],
+				   LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod,
+				   FigCch_UNSIGNED,&NumNodes))
+     {
+      /***** Get current number of nodes with degrees from database and update cache *****/
+      NumNodes = FunctionGetFigure[LevelChildren][LevelGrandChildren] (LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod);
+      FigCch_UpdateFigureIntoCache (Figure[LevelChildren][LevelGrandChildren],
+				    LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod,
+				    FigCch_UNSIGNED,&NumNodes);
+     }
+
+   return NumNodes;
   }
 
 /*****************************************************************************/
