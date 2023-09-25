@@ -1077,20 +1077,18 @@ static void Hie_GetAndShowHierarchyWith (Hie_Level_t LevelGrandChildren)
    Hie_Level_t LevelChildren;
 
    /***** Get number of elements with courses *****/
+   // For each level country, institution, center, degree and course...
    for (LevelChildren  = Hie_CTY;
         LevelChildren <= Hie_CRS;
         LevelChildren++)
-      if (LevelChildren < LevelGrandChildren)
-        {
-	 if (LevelChildren <= Gbl.Scope.Current)
-	    NumNodes[LevelChildren] = 1;
-	 else	// Level >= Gbl.Scope.Curremt + 1
-            NumNodes[LevelChildren] = (int) Hie_GetCachedNumNodesInHieLvlWith (LevelChildren,		// Child
-        							               Gbl.Scope.Current,	// Parent
-        							               LevelGrandChildren);	// Grand child
-        }
-      else	// Level >= LevelGrandChildren
+      if (LevelChildren >= LevelGrandChildren)		// Example: don't show number of centers with institutions
 	 NumNodes[LevelChildren] = -1;
+      else if (LevelChildren < Gbl.Scope.Current)	// Example: if scope is center (4) =>
+	 NumNodes[LevelChildren] = 1;			//          number of countries/instit./centers in center is 1
+      else
+         NumNodes[LevelChildren] = (int) Hie_GetCachedNumNodesInHieLvlWith (LevelChildren,		// Child
+        							            Gbl.Scope.Current,	// Parent
+        							            LevelGrandChildren);// Grand child
 
    /***** Write number of elements with courses *****/
    Hie_ShowHierarchyRow (Txt_With_,*Txt[LevelGrandChildren],"DAT",NumNodes);
@@ -1218,7 +1216,7 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
   {
    static FigCch_FigureCached_t Figure[Hie_NUM_LEVELS][Hie_NUM_LEVELS] =
      {
-     // Child Grandchild
+     // Child / Grandchild
       [Hie_CTY][Hie_INS] = FigCch_NUM_CTYS_WITH_INSS,
       [Hie_CTY][Hie_CTR] = FigCch_NUM_CTYS_WITH_CTRS,
       [Hie_CTY][Hie_DEG] = FigCch_NUM_CTYS_WITH_DEGS,
@@ -1235,7 +1233,7 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
      };
    static unsigned (*FunctionGetFigure[Hie_NUM_LEVELS][Hie_NUM_LEVELS]) (Hie_Level_t Level,long HieCod) =
      {
-     // Child Grandchild
+     // Child / Grandchild
       [Hie_CTY][Hie_INS] = Cty_DB_GetNumCtysWithInss,
       [Hie_CTY][Hie_CTR] = Cty_DB_GetNumCtysWithCtrs,
       [Hie_CTY][Hie_DEG] = Cty_DB_GetNumCtysWithDegs,

@@ -38,13 +38,13 @@ void Hie_DB_BuildSubquery (char SubQuery[128],Hie_Level_t Level,long HieCod)
   {
    static const char *Format[Hie_NUM_LEVELS] =
      {
-      [Hie_UNK] = "",				// Unknown
-      [Hie_SYS] = "",				// System
+      [Hie_UNK] = "",					// Unknown
+      [Hie_SYS] = "",					// System
       [Hie_CTY] = "ins_instits.CtyCod=%ld AND ",	// Country
       [Hie_INS] = "ctr_centers.InsCod=%ld AND ",	// Institution
       [Hie_CTR] = "deg_degrees.CtrCod=%ld AND ",	// Center
       [Hie_DEG] = "crs_courses.DegCod=%ld AND ",	// Degree
-      [Hie_CRS] = "crs_users.CrsCod=%ld AND ",	// Course
+      [Hie_CRS] = "crs_users.CrsCod=%ld AND ",		// Course
      };
 
    if (HieCod > 0)
