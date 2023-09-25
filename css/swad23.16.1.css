@@ -4409,6 +4409,7 @@ legend {font-size:12pt;}
 .Tml_FORM
 	{
 	padding-top:8px;
+	text-align:left;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
@@ -4417,6 +4418,7 @@ legend {font-size:12pt;}
 	{
 	padding-top:8px;
 	color:#808080;
+	text-align:left;
 	font-size:12pt;
 	overflow:hidden;
 	text-overflow:ellipsis;
