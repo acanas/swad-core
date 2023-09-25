@@ -636,7 +636,7 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 #define CSS_FILE		"swad23.16.1.css"
 #define JS_FILE			"swad22.49.js"
 /*
-	Version 23.17:	  Sep 22, 2023  Code refactoring in hierarchy. (336655 lines)
+	Version 23.17:	  Sep 25, 2023  Code refactoring in hierarchy. (336655 lines)
 	Version 23.16.1:  Sep 25, 2023  Fixed CSS issues. (336778 lines)
 	Version 23.16:	  Sep 22, 2023  Code refactoring in hierarchy and cache. (336775 lines)
 	Version 23.15:	  Sep 22, 2023  Code refactoring in hierarchy and cache. (336896 lines)
