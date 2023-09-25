@@ -80,10 +80,7 @@ static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status);
 static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt);
 
 static void Hie_WriteHeadHierarchy (void);
-static void Hie_GetAndShowHierarchyWithInss (void);
-static void Hie_GetAndShowHierarchyWithCtrs (void);
-static void Hie_GetAndShowHierarchyWithDegs (void);
-static void Hie_GetAndShowHierarchyWithCrss (void);
+static void Hie_GetAndShowHierarchyWith (Hie_Level_t LevelGrandChildren);
 static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role);
 static void Hie_GetAndShowHierarchyTotal (void);
 static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
@@ -990,10 +987,10 @@ void Hie_GetAndShowHierarchyStats (void)
                       Hlp_ANALYTICS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
 
       Hie_WriteHeadHierarchy ();
-      Hie_GetAndShowHierarchyWithInss ();
-      Hie_GetAndShowHierarchyWithCtrs ();
-      Hie_GetAndShowHierarchyWithDegs ();
-      Hie_GetAndShowHierarchyWithCrss ();
+      Hie_GetAndShowHierarchyWith (Hie_INS);
+      Hie_GetAndShowHierarchyWith (Hie_CTR);
+      Hie_GetAndShowHierarchyWith (Hie_DEG);
+      Hie_GetAndShowHierarchyWith (Hie_CRS);
       for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
@@ -1059,177 +1056,44 @@ static void Hie_WriteHeadHierarchy (void)
   }
 
 /*****************************************************************************/
-/****** Get and show number of elements in hierarchy with institutions *******/
+/********* Get and show number of elements in hierarchy with nodes ***********/
 /*****************************************************************************/
 
-static void Hie_GetAndShowHierarchyWithInss (void)
+static void Hie_GetAndShowHierarchyWith (Hie_Level_t LevelGrandChildren)
   {
    extern const char *Txt_With_;
    extern const char *Txt_institutions;
-   int NumNodes[Hie_NUM_LEVELS] =
-     {
-      [Hie_CTY] =  1,	// < 0 ==> do not show number
-      [Hie_INS] = -1,	// < 0 ==> do not show number
-      [Hie_CTR] = -1,	// < 0 ==> do not show number
-      [Hie_DEG] = -1,	// < 0 ==> do not show number
-      [Hie_CRS] = -1,	// < 0 ==> do not show number
-     };
-
-   /***** Get number of elements with institutions *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_INS);
-         break;
-      case Hie_CTY:
-      case Hie_INS:
-      case Hie_CTR:
-      case Hie_DEG:
-      case Hie_CRS:
-	 break;
-      default:
-	 Err_WrongHierarchyLevelExit ();
-	 break;
-     }
-
-   /***** Write number of elements with institutions *****/
-   Hie_ShowHierarchyRow (Txt_With_,Txt_institutions,"DAT",NumNodes);
-  }
-
-/*****************************************************************************/
-/******** Get and show number of elements in hierarchy with centers **********/
-/*****************************************************************************/
-
-static void Hie_GetAndShowHierarchyWithCtrs (void)
-  {
-   extern const char *Txt_With_;
    extern const char *Txt_centers;
-   int NumNodes[Hie_NUM_LEVELS] =
-     {
-      [Hie_CTY] =  1,
-      [Hie_INS] =  1,
-      [Hie_CTR] = -1,	// < 0 ==> do not show number
-      [Hie_DEG] = -1,	// < 0 ==> do not show number
-      [Hie_CRS] = -1,	// < 0 ==> do not show number
-     };
-
-   /***** Get number of elements with centers *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_CTR);
-	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_SYS,Hie_CTR);
-	 break;
-      case Hie_CTY:
-	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_CTY,Hie_CTR);
-         break;
-      case Hie_INS:
-      case Hie_CTR:
-      case Hie_DEG:
-      case Hie_CRS:
-	 break;
-      default:
-	 Err_WrongHierarchyLevelExit ();
-	 break;
-     }
-
-   /***** Write number of elements with centers *****/
-   Hie_ShowHierarchyRow (Txt_With_,Txt_centers,"DAT",NumNodes);
-  }
-
-/*****************************************************************************/
-/******** Get and show number of elements in hierarchy with degrees **********/
-/*****************************************************************************/
-
-static void Hie_GetAndShowHierarchyWithDegs (void)
-  {
-   extern const char *Txt_With_;
    extern const char *Txt_degrees;
-   int NumNodes[Hie_NUM_LEVELS] =
-     {
-      [Hie_CTY] =  1,
-      [Hie_INS] =  1,
-      [Hie_CTR] =  1,
-      [Hie_DEG] = -1,	// < 0 ==> do not show number
-      [Hie_CRS] = -1,	// < 0 ==> do not show number
-     };
-
-   /***** Get number of elements with degrees *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_DEG);
-	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_SYS,Hie_DEG);
-         NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_SYS,Hie_DEG);
-	 break;
-      case Hie_CTY:
-	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_CTY,Hie_DEG);
-         NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_CTY,Hie_DEG);
-	 break;
-      case Hie_INS:
-         NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_INS,Hie_DEG);
-         break;
-      case Hie_CTR:
-      case Hie_DEG:
-      case Hie_CRS:
-	 break;
-      default:
-	 Err_WrongHierarchyLevelExit ();
-	 break;
-     }
-
-   /***** Write number of elements with degrees *****/
-   Hie_ShowHierarchyRow (Txt_With_,Txt_degrees,"DAT",NumNodes);
-  }
-
-/*****************************************************************************/
-/******** Get and show number of elements in hierarchy with courses **********/
-/*****************************************************************************/
-
-static void Hie_GetAndShowHierarchyWithCrss (void)
-  {
-   extern const char *Txt_With_;
    extern const char *Txt_courses;
-   int NumNodes[Hie_NUM_LEVELS] =
+   static const char **Txt[Hie_NUM_LEVELS] =
      {
-      [Hie_CTY] =  1,
-      [Hie_INS] =  1,
-      [Hie_CTR] =  1,
-      [Hie_DEG] =  1,
-      [Hie_CRS] = -1,	// < 0 ==> do not show number
+      [Hie_INS] = &Txt_institutions,	// Number of ... with institutions
+      [Hie_CTR] = &Txt_centers,		// Number of ... with centers
+      [Hie_DEG] = &Txt_degrees,		// Number of ... with degrees
+      [Hie_CRS] = &Txt_courses,		// Number of ... with courses
      };
+   int NumNodes[Hie_NUM_LEVELS];
+   Hie_Level_t LevelChildren;
 
    /***** Get number of elements with courses *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Hie_SYS:
-	 NumNodes[Hie_CTY] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTY,Hie_SYS,Hie_CRS);
-	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_SYS,Hie_CRS);
-	 NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_SYS,Hie_CRS);
-	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_SYS,Hie_CRS);
-	 break;
-      case Hie_CTY:
-	 NumNodes[Hie_INS] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_INS,Hie_CTY,Hie_CRS);
-	 NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_CTY,Hie_CRS);
-	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_CTY,Hie_CRS);
-	 break;
-      case Hie_INS:
-	 NumNodes[Hie_CTR] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_CTR,Hie_INS,Hie_CRS);
-	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_INS,Hie_CRS);
-	 break;
-      case Hie_CTR:
-	 NumNodes[Hie_DEG] = (int) Hie_GetCachedNumNodesInHieLvlWith (Hie_DEG,Hie_CTR,Hie_CRS);
-	 break;
-      case Hie_DEG:
-      case Hie_CRS:
-	 break;
-      default:
-	 Err_WrongHierarchyLevelExit ();
-	 break;
-     }
+   for (LevelChildren  = Hie_CTY;
+        LevelChildren <= Hie_CRS;
+        LevelChildren++)
+      if (LevelChildren < LevelGrandChildren)
+        {
+	 if (LevelChildren <= Gbl.Scope.Current)
+	    NumNodes[LevelChildren] = 1;
+	 else	// Level >= Gbl.Scope.Curremt + 1
+            NumNodes[LevelChildren] = (int) Hie_GetCachedNumNodesInHieLvlWith (LevelChildren,		// Child
+        							               Gbl.Scope.Current,	// Parent
+        							               LevelGrandChildren);	// Grand child
+        }
+      else	// Level >= LevelGrandChildren
+	 NumNodes[LevelChildren] = -1;
 
    /***** Write number of elements with courses *****/
-   Hie_ShowHierarchyRow (Txt_With_,Txt_courses,"DAT",NumNodes);
+   Hie_ShowHierarchyRow (Txt_With_,*Txt[LevelGrandChildren],"DAT",NumNodes);
   }
 
 /*****************************************************************************/

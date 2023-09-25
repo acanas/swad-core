@@ -2687,13 +2687,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .LST_REC_PINK		{color:#246600; font-size:11pt; white-space:nowrap;}
 .LST_REC_DARK		{color:#80c040; font-size:11pt; white-space:nowrap;}
 
-.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#406020; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID_WHITE,
+.LST_REC_HID_GREY,
+.LST_REC_HID_PURPLE,
+.LST_REC_HID_BLUE,
+.LST_REC_HID_YELLOW,
+.LST_REC_HID_PINK	{color:#92b380; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID_DARK	{color:#406020; font-size:11pt; white-space:nowrap;}
 
 .LST_EDIT		{width:250px; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid;}
 .LST_EDIT_ROWS		{width:30px;  font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid;}
