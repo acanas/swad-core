@@ -140,27 +140,23 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
       case TabUnk:
 	 return false;
       case TabSys:
-	 return (Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0);	// No country selected
+	 return (Gbl.Hierarchy.Level == Hie_SYS);	// Institution selected
       case TabCty:
-	 return (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0 &&	// Country selected
-	         Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0);	// No institution selected
+	 return (Gbl.Hierarchy.Level == Hie_CTY);	// Institution selected
       case TabIns:
-	 return (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&	// Institution selected
-	         Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0);	// No center selected
+	 return (Gbl.Hierarchy.Level == Hie_INS);	// Institution selected
       case TabCtr:
-	 return (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 &&	// Center selected
-	         Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0);	// No degree selected
+	 return (Gbl.Hierarchy.Level == Hie_CTR);	// Center selected
       case TabDeg:
-	 return (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 &&	// Degree selected
-	         Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0);	// No course selected
+	 return (Gbl.Hierarchy.Level == Hie_DEG);	// Degree selected
       case TabCrs:
 	 return (Gbl.Hierarchy.Level == Hie_CRS);	// Course selected
       case TabAss:
-	 return (Gbl.Hierarchy.Level == Hie_CRS ||	// Course selected
+	 return (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
 	         Gbl.Usrs.Me.Role.Logged >= Rol_STD);	// I belong to course or I am an admin
       case TabFil:
       	 return (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 ||	// Institution selected
-	         Gbl.Usrs.Me.Logged);			// I'm logged
+	         Gbl.Usrs.Me.Logged);				// I'm logged
       default:
 	 return true;
      }

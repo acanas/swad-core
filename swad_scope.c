@@ -82,23 +82,11 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 		  WriteScope = true;
 		  break;
 	       case Hie_CTY:
-		  if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
-		     WriteScope = true;
-		  break;
 	       case Hie_INS:
-		  if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
-		     WriteScope = true;
-		  break;
 	       case Hie_CTR:
-		  if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
-		     WriteScope = true;
-		  break;
 	       case Hie_DEG:
-		  if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
-		     WriteScope = true;
-		  break;
 	       case Hie_CRS:
-		  if (Gbl.Hierarchy.Level == Hie_CRS)
+		  if (Gbl.Hierarchy.Node[Level].HieCod > 0)
 		     WriteScope = true;
 		  break;
 	       default:
@@ -160,25 +148,18 @@ void Sco_GetScope (const char *ParName)
 
 void Sco_AdjustScope (void)
   {
+   Hie_Level_t Level;
+
    /***** Is scope is unknow, use default scope *****/
    if (Gbl.Scope.Current == Hie_UNK)
       Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == Hie_CRS && Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      Gbl.Scope.Current = Hie_DEG;
-
-   if (Gbl.Scope.Current == Hie_DEG && Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0)
-      Gbl.Scope.Current = Hie_CTR;
-
-   if (Gbl.Scope.Current == Hie_CTR && Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)
-      Gbl.Scope.Current = Hie_INS;
-
-   if (Gbl.Scope.Current == Hie_INS && Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)
-      Gbl.Scope.Current = Hie_CTY;
-
-   if (Gbl.Scope.Current == Hie_CTY && Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0)
-      Gbl.Scope.Current = Hie_SYS;
+   for (Level  = Hie_CRS;
+	Level >= Hie_CTY;
+	Level--)
+      if (Gbl.Scope.Current == Level && Gbl.Hierarchy.Node[Level].HieCod <= 0)
+	 Gbl.Scope.Current = Level - 1;	// Go up to parent level
 
    /***** Avoid forbidden scopes *****/
    if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)

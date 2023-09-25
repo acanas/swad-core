@@ -1468,15 +1468,15 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 
    /***** Initialize institution, degree and course to show in header *****/
    Hie[Hie_INS].HieCod = (Gbl.Scope.Current == Hie_CRS ||
-			     Gbl.Scope.Current == Hie_DEG ||
-			     Gbl.Scope.Current == Hie_CTR ||
-			     Gbl.Scope.Current == Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
-							        -1L;
+		          Gbl.Scope.Current == Hie_DEG ||
+			  Gbl.Scope.Current == Hie_CTR ||
+			  Gbl.Scope.Current == Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+							  -1L;
    Hie[Hie_DEG].HieCod = (Gbl.Scope.Current == Hie_CRS ||
-			     Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-							        -1L;
+			  Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+							  -1L;
    Hie[Hie_CRS].HieCod = (Gbl.Scope.Current == Hie_CRS) ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-							        -1L;
+							  -1L;
 
    /***** Get data of institution, degree and course *****/
    Ins_GetInstitDataByCod (&Hie[Hie_INS]);

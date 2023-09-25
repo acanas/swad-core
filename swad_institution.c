@@ -169,7 +169,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	    /* Get institution code (row[0]) */
 	    Ins.HieCod = Str_ConvertStrCodToLongCod (row[0]);
 	    BgColor = (Ins.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? "BG_HIGHLIGHT" :
-								              The_GetColorRows ();
+								           The_GetColorRows ();
 
 	    /* Get data of institution */
 	    Ins_GetInstitDataByCod (&Ins);
@@ -372,7 +372,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       TxtClassStrong = "DAT_STRONG";
      }
    BgColor = (Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? "BG_HIGHLIGHT" :
-							              The_GetColorRows ();
+							           The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
@@ -579,7 +579,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
      {
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.List[Hie_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTY].Num,
-							sizeof (*Gbl.Hierarchy.List[Hie_CTY].Lst))) == NULL)
+						     sizeof (*Gbl.Hierarchy.List[Hie_CTY].Lst))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -612,7 +612,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
      {
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.List[Hie_CTY].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_CTY].Num,
-							sizeof (*Gbl.Hierarchy.List[Hie_CTY].Lst))) == NULL)
+						     sizeof (*Gbl.Hierarchy.List[Hie_CTY].Lst))) == NULL)
           Err_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
@@ -829,7 +829,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Node[Hie_INS].HieCod < 0 ? HTM_OPTION_SELECTED :
-							      HTM_OPTION_UNSELECTED,
+							   HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
 		  "[%s]",Txt_Institution);
 
@@ -854,7 +854,7 @@ void Ins_WriteSelectorOfInstitution (void)
 	    HTM_OPTION (HTM_Type_LONG,&InsCod,
 			Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
 			InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
-								          HTM_OPTION_UNSELECTED,
+								       HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,
 			"%s",row[1]);
 	   }
@@ -1200,7 +1200,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
         {
          /***** If institution was in database... *****/
          if (Ins_DB_CheckIfInsNameExistsInCty (ParName,NewInsName,Ins->HieCod,
-                                            Gbl.Hierarchy.Node[Hie_CTY].HieCod))
+                                               Gbl.Hierarchy.Node[Hie_CTY].HieCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              NewInsName);

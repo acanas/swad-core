@@ -1936,7 +1936,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t Defaul
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
    UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.Level == Hie_CRS) ? DefaultRole :	// Course selected
-	                                                              Rol_UNK;		// No course selected
+	                                                           Rol_UNK;		// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 
@@ -3203,7 +3203,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 	       CtyInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 	       HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
 			   CtyInLst->HieCod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
-							     HTM_OPTION_UNSELECTED,
+							        HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s",CtyInLst->FullName);
 	      }
@@ -3835,7 +3835,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			CtyInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
 				    CtyInLst->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
-										    HTM_OPTION_UNSELECTED,
+										       HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",CtyInLst->FullName);
 		       }

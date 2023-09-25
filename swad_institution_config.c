@@ -329,7 +329,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		     CtyInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
 				 CtyInLst->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_OPTION_SELECTED :
-										             HTM_OPTION_UNSELECTED,
+										          HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
 				 "%s",CtyInLst->FullName);
 		    }
@@ -388,8 +388,7 @@ static void InsCfg_ShrtName (bool PutForm)
 
 static void InsCfg_WWW (bool PrintView,bool PutForm)
   {
-   HieCfg_WWW (PrintView,PutForm,ActChgInsWWWCfg,
-	       Gbl.Hierarchy.Node[Hie_INS].WWW);
+   HieCfg_WWW (PrintView,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Node[Hie_INS].WWW);
   }
 
 /*****************************************************************************/
@@ -550,11 +549,13 @@ void InsCfg_ChangeInsCty (void)
       Cty_GetBasicCountryDataByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Node[Hie_INS].ShrtName,-1L,NewCty.HieCod))
+      if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Node[Hie_INS].ShrtName,
+				            -1L,NewCty.HieCod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
 		          Gbl.Hierarchy.Node[Hie_INS].ShrtName);
-      else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Node[Hie_INS].FullName,-1L,NewCty.HieCod))
+      else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Node[Hie_INS].FullName,
+						 -1L,NewCty.HieCod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
 		          Gbl.Hierarchy.Node[Hie_INS].FullName);
@@ -563,7 +564,7 @@ void InsCfg_ChangeInsCty (void)
 	 /***** Update the table changing the country of the institution *****/
 	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Node[Hie_INS].HieCod,NewCty.HieCod);
          Gbl.Hierarchy.Node[Hie_INS].PrtCod =
-         Gbl.Hierarchy.Node[Hie_CTY].HieCod    = NewCty.HieCod;
+         Gbl.Hierarchy.Node[Hie_CTY].HieCod = NewCty.HieCod;
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();

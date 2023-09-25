@@ -848,12 +848,12 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
 	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,		// Departments in current insitution
-				      Projects->Filter.DptCod,		// Selected department
-				      Prj_PAR_FILTER_DPT_COD_NAME,	// Parameter name
-				      SelectClass,			// Selector class
-				      -1L,				// First option
-				      Txt_Any_department,		// Text when no department selected
+	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
+				      Projects->Filter.DptCod,			// Selected department
+				      Prj_PAR_FILTER_DPT_COD_NAME,		// Parameter name
+				      SelectClass,				// Selector class
+				      -1L,					// First option
+				      Txt_Any_department,			// Text when no department selected
 				      HTM_SUBMIT_ON_CHANGE);
 	 free (SelectClass);
 
@@ -3769,11 +3769,11 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
-						  Projects->Prj.DptCod,		// Selected department
-						  Par_CodeStr[ParCod_Dpt],	// Parameter name
-						  SelectClass,			// Selector class
-						  0,				// First option
-						  Txt_Another_department,	// Text when no department selected
+						  Projects->Prj.DptCod,			// Selected department
+						  Par_CodeStr[ParCod_Dpt],		// Parameter name
+						  SelectClass,				// Selector class
+						  0,					// First option
+						  Txt_Another_department,		// Text when no department selected
 						  HTM_DONT_SUBMIT_ON_CHANGE);
 		     free (SelectClass);
 		  HTM_TD_End ();

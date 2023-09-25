@@ -4658,7 +4658,7 @@ void Usr_ListAllDataTchs (void)
 				     (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
 				     (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
 				     (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-								        -1L))))),
+								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -5368,7 +5368,7 @@ void Usr_SeeTeachers (void)
 				     (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
 				     (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
 				     (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-								        -1L))))),
+								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -6032,7 +6032,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 				     (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
 				     (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
 				     (Gbl.Scope.Current == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
-								        -1L))))),
+								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -6297,7 +6297,7 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 	       (Gbl.Scope.Current == Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
 	       (Gbl.Scope.Current == Hie_CTR ? Gbl.Hierarchy.Node[Hie_CTR].HieCod :
 	       (Gbl.Scope.Current == Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
-	                                          Gbl.Hierarchy.Node[Hie_CRS].HieCod))));
+	                                       Gbl.Hierarchy.Node[Hie_CRS].HieCod))));
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
 	         (1 << Rol_TCH);
