@@ -80,7 +80,7 @@ unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
 
 unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
 					    Hie_Level_t LevelParent,
-					    Hie_Level_t LevelGrandChildren);
+					    Hie_Level_t HavingNodesOfLevel);
 
 void Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_Level_t Level);
 unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,

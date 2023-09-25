@@ -80,7 +80,7 @@ static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status);
 static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt);
 
 static void Hie_WriteHeadHierarchy (void);
-static void Hie_GetAndShowHierarchyWith (Hie_Level_t LevelGrandChildren);
+static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel);
 static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role);
 static void Hie_GetAndShowHierarchyTotal (void);
 static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
@@ -979,6 +979,7 @@ void Hie_GetAndShowHierarchyStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_hierarchy;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   Hie_Level_t HavingNodesOfLevel;
    Rol_Role_t Role;
 
    /***** Begin box and table *****/
@@ -986,15 +987,22 @@ void Hie_GetAndShowHierarchyStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
 
+      /* Head row */
       Hie_WriteHeadHierarchy ();
-      Hie_GetAndShowHierarchyWith (Hie_INS);
-      Hie_GetAndShowHierarchyWith (Hie_CTR);
-      Hie_GetAndShowHierarchyWith (Hie_DEG);
-      Hie_GetAndShowHierarchyWith (Hie_CRS);
+
+      /* Rows with number of nodes having nodes of each level */
+      for (HavingNodesOfLevel  = Hie_INS;
+	   HavingNodesOfLevel <= Hie_CRS;
+	   HavingNodesOfLevel++)
+         Hie_GetAndShowHierarchyWithNodes (HavingNodesOfLevel);
+
+      /* Rows with number of nodes having users of each role */
       for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
 	 Hie_GetAndShowHierarchyWithUsrs (Role);
+
+      /* Row with total nodes */
       Hie_GetAndShowHierarchyTotal ();
 
    /***** End table and box *****/
@@ -1059,7 +1067,7 @@ static void Hie_WriteHeadHierarchy (void)
 /********* Get and show number of elements in hierarchy with nodes ***********/
 /*****************************************************************************/
 
-static void Hie_GetAndShowHierarchyWith (Hie_Level_t LevelGrandChildren)
+static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel)
   {
    extern const char *Txt_With_;
    extern const char *Txt_institutions;
@@ -1081,17 +1089,18 @@ static void Hie_GetAndShowHierarchyWith (Hie_Level_t LevelGrandChildren)
    for (LevelChildren  = Hie_CTY;
         LevelChildren <= Hie_CRS;
         LevelChildren++)
-      if (LevelChildren >= LevelGrandChildren)		// Example: don't show number of centers with institutions
+      if (LevelChildren >= HavingNodesOfLevel)			// Example: don't show number of centers with institutions
 	 NumNodes[LevelChildren] = -1;
-      else if (LevelChildren < Gbl.Scope.Current)	// Example: if scope is center (4) =>
-	 NumNodes[LevelChildren] = 1;			//          number of countries/instit./centers in center is 1
+      else if (LevelChildren      <  Gbl.Scope.Current &&	// Example: if scope is center (4)
+	       HavingNodesOfLevel <= Gbl.Scope.Current)		//          number of nodes with instit./countries/centers
+	 NumNodes[LevelChildren] = 1;				//          in current center is 1
       else
-         NumNodes[LevelChildren] = (int) Hie_GetCachedNumNodesInHieLvlWith (LevelChildren,		// Child
+         NumNodes[LevelChildren] = (int) Hie_GetCachedNumNodesInHieLvlWith (LevelChildren,	// Child
         							            Gbl.Scope.Current,	// Parent
-        							            LevelGrandChildren);// Grand child
+        							            HavingNodesOfLevel);// Grand child
 
    /***** Write number of elements with courses *****/
-   Hie_ShowHierarchyRow (Txt_With_,*Txt[LevelGrandChildren],"DAT",NumNodes);
+   Hie_ShowHierarchyRow (Txt_With_,*Txt[HavingNodesOfLevel],"DAT",NumNodes);
   }
 
 /*****************************************************************************/
@@ -1207,13 +1216,17 @@ unsigned Hie_GetNumNodesInHieLvl (Hie_Level_t LevelChildren,
   }
 
 /*****************************************************************************/
-/***** Get number of children nodes in parent node with children nodes *********************/
+/**** Get number of children nodes in parent node having nodes of a level ****/
 /*****************************************************************************/
 
 unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
 					    Hie_Level_t LevelParent,
-					    Hie_Level_t LevelGrandChildren)
+					    Hie_Level_t HavingNodesOfLevel)
   {
+   // Example: number of centers with courses in current institution
+   //          LevelChildren      = center
+   //          LevelParent        = institution
+   //	       HavingNodesOfLevel = course
    static FigCch_FigureCached_t Figure[Hie_NUM_LEVELS][Hie_NUM_LEVELS] =
      {
      // Child / Grandchild
@@ -1251,13 +1264,13 @@ unsigned Hie_GetCachedNumNodesInHieLvlWith (Hie_Level_t LevelChildren,
    unsigned NumNodes;
 
    /***** Get number of centers with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (Figure[LevelChildren][LevelGrandChildren],
+   if (!FigCch_GetFigureFromCache (Figure[LevelChildren][HavingNodesOfLevel],
 				   LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod,
 				   FigCch_UNSIGNED,&NumNodes))
      {
       /***** Get current number of nodes with degrees from database and update cache *****/
-      NumNodes = FunctionGetFigure[LevelChildren][LevelGrandChildren] (LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod);
-      FigCch_UpdateFigureIntoCache (Figure[LevelChildren][LevelGrandChildren],
+      NumNodes = FunctionGetFigure[LevelChildren][HavingNodesOfLevel] (LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod);
+      FigCch_UpdateFigureIntoCache (Figure[LevelChildren][HavingNodesOfLevel],
 				    LevelParent,Gbl.Hierarchy.Node[LevelParent].HieCod,
 				    FigCch_UNSIGNED,&NumNodes);
      }

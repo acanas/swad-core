@@ -52,14 +52,10 @@ void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
 
 unsigned Cty_DB_GetNumCtysInSys (__attribute__((unused)) long SysCod);
 
-unsigned Cty_DB_GetNumCtysWithInss (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod);
-unsigned Cty_DB_GetNumCtysWithCtrs (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod);
-unsigned Cty_DB_GetNumCtysWithDegs (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod);
-unsigned Cty_DB_GetNumCtysWithCrss (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod);
+unsigned Cty_DB_GetNumCtysWithInss (Hie_Level_t Level,long HieCod);
+unsigned Cty_DB_GetNumCtysWithCtrs (Hie_Level_t Level,long HieCod);
+unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t Level,long HieCod);
+unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t Level,long HieCod);
 unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
                                     Hie_Level_t Level,long Cod);
 

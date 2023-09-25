@@ -295,41 +295,54 @@ unsigned Cty_DB_GetNumCtysInSys (__attribute__((unused)) long SysCod)
 /***************** Get number of countries with institutions *****************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithInss (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod)
+unsigned Cty_DB_GetNumCtysWithInss (Hie_Level_t Level,long HieCod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with institutions",
 		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
 		   " FROM cty_countrs,"
 			 "ins_instits"
-		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod");
+		  " WHERE %s"
+		         "cty_countrs.CtyCod=ins_instits.CtyCod",
+		  SubQuery);
   }
 
 /*****************************************************************************/
 /******************* Get number of countries with centers ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithCtrs (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod)
+unsigned Cty_DB_GetNumCtysWithCtrs (Hie_Level_t Level,long HieCod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with centers",
 		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
 		   " FROM cty_countrs,"
 			 "ins_instits,"
 			 "ctr_centers"
-		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
-		    " AND ins_instits.InsCod=ctr_centers.InsCod");
+		  " WHERE %s"
+		         "cty_countrs.CtyCod=ins_instits.CtyCod"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod",
+		  SubQuery);
   }
 
 /*****************************************************************************/
 /******************* Get number of countries with degrees ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithDegs (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod)
+unsigned Cty_DB_GetNumCtysWithDegs (Hie_Level_t Level,long HieCod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with degrees",
 		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
@@ -337,18 +350,23 @@ unsigned Cty_DB_GetNumCtysWithDegs (__attribute__((unused)) Hie_Level_t Level,
 			 "ins_instits,"
 			 "ctr_centers,"
 			 "deg_degrees"
-		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
+		  " WHERE %s"
+		         "cty_countrs.CtyCod=ins_instits.CtyCod"
 		    " AND ins_instits.InsCod=ctr_centers.InsCod"
-		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod");
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		  SubQuery);
   }
 
 /*****************************************************************************/
 /******************* Get number of countries with courses ********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithCrss (__attribute__((unused)) Hie_Level_t Level,
-				    __attribute__((unused)) long HieCod)
+unsigned Cty_DB_GetNumCtysWithCrss (Hie_Level_t Level,long HieCod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Level,HieCod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with courses",
 		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
@@ -357,10 +375,12 @@ unsigned Cty_DB_GetNumCtysWithCrss (__attribute__((unused)) Hie_Level_t Level,
 			 "ctr_centers,"
 			 "deg_degrees,"
 			 "crs_courses"
-		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
+		  " WHERE %s"
+		         "cty_countrs.CtyCod=ins_instits.CtyCod"
 		    " AND ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		    " AND deg_degrees.DegCod=crs_courses.DegCod");
+		    " AND deg_degrees.DegCod=crs_courses.DegCod",
+		  SubQuery);
   }
 
 /*****************************************************************************/
