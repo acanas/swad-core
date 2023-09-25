@@ -1020,45 +1020,38 @@ static void Hie_WriteHeadHierarchy (void)
    extern const char *Txt_Centers;
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
+   static const char *Icons[Hie_NUM_LEVELS] =
+     {
+      [Hie_CTY] = "globe-americas.svg",
+      [Hie_INS] = "university.svg",
+      [Hie_CTR] = "building.svg",
+      [Hie_DEG] = "graduation-cap.svg",
+      [Hie_CRS] = "chalkboard-teacher.svg",
+     };
+   static const char **Txt[Hie_NUM_LEVELS] =
+     {
+      [Hie_CTY] = &Txt_Countries,
+      [Hie_INS] = &Txt_Institutions,
+      [Hie_CTR] = &Txt_Centers,
+      [Hie_DEG] = &Txt_Degrees,
+      [Hie_CRS] = &Txt_Courses,
+     };
+   Hie_Level_t Level;
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
 
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 Ico_PutIcon ("globe-americas.svg",Ico_BLACK,
-	              Txt_Countries,"ICOx16");
-	 HTM_BR ();
-	 HTM_Txt (Txt_Countries);
-      HTM_TH_End ();
-
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 Ico_PutIcon ("university.svg",Ico_BLACK,
-	              Txt_Institutions,"ICOx16");
-	 HTM_BR ();
-	 HTM_Txt (Txt_Institutions);
-      HTM_TH_End ();
-
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 Ico_PutIcon ("building.svg",Ico_BLACK,
-	              Txt_Centers,"ICOx16");
-	 HTM_BR ();
-	 HTM_Txt (Txt_Centers);
-      HTM_TH_End ();
-
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 Ico_PutIcon ("graduation-cap.svg",Ico_BLACK,
-	              Txt_Degrees,"ICOx16");
-	 HTM_BR ();
-	 HTM_Txt (Txt_Degrees);
-      HTM_TH_End ();
-
-      HTM_TH_Begin (HTM_HEAD_RIGHT);
-	 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,
-	              Txt_Courses,"ICOx16");
-	 HTM_BR ();
-	 HTM_Txt (Txt_Courses);
-      HTM_TH_End ();
+      for (Level  = Hie_CTY;
+	   Level <= Hie_CRS;
+	   Level++)
+	{
+	 HTM_TH_Begin (HTM_HEAD_RIGHT);
+	    Ico_PutIcon (Icons[Level],Ico_BLACK,*Txt[Level],"ICOx16");
+	    HTM_BR ();
+	    HTM_Txt (*Txt[Level]);
+	 HTM_TH_End ();
+	}
 
    HTM_TR_End ();
   }
@@ -1089,11 +1082,11 @@ static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel)
    for (LevelChildren  = Hie_CTY;
         LevelChildren <= Hie_CRS;
         LevelChildren++)
-      if (LevelChildren >= HavingNodesOfLevel)			// Example: don't show number of centers with institutions
+      if (LevelChildren >= HavingNodesOfLevel)		// Example: don't show number of centers with institutions
 	 NumNodes[LevelChildren] = -1;
-      else if (LevelChildren      <  Gbl.Scope.Current &&	// Example: if scope is center (4)
-	       HavingNodesOfLevel <= Gbl.Scope.Current)		//          number of nodes with instit./countries/centers
-	 NumNodes[LevelChildren] = 1;				//          in current center is 1
+      else if (HavingNodesOfLevel <= Gbl.Scope.Current)	// Example: if scope is center (4)
+	                                     		//          number of nodes with instit./countries/centers
+	 NumNodes[LevelChildren] = 1;			//          in current center is 1
       else
          NumNodes[LevelChildren] = (int) Hie_GetCachedNumNodesInHieLvlWith (LevelChildren,	// Child
         							            Gbl.Scope.Current,	// Parent
@@ -1111,14 +1104,22 @@ static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
   {
    extern const char *Txt_With_;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static unsigned (*FunctionGetCachedNumNodesWithusrs[Hie_NUM_LEVELS]) (Rol_Role_t Role) =
+     {
+      [Hie_CTY] = Cty_GetCachedNumCtysWithUsrs,
+      [Hie_INS] = Ins_GetCachedNumInssWithUsrs,
+      [Hie_CTR] = Ctr_GetCachedNumCtrsWithUsrs,
+      [Hie_DEG] = Deg_GetCachedNumDegsWithUsrs,
+      [Hie_CRS] = Crs_GetCachedNumCrssWithUsrs,
+     };
    int NumNodes[Hie_NUM_LEVELS];
+   Hie_Level_t Level;
 
-   /***** Get number of elements with students *****/
-   NumNodes[Hie_CTY] = Cty_GetCachedNumCtysWithUsrs (Role);
-   NumNodes[Hie_INS] = Ins_GetCachedNumInssWithUsrs (Role);
-   NumNodes[Hie_CTR] = Ctr_GetCachedNumCtrsWithUsrs (Role);
-   NumNodes[Hie_DEG] = Deg_GetCachedNumDegsWithUsrs (Role);
-   NumNodes[Hie_CRS] = Crs_GetCachedNumCrssWithUsrs (Role);
+   /***** Get number of nodes with users *****/
+   for (Level  = Hie_CTY;
+        Level <= Hie_CRS;
+        Level++)
+      NumNodes[Level] = FunctionGetCachedNumNodesWithusrs[Level] (Role);
 
    /***** Write number of elements with users *****/
    Hie_ShowHierarchyRow (Txt_With_,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
@@ -1373,7 +1374,7 @@ static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
       HTM_TD_End ();
 
       /***** Write number of countries *****/
-      for (Level = Hie_CTY;
+      for (Level  = Hie_CTY;
 	   Level <= Hie_CRS;
 	   Level++)
          Hie_ShowHierarchyCell (ClassTxt,NumNodes[Level]);
