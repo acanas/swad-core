@@ -39,11 +39,11 @@
 void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange);
 void Sco_PutParCurrentScope (void *Level);
 void Sco_PutParScope (const char *ParName,Hie_Level_t Level);
-void Sco_GetScope (const char *ParName);
-void Sco_AdjustScope (void);
+void Sco_GetScope (const char *ParName,Hie_Level_t DefaultScope);
+void Sco_AdjustScope (Hie_Level_t DefaultScope);
 
-void Sco_SetScopesForListingGuests (void);
-void Sco_SetScopesForListingStudents (void);
+void Sco_SetAllowedScopesForListingGuests (void);
+void Sco_SetAllowedScopesForListingStudents (void);
 
 Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
 Hie_Level_t Hie_GetLevelFromDBStr (const char *LevelDBStr);

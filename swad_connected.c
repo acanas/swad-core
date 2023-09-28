@@ -100,8 +100,8 @@ void Con_ShowConnectedUsrs (void)
      }
 
    /***** Get scope *****/
-   Sco_SetScopesForListingStudents ();
-   Sco_GetScope ("ScopeCon");
+   Sco_SetAllowedScopesForListingStudents ();
+   Sco_GetScope ("ScopeCon",Hie_CRS);
 
    /***** Begin box *****/
    /* Current time */
@@ -236,17 +236,13 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
        (Gbl.Usrs.Me.IBelongToCurrentCrs ||		// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
-      Gbl.Usrs.Connected.NumUsrs       = 0;
+      Gbl.Usrs.Connected.NumUsrs       =
       Gbl.Usrs.Connected.NumUsrsToList = 0;
       Gbl.Scope.Current = Hie_CRS;
 
-      /***** Number of teachers *****/
+      /***** Number of teachers, non-editing teachers, and students *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
-
-      /***** Number of non-editing teachers *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_NET);
-
-      /***** Number of students *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_STD);
      }
   }

@@ -98,7 +98,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 
 static void Svy_HideUnhideSurvey (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy);
+static void Svy_SetAllowedScopes (struct Svy_Survey *Svy);
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod);
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt);
@@ -1668,8 +1668,8 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       Svy_SetDefaultAndAllowedScope (&Surveys.Svy);
-	       Sco_GetScope ("ScopeSvy");
+	       Svy_SetAllowedScopes (&Surveys.Svy);
+	       Sco_GetScope ("ScopeSvy",Surveys.Svy.Level);
 	       Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 
@@ -1754,15 +1754,14 @@ void Svy_ReqCreatOrEditSvy (void)
   }
 
 /*****************************************************************************/
-/****** Set default and allowed scopes depending on logged user's role *******/
+/************ Set allowed scopes depending on logged user's role *************/
 /*****************************************************************************/
 
-static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
+static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
   {
    bool ICanEdit = false;
 
-   /***** Set default scope *****/
-   Gbl.Scope.Default = Hie_UNK;
+   /***** Set allowed scopes *****/
    Gbl.Scope.Allowed = 0;
 
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1774,7 +1773,6 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 	       Svy->Level = Hie_CRS;
 	    if (Svy->Level == Hie_CRS)
 	      {
-               Gbl.Scope.Default = Svy->Level;
 	       Gbl.Scope.Allowed = 1 << Hie_CRS;
 	       ICanEdit = true;
 	      }
@@ -1785,7 +1783,6 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 	    Svy->Level = Hie_DEG;
 	 if (Svy->Level == Hie_DEG)
 	   {
-	    Gbl.Scope.Default = Svy->Level;
 	    Gbl.Scope.Allowed = 1 << Hie_DEG;
 	    ICanEdit = true;
 	   }
@@ -1795,7 +1792,6 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 	    Svy->Level = Hie_CTR;
 	 if (Svy->Level == Hie_CTR)
 	   {
-	    Gbl.Scope.Default = Svy->Level;
 	    Gbl.Scope.Allowed = 1 << Hie_CTR;
 	    ICanEdit = true;
 	   }
@@ -1805,7 +1801,6 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 	    Svy->Level = Hie_INS;
 	 if (Svy->Level == Hie_INS)
 	   {
-	    Gbl.Scope.Default = Svy->Level;
 	    Gbl.Scope.Allowed = 1 << Hie_INS;
 	    ICanEdit = true;
 	   }
@@ -1815,7 +1810,6 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 	    Svy->Level = (Gbl.Hierarchy.Level < Hie_NUM_LEVELS &&
 		          Gbl.Hierarchy.Level != Hie_UNK) ? Gbl.Hierarchy.Level :
 		        	                            Hie_SYS;
-         Gbl.Scope.Default = Svy->Level;
          Gbl.Scope.Allowed = 1 << Hie_SYS |
 	                     1 << Hie_CTY |
 	                     1 << Hie_INS |
@@ -1934,8 +1928,8 @@ void Svy_ReceiveFormSurvey (void)
      }
 
    /***** Get scope *****/
-   Svy_SetDefaultAndAllowedScope (&NewSvy);
-   Sco_GetScope ("ScopeSvy");
+   Svy_SetAllowedScopes (&NewSvy);
+   Sco_GetScope ("ScopeSvy",NewSvy.Level);
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:

@@ -95,7 +95,6 @@ struct Globals
    struct
      {
       Hie_Level_t Current;
-      Hie_Level_t Default;
       unsigned Allowed;
      } Scope;
    struct

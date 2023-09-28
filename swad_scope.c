@@ -129,7 +129,7 @@ void Sco_PutParScope (const char *ParName,Hie_Level_t Level)
 /*************************** Get parameter scope *****************************/
 /*****************************************************************************/
 
-void Sco_GetScope (const char *ParName)
+void Sco_GetScope (const char *ParName,Hie_Level_t DefaultScope)
   {
    /***** Get parameter with scope *****/
    Gbl.Scope.Current = (Hie_Level_t)
@@ -139,20 +139,20 @@ void Sco_GetScope (const char *ParName)
                                                (unsigned long) Hie_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/
-   Sco_AdjustScope ();
+   Sco_AdjustScope (DefaultScope);
   }
 
 /*****************************************************************************/
 /*********** Adjust scope avoiding impossible or forbidden scopes ************/
 /*****************************************************************************/
 
-void Sco_AdjustScope (void)
+void Sco_AdjustScope (Hie_Level_t DefaultScope)
   {
    Hie_Level_t Level;
 
    /***** Is scope is unknow, use default scope *****/
    if (Gbl.Scope.Current == Hie_UNK)
-      Gbl.Scope.Current = Gbl.Scope.Default;
+      Gbl.Scope.Current = DefaultScope;
 
    /***** Avoid impossible scopes *****/
    for (Level  = Hie_CRS;
@@ -170,17 +170,15 @@ void Sco_AdjustScope (void)
 /****************** Set allowed scopes when listing guests *******************/
 /*****************************************************************************/
 
-void Sco_SetScopesForListingGuests (void)
+void Sco_SetAllowedScopesForListingGuests (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_SYS_ADM:
 	 Gbl.Scope.Allowed = 1 << Hie_SYS;
-	 Gbl.Scope.Default = Hie_SYS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = Hie_UNK;
 	 break;
      }
   }
@@ -189,9 +187,8 @@ void Sco_SetScopesForListingGuests (void)
 /**************** Set allowed scopes when listing students *******************/
 /*****************************************************************************/
 
-void Sco_SetScopesForListingStudents (void)
+void Sco_SetAllowedScopesForListingStudents (void)
   {
-   Gbl.Scope.Default = Hie_CRS;
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
@@ -224,7 +221,6 @@ void Sco_SetScopesForListingStudents (void)
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = Hie_UNK;
 	 break;
      }
   }

@@ -248,8 +248,7 @@ static void Ind_GetParsIndicators (struct Ind_Indicators *Indicators)
 		       1 << Hie_CTR |
 		       1 << Hie_DEG |
 		       1 << Hie_CRS;
-   Gbl.Scope.Default = Hie_CRS;
-   Sco_GetScope ("ScopeInd");
+   Sco_GetScope ("ScopeInd",Hie_CRS);
 
    /***** Get degree type code *****/
    Indicators->DegTypCod = (Gbl.Scope.Current == Hie_SYS) ?

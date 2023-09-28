@@ -105,8 +105,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 				1 << Hie_CTR |
 				1 << Hie_DEG |
 				1 << Hie_CRS;
-	    Gbl.Scope.Default = Hie_SYS;
-	    Sco_GetScope ("FigScope");
+	    Sco_GetScope ("FigScope",Hie_SYS);
 	    Sco_PutSelectorScope ("FigScope",HTM_DONT_SUBMIT_ON_CHANGE);
 	 HTM_LABEL_End ();
 
@@ -148,8 +147,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    struct Fig_Figures Figures;
 
    /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
-   Gbl.Scope.Default = Hie_CRS;
-   Sco_AdjustScope ();
+   Sco_AdjustScope (Hie_CRS);
 
    /***** Put icon to show figure *****/
    Figures.Level      = Gbl.Scope.Current;

@@ -4270,8 +4270,8 @@ void Usr_ListAllDataGsts (void)
    Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Sco_SetScopesForListingGuests ();
-   Sco_GetScope ("ScopeUsr");
+   Sco_SetAllowedScopesForListingGuests ();
+   Sco_GetScope ("ScopeUsr",Hie_SYS);
 
    /****** Get list of guests ******/
    Usr_GetGstsLst (Gbl.Scope.Current);
@@ -4384,8 +4384,8 @@ void Usr_ListAllDataStds (void)
    Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Sco_SetScopesForListingStudents ();
-   Sco_GetScope ("ScopeUsr");
+   Sco_SetAllowedScopesForListingStudents ();
+   Sco_GetScope ("ScopeUsr",Hie_CRS);
 
    /***** If the scope is the current course... *****/
    if (Gbl.Scope.Current == Hie_CRS)
@@ -4642,8 +4642,7 @@ void Usr_ListAllDataTchs (void)
                        1 << Hie_CTR |
                        1 << Hie_DEG |
                        1 << Hie_CRS;
-   Gbl.Scope.Default = Hie_CRS;
-   Sco_GetScope ("ScopeUsr");
+   Sco_GetScope ("ScopeUsr",Hie_CRS);
 
    /***** Get list of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
@@ -4912,8 +4911,7 @@ void Usr_ListDataAdms (void)
                        1 << Hie_INS |
                        1 << Hie_CTR |
                        1 << Hie_DEG;
-   Gbl.Scope.Default = Hie_DEG;
-   Sco_GetScope ("ScopeUsr");
+   Sco_GetScope ("ScopeUsr",Hie_DEG);
 
    /***** Get list of administrators *****/
    Adm_GetAdmsLst (Gbl.Scope.Current);
@@ -5051,8 +5049,8 @@ void Usr_SeeGuests (void)
    Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Sco_SetScopesForListingGuests ();
-   Sco_GetScope ("ScopeUsr");
+   Sco_SetAllowedScopesForListingGuests ();
+   Sco_GetScope ("ScopeUsr",Hie_SYS);
 
    /***** Get list of guests in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
@@ -5185,8 +5183,8 @@ void Usr_SeeStudents (void)
    Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Sco_SetScopesForListingStudents ();
-   Sco_GetScope ("ScopeUsr");
+   Sco_SetAllowedScopesForListingStudents ();
+   Sco_GetScope ("ScopeUsr",Hie_CRS);
 
    /***** Get groups to show ******/
    if (Gbl.Scope.Current == Hie_CRS)
@@ -5348,8 +5346,7 @@ void Usr_SeeTeachers (void)
                        1 << Hie_CTR |
                        1 << Hie_DEG |
                        1 << Hie_CRS;
-   Gbl.Scope.Default = Hie_CRS;
-   Sco_GetScope ("ScopeUsr");
+   Sco_GetScope ("ScopeUsr",Hie_CRS);
 
    /***** Get groups to show ******/
    if (Gbl.Scope.Current == Hie_CRS)
@@ -5929,8 +5926,8 @@ void Usr_SeeGstClassPhotoPrn (void)
    Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Sco_SetScopesForListingGuests ();
-   Sco_GetScope ("ScopeUsr");
+   // Sco_SetScopesForListingGuests ();
+   Sco_GetScope ("ScopeUsr",Hie_SYS);
 
    /***** Get list of guests *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
@@ -5964,8 +5961,8 @@ void Usr_SeeStdClassPhotoPrn (void)
    Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Sco_SetScopesForListingStudents ();
-   Sco_GetScope ("ScopeUsr");
+   Sco_SetAllowedScopesForListingStudents ();
+   Sco_GetScope ("ScopeUsr",Hie_CRS);
 
    /****** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -6013,8 +6010,7 @@ void Usr_SeeTchClassPhotoPrn (void)
                        1 << Hie_CTR |
                        1 << Hie_DEG |
                        1 << Hie_CRS;
-   Gbl.Scope.Default = Hie_CRS;
-   Sco_GetScope ("ScopeUsr");
+   Sco_GetScope ("ScopeUsr",Hie_CRS);
 
    /****** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();

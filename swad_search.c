@@ -177,8 +177,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 				      1 << Hie_CTR |
 				      1 << Hie_DEG |
 				      1 << Hie_CRS;
-		  Gbl.Scope.Default = DefaultScope;
-		  Sco_GetScope ("ScopeSch");
+		  Sco_GetScope ("ScopeSch",DefaultScope);
 		  Sco_PutSelectorScope ("ScopeSch",HTM_DONT_SUBMIT_ON_CHANGE);
 	       HTM_LABEL_End ();
 	    HTM_DIV_End ();

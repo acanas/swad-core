@@ -1695,7 +1695,7 @@ int swad__findUsers (struct soap *soap,
    if (Search.Str[0])	// Search some users
      {
       Gbl.Scope.Current = (Gbl.Hierarchy.Level == Hie_CRS) ? Hie_CRS :
-							        Hie_SYS;
+							     Hie_SYS;
       if (Sch_BuildSearchQuery (SearchQuery,&Search,
 				"CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 				NULL,NULL))

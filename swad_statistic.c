@@ -548,8 +548,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 				   1 << Hie_CTR |
 				   1 << Hie_DEG |
 				   1 << Hie_CRS;
-	       Gbl.Scope.Default = Hie_SYS;
-	       Sco_GetScope ("ScopeSta");
+	       Sco_GetScope ("ScopeSta",Hie_SYS);
 	       Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 
@@ -827,8 +826,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 			     1 << Hie_CTR |
 			     1 << Hie_DEG |
 			     1 << Hie_CRS;
-	 Gbl.Scope.Default = Hie_SYS;
-	 Sco_GetScope ("ScopeSta");
+	 Sco_GetScope ("ScopeSta",Hie_SYS);
 
 	 /***** Show form again *****/
 	 Sta_PutFormGblHits (&Stats);

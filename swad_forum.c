@@ -3232,7 +3232,6 @@ static void For_InsertThrInClipboard (long ThrCod)
    For_DB_InsertThrInMyClipboard (ThrCod);
   }
 
-
 /*****************************************************************************/
 /************************** Show figures about forums ************************/
 /*****************************************************************************/
@@ -3253,9 +3252,9 @@ void For_GetAndShowForumStats (void)
    struct For_FiguresForum FiguresForum;
 
    /***** Reset total stats *****/
-   FiguresForum.NumForums           = 0;
-   FiguresForum.NumThreads          = 0;
-   FiguresForum.NumPosts            = 0;
+   FiguresForum.NumForums  = 0;
+   FiguresForum.NumThreads = 0;
+   FiguresForum.NumPosts   = 0;
    FiguresForum.NumUsrsToBeNotifiedByEMail = 0;
 
    /***** Begin box and table *****/

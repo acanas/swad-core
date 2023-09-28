@@ -2134,8 +2134,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                        1 << Hie_CTR |
                        1 << Hie_DEG |
                        1 << Hie_CRS;
-   Gbl.Scope.Default = Hie_CRS;
-   Sco_GetScope ("ScopeEnr");
+   Sco_GetScope ("ScopeEnr",Hie_CRS);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Enrolment_requests,
