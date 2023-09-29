@@ -80,8 +80,8 @@ struct Globals
      } Session;
    struct
      {
-      Tab_Tab_t Tab;
-      Act_Action_t Act;
+      Tab_Tab_t Tab;		// Current navigation tab
+      Act_Action_t Act;		// Current action
       Act_Action_t Original;	// Used in some actions to know what action gave rise to the current action
       bool UsesAJAX;		// Do not generate full HTML page, only the content of a div
       bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time

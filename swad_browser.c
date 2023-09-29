@@ -4006,6 +4006,45 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                      bool TreeContracted,
                                      Brw_IconTree_t IconThisRow)
   {
+   static bool SeeDoc[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_SHOW_DOC_INS] = true,
+      [Brw_SHOW_DOC_CTR] = true,
+      [Brw_SHOW_DOC_DEG] = true,
+      [Brw_SHOW_DOC_CRS] = true,
+      [Brw_SHOW_DOC_GRP] = true,
+     };
+   static bool AdmDoc[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_ADMI_DOC_INS] = true,
+      [Brw_ADMI_DOC_CTR] = true,
+      [Brw_ADMI_DOC_DEG] = true,
+      [Brw_ADMI_DOC_CRS] = true,
+      [Brw_ADMI_DOC_GRP] = true,
+     };
+   static bool AdmSha[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_ADMI_SHR_INS] = true,
+      [Brw_ADMI_SHR_CTR] = true,
+      [Brw_ADMI_SHR_DEG] = true,
+      [Brw_ADMI_SHR_CRS] = true,
+      [Brw_ADMI_SHR_GRP] = true,
+     };
+   static bool AdmAsg[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_ADMI_ASG_USR] = true,
+      [Brw_ADMI_ASG_CRS] = true,
+     };
+   static bool SeeMrk[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_SHOW_MRK_CRS] = true,
+      [Brw_SHOW_MRK_GRP] = true,
+     };
+   static bool AdmMrk[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_ADMI_MRK_CRS] = true,
+      [Brw_ADMI_MRK_GRP] = true,
+     };
    char *Anchor;
    HidVis_HiddenOrVisible_t HiddenOrVisible = HidVis_VISIBLE;
    bool RowSetAsPublic = false;
@@ -4013,27 +4052,6 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    bool IsRecent = false;
    struct Brw_FileMetadata FileMetadata;
    char FileBrowserId[32];
-   bool SeeDocsZone     = Gbl.FileBrowser.Type == Brw_SHOW_DOC_INS ||
-	                  Gbl.FileBrowser.Type == Brw_SHOW_DOC_CTR ||
-	                  Gbl.FileBrowser.Type == Brw_SHOW_DOC_DEG ||
-	                  Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
-                          Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP;
-   bool AdminDocsZone   = Gbl.FileBrowser.Type == Brw_ADMI_DOC_INS ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_DOC_CTR ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_DOC_DEG ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_DOC_GRP;
-   bool SharedZone      = Gbl.FileBrowser.Type == Brw_ADMI_SHR_INS ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_SHR_CTR ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_SHR_DEG ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_SHR_CRS ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_SHR_GRP;
-   bool AssignmentsZone = Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS;
-   bool SeeMarks        = Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-                          Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP;
-   bool AdminMarks      = Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS ||
-                          Gbl.FileBrowser.Type == Brw_ADMI_MRK_GRP;
 
    /***** Initializations *****/
    Gbl.FileBrowser.Clipboard.IsThisFile = false;
@@ -4041,14 +4059,21 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	     Gbl.FileBrowser.Id);
 
    /***** Is this row hidden or visible? *****/
-   if (SeeDocsZone || AdminDocsZone ||
-       SeeMarks    || AdminMarks)
+   if (SeeDoc[Gbl.FileBrowser.Type] ||
+       SeeMrk[Gbl.FileBrowser.Type] ||
+       AdmDoc[Gbl.FileBrowser.Type] ||
+       AdmMrk[Gbl.FileBrowser.Type])
      {
       HiddenOrVisible = Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
                                                                   Gbl.FileBrowser.FilFolLnk.Full);
-      if (HiddenOrVisible == HidVis_HIDDEN && Level && (SeeDocsZone || SeeMarks))
+      if (HiddenOrVisible == HidVis_HIDDEN &&
+	  (SeeDoc[Gbl.FileBrowser.Type] ||
+	   SeeMrk[Gbl.FileBrowser.Type]) &&
+	  Level)	// Don't return on level 0
          return false;
-      if (AdminDocsZone || AdminMarks)
+
+      if (AdmDoc[Gbl.FileBrowser.Type] ||
+	  AdmMrk[Gbl.FileBrowser.Type])
         {
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
 	    Gbl.FileBrowser.HiddenLevels[Level] = (HiddenOrVisible == HidVis_HIDDEN);
@@ -4073,7 +4098,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                              Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
 
    /***** Is this row public or private? *****/
-   if (SeeDocsZone || AdminDocsZone || SharedZone)
+   if (SeeDoc[Gbl.FileBrowser.Type] ||
+       AdmDoc[Gbl.FileBrowser.Type] ||
+       AdmSha[Gbl.FileBrowser.Type])
      {
       RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
 	                                                                   FileMetadata.IsPublic;
@@ -4089,18 +4116,20 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /* Style of the text in this row */
    snprintf (Gbl.FileBrowser.TxtStyle,sizeof (Gbl.FileBrowser.TxtStyle),
              "%s_%s",
-             LightStyle ? (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_HID" :
-											  "LST_REC_HID") :
-			  (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST" :
-											  "LST_REC"),
+             Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
+             !IsRecent ? (LightStyle ? "LST_HID" :
+        			       "LST") :
+        	         (LightStyle ? "LST_REC_HID" :
+        	        	       "LST_REC"),
 	     The_GetSuffix ());
-   Gbl.FileBrowser.InputStyle = (LightStyle ? (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_EDIT_HID" :
-	                                                                                                      "LST_EDIT_REC_HID") :
-                                              (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_EDIT" :
-                                        	                                                              "LST_EDIT_REC"));
+   Gbl.FileBrowser.InputStyle = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
+	                         !IsRecent) ? (LightStyle ? "LST_EDIT_HID" :
+					                    "LST_EDIT") :
+	                                      (LightStyle ? "LST_EDIT_REC_HID" :
+					                    "LST_EDIT_REC");
 
    /***** Get data of assignment using the name of the folder *****/
-   if (AssignmentsZone)
+   if (AdmAsg[Gbl.FileBrowser.Type])
      {
       if (Level == 1)	// Main folder of the assignment
 	{
@@ -4189,7 +4218,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	       Brw_IndentAndWriteIconExpandContract (Level,FileBrowserId,RowId,IconThisRow);
 
 	    /* Put icon to hide/unhide file or folder */
-	    if (AdminDocsZone || AdminMarks)
+	    if (AdmDoc[Gbl.FileBrowser.Type] ||
+		AdmMrk[Gbl.FileBrowser.Type])
 	       Brw_PutIconHideUnhide (Anchor,HiddenOrVisible);
 
 	    /***** File or folder icon *****/
@@ -4223,11 +4253,10 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /* End column */
    HTM_TD_End ();
 
-   if (AdminMarks)
+   if (AdmMrk[Gbl.FileBrowser.Type])
       /***** Header and footer rows *****/
       Mrk_GetAndWriteNumRowsHeaderAndFooter ();
-
-   if (AssignmentsZone && Level == 1)
+   else if (AdmAsg[Gbl.FileBrowser.Type] && Level == 1)
       /***** Start and end dates of assignment *****/
       Brw_WriteDatesAssignment ();
    else
@@ -4239,8 +4268,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       /***** Put icon to download ZIP of folder *****/
       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
-	     !SeeMarks &&				// Do not ZIP folders when seeing marks
-	     !(SeeDocsZone && HiddenOrVisible == HidVis_HIDDEN))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
+	     !SeeMrk[Gbl.FileBrowser.Type] &&	// Do not ZIP folders when showing marks
+	     !(SeeDoc[Gbl.FileBrowser.Type] && HiddenOrVisible == HidVis_HIDDEN))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	    Brw_PutButtonToDownloadZIPOfAFolder ();
       HTM_TD_End ();
      }
@@ -4254,7 +4283,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    The_ChangeRowColor ();
 
-   if (HiddenOrVisible == HidVis_HIDDEN && (SeeDocsZone || SeeMarks))
+   if (HiddenOrVisible == HidVis_HIDDEN &&
+       (SeeDoc[Gbl.FileBrowser.Type] ||
+	SeeMrk[Gbl.FileBrowser.Type]))
       return false;
    return true;
   }
