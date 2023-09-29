@@ -435,6 +435,8 @@ static void ZIP_CompressFolderIntoZIP (void)
 
 static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree)
   {
+   extern bool Brw_TypeIsSeeDoc[Brw_NUM_TYPES_FILE_BROWSER];
+   extern bool Brw_TypeIsSeeMrk[Brw_NUM_TYPES_FILE_BROWSER];
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
@@ -444,13 +446,6 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
    struct stat FileStatus;
    Brw_FileType_t FileType;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
-   bool SeeDocsZone = Gbl.FileBrowser.Type == Brw_SHOW_DOC_INS ||
-                      Gbl.FileBrowser.Type == Brw_SHOW_DOC_CTR ||
-                      Gbl.FileBrowser.Type == Brw_SHOW_DOC_DEG ||
-                      Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
-                      Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP;
-   bool SeeMarks    = Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-                      Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP;
    unsigned long long FullSize = 0;
 
    /***** Scan directory *****/
@@ -479,9 +474,9 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	       FileType = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
 									 Brw_IS_FILE;	// It's a file
 
-	    HiddenOrVisible = (SeeDocsZone ||
-		               SeeMarks) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
-		                                                                     PathFileInTree) :
+	    HiddenOrVisible = (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
+		               Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
+		                                                         PathFileInTree) :
 					   HidVis_VISIBLE;
 
 	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible

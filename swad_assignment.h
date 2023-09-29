@@ -105,6 +105,9 @@ void Asg_UnhideAssignment (void);
 void Asg_ReceiveFormAssignment (void);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
+void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg);
+bool Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg);
+
 unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif);
 
 //-------------------------------- Figures ------------------------------------

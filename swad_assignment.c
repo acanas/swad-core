@@ -1617,6 +1617,89 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
   }
 
 /*****************************************************************************/
+/************ Write start and end dates of a folder of assignment ************/
+/*****************************************************************************/
+
+void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
+  {
+   extern const char *Txt_unknown_assignment;
+   static unsigned UniqueId = 0;
+   char *Id;
+
+   /***** Begin table cell *****/
+   HTM_TD_Begin ("colspan=\"2\" class=\"RM %s_%s %s\"",
+		 Asg->Open ? "ASG_LST_DATE_GREEN" :
+			     "ASG_LST_DATE_RED",
+		 The_GetSuffix (),
+		 The_GetColorRows ());
+
+      if (Asg->AsgCod > 0)
+	{
+	 UniqueId++;
+
+	 /***** Write start date *****/
+	 if (asprintf (&Id,"asg_start_date_%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_SPAN_Begin ("id=\"%s\"",Id);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Asg->TimeUTC[Dat_STR_TIME],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					  true,true,false,0x7);
+	 HTM_SPAN_End ();
+	 free (Id);
+
+	 /***** Arrow *****/
+	 HTM_Txt ("&rarr;");
+
+	 /***** Write end date *****/
+	 if (asprintf (&Id,"asg_end_date_%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_SPAN_Begin ("id=\"%s\"",Id);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Asg->TimeUTC[Dat_END_TIME],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					  true,false,false,0x7);
+	 HTM_SPAN_End ();
+	 free (Id);
+	}
+      else
+	 HTM_TxtF ("&nbsp;(%s)",Txt_unknown_assignment);
+
+   /***** End table cell *****/
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/* Check if I have permission to create a file or folder into an assignment **/
+/*****************************************************************************/
+
+bool Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
+  {
+   /***** Trivial check 1: assignment is valid *****/
+   if (Asg->AsgCod <= 0)
+      return false;
+
+   /***** Check 2: Do not create anything in hidden assigments *****/
+   if (Asg->HiddenOrVisible == HidVis_HIDDEN)
+      return false;
+
+   /***** Check 3: If I do not belong to course / groups of this assignment,
+		   I can not create anything inside this assignment *****/
+   if (!Asg->IBelongToCrsOrGrps)
+      return false;
+
+   /***** Check 4: Depending on my role in this course... *****/
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
+     {
+      case Rol_STD:		// Students...
+      case Rol_NET:		// ...and non-editing teachers...
+	 return Asg->Open;	// ...can create inside open assignments
+      case Rol_TCH:		// Teachers...
+	 return true;		// ...can create inside open or closed assignments
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
 /************************ Get number of assignments **************************/
 /*****************************************************************************/
 // Returns the number of assignments

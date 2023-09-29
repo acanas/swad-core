@@ -40,6 +40,7 @@
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
+#include "swad_assignment.h"
 #include "swad_box.h"
 #include "swad_browser.h"
 #include "swad_browser_database.h"
@@ -141,6 +142,83 @@ const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_TCH_GRP] = Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS,
    [Brw_ADMI_DOC_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_DOCUMENTS,
    [Brw_ADMI_ASS_PRJ] = Brw_INTERNAL_NAME_ROOT_FOLDER_PROJECT_ASSESSMENT,
+  };
+
+bool Brw_TypeIsCrsBrw[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_SHOW_DOC_CRS] = true,
+   [Brw_ADMI_DOC_CRS] = true,
+   [Brw_ADMI_TCH_CRS] = true,
+   [Brw_ADMI_SHR_CRS] = true,
+   [Brw_SHOW_MRK_CRS] = true,
+   [Brw_ADMI_MRK_CRS] = true,
+  };
+bool Brw_TypeIsGrpBrw[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_SHOW_DOC_GRP] = true,
+   [Brw_ADMI_DOC_GRP] = true,
+   [Brw_ADMI_TCH_GRP] = true,
+   [Brw_ADMI_SHR_GRP] = true,
+   [Brw_SHOW_MRK_GRP] = true,
+   [Brw_ADMI_MRK_GRP] = true,
+  };
+bool Brw_TypeIsSeeDoc[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_SHOW_DOC_INS] = true,
+   [Brw_SHOW_DOC_CTR] = true,
+   [Brw_SHOW_DOC_DEG] = true,
+   [Brw_SHOW_DOC_CRS] = true,
+   [Brw_SHOW_DOC_GRP] = true,
+  };
+bool Brw_TypeIsAdmDoc[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_DOC_INS] = true,
+   [Brw_ADMI_DOC_CTR] = true,
+   [Brw_ADMI_DOC_DEG] = true,
+   [Brw_ADMI_DOC_CRS] = true,
+   [Brw_ADMI_DOC_GRP] = true,
+  };
+bool Brw_TypeIsAdmSha[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_SHR_INS] = true,
+   [Brw_ADMI_SHR_CTR] = true,
+   [Brw_ADMI_SHR_DEG] = true,
+   [Brw_ADMI_SHR_CRS] = true,
+   [Brw_ADMI_SHR_GRP] = true,
+  };
+bool Brw_TypeIsAdmAsg[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_ASG_USR] = true,
+   [Brw_ADMI_ASG_CRS] = true,
+  };
+bool Brw_TypeIsAdmUsrAsgWrk[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_ASG_USR] = true,
+   [Brw_ADMI_WRK_USR] = true,
+  };
+bool Brw_TypeIsAdmCrsAsgWrk[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_ASG_CRS] = true,
+   [Brw_ADMI_WRK_CRS] = true,
+  };
+bool Brw_TypeIsSeeMrk[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_SHOW_MRK_CRS] = true,
+   [Brw_SHOW_MRK_GRP] = true,
+  };
+bool Brw_TypeIsAdmMrk[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_MRK_CRS] = true,
+   [Brw_ADMI_MRK_GRP] = true,
+  };
+bool Brw_TypeIsAdmBrf[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_BRF_USR] = true,
+  };
+bool Brw_TypeIsAdmPrj[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_DOC_PRJ] = true,
+   [Brw_ADMI_ASS_PRJ] = true,
   };
 
 /*****************************************************************************/
@@ -1053,12 +1131,6 @@ static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParsFullTree (void);
 static bool Brw_GetFullTreeFromForm (void);
 
-static bool Brw_GetIfGroupFileBrowser (void);
-static bool Brw_GetIfProjectFileBrowser (void);
-static bool Brw_GetIfBriefcaseFileBrowser (void);
-static bool Brw_GetIfUsrAssigWorksFileBrowser (void);
-static bool Brw_GetIfCrsAssigWorksFileBrowser (void);
-
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
 
@@ -1108,7 +1180,6 @@ static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser
 static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
                                    const char FileName[NAME_MAX + 1],
                                    char FileNameToShow[NAME_MAX + 1]);
-static void Brw_WriteDatesAssignment (void);
 static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
@@ -1836,10 +1907,10 @@ void Brw_GetParAndInitFileBrowser (void)
    Brw_SetFullPathInTree ();
 
    /***** Get other parameters *****/
-   if (Brw_GetIfProjectFileBrowser ())
+   if (Brw_TypeIsAdmPrj[Gbl.FileBrowser.Type])
       /* Get project code */
       Prj_SetPrjCod (ParCod_GetPar (ParCod_Prj));
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
      {
       /* Get lists of the selected users if not already got */
       Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
@@ -2064,13 +2135,13 @@ void Brw_PutImplicitParsFileBrowser (void *FilFolLnk)
 void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
                              Brw_FileType_t FileType,long FilCod)
   {
-   if (Brw_GetIfGroupFileBrowser ())		// This file browser needs specify a group
+   if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type])		// This file browser needs specify a group
       /***** Group code *****/
       ParCod_PutPar (ParCod_Grp,Gbl.Crs.Grps.GrpCod);
-   else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
+   else if (Brw_TypeIsAdmPrj[Gbl.FileBrowser.Type])	// This file browser needs specify a project
       /***** Project code *****/
       ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
      {
       /***** Users selected *****/
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
@@ -2145,9 +2216,7 @@ static void Brw_GetParsPathInTreeAndFileName (void)
      }
 
    /***** Get data of assignment *****/
-   if (Gbl.FileBrowser.Level &&
-       (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
-        Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
+   if (Gbl.FileBrowser.Level && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
      {
       if (Gbl.FileBrowser.Level == 1)
          // We are in this case: assignments/assignment-folder
@@ -2829,18 +2898,6 @@ static void Brw_FormToChangeCrsGrpZone (void)
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
-   bool IsCourseZone = Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_DOC_CRS ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_TCH_CRS ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_SHR_CRS ||
-                       Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS;
-   bool IsGroupZone  = Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_DOC_GRP ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_TCH_GRP ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_SHR_GRP ||
-                       Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP ||
-                       Gbl.FileBrowser.Type == Brw_ADMI_MRK_GRP;
 
    /***** Get list of groups to show *****/
    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
@@ -2855,12 +2912,14 @@ static void Brw_FormToChangeCrsGrpZone (void)
       HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
 	 /***** Select the complete course, not a group *****/
-	 HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
-						     "BROWSER_TITLE_LIGHT");
+	 HTM_LI_Begin ("class=\"%s\"",
+	               Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? "BROWSER_TITLE" :
+						                "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"%s",
-				IsCourseZone ? " checked=\"checked\"" : "");
+				Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? " checked=\"checked\"" :
+									 "");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();
@@ -2878,7 +2937,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
 	       /* Select this group */
 	       HTM_LI_Begin ("class=\"%s\"",
-			     (IsGroupZone &&
+			     (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
 			      GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
 								      "BROWSER_TITLE_LIGHT");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
@@ -2890,7 +2949,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"%s",
 				      GrpDat.GrpCod,
-				      (IsGroupZone &&
+				      (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
 				       GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? " checked=\"checked\"" :
 					                                       "");
 		     HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
@@ -3040,11 +3099,11 @@ static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Ar
 
 void Brw_ShowAgainFileBrowserOrWorks (void)
   {
-   if (Brw_GetIfUsrAssigWorksFileBrowser ())
+   if (Brw_TypeIsAdmUsrAsgWrk[Gbl.FileBrowser.Type])
       Brw_ShowFileBrowsersAsgWrkUsr ();
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
       Brw_ShowFileBrowsersAsgWrkCrs ();
-   else if (Brw_GetIfProjectFileBrowser ())
+   else if (Brw_TypeIsAdmPrj[Gbl.FileBrowser.Type])
       Prj_ShowOneProject ();
    else
       Brw_ShowFileBrowserNormal ();
@@ -3363,12 +3422,12 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
       Brw_PutCheckboxFullTree ();	// Checkbox to show the full tree
-      if (Brw_GetIfBriefcaseFileBrowser ())
+      if (Brw_TypeIsAdmBrf[Gbl.FileBrowser.Type])
 	{
 	 if (Gbl.Action.Act != ActReqRemOldBrf)
 	    Brw_PutLinkToAskRemOldFiles ();	// Remove old files
 	}
-      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+      else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
 	{
 	 if (!Gbl.FileBrowser.ZIP.CreateZIP)
 	    ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the...
@@ -3658,11 +3717,11 @@ static void Brw_PutCheckboxFullTree (void)
 
 static void Brw_PutParsFullTree (void)
   {
-   if (Brw_GetIfGroupFileBrowser ())
+   if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type])
       ParCod_PutPar (ParCod_Grp,Gbl.Crs.Grps.GrpCod);
-   else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
+   else if (Brw_TypeIsAdmPrj[Gbl.FileBrowser.Type])	// This file browser needs specify a project
       ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   else if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
@@ -3684,83 +3743,6 @@ void Brw_PutParFullTreeIfSelected (void *FullTree)
 static bool Brw_GetFullTreeFromForm (void)
   {
    return Par_GetParBool ("FullTree");
-  }
-
-/*****************************************************************************/
-/********* Get if the current file browser is a group file browser ***********/
-/*****************************************************************************/
-
-static bool Brw_GetIfGroupFileBrowser (void)
-  {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
-         return true;
-      default:
-	 return false;
-     }
-  }
-
-/*****************************************************************************/
-/******** Get if the current file browser is a project file browser **********/
-/*****************************************************************************/
-
-static bool Brw_GetIfProjectFileBrowser (void)
-  {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_DOC_PRJ:	// Project documents
-      case Brw_ADMI_ASS_PRJ:	// Project assessment
-         return true;
-      default:
-	 return false;
-     }
-  }
-
-/*****************************************************************************/
-/****** Get if the current file browser is course assignments or works *******/
-/*****************************************************************************/
-
-static bool Brw_GetIfBriefcaseFileBrowser (void)
-  {
-   return (Gbl.FileBrowser.Type == Brw_ADMI_BRF_USR);
-  }
-
-/*****************************************************************************/
-/****** Get if the current file browser is course assignments or works *******/
-/*****************************************************************************/
-
-static bool Brw_GetIfUsrAssigWorksFileBrowser (void)
-  {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_ASG_USR:	// My assignments
-      case Brw_ADMI_WRK_USR:	// My works
-         return true;
-      default:
-	 return false;
-     }
-  }
-
-/*****************************************************************************/
-/****** Get if the current file browser is course assignments or works *******/
-/*****************************************************************************/
-
-static bool Brw_GetIfCrsAssigWorksFileBrowser (void)
-  {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_ASG_CRS:	// Course assignments
-      case Brw_ADMI_WRK_CRS:	// Course works
-         return true;
-      default:
-	 return false;
-     }
   }
 
 /*****************************************************************************/
@@ -4006,45 +3988,6 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                      bool TreeContracted,
                                      Brw_IconTree_t IconThisRow)
   {
-   static bool SeeDoc[Brw_NUM_TYPES_FILE_BROWSER] =
-     {
-      [Brw_SHOW_DOC_INS] = true,
-      [Brw_SHOW_DOC_CTR] = true,
-      [Brw_SHOW_DOC_DEG] = true,
-      [Brw_SHOW_DOC_CRS] = true,
-      [Brw_SHOW_DOC_GRP] = true,
-     };
-   static bool AdmDoc[Brw_NUM_TYPES_FILE_BROWSER] =
-     {
-      [Brw_ADMI_DOC_INS] = true,
-      [Brw_ADMI_DOC_CTR] = true,
-      [Brw_ADMI_DOC_DEG] = true,
-      [Brw_ADMI_DOC_CRS] = true,
-      [Brw_ADMI_DOC_GRP] = true,
-     };
-   static bool AdmSha[Brw_NUM_TYPES_FILE_BROWSER] =
-     {
-      [Brw_ADMI_SHR_INS] = true,
-      [Brw_ADMI_SHR_CTR] = true,
-      [Brw_ADMI_SHR_DEG] = true,
-      [Brw_ADMI_SHR_CRS] = true,
-      [Brw_ADMI_SHR_GRP] = true,
-     };
-   static bool AdmAsg[Brw_NUM_TYPES_FILE_BROWSER] =
-     {
-      [Brw_ADMI_ASG_USR] = true,
-      [Brw_ADMI_ASG_CRS] = true,
-     };
-   static bool SeeMrk[Brw_NUM_TYPES_FILE_BROWSER] =
-     {
-      [Brw_SHOW_MRK_CRS] = true,
-      [Brw_SHOW_MRK_GRP] = true,
-     };
-   static bool AdmMrk[Brw_NUM_TYPES_FILE_BROWSER] =
-     {
-      [Brw_ADMI_MRK_CRS] = true,
-      [Brw_ADMI_MRK_GRP] = true,
-     };
    char *Anchor;
    HidVis_HiddenOrVisible_t HiddenOrVisible = HidVis_VISIBLE;
    bool RowSetAsPublic = false;
@@ -4059,21 +4002,21 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	     Gbl.FileBrowser.Id);
 
    /***** Is this row hidden or visible? *****/
-   if (SeeDoc[Gbl.FileBrowser.Type] ||
-       SeeMrk[Gbl.FileBrowser.Type] ||
-       AdmDoc[Gbl.FileBrowser.Type] ||
-       AdmMrk[Gbl.FileBrowser.Type])
+   if (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
+       Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type] ||
+       Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
+       Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
      {
       HiddenOrVisible = Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
                                                                   Gbl.FileBrowser.FilFolLnk.Full);
       if (HiddenOrVisible == HidVis_HIDDEN &&
-	  (SeeDoc[Gbl.FileBrowser.Type] ||
-	   SeeMrk[Gbl.FileBrowser.Type]) &&
+	  (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
+	   Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]) &&
 	  Level)	// Don't return on level 0
          return false;
 
-      if (AdmDoc[Gbl.FileBrowser.Type] ||
-	  AdmMrk[Gbl.FileBrowser.Type])
+      if (Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
+	  Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
         {
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
 	    Gbl.FileBrowser.HiddenLevels[Level] = (HiddenOrVisible == HidVis_HIDDEN);
@@ -4098,9 +4041,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                              Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
 
    /***** Is this row public or private? *****/
-   if (SeeDoc[Gbl.FileBrowser.Type] ||
-       AdmDoc[Gbl.FileBrowser.Type] ||
-       AdmSha[Gbl.FileBrowser.Type])
+   if (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
+       Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
+       Brw_TypeIsAdmSha[Gbl.FileBrowser.Type])
      {
       RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
 	                                                                   FileMetadata.IsPublic;
@@ -4129,7 +4072,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 					                    "LST_EDIT_REC");
 
    /***** Get data of assignment using the name of the folder *****/
-   if (AdmAsg[Gbl.FileBrowser.Type])
+   if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
      {
       if (Level == 1)	// Main folder of the assignment
 	{
@@ -4218,8 +4161,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	       Brw_IndentAndWriteIconExpandContract (Level,FileBrowserId,RowId,IconThisRow);
 
 	    /* Put icon to hide/unhide file or folder */
-	    if (AdmDoc[Gbl.FileBrowser.Type] ||
-		AdmMrk[Gbl.FileBrowser.Type])
+	    if (Brw_TypeIsAdmDoc[Gbl.FileBrowser.Type] ||
+		Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
 	       Brw_PutIconHideUnhide (Anchor,HiddenOrVisible);
 
 	    /***** File or folder icon *****/
@@ -4253,12 +4196,12 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /* End column */
    HTM_TD_End ();
 
-   if (AdmMrk[Gbl.FileBrowser.Type])
+   if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
       /***** Header and footer rows *****/
       Mrk_GetAndWriteNumRowsHeaderAndFooter ();
-   else if (AdmAsg[Gbl.FileBrowser.Type] && Level == 1)
+   else if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type] && Level == 1)
       /***** Start and end dates of assignment *****/
-      Brw_WriteDatesAssignment ();
+      Asg_WriteDatesAssignment (&Gbl.FileBrowser.Asg);
    else
       /***** File date and size *****/
       Brw_WriteFileSizeAndDate (&FileMetadata);
@@ -4268,8 +4211,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       /***** Put icon to download ZIP of folder *****/
       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
-	     !SeeMrk[Gbl.FileBrowser.Type] &&	// Do not ZIP folders when showing marks
-	     !(SeeDoc[Gbl.FileBrowser.Type] && HiddenOrVisible == HidVis_HIDDEN))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
+	     !Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type] &&	// Do not ZIP folders when showing marks
+	     !(Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] && HiddenOrVisible == HidVis_HIDDEN))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	    Brw_PutButtonToDownloadZIPOfAFolder ();
       HTM_TD_End ();
      }
@@ -4284,8 +4227,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    The_ChangeRowColor ();
 
    if (HiddenOrVisible == HidVis_HIDDEN &&
-       (SeeDoc[Gbl.FileBrowser.Type] ||
-	SeeMrk[Gbl.FileBrowser.Type]))
+       (Brw_TypeIsSeeDoc[Gbl.FileBrowser.Type] ||
+	Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type]))
       return false;
    return true;
   }
@@ -4334,8 +4277,7 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
 
    /***** Do not paste a link in marks... *****/
    if (Gbl.FileBrowser.Clipboard.FilFolLnk.Type == Brw_IS_LINK &&
-       (Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS ||
-        Gbl.FileBrowser.Type == Brw_ADMI_MRK_GRP))
+       Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
       return false;
 
    /**** If I can not create elements into this folder... *****/
@@ -4922,9 +4864,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	       else
 		 {
 	          /***** Write name of the folder *****/
-		  if ((Level == 1) &&
-		      (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
-		       Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
+		  if (Level == 1 && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
 		     HTM_SPAN_Begin ("title=\"%s\"",Gbl.FileBrowser.Asg.Title);
 
 		  HTM_STRONG_Begin ();
@@ -4932,9 +4872,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 		  HTM_STRONG_End ();
 		  HTM_NBSP ();
 
-		  if ((Level == 1) &&
-		      (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
-		       Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
+		  if (Level == 1 && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
 		     HTM_SPAN_End ();
 		 }
 
@@ -4955,9 +4893,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	       Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	       /* Link to the form and to the file */
-	       HTM_BUTTON_Submit_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-					 Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
-										     Txt_Download,
+	       HTM_BUTTON_Submit_Begin (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type] ? Txt_Check_marks_in_the_file :
+										 Txt_Download,
 					"class=\"LM BT_LINK FILENAME\"");
 		  HTM_Txt (FileNameToShow);
 	       HTM_BUTTON_End ();
@@ -5023,57 +4960,6 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
 	     FileName);
    if (symlink (FullPathIncludingFile,Link) != 0)
       Err_ShowErrorAndExit ("Can not create temporary link.");
-  }
-
-/*****************************************************************************/
-/************ Write start and end dates of a folder of assignment ************/
-/*****************************************************************************/
-
-static void Brw_WriteDatesAssignment (void)
-  {
-   extern const char *Txt_unknown_assignment;
-   static unsigned UniqueId = 0;
-   char *Id;
-
-   /***** Begin table cell *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"RM %s_%s %s\"",
-		 Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
-					    "ASG_LST_DATE_RED",
-		 The_GetSuffix (),
-		 The_GetColorRows ());
-
-      if (Gbl.FileBrowser.Asg.AsgCod > 0)
-	{
-	 UniqueId++;
-
-	 /***** Write start date *****/
-	 if (asprintf (&Id,"asg_start_date_%u",UniqueId) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 HTM_SPAN_Begin ("id=\"%s\"",Id);
-	    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_STR_TIME],
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  true,true,false,0x7);
-	 HTM_SPAN_End ();
-	 free (Id);
-
-	 /***** Arrow *****/
-	 HTM_Txt ("&rarr;");
-
-	 /***** Write end date *****/
-	 if (asprintf (&Id,"asg_end_date_%u",UniqueId) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 HTM_SPAN_Begin ("id=\"%s\"",Id);
-	    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  true,false,false,0x7);
-	 HTM_SPAN_End ();
-	 free (Id);
-	}
-      else
-	 HTM_TxtF ("&nbsp;(%s)",Txt_unknown_assignment);
-
-   /***** End table cell *****/
-   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -5862,13 +5748,13 @@ long Brw_GetCodForFileBrowser (void)
 
 long Brw_GetZoneUsrCodForFileBrowser (void)
   {
-   if (Brw_GetIfBriefcaseFileBrowser ())	// Briefcase
+   if (Brw_TypeIsAdmBrf[Gbl.FileBrowser.Type])		// My briefcase
       return Gbl.Usrs.Me.UsrDat.UsrCod;
 
-   if (Brw_GetIfUsrAssigWorksFileBrowser ())	// My assignments or works
+   if (Brw_TypeIsAdmUsrAsgWrk[Gbl.FileBrowser.Type])	// My assignments or works
       return Gbl.Usrs.Me.UsrDat.UsrCod;
 
-   if (Brw_GetIfCrsAssigWorksFileBrowser ())	// Course assignments or works
+   if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])	// Course assignments or works
       return Gbl.Usrs.Other.UsrDat.UsrCod;
 
    return -1L;
@@ -6245,7 +6131,6 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
    char PathDstWithFile[PATH_MAX + 1 + PATH_MAX + 1 + NAME_MAX + 1];
    struct stat FileStatus;
    struct dirent **FileList;
-   bool AdminMarks;
    struct Mrk_Properties Marks;
    int NumFile;
    int NumFiles;
@@ -6331,9 +6216,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 	 else	// Destination file does not exist
 	   {
 	    /***** If the target file browser is that of marks, only HTML files are allowed *****/
-	    AdminMarks = Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS ||
-			 Gbl.FileBrowser.Type == Brw_ADMI_MRK_GRP;
-	    if (AdminMarks)
+	    if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
 	      {
 	       /* Check extension of the file */
 	       if (Str_FileIsHTML (FileNameOrg))
@@ -6370,7 +6253,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 		     *FirstFilCod = FilCod;
 
 		  /* Add a new entry of marks into database */
-		  if (AdminMarks)
+		  if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
 		     Mrk_DB_AddMarks (FilCod,&Marks);
 
 		  if (FileType == Brw_IS_FILE)
@@ -7027,7 +6910,6 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
    char PathTmp[PATH_MAX + 1 + PATH_MAX + 4 + 1];
    char PathCompleteInTreeIncludingFile[PATH_MAX + 1 + NAME_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   bool AdminMarks;
    bool FileIsValid = true;
    long FilCod = -1L;	// Code of new file in database
    struct Brw_FileMetadata FileMetadata;
@@ -7037,8 +6919,6 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
-   AdminMarks = Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS ||
-                Gbl.FileBrowser.Type == Brw_ADMI_MRK_GRP;
 
    /***** Check if creating a new file is allowed *****/
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
@@ -7083,7 +6963,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 
                   /* Check if the content of the file of marks is valid */
                   if (FileIsValid)
-                     if (AdminMarks)
+                     if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
                         if (!Mrk_CheckFileOfMarks (PathTmp,&Marks))
                            FileIsValid = false;
 
@@ -7147,7 +7027,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
                            Brw_GetFileMetadataByCod (&FileMetadata);
 
                            /* Add a new entry of marks into database */
-			   if (AdminMarks)
+			   if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
                               Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
 
                            /* Notify new file */
@@ -7616,8 +7496,7 @@ void Brw_ShowFileMetadata (void)
 	    FileHasPublisher = false;	// Get user's data from database
 
 	 /***** Get link to download the file *****/
-	 if (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-	     Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP)
+	 if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
 	    URL[0] = '\0';
 	 else
 	    Brw_GetLinkToDownloadFile (FileMetadata.FilFolLnk.Path,
@@ -8080,8 +7959,7 @@ void Brw_DownloadFile (void)
 	 Brw_GetAndUpdateFileViews (&FileMetadata);
 
 	 /***** Get link to download the file *****/
-	 if (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-	     Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP)
+	 if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
 	    URL[0] = '\0';
 	 else
 	    Brw_GetLinkToDownloadFile (Gbl.FileBrowser.FilFolLnk.Path,
@@ -8248,8 +8126,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
    const char *Title;
 
    /***** On the screen a link will be shown to download the file *****/
-   if (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-       Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP)
+   if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
      {
       /* Form to see marks */
       Frm_BeginForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
@@ -8315,8 +8192,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
    extern const char *Txt_Check_marks_in_the_file;
 
    /***** On the screen a link will be shown to download the file *****/
-   if (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-       Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP)
+   if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
      {
       /* Form to see marks */
       Frm_BeginForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
@@ -8987,30 +8863,11 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
          return Brw_CheckIfICanModifySharedFileOrFolder ();
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_ASG_CRS:
-	 if (Gbl.FileBrowser.Asg.AsgCod <= 0)	// If folder does not correspond to any assignment
-	    return true;			// Folder can be removed or renamed
-
-	 if (Gbl.FileBrowser.Asg.HiddenOrVisible == HidVis_HIDDEN)
-	    return false;			// Do not edit anything in hidden assigments
-
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER && // The main folder of an assignment
              Level == 1)
 	    return false;			// Do not remove / rename main folder of assigment
 
-	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
-	    return false; 				// I can not edit this assignment
-
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:			// Students...
-	    case Rol_NET:			// ...and non-editing teachers...
-	       return Gbl.FileBrowser.Asg.Open;	// ...can edit inside open assignments
-	    case Rol_TCH:			// Teachers...
-	       return true;			// ...can edit inside open or closed assignments
-	    default:
-	       break;
-	   }
-	 return false;
+	 return Asg_CheckIfICanCreateIntoAssigment (&Gbl.FileBrowser.Asg);
       case Brw_ADMI_DOC_PRJ:
          return Brw_CheckIfICanModifyPrjDocFileOrFolder ();
       case Brw_ADMI_ASS_PRJ:
@@ -9073,27 +8930,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (Level == 0)	// If root folder
 	    return false;	// Folders of assigments (level 1)
 				// can only be created automatically
-
-	 if (Gbl.FileBrowser.Asg.AsgCod <= 0)	// If folder does not correspond to any assignment
-	    return false;			// Do not create anything out of assignments
-
-	 if (Gbl.FileBrowser.Asg.HiddenOrVisible == HidVis_HIDDEN)
-	    return false;			// Do not create anything in hidden assigments
-
-	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
-	    return false; 				// I can not create anything inside this assignment
-
-	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
-	   {
-	    case Rol_STD:			// Students...
-	    case Rol_NET:			// ...and non-editing teachers...
-	       return Gbl.FileBrowser.Asg.Open;	// ...can create inside open assignments
-	    case Rol_TCH:			// Teachers...
-	       return true;			// ...can create inside open or closed assignments
-	    default:
-	       break;
-	   }
-	 return false;
+	 return Asg_CheckIfICanCreateIntoAssigment (&Gbl.FileBrowser.Asg);
       default:
          return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type);
      }
@@ -9851,7 +9688,7 @@ void Brw_RemoveOldFilesBriefcase (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   if (Brw_TypeIsAdmCrsAsgWrk[Gbl.FileBrowser.Type])
      {
       /***** Get parameter with number of months without access *****/
       Months = (unsigned)
