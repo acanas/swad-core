@@ -2166,7 +2166,6 @@ void Brw_PutParsFileBrowser (const char *PathInTree,const char *FilFolLnkName,
 static void Brw_GetParsPathInTreeAndFileName (void)
   {
    const char *Ptr;
-   unsigned i;
    Brw_FileType_t FileType;
    char FileNameToShow[NAME_MAX + 1];
 
@@ -2218,24 +2217,7 @@ static void Brw_GetParsPathInTreeAndFileName (void)
    /***** Get data of assignment *****/
    if (Gbl.FileBrowser.Level && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
      {
-      if (Gbl.FileBrowser.Level == 1)
-         // We are in this case: assignments/assignment-folder
-         Str_Copy (Gbl.FileBrowser.Asg.Folder,Gbl.FileBrowser.FilFolLnk.Name,
-                   sizeof (Gbl.FileBrowser.Asg.Folder) - 1);
-      else
-        {
-         // We are in this case: assignments/assignment-folder/rest-of-path
-         for (Ptr = Gbl.FileBrowser.FilFolLnk.Path;
-              *Ptr && *Ptr != '/';
-              Ptr++);	// Go to first '/'
-         if (*Ptr == '/')
-            Ptr++;	// Skip '/'
-         for (i = 0;
-              i < Brw_MAX_BYTES_FOLDER && *Ptr && *Ptr != '/';
-              i++, Ptr++)
-            Gbl.FileBrowser.Asg.Folder[i] = *Ptr;	// Copy assignment folder
-         Gbl.FileBrowser.Asg.Folder[i] = '\0';
-        }
+      Asg_SetFolder (&Gbl.FileBrowser.Asg,Gbl.FileBrowser.Level);
       Asg_GetAssignmentDataByFolder (&Gbl.FileBrowser.Asg);
      }
   }
@@ -4076,8 +4058,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      {
       if (Level == 1)	// Main folder of the assignment
 	{
-	 Str_Copy (Gbl.FileBrowser.Asg.Folder,Gbl.FileBrowser.FilFolLnk.Name,
-	           sizeof (Gbl.FileBrowser.Asg.Folder) - 1);
+	 Asg_SetFolder (&Gbl.FileBrowser.Asg,Level);
 	 Asg_GetAssignmentDataByFolder (&Gbl.FileBrowser.Asg);
 	 // The data of this assignment remains in Gbl.FileBrowser.Asg
 	 // for all subsequent rows with Level > 1 (files or folders inside this folder),

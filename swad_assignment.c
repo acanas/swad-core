@@ -1700,6 +1700,35 @@ bool Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
   }
 
 /*****************************************************************************/
+/*************************** Set assignment folder ***************************/
+/*****************************************************************************/
+
+void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level)
+  {
+   const char *Ptr;
+   unsigned i;
+
+   if (Level == 1)
+      // We are in this case: assignments/assignment-folder
+      Str_Copy (Asg->Folder,Gbl.FileBrowser.FilFolLnk.Name,
+		sizeof (Asg->Folder) - 1);
+   else
+     {
+      // We are in this case: assignments/assignment-folder/rest-of-path
+      for (Ptr = Gbl.FileBrowser.FilFolLnk.Path;
+	   *Ptr && *Ptr != '/';
+	   Ptr++);	// Go to first '/'
+      if (*Ptr == '/')
+	 Ptr++;	// Skip '/'
+      for (i = 0;
+	   i < Brw_MAX_BYTES_FOLDER && *Ptr && *Ptr != '/';
+	   i++, Ptr++)
+	 Asg->Folder[i] = *Ptr;	// Copy assignment folder
+      Asg->Folder[i] = '\0';
+     }
+  }
+
+/*****************************************************************************/
 /************************ Get number of assignments **************************/
 /*****************************************************************************/
 // Returns the number of assignments
