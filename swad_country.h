@@ -40,8 +40,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Cty_MAX_COUNTRS_PER_USR	 10	// Used in list of my countries
-
 #define Cty_MAX_CHARS_NAME	(48 - 1)	// 47
 #define Cty_MAX_BYTES_NAME	((Cty_MAX_CHARS_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 767
 

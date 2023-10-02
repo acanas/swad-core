@@ -1776,29 +1776,33 @@ void Ctr_GetMyCenters (void)
    if (!Gbl.Usrs.Me.MyCtrs.Filled)
      {
       Gbl.Usrs.Me.MyCtrs.Num = 0;
+      Gbl.Usrs.Me.MyCtrs.Ctrs = NULL;
 
       /***** Get my centers from database *****/
       NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_res,
                                        Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      for (NumCtr = 0;
-	   NumCtr < NumCtrs;
-	   NumCtr++)
-	{
-	 /* Get next center */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get center code */
-	 if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+      if (NumCtrs)
+        {
+	 if ((Gbl.Usrs.Me.MyCtrs.Ctrs = malloc (NumCtrs *
+						sizeof (*Gbl.Usrs.Me.MyCtrs.Ctrs))) == NULL)
+            Err_NotEnoughMemoryExit ();
+	 for (NumCtr = 0;
+	      NumCtr < NumCtrs;
+	      NumCtr++)
 	   {
-	    if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTERS_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
+	    /* Get next center */
+	    row = mysql_fetch_row (mysql_res);
 
-	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
-	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    /* Get center code */
+	    if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	      {
+	       Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].HieCod  = CtrCod;
+	       Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-	    Gbl.Usrs.Me.MyCtrs.Num++;
+	       Gbl.Usrs.Me.MyCtrs.Num++;
+	      }
 	   }
-	}
+        }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1818,6 +1822,10 @@ void Ctr_FreeMyCenters (void)
      {
       /***** Reset list *****/
       Gbl.Usrs.Me.MyCtrs.Filled = false;
+      if (Gbl.Usrs.Me.MyCtrs.Num &&
+	  Gbl.Usrs.Me.MyCtrs.Ctrs)
+         free (Gbl.Usrs.Me.MyCtrs.Ctrs);
+      Gbl.Usrs.Me.MyCtrs.Ctrs = NULL;
       Gbl.Usrs.Me.MyCtrs.Num    = 0;
      }
   }
@@ -1837,7 +1845,7 @@ bool Ctr_CheckIfIBelongToCtr (long CtrCod)
    for (NumMyCtr = 0;
         NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
         NumMyCtr++)
-      if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].CtrCod == CtrCod)
+      if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].HieCod == CtrCod)
          return true;
    return false;
   }

@@ -263,7 +263,7 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
       for (NumMyIns = 0;
            NumMyIns < Gbl.Usrs.Me.MyInss.Num;
            NumMyIns++)
-         if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod == InsCod)
+         if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].HieCod == InsCod)
             return Gbl.Usrs.Me.MyInss.Inss[NumMyIns].MaxRole;
       return Rol_GST;
      }
@@ -287,7 +287,7 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
       for (NumMyCtr = 0;
            NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
            NumMyCtr++)
-         if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].CtrCod == CtrCod)
+         if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].HieCod == CtrCod)
             return Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].MaxRole;
       return Rol_GST;
      }
@@ -313,7 +313,7 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
    for (NumMyDeg = 0;
 	NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
 	NumMyDeg++)
-      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
+      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod == DegCod)
 	 return Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].MaxRole;
    return Rol_GST;
   }
@@ -349,9 +349,9 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
    for (NumMyCrs = 0, Role = Rol_UNK;
 	NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
 	NumMyCrs++)
-      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
+      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod == CrsCod)
 	{
-	 Role = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].Role;
+	 Role = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].MaxRole;
 	 break;
 	}
 

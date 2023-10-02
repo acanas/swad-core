@@ -137,52 +137,31 @@ struct Globals
            {
             bool Filled;	// My institutions are already filled?
             unsigned Num;
-            struct
-              {
-               long CtyCod;
-               Rol_Role_t MaxRole;
-              } Ctys[Cty_MAX_COUNTRS_PER_USR];
+            struct Hie_MyNode *Ctys;
            } MyCtys;
          struct
            {
             bool Filled;	// My institutions are already filled?
             unsigned Num;
-            struct
-              {
-               long InsCod;
-               Rol_Role_t MaxRole;
-              } Inss[Ins_MAX_INSTITS_PER_USR];
+            struct Hie_MyNode *Inss;
            } MyInss;
          struct
            {
             bool Filled;	// My centers are already filled?
             unsigned Num;
-            struct
-              {
-               long CtrCod;
-               Rol_Role_t MaxRole;
-              } Ctrs[Ctr_MAX_CENTERS_PER_USR];
+            struct Hie_MyNode *Ctrs;
            } MyCtrs;
          struct
            {
             bool Filled;	// My degrees are already filled?
             unsigned Num;
-            struct
-              {
-               long DegCod;
-               Rol_Role_t MaxRole;
-              } Degs[Deg_MAX_DEGREES_PER_USR];
+            struct Hie_MyNode *Degs;
            } MyDegs;
          struct
            {
             bool Filled;	// My courses are already filled?
             unsigned Num;
-            struct
-              {
-               long CrsCod;
-               Rol_Role_t Role;
-               long DegCod;
-              } Crss[Crs_MAX_COURSES_PER_USR];
+            struct Hie_MyNode *Crss;
            } MyCrss;
 	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me

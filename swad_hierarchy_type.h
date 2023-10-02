@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_constant.h"
+#include "swad_role_type.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -76,6 +77,13 @@ typedef enum
 
 #define Hie_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
 #define Hie_MAX_BYTES_FULL_NAME	((Hie_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+struct Hie_MyNode
+  {
+   long HieCod;			// Course/degree/center/institution/country code
+   long PrtCod;			// Parent code
+   Rol_Role_t MaxRole;		// Role in course or maximum role in degree/center/institution/country
+  };
 
 struct Hie_Node
   {

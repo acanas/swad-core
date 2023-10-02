@@ -1790,28 +1790,32 @@ void Cty_GetMyCountrs (void)
    if (!Gbl.Usrs.Me.MyCtys.Filled)
      {
       Gbl.Usrs.Me.MyCtys.Num = 0;
+      Gbl.Usrs.Me.MyCtys.Ctys = NULL;
 
       /***** Get my institutions from database *****/
       NumCtys = Cty_DB_GetCtysFromUsr (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod);
-      for (NumCty = 0;
-	   NumCty < NumCtys;
-	   NumCty++)
-	{
-	 /* Get next country */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get country code */
-	 if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+      if (NumCtys)
+        {
+	 if ((Gbl.Usrs.Me.MyCtys.Ctys = malloc (NumCtys *
+						sizeof (*Gbl.Usrs.Me.MyCtys.Ctys))) == NULL)
+            Err_NotEnoughMemoryExit ();
+	 for (NumCty = 0;
+	      NumCty < NumCtys;
+	      NumCty++)
 	   {
-	    if (Gbl.Usrs.Me.MyCtys.Num == Cty_MAX_COUNTRS_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
+	    /* Get next country */
+	    row = mysql_fetch_row (mysql_res);
 
-	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].CtyCod  = CtyCod;
-	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    /* Get country code */
+	    if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	      {
+	       Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].HieCod  = CtyCod;
+	       Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-	    Gbl.Usrs.Me.MyCtys.Num++;
+	       Gbl.Usrs.Me.MyCtys.Num++;
+	      }
 	   }
-	}
+        }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1831,7 +1835,11 @@ void Cty_FreeMyCountrs (void)
      {
       /***** Reset list *****/
       Gbl.Usrs.Me.MyCtys.Filled = false;
-      Gbl.Usrs.Me.MyCtys.Num    = 0;
+      if (Gbl.Usrs.Me.MyCtys.Num &&
+	  Gbl.Usrs.Me.MyCtys.Ctys)
+         free (Gbl.Usrs.Me.MyCtys.Ctys);
+      Gbl.Usrs.Me.MyCtys.Ctys = NULL;
+      Gbl.Usrs.Me.MyCtys.Num = 0;
      }
   }
 
@@ -1850,7 +1858,7 @@ bool Cty_CheckIfIBelongToCty (long CtyCod)
    for (NumMyCty = 0;
         NumMyCty < Gbl.Usrs.Me.MyCtys.Num;
         NumMyCty++)
-      if (Gbl.Usrs.Me.MyCtys.Ctys[NumMyCty].CtyCod == CtyCod)
+      if (Gbl.Usrs.Me.MyCtys.Ctys[NumMyCty].HieCod == CtyCod)
          return true;
    return false;
   }

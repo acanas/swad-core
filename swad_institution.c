@@ -1699,29 +1699,33 @@ void Ins_GetMyInstits (void)
    if (!Gbl.Usrs.Me.MyInss.Filled)
      {
       Gbl.Usrs.Me.MyInss.Num = 0;
+      Gbl.Usrs.Me.MyInss.Inss = NULL;
 
       /***** Get my institutions from database *****/
       NumInss = Ins_DB_GetInssFromUsr (&mysql_res,
                                        Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      for (NumIns = 0;
-	   NumIns < NumInss;
-	   NumIns++)
-	{
-	 /* Get next institution */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get institution code */
-	 if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+      if (NumInss)
+        {
+	 if ((Gbl.Usrs.Me.MyInss.Inss = malloc (NumInss *
+						sizeof (*Gbl.Usrs.Me.MyInss.Inss))) == NULL)
+            Err_NotEnoughMemoryExit ();
+	 for (NumIns = 0;
+	      NumIns < NumInss;
+	      NumIns++)
 	   {
-	    if (Gbl.Usrs.Me.MyInss.Num == Ins_MAX_INSTITS_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
+	    /* Get next institution */
+	    row = mysql_fetch_row (mysql_res);
 
-	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].InsCod  = InsCod;
-	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    /* Get institution code */
+	    if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	      {
+	       Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].HieCod  = InsCod;
+	       Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-	    Gbl.Usrs.Me.MyInss.Num++;
+	       Gbl.Usrs.Me.MyInss.Num++;
+	      }
 	   }
-	}
+        }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1741,7 +1745,11 @@ void Ins_FreeMyInstits (void)
      {
       /***** Reset list *****/
       Gbl.Usrs.Me.MyInss.Filled = false;
-      Gbl.Usrs.Me.MyInss.Num    = 0;
+      if (Gbl.Usrs.Me.MyInss.Num &&
+	  Gbl.Usrs.Me.MyInss.Inss)
+         free (Gbl.Usrs.Me.MyInss.Inss);
+      Gbl.Usrs.Me.MyInss.Inss = NULL;
+      Gbl.Usrs.Me.MyInss.Num = 0;
      }
   }
 
@@ -1760,7 +1768,7 @@ bool Ins_CheckIfIBelongToIns (long InsCod)
    for (NumMyIns = 0;
         NumMyIns < Gbl.Usrs.Me.MyInss.Num;
         NumMyIns++)
-      if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod == InsCod)
+      if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].HieCod == InsCod)
          return true;
    return false;
   }

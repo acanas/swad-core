@@ -1317,7 +1317,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 		    NumMyIns < Gbl.Usrs.Me.MyInss.Num;
 		    NumMyIns++)
 		 {
-		  InsCod = Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod;
+		  InsCod = Gbl.Usrs.Me.MyInss.Inss[NumMyIns].HieCod;
 
 		  /* Links to forums of this institution */
 		  For_WriteLinksToInsForums (Forums,

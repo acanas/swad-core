@@ -3248,27 +3248,33 @@ void Enr_GetMyCourses (void)
    Enr_DB_CreateTmpTableMyCourses ();
 
    /***** Get my courses from database *****/
+   Gbl.Usrs.Me.MyCrss.Num = 0;
+   Gbl.Usrs.Me.MyCrss.Crss = NULL;
+
    NumCrss = Enr_DB_GetMyCourses (&mysql_res);
-   for (NumCrs = 0;
-	NumCrs < NumCrss;
-	NumCrs++)
+   if (NumCrss)
      {
-      /* Get next course */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get course code (row[0]) */
-      if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+      if ((Gbl.Usrs.Me.MyCrss.Crss = malloc (NumCrss *
+					     sizeof (*Gbl.Usrs.Me.MyCrss.Crss))) == NULL)
+	 Err_NotEnoughMemoryExit ();
+      for (NumCrs = 0;
+	   NumCrs < NumCrss;
+	   NumCrs++)
 	{
-	 if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
-	    Err_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
+	 /* Get next course */
+	 row = mysql_fetch_row (mysql_res);
 
-	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].CrsCod = CrsCod;
+	 /* Get course code (row[0]) */
+	 if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].HieCod = CrsCod;
 
-	 /* Get role (row[1]) and degree code (row[2]) */
-	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
-	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
+	    /* Get role (row[1]) and degree code (row[2]) */
+	    Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].PrtCod  = Str_ConvertStrCodToLongCod (row[2]);
 
-	 Gbl.Usrs.Me.MyCrss.Num++;
+	    Gbl.Usrs.Me.MyCrss.Num++;
+	   }
 	}
      }
 
@@ -3289,6 +3295,9 @@ void Enr_FreeMyCourses (void)
      {
       /***** Reset list *****/
       Gbl.Usrs.Me.MyCrss.Filled = false;
+      if (Gbl.Usrs.Me.MyCrss.Num &&
+	  Gbl.Usrs.Me.MyCrss.Crss)
+         free (Gbl.Usrs.Me.MyCrss.Crss);
       Gbl.Usrs.Me.MyCrss.Num    = 0;
 
       /***** Remove temporary table with my courses *****/
@@ -3311,7 +3320,7 @@ bool Enr_CheckIfIBelongToCrs (long CrsCod)
    for (NumMyCrs = 0;
         NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
         NumMyCrs++)
-      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
+      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod == CrsCod)
          return true;
 
    return false;

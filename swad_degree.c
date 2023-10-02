@@ -1658,29 +1658,33 @@ void Deg_GetMyDegrees (void)
    if (!Gbl.Usrs.Me.MyDegs.Filled)
      {
       Gbl.Usrs.Me.MyDegs.Num = 0;
+      Gbl.Usrs.Me.MyDegs.Degs = NULL;
 
       /***** Get my degrees from database *****/
       NumDegs = Deg_DB_GetDegsFromUsr (&mysql_res,
                                        Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      for (NumDeg = 0;
-	   NumDeg < NumDegs;
-	   NumDeg++)
-	{
-	 /* Get next degree */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get degree code */
-	 if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+      if (NumDegs)
+        {
+	 if ((Gbl.Usrs.Me.MyDegs.Degs = malloc (NumDegs *
+						sizeof (*Gbl.Usrs.Me.MyDegs.Degs))) == NULL)
+            Err_NotEnoughMemoryExit ();
+	 for (NumDeg = 0;
+	      NumDeg < NumDegs;
+	      NumDeg++)
 	   {
-	    if (Gbl.Usrs.Me.MyDegs.Num == Deg_MAX_DEGREES_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
+	    /* Get next degree */
+	    row = mysql_fetch_row (mysql_res);
 
-	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].DegCod  = DegCod;
-	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    /* Get degree code */
+	    if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	      {
+	       Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].HieCod  = DegCod;
+	       Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-	    Gbl.Usrs.Me.MyDegs.Num++;
+	       Gbl.Usrs.Me.MyDegs.Num++;
+	      }
 	   }
-	}
+        }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1700,6 +1704,10 @@ void Deg_FreeMyDegrees (void)
      {
       /***** Reset list *****/
       Gbl.Usrs.Me.MyDegs.Filled = false;
+      if (Gbl.Usrs.Me.MyDegs.Num &&
+	  Gbl.Usrs.Me.MyDegs.Degs)
+         free (Gbl.Usrs.Me.MyDegs.Degs);
+      Gbl.Usrs.Me.MyDegs.Degs = NULL;
       Gbl.Usrs.Me.MyDegs.Num    = 0;
      }
   }
@@ -1719,7 +1727,7 @@ bool Deg_CheckIfIBelongToDeg (long DegCod)
    for (NumMyDeg = 0;
         NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
         NumMyDeg++)
-      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
+      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod == DegCod)
          return true;
    return false;
   }

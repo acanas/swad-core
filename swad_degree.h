@@ -42,8 +42,6 @@
 
 #define Deg_MAX_YEARS_PER_DEGREE	12 // Max number of academic years per degree
 
-#define Deg_MAX_DEGREES_PER_USR		20 // Used in list of my degrees
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

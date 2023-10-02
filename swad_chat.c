@@ -175,7 +175,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	      NumMyDeg++)
 	   {
 	    /* Get data of this degree */
-	    Deg.HieCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
+	    Deg.HieCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod;
 	    if (!Deg_GetDegreeDataByCod (&Deg))
 	       Err_WrongDegreeExit ();
 
@@ -362,9 +362,10 @@ void Cht_WriteParsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtNam
 /******************************* Enter a chat room ***************************/
 /*****************************************************************************/
 
-#define Cht_MAX_BYTES_ROOM_CODES      ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * Cht_MAX_BYTES_ROOM_CODE)
-#define Cht_MAX_BYTES_ROOM_SHRT_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * Cht_MAX_BYTES_ROOM_SHRT_NAME)
-#define Cht_MAX_BYTES_ROOM_FULL_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * Cht_MAX_BYTES_ROOM_FULL_NAME)
+// TODO: Max. bytes should be allocated dinamycally depending on number of degrees and courses
+#define Cht_MAX_BYTES_ROOM_CODES      (100 * Cht_MAX_BYTES_ROOM_CODE)
+#define Cht_MAX_BYTES_ROOM_SHRT_NAMES (100 * Cht_MAX_BYTES_ROOM_SHRT_NAME)
+#define Cht_MAX_BYTES_ROOM_FULL_NAMES (100 * Cht_MAX_BYTES_ROOM_FULL_NAME)
 
 void Cht_OpenChatWindow (void)
   {
@@ -386,9 +387,9 @@ void Cht_OpenChatWindow (void)
    char ThisRoomCode[Cht_MAX_BYTES_ROOM_CODE + 1];
    char ThisRoomShortName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
    char ThisRoomFullName [Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
-   char ListRoomCodes     [Cht_MAX_BYTES_ROOM_CODES      + 1];
+   char ListRoomCodes    [Cht_MAX_BYTES_ROOM_CODES      + 1];
    char ListRoomShrtNames[Cht_MAX_BYTES_ROOM_SHRT_NAMES + 1];
-   char ListRoomFullNames [Cht_MAX_BYTES_ROOM_FULL_NAMES + 1];
+   char ListRoomFullNames[Cht_MAX_BYTES_ROOM_FULL_NAMES + 1];
    FILE *FileChat;
    FILE *FileOut = Fil_GetOutputFile ();
 
@@ -470,14 +471,14 @@ void Cht_OpenChatWindow (void)
 	NumMyDeg++)
      {
       snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",
-		Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod);
+		Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this degree */
-         Deg.HieCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
+         Deg.HieCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod;
          Deg_GetDegreeDataByCod (&Deg);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),"%s",
@@ -497,14 +498,14 @@ void Cht_OpenChatWindow (void)
 	NumMyCrs++)
      {
       snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
-		Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
+		Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this course */
-         Crs.HieCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
+         Crs.HieCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod;
          Crs_GetCourseDataByCod (&Crs);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),

@@ -600,8 +600,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		 NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
 		 NumMyCrs++)
 	      {
-	       CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
-	       DegCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].DegCod;
+	       CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod;
+	       DegCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].PrtCod;
 
 	       Crs_DB_GetShortNamesByCod (CrsCod,CrsShortName,DegShortName);
 
