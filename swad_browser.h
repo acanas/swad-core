@@ -111,13 +111,6 @@ typedef enum	// Don't change these values! They are stored in database as number
 
 typedef enum
   {
-   Brw_ICON_NONE = 0,
-   Brw_ICON_VIEW = 1,
-   Brw_ICON_EDIT = 2
-  } Brw_IconViewEdit_t;
-
-typedef enum
-  {
    Brw_HEADER = 0,
    Brw_FOOTER = 1,
   } Brw_HeadOrFoot_t;

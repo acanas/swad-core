@@ -256,7 +256,6 @@ struct Globals
       char NewFilFolLnkName[NAME_MAX + 1];
       struct Brw_FilFolLnk FilFolLnk;
       unsigned Level;
-      Brw_IconViewEdit_t IconViewEdit;
       struct
         {
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser
@@ -273,9 +272,7 @@ struct Globals
          char R[NAME_MAX + 1];	// Right directory: rest of chars
         } TmpPubDir;
       bool HiddenLevels[1 + BrwSiz_MAX_DIR_LEVELS];
-      char TxtStyle[64];
-      const char *InputStyle;
-      struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone.
+      struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 of an assignment zone.
 				        // TODO: Remove from global?
       struct
         {

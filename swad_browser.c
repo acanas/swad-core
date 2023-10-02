@@ -1121,7 +1121,6 @@ static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Ar
 static void Brw_ShowFileBrowser (void);
 static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
-static void Brw_PutButtonToShowEdit (void);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
 static void Brw_WriteSubtitleOfFileBrowser (void);
@@ -1171,7 +1170,8 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 
 static void Brw_PutButtonToDownloadZIPOfAFolder (void);
 
-static void Brw_WriteFileName (unsigned Level,bool IsPublic);
+static void Brw_WriteFileName (unsigned Level,bool IsPublic,
+			       const char *TxtStyle,const char *InputStyle);
 static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser,
                                                    unsigned Level,
                                                    Brw_FileType_t FileType,
@@ -1180,7 +1180,8 @@ static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser
 static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
                                    const char FileName[NAME_MAX + 1],
                                    char FileNameToShow[NAME_MAX + 1]);
-static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata);
+static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata,
+				      const char *TxtStyle);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 
@@ -1898,7 +1899,7 @@ void Brw_GetParAndInitFileBrowser (void)
          Gbl.FileBrowser.Type = Brw_ADMI_BRF_USR;
          break;
       default:
-         Err_ShowErrorAndExit ("The type of file browser can not be determined.");
+         Err_WrongFileBrowserExit ();
          break;
      }
 
@@ -3192,55 +3193,7 @@ static void Brw_ShowFileBrowser (void)
      };
    struct Brw_NumObjects Removed;
    char FileBrowserSectionId[32];
-   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
-
-   /***** Set contextual icon in box *****/
-   Gbl.FileBrowser.IconViewEdit = Brw_ICON_NONE;
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_SHOW_DOC_INS:
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_EDIT;
-	 break;
-      case Brw_ADMI_DOC_INS:
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_VIEW;
-	 break;
-      case Brw_SHOW_DOC_CTR:
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_EDIT;
-	 break;
-      case Brw_ADMI_DOC_CTR:
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_VIEW;
-	 break;
-      case Brw_SHOW_DOC_DEG:
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_EDIT;
-	 break;
-      case Brw_ADMI_DOC_DEG:
-	 if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_VIEW;
-	 break;
-      case Brw_SHOW_DOC_CRS:
-      case Brw_SHOW_DOC_GRP:
-      case Brw_SHOW_MRK_CRS:
-      case Brw_SHOW_MRK_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_EDIT;
-	 break;
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_MRK_GRP:
-	 if (IAmTeacherOrSysAdm)
-	    Gbl.FileBrowser.IconViewEdit = Brw_ICON_VIEW;
-	 break;
-      default:
-	 break;
-     }
 
    /***** Every time user clicks in menu option to view
           his/her (temporary) briefcase ==> remove old files *****/
@@ -3294,9 +3247,6 @@ static void Brw_ShowFileBrowser (void)
 	 /***** Show and store number of documents found *****/
 	 BrwSiz_ShowAndStoreSizeOfFileBrowser (Size);
 
-	 /***** Put button to show / edit *****/
-	 Brw_PutButtonToShowEdit ();
-
       /***** End box *****/
       Box_BoxEnd ();
 
@@ -3320,8 +3270,62 @@ static void Brw_ShowFileBrowser (void)
 
 static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
   {
+   enum
+     {
+      Brw_ICON_NONE,
+      Brw_ICON_VIEW,
+      Brw_ICON_EDIT
+     } IconViewEdit = Brw_ICON_NONE;
+
+   /***** Set contextual icon in box *****/
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_SHOW_DOC_INS:
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+	    IconViewEdit = Brw_ICON_EDIT;
+	 break;
+      case Brw_ADMI_DOC_INS:
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+	    IconViewEdit = Brw_ICON_VIEW;
+	 break;
+      case Brw_SHOW_DOC_CTR:
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	    IconViewEdit = Brw_ICON_EDIT;
+	 break;
+      case Brw_ADMI_DOC_CTR:
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	    IconViewEdit = Brw_ICON_VIEW;
+	 break;
+      case Brw_SHOW_DOC_DEG:
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+	    IconViewEdit = Brw_ICON_EDIT;
+	 break;
+      case Brw_ADMI_DOC_DEG:
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+	    IconViewEdit = Brw_ICON_VIEW;
+	 break;
+      case Brw_SHOW_DOC_CRS:
+      case Brw_SHOW_DOC_GRP:
+      case Brw_SHOW_MRK_CRS:
+      case Brw_SHOW_MRK_GRP:
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	    IconViewEdit = Brw_ICON_EDIT;
+	 break;
+      case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_MRK_GRP:
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	    IconViewEdit = Brw_ICON_VIEW;
+	 break;
+      default:
+	 break;
+     }
+
    /***** Put icon to view / edit file browser *****/
-   switch (Gbl.FileBrowser.IconViewEdit)
+   switch (IconViewEdit)
      {
       case Brw_ICON_NONE:
 	 break;
@@ -3359,37 +3363,6 @@ static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_FOLDERS_AND_FILES);
-  }
-
-/*****************************************************************************/
-/***************** Put button to view / edit file browser ********************/
-/*****************************************************************************/
-
-static void Brw_PutButtonToShowEdit (void)
-  {
-   switch (Gbl.FileBrowser.IconViewEdit)
-     {
-      case Brw_ICON_NONE:
-	 break;
-      case Brw_ICON_VIEW:
-         if (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type] != ActUnk)
-           {
-	    Frm_BeginForm (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
-	       Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-	       Btn_PutConfirmButton (Act_GetActionText (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]));
-            Frm_EndForm ();
-           }
-	 break;
-      case Brw_ICON_EDIT:
-         if (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type] != ActUnk)
-           {
-	    Frm_BeginForm (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
-	       Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-	       Btn_PutConfirmButton (Act_GetActionText (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]));
-            Frm_EndForm ();
-           }
-	 break;
-     }
   }
 
 /*****************************************************************************/
@@ -3977,6 +3950,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    bool IsRecent = false;
    struct Brw_FileMetadata FileMetadata;
    char FileBrowserId[32];
+   char TxtStyle[64];
+   char *InputStyle;
 
    /***** Initializations *****/
    Gbl.FileBrowser.Clipboard.IsThisFile = false;
@@ -4039,7 +4014,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       IsRecent = true;
 
    /* Style of the text in this row */
-   snprintf (Gbl.FileBrowser.TxtStyle,sizeof (Gbl.FileBrowser.TxtStyle),
+   snprintf (TxtStyle,sizeof (TxtStyle),
              "%s_%s",
              Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
              !IsRecent ? (LightStyle ? "LST_HID" :
@@ -4047,26 +4022,21 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
         	         (LightStyle ? "LST_REC_HID" :
         	        	       "LST_REC"),
 	     The_GetSuffix ());
-   Gbl.FileBrowser.InputStyle = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
-	                         !IsRecent) ? (LightStyle ? "LST_EDIT_HID" :
-					                    "LST_EDIT") :
-	                                      (LightStyle ? "LST_EDIT_REC_HID" :
-					                    "LST_EDIT_REC");
+   InputStyle = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER ||
+	         !IsRecent) ? (LightStyle ? "LST_EDIT_HID" :
+					    "LST_EDIT") :
+			      (LightStyle ? "LST_EDIT_REC_HID" :
+					    "LST_EDIT_REC");
 
    /***** Get data of assignment using the name of the folder *****/
-   if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
+   if (Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type] && Level == 1)	// Main folder of the assignment
      {
-      if (Level == 1)	// Main folder of the assignment
-	{
-	 Asg_SetFolder (&Gbl.FileBrowser.Asg,Level);
-	 Asg_GetAssignmentDataByFolder (&Gbl.FileBrowser.Asg);
-	 // The data of this assignment remains in Gbl.FileBrowser.Asg
-	 // for all subsequent rows with Level > 1 (files or folders inside this folder),
-	 // and they are overwritten on the next row with level == 1 (next assignment)
-	}
+      Asg_SetFolder (&Gbl.FileBrowser.Asg,Level);
+      Asg_GetAssignmentDataByFolder (&Gbl.FileBrowser.Asg);
+      // The data of this assignment remains in Gbl.FileBrowser.Asg
+      // for all subsequent rows with Level > 1 (files or folders inside this folder),
+      // and they are overwritten on the next row with level == 1 (next assignment)
      }
-   else	// Not an assignment zone
-      Gbl.FileBrowser.Asg.AsgCod = -1L;
 
    /***** Begin this row *****/
    if (asprintf (&Anchor,"fil_brw_%u_%s",
@@ -4169,7 +4139,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	       Brw_PutIconNewFileOrFolder ();
 
 	    /* File or folder name */
-	    Brw_WriteFileName (Level,FileMetadata.IsPublic);
+	    Brw_WriteFileName (Level,FileMetadata.IsPublic,TxtStyle,InputStyle);
 
 	 HTM_TR_End ();
       HTM_TABLE_End ();
@@ -4185,7 +4155,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       Asg_WriteDatesAssignment (&Gbl.FileBrowser.Asg);
    else
       /***** File date and size *****/
-      Brw_WriteFileSizeAndDate (&FileMetadata);
+      Brw_WriteFileSizeAndDate (&FileMetadata,TxtStyle);
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
      {
@@ -4801,7 +4771,8 @@ static void Brw_PutButtonToDownloadZIPOfAFolder (void)
 /********** Write central part with the name of a file or folder *************/
 /*****************************************************************************/
 
-static void Brw_WriteFileName (unsigned Level,bool IsPublic)
+static void Brw_WriteFileName (unsigned Level,bool IsPublic,
+			       const char *TxtStyle,const char *InputStyle)
   {
    extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
@@ -4822,7 +4793,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	 /***** Begin cell *****/
 	 HTM_TD_Begin (Gbl.FileBrowser.Clipboard.IsThisFile ? "class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"" :
 							      "class=\"%s LM\" style=\"width:99%%;\"",
-		       Gbl.FileBrowser.TxtStyle);
+		       TxtStyle);
 
 	    HTM_DIV_Begin ("class=\"FILENAME\"");
 
@@ -4836,7 +4807,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 		     HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"LST_EDIT %s_%s %s\"",
-				     Gbl.FileBrowser.InputStyle,
+				     InputStyle,
 				     The_GetSuffix (),
 				     Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
 									    The_GetColorRows ());
@@ -4866,7 +4837,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       case Brw_IS_LINK:
 	 HTM_TD_Begin (Gbl.FileBrowser.Clipboard.IsThisFile ? "class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"" :
 							      "class=\"%s LM\" style=\"width:99%%;\"",
-		       Gbl.FileBrowser.TxtStyle);
+		       TxtStyle);
 
 	    HTM_NBSP ();
 
@@ -4947,7 +4918,8 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
 /****************** Write size and date of a file or folder ******************/
 /*****************************************************************************/
 
-static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata)
+static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata,
+				      const char *TxtStyle)
   {
    static unsigned UniqueId = 0;
    char *Id;
@@ -4958,14 +4930,12 @@ static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata)
       Fil_WriteFileSizeBrief ((double) FileMetadata->Size,FileSizeStr);
    else
       FileSizeStr[0] = '\0';
-   HTM_TD_Begin ("class=\"%s RM %s\"",
-                 Gbl.FileBrowser.TxtStyle,The_GetColorRows ());
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtStyle,The_GetColorRows ());
       HTM_TxtF ("&nbsp;%s",FileSizeStr);
    HTM_TD_End ();
 
    /***** Write the date *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",
-                 Gbl.FileBrowser.TxtStyle,The_GetColorRows ());
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtStyle,The_GetColorRows ());
       HTM_NBSP ();
       if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
 	  Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
@@ -8829,7 +8799,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_DOC_CRS:
          return Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
       case Brw_ADMI_DOC_GRP:
-	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// A teacher...
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher...
 							// ...can edit only if he/she belongs to group
 	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
 	 // An administrator can edit

@@ -34517,7 +34517,7 @@ const char *Txt_Result_visibility =
 #elif L==9	// pt
 	"Visibilidade dos resultados";
 #elif L==10	// tr
-	"Result visibility";		// Çeviri lazim!
+	"Sonu&ccedil;lar&inodot;n g&ouml;r&uuml;n&uuml;rl&uuml;&gbreve;&uuml;";
 #endif
 
 const char *Txt_Results =
