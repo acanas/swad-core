@@ -259,7 +259,7 @@ Rol_Role_t Rol_GetMyMaxRoleIn (Hie_Level_t Level,long HieCod)
       return Rol_UNK;
 
    /***** Fill the list with the nodes I belong to (if not already filled) *****/
-   Hie_GetMyHierarchy (HieCod);
+   Hie_GetMyHierarchy (Level);
 
    /***** Check if the node passed as parameter is any of my nodes *****/
    for (NumMyNode = 0;
