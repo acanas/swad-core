@@ -574,7 +574,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num ? ActSeePrg :
-                                               ActReqSch);
+							   ActReqSch);
 
       /***** Begin selector of courses *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,

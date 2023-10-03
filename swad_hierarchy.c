@@ -1048,7 +1048,7 @@ bool Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod)
   {
    unsigned NumMyNode;
 
-   /***** Fill the list with the centers I belong to *****/
+   /***** Fill the list with the nodes I belong to *****/
    Hie_GetMyHierarchy (Level);
 
    /***** Check if the node passed as parameter is any of my nodes *****/

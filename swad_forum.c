@@ -1537,7 +1537,7 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
 
    if (InsCod > 0)
      {
-      MaxRoleInIns = Rol_GetMyMaxRoleInIns (InsCod);
+      MaxRoleInIns = Rol_GetMyMaxRoleIn (Hie_INS,InsCod);
       ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                     MaxRoleInIns == Rol_NET ||
 	                     MaxRoleInIns == Rol_TCH);
@@ -1580,7 +1580,7 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
 
    if (CtrCod > 0)
      {
-      MaxRoleInCtr = Rol_GetMyMaxRoleInCtr (CtrCod);
+      MaxRoleInCtr = Rol_GetMyMaxRoleIn (Hie_CTR,CtrCod);
       ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                     MaxRoleInCtr == Rol_NET ||
 	                     MaxRoleInCtr == Rol_TCH);
@@ -1623,7 +1623,7 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
 
    if (DegCod > 0)
      {
-      MaxRoleInDeg = Rol_GetMyMaxRoleInDeg (DegCod);
+      MaxRoleInDeg = Rol_GetMyMaxRoleIn (Hie_DEG,DegCod);
       ICanSeeTeacherForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                     MaxRoleInDeg == Rol_NET ||
 	                     MaxRoleInDeg == Rol_TCH);
@@ -2662,40 +2662,40 @@ static void For_RestrictAccess (const struct For_Forums *Forums)
                                                             (1 << Rol_TCH)));
          break;
       case For_FORUM_INSTIT_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.HieCod);
+	 MaxRole = Rol_GetMyMaxRoleIn (Hie_INS,Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_INSTIT_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInIns (Forums->Forum.HieCod);
+	 MaxRole = Rol_GetMyMaxRoleIn (Hie_INS,Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTER_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.HieCod);
+	 MaxRole = Rol_GetMyMaxRoleIn (Hie_CTR,Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTER_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInCtr (Forums->Forum.HieCod);
+	 MaxRole = Rol_GetMyMaxRoleIn (Hie_CTR,Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_USRS:
-	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.HieCod);
+	 MaxRole = Rol_GetMyMaxRoleIn (Hie_DEG,Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole >= Rol_STD ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_TCHS:
-	 MaxRole = Rol_GetMyMaxRoleInDeg (Forums->Forum.HieCod);
+	 MaxRole = Rol_GetMyMaxRoleIn (Hie_DEG,Forums->Forum.HieCod);
          ICanSeeForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
                          MaxRole == Rol_NET ||
                          MaxRole == Rol_TCH);
