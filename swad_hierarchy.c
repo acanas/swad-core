@@ -635,6 +635,8 @@ void Hie_ResetHierarchy (void)
       Gbl.Hierarchy.Node[Level].ShrtName[0] =
       Gbl.Hierarchy.Node[Level].FullName[0] = '\0';
       Gbl.Hierarchy.Node[Level].WWW[0]      = '\0';
+
+      Gbl.Usrs.Me.IBelongToCurrent[Level] = false;
      }
    Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod = -1L;
    Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod = -1L;
@@ -934,6 +936,7 @@ void Hie_ResetMyHierarchy (void)
       Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
       Gbl.Usrs.Me.Hierarchy[Level].Num = 0;
       Gbl.Usrs.Me.Hierarchy[Level].Filled = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Level] = false;
      }
   }
 

@@ -1988,22 +1988,22 @@ void Brw_GetParAndInitFileBrowser (void)
 	 case Brw_SHOW_DOC_INS:
 	 case Brw_ADMI_DOC_INS:
 	 case Brw_ADMI_SHR_INS:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentIns;
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrent[Hie_INS];
 	    break;
 	 case Brw_SHOW_DOC_CTR:
 	 case Brw_ADMI_DOC_CTR:
 	 case Brw_ADMI_SHR_CTR:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentCtr;
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR];
 	    break;
 	 case Brw_SHOW_DOC_DEG:
 	 case Brw_ADMI_DOC_DEG:
 	 case Brw_ADMI_SHR_DEG:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentDeg;
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG];
 	    break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_SHR_CRS:
-	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrentCrs;
+	    Gbl.FileBrowser.ShowOnlyPublicFiles = !Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS];
 	    break;
 	 default:
 	    break;

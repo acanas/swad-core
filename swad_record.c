@@ -2257,7 +2257,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		       {
 			case Usr_ME:
 			   // Don't show groups if I don't belong to course
-			   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+			   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
 			      Grp_ShowLstGrpsToChgMyGrps ();
 			   break;
 			case Usr_OTHER:

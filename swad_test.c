@@ -350,7 +350,7 @@ void Tst_AssessTest (void)
 	 Lay_WriteHeaderClassPhoto (false,false);
 
 	 /***** Header *****/
-	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+	 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
 	   {
 	    HTM_DIV_Begin ("class=\"Tst_SUBTITLE DAT_%s\"",
 	                   The_GetSuffix ());

@@ -124,8 +124,8 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
          Permission = ActLst_Actions[Action].PermissionDeg;
 	 break;
       case Hie_CRS:	// Course selected
-	 Permission = Gbl.Usrs.Me.IBelongToCurrentCrs ? ActLst_Actions[Action].PermissionCrsIfIBelong :
-							ActLst_Actions[Action].PermissionCrsIfIDontBelong;
+	 Permission = Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ? ActLst_Actions[Action].PermissionCrsIfIBelong :
+							      ActLst_Actions[Action].PermissionCrsIfIDontBelong;
 	 break;
       default:
 	 return false;
@@ -358,7 +358,7 @@ void Act_AdjustCurrentAction (void)
      }
 
    /***** If I belong to current course *****/
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
      {
       /***** Adjustment 6:
              -------------

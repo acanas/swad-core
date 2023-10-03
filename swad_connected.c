@@ -233,7 +233,7 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
   {
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&	// Right column visible
        Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
-       (Gbl.Usrs.Me.IBelongToCurrentCrs ||		// I can view users
+       (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ||	// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
       Gbl.Usrs.Connected.NumUsrs       =

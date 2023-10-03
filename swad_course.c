@@ -151,6 +151,7 @@ void Crs_ShowIntroduction (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
+   extern const char *Par_CodeStr[];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
@@ -188,7 +189,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    IsLastItemInLevel[1] = true;
 	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
 	    Frm_BeginForm (ActMyCrs);
-	       // Cty_PutParCtyCod (-1L);
+	       Par_PutParLong (NULL,Par_CodeStr[ParCod_Cty],-1L);
 	       HTM_BUTTON_Submit_Begin (Txt_System,
 	                                "class=\"BT_LINK FORM_IN_%s\"",
 					The_GetSuffix ());
@@ -621,8 +622,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
 	 /***** Write an option with the current course
 		when I don't belong to it *****/
-	 if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
-	     !Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to it
+	 if (Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
+	     !Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])	// I do not belong to it
 	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	                HTM_OPTION_SELECTED,
 	                HTM_OPTION_DISABLED,

@@ -874,7 +874,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
       return true;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
       return false;
 
    /***** 7. Fast check: It's me? *****/
@@ -947,7 +947,7 @@ bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
       return true;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
       return false;
 
    /***** 6. Fast check: It's me? *****/
@@ -998,7 +998,7 @@ bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
       return true;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
       return false;
 
    /***** 7. Fast check: It's me? *****/
@@ -1040,7 +1040,7 @@ bool Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
       return true;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
       return false;
 
    /***** 6. Fast check: It's me? *****/

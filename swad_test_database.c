@@ -57,8 +57,8 @@ extern struct Globals Gbl;
 
 void Tst_DB_IncreaseNumMyPrints (void)
   {
-   /***** Trivial check *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+   /***** Trivial check: do I belong to current course? *****/
+   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
       return;
 
    /***** Update my number of accesses to test in this course *****/

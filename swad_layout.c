@@ -1612,8 +1612,11 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
   {
    unsigned i;
 
+   if (Level <= 1)
+      return;
+
    /***** Indent (from 1 to Level-1) *****/
-   for (i = 1;
+   for (i = 2;
 	i < Level;
 	i++)
       Ico_PutIcon (IsLastItemInLevel[i] ? "tr20x20.gif" :
@@ -1622,11 +1625,10 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 		   "","ICO25x25");
 
    /***** Level *****/
-   if (Level)
-      Ico_PutIcon (IsLastItemInLevel[Level] ? "subend20x20.gif" :
-					      "submid20x20.gif",
-		   Ico_BLACK,
-		   "","ICO25x25");
+   Ico_PutIcon (IsLastItemInLevel[Level] ? "subend20x20.gif" :
+					   "submid20x20.gif",
+		Ico_BLACK,
+		"","ICO25x25");
   }
 
 /*****************************************************************************/

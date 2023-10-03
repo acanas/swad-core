@@ -2617,7 +2617,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .LIST_TREE li
 	{
 	box-sizing:border-box;
-	max-width:500px;
+	/* max-width:500px; */
 	height:25px;
 	text-align:left;
 	vertical-align:middle;

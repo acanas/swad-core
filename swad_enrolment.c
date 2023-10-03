@@ -176,7 +176,8 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
   {
    extern const char *Txt_Register_students;
 
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
+   // if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
+   if (Rol_GetMyRoleInCrs (CrsCod) == Rol_TCH)	// I am a teacher in the given course
       if (!Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
 				 1 << Rol_STD))	// No students in course
 	{
@@ -3184,8 +3185,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	{
 	 case Usr_ME:
 	    /* Now I don't belong to current course */
-	    Gbl.Usrs.Me.IBelongToCurrentCrs =
-	    Gbl.Usrs.Me.UsrDat.Accepted     = false;
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] =
+	    Gbl.Usrs.Me.UsrDat.Accepted           = false;
 
 	    /* Fill the list with the courses I belong to */
 	    Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
@@ -3324,7 +3325,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
       return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
       if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))	// Course selected and we both belong to it
         {
          Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;

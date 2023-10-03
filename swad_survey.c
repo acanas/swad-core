@@ -995,7 +995,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 		  if (Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod))
 		    {
 		     *ScopesAllowed |= 1 << Hie_DEG;
-		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+		     if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
 			*ScopesAllowed |= 1 << Hie_CRS;
 		    }
 		 }
@@ -1018,7 +1018,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 		  if (Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod))
 		    {
 		     *ScopesAllowed |= 1 << Hie_DEG;
-		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+		     if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
 		       {
 			*ScopesAllowed |= 1 << Hie_CRS;
 			*HiddenAllowed |= 1 << Hie_CRS;	// A non-editing teacher or teacher can view hidden course surveys

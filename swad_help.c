@@ -127,7 +127,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	{
 	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	   {
-	    if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
+	    if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])	// I belong to this course
 	      {
 	       if (Gbl.Action.Act != ActLogIn &&
 		   Gbl.Action.Act != ActLogInNew &&

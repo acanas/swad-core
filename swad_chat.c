@@ -137,7 +137,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Link to chat available for all users *****/
-	 IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
+	 IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] &&
 				 !Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num);
 	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
 		   Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);

@@ -3045,7 +3045,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
       return false;
 
    /***** 5. Fast check: It's me? *****/
@@ -4331,8 +4331,8 @@ Grp_WhichGroups_t Grp_GetParWhichGroups (void)
 	    If I belong       to this course ==> see only my groups
 	    If I don't belong to this course ==> see all groups
 	    */
-	    WhichGroupsDefault = Gbl.Usrs.Me.IBelongToCurrentCrs ? Grp_MY_GROUPS :
-							           Grp_ALL_GROUPS;
+	    WhichGroupsDefault = Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ? Grp_MY_GROUPS :
+									 Grp_ALL_GROUPS;
 	    break;
 	 case ActSeeMyTT:	// Show my timetable
 	 case ActPrnMyTT:	// Print my timetable

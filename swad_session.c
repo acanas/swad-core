@@ -123,13 +123,10 @@ void Ses_CloseSession (void)
       /***** Now, user is not logged in *****/
       Gbl.Usrs.Me.Role.LoggedBeforeCloseSession = Gbl.Usrs.Me.Role.Logged;
       Gbl.Usrs.Me.Logged = false;
-      Gbl.Usrs.Me.IBelongToCurrentIns = false;
-      Gbl.Usrs.Me.IBelongToCurrentCtr = false;
-      Gbl.Usrs.Me.IBelongToCurrentDeg = false;
-      Gbl.Usrs.Me.IBelongToCurrentCrs = false;
-      Gbl.Usrs.Me.Role.Logged = Rol_UNK;	// Don't uncomment this line. Don't change the role to unknown. Keep user's role in order to log the access
-      Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
-      Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num = 0;
+      Gbl.Usrs.Me.Role.Logged = Rol_UNK;	// TODO: Keep user's role in order to log the access?
+      Hie_FreeMyHierarchy ();
+      // Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
+      // Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num = 0;
 
       /***** Update number of open sessions in order to show them properly *****/
       Ses_GetNumSessions ();

@@ -1298,7 +1298,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 							     Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 							     true,
 							     IsLastItemInLevel) > 0)
-				 if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+				 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ||
 				     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 				    /***** Links to forums of current degree *****/
 				    For_WriteLinksToCrsForums (Forums,

@@ -124,10 +124,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
    Gbl.Usrs.Me.Role.Max                      = Rol_UNK;
    Gbl.Usrs.Me.Role.HasChanged = false;
-   Gbl.Usrs.Me.IBelongToCurrentIns = false;
-   Gbl.Usrs.Me.IBelongToCurrentCtr = false;
-   Gbl.Usrs.Me.IBelongToCurrentDeg = false;
-   Gbl.Usrs.Me.IBelongToCurrentCrs = false;
    Gbl.Usrs.Me.MyPhotoExists = false;
    Gbl.Usrs.Me.NumAccWithoutPhoto = 0;
    Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialized to a big value, so by default files are not shown as recent or new
