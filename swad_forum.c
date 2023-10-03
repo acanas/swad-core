@@ -1261,7 +1261,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeInsForum = true;
 		  else
-		     ICanSeeInsForum = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		     ICanSeeInsForum = Hie_CheckIfIBelongTo (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 		 }
 	       else
 		  ICanSeeInsForum = false;
@@ -1274,7 +1274,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeCtrForum = true;
 		  else
-		     ICanSeeCtrForum = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		     ICanSeeCtrForum = Hie_CheckIfIBelongTo (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 
 		  /***** Links to forums of current institution *****/
 		  if (For_WriteLinksToInsForums (Forums,Gbl.Hierarchy.Node[Hie_INS].HieCod,
@@ -1285,7 +1285,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 			if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 			   ICanSeeDegForum = true;
 			else
-			   ICanSeeDegForum = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			   ICanSeeDegForum = Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 
 			/***** Links to forums of current center *****/
 			if (For_WriteLinksToCtrForums (Forums,

@@ -73,6 +73,4 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role);
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 
-bool Ctr_CheckIfIBelongToCtr (long CtrCod);
-
 #endif

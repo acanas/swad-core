@@ -84,8 +84,6 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role);
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);
 
-bool Cty_CheckIfIBelongToCty (long CtyCod);
-
 void Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);

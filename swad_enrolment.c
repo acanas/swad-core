@@ -3222,27 +3222,6 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
   }
 
 /*****************************************************************************/
-/*********************** Check if I belong to a course ***********************/
-/*****************************************************************************/
-
-bool Enr_CheckIfIBelongToCrs (long CrsCod)
-  {
-   unsigned NumMyCrs;
-
-   /***** Fill the list with the courses I belong to *****/
-   Hie_GetMyHierarchy (Hie_CRS);
-
-   /***** Check if the course passed as parameter is any of my courses *****/
-   for (NumMyCrs = 0;
-        NumMyCrs < Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num;
-        NumMyCrs++)
-      if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod == CrsCod)
-         return true;
-
-   return false;
-  }
-
-/*****************************************************************************/
 /***** Check if user belongs (no matter if he/she has accepted or not) *******/
 /***** to the current course                                           *******/
 /*****************************************************************************/

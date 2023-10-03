@@ -1643,26 +1643,6 @@ static void Deg_EditingDegreeDestructor (void)
   }
 
 /*****************************************************************************/
-/*********************** Check if I belong to a degree ***********************/
-/*****************************************************************************/
-
-bool Deg_CheckIfIBelongToDeg (long DegCod)
-  {
-   unsigned NumMyDeg;
-
-   /***** Fill the list with the degrees I belong to *****/
-   Hie_GetMyHierarchy (Hie_DEG);
-
-   /***** Check if the degree passed as parameter is any of my degrees *****/
-   for (NumMyDeg = 0;
-        NumMyDeg < Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num;
-        NumMyDeg++)
-      if (Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod == DegCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
 /********* Get the degree in which a user is enroled in more courses *********/
 /*****************************************************************************/
 

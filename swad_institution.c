@@ -1684,26 +1684,6 @@ static void Ins_FormToGoToMap (struct Hie_Node *Ins)
   }
 
 /*****************************************************************************/
-/******************** Check if I belong to an institution ********************/
-/*****************************************************************************/
-
-bool Ins_CheckIfIBelongToIns (long InsCod)
-  {
-   unsigned NumMyIns;
-
-   /***** Fill the list with the institutions I belong to *****/
-   Hie_GetMyHierarchy (Hie_INS);
-
-   /***** Check if the institution passed as parameter is any of my institutions *****/
-   for (NumMyIns = 0;
-        NumMyIns < Gbl.Usrs.Me.Hierarchy[Hie_INS].Num;
-        NumMyIns++)
-      if (Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[NumMyIns].HieCod == InsCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
 /***************** Write parameter with code of institution ******************/
 /*****************************************************************************/
 

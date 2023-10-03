@@ -965,16 +965,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
    	   	   	// ...but not belonging to the current course *********
 	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Node[Hie_CTY].HieCod))
+	 if (Hie_CheckIfIBelongTo (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
 	   {
 	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[Hie_INS].HieCod))
+	    if (Hie_CheckIfIBelongTo (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod))
 	      {
 	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[Hie_CTR].HieCod))
+	       if (Hie_CheckIfIBelongTo (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod))
 		 {
 		  *ScopesAllowed |= 1 << Hie_CTR;
-		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[Hie_DEG].HieCod))
+		  if (Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod))
 		     *ScopesAllowed |= 1 << Hie_DEG;
 		 }
 	      }
@@ -983,16 +983,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_STD:	// Student in current course **************************
 	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Node[Hie_CTY].HieCod))
+	 if (Hie_CheckIfIBelongTo (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
 	   {
 	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[Hie_INS].HieCod))
+	    if (Hie_CheckIfIBelongTo (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod))
 	      {
 	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[Hie_CTR].HieCod))
+	       if (Hie_CheckIfIBelongTo (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod))
 		 {
 		  *ScopesAllowed |= 1 << Hie_CTR;
-		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[Hie_DEG].HieCod))
+		  if (Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod))
 		    {
 		     *ScopesAllowed |= 1 << Hie_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -1006,16 +1006,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_TCH:	// Teacher in current course **************************
 	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Node[Hie_CTY].HieCod))
+	 if (Hie_CheckIfIBelongTo (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
 	   {
 	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[Hie_INS].HieCod))
+	    if (Hie_CheckIfIBelongTo (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod))
 	      {
 	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[Hie_CTR].HieCod))
+	       if (Hie_CheckIfIBelongTo (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod))
 		 {
 		  *ScopesAllowed |= 1 << Hie_CTR;
-		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[Hie_DEG].HieCod))
+		  if (Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod))
 		    {
 		     *ScopesAllowed |= 1 << Hie_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -1167,27 +1167,21 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       /* Do I belong to valid groups to answer this survey? */
       switch (Svy->Level)
         {
-	 case Hie_UNK:	// Unknown
-            Err_WrongHierarchyLevelExit ();
-	    break;
 	 case Hie_SYS:	// System
             Svy->Status.IBelongToScope = Gbl.Usrs.Me.Logged;
 	    break;
 	 case Hie_CTY:	// Country
-            Svy->Status.IBelongToScope = Cty_CheckIfIBelongToCty (Svy->HieCod);
-	    break;
 	 case Hie_INS:	// Institution
-            Svy->Status.IBelongToScope = Ins_CheckIfIBelongToIns (Svy->HieCod);
-	    break;
 	 case Hie_CTR:	// Center
-            Svy->Status.IBelongToScope = Ctr_CheckIfIBelongToCtr (Svy->HieCod);
-	    break;
 	 case Hie_DEG:	// Degree
-            Svy->Status.IBelongToScope = Deg_CheckIfIBelongToDeg (Svy->HieCod);
+            Svy->Status.IBelongToScope = Hie_CheckIfIBelongTo (Svy->Level,Svy->HieCod);
 	    break;
 	 case Hie_CRS:	// Course
-	    Svy->Status.IBelongToScope = Enr_CheckIfIBelongToCrs (Svy->HieCod) &&
+	    Svy->Status.IBelongToScope = Hie_CheckIfIBelongTo (Svy->Level,Svy->HieCod) &&
 					 Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
+	    break;
+	 default:	// Unknown
+            Err_WrongHierarchyLevelExit ();
 	    break;
         }
 

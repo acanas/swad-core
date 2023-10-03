@@ -83,7 +83,6 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role);
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 
-bool Deg_CheckIfIBelongToDeg (long DegCod);
 void Deg_GetUsrMainDeg (long UsrCod,
 		        char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
 		        Rol_Role_t *MaxRole);

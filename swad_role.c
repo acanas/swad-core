@@ -143,7 +143,7 @@ void Rol_SetMyRoles (void)
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	 Gbl.Usrs.Me.IBelongToCurrentDeg = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentDeg = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentDeg = false;
@@ -154,7 +154,7 @@ void Rol_SetMyRoles (void)
       if (Gbl.Usrs.Me.IBelongToCurrentDeg)
          Gbl.Usrs.Me.IBelongToCurrentCtr = true;
       else
-         Gbl.Usrs.Me.IBelongToCurrentCtr = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+         Gbl.Usrs.Me.IBelongToCurrentCtr = Hie_CheckIfIBelongTo (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentCtr = false;
@@ -165,7 +165,7 @@ void Rol_SetMyRoles (void)
       if (Gbl.Usrs.Me.IBelongToCurrentCtr)
 	 Gbl.Usrs.Me.IBelongToCurrentIns = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentIns = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	 Gbl.Usrs.Me.IBelongToCurrentIns = Hie_CheckIfIBelongTo (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentIns = false;

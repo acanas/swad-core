@@ -1761,26 +1761,6 @@ static void Ctr_FormToGoToMap (struct Hie_Node *Ctr)
   }
 
 /*****************************************************************************/
-/*********************** Check if I belong to a center ***********************/
-/*****************************************************************************/
-
-bool Ctr_CheckIfIBelongToCtr (long CtrCod)
-  {
-   unsigned NumMyCtr;
-
-   /***** Fill the list with the centers I belong to *****/
-   Hie_GetMyHierarchy (Hie_CTR);
-
-   /***** Check if the center passed as parameter is any of my centers *****/
-   for (NumMyCtr = 0;
-        NumMyCtr < Gbl.Usrs.Me.Hierarchy[Hie_CTR].Num;
-        NumMyCtr++)
-      if (Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes[NumMyCtr].HieCod == CtrCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
 /******************** Write parameter with code of center ********************/
 /*****************************************************************************/
 

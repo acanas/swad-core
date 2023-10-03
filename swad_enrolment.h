@@ -137,7 +137,6 @@ void Enr_CreateNewUsr2 (void);
 void Enr_ModifyUsr1 (void);
 void Enr_ModifyUsr2 (void);
 
-bool Enr_CheckIfIBelongToCrs (long CrsCod);
 void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
 bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);

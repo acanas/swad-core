@@ -1041,6 +1041,26 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
   }
 
 /*****************************************************************************/
+/****** Check if I belong to a course/degree/center/institution/country ******/
+/*****************************************************************************/
+
+bool Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod)
+  {
+   unsigned NumMyNode;
+
+   /***** Fill the list with the centers I belong to *****/
+   Hie_GetMyHierarchy (Level);
+
+   /***** Check if the node passed as parameter is any of my nodes *****/
+   for (NumMyNode = 0;
+        NumMyNode < Gbl.Usrs.Me.Hierarchy[Level].Num;
+        NumMyNode++)
+      if (Gbl.Usrs.Me.Hierarchy[Level].Nodes[NumMyNode].HieCod == HieCod)
+         return true;
+   return false;
+  }
+
+/*****************************************************************************/
 /*** Flush cache that stores if a user belongs to a node of the hierarchy ****/
 /*****************************************************************************/
 

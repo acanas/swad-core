@@ -1775,26 +1775,6 @@ static void Cty_FormToGoToMap (struct Hie_Node *Cty)
   }
 
 /*****************************************************************************/
-/********************** Check if I belong to a country **********************/
-/*****************************************************************************/
-
-bool Cty_CheckIfIBelongToCty (long CtyCod)
-  {
-   unsigned NumMyCty;
-
-   /***** Fill the list with the institutions I belong to *****/
-   Hie_GetMyHierarchy (Hie_CTY);
-
-   /***** Check if the country passed as parameter is any of my countries *****/
-   for (NumMyCty = 0;
-        NumMyCty < Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num;
-        NumMyCty++)
-      if (Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes[NumMyCty].HieCod == CtyCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
 /******* Get number of users who don't claim to belong to any country ********/
 /*****************************************************************************/
 
