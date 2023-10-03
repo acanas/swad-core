@@ -975,13 +975,13 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
    unsigned NumNodes;
    long HieCod;
    static unsigned (*GetNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
-						      long UsrCod,long HieCod) =
+						      long PrtCod) =
      {
-      [Hie_CTY] = Cty_DB_GetCtysFromUsr,
-      [Hie_INS] = Ins_DB_GetInssFromUsr,
-      [Hie_CTR] = Ctr_DB_GetCtrsFromUsr,
-      [Hie_DEG] = Deg_DB_GetDegsFromUsr,
-      [Hie_CRS] = Enr_DB_GetMyCourses,
+      [Hie_CTY] = Cty_DB_GetMyCtys,
+      [Hie_INS] = Ins_DB_GetMyInss,
+      [Hie_CTR] = Ctr_DB_GetMyCtrs,
+      [Hie_DEG] = Deg_DB_GetMyDegs,
+      [Hie_CRS] = Enr_DB_GetMyCrss,
      };
 
    /***** Trivial check 1: if list of nodes is already filled, there's nothing to do *****/
@@ -1004,8 +1004,7 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
    Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
 
    /***** Get my courses/degrees/centers/institutions/countries from database *****/
-   NumNodes = GetNodesFromDB[Level] (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-   if (NumNodes)
+   if ((NumNodes = GetNodesFromDB[Level] (&mysql_res,-1L)))
      {
       if ((Gbl.Usrs.Me.Hierarchy[Level].Nodes = malloc (NumNodes *
 							sizeof (*Gbl.Usrs.Me.Hierarchy[Level].Nodes))) == NULL)

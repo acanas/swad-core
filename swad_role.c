@@ -257,7 +257,6 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
    if (InsCod > 0)
      {
       /***** Fill the list with the institutions I belong to (if not already filled) *****/
-      // Ins_GetMyInstits ();
       Hie_GetMyHierarchy (Hie_INS);
 
       /***** Check if the institution passed as parameter is any of my institutions *****/
@@ -282,7 +281,6 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
    if (CtrCod > 0)
      {
       /***** Fill the list with the centers I belong to (if not already filled) *****/
-      // Ctr_GetMyCenters ();
       Hie_GetMyHierarchy (Hie_CTR);
 
       /***** Check if the center passed as parameter is any of my centers *****/
@@ -309,7 +307,6 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
       return Rol_UNK;
 
    /***** Fill the list with the degrees I belong to (if not already filled) *****/
-   // Deg_GetMyDegrees ();
    Hie_GetMyHierarchy (Hie_DEG);
 
    /***** Check if the degree passed as parameter is any of my degrees *****/
@@ -346,7 +343,6 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 
    /***** 3. Slow check: get my role from list of my courses *****/
    /* Fill the list with the courses I belong to (if not already filled) */
-   // Enr_GetMyCourses ();
    Hie_GetMyHierarchy (Hie_CRS);
 
    /* Check if the current course is any of my courses */

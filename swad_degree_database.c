@@ -757,13 +757,13 @@ void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus)
   }
 
 /*****************************************************************************/
-/***************** Get the degrees of a user from database *******************/
+/********************** Get my degrees from database *************************/
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
+unsigned Deg_DB_GetMyDegs (MYSQL_RES **mysql_res,long PrtCod)
   {
-   if (HieCod > 0)
+   if (PrtCod > 0)
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
 		      "SELECT deg_degrees.DegCod,"	// row[0]
@@ -777,8 +777,8 @@ unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
 		        " AND deg_degrees.CtrCod=%ld"
 		   " GROUP BY deg_degrees.DegCod"
 		   " ORDER BY deg_degrees.ShortName",
-		      UsrCod,
-		      HieCod);
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      PrtCod);
    else
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
@@ -792,7 +792,7 @@ unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
 		        " AND crs_courses.DegCod=deg_degrees.DegCod"
 		   " GROUP BY deg_degrees.DegCod"
 		   " ORDER BY deg_degrees.ShortName",
-		      UsrCod);
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

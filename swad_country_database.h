@@ -75,8 +75,8 @@ bool Cty_DB_CheckIfMapIsAvailable (long CtyCod);
 void Cty_DB_UpdateCtyField (long CtyCod,const char *FldName,const char *FldValue);
 void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 
-unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,
-				long UsrCod,__attribute__((unused)) long HieCod);
+unsigned Cty_DB_GetMyCtys (MYSQL_RES **mysql_res,
+			   __attribute__((unused)) long PrtCod);
 unsigned Cty_DB_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
 unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);

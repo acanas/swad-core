@@ -1238,7 +1238,6 @@ void For_ShowForumList (struct For_Forums *Forums)
       Forums->Thread.ToMove = For_DB_GetThrInMyClipboard ();
 
    /***** Fill the list with the institutions I belong to *****/
-   // Ins_GetMyInstits ();
    Hie_GetMyHierarchy (Hie_INS);
 
    /***** Begin box *****/
@@ -1327,9 +1326,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 					     IsLastItemInLevel);
 
 		  /* Get my centers in this institution from database */
-		  NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_resCtr,
-		                                   Gbl.Usrs.Me.UsrDat.UsrCod,
-						   InsCod);
+		  NumCtrs = Ctr_DB_GetMyCtrs (&mysql_resCtr,InsCod);
 		  for (NumCtr = 0;
 		       NumCtr < NumCtrs;
 		       NumCtr++)
@@ -1345,9 +1342,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 						    IsLastItemInLevel) > 0)
 		       {
 			/* Get my degrees in this institution from database */
-			NumDegs = Deg_DB_GetDegsFromUsr (&mysql_resDeg,
-			                                 Gbl.Usrs.Me.UsrDat.UsrCod,
-							 CtrCod);
+			NumDegs = Deg_DB_GetMyDegs (&mysql_resDeg,CtrCod);
 			for (NumDeg = 0;
 			     NumDeg < NumDegs;
 			     NumDeg++)

@@ -756,13 +756,13 @@ unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
   }
 
 /*****************************************************************************/
-/************** Get the institutions of a user from database *****************/
+/******************* Get my institutions from database ***********************/
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
+unsigned Ins_DB_GetMyInss (MYSQL_RES **mysql_res,long PrtCod)
   {
-   if (HieCod > 0)
+   if (PrtCod > 0)
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
 		      "SELECT ins_instits.InsCod,"	// row[0]
@@ -780,8 +780,8 @@ unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
 		        " AND ins_instits.CtyCod=%ld"
 		   " GROUP BY ins_instits.InsCod"
 		   " ORDER BY ins_instits.ShortName",
-		      UsrCod,
-		      HieCod);
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      PrtCod);
    else
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
@@ -799,7 +799,7 @@ unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
 		        " AND ctr_centers.InsCod=ins_instits.InsCod"
 		   " GROUP BY ins_instits.InsCod"
 		   " ORDER BY ins_instits.ShortName",
-		      UsrCod);
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

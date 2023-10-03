@@ -126,7 +126,6 @@ void Cht_ShowListOfAvailableChatRooms (void)
    char ThisRoomFullName[Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
 
    /***** Fill the list with the degrees I belong to *****/ 
-   // Deg_GetMyDegrees ();
    Hie_GetMyHierarchy (Hie_DEG);
 
    /***** Begin box *****/
@@ -407,9 +406,7 @@ void Cht_OpenChatWindow (void)
       Err_ShowErrorAndExit ("Wrong code of chat room.");
 
    /***** Fill the lists with the degrees and courses I belong to *****/ 
-   // Deg_GetMyDegrees ();
    Hie_GetMyHierarchy (Hie_DEG);
-   // Enr_GetMyCourses ();
    Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Build my user's name *****/

@@ -720,14 +720,13 @@ unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
-/***************** Get the centers of a user from database *******************/
+/********************** Get my centers from database *************************/
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
+unsigned Ctr_DB_GetMyCtrs (MYSQL_RES **mysql_res,long PrtCod)
   {
-   /***** Get from database the centers a user belongs to *****/
-   if (HieCod > 0)
+   if (PrtCod > 0)
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
 		      "SELECT ctr_centers.CtrCod,"	// row[0]
@@ -743,8 +742,8 @@ unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
 		        " AND ctr_centers.InsCod=%ld"
 		   " GROUP BY ctr_centers.CtrCod"
 		   " ORDER BY ctr_centers.ShortName",
-		      UsrCod,
-		      HieCod);
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      PrtCod);
    else
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
@@ -760,7 +759,7 @@ unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
 		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 		   " GROUP BY ctr_centers.CtrCod"
 		   " ORDER BY ctr_centers.ShortName",
-		      UsrCod);
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

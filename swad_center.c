@@ -1761,58 +1761,6 @@ static void Ctr_FormToGoToMap (struct Hie_Node *Ctr)
   }
 
 /*****************************************************************************/
-/***** Get all my centers (those of my courses) and store them in a list *****/
-/*****************************************************************************/
-/*
-void Ctr_GetMyCenters (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCtr;
-   unsigned NumCtrs;
-   long CtrCod;
-
-   ***** If my centers are yet filled, there's nothing to do *****
-   if (!Gbl.Usrs.Me.Hierarchy[Hie_CTR].Filled)
-     {
-      Gbl.Usrs.Me.Hierarchy[Hie_CTR].Num = 0;
-      Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes = NULL;
-
-      ***** Get my centers from database *****
-      NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_res,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      if (NumCtrs)
-        {
-	 if ((Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes = malloc (NumCtrs *
-						sizeof (*Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes))) == NULL)
-            Err_NotEnoughMemoryExit ();
-	 for (NumCtr = 0;
-	      NumCtr < NumCtrs;
-	      NumCtr++)
-	   {
-	    * Get next center *
-	    row = mysql_fetch_row (mysql_res);
-
-	    * Get center code *
-	    if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	      {
-	       Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CTR].Num].HieCod  = CtrCod;
-	       Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CTR].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	       Gbl.Usrs.Me.Hierarchy[Hie_CTR].Num++;
-	      }
-	   }
-        }
-
-      ***** Free structure that stores the query result *****
-      DB_FreeMySQLResult (&mysql_res);
-
-      ***** Set boolean that indicates that my centers are yet filled *****
-      Gbl.Usrs.Me.Hierarchy[Hie_CTR].Filled = true;
-     }
-  }
-*/
-/*****************************************************************************/
 /*********************** Check if I belong to a center ***********************/
 /*****************************************************************************/
 
@@ -1821,7 +1769,6 @@ bool Ctr_CheckIfIBelongToCtr (long CtrCod)
    unsigned NumMyCtr;
 
    /***** Fill the list with the centers I belong to *****/
-   // Ctr_GetMyCenters ();
    Hie_GetMyHierarchy (Hie_CTR);
 
    /***** Check if the center passed as parameter is any of my centers *****/

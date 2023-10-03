@@ -1775,57 +1775,6 @@ static void Cty_FormToGoToMap (struct Hie_Node *Cty)
   }
 
 /*****************************************************************************/
-/**** Get all my countries (those of my courses) and store them in a list ****/
-/*****************************************************************************/
-/*
-void Cty_GetMyCountrs (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCty;
-   unsigned NumCtys;
-   long CtyCod;
-
-   ***** If my countries are yet filled, there's nothing to do *****
-   if (!Gbl.Usrs.Me.Hierarchy[Hie_CTY].Filled)
-     {
-      Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num   = 0;
-      Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes = NULL;
-
-      ***** Get my countries from database *****
-      NumCtys = Cty_DB_GetCtysFromUsr (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      if (NumCtys)
-        {
-	 if ((Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes = malloc (NumCtys *
-							     sizeof (*Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes))) == NULL)
-            Err_NotEnoughMemoryExit ();
-	 for (NumCty = 0;
-	      NumCty < NumCtys;
-	      NumCty++)
-	   {
-	    * Get next country *
-	    row = mysql_fetch_row (mysql_res);
-
-	    * Get country code *
-	    if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	      {
-	       Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num].HieCod  = CtyCod;
-	       Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	       Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num++;
-	      }
-	   }
-        }
-
-      ***** Free structure that stores the query result *****
-      DB_FreeMySQLResult (&mysql_res);
-
-      ***** Set boolean that indicates that my institutions are yet filled *****
-      Gbl.Usrs.Me.Hierarchy[Hie_CTY].Filled = true;
-     }
-  }
-*/
-/*****************************************************************************/
 /********************** Check if I belong to a country **********************/
 /*****************************************************************************/
 
@@ -1834,7 +1783,6 @@ bool Cty_CheckIfIBelongToCty (long CtyCod)
    unsigned NumMyCty;
 
    /***** Fill the list with the institutions I belong to *****/
-   // Cty_GetMyCountrs ();
    Hie_GetMyHierarchy (Hie_CTY);
 
    /***** Check if the country passed as parameter is any of my countries *****/

@@ -1643,58 +1643,6 @@ static void Deg_EditingDegreeDestructor (void)
   }
 
 /*****************************************************************************/
-/***** Get all my degrees (those of my courses) and store them in a list *****/
-/*****************************************************************************/
-/*
-void Deg_GetMyDegrees (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumDeg;
-   unsigned NumDegs;
-   long DegCod;
-
-   ***** If my degrees are yet filled, there's nothing to do *****
-   if (!Gbl.Usrs.Me.Hierarchy[Hie_DEG].Filled)
-     {
-      Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num = 0;
-      Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes = NULL;
-
-      ***** Get my degrees from database *****
-      NumDegs = Deg_DB_GetDegsFromUsr (&mysql_res,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      if (NumDegs)
-        {
-	 if ((Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes = malloc (NumDegs *
-						sizeof (*Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes))) == NULL)
-            Err_NotEnoughMemoryExit ();
-	 for (NumDeg = 0;
-	      NumDeg < NumDegs;
-	      NumDeg++)
-	   {
-	    * Get next degree *
-	    row = mysql_fetch_row (mysql_res);
-
-	    * Get degree code *
-	    if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	      {
-	       Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num].HieCod  = DegCod;
-	       Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	       Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num++;
-	      }
-	   }
-        }
-
-      ***** Free structure that stores the query result *****
-      DB_FreeMySQLResult (&mysql_res);
-
-      ***** Set boolean that indicates that my degrees are yet filled *****
-      Gbl.Usrs.Me.Hierarchy[Hie_DEG].Filled = true;
-     }
-  }
-*/
-/*****************************************************************************/
 /*********************** Check if I belong to a degree ***********************/
 /*****************************************************************************/
 
@@ -1703,7 +1651,6 @@ bool Deg_CheckIfIBelongToDeg (long DegCod)
    unsigned NumMyDeg;
 
    /***** Fill the list with the degrees I belong to *****/
-   // Deg_GetMyDegrees ();
    Hie_GetMyHierarchy (Hie_DEG);
 
    /***** Check if the degree passed as parameter is any of my degrees *****/

@@ -595,12 +595,12 @@ void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBU
   }
 
 /*****************************************************************************/
-/**************** Get the countries of a user from database ******************/
+/********************* Get my countries from database ************************/
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,
-				long UsrCod,__attribute__((unused)) long HieCod)
+unsigned Cty_DB_GetMyCtys (MYSQL_RES **mysql_res,
+			   __attribute__((unused)) long PrtCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
@@ -622,7 +622,7 @@ unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
 		" GROUP BY cty_countrs.CtyCod"
 		" ORDER BY cty_countrs.Name_%s",
-		   UsrCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
 

@@ -199,7 +199,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 HTM_LI_End ();
 
 	 /***** Get my countries *****/
-	 NumCtys = Cty_DB_GetCtysFromUsr (&mysql_resCty,Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
+	 NumCtys = Cty_DB_GetMyCtys (&mysql_resCty,-1L);
 	 for (NumCty = 0;
 	      NumCty < NumCtys;
 	      NumCty++)
@@ -231,9 +231,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    HTM_LI_End ();
 
 	    /***** Get my institutions in this country *****/
-	    NumInss = Ins_DB_GetInssFromUsr (&mysql_resIns,
-	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                     Hie[Hie_CTY].HieCod);
+	    NumInss = Ins_DB_GetMyInss (&mysql_resIns,
+	                                Hie[Hie_CTY].HieCod);
 	    for (NumIns = 0;
 		 NumIns < NumInss;
 		 NumIns++)
@@ -268,9 +267,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       HTM_LI_End ();
 
 	       /***** Get my centers in this institution *****/
-	       NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_resCtr,
-	                                        Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                        Hie[Hie_INS].HieCod);
+	       NumCtrs = Ctr_DB_GetMyCtrs (&mysql_resCtr,Hie[Hie_INS].HieCod);
 	       for (NumCtr = 0;
 		    NumCtr < NumCtrs;
 		    NumCtr++)
@@ -305,9 +302,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  HTM_LI_End ();
 
 		  /***** Get my degrees in this center *****/
-		  NumDegs = Deg_DB_GetDegsFromUsr (&mysql_resDeg,
-		                                   Gbl.Usrs.Me.UsrDat.UsrCod,
-		                                   Hie[Hie_CTR].HieCod);
+		  NumDegs = Deg_DB_GetMyDegs (&mysql_resDeg,Hie[Hie_CTR].HieCod);
 		  for (NumDeg = 0;
 		       NumDeg < NumDegs;
 		       NumDeg++)
@@ -575,7 +570,6 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
-      // Enr_GetMyCourses ();
       Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Begin form *****/
@@ -1955,7 +1949,6 @@ static void Crs_PutButtonToRegisterInCrs (void)
 void Crs_ReqSelectOneOfMyCourses (void)
   {
    /***** Fill the list with the courses I belong to, if not filled *****/
-   // Enr_GetMyCourses ();
    Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Select one of my courses *****/

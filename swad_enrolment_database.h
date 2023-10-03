@@ -40,9 +40,8 @@ void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
 void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod);
 
 void Enr_DB_CreateTmpTableMyCourses (void);
-unsigned Enr_DB_GetMyCourses (MYSQL_RES **mysql_res,
-			      __attribute__((unused)) long UsrCod,
-			      __attribute__((unused)) long HieCod);
+unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,
+			   __attribute__((unused)) long PrtCod);
 void Enr_DB_DropTmpTableMyCourses (void);
 unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res);
 

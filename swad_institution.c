@@ -1684,59 +1684,6 @@ static void Ins_FormToGoToMap (struct Hie_Node *Ins)
   }
 
 /*****************************************************************************/
-/** Get all my institutions (those of my courses) and store them in a list ***/
-/*****************************************************************************/
-/*
-void Ins_GetMyInstits (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumIns;
-   unsigned NumInss;
-   long InsCod;
-
-   ***** If my institutions are yet filled, there's nothing to do *****
-   if (!Gbl.Usrs.Me.Hierarchy[Hie_INS].Filled)
-     {
-      Gbl.Usrs.Me.Hierarchy[Hie_INS].Num = 0;
-      Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes = NULL;
-
-      ***** Get my institutions from database *****
-      NumInss = Ins_DB_GetInssFromUsr (&mysql_res,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      if (NumInss)
-        {
-	 if ((Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes = malloc (NumInss *
-						sizeof (*Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes))) == NULL)
-            Err_NotEnoughMemoryExit ();
-	 for (NumIns = 0;
-	      NumIns < NumInss;
-	      NumIns++)
-	   {
-	    * Get next institution *
-	    row = mysql_fetch_row (mysql_res);
-
-	    * Get institution code *
-	    if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	      {
-	       Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_INS].Num].HieCod  = InsCod;
-	       Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_INS].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	       Gbl.Usrs.Me.Hierarchy[Hie_INS].Num++;
-	      }
-	   }
-        }
-
-
-      ***** Free structure that stores the query result *****
-      DB_FreeMySQLResult (&mysql_res);
-
-      ***** Set boolean that indicates that my institutions are yet filled *****
-      Gbl.Usrs.Me.Hierarchy[Hie_INS].Filled = true;
-     }
-  }
-*/
-/*****************************************************************************/
 /******************** Check if I belong to an institution ********************/
 /*****************************************************************************/
 
@@ -1745,7 +1692,6 @@ bool Ins_CheckIfIBelongToIns (long InsCod)
    unsigned NumMyIns;
 
    /***** Fill the list with the institutions I belong to *****/
-   // Ins_GetMyInstits ();
    Hie_GetMyHierarchy (Hie_INS);
 
    /***** Check if the institution passed as parameter is any of my institutions *****/

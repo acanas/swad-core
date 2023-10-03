@@ -101,9 +101,8 @@ void Enr_DB_CreateTmpTableMyCourses (void)
 /************************* Get my courses from database **********************/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetMyCourses (MYSQL_RES **mysql_res,
-			      __attribute__((unused)) long UsrCod,
-			      __attribute__((unused)) long HieCod)
+unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,
+			   __attribute__((unused)) long PrtCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get which courses you belong to",
@@ -172,7 +171,6 @@ bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
   {
    /***** Fill the list with the courses I belong to (if not already filled) *****/
-   // Enr_GetMyCourses ();
    Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Check if user shares any course with me *****/
@@ -203,7 +201,6 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
    /***** 2. Slow check: Get if user shares any course with me
                          with a different role, from database *****/
    /* Fill the list with the courses I belong to (if not already filled) */
-   // Enr_GetMyCourses ();
    Hie_GetMyHierarchy (Hie_CRS);
 
    /* Remove temporary table if exists */

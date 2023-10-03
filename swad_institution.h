@@ -70,7 +70,6 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 
-// void Ins_GetMyInstits (void);
 bool Ins_CheckIfIBelongToIns (long InsCod);
 
 void Ins_PutParInsCod (void *InsCod);
