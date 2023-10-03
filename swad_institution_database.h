@@ -77,7 +77,7 @@ unsigned Ins_DB_GetNumInssWithCrss (Hie_Level_t Level,long HieCod);
 unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
                                     Hie_Level_t Level,long HieCod);
 
-unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod);
+unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod);
 bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
 				    bool CountOnlyAcceptedCourses);
 unsigned Ins_DB_GetNumUsrsWhoClaimToBelongToIns (long InsCod);

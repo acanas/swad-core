@@ -126,7 +126,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
    char ThisRoomFullName[Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
 
    /***** Fill the list with the degrees I belong to *****/ 
-   Deg_GetMyDegrees ();
+   // Deg_GetMyDegrees ();
+   Hie_GetMyHierarchy (Hie_DEG);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Chat_rooms,
@@ -138,14 +139,14 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
 	 /***** Link to chat available for all users *****/
 	 IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
-				 !Gbl.Usrs.Me.MyDegs.Num);
+				 !Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num);
 	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
 		   Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
 	 Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
 	    Ico_PutIcon ("comments.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
 	 Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
 
-	 IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegs.Num;
+	 IsLastItemInLevel[1] = !Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num;
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
@@ -171,16 +172,16 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
 	 /***** Link to chat of users from my degrees *****/
 	 for (NumMyDeg = 0;
-	      NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
+	      NumMyDeg < Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num;
 	      NumMyDeg++)
 	   {
 	    /* Get data of this degree */
-	    Deg.HieCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod;
+	    Deg.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod;
 	    if (!Deg_GetDegreeDataByCod (&Deg))
 	       Err_WrongDegreeExit ();
 
 	    /* Link to the room of this degree */
-	    IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegs.Num - 1);
+	    IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num - 1);
 	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",Deg.HieCod);
 	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
 		      Deg.ShrtName);
@@ -406,8 +407,10 @@ void Cht_OpenChatWindow (void)
       Err_ShowErrorAndExit ("Wrong code of chat room.");
 
    /***** Fill the lists with the degrees and courses I belong to *****/ 
-   Deg_GetMyDegrees ();
-   Enr_GetMyCourses ();
+   // Deg_GetMyDegrees ();
+   Hie_GetMyHierarchy (Hie_DEG);
+   // Enr_GetMyCourses ();
+   Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Build my user's name *****/
    Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.Surname1,sizeof (UsrName) - 1);
@@ -467,18 +470,18 @@ void Cht_OpenChatWindow (void)
         }
 
    for (NumMyDeg = 0;
-	NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
+	NumMyDeg < Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num;
 	NumMyDeg++)
      {
       snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",
-		Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod);
+		Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this degree */
-         Deg.HieCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod;
+         Deg.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod;
          Deg_GetDegreeDataByCod (&Deg);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),"%s",
@@ -494,18 +497,18 @@ void Cht_OpenChatWindow (void)
      }
 
    for (NumMyCrs = 0;
-	NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
+	NumMyCrs < Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num;
 	NumMyCrs++)
      {
       snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
-		Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod);
+		Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this course */
-         Crs.HieCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod;
+         Crs.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod;
          Crs_GetCourseDataByCod (&Crs);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),

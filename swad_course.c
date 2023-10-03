@@ -199,15 +199,15 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 HTM_LI_End ();
 
 	 /***** Get my countries *****/
-	 NumCtys = Cty_DB_GetCtysFromUsr (&mysql_resCty,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 NumCtys = Cty_DB_GetCtysFromUsr (&mysql_resCty,Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
 	 for (NumCty = 0;
 	      NumCty < NumCtys;
 	      NumCty++)
 	   {
-	    /***** Get next institution *****/
+	    /***** Get next country *****/
 	    row = mysql_fetch_row (mysql_resCty);
 
-	    /***** Get data of this institution *****/
+	    /***** Get data of this country *****/
 	    Hie[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (row[0]);
 	    if (!Cty_GetBasicCountryDataByCod (&Hie[Hie_CTY]))
 	       Err_WrongCountrExit ();
@@ -575,10 +575,11 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
-      Enr_GetMyCourses ();
+      // Enr_GetMyCourses ();
+      Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Begin form *****/
-   Frm_BeginFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeePrg :
+   Frm_BeginFormGoTo (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num ? ActSeePrg :
                                                ActReqSch);
 
       /***** Begin selector of courses *****/
@@ -593,15 +594,15 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 	                HTM_OPTION_DISABLED,
 			"%s",Txt_Course);
 
-	 if (Gbl.Usrs.Me.MyCrss.Num)
+	 if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
 	   {
 	    /***** Write an option for each of my courses *****/
 	    for (NumMyCrs = 0, LastDegCod = -1L;
-		 NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
+		 NumMyCrs < Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num;
 		 NumMyCrs++)
 	      {
-	       CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod;
-	       DegCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].PrtCod;
+	       CrsCod = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod;
+	       DegCod = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].PrtCod;
 
 	       Crs_DB_GetShortNamesByCod (CrsCod,CrsShortName,DegShortName);
 
@@ -1954,10 +1955,11 @@ static void Crs_PutButtonToRegisterInCrs (void)
 void Crs_ReqSelectOneOfMyCourses (void)
   {
    /***** Fill the list with the courses I belong to, if not filled *****/
-   Enr_GetMyCourses ();
+   // Enr_GetMyCourses ();
+   Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.MyCrss.Num)
+   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
       /* Show my courses */
       Crs_WriteListMyCoursesToSelectOne ();
    else	// I am not enroled in any course

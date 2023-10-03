@@ -135,34 +135,10 @@ struct Globals
          bool ConfirmEmailJustSent;	// An email to confirm my email address has just been sent
          struct
            {
-            bool Filled;	// My institutions are already filled?
-            unsigned Num;
-            struct Hie_MyNode *Ctys;
-           } MyCtys;
-         struct
-           {
-            bool Filled;	// My institutions are already filled?
-            unsigned Num;
-            struct Hie_MyNode *Inss;
-           } MyInss;
-         struct
-           {
-            bool Filled;	// My centers are already filled?
-            unsigned Num;
-            struct Hie_MyNode *Ctrs;
-           } MyCtrs;
-         struct
-           {
-            bool Filled;	// My degrees are already filled?
-            unsigned Num;
-            struct Hie_MyNode *Degs;
-           } MyDegs;
-         struct
-           {
-            bool Filled;	// My courses are already filled?
-            unsigned Num;
-            struct Hie_MyNode *Crss;
-           } MyCrss;
+            struct Hie_MyNode *Nodes;	// List of courses/degrees/centers/institutions/countries
+            unsigned Num;		// Number of courses/degrees/centers/institutions/countries
+            bool Filled;		// List is already filled?
+           } Hierarchy[Hie_NUM_LEVELS];	// My hierarchy
 	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow

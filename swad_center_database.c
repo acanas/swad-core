@@ -724,10 +724,10 @@ unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod)
+unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
   {
    /***** Get from database the centers a user belongs to *****/
-   if (InsCod > 0)
+   if (HieCod > 0)
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
 		      "SELECT ctr_centers.CtrCod,"	// row[0]
@@ -744,7 +744,7 @@ unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod)
 		   " GROUP BY ctr_centers.CtrCod"
 		   " ORDER BY ctr_centers.ShortName",
 		      UsrCod,
-		      InsCod);
+		      HieCod);
    else
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",

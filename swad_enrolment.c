@@ -3188,8 +3188,9 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	    Gbl.Usrs.Me.UsrDat.Accepted     = false;
 
 	    /* Fill the list with the courses I belong to */
-	    Gbl.Usrs.Me.MyCrss.Filled = false;
-	    Enr_GetMyCourses ();
+	    Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
+	    // Enr_GetMyCourses ();
+	    Hie_GetMyHierarchy (Hie_CRS);
 
 	    /* Set my roles */
 	    Gbl.Usrs.Me.Role.FromSession              =
@@ -3224,7 +3225,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 /*****************************************************************************/
 /*************** Get all my courses and store them in a list *****************/
 /*****************************************************************************/
-
+/*
 void Enr_GetMyCourses (void)
   {
    MYSQL_RES *mysql_res;
@@ -3233,78 +3234,58 @@ void Enr_GetMyCourses (void)
    unsigned NumCrs;
    long CrsCod;
 
-   /***** Trivial check 1: if my courses are already filled, there's nothing to do *****/
-   if (Gbl.Usrs.Me.MyCrss.Filled)
+   ***** Trivial check 1: if my courses are already filled, there's nothing to do *****
+   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled)
       return;
 
-   /***** Trivial check 2: if user's code is not set, don't query database *****/
+   ***** Trivial check 2: if user's code is not set, don't query database *****
    if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0)
       return;
 
-   /***** Remove temporary table with my courses *****/
+   ***** Remove temporary table with my courses *****
    Enr_DB_DropTmpTableMyCourses ();
 
-   /***** Create temporary table with my courses *****/
+   ***** Create temporary table with my courses *****
    Enr_DB_CreateTmpTableMyCourses ();
 
-   /***** Get my courses from database *****/
-   Gbl.Usrs.Me.MyCrss.Num = 0;
-   Gbl.Usrs.Me.MyCrss.Crss = NULL;
+   ***** Get my courses from database *****
+   Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num = 0;
+   Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes = NULL;
 
    NumCrss = Enr_DB_GetMyCourses (&mysql_res);
    if (NumCrss)
      {
-      if ((Gbl.Usrs.Me.MyCrss.Crss = malloc (NumCrss *
-					     sizeof (*Gbl.Usrs.Me.MyCrss.Crss))) == NULL)
+      if ((Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes = malloc (NumCrss *
+					     sizeof (*Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes))) == NULL)
 	 Err_NotEnoughMemoryExit ();
       for (NumCrs = 0;
 	   NumCrs < NumCrss;
 	   NumCrs++)
 	{
-	 /* Get next course */
+	 * Get next course *
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get course code (row[0]) */
+	 * Get course code (row[0]) *
 	 if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	   {
-	    Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].HieCod = CrsCod;
+	    Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num].HieCod = CrsCod;
 
-	    /* Get role (row[1]) and degree code (row[2]) */
-	    Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-	    Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].PrtCod  = Str_ConvertStrCodToLongCod (row[2]);
+	    * Get role (row[1]) and degree code (row[2]) *
+	    Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	    Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num].PrtCod  = Str_ConvertStrCodToLongCod (row[2]);
 
-	    Gbl.Usrs.Me.MyCrss.Num++;
+	    Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num++;
 	   }
 	}
      }
 
-   /***** Free structure that stores the query result *****/
+   ***** Free structure that stores the query result *****
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Set boolean that indicates that my courses are already filled *****/
-   Gbl.Usrs.Me.MyCrss.Filled = true;
+   ***** Set boolean that indicates that my courses are already filled *****
+   Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = true;
   }
-
-/*****************************************************************************/
-/************************ Free the list of my courses ************************/
-/*****************************************************************************/
-
-void Enr_FreeMyCourses (void)
-  {
-   if (Gbl.Usrs.Me.MyCrss.Filled)
-     {
-      /***** Reset list *****/
-      Gbl.Usrs.Me.MyCrss.Filled = false;
-      if (Gbl.Usrs.Me.MyCrss.Num &&
-	  Gbl.Usrs.Me.MyCrss.Crss)
-         free (Gbl.Usrs.Me.MyCrss.Crss);
-      Gbl.Usrs.Me.MyCrss.Num    = 0;
-
-      /***** Remove temporary table with my courses *****/
-      Enr_DB_DropTmpTableMyCourses ();
-     }
-  }
-
+*/
 /*****************************************************************************/
 /*********************** Check if I belong to a course ***********************/
 /*****************************************************************************/
@@ -3314,13 +3295,14 @@ bool Enr_CheckIfIBelongToCrs (long CrsCod)
    unsigned NumMyCrs;
 
    /***** Fill the list with the courses I belong to *****/
-   Enr_GetMyCourses ();
+   // Enr_GetMyCourses ();
+   Hie_GetMyHierarchy (Hie_CRS);
 
    /***** Check if the course passed as parameter is any of my courses *****/
    for (NumMyCrs = 0;
-        NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
+        NumMyCrs < Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num;
         NumMyCrs++)
-      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod == CrsCod)
+      if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod == CrsCod)
          return true;
 
    return false;

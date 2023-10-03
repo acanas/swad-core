@@ -760,9 +760,9 @@ unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod)
+unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
   {
-   if (CtyCod > 0)
+   if (HieCod > 0)
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
 		      "SELECT ins_instits.InsCod,"	// row[0]
@@ -781,7 +781,7 @@ unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod)
 		   " GROUP BY ins_instits.InsCod"
 		   " ORDER BY ins_instits.ShortName",
 		      UsrCod,
-		      CtyCod);
+		      HieCod);
    else
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",

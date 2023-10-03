@@ -1777,7 +1777,7 @@ static void Cty_FormToGoToMap (struct Hie_Node *Cty)
 /*****************************************************************************/
 /**** Get all my countries (those of my courses) and store them in a list ****/
 /*****************************************************************************/
-
+/*
 void Cty_GetMyCountrs (void)
   {
    MYSQL_RES *mysql_res;
@@ -1786,63 +1786,45 @@ void Cty_GetMyCountrs (void)
    unsigned NumCtys;
    long CtyCod;
 
-   /***** If my countries are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyCtys.Filled)
+   ***** If my countries are yet filled, there's nothing to do *****
+   if (!Gbl.Usrs.Me.Hierarchy[Hie_CTY].Filled)
      {
-      Gbl.Usrs.Me.MyCtys.Num = 0;
-      Gbl.Usrs.Me.MyCtys.Ctys = NULL;
+      Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num   = 0;
+      Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes = NULL;
 
-      /***** Get my institutions from database *****/
-      NumCtys = Cty_DB_GetCtysFromUsr (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod);
+      ***** Get my countries from database *****
+      NumCtys = Cty_DB_GetCtysFromUsr (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
       if (NumCtys)
         {
-	 if ((Gbl.Usrs.Me.MyCtys.Ctys = malloc (NumCtys *
-						sizeof (*Gbl.Usrs.Me.MyCtys.Ctys))) == NULL)
+	 if ((Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes = malloc (NumCtys *
+							     sizeof (*Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes))) == NULL)
             Err_NotEnoughMemoryExit ();
 	 for (NumCty = 0;
 	      NumCty < NumCtys;
 	      NumCty++)
 	   {
-	    /* Get next country */
+	    * Get next country *
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Get country code */
+	    * Get country code *
 	    if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	      {
-	       Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].HieCod  = CtyCod;
-	       Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+	       Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num].HieCod  = CtyCod;
+	       Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes[Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-	       Gbl.Usrs.Me.MyCtys.Num++;
+	       Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num++;
 	      }
 	   }
         }
 
-      /***** Free structure that stores the query result *****/
+      ***** Free structure that stores the query result *****
       DB_FreeMySQLResult (&mysql_res);
 
-      /***** Set boolean that indicates that my institutions are yet filled *****/
-      Gbl.Usrs.Me.MyCtys.Filled = true;
+      ***** Set boolean that indicates that my institutions are yet filled *****
+      Gbl.Usrs.Me.Hierarchy[Hie_CTY].Filled = true;
      }
   }
-
-/*****************************************************************************/
-/************************ Free the list of my countries ************************/
-/*****************************************************************************/
-
-void Cty_FreeMyCountrs (void)
-  {
-   if (Gbl.Usrs.Me.MyCtys.Filled)
-     {
-      /***** Reset list *****/
-      Gbl.Usrs.Me.MyCtys.Filled = false;
-      if (Gbl.Usrs.Me.MyCtys.Num &&
-	  Gbl.Usrs.Me.MyCtys.Ctys)
-         free (Gbl.Usrs.Me.MyCtys.Ctys);
-      Gbl.Usrs.Me.MyCtys.Ctys = NULL;
-      Gbl.Usrs.Me.MyCtys.Num = 0;
-     }
-  }
-
+*/
 /*****************************************************************************/
 /********************** Check if I belong to a country **********************/
 /*****************************************************************************/
@@ -1852,13 +1834,14 @@ bool Cty_CheckIfIBelongToCty (long CtyCod)
    unsigned NumMyCty;
 
    /***** Fill the list with the institutions I belong to *****/
-   Cty_GetMyCountrs ();
+   // Cty_GetMyCountrs ();
+   Hie_GetMyHierarchy (Hie_CTY);
 
    /***** Check if the country passed as parameter is any of my countries *****/
    for (NumMyCty = 0;
-        NumMyCty < Gbl.Usrs.Me.MyCtys.Num;
+        NumMyCty < Gbl.Usrs.Me.Hierarchy[Hie_CTY].Num;
         NumMyCty++)
-      if (Gbl.Usrs.Me.MyCtys.Ctys[NumMyCty].HieCod == CtyCod)
+      if (Gbl.Usrs.Me.Hierarchy[Hie_CTY].Nodes[NumMyCty].HieCod == CtyCod)
          return true;
    return false;
   }

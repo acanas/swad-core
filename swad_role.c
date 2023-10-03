@@ -257,14 +257,15 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
    if (InsCod > 0)
      {
       /***** Fill the list with the institutions I belong to (if not already filled) *****/
-      Ins_GetMyInstits ();
+      // Ins_GetMyInstits ();
+      Hie_GetMyHierarchy (Hie_INS);
 
       /***** Check if the institution passed as parameter is any of my institutions *****/
       for (NumMyIns = 0;
-           NumMyIns < Gbl.Usrs.Me.MyInss.Num;
+           NumMyIns < Gbl.Usrs.Me.Hierarchy[Hie_INS].Num;
            NumMyIns++)
-         if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].HieCod == InsCod)
-            return Gbl.Usrs.Me.MyInss.Inss[NumMyIns].MaxRole;
+         if (Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[NumMyIns].HieCod == InsCod)
+            return Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[NumMyIns].MaxRole;
       return Rol_GST;
      }
    return Rol_UNK;   // No degree
@@ -281,14 +282,15 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
    if (CtrCod > 0)
      {
       /***** Fill the list with the centers I belong to (if not already filled) *****/
-      Ctr_GetMyCenters ();
+      // Ctr_GetMyCenters ();
+      Hie_GetMyHierarchy (Hie_CTR);
 
       /***** Check if the center passed as parameter is any of my centers *****/
       for (NumMyCtr = 0;
-           NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
+           NumMyCtr < Gbl.Usrs.Me.Hierarchy[Hie_CTR].Num;
            NumMyCtr++)
-         if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].HieCod == CtrCod)
-            return Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].MaxRole;
+         if (Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes[NumMyCtr].HieCod == CtrCod)
+            return Gbl.Usrs.Me.Hierarchy[Hie_CTR].Nodes[NumMyCtr].MaxRole;
       return Rol_GST;
      }
    return Rol_UNK;   // No center
@@ -307,14 +309,15 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
       return Rol_UNK;
 
    /***** Fill the list with the degrees I belong to (if not already filled) *****/
-   Deg_GetMyDegrees ();
+   // Deg_GetMyDegrees ();
+   Hie_GetMyHierarchy (Hie_DEG);
 
    /***** Check if the degree passed as parameter is any of my degrees *****/
    for (NumMyDeg = 0;
-	NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
+	NumMyDeg < Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num;
 	NumMyDeg++)
-      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].HieCod == DegCod)
-	 return Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].MaxRole;
+      if (Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod == DegCod)
+	 return Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].MaxRole;
    return Rol_GST;
   }
 
@@ -343,15 +346,16 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 
    /***** 3. Slow check: get my role from list of my courses *****/
    /* Fill the list with the courses I belong to (if not already filled) */
-   Enr_GetMyCourses ();
+   // Enr_GetMyCourses ();
+   Hie_GetMyHierarchy (Hie_CRS);
 
    /* Check if the current course is any of my courses */
    for (NumMyCrs = 0, Role = Rol_UNK;
-	NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
+	NumMyCrs < Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num;
 	NumMyCrs++)
-      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].HieCod == CrsCod)
+      if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod == CrsCod)
 	{
-	 Role = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].MaxRole;
+	 Role = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].MaxRole;
 	 break;
 	}
 

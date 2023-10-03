@@ -1238,7 +1238,8 @@ void For_ShowForumList (struct For_Forums *Forums)
       Forums->Thread.ToMove = For_DB_GetThrInMyClipboard ();
 
    /***** Fill the list with the institutions I belong to *****/
-   Ins_GetMyInstits ();
+   // Ins_GetMyInstits ();
+   Hie_GetMyHierarchy (Hie_INS);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forums,
@@ -1314,15 +1315,15 @@ void For_ShowForumList (struct For_Forums *Forums)
 
 	       /***** Links to forums of users from my institutions, the degrees in each institution and the courses in each degree *****/
 	       for (NumMyIns = 0;
-		    NumMyIns < Gbl.Usrs.Me.MyInss.Num;
+		    NumMyIns < Gbl.Usrs.Me.Hierarchy[Hie_INS].Num;
 		    NumMyIns++)
 		 {
-		  InsCod = Gbl.Usrs.Me.MyInss.Inss[NumMyIns].HieCod;
+		  InsCod = Gbl.Usrs.Me.Hierarchy[Hie_INS].Nodes[NumMyIns].HieCod;
 
 		  /* Links to forums of this institution */
 		  For_WriteLinksToInsForums (Forums,
 					     InsCod,
-					     (NumMyIns == Gbl.Usrs.Me.MyInss.Num - 1),
+					     (NumMyIns == Gbl.Usrs.Me.Hierarchy[Hie_INS].Num - 1),
 					     IsLastItemInLevel);
 
 		  /* Get my centers in this institution from database */

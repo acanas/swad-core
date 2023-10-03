@@ -122,7 +122,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.Role.FromSession              =
    Gbl.Usrs.Me.Role.Logged                   =
    Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
-   Gbl.Usrs.Me.Role.Max                          = Rol_UNK;
+   Gbl.Usrs.Me.Role.Max                      = Rol_UNK;
    Gbl.Usrs.Me.Role.HasChanged = false;
    Gbl.Usrs.Me.IBelongToCurrentIns = false;
    Gbl.Usrs.Me.IBelongToCurrentCtr = false;
@@ -131,11 +131,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.MyPhotoExists = false;
    Gbl.Usrs.Me.NumAccWithoutPhoto = 0;
    Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialized to a big value, so by default files are not shown as recent or new
-   Gbl.Usrs.Me.MyInss.Filled = false;
-   Gbl.Usrs.Me.MyCtrs.Filled = false;
-   Gbl.Usrs.Me.MyDegs.Filled = false;
-   Gbl.Usrs.Me.MyCrss.Filled = false;
-   Gbl.Usrs.Me.MyCrss.Num = 0;
+   Hie_ResetMyHierarchy ();
    Gbl.Usrs.Me.ConfirmEmailJustSent = false;	// An email to confirm my email address has not just been sent
 
    Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
@@ -268,11 +264,9 @@ void Gbl_Cleanup (void)
        !Gbl.WebService.IsWebService &&
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
       Ses_DB_RemovePar ();
-   Enr_FreeMyCourses ();
-   Deg_FreeMyDegrees ();
-   Ctr_FreeMyCenters ();
-   Ins_FreeMyInstits ();
-   Cty_FreeMyCountrs ();
+
+   Hie_FreeMyHierarchy ();
+
    Usr_UsrDataDestructor (&Gbl.Usrs.Me.UsrDat);
    Usr_UsrDataDestructor (&Gbl.Usrs.Other.UsrDat);
    Rec_FreeListFields ();

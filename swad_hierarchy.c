@@ -905,7 +905,7 @@ Hie_Order_t Hie_GetParHieOrder (void)
   }
 
 /*****************************************************************************/
-/**************************** Free list of centers ***************************/
+/***************** Free list of courses/degrees/centers... *******************/
 /*****************************************************************************/
 
 void Hie_FreeList (Hie_Level_t Level)
@@ -917,6 +917,128 @@ void Hie_FreeList (Hie_Level_t Level)
       Gbl.Hierarchy.List[Level].Lst = NULL;
       Gbl.Hierarchy.List[Level].Num = 0;
      }
+  }
+
+/*****************************************************************************/
+/***** Reset lists of my courses/degrees/centers/institutions/countries ******/
+/*****************************************************************************/
+
+void Hie_ResetMyHierarchy (void)
+  {
+   Hie_Level_t Level;
+
+   for (Level  = Hie_CTY;
+	Level <= Hie_CRS;
+	Level++)
+     {
+      Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
+      Gbl.Usrs.Me.Hierarchy[Level].Num = 0;
+      Gbl.Usrs.Me.Hierarchy[Level].Filled = false;
+     }
+  }
+
+/*****************************************************************************/
+/****** Free lists of my courses/degrees/centers/institutions/countries ******/
+/*****************************************************************************/
+
+void Hie_FreeMyHierarchy (void)
+  {
+   Hie_Level_t Level;
+
+   /***** Remove temporary table with my courses *****/
+   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled)
+      Enr_DB_DropTmpTableMyCourses ();
+
+   /***** Free allocated memory
+          for my courses/degrees/centers/institutions/countries *****/
+   for (Level  = Hie_CTY;
+	Level <= Hie_CRS;
+	Level++)
+      if (Gbl.Usrs.Me.Hierarchy[Level].Filled &&
+	  Gbl.Usrs.Me.Hierarchy[Level].Num &&
+	  Gbl.Usrs.Me.Hierarchy[Level].Nodes)
+         free (Gbl.Usrs.Me.Hierarchy[Level].Nodes);
+
+   Hie_ResetMyHierarchy ();
+  }
+
+/*****************************************************************************/
+/********* Get all my courses/degrees/centers/institutions/countries *********/
+/********* and store them in a list                                  *********/
+/*****************************************************************************/
+
+void Hie_GetMyHierarchy (Hie_Level_t Level)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumNode;
+   unsigned NumNodes;
+   long HieCod;
+   static unsigned (*GetNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
+						      long UsrCod,long HieCod) =
+     {
+      [Hie_CTY] = Cty_DB_GetCtysFromUsr,
+      [Hie_INS] = Ins_DB_GetInssFromUsr,
+      [Hie_CTR] = Ctr_DB_GetCtrsFromUsr,
+      [Hie_DEG] = Deg_DB_GetDegsFromUsr,
+      [Hie_CRS] = Enr_DB_GetMyCourses,
+     };
+
+   /***** Trivial check 1: if list of nodes is already filled, there's nothing to do *****/
+   if (Gbl.Usrs.Me.Hierarchy[Level].Filled)
+      return;
+
+   /***** Trivial check 2: if user's code is not set, don't query database *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0)
+      return;
+
+   /***** If retrieving my list of courses, create a temporary table with them *****/
+   if (Level == Hie_CRS)
+     {
+      Enr_DB_DropTmpTableMyCourses ();
+      Enr_DB_CreateTmpTableMyCourses ();
+     }
+
+   /***** Set default values *****/
+   Gbl.Usrs.Me.Hierarchy[Level].Num   = 0;
+   Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
+
+   /***** Get my courses/degrees/centers/institutions/countries from database *****/
+   NumNodes = GetNodesFromDB[Level] (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
+   if (NumNodes)
+     {
+      if ((Gbl.Usrs.Me.Hierarchy[Level].Nodes = malloc (NumNodes *
+							sizeof (*Gbl.Usrs.Me.Hierarchy[Level].Nodes))) == NULL)
+	 Err_NotEnoughMemoryExit ();
+      for (NumNode = 0;
+	   NumNode < NumNodes;
+	   NumNode++)
+	{
+	 /* Get next course/degree/center/institution/country */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get hierarchy code (row[0]) */
+	 if ((HieCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].HieCod  = HieCod;
+
+	    /* Get role or maximum role (row[1]) in this node */
+	    Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+
+	    /* Get parent hierarchy code */
+	    if (Level == Hie_CRS)
+	       Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].PrtCod  = Str_ConvertStrCodToLongCod (row[2]);
+
+	    Gbl.Usrs.Me.Hierarchy[Level].Num++;
+	   }
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Set boolean that indicates that my institutions are yet filled *****/
+   Gbl.Usrs.Me.Hierarchy[Level].Filled = true;
   }
 
 /*****************************************************************************/

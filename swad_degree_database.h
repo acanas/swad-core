@@ -80,7 +80,7 @@ void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);
 void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus);
 
-unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod);
+unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod);
 unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);
 bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
 				    bool CountOnlyAcceptedCourses);

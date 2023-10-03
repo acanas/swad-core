@@ -761,9 +761,9 @@ void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus)
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod)
+unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod)
   {
-   if (CtrCod > 0)
+   if (HieCod > 0)
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
 		      "SELECT deg_degrees.DegCod,"	// row[0]
@@ -778,7 +778,7 @@ unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod)
 		   " GROUP BY deg_degrees.DegCod"
 		   " ORDER BY deg_degrees.ShortName",
 		      UsrCod,
-		      CtrCod);
+		      HieCod);
    else
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",

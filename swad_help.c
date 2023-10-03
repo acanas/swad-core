@@ -112,7 +112,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    /***** Alert message *****/
    if (Gbl.Usrs.Me.Logged &&
-       !Gbl.Usrs.Me.MyCrss.Num)
+       !Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
       Ale_ShowAlert (Ale_INFO,"%s<br />%s<br />%s",
 	             Txt_You_are_not_enroled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
 	             Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them,
@@ -157,7 +157,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	      }
 	   }
 
-	 if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
+	 if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I am enroled in some courses
 	   {
 	    if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
 		Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course

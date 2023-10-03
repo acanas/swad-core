@@ -84,8 +84,7 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role);
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);
 
-void Cty_GetMyCountrs (void);
-void Cty_FreeMyCountrs (void);
+// void Cty_GetMyCountrs (void);
 bool Cty_CheckIfIBelongToCty (long CtyCod);
 
 void Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);

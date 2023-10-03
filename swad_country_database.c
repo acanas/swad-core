@@ -599,7 +599,8 @@ void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBU
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod)
+unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,
+				long UsrCod,__attribute__((unused)) long HieCod)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 

@@ -446,9 +446,9 @@ unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
 /*****************************************************************************/
 // Returns the number of rows of the result
 
-unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod)
+unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long PrtCod)
   {
-   if (DegCod > 0)	// Courses in a degree
+   if (PrtCod > 0)	// Courses in a degree
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",
 		      "SELECT crs_users.CrsCod,"	// row[0]
@@ -461,7 +461,7 @@ unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod)
 		        " AND crs_courses.DegCod=%ld"
 		      " ORDER BY crs_courses.ShortName",
 		      UsrCod,
-		      DegCod);
+		      PrtCod);
    else			// All the courses
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",

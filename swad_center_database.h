@@ -85,7 +85,7 @@ void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsign
 unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
 
-unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod);
+unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long HieCod);
 bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
 				    bool CountOnlyAcceptedCourses);
 unsigned Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);
