@@ -164,7 +164,7 @@ void BrwSiz_SetAndCheckQuota (struct BrwSiz_BrowserSize *Size)
 
    /***** Check the quota *****/
    BrwSiz_SetMaxQuota (Size);
-   BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+   BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
    if (BrwSiz_CheckIfQuotaExceded (Size))
       Ale_ShowAlert (Ale_WARNING,Txt_Quota_exceeded);
   }

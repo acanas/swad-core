@@ -1965,7 +1965,7 @@ void Inf_ReceivePagInfo (void)
          Fil_RemoveTree (PathRelDirHTML);
          Fil_CreateDirIfNotExists (PathRelDirHTML);
          snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),"%s/%s.zip",
-                   Gbl.Crs.PathPriv,
+                   Gbl.Crs.Path.AbsPriv,
                    Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
 
          if (Fil_EndReceptionOfFile (PathRelFileZIP,Par))

@@ -72,6 +72,7 @@ extern struct Globals Gbl;
 /******************************** Private types ******************************/
 /*****************************************************************************/
 
+#define Att_TYPES_OF_VIEW 4
 typedef enum
   {
    Att_VIEW_ONLY_ME,	// View only me
@@ -2619,6 +2620,13 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Update_attendance;
+   static void (*FunctionToDrawContextualIcons[Att_TYPES_OF_VIEW]) (void *Args) =
+     {
+      [Att_VIEW_ONLY_ME] = Att_PutIconToViewAttEvents,
+      [Att_VIEW_SEL_USR] = Att_PutIconToEditAttEvents,
+      [Att_PRNT_ONLY_ME] = NULL,
+      [Att_PRNT_SEL_USR] = NULL,
+     };
    unsigned UniqueId;
    char *Id;
    unsigned NumAttEvent;
@@ -2626,25 +2634,9 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
                       TypeOfView == Att_VIEW_SEL_USR);
 
    /***** Begin box *****/
-   switch (TypeOfView)
-     {
-      case Att_VIEW_ONLY_ME:
-	 Box_BoxBegin (NULL,Txt_Events,
-		       Att_PutIconToViewAttEvents,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-	 break;
-      case Att_VIEW_SEL_USR:
-	 Box_BoxBegin (NULL,Txt_Events,
-		       Att_PutIconToEditAttEvents,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-	 break;
-      case Att_PRNT_ONLY_ME:
-      case Att_PRNT_SEL_USR:
-	 Box_BoxBegin (NULL,Txt_Events,
-		       NULL,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-	 break;
-     }
+   Box_BoxBegin (NULL,Txt_Events,
+		 FunctionToDrawContextualIcons[TypeOfView],NULL,
+		 NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to update the attendance
 	     depending on the events selected *****/

@@ -542,7 +542,7 @@ void Mrk_ShowMyMarks (void)
    /***** Get the path of the file of marks *****/
    Brw_SetFullPathInTree ();
    snprintf (PathPrivate,sizeof (PathPrivate),"%s/%s",
-             Gbl.FileBrowser.Priv.PathAboveRootFolder,
+             Gbl.FileBrowser.Path.AboveRootFolder,
              Gbl.FileBrowser.FilFolLnk.Full);
 
    /***** Get number of rows of header or footer *****/

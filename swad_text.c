@@ -47149,300 +47149,135 @@ const char *Txt_The_copy_has_been_successful =
 	"The copy has been successful.";		// Çeviri lazim!
 #endif
 
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque se exceder&iacute;a la cuota de disco.";	// Necessita traducció
 #elif L==2	// de
 	"Der Kopiervorgang wurde aus Platzgr&uuml;nden abgebrochen, als versucht wurde,"
-	" die Datei <strong>%s</strong> einzuf&uuml;gen.";
+	" <strong>%s</strong> einzuf&uuml;gen.";
 #elif L==3	// en
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the disk quota.";
 #elif L==4	// es
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque se exceder&iacute;a la cuota de disco.";
 #elif L==5	// fr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the disk quota.";		// Besoin de traduction
 #elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque se exceder&iacute;a la cuota de disco.";	// Okoteve traducción
 #elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il file <strong>%s</strong>"
+	"La copia &egrave; terminata quando si &egrave; provato a incollare <strong>%s</strong>"
 	" perch&egrave; esso superava la quota di gestione del disco.";
 #elif L==8	// pl
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	"A c&oacute;pia parou ao tentar colar <strong>%s</strong>"
 	" porque ele excederia a cota de disco.";
 #elif L==10	// tr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the disk quota.";		// Çeviri lazim!
 #endif
 
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La copia se ha detenido al intentar pegar la carpeta <strong>%s</strong>"
-	" porque se exceder&iacute;a la cuota de disco.";	// Necessita traducció
-#elif L==2	// de
-	"Der Kopiervorgang wurde aus Platzgr&uuml;nden abgebrochen, als versucht wurde,"
-	" das Verzeichnis <strong>%s</strong> einzuf&uuml;gen.";
-#elif L==3	// en
-	"The copy has stopped when trying to paste the folder <strong>%s</strong>"
-	" because it would exceed the disk quota.";
-#elif L==4	// es
-	"La copia se ha detenido al intentar pegar la carpeta <strong>%s</strong>"
-	" porque se exceder&iacute;a la cuota de disco.";
-#elif L==5	// fr
-	"The copy has stopped when trying to paste the folder <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Besoin de traduction
-#elif L==6	// gn
-	"La copia se ha detenido al intentar pegar la carpeta <strong>%s</strong>"
-	" porque se exceder&iacute;a la cuota de disco.";	// Okoteve traducción
-#elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare la cartella<strong>%s</strong>"
-	" perch&egrave; essa superava la quota di gestione del disco.";
-#elif L==8	// pl
-	"The copy has stopped when trying to paste the folder <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar a pasta <strong>%s</strong>"
-	" porque ele excederia a cota de disco.";
-#elif L==10	// tr
-	"The copy has stopped when trying to paste the folder <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Çeviri lazim!
-#endif
-
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque se exceder&iacute;a la cuota de disco.";	// Necessita traducció
-#elif L==2	// de
-	"Der Kopiervorgang wurde aus Platzgr&uuml;nden abgebrochen, als versucht wurde,"
-	" das Link <strong>%s</strong> einzuf&uuml;gen.";
-#elif L==3	// en
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the disk quota.";
-#elif L==4	// es
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque se exceder&iacute;a la cuota de disco.";
-#elif L==5	// fr
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Besoin de traduction
-#elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque se exceder&iacute;a la cuota de disco.";	// Okoteve traducción
-#elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il link<strong>%s</strong>"
-	" perch&egrave; essa superava la quota di gestione del disco.";
-#elif L==8	// pl
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
-	" porque ele excederia a cota de disco.";
-#elif L==10	// tr
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the disk quota.";		// Çeviri lazim!
-#endif
-
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";	// Necessita traducció
 #elif L==2	// de
 	"Zu viele Ebenen. Der Kopiervorgang wurde abgebrochen, als versucht wurde,"
-	" die Datei <strong>%s</strong> einzuf&uuml;gen.";
+	" <strong>%s</strong> einzuf&uuml;gen.";
 #elif L==3	// en
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the maximum allowed number of levels.";
 #elif L==4	// es
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";
 #elif L==5	// fr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the maximum allowed number of levels.";			// Besoin de traduction
 #elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";	// Okoteve traducción
 #elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il file <strong>%s</strong>"
+	"La copia &egrave; terminata quando si &egrave; provato a incollare <strong>%s</strong>"
 	" perch&egrave; esso superava il massimo numero di livelli permesso.";
 #elif L==8	// pl
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the maximum allowed number of levels.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	"A c&oacute;pia parou ao tentar colar <strong>%s</strong>"
 	" porque ele excederia o n&uacute;mero m&aacute;ximo permitido de n&iacute;veis.";
 #elif L==10	// tr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because it would exceed the maximum allowed number of levels.";			// Çeviri lazim!
 #endif
 
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_there_is_already_an_object_with_that_name =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
-	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";	// Necessita traducció
-#elif L==2	// de
-	"Zu viele Ebenen. Der Kopiervorgang wurde abgebrochen, als versucht wurde,"
-	" die Datei <strong>%s</strong> einzuf&uuml;gen.";
-#elif L==3	// en
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";
-#elif L==4	// es
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
-	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";
-#elif L==5	// fr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Besoin de traduction
-#elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
-	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";	// Okoteve traducción
-#elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il file <strong>%s</strong>"
-	" perch&egrave; superava il massimo numero di livelli permessi.";
-#elif L==8	// pl
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
-	" porque ele excederia o n&uacute;mero m&aacute;ximo permitido de n&iacute;veis.";
-#elif L==10	// tr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Çeviri lazim!
-#endif
-
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_maximum_allowed_number_of_levels =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";	// Necessita traducció
-#elif L==2	// de
-	"Zu viele Ebenen. Der Kopiervorgang wurde abgebrochen, als versucht wurde,"
-	" die Link <strong>%s</strong> einzuf&uuml;gen.";
-#elif L==3	// en
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";
-#elif L==4	// es
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";
-#elif L==5	// fr
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Besoin de traduction
-#elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque se exceder&iacute;a el n&uacute;mero m&aacute;ximo de niveles permitido.";	// Okoteve traducción
-#elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il link <strong>%s</strong>"
-	" perch&egrave; superava il massimo numero di livelli permessi.";
-#elif L==8	// pl
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
-	" porque ele excederia o n&uacute;mero m&aaxute;ximo permitido de n&iacute;veis.";
-#elif L==10	// tr
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because it would exceed the maximum allowed number of levels.";			// Çeviri lazim!
-#endif
-
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque ya existe otro objeto con ese nombre.";	// Necessita traducció
 #elif L==2	// de
-	"Der Kopiervorgang wurde abgebrochen, als versucht wurde, die Datei <strong>%s</strong>"
+	"Der Kopiervorgang wurde abgebrochen, als versucht wurde, <strong>%s</strong>"
 	" einzuf&uuml;gen. Der Objektname wird bereits verwendet.";
 #elif L==3	// en
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because there is already an object with that name.";
 #elif L==4	// es
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque ya existe otro objeto con ese nombre.";
 #elif L==5	// fr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because there is already an object with that name.";	// Besoin de traduction
 #elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque ya existe otro objecto con ese nombre.";	// Okoteve traducción
 #elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il file <strong>%s</strong>"
+	"La copia &egrave; terminata quando si &egrave; provato a incollare <strong>%s</strong>"
 	" perch&egrave; c'era gi&agrave; un oggetto con quel nome.";
 #elif L==8	// pl
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because there is already an object with that name.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	"A c&oacute;pia parou ao tentar colar <strong>%s</strong>"
 	" porque j&aacute; existe um objeto com esse nome.";
 #elif L==10	// tr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because there is already an object with that name.";	// Çeviri lazim!
 #endif
 
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque ya existe otro objeto con ese nombre.";	// Necessita traducció
-#elif L==2	// de
-	"Der Kopiervorgang wurde abgebrochen, als versucht wurde, die Link <strong>%s</strong>"
-	" einzuf&uuml;gen. Der Objektname wird bereits verwendet.";
-#elif L==3	// en
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because there is already an object with that name.";
-#elif L==4	// es
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque ya existe otro objeto con ese nombre.";
-#elif L==5	// fr
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because there is already an object with that name.";	// Besoin de traduction
-#elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el enlace <strong>%s</strong>"
-	" porque ya existe otro objecto con ese nombre.";	// Okoteve traducción
-#elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il link <strong>%s</strong>"
-	" perch&egrave; c'era gi&agrave; un oggetto con quel nome.";
-#elif L==8	// pl
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because there is already an object with that name.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o link <strong>%s</strong>"
-	" porque j&aacute; existe um objeto com esse nome.";
-#elif L==10	// tr
-	"The copy has stopped when trying to paste the link <strong>%s</strong>"
-	" because there is already an object with that name.";	// Çeviri lazim!
-#endif
-
-const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque no se puede pegar aqu&iacute; un archivo de un tipo distinto a HTML.";	// Necessita traducció
 #elif L==2	// de
-	"Der Kopiervorgang wurde abgebrochen, als versucht wurde, die Datei <strong>%s</strong>"
+	"Der Kopiervorgang wurde abgebrochen, als versucht wurde, <strong>%s</strong>"
 	" einzuf&uuml;gen. Es d&uuml;rfen nur HTML-Daten eingef&uumlgt werden.";
 #elif L==3	// en
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because you can not paste a file here of a type other than HTML.";
 #elif L==4	// es
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque no se puede pegar aqu&iacute; un archivo de un tipo distinto a HTML.";
 #elif L==5	// fr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because you can not paste a file here of a type other than HTML.";		// Besoin de traduction
 #elif L==6	// gn
-	"La copia se ha detenido al intentar pegar el archivo <strong>%s</strong>"
+	"La copia se ha detenido al intentar pegar <strong>%s</strong>"
 	" porque no se puede pegar aqu&iacute; un archivo de un tipo distinto a HTML.";	// Okoteve traducción
 #elif L==7	// it
-	"La copia &egrave; terminata quando si &egrave; provato a incollare il file <strong>%s</strong>"
+	"La copia &egrave; terminata quando si &egrave; provato a incollare <strong>%s</strong>"
 	" perch&egrave; non puoi incollare qui un file di un tipo diverso da HTML.";
 #elif L==8	// pl
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because you can not paste a file here of a type other than HTML.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A c&oacute;pia parou ao tentar colar o arquivo <strong>%s</strong>"
+	"A c&oacute;pia parou ao tentar colar <strong>%s</strong>"
 	" porque voc&ecirc; n&atilde;o pode colar um arquivo aqui de um tipo diferente de HTML.";
 #elif L==10	// tr
-	"The copy has stopped when trying to paste the file <strong>%s</strong>"
+	"The copy has stopped when trying to paste <strong>%s</strong>"
 	" because you can not paste a file here of a type other than HTML.";		// Çeviri lazim!
 #endif
 

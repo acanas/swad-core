@@ -275,7 +275,7 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
    /* Create path to folder and link */
    snprintf (PathFolderUsrInsideCrs,sizeof (PathFolderUsrInsideCrs),
 	     "%s/usr/%02u/%ld",
-	     Gbl.Crs.PathPriv,(unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
+	     Gbl.Crs.Path.AbsPriv,(unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
    snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),"%s/%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir,FullNameAndUsrID);
 
@@ -348,7 +348,7 @@ static void ZIP_CompressFolderIntoZIP (void)
 
    /***** Create a copy of the directory to compress *****/
    snprintf (Path,sizeof (Path),"%s/%s",
-	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	     Gbl.FileBrowser.Path.AboveRootFolder,
 	     Gbl.FileBrowser.FilFolLnk.Full);
    snprintf (PathCompression,sizeof (PathCompression),"%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,

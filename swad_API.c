@@ -4679,7 +4679,7 @@ int swad__getDirectoryTree (struct soap *soap,
    Gbl.Crs.Grps.GrpCod = (groupCode > 0) ? (long) groupCode :
 	                                   -1L;
 
-   snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),"%s/%ld",
+   snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%ld",
              Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Brw_InitializeFileBrowser ();
    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
@@ -4706,7 +4706,7 @@ int swad__getDirectoryTree (struct soap *soap,
    if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_IS_FOLDER,
                                                  Gbl.FileBrowser.FilFolLnk.Full) == HidVis_VISIBLE)
       API_ListDir (XML,1,
-                   Gbl.FileBrowser.Priv.PathRootFolder,
+                   Gbl.FileBrowser.Path.RootFolder,
                    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
    XML_WriteEndFile (XML,"tree");
 

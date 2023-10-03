@@ -2250,8 +2250,8 @@ static void Brw_SetPathFileBrowser (void)
 
    /***** Reset paths. An empty path means that
           we don't have to create that directory *****/
-   Gbl.FileBrowser.Priv.PathAboveRootFolder[0] = '\0';
-   Gbl.FileBrowser.Priv.PathRootFolder[0] = '\0';
+   Gbl.FileBrowser.Path.AboveRootFolder[0] = '\0';
+   Gbl.FileBrowser.Path.RootFolder[0] = '\0';
 
    /***** Set paths depending on file browser *****/
    switch (Gbl.FileBrowser.Type)
@@ -2270,8 +2270,8 @@ static void Brw_SetPathFileBrowser (void)
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
-	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
+	 snprintf (Gbl.FileBrowser.Path.AboveRootFolder,
+	           sizeof (Gbl.FileBrowser.Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_INS_PRIVATE,
 		   (unsigned) (Gbl.Hierarchy.Node[Hie_INS].HieCod % 100),
@@ -2291,8 +2291,8 @@ static void Brw_SetPathFileBrowser (void)
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current center */
-	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
+	 snprintf (Gbl.FileBrowser.Path.AboveRootFolder,
+	           sizeof (Gbl.FileBrowser.Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_CTR_PRIVATE,
 		   (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
@@ -2312,8 +2312,8 @@ static void Brw_SetPathFileBrowser (void)
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
-	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
+	 snprintf (Gbl.FileBrowser.Path.AboveRootFolder,
+	           sizeof (Gbl.FileBrowser.Path.AboveRootFolder),
 	           "%s/%02u/%u",
 		   Cfg_PATH_DEG_PRIVATE,
 		   (unsigned) (Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100),
@@ -2326,8 +2326,8 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_SHOW_MRK_CRS:
       case Brw_ADMI_MRK_CRS:
          /* Create path to the current course */
-         Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.Crs.PathPriv,
-                   sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder) - 1);
+         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Gbl.Crs.Path.AbsPriv,
+                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
 	 break;
       case Brw_SHOW_DOC_GRP:
       case Brw_ADMI_DOC_GRP:
@@ -2337,37 +2337,37 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_MRK_GRP:
 	 /* Create a directory for groups inside the current course */
          snprintf (Path,sizeof (Path),"%s/%s",
-                   Gbl.Crs.PathPriv,Cfg_FOLDER_GRP);
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP);
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to this group */
          snprintf (Path,sizeof (Path),"%s/%s/%ld",
-                   Gbl.Crs.PathPriv,Cfg_FOLDER_GRP,
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,
                    Gbl.Crs.Grps.GrpCod);
-         Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,Path,
-                   sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder) - 1);
+         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
+                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
 	 break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
 	 /* Create a directory for me inside the current course */
          snprintf (Path,sizeof (Path),"%s/%s",
-                   Gbl.Crs.PathPriv,Cfg_FOLDER_USR);
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all users whose codes end in
 	    my-user-code mod 100 */
          snprintf (Path,sizeof (Path),"%s/%s/%02u",
-                   Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                    (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to me */
          snprintf (Path,sizeof (Path),"%s/%s/%02u/%ld",
-                   Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                    (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
                    Gbl.Usrs.Me.UsrDat.UsrCod);
-         Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,Path,
-                   sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder) - 1);
+         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
+                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
          break;
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
@@ -2375,23 +2375,23 @@ static void Brw_SetPathFileBrowser (void)
            {
 	    /* Create a directory for this user inside the current course */
             snprintf (Path,sizeof (Path),"%s/%s",
-        	      Gbl.Crs.PathPriv,Cfg_FOLDER_USR);
+        	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
             Fil_CreateDirIfNotExists (Path);
 
 	    /* Create a directory for all users whose codes end in
 	       user-code mod 100 */
 	    snprintf (Path,sizeof (Path),"%s/%s/%02u",
-		      Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
+		      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
 		      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
             /* Create path to user */
             snprintf (Path,sizeof (Path),"%s/%s/%02u/%ld",
-        	      Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
+        	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
                       (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
         	      Gbl.Usrs.Other.UsrDat.UsrCod);
-            Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,Path,
-                      sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder) - 1);
+            Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
+                      sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
            }
          break;
       case Brw_ADMI_DOC_PRJ:
@@ -2400,42 +2400,42 @@ static void Brw_SetPathFileBrowser (void)
 
 	 /* Create a directory for projects inside the current course */
          snprintf (Path,sizeof (Path),"%s/%s",
-                   Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ);
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all projects which codes end in
 	    project-code mod 100 */
 	 snprintf (Path,sizeof (Path),"%s/%s/%02u",
-		   Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ,
+		   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
                    (unsigned) (PrjCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current project */
          snprintf (Path,sizeof (Path),"%s/%s/%02u/%ld",
-                   Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ,
+                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
                    (unsigned) (PrjCod % 100),
                    PrjCod);
-         Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,Path,
-                   sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder) - 1);
+         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Path,
+                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
 	 break;
       case Brw_ADMI_BRF_USR:
-         Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.Usrs.Me.PathDir,
-                   sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder) - 1);
+         Str_Copy (Gbl.FileBrowser.Path.AboveRootFolder,Gbl.Usrs.Me.PathDir,
+                   sizeof (Gbl.FileBrowser.Path.AboveRootFolder) - 1);
 	 break;
       default:
 	 return;
      }
 
    /***** Create directories that not exist *****/
-   if (Gbl.FileBrowser.Priv.PathAboveRootFolder[0])
+   if (Gbl.FileBrowser.Path.AboveRootFolder[0])
      {
-      Fil_CreateDirIfNotExists (Gbl.FileBrowser.Priv.PathAboveRootFolder);
+      Fil_CreateDirIfNotExists (Gbl.FileBrowser.Path.AboveRootFolder);
       snprintf (Path,sizeof (Path),"%s/%s",
-                Gbl.FileBrowser.Priv.PathAboveRootFolder,
+                Gbl.FileBrowser.Path.AboveRootFolder,
                 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-      Str_Copy (Gbl.FileBrowser.Priv.PathRootFolder,Path,
-                sizeof (Gbl.FileBrowser.Priv.PathRootFolder) - 1);
-      Fil_CreateDirIfNotExists (Gbl.FileBrowser.Priv.PathRootFolder);
+      Str_Copy (Gbl.FileBrowser.Path.RootFolder,Path,
+                sizeof (Gbl.FileBrowser.Path.RootFolder) - 1);
+      Fil_CreateDirIfNotExists (Gbl.FileBrowser.Path.RootFolder);
 
       /***** If file browser is for assignments,
              create folders of assignments if not exist *****/
@@ -2473,7 +2473,7 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
 
       /* Check if folder exists */
       snprintf (PathFolder,sizeof (PathFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.PathPriv,
+                Gbl.Crs.Path.AbsPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2519,7 +2519,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 	   {
 	    /* Create folder if not exists */
 	    snprintf (PathFolderAsg,sizeof (PathFolderAsg),"%s/%s",
-		      Gbl.FileBrowser.Priv.PathRootFolder,row[0]);
+		      Gbl.FileBrowser.Path.RootFolder,row[0]);
 	    Fil_CreateDirIfNotExists (PathFolderAsg);
 	   }
      }
@@ -2565,13 +2565,13 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
 
       /* Rename folder if exists */
       snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.PathPriv,
+                Gbl.Crs.Path.AbsPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
                 OldFolderName);
       snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.PathPriv,
+                Gbl.Crs.Path.AbsPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2594,7 +2594,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
 
          /* Rename folder if exists */
          snprintf (PathOldFolder,sizeof (PathOldFolder),"%s/usr/%02u/%ld/%s/%s",
-                   Gbl.Crs.PathPriv,
+                   Gbl.Crs.Path.AbsPriv,
                    (unsigned) (UsrCod % 100),
                    UsrCod,	// User's code
                    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2602,7 +2602,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,
          if (Fil_CheckIfPathExists (PathOldFolder))
            {
             snprintf (PathNewFolder,sizeof (PathNewFolder),"%s/usr/%02u/%ld/%s/%s",
-                      Gbl.Crs.PathPriv,
+                      Gbl.Crs.Path.AbsPriv,
 	 	      (unsigned) (UsrCod % 100),
  		      UsrCod,	// User's code
                       Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2677,7 +2677,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
 
       /* Remove tree if exists */
       snprintf (PathFolder,sizeof (PathFolder),"%s/usr/%02u/%ld/%s/%s",
-                Gbl.Crs.PathPriv,
+                Gbl.Crs.Path.AbsPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -3240,7 +3240,7 @@ static void Brw_ShowFileBrowser (void)
 					 Brw_ICON_TREE_NOTHING))
 	       Brw_ListDir (1,"1",
 			    false,	// Tree not contracted
-			    Gbl.FileBrowser.Priv.PathRootFolder,
+			    Gbl.FileBrowser.Path.RootFolder,
 			    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
 	 HTM_TABLE_End ();
 
@@ -5051,7 +5051,7 @@ void Brw_RemFileFromTree (void)
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
-	        Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	        Gbl.FileBrowser.Path.AboveRootFolder,
 	        Gbl.FileBrowser.FilFolLnk.Full);
 
       /***** Check if is a file/link or a folder *****/
@@ -5104,7 +5104,7 @@ void Brw_RemFolderFromTree (void)
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this folder?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
-	        Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	        Gbl.FileBrowser.Path.AboveRootFolder,
 	        Gbl.FileBrowser.FilFolLnk.Full);
 
       /***** Check if it's a file or a folder *****/
@@ -5170,7 +5170,7 @@ void Brw_RemSubtreeInFileBrowser (void)
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this subtree?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
-	        Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	        Gbl.FileBrowser.Path.AboveRootFolder,
 	        Gbl.FileBrowser.FilFolLnk.Full);
 
       /***** Remove the whole tree *****/
@@ -5975,7 +5975,7 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
         }
 
       /***** Paste tree (path in clipboard) into folder *****/
-      BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+      BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
       BrwSiz_SetMaxQuota (Size);
       if (Brw_PasteTreeIntoFolder (Size,
 	                           Gbl.FileBrowser.Clipboard.Level,
@@ -6061,18 +6061,10 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
                                      struct Brw_NumObjects *Pasted,
                                      long *FirstFilCod)
   {
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota;
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota;
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota;
-
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_maximum_allowed_number_of_levels;
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_maximum_allowed_number_of_levels;
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_maximum_allowed_number_of_levels;
-
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name;
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name;
-
-   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML;
+   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota;
+   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_maximum_allowed_number_of_levels;
+   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_there_is_already_an_object_with_that_name;
+   extern const char *Txt_The_copy_has_stopped_when_trying_to_paste_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML;
    Brw_FileType_t FileType;
    char PathUntilFileNameOrg[PATH_MAX + 1];
    char FileNameOrg[NAME_MAX + 1];
@@ -6120,7 +6112,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 
    /***** Construct the relative path of the destination file or folder *****/
    snprintf (PathDstWithFile,sizeof (PathDstWithFile),"%s/%s",
-	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	     Gbl.FileBrowser.Path.AboveRootFolder,
 	     PathDstInTreeWithFile);
 
    /***** Update and check number of levels *****/
@@ -6131,23 +6123,8 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 
    if (BrwSiz_CheckIfQuotaExceded (Size))
      {
-      switch (FileType)
-        {
-	 case Brw_IS_FILE:
-            Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
-		           FileNameToShow);
-	    break;
-	 case Brw_IS_FOLDER:
-            Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
-		           FileNameToShow);
-	    break;
-	 case Brw_IS_LINK:
-            Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
-		           FileNameToShow);
-	    break;
-	 default:
-            Err_ShowErrorAndExit ("Can not paste unknown file type.");
-        }
+      Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_maximum_allowed_number_of_levels,
+		     FileNameToShow);
       CopyIsGoingSuccessful = false;
      }
    else	// Quota not exceeded
@@ -6159,8 +6136,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 	 /***** Check if exists the destination file */
 	 if (Fil_CheckIfPathExists (PathDstWithFile))
 	   {
-	    Ale_ShowAlert (Ale_WARNING,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_there_is_already_an_object_with_that_name :
-					                         Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_there_is_already_an_object_with_that_name,
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_there_is_already_an_object_with_that_name,
 		           FileNameToShow);
 	    CopyIsGoingSuccessful = false;
 	   }
@@ -6174,7 +6150,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 		  Mrk_CheckFileOfMarks (PathOrg,&Marks);
 	       else
 		 {
-		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
+		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_you_can_not_paste_a_file_here_of_a_type_other_than_HTML,
 			         FileNameToShow);
 	          CopyIsGoingSuccessful = false;
 		 }
@@ -6187,8 +6163,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 	       Size->TotalSiz += (unsigned long long) FileStatus.st_size;
 	       if (BrwSiz_CheckIfQuotaExceded (Size))
 		 {
-		  Ale_ShowAlert (Ale_WARNING,FileType == Brw_IS_FILE ? Txt_The_copy_has_stopped_when_trying_to_paste_the_file_X_because_it_would_exceed_the_disk_quota :
-						                       Txt_The_copy_has_stopped_when_trying_to_paste_the_link_X_because_it_would_exceed_the_disk_quota,
+		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota,
 			         FileNameToShow);
 		  CopyIsGoingSuccessful = false;
 		 }
@@ -6229,7 +6204,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 	       Size->TotalSiz += (unsigned long long) FileStatus.st_size;
 	       if (BrwSiz_CheckIfQuotaExceded (Size))
 		 {
-		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_the_folder_X_because_it_would_exceed_the_disk_quota,
+		  Ale_ShowAlert (Ale_WARNING,Txt_The_copy_has_stopped_when_trying_to_paste_X_because_it_would_exceed_the_disk_quota,
 			         FileNameToShow);
 		  CopyIsGoingSuccessful = false;
 		 }
@@ -6607,7 +6582,7 @@ void Brw_RecFolderFileBrowser (void)
         {
          /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
          snprintf (Path,sizeof (Path),"%s/%s",
-        	   Gbl.FileBrowser.Priv.PathAboveRootFolder,
+        	   Gbl.FileBrowser.Path.AboveRootFolder,
 		   Gbl.FileBrowser.FilFolLnk.Full);
 
          if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
@@ -6619,7 +6594,7 @@ void Brw_RecFolderFileBrowser (void)
          if (mkdir (Path,(mode_t) 0xFFF) == 0)
 	   {
 	    /* Check if quota has been exceeded */
-	    BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+	    BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
 	    BrwSiz_SetMaxQuota (Size);
             if (BrwSiz_CheckIfQuotaExceded (Size))
 	      {
@@ -6712,10 +6687,10 @@ void Brw_RenFolderFileBrowser (void)
         	      Gbl.FileBrowser.FilFolLnk.Path,
 		      Gbl.FileBrowser.FilFolLnk.Name);
             snprintf (OldPath,sizeof (OldPath),"%s/%s",
-        	      Gbl.FileBrowser.Priv.PathAboveRootFolder,OldPathInTree);
+        	      Gbl.FileBrowser.Path.AboveRootFolder,OldPathInTree);
 
             /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
-            if (strlen (Gbl.FileBrowser.Priv.PathAboveRootFolder) + 1 +
+            if (strlen (Gbl.FileBrowser.Path.AboveRootFolder) + 1 +
                 strlen (Gbl.FileBrowser.FilFolLnk.Path) + 1 +
                 strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 	       Err_ShowErrorAndExit ("Path is too long.");
@@ -6723,7 +6698,7 @@ void Brw_RenFolderFileBrowser (void)
         	      Gbl.FileBrowser.FilFolLnk.Path,
 		      Gbl.FileBrowser.NewFilFolLnkName);
             snprintf (NewPath,sizeof (NewPath),"%s/%s",
-        	      Gbl.FileBrowser.Priv.PathAboveRootFolder,NewPathInTree);
+        	      Gbl.FileBrowser.Path.AboveRootFolder,NewPathInTree);
 
             /* We should check here that a folder with the same name does not exist.
 	       but we leave this work to the system */
@@ -6892,7 +6867,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
               {
                /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
                snprintf (Path,sizeof (Path),"%s/%s",
-                         Gbl.FileBrowser.Priv.PathAboveRootFolder,
+                         Gbl.FileBrowser.Path.AboveRootFolder,
                          Gbl.FileBrowser.FilFolLnk.Full);
                if (strlen (Path) + 1 +
         	   strlen (Gbl.FileBrowser.NewFilFolLnkName) +
@@ -6931,7 +6906,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
                      else			// Success
 	               {
 	                /* Check if quota has been exceeded */
-	                BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+	                BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
 	                BrwSiz_SetMaxQuota (Size);
                         if (BrwSiz_CheckIfQuotaExceded (Size))
 	                  {
@@ -7092,7 +7067,7 @@ void Brw_RecLinkFileBrowser (void)
 	   {
 	    /* The name of the file with the link will be the FileName.url */
 	    snprintf (Path,sizeof (Path),"%s/%s",
-		      Gbl.FileBrowser.Priv.PathAboveRootFolder,
+		      Gbl.FileBrowser.Path.AboveRootFolder,
 		      Gbl.FileBrowser.FilFolLnk.Full);
 	    if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
 	       Err_ShowErrorAndExit ("Path is too long.");
@@ -7116,7 +7091,7 @@ void Brw_RecLinkFileBrowser (void)
 		  fclose (FileURL);
 
 		  /* Check if quota has been exceeded */
-		  BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Priv.PathRootFolder);
+		  BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
 		  BrwSiz_SetMaxQuota (Size);
 		  if (BrwSiz_CheckIfQuotaExceded (Size))
 		    {
@@ -7815,7 +7790,7 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 
    /***** Construct absolute path to file in the private directory *****/
    snprintf (FullPathIncludingFile,sizeof (FullPathIncludingFile),"%s/%s/%s",
-	     Gbl.FileBrowser.Priv.PathAboveRootFolder,PathInTree,FileName);
+	     Gbl.FileBrowser.Path.AboveRootFolder,PathInTree,FileName);
 
    if (Str_FileIs (FileName,"url"))	// It's a link (URL inside a .url file)
      {
@@ -8489,7 +8464,7 @@ bool Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
    struct stat FileStatus;
 
    snprintf (Path,sizeof (Path),"%s/%s",
-	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
+	     Gbl.FileBrowser.Path.AboveRootFolder,
 	     FileMetadata->FilFolLnk.Full);
    if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
      {
@@ -9681,7 +9656,7 @@ static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *
    Removed->NumFiles =
    Removed->NumLinks =
    Removed->NumFolds = 0;
-   Brw_ScanDirRemovingOldFiles (1,Gbl.FileBrowser.Priv.PathRootFolder,
+   Brw_ScanDirRemovingOldFiles (1,Gbl.FileBrowser.Path.RootFolder,
                                 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
                                 TimeRemoveFilesOlder,Removed);
 

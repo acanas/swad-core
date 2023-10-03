@@ -124,7 +124,6 @@ struct Globals
          char PendingPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 	 char PathDir[PATH_MAX + 1];
 	 bool Logged;
-         bool IBelongToCurrent[Hie_NUM_LEVELS];
          bool MyPhotoExists;
          unsigned NumAccWithoutPhoto;
          char PhotoURL[Cns_MAX_BYTES_WWW + 1];
@@ -136,6 +135,7 @@ struct Globals
             unsigned Num;		// Number of courses/degrees/centers/institutions/countries
             bool Filled;		// List is already filled?
            } Hierarchy[Hie_NUM_LEVELS];	// My hierarchy
+         bool IBelongToCurrent[Hie_NUM_LEVELS];
 	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow
@@ -178,9 +178,12 @@ struct Globals
      } Usrs;
    struct
      {
-      char PathPriv[PATH_MAX + 1];	// Absolute path to the private directory of the course
-      char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
-      char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
+      struct
+        {
+	 char AbsPriv[PATH_MAX + 1];	// Absolute path to the private directory of the course
+	 char RelPubl[PATH_MAX + 1];	// Relative path to the public directory of the course
+	 char URLPubl[PATH_MAX + 1];	// Abolute URL to the public part of the course
+        } Path;
       struct Grp_Groups Grps;
       struct Inf_Info Info;
       struct
@@ -202,9 +205,9 @@ struct Globals
       bool UploadingWithDropzone;
       struct
 	{
-	 char PathAboveRootFolder[PATH_MAX + 1];
-	 char PathRootFolder[PATH_MAX + 1];
-	} Priv;
+	 char AboveRootFolder[PATH_MAX + 1];
+	 char RootFolder[PATH_MAX + 1];
+	} Path;
       char NewFilFolLnkName[NAME_MAX + 1];
       struct Brw_FilFolLnk FilFolLnk;
       unsigned Level;
