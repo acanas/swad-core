@@ -384,16 +384,10 @@ unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    switch (UsrRole)
      {
       case Rol_STD:	// Student
-	 sprintf (SubQueryRole," AND Role=%u",
-	          (unsigned) Rol_STD);
-	 break;
       case Rol_NET:	// Non-editing teacher
+      case Rol_TCH:	// Teacher
 	 sprintf (SubQueryRole," AND Role=%u",
-	          (unsigned) Rol_NET);
-	 break;
-      case Rol_TCH:	// or teacher
-	 sprintf (SubQueryRole," AND Role=%u",
-	          (unsigned) Rol_TCH);
+	          (unsigned) UsrRole);
 	 break;
       default:
 	 SubQueryRole[0] = '\0';

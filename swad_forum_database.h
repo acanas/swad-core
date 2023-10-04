@@ -104,23 +104,11 @@ void For_DB_RemoveDisabledPstsInThread (long ThrCod);
 
 //----------------------------- Statistics ------------------------------------
 unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
-                                         long CtyCod,
-                                         long InsCod,
-                                         long CtrCod,
-                                         long DegCod,
-                                         long CrsCod);
+					 long HieCod[Hie_NUM_LEVELS]);
 unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
-                                               long CtyCod,
-                                               long InsCod,
-                                               long CtrCod,
-                                               long DegCod,
-                                               long CrsCod);
+					       long HieCod[Hie_NUM_LEVELS]);
 unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
-                                               long CtyCod,
-                                               long InsCod,
-                                               long CtrCod,
-                                               long DegCod,
-                                               long CrsCod,
+					       long HieCod[Hie_NUM_LEVELS],
                                                unsigned *NumUsrsToBeNotifiedByEMail);
 
 #endif
