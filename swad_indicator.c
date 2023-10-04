@@ -1144,6 +1144,17 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
                                        struct Ind_IndicatorsCrs *IndicatorsCrs)
   {
+   long HieCod[Hie_NUM_LEVELS] =
+     {
+      [Hie_UNK] = -1L,
+      [Hie_SYS] = -1L,
+      [Hie_CTY] = -1L,
+      [Hie_INS] = -1L,
+      [Hie_CTR] = -1L,
+      [Hie_DEG] = -1L,
+      [Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+     };
+
    /***** Initialize number of indicators *****/
    IndicatorsCrs->NumIndicators = 0;
 
@@ -1172,8 +1183,8 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #3: information about online tutoring *****/
-   IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod);
-   IndicatorsCrs->NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
+   IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,HieCod);
+   IndicatorsCrs->NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,HieCod,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
    IndicatorsCrs->NumMsgsSentByTchs = Msg_DB_GetNumMsgsSentByTchsCrs (CrsCod);
    IndicatorsCrs->ThereIsOnlineTutoring = (IndicatorsCrs->NumThreads        != 0) ||
 	                                  (IndicatorsCrs->NumPosts          != 0) ||

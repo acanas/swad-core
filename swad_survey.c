@@ -1924,52 +1924,33 @@ void Svy_ReceiveFormSurvey (void)
    /***** Get scope *****/
    Svy_SetAllowedScopes (&NewSvy);
    Sco_GetScope ("ScopeSvy",NewSvy.Level);
-   switch (Gbl.Scope.Current)
-     {
-      case Hie_SYS:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
+   if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
+      switch (Gbl.Scope.Current)
+	{
+	 case Hie_SYS:
+	 case Hie_CTY:
+	 default:
 	    Err_WrongHierarchyLevelExit ();
-         NewSvy.Level = Hie_SYS;
-         NewSvy.HieCod = -1L;
-         break;
-      case Hie_CTY:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	    Err_WrongHierarchyLevelExit ();
-	 NewSvy.Level = Hie_CTY;
-	 NewSvy.HieCod = Gbl.Hierarchy.Node[Hie_CTY].HieCod;
-         break;
-      case Hie_INS:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
-	    Err_WrongHierarchyLevelExit ();
-	 NewSvy.Level = Hie_INS;
-	 NewSvy.HieCod = Gbl.Hierarchy.Node[Hie_INS].HieCod;
-         break;
-      case Hie_CTR:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
-	    Err_WrongHierarchyLevelExit ();
-	 NewSvy.Level = Hie_CTR;
-	 NewSvy.HieCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-         break;
-      case Hie_DEG:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
-	    Err_WrongHierarchyLevelExit ();
-	 NewSvy.Level = Hie_DEG;
-	 NewSvy.HieCod = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-         break;
-      case Hie_CRS:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
-	    Err_WrongHierarchyLevelExit ();
-	 NewSvy.Level = Hie_CRS;
-	 NewSvy.HieCod = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-         break;
-      default:
-	 Err_WrongHierarchyLevelExit ();
-	 break;
-     }
+	    break;
+	 case Hie_INS:
+	    if (Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
+	       Err_WrongHierarchyLevelExit ();
+	    break;
+	 case Hie_CTR:
+	    if (Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
+	       Err_WrongHierarchyLevelExit ();
+	    break;
+	 case Hie_DEG:
+	    if (Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
+	       Err_WrongHierarchyLevelExit ();
+	    break;
+	 case Hie_CRS:
+	    if (Gbl.Usrs.Me.Role.Logged != Rol_TCH)
+	       Err_WrongHierarchyLevelExit ();
+	    break;
+	}
+   NewSvy.Level = Gbl.Scope.Current;
+   NewSvy.HieCod = Gbl.Hierarchy.Node[Gbl.Scope.Current].HieCod;
 
    /***** Get start/end date-times *****/
    NewSvy.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);

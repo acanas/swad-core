@@ -3847,8 +3847,7 @@ void Usr_ListUsersToSelect (Rol_Role_t Role,struct Usr_SelectedUsrs *SelectedUsr
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
-         Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL,
-                             Role,SelectedUsrs,true);
+         Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL,Role,SelectedUsrs,true);
          break;
       case Set_USR_LIST_AS_LISTING:
          Usr_ListUsrsForSelection (Role,SelectedUsrs);
@@ -5322,7 +5321,7 @@ void Usr_SeeTeachers (void)
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
 	    Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);	// Admin one teacher
-	    if (Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
+	    if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
 		Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am logged as admin
 	      {
 	       Enr_PutLinkToAdminSeveralUsrs (Rol_NET);	// Admin several non-editing teachers

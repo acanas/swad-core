@@ -499,38 +499,28 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 	 case TmlNot_INS_DOC_PUB_FILE:
 	 case TmlNot_INS_SHA_PUB_FILE:
 	    /* Write location (institution) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
-	              Txt_Institution,
-	              Hie[Hie_INS].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie[Hie_INS].ShrtName);
 	    break;
 	 case TmlNot_CTR_DOC_PUB_FILE:
 	 case TmlNot_CTR_SHA_PUB_FILE:
 	    /* Write location (center) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
-	              Txt_Center,
-	              Hie[Hie_CTR].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie[Hie_CTR].ShrtName);
 	    break;
 	 case TmlNot_DEG_DOC_PUB_FILE:
 	 case TmlNot_DEG_SHA_PUB_FILE:
 	    /* Write location (degree) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
-	              Txt_Degree,
-	              Hie[Hie_DEG].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie[Hie_DEG].ShrtName);
 	    break;
 	 case TmlNot_CRS_DOC_PUB_FILE:
 	 case TmlNot_CRS_SHA_PUB_FILE:
 	 case TmlNot_CALL_FOR_EXAM:
 	 case TmlNot_NOTICE:
 	    /* Write location (course) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
-	              Txt_Course,
-	              Hie[Hie_CRS].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s", Txt_Course,Hie[Hie_CRS].ShrtName);
 	    break;
 	 case TmlNot_FORUM_POST:
 	    /* Write forum name */
-	    HTM_TxtF ("%s:&nbsp;%s",
-	              Txt_Forum,
-	              ForumName);
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
 	    break;
 	 default:
 	    break;
@@ -897,32 +887,28 @@ void TmlNot_StoreAndPublishNote (TmlNot_Type_t NoteType,long Cod)
 void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
                                          struct TmlPub_Publication *Pub)
   {
+   static Hie_Level_t Level[Tml_NOT_NUM_NOTE_TYPES] =
+     {
+      [TmlNot_INS_DOC_PUB_FILE] = Hie_INS,
+      [TmlNot_INS_SHA_PUB_FILE] = Hie_INS,
+
+      [TmlNot_CTR_DOC_PUB_FILE] = Hie_CTR,
+      [TmlNot_CTR_SHA_PUB_FILE] = Hie_CTR,
+
+      [TmlNot_DEG_DOC_PUB_FILE] = Hie_DEG,
+      [TmlNot_DEG_SHA_PUB_FILE] = Hie_DEG,
+
+      [TmlNot_CRS_DOC_PUB_FILE] = Hie_CRS,
+      [TmlNot_CRS_SHA_PUB_FILE] = Hie_CRS,
+      [TmlNot_CALL_FOR_EXAM   ] = Hie_CRS,
+      [TmlNot_NOTICE          ] = Hie_CRS,
+     };
    long HieCod;	// Hierarchy code (institution/center/degree/course)
 
-   switch (NoteType)
-     {
-      case TmlNot_INS_DOC_PUB_FILE:
-      case TmlNot_INS_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Node[Hie_INS].HieCod;
-	 break;
-      case TmlNot_CTR_DOC_PUB_FILE:
-      case TmlNot_CTR_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-	 break;
-      case TmlNot_DEG_DOC_PUB_FILE:
-      case TmlNot_DEG_SHA_PUB_FILE:
-	 HieCod = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-	 break;
-      case TmlNot_CRS_DOC_PUB_FILE:
-      case TmlNot_CRS_SHA_PUB_FILE:
-      case TmlNot_CALL_FOR_EXAM:
-      case TmlNot_NOTICE:
-	 HieCod = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-	 break;
-      default:
-	 HieCod = -1L;
-         break;
-     }
+   if (Level[NoteType])
+      HieCod = Gbl.Hierarchy.Node[Level[NoteType]].HieCod;
+   else
+      HieCod = -1L;
 
    /***** Publish note in timeline *****/
    Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;

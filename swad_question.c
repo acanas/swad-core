@@ -2985,7 +2985,7 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
            }
 
          /* Its mandatory to mark at least one option as correct */
-         for (NumOpt = 0;
+         for (NumOpt  = 0;
               NumOpt <= NumLastOpt;
               NumOpt++)
             if (Question->Answer.Options[NumOpt].Correct)
@@ -3010,8 +3010,8 @@ bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Quest
            }
 
 	 /* No option should be empty before a non-empty option */
-         for (NumOpt=0, ThereIsEndOfAnswers=false;
-              NumOpt<Qst_MAX_OPTIONS_PER_QUESTION;
+         for (NumOpt = 0, ThereIsEndOfAnswers=false;
+              NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
             if (Question->Answer.Options[NumOpt].Text)
               {
