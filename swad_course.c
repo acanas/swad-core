@@ -566,8 +566,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
    long CrsCod;
    long DegCod;
    long LastDegCod;
-   char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1];
-   char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   char CrsShortName[Cns_MAX_BYTES_SHRT_NAME + 1];
+   char DegShortName[Cns_MAX_BYTES_SHRT_NAME + 1];
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
@@ -1012,7 +1012,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		 {
 		  Frm_BeginForm (ActRenCrsSho);
 		     ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
+		     HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -1028,7 +1028,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		 {
 		  Frm_BeginForm (ActRenCrsFul);
 		     ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-		     HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs->FullName,
+		     HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Crs->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -1147,7 +1147,7 @@ static void Crs_PutFormToCreateCourse (void)
 
 	 /***** Course short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1156,7 +1156,7 @@ static void Crs_PutFormToCreateCourse (void)
 
 	 /***** Course full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1341,10 +1341,10 @@ static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
    Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get course short name */
-   Par_GetParText ("ShortName",Crs->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Crs->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
 
    /* Get course full name */
-   Par_GetParText ("FullName",Crs->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Crs->FullName,Cns_MAX_BYTES_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1742,34 +1742,23 @@ void Crs_RenameCourseFull (void)
 
 void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_The_course_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentCrsName = NULL;	// Initialized to avoid warning
-   char NewCrsName[Hie_MAX_BYTES_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
-         CurrentCrsName = Crs->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
-         CurrentCrsName = Crs->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Crs->ShrtName,
+      [Cns_FULL_NAME] = Crs->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the new name for the course */
-   Par_GetParText (ParName,NewCrsName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get from the database the data of the degree *****/
    Crs_GetCourseDataByCod (Crs);
@@ -1777,35 +1766,38 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
       Err_NoPermissionExit ();
 
    /***** Check if new name is empty *****/
-   if (NewCrsName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
 	     (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentCrsName,NewCrsName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
 	{
 	 /***** If course was in database... *****/
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (ParName,NewCrsName,Crs->HieCod,
+	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Cns_ParShrtOrFullName[ShrtOrFullName],
+						     NewName,Crs->HieCod,
 						     Crs->PrtCod,Crs->Specific.Year))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_course_X_already_exists,
-			     NewCrsName);
+			     NewName);
 	 else
 	   {
 	    /* Update the table changing old name by new name */
-	    Crs_DB_UpdateCrsName (Crs->HieCod,FldName,NewCrsName);
+	    Crs_DB_UpdateCrsName (Crs->HieCod,
+				  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
 	    /* Create alert to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 			     Txt_The_course_X_has_been_renamed_as_Y,
-			     CurrentCrsName,NewCrsName);
+			     CurrentName[ShrtOrFullName],NewName);
 
 	    /* Change current course name in order to display it properly */
-	    Str_Copy (CurrentCrsName,NewCrsName,MaxBytes);
+	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 	   }
 	}
       else	// The same name
 	 Ale_CreateAlert (Ale_INFO,NULL,
-			  Txt_The_name_X_has_not_changed,CurrentCrsName);
+			  Txt_The_name_X_has_not_changed,CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

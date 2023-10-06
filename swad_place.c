@@ -481,7 +481,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcSho);
 		  ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
-		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
+		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Plc->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -492,7 +492,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcFul);
 		  ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
-		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
+		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Plc->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -587,73 +587,67 @@ void Plc_RenamePlaceFull (void)
 
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentPlcName = NULL;	// Initialized to avoid warning
-   char NewPlcName[Plc_MAX_BYTES_PLACE_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Plc_MAX_BYTES_PLACE_SHRT_NAME;
-         CurrentPlcName = Plc_EditingPlc->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Plc_MAX_BYTES_PLACE_FULL_NAME;
-         CurrentPlcName = Plc_EditingPlc->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
+      [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the place */
    Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
    /* Get the new name for the place */
-   Par_GetParText (ParName,NewPlcName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get place old names from database  *****/
    Plc_GetPlaceDataByCod (Plc_EditingPlc);
 
    /***** Check if new name is empty *****/
-   if (NewPlcName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentPlcName,NewPlcName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If place was in database... *****/
-         if (Plc_DB_CheckIfPlaceNameExists (Plc_EditingPlc->PlcCod,ParName,NewPlcName))
+         if (Plc_DB_CheckIfPlaceNameExists (Plc_EditingPlc->PlcCod,
+					    Cns_ParShrtOrFullName[ShrtOrFullName],
+					    NewName))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_place_X_already_exists,
-                             NewPlcName);
+                             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,FldName,NewPlcName);
+            Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,
+        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_place_X_has_been_renamed_as_Y,
-                             CurrentPlcName,NewPlcName);
+                             CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,CurrentPlcName);
+                          Txt_The_name_X_has_not_changed,
+                          CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update place name *****/
-   Str_Copy (CurrentPlcName,NewPlcName,MaxBytes);
+   Str_Copy (CurrentName[ShrtOrFullName],NewName,
+	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -696,7 +690,7 @@ static void Plc_PutFormToCreatePlace (void)
 
 	 /***** Place short name *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Plc_EditingPlc->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -705,7 +699,7 @@ static void Plc_PutFormToCreatePlace (void)
 
 	 /***** Place full name *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Plc_EditingPlc->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -757,10 +751,10 @@ void Plc_ReceiveFormNewPlace (void)
 
    /***** Get parameters from form *****/
    /* Get place short name */
-   Par_GetParText ("ShortName",Plc_EditingPlc->ShrtName,Plc_MAX_BYTES_PLACE_SHRT_NAME);
+   Par_GetParText ("ShortName",Plc_EditingPlc->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
 
    /* Get place full name */
-   Par_GetParText ("FullName",Plc_EditingPlc->FullName,Plc_MAX_BYTES_PLACE_FULL_NAME);
+   Par_GetParText ("FullName",Plc_EditingPlc->FullName,Cns_MAX_BYTES_FULL_NAME);
 
    if (Plc_EditingPlc->ShrtName[0] &&
        Plc_EditingPlc->FullName[0])	// If there's a place name

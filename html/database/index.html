@@ -40,7 +40,7 @@
 	<td align="center">
 		<h1>SWAD database</h1>
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2018
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2021
 	</td>
 	</tr>
 
@@ -64,186 +64,168 @@
 	</p>
 
 	<p align="justify">
-	There are 117 tables in SWAD:
+	There are 144 tables in SWAD:
 	</p>
 
 	<pre>
 mysql> SHOW TABLES;
-+----------------------+
-| Tables_in_swad       |
-+----------------------+
-| <a href="#IP_prefs">IP_prefs</a>             |
-| <a href="#actions">actions</a>              |
-| <a href="#actions_MFU">actions_MFU</a>          |
-| <a href="#admin">admin</a>                |
-| <a href="#agendas">agendas</a>              |
-| <a href="#ann_seen">ann_seen</a>             |
-| <a href="#announcements">announcements</a>        |
-| <a href="#asg_grp">asg_grp</a>              |
-| <a href="#assignments">assignments</a>          |
-| <a href="#att_events">att_events</a>           |
-| <a href="#att_grp">att_grp</a>              |
-| <a href="#att_usr">att_usr</a>              |
-| <a href="#banners">banners</a>              |
-| <a href="#birthdays_today">birthdays_today</a>      |
-| <a href="#centres">centres</a>              |
-| <a href="#chat">chat</a>                 |
-| <a href="#clicks_without_photo">clicks_without_photo</a> |
-| <a href="#clipboard">clipboard</a>            |
-| <a href="#connected">connected</a>            |
-| <a href="#countries">countries</a>            |
-| <a href="#courses">courses</a>              |
-| <a href="#crs_grp">crs_grp</a>              |
-| <a href="#crs_grp_types">crs_grp_types</a>        |
-| <a href="#crs_grp_usr">crs_grp_usr</a>          |
-| <a href="#crs_info_read">crs_info_read</a>        |
-| <a href="#crs_info_src">crs_info_src</a>         |
-| <a href="#crs_info_txt">crs_info_txt</a>         |
-| <a href="#crs_last">crs_last</a>             |
-| <a href="#crs_record_fields">crs_record_fields</a>    |
-| <a href="#crs_records">crs_records</a>          |
-| <a href="#crs_usr">crs_usr</a>              |
-| <a href="#crs_usr_requests">crs_usr_requests</a>     |
-| <a href="#debug">debug</a>                |
-| <a href="#deg_types">deg_types</a>            |
-| <a href="#degrees">degrees</a>              |
-| <a href="#departments">departments</a>          |
-| <a href="#exam_announcements">exam_announcements</a>   |
-| <a href="#expanded_folders">expanded_folders</a>     |
-| <a href="#file_browser_last">file_browser_last</a>    |
-| <a href="#file_browser_size">file_browser_size</a>    |
-| <a href="#file_view">file_view</a>            |
-| <a href="#files">files</a>                |
-| <a href="#forum_disabled_post">forum_disabled_post</a>  |
-| <a href="#forum_post">forum_post</a>           |
-| <a href="#forum_thr_clip">forum_thr_clip</a>       |
-| <a href="#forum_thr_read">forum_thr_read</a>       |
-| <a href="#forum_thread">forum_thread</a>         |
-| <a href="#gam_answers">gam_answers</a>          |
-| <a href="#gam_grp">gam_grp</a>              |
-| <a href="#gam_questions">gam_questions</a>        |
-| <a href="#gam_users">gam_users</a>            |
-| <a href="#games">games</a>                |
-| <a href="#hidden_params">hidden_params</a>        |
-| <a href="#holidays">holidays</a>             |
-| <a href="#institutions">institutions</a>         |
-| <a href="#links">links</a>                |
-| <a href="#log_banners">log_banners</a>          |
-| <a href="#log_comments">log_comments</a>         |
-| <a href="#log_full">log_full</a>             |
-| <a href="#log_recent">log_recent</a>           |
-| <a href="#log_search">log_search</a>           |
-| <a href="#log_ws">log_ws</a>               |
-| <a href="#mail_domains">mail_domains</a>         |
-| <a href="#marks_properties">marks_properties</a>     |
-| <a href="#msg_banned">msg_banned</a>           |
-| <a href="#msg_content">msg_content</a>          |
-| <a href="#msg_content_deleted">msg_content_deleted</a>  |
-| <a href="#msg_rcv">msg_rcv</a>              |
-| <a href="#msg_rcv_deleted">msg_rcv_deleted</a>      |
-| <a href="#msg_snt">msg_snt</a>              |
-| <a href="#msg_snt_deleted">msg_snt_deleted</a>      |
-| <a href="#notices">notices</a>              |
-| <a href="#notices_deleted">notices_deleted</a>      |
-| <a href="#notif">notif</a>                |
-| <a href="#pending_emails">pending_emails</a>       |
-| <a href="#pending_passwd">pending_passwd</a>       |
-| <a href="#places">places</a>               |
-| <a href="#plugins">plugins</a>              |
-| <a href="#prj_usr">prj_usr</a>              |
-| <a href="#projects">projects</a>             |
-| <a href="#sessions">sessions</a>             |
-| <a href="#social_comments">social_comments</a>      |
-| <a href="#social_comments_fav">social_comments_fav</a>  |
-| <a href="#social_notes">social_notes</a>         |
-| <a href="#social_notes_fav">social_notes_fav</a>     |
-| <a href="#social_posts">social_posts</a>         |
-| <a href="#social_pubs">social_pubs</a>          |
-| <a href="#social_timelines">social_timelines</a>     |
-| <a href="#sta_degrees">sta_degrees</a>          |
-| <a href="#sta_notif">sta_notif</a>            |
-| <a href="#surveys">surveys</a>              |
-| <a href="#svy_answers">svy_answers</a>          |
-| <a href="#svy_grp">svy_grp</a>              |
-| <a href="#svy_questions">svy_questions</a>        |
-| <a href="#svy_users">svy_users</a>            |
-| <a href="#timetable_crs">timetable_crs</a>        |
-| <a href="#timetable_tut">timetable_tut</a>        |
-| <a href="#tst_answers">tst_answers</a>          |
-| <a href="#tst_config">tst_config</a>           |
-| <a href="#tst_exam_questions">tst_exam_questions</a>   |
-| <a href="#tst_exams">tst_exams</a>            |
-| <a href="#tst_question_tags">tst_question_tags</a>    |
-| <a href="#tst_questions">tst_questions</a>        |
-| <a href="#tst_status">tst_status</a>           |
-| <a href="#tst_tags">tst_tags</a>             |
-| <a href="#usr_IDs">usr_IDs</a>              |
-| <a href="#usr_banned">usr_banned</a>           |
-| <a href="#usr_data">usr_data</a>             |
-| <a href="#usr_duplicated">usr_duplicated</a>       |
-| <a href="#usr_emails">usr_emails</a>           |
-| <a href="#usr_figures">usr_figures</a>          |
-| <a href="#usr_follow">usr_follow</a>           |
-| <a href="#usr_last">usr_last</a>             |
-| <a href="#usr_nicknames">usr_nicknames</a>        |
-| <a href="#usr_report">usr_report</a>           |
-| <a href="#usr_webs">usr_webs</a>             |
-| <a href="#ws_keys">ws_keys</a>              |
-+----------------------+
-117 rows in set (0,00 sec)
++--------------------------+
+| Tables_in_swad           |
++--------------------------+
+| <a href="#act_frequent">act_frequent</a>             |
+| <a href="#agd_agendas">agd_agendas</a>              |
+| <a href="#ann_announcements">ann_announcements</a>        |
+| <a href="#ann_seen">ann_seen</a>                 |
+| <a href="#api_keys">api_keys</a>                 |
+| <a href="#asg_assignments">asg_assignments</a>          |
+| <a href="#asg_groups">asg_groups</a>               |
+| <a href="#att_events">att_events</a>               |
+| <a href="#att_groups">att_groups</a>               |
+| <a href="#att_users">att_users</a>                |
+| <a href="#ban_banners">ban_banners</a>              |
+| <a href="#bld_buildings">bld_buildings</a>            |
+| <a href="#brw_caches">brw_caches</a>               |
+| <a href="#brw_clipboards">brw_clipboards</a>           |
+| <a href="#brw_expanded">brw_expanded</a>             |
+| <a href="#brw_files">brw_files</a>                |
+| <a href="#brw_last">brw_last</a>                 |
+| <a href="#brw_sizes">brw_sizes</a>                |
+| <a href="#brw_views">brw_views</a>                |
+| <a href="#cfe_exams">cfe_exams</a>                |
+| <a href="#cht_rooms">cht_rooms</a>                |
+| <a href="#crs_courses">crs_courses</a>              |
+| <a href="#crs_info_read">crs_info_read</a>            |
+| <a href="#crs_info_src">crs_info_src</a>             |
+| <a href="#crs_info_txt">crs_info_txt</a>             |
+| <a href="#crs_last">crs_last</a>                 |
+| <a href="#crs_record_fields">crs_record_fields</a>        |
+| <a href="#crs_records">crs_records</a>              |
+| <a href="#crs_requests">crs_requests</a>             |
+| <a href="#crs_users">crs_users</a>                |
+| <a href="#crs_user_settings">crs_user_settings</a>        |
+| <a href="#ctr_centers">ctr_centers</a>              |
+| <a href="#cty_countrs">cty_countrs</a>              |
+| <a href="#dbg_debug">dbg_debug</a>                |
+| <a href="#deg_degrees">deg_degrees</a>              |
+| <a href="#deg_types">deg_types</a>                |
+| <a href="#dpt_departments">dpt_departments</a>          |
+| <a href="#exa_exams">exa_exams</a>                |
+| <a href="#exa_groups">exa_groups</a>               |
+| <a href="#exa_log">exa_log</a>                  |
+| <a href="#exa_log_sessions">exa_log_sessions</a>         |
+| <a href="#exa_log_user_agents">exa_log_user_agents</a>      |
+| <a href="#exa_print_questions">exa_print_questions</a>      |
+| <a href="#exa_prints">exa_prints</a>               |
+| <a href="#exa_sessions">exa_sessions</a>             |
+| <a href="#exa_set_answers">exa_set_answers</a>          |
+| <a href="#exa_set_questions">exa_set_questions</a>        |
+| <a href="#exa_sets">exa_sets</a>                 |
+| <a href="#fig_figures">fig_figures</a>              |
+| <a href="#fir_banned">fir_banned</a>               |
+| <a href="#fir_log">fir_log</a>                  |
+| <a href="#for_clipboards">for_clipboards</a>           |
+| <a href="#for_disabled">for_disabled</a>             |
+| <a href="#for_posts">for_posts</a>                |
+| <a href="#for_read">for_read</a>                 |
+| <a href="#for_threads">for_threads</a>              |
+| <a href="#gam_games">gam_games</a>                |
+| <a href="#gam_questions">gam_questions</a>            |
+| <a href="#grp_groups">grp_groups</a>               |
+| <a href="#grp_types">grp_types</a>                |
+| <a href="#grp_users">grp_users</a>                |
+| <a href="#hld_holidays">hld_holidays</a>             |
+| <a href="#ins_instits">ins_instits</a>              |
+| <a href="#lnk_links">lnk_links</a>                |
+| <a href="#log">log</a>                      |
+| <a href="#log_api">log_api</a>                  |
+| <a href="#log_banners">log_banners</a>              |
+| <a href="#log_comments">log_comments</a>             |
+| <a href="#log_recent">log_recent</a>               |
+| <a href="#log_search">log_search</a>               |
+| <a href="#mch_answers">mch_answers</a>              |
+| <a href="#mch_groups">mch_groups</a>               |
+| <a href="#mch_indexes">mch_indexes</a>              |
+| <a href="#mch_matches">mch_matches</a>              |
+| <a href="#mch_players">mch_players</a>              |
+| <a href="#mch_playing">mch_playing</a>              |
+| <a href="#mch_results">mch_results</a>              |
+| <a href="#mch_times">mch_times</a>                |
+| <a href="#med_media">med_media</a>                |
+| <a href="#mrk_marks">mrk_marks</a>                |
+| <a href="#msg_banned">msg_banned</a>               |
+| <a href="#msg_content">msg_content</a>              |
+| <a href="#msg_content_deleted">msg_content_deleted</a>      |
+| <a href="#msg_rcv">msg_rcv</a>                  |
+| <a href="#msg_rcv_deleted">msg_rcv_deleted</a>          |
+| <a href="#msg_snt">msg_snt</a>                  |
+| <a href="#msg_snt_deleted">msg_snt_deleted</a>          |
+| <a href="#not_deleted">not_deleted</a>              |
+| <a href="#not_notices">not_notices</a>              |
+| <a href="#ntf_mail_domains">ntf_mail_domains</a>         |
+| <a href="#ntf_notifications">ntf_notifications</a>        |
+| <a href="#plc_places">plc_places</a>               |
+| <a href="#plg_plugins">plg_plugins</a>              |
+| <a href="#prg_items">prg_items</a>                |
+| <a href="#prj_config">prj_config</a>               |
+| <a href="#prj_projects">prj_projects</a>             |
+| <a href="#prj_users">prj_users</a>                |
+| <a href="#roo_check_in">roo_check_in</a>             |
+| <a href="#roo_macs">roo_macs</a>                 |
+| <a href="#roo_rooms">roo_rooms</a>                |
+| <a href="#ses_params">ses_params</a>               |
+| <a href="#ses_sessions">ses_sessions</a>             |
+| <a href="#set_ip_settings">set_ip_settings</a>          |
+| <a href="#sta_degrees">sta_degrees</a>              |
+| <a href="#sta_notifications">sta_notifications</a>        |
+| <a href="#svy_answers">svy_answers</a>              |
+| <a href="#svy_groups">svy_groups</a>               |
+| <a href="#svy_questions">svy_questions</a>            |
+| <a href="#svy_surveys">svy_surveys</a>              |
+| <a href="#svy_users">svy_users</a>                |
+| <a href="#tml_comments">tml_comments</a>             |
+| <a href="#tml_comments_fav">tml_comments_fav</a>         |
+| <a href="#tml_notes">tml_notes</a>                |
+| <a href="#tml_notes_fav">tml_notes_fav</a>            |
+| <a href="#tml_posts">tml_posts</a>                |
+| <a href="#tml_pubs">tml_pubs</a>                 |
+| <a href="#tml_timelines">tml_timelines</a>            |
+| <a href="#tmt_courses">tmt_courses</a>              |
+| <a href="#tmt_tutoring">tmt_tutoring</a>             |
+| <a href="#tst_answers">tst_answers</a>              |
+| <a href="#tst_config">tst_config</a>               |
+| <a href="#tst_exam_questions">tst_exam_questions</a>       |
+| <a href="#tst_exams">tst_exams</a>                |
+| <a href="#tst_question_tags">tst_question_tags</a>        |
+| <a href="#tst_questions">tst_questions</a>            |
+| <a href="#tst_tags">tst_tags</a>                 |
+| <a href="#usr_admins">usr_admins</a>               |
+| <a href="#usr_banned">usr_banned</a>               |
+| <a href="#usr_birthdays_today">usr_birthdays_today</a>      |
+| <a href="#usr_clicks_without_photo">usr_clicks_without_photo</a> |
+| <a href="#usr_connected">usr_connected</a>            |
+| <a href="#usr_data">usr_data</a>                 |
+| <a href="#usr_duplicated">usr_duplicated</a>           |
+| <a href="#usr_emails">usr_emails</a>               |
+| <a href="#usr_figures">usr_figures</a>              |
+| <a href="#usr_follow">usr_follow</a>               |
+| <a href="#usr_ids">usr_ids</a>                  |
+| <a href="#usr_last">usr_last</a>                 |
+| <a href="#usr_nicknames">usr_nicknames</a>            |
+| <a href="#usr_pending_emails">usr_pending_emails</a>       |
+| <a href="#usr_pending_passwd">usr_pending_passwd</a>       |
+| <a href="#usr_reports">usr_reports</a>              |
+| <a href="#usr_webs">usr_webs</a>                 |
++--------------------------+
+144 rows in set (0,00 sec)
 	</pre>
 
-	<section id="IP_prefs">
-	<h3>Table IP_prefs</h3>
-	<p align="justify">
-	Stores user's preferences for each IP address:
-	</p>
-	<pre>
-mysql> DESCRIBE IP_prefs;
-+----------------+------------+------+-----+---------+-------+
-| Field          | Type       | Null | Key | Default | Extra |
-+----------------+------------+------+-----+---------+-------+
-| IP             | char(15)   | NO   | PRI | NULL    |       |
-| UsrCod         | int(11)    | NO   | MUL | -1      |       |
-| LastChange     | datetime   | NO   | MUL | NULL    |       |
-| FirstDayOfWeek | tinyint(4) | NO   |     | 0       |       |
-| DateFormat     | tinyint(4) | NO   |     | 0       |       |
-| Theme          | char(16)   | NO   |     | NULL    |       |
-| IconSet        | char(16)   | NO   |     | NULL    |       |
-| Menu           | tinyint(4) | NO   |     | 0       |       |
-| SideCols       | tinyint(4) | NO   |     | NULL    |       |
-+----------------+------------+------+-----+---------+-------+
-9 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="actions">
-	<h3>Table actions</h3>
-	<p align="justify">
-	Stores the text that describes each of the actions.
-	Each action has a numeric code associated to it that persists over time:
-	</p>
-	<pre>
-mysql> DESCRIBE actions;
-+----------+---------------+------+-----+---------+-------+
-| Field    | Type          | Null | Key | Default | Extra |
-+----------+---------------+------+-----+---------+-------+
-| ActCod   | int(11)       | NO   | PRI | -1      |       |
-| Language | char(2)       | NO   | PRI | es      |       |
-| Obsolete | enum('N','Y') | NO   |     | N       |       |
-| Txt      | varchar(255)  | NO   | MUL | NULL    |       |
-+----------+---------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="actions_MFU">
-	<h3>Table actions_MFU</h3>
+	<section id="act_frequent">
+	<h3>Table act_frequent</h3>
 	<p align="justify">
 	Stores the recent actions more frequently made by each user:
 	</p>
 	<pre>
-mysql> DESCRIBE actions_MFU;
+mysql> DESCRIBE act_frequent;
 +-----------+----------+------+-----+---------+-------+
 | Field     | Type     | Null | Key | Default | Extra |
 +-----------+----------+------+-----+---------+-------+
@@ -256,31 +238,13 @@ mysql> DESCRIBE actions_MFU;
 	</pre>
 	</section>
 
-	<section id="admin">
-	<h3>Table admin</h3>
-	<p align="justify">
-	Stores administrators of platform, institutions, centres and degrees:
-	</p>
-	<pre>
-mysql> DESCRIBE admin;
-+--------+-------------------------------+------+-----+---------+-------+
-| Field  | Type                          | Null | Key | Default | Extra |
-+--------+-------------------------------+------+-----+---------+-------+
-| UsrCod | int(11)                       | NO   | PRI | NULL    |       |
-| Scope  | enum('Sys','Ins','Ctr','Deg') | NO   | PRI | NULL    |       |
-| Cod    | int(11)                       | NO   | PRI | NULL    |       |
-+--------+-------------------------------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="agendas">
-	<h3>Table agendas</h3>
+	<section id="agd_agendas">
+	<h3>Table agd_agendas</h3>
 	<p align="justify">
 	Stores users' agendas:
 	</p>
 	<pre>
-mysql> DESCRIBE agendas;
+mysql> DESCRIBE agd_agendas;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -294,7 +258,27 @@ mysql> DESCRIBE agendas;
 | Location  | varchar(2047) | NO   |     | NULL    |                |
 | Txt       | text          | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-9 rows in set (0,01 sec)
+9 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="ann_announcements">
+	<h3>Table ann_announcements</h3>
+	<p align="justify">
+	Stores the global announcements:
+	</p>
+	<pre>
+mysql> DESCRIBE ann_announcements;
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| AnnCod  | int(11)    | NO   | PRI | NULL    | auto_increment |
+| Status  | tinyint(4) | NO   | MUL | 0       |                |
+| Roles   | int(11)    | NO   |     | 0       |                |
+| Subject | text       | NO   |     | NULL    |                |
+| Content | text       | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -315,50 +299,32 @@ mysql> DESCRIBE ann_seen;
 	</pre>
 	</section>
 
-	<section id="announcements">
-	<h3>Table announcements</h3>
+	<section id="api_keys">
+	<h3>Table api_keys</h3>
 	<p align="justify">
-	Stores the global announcements:
+	Stores the keys used in API / web service:
 	</p>
 	<pre>
-mysql> DESCRIBE announcements;
-+---------+------------+------+-----+---------+----------------+
-| Field   | Type       | Null | Key | Default | Extra          |
-+---------+------------+------+-----+---------+----------------+
-| AnnCod  | int(11)    | NO   | PRI | NULL    | auto_increment |
-| Status  | tinyint(4) | NO   | MUL | 0       |                |
-| Roles   | int(11)    | NO   |     | 0       |                |
-| Subject | text       | NO   |     | NULL    |                |
-| Content | text       | NO   |     | NULL    |                |
-+---------+------------+------+-----+---------+----------------+
-5 rows in set (0,01 sec)
+mysql> DESCRIBE api_keys;
++----------+----------+------+-----+---------+-------+
+| Field    | Type     | Null | Key | Default | Extra |
++----------+----------+------+-----+---------+-------+
+| WSKey    | char(43) | NO   | PRI | NULL    |       |
+| UsrCod   | int(11)  | NO   | MUL | NULL    |       |
+| PlgCod   | int(11)  | NO   | MUL | NULL    |       |
+| LastTime | datetime | NO   | MUL | NULL    |       |
++----------+----------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="asg_grp">
-	<h3>Table asg_grp</h3>
-	<p align="justify">
-	Stores the groups associated to assigments:
-	</p>
-	<pre>
-mysql> DESCRIBE asg_grp;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| AsgCod | int(11) | NO   | PRI | NULL    |       |
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="assignments">
-	<h3>Table assignments</h3>
+	<section id="asg_assignments">
+	<h3>Table asg_assignments</h3>
 	<p align="justify">
 	Stores the assignments proposed by the teachers to their students:
 	</p>
 	<pre>
-mysql> DESCRIBE assignments;
+mysql> DESCRIBE asg_assignments;
 +-----------+----------------+------+-----+---------+----------------+
 | Field     | Type           | Null | Key | Default | Extra          |
 +-----------+----------------+------+-----+---------+----------------+
@@ -374,6 +340,23 @@ mysql> DESCRIBE assignments;
 | Txt       | text           | NO   |     | NULL    |                |
 +-----------+----------------+------+-----+---------+----------------+
 10 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="asg_groups">
+	<h3>Table asg_groups</h3>
+	<p align="justify">
+	Stores the groups associated to assigments:
+	</p>
+	<pre>
+mysql> DESCRIBE asg_groups;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| AsgCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -397,17 +380,17 @@ mysql> DESCRIBE att_events;
 | Title             | varchar(2047) | NO   |     | NULL    |                |
 | Txt               | text          | NO   |     | NULL    |                |
 +-------------------+---------------+------+-----+---------+----------------+
-9 rows in set (0,01 sec)
+9 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="att_grp">
-	<h3>Table att_grp</h3>
+	<section id="att_groups">
+	<h3>Table att_groups</h3>
 	<p align="justify">
 	Stores groups associated to control attendance:
 	</p>
 	<pre>
-mysql> DESCRIBE att_grp;
+mysql> DESCRIBE att_groups;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
@@ -418,13 +401,13 @@ mysql> DESCRIBE att_grp;
 	</pre>
 	</section>
 
-	<section id="att_usr">
-	<h3>Table att_usr</h3>
+	<section id="att_users">
+	<h3>Table att_users</h3>
 	<p align="justify">
 	Stores users who have attended to events:
 	</p>
 	<pre>
-mysql> DESCRIBE att_usr;
+mysql> DESCRIBE att_users;
 +------------+---------------+------+-----+---------+-------+
 | Field      | Type          | Null | Key | Default | Extra |
 +------------+---------------+------+-----+---------+-------+
@@ -438,13 +421,13 @@ mysql> DESCRIBE att_usr;
 	</pre>
 	</section>
 
-	<section id="banners">
-	<h3>Table banners</h3>
+	<section id="ban_banners">
+	<h3>Table ban_banners</h3>
 	<p align="justify">
 	Stores advertising banners:
 	</p>
 	<pre>
-mysql> DESCRIBE banners;
+mysql> DESCRIBE ban_banners;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -459,87 +442,51 @@ mysql> DESCRIBE banners;
 	</pre>
 	</section>
 
-	<section id="birthdays_today">
-	<h3>Table birthdays_today</h3>
+	<section id="bld_buildings">
+	<h3>Table bld_buildings</h3>
 	<p align="justify">
-	Stores birthdays already congratulated today:
+	Stores buildings in a center:
 	</p>
 	<pre>
-mysql> DESCRIBE birthdays_today;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| UsrCod | int(11) | NO   | PRI | NULL    |       |
-| Today  | date    | NO   | MUL | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
+mysql> DESCRIBE bld_buildings;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| BldCod    | int           | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int           | NO   | MUL | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
+| Location  | varchar(2047) | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
 	</pre>
 	</section>
 
-	<section id="centres">
-	<h3>Table centres</h3>
+	<section id="brw_caches">
+	<h3>Table brw_caches</h3>
 	<p align="justify">
-	Stores centres (faculties, schools...):
+	Stores the media private paths linked from public directories in current session :
 	</p>
 	<pre>
-mysql> DESCRIBE centres;
-+------------------+---------------+------+-----+---------+----------------+
-| Field            | Type          | Null | Key | Default | Extra          |
-+------------------+---------------+------+-----+---------+----------------+
-| CtrCod           | int(11)       | NO   | PRI | NULL    | auto_increment |
-| InsCod           | int(11)       | NO   | MUL | NULL    |                |
-| PlcCod           | int(11)       | NO   | MUL | -1      |                |
-| Status           | tinyint(4)    | NO   | MUL | 0       |                |
-| RequesterUsrCod  | int(11)       | NO   |     | -1      |                |
-| ShortName        | varchar(511)  | NO   |     | NULL    |                |
-| FullName         | varchar(2047) | NO   |     | NULL    |                |
-| WWW              | varchar(255)  | NO   |     | NULL    |                |
-| PhotoAttribution | text          | NO   |     | NULL    |                |
-+------------------+---------------+------+-----+---------+----------------+
-9 rows in set (0,00 sec)
+mysql> DESCRIBE brw_caches;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| SessionId | char(43) | NO   | MUL | NULL    |       |
+| PrivPath  | text     | NO   |     | NULL    |       |
+| TmpPubDir | text     | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
 	</pre>
 	</section>
 
-	<section id="chat">
-	<h3>Table chat</h3>
+	<section id="brw_clipboards">
+	<h3>Table brw_clipboards</h3>
 	<p align="justify">
-	Stored number of users in each chat room (this table is not used now):
+	Stores clipboards (paths used to copy-paste folders and files):
 	</p>
 	<pre>
-mysql> DESCRIBE chat;
-+----------+-------------+------+-----+---------+-------+
-| Field    | Type        | Null | Key | Default | Extra |
-+----------+-------------+------+-----+---------+-------+
-| RoomCode | varchar(16) | NO   | PRI | NULL    |       |
-| NumUsrs  | int(11)     | NO   |     | NULL    |       |
-+----------+-------------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
-	</pre>
-
-	<section id="clicks_without_photo">
-	<h3>Table clicks_without_photo</h3>
-	<p align="justify">
-	Stores the number of clicks that remains to each user before being required to submit his/her photo:
-	</p>
-	<pre>
-mysql> DESCRIBE clicks_without_photo;
-+-----------+---------+------+-----+---------+-------+
-| Field     | Type    | Null | Key | Default | Extra |
-+-----------+---------+------+-----+---------+-------+
-| UsrCod    | int(11) | NO   | PRI | NULL    |       |
-| NumClicks | int(11) | NO   |     | NULL    |       |
-+-----------+---------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="clipboard">
-	<h3>Table clipboard</h3>
-	<p align="justify">
-	Stores clipboard (paths used to copy-paste folders and files):
-	</p>
-	<pre>
-mysql> DESCRIBE clipboard;
+mysql> DESCRIBE brw_clipboards;
 +-------------+------------+------+-----+-------------------+-----------------------------+
 | Field       | Type       | Null | Key | Default           | Extra                       |
 +-------------+------------+------+-----+-------------------+-----------------------------+
@@ -555,68 +502,166 @@ mysql> DESCRIBE clipboard;
 	</pre>
 	</section>
 
-	<section id="connected">
-	<h3>Table connected</h3>
+	<section id="brw_expanded">
+	<h3>Table brw_expanded</h3>
 	<p align="justify">
-	Stores users currently connected to the platform:
+	Stores the expanded folders for each user:
 	</p>
 	<pre>
-mysql> DESCRIBE connected;
-+---------------+------------+------+-----+---------+-------+
-| Field         | Type       | Null | Key | Default | Extra |
-+---------------+------------+------+-----+---------+-------+
-| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
-| RoleInLastCrs | tinyint(4) | NO   | MUL | 0       |       |
-| LastCrsCod    | int(11)    | NO   | MUL | -1      |       |
-| LastTime      | datetime   | NO   |     | NULL    |       |
-+---------------+------------+------+-----+---------+-------+
+mysql> DESCRIBE brw_expanded;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| UsrCod      | int(11)    | NO   | MUL | NULL    |       |
+| FileBrowser | tinyint(4) | NO   | MUL | NULL    |       |
+| Cod         | int(11)    | NO   |     | -1      |       |
+| WorksUsrCod | int(11)    | NO   | MUL | NULL    |       |
+| Path        | text       | NO   |     | NULL    |       |
+| ClickTime   | datetime   | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+6 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="brw_files">
+	<h3>Table brw_files</h3>
+	<p align="justify">
+	Stores metadata about each file:
+	</p>
+	<pre>
+mysql> DESCRIBE brw_files;
++-----------------+---------------+------+-----+---------+----------------+
+| Field           | Type          | Null | Key | Default | Extra          |
++-----------------+---------------+------+-----+---------+----------------+
+| FilCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
+| FileBrowser     | tinyint(4)    | NO   | MUL | NULL    |                |
+| Cod             | int(11)       | NO   |     | -1      |                |
+| ZoneUsrCod      | int(11)       | NO   | MUL | -1      |                |
+| PublisherUsrCod | int(11)       | NO   | MUL | NULL    |                |
+| FileType        | tinyint(4)    | NO   |     | 0       |                |
+| Path            | text          | NO   |     | NULL    |                |
+| Hidden          | enum('N','Y') | NO   |     | N       |                |
+| Public          | enum('N','Y') | NO   |     | N       |                |
+| License         | tinyint(4)    | NO   |     | 0       |                |
++-----------------+---------------+------+-----+---------+----------------+
+10 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="brw_last">
+	<h3>Table brw_last</h3>
+	<p align="justify">
+	Stores the last click of every user in each file browser zone:
+	</p>
+	<pre>
+mysql> DESCRIBE brw_last;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| UsrCod      | int(11)    | NO   | PRI | NULL    |       |
+| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
+| Cod         | int(11)    | NO   | PRI | -1      |       |
+| LastClick   | datetime   | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
 4 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="countries">
-	<h3>Table countries</h3>
+	<section id="brw_sizes">
+	<h3>Table brw_sizes</h3>
 	<p align="justify">
-	Stores the countries:
+	Stores the sizes of the file zones:
 	</p>
 	<pre>
-mysql> DESCRIBE countries;
-+----------------+--------------+------+-----+---------+-------+
-| Field          | Type         | Null | Key | Default | Extra |
-+----------------+--------------+------+-----+---------+-------+
-| CtyCod         | int(11)      | NO   | PRI | NULL    |       |
-| Alpha2         | char(2)      | NO   | UNI | NULL    |       |
-| MapAttribution | text         | NO   |     | NULL    |       |
-| Name_ca        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_de        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_en        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_es        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_fr        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_gn        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_it        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_pl        | varchar(767) | NO   | MUL | NULL    |       |
-| Name_pt        | varchar(767) | NO   | MUL | NULL    |       |
-| WWW_ca         | varchar(255) | NO   |     | NULL    |       |
-| WWW_de         | varchar(255) | NO   |     | NULL    |       |
-| WWW_en         | varchar(255) | NO   |     | NULL    |       |
-| WWW_es         | varchar(255) | NO   |     | NULL    |       |
-| WWW_fr         | varchar(255) | NO   |     | NULL    |       |
-| WWW_gn         | varchar(255) | NO   |     | NULL    |       |
-| WWW_it         | varchar(255) | NO   |     | NULL    |       |
-| WWW_pl         | varchar(255) | NO   |     | NULL    |       |
-| WWW_pt         | varchar(255) | NO   |     | NULL    |       |
-+----------------+--------------+------+-----+---------+-------+
-21 rows in set (0,00 sec)
+mysql> DESCRIBE brw_sizes;
++-------------+------------+------+-----+---------+-------+
+| Field       | Type       | Null | Key | Default | Extra |
++-------------+------------+------+-----+---------+-------+
+| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
+| Cod         | int(11)    | NO   | PRI | -1      |       |
+| ZoneUsrCod  | int(11)    | NO   | PRI | -1      |       |
+| NumLevels   | int(11)    | NO   |     | NULL    |       |
+| NumFolders  | int(11)    | NO   |     | NULL    |       |
+| NumFiles    | int(11)    | NO   |     | NULL    |       |
+| TotalSize   | bigint(20) | NO   |     | NULL    |       |
++-------------+------------+------+-----+---------+-------+
+7 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="courses">
-	<h3>Table courses</h3>
+	<section id="brw_views">
+	<h3>Table brw_views</h3>
+	<p align="justify">
+	Stores the number of times each user has seen each file:
+	</p>
+	<pre>
+mysql> DESCRIBE brw_views;
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| FilCod   | int(11) | NO   | PRI | NULL    |       |
+| UsrCod   | int(11) | NO   | PRI | NULL    |       |
+| NumViews | int(11) | NO   |     | 0       |       |
++----------+---------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="cfe_exams">
+	<h3>Table cfe_exams</h3>
+	<p align="justify">
+	Stores the calls for exams:
+	</p>
+	<pre>
+mysql> DESCRIBE cfe_exams;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| ExaCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod      | int(11)       | NO   | MUL | -1      |                |
+| Status      | tinyint(4)    | NO   | MUL | 0       |                |
+| NumNotif    | int(11)       | NO   |     | 0       |                |
+| CrsFullName | varchar(2047) | NO   |     | NULL    |                |
+| Year        | tinyint(4)    | NO   |     | NULL    |                |
+| ExamSession | varchar(2047) | NO   |     | NULL    |                |
+| CallDate    | datetime      | NO   |     | NULL    |                |
+| ExamDate    | datetime      | NO   |     | NULL    |                |
+| Duration    | time          | NO   |     | NULL    |                |
+| Place       | text          | NO   |     | NULL    |                |
+| ExamMode    | text          | NO   |     | NULL    |                |
+| Structure   | text          | NO   |     | NULL    |                |
+| DocRequired | text          | NO   |     | NULL    |                |
+| MatRequired | text          | NO   |     | NULL    |                |
+| MatAllowed  | text          | NO   |     | NULL    |                |
+| OtherInfo   | text          | NO   |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+17 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="cht_rooms">
+	<h3>Table cht_rooms</h3>
+	<p align="justify">
+	Stored number of users in each chat room (this table is not used now):
+	</p>
+	<pre>
+mysql> DESCRIBE cht_rooms;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| RoomCode | varchar(16) | NO   | PRI | NULL    |       |
+| NumUsrs  | int(11)     | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+	</pre>
+
+	<section id="crs_courses">
+	<h3>Table crs_courses</h3>
 	<p align="justify">
 	Stores the courses/subjects:
 	</p>
 	<pre>
-mysql> DESCRIBE courses;
+mysql> DESCRIBE crs_courses;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
@@ -634,72 +679,12 @@ mysql> DESCRIBE courses;
 	</pre>
 	</section>
 
-	<section id="crs_grp">
-	<h3>Table crs_grp</h3>
-	<p align="justify">
-	Stores the groups in courses:
-	</p>
-	<pre>
-mysql> DESCRIBE crs_grp;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| GrpCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
-| GrpTypCod   | int(11)       | NO   | MUL | NULL    |                |
-| GrpName     | varchar(2047) | NO   |     | NULL    |                |
-| MaxStudents | int(11)       | NO   |     | NULL    |                |
-| Open        | enum('N','Y') | NO   |     | N       |                |
-| FileZones   | enum('N','Y') | NO   |     | N       |                |
-+-------------+---------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="crs_grp_types">
-	<h3>Table crs_grp_types</h3>
-	<p align="justify">
-	Stores the types of groups in courses:
-	</p>
-	<pre>
-mysql> DESCRIBE crs_grp_types;
-+--------------+---------------+------+-----+---------+----------------+
-| Field        | Type          | Null | Key | Default | Extra          |
-+--------------+---------------+------+-----+---------+----------------+
-| GrpTypCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod       | int(11)       | NO   | MUL | -1      |                |
-| GrpTypName   | varchar(2047) | NO   |     | NULL    |                |
-| Mandatory    | enum('N','Y') | NO   |     | NULL    |                |
-| Multiple     | enum('N','Y') | NO   |     | NULL    |                |
-| MustBeOpened | enum('N','Y') | NO   |     | N       |                |
-| OpenTime     | datetime      | NO   |     | NULL    |                |
-+--------------+---------------+------+-----+---------+----------------+
-7 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="crs_grp_usr">
-	<h3>Table crs_grp_usr</h3>
-	<p align="justify">
-	Stores the users beloging to each group:
-	</p>
-	<pre>
-mysql> DESCRIBE crs_grp_usr;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-| UsrCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
-	</pre>
-	</section>
-
 	<section id="crs_info_read">
 	<h3>Table crs_info_read</h3>
 	<p align="justify">
 	Stores the users who have read the information with mandatory reading:
 	</p>
-	<pre>
+	<pre style="font-size:0.75em;">
 mysql> DESCRIBE crs_info_read;
 +----------+--------------------------------------------------------------------------------------------+------+-----+---------+-------+
 | Field    | Type                                                                                       | Null | Key | Default | Extra |
@@ -805,41 +790,13 @@ mysql> DESCRIBE crs_records;
 	</pre>
 	</section>
 
-	<section id="crs_usr">
-	<h3>Table crs_usr</h3>
-	<p align="justify">
-	Stores who users belong to what courses:
-	</p>
-	<pre>
-mysql> DESCRIBE crs_usr;
-+----------------+---------------------------+------+-----+------------+-------+
-| Field          | Type                      | Null | Key | Default    | Extra |
-+----------------+---------------------------+------+-----+------------+-------+
-| CrsCod         | int(11)                   | NO   | PRI | -1         |       |
-| UsrCod         | int(11)                   | NO   | PRI | NULL       |       |
-| Role           | tinyint(4)                | NO   | PRI | 0          |       |
-| Accepted       | enum('N','Y')             | NO   |     | N          |       |
-| LastDowGrpCod  | int(11)                   | NO   |     | -1         |       |
-| LastComGrpCod  | int(11)                   | NO   |     | -1         |       |
-| LastAssGrpCod  | int(11)                   | NO   |     | -1         |       |
-| NumAccTst      | int(11)                   | NO   |     | 0          |       |
-| LastAccTst     | datetime                  | NO   |     | NULL       |       |
-| NumQstsLastTst | int(11)                   | NO   |     | 0          |       |
-| UsrListType    | enum('classphoto','list') | NO   |     | classphoto |       |
-| ColsClassPhoto | tinyint(4)                | NO   |     | NULL       |       |
-| ListWithPhotos | enum('N','Y')             | NO   |     | Y          |       |
-+----------------+---------------------------+------+-----+------------+-------+
-13 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="crs_usr_requests">
-	<h3>Table crs_usr_requests</h3>
+	<section id="crs_requests">
+	<h3>Table crs_requests</h3>
 	<p align="justify">
 	Stores requests for enrollment in courses:
 	</p>
 	<pre>
-mysql> DESCRIBE crs_usr_requests;
+mysql> DESCRIBE crs_requests;
 +-------------+------------+------+-----+---------+----------------+
 | Field       | Type       | Null | Key | Default | Extra          |
 +-------------+------------+------+-----+---------+----------------+
@@ -853,13 +810,120 @@ mysql> DESCRIBE crs_usr_requests;
 	</pre>
 	</section>
 
-	<section id="debug">
-	<h3>Table debug</h3>
+	<section id="crs_users">
+	<h3>Table crs_users</h3>
+	<p align="justify">
+	Stores who users belong to what courses:
+	</p>
+	<pre>
+mysql> DESCRIBE crs_users;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| CrsCod   | int           | NO   | PRI | NULL    |       |
+| UsrCod   | int           | NO   | PRI | NULL    |       |
+| Role     | tinyint       | NO   | MUL | 0       |       |
+| Accepted | enum('N','Y') | NO   |     | N       |       |
++----------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+	</pre>
+	</section>
+	
+	<section id="crs_user_settings">
+	<h3>Table crs_user_settings</h3>
+	<p align="justify">
+	Stores last settings (preferences) of users in courses:
+	</p>
+	<pre>
+mysql> DESCRIBE crs_user_settings;
++----------------+---------------------------+------+-----+------------+-------+
+| Field          | Type                      | Null | Key | Default    | Extra |
++----------------+---------------------------+------+-----+------------+-------+
+| UsrCod         | int                       | NO   | PRI | NULL       |       |
+| CrsCod         | int                       | NO   | PRI | NULL       |       |
+| LastDowGrpCod  | int                       | NO   |     | -1         |       |
+| LastComGrpCod  | int                       | NO   |     | -1         |       |
+| LastAssGrpCod  | int                       | NO   |     | -1         |       |
+| NumAccTst      | int                       | NO   |     | 0          |       |
+| LastAccTst     | datetime                  | NO   |     | NULL       |       |
+| NumQstsLastTst | int                       | NO   |     | 0          |       |
+| UsrListType    | enum('classphoto','list') | NO   |     | classphoto |       |
+| ColsClassPhoto | tinyint                   | NO   |     | NULL       |       |
+| ListWithPhotos | enum('N','Y')             | NO   |     | Y          |       |
++----------------+---------------------------+------+-----+------------+-------+
+11 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="ctr_centers">
+	<h3>Table ctr_centers</h3>
+	<p align="justify">
+	Stores centers (faculties, schools...):
+	</p>
+	<pre>
+mysql> DESCRIBE ctr_centers;
++------------------+---------------+------+-----+---------+----------------+
+| Field            | Type          | Null | Key | Default | Extra          |
++------------------+---------------+------+-----+---------+----------------+
+| CtrCod           | int(11)       | NO   | PRI | NULL    | auto_increment |
+| InsCod           | int(11)       | NO   | MUL | NULL    |                |
+| PlcCod           | int(11)       | NO   | MUL | -1      |                |
+| Status           | tinyint(4)    | NO   | MUL | 0       |                |
+| RequesterUsrCod  | int(11)       | NO   |     | -1      |                |
+| ShortName        | varchar(511)  | NO   |     | NULL    |                |
+| FullName         | varchar(2047) | NO   |     | NULL    |                |
+| WWW              | varchar(255)  | NO   |     | NULL    |                |
+| PhotoAttribution | text          | NO   |     | NULL    |                |
++------------------+---------------+------+-----+---------+----------------+
+9 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="cty_countrs">
+	<h3>Table cty_countrs</h3>
+	<p align="justify">
+	Stores the countries:
+	</p>
+	<pre>
+mysql> DESCRIBE cty_countrs;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| CtyCod         | int          | NO   | PRI | NULL    |       |
+| Alpha2         | char(2)      | NO   | UNI | NULL    |       |
+| MapAttribution | text         | NO   |     | NULL    |       |
+| Name_ca        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_de        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_en        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_es        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_fr        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_gn        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_it        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_pl        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_pt        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_tr        | varchar(767) | NO   | MUL | NULL    |       |
+| WWW_ca         | varchar(255) | NO   |     | NULL    |       |
+| WWW_de         | varchar(255) | NO   |     | NULL    |       |
+| WWW_en         | varchar(255) | NO   |     | NULL    |       |
+| WWW_es         | varchar(255) | NO   |     | NULL    |       |
+| WWW_fr         | varchar(255) | NO   |     | NULL    |       |
+| WWW_gn         | varchar(255) | NO   |     | NULL    |       |
+| WWW_it         | varchar(255) | NO   |     | NULL    |       |
+| WWW_pl         | varchar(255) | NO   |     | NULL    |       |
+| WWW_pt         | varchar(255) | NO   |     | NULL    |       |
+| WWW_tr         | varchar(255) | NO   |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+23 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="dbg_debug">
+	<h3>Table dbg_debug</h3>
 	<p align="justify">
 	Used for debugging purposes:
 	</p>
 	<pre>
-mysql> DESCRIBE debug;
+mysql> DESCRIBE dbg_debug;
 +-----------+----------+------+-----+---------+----------------+
 | Field     | Type     | Null | Key | Default | Extra          |
 +-----------+----------+------+-----+---------+----------------+
@@ -871,30 +935,13 @@ mysql> DESCRIBE debug;
 	</pre>
 	</section>
 
-	<section id="deg_types">
-	<h3>Table deg_types</h3>
-	<p align="justify">
-	Stores the types of degree:
-	</p>
-	<pre>
-mysql> DESCRIBE deg_types;
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| DegTypCod  | int(11)      | NO   | PRI | NULL    | auto_increment |
-| DegTypName | varchar(511) | NO   |     | NULL    |                |
-+------------+--------------+------+-----+---------+----------------+
-2 rows in set (0,01 sec)
-	</pre>
-	</section>
-
-	<section id="degrees">
-	<h3>Table degrees</h3>
+	<section id="deg_degrees">
+	<h3>Table deg_degrees</h3>
 	<p align="justify">
 	Stores the degrees:
 	</p>
 	<pre>
-mysql> DESCRIBE degrees;
+mysql> DESCRIBE deg_degrees;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
@@ -911,13 +958,30 @@ mysql> DESCRIBE degrees;
 	</pre>
 	</section>
 
-	<section id="departments">
-	<h3>Table departments</h3>
+	<section id="deg_types">
+	<h3>Table deg_types</h3>
+	<p align="justify">
+	Stores the types of degree:
+	</p>
+	<pre>
+mysql> DESCRIBE deg_types;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| DegTypCod  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| DegTypName | varchar(511) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+2 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="dpt_departments">
+	<h3>Table dpt_departments</h3>
 	<p align="justify">
 	Stores the departments:
 	</p>
 	<pre>
-mysql> DESCRIBE departments;
+mysql> DESCRIBE dpt_departments;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -931,194 +995,300 @@ mysql> DESCRIBE departments;
 	</pre>
 	</section>
 
-	<section id="exam_announcements">
-	<h3>Table exam_announcements</h3>
+	<section id="exa_exams">
+	<h3>Table exa_exams</h3>
 	<p align="justify">
-	Stores the calls for examination:
+	Stores the exams:
 	</p>
 	<pre>
-mysql> DESCRIBE exam_announcements;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| ExaCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod      | int(11)       | NO   | MUL | -1      |                |
-| Status      | tinyint(4)    | NO   | MUL | 0       |                |
-| NumNotif    | int(11)       | NO   |     | 0       |                |
-| CrsFullName | varchar(2047) | NO   |     | NULL    |                |
-| Year        | tinyint(4)    | NO   |     | NULL    |                |
-| ExamSession | varchar(2047) | NO   |     | NULL    |                |
-| CallDate    | datetime      | NO   |     | NULL    |                |
-| ExamDate    | datetime      | NO   |     | NULL    |                |
-| Duration    | time          | NO   |     | NULL    |                |
-| Place       | text          | NO   |     | NULL    |                |
-| ExamMode    | text          | NO   |     | NULL    |                |
-| Structure   | text          | NO   |     | NULL    |                |
-| DocRequired | text          | NO   |     | NULL    |                |
-| MatRequired | text          | NO   |     | NULL    |                |
-| MatAllowed  | text          | NO   |     | NULL    |                |
-| OtherInfo   | text          | NO   |     | NULL    |                |
-+-------------+---------------+------+-----+---------+----------------+
-17 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="expanded_folders">
-	<h3>Table expanded_folders</h3>
-	<p align="justify">
-	Stores the expanded folders for each user:
-	</p>
-	<pre>
-mysql> DESCRIBE expanded_folders;
-+-------------+------------+------+-----+---------+-------+
-| Field       | Type       | Null | Key | Default | Extra |
-+-------------+------------+------+-----+---------+-------+
-| UsrCod      | int(11)    | NO   | MUL | NULL    |       |
-| FileBrowser | tinyint(4) | NO   | MUL | NULL    |       |
-| Cod         | int(11)    | NO   |     | -1      |       |
-| WorksUsrCod | int(11)    | NO   | MUL | NULL    |       |
-| Path        | text       | NO   |     | NULL    |       |
-| ClickTime   | datetime   | NO   |     | NULL    |       |
-+-------------+------------+------+-----+---------+-------+
-6 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="file_browser_last">
-	<h3>Table file_browser_last</h3>
-	<p align="justify">
-	Stores the last click of every user in each file browser zone:
-	</p>
-	<pre>
-mysql> DESCRIBE file_browser_last;
-+-------------+------------+------+-----+---------+-------+
-| Field       | Type       | Null | Key | Default | Extra |
-+-------------+------------+------+-----+---------+-------+
-| UsrCod      | int(11)    | NO   | PRI | NULL    |       |
-| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
-| Cod         | int(11)    | NO   | PRI | -1      |       |
-| LastClick   | datetime   | NO   |     | NULL    |       |
-+-------------+------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="file_browser_size">
-	<h3>Table file_browser_size</h3>
-	<p align="justify">
-	Stores the sizes of the file zones:
-	</p>
-	<pre>
-mysql> DESCRIBE file_browser_size;
-+-------------+------------+------+-----+---------+-------+
-| Field       | Type       | Null | Key | Default | Extra |
-+-------------+------------+------+-----+---------+-------+
-| FileBrowser | tinyint(4) | NO   | PRI | NULL    |       |
-| Cod         | int(11)    | NO   | PRI | -1      |       |
-| ZoneUsrCod  | int(11)    | NO   | PRI | -1      |       |
-| NumLevels   | int(11)    | NO   |     | NULL    |       |
-| NumFolders  | int(11)    | NO   |     | NULL    |       |
-| NumFiles    | int(11)    | NO   |     | NULL    |       |
-| TotalSize   | bigint(20) | NO   |     | NULL    |       |
-+-------------+------------+------+-----+---------+-------+
-7 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="file_view">
-	<h3>Table file_view</h3>
-	<p align="justify">
-	Stores the number of times each user has seen each file:
-	</p>
-	<pre>
-mysql> DESCRIBE file_view;
-+----------+---------+------+-----+---------+-------+
-| Field    | Type    | Null | Key | Default | Extra |
-+----------+---------+------+-----+---------+-------+
-| FilCod   | int(11) | NO   | PRI | NULL    |       |
-| UsrCod   | int(11) | NO   | PRI | NULL    |       |
-| NumViews | int(11) | NO   |     | 0       |       |
-+----------+---------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="files">
-	<h3>Table files</h3>
-	<p align="justify">
-	Stores metadata about each file:
-	</p>
-	<pre>
-mysql> DESCRIBE files;
-+-----------------+---------------+------+-----+---------+----------------+
-| Field           | Type          | Null | Key | Default | Extra          |
-+-----------------+---------------+------+-----+---------+----------------+
-| FilCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
-| FileBrowser     | tinyint(4)    | NO   | MUL | NULL    |                |
-| Cod             | int(11)       | NO   |     | -1      |                |
-| ZoneUsrCod      | int(11)       | NO   | MUL | -1      |                |
-| PublisherUsrCod | int(11)       | NO   | MUL | NULL    |                |
-| FileType        | tinyint(4)    | NO   |     | 0       |                |
-| Path            | text          | NO   |     | NULL    |                |
-| Hidden          | enum('N','Y') | NO   |     | N       |                |
-| Public          | enum('N','Y') | NO   |     | N       |                |
-| License         | tinyint(4)    | NO   |     | 0       |                |
-+-----------------+---------------+------+-----+---------+----------------+
-10 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="forum_disabled_post">
-	<h3>Table forum_disabled_post</h3>
-	<p align="justify">
-	Stores the forum post that have been disabled:
-	</p>
-	<pre>
-mysql> DESCRIBE forum_disabled_post;
-+-------------+----------+------+-----+---------+-------+
-| Field       | Type     | Null | Key | Default | Extra |
-+-------------+----------+------+-----+---------+-------+
-| PstCod      | int(11)  | NO   | PRI | NULL    |       |
-| UsrCod      | int(11)  | NO   |     | NULL    |       |
-| DisableTime | datetime | NO   |     | NULL    |       |
-+-------------+----------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="forum_post">
-	<h3>Table forum_post</h3>
-	<p align="justify">
-	Stores the forum posts:
-	</p>
-	<pre>
-mysql> DESCRIBE forum_post;
+mysql> DESCRIBE exa_exams;
 +------------+---------------+------+-----+---------+----------------+
 | Field      | Type          | Null | Key | Default | Extra          |
 +------------+---------------+------+-----+---------+----------------+
-| PstCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
-| ThrCod     | int(11)       | NO   | MUL | NULL    |                |
-| UsrCod     | int(11)       | NO   | MUL | NULL    |                |
-| CreatTime  | datetime      | NO   | MUL | NULL    |                |
-| ModifTime  | datetime      | NO   | MUL | NULL    |                |
-| NumNotif   | int(11)       | NO   |     | 0       |                |
-| Subject    | text          | NO   |     | NULL    |                |
-| Content    | longtext      | NO   |     | NULL    |                |
-| ImageName  | varchar(43)   | NO   |     | NULL    |                |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |                |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |                |
+| ExaCod     | int           | NO   | PRI | NULL    | auto_increment |
+| CrsCod     | int           | NO   | MUL | -1      |                |
+| Hidden     | enum('N','Y') | NO   |     | N       |                |
+| UsrCod     | int           | NO   |     | NULL    |                |
+| MaxGrade   | double        | NO   |     | 1       |                |
+| Visibility | int           | NO   |     | 31      |                |
+| Title      | varchar(2047) | NO   |     | NULL    |                |
+| Txt        | text          | NO   |     | NULL    |                |
 +------------+---------------+------+-----+---------+----------------+
-11 rows in set (0,00 sec)
+8 rows in set (0.00 sec)
 	</pre>
 	</section>
 
-	<section id="forum_thr_clip">
-	<h3>Table forum_thr_clip</h3>
+	<section id="exa_groups">
+	<h3>Table exa_groups</h3>
+	<p align="justify">
+	Stores the groups associated to each session in an exam:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_groups;
++--------+------+------+-----+---------+-------+
+| Field  | Type | Null | Key | Default | Extra |
++--------+------+------+-----+---------+-------+
+| SesCod | int  | NO   | PRI | NULL    |       |
+| GrpCod | int  | NO   | PRI | NULL    |       |
++--------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_log">
+	<h3>Table exa_log</h3>
+	<p align="justify">
+	Stores the access log to exam prints:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_log;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| LogCod    | int           | NO   | PRI | NULL    |       |
+| PrnCod    | int           | NO   | MUL | NULL    |       |
+| ActCod    | int           | NO   |     | NULL    |       |
+| QstInd    | int           | NO   |     | -1      |       |
+| CanAnswer | enum('N','Y') | NO   |     | N       |       |
+| ClickTime | datetime      | NO   | MUL | NULL    |       |
+| IP        | char(15)      | NO   |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_log_sessions">
+	<h3>Table exa_log_sessions</h3>
+	<p align="justify">
+	Stores stores the session id fields for access log to exam prints:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_log_sessions;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| LogCod    | int      | NO   | PRI | NULL    |       |
+| PrnCod    | int      | NO   | MUL | NULL    |       |
+| SessionId | char(43) | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_log_user_agents">
+	<h3>Table exa_log_user_agents</h3>
+	<p align="justify">
+	Stores the user agent fields for access log to exam prints:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_log_user_agents;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| LogCod    | int  | NO   | PRI | NULL    |       |
+| PrnCod    | int  | NO   | MUL | NULL    |       |
+| UserAgent | text | NO   |     | NULL    |       |
++-----------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_print_questions">
+	<h3>Table exa_print_questions</h3>
+	<p align="justify">
+	Stores the questions and answers in exam prints made by users:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_print_questions;
++---------+--------+------+-----+---------+-------+
+| Field   | Type   | Null | Key | Default | Extra |
++---------+--------+------+-----+---------+-------+
+| PrnCod  | int    | NO   | PRI | NULL    |       |
+| QstCod  | int    | NO   | PRI | NULL    |       |
+| QstInd  | int    | NO   |     | NULL    |       |
+| SetCod  | int    | NO   |     | NULL    |       |
+| Score   | double | NO   |     | 0       |       |
+| Indexes | text   | NO   |     | NULL    |       |
+| Answers | text   | NO   |     | NULL    |       |
++---------+--------+------+-----+---------+-------+
+7 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="exa_prints">
+	<h3>Table exa_prints</h3>
+	<p align="justify">
+	Stores stores the exam prints of every exam session:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_prints;
++-----------------+---------------+------+-----+---------+----------------+
+| Field           | Type          | Null | Key | Default | Extra          |
++-----------------+---------------+------+-----+---------+----------------+
+| PrnCod          | int           | NO   | PRI | NULL    | auto_increment |
+| SesCod          | int           | NO   | MUL | NULL    |                |
+| UsrCod          | int           | NO   |     | NULL    |                |
+| StartTime       | datetime      | NO   |     | NULL    |                |
+| EndTime         | datetime      | NO   |     | NULL    |                |
+| NumQsts         | int           | NO   |     | 0       |                |
+| NumQstsNotBlank | int           | NO   |     | 0       |                |
+| Sent            | enum('N','Y') | NO   |     | N       |                |
+| Score           | double        | NO   |     | 0       |                |
++-----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_sessions">
+	<h3>Table exa_sessions</h3>
+	<p align="justify">
+	Stores the exam sessions:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_sessions;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| SesCod         | int           | NO   | PRI | NULL    | auto_increment |
+| ExaCod         | int           | NO   | MUL | NULL    |                |
+| Hidden         | enum('N','Y') | NO   |     | N       |                |
+| UsrCod         | int           | NO   |     | NULL    |                |
+| StartTime      | datetime      | NO   |     | NULL    |                |
+| EndTime        | datetime      | NO   |     | NULL    |                |
+| Title          | varchar(2047) | NO   |     | NULL    |                |
+| ShowUsrResults | enum('N','Y') | NO   |     | N       |                |
++----------------+---------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_set_answers">
+	<h3>Table exa_set_answers</h3>
+	<p align="justify">
+	Stores the answers of questions in exam sets:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_set_answers;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| QstCod   | int           | NO   | PRI | NULL    |       |
+| AnsInd   | tinyint       | NO   | PRI | NULL    |       |
+| Answer   | text          | NO   |     | NULL    |       |
+| Feedback | text          | NO   |     | NULL    |       |
+| MedCod   | int           | NO   | MUL | -1      |       |
+| Correct  | enum('N','Y') | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_set_questions">
+	<h3>Table exa_set_questions</h3>
+	<p align="justify">
+	Stores the questions in exam sets:
+	</p>
+	<pre style="font-size:0.75em;">
+mysql> DESCRIBE exa_set_questions;
++----------+---------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field    | Type                                                                      | Null | Key | Default | Extra          |
++----------+---------------------------------------------------------------------------+------+-----+---------+----------------+
+| QstCod   | int                                                                       | NO   | PRI | NULL    | auto_increment |
+| SetCod   | int                                                                       | NO   | MUL | NULL    |                |
+| Invalid  | enum('N','Y')                                                             | NO   |     | N       |                |
+| AnsType  | enum('int','float','true_false','unique_choice','multiple_choice','text') | NO   |     | NULL    |                |
+| Shuffle  | enum('N','Y')                                                             | NO   |     | NULL    |                |
+| Stem     | text                                                                      | NO   |     | NULL    |                |
+| Feedback | text                                                                      | NO   |     | NULL    |                |
+| MedCod   | int                                                                       | NO   | MUL | -1      |                |
++----------+---------------------------------------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="exa_sets">
+	<h3>Table exa_sets</h3>
+	<p align="justify">
+	Stores the question sets in the exams:
+	</p>
+	<pre>
+mysql> DESCRIBE exa_sets;
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| SetCod         | int           | NO   | PRI | NULL    | auto_increment |
+| ExaCod         | int           | NO   |     | NULL    |                |
+| SetInd         | int           | NO   |     | NULL    |                |
+| NumQstsToPrint | int           | NO   |     | 0       |                |
+| Title          | varchar(2047) | NO   |     | NULL    |                |
++----------------+---------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="fig_figures">
+	<h3>Table fig_figures</h3>
+	<p align="justify">
+	Stores cached figures for quick retrieval of figures (i.e. number of students in the platform):
+	</p>
+	<pre style="font-size:0.75em;">
+mysql> DESCRIBE fig_figures;
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type                                      | Null | Key | Default           | Extra                                         |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Figure      | int                                       | NO   | PRI | NULL              |                                               |
+| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                                               |
+| Cod         | int                                       | NO   | PRI | -1                |                                               |
+| ValueInt    | int                                       | NO   |     | 0                 |                                               |
+| ValueDouble | double                                    | NO   |     | 0                 |                                               |
+| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+6 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="fir_banned">
+	<h3>Table fir_banned</h3>
+	<p align="justify">
+	Stores the banned IPs in order to mitigate denial of service attacks:
+	</p>
+	<pre>
+mysql> DESCRIBE fir_banned;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| IP        | char(15) | NO   | MUL | NULL    |       |
+| BanTime   | datetime | NO   | MUL | NULL    |       |
+| UnbanTime | datetime | NO   | MUL | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="fir_log">
+	<h3>Table fir_log</h3>
+	<p align="justify">
+	Stores the most recent IPs in order to mitigate denial of service attacks:
+	</p>
+	<pre>
+mysql> DESCRIBE fir_log;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| ClickTime | datetime | NO   | MUL | NULL    |       |
+| IP        | char(15) | NO   | MUL | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="for_clipboards">
+	<h3>Table for_clipboards</h3>
 	<p align="justify">
 	Stores the clipboards used to move threads from one forum to another:
 	</p>
 	<pre>
-mysql> DESCRIBE forum_thr_clip;
+mysql> DESCRIBE for_clipboards;
 +------------+-----------+------+-----+-------------------+-----------------------------+
 | Field      | Type      | Null | Key | Default           | Extra                       |
 +------------+-----------+------+-----+-------------------+-----------------------------+
@@ -1130,13 +1300,55 @@ mysql> DESCRIBE forum_thr_clip;
 	</pre>
 	</section>
 
-	<section id="forum_thr_read">
-	<h3>Table forum_thr_read</h3>
+	<section id="for_disabled">
+	<h3>Table for_disabled</h3>
+	<p align="justify">
+	Stores the forum posts that have been disabled:
+	</p>
+	<pre>
+mysql> DESCRIBE for_disabled;
++-------------+----------+------+-----+---------+-------+
+| Field       | Type     | Null | Key | Default | Extra |
++-------------+----------+------+-----+---------+-------+
+| PstCod      | int(11)  | NO   | PRI | NULL    |       |
+| UsrCod      | int(11)  | NO   |     | NULL    |       |
+| DisableTime | datetime | NO   |     | NULL    |       |
++-------------+----------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="for_posts">
+	<h3>Table for_posts</h3>
+	<p align="justify">
+	Stores the forum posts:
+	</p>
+	<pre>
+mysql> DESCRIBE for_posts;
++-----------+----------+------+-----+---------+----------------+
+| Field     | Type     | Null | Key | Default | Extra          |
++-----------+----------+------+-----+---------+----------------+
+| PstCod    | int      | NO   | PRI | NULL    | auto_increment |
+| ThrCod    | int      | NO   | MUL | NULL    |                |
+| UsrCod    | int      | NO   | MUL | NULL    |                |
+| CreatTime | datetime | NO   | MUL | NULL    |                |
+| ModifTime | datetime | NO   | MUL | NULL    |                |
+| NumNotif  | int      | NO   |     | 0       |                |
+| Subject   | text     | NO   |     | NULL    |                |
+| Content   | longtext | NO   |     | NULL    |                |
+| MedCod    | int      | NO   | MUL | -1      |                |
++-----------+----------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="for_read">
+	<h3>Table for_read</h3>
 	<p align="justify">
 	Stores the threads read by each user:
 	</p>
 	<pre>
-mysql> DESCRIBE forum_thr_read;
+mysql> DESCRIBE for_read;
 +----------+----------+------+-----+---------+-------+
 | Field    | Type     | Null | Key | Default | Extra |
 +----------+----------+------+-----+---------+-------+
@@ -1148,13 +1360,13 @@ mysql> DESCRIBE forum_thr_read;
 	</pre>
 	</section>
 
-	<section id="forum_thread">
-	<h3>Table forum_thread</h3>
+	<section id="for_threads">
+	<h3>Table for_threads</h3>
 	<p align="justify">
 	Stores the forum threads:
 	</p>
 	<pre>
-mysql> DESCRIBE forum_thread;
+mysql> DESCRIBE for_threads;
 +-------------+------------+------+-----+---------+----------------+
 | Field       | Type       | Null | Key | Default | Extra          |
 +-------------+------------+------+-----+---------+----------------+
@@ -1187,20 +1399,29 @@ mysql> DESCRIBE gam_answers;
 	</pre>
 	</section>
 
-	<section id="gam_grp">
-	<h3>Table gam_grp</h3>
+	<section id="gam_games">
+	<h3>Table gam_games</h3>
 	<p align="justify">
-	Stores the groups associated to each game:
+	Stores the games:
 	</p>
 	<pre>
-mysql> DESCRIBE gam_grp;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| GamCod | int(11) | NO   | PRI | NULL    |       |
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
+mysql> DESCRIBE gam_games;
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                      | Null | Key | Default | Extra          |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| GamCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
+| Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
+| Cod       | int(11)                                   | NO   |     | -1      |                |
+| Hidden    | enum('N','Y')                             | NO   |     | N       |                |
+| NumNotif  | int(11)                                   | NO   |     | 0       |                |
+| Roles     | int(11)                                   | NO   |     | 0       |                |
+| UsrCod    | int(11)                                   | NO   |     | NULL    |                |
+| StartTime | datetime                                  | NO   |     | NULL    |                |
+| EndTime   | datetime                                  | NO   |     | NULL    |                |
+| Title     | varchar(2047)                             | NO   |     | NULL    |                |
+| Txt       | text                                      | NO   |     | NULL    |                |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+11 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -1222,75 +1443,74 @@ mysql> DESCRIBE gam_questions;
 	</pre>
 	</section>
 
-	<section id="gam_users">
-	<h3>Table gam_users</h3>
+	<section id="grp_groups">
+	<h3>Table grp_groups</h3>
 	<p align="justify">
-	Stores the users who have answer the games:
+	Stores the groups in courses:
 	</p>
 	<pre>
-mysql> DESCRIBE gam_users;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| GamCod | int(11) | NO   | PRI | NULL    |       |
-| UsrCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
+mysql> DESCRIBE grp_groups;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| GrpCod      | int           | NO   | PRI | NULL    | auto_increment |
+| GrpTypCod   | int           | NO   | MUL | NULL    |                |
+| GrpName     | varchar(2047) | NO   |     | NULL    |                |
+| RooCod      | int           | NO   | MUL | -1      |                |
+| MaxStudents | int           | NO   |     | NULL    |                |
+| Open        | enum('N','Y') | NO   |     | N       |                |
+| FileZones   | enum('N','Y') | NO   |     | N       |                |
++-------------+---------------+------+-----+---------+----------------+
+7 rows in set (0.01 sec)
 	</pre>
 	</section>
 
-	<section id="games">
-	<h3>Table games</h3>
+	<section id="grp_types">
+	<h3>Table grp_types</h3>
 	<p align="justify">
-	Stores the games:
+	Stores the types of groups in courses:
 	</p>
 	<pre>
-mysql> DESCRIBE games;
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-| Field     | Type                                      | Null | Key | Default | Extra          |
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-| GamCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
-| Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
-| Cod       | int(11)                                   | NO   |     | -1      |                |
-| Hidden    | enum('N','Y')                             | NO   |     | N       |                |
-| NumNotif  | int(11)                                   | NO   |     | 0       |                |
-| Roles     | int(11)                                   | NO   |     | 0       |                |
-| UsrCod    | int(11)                                   | NO   |     | NULL    |                |
-| StartTime | datetime                                  | NO   |     | NULL    |                |
-| EndTime   | datetime                                  | NO   |     | NULL    |                |
-| Title     | varchar(2047)                             | NO   |     | NULL    |                |
-| Txt       | text                                      | NO   |     | NULL    |                |
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-11 rows in set (0,00 sec)
+mysql> DESCRIBE grp_types;
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| GrpTypCod    | int           | NO   | PRI | NULL    | auto_increment |
+| CrsCod       | int           | NO   | MUL | -1      |                |
+| GrpTypName   | varchar(2047) | NO   |     | NULL    |                |
+| Mandatory    | enum('N','Y') | NO   |     | NULL    |                |
+| Multiple     | enum('N','Y') | NO   |     | NULL    |                |
+| MustBeOpened | enum('N','Y') | NO   |     | N       |                |
+| OpenTime     | datetime      | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+7 rows in set (0.01 sec)
 	</pre>
 	</section>
 
-	<section id="hidden_params">
-	<h3>Table hidden_params</h3>
+	<section id="grp_users">
+	<h3>Table grp_users</h3>
 	<p align="justify">
-	Stores some hidden parameters passed from a page to another using database instead of forms:
+	Stores the users beloging to each group:
 	</p>
 	<pre>
-mysql> DESCRIBE hidden_params;
-+------------+--------------+------+-----+---------+-------+
-| Field      | Type         | Null | Key | Default | Extra |
-+------------+--------------+------+-----+---------+-------+
-| SessionId  | char(43)     | NO   | MUL | NULL    |       |
-| Action     | int(11)      | NO   |     | NULL    |       |
-| ParamName  | varchar(255) | NO   |     | NULL    |       |
-| ParamValue | longtext     | NO   |     | NULL    |       |
-+------------+--------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
+mysql> DESCRIBE grp_users;
++--------+------+------+-----+---------+-------+
+| Field  | Type | Null | Key | Default | Extra |
++--------+------+------+-----+---------+-------+
+| GrpCod | int  | NO   | PRI | NULL    |       |
+| UsrCod | int  | NO   | PRI | NULL    |       |
++--------+------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
 	</pre>
 	</section>
 
-	<section id="holidays">
-	<h3>Table holidays</h3>
+	<section id="hld_holidays">
+	<h3>Table hld_holidays</h3>
 	<p align="justify">
 	Stores the holidays in each institution:
 	</p>
 	<pre>
-mysql> DESCRIBE holidays;
+mysql> DESCRIBE hld_holidays;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -1302,17 +1522,17 @@ mysql> DESCRIBE holidays;
 | EndDate   | date          | NO   |     | NULL    |                |
 | Name      | varchar(2047) | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-7 rows in set (0,01 sec)
+7 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="institutions">
-	<h3>Table institutions</h3>
+	<section id="ins_instits">
+	<h3>Table ins_instits</h3>
 	<p align="justify">
 	Stores the institutions (for example, universities):
 	</p>
 	<pre>
-mysql> DESCRIBE institutions;
+mysql> DESCRIBE ins_instits;
 +-----------------+---------------+------+-----+---------+----------------+
 | Field           | Type          | Null | Key | Default | Extra          |
 +-----------------+---------------+------+-----+---------+----------------+
@@ -1328,13 +1548,13 @@ mysql> DESCRIBE institutions;
 	</pre>
 	</section>
 
-	<section id="links">
-	<h3>Table links</h3>
+	<section id="lnk_links">
+	<h3>Table lnk_links</h3>
 	<p align="justify">
 	Stores the global institutional links shown on right part of page:
 	</p>
 	<pre>
-mysql> DESCRIBE links;
+mysql> DESCRIBE lnk_links;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -1344,6 +1564,52 @@ mysql> DESCRIBE links;
 | WWW       | varchar(255)  | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
 4 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="log">
+	<h3>Table log</h3>
+	<p align="justify">
+	Stores the log of all clicks:
+	</p>
+	<pre>
+mysql> DESCRIBE log;
++----------------+------------+------+-----+---------+----------------+
+| Field          | Type       | Null | Key | Default | Extra          |
++----------------+------------+------+-----+---------+----------------+
+| LogCod         | int(11)    | NO   | PRI | NULL    | auto_increment |
+| ActCod         | int(11)    | NO   | MUL | -1      |                |
+| CtyCod         | int(11)    | NO   | MUL | -1      |                |
+| InsCod         | int(11)    | NO   | MUL | -1      |                |
+| CtrCod         | int(11)    | NO   | MUL | -1      |                |
+| DegCod         | int(11)    | NO   | MUL | -1      |                |
+| CrsCod         | int(11)    | NO   | MUL | -1      |                |
+| UsrCod         | int(11)    | NO   | MUL | -1      |                |
+| Role           | tinyint(4) | NO   |     | NULL    |                |
+| ClickTime      | datetime   | NO   | MUL | NULL    |                |
+| TimeToGenerate | int(11)    | NO   |     | NULL    |                |
+| TimeToSend     | int(11)    | NO   |     | NULL    |                |
+| IP             | char(15)   | NO   |     | NULL    |                |
++----------------+------------+------+-----+---------+----------------+
+13 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="log_api">
+	<h3>Table log_api</h3>
+	<p align="justify">
+	Stores the log of calls to API (web service) from plugins:
+	</p>
+	<pre>
+mysql> DESCRIBE log_api;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| LogCod | int(11) | NO   | PRI | NULL    |       |
+| PlgCod | int(11) | NO   | MUL | NULL    |       |
+| FunCod | int(11) | NO   | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -1378,34 +1644,6 @@ mysql> DESCRIBE log_comments;
 | Comments | text    | NO   |     | NULL    |       |
 +----------+---------+------+-----+---------+-------+
 2 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="log_full">
-	<h3>Table log_full</h3>
-	<p align="justify">
-	Stores the log of all clicks:
-	</p>
-	<pre>
-mysql> DESCRIBE log_full;
-+----------------+------------+------+-----+---------+----------------+
-| Field          | Type       | Null | Key | Default | Extra          |
-+----------------+------------+------+-----+---------+----------------+
-| LogCod         | int(11)    | NO   | PRI | NULL    | auto_increment |
-| ActCod         | int(11)    | NO   | MUL | -1      |                |
-| CtyCod         | int(11)    | NO   | MUL | -1      |                |
-| InsCod         | int(11)    | NO   | MUL | -1      |                |
-| CtrCod         | int(11)    | NO   | MUL | -1      |                |
-| DegCod         | int(11)    | NO   | MUL | -1      |                |
-| CrsCod         | int(11)    | NO   | MUL | -1      |                |
-| UsrCod         | int(11)    | NO   | MUL | -1      |                |
-| Role           | tinyint(4) | NO   |     | NULL    |                |
-| ClickTime      | datetime   | NO   | MUL | NULL    |                |
-| TimeToGenerate | int(11)    | NO   |     | NULL    |                |
-| TimeToSend     | int(11)    | NO   |     | NULL    |                |
-| IP             | char(15)   | NO   |     | NULL    |                |
-+----------------+------------+------+-----+---------+----------------+
-13 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -1454,49 +1692,191 @@ mysql> DESCRIBE log_search;
 	</pre>
 	</section>
 
-	<section id="log_ws">
-	<h3>Table log_ws</h3>
+	<section id="mch_answers">
+	<h3>Table mch_answers</h3>
 	<p align="justify">
-	Stores the log of calls to web service from plugins:
+	Stores the users' answers to the matches:
 	</p>
 	<pre>
-mysql> DESCRIBE log_ws;
+mysql> DESCRIBE mch_answers;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
-| LogCod | int(11) | NO   | PRI | NULL    |       |
-| PlgCod | int(11) | NO   | MUL | NULL    |       |
-| FunCod | int(11) | NO   | MUL | NULL    |       |
+| MchCod | int     | NO   | PRI | NULL    |       |
+| UsrCod | int     | NO   | PRI | NULL    |       |
+| QstInd | int     | NO   | PRI | NULL    |       |
+| NumOpt | tinyint | NO   |     | NULL    |       |
+| AnsInd | tinyint | NO   |     | NULL    |       |
 +--------+---------+------+-----+---------+-------+
-3 rows in set (0,01 sec)
+5 rows in set (0.00 sec)
 	</pre>
 	</section>
 
-	<section id="mail_domains">
-	<h3>Table mail_domains</h3>
+	<section id="mch_groups">
+	<h3>Table mch_groups</h3>
 	<p align="justify">
-	Stores e-mail domains to which sending of notifications is allowed:
+	Stores the groups associated to each match in a game:
 	</p>
 	<pre>
-mysql> DESCRIBE mail_domains;
-+--------+---------------+------+-----+---------+----------------+
-| Field  | Type          | Null | Key | Default | Extra          |
-+--------+---------------+------+-----+---------+----------------+
-| MaiCod | int(11)       | NO   | PRI | NULL    | auto_increment |
-| Domain | varchar(255)  | NO   | UNI | NULL    |                |
-| Info   | varchar(2047) | NO   |     | NULL    |                |
-+--------+---------------+------+-----+---------+----------------+
-3 rows in set (0,00 sec)
+mysql> DESCRIBE mch_groups;
++--------+------+------+-----+---------+-------+
+| Field  | Type | Null | Key | Default | Extra |
++--------+------+------+-----+---------+-------+
+| MchCod | int  | NO   | PRI | NULL    |       |
+| GrpCod | int  | NO   | PRI | NULL    |       |
++--------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
 	</pre>
 	</section>
 
-	<section id="marks_properties">
-	<h3>Table marks_properties</h3>
+	<section id="mch_indexes">
+	<h3>Table mch_indexes</h3>
+	<p align="justify">
+	Stores the order of answers in a match:
+	</p>
+	<pre>
+mysql> DESCRIBE mch_indexes;
++---------+------+------+-----+---------+-------+
+| Field   | Type | Null | Key | Default | Extra |
++---------+------+------+-----+---------+-------+
+| MchCod  | int  | NO   | PRI | NULL    |       |
+| QstInd  | int  | NO   | PRI | NULL    |       |
+| Indexes | text | NO   |     | NULL    |       |
++---------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="mch_matches">
+	<h3>Table mch_matches</h3>
+	<p align="justify">
+	Stores the matches (games instances) already played:
+	</p>
+	<pre>
+mysql> DESCRIBE mch_matches;
++----------------+------------------------------------------------+------+-----+---------+----------------+
+| Field          | Type                                           | Null | Key | Default | Extra          |
++----------------+------------------------------------------------+------+-----+---------+----------------+
+| MchCod         | int                                            | NO   | PRI | NULL    | auto_increment |
+| GamCod         | int                                            | NO   | MUL | NULL    |                |
+| UsrCod         | int                                            | NO   |     | NULL    |                |
+| StartTime      | datetime                                       | NO   |     | NULL    |                |
+| EndTime        | datetime                                       | NO   |     | NULL    |                |
+| Title          | varchar(2047)                                  | NO   |     | NULL    |                |
+| QstInd         | int                                            | NO   |     | 0       |                |
+| QstCod         | int                                            | NO   |     | -1      |                |
+| Showing        | enum('start','stem','answers','results','end') | NO   |     | start   |                |
+| Countdown      | int                                            | NO   |     | -1      |                |
+| NumCols        | int                                            | NO   |     | 1       |                |
+| ShowQstResults | enum('N','Y')                                  | NO   |     | N       |                |
+| ShowUsrResults | enum('N','Y')                                  | NO   |     | N       |                |
++----------------+------------------------------------------------+------+-----+---------+----------------+
+13 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="mch_players">
+	<h3>Table mch_players</h3>
+	<p align="justify">
+	Stores the current match players:
+	</p>
+	<pre>
+mysql> DESCRIBE mch_players;
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                                         |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| MchCod | int       | NO   | PRI | NULL              |                                               |
+| UsrCod | int       | NO   | PRI | NULL              |                                               |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+3 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="mch_playing">
+	<h3>Table mch_playing</h3>
+	<p align="justify">
+	Stores the current matches being played:
+	</p>
+	<pre>
+mysql> DESCRIBE mch_playing;
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                                         |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| MchCod | int       | NO   | PRI | NULL              |                                               |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+2 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="mch_results">
+	<h3>Table mch_results</h3>
+	<p align="justify">
+	Stores match results:
+	</p>
+	<pre>
+mysql> DESCRIBE mch_results;
++-----------------+----------+------+-----+---------+-------+
+| Field           | Type     | Null | Key | Default | Extra |
++-----------------+----------+------+-----+---------+-------+
+| MchCod          | int      | NO   | PRI | NULL    |       |
+| UsrCod          | int      | NO   | PRI | NULL    |       |
+| StartTime       | datetime | NO   |     | NULL    |       |
+| EndTime         | datetime | NO   |     | NULL    |       |
+| NumQsts         | int      | NO   |     | 0       |       |
+| NumQstsNotBlank | int      | NO   |     | 0       |       |
+| Score           | double   | NO   |     | 0       |       |
++-----------------+----------+------+-----+---------+-------+
+7 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="mch_times">
+	<h3>Table mch_times</h3>
+	<p align="justify">
+	Stores the elapsed time in every question in every match played:
+	</p>
+	<pre>
+mysql> DESCRIBE mch_times;
++-------------+------+------+-----+----------+-------+
+| Field       | Type | Null | Key | Default  | Extra |
++-------------+------+------+-----+----------+-------+
+| MchCod      | int  | NO   | PRI | NULL     |       |
+| QstInd      | int  | NO   | PRI | NULL     |       |
+| ElapsedTime | time | NO   |     | 00:00:00 |       |
++-------------+------+------+-----+----------+-------+
+3 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="med_media">
+	<h3>Table med_media</h3>
+	<p align="justify">
+	Stores information about media (images, videos, YouTube):
+	</p>
+	<pre style="font-size:0.75em;">
+mysql> DESCRIBE med_media;
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                          | Null | Key | Default | Extra          |
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+| MedCod | int(11)                                                       | NO   | PRI | NULL    | auto_increment |
+| Type   | enum('none','jpg','gif','mp4','webm','ogg','youtube','embed') | NO   | MUL | none    |                |
+| Name   | varchar(43)                                                   | NO   |     |         |                |
+| URL    | varchar(255)                                                  | NO   |     |         |                |
+| Title  | varchar(2047)                                                 | NO   |     |         |                |
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="mrk_marks">
+	<h3>Table mrk_marks</h3>
 	<p align="justify">
 	Stores information about files of marks:
 	</p>
 	<pre>
-mysql> DESCRIBE marks_properties;
+mysql> DESCRIBE mrk_marks;
 +--------+---------+------+-----+---------+----------------+
 | Field  | Type    | Null | Key | Default | Extra          |
 +--------+---------+------+-----+---------+----------------+
@@ -1532,17 +1912,15 @@ mysql> DESCRIBE msg_banned;
 	</p>
 	<pre>
 mysql> DESCRIBE msg_content;
-+------------+---------------+------+-----+---------+----------------+
-| Field      | Type          | Null | Key | Default | Extra          |
-+------------+---------------+------+-----+---------+----------------+
-| MsgCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
-| Subject    | text          | NO   | MUL | NULL    |                |
-| Content    | longtext      | NO   |     | NULL    |                |
-| ImageName  | varchar(43)   | NO   |     |         |                |
-| ImageTitle | varchar(2047) | NO   |     |         |                |
-| ImageURL   | varchar(255)  | NO   |     |         |                |
-+------------+---------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
++---------+----------+------+-----+---------+----------------+
+| Field   | Type     | Null | Key | Default | Extra          |
++---------+----------+------+-----+---------+----------------+
+| MsgCod  | int      | NO   | PRI | NULL    | auto_increment |
+| Subject | text     | NO   | MUL | NULL    |                |
+| Content | longtext | NO   |     | NULL    |                |
+| MedCod  | int      | NO   | MUL | -1      |                |
++---------+----------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
 	</pre>
 	</section>
 
@@ -1553,17 +1931,15 @@ mysql> DESCRIBE msg_content;
 	</p>
 	<pre>
 mysql> DESCRIBE msg_content_deleted;
-+------------+---------------+------+-----+---------+-------+
-| Field      | Type          | Null | Key | Default | Extra |
-+------------+---------------+------+-----+---------+-------+
-| MsgCod     | int(11)       | NO   | PRI | NULL    |       |
-| Subject    | text          | NO   | MUL | NULL    |       |
-| Content    | longtext      | NO   |     | NULL    |       |
-| ImageName  | varchar(43)   | NO   |     |         |       |
-| ImageTitle | varchar(2047) | NO   |     |         |       |
-| ImageURL   | varchar(255)  | NO   |     |         |       |
-+------------+---------------+------+-----+---------+-------+
-6 rows in set (0,00 sec)
++---------+----------+------+-----+---------+-------+
+| Field   | Type     | Null | Key | Default | Extra |
++---------+----------+------+-----+---------+-------+
+| MsgCod  | int      | NO   | PRI | NULL    |       |
+| Subject | text     | NO   | MUL | NULL    |       |
+| Content | longtext | NO   |     | NULL    |       |
+| MedCod  | int      | NO   | MUL | -1      |       |
++---------+----------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
 	</pre>
 	</section>
 
@@ -1604,7 +1980,7 @@ mysql> DESCRIBE msg_rcv_deleted;
 | Open     | enum('N','Y') | NO   |     | N       |       |
 | Replied  | enum('N','Y') | NO   |     | N       |       |
 +----------+---------------+------+-----+---------+-------+
-5 rows in set (0,01 sec)
+5 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -1624,7 +2000,7 @@ mysql> DESCRIBE msg_snt;
 | Expanded  | enum('N','Y') | NO   |     | N       |       |
 | CreatTime | datetime      | NO   |     | NULL    |       |
 +-----------+---------------+------+-----+---------+-------+
-5 rows in set (0,01 sec)
+5 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -1647,13 +2023,34 @@ mysql> DESCRIBE msg_snt_deleted;
 	</pre>
 	</section>
 
-	<section id="notices">
-	<h3>Table notices</h3>
+	<section id="not_deleted">
+	<h3>Table not_deleted</h3>
+	<p align="justify">
+	Stores the yellow notes (post-it) that have been deleted:
+	</p>
+	<pre>
+mysql> DESCRIBE not_deleted;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| NotCod    | int(11)  | NO   | PRI | NULL    |       |
+| CrsCod    | int(11)  | NO   | MUL | -1      |       |
+| UsrCod    | int(11)  | NO   | MUL | NULL    |       |
+| CreatTime | datetime | NO   | MUL | NULL    |       |
+| Content   | text     | NO   |     | NULL    |       |
+| NumNotif  | int(11)  | NO   |     | 0       |       |
++-----------+----------+------+-----+---------+-------+
+6 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="not_notices">
+	<h3>Table not_notices</h3>
 	<p align="justify">
 	Stores the yellow notes (post-it):
 	</p>
 	<pre>
-mysql> DESCRIBE notices;
+mysql> DESCRIBE not_notices;
 +-----------+------------+------+-----+---------+----------------+
 | Field     | Type       | Null | Key | Default | Extra          |
 +-----------+------------+------+-----+---------+----------------+
@@ -1669,34 +2066,31 @@ mysql> DESCRIBE notices;
 	</pre>
 	</section>
 
-	<section id="notices_deleted">
-	<h3>Table notices_deleted</h3>
+	<section id="ntf_mail_domains">
+	<h3>Table ntf_mail_domains</h3>
 	<p align="justify">
-	Stores the yellow notes (post-it) that have been deleted:
+	Stores e-mail domains to which sending of notifications is allowed:
 	</p>
 	<pre>
-mysql> DESCRIBE notices_deleted;
-+-----------+----------+------+-----+---------+-------+
-| Field     | Type     | Null | Key | Default | Extra |
-+-----------+----------+------+-----+---------+-------+
-| NotCod    | int(11)  | NO   | PRI | NULL    |       |
-| CrsCod    | int(11)  | NO   | MUL | -1      |       |
-| UsrCod    | int(11)  | NO   | MUL | NULL    |       |
-| CreatTime | datetime | NO   | MUL | NULL    |       |
-| Content   | text     | NO   |     | NULL    |       |
-| NumNotif  | int(11)  | NO   |     | 0       |       |
-+-----------+----------+------+-----+---------+-------+
-6 rows in set (0,00 sec)
+mysql> DESCRIBE ntf_mail_domains;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| MaiCod | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Domain | varchar(255)  | NO   | UNI | NULL    |                |
+| Info   | varchar(2047) | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+3 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="notif">
-	<h3>Table notif</h3>
+	<section id="ntf_notifications">
+	<h3>Table ntf_notifications</h3>
 	<p align="justify">
 	Stores the notifications of events:
 	</p>
 	<pre>
-mysql> DESCRIBE notif;
+mysql> DESCRIBE ntf_notifications;
 +-------------+------------+------+-----+---------+----------------+
 | Field       | Type       | Null | Key | Default | Extra          |
 +-------------+------------+------+-----+---------+----------------+
@@ -1716,50 +2110,13 @@ mysql> DESCRIBE notif;
 	</pre>
 	</section>
 
-	<section id="pending_emails">
-	<h3>Table pending_emails</h3>
-	<p align="justify">
-	Stores the emails pending of confirmation:
-	</p>
-	<pre>
-mysql> DESCRIBE pending_emails;
-+-------------+--------------+------+-----+---------+-------+
-| Field       | Type         | Null | Key | Default | Extra |
-+-------------+--------------+------+-----+---------+-------+
-| UsrCod      | int(11)      | NO   | MUL | NULL    |       |
-| E_mail      | varchar(255) | NO   |     | NULL    |       |
-| MailKey     | char(43)     | NO   | PRI | NULL    |       |
-| DateAndTime | datetime     | NO   |     | NULL    |       |
-+-------------+--------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="pending_passwd">
-	<h3>Table pending_passwd</h3>
-	<p align="justify">
-	Stores the passwords pending of activation, sent by e-mail when a user who have forgotten his/her password request a new one:
-	</p>
-	<pre>
-mysql> DESCRIBE pending_passwd;
-+-----------------+----------+------+-----+---------+-------+
-| Field           | Type     | Null | Key | Default | Extra |
-+-----------------+----------+------+-----+---------+-------+
-| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
-| PendingPassword | char(86) | NO   |     | NULL    |       |
-| DateAndTime     | datetime | NO   |     | NULL    |       |
-+-----------------+----------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="places">
-	<h3>Table places</h3>
+	<section id="plc_places">
+	<h3>Table plc_places</h3>
 	<p align="justify">
 	Stores the places associated to each institution, used in holidays:
 	</p>
 	<pre>
-mysql> DESCRIBE places;
+mysql> DESCRIBE plc_places;
 +-----------+---------------+------+-----+---------+----------------+
 | Field     | Type          | Null | Key | Default | Extra          |
 +-----------+---------------+------+-----+---------+----------------+
@@ -1768,17 +2125,17 @@ mysql> DESCRIBE places;
 | ShortName | varchar(511)  | NO   |     | NULL    |                |
 | FullName  | varchar(2047) | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-4 rows in set (0,01 sec)
+4 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="plugins">
-	<h3>Table plugins</h3>
+	<section id="plg_plugins">
+	<h3>Table plg_plugins</h3>
 	<p align="justify">
 	Stores the plugins:
 	</p>
 	<pre>
-mysql> DESCRIBE plugins;
+mysql> DESCRIBE plg_plugins;
 +-------------+---------------+------+-----+---------+----------------+
 | Field       | Type          | Null | Key | Default | Extra          |
 +-------------+---------------+------+-----+---------+----------------+
@@ -1790,35 +2147,59 @@ mysql> DESCRIBE plugins;
 | URL         | varchar(255)  | NO   |     | NULL    |                |
 | IP          | char(15)      | NO   |     | NULL    |                |
 +-------------+---------------+------+-----+---------+----------------+
-7 rows in set (0,01 sec)
+7 rows in set (0,00 sec)
 	</pre>
 	</section>
 
-	<section id="prj_usr">
-	<h3>Table prj_usr</h3>
+	<section id="prg_items">
+	<h3>Table prg_items</h3>
 	<p align="justify">
-	Stores the the users inside projects:
+	Stores the items of the course program:
 	</p>
 	<pre>
-mysql> DESCRIBE prj_usr;
-+---------------+------------+------+-----+---------+-------+
-| Field         | Type       | Null | Key | Default | Extra |
-+---------------+------------+------+-----+---------+-------+
-| PrjCod        | int(11)    | NO   | PRI | NULL    |       |
-| RoleInProject | tinyint(4) | NO   | PRI | 0       |       |
-| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
-+---------------+------------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
+mysql> DESCRIBE prg_items;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| ItmCod    | int           | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int           | NO   | MUL | -1      |                |
+| ItmInd    | int           | NO   |     | 0       |                |
+| Level     | int           | NO   |     | 1       |                |
+| Hidden    | enum('N','Y') | NO   |     | N       |                |
+| UsrCod    | int           | NO   |     | NULL    |                |
+| StartTime | datetime      | NO   |     | NULL    |                |
+| EndTime   | datetime      | NO   |     | NULL    |                |
+| Title     | varchar(2047) | NO   |     | NULL    |                |
+| Txt       | text          | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+10 rows in set (0.00 sec)
 	</pre>
 	</section>
 
-	<section id="projects">
-	<h3>Table projects</h3>
+	<section id="prj_config">
+	<h3>Table prj_config</h3>
+	<p align="justify">
+	Stores the configuration of projects for each course:
+	</p>
+	<pre>
+mysql> DESCRIBE prj_config;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| CrsCod   | int           | NO   | PRI | -1      |       |
+| Editable | enum('N','Y') | NO   |     | Y       |       |
++----------+---------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="prj_projects">
+	<h3>Table prj_projects</h3>
 	<p align="justify">
 	Stores the projects proposed by the teachers to their students:
 	</p>
 	<pre>
-mysql> DESCRIBE projects;
+mysql> DESCRIBE prj_projects;
 +-------------+-------------------------------------+------+-----+---------+----------------+
 | Field       | Type                                | Null | Key | Default | Extra          |
 +-------------+-------------------------------------+------+-----+---------+----------------+
@@ -1841,13 +2222,109 @@ mysql> DESCRIBE projects;
 	</pre>
 	</section>
 
-	<section id="sessions">
-	<h3>Table sessions</h3>
+	<section id="prj_users">
+	<h3>Table prj_users</h3>
+	<p align="justify">
+	Stores the users inside projects:
+	</p>
+	<pre>
+mysql> DESCRIBE prj_users;
++---------------+------------+------+-----+---------+-------+
+| Field         | Type       | Null | Key | Default | Extra |
++---------------+------------+------+-----+---------+-------+
+| PrjCod        | int(11)    | NO   | PRI | NULL    |       |
+| RoleInProject | tinyint(4) | NO   | PRI | 0       |       |
+| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
++---------------+------------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="roo_check_in">
+	<h3>Table roo_check_in</h3>
+	<p align="justify">
+	Stores the history of locations of users:
+	</p>
+	<pre>
+mysql> DESCRIBE roo_check_in;
++-------------+----------+------+-----+---------+----------------+
+| Field       | Type     | Null | Key | Default | Extra          |
++-------------+----------+------+-----+---------+----------------+
+| ChkCod      | int      | NO   | PRI | NULL    | auto_increment |
+| UsrCod      | int      | NO   | MUL | NULL    |                |
+| RooCod      | int      | NO   |     | NULL    |                |
+| CheckInTime | datetime | NO   | MUL | NULL    |                |
++-------------+----------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="roo_macs">
+	<h3>Table roo_macs</h3>
+	<p align="justify">
+	Stores the associations between rooms and MAC addresses:
+	</p>
+	<pre>
+mysql> DESCRIBE roo_macs;
++--------+--------+------+-----+---------+----------------+
+| Field  | Type   | Null | Key | Default | Extra          |
++--------+--------+------+-----+---------+----------------+
+| RooCod | int    | NO   | PRI | NULL    | auto_increment |
+| MAC    | bigint | NO   | PRI | NULL    |                |
++--------+--------+------+-----+---------+----------------+
+2 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="roo_rooms">
+	<h3>Table roo_rooms</h3>
+	<p align="justify">
+	Stores the rooms associated to each center:
+	</p>
+	<pre style="font-size:0.25em;">
+mysql> DESCRIBE roo_rooms;
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                                                                                                                                                                                                                                                        | Null | Key | Default | Extra          |
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| RooCod    | int                                                                                                                                                                                                                                                                         | NO   | PRI | NULL    | auto_increment |
+| CtrCod    | int                                                                                                                                                                                                                                                                         | NO   | MUL | NULL    |                |
+| BldCod    | int                                                                                                                                                                                                                                                                         | NO   |     | -1      |                |
+| Floor     | int                                                                                                                                                                                                                                                                         | NO   |     | 0       |                |
+| Type      | enum('no_type','administration','auditorium','cafeteria','canteen','classroom','concierge','corridor','gym','hall','kindergarten','laboratory','library','office','outdoors','parking','pavilion','room','secretariat','seminar','shop','store','toilets','virtual','yard') | NO   |     | no_type |                |
+| ShortName | varchar(511)                                                                                                                                                                                                                                                                | NO   |     | NULL    |                |
+| FullName  | varchar(2047)                                                                                                                                                                                                                                                               | NO   |     | NULL    |                |
+| Capacity  | int                                                                                                                                                                                                                                                                         | NO   |     | NULL    |                |
++-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="ses_params">
+	<h3>Table ses_params</h3>
+	<p align="justify">
+	Stores some session parameters passed from a page to another using database instead of forms:
+	</p>
+	<pre>
+mysql> DESCRIBE ses_params;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| SessionId  | char(43)     | NO   | MUL | NULL    |       |
+| Action     | int(11)      | NO   |     | NULL    |       |
+| ParamName  | varchar(255) | NO   |     | NULL    |       |
+| ParamValue | longtext     | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="ses_sessions">
+	<h3>Table ses_sessions</h3>
 	<p align="justify">
 	Stores the information of open sessions:
 	</p>
 	<pre>
-mysql> DESCRIBE sessions;
+mysql> DESCRIBE ses_sessions;
 +----------------+---------------+------+-----+---------+-------+
 | Field          | Type          | Null | Key | Default | Extra |
 +----------------+---------------+------+-----+---------+-------+
@@ -1874,140 +2351,27 @@ mysql> DESCRIBE sessions;
 	</pre>
 	</section>
 
-	<section id="social_comments">
-	<h3>Table social_comments</h3>
+	<section id="set_ip_settings">
+	<h3>Table set_ip_settings</h3>
 	<p align="justify">
-	Stores the content of comments to social notes:
+	Stores user's settings (preferences) for each IP address:
 	</p>
 	<pre>
-mysql> DESCRIBE social_comments;
-+------------+---------------+------+-----+---------+-------+
-| Field      | Type          | Null | Key | Default | Extra |
-+------------+---------------+------+-----+---------+-------+
-| PubCod     | bigint(20)    | NO   | PRI | NULL    |       |
-| Content    | longtext      | NO   | MUL | NULL    |       |
-| ImageName  | varchar(43)   | NO   |     | NULL    |       |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |       |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |       |
-+------------+---------------+------+-----+---------+-------+
-5 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="social_comments_fav">
-	<h3>Table social_comments_fav</h3>
-	<p align="justify">
-	Stores users who marked social comments as favourite:
-	</p>
-	<pre>
-mysql> DESCRIBE social_comments_fav;
-+---------+------------+------+-----+---------+----------------+
-| Field   | Type       | Null | Key | Default | Extra          |
-+---------+------------+------+-----+---------+----------------+
-| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| PubCod  | bigint(20) | NO   | MUL | NULL    |                |
-| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
-| TimeFav | datetime   | NO   |     | NULL    |                |
-+---------+------------+------+-----+---------+----------------+
-4 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="social_notes">
-	<h3>Table social_notes</h3>
-	<p align="justify">
-	Stores social notes:
-	</p>
-	<pre>
-mysql> DESCRIBE social_notes;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| NotCod      | bigint(20)    | NO   | PRI | NULL    | auto_increment |
-| NoteType    | tinyint(4)    | NO   | MUL | NULL    |                |
-| Cod         | int(11)       | NO   |     | -1      |                |
-| UsrCod      | int(11)       | NO   | MUL | NULL    |                |
-| HieCod      | int(11)       | NO   |     | -1      |                |
-| Unavailable | enum('N','Y') | NO   |     | N       |                |
-| TimeNote    | datetime      | NO   | MUL | NULL    |                |
-+-------------+---------------+------+-----+---------+----------------+
-7 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="social_notes_fav">
-	<h3>Table social_notes_fav</h3>
-	<p align="justify">
-	Stores users who marked social notes as favourite:
-	</p>
-	<pre>
-mysql> DESCRIBE social_notes_fav;
-+---------+------------+------+-----+---------+----------------+
-| Field   | Type       | Null | Key | Default | Extra          |
-+---------+------------+------+-----+---------+----------------+
-| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| NotCod  | bigint(20) | NO   | MUL | NULL    |                |
-| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
-| TimeFav | datetime   | NO   |     | NULL    |                |
-+---------+------------+------+-----+---------+----------------+
-4 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="social_posts">
-	<h3>Table social_posts</h3>
-	<p align="justify">
-	Stores social posts (public comments written by users):
-	</p>
-	<pre>
-mysql> DESCRIBE social_posts;
-+------------+---------------+------+-----+---------+----------------+
-| Field      | Type          | Null | Key | Default | Extra          |
-+------------+---------------+------+-----+---------+----------------+
-| PstCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
-| Content    | longtext      | NO   | MUL | NULL    |                |
-| ImageName  | varchar(43)   | NO   |     | NULL    |                |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |                |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |                |
-+------------+---------------+------+-----+---------+----------------+
-5 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="social_pubs">
-	<h3>Table social_pubs</h3>
-	<p align="justify">
-	Stores social publishings (original notes, sharede notes or comments):
-	</p>
-	<pre>
-mysql> DESCRIBE social_pubs;
-+--------------+------------+------+-----+---------+----------------+
-| Field        | Type       | Null | Key | Default | Extra          |
-+--------------+------------+------+-----+---------+----------------+
-| PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
-| NotCod       | bigint(20) | NO   | MUL | NULL    |                |
-| PublisherCod | int(11)    | NO   | MUL | NULL    |                |
-| PubType      | tinyint(4) | NO   | MUL | NULL    |                |
-| TimePublish  | datetime   | NO   | MUL | NULL    |                |
-+--------------+------------+------+-----+---------+----------------+
-5 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="social_timelines">
-	<h3>Table social_timelines</h3>
-	<p align="justify">
-	Stores notes published in social timeline for every active session:
-	</p>
-	<pre>
-mysql> DESCRIBE social_timelines;
-+-----------+------------+------+-----+---------+-------+
-| Field     | Type       | Null | Key | Default | Extra |
-+-----------+------------+------+-----+---------+-------+
-| SessionId | char(43)   | NO   | PRI | NULL    |       |
-| NotCod    | bigint(20) | NO   | PRI | NULL    |       |
-+-----------+------------+------+-----+---------+-------+
-2 rows in set (0,00 sec)
+mysql> DESCRIBE set_ip_settings;
++----------------+------------+------+-----+---------+-------+
+| Field          | Type       | Null | Key | Default | Extra |
++----------------+------------+------+-----+---------+-------+
+| IP             | char(15)   | NO   | PRI | NULL    |       |
+| UsrCod         | int(11)    | NO   | MUL | -1      |       |
+| LastChange     | datetime   | NO   | MUL | NULL    |       |
+| FirstDayOfWeek | tinyint(4) | NO   |     | 0       |       |
+| DateFormat     | tinyint(4) | NO   |     | 0       |       |
+| Theme          | char(16)   | NO   |     | NULL    |       |
+| IconSet        | char(16)   | NO   |     | NULL    |       |
+| Menu           | tinyint(4) | NO   |     | 0       |       |
+| SideCols       | tinyint(4) | NO   |     | NULL    |       |
++----------------+------------+------+-----+---------+-------+
+9 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2032,13 +2396,13 @@ mysql> DESCRIBE sta_degrees;
 	</pre>
 	</section>
 
-	<section id="sta_notif">
-	<h3>Table sta_notif</h3>
+	<section id="sta_notifications">
+	<h3>Table sta_notifications</h3>
 	<p align="justify">
 	Stores statistics about notifications: number of notified events and number of e-mails sent:
 	</p>
 	<pre>
-mysql> DESCRIBE sta_notif;
+mysql> DESCRIBE sta_notifications;
 +-------------+------------+------+-----+---------+-------+
 | Field       | Type       | Null | Key | Default | Extra |
 +-------------+------------+------+-----+---------+-------+
@@ -2048,35 +2412,7 @@ mysql> DESCRIBE sta_notif;
 | NumEvents   | int(11)    | NO   |     | NULL    |       |
 | NumMails    | int(11)    | NO   |     | NULL    |       |
 +-------------+------------+------+-----+---------+-------+
-5 rows in set (0,01 sec)
-	</pre>
-	</section>
-
-	<section id="surveys">
-	<h3>Table surveys</h3>
-	<p align="justify">
-	Stores the surveys:
-	</p>
-	<pre>
-mysql> DESCRIBE surveys;
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-| Field     | Type                                      | Null | Key | Default | Extra          |
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-| SvyCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
-| Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
-| Cod       | int(11)                                   | NO   |     | -1      |                |
-| DegCod    | int(11)                                   | NO   |     | -1      |                |
-| CrsCod    | int(11)                                   | NO   |     | -1      |                |
-| Hidden    | enum('N','Y')                             | NO   |     | N       |                |
-| NumNotif  | int(11)                                   | NO   |     | 0       |                |
-| Roles     | int(11)                                   | NO   |     | 0       |                |
-| UsrCod    | int(11)                                   | NO   |     | NULL    |                |
-| StartTime | datetime                                  | NO   |     | NULL    |                |
-| EndTime   | datetime                                  | NO   |     | NULL    |                |
-| Title     | varchar(2047)                             | NO   |     | NULL    |                |
-| Txt       | text                                      | NO   |     | NULL    |                |
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-13 rows in set (0,00 sec)
+5 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2099,13 +2435,13 @@ mysql> DESCRIBE svy_answers;
 	</pre>
 	</section>
 
-	<section id="svy_grp">
-	<h3>Table svy_grp</h3>
+	<section id="svy_groups">
+	<h3>Table svy_groups</h3>
 	<p align="justify">
 	Stores the groups associated to each survey:
 	</p>
 	<pre>
-mysql> DESCRIBE svy_grp;
+mysql> DESCRIBE svy_groups;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
@@ -2136,6 +2472,34 @@ mysql> DESCRIBE svy_questions;
 	</pre>
 	</section>
 
+	<section id="svy_surveys">
+	<h3>Table svy_surveys</h3>
+	<p align="justify">
+	Stores the surveys:
+	</p>
+	<pre>
+mysql> DESCRIBE svy_surveys;
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                      | Null | Key | Default | Extra          |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+| SvyCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
+| Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
+| Cod       | int(11)                                   | NO   |     | -1      |                |
+| DegCod    | int(11)                                   | NO   |     | -1      |                |
+| CrsCod    | int(11)                                   | NO   |     | -1      |                |
+| Hidden    | enum('N','Y')                             | NO   |     | N       |                |
+| NumNotif  | int(11)                                   | NO   |     | 0       |                |
+| Roles     | int(11)                                   | NO   |     | 0       |                |
+| UsrCod    | int(11)                                   | NO   |     | NULL    |                |
+| StartTime | datetime                                  | NO   |     | NULL    |                |
+| EndTime   | datetime                                  | NO   |     | NULL    |                |
+| Title     | varchar(2047)                             | NO   |     | NULL    |                |
+| Txt       | text                                      | NO   |     | NULL    |                |
++-----------+-------------------------------------------+------+-----+---------+----------------+
+13 rows in set (0,00 sec)
+	</pre>
+	</section>
+
 	<section id="svy_users">
 	<h3>Table svy_users</h3>
 	<p align="justify">
@@ -2153,46 +2517,178 @@ mysql> DESCRIBE svy_users;
 	</pre>
 	</section>
 
-	<section id="timetable_crs">
-	<h3>Table timetable_crs</h3>
+	<section id="tml_comments">
+	<h3>Table tml_comments</h3>
+	<p align="justify">
+	Stores the content of comments to social notes:
+	</p>
+	<pre>
+mysql> DESCRIBE tml_comments;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| PubCod | bigint   | NO   | PRI | NULL    |       |
+| Txt    | longtext | NO   | MUL | NULL    |       |
+| MedCod | int      | NO   | MUL | -1      |       |
++--------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="tml_comments_fav">
+	<h3>Table tml_comments_fav</h3>
+	<p align="justify">
+	Stores users who marked social comments as favourite:
+	</p>
+	<pre>
+mysql> DESCRIBE tml_comments_fav;
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| PubCod  | bigint(20) | NO   | MUL | NULL    |                |
+| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
+| TimeFav | datetime   | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+4 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="tml_notes">
+	<h3>Table tml_notes</h3>
+	<p align="justify">
+	Stores social notes:
+	</p>
+	<pre>
+mysql> DESCRIBE tml_notes;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| NotCod      | bigint(20)    | NO   | PRI | NULL    | auto_increment |
+| NoteType    | tinyint(4)    | NO   | MUL | NULL    |                |
+| Cod         | int(11)       | NO   |     | -1      |                |
+| UsrCod      | int(11)       | NO   | MUL | NULL    |                |
+| HieCod      | int(11)       | NO   |     | -1      |                |
+| Unavailable | enum('N','Y') | NO   |     | N       |                |
+| TimeNote    | datetime      | NO   | MUL | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="tml_notes_fav">
+	<h3>Table tml_notes_fav</h3>
+	<p align="justify">
+	Stores users who marked social notes as favourite:
+	</p>
+	<pre>
+mysql> DESCRIBE tml_notes_fav;
++---------+------------+------+-----+---------+----------------+
+| Field   | Type       | Null | Key | Default | Extra          |
++---------+------------+------+-----+---------+----------------+
+| FavCod  | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| NotCod  | bigint(20) | NO   | MUL | NULL    |                |
+| UsrCod  | int(11)    | NO   | MUL | NULL    |                |
+| TimeFav | datetime   | NO   |     | NULL    |                |
++---------+------------+------+-----+---------+----------------+
+4 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="tml_posts">
+	<h3>Table tml_posts</h3>
+	<p align="justify">
+	Stores social posts (public comments written by users):
+	</p>
+	<pre>
+mysql> DESCRIBE tml_posts;
++--------+----------+------+-----+---------+----------------+
+| Field  | Type     | Null | Key | Default | Extra          |
++--------+----------+------+-----+---------+----------------+
+| PstCod | int      | NO   | PRI | NULL    | auto_increment |
+| Txt    | longtext | NO   | MUL | NULL    |                |
+| MedCod | int      | NO   | MUL | -1      |                |
++--------+----------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="tml_pubs">
+	<h3>Table tml_pubs</h3>
+	<p align="justify">
+	Stores social publishings (original notes, sharede notes or comments):
+	</p>
+	<pre>
+mysql> DESCRIBE tml_pubs;
++--------------+------------+------+-----+---------+----------------+
+| Field        | Type       | Null | Key | Default | Extra          |
++--------------+------------+------+-----+---------+----------------+
+| PubCod       | bigint(20) | NO   | PRI | NULL    | auto_increment |
+| NotCod       | bigint(20) | NO   | MUL | NULL    |                |
+| PublisherCod | int(11)    | NO   | MUL | NULL    |                |
+| PubType      | tinyint(4) | NO   | MUL | NULL    |                |
+| TimePublish  | datetime   | NO   | MUL | NULL    |                |
++--------------+------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="tml_timelines">
+	<h3>Table tml_timelines</h3>
+	<p align="justify">
+	Stores notes published in social timeline for every active session:
+	</p>
+	<pre>
+mysql> DESCRIBE tml_timelines;
++-----------+------------+------+-----+---------+-------+
+| Field     | Type       | Null | Key | Default | Extra |
++-----------+------------+------+-----+---------+-------+
+| SessionId | char(43)   | NO   | PRI | NULL    |       |
+| NotCod    | bigint(20) | NO   | PRI | NULL    |       |
++-----------+------------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="tmt_courses">
+	<h3>Table tmt_courses</h3>
 	<p align="justify">
 	Stores the timetables of the courses:
 	</p>
 	<pre>
-mysql> DESCRIBE timetable_crs;
+mysql> DESCRIBE tmt_courses;
 +-----------+------------------------------------+------+-----+---------+-------+
 | Field     | Type                               | Null | Key | Default | Extra |
 +-----------+------------------------------------+------+-----+---------+-------+
-| CrsCod    | int(11)                            | NO   | MUL | -1      |       |
-| GrpCod    | int(11)                            | NO   |     | -1      |       |
-| Weekday   | tinyint(4)                         | NO   |     | NULL    |       |
+| CrsCod    | int                                | NO   | MUL | -1      |       |
+| GrpCod    | int                                | NO   |     | -1      |       |
+| Weekday   | tinyint                            | NO   |     | NULL    |       |
 | StartTime | time                               | NO   |     | NULL    |       |
 | Duration  | time                               | NO   |     | NULL    |       |
 | ClassType | enum('free','lecture','practical') | NO   |     | NULL    |       |
-| Place     | varchar(511)                       | NO   |     | NULL    |       |
-| GroupName | varchar(2047)                      | NO   |     | NULL    |       |
+| Info      | varchar(2047)                      | NO   |     |         |       |
 +-----------+------------------------------------+------+-----+---------+-------+
-8 rows in set (0,01 sec)
+7 rows in set (0.01 sec)
 	</pre>
 	</section>
 
-	<section id="timetable_tut">
-	<h3>Table timetable_tut</h3>
+	<section id="tmt_tutoring">
+	<h3>Table tmt_tutoring</h3>
 	<p align="justify">
-	Stores the timetables of office hours of the teachers:
+	Stores the timetables of tutoring hours of the teachers:
 	</p>
 	<pre>
-mysql> DESCRIBE timetable_tut;
-+-----------+--------------+------+-----+---------+-------+
-| Field     | Type         | Null | Key | Default | Extra |
-+-----------+--------------+------+-----+---------+-------+
-| UsrCod    | int(11)      | NO   | MUL | NULL    |       |
-| Weekday   | tinyint(4)   | NO   |     | NULL    |       |
-| StartTime | time         | NO   |     | NULL    |       |
-| Duration  | time         | NO   |     | NULL    |       |
-| Place     | varchar(511) | NO   |     | NULL    |       |
-+-----------+--------------+------+-----+---------+-------+
-5 rows in set (0,00 sec)
+mysql> DESCRIBE tmt_tutoring;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| UsrCod    | int           | NO   | MUL | NULL    |       |
+| Weekday   | tinyint       | NO   |     | NULL    |       |
+| StartTime | time          | NO   |     | NULL    |       |
+| Duration  | time          | NO   |     | NULL    |       |
+| Info      | varchar(2047) | NO   |     |         |       |
++-----------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
 	</pre>
 	</section>
 
@@ -2203,19 +2699,17 @@ mysql> DESCRIBE timetable_tut;
 	</p>
 	<pre>
 mysql> DESCRIBE tst_answers;
-+------------+---------------+------+-----+---------+-------+
-| Field      | Type          | Null | Key | Default | Extra |
-+------------+---------------+------+-----+---------+-------+
-| QstCod     | int(11)       | NO   | MUL | NULL    |       |
-| AnsInd     | tinyint(4)    | NO   |     | NULL    |       |
-| Answer     | text          | NO   |     | NULL    |       |
-| Feedback   | text          | NO   |     | NULL    |       |
-| ImageName  | varchar(43)   | NO   |     | NULL    |       |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |       |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |       |
-| Correct    | enum('N','Y') | NO   |     | NULL    |       |
-+------------+---------------+------+-----+---------+-------+
-8 rows in set (0,00 sec)
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| QstCod   | int           | NO   | MUL | NULL    |       |
+| AnsInd   | tinyint       | NO   |     | NULL    |       |
+| Answer   | text          | NO   |     | NULL    |       |
+| Feedback | text          | NO   |     | NULL    |       |
+| MedCod   | int           | NO   | MUL | -1      |       |
+| Correct  | enum('N','Y') | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
 	</pre>
 	</section>
 
@@ -2313,21 +2807,19 @@ mysql> DESCRIBE tst_questions;
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
 | Field           | Type                                                                      | Null | Key | Default | Extra          |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-| QstCod          | int(11)                                                                   | NO   | PRI | NULL    | auto_increment |
-| CrsCod          | int(11)                                                                   | NO   | MUL | -1      |                |
+| QstCod          | int                                                                       | NO   | PRI | NULL    | auto_increment |
+| CrsCod          | int                                                                       | NO   | MUL | -1      |                |
 | EditTime        | datetime                                                                  | NO   |     | NULL    |                |
 | AnsType         | enum('int','float','true_false','unique_choice','multiple_choice','text') | NO   |     | NULL    |                |
 | Shuffle         | enum('N','Y')                                                             | NO   |     | NULL    |                |
 | Stem            | text                                                                      | NO   |     | NULL    |                |
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
-| ImageName       | varchar(43)                                                               | NO   |     | NULL    |                |
-| ImageTitle      | varchar(2047)                                                             | NO   |     | NULL    |                |
-| ImageURL        | varchar(255)                                                              | NO   |     | NULL    |                |
-| NumHits         | int(11)                                                                   | NO   |     | 0       |                |
-| NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
+| MedCod          | int                                                                       | NO   | MUL | -1      |                |
+| NumHits         | int                                                                       | NO   |     | 0       |                |
+| NumHitsNotBlank | int                                                                       | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-13 rows in set (0,00 sec)
+11 rows in set (0.01 sec)
 	</pre>
 	</section>
 
@@ -2370,22 +2862,21 @@ mysql> DESCRIBE tst_tags;
 	</pre>
 	</section>
 
-	<section id="usr_IDs">
-	<h3>Table usr_IDs</h3>
+	<section id="usr_admins">
+	<h3>Table usr_admins</h3>
 	<p align="justify">
-	Stores the users' IDs:
+	Stores administrators of platform, institutions, centers and degrees:
 	</p>
 	<pre>
-mysql> DESCRIBE usr_IDs;
-+-----------+---------------+------+-----+---------+-------+
-| Field     | Type          | Null | Key | Default | Extra |
-+-----------+---------------+------+-----+---------+-------+
-| UsrCod    | int(11)       | NO   | PRI | NULL    |       |
-| UsrID     | char(16)      | NO   | PRI | NULL    |       |
-| CreatTime | datetime      | NO   |     | NULL    |       |
-| Confirmed | enum('N','Y') | NO   |     | N       |       |
-+-----------+---------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
+mysql> DESCRIBE usr_admins;
++--------+-------------------------------+------+-----+---------+-------+
+| Field  | Type                          | Null | Key | Default | Extra |
++--------+-------------------------------+------+-----+---------+-------+
+| UsrCod | int(11)                       | NO   | PRI | NULL    |       |
+| Scope  | enum('Sys','Ins','Ctr','Deg') | NO   | PRI | NULL    |       |
+| Cod    | int(11)                       | NO   | PRI | NULL    |       |
++--------+-------------------------------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2402,6 +2893,59 @@ mysql> DESCRIBE usr_banned;
 | UsrCod | int(11) | NO   | PRI | NULL    |       |
 +--------+---------+------+-----+---------+-------+
 1 row in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="usr_birthdays_today">
+	<h3>Table usr_birthdays_today</h3>
+	<p align="justify">
+	Stores birthdays already congratulated today:
+	</p>
+	<pre>
+mysql> DESCRIBE usr_birthdays_today;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| UsrCod | int(11) | NO   | PRI | NULL    |       |
+| Today  | date    | NO   | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="usr_clicks_without_photo">
+	<h3>Table usr_clicks_without_photo</h3>
+	<p align="justify">
+	Stores the number of clicks that remains to each user before being required to submit his/her photo:
+	</p>
+	<pre>
+mysql> DESCRIBE usr_clicks_without_photo;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| UsrCod    | int(11) | NO   | PRI | NULL    |       |
+| NumClicks | int(11) | NO   |     | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="usr_connected">
+	<h3>Table usr_connected</h3>
+	<p align="justify">
+	Stores users currently connected to the platform:
+	</p>
+	<pre>
+mysql> DESCRIBE usr_connected;
++---------------+------------+------+-----+---------+-------+
+| Field         | Type       | Null | Key | Default | Extra |
++---------------+------------+------+-----+---------+-------+
+| UsrCod        | int(11)    | NO   | PRI | NULL    |       |
+| RoleInLastCrs | tinyint(4) | NO   | MUL | 0       |       |
+| LastCrsCod    | int(11)    | NO   | MUL | -1      |       |
+| LastTime      | datetime   | NO   |     | NULL    |       |
++---------------+------------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2486,7 +3030,7 @@ mysql> DESCRIBE usr_emails;
 | CreatTime | datetime      | NO   |     | NULL    |       |
 | Confirmed | enum('N','Y') | NO   |     | N       |       |
 +-----------+---------------+------+-----+---------+-------+
-4 rows in set (0,01 sec)
+4 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2529,6 +3073,25 @@ mysql> DESCRIBE usr_follow;
 	</pre>
 	</section>
 
+	<section id="usr_ids">
+	<h3>Table usr_ids</h3>
+	<p align="justify">
+	Stores the users' IDs:
+	</p>
+	<pre>
+mysql> DESCRIBE usr_ids;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| UsrCod    | int(11)       | NO   | PRI | NULL    |       |
+| UsrID     | char(16)      | NO   | PRI | NULL    |       |
+| CreatTime | datetime      | NO   |     | NULL    |       |
+| Confirmed | enum('N','Y') | NO   |     | N       |       |
++-----------+---------------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
+	</pre>
+	</section>
+
 	<section id="usr_last">
 	<h3>Table usr_last</h3>
 	<p align="justify">
@@ -2568,13 +3131,50 @@ mysql> DESCRIBE usr_nicknames;
 	</pre>
 	</section>
 
-	<section id="usr_report">
-	<h3>Table usr_report</h3>
+	<section id="usr_pending_emails">
+	<h3>Table usr_pending_emails</h3>
+	<p align="justify">
+	Stores the emails pending of confirmation:
+	</p>
+	<pre>
+mysql> DESCRIBE usr_pending_emails;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| UsrCod      | int(11)      | NO   | MUL | NULL    |       |
+| E_mail      | varchar(255) | NO   |     | NULL    |       |
+| MailKey     | char(43)     | NO   | PRI | NULL    |       |
+| DateAndTime | datetime     | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="usr_pending_passwd">
+	<h3>Table usr_pending_passwd</h3>
+	<p align="justify">
+	Stores the passwords pending of activation, sent by e-mail when a user who have forgotten his/her password request a new one:
+	</p>
+	<pre>
+mysql> DESCRIBE usr_pending_passwd;
++-----------------+----------+------+-----+---------+-------+
+| Field           | Type     | Null | Key | Default | Extra |
++-----------------+----------+------+-----+---------+-------+
+| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
+| PendingPassword | char(86) | NO   |     | NULL    |       |
+| DateAndTime     | datetime | NO   |     | NULL    |       |
++-----------------+----------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="usr_reports">
+	<h3>Table usr_reports</h3>
 	<p align="justify">
 	Stores users' usage reports:
 	</p>
 	<pre>
-mysql> DESCRIBE usr_report;
+mysql> DESCRIBE usr_reports;
 +---------------+--------------+------+-----+---------+----------------+
 | Field         | Type         | Null | Key | Default | Extra          |
 +---------------+--------------+------+-----+---------+----------------+
@@ -2605,25 +3205,6 @@ mysql> DESCRIBE usr_webs;
 | URL    | varchar(255)                                                                                                                                                                                                                                                                                                                                          | NO   |     | NULL    |       |
 +--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
 3 rows in set (0,00 sec)
-	</pre>
-	</section>
-
-	<section id="ws_keys">
-	<h3>Table ws_keys</h3>
-	<p align="justify">
-	Stores the keys used in plugins and web service:
-	</p>
-	<pre>
-mysql> DESCRIBE ws_keys;
-+----------+----------+------+-----+---------+-------+
-| Field    | Type     | Null | Key | Default | Extra |
-+----------+----------+------+-----+---------+-------+
-| WSKey    | char(43) | NO   | PRI | NULL    |       |
-| UsrCod   | int(11)  | NO   | MUL | NULL    |       |
-| PlgCod   | int(11)  | NO   | MUL | NULL    |       |
-| LastTime | datetime | NO   | MUL | NULL    |       |
-+----------+----------+------+-----+---------+-------+
-4 rows in set (0,01 sec)
 	</pre>
 	</section>
 

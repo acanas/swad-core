@@ -14,6 +14,10 @@
 	{
 	color:#A0A0A0;
 	}
+.obsolete
+	{
+	color:#660000;
+	}
   </style>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -53,7 +57,7 @@
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES"
 		title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png"
 		style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2018
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2021
 	</td>
 	</tr>
 
@@ -62,7 +66,7 @@
 
 	<h2>Plugins</h2>
 
-	<p align="justify">
+	<p style="text-align:justify">
 	It is possible to develop plugins for <a href="http://openswad.org/">SWAD</a>.
         In this context, a <a href="http://en.wikipedia.org/wiki/Plug-in_(computing)">plugin</a>
         is a program external to SWAD,
@@ -72,7 +76,7 @@
 	and other plugins are under development.
 	</p>
 
-	<p align="justify">
+	<p style="text-align:justify">
 	SWAD has a form that allows administrators to add new plugins
 	or edit the existing plugins.
 	Each plugin is specified by the following elements:
@@ -89,7 +93,7 @@
 
 	<h2>Web service</h2>
 
-	<p align="justify">
+	<p style="text-align:justify">
 	The plugins interact with the program SWAD
 	through a web service with several operations or functions.
 	A <a href="http://en.wikipedia.org/wiki/Web_service">web service</a>
@@ -99,7 +103,7 @@
 	and the plugin is the client that request one or several functions from the web service.
 	</p>
 
-	<p align="justify">
+	<p style="text-align:justify">
 	There are two possible ways to access to a SWAD plugin:
 	</p>
 	<ul>
@@ -124,8 +128,8 @@
 
 	<h2>SOAP</h2>
 
-	<p align="justify">
-	The exchange of informationn between the SWAD web service (server) and a plugin (client)
+	<p style="text-align:justify">
+	The exchange of information between the SWAD web service (server) and a plugin (client)
 	is performed through <a href="http://en.wikipedia.org/wiki/XML">XML (Extensible Markup Language)</a> messages
 	using the protocol <a href="http://en.wikipedia.org/wiki/SOAP">SOAP (Simple Object Access Protocol)</a>.
 	The client sends a SOAP message to the server
@@ -134,7 +138,7 @@
 	with the resulting data (users, courses, etc.).
 	</p>
 
-	<p align="justify">
+	<p style="text-align:justify">
 	The main core of SWAD, <a href="/source/">written in C</a>,
 	uses the tool <a href="http://www.cs.fsu.edu/~engelen/soap.html">gSOAP</a>
 	to implement the SOAP server protocol.
@@ -144,7 +148,7 @@
 
 	<h2>WSDL</h2>
 
-	<p align="justify">
+	<p style="text-align:justify">
         The interface of a web service is given in a format automatically processable written in
 	<a href="http://en.wikipedia.org/wiki/Web_Services_Description_Language">WSDL (Web Services Description Language)</a>.
 	The SWAD server provides to the clientes several operations or functions indicated
@@ -152,11 +156,11 @@
 	</p>
 	
 	<ul>
-	<li><a href="http://openswad.org/api/swad.wsdl">http://openswad.org/api/swad.wsdl</a></li>
-	<li><a href="http://swad.ugr.es/ws/swad.wsdl">http://swad.ugr.es/ws/swad.wsdl</a></li>
+	<li><a href="https://openswad.org/api/swad.wsdl">https://openswad.org/api/swad.wsdl</a></li>
+	<li><a href="https://swad.ugr.es/api/swad.wsdl">https://swad.ugr.es/api/swad.wsdl</a></li>
 	</ul>
 
-	<p align="justify">
+	<p style="text-align:justify">
 	At the end of the WSDL file you can find the URL to call the SWAD web service.
 	The CGI executed as answer detects that a call to the web service (and not a normal web request) is performed
 	if the variable <code>CONTENT_TYPE</code> is set to <code>text/xml</code>.
@@ -165,13 +169,14 @@
 
 	<h2>SWAD API (Application Programming Interface): functions provided by SWAD web service</h2>
 
-	<p align="justify">
+	<p style="text-align:justify">
 	The SWAD web service provides the following functions:
 	</p>
 	<ul>
 		<li><a href="#createAccount"><code>createAccount</code></a></li>
 		<li><a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a></li>
 		<li><a href="#loginBySessionKey"><code>loginBySessionKey</code></a></li>
+		<li><a href="#getAvailableRoles"><code>getAvailableRoles</code></a></li>
 		<li style="margin-bottom:1em;"><a href="#getNewPassword"><code>getNewPassword</code></a></li>
 
 		<li><a href="#getCourses"><code>getCourses</code></a></li>
@@ -189,6 +194,12 @@
 		<li><a href="#getTests"><code>getTests</code></a></li>
 		<li style="margin-bottom:1em;"><a href="#getTrivialQuestion"><code>getTrivialQuestion</code></a></li>
 
+		<li><a href="#getGames"><code>getGames</code></a></li>
+		<li><a href="#getMatches"><code>getMatches</code></a></li>
+		<!-- <li><a href="#playMatch"><code>playMatch</code></a></li> -->
+		<li><a href="#getMatchStatus"><code>getMatchStatus</code></a></li>
+		<li style="margin-bottom:1em;"><a href="#answerMatchQuestion"><code>answerMatchQuestion</code></a></li>
+
 		<li><a href="#getUsers"><code>getUsers</code></a></li>
 		<li style="margin-bottom:1em;"><a href="#findUsers"><code>findUsers</code></a></li>
 
@@ -203,12 +214,16 @@
 
 		<li><a href="#sendNotice"><code>sendNotice</code></a></li>
 		<li style="margin-bottom:1em;"><a href="#sendMessage"><code>sendMessage</code></a></li>
+		
+		<li><a href="#getLocation"><code>getLocation</code></a></li>
+		<li><a href="#sendMyLocation"><code>sendMyLocation</code></a></li>
+		<li><a href="#getLastLocation"><code>getLastLocation</code></a></li>
 	</ul>
 
 	<hr />
 
-	<a name="createAccount"><h3 class="WS_FUNCTION"><code>createAccount</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="createAccount">createAccount</a></code></h3>
+	<p style="text-align:justify">
 	Create a new user account.
 	</p>
 		<ul>
@@ -216,7 +231,6 @@
 				<ul>
 					<li><strong>userNickname</strong>: string starting by @ (@nickname of the user).</li>
 					<li><strong>userEmail</strong>: string (email of the user).</li>
-					<!-- <li><strong>userID</strong>: string (DNI/passport of the user).</li> -->
 					<li><strong>userPassword</strong>: string, plain password.</li>
 					<li><strong>appKey</strong>: string, key used by the application.</li>
 				</ul>
@@ -231,7 +245,7 @@
 									<li>-2 &rarr; nickname registered by another user</li>
 									<li>-3 &rarr; e-mail not valid</li>
 									<li>-4 &rarr; e-mail registered by another user</li>
-									<li>-5 &rarr; password not valid (too short, too trivial...)</li>
+									<li>-5 &rarr; password not valid (too short, too trivial&hellip;)</li>
 								</ul>
 							</li>
 							<li>If &gt; 0, the account has been successfully created
@@ -244,8 +258,8 @@
 			</li>
 		</ul>
 
-	<a name="loginByUserPasswordKey"><h3 class="WS_FUNCTION"><code>loginByUserPasswordKey</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="loginByUserPasswordKey">loginByUserPasswordKey</a></code></h3>
+	<p style="text-align:justify">
 	Returns data of the user, given an identifier of the user (DNI/passport, @nickname or email),
 	a password and an application key.
 	</p>
@@ -288,8 +302,8 @@
 			</li>
 		</ul>
 
-	<a name="loginBySessionKey"><h3 class="WS_FUNCTION"><code>loginBySessionKey</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="loginBySessionKey">loginBySessionKey</a></code></h3>
+	<p style="text-align:justify">
 	Returns data of the user and course of a session,
 	given an identifier of session passed to the plugin from SWAD.
 	</p>
@@ -333,8 +347,43 @@
 			</li>
 		</ul>
 
-	<a name="getNewPassword"><h3 class="WS_FUNCTION"><code>getNewPassword</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getAvailableRoles">getAvailableRoles</a></code></h3>
+	<p style="text-align:justify">
+	Get available roles in a course.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>courseCode</strong>: integer.</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>roles</strong>: integer, with bits set (bit <em>i</em> = 1) on available roles, or clear (bit <em>i</em> = 0) in unavailable roles:
+						<ul>	
+							<li><var>bit 0</var>: Unknown: User not logged in</li>
+							<li><var>bit 1</var>: Guest: User not belonging to any course</li>
+							<li><var>bit 2</var>: User: Student or teacher outside of her/his courses</li>
+
+							<li><var>bit 3</var>: Student: Student in the selected course</li>
+							<li><var>bit 4</var>: Non-editing teacher: Teacher in the selected course without permission to edit</li>
+							<li><var>bit 5</var>: Teacher: Teacher in the selected course with permission to edit</li>
+
+							<li><var>bit 6</var>: Degree admin: Administrator of the degree to which the selected course belongs</li>
+							<li><var>bit 7</var>: Center admin: Administrator of the center to which the selected course belongs</li>
+							<li><var>bit 8</var>: Institution admin: Administrator of the institution to which the selected course belongs</li>
+							<li><var>bit 9</var>: System admin: System administrator (also known as superuser)</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<h3 class="WS_FUNCTION"><code><a name="getNewPassword">getNewPassword</a></code></h3>
+	<p style="text-align:justify">
 	Sends a new password by e-mail.
 	</p>
 		<ul>
@@ -346,17 +395,18 @@
 			</li>
 			<li>Returns a data structure with the following fields:
 				<ul>
-					<li><strong>success</strong>: integer. For compatibility with other functions,
-						this function returns a number &gt; 0 (currently 1) on success,
-						and a number &lt;= 0 (currently 0) on error.</li>
+					<li><strong>success</strong>: integer.
+						If 0 &rArr; error (for example, if the event does not exist).
+						If not 0 &rArr; success.
+					</li>
 				</ul>
 			</li>
 		</ul>
 
 	<hr />
 
-	<a name="getCourses"><h3 class="WS_FUNCTION"><code>getCourses</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getCourses">getCourses</a></code></h3>
+	<p style="text-align:justify">
 	Returns the list of courses to which the user belongs.
 	</p>
 		<ul>
@@ -390,8 +440,8 @@
 			</li>
 		</ul>
 
-	<a name="getCourseInfo"><h3 class="WS_FUNCTION"><code>getCourseInfo</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getCourseInfo">getCourseInfo</a></code></h3>
+	<p style="text-align:justify">
 	Returns information about the course.
 	</p>
 		<ul>
@@ -439,8 +489,8 @@
 
 	<hr />
 
-	<a name="getGroupTypes"><h3 class="WS_FUNCTION"><code>getGroupTypes</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getGroupTypes">getGroupTypes</a></code></h3>
+	<p style="text-align:justify">
 	Returns the list of types of group of a course.
 	Before consulting the list of types of group,
 	this function opens automatically
@@ -484,8 +534,8 @@
 			</li>
 		</ul>
 
-	<a name="getGroups"><h3 class="WS_FUNCTION"><code>getGroups</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getGroups">getGroups</a></code></h3>
+	<p style="text-align:justify">
 	Returns the list of all the groups of a course.
 	Before consulting the list of types of group,
 	this function opens automatically
@@ -525,8 +575,8 @@
 			</li>
 		</ul>
 
-	<a name="sendMyGroups"><h3 class="WS_FUNCTION"><code>sendMyGroups</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="sendMyGroups">sendMyGroups</a></code></h3>
+	<p style="text-align:justify">
 	It sends to the server a list with all the groups in a course
 	to which the requester wants to belong.
 	It tries to enrol the user in those groups if possible,
@@ -551,10 +601,10 @@
 			<li>Returns a data structure with the following fields:
 				<ul>
 					<li><strong>success</strong>: integer.
-						If 0 &rArr; it was impossible to satisfy all the requested changes,
-						no change performed.
-						If not 0 &rArr; all the requested changes
-						have been performed with success.
+						If 0 &rArr; error (it was impossible to satisfy all the requested changes,
+						no change performed).
+						If not 0 &rArr; success (all the requested changes
+						have been performed).
 					</li>
 					<li><strong>numGroups</strong>: integer, number of groups.</li>
 					<li><strong>groupsArray</strong>: list of elements,
@@ -567,8 +617,8 @@
 
 	<hr />
 
-	<a name="getDirectoryTree"><h3 class="WS_FUNCTION"><code>getDirectoryTree</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getDirectoryTree">getDirectoryTree</a></code></h3>
+	<p style="text-align:justify">
 	Returns the full tree of a file zone (documents, shared files or marks) in a course or a group.
 	The requester must belong to the course or the group.
 	</p>
@@ -653,8 +703,8 @@
 			</li>
 		</ul>
 
-	<a name="getFile"><h3 class="WS_FUNCTION"><code>getFile</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getFile">getFile</a></code></h3>
+	<p style="text-align:justify">
 	This function must be called each time the user wants to download a file
 	from a documents zone or a shared files zone in a course or a group.
 	The requester must belong to the course or group.
@@ -709,8 +759,8 @@
 		</ul>
 
 
-	<a name="getMarks"><h3 class="WS_FUNCTION"><code>getMarks</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getMarks">getMarks</a></code></h3>
+	<p style="text-align:justify">
 	Returns information about the marks (qualifications, scores) of the requester
 	from a given HTML file of marks.
 	This function is allowed <strong>only for students</strong>.
@@ -751,8 +801,8 @@
 
 	<hr />
 
-	<a name="getTestConfig"><h3 class="WS_FUNCTION"><code>getTestConfig</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getTestConfig">getTestConfig</a></code></h3>
+	<p style="text-align:justify">
 	Returns the configuration of the tests of a course.
 	</p>
 		<ul>
@@ -777,7 +827,7 @@
 					<li><strong>minQuestions</strong>: integer, minimum number of questions in an exam.</li>
 					<li><strong>defQuestions</strong>: integer, default number of questions in an exam.</li>
 					<li><strong>maxQuestions</strong>: integer, maximum number of questions in an exam.</li>
-					<li><strong>feedback</strong>: string with the type of feedback for the user,
+					<li class="obsolete"><strong>feedback</strong> (obsolete, to be removed in 2021): string with the type of feedback for the user,
 						with one of the following 5 values:
 						<ul>
 							<li><var>nothing</var>: no feedback.</li>
@@ -787,12 +837,21 @@
 							<li><var>fullFeedback</var>: maximum feedback: text of feedback.</li>
 						</ul>
 					</li>
+					<li><strong>visibility</strong>: integer, with the following meaning for each bit:
+						<ul>
+							<li>Bit 0 = 1 &rArr; the questions and answers texts are visible in test results.</li>
+							<li>Bit 1 = 1 &rArr; the feedback texts are visible in test results.</li>
+							<li>Bit 2 = 1 &rArr; which are the correct answers is visible in test results.</li>
+							<li>Bit 3 = 1 &rArr; the score of each question is visible in test results.</li>
+							<li>Bit 4 = 1 &rArr; the total score of an exam is visible in test results.</li>
+						</ul>
+					</li>
 				</ul>
 			</li>
 		</ul>
 
-	<a name="getTests"><h3 class="WS_FUNCTION"><code>getTests</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getTests">getTests</a></code></h3>
+	<p style="text-align:justify">
 	Returns the self-assessment tests of a course.
 	This function should not be callled if the download of tests is not allowed in this course
 	(if the function <a href="#getTestConfig"><code>getTestConfig</code></a> returns pluggable = 0).
@@ -816,7 +875,7 @@
 			</li>
 			<li>Returns a data structure with the following fields:
 				<ul>
-					<li><strong>tags</strong>: list of all the tags not hidden,
+					<li><strong>tagsArray</strong>: list of all the tags not hidden,
 						without having into account beginTime,
 						where each tag is a data structure with the following fields:
 						<ul>
@@ -825,7 +884,7 @@
 						</ul>
 					</li>
 
-					<li><strong>questions</strong>: list of questions with an edition/change time later than or equal to beginTime,
+					<li><strong>questionsArray</strong>: list of questions with an edition/change time later than or equal to beginTime,
 						where each question is a data structure with the following fields:
 						<ul>
 							<li><strong>questionCode</strong>: integer, unique identifier for the question.</li>
@@ -845,11 +904,11 @@
 						</ul>
 					</li>
 
-					<li><strong>answers</strong>: list of answers of the returned questions,
+					<li><strong>answersArray</strong>: list of answers of the returned questions,
 						where each answer is a data structure with the following fields:
 						<ul>
 							<li><strong>questionCode</strong>: integer.</li>
-							<li><strong>answerIndex</strong>: integer, index or position (0, 1, 2,...) of the answer inside the question.</li>
+							<li><strong>answerIndex</strong>: integer, index or position (0, 1, 2&hellip;) of the answer inside the question.</li>
 							<li><strong>correct</strong>: integer. If not 0 &rArr; the answer is correct.</li>
 							<li><strong>answerText</strong>: string with the text of the answer.</li>
 							<li><strong>answerFeedback</strong>: string with the feedback for this answer
@@ -857,19 +916,19 @@
 						</ul>
 					</li>
 
-					<li><strong>questionTags</strong>: list of tags of the returned questions:
+					<li><strong>questionTagsArray</strong>: list of tags of the returned questions:
 						<ul>
 							<li><strong>questionCode</strong>: integer.</li>
 							<li><strong>tagCode</strong>: integer.</li>
-							<li><strong>tagIndex</strong>: integer, index or position (0, 1, 2,...) of the tag inside the question.</li>
+							<li><strong>tagIndex</strong>: integer, index or position (0, 1, 2&hellip;) of the tag inside the question.</li>
 						</ul>
 					</li>
 				</ul>
 			</li>
 		</ul>
 
-	<a name="getTrivialQuestion"><h3 class="WS_FUNCTION"><code>getTrivialQuestion</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getTrivialQuestion">getTrivialQuestion</a></code></h3>
+	<p style="text-align:justify">
 	Returns a random test question, selected from the "uniqueChoice" questions
 	in the courses of a given list of degrees,
 	and with a score in the interval [<code>lowerScore</code>, <code>upperScore</code>].
@@ -899,10 +958,10 @@
 							<li><strong>feedback</strong>: string with the feedback of the question.</li>
 						</ul>
 					</li>
-					<li><strong>answers</strong>: list of answers of the returned question, where each answer is a data structure with the following fields:
+					<li><strong>answersArray</strong>: list of answers of the returned question, where each answer is a data structure with the following fields:
 						<ul>
 							<li><strong>questionCode</strong>: integer.</li>
-							<li><strong>answerIndex</strong>: integer, index or position (0, 1, 2,...) of the answer inside the question.</li>
+							<li><strong>answerIndex</strong>: integer, index or position (0, 1, 2%ellip;) of the answer inside the question.</li>
 							<li><strong>correct</strong>: integer. If not 0 &rArr; the answer is correct.</li>
 							<li><strong>answerText</strong>: string with the text of the answer.</li>
 							<li><strong>answerFeedback</strong>: string with the feedback for this answer.
@@ -914,8 +973,215 @@
 
 	<hr />
 
-	<a name="getUsers"><h3 class="WS_FUNCTION"><code>getUsers</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getGames">getGames</a></code></h3>
+	<p style="text-align:justify">
+	Returns the list of visible (not hidden) games in a given course.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>courseCode</strong>: integer.</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>numGames</strong>: integer, number of games.</li>
+					<li><strong>gamesArray</strong>: list of elements,
+						where each element is a data structure with the following fields:
+						<ul>
+							<li><strong>gameCode</strong>: integer, unique identifier for each game.</li>
+							<li><strong>userSurname1</strong>: string.</li>
+							<li><strong>userSurname2</strong>: string.</li>
+							<li><strong>userFirstname</strong>: string.</li>
+							<li><strong>userPhoto</strong>: string
+								with the full URL of a JPG image
+								of size 150 (width) &times; 200 (height).
+								If it is a string empty, the user
+								has no photo or it can not be shown.</li>
+							<li><strong>startTime</strong>: integer of 32 bits with sign, <a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.</li>
+							<li><strong>endTime</strong>: integer of 32 bits with sign, <a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.</li>
+							<li><strong>title</strong>: string.</li>
+							<li><strong>text</strong>: string.</li>
+							<li><strong>numQuestions</strong>: integer, number of questions in game.</li>
+							<li><strong>maxGrade</strong>: float &ge; 0, maximum grade in game.</li>
+							<li><strong>visibility</strong>: integer, with the following meaning for each bit:
+								<ul>
+									<li>Bit 0 = 1 &rArr; the questions and answers texts are visible in match results.</li>
+									<li>Bit 1 = 1 &rArr; the feedback texts are visible in match results.</li>
+									<li>Bit 2 = 1 &rArr; which are the correct answers is visible in match results.</li>
+									<li>Bit 3 = 1 &rArr; the score of each question is visible in match results.</li>
+									<li>Bit 4 = 1 &rArr; the total score of the match is visible in match results.</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<h3 class="WS_FUNCTION"><code><a name="getMatches">getMatches</a></code></h3>
+	<p style="text-align:justify">
+	Returns the list of matches in a given game,
+	associated to the whole course or to the groups to which the requester belongs.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>courseCode</strong>: integer.</li>
+					<li><strong>gameCode</strong>: integer, identifier of the game.
+						The code must be a valid value &gt; 0 corresponding to an existing game
+						returned by <a href="#getGames"><code>getGames</code></a>.
+						The requester must be a student in the course.
+					</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>numMatches</strong>: integer, number of matches.</li>
+					<li><strong>matchesArray</strong>: list of elements,
+						where each element is a data structure with the following fields:
+						<ul>
+							<li><strong>matchCode</strong>: integer, unique identifier for each match.</li>
+							<li><strong>userSurname1</strong>: string.</li>
+							<li><strong>userSurname2</strong>: string.</li>
+							<li><strong>userFirstname</strong>: string.</li>
+							<li><strong>userPhoto</strong>: string
+								with the full URL of a JPG image
+								of size 150 (width) &times; 200 (height).
+								If it is a string empty, the user
+								has no photo or it can not be shown.</li>
+							<li><strong>startTime</strong>: integer of 32 bits with sign, <a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.</li>
+							<li><strong>endTime</strong>: integer of 32 bits with sign, <a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.</li>
+							<li><strong>title</strong>: string.</li>
+							<li><strong>questionIndex</strong>: integer.</li>
+							<li><strong>groups</strong>: string.
+								List of codes of groups (each code is an integer number)
+								to which this match is applicable.
+								If this list of group codes is empty &rArr;
+								this match is applicable to the whole course.
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<h3 class="WS_FUNCTION"><code><a name="getMatchStatus">getMatchStatus</a></code></h3>
+	<p style="text-align:justify">
+	Get match status to be refreshed in student's screen.
+	This function should be called:
+	<ul>
+		<li>from time to time (e.g. 3 seconds)</li>
+		<li>just after calling <a href="#answerMatchQuestion"><code>answerMatchQuestion</code></a></li>
+	</ul>
+	and the screen should be refreshed according to the status returned.
+	
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>courseCode</strong>: integer.</li>
+					<li><strong>gameCode</strong>: integer, identifier of the game.
+						The code must be a valid value &gt; 0 corresponding to an existing game
+						returned by <a href="#getGames"><code>getGames</code></a>.
+						The requester must be a student in the course.
+					</li>
+					<li><strong>matchCode</strong>: integer, identifier of the match.
+						The code must be a valid value &gt; 0 corresponding to an existing match
+						returned by <a href="#getMatches"><code>getMatches</code></a>.
+						The requester must be a student in the course, and belong to the groups,
+						to which this match is associated.
+					</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>matchCode</strong>: integer, unique identifier of the match.
+						<ul>
+							<li>If &gt; 0, the teacher's screen is showing the answers and the student has permission to answer.
+							The caller may draw buttons for the options and call
+							<a href="#answerMatchQuestion"><code>answerMatchQuestion</code></a>
+							if the student either chooses an option or chooses to remove his/her answer.
+							</li>
+							<li>If = 0, the match is in a status where the student can not answer
+							(the match has not started, or has finished, or is in pause, or is showing results).</li>
+							<li>If &lt; 0, an error has happened, the requester can not join the match.</li>
+						</ul>
+					</li>
+					<li><strong>questionIndex</strong>: integer
+						<ul>
+							<li>0 &rArr; before first question, the match has not started</li>
+							<li>1, 2, 3&hellip; &rArr; index of current question</li>
+							<li>big number (currently 2<sup>31</sup> - 1 = 2147483647) &rArr; after last question, the match has finished</li>
+						</ul>
+					</li>
+					<li><strong>numAnswers</strong>: integer, number of options (a, b, c&hellip;) in question (only when questionIndex is 1, 2, 3&hellip;)</li>
+					<li><strong>answerIndex</strong>: integer
+						<ul>
+							<li>If &lt; 0 &rArr; no answer selected.</li>
+							<li>If &ge; 0 &rArr; index (0, 1, 2&hellip;) of the answer selected (only when questionIndex is 1, 2, 3&hellip;).</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<h3 class="WS_FUNCTION"><code><a name="answerMatchQuestion">answerMatchQuestion</a></code></h3>
+	<p style="text-align:justify">
+	Send an answer to the current question in a match.
+	The requester should call this function only if <a href="#getMatchStatus"><code>getMatchStatus</code></a>
+	has returned matchCode &gt; 0.
+	After calling this function, the requester should call
+	<a href="#getMatchStatus"><code>getMatchStatus</code></a>
+	again in order to get the current status of the match before refreshing the screen.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>courseCode</strong>: integer.</li>
+					<li><strong>gameCode</strong>: integer, identifier of the game.
+						The code must be a valid value &gt; 0 corresponding to an existing game
+						returned by <a href="#getGames"><code>getGames</code></a>.
+						The requester must be a student in the course.
+					</li>
+					<li><strong>matchCode</strong>: integer, identifier of the match.</li>
+					<li><strong>questionIndex</strong>: integer, index of question (1, 2, 3&hellip;).</li>
+					<li><strong>answerIndex</strong>: integer.
+						<ul>
+							<li>If &lt; 0 &rArr; no answer selected.</li>
+							<li>If &ge; 0 &rArr; index (0, 1, 2&hellip;) of the answer selected.</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>matchCode</strong>: integer, unique identifier of the match.
+						<ul>
+							<li>&gt; 0 on success.</li>
+							<li>&le; 0 on error.</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<hr />
+
+	<h3 class="WS_FUNCTION"><code><a name="getUsers">getUsers</a></code></h3>
+	<p style="text-align:justify">
 	Returns the list of users with a given role (students or teachers)
 	enroled in a course (and optionally in some groups of the course).
 	</p>
@@ -965,8 +1231,8 @@
 			</li>
 		</ul>
 
-	<a name="findUsers"><h3 class="WS_FUNCTION"><code>findUsers</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="findUsers">findUsers</a></code></h3>
+	<p style="text-align:justify">
 	Returns a list of users whose full name contains the words given in filter.
 	</p>
 		<ul>
@@ -1037,8 +1303,8 @@
 
 	<hr />
 
-	<a name="getAttendanceEvents"><h3 class="WS_FUNCTION"><code>getAttendanceEvents</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getAttendanceEvents">getAttendanceEvents</a></code></h3>
+	<p style="text-align:justify">
 	Returns the list of the attendance events in a course available for the requester
 	(associated to the whole course or to the groups to which the requester belongs).
 	</p>
@@ -1084,8 +1350,8 @@
 			</li>
 		</ul>
 
-	<a name="sendAttendanceEvent"><h3 class="WS_FUNCTION"><code>sendAttendanceEvent</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="sendAttendanceEvent">sendAttendanceEvent</a></code></h3>
+	<p style="text-align:justify">
 	Sends an attendance event.
 	</p>
 		<ul>
@@ -1123,14 +1389,18 @@
 			</li>
 			<li>Returns a data structure with the following fields:
 				<ul>
-					<li><strong>attendanceEventCode</strong>: integer, unique identifier of the attendance event, &gt; 0 on success.
-						On error, this code will be &lt;= 0.</li>
+					<li><strong>attendanceEventCode</strong>: integer, unique identifier of the attendance event.
+						<ul>
+							<li>&gt; 0 on success.</li>
+							<li>&le; 0 on error.</li>
+						</ul>
+					</li>
 				</ul>
 			</li>
 		</ul>
 
-	<a name="removeAttendanceEvent"><h3 class="WS_FUNCTION"><code>removeAttendanceEvent</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="removeAttendanceEvent">removeAttendanceEvent</a></code></h3>
+	<p style="text-align:justify">
 	Removes an existing attendance event.
 	</p>
 		<ul>
@@ -1148,14 +1418,18 @@
 			</li>
 			<li>Returns a data structure with the following fields:
 				<ul>
-					<li><strong>attendanceEventCode</strong>: integer, unique identifier of the attendance event, &gt; 0 on success.
-						On error, this code will be &lt;= 0.</li>
+					<li><strong>attendanceEventCode</strong>: integer, unique identifier of the attendance event.
+						<ul>
+							<li>&gt; 0 on success.</li>
+							<li>&le; 0 on error.</li>
+						</ul>
+					</li>
 				</ul>
 			</li>
 		</ul>
 
-	<a name="getAttendanceUsers"><h3 class="WS_FUNCTION"><code>getAttendanceUsers</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getAttendanceUsers">getAttendanceUsers</a></code></h3>
+	<p style="text-align:justify">
 	Returns the list of users (students) in an attendance event.
 	</p>
 		<ul>
@@ -1197,8 +1471,8 @@
 			</li>
 		</ul>
 
-	<a name="sendAttendanceUsers"><h3 class="WS_FUNCTION"><code>sendAttendanceUsers</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="sendAttendanceUsers">sendAttendanceUsers</a></code></h3>
+	<p style="text-align:justify">
 	Send the list of users (students)
 	who have attended to an attendance event.
 	All users in this list will be marked as present;
@@ -1237,7 +1511,10 @@
 			</li>
 			<li>Returns a data structure with the following fields:
 				<ul>
-					<li><strong>success</strong>: integer. 1 on success, 0 on error (for example, if the event does not exist).</li>
+					<li><strong>success</strong>: integer.
+						If 0 &rArr; error (for example, if the event does not exist).
+						If not 0 &rArr; success.
+					</li>
 					<li><strong>numUsers</strong>: integer, number of users found in list and marked as present in the event.
 					</li>
 				</ul>
@@ -1246,8 +1523,8 @@
 
 	<hr />
 
-	<a name="getNotifications"><h3 class="WS_FUNCTION"><code>getNotifications</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="getNotifications">getNotifications</a></code></h3>
+	<p style="text-align:justify">
 	Returns the list of recent notifications for the requester.
 	</p>
 		<ul>
@@ -1371,8 +1648,8 @@
 			</li>
 		</ul>
 
-	<a name="markNotificationsAsRead"><h3 class="WS_FUNCTION"><code>markNotificationsAsRead</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="markNotificationsAsRead">markNotificationsAsRead</a></code></h3>
+	<p style="text-align:justify">
 	It marks several notifications as read.
 	You should call this function when one or more notifications have been open / read by the user.
 	</p>
@@ -1400,8 +1677,8 @@
 
 	<hr />
 
-	<a name="sendNotice"><h3 class="WS_FUNCTION"><code>sendNotice</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="sendNotice">sendNotice</a></code></h3>
+	<p style="text-align:justify">
 	Sends a public notice (yellow note) to a course.
 	The requester must be a teacher in the course.
 	</p>
@@ -1423,8 +1700,8 @@
 			</li>
 		</ul>
 
-	<a name="sendMessage"><h3 class="WS_FUNCTION"><code>sendMessage</code></h3></a>
-	<p align="justify">
+	<h3 class="WS_FUNCTION"><code><a name="sendMessage">sendMessage</a></code></h3>
+	<p style="text-align:justify">
 	It sends a message to one or more users.
 	</p>
 		<ul>
@@ -1479,6 +1756,122 @@
 							</li>
 						</ul>
 					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<hr />
+
+	<h3 class="WS_FUNCTION"><code><a name="getLocation">getLocation</a></code></h3>
+	<p style="text-align:justify">
+	Returns a location (institution, center, building and room)
+	for Wi-Fi-based positioning system given a MAC address.
+	</p>
+	<p style="text-align:justify">
+	In order to fill the database that stores the MAC-location pairs,
+	the client can call function <a href="#getAvailableRoles"><code>getAvailableRoles</code></a>
+	to check if the logged user is allowed to see the MAC address of the nearest Wi-Fi access point.
+	Only center, institution and system admins should be allowed to see it.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>MAC</strong>: string in <em>XXXXXXXXXXXX</em> format (12 hexadecimal digits)</li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>location</strong>: a data structure, corresponding to a location, with the following fields:
+						<ul>
+							<li><strong>institutionCode</strong>: integer, unique identifier of the institution.</li>
+							<li><strong>institutionShortName</strong>: string.</li>
+							<li><strong>institutionFullName</strong>: string.</li>
+							<li><strong>centerCode</strong>: integer, unique identifier of the center.</li>
+							<li><strong>centerShortName</strong>: string.</li>
+							<li><strong>centerFullName</strong>: string.</li>
+							<li><strong>buildingCode</strong>: integer, unique identifier of the building.</li>
+							<li><strong>buildingShortName</strong>: string.</li>
+							<li><strong>buildingFullName</strong>: string.</li>
+							<li><strong>floor</strong>: signed integer.</li>
+							<li><strong>roomCode</strong>: integer, unique identifier of the room
+								(&le; 0 &rArr; no room found for this MAC;
+								 &gt; 0 &rArr; room found).</li>
+							<li><strong>roomShortName</strong>: string.</li>
+							<li><strong>roomFullName</strong>: string.</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<h3 class="WS_FUNCTION"><code><a name="sendMyLocation">sendMyLocation</a></code></h3>
+	<p style="text-align:justify">
+	Sends user's current location (room).
+	Periodically called from the client to send the user's current location to the server.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>roomCode</strong>: integer, unique identifier of the room
+						returned by <a href="#getLocation"><code>getLocation</code></a> 
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>success</strong>: integer.
+						If 0 &rArr; error (for example, if the room does not exist).
+						If not 0 &rArr; success.
+					</li>
+				</ul>
+			</li>
+		</ul>
+
+	<h3 class="WS_FUNCTION"><code><a name="getLastLocation">getLastLocation</a></code></h3>
+	<p style="text-align:justify">
+	Returns the more recent location (institution, center, building and room) of a given user.
+	A user can only consult the location of another user
+	if the intersection of the centers of their courses is not empty.
+	Both users do not have to share any course,
+	but at least some course of each one has to share center.
+	</p>
+		<ul>
+			<li>Call parameters:
+				<ul>
+					<li><strong>wsKey</strong>: string, identifier returned by
+						<a href="#loginByUserPasswordKey"><code>loginByUserPasswordKey</code></a> or
+						<a href="#loginBySessionKey"><code>loginBySessionKey</code></a>.</li>
+					<li><strong>userCode</strong>: unique identifier of the user
+						returned, for example, by <a href="#findUsers"><code>findUsers</code></a></li>
+				</ul>
+			</li>
+			<li>Returns a data structure with the following fields:
+				<ul>
+					<li><strong>location</strong>: a data structure, corresponding to a location, with the following fields:
+						<ul>
+							<li><strong>institutionCode</strong>: integer, unique identifier of the institution.</li>
+							<li><strong>institutionShortName</strong>: string.</li>
+							<li><strong>institutionFullName</strong>: string.</li>
+							<li><strong>centerCode</strong>: integer, unique identifier of the center.</li>
+							<li><strong>centerShortName</strong>: string.</li>
+							<li><strong>centerFullName</strong>: string.</li>
+							<li><strong>buildingCode</strong>: integer, unique identifier of the building.</li>
+							<li><strong>buildingShortName</strong>: string.</li>
+							<li><strong>buildingFullName</strong>: string.</li>
+							<li><strong>floor</strong>: signed integer.</li>
+							<li><strong>roomCode</strong>: integer, unique identifier of the room
+								(&le; 0 &rArr; the user has no registered her/his last location, or you don't have permission to see it;
+								 &gt; 0 &rArr; room found).</li>
+							<li><strong>roomShortName</strong>: string.</li>
+							<li><strong>roomFullName</strong>: string.</li>
+						</ul>
+					</li>
+					<li><strong>checkinTime</strong>: integer of 32 bits with sign, <a href="http://en.wikipedia.org/wiki/Unix_time">Unix time</a>.</li>
 				</ul>
 			</li>
 		</ul>

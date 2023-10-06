@@ -430,7 +430,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenLnkSho);
 		  ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
-		  HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
+		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Lnk->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
 				  " required=\"required\"",
@@ -442,7 +442,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenLnkFul);
 		  ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
-		  HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
+		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Lnk->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\""
 				  " required=\"required\"",
@@ -536,73 +536,66 @@ void Lnk_RenameLinkFull (void)
 
 static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentLnkName = NULL;	// Initialized to avoid warning
-   char NewLnkName[Lnk_MAX_BYTES_LINK_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Lnk_MAX_BYTES_LINK_SHRT_NAME;
-         CurrentLnkName = Lnk_EditingLnk->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Lnk_MAX_BYTES_LINK_FULL_NAME;
-         CurrentLnkName = Lnk_EditingLnk->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
+      [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
    Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /* Get the new name for the link */
-   Par_GetParText (ParName,NewLnkName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get link data from the database *****/
    Lnk_GetLinkDataByCod (Lnk_EditingLnk);
 
    /***** Check if new name is empty *****/
-   if (NewLnkName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentLnkName,NewLnkName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If link was in database... *****/
-         if (Lnk_DB_CheckIfLinkNameExists (ParName,NewLnkName,Lnk_EditingLnk->LnkCod))
+         if (Lnk_DB_CheckIfLinkNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+					   NewName,Lnk_EditingLnk->LnkCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_link_X_already_exists,
-                             NewLnkName);
+                             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Lnk_DB_UpdateLnkName (Lnk_EditingLnk->LnkCod,FldName,NewLnkName);
+            Lnk_DB_UpdateLnkName (Lnk_EditingLnk->LnkCod,
+        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_link_X_has_been_renamed_as_Y,
-                             CurrentLnkName,NewLnkName);
+                             CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,CurrentLnkName);
+                          Txt_The_name_X_has_not_changed,
+                          CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentLnkName,NewLnkName,MaxBytes);
+   Str_Copy (CurrentName[ShrtOrFullName],NewName,
+	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -685,7 +678,7 @@ static void Lnk_PutFormToCreateLink (void)
 
 	 /***** Link short name *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Lnk_EditingLnk->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -694,7 +687,7 @@ static void Lnk_PutFormToCreateLink (void)
 
 	 /***** Link full name *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Lnk_EditingLnk->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -750,10 +743,10 @@ void Lnk_ReceiveFormNewLink (void)
 
    /***** Get parameters from form *****/
    /* Get link short name */
-   Par_GetParText ("ShortName",Lnk_EditingLnk->ShrtName,Lnk_MAX_BYTES_LINK_SHRT_NAME);
+   Par_GetParText ("ShortName",Lnk_EditingLnk->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
 
    /* Get link full name */
-   Par_GetParText ("FullName",Lnk_EditingLnk->FullName,Lnk_MAX_BYTES_LINK_FULL_NAME);
+   Par_GetParText ("FullName",Lnk_EditingLnk->FullName,Cns_MAX_BYTES_FULL_NAME);
 
    /* Get link URL */
    Par_GetParText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);

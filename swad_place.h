@@ -33,18 +33,12 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Plc_MAX_CHARS_PLACE_SHRT_NAME	(32 - 1)	// 31
-#define Plc_MAX_BYTES_PLACE_SHRT_NAME	((Plc_MAX_CHARS_PLACE_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Plc_MAX_CHARS_PLACE_FULL_NAME	(128 - 1)	// 127
-#define Plc_MAX_BYTES_PLACE_FULL_NAME	((Plc_MAX_CHARS_PLACE_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 struct Plc_Place
   {
    long PlcCod;
    long InsCod;
-   char ShrtName[Plc_MAX_BYTES_PLACE_SHRT_NAME + 1];
-   char FullName[Plc_MAX_BYTES_PLACE_FULL_NAME + 1];
+   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];
    unsigned NumCtrs;
   };
 

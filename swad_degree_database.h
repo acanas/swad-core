@@ -47,7 +47,7 @@ void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp);
 unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long DegCod);
 long Deg_DB_GetInsCodOfDegreeByCod (long DegCod);
 long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod);
-void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1]);
+void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1]);
 bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 unsigned Deg_DB_GetNumDegsOfType (long DegTypCod);
 unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod);
@@ -74,7 +74,7 @@ unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);
 void Deg_DB_UpdateDegTypName (long DegTypCod,
                               const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
 void Deg_DB_UpdateDegNameDB (long DegCod,const char *FldName,
-                             const char NewDegName[Hie_MAX_BYTES_FULL_NAME + 1]);
+                             const char NewDegName[Cns_MAX_BYTES_FULL_NAME + 1]);
 void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod);
 void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);
 void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);

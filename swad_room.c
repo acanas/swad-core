@@ -696,7 +696,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActRenRooSho,Anchor);
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
-		  HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
+		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Room->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\""
 				  " class=\"INPUT_SHORT_NAME INPUT_%s\"",
@@ -708,7 +708,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActRenRooFul,Anchor);
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
-		  HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
+		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Room->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\""
 				  " class=\"INPUT_FULL_NAME INPUT_%s\"",
@@ -1056,75 +1056,68 @@ void Roo_RenameRoomFull (void)
 
 static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_room_X_already_exists;
    extern const char *Txt_The_room_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentClaName = NULL;	// Initialized to avoid warning
-   char NewClaName[Roo_MAX_BYTES_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Roo_MAX_BYTES_SHRT_NAME;
-         CurrentClaName = Roo_EditingRoom->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Roo_MAX_BYTES_FULL_NAME;
-         CurrentClaName = Roo_EditingRoom->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Roo_EditingRoom->ShrtName,
+      [Cns_FULL_NAME] = Roo_EditingRoom->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get room code */
    Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get the new name for the room */
-   Par_GetParText (ParName,NewClaName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get from the database the old names of the room *****/
    Roo_GetRoomDataByCod (Roo_EditingRoom);
 
    /***** Check if new name is empty *****/
-   if (NewClaName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentClaName,NewClaName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If room was in database... *****/
          if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                                            Roo_EditingRoom->RooCod,
-                                           ParName,NewClaName))
+                                           Cns_ParShrtOrFullName[ShrtOrFullName],
+                                           NewName))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_room_X_already_exists,
-                             NewClaName);
+                             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,FldName,NewClaName);
+            Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,
+        			   Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_room_X_has_been_renamed_as_Y,
-                             CurrentClaName,NewClaName);
+                             CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,CurrentClaName);
+                          Txt_The_name_X_has_not_changed,
+                          CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update room name *****/
-   Str_Copy (CurrentClaName,NewClaName,MaxBytes);
+   Str_Copy (CurrentName[ShrtOrFullName],NewName,
+	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -1255,7 +1248,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 
 	 /***** Room short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1264,7 +1257,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 
 	 /***** Room full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1342,8 +1335,8 @@ void Roo_ReceiveFormNewRoom (void)
    Roo_EditingRoom->Type   = Roo_GetParType ();
 
    /* Get room short name and full name */
-   Par_GetParText ("ShortName",Roo_EditingRoom->ShrtName,Roo_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Roo_EditingRoom->FullName,Roo_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Roo_EditingRoom->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Roo_EditingRoom->FullName,Cns_MAX_BYTES_FULL_NAME);
 
    /* Get seating capacity */
    Roo_EditingRoom->Capacity = (unsigned)

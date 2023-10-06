@@ -674,29 +674,29 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	       TstPrn_ComputeAnswerScore (&PrintedQuestions[QstInd],Question);
 	       TstPrn_WriteAnswersExam (UsrDat,&PrintedQuestions[QstInd],Question,
 					ICanView,"Qst_TXT","Qst_TXT_LIGHT");
+
+	       /* Write score retrieved from database */
+	       if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
+		 {
+		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
+				 The_GetSuffix ());
+		     HTM_TxtColonNBSP (Txt_Score);
+		     HTM_SPAN_Begin ("class=\"%s_%s\"",
+				     PrintedQuestions[QstInd].StrAnswers[0] ?
+				     (PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct
+									   "Qst_ANS_BAD") :	// Wrong
+									   "Qst_ANS_0",		// Blank answer
+				     The_GetSuffix ());
+			HTM_Double2Decimals (PrintedQuestions[QstInd].Score);
+		     HTM_SPAN_End ();
+		  HTM_DIV_End ();
+		 }
 	      }
 	    else
 	       Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
 	   }
 	 else
 	    Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
-
-	 /* Write score retrieved from database */
-	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
-	   {
-	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
-	                   The_GetSuffix ());
-	       HTM_TxtColonNBSP (Txt_Score);
-	       HTM_SPAN_Begin ("class=\"%s_%s\"",
-			       PrintedQuestions[QstInd].StrAnswers[0] ?
-			       (PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct
-								     "Qst_ANS_BAD") :	// Wrong
-								     "Qst_ANS_0",	// Blank answer
-			       The_GetSuffix ());
-		  HTM_Double2Decimals (PrintedQuestions[QstInd].Score);
-	       HTM_SPAN_End ();
-	    HTM_DIV_End ();
-	   }
 
 	 /* Question feedback */
 	 if (QuestionUneditedAfterExam)

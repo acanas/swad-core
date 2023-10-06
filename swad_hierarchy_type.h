@@ -72,12 +72,6 @@ typedef enum
 #define Hie_MAX_CHARS_INSTITUTIONAL_COD  (16 - 1)	// 15
 #define Hie_MAX_BYTES_INSTITUTIONAL_COD  ((Hie_MAX_CHARS_INSTITUTIONAL_COD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
 
-#define Hie_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
-#define Hie_MAX_BYTES_SHRT_NAME	((Hie_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Hie_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
-#define Hie_MAX_BYTES_FULL_NAME	((Hie_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 struct Hie_MyNode
   {
    long HieCod;			// Course/degree/center/institution/country code
@@ -98,8 +92,8 @@ struct Hie_Node
    Hie_Status_t Status;		// Node status
    long RequesterUsrCod;	// User code of the person who requested the creation of this node
    char InstitutionalCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the node
-   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of the node
-   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of the node
+   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];	// Short name of the node
+   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];	// Full name of the node
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct
      {

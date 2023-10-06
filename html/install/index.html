@@ -44,7 +44,7 @@
 		</p>
 
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2018
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2020
 	</td>
 	</tr>
 
@@ -77,6 +77,7 @@
 		<li><a href="#mathjax">Installing MathJax</a></li>
 		<li><a href="#gsoap">Compiling and installing gSOAP, required to compile SWAD core</a></li>
 		<li><a href="#compile-swad">Compiling and installing SWAD core</a></li>
+		<li><a href="#fontawesome">Installing Font Awesome icons</a></li>
 		<li><a href="#fotomaton">Installing photo processing program <code>fotomaton</code></a></li>
 		<li><a href="#photo-average">Installing photo averaging programs <code>foto_mediana</code> and <code>foto_promedio</code></a></li>
 		<li><a href="#chat-server">Installing chat server <code>swad-ircd</code></a></li>
@@ -190,8 +191,8 @@
 	</p>
 
 	<p>
-	In the rest of this installation guide we give instructions for CentOS 6.5 and Ubuntu 14.04 LTS,
-	assuming that the user is root for some commands in CentOS 6.5 and a sudoer user in Ubuntu 14.04 LTS.
+	In the rest of this installation guide we give instructions for CentOS 6.5 and Ubuntu 18.04 LTS,
+	assuming that the user is root for some commands in CentOS 6.5 and a sudoer user in Ubuntu 18.04 LTS.
 	</p>
 
 	</li>
@@ -241,7 +242,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -260,14 +261,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install gcc-c++</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install build-essential</code>
+		<code>sudo apt install build-essential</code>
 	</td>
 	</tr>
 	</table>
@@ -278,7 +279,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -296,7 +297,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -316,7 +317,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -324,7 +325,7 @@
 		<code>reboot</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get update</code><br />
+		<code>sudo apt update</code><br />
 		<code>sudo reboot</code>
 	</td>
 	</tr>
@@ -348,14 +349,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install git</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install git</code>
+		<code>sudo apt install git</code>
 	</td>
 	</tr>
 	</table>
@@ -375,14 +376,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install libjpeg-devel</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install libjpeg-dev</code>
+		<code>sudo apt install libjpeg-dev</code>
 	</td>
 	</tr>
 	</table>
@@ -395,14 +396,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install cmake</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install cmake</code>
+		<code>sudo apt install cmake</code>
 	</td>
 	</tr>
 	</table>
@@ -422,51 +423,53 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install pkgconfig</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install pkg-config</code>
+		<code>sudo apt install pkg-config</code>
 	</td>
 	</tr>
 	</table>
 	</li>
 
 	<li>
-	To install <a href="http://opencv.org/">OpenCV</a>,
-	download the code from <a href="http://opencv.org/downloads.html">http://opencv.org/downloads.html</a>.
+	To install version 3.3.0 of <a href="http://opencv.org/">OpenCV</a>
+	(later versions do not work with our programs),
+	download the code from <a href="https://github.com/opencv/opencv/archive/3.3.0.zip">https://github.com/opencv/opencv/archive/3.3.0.zip</a>.
 	We recommend to follow the steps of the installation guide, available in:<br />
 		<a href="http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html">http://docs.opencv.org/doc/tutorials/introduction/linux_install/linux_install.html</a>.
 	As an example, we followed these steps:<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
  		<code>cd ~</code><br />
- 		<code>wget sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.9/opencv-2.4.9.zip</code> (or later)<br />
- 		<code>unzip opencv-2.4.9.zip</code> (or later)<br />
-		<code>cd opencv-2.4.9</code> (or later)<br />
+ 		<code>wget https://github.com/opencv/opencv/archive/3.3.0.zip</code> (or later)<br />
+ 		<code>unzip 3.3.0.zip</code> (or later)<br />
+		<code>cd opencv-3.3.0</code> (or later)<br />
 		<code>mkdir release</code><br />
 		<code>cd release</code><br />
 		<code>cmake ..</code><br />
-		<code>make</code><br />
+		<code>make</code> (compiling OpenCV usually takes several minutes)<br />
 		<code>make install</code><br />
  		<code>cd ~</code>
 	</td>
 	<td width="50%" valign="top">
  		<code>cd ~</code><br />
- 		<code>git clone https://github.com/Itseez/opencv.git</code><br />
-		<code>cd opencv</code><br />
+ 		<code>wget https://github.com/opencv/opencv/archive/3.3.0.zip</code><br />
+ 		<code>unzip 3.3.0.zip</code><br />
+		<code>cd opencv-3.3.0</code><br />
 		<code>mkdir release</code><br />
 		<code>cd release</code><br />
 		<code>cmake ..</code><br />
-		<code>make</code><br />
+		<code>make</code> (compiling OpenCV usually takes several minutes)<br />
 		<code>sudo make install</code><br />
  		<code>cd ~</code>
 	</td>
@@ -489,7 +492,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -533,7 +536,7 @@
 		</p>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install pandoc</code>
+		<code>sudo apt install pandoc</code>
 	</td>
 	</tr>
 	</table>
@@ -554,14 +557,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install ImageMagick</code><br />
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install ImageMagick</code>
+		<code>sudo apt install imagemagick</code>
 	</td>
 	</tr>
 	</table>
@@ -580,7 +583,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -588,7 +591,7 @@
 		<code>yum -y install mod_ssl openssl</code>
 	</td>
 	<td width="50%" valign="top">	
-		<code>sudo apt-get install apache2 apache2-utils</code><br />
+		<code>sudo apt install apache2 apache2-utils</code><br />
 		<p>
 		Activate the cgi module and the rewrite module:<br />
 			<code>sudo a2enmod cgi</code><br />
@@ -626,7 +629,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -635,7 +638,6 @@
 	</td>
 	<td width="50%" valign="top">
 		<code>/etc/apache2/</code><br />
-		<code>/etc/apache2/conf.d</code>
 	</td>
 	</tr>
 	</table>
@@ -646,7 +648,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -665,7 +667,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -741,6 +743,21 @@
 		<code>DirectoryIndex index.html index.htm</code><br />
 		</li>
 
+		<li>
+		At the end of the file, add the following lines to enable compression:<br />
+		<code>
+		AddOutputFilterByType DEFLATE text/plain<br />
+		AddOutputFilterByType DEFLATE text/html<br />
+		AddOutputFilterByType DEFLATE text/xml<br />
+		AddOutputFilterByType DEFLATE text/css<br />
+		AddOutputFilterByType DEFLATE application/xml<br />
+		AddOutputFilterByType DEFLATE application/xhtml+xml<br />
+		AddOutputFilterByType DEFLATE application/rss+xml<br />
+		AddOutputFilterByType DEFLATE application/javascript<br />
+		AddOutputFilterByType DEFLATE application/x-javascript
+		</code>
+		</li>
+
 		</ul>
 	</td>
 	<td width="50%" valign="top">
@@ -778,7 +795,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -798,7 +815,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -840,8 +857,10 @@
 		<code>RewriteRule "^/$" "/pl" [L,R=301]</code><br />
 		<code>RewriteCond %{HTTP:Accept-Language} ^(pt)[-,;]? [NC]</code><br />
 		<code>RewriteRule "^/$" "/pt" [L,R=301]</code><br />
+		<code>RewriteCond %{HTTP:Accept-Language} ^(tr)[-,;]? [NC]</code><br />
+		<code>RewriteRule "^/$" "/tr" [L,R=301]</code><br />
 		<code># Rewriting for other languages</code><br />
-		<code>RewriteCond %{HTTP:Accept-Language} !^(ca|de|en|es|fr|gn|it|pl|pt) [NC]</code><br />
+		<code>RewriteCond %{HTTP:Accept-Language} !^(ca|de|en|es|fr|gn|it|pl|pt|tr) [NC]</code><br />
 		<code>RewriteRule "^/$" "/en" [L,R=301]</code><br />
 		<br />
 		<code>#</code><br />
@@ -856,6 +875,7 @@
 		<code>ScriptAlias /it "/var/www/cgi-bin/swad/swad_it"</code><br />
 		<code>ScriptAlias /pl "/var/www/cgi-bin/swad/swad_pl"</code><br />
 		<code>ScriptAlias /pt "/var/www/cgi-bin/swad/swad_pt"</code><br />
+		<code>ScriptAlias /tr "/var/www/cgi-bin/swad/swad_tr"</code><br />
 		<br />
 		In the previous lines, <code>/var/www/cgi-bin/swad/</code> is the path to the SWAD executable programs,
 		that could be in another location.
@@ -922,22 +942,25 @@
 		<code>RewriteRule "^/$" "/pl" [L,R=301]</code><br />
 		<code>RewriteCond %{HTTP:Accept-Language} ^(pt)[-,;]? [NC]</code><br />
 		<code>RewriteRule "^/$" "/pt" [L,R=301]</code><br />
+		<code>RewriteCond %{HTTP:Accept-Language} ^(tr)[-,;]? [NC]</code><br />
+		<code>RewriteRule "^/$" "/tr" [L,R=301]</code><br />
 		<code># Rewriting for other languages</code><br />
-		<code>RewriteCond %{HTTP:Accept-Language} !^(ca|de|en|es|fr|gn|it|pl|pt) [NC]</code><br />
+		<code>RewriteCond %{HTTP:Accept-Language} !^(ca|de|en|es|fr|gn|it|pl|pt|tr) [NC]</code><br />
 		<code>RewriteRule "^/$" "/en" [L,R=301]</code><br />
 		<br />
 		<code>#</code><br />
 		<code># Aliases</code><br />
 		<code>#</code><br />
-		<code>ScriptAlias /ca "/var/www/cgi-bin/swad/swad_ca"</code><br />
-		<code>ScriptAlias /de "/var/www/cgi-bin/swad/swad_de"</code><br />
-		<code>ScriptAlias /en "/var/www/cgi-bin/swad/swad_en"</code><br />
-		<code>ScriptAlias /es "/var/www/cgi-bin/swad/swad_es"</code><br />
-		<code>ScriptAlias /fr "/var/www/cgi-bin/swad/swad_fr"</code><br />
-		<code>ScriptAlias /gn "/var/www/cgi-bin/swad/swad_gn"</code><br />
-		<code>ScriptAlias /it "/var/www/cgi-bin/swad/swad_it"</code><br />
-		<code>ScriptAlias /pl "/var/www/cgi-bin/swad/swad_pl"</code><br />
-		<code>ScriptAlias /pt "/var/www/cgi-bin/swad/swad_pt"</code><br />
+		<code>ScriptAlias /ca "/usr/lib/cgi-bin/swad/swad_ca"</code><br />
+		<code>ScriptAlias /de "/usr/lib/cgi-bin/swad/swad_de"</code><br />
+		<code>ScriptAlias /en "/usr/lib/cgi-bin/swad/swad_en"</code><br />
+		<code>ScriptAlias /es "/usr/lib/cgi-bin/swad/swad_es"</code><br />
+		<code>ScriptAlias /fr "/usr/lib/cgi-bin/swad/swad_fr"</code><br />
+		<code>ScriptAlias /gn "/usr/lib/cgi-bin/swad/swad_gn"</code><br />
+		<code>ScriptAlias /it "/usr/lib/cgi-bin/swad/swad_it"</code><br />
+		<code>ScriptAlias /pl "/usr/lib/cgi-bin/swad/swad_pl"</code><br />
+		<code>ScriptAlias /pt "/usr/lib/cgi-bin/swad/swad_pt"</code><br />
+		<code>ScriptAlias /tr "/usr/lib/cgi-bin/swad/swad_tr"</code><br />
 		<br />
 		In the previous lines, <code>/usr/lib/cgi-bin/swad/</code> is the path to the SWAD executable programs,
 		that could be in another location. 
@@ -950,10 +973,11 @@
 	</p>
 
 	<p>
-	To allow the META tags in HTML content to override a charset choice, comment out this directive:<br />
-	<code>AddDefaultCharset UTF-8</code></br>
-	by adding #:<br />
-	<code>#AddDefaultCharset UTF-8</code>
+	To allow the META tags in HTML content to override a charset choice,
+	the following directive should be left commented:<br />
+	<code>#AddDefaultCharset UTF-8</code><br />
+	In Ubuntu, this directive is located in the file
+	<code>/etc/apache2/conf-available/charset.conf</code>.
 	</p>
 
 	<p>
@@ -963,7 +987,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -977,8 +1001,10 @@
 		and save it.
 	</td>
 	<td width="50%" valign="top">
-		Edit the file <code>/etc/apache2/sites-available/000-default.conf</code>,
-		add the following line into the
+		<code>cd /etc/apache2/sites-available/</code><br />
+		Edit the file <code>000-default.conf</code>:<br />
+		<code>sudo gedit 000-default.conf</code><br />
+		Add the following line into the
 		<code>&lt;VirtualHost *:80&gt;</code> section:<br />
 		<code>Redirect permanent / https://openswad.org/</code><br />
 		(replace https://openswad.org/ by your https address),
@@ -994,7 +1020,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1018,14 +1044,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install mysql mysql-server</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install mysql-server</code>
+		<code>sudo apt install mysql-server</code>
 	</td>
 	</tr>
 	</table>
@@ -1036,14 +1062,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install mysql-devel</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install libmysqlclient-dev</code>
+		<code>sudo apt install libmysqlclient-dev</code>
 	</td>
 	</tr>
 	</table>
@@ -1055,7 +1081,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1063,18 +1089,65 @@
 		<code>cp -a my.cnf my.cnf.original</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>cd /etc/mysql/</code><br />
-		<code>sudo cp -a my.cnf my.cnf.original</code>
+		<code>cd /etc/mysql/mysql.conf.d</code><br />
+		<code>sudo cp -a mysqld.cnf mysqld.cnf.original</code>
 	</td>
 	</tr>
 	</table>
 	</p>
 
 	<p>
-	Edit inside the file <code>my.cnf</code> all the optimizations
+	Edit inside the configuration file just backed up (my.cnf or mysqld.cnf) all the optimizations
 	that we consider neccesary for MySQL,
 	in function of the configuration of our server.
 	Probably we should increase <code>query_cache_size</code> and <code>key_buffer</code> / <code>key_buffer_size</code>.
+	</p>
+	
+	<p>
+	As an example, you could add the following optimizations:
+	</p>
+	
+	<code>
+	max_connections = 100<br />
+	innodb_buffer_pool_size = 8G<br />
+	key_buffer_size = 4G<br />
+	join_buffer_size = 128M<br />
+	sort_buffer_size = 128M<br />
+	read_buffer_size = 64M<br />
+	read_rnd_buffer_size = 64M<br />
+	repair_cache.key_buffer_size = 128M<br />
+	query_cache_size = 1G<br />
+	long_query_time = 1<br />
+	slow_query_log = 1<br />
+	slow_query_log_file = "/var/log/mysql/log-slow-queries.log"
+	</code>
+	
+	<p>
+	Optionally, if you are a developer, you could also enable the log for slow queries:
+	</p>
+	
+	<code>
+	long_query_time=0.5<br />
+	slow_query_log=1<br />
+	slow_query_log_file=&quot;/var/log/mysql/mysql-slow.log&quot;
+	</code>
+	
+	</p>
+	
+	<p>
+	In Mysql 8.0, it may be necessary to set the default character set to Latin1, adding the following lines to configuration:<br />
+	<code>
+	[client]<br />
+	default-character-set=latin1<br />
+	<br />
+	[mysql]<br />
+	default-character-set=latin1<br />
+	<br />
+	[mysqld]<br />
+	collation-server = latin1_spanish_ci<br />
+	init-connect='SET NAMES latin1'<br />
+	character-set-server = latin1<br />
+	</code>
 	</p>
 
 	<p>
@@ -1082,7 +1155,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1096,29 +1169,12 @@
 	</p>
 
 	<p>
-	Set a password for the MySQL root user:
-	<table width="100%">
-	<tr>
-	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
-	</tr>
-	<tr>
-	<td width="50%" valign="top">
+	Set a password for the MySQL root user.
 	To do so, start the server, then issue the following command:<br />
-
-	<code>/usr/bin/mysqladmin -u root password 'new-password'</code><br />
-	
-	Alternatively we can run:<br />
-	<code>/usr/bin/mysql_secure_installation</code><br />
-	
+	<code>sudo /usr/bin/mysql_secure_installation</code><br />
 	which will also give us the option of removing the test
-	databases and anonymous user created by default.  This is
+	databases and anonymous user created by default. This is
 	strongly recommended for production servers.
-	</td>
-	<td width="50%" valign="top">
-	</td>
-	</tr>
-	</table>
 	</p>
 
 	<p>
@@ -1167,7 +1223,7 @@
 
 	<p>
 	Use <code>mysql</code> command to connect to server with MySQL user <code>root</code>:<br />
-		<code>mysql -u root -p mysql</code><br />
+		<code>sudo mysql -u root</code> or <code>mysql -u root -p</code><br />
 	</p>
 
 	<p>
@@ -1273,7 +1329,7 @@
   			'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',<br />
 			'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',<br />
 			'0','1','2','3','4','5','6','7','8','9','-','_'<br />
-		<code>mysql&gt; INSERT INTO usr_data (EncryptedUsrCod,Comments) VALUES(@EncryptedUsrCod,'');</code><br />	
+		<code>mysql&gt; INSERT INTO usr_data (EncryptedUsrCod,Birthday,Comments) VALUES(@EncryptedUsrCod,NOW(),'');</code><br />	
 		<code>mysql&gt; INSERT INTO usr_IDs (UsrCod,UsrID,CreatTime,Confirmed) VALUES(LAST_INSERT_ID(),@MyID,NOW(),'Y');</code><br />
 		<code>mysql&gt; INSERT INTO admin (UsrCod,Scope,Cod) VALUES (LAST_INSERT_ID(),'Sys','0');</code><br />
 		<code>mysql&gt; quit</code>
@@ -1298,7 +1354,7 @@
 			<table width="100%">
 			<tr>
 			<th>CentOS 6.5</th>
-			<th>Ubuntu 14.04</th>
+			<th>Ubuntu 18.04</th>
 			</tr>
 			<tr>
 			<td width="50%" valign="top">
@@ -1316,7 +1372,7 @@
 			<table width="100%">
 			<tr>
 			<th>CentOS 6.5</th>
-			<th>Ubuntu 14.04</th>
+			<th>Ubuntu 18.04</th>
 			</tr>
 			<tr>
 			<td width="50%" valign="top">
@@ -1332,7 +1388,7 @@
 			<table width="100%">
 			<tr>
 			<th>CentOS 6.5</th>
-			<th>Ubuntu 14.04</th>
+			<th>Ubuntu 18.04</th>
 			</tr>
 			<tr>
 			<td width="50%" valign="top">
@@ -1357,7 +1413,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1376,7 +1432,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1395,7 +1451,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1414,7 +1470,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1428,29 +1484,11 @@
 	</p>
 
 	<p>
-	Change the owner of the public and private directories:
-	<table width="100%">
-	<tr>
-	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
-	</tr>
-	<tr>
-	<td width="50%" valign="top">
-		<code>chown -R apache:apache /var/www/html/swad /var/www/swad</code>
-	</td>
-	<td width="50%" valign="top">
-		<code>sudo chown -R www-data:www-data /var/www/html/swad /var/www/swad</code>
-	</td>
-	</tr>
-	</table>
-	</p>
-
-	<p>
 	To show the icon in the address bar of browser, we can put a file <code>favicon.ico</code> in the main web directory:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1470,6 +1508,27 @@
 	In the file <code>favicon.ico</code> included inside the directory <code>icon</code>
 	indicated below, there is a SWAD icon that wil be shown when the platform is on screen.
 	</p>
+	
+	<code>sudo cp /home/&lt;user_directory&gt;/swad/swad-core/icon/favicon.ico /var/www/html/</code><br />
+
+	<p>
+	Change the owner of the public and private directories:
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 18.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>chown -R apache:apache /var/www/html/swad /var/www/swad</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo chown -R www-data:www-data /var/www/html/swad /var/www/swad</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+
 
 	</li>
 
@@ -1483,7 +1542,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1538,7 +1597,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1580,7 +1639,7 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1610,27 +1669,58 @@
 	<a href="http://docs.mathjax.org/">MathJax</a> is a Javascript library required to display math.
 	In SWAD, it is used in combination with Markdown and Pandoc.
 	To install it, follow the instructions in
-	<a href="http://docs.mathjax.org/en/latest/installation.html">http://docs.mathjax.org/en/latest/installation.html</a>.
+	<a href="http://docs.mathjax.org/en/latest/web/start.html">http://docs.mathjax.org/en/latest/web/start.html</a>.
+	
+	You can download it from
+	<a href="https://www.jsdelivr.com/package/npm/mathjax">https://www.jsdelivr.com/package/npm/mathjax</a>.
+	
 	The directory downloaded and uncompressed must be located inside our main HTML directory
 	<code>/var/www/html/swad/</code>:<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
-		<code>mv <em>our-downloaded-copy-of-mathjax</em> /var/www/html/swad/MathJax</code><br />
-		<code>chown -R apache:apache /var/www/html/swad/MathJax</code><br />
+		<code>cp -a <em>our-downloaded-copy-of-mathjax/package/es5</em> /var/www/html/swad/mathjax</code><br />
+		<code>chown -R apache:apache /var/www/html/swad/mathjax</code><br />
 		If in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
 		it should be necessary to change the permissions of the directory <code>dropzone</code> and its contents:<br />
 			<code>ls -lZ /var/www/html/swad/</code><br />
-			<code>chcon -R -t httpd_sys_content_t /var/www/html/swad/MathJax</code><br />
+			<code>chcon -R -t httpd_sys_content_t /var/www/html/swad/mathjax</code><br />
 			<code>ls -lZ /var/www/html/swad/</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo mv <em>our-downloaded-copy-of-mathjax</em> /var/www/html/swad/MathJax</code><br />
-		<code>sudo chown -R www-data:www-data /var/www/html/swad/MathJax</code>
+		<code>sudo cp -a <em>our-downloaded-copy-of-mathjax/package/es5</em> /var/www/html/swad/mathjax</code><br />
+		<code>sudo chown -R www-data:www-data /var/www/html/swad/mathjax</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	
+	<p>
+	To finish the installation of MathJax, you must copy the file <code>mathjax-config.js</code>
+	located inside the directory <code>/home/&lt;user_directory&gt;/swad/swad-core/js</code>,
+	to the SWAD public directory:<br />
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 18.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp /home/&lt;user_directory&gt;/swad/swad-core/js/mathjax-config.js /var/www/html/swad/</code><br />
+		<code>chown apache:apache /var/www/html/swad/mathjax-config.js</code><br />
+		If in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
+		it should be necessary to change the permissions of the directory <code>dropzone</code> and its contents:<br />
+			<code>ls -lZ /var/www/html/swad/</code><br />
+			<code>chcon -t httpd_sys_content_t /var/www/html/swad/mathjax-config.js</code><br />
+			<code>ls -lZ /var/www/html/swad/</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp /home/&lt;user_directory&gt;/swad/swad-core/js/mathjax-config.js /var/www/html/swad/</code><br />
+		<code>sudo chown www-data:www-data /var/www/html/swad/mathjax-config.js</code>
 	</td>
 	</tr>
 	</table>
@@ -1647,14 +1737,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install byacc</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install byacc</code>
+		<code>sudo apt install byacc</code>
 	</td>
 	</tr>
 	</table>
@@ -1665,14 +1755,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install flex</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install flex</code>
+		<code>sudo apt install flex</code>
 	</td>
 	</tr>
 	</table>
@@ -1683,14 +1773,14 @@
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 		<code>yum -y install bison bison-devel</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install bison</code>
+		<code>sudo apt install bison</code>
 	</td>
 	</tr>
 	</table>
@@ -1701,13 +1791,13 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo apt-get install libssl-dev</code>
+		<code>sudo apt install libssl-dev</code>
 	</td>
 	</tr>
 	</table>
@@ -1717,8 +1807,8 @@
 	We need to install the <a href="http://www.cs.fsu.edu/~engelen/soap.html">gSOAP</a> <em>toolkit</em>,
 	that can be downloaded from:<br />
 	<a href="http://www.cs.fsu.edu/~engelen/soap.html">http://www.cs.fsu.edu/~engelen/soap.html</a><br />
-	<a href="http://sourceforge.net/projects/gsoap2/files/">http://sourceforge.net/projects/gsoap2/files/</a><br />
-	(Tested with the version 2.8.30,
+	<a href="https://www.genivia.com/products.html#gsoap">http://sourceforge.net/projects/gsoap2/files/</a><br />
+	(Tested with the version 2.8.98,
 	probably more recent versions also work.)
 	</p>
 
@@ -1729,12 +1819,12 @@
 	Go to directory <code>/home/&lt;user_directory&gt;/swad/gsoap</code>:<br />
 		<code>cd /home/&lt;user_directory&gt;/swad/gsoap</code><br />
 
-	Download the file <code>gsoap_2.8.30.zip</code> (or later)
+	Download the file <code>gsoap_2.8.98.zip</code> (or later)
 	and copy it in <code>/home/&lt;user_directory&gt;/swad/gsoap</code><br />
-	<code>wget http://downloads.sourceforge.net/project/gsoap2/gSOAP/gsoap_2.8.30.zip</code><br />
+	<code>wget https://sourceforge.net/projects/gsoap2/files/gsoap-2.8/gsoap_2.8.98.zip</code><br />
 
 	Uncompress gSOAP:<br />
-		<code>unzip gsoap_2.8.30.zip</code> (or later)<br />
+		<code>unzip gsoap_2.8.98.zip</code> (or later)<br />
 	It should have been created the directory <code>gsoap-2.8</code>. Go to that directory:<br />
 		<code>cd gsoap-2.8</code><br />
 	Configure:<br />
@@ -1746,7 +1836,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1795,7 +1885,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1803,8 +1893,8 @@
 		<code>cp /home/&lt;user_directory&gt;/swad/swad-core/soap/swad.wsdl /var/www/html/swad/ws/</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo mkdir /var/www/html/swad/ws/</code><br />
-		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/soap/swad.wsdl /var/www/html/swad/ws/</code>
+		<code>sudo mkdir /var/www/html/swad/api/</code><br />
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/soap/swad.wsdl /var/www/html/swad/api/</code>
 	</td>
 	</tr>
 	</table>
@@ -1820,26 +1910,6 @@
 	<p>
 	Return to directory <code>/home/&lt;user_directory&gt;/swad/swad-core</code>:<br />
 		<code>cd /home/&lt;user_directory&gt;/swad/swad-core</code>
-	</p>
- 
- 	<p>
-	Edit the file <code>swad.cfg</code>
-	making the necessary modifications and save it.
-	Copy the file <code>swad.cfg</code> just edited to SWAD directory for executable programs:
- 	<table width="100%">
-	<tr>
-	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
-	</tr>
-	<tr>
-	<td width="50%" valign="top">
-		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad.cfg /var/www/cgi-bin/swad/</code><br />
-	</td>
-	<td width="50%" valign="top">
-		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad.cfg /usr/lib/cgi-bin/swad/</code><br />
-	</td>
-	</tr>
-	</table>
 	</p>
 
 	<p>
@@ -1870,7 +1940,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1890,7 +1960,7 @@
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1915,13 +1985,12 @@ cp -af $CGI/swad_pl $CGI/swad_pl.old<br />
 cp -af $CGI/swad_pt $CGI/swad_pt.old<br />
 <br />
 cp -f $CORE/swad_ca $CORE/swad_de $CORE/swad_en $CORE/swad_es $CORE/swad_fr $CORE/swad_gn $CORE/swad_it $CORE/swad_pl $CORE/swad_pt $CGI<br />
-cp -f $CORE/js/swad.js $PUBLIC_HTML<br />
-cp -f $CORE/css/swad_desktop.css $CORE/css/swad_mobile.css $PUBLIC_HTML<br />
+cp -f $CORE/js/swad*.js $PUBLIC_HTML<br />
+cp -f $CORE/css/swad*.css $PUBLIC_HTML<br />
 <br />
 chown -R $APACHE_USER:$APACHE_GROUP $CGI<br />
-chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad.js<br />
-chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_desktop.css<br />
-chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.js<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 		</code>
 	</td>
 	<td width="50%" valign="top">
@@ -1946,13 +2015,12 @@ cp -af $CGI/swad_pl $CGI/swad_pl.old<br />
 cp -af $CGI/swad_pt $CGI/swad_pt.old<br />
 <br />
 cp -f $CORE/swad_ca $CORE/swad_de $CORE/swad_en $CORE/swad_es $CORE/swad_fr $CORE/swad_gn $CORE/swad_it $CORE/swad_pl $CORE/swad_pt $CGI<br />
-cp -f $CORE/js/swad.js $PUBLIC_HTML<br />
-cp -f $CORE/css/swad_desktop.css $CORE/css/swad_mobile.css $PUBLIC_HTML<br />
+cp -f $CORE/js/swad*.js $PUBLIC_HTML<br />
+cp -f $CORE/css/swad*.css $PUBLIC_HTML<br />
 <br />
 chown -R $APACHE_USER:$APACHE_GROUP $CGI<br />
-chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad.js<br />
-chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_desktop.css<br />
-chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.js<br />
+chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad*.css<br />
 		</code>
 	</td>
 	</tr>
@@ -1966,7 +2034,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1987,7 +2055,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
  	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -1995,6 +2063,26 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</td>
 	<td width="50%" valign="top">
 		<code>sudo /usr/lib/cgi-bin/swad/swad_copy.sh</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+ 
+ 	<p>
+	Edit the file <code>swad.cfg</code>
+	making the necessary modifications and save it.
+	Copy the file <code>swad.cfg</code> just edited to SWAD directory for executable programs:
+ 	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 18.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad.cfg /var/www/cgi-bin/swad/</code><br />
+	</td>
+	<td width="50%" valign="top">
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/swad.cfg /usr/lib/cgi-bin/swad/</code><br />
 	</td>
 	</tr>
 	</table>
@@ -2009,7 +2097,31 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	</li>
 
 	<li>
+	<h2><a name="fontawesome">Installing Font Awesome icons</a></h2>
 
+	<p>
+	Copy the following directory to use Font Awesome icons:<br />
+	</p>
+	<table width="100%">
+	<tr>
+	<th>CentOS 6.5</th>
+	<th>Ubuntu 18.04</th>
+	</tr>
+	<tr>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/fontawesome /var/www/html/swad/</code><br />
+		<code>chown -R apache:apache /var/www/html/swad/fontawesome</code>
+	</td>
+	<td width="50%" valign="top">
+		<code>cp -a /home/&lt;user_directory&gt;/swad/fontawesome /var/www/html/swad/</code><br />
+		<code>sudo chown -R www-data:www-data /var/www/html/swad/fontawesome</code>
+	</td>
+	</tr>
+	</table>
+	</p>
+	</li>
+
+	<li>
 	<h2><a name="fotomaton">Installing photo processing program <code>fotomaton</code></a></h2>
 
 	<p>
@@ -2020,26 +2132,13 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 
 	<p>
 	The source code of photo processing program <code>fotomaton</code>
-	is available in the forge de GitHub:
-	<a href="https://github.com/dcalandria/swad-fotomaton">https://github.com/dcalandria/swad-fotomaton</a>
+	is available in the directory <code>fotomaton</code>
+	inside <code>/home/&lt;user_directory&gt;/swad/swad-core/</code>.
 	</p>
 
 	<p>
 	We can compile this program in the local directory:<br />
-		<code>cd /home/&lt;user_directory&gt;/swad</code><br />
-	</p>
-
-	<p>
-	Download the program from the forge using the following command:<br />
-		<code>git clone git://github.com/dcalandria/swad-fotomaton.git</code><br />
-	This will create the directory <code>swad-fotomaton</code>
-	inside <code>/home/&lt;user_directory&gt;/swad</code>.
-	</p>
-
-	<p>
-	Go to directory <code>swad-fotomaton</code>:<br />
-		<code>cd swad-fotomaton</code><br />
-	And compile:<br />
+		<code>cd /home/&lt;user_directory&gt;/swad/swad-core/fotomaton</code><br />
 		<code>make</code><br />
 	As result, it should have been created an executable file <code>fotomaton</code>.
 	</p>
@@ -2063,7 +2162,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2087,29 +2186,29 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	The first parameter is a data file that is needed by face recognizer,
 	and that we must place in the same directory where we have copied the program <code>fotomaton</code>.
 	In the package downloaded from GitHub or in the directory
-	<code>/home/&lt;user_directory&gt;/swad/swad-core/fotomaton_data</code>
-	we should find a file <code>options</code> that holds these data
+	<code>/home/&lt;user_directory&gt;/swad/swad-core/fotomaton/example</code>
+	we should find a file <code>cascade.xml</code> that holds these data
 	necessary for the face recognizer.
 	Copy it in the same directory of SWAD executable programs
 	where we have copied the executable <code>fotomaton</code>:
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
-		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/fotomaton_data/options /var/www/cgi-bin/swad/</code><br />
-		<code>chown -R apache:apache /var/www/cgi-bin/swad/options</code><br />
+		<code>cp -a /home/&lt;user_directory&gt;/swad/swad-core/fotomaton/example/cascade.xml /var/www/cgi-bin/swad/</code><br />
+		<code>chown -R apache:apache /var/www/cgi-bin/swad/cascade.xml</code><br />
 		Sometimes in CentOS <a href="http://en.wikipedia.org/wiki/Security-Enhanced_Linux">SELinux</a> is activated,
-		and it could be necessary to change the permissions of the file <code>options</code>:<br />
+		and it could be necessary to change the permissions of the file <code>cascade.xml</code>:<br />
 			<code>ls -lZ /var/www/cgi-bin/swad/</code><br />
-			<code>chcon -t httpd_sys_content_t /var/www/cgi-bin/swad/options</code><br />
+			<code>chcon -t httpd_sys_content_t /var/www/cgi-bin/swad/cascade.xml</code><br />
 			<code>ls -lZ /var/www/cgi-bin/swad/</code>
 	</td>
 	<td width="50%" valign="top">
-		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/fotomaton_data/options /usr/lib/cgi-bin/swad/</code><br />
-		<code>sudo chown -R www-data:www-data /usr/lib/cgi-bin/swad/options</code>
+		<code>sudo cp -a /home/&lt;user_directory&gt;/swad/swad-core/fotomaton/example/cascade.xml /usr/lib/cgi-bin/swad/</code><br />
+		<code>sudo chown -R www-data:www-data /usr/lib/cgi-bin/swad/cascade.xml</code>
 	</td>
 	</tr>
 	</table>
@@ -2163,7 +2262,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2223,7 +2322,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2249,7 +2348,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2282,7 +2381,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2304,7 +2403,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2328,7 +2427,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2363,7 +2462,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">
@@ -2404,7 +2503,7 @@ chown $APACHE_USER:$APACHE_GROUP $PUBLIC_HTML/swad_mobile.css<br />
 	<table width="100%">
 	<tr>
 	<th>CentOS 6.5</th>
-	<th>Ubuntu 14.04</th>
+	<th>Ubuntu 18.04</th>
 	</tr>
 	<tr>
 	<td width="50%" valign="top">

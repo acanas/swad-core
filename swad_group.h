@@ -67,7 +67,7 @@ struct GroupData
    struct
      {
       long RooCod;					// Room code
-      char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];	// Room short name
+      char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];	// Room short name
      } Room;
    unsigned MaxStudents;
    int  Vacant;
@@ -83,7 +83,7 @@ struct Group
    struct
      {
       long RooCod;					// Room code
-      char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];	// Room short name
+      char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];	// Room short name
      } Room;
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
    unsigned MaxStudents;			// Maximum number of students in the group

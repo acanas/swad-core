@@ -590,71 +590,71 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
    extern const char *Txt_The_email_domain_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentMaiName = NULL;	// Initialized to avoid warning
-   char NewMaiName[Mai_MAX_BYTES_MAIL_INFO + 1];
-
-   switch (ShrtOrFullName)
+   static const char *ParName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "Domain";
-         FldName = "Domain";
-         MaxBytes = Cns_MAX_BYTES_EMAIL_ADDRESS;
-         CurrentMaiName = Mai_EditingMai->Domain;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "Info";
-         FldName = "Info";
-         MaxBytes = Mai_MAX_BYTES_MAIL_INFO;
-         CurrentMaiName = Mai_EditingMai->Info;
-         break;
-     }
+      [Cns_SHRT_NAME] = "Domain",
+      [Cns_FULL_NAME] = "Info",
+     };
+   static const char *FldName[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = "Domain",
+      [Cns_FULL_NAME] = "Info",
+     };
+   static unsigned MaxBytes[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Cns_MAX_BYTES_EMAIL_ADDRESS,
+      [Cns_FULL_NAME] = Mai_MAX_BYTES_MAIL_INFO,
+     };
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Mai_EditingMai->Domain,
+      [Cns_FULL_NAME] = Mai_EditingMai->Info,
+     };
+   char NewName[Mai_MAX_BYTES_MAIL_INFO + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the mail */
    Mai_EditingMai->MaiCod = ParCod_GetAndCheckPar (ParCod_Mai);
 
    /* Get the new name for the mail */
-   Par_GetParText (ParName,NewMaiName,MaxBytes);
+   Par_GetParText (ParName[ShrtOrFullName],NewName,MaxBytes[ShrtOrFullName]);
 
    /***** Get from the database the old names of the mail *****/
    Mai_GetMailDomainDataByCod (Mai_EditingMai);
 
    /***** Check if new name is empty *****/
-   if (NewMaiName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentMaiName,NewMaiName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If mail was in database... *****/
-         if (Mai_DB_CheckIfMailDomainNameExists (ParName,NewMaiName,Mai_EditingMai->MaiCod))
+         if (Mai_DB_CheckIfMailDomainNameExists (ParName[ShrtOrFullName],NewName,Mai_EditingMai->MaiCod))
 	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_already_exists,
-                             NewMaiName);
+                             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName,NewMaiName);
+            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_has_been_renamed_as_Y,
-                             CurrentMaiName,NewMaiName);
+                             CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
 	 Ale_CreateAlert (Ale_INFO,Mai_EMAIL_SECTION_ID,
 	                  Txt_The_email_domain_X_has_not_changed,
-                          CurrentMaiName);
+                          CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentMaiName,NewMaiName,MaxBytes);
+   Str_Copy (CurrentName[ShrtOrFullName],NewName,MaxBytes[ShrtOrFullName]);
   }
 
 /*****************************************************************************/

@@ -161,8 +161,8 @@ long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void)
 /*****************************************************************************/
 
 void Crs_DB_GetShortNamesByCod (long CrsCod,
-                                char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1],
-                                char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1])
+                                char CrsShortName[Cns_MAX_BYTES_SHRT_NAME + 1],
+                                char DegShortName[Cns_MAX_BYTES_SHRT_NAME + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -185,8 +185,8 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
      {
       /***** Get the course short name and degree short name *****/
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (CrsShortName,row[0],Hie_MAX_BYTES_SHRT_NAME);
-      Str_Copy (DegShortName,row[1],Hie_MAX_BYTES_SHRT_NAME);
+      Str_Copy (CrsShortName,row[0],Cns_MAX_BYTES_SHRT_NAME);
+      Str_Copy (DegShortName,row[1],Cns_MAX_BYTES_SHRT_NAME);
      }
 
    /***** Free structure that stores the query result *****/

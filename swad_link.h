@@ -27,17 +27,11 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Lnk_MAX_CHARS_LINK_SHRT_NAME	(32 - 1)	// 31
-#define Lnk_MAX_BYTES_LINK_SHRT_NAME	((Lnk_MAX_CHARS_LINK_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Lnk_MAX_CHARS_LINK_FULL_NAME	(128 - 1)	// 127
-#define Lnk_MAX_BYTES_LINK_FULL_NAME	((Lnk_MAX_CHARS_LINK_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 struct Lnk_Link
   {
    long LnkCod;
-   char ShrtName[Lnk_MAX_BYTES_LINK_SHRT_NAME + 1];
-   char FullName[Lnk_MAX_BYTES_LINK_FULL_NAME + 1];
+   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
   };
 

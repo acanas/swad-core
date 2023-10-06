@@ -536,7 +536,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenDptSho);
 		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		  HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,DptInLst->ShrtName,
+		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,DptInLst->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -547,7 +547,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenDptFul);
 		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		  HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,DptInLst->FullName,
+		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,DptInLst->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -683,73 +683,66 @@ void Dpt_RenameDepartFull (void)
 
 static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   size_t MaxBytes = 0;		// Initialized to avoid warning
-   char *CurrentDptName = NULL;	// Initialized to avoid warning
-   char NewDptName[Hie_MAX_BYTES_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
-         CurrentDptName = Dpt_EditingDpt->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
-         CurrentDptName = Dpt_EditingDpt->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
+      [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
    Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /* Get the new name for the department */
-   Par_GetParText (ParName,NewDptName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get from the database the old names of the department *****/
    Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
 
    /***** Check if new name is empty *****/
-   if (NewDptName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentDptName,NewDptName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Dpt_DB_CheckIfDepartmentNameExists (ParName,NewDptName,Dpt_EditingDpt->DptCod))
+         if (Dpt_DB_CheckIfDepartmentNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+						 NewName,Dpt_EditingDpt->DptCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_department_X_already_exists,
-                             NewDptName);
+                             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,FldName,NewDptName);
+            Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,
+        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_department_X_has_been_renamed_as_Y,
-                             CurrentDptName,NewDptName);
+                             CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,CurrentDptName);
+                          Txt_The_name_X_has_not_changed,
+                          CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentDptName,NewDptName,MaxBytes);
+   Str_Copy (CurrentName[ShrtOrFullName],NewName,
+	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /******************************************************************************/
@@ -861,7 +854,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Department short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -870,7 +863,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Department full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -937,10 +930,10 @@ void Dpt_ReceiveFormNewDpt (void)
    Dpt_EditingDpt->InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /* Get department short name */
-   Par_GetParText ("ShortName",Dpt_EditingDpt->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
 
    /* Get department full name */
-   Par_GetParText ("FullName",Dpt_EditingDpt->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Dpt_EditingDpt->FullName,Cns_MAX_BYTES_FULL_NAME);
 
    /* Get department WWW */
    Par_GetParText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);

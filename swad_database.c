@@ -350,8 +350,8 @@ mysql> DESCRIBE ban_banners;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS ban_banners ("
 			"BanCod INT NOT NULL AUTO_INCREMENT,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"ShortName VARCHAR(511) NOT NULL,"	// Ban_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Ban_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"Img VARCHAR(255) NOT NULL,"		// Ban_MAX_BYTES_IMAGE
 			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(BanCod),"
@@ -374,8 +374,8 @@ mysql> DESCRIBE bld_buildings;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS bld_buildings ("
 			"BldCod INT NOT NULL AUTO_INCREMENT,"
 			"CtrCod INT NOT NULL,"
-			"ShortName VARCHAR(511) NOT NULL,"	// Bld_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Bld_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"Location VARCHAR(2047) NOT NULL,"	// Bld_MAX_BYTES_LOCATION
 		   "UNIQUE INDEX(BldCod),"
 		   "INDEX(CtrCod))");
@@ -584,7 +584,7 @@ mysql> DESCRIBE cfe_exams;
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"NumNotif INT NOT NULL DEFAULT 0,"
-			"CrsFullName VARCHAR(2047) NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"CrsFullName VARCHAR(2047) NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"Year TINYINT NOT NULL,"
 			"ExamSession VARCHAR(2047) NOT NULL,"	// Cfe_MAX_BYTES_SESSION
 			"CallDate DATETIME NOT NULL,"
@@ -642,8 +642,8 @@ mysql> DESCRIBE crs_courses;
 			"InsCrsCod CHAR(7) NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"NumIndicators INT NOT NULL DEFAULT -1,"
 		   "UNIQUE INDEX(CrsCod),"
 		   "INDEX(DegCod,Year),"
@@ -977,8 +977,8 @@ mysql> DESCRIBE ctr_centers;
 			"Latitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"Longitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"Altitude DOUBLE PRECISION NOT NULL DEFAULT 0,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
 			"PhotoAttribution TEXT NOT NULL,"				// Med_MAX_BYTES_ATTRIBUTION
 		   "UNIQUE INDEX(CtrCod),"
@@ -1093,8 +1093,8 @@ mysql> DESCRIBE deg_degrees;
 			"DegTypCod INT NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DegCod),"
 		   "INDEX(CtrCod),"
@@ -1118,8 +1118,8 @@ mysql> DESCRIBE dpt_departments;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS dpt_departments ("
 			"DptCod INT NOT NULL AUTO_INCREMENT,"
 			"InsCod INT NOT NULL,"
-			"ShortName VARCHAR(511) NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DptCod),"
 		   "INDEX(InsCod))");
@@ -1852,8 +1852,8 @@ mysql> DESCRIBE ins_instits;
 			"CtyCod INT NOT NULL,"
 			"Status TINYINT NOT NULL DEFAULT 0,"
 			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
-			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(InsCod),"
 		   "INDEX(CtyCod),"
@@ -1874,8 +1874,8 @@ mysql> DESCRIBE lnk_links;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS lnk_links ("
 			"LnkCod INT NOT NULL AUTO_INCREMENT,"
-			"ShortName VARCHAR(511) NOT NULL,"	// Lnk_MAX_BYTES_LINK_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Lnk_MAX_BYTES_LINK_FULL_NAME
+			"ShortName VARCHAR(511) NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(LnkCod))");
 
@@ -2434,8 +2434,8 @@ mysql> DESCRIBE plc_places;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS plc_places ("
 			"PlcCod INT NOT NULL AUTO_INCREMENT,"
 			"InsCod INT NOT NULL,"
-			"ShortName VARCHAR(511) NOT NULL,"	// Plc_MAX_BYTES_PLACE_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Plc_MAX_BYTES_PLACE_FULL_NAME
+			"ShortName VARCHAR(511) NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 		   "UNIQUE INDEX(PlcCod),"
 		   "INDEX(InsCod))");
 
@@ -2719,8 +2719,8 @@ mysql> DESCRIBE roo_rooms;
 			"'toilets',"
 			"'virtual',"
 			"'yard') NOT NULL DEFAULT 'no_type',"
-			"ShortName VARCHAR(511) NOT NULL,"	// Roo_MAX_BYTES_SHRT_NAME
-			"FullName VARCHAR(2047) NOT NULL,"	// Roo_MAX_BYTES_FULL_NAME
+			"ShortName VARCHAR(511) NOT NULL,"	// Cns_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Cns_MAX_BYTES_FULL_NAME
 			"Capacity INT NOT NULL,"
 		   "UNIQUE INDEX(RooCod),"
 		   "INDEX(CtrCod,BldCod,Floor))");

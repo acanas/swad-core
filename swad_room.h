@@ -34,12 +34,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Roo_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
-#define Roo_MAX_BYTES_SHRT_NAME	((Roo_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Roo_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
-#define Roo_MAX_BYTES_FULL_NAME	((Roo_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 #define Roo_MAX_CAPACITY	10000	// If capacity of a room is greater than this, it is considered infinite
 #define Roo_UNLIMITED_CAPACITY	INT_MAX	// This number can be stored in database as an integer...
 					// ...and means that a room has no limited capacity
@@ -79,11 +73,11 @@ struct Roo_Room
    long RooCod;						// Room code
    long CtrCod;						// Center code
    long BldCod;						// Building code
-   char BldShrtName[Bld_MAX_BYTES_SHRT_NAME + 1];	// Building short name
+   char BldShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];	// Building short name
    int  Floor;						// Room floor
    Roo_RoomType_t Type;					// Room type
-   char ShrtName[Roo_MAX_BYTES_SHRT_NAME + 1];		// Room short name
-   char FullName[Roo_MAX_BYTES_FULL_NAME + 1];		// Room full name
+   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];		// Room short name
+   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];		// Room full name
    unsigned Capacity;		// Room seating capacity
 				// (maximum people who fit in the room)
    unsigned long long MACnum;

@@ -102,7 +102,7 @@ void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level,
 	   {
 	    /* Form to change full name */
 	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,
+	       HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,
 			       Gbl.Hierarchy.Node[Level].FullName,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"FullName\""
@@ -140,7 +140,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level)
 	   {
 	    /* Form to change short name */
 	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,
+	       HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,
 			       Gbl.Hierarchy.Node[Level].ShrtName,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"ShortName\""

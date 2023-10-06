@@ -441,7 +441,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanSho);
 		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
-		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -452,7 +452,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanFul);
 		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
-		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ban->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -613,74 +613,65 @@ void Ban_RenameBannerFull (void)
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
                               Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_The_banner_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentBanName = NULL;	// Initialized to avoid warning
-   char NewBanName[Ban_MAX_BYTES_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Ban_MAX_BYTES_SHRT_NAME;
-         CurrentBanName = Ban->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Ban_MAX_BYTES_FULL_NAME;
-         CurrentBanName = Ban->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Ban->ShrtName,
+      [Cns_FULL_NAME] = Ban->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /* Get the new name for the banner */
-   Par_GetParText (ParName,NewBanName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get banner data from the database *****/
    Ban_GetBannerDataByCod (Ban);
 
    /***** Check if new name is empty *****/
-   if (!NewBanName[0])
+   if (!NewName[0])
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
    else
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentBanName,NewBanName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If banner was in database... *****/
-         if (Ban_DB_CheckIfBannerNameExists (ParName,NewBanName,Ban->BanCod))
+         if (Ban_DB_CheckIfBannerNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+					     NewName,Ban->BanCod))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_banner_X_already_exists,
-                             NewBanName);
+                             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Ban_DB_UpdateBanName (Ban->BanCod,FldName,NewBanName);
+            Ban_DB_UpdateBanName (Ban->BanCod,Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 		             Txt_The_banner_X_has_been_renamed_as_Y,
-                             CurrentBanName,NewBanName);
+                             CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
          /* Write warning message */
 	 Ale_CreateAlert (Ale_INFO,NULL,
-	                  Txt_The_name_X_has_not_changed,CurrentBanName);
+	                  Txt_The_name_X_has_not_changed,CurrentName[ShrtOrFullName]);
      }
 
    /***** Update name *****/
-   Str_Copy (CurrentBanName,NewBanName,MaxBytes);
+   Str_Copy (CurrentName[ShrtOrFullName],NewName,
+	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -813,7 +804,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 
 	 /* Banner short name */
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -822,7 +813,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 
 	 /* Banner full name */
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ban->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -897,8 +888,8 @@ void Ban_ReceiveFormNewBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
-   Par_GetParText ("ShortName",Ban->ShrtName,Ban_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Ban->FullName,Ban_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Ban->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Ban->FullName,Cns_MAX_BYTES_FULL_NAME);
    Par_GetParText ("Img"      ,Ban->Img     ,Ban_MAX_BYTES_IMAGE);
    Par_GetParText ("WWW"      ,Ban->WWW     ,Cns_MAX_BYTES_WWW);
 

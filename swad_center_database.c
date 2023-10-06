@@ -260,7 +260,7 @@ long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod)
 /*************** Get the short name of a center from its code ****************/
 /*****************************************************************************/
 
-void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1])
+void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: center code should be > 0 *****/
    if (CtrCod <= 0)
@@ -270,7 +270,7 @@ void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Hie_MAX_BYTES_S
      }
 
    /***** Get the short name of a center from database *****/
-   DB_QuerySELECTString (ShrtName,Hie_MAX_BYTES_SHRT_NAME,
+   DB_QuerySELECTString (ShrtName,Cns_MAX_BYTES_SHRT_NAME,
 			 "can not get the short name of a center",
 		         "SELECT ShortName"
 			  " FROM ctr_centers"

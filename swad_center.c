@@ -839,7 +839,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		 {
 		  Frm_BeginForm (ActRenCtrSho);
 		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
+		     HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -855,7 +855,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		 {
 		  Frm_BeginForm (ActRenCtrFul);
 		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-		     HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,
+		     HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ctr->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -1079,70 +1079,63 @@ void Ctr_RenameCenterFull (void)
 
 void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_The_center_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentCtrName = NULL;	// Initialized to avoid warning
-   char NewCtrName[Hie_MAX_BYTES_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
-         CurrentCtrName = Ctr->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
-         CurrentCtrName = Ctr->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Ctr->ShrtName,
+      [Cns_FULL_NAME] = Ctr->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the new name for the center */
-   Par_GetParText (ParName,NewCtrName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get from the database the old names of the center *****/
    Ctr_GetCenterDataByCod (Ctr);
 
    /***** Check if new name is empty *****/
-   if (!NewCtrName[0])
+   if (!NewName[0])
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
    else
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentCtrName,NewCtrName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns (ParName,NewCtrName,Ctr->HieCod,
+         if (Ctr_DB_CheckIfCtrNameExistsInIns (Cns_ParShrtOrFullName[ShrtOrFullName],
+					       NewName,Ctr->HieCod,
 					       Gbl.Hierarchy.Node[Hie_INS].HieCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_center_X_already_exists,
-			     NewCtrName);
+			     NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Ctr_DB_UpdateCtrName (Ctr->HieCod,FldName,NewCtrName);
+            Ctr_DB_UpdateCtrName (Ctr->HieCod,
+        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_center_X_has_been_renamed_as_Y,
-                             CurrentCtrName,NewCtrName);
+                             CurrentName[ShrtOrFullName],NewName);
 
 	    /* Change current center name in order to display it properly */
-	    Str_Copy (CurrentCtrName,NewCtrName,MaxBytes);
+	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,CurrentCtrName);
+                          Txt_The_name_X_has_not_changed,
+                          CurrentName[ShrtOrFullName]);
      }
   }
 
@@ -1325,7 +1318,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Center short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1334,7 +1327,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Center full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1522,8 +1515,8 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
    Ctr_EditingCtr->Specific.PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /* Get center short name and full name */
-   Par_GetParText ("ShortName",Ctr_EditingCtr->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Ctr_EditingCtr->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Ctr_EditingCtr->FullName,Cns_MAX_BYTES_FULL_NAME);
 
    /* Get center WWW */
    Par_GetParText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);

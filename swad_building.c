@@ -429,7 +429,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldSho,Anchor);
 		  ParCod_PutPar (ParCod_Bld,Building->BldCod);
-		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
+		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Building->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -440,7 +440,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldFul,Anchor);
 		  ParCod_PutPar (ParCod_Bld,Building->BldCod);
-		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
+		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Building->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
@@ -536,73 +536,67 @@ void Bld_RenameBuildingFull (void)
 
 static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_building_X_already_exists;
    extern const char *Txt_The_building_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentClaName = NULL;	// Initialized to avoid warning
-   char NewClaName[Bld_MAX_BYTES_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Bld_MAX_BYTES_SHRT_NAME;
-         CurrentClaName = Bld_EditingBuilding->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Bld_MAX_BYTES_FULL_NAME;
-         CurrentClaName = Bld_EditingBuilding->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
+      [Cns_FULL_NAME] = Bld_EditingBuilding->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
    Bld_EditingBuilding->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /* Get the new name for the building */
-   Par_GetParText (ParName,NewClaName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get from the database the old names of the building *****/
    Bld_GetBuildingDataByCod (Bld_EditingBuilding);
 
    /***** Check if new name is empty *****/
-   if (NewClaName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentClaName,NewClaName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If building was in database... *****/
-         if (Bld_DB_CheckIfBuildingNameExists (ParName,NewClaName,Bld_EditingBuilding->BldCod))
+         if (Bld_DB_CheckIfBuildingNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+					       NewName,Bld_EditingBuilding->BldCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_building_X_already_exists,
-                             NewClaName);
+                             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,FldName,NewClaName);
+            Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,
+        			       Cns_FldShrtOrFullName[ShrtOrFullName],
+        			       NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_building_X_has_been_renamed_as_Y,
-                             CurrentClaName,NewClaName);
+                             CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,CurrentClaName);
+                          Txt_The_name_X_has_not_changed,
+                          CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update building name *****/
-   Str_Copy (CurrentClaName,NewClaName,MaxBytes);
+   Str_Copy (CurrentName[ShrtOrFullName],NewName,
+	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -613,7 +607,7 @@ void Bld_ChangeBuildingLocation (void)
   {
    extern const char *Txt_The_location_of_the_building_X_has_changed_to_Y;
    extern const char *Txt_The_location_of_the_building_X_has_not_changed;
-   char NewLocation[Bld_MAX_BYTES_FULL_NAME + 1];
+   char NewLocation[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Building constructor *****/
    Bld_EditingBuildingConstructor ();
@@ -688,7 +682,7 @@ static void Bld_PutFormToCreateBuilding (void)
 
 	 /***** Building short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -697,7 +691,7 @@ static void Bld_PutFormToCreateBuilding (void)
 
 	 /***** Building full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -754,10 +748,10 @@ void Bld_ReceiveFormNewBuilding (void)
 
    /***** Get parameters from form *****/
    /* Get building short name */
-   Par_GetParText ("ShortName",Bld_EditingBuilding->ShrtName,Bld_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("ShortName",Bld_EditingBuilding->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
 
    /* Get building full name */
-   Par_GetParText ("FullName",Bld_EditingBuilding->FullName,Bld_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("FullName",Bld_EditingBuilding->FullName,Cns_MAX_BYTES_FULL_NAME);
 
    /* Get building location */
    Par_GetParText ("Location",Bld_EditingBuilding->Location,Bld_MAX_BYTES_LOCATION);

@@ -301,7 +301,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
   {
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
-   char CourseName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   char CourseName[Cns_MAX_BYTES_SHRT_NAME + 1];
    struct Con_ConnectedUsrs Usrs;
 
    /***** Trivial check *****/

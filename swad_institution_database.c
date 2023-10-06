@@ -97,14 +97,14 @@ void Ins_DB_UpdateInsStatus (long InsCod,Hie_Status_t Status)
 /*************************** Update institution name *************************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewInsName)
+void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewName)
   {
    /***** Update institution changing old name by new name */
    DB_QueryUPDATE ("can not update the name of an institution",
 		   "UPDATE ins_instits"
 		     " SET %s='%s'"
 		   " WHERE InsCod=%ld",
-	           FldName,NewInsName,
+	           FldName,NewName,
 	           InsCod);
   }
 
@@ -148,7 +148,7 @@ unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod)
 /*********** Get the short name of an institution from its code **************/
 /*****************************************************************************/
 
-void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1])
+void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: institution code should be > 0 *****/
    if (InsCod <= 0)
@@ -158,7 +158,7 @@ void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 
      }
 
    /***** Get short name of institution from database *****/
-   DB_QuerySELECTString (ShrtName,Hie_MAX_BYTES_SHRT_NAME,
+   DB_QuerySELECTString (ShrtName,Cns_MAX_BYTES_SHRT_NAME,
 			 "can not get the short name of an institution",
 			 "SELECT ShortName"
 			  " FROM ins_instits"

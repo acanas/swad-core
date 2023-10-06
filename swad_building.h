@@ -27,17 +27,12 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_constant.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define Bld_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
-#define Bld_MAX_BYTES_SHRT_NAME	((Bld_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Bld_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
-#define Bld_MAX_BYTES_FULL_NAME	((Bld_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Bld_MAX_CHARS_LOCATION	(128 - 1)	// 127
 #define Bld_MAX_BYTES_LOCATION	((Bld_MAX_CHARS_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
@@ -46,8 +41,8 @@ struct Bld_Building
   {
    long BldCod;
    long InsCod;
-   char ShrtName[Bld_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Bld_MAX_BYTES_FULL_NAME + 1];
+   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];
    char Location[Bld_MAX_BYTES_LOCATION + 1];	// Examples: Campus North, City center
   };
 

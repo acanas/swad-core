@@ -172,7 +172,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    ExaCod = ParCod_GetPar (ParCod_Exa);
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!CallsForExams->CallForExam.CrsFullName[0])
       Str_Copy (CallsForExams->CallForExam.CrsFullName,
@@ -1001,7 +1001,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
-		  HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
+		  HTM_INPUT_TEXT ("CrsName",Cns_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"CrsName\" size=\"30\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());

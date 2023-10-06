@@ -384,7 +384,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
 		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,DegInLst->ShrtName,
+		     HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,DegInLst->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -400,7 +400,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
 		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
-		     HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,DegInLst->FullName,
+		     HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,DegInLst->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
 				     The_GetSuffix ());
@@ -562,7 +562,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree short name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
+	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -571,7 +571,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
+	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
@@ -1081,8 +1081,8 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
    Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 
    /* Get degree short name and full name */
-   Par_GetParText ("ShortName",Deg_EditingDeg->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("ShortName",Deg_EditingDeg->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
+   Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Cns_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
    Deg_EditingDeg->Specific.TypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
@@ -1319,67 +1319,60 @@ void Deg_RenameDegreeFull (void)
 
 void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   const char *ParName = NULL;	// Initialized to avoid warning
-   const char *FldName = NULL;	// Initialized to avoid warning
-   unsigned MaxBytes = 0;	// Initialized to avoid warning
-   char *CurrentDegName = NULL;	// Initialized to avoid warning
-   char NewDegName[Hie_MAX_BYTES_FULL_NAME + 1];
-
-   switch (ShrtOrFullName)
+   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
      {
-      case Cns_SHRT_NAME:
-         ParName = "ShortName";
-         FldName = "ShortName";
-         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
-         CurrentDegName = Deg->ShrtName;
-         break;
-      case Cns_FULL_NAME:
-         ParName = "FullName";
-         FldName = "FullName";
-         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
-         CurrentDegName = Deg->FullName;
-         break;
-     }
+      [Cns_SHRT_NAME] = Deg->ShrtName,
+      [Cns_FULL_NAME] = Deg->FullName,
+     };
+   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the new name for the degree */
-   Par_GetParText (ParName,NewDegName,MaxBytes);
+   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
+		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /***** Get data of degree *****/
    Deg_GetDegreeDataByCod (Deg);
 
    /***** Check if new name is empty *****/
-   if (NewDegName[0])
+   if (NewName[0])
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentDegName,NewDegName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_DB_CheckIfDegNameExistsInCtr (ParName,NewDegName,Deg->HieCod,Deg->PrtCod))
+         if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_ParShrtOrFullName[ShrtOrFullName],
+					       NewName,Deg->HieCod,Deg->PrtCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_degree_X_already_exists,
-		             NewDegName);
+		             NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Deg_DB_UpdateDegNameDB (Deg->HieCod,FldName,NewDegName);
+            Deg_DB_UpdateDegNameDB (Deg->HieCod,
+        			    Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_degree_X_has_been_renamed_as_Y,
-                             CurrentDegName,NewDegName);
+                             CurrentName[ShrtOrFullName],NewName);
 
 	    /* Change current degree name in order to display it properly */
-	    Str_Copy (CurrentDegName,NewDegName,MaxBytes);
+	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
-                          Txt_The_name_X_has_not_changed,CurrentDegName);
+                          Txt_The_name_X_has_not_changed,
+                          CurrentName[ShrtOrFullName]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1647,7 +1640,7 @@ static void Deg_EditingDegreeDestructor (void)
 /*****************************************************************************/
 
 void Deg_GetUsrMainDeg (long UsrCod,
-		        char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
+		        char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1],
 		        Rol_Role_t *MaxRole)
   {
    MYSQL_RES *mysql_res;
@@ -1659,7 +1652,7 @@ void Deg_GetUsrMainDeg (long UsrCod,
       row = mysql_fetch_row (mysql_res);
 
       /* Get degree name (row[0]) */
-      Str_Copy (ShrtName,row[0],Hie_MAX_BYTES_SHRT_NAME);
+      Str_Copy (ShrtName,row[0],Cns_MAX_BYTES_SHRT_NAME);
 
       /* Get maximum role (row[1]) */
       *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);

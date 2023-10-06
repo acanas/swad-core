@@ -5282,7 +5282,7 @@ static void Brw_WriteCurrentClipboard (void)
    struct Prj_Project Prj;
    struct Usr_Data UsrDat;
    char TxtClipboardZone[1024 +
-			 Hie_MAX_BYTES_SHRT_NAME +
+			 Cns_MAX_BYTES_SHRT_NAME +
 			 Grp_MAX_BYTES_GROUP_TYPE_NAME +
 			 Grp_MAX_BYTES_GROUP_NAME +
 			 Usr_MAX_BYTES_FULL_NAME +
