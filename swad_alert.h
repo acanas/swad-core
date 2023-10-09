@@ -92,6 +92,6 @@ void Ale_CreateAlertYouCanNotLeaveFieldEmpty (void);
 void Ale_CreateAlertYouMustSpecifyTheTitle (void);
 void Ale_CreateAlertYouMustSpecifyTheWebAddress (void);
 void Ale_CreateAlertYouMustSpecifyTheName (void);
-void Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName (void);
+void Ale_CreateAlertYouMustSpecifyShrtNameAndFullName (void);
 
 #endif

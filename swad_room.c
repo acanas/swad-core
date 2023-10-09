@@ -628,10 +628,20 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenRooSho,
+      [Cns_FULL_NAME] = ActRenRooFul,
+     };
    unsigned NumRoom;
    struct Roo_Room *Room;
    char *Anchor = NULL;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    HTM_TABLE_BeginWidePadding (2);
 
@@ -692,29 +702,27 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
-	    /* Room short name */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       Frm_BeginFormAnchor (ActRenRooSho,Anchor);
-		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
-		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Room->ShrtName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"10\""
-				  " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
-
-	    /* Room full name */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       Frm_BeginFormAnchor (ActRenRooFul,Anchor);
-		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Room->FullName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"20\""
-				  " class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+	    /* Room short name and full name */
+	    Name[Cns_SHRT_NAME] = Room->ShrtName;
+	    Name[Cns_FULL_NAME] = Room->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"LT\"");
+		  Frm_BeginFormAnchor (ActionRename[ShrtOrFullName],Anchor);
+		     ParCod_PutPar (ParCod_Roo,Room->RooCod);
+		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+				     Name[ShrtOrFullName],
+				     HTM_SUBMIT_ON_CHANGE,
+				     "size=\"10\""
+				     " class=\"%s INPUT_%s\"",
+				     Cns_ClassShrtOrFullName[ShrtOrFullName],
+				     The_GetSuffix ());
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+	      }
 
 	    /* Seating capacity */
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -1207,8 +1215,17 @@ void Roo_ContEditAfterChgRoom (void)
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Roo_EditingRoom->ShrtName,
+      [Cns_FULL_NAME] = Roo_EditingRoom->FullName,
+     };
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewRoo,NULL,NULL,NULL);
@@ -1246,23 +1263,22 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 				 HTM_DONT_SUBMIT_ON_CHANGE);
 	 HTM_TD_End ();
 
-	 /***** Room short name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"10\" class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Room full name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"20\" class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Room short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"10\" class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Seating capacity *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1322,8 +1338,18 @@ static void Roo_PutHeadRooms (void)
 
 void Roo_ReceiveFormNewRoom (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_room_X_already_exists;
    extern const char *Txt_Created_new_room_X;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Roo_EditingRoom->ShrtName,
+      [Cns_FULL_NAME] = Roo_EditingRoom->FullName,
+     };
 
    /***** Room constructor *****/
    Roo_EditingRoomConstructor ();
@@ -1335,8 +1361,12 @@ void Roo_ReceiveFormNewRoom (void)
    Roo_EditingRoom->Type   = Roo_GetParType ();
 
    /* Get room short name and full name */
-   Par_GetParText ("ShortName",Roo_EditingRoom->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Roo_EditingRoom->FullName,Cns_MAX_BYTES_FULL_NAME);
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+		      Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /* Get seating capacity */
    Roo_EditingRoom->Capacity = (unsigned)
@@ -1352,17 +1382,18 @@ void Roo_ReceiveFormNewRoom (void)
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
       /***** If name of room was in database... *****/
-      if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,-1L,
-                                        "ShortName",Roo_EditingRoom->ShrtName))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_room_X_already_exists,
-                          Roo_EditingRoom->ShrtName);
-      else if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,-1L,
-                                             "FullName",Roo_EditingRoom->FullName))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_room_X_already_exists,
-                          Roo_EditingRoom->FullName);
-      else	// Add new room to database
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+	 if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,-1L,
+					   Cns_FldShrtOrFullName[ShrtOrFullName],
+					   Name[ShrtOrFullName]))
+	   {
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_room_X_already_exists,Name[ShrtOrFullName]);
+	    Exists = true;
+	   }
+      if (!Exists)	// Add new room to database
         {
          Roo_CreateRoom (Roo_EditingRoom);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1371,7 +1402,7 @@ void Roo_ReceiveFormNewRoom (void)
         }
      }
    else	// If there is not a room name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

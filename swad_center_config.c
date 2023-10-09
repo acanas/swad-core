@@ -611,9 +611,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 
 static void CtrCfg_FullName (bool PutForm)
   {
-   extern const char *Txt_Center;
-
-   HieCfg_FullName (PutForm,ActRenCtrFulCfg,Hie_CTR,Txt_Center);
+   HieCfg_Name (PutForm,Hie_CTR,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -622,7 +620,7 @@ static void CtrCfg_FullName (bool PutForm)
 
 static void CtrCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenCtrShoCfg,Hie_CTR);
+   HieCfg_Name (PutForm,Hie_CTR,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -1021,9 +1019,17 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
 
 void CtrCfg_ChangeCtrIns (void)
   {
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_The_center_X_has_been_moved_to_the_institution_Y;
    struct Hie_Node NewIns;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
+      [Cns_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CTR].FullName,
+     };
 
    /***** Get parameter with institution code *****/
    NewIns.HieCod = ParCod_GetAndCheckPar (ParCod_OthIns);
@@ -1035,23 +1041,20 @@ void CtrCfg_ChangeCtrIns (void)
       Ins_GetInstitDataByCod (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
-      if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",
-                                            Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
-                                            Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-                                            NewIns.HieCod))
-	 /***** Create warning message *****/
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_The_center_X_already_exists,
-		          Gbl.Hierarchy.Node[Hie_CTR].ShrtName);
-      else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",
-                                                 Gbl.Hierarchy.Node[Hie_CTR].FullName,
-                                                 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-                                                 NewIns.HieCod))
-	 /***** Create warning message *****/
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_The_center_X_already_exists,
-		          Gbl.Hierarchy.Node[Hie_CTR].FullName);
-      else
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+	 if (Ctr_DB_CheckIfCtrNameExistsInIns (Cns_FldShrtOrFullName[ShrtOrFullName],
+					       Name[ShrtOrFullName],
+					       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+					       NewIns.HieCod))
+	   {
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_center_X_already_exists,
+			     Name[ShrtOrFullName]);
+	    Exists = true;
+	   }
+      if (!Exists)
 	{
 	 /***** Update institution in table of centers *****/
 	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewIns.HieCod);

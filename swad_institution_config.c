@@ -368,9 +368,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 
 static void InsCfg_FullName (bool PutForm)
   {
-   extern const char *Txt_Institution;
-
-   HieCfg_FullName (PutForm,ActRenInsFulCfg,Hie_INS,Txt_Institution);
+   HieCfg_Name (PutForm,Hie_INS,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -379,7 +377,7 @@ static void InsCfg_FullName (bool PutForm)
 
 static void InsCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenInsShoCfg,Hie_INS);
+   HieCfg_Name (PutForm,Hie_INS,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -535,9 +533,17 @@ void InsCfg_RemoveLogo (void)
 
 void InsCfg_ChangeInsCty (void)
   {
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Hie_Node NewCty;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_INS].ShrtName,
+      [Cns_FULL_NAME] = Gbl.Hierarchy.Node[Hie_INS].FullName,
+     };
 
    /***** Get the new country code for the institution *****/
    NewCty.HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
@@ -549,17 +555,19 @@ void InsCfg_ChangeInsCty (void)
       Cty_GetBasicCountryDataByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Node[Hie_INS].ShrtName,
-				            -1L,NewCty.HieCod))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_institution_X_already_exists,
-		          Gbl.Hierarchy.Node[Hie_INS].ShrtName);
-      else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Node[Hie_INS].FullName,
-						 -1L,NewCty.HieCod))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_institution_X_already_exists,
-		          Gbl.Hierarchy.Node[Hie_INS].FullName);
-      else
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+	 if (Ins_DB_CheckIfInsNameExistsInCty (Cns_FldShrtOrFullName[ShrtOrFullName],
+					       Name[ShrtOrFullName],
+					       -1L,NewCty.HieCod))
+	   {
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_institution_X_already_exists,
+			     Name[ShrtOrFullName]);
+	    Exists = true;
+	   }
+      if (!Exists)
 	{
 	 /***** Update the table changing the country of the institution *****/
 	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Node[Hie_INS].HieCod,NewCty.HieCod);

@@ -383,15 +383,25 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhBan,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidBan,	// Visible ==> action to hide
      };
-   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenBanSho,
+      [Cns_FULL_NAME] = ActRenBanFul,
+     };
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -437,27 +447,26 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	       HTM_ARTICLE_End ();
 	    HTM_TD_End ();
 
-	    /* Banner short name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenBanSho);
-		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
-		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
-
-	    /* Banner full name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenBanFul);
-		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
-		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ban->FullName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+	    /* Banner short name and full name */
+	    Name[Cns_SHRT_NAME] = Ban->ShrtName;
+	    Name[Cns_FULL_NAME] = Ban->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"CM\"");
+		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
+		     ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
+		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+				     Name[ShrtOrFullName],
+				     HTM_SUBMIT_ON_CHANGE,
+				     "class=\"%s INPUT_%s\"",
+				     Cns_ClassShrtOrFullName[ShrtOrFullName],
+				     The_GetSuffix ());
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+	      }
 
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"CM\"");
@@ -783,6 +792,16 @@ void Ban_ContEditAfterChgBan (void)
 
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Ban->ShrtName,
+      [Cns_FULL_NAME] = Ban->FullName,
+     };
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewBan,NULL,NULL,NULL);
 
@@ -802,23 +821,22 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 
 	 HTM_TD_Empty (1);
 
-	 /* Banner short name */
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /* Banner full name */
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ban->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /* Banner short name and full name */
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /* Banner image */
 	 HTM_TD_Begin ("class=\"CM\"");
@@ -878,48 +896,68 @@ static void Ban_PutHeadBanners (void)
 
 void Ban_ReceiveFormNewBanner (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_banner_X;
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Ban->ShrtName,
+      [Cns_FULL_NAME] = Ban->FullName,
+     };
 
    /***** Reset banner *****/
    Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
-   Par_GetParText ("ShortName",Ban->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Ban->FullName,Cns_MAX_BYTES_FULL_NAME);
-   Par_GetParText ("Img"      ,Ban->Img     ,Ban_MAX_BYTES_IMAGE);
-   Par_GetParText ("WWW"      ,Ban->WWW     ,Cns_MAX_BYTES_WWW);
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+	              Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParText ("Img",Ban->Img,Ban_MAX_BYTES_IMAGE);
+   Par_GetParText ("WWW",Ban->WWW,Cns_MAX_BYTES_WWW);
 
    if (Ban->ShrtName[0] &&
        Ban->FullName[0])	// If there's a banner name
      {
       /***** If name of banner was in database... *****/
-      if (Ban_DB_CheckIfBannerNameExists ("ShortName",Ban->ShrtName,-1L))
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_The_banner_X_already_exists,
-                          Ban->ShrtName);
-      else if (Ban_DB_CheckIfBannerNameExists ("FullName",Ban->FullName,-1L))
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_The_banner_X_already_exists,
-                          Ban->FullName);
-      else if (!Ban->Img[0])
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_You_must_specify_the_image_of_the_new_banner);
-      else if (!Ban->WWW[0])
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_You_must_specify_the_web_address);
-      else	// Add new banner to database
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+	 if (Ban_DB_CheckIfBannerNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+					     Name[ShrtOrFullName],-1L))
+	   {
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_banner_X_already_exists,
+			     Name[ShrtOrFullName]);
+	    Exists = true;
+	   }
+      if (!Exists)
         {
-         Ban_DB_CreateBanner (Ban);
-	 Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
-			  Ban->ShrtName);
+	 if (!Ban->Img[0])
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_You_must_specify_the_image_of_the_new_banner);
+	 else if (!Ban->WWW[0])
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_You_must_specify_the_web_address);
+	 else	// Add new banner to database
+	   {
+	    Ban_DB_CreateBanner (Ban);
+	    Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
+			     Ban->ShrtName);
+	   }
         }
      }
    else	// If there is not a banner name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

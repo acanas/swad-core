@@ -782,7 +782,7 @@ void Mai_ReceiveFormNewMailDomain (void)
         }
      }
    else	// If there is not a mail name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

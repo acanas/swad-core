@@ -577,7 +577,7 @@ void Ale_CreateAlertYouMustSpecifyTheName (void)
 /************ Create alert when short name or full name are empty ************/
 /*****************************************************************************/
 
-void Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName (void)
+void Ale_CreateAlertYouMustSpecifyShrtNameAndFullName (void)
   {
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name;
 

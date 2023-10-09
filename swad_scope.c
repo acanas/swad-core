@@ -46,24 +46,10 @@ extern struct Globals Gbl;
 
 void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange)
   {
-   extern const char *Txt_System;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Center;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
+   extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
    Hie_Level_t Level;
    unsigned ScopeUnsigned;
    bool WriteScope;
-   static const char **TxtScope[Hie_NUM_LEVELS] =
-     {
-      [Hie_SYS] = &Txt_System,
-      [Hie_CTY] = &Txt_Country,
-      [Hie_INS] = &Txt_Institution,
-      [Hie_CTR] = &Txt_Center,
-      [Hie_DEG] = &Txt_Degree,
-      [Hie_CRS] = &Txt_Course,
-     };
 
    HTM_SELECT_Begin (SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\" class=\"INPUT_%s\"",
@@ -102,7 +88,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 							HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s: %s",
-			   *TxtScope[Level],
+			   *Hie_TxtLevel[Level],
 			   Gbl.Hierarchy.Node[Level].ShrtName);
 	      }
 	   }

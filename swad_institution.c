@@ -876,7 +876,15 @@ void Ins_WriteSelectorOfInstitution (void)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenInsSho,
+      [Cns_FULL_NAME] = ActRenInsFul,
+     };
    unsigned NumIns;
    struct Hie_Node *Ins;
    char WWW[Cns_MAX_BYTES_WWW + 1];
@@ -885,6 +893,8 @@ static void Ins_ListInstitutionsForEdition (void)
    unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -940,37 +950,31 @@ static void Ins_ListInstitutionsForEdition (void)
 			     20,NULL);
 	    HTM_TD_End ();
 
-	    /* Institution short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActRenInsSho);
-		     ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (Ins->ShrtName);
-	    HTM_TD_End ();
-
-	    /* Institution full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	    if (ICanEdit)
+	    /* Institution short name and full name */
+	    Name[Cns_SHRT_NAME] = Ins->ShrtName;
+	    Name[Cns_FULL_NAME] = Ins->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
 	      {
-	       Frm_BeginForm (ActRenInsFul);
-		  ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ins->FullName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+		  if (ICanEdit)
+		    {
+		     Frm_BeginForm (ActionRename[ShrtOrFullName]);
+			ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
+			HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+					Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+					Name[ShrtOrFullName],
+					HTM_SUBMIT_ON_CHANGE,
+					"class=\"%s INPUT_%s\"",
+					Cns_ClassShrtOrFullName[ShrtOrFullName],
+					The_GetSuffix ());
+		     Frm_EndForm ();
+		    }
+		  else
+		     HTM_Txt (Name[ShrtOrFullName]);
+	       HTM_TD_End ();
 	      }
-	    else
-	       HTM_Txt (Ins->FullName);
-	    HTM_TD_End ();
 
 	    /* Institution WWW */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -1349,7 +1353,16 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    Act_Action_t NextAction = ActUnk;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Ins_EditingIns->ShrtName,
+      [Cns_FULL_NAME] = Ins_EditingIns->FullName,
+     };
 
    /***** Set action depending on role *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -1383,23 +1396,22 @@ static void Ins_PutFormToCreateInstitution (void)
 			  20,NULL);
 	 HTM_TD_End ();
 
-	 /***** Institution short name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Institution full name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Institution short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Institution WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1508,17 +1520,33 @@ void Ins_ReceiveFormNewIns (void)
 
 static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_Created_new_institution_X;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Ins_EditingIns->ShrtName,
+      [Cns_FULL_NAME] = Ins_EditingIns->FullName,
+     };
 
    /***** Get parameters from form *****/
    /* Set institution country */
    Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[Hie_CTY].HieCod;
 
    /* Get institution short name, full name and WWW */
-   Par_GetParText ("ShortName",Ins_EditingIns->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Ins_EditingIns->FullName,Cns_MAX_BYTES_FULL_NAME);
-   Par_GetParText ("WWW"      ,Ins_EditingIns->WWW     ,Cns_MAX_BYTES_WWW);
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+		      Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+
+   /* Get institution URL */
+   Par_GetParText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
 
    if (Ins_EditingIns->ShrtName[0] &&
        Ins_EditingIns->FullName[0])	// If there's a institution name
@@ -1526,17 +1554,19 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
       if (Ins_EditingIns->WWW[0])
         {
          /***** If name of institution was in database... *****/
-         if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Ins_EditingIns->ShrtName,
-					       -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_institution_X_already_exists,
-                             Ins_EditingIns->ShrtName);
-         else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Ins_EditingIns->FullName,
-						    -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_institution_X_already_exists,
-                             Ins_EditingIns->FullName);
-         else	// Add new institution to database
+	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	      ShrtOrFullName++)
+	    if (Ins_DB_CheckIfInsNameExistsInCty (Cns_FldShrtOrFullName[ShrtOrFullName],
+						  Name[ShrtOrFullName],
+						  -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
+	      {
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_institution_X_already_exists,
+				Name[ShrtOrFullName]);
+	       Exists = true;
+	      }
+         if (!Exists)	// Add new institution to database
            {
             Ins_EditingIns->HieCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1548,7 +1578,7 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a institution name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

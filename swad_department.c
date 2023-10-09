@@ -464,12 +464,22 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
 
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_institution;
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenDptSho,
+      [Cns_FULL_NAME] = ActRenDptFul,
+     };
    unsigned NumDpt;
    struct Dpt_Department *DptInLst;
    struct Hie_Node Ins;
    unsigned NumIns;
    struct Hie_Node *InsInLst;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -532,27 +542,26 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
-	    /* Department short name */
-	    HTM_TD_Begin ("class=\"LM\"");
-	       Frm_BeginForm (ActRenDptSho);
-		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,DptInLst->ShrtName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
-
-	    /* Department full name */
-	    HTM_TD_Begin ("class=\"LM\"");
-	       Frm_BeginForm (ActRenDptFul);
-		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,DptInLst->FullName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+	    /* Department short name and full name */
+	    Name[Cns_SHRT_NAME] = DptInLst->ShrtName;
+	    Name[Cns_FULL_NAME] = DptInLst->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"LM\"");
+		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
+		     ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
+		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+				     Name[ShrtOrFullName],
+				     HTM_SUBMIT_ON_CHANGE,
+				     "class=\"%s INPUT_%s\"",
+				     Cns_ClassShrtOrFullName[ShrtOrFullName],
+				     The_GetSuffix ());
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+	      }
 
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"LM\"");
@@ -807,9 +816,18 @@ void Dpt_ContEditAfterChgDpt (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_institution;
    unsigned NumIns;
    const struct Hie_Node *InsInLst;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
+      [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
+     };
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewDpt,NULL,NULL,NULL);
@@ -852,23 +870,22 @@ static void Dpt_PutFormToCreateDepartment (void)
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
-	 /***** Department short name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Department full name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Department short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Department WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -919,8 +936,18 @@ static void Dpt_PutHeadDepartments (void)
 
 void Dpt_ReceiveFormNewDpt (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_Created_new_department_X;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
+      [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
+     };
 
    /***** Department constructor *****/
    Dpt_EditingDepartmentConstructor ();
@@ -929,11 +956,13 @@ void Dpt_ReceiveFormNewDpt (void)
    /* Get institution */
    Dpt_EditingDpt->InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
-   /* Get department short name */
-   Par_GetParText ("ShortName",Dpt_EditingDpt->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-
-   /* Get department full name */
-   Par_GetParText ("FullName",Dpt_EditingDpt->FullName,Cns_MAX_BYTES_FULL_NAME);
+   /* Get department short name and full name */
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+		      Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /* Get department WWW */
    Par_GetParText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
@@ -944,15 +973,18 @@ void Dpt_ReceiveFormNewDpt (void)
       if (Dpt_EditingDpt->WWW[0])
         {
          /***** If name of department was in database... *****/
-         if (Dpt_DB_CheckIfDepartmentNameExists ("ShortName",Dpt_EditingDpt->ShrtName,-1L))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_department_X_already_exists,
-                             Dpt_EditingDpt->ShrtName);
-         else if (Dpt_DB_CheckIfDepartmentNameExists ("FullName",Dpt_EditingDpt->FullName,-1L))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_department_X_already_exists,
-                             Dpt_EditingDpt->FullName);
-         else	// Add new department to database
+	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	      ShrtOrFullName++)
+	    if (Dpt_DB_CheckIfDepartmentNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+						    Name[ShrtOrFullName],-1L))
+	      {
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_department_X_already_exists,
+				Name[ShrtOrFullName]);
+	       Exists = true;
+	      }
+         if (!Exists)	// Add new department to database
            {
             Dpt_DB_CreateDepartment (Dpt_EditingDpt);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -964,7 +996,7 @@ void Dpt_ReceiveFormNewDpt (void)
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a department name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

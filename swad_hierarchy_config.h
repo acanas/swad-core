@@ -34,9 +34,7 @@
 /*****************************************************************************/
 
 void HieCfg_Title (bool PutLink,Hie_Level_t LogoScope);
-void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level,
-		      const char *Label);
-void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level);
+void HieCfg_Name (bool PutForm,Hie_Level_t Level,Cns_ShrtOrFullName_t ShrtOrFullName);
 void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1]);
 void HieCfg_Shortcut (bool PrintView,ParCod_Param_t ParCode,long HieCod);

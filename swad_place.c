@@ -445,8 +445,18 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenPlcSho,
+      [Cns_FULL_NAME] = ActRenPlcFul,
+     };
    unsigned NumPlc;
    struct Plc_Place *Plc;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -477,27 +487,26 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	       HTM_Long (Plc->PlcCod);
 	    HTM_TD_End ();
 
-	    /* Place short name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenPlcSho);
-		  ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
-		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Plc->ShrtName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
-
-	    /* Place full name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenPlcFul);
-		  ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Plc->FullName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+	    /* Place short name and full name */
+	    Name[Cns_SHRT_NAME] = Plc->ShrtName;
+	    Name[Cns_FULL_NAME] = Plc->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"CM\"");
+		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
+		     ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
+		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+				     Name[ShrtOrFullName],
+				     HTM_SUBMIT_ON_CHANGE,
+				     "class=\"%s INPUT_%s\"",
+				     Cns_ClassShrtOrFullName[ShrtOrFullName],
+				     The_GetSuffix ());
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+	      }
 
 	    /* Number of centers */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -672,6 +681,16 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
+      [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
+     };
+
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewPlc,NULL,NULL,NULL);
 
@@ -688,23 +707,22 @@ static void Plc_PutFormToCreatePlace (void)
 	 HTM_TD_Begin ("class=\"CODE\"");
 	 HTM_TD_End ();
 
-	 /***** Place short name *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Plc_EditingPlc->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Place full name *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Plc_EditingPlc->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Place short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Number of centers *****/
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -743,32 +761,47 @@ static void Plc_PutHeadPlaces (void)
 
 void Plc_ReceiveFormNewPlace (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_Created_new_place_X;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
+      [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
+     };
 
    /***** Place constructor *****/
    Plc_EditingPlaceConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get place short name */
-   Par_GetParText ("ShortName",Plc_EditingPlc->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-
-   /* Get place full name */
-   Par_GetParText ("FullName",Plc_EditingPlc->FullName,Cns_MAX_BYTES_FULL_NAME);
+   /* Get place short name and full name */
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+		      Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    if (Plc_EditingPlc->ShrtName[0] &&
        Plc_EditingPlc->FullName[0])	// If there's a place name
      {
       /***** If name of place was in database... *****/
-      if (Plc_DB_CheckIfPlaceNameExists (-1L,"ShortName",Plc_EditingPlc->ShrtName))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_place_X_already_exists,
-                          Plc_EditingPlc->ShrtName);
-      else if (Plc_DB_CheckIfPlaceNameExists (-1L,"FullName",Plc_EditingPlc->FullName))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_place_X_already_exists,
-                          Plc_EditingPlc->FullName);
-      else	// Add new place to database
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+	 if (Plc_DB_CheckIfPlaceNameExists (-1L,Cns_FldShrtOrFullName[ShrtOrFullName],
+					    Name[ShrtOrFullName]))
+	   {
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_place_X_already_exists,
+			     Name[ShrtOrFullName]);
+	    Exists = true;
+	   }
+      if (!Exists)	// Add new place to database
         {
          Plc_DB_CreatePlace (Plc_EditingPlc);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_place_X,
@@ -776,7 +809,7 @@ void Plc_ReceiveFormNewPlace (void)
         }
      }
    else	// If there is not a place name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

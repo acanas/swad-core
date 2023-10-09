@@ -397,8 +397,18 @@ static void Lnk_FreeListLinks (struct Lnk_Links *Links)
 
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenLnkSho,
+      [Cns_FULL_NAME] = ActRenLnkFul,
+     };
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -426,29 +436,27 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	       HTM_Long (Lnk->LnkCod);
 	    HTM_TD_End ();
 
-	    /* Link short name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenLnkSho);
-		  ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
-		  HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Lnk->ShrtName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
-
-	    /* Link full name */
-	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_BeginForm (ActRenLnkFul);
-		  ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
-		  HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Lnk->FullName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+	    /* Link short name and full name */
+	    Name[Cns_SHRT_NAME] = Lnk->ShrtName;
+	    Name[Cns_FULL_NAME] = Lnk->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"CM\"");
+		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
+		     ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
+		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+				     Name[ShrtOrFullName],
+				     HTM_SUBMIT_ON_CHANGE,
+				     "class=\"%s INPUT_%s\""
+				     " required=\"required\"",
+				     Cns_ClassShrtOrFullName[ShrtOrFullName],
+				     The_GetSuffix ());
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+	      }
 
 	    /* Link WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
@@ -660,6 +668,16 @@ void Lnk_ContEditAfterChgLnk (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
+      [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
+     };
+
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewLnk,NULL,NULL,NULL);
 
@@ -676,23 +694,22 @@ static void Lnk_PutFormToCreateLink (void)
 	 HTM_TD_Begin ("class=\"CODE\"");
 	 HTM_TD_End ();
 
-	 /***** Link short name *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Lnk_EditingLnk->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Link full name *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Lnk_EditingLnk->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Link short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Link WWW *****/
 	 HTM_TD_Begin ("class=\"CM\"");
@@ -734,19 +751,31 @@ static void Lnk_PutHeadLinks (void)
 
 void Lnk_ReceiveFormNewLink (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_link_X;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
+      [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
+     };
 
    /***** Link constructor *****/
    Lnk_EditingLinkConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get link short name */
-   Par_GetParText ("ShortName",Lnk_EditingLnk->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-
-   /* Get link full name */
-   Par_GetParText ("FullName",Lnk_EditingLnk->FullName,Cns_MAX_BYTES_FULL_NAME);
+   /* Get link short name and full name */
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+		      Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /* Get link URL */
    Par_GetParText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);
@@ -755,27 +784,33 @@ void Lnk_ReceiveFormNewLink (void)
        Lnk_EditingLnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      if (Lnk_DB_CheckIfLinkNameExists ("ShortName",Lnk_EditingLnk->ShrtName,-1L))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_link_X_already_exists,
-                          Lnk_EditingLnk->ShrtName);
-      else if (Lnk_DB_CheckIfLinkNameExists ("FullName",Lnk_EditingLnk->FullName,-1L))
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_The_link_X_already_exists,
-                          Lnk_EditingLnk->FullName);
-      else if (!Lnk_EditingLnk->WWW[0])
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          Txt_You_must_specify_the_web_address);
-      else	// Add new link to database
-        {
-         Lnk_DB_CreateLink (Lnk_EditingLnk);
-      	 Ale_CreateAlert (Ale_SUCCESS,NULL,
-      	                  Txt_Created_new_link_X,
-			  Lnk_EditingLnk->ShrtName);
-        }
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+	 if (Lnk_DB_CheckIfLinkNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+					   Name[ShrtOrFullName],-1L))
+	   {
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_link_X_already_exists,
+			     Name[ShrtOrFullName]);
+	    Exists = true;
+	   }
+      if (!Exists)
+	{
+	 if (!Lnk_EditingLnk->WWW[0])
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_You_must_specify_the_web_address);
+	 else	// Add new link to database
+	   {
+	    Lnk_DB_CreateLink (Lnk_EditingLnk);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_Created_new_link_X,
+			     Lnk_EditingLnk->ShrtName);
+	   }
+	}
      }
    else	// If there is not a link name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

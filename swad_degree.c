@@ -316,16 +316,26 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenDegSho,
+      [Cns_FULL_NAME] = ActRenDegFul,
+     };
    unsigned NumDeg;
-   struct Hie_Node *DegInLst;
+   struct Hie_Node *Deg;
    unsigned NumDegTyp;
-   struct DegTyp_DegreeType *DegTypInLst;
+   struct DegTyp_DegreeType *DegTyp;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -341,13 +351,13 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	   NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
 	   NumDeg++)
 	{
-	 DegInLst = &(Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]);
+	 Deg = &(Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]);
 
-	 ICanEdit = Deg_CheckIfICanEditADegree (DegInLst);
+	 ICanEdit = Deg_CheckIfICanEditADegree (Deg);
 	 NumCrss = Hie_GetNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 					    Hie_DEG,	// ...in degree
-					    DegInLst->HieCod);
-	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (Hie_DEG,DegInLst->HieCod,
+					    Deg->HieCod);
+	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (Hie_DEG,Deg->HieCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
 						    1 << Rol_TCH);	// Any user
@@ -362,60 +372,54 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDeg,NULL,
-						 Hie_PutParOtherHieCod,&DegInLst->HieCod);
+						 Hie_PutParOtherHieCod,&Deg->HieCod);
 	    HTM_TD_End ();
 
 	    /* Degree code */
 	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
-	       HTM_Long (DegInLst->HieCod);
+	       HTM_Long (Deg->HieCod);
 	    HTM_TD_End ();
 
 	    /* Degree logo */
-	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",DegInLst->FullName);
+	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
 	       Lgo_DrawLogo (Hie_DEG,
-			     DegInLst->HieCod,
-			     DegInLst->ShrtName
+			     Deg->HieCod,
+			     Deg->ShrtName
 			     ,20,NULL);
 	    HTM_TD_End ();
 
-	    /* Degree short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActRenDegSho);
-		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,DegInLst->ShrtName,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (DegInLst->ShrtName);
-	    HTM_TD_End ();
-
-	    /* Degree full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActRenDegFul);
-		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
-		     HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,DegInLst->FullName,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (DegInLst->FullName);
-	    HTM_TD_End ();
+	    /* Degree short name and full name */
+	    Name[Cns_SHRT_NAME] = Deg->ShrtName;
+	    Name[Cns_FULL_NAME] = Deg->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+		  if (ICanEdit)
+		    {
+		     Frm_BeginForm (ActionRename[ShrtOrFullName]);
+			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
+			HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+					Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+					Name[ShrtOrFullName],
+					HTM_SUBMIT_ON_CHANGE,
+					"class=\"%s INPUT_%s\"",
+					Cns_ClassShrtOrFullName[ShrtOrFullName],
+					The_GetSuffix ());
+		     Frm_EndForm ();
+		    }
+		  else
+		     HTM_Txt (Name[ShrtOrFullName]);
+	       HTM_TD_End ();
+	      }
 
 	    /* Degree type */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
-		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
+		     ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"OthDegTypCod\""
 				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
@@ -424,12 +428,12 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			     NumDegTyp < DegTypes->Num;
 			     NumDegTyp++)
 			  {
-			   DegTypInLst = &DegTypes->Lst[NumDegTyp];
-			   HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
-				       DegTypInLst->DegTypCod == DegInLst->Specific.TypCod ? HTM_OPTION_SELECTED :
-											     HTM_OPTION_UNSELECTED,
+			   DegTyp = &DegTypes->Lst[NumDegTyp];
+			   HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
+				       DegTyp->DegTypCod == Deg->Specific.TypCod ? HTM_OPTION_SELECTED :
+										   HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
-				       "%s",DegTypInLst->DegTypName);
+				       "%s",DegTyp->DegTypName);
 			  }
 		     HTM_SELECT_End ();
 		  Frm_EndForm ();
@@ -439,9 +443,9 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		       NumDegTyp < DegTypes->Num;
 		       NumDegTyp++)
 		    {
-		     DegTypInLst = &DegTypes->Lst[NumDegTyp];
-		     if (DegTypInLst->DegTypCod == DegInLst->Specific.TypCod)
-			HTM_Txt (DegTypInLst->DegTypName);
+		     DegTyp = &DegTypes->Lst[NumDegTyp];
+		     if (DegTyp->DegTypCod == Deg->Specific.TypCod)
+			HTM_Txt (DegTyp->DegTypName);
 		    }
 	    HTM_TD_End ();
 
@@ -450,8 +454,8 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
-		     ParCod_PutPar (ParCod_OthHie,DegInLst->HieCod);
-		     HTM_INPUT_URL ("WWW",DegInLst->WWW,HTM_SUBMIT_ON_CHANGE,
+		     ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
+		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				    " required=\"required\"",
 				    The_GetSuffix ());
@@ -459,12 +463,12 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		 }
 	       else
 		 {
-		  Str_Copy (WWW,DegInLst->WWW,sizeof (WWW) - 1);
+		  Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
 		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 			          " class=\"DAT_%s\"",
-				  DegInLst->WWW,
-				  DegInLst->WWW,
+				  Deg->WWW,
+				  Deg->WWW,
 				  The_GetSuffix ());
 			HTM_Txt (WWW);
 		     HTM_A_End ();
@@ -483,7 +487,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Degree requester */
-	    UsrDat.UsrCod = DegInLst->RequesterUsrCod;
+	    UsrDat.UsrCod = Deg->RequesterUsrCod;
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
@@ -494,7 +498,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree status */
 	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM,
-	                                 DegInLst->Status,ActChgDegSta,DegInLst->HieCod,
+	                                 Deg->Status,ActChgDegSta,Deg->HieCod,
 	                                 Txt_DEGREE_STATUS);
 
 	 HTM_TR_End ();
@@ -524,9 +528,18 @@ static bool Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
 
 static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
    struct DegTyp_DegreeType *DegTypInLst;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Deg_EditingDeg->ShrtName,
+      [Cns_FULL_NAME] = Deg_EditingDeg->FullName,
+     };
 
    /***** Set action depending on role *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -560,23 +573,22 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 			  20,NULL);
 	 HTM_TD_End ();
 
-	 /***** Degree short name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Degree full name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Degree short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Degree type *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1073,16 +1085,30 @@ void Deg_ReceiveFormNewDeg (void)
 
 static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_Created_new_degree_X;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Deg_EditingDeg->ShrtName,
+      [Cns_FULL_NAME] = Deg_EditingDeg->FullName,
+     };
 
    /***** Get parameters from form *****/
    /* Set degree center */
    Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 
    /* Get degree short name and full name */
-   Par_GetParText ("ShortName",Deg_EditingDeg->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Deg_EditingDeg->FullName,Cns_MAX_BYTES_FULL_NAME);
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+		      Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /* Get degree type */
    Deg_EditingDeg->Specific.TypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
@@ -1096,17 +1122,19 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
       if (Deg_EditingDeg->WWW[0])
 	{
 	 /***** If name of degree was in database... *****/
-	 if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",Deg_EditingDeg->ShrtName,
-	                                       -1L,Deg_EditingDeg->PrtCod))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-		             Txt_The_degree_X_already_exists,
-		             Deg_EditingDeg->ShrtName);
-	 else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",Deg_EditingDeg->FullName,
-	                                            -1L,Deg_EditingDeg->PrtCod))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-		             Txt_The_degree_X_already_exists,
-		             Deg_EditingDeg->FullName);
-	 else	// Add new degree to database
+	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	      ShrtOrFullName++)
+	    if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_FldShrtOrFullName[ShrtOrFullName],
+						  Name[ShrtOrFullName],
+						  -1L,Deg_EditingDeg->PrtCod))
+	      {
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_degree_X_already_exists,
+				Name[ShrtOrFullName]);
+	       Exists = true;
+	      }
+	 if (!Exists)	// Add new degree to database
 	   {
 	    Deg_DB_CreateDegree (Deg_EditingDeg,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1118,7 +1146,7 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a degree name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/
@@ -1351,8 +1379,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
          if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_ParShrtOrFullName[ShrtOrFullName],
 					       NewName,Deg->HieCod,Deg->PrtCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_degree_X_already_exists,
-		             NewName);
+        	             Txt_The_degree_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */

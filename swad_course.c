@@ -916,14 +916,24 @@ static void Crs_ListCoursesForEdition (void)
 
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenCrsSho,
+      [Cns_FULL_NAME] = ActRenCrsFul,
+     };
    struct Hie_Node *Crs;
    unsigned YearAux;
    unsigned NumCrs;
    struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumUsrs[Rol_NUM_ROLES];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -934,6 +944,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	NumCrs++)
      {
       Crs = &(Gbl.Hierarchy.List[Hie_DEG].Lst[NumCrs]);
+
       if (Crs->Specific.Year == Year)
 	{
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
@@ -1006,37 +1017,31 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		  HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
-	    /* Course short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActRenCrsSho);
-		     ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (Crs->ShrtName);
-	    HTM_TD_End ();
-
-	    /* Course full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActRenCrsFul);
-		     ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-		     HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Crs->FullName,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (Crs->FullName);
-	    HTM_TD_End ();
+	    /* Course short name and full name */
+	    Name[Cns_SHRT_NAME] = Crs->ShrtName;
+	    Name[Cns_FULL_NAME] = Crs->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+		  if (ICanEdit)
+		    {
+		     Frm_BeginForm (ActionRename[ShrtOrFullName]);
+			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
+			HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+					Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+					Name[ShrtOrFullName],
+					HTM_SUBMIT_ON_CHANGE,
+					"class=\"%s INPUT_%s\"",
+					Cns_ClassShrtOrFullName[ShrtOrFullName],
+					The_GetSuffix ());
+		     Frm_EndForm ();
+		    }
+		  else
+		     HTM_Txt (Name[ShrtOrFullName]);
+	       HTM_TD_End ();
+	      }
 
 	    /* Current number of teachers in this course */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -1089,9 +1094,18 @@ static bool Crs_CheckIfICanEdit (struct Hie_Node *Crs)
 
 static void Crs_PutFormToCreateCourse (void)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    Act_Action_t NextAction = ActUnk;
    unsigned Year;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Crs_EditingCrs->ShrtName,
+      [Cns_FULL_NAME] = Crs_EditingCrs->FullName,
+     };
 
    /***** Set action depending on role *****/
 
@@ -1145,23 +1159,22 @@ static void Crs_PutFormToCreateCourse (void)
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
-	 /***** Course short name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Course full name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Course short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Current number of teachers in this course *****/
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -1277,10 +1290,18 @@ void Crs_ReceiveFormNewCrs (void)
 
 static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
   {
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_Created_new_course_X;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Crs_EditingCrs->ShrtName,
+      [Cns_FULL_NAME] = Crs_EditingCrs->FullName,
+     };
 
    /***** Get parameters from form *****/
    /* Set course degree */
@@ -1297,17 +1318,20 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 	  Crs_EditingCrs->FullName[0])	// If there's a course name
 	{
 	 /***** If name of course was in database... *****/
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
-						     -1L,Crs_EditingCrs->PrtCod,Crs_EditingCrs->Specific.Year))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_course_X_already_exists,
-	                     Crs_EditingCrs->ShrtName);
-	 else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
-	                                                  -1L,Crs_EditingCrs->PrtCod,Crs_EditingCrs->Specific.Year))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_course_X_already_exists,
-		             Crs_EditingCrs->FullName);
-	 else	// Add new requested course to database
+	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	      ShrtOrFullName++)
+	    if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Cns_FldShrtOrFullName[ShrtOrFullName],
+							Name[ShrtOrFullName],
+							-1L,Crs_EditingCrs->PrtCod,
+							Crs_EditingCrs->Specific.Year))
+	      {
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_course_X_already_exists,
+				Name[ShrtOrFullName]);
+	       Exists = true;
+	      }
+	 if (!Exists)	// Add new requested course to database
 	   {
 	    Crs_DB_CreateCourse (Crs_EditingCrs,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1316,7 +1340,7 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 	   }
 	}
       else	// If there is not a course name
-         Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+         Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
      }
    else	// Year not valid
       Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1330,7 +1354,15 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 
 static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    char YearStr[2 + 1];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Crs->ShrtName,
+      [Cns_FULL_NAME] = Crs->FullName,
+     };
 
    /***** Get parameters of the course from form *****/
    /* Get year */
@@ -1340,11 +1372,13 @@ static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
    /* Get institutional code */
    Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
-   /* Get course short name */
-   Par_GetParText ("ShortName",Crs->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-
-   /* Get course full name */
-   Par_GetParText ("FullName",Crs->FullName,Cns_MAX_BYTES_FULL_NAME);
+   /* Get course short name and full name */
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+		      Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -1629,12 +1663,20 @@ void Crs_ChangeInsCrsCod (void)
 
 void Crs_ChangeCrsYear (void)
   {
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_course_X_already_exists_in_year_Y;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
    char YearStr[2 + 1];
    unsigned NewYear;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Crs_EditingCrs->ShrtName,
+      [Cns_FULL_NAME] = Crs_EditingCrs->FullName,
+     };
 
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
@@ -1655,19 +1697,19 @@ void Crs_ChangeCrsYear (void)
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       /***** If name of course was in database in the new year... *****/
-      if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
-						  -1L,Crs_EditingCrs->PrtCod,NewYear))
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-			  Txt_The_course_X_already_exists_in_year_Y,
-			  Crs_EditingCrs->ShrtName,
-			  Txt_YEAR_OF_DEGREE[NewYear]);
-      else if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
-						       -1L,Crs_EditingCrs->PrtCod,NewYear))
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-			  Txt_The_course_X_already_exists_in_year_Y,
-			  Crs_EditingCrs->FullName,
-			  Txt_YEAR_OF_DEGREE[NewYear]);
-      else	// Update year in database
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+        {
+	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Cns_FldShrtOrFullName[ShrtOrFullName],
+						     Name[ShrtOrFullName],
+						     -1L,Crs_EditingCrs->PrtCod,NewYear))
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_The_course_X_already_exists_in_year_Y,
+			     Name[ShrtOrFullName],Txt_YEAR_OF_DEGREE[NewYear]);
+	 Exists = true;
+        }
+      if (!Exists)	// Update year in database
 	{
 	 /***** Update year in table of courses *****/
 	 Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);

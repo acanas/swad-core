@@ -266,9 +266,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 
 static void DegCfg_FullName (bool PutForm)
   {
-   extern const char *Txt_Degree;
-
-   HieCfg_FullName (PutForm,ActRenDegFulCfg,Hie_DEG,Txt_Degree);
+   HieCfg_Name (PutForm,Hie_DEG,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -277,7 +275,7 @@ static void DegCfg_FullName (bool PutForm)
 
 static void DegCfg_ShrtName (bool PutForm)
   {
-   HieCfg_ShrtName (PutForm,ActRenDegShoCfg,Hie_DEG);
+   HieCfg_Name (PutForm,Hie_DEG,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -350,9 +348,17 @@ static void DegCfg_NumCrss (void)
 
 void DegCfg_ChangeDegCtr (void)
   {
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_moved_to_the_center_Y;
    struct Hie_Node NewCtr;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   bool Exists;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
+      [Cns_FULL_NAME] = Gbl.Hierarchy.Node[Hie_DEG].FullName,
+     };
 
    /***** Get parameter with center code *****/
    NewCtr.HieCod = ParCod_GetAndCheckPar (ParCod_OthCtr);
@@ -364,21 +370,19 @@ void DegCfg_ChangeDegCtr (void)
       Ctr_GetCenterDataByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new center *****/
-      if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",
-					    Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
-					    Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-					    NewCtr.HieCod))
-         Ale_CreateAlert (Ale_WARNING,
-                          Txt_The_degree_X_already_exists,
-		          Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
-      else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",
-						 Gbl.Hierarchy.Node[Hie_DEG].FullName,
-						 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-						 NewCtr.HieCod))
-         Ale_CreateAlert (Ale_WARNING,
-                          Txt_The_degree_X_already_exists,
-		          Gbl.Hierarchy.Node[Hie_DEG].FullName);
-      else
+      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	   ShrtOrFullName++)
+	 if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_FldShrtOrFullName[ShrtOrFullName],
+					       Name[ShrtOrFullName],
+					       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+					       NewCtr.HieCod))
+           {
+	    Ale_CreateAlert (Ale_WARNING,Txt_The_degree_X_already_exists,
+			     Name[ShrtOrFullName]);
+	    Exists = true;
+           }
+      if (Exists)
 	{
 	 /***** Update center in table of degrees *****/
 	 Deg_DB_UpdateDegCtr (Gbl.Hierarchy.Node[Hie_DEG].HieCod,NewCtr.HieCod);

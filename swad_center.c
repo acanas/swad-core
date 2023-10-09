@@ -730,8 +730,16 @@ void Ctr_WriteSelectorOfCenter (void)
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
+   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = ActRenCtrSho,
+      [Cns_FULL_NAME] = ActRenCtrFul,
+     };
    unsigned NumCtr;
    struct Hie_Node *Ctr;
    unsigned NumPlc;
@@ -742,6 +750,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    unsigned NumDegs;
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -833,37 +843,31 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			HTM_Txt (Places->Lst[NumPlc].ShrtName);
 	    HTM_TD_End ();
 
-	    /* Center short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActRenCtrSho);
-		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-		     HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (Ctr->ShrtName);
-	    HTM_TD_End ();
-
-	    /* Center full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
-		 {
-		  Frm_BeginForm (ActRenCtrFul);
-		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-		     HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ctr->FullName,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_FULL_NAME INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		  HTM_Txt (Ctr->FullName);
-	    HTM_TD_End ();
+	    /* Center short name and full name */
+	    Name[Cns_SHRT_NAME] = Ctr->ShrtName;
+	    Name[Cns_FULL_NAME] = Ctr->FullName;
+	    for (ShrtOrFullName  = Cns_SHRT_NAME;
+		 ShrtOrFullName <= Cns_FULL_NAME;
+		 ShrtOrFullName++)
+	      {
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+		  if (ICanEdit)
+		    {
+		     Frm_BeginForm (ActionRename[ShrtOrFullName]);
+			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
+			HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+					Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+					Name[ShrtOrFullName],
+					HTM_SUBMIT_ON_CHANGE,
+					"class=\"%s INPUT_%s\"",
+					Cns_ClassShrtOrFullName[ShrtOrFullName],
+					The_GetSuffix ());
+		     Frm_EndForm ();
+		    }
+		  else
+		     HTM_Txt (Name[ShrtOrFullName]);
+	       HTM_TD_End ();
+	      }
 
 	    /* Center WWW */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -1255,10 +1259,19 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_place;
    Act_Action_t NextAction = ActUnk;
    unsigned NumPlc;
    const struct Plc_Place *PlcInLst;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
+      [Cns_FULL_NAME] = Ctr_EditingCtr->FullName,
+     };
 
    /***** Set action depending on role *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
@@ -1316,23 +1329,22 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
-	 /***** Center short name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
-
-	 /***** Center full name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 HTM_TD_End ();
+	 /***** Center short name and full name *****/
+	 for (ShrtOrFullName  = Cns_SHRT_NAME;
+	      ShrtOrFullName <= Cns_FULL_NAME;
+	      ShrtOrFullName++)
+	   {
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    HTM_TD_End ();
+	   }
 
 	 /***** Center WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1504,8 +1516,18 @@ void Ctr_ReceiveFormNewCtr (void)
 
 static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_Created_new_center_X;
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
+      [Cns_FULL_NAME] = Ctr_EditingCtr->FullName,
+     };
+   bool Exists;
 
    /***** Get parameters from form *****/
    /* Set center institution */
@@ -1515,8 +1537,12 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
    Ctr_EditingCtr->Specific.PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /* Get center short name and full name */
-   Par_GetParText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_MAX_BYTES_SHRT_NAME);
-   Par_GetParText ("FullName" ,Ctr_EditingCtr->FullName,Cns_MAX_BYTES_FULL_NAME);
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
+	              Name[ShrtOrFullName],
+		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
 
    /* Get center WWW */
    Par_GetParText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
@@ -1527,19 +1553,19 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
       if (Ctr_EditingCtr->WWW[0])
         {
          /***** If name of center was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",
-					       Ctr_EditingCtr->ShrtName,-1L,
-					       Gbl.Hierarchy.Node[Hie_INS].HieCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_center_X_already_exists,
-                             Ctr_EditingCtr->ShrtName);
-         else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",
-						    Ctr_EditingCtr->FullName,-1L,
-						    Gbl.Hierarchy.Node[Hie_INS].HieCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        		     Txt_The_center_X_already_exists,
-                             Ctr_EditingCtr->FullName);
-         else	// Add new center to database
+	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	      ShrtOrFullName++)
+	    if (Ctr_DB_CheckIfCtrNameExistsInIns (Cns_FldShrtOrFullName[ShrtOrFullName],
+						  Name[ShrtOrFullName],-1L,
+						  Gbl.Hierarchy.Node[Hie_INS].HieCod))
+	      {
+	       Ale_CreateAlert (Ale_WARNING,NULL,
+				Txt_The_center_X_already_exists,
+				Name[ShrtOrFullName]);
+	       Exists = true;
+	      }
+	 if (!Exists)	// Add new center to database
            {
             Ctr_EditingCtr->HieCod = Ctr_DB_CreateCenter (Ctr_EditingCtr,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1551,7 +1577,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
      }
    else	// If there is not a center name
-      Ale_CreateAlertYouMustSpecifyTheShortNameAndTheFullName ();
+      Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
   }
 
 /*****************************************************************************/

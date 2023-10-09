@@ -82,75 +82,62 @@ void HieCfg_Title (bool PutLink,Hie_Level_t Level)
   }
 
 /*****************************************************************************/
-/********************** Show full name in configuration **********************/
+/******************* Show short/full name in configuration *******************/
 /*****************************************************************************/
 
-void HieCfg_FullName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level,
-		      const char *Label)
+void HieCfg_Name (bool PutForm,Hie_Level_t Level,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
+   extern const char *Txt_Short_name;
+   static Act_Action_t Action[Hie_NUM_LEVELS][Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Hie_INS][Cns_SHRT_NAME] = ActRenInsShoCfg,
+      [Hie_INS][Cns_FULL_NAME] = ActRenInsFulCfg,
+      [Hie_CTR][Cns_SHRT_NAME] = ActRenCtrShoCfg,
+      [Hie_CTR][Cns_FULL_NAME] = ActRenCtrFulCfg,
+      [Hie_DEG][Cns_SHRT_NAME] = ActRenDegShoCfg,
+      [Hie_DEG][Cns_FULL_NAME] = ActRenDegFulCfg,
+      [Hie_CRS][Cns_SHRT_NAME] = ActRenCrsShoCfg,
+      [Hie_CRS][Cns_FULL_NAME] = ActRenCrsFulCfg,
+     };
+   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+     {
+      [Cns_SHRT_NAME] = Gbl.Hierarchy.Node[Level].ShrtName,
+      [Cns_FULL_NAME] = Gbl.Hierarchy.Node[Level].FullName,
+     };
+
    /***** Full name *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "FullName" :
+      Frm_LabelColumn ("RT",PutForm ? Cns_ParShrtOrFullName[ShrtOrFullName] :
 				      NULL,
-		       Label);
+		       ShrtOrFullName == Cns_SHRT_NAME ? Txt_Short_name :
+							 *Hie_TxtLevel[Level]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (PutForm)
 	   {
 	    /* Form to change full name */
-	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("FullName",Cns_MAX_CHARS_FULL_NAME,
-			       Gbl.Hierarchy.Node[Level].FullName,
+	    Frm_BeginForm (Action[Level][ShrtOrFullName]);
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
 			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"FullName\""
-			       " class=\"INPUT_FULL_NAME INPUT_%s\""
+			       "id=\"%s\""
+			       " class=\"%s INPUT_%s\""
 			       " required=\"required\"",
+			       Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
 			       The_GetSuffix ());
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit full name
-	    HTM_Txt (Gbl.Hierarchy.Node[Level].FullName);
-      HTM_TD_End ();
-
-   HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/********* Show institution short name in institution configuration **********/
-/*****************************************************************************/
-
-void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,Hie_Level_t Level)
-  {
-   extern const char *Txt_Short_name;
-
-   /***** Short name *****/
-   HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "ShortName" :
-				      NULL,
-		       Txt_Short_name);
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    /* Form to change short name */
-	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_TEXT ("ShortName",Cns_MAX_CHARS_SHRT_NAME,
-			       Gbl.Hierarchy.Node[Level].ShrtName,
-			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"ShortName\""
-			       " class=\"INPUT_SHORT_NAME INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    Frm_EndForm ();
-	   }
-	 else	// I can not edit short name
-	    HTM_Txt (Gbl.Hierarchy.Node[Level].ShrtName);
+	    HTM_Txt (Name[ShrtOrFullName]);
       HTM_TD_End ();
 
    HTM_TR_End ();
