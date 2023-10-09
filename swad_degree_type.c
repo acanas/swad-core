@@ -105,7 +105,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
    extern const char *Txt_Any_type_of_degree;
    struct DegTyp_DegTypes DegTypes;
    unsigned NumDegTyp;
-   const struct DegTyp_DegreeType *DegTypInLst;
+   const struct DegTyp_DegreeType *DegTyp;
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
@@ -125,12 +125,12 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 	   NumDegTyp < DegTypes.Num;
 	   NumDegTyp++)
 	{
-	 DegTypInLst = &DegTypes.Lst[NumDegTyp];
-	 HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
-		     DegTypInLst->DegTypCod == SelectedDegTypCod ? HTM_OPTION_SELECTED :
-								   HTM_OPTION_UNSELECTED,
+	 DegTyp = &DegTypes.Lst[NumDegTyp];
+	 HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
+		     DegTyp->DegTypCod == SelectedDegTypCod ? HTM_OPTION_SELECTED :
+							      HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
-		     "%s",DegTypInLst->DegTypName);
+		     "%s",DegTyp->DegTypName);
 	}
    HTM_SELECT_End ();
 

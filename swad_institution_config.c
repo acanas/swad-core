@@ -299,7 +299,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
    unsigned NumCty;
-   const struct Hie_Node *CtyInLst;
+   const struct Hie_Node *Cty;
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();
@@ -326,12 +326,12 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 		       NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 		       NumCty++)
 		    {
-		     CtyInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
-		     HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
-				 CtyInLst->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_OPTION_SELECTED :
-										          HTM_OPTION_UNSELECTED,
+		     Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+		     HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
+				 Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_OPTION_SELECTED :
+										     HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",CtyInLst->FullName);
+				 "%s",Cty->FullName);
 		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();

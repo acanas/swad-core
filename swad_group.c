@@ -1390,13 +1390,13 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
    extern const char *Txt_No_assigned_room;
    extern const char *Txt_Another_room;
    unsigned NumGrpTyp1;
-   const struct GroupType *GrpTyp1InLst;
+   const struct GroupType *GrpTyp1;
    unsigned NumGrpTyp2;
-   const struct GroupType *GrpTyp2InLst;
+   const struct GroupType *GrpTyp2;
    unsigned NumGrpThisType;
    struct Group *Grp;
    unsigned NumRoo;
-   const struct Roo_Room *RooInLst;
+   const struct Roo_Room *Roo;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -1411,12 +1411,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	   NumGrpTyp1 < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp1++)
 	{
-	 GrpTyp1InLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp1];
+	 GrpTyp1 = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp1];
 	 for (NumGrpThisType = 0;
-	      NumGrpThisType < GrpTyp1InLst->NumGrps;
+	      NumGrpThisType < GrpTyp1->NumGrps;
 	      NumGrpThisType++)
 	   {
-	    Grp = &GrpTyp1InLst->LstGrps[NumGrpThisType];
+	    Grp = &GrpTyp1->LstGrps[NumGrpThisType];
 
 	    HTM_TR_Begin (NULL);
 
@@ -1471,12 +1471,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			     NumGrpTyp2 < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 			     NumGrpTyp2++)
 			  {
-			   GrpTyp2InLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp2];
-			   HTM_OPTION (HTM_Type_LONG,&GrpTyp2InLst->GrpTypCod,
-				       GrpTyp2InLst->GrpTypCod == GrpTyp1InLst->GrpTypCod ? HTM_OPTION_SELECTED :
-											    HTM_OPTION_UNSELECTED,
+			   GrpTyp2 = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp2];
+			   HTM_OPTION (HTM_Type_LONG,&GrpTyp2->GrpTypCod,
+				       GrpTyp2->GrpTypCod == GrpTyp1->GrpTypCod ? HTM_OPTION_SELECTED :
+										  HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
-				       "%s",GrpTyp2InLst->GrpTypName);
+				       "%s",GrpTyp2->GrpTypName);
 			  }
 
 		     /* End selector */
@@ -1524,12 +1524,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			     NumRoo < Rooms->Num;
 			     NumRoo++)
 			  {
-			   RooInLst = &Rooms->Lst[NumRoo];
-			   HTM_OPTION (HTM_Type_LONG,&RooInLst->RooCod,
-				       RooInLst->RooCod == Grp->Room.RooCod ? HTM_OPTION_SELECTED :
-									      HTM_OPTION_UNSELECTED,
+			   Roo = &Rooms->Lst[NumRoo];
+			   HTM_OPTION (HTM_Type_LONG,&Roo->RooCod,
+				       Roo->RooCod == Grp->Room.RooCod ? HTM_OPTION_SELECTED :
+									 HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
-				       "%s",RooInLst->ShrtName);
+				       "%s",Roo->ShrtName);
 			  }
 
 		     /* End selector */
@@ -2509,9 +2509,9 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    extern const char *Txt_No_assigned_room;
    extern const char *Txt_Another_room;
    unsigned NumGrpTyp;
-   const struct GroupType *GrpTypInLst;
+   const struct GroupType *GrpTyp;
    unsigned NumRoo;
-   const struct Roo_Room *RooInLst;
+   const struct Roo_Room *Roo;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -2553,12 +2553,12 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		       NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		       NumGrpTyp++)
 		    {
-		     GrpTypInLst = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
-		     HTM_OPTION (HTM_Type_LONG,&GrpTypInLst->GrpTypCod,
-				 GrpTypInLst->GrpTypCod == Gbl.Crs.Grps.GrpTyp.GrpTypCod ? HTM_OPTION_SELECTED :
-											   HTM_OPTION_UNSELECTED,
+		     GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+		     HTM_OPTION (HTM_Type_LONG,&GrpTyp->GrpTypCod,
+				 GrpTyp->GrpTypCod == Gbl.Crs.Grps.GrpTyp.GrpTypCod ? HTM_OPTION_SELECTED :
+										      HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",GrpTypInLst->GrpTypName);
+				 "%s",GrpTyp->GrpTypName);
 		    }
 
 	       /* End selector */
@@ -2601,12 +2601,12 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		       NumRoo < Rooms->Num;
 		       NumRoo++)
 		    {
-		     RooInLst = &Rooms->Lst[NumRoo];
-		     HTM_OPTION (HTM_Type_LONG,&RooInLst->RooCod,
-				 RooInLst->RooCod == Gbl.Crs.Grps.RooCod ? HTM_OPTION_SELECTED :
-									   HTM_OPTION_UNSELECTED,
+		     Roo = &Rooms->Lst[NumRoo];
+		     HTM_OPTION (HTM_Type_LONG,&Roo->RooCod,
+				 Roo->RooCod == Gbl.Crs.Grps.RooCod ? HTM_OPTION_SELECTED :
+								      HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",RooInLst->ShrtName);
+				 "%s",Roo->ShrtName);
 		    }
 
 	       /* End selector */

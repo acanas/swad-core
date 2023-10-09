@@ -770,7 +770,7 @@ static void Roo_PutSelectorBuilding (long BldCod,
    extern const char *Txt_No_assigned_building;
    extern const char *Txt_Another_building;
    unsigned NumBld;
-   const struct Bld_Building *BldInLst;
+   const struct Bld_Building *Bld;
 
    /***** Begin selector *****/
    HTM_SELECT_Begin (SubmitOnChange,NULL,
@@ -796,12 +796,12 @@ static void Roo_PutSelectorBuilding (long BldCod,
 	   NumBld < Buildings->Num;
 	   NumBld++)
 	{
-	 BldInLst = &Buildings->Lst[NumBld];
-	 HTM_OPTION (HTM_Type_LONG,&BldInLst->BldCod,
-		     BldCod == BldInLst->BldCod ? HTM_OPTION_SELECTED :
-						  HTM_OPTION_UNSELECTED,
+	 Bld = &Buildings->Lst[NumBld];
+	 HTM_OPTION (HTM_Type_LONG,&Bld->BldCod,
+		     BldCod == Bld->BldCod ? HTM_OPTION_SELECTED :
+					     HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
-		     "%s",BldInLst->ShrtName);
+		     "%s",Bld->ShrtName);
 	}
 
    /***** End selector *****/

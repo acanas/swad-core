@@ -352,3 +352,41 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
    /***** Column/cell end *****/
    HTM_TD_End ();
   }
+
+/*****************************************************************************/
+/************************ Write short and full names *************************/
+/*****************************************************************************/
+
+void Frm_PutShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES],
+			       ParCod_Param_t ParCod,long Cod,
+			       const char *Name[Cns_NUM_SHRT_FULL_NAMES],
+			       bool PutForm)
+  {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+     {
+      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	 if (PutForm)
+	   {
+	    Frm_BeginForm (ActionRename[ShrtOrFullName]);
+	       ParCod_PutPar (ParCod,Cod);
+	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			       Name[ShrtOrFullName],
+			       HTM_SUBMIT_ON_CHANGE,
+			       "class=\"%s INPUT_%s\"",
+			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       The_GetSuffix ());
+	    Frm_EndForm ();
+	   }
+	 else
+	    HTM_Txt (Name[ShrtOrFullName]);
+      HTM_TD_End ();
+     }
+  }

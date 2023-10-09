@@ -383,9 +383,6 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
@@ -400,8 +397,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -450,23 +446,10 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner short name and full name */
 	    Name[Cns_SHRT_NAME] = Ban->ShrtName;
 	    Name[Cns_FULL_NAME] = Ban->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"CM\"");
-		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
-		     ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
-		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-				     Name[ShrtOrFullName],
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"%s INPUT_%s\"",
-				     Cns_ClassShrtOrFullName[ShrtOrFullName],
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-	       HTM_TD_End ();
-	      }
+	    Frm_PutShortAndFullNames (ActionRename,
+				      ParCod_Ban,Banners->BanCodToEdit,
+				      Name,
+				      true);	// Put form
 
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"CM\"");

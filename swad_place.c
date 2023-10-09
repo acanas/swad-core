@@ -445,9 +445,6 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = ActRenPlcSho,
@@ -455,8 +452,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
      };
    unsigned NumPlc;
    struct Plc_Place *Plc;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -490,23 +486,10 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    /* Place short name and full name */
 	    Name[Cns_SHRT_NAME] = Plc->ShrtName;
 	    Name[Cns_FULL_NAME] = Plc->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"CM\"");
-		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
-		     ParCod_PutPar (ParCod_Plc,Plc->PlcCod);
-		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-				     Name[ShrtOrFullName],
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"%s INPUT_%s\"",
-				     Cns_ClassShrtOrFullName[ShrtOrFullName],
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-	       HTM_TD_End ();
-	      }
+	    Frm_PutShortAndFullNames (ActionRename,
+				      ParCod_Plc,Plc->PlcCod,
+				      Name,
+				      true);	// Put form
 
 	    /* Number of centers */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());

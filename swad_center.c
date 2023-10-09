@@ -730,9 +730,6 @@ void Ctr_WriteSelectorOfCenter (void)
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
@@ -743,15 +740,14 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    unsigned NumCtr;
    struct Hie_Node *Ctr;
    unsigned NumPlc;
-   const struct Plc_Place *PlcInLst;
+   const struct Plc_Place *Plc;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumDegs;
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -825,12 +821,12 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			     NumPlc < Places->Num;
 			     NumPlc++)
 			  {
-			   PlcInLst = &Places->Lst[NumPlc];
-			   HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-				       PlcInLst->PlcCod == Ctr->Specific.PlcCod ? HTM_OPTION_SELECTED :
-									          HTM_OPTION_UNSELECTED,
+			   Plc = &Places->Lst[NumPlc];
+			   HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
+				       Plc->PlcCod == Ctr->Specific.PlcCod ? HTM_OPTION_SELECTED :
+									     HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
-				       "%s",PlcInLst->ShrtName);
+				       "%s",Plc->ShrtName);
 			  }
 		     HTM_SELECT_End ();
 		  Frm_EndForm ();
@@ -846,28 +842,10 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    /* Center short name and full name */
 	    Name[Cns_SHRT_NAME] = Ctr->ShrtName;
 	    Name[Cns_FULL_NAME] = Ctr->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-		  if (ICanEdit)
-		    {
-		     Frm_BeginForm (ActionRename[ShrtOrFullName]);
-			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-			HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-					Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-					Name[ShrtOrFullName],
-					HTM_SUBMIT_ON_CHANGE,
-					"class=\"%s INPUT_%s\"",
-					Cns_ClassShrtOrFullName[ShrtOrFullName],
-					The_GetSuffix ());
-		     Frm_EndForm ();
-		    }
-		  else
-		     HTM_Txt (Name[ShrtOrFullName]);
-	       HTM_TD_End ();
-	      }
+	    Frm_PutShortAndFullNames (ActionRename,
+				      ParCod_OthHie,Ctr->HieCod,
+				      Name,
+				      ICanEdit);	// Put form?
 
 	    /* Center WWW */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -1265,7 +1243,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
    extern const char *Txt_Another_place;
    Act_Action_t NextAction = ActUnk;
    unsigned NumPlc;
-   const struct Plc_Place *PlcInLst;
+   const struct Plc_Place *Plc;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    char *Name[Cns_NUM_SHRT_FULL_NAMES] =
      {
@@ -1319,12 +1297,12 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 		    NumPlc < Places->Num;
 		    NumPlc++)
 		 {
-		  PlcInLst = &Places->Lst[NumPlc];
-		  HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-			      PlcInLst->PlcCod == Ctr_EditingCtr->Specific.PlcCod ? HTM_OPTION_SELECTED :
-									            HTM_OPTION_UNSELECTED,
+		  Plc = &Places->Lst[NumPlc];
+		  HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
+			      Plc->PlcCod == Ctr_EditingCtr->Specific.PlcCod ? HTM_OPTION_SELECTED :
+									       HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
-			      "%s",PlcInLst->ShrtName);
+			      "%s",Plc->ShrtName);
 		 }
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();

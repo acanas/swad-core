@@ -31,6 +31,7 @@
 #include "swad_button.h"
 #include "swad_constant.h"
 #include "swad_cryptography.h"
+#include "swad_parameter_code.h"
 
 /*****************************************************************************/
 /************************** Public constants and types ***********************/
@@ -77,5 +78,10 @@ void Frm_SetAnchorStr (long Cod,char **Anchor);
 void Frm_FreeAnchorStr (char **Anchor);
 
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label);
+
+void Frm_PutShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES],
+			       ParCod_Param_t ParCod,long Cod,
+			       const char *Name[Cns_NUM_SHRT_FULL_NAMES],
+			       bool PutForm);
 
 #endif

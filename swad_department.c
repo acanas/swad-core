@@ -464,9 +464,6 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
 
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_institution;
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
      {
@@ -474,12 +471,10 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       [Cns_FULL_NAME] = ActRenDptFul,
      };
    unsigned NumDpt;
-   struct Dpt_Department *DptInLst;
-   struct Hie_Node Ins;
+   struct Dpt_Department *Dpt;
    unsigned NumIns;
-   struct Hie_Node *InsInLst;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   struct Hie_Node *Ins;
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -492,82 +487,65 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	   NumDpt < Departments->Num;
 	   NumDpt++)
 	{
-	 DptInLst = &Departments->Lst[NumDpt];
-
-	 /* Get data of institution of this department */
-	 Ins.HieCod = DptInLst->InsCod;
-	 Ins_GetInstitDataByCod (&Ins);
+	 Dpt = &Departments->Lst[NumDpt];
 
 	 HTM_TR_Begin (NULL);
 
 	    /* Icon to remove department */
 	    HTM_TD_Begin ("class=\"BM\"");
-	       if (DptInLst->NumTchs)	// Department has teachers ==> deletion forbidden
+	       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDpt,NULL,
-						 Dpt_PutParDptCod,&DptInLst->DptCod);
+						 Dpt_PutParDptCod,&Dpt->DptCod);
 	    HTM_TD_End ();
 
 	    /* Department code */
 	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
-	       HTM_TxtF ("%ld&nbsp;",DptInLst->DptCod);
+	       HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
 	    HTM_TD_End ();
 
 	    /* Institution */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgDptIns);
-		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
+		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
-		                 DptInLst->InsCod == 0 ? HTM_OPTION_SELECTED :
-		                			 HTM_OPTION_UNSELECTED,
+		                 Dpt->InsCod == 0 ? HTM_OPTION_SELECTED :
+						    HTM_OPTION_UNSELECTED,
 		                 HTM_OPTION_ENABLED,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 			  NumIns++)
 		       {
-			InsInLst = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
-			HTM_OPTION (HTM_Type_LONG,&InsInLst->HieCod,
-				    InsInLst->HieCod == DptInLst->InsCod ? HTM_OPTION_SELECTED :
-									HTM_OPTION_UNSELECTED,
+			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
+				    Ins->HieCod == Dpt->InsCod ? HTM_OPTION_SELECTED :
+								 HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
-				    "%s",InsInLst->ShrtName);
+				    "%s",Ins->ShrtName);
 		       }
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /* Department short name and full name */
-	    Name[Cns_SHRT_NAME] = DptInLst->ShrtName;
-	    Name[Cns_FULL_NAME] = DptInLst->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"LM\"");
-		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
-		     ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-				     Name[ShrtOrFullName],
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"%s INPUT_%s\"",
-				     Cns_ClassShrtOrFullName[ShrtOrFullName],
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-	       HTM_TD_End ();
-	      }
+	    Name[Cns_SHRT_NAME] = Dpt->ShrtName;
+	    Name[Cns_FULL_NAME] = Dpt->FullName;
+	    Frm_PutShortAndFullNames (ActionRename,
+				      ParCod_Dpt,Dpt->DptCod,
+				      Name,
+				      true);	// Put form
 
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgDptWWW);
-		  ParCod_PutPar (ParCod_Dpt,DptInLst->DptCod);
-		  HTM_INPUT_URL ("WWW",DptInLst->WWW,HTM_SUBMIT_ON_CHANGE,
+		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
+		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
 				 " required=\"required\"",
 				 The_GetSuffix ());
@@ -576,7 +554,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
 	    /* Number of teachers */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (DptInLst->NumTchs);
+	       HTM_Unsigned (Dpt->NumTchs);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -821,7 +799,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_institution;
    unsigned NumIns;
-   const struct Hie_Node *InsInLst;
+   const struct Hie_Node *Ins;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    char *Name[Cns_NUM_SHRT_FULL_NAMES] =
      {
@@ -860,12 +838,12 @@ static void Dpt_PutFormToCreateDepartment (void)
 		    NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 		    NumIns++)
 		 {
-		  InsInLst = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
-		  HTM_OPTION (HTM_Type_LONG,&InsInLst->HieCod,
-			     InsInLst->HieCod == Dpt_EditingDpt->InsCod ? HTM_OPTION_SELECTED :
-								       HTM_OPTION_UNSELECTED,
+		  Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+		  HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
+			     Ins->HieCod == Dpt_EditingDpt->InsCod ? HTM_OPTION_SELECTED :
+								     HTM_OPTION_UNSELECTED,
 			     HTM_OPTION_ENABLED,
-			      "%s",InsInLst->ShrtName);
+			      "%s",Ins->ShrtName);
 		 }
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -1050,7 +1028,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    extern const char *Txt_Another_department;
    struct Dpt_Departments Departments;
    unsigned NumDpt;
-   const struct Dpt_Department *DptInLst;
+   const struct Dpt_Department *Dpt;
    bool NoDptSelectable;
 
    /***** Reset departments context *****/
@@ -1096,12 +1074,12 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	   NumDpt < Departments.Num;
 	   NumDpt++)
 	{
-	 DptInLst = &Departments.Lst[NumDpt];
-	 HTM_OPTION (HTM_Type_LONG,&DptInLst->DptCod,
-		     DptInLst->DptCod == DptCod ? HTM_OPTION_SELECTED :
-						  HTM_OPTION_UNSELECTED,
+	 Dpt = &Departments.Lst[NumDpt];
+	 HTM_OPTION (HTM_Type_LONG,&Dpt->DptCod,
+		     Dpt->DptCod == DptCod ? HTM_OPTION_SELECTED :
+					     HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
-		     "%s",DptInLst->FullName);
+		     "%s",Dpt->FullName);
 	}
 
    /* End selector */

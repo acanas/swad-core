@@ -876,9 +876,6 @@ void Ins_WriteSelectorOfInstitution (void)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
      {
@@ -893,8 +890,7 @@ static void Ins_ListInstitutionsForEdition (void)
    unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -953,28 +949,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	    /* Institution short name and full name */
 	    Name[Cns_SHRT_NAME] = Ins->ShrtName;
 	    Name[Cns_FULL_NAME] = Ins->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-		  if (ICanEdit)
-		    {
-		     Frm_BeginForm (ActionRename[ShrtOrFullName]);
-			ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
-			HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-					Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-					Name[ShrtOrFullName],
-					HTM_SUBMIT_ON_CHANGE,
-					"class=\"%s INPUT_%s\"",
-					Cns_ClassShrtOrFullName[ShrtOrFullName],
-					The_GetSuffix ());
-		     Frm_EndForm ();
-		    }
-		  else
-		     HTM_Txt (Name[ShrtOrFullName]);
-	       HTM_TD_End ();
-	      }
+	    Frm_PutShortAndFullNames (ActionRename,
+				      ParCod_OthHie,Ins->HieCod,
+				      Name,
+				      ICanEdit);	// Put form?
 
 	    /* Institution WWW */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());

@@ -198,7 +198,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Degree;
    unsigned NumDeg;
-   const struct Hie_Node *DegInLst;
+   const struct Hie_Node *Deg;
 
    /***** Degree *****/
    HTM_TR_Begin (NULL);
@@ -225,12 +225,12 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		       NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
 		       NumDeg++)
 		    {
-		     DegInLst = &Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg];
-		     HTM_OPTION (HTM_Type_LONG,&DegInLst->HieCod,
-				 DegInLst->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
+		     Deg = &Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg];
+		     HTM_OPTION (HTM_Type_LONG,&Deg->HieCod,
+				 Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
+										     HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",DegInLst->ShrtName);
+				 "%s",Deg->ShrtName);
 		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();

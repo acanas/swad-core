@@ -193,7 +193,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Center;
    unsigned NumCtr;
-   const struct Hie_Node *CtrInLst;
+   const struct Hie_Node *Ctr;
 
    /***** Center *****/
    HTM_TR_Begin (NULL);
@@ -220,12 +220,12 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 		       NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
 		       NumCtr++)
 		    {
-		     CtrInLst = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
-		     HTM_OPTION (HTM_Type_LONG,&CtrInLst->HieCod,
-				 CtrInLst->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
+		     Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
+		     HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
+				 Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
+										     HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",CtrInLst->ShrtName);
+				 "%s",Ctr->ShrtName);
 		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();

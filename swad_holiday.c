@@ -490,9 +490,9 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
    extern const char *Txt_All_places;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
    unsigned NumHld;
-   struct Hld_Holiday *HldInLst;
+   struct Hld_Holiday *Hld;
    unsigned NumPlc;
-   const struct Plc_Place *PlcInLst;
+   const struct Plc_Place *Plc;
    Hld_HolidayType_t HolidayType;
    unsigned HolidayTypeUnsigned;
    unsigned CurrentYear = Dat_GetCurrentYear ();
@@ -519,43 +519,43 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		 NumHld < Holidays->Num;
 		 NumHld++)
 	      {
-	       HldInLst = &Holidays->Lst[NumHld];
+	       Hld = &Holidays->Lst[NumHld];
 
 	       HTM_TR_Begin (NULL);
 
 		  /* Put icon to remove holiday */
 		  HTM_TD_Begin ("class=\"BM\"");
 		     Ico_PutContextualIconToRemove (ActRemHld,NULL,
-						    Hld_PutParHldCod,&HldInLst->HldCod);
+						    Hld_PutParHldCod,&Hld->HldCod);
 		  HTM_TD_End ();
 
 		  /* Holiday code */
 		  HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
-		     HTM_TxtF ("%ld&nbsp;",HldInLst->HldCod);
+		     HTM_TxtF ("%ld&nbsp;",Hld->HldCod);
 		  HTM_TD_End ();
 
 		  /* Holiday place */
 		  HTM_TD_Begin ("class=\"CM\"");
 		     Frm_BeginForm (ActChgHldPlc);
-			ParCod_PutPar (ParCod_Hld,HldInLst->HldCod);
+			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 					  The_GetSuffix ());
 			   HTM_OPTION (HTM_Type_STRING,"-1",
-				       HldInLst->PlcCod <= 0 ? HTM_OPTION_SELECTED :
-							       HTM_OPTION_UNSELECTED,
+				       Hld->PlcCod <= 0 ? HTM_OPTION_SELECTED :
+							  HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
 				       "%s",Txt_All_places);
 			   for (NumPlc = 0;
 				NumPlc < Places->Num;
 				NumPlc++)
 			     {
-			      PlcInLst = &Places->Lst[NumPlc];
-			      HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-					  PlcInLst->PlcCod == HldInLst->PlcCod ? HTM_OPTION_SELECTED :
-										 HTM_OPTION_UNSELECTED,
+			      Plc = &Places->Lst[NumPlc];
+			      HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
+					  Plc->PlcCod == Hld->PlcCod ? HTM_OPTION_SELECTED :
+								       HTM_OPTION_UNSELECTED,
 					  HTM_OPTION_ENABLED,
-					  "%s",PlcInLst->ShrtName);
+					  "%s",Plc->ShrtName);
 			     }
 			HTM_SELECT_End ();
 		     Frm_EndForm ();
@@ -564,7 +564,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		  /* Holiday type */
 		  HTM_TD_Begin ("class=\"CM\"");
 		     Frm_BeginForm (ActChgHldTyp);
-			ParCod_PutPar (ParCod_Hld,HldInLst->HldCod);
+			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"HldTyp\" class=\"INPUT_%s\""
 					  " style=\"width:62px;\"",	// TODO: Use a CSS class
@@ -575,8 +575,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 			     {
 			      HolidayTypeUnsigned = (unsigned) HolidayType;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&HolidayTypeUnsigned,
-					  HolidayType == HldInLst->HldTyp ? HTM_OPTION_SELECTED :
-									    HTM_OPTION_UNSELECTED,
+					  HolidayType == Hld->HldTyp ? HTM_OPTION_SELECTED :
+								       HTM_OPTION_UNSELECTED,
 					  HTM_OPTION_ENABLED,
 					  "%s",Txt_HOLIDAY_TYPES[HolidayType]);
 			     }
@@ -587,7 +587,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		  /* Holiday date / Non school period start date */
 		  HTM_TD_Begin ("class=\"CM\"");
 		     Frm_BeginForm (ActChgHldStrDat);
-			ParCod_PutPar (ParCod_Hld,HldInLst->HldCod);
+			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 			Dat_WriteFormDate (CurrentYear - 1,
 					   CurrentYear + 1,
 					   "Start",
@@ -600,21 +600,21 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		  /* Non school period end date */
 		  HTM_TD_Begin ("class=\"CM\"");
 		     Frm_BeginForm (ActChgHldEndDat);
-			ParCod_PutPar (ParCod_Hld,HldInLst->HldCod);
+			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 			Dat_WriteFormDate (CurrentYear - 1,
 					   CurrentYear + 1,
 					   "End",
 					   &(Holidays->Lst[NumHld].EndDate),
 					   HTM_SUBMIT_ON_CHANGE,
-					   (HldInLst->HldTyp == Hld_HOLIDAY));
+					   (Hld->HldTyp == Hld_HOLIDAY));
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 
 		  /* Holiday name */
 		  HTM_TD_Begin ("class=\"CM\"");
 		     Frm_BeginForm (ActRenHld);
-			ParCod_PutPar (ParCod_Hld,HldInLst->HldCod);
-			HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,HldInLst->Name,
+			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
+			HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
 					HTM_SUBMIT_ON_CHANGE,
 					"size=\"20\" class=\"INPUT_%s\"",
 					The_GetSuffix ());
@@ -890,7 +890,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
    extern const char *Txt_All_places;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
    unsigned NumPlc;
-   const struct Plc_Place *PlcInLst;
+   const struct Plc_Place *Plc;
    Hld_HolidayType_t HolidayType;
    unsigned HolidayTypeUnsigned;
    unsigned CurrentYear = Dat_GetCurrentYear ();
@@ -925,12 +925,12 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 		    NumPlc < Places->Num;
 		    NumPlc++)
 		 {
-		  PlcInLst = &Places->Lst[NumPlc];
-		  HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-			      PlcInLst->PlcCod == Hld_EditingHld->PlcCod ? HTM_OPTION_SELECTED :
-									   HTM_OPTION_UNSELECTED,
+		  Plc = &Places->Lst[NumPlc];
+		  HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
+			      Plc->PlcCod == Hld_EditingHld->PlcCod ? HTM_OPTION_SELECTED :
+								      HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
-			      "%s",PlcInLst->ShrtName);
+			      "%s",Plc->ShrtName);
 		 }
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();

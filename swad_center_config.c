@@ -536,7 +536,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    extern const char *Par_CodeStr[];
    extern const char *Txt_Institution;
    unsigned NumIns;
-   const struct Hie_Node *InsInLst;
+   const struct Hie_Node *Ins;
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
@@ -563,12 +563,12 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 		       NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 		       NumIns++)
 		    {
-		     InsInLst = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
-		     HTM_OPTION (HTM_Type_LONG,&InsInLst->HieCod,
-				 InsInLst->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
+		     Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+		     HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
+				 Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
+										     HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",InsInLst->ShrtName);
+				 "%s",Ins->ShrtName);
 		    }
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
@@ -635,7 +635,6 @@ static void CtrCfg_Place (bool PutForm)
    struct Plc_Places Places;
    struct Plc_Place Plc;
    unsigned NumPlc;
-   const struct Plc_Place *PlcInLst;
 
    /***** Reset places context *****/
    Plc_ResetPlaces (&Places);
@@ -665,20 +664,17 @@ static void CtrCfg_Place (bool PutForm)
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"0",
 			      Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
-										    HTM_OPTION_UNSELECTED,
+										 HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
 			      "%s",Txt_Another_place);
 		  for (NumPlc = 0;
 		       NumPlc < Places.Num;
 		       NumPlc++)
-		    {
-		     PlcInLst = &Places.Lst[NumPlc];
-		     HTM_OPTION (HTM_Type_LONG,&PlcInLst->PlcCod,
-				 PlcInLst->PlcCod == Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod ? HTM_OPTION_SELECTED :
-												      HTM_OPTION_UNSELECTED,
+		     HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
+				 Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod ? HTM_OPTION_SELECTED :
+													    HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",PlcInLst->ShrtName);
-		    }
+				 "%s",Places.Lst[NumPlc].ShrtName);
 	       HTM_SELECT_End ();
 	    Frm_EndForm ();
 

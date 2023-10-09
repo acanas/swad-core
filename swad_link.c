@@ -397,9 +397,6 @@ static void Lnk_FreeListLinks (struct Lnk_Links *Links)
 
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = ActRenLnkSho,
@@ -407,8 +404,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
      };
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -439,24 +435,10 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    /* Link short name and full name */
 	    Name[Cns_SHRT_NAME] = Lnk->ShrtName;
 	    Name[Cns_FULL_NAME] = Lnk->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"CM\"");
-		  Frm_BeginForm (ActionRename[ShrtOrFullName]);
-		     ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
-		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-				     Name[ShrtOrFullName],
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"%s INPUT_%s\""
-				     " required=\"required\"",
-				     Cns_ClassShrtOrFullName[ShrtOrFullName],
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-	       HTM_TD_End ();
-	      }
+	    Frm_PutShortAndFullNames (ActionRename,
+				      ParCod_Lnk,Lnk->LnkCod,
+				      Name,
+				      true);	// Put form
 
 	    /* Link WWW */
 	    HTM_TD_Begin ("class=\"CM\"");

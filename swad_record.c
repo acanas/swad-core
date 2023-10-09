@@ -268,7 +268,7 @@ static void Rec_ListFieldsRecordsForEdition (void)
   {
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
-   struct RecordField *FldInLst;
+   struct RecordField *Fld;
    Rec_VisibilityRecordFields_t Vis;
    unsigned VisUnsigned;
    char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -284,20 +284,20 @@ static void Rec_ListFieldsRecordsForEdition (void)
 	   NumField < Gbl.Crs.Records.LstFields.Num;
 	   NumField++)
 	{
-	 FldInLst = &Gbl.Crs.Records.LstFields.Lst[NumField];
+	 Fld = &Gbl.Crs.Records.LstFields.Lst[NumField];
 
 	 HTM_TR_Begin (NULL);
 
 	    /* Write icon to remove the field */
 	    HTM_TD_Begin ("class=\"BM\"");
 	       Ico_PutContextualIconToRemove (ActReqRemFie,NULL,
-					      Rec_PutParFldCod,&FldInLst->FieldCod);
+					      Rec_PutParFldCod,&Fld->FieldCod);
 	    HTM_TD_End ();
 
 	    /* Name of the field */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenFie);
-		  ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
+		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
 		  HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 				  Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -309,9 +309,9 @@ static void Rec_ListFieldsRecordsForEdition (void)
 	    /* Number of lines in the form */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgRowFie);
-		  ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
+		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
 		  snprintf (StrNumLines,sizeof (StrNumLines),"%u",
-			    FldInLst->NumLines);
+			    Fld->NumLines);
 		  HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"2\" class=\"INPUT_%s\"",
@@ -322,7 +322,7 @@ static void Rec_ListFieldsRecordsForEdition (void)
 	    /* Visibility of a field */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgVisFie);
-		  ParCod_PutPar (ParCod_Fld,FldInLst->FieldCod);
+		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"Visibility\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
@@ -332,8 +332,8 @@ static void Rec_ListFieldsRecordsForEdition (void)
 		       {
 			VisUnsigned = (unsigned) Vis;
 			HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-				    Vis == FldInLst->Visibility ? HTM_OPTION_SELECTED :
-								  HTM_OPTION_UNSELECTED,
+				    Vis == Fld->Visibility ? HTM_OPTION_SELECTED :
+							     HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
 		       }
@@ -3161,7 +3161,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
    extern const char *Txt_Another_country;
    char *Label;
    unsigned NumCty;
-   const struct Hie_Node *CtyInLst;
+   const struct Hie_Node *Cty;
 
    /***** If list of countries is empty, try to get it *****/
    Cty_GetBasicListOfCountries ();
@@ -3200,12 +3200,12 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 		 NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 		 NumCty++)
 	      {
-	       CtyInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
-	       HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
-			   CtyInLst->HieCod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
-							        HTM_OPTION_UNSELECTED,
+	       Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+	       HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
+			   Cty->HieCod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
+							   HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
-			   "%s",CtyInLst->FullName);
+			   "%s",Cty->FullName);
 	      }
 	 HTM_SELECT_End ();
       HTM_TD_End ();
@@ -3782,11 +3782,11 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
    unsigned NumCty;
-   const struct Hie_Node *CtyInLst;
+   const struct Hie_Node *Cty;
    unsigned NumIns;
-   const struct Hie_Node *InsInLst;
+   const struct Hie_Node *Ins;
    unsigned NumCtr;
-   const struct Hie_Node *CtrInLst;
+   const struct Hie_Node *Ctr;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char *Label;
    char *SelectClass;
@@ -3832,12 +3832,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 			  NumCty++)
 		       {
-			CtyInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
-			HTM_OPTION (HTM_Type_LONG,&CtyInLst->HieCod,
-				    CtyInLst->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
+			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
+				    Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
+										  HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
-				    "%s",CtyInLst->FullName);
+				    "%s",Cty->FullName);
 		       }
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -3883,12 +3883,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 			  NumIns++)
 		       {
-			InsInLst = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
-			HTM_OPTION (HTM_Type_LONG,&InsInLst->HieCod,
-				    InsInLst->HieCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
-										    HTM_OPTION_UNSELECTED,
+			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
+				    Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
+									       HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
-				    "%s",InsInLst->FullName);
+				    "%s",Ins->FullName);
 		       }
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -3935,12 +3935,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			     NumCtr < Gbl.Hierarchy.List[Hie_SYS].Num;
 			     NumCtr++)
 			  {
-			   CtrInLst = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCtr];
-			   HTM_OPTION (HTM_Type_LONG,&CtrInLst->HieCod,
-				       CtrInLst->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
-											   HTM_OPTION_UNSELECTED,
+			   Ctr = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCtr];
+			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
+				       Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
+										      HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
-				       CtrInLst->FullName);
+				       Ctr->FullName);
 			  }
 		     HTM_SELECT_End ();
 		  Frm_EndForm ();

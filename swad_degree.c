@@ -316,9 +316,6 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
      {
@@ -334,8 +331,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    bool ICanEdit;
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -391,28 +387,10 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    /* Degree short name and full name */
 	    Name[Cns_SHRT_NAME] = Deg->ShrtName;
 	    Name[Cns_FULL_NAME] = Deg->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-		  if (ICanEdit)
-		    {
-		     Frm_BeginForm (ActionRename[ShrtOrFullName]);
-			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
-			HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-					Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-					Name[ShrtOrFullName],
-					HTM_SUBMIT_ON_CHANGE,
-					"class=\"%s INPUT_%s\"",
-					Cns_ClassShrtOrFullName[ShrtOrFullName],
-					The_GetSuffix ());
-		     Frm_EndForm ();
-		    }
-		  else
-		     HTM_Txt (Name[ShrtOrFullName]);
-	       HTM_TD_End ();
-	      }
+	    Frm_PutShortAndFullNames (ActionRename,
+				      ParCod_OthHie,Deg->HieCod,
+				      Name,
+				      ICanEdit);	// Put form?
 
 	    /* Degree type */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -533,7 +511,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
    extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
-   struct DegTyp_DegreeType *DegTypInLst;
+   struct DegTyp_DegreeType *DegTyp;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    char *Name[Cns_NUM_SHRT_FULL_NAMES] =
      {
@@ -600,12 +578,12 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 		    NumDegTyp < DegTypes->Num;
 		    NumDegTyp++)
 		 {
-		  DegTypInLst = &DegTypes->Lst[NumDegTyp];
-		  HTM_OPTION (HTM_Type_LONG,&DegTypInLst->DegTypCod,
-			      DegTypInLst->DegTypCod == Deg_EditingDeg->Specific.TypCod ? HTM_OPTION_SELECTED :
-											  HTM_OPTION_UNSELECTED,
+		  DegTyp = &DegTypes->Lst[NumDegTyp];
+		  HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
+			      DegTyp->DegTypCod == Deg_EditingDeg->Specific.TypCod ? HTM_OPTION_SELECTED :
+										     HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
-			      "%s",DegTypInLst->DegTypName);
+			      "%s",DegTyp->DegTypName);
 		 }
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
