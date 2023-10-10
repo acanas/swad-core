@@ -59,7 +59,7 @@ void Ins_WriteSelectorOfInstitution (void);
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
-void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFullName);
+void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull);
 void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);

@@ -535,11 +535,7 @@ void InsCfg_ChangeInsCty (void)
   {
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Hie_Node NewCty;
-   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_INS].ShrtName,
-      [Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_INS].FullName,
-     };
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get the new country code for the institution *****/
    NewCty.HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
@@ -551,8 +547,12 @@ void InsCfg_ChangeInsCty (void)
       Cty_GetBasicCountryDataByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,Names,
-				  -1L,NewCty.HieCod,
+      Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_INS].ShrtName;
+      Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_INS].FullName;
+      if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,
+				  Names,
+				  -1L,
+				  NewCty.HieCod,
 				  0))	// Unused
 	{
 	 /***** Update the table changing the country of the institution *****/

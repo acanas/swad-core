@@ -1140,11 +1140,11 @@ void Ins_RenameInsFull (void)
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
 
-void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFullName)
+void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
@@ -1156,7 +1156,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
    char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get the new name for the institution from form *****/
-   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get from the database the old names of the institution *****/
    Ins_GetInstitDataByCod (Ins);
@@ -1166,10 +1166,10 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If institution was not in database... *****/
-         if (Ins_DB_CheckIfInsNameExistsInCty (Nam_ParShrtOrFullName[ShrtOrFullName],
+         if (Ins_DB_CheckIfInsNameExistsInCty (Nam_Params[ShrtOrFull],
 					       NewName,Ins->HieCod,
                                                Gbl.Hierarchy.Node[Hie_CTY].HieCod,
                                                0))	// Unused
@@ -1178,22 +1178,22 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
            {
             /* Update the table changing old name by new name */
             Ins_UpdateInsNameDB (Ins->HieCod,
-        			 Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			 Nam_Fields[ShrtOrFull],NewName);
 
             /* Create message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_institution_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFullName],NewName);
+                             CurrentName[ShrtOrFull],NewName);
 
 	    /* Change current institution name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-		      Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
+	    Str_Copy (CurrentName[ShrtOrFull],NewName,
+		      Nam_MaxBytes[ShrtOrFull]);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFullName]);
+                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
@@ -1330,11 +1330,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 static void Ins_PutFormToCreateInstitution (void)
   {
    Act_Action_t NextAction = ActUnk;
-   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Ins_EditingIns->ShrtName,
-      [Nam_FULL_NAME] = Ins_EditingIns->FullName,
-     };
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Set action depending on role *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -1369,6 +1365,8 @@ static void Ins_PutFormToCreateInstitution (void)
 	 HTM_TD_End ();
 
 	 /***** Institution short name and full name *****/
+	 Names[Nam_SHRT_NAME] = Ins_EditingIns->ShrtName;
+	 Names[Nam_FULL_NAME] = Ins_EditingIns->FullName;
 	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Institution WWW *****/
@@ -1479,17 +1477,15 @@ void Ins_ReceiveFormNewIns (void)
 static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
   {
    extern const char *Txt_Created_new_institution_X;
-   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Ins_EditingIns->ShrtName,
-      [Nam_FULL_NAME] = Ins_EditingIns->FullName,
-     };
+   char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameters from form *****/
    /* Set institution country */
    Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[Hie_CTY].HieCod;
 
-   /* Get institution short name, full name and WWW */
+   /* Get institution short name and full name */
+   Names[Nam_SHRT_NAME] = Ins_EditingIns->ShrtName;
+   Names[Nam_FULL_NAME] = Ins_EditingIns->FullName;
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get institution URL */
@@ -1501,8 +1497,10 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
       if (Ins_EditingIns->WWW[0])
         {
          /***** If name of institution was not in database... *****/
-	 if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,Names,
-				     -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+	 if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,
+				     (const char **) Names,
+				     -1L,
+				     Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 				     0))	// Unused
            {
             Ins_EditingIns->HieCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);

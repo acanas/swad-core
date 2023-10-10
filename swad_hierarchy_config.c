@@ -85,11 +85,11 @@ void HieCfg_Title (bool PutLink,Hie_Level_t Level)
 /******************* Show short/full name in configuration *******************/
 /*****************************************************************************/
 
-void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFullName)
+void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxChars[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
    extern const char *Txt_Short_name;
    static Act_Action_t Action[Hie_NUM_LEVELS][Nam_NUM_SHRT_FULL_NAMES] =
@@ -113,9 +113,9 @@ void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Nam_ParShrtOrFullName[ShrtOrFullName] :
+      Frm_LabelColumn ("RT",PutForm ? Nam_Params[ShrtOrFull] :
 				      NULL,
-		       ShrtOrFullName == Nam_SHRT_NAME ? Txt_Short_name :
+		       ShrtOrFull == Nam_SHRT_NAME ? Txt_Short_name :
 							 *Hie_TxtLevel[Level]);
 
       /* Data */
@@ -123,21 +123,21 @@ void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull
 	 if (PutForm)
 	   {
 	    /* Form to change full name */
-	    Frm_BeginForm (Action[Level][ShrtOrFullName]);
-	       HTM_INPUT_TEXT (Nam_ParShrtOrFullName[ShrtOrFullName],
-			       Nam_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
+	    Frm_BeginForm (Action[Level][ShrtOrFull]);
+	       HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],
+			       Nam_MaxChars[ShrtOrFull],
+			       Name[ShrtOrFull],
 			       HTM_SUBMIT_ON_CHANGE,
 			       "id=\"%s\""
 			       " class=\"%s INPUT_%s\""
 			       " required=\"required\"",
-			       Nam_ParShrtOrFullName[ShrtOrFullName],
-			       Nam_ClassShrtOrFullName[ShrtOrFullName],
+			       Nam_Params[ShrtOrFull],
+			       Nam_Classes[ShrtOrFull],
 			       The_GetSuffix ());
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit full name
-	    HTM_Txt (Name[ShrtOrFullName]);
+	    HTM_Txt (Name[ShrtOrFull]);
       HTM_TD_End ();
 
    HTM_TR_End ();

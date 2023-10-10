@@ -36,55 +36,31 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
+const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES] =
   {
    [Nam_SHRT_NAME] = "ShortName",
    [Nam_FULL_NAME] = "FullName",
   };
-const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
+const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES] =
   {
    [Nam_SHRT_NAME] = "ShortName",
    [Nam_FULL_NAME] = "FullName",
   };
-unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
+unsigned Nam_MaxChars[Nam_NUM_SHRT_FULL_NAMES] =
   {
    [Nam_SHRT_NAME] = Nam_MAX_CHARS_SHRT_NAME,
    [Nam_FULL_NAME] = Nam_MAX_CHARS_FULL_NAME,
   };
-unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
+unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES] =
   {
    [Nam_SHRT_NAME] = Nam_MAX_BYTES_SHRT_NAME,
    [Nam_FULL_NAME] = Nam_MAX_BYTES_FULL_NAME,
   };
-const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
+const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES] =
   {
    [Nam_SHRT_NAME] = "INPUT_SHORT_NAME",
    [Nam_FULL_NAME] = "INPUT_FULL_NAME",
   };
-
-/*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/************** External global variables from others modules ****************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/************************** Public global variables **************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/************************* Private global variables **************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/***************************** Private prototypes ****************************/
-/*****************************************************************************/
 
 /*****************************************************************************/
 /************************ Get short name and full name ***********************/
@@ -92,21 +68,17 @@ const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
 
 void Nam_GetParsShrtAndFullName (char *Names[Nam_NUM_SHRT_FULL_NAMES])
   {
-   Nam_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFull;
 
-   for (ShrtOrFullName  = Nam_SHRT_NAME;
-	ShrtOrFullName <= Nam_FULL_NAME;
-	ShrtOrFullName++)
-      Nam_GetParShrtOrFullName (ShrtOrFullName,Names[ShrtOrFullName]);
+   for (ShrtOrFull  = Nam_SHRT_NAME;
+	ShrtOrFull <= Nam_FULL_NAME;
+	ShrtOrFull++)
+      Nam_GetParShrtOrFullName (ShrtOrFull,Names[ShrtOrFull]);
   }
 
-void Nam_GetParShrtOrFullName (Nam_ShrtOrFullName_t ShrtOrFullName,char *Name)
+void Nam_GetParShrtOrFullName (Nam_ShrtOrFullName_t ShrtOrFull,char *Name)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-
-   Par_GetParText (Nam_ParShrtOrFullName[ShrtOrFullName],Name,
-		   Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParText (Nam_Params[ShrtOrFull],Name,Nam_MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/
@@ -115,24 +87,18 @@ void Nam_GetParShrtOrFullName (Nam_ShrtOrFullName_t ShrtOrFullName,char *Name)
 
 void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES])
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   Nam_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFull;
 
-   for (ShrtOrFullName  = Nam_SHRT_NAME;
-	ShrtOrFullName <= Nam_FULL_NAME;
-	ShrtOrFullName++)
+   for (ShrtOrFull  = Nam_SHRT_NAME;
+	ShrtOrFull <= Nam_FULL_NAME;
+	ShrtOrFull++)
      {
       HTM_TD_Begin ("class=\"CM\"");
-	 HTM_INPUT_TEXT (Nam_ParShrtOrFullName[ShrtOrFullName],
-			 Nam_MaxCharsShrtOrFullName[ShrtOrFullName],
-			 Names[ShrtOrFullName],
+	 HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],Nam_MaxChars[ShrtOrFull],
+			 Names[ShrtOrFull],
 			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "class=\"%s INPUT_%s\""
-			 " required=\"required\"",
-			 Nam_ClassShrtOrFullName[ShrtOrFullName],
-			 The_GetSuffix ());
+			 "class=\"%s INPUT_%s\" required=\"required\"",
+			 Nam_Classes[ShrtOrFull],The_GetSuffix ());
       HTM_TD_End ();
      }
   }
@@ -142,32 +108,26 @@ void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_
 			            const char *Names[Nam_NUM_SHRT_FULL_NAMES],
 			            bool PutForm)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   Nam_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFull;
 
-   for (ShrtOrFullName  = Nam_SHRT_NAME;
-	ShrtOrFullName <= Nam_FULL_NAME;
-	ShrtOrFullName++)
+   for (ShrtOrFull  = Nam_SHRT_NAME;
+	ShrtOrFull <= Nam_FULL_NAME;
+	ShrtOrFull++)
      {
       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	 if (PutForm)
 	   {
-	    Frm_BeginForm (ActionRename[ShrtOrFullName]);
+	    Frm_BeginForm (ActionRename[ShrtOrFull]);
 	       ParCod_PutPar (ParCod,Cod);
-	       HTM_INPUT_TEXT (Nam_ParShrtOrFullName[ShrtOrFullName],
-			       Nam_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Names[ShrtOrFullName],
+	       HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],Nam_MaxChars[ShrtOrFull],
+			       Names[ShrtOrFull],
 			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Nam_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
+			       "class=\"%s INPUT_%s\" required=\"required\"",
+			       Nam_Classes[ShrtOrFull],The_GetSuffix ());
 	    Frm_EndForm ();
 	   }
 	 else
-	    HTM_Txt (Names[ShrtOrFullName]);
+	    HTM_Txt (Names[ShrtOrFull]);
       HTM_TD_End ();
      }
   }
@@ -178,21 +138,18 @@ void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_
 
 bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char *Name,
 					         long Cod,long PrtCod,unsigned Year),
-		            char *Names[Nam_NUM_SHRT_FULL_NAMES],
+		            const char *Names[Nam_NUM_SHRT_FULL_NAMES],
 			    long Cod,long PrtCod,unsigned Year)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFull;
 
-   for (ShrtOrFullName  = Nam_SHRT_NAME;
-	ShrtOrFullName <= Nam_FULL_NAME;
-	ShrtOrFullName++)
-      if (FuncToCheck (Nam_FldShrtOrFullName[ShrtOrFullName],
-		       Names[ShrtOrFullName],Cod,PrtCod,Year))
+   for (ShrtOrFull  = Nam_SHRT_NAME;
+	ShrtOrFull <= Nam_FULL_NAME;
+	ShrtOrFull++)
+      if (FuncToCheck (Nam_Fields[ShrtOrFull],Names[ShrtOrFull],Cod,PrtCod,Year))
 	{
-	 Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,
-			  Names[ShrtOrFullName]);
+	 Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,Names[ShrtOrFull]);
 	 return true;	// Exists
 	}
 

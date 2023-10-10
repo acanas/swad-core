@@ -74,7 +74,7 @@ bool Deg_GetDegreeDataByCod (struct Hie_Node *Deg);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName);
+void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull);
 void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);

@@ -122,7 +122,7 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
 static int Roo_GetParFloor (void);
 static Roo_RoomType_t Roo_GetParType (void);
 
-static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFullName);
+static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull);
 
 static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity);
 
@@ -1044,11 +1044,11 @@ void Roo_RenameRoomFull (void)
 /************************* Change the name of a room *************************/
 /*****************************************************************************/
 
-static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFullName)
+static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
    extern const char *Txt_The_room_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
@@ -1064,7 +1064,7 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFullName)
    Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get the new name for the room */
-   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get from the database the old names of the room *****/
    Roo_GetRoomDataByCod (Roo_EditingRoom);
@@ -1074,10 +1074,10 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFullName)
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If room was in database... *****/
-         if (Roo_DB_CheckIfRoomNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
+         if (Roo_DB_CheckIfRoomNameExists (Nam_Params[ShrtOrFull],
                                            NewName,Roo_EditingRoom->RooCod,
                                            Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                                            0))	// Unused
@@ -1087,25 +1087,25 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,
-        			   Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			   Nam_Fields[ShrtOrFull],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_room_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFullName],NewName);
+                             CurrentName[ShrtOrFull],NewName);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFullName]);
+                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update room name *****/
-   Str_Copy (CurrentName[ShrtOrFullName],NewName,
-	     Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Str_Copy (CurrentName[ShrtOrFull],NewName,
+	     Nam_MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/
@@ -1197,11 +1197,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
-   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Roo_EditingRoom->ShrtName,
-      [Nam_FULL_NAME] = Roo_EditingRoom->FullName,
-     };
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewRoo,NULL,NULL,NULL);
@@ -1240,6 +1236,8 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 HTM_TD_End ();
 
 	 /***** Room short name and full name *****/
+	 Names[Nam_SHRT_NAME] = Roo_EditingRoom->ShrtName;
+	 Names[Nam_FULL_NAME] = Roo_EditingRoom->FullName;
 	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Seating capacity *****/
@@ -1301,11 +1299,7 @@ static void Roo_PutHeadRooms (void)
 void Roo_ReceiveFormNewRoom (void)
   {
    extern const char *Txt_Created_new_room_X;
-   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Roo_EditingRoom->ShrtName,
-      [Nam_FULL_NAME] = Roo_EditingRoom->FullName,
-     };
+   char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Room constructor *****/
    Roo_EditingRoomConstructor ();
@@ -1317,6 +1311,8 @@ void Roo_ReceiveFormNewRoom (void)
    Roo_EditingRoom->Type   = Roo_GetParType ();
 
    /* Get room short name and full name */
+   Names[Nam_SHRT_NAME] = Roo_EditingRoom->ShrtName;
+   Names[Nam_FULL_NAME] = Roo_EditingRoom->FullName;
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get seating capacity */
@@ -1333,8 +1329,10 @@ void Roo_ReceiveFormNewRoom (void)
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
       /***** If name of room was not in database... *****/
-      if (!Nam_CheckIfNameExists (Roo_DB_CheckIfRoomNameExists,Names,
-				  -1L,Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+      if (!Nam_CheckIfNameExists (Roo_DB_CheckIfRoomNameExists,
+				  (const char **) Names,
+				  -1L,
+				  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 				  0))	// Unused
         {
          Roo_CreateRoom (Roo_EditingRoom);

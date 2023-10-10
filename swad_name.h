@@ -58,7 +58,7 @@ typedef enum
 /*****************************************************************************/
 
 void Nam_GetParsShrtAndFullName (char *Names[Nam_NUM_SHRT_FULL_NAMES]);
-void Nam_GetParShrtOrFullName (Nam_ShrtOrFullName_t ShrtOrFullName,char *Name);
+void Nam_GetParShrtOrFullName (Nam_ShrtOrFullName_t ShrtOrFull,char *Name);
 
 void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES]);
 void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
@@ -68,7 +68,7 @@ void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_
 
 bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char *Name,
 					         long Cod,long PrtCod,unsigned Year),
-		            char *Names[Nam_NUM_SHRT_FULL_NAMES],
+		            const char *Names[Nam_NUM_SHRT_FULL_NAMES],
 			    long Cod,long PrtCod,unsigned Year);
 
 #endif

@@ -461,11 +461,7 @@ void CrsCfg_ChangeCrsDeg (void)
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    struct Hie_Node NewDeg;
-   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName,
-      [Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CRS].FullName,
-     };
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameter with degree code *****/
    NewDeg.HieCod = ParCod_GetAndCheckPar (ParCod_OthDeg);
@@ -477,8 +473,12 @@ void CrsCfg_ChangeCrsDeg (void)
       Deg_GetDegreeDataByCod (&NewDeg);
 
       /***** If name of course was not in database in the new degree... *****/
-      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,Names,
-				  -1L,NewDeg.HieCod,
+      Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName;
+      Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CRS].FullName;
+      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
+				  Names,
+				  -1L,
+				  NewDeg.HieCod,
 				  Gbl.Hierarchy.Node[Hie_CRS].Specific.Year))
 	{
 	 /***** Update degree in table of courses *****/
@@ -523,11 +523,7 @@ void CrsCfg_ChangeCrsYear (void)
    extern const char *Txt_The_year_X_is_not_allowed;
    char YearStr[2 + 1];
    unsigned NewYear;
-   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName,
-      [Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CRS].FullName,
-     };
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameter with year/semester *****/
    Par_GetParText ("OthCrsYear",YearStr,2);
@@ -536,8 +532,12 @@ void CrsCfg_ChangeCrsYear (void)
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       /***** If name of course was not in database in the new year... *****/
-      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,Names,
-				  -1L,Gbl.Hierarchy.Node[Hie_CRS].PrtCod,
+      Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName;
+      Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CRS].FullName;
+      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,
+				  Names,
+				  -1L,
+				  Gbl.Hierarchy.Node[Hie_CRS].PrtCod,
 				  NewYear))
 	{
 	 /***** Update year in table of courses *****/

@@ -91,7 +91,7 @@ static void Mai_FreeListMailDomains (struct Mai_Mails *Mails);
 static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails);
 static void Mai_PutParMaiCod (void *MaiCod);
 
-static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFullName);
+static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFull);
 
 static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
@@ -585,7 +585,7 @@ void Mai_RenameMailDomainFull (void)
 /************************* Change the name of a mail *************************/
 /*****************************************************************************/
 
-static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFullName)
+static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
@@ -617,7 +617,7 @@ static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFullName)
    Mai_EditingMai->MaiCod = ParCod_GetAndCheckPar (ParCod_Mai);
 
    /* Get the new name for the mail */
-   Par_GetParText (ParName[ShrtOrFullName],NewName,MaxBytes[ShrtOrFullName]);
+   Par_GetParText (ParName[ShrtOrFull],NewName,MaxBytes[ShrtOrFull]);
 
    /***** Get from the database the old names of the mail *****/
    Mai_GetMailDomainDataByCod (Mai_EditingMai);
@@ -627,34 +627,34 @@ static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFullName)
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If mail was in database... *****/
-         if (Mai_DB_CheckIfMailDomainNameExists (ParName[ShrtOrFullName],NewName,Mai_EditingMai->MaiCod))
+         if (Mai_DB_CheckIfMailDomainNameExists (ParName[ShrtOrFull],NewName,Mai_EditingMai->MaiCod))
 	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_already_exists,
                              NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName[ShrtOrFullName],NewName);
+            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FldName[ShrtOrFull],NewName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFullName],NewName);
+                             CurrentName[ShrtOrFull],NewName);
            }
         }
       else	// The same name
 	 Ale_CreateAlert (Ale_INFO,Mai_EMAIL_SECTION_ID,
 	                  Txt_The_email_domain_X_has_not_changed,
-                          CurrentName[ShrtOrFullName]);
+                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentName[ShrtOrFullName],NewName,MaxBytes[ShrtOrFullName]);
+   Str_Copy (CurrentName[ShrtOrFull],NewName,MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/

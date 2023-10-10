@@ -509,11 +509,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
    Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
    struct DegTyp_DegreeType *DegTyp;
-   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Deg_EditingDeg->ShrtName,
-      [Nam_FULL_NAME] = Deg_EditingDeg->FullName,
-     };
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Set action depending on role *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -548,6 +544,8 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 	 HTM_TD_End ();
 
 	 /***** Degree short name and full name *****/
+	 Names[Nam_SHRT_NAME] = Deg_EditingDeg->ShrtName;
+	 Names[Nam_FULL_NAME] = Deg_EditingDeg->FullName;
 	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Degree type *****/
@@ -1046,17 +1044,15 @@ void Deg_ReceiveFormNewDeg (void)
 static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
   {
    extern const char *Txt_Created_new_degree_X;
-   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Deg_EditingDeg->ShrtName,
-      [Nam_FULL_NAME] = Deg_EditingDeg->FullName,
-     };
+   char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Get parameters from form *****/
    /* Set degree center */
    Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 
    /* Get degree short name and full name */
+   Names[Nam_SHRT_NAME] = Deg_EditingDeg->ShrtName;
+   Names[Nam_FULL_NAME] = Deg_EditingDeg->FullName;
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get degree type */
@@ -1071,8 +1067,10 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
       if (Deg_EditingDeg->WWW[0])
 	{
 	 /***** If name of degree was not in database... *****/
-	 if (!Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,Names,
-				     -1L,Deg_EditingDeg->PrtCod,
+	 if (!Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,
+				     (const char **) Names,
+				     -1L,
+				     Deg_EditingDeg->PrtCod,
 				     0))	// Unused
 	   {
 	    Deg_DB_CreateDegree (Deg_EditingDeg,Status);
@@ -1283,11 +1281,11 @@ void Deg_RenameDegreeFull (void)
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName)
+void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
@@ -1300,7 +1298,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the new name for the degree */
-   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get data of degree *****/
    Deg_GetDegreeDataByCod (Deg);
@@ -1310,10 +1308,10 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName)
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_ParShrtOrFullName[ShrtOrFullName],
+         if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_Params[ShrtOrFull],
 					       NewName,Deg->HieCod,Deg->PrtCod,
 					       0))	// Unused
             Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
@@ -1321,22 +1319,22 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Deg_DB_UpdateDegNameDB (Deg->HieCod,
-        			    Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			    Nam_Fields[ShrtOrFull],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_degree_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFullName],NewName);
+                             CurrentName[ShrtOrFull],NewName);
 
 	    /* Change current degree name in order to display it properly */
-	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-		      Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
+	    Str_Copy (CurrentName[ShrtOrFull],NewName,
+		      Nam_MaxBytes[ShrtOrFull]);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFullName]);
+                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

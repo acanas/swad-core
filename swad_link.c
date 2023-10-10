@@ -96,7 +96,7 @@ static void Lnk_FreeListLinks (struct Lnk_Links *Links);
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links);
 static void Lnk_PutParLnkCod (void *LnkCod);
 
-static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName);
+static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull);
 
 static void Lnk_PutFormToCreateLink (void);
 static void Lnk_PutHeadLinks (void);
@@ -524,11 +524,11 @@ void Lnk_RenameLinkFull (void)
 /************************ Change the name of a link **************************/
 /*****************************************************************************/
 
-static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName)
+static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
@@ -544,7 +544,7 @@ static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName)
    Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /* Get the new name for the link */
-   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get link data from the database *****/
    Lnk_GetLinkDataByCod (Lnk_EditingLnk);
@@ -554,10 +554,10 @@ static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName)
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
+      if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If link was in database... *****/
-         if (Lnk_DB_CheckIfLinkNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
+         if (Lnk_DB_CheckIfLinkNameExists (Nam_Params[ShrtOrFull],
 					   NewName,Lnk_EditingLnk->LnkCod,
 					   -1L,	// Unused
 					   0))	// Unused
@@ -566,25 +566,25 @@ static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Lnk_DB_UpdateLnkName (Lnk_EditingLnk->LnkCod,
-        			  Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			  Nam_Fields[ShrtOrFull],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_link_X_has_been_renamed_as_Y,
-                             CurrentName[ShrtOrFullName],NewName);
+                             CurrentName[ShrtOrFull],NewName);
            }
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_X_has_not_changed,
-                          CurrentName[ShrtOrFullName]);
+                          CurrentName[ShrtOrFull]);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update name *****/
-   Str_Copy (CurrentName[ShrtOrFullName],NewName,
-	     Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Str_Copy (CurrentName[ShrtOrFull],NewName,
+	     Nam_MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/
@@ -649,11 +649,7 @@ void Lnk_ContEditAfterChgLnk (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
-   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
-      [Nam_FULL_NAME] = Lnk_EditingLnk->FullName,
-     };
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewLnk,NULL,NULL,NULL);
@@ -672,6 +668,8 @@ static void Lnk_PutFormToCreateLink (void)
 	 HTM_TD_End ();
 
 	 /***** Link short name and full name *****/
+	 Names[Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName;
+	 Names[Nam_FULL_NAME] = Lnk_EditingLnk->FullName;
 	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Link WWW *****/
@@ -716,17 +714,15 @@ void Lnk_ReceiveFormNewLink (void)
   {
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_link_X;
-   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
-     {
-      [Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
-      [Nam_FULL_NAME] = Lnk_EditingLnk->FullName,
-     };
+   char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Link constructor *****/
    Lnk_EditingLinkConstructor ();
 
    /***** Get parameters from form *****/
    /* Get link short name and full name */
+   Names[Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName;
+   Names[Nam_FULL_NAME] = Lnk_EditingLnk->FullName;
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get link URL */
@@ -736,7 +732,8 @@ void Lnk_ReceiveFormNewLink (void)
        Lnk_EditingLnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      if (!Nam_CheckIfNameExists (Lnk_DB_CheckIfLinkNameExists,Names,
+      if (!Nam_CheckIfNameExists (Lnk_DB_CheckIfLinkNameExists,
+				  (const char **) Names,
 				  -1L,
 				  -1L,	// Unused
 				  0))	// Unused
