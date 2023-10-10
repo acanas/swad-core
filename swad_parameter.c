@@ -909,29 +909,6 @@ unsigned Par_GetParText (const char *ParName,char *ParValue,size_t MaxBytes)
   }
 
 /*****************************************************************************/
-/************************ Get short name and full name ***********************/
-/*****************************************************************************/
-
-void Nam_GetParsShrtAndFullName (char *Names[Nam_NUM_SHRT_FULL_NAMES])
-  {
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-
-   for (ShrtOrFullName  = Nam_SHRT_NAME;
-	ShrtOrFullName <= Nam_FULL_NAME;
-	ShrtOrFullName++)
-      Nam_GetParShrtOrFullName (ShrtOrFullName,Names[ShrtOrFullName]);
-  }
-
-void Nam_GetParShrtOrFullName (Nam_ShrtOrFullName_t ShrtOrFullName,char *Name)
-  {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-
-   Par_GetParText (Nam_ParShrtOrFullName[ShrtOrFullName],Name,
-		   Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
-  }
-
-/*****************************************************************************/
 /****************** Get the unsigned value of a parameter ********************/
 /*****************************************************************************/
 

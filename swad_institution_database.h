@@ -48,8 +48,9 @@ void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 
 unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod);
 bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
                                        const char *Name,
-				       long InsCod,
-				       long CtyCod);
+				       long Cod,
+				       long PrtCod,
+				       __attribute__((unused)) unsigned Year);
 
 unsigned Ins_DB_GetAllInsWithPendingCtr (MYSQL_RES **mysql_res);
 unsigned Ins_DB_GetInsWithPendingCtrsAdminByMe (MYSQL_RES **mysql_res);

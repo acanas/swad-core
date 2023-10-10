@@ -582,7 +582,7 @@ static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_place_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -611,10 +611,10 @@ static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFullName)
         {
          /***** If place was in database... *****/
          if (Plc_DB_CheckIfPlaceNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
-					    NewName,Plc_EditingPlc->PlcCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_place_X_already_exists,
-                             NewName);
+					    NewName,Plc_EditingPlc->PlcCod,
+					    Gbl.Hierarchy.Node[Hie_INS].HieCod,
+					    0))	// Unused
+            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
@@ -724,11 +724,7 @@ static void Plc_PutHeadPlaces (void)
 
 void Plc_ReceiveFormNewPlace (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_Created_new_place_X;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Plc_EditingPlc->ShrtName,
@@ -745,19 +741,10 @@ void Plc_ReceiveFormNewPlace (void)
    if (Plc_EditingPlc->ShrtName[0] &&
        Plc_EditingPlc->FullName[0])	// If there's a place name
      {
-      /***** If name of place was in database... *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Plc_DB_CheckIfPlaceNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
-					    Names[ShrtOrFullName],-1L))
-	   {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_place_X_already_exists,
-			     Names[ShrtOrFullName]);
-	    Exists = true;
-	   }
-      if (!Exists)	// Add new place to database
+      /***** If name of place was not in database... *****/
+      if (!Nam_CheckIfNameExists (Plc_DB_CheckIfPlaceNameExists,Names,
+				  -1L,Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				  0))	// Unused
         {
          Plc_DB_CreatePlace (Plc_EditingPlc);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_place_X,

@@ -79,15 +79,4 @@ void Frm_FreeAnchorStr (char **Anchor);
 
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label);
 
-void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES]);
-void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
-				    ParCod_Param_t ParCod,long Cod,
-				    const char *Names[Nam_NUM_SHRT_FULL_NAMES],
-				    bool PutForm);
-
-bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char *Name,
-					         long Cod,long PrtCod,unsigned Year),
-		            char *Names[Nam_NUM_SHRT_FULL_NAMES],
-			    long Cod,long PrtCod,unsigned Year);
-
 #endif

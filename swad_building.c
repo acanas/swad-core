@@ -743,7 +743,8 @@ void Bld_ReceiveFormNewBuilding (void)
      {
       /***** If name of building was not in database... *****/
       if (!Nam_CheckIfNameExists (Bld_DB_CheckIfBuildingNameExists,Names,-1L,
-				  -1L,0))	// Unused
+				  -1L,	// Unused
+				  0))	// Unused
         {
          Bld_DB_CreateBuilding (Bld_EditingBuilding);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_building_X,

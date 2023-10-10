@@ -110,7 +110,9 @@ unsigned Lnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod)
 /********************** Check if the name of link exists *********************/
 /*****************************************************************************/
 
-bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long LnkCod)
+bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod,
+				   __attribute__((unused)) long PrtCod,
+				   __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of an institutional link already existed",
@@ -120,7 +122,7 @@ bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Lnk
 		    " WHERE %s='%s'"
 		      " AND LnkCod<>%ld)",
 		   FldName,Name,
-		   LnkCod);
+		   Cod);
   }
 
 /*****************************************************************************/

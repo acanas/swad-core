@@ -29,6 +29,7 @@
 
 #include "swad_constant.h"
 #include "swad_hidden_visible.h"
+#include "swad_name.h"
 #include "swad_string.h"
 
 /*****************************************************************************/

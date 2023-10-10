@@ -537,7 +537,8 @@ void CrsCfg_ChangeCrsYear (void)
      {
       /***** If name of course was not in database in the new year... *****/
       if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,Names,
-				  -1L,Gbl.Hierarchy.Node[Hie_CRS].PrtCod,NewYear))
+				  -1L,Gbl.Hierarchy.Node[Hie_CRS].PrtCod,
+				  NewYear))
 	{
 	 /***** Update year in table of courses *****/
          Crs_UpdateCrsYear (&Gbl.Hierarchy.Node[Hie_CRS],NewYear);

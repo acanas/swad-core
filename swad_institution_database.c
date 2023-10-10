@@ -193,8 +193,9 @@ unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod)
 
 bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
                                        const char *Name,
-				       long InsCod,
-				       long CtyCod)
+				       long Cod,
+				       long PrtCod,
+				       __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of an institution already existed",
@@ -204,9 +205,9 @@ bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
 		    " WHERE CtyCod=%ld"
 		      " AND %s='%s'"
 		      " AND InsCod<>%ld)",
-		   CtyCod,
+		   PrtCod,
 		   FldName,Name,
-		   InsCod);
+		   Cod);
   }
 
 /*****************************************************************************/

@@ -48647,29 +48647,6 @@ const char *Txt_The_ID_X_matches_one_of_the_existing =	// Warning: it is very im
 	" matches one of the existing.";		// Çeviri lazim!
 #endif
 
-const char *Txt_The_institution_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La instituci&oacute; <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Die Hochschule <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The institution <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"La instituci&oacute;n <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"The institution <strong>%s</strong> already exists.";	// Besoin de traduction
-#elif L==6	// gn
-	"La instituci&oacute;n <strong>%s</strong> ya existe.";	// Okoteve traducción
-#elif L==7	// it
-	"L'istituzione <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"The institution <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"A institui&ccedil;&atilde;o <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The institution <strong>%s</strong> already exists.";	// Çeviri lazim!
-#endif
-
 const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"La instituci&oacute; <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
@@ -48816,29 +48793,6 @@ const char *Txt_The_integrated_editor_is_not_yet_available =
 	"O editor integrado ainda n&atilde;o est&aacute; dispon&iacute;vel.";
 #elif L==10	// tr
 	"The integrated editor is not yet available.";			// Çeviri lazim!
-#endif
-
-const char *Txt_The_link_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L'enlla&ccedil; <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Der Link <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The link <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"El enlace <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"Le lien <strong>%s</strong> existe d&eacute;j&agrave;.";
-#elif L==6	// gn
-	"El enlace <strong>%s</strong> ya existe.";	// Okoteve traducción
-#elif L==7	// it
-	"Il link <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Link <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"O link <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The link <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y =	// Warning: it is very important to include %s in the following sentences
@@ -49908,29 +49862,6 @@ const char *Txt_The_password_has_been_changed_successfully =
 	"The password has been changed successfully.";			// Çeviri lazim!
 #endif
 
-const char *Txt_The_place_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El lloc <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Der Standort <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The place <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"El lugar <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"L'emplacement <strong>%s</strong> existe d&eacute;j&agrave;.";
-#elif L==6	// gn
-	"El lugar <strong>%s</strong> ya existe.";		// Okoteve traducción
-#elif L==7	// it
-	"Il luogo <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Miejsce <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"A localiza&ccedil;&atilde;o <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The place <strong>%s</strong> already exists.";	// Çeviri lazim!
-#endif
-
 const char *Txt_The_place_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"El lloc <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
@@ -50202,29 +50133,6 @@ const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B =
 	"The role of <strong>%s</strong>"
 	" in the course <strong>%s</strong>"
 	" has changed from %s to %s.";		// Çeviri lazim!
-#endif
-
-const char *Txt_The_room_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La sala <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Das Raum <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The room <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"La sala <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"La salle <strong>%s</strong> existe d&eacute;j&agrave;.";
-#elif L==6	// gn
-	"La sala <strong>%s</strong> ya existe.";		// Okoteve traducción
-#elif L==7	// it
-	"L'aula <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Klasa <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"A sala <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The room <strong>%s</strong> already exists.";		// Çeviri lazim!
 #endif
 
 const char *Txt_The_room_X_does_not_have_a_limited_capacity_now =	// Warning: it is very important to include %s in the following sentences

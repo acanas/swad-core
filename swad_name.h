@@ -1,7 +1,9 @@
-// swad_constant.c: common constants used in several modules
+// swad_name.h: short and full names
 
+#ifndef _SWAD_NAM
+#define _SWAD_NAM
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -22,33 +24,51 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/*********************************** Headers *********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
+
+#include "swad_action.h"
+#include "swad_parameter_code.h"
+#include "swad_string.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
+#define Nam_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
+#define Nam_MAX_BYTES_SHRT_NAME	((Nam_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
+
+#define Nam_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
+#define Nam_MAX_BYTES_FULL_NAME	((Nam_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 /*****************************************************************************/
-/******************************* Private types *******************************/
+/******************************* Public types ********************************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/************** External global variables from others modules ****************/
-/*****************************************************************************/
+// Related with names of centers, degrees, courses,...
+#define Nam_NUM_SHRT_FULL_NAMES 2
+typedef enum
+  {
+   Nam_SHRT_NAME,
+   Nam_FULL_NAME,
+  } Nam_ShrtOrFullName_t;
 
 /*****************************************************************************/
-/************************** Public global variables **************************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/************************* Private global variables **************************/
-/*****************************************************************************/
+void Nam_GetParsShrtAndFullName (char *Names[Nam_NUM_SHRT_FULL_NAMES]);
+void Nam_GetParShrtOrFullName (Nam_ShrtOrFullName_t ShrtOrFullName,char *Name);
 
-/*****************************************************************************/
-/***************************** Private prototypes ****************************/
-/*****************************************************************************/
+void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES]);
+void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
+				    ParCod_Param_t ParCod,long Cod,
+				    const char *Names[Nam_NUM_SHRT_FULL_NAMES],
+				    bool PutForm);
+
+bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char *Name,
+					         long Cod,long PrtCod,unsigned Year),
+		            char *Names[Nam_NUM_SHRT_FULL_NAMES],
+			    long Cod,long PrtCod,unsigned Year);
+
+#endif

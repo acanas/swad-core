@@ -1049,7 +1049,7 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_room_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_room_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -1079,9 +1079,9 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFullName)
          /***** If room was in database... *****/
          if (Roo_DB_CheckIfRoomNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
                                            NewName,Roo_EditingRoom->RooCod,
-                                           Gbl.Hierarchy.Node[Hie_CTR].HieCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_room_X_already_exists,
+                                           Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+                                           0))	// Unused
+            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,
                              NewName);
          else
            {
@@ -1300,11 +1300,7 @@ static void Roo_PutHeadRooms (void)
 
 void Roo_ReceiveFormNewRoom (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_room_X_already_exists;
    extern const char *Txt_Created_new_room_X;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Roo_EditingRoom->ShrtName,
@@ -1336,19 +1332,10 @@ void Roo_ReceiveFormNewRoom (void)
    if (Roo_EditingRoom->ShrtName[0] &&
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
-      /***** If name of room was in database... *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Roo_DB_CheckIfRoomNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
-					   Names[ShrtOrFullName],-1L,
-					   Gbl.Hierarchy.Node[Hie_CTR].HieCod))
-	   {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_room_X_already_exists,Names[ShrtOrFullName]);
-	    Exists = true;
-	   }
-      if (!Exists)	// Add new room to database
+      /***** If name of room was not in database... *****/
+      if (!Nam_CheckIfNameExists (Roo_DB_CheckIfRoomNameExists,Names,
+				  -1L,Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				  0))	// Unused
         {
          Roo_CreateRoom (Roo_EditingRoom);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_room_X,

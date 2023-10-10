@@ -1145,7 +1145,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_institution_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -1168,13 +1168,12 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
-         /***** If institution was in database... *****/
+         /***** If institution was not in database... *****/
          if (Ins_DB_CheckIfInsNameExistsInCty (Nam_ParShrtOrFullName[ShrtOrFullName],
 					       NewName,Ins->HieCod,
-                                               Gbl.Hierarchy.Node[Hie_CTY].HieCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_institution_X_already_exists,
-                             NewName);
+                                               Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+                                               0))	// Unused
+            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
@@ -1479,13 +1478,7 @@ void Ins_ReceiveFormNewIns (void)
 
 static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_Created_new_institution_X;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Ins_EditingIns->ShrtName,
@@ -1507,20 +1500,10 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
      {
       if (Ins_EditingIns->WWW[0])
         {
-         /***** If name of institution was in database... *****/
-	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	      ShrtOrFullName++)
-	    if (Ins_DB_CheckIfInsNameExistsInCty (Nam_FldShrtOrFullName[ShrtOrFullName],
-						  Names[ShrtOrFullName],
-						  -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
-	      {
-	       Ale_CreateAlert (Ale_WARNING,NULL,
-				Txt_The_institution_X_already_exists,
-				Names[ShrtOrFullName]);
-	       Exists = true;
-	      }
-         if (!Exists)	// Add new institution to database
+         /***** If name of institution was not in database... *****/
+	 if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,Names,
+				     -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+				     0))	// Unused
            {
             Ins_EditingIns->HieCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_institution_X,

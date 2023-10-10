@@ -41,7 +41,9 @@ void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res);
 unsigned Lnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);
-bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long LnkCod);
+bool Lnk_DB_CheckIfLinkNameExists (const char *FldName,const char *Name,long Cod,
+				   __attribute__((unused)) long PrtCod,
+				   __attribute__((unused)) unsigned Year);
 
 void Lnk_DB_RemoveLink (long LnkCod);
 

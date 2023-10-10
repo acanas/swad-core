@@ -34,6 +34,7 @@
 #include "swad_degree.h"
 #include "swad_figure_cache.h"
 #include "swad_map.h"
+#include "swad_name.h"
 #include "swad_role_type.h"
 
 /*****************************************************************************/

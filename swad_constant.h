@@ -33,12 +33,6 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Nam_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
-#define Nam_MAX_BYTES_SHRT_NAME	((Nam_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
-
-#define Nam_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
-#define Nam_MAX_BYTES_FULL_NAME	((Nam_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 #define Cns_MAX_CHARS_WWW	(256 - 1)		// 255: max. number of chars of a URL
 #define Cns_MAX_BYTES_WWW	Cns_MAX_CHARS_WWW	// 255
 
@@ -110,14 +104,6 @@ typedef enum
    Cns_QUIET,
    Cns_VERBOSE,
   } Cns_QuietOrVerbose_t;
-
-// Related with names of centers, degrees, courses,...
-#define Nam_NUM_SHRT_FULL_NAMES 2
-typedef enum
-  {
-   Nam_SHRT_NAME,
-   Nam_FULL_NAME,
-  } Nam_ShrtOrFullName_t;
 
 #define Cns_NUM_DISABLED_ENABLED 2
 typedef enum

@@ -33,6 +33,7 @@
 #include "swad_constant.h"
 #include "swad_figure_cache.h"
 #include "swad_hierarchy_type.h"
+#include "swad_name.h"
 #include "swad_role_type.h"
 #include "swad_string.h"
 

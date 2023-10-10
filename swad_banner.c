@@ -883,7 +883,8 @@ void Ban_ReceiveFormNewBanner (void)
      {
       /***** If name of banner was not in database... *****/
       if (!Nam_CheckIfNameExists (Ban_DB_CheckIfBannerNameExists,Names,-1L,
-				  -1L,0))	// Unused
+				  -1L,	// Unused
+				  0))	// Unused
         {
 	 if (!Ban->Img[0])
 	    Ale_CreateAlert (Ale_WARNING,NULL,

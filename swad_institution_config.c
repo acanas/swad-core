@@ -533,12 +533,8 @@ void InsCfg_RemoveLogo (void)
 
 void InsCfg_ChangeInsCty (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_country_of_the_institution_X_has_changed_to_Y;
    struct Hie_Node NewCty;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_INS].ShrtName,
@@ -555,19 +551,9 @@ void InsCfg_ChangeInsCty (void)
       Cty_GetBasicCountryDataByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Ins_DB_CheckIfInsNameExistsInCty (Nam_FldShrtOrFullName[ShrtOrFullName],
-					       Names[ShrtOrFullName],
-					       -1L,NewCty.HieCod))
-	   {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_institution_X_already_exists,
-			     Names[ShrtOrFullName]);
-	    Exists = true;
-	   }
-      if (!Exists)
+      if (!Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,Names,
+				  -1L,NewCty.HieCod,
+				  0))	// Unused
 	{
 	 /***** Update the table changing the country of the institution *****/
 	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Node[Hie_INS].HieCod,NewCty.HieCod);

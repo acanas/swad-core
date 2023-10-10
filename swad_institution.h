@@ -30,6 +30,7 @@
 #include "swad_center.h"
 #include "swad_constant.h"
 #include "swad_figure_cache.h"
+#include "swad_name.h"
 #include "swad_role_type.h"
 
 /*****************************************************************************/

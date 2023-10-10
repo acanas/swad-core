@@ -529,7 +529,7 @@ static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_link_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -558,10 +558,10 @@ static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName)
         {
          /***** If link was in database... *****/
          if (Lnk_DB_CheckIfLinkNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
-					   NewName,Lnk_EditingLnk->LnkCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_link_X_already_exists,
-                             NewName);
+					   NewName,Lnk_EditingLnk->LnkCod,
+					   -1L,	// Unused
+					   0))	// Unused
+            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
@@ -714,14 +714,8 @@ static void Lnk_PutHeadLinks (void)
 
 void Lnk_ReceiveFormNewLink (void)
   {
-   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_link_X;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
@@ -742,18 +736,10 @@ void Lnk_ReceiveFormNewLink (void)
        Lnk_EditingLnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Lnk_DB_CheckIfLinkNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
-					   Names[ShrtOrFullName],-1L))
-	   {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_link_X_already_exists,
-			     Names[ShrtOrFullName]);
-	    Exists = true;
-	   }
-      if (!Exists)
+      if (!Nam_CheckIfNameExists (Lnk_DB_CheckIfLinkNameExists,Names,
+				  -1L,
+				  -1L,	// Unused
+				  0))	// Unused
 	{
 	 if (!Lnk_EditingLnk->WWW[0])
 	    Ale_CreateAlert (Ale_WARNING,NULL,
