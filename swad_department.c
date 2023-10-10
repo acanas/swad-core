@@ -673,7 +673,7 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_department_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -700,12 +700,12 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFullName)
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
-         /***** If degree was in database... *****/
+         /***** If name department was not in database... *****/
          if (Dpt_DB_CheckIfDepartmentNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
-						 NewName,Dpt_EditingDpt->DptCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_department_X_already_exists,
-                             NewName);
+						 NewName,Dpt_EditingDpt->DptCod,
+						 -1L,	// Unused
+						 0))	// Unused
+            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
@@ -895,11 +895,7 @@ static void Dpt_PutHeadDepartments (void)
 
 void Dpt_ReceiveFormNewDpt (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_Created_new_department_X;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
@@ -924,19 +920,11 @@ void Dpt_ReceiveFormNewDpt (void)
      {
       if (Dpt_EditingDpt->WWW[0])
         {
-         /***** If name of department was in database... *****/
-	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	      ShrtOrFullName++)
-	    if (Dpt_DB_CheckIfDepartmentNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
-						    Names[ShrtOrFullName],-1L))
-	      {
-	       Ale_CreateAlert (Ale_WARNING,NULL,
-				Txt_The_department_X_already_exists,
-				Names[ShrtOrFullName]);
-	       Exists = true;
-	      }
-         if (!Exists)	// Add new department to database
+         /***** If name of department was not in database... *****/
+	 if (!Nam_CheckIfNameExists (Dpt_DB_CheckIfDepartmentNameExists,Names,
+				     -1L,
+				     -1L,	// Unused
+				     0))	// Unused
            {
             Dpt_DB_CreateDepartment (Dpt_EditingDpt);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_department_X,

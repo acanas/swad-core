@@ -1045,11 +1045,7 @@ void Deg_ReceiveFormNewDeg (void)
 
 static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_Created_new_degree_X;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Deg_EditingDeg->ShrtName,
@@ -1074,20 +1070,10 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
      {
       if (Deg_EditingDeg->WWW[0])
 	{
-	 /***** If name of degree was in database... *****/
-	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	      ShrtOrFullName++)
-	    if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_FldShrtOrFullName[ShrtOrFullName],
-						  Names[ShrtOrFullName],
-						  -1L,Deg_EditingDeg->PrtCod))
-	      {
-	       Ale_CreateAlert (Ale_WARNING,NULL,
-				Txt_The_degree_X_already_exists,
-				Names[ShrtOrFullName]);
-	       Exists = true;
-	      }
-	 if (!Exists)	// Add new degree to database
+	 /***** If name of degree was not in database... *****/
+	 if (!Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,Names,
+				     -1L,Deg_EditingDeg->PrtCod,
+				     0))	// Unused
 	   {
 	    Deg_DB_CreateDegree (Deg_EditingDeg,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_degree_X,
@@ -1302,7 +1288,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_degree_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -1328,9 +1314,9 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName)
         {
          /***** If degree was in database... *****/
          if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_ParShrtOrFullName[ShrtOrFullName],
-					       NewName,Deg->HieCod,Deg->PrtCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_degree_X_already_exists,NewName);
+					       NewName,Deg->HieCod,Deg->PrtCod,
+					       0))	// Unused
+            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */

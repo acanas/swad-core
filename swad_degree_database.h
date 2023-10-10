@@ -56,7 +56,8 @@ unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res);
 bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
-                                       long DegCod,long CtrCod);
+                                       long Cod,long PrtCod,
+				       __attribute__((unused)) unsigned Year);
 
 unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],

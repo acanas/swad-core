@@ -47,7 +47,7 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
                                 char DegShortName[Nam_MAX_BYTES_SHRT_NAME + 1]);
 bool Crs_DB_CheckIfCrsCodExists (long CrsCod);
 bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,
-					     long CrsCod,long DegCod,unsigned Year);
+					     long Cod,long PrtCod,unsigned Year);
 unsigned Crs_DB_GetCrssOfAUsr (MYSQL_RES **mysql_res,long UsrCod,Rol_Role_t Role);
 unsigned Crs_DB_GetOldCrss (MYSQL_RES **mysql_res,unsigned long SecondsWithoutAccess);
 

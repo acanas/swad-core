@@ -649,14 +649,13 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-		             Txt_The_banner_X_has_been_renamed_as_Y,
+			     Txt_The_banner_X_has_been_renamed_as_Y,
                              CurrentName[ShrtOrFullName],NewName);
            }
         }
       else	// The same name
          /* Write warning message */
-	 Ale_CreateAlert (Ale_INFO,NULL,
-	                  Txt_The_name_X_has_not_changed,
+	 Ale_CreateAlert (Ale_INFO,NULL,Txt_The_name_X_has_not_changed,
 	                  CurrentName[ShrtOrFullName]);
      }
 
@@ -882,7 +881,7 @@ void Ban_ReceiveFormNewBanner (void)
    if (Ban->ShrtName[0] &&
        Ban->FullName[0])	// If there's a banner name
      {
-      /***** If name of banner was in database... *****/
+      /***** If name of banner was not in database... *****/
       if (!Nam_CheckIfNameExists (Ban_DB_CheckIfBannerNameExists,Names,-1L,
 				  -1L,0))	// Unused
         {
@@ -892,7 +891,7 @@ void Ban_ReceiveFormNewBanner (void)
 	 else if (!Ban->WWW[0])
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_You_must_specify_the_web_address);
-	 else	// Add new banner to database
+	 else
 	   {
 	    Ban_DB_CreateBanner (Ban);
 	    Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,

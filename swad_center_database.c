@@ -297,7 +297,8 @@ unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod)
 /*****************************************************************************/
 
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
-				       long CtrCod,long InsCod)
+				       long Cod,long PrtCod,
+				       __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a center already existed",
@@ -307,10 +308,9 @@ bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
 		    " WHERE InsCod=%ld"
 		      " AND %s='%s'"
 		      " AND CtrCod<>%ld)",
-		   InsCod,
-		   FldName,
-		   Name,
-		   CtrCod);
+		   PrtCod,
+		   FldName,Name,
+		   Cod);
   }
 
 /*****************************************************************************/

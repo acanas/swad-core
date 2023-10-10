@@ -517,7 +517,8 @@ unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
-                                       long DegCod,long CtrCod)
+                                       long Cod,long PrtCod,
+				       __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a degree already existed",
@@ -527,9 +528,9 @@ bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,
 		    " WHERE CtrCod=%ld"
 		      " AND %s='%s'"
 		      " AND DegCod<>%ld)",
-		   CtrCod,
+		   PrtCod,
 		   FldName,Name,
-		   DegCod);
+		   Cod);
   }
 
 /*****************************************************************************/

@@ -51,7 +51,8 @@ long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
 void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
-				       long CtrCod,long InsCod);
+				       long Cod,long PrtCod,
+				       __attribute__((unused)) unsigned Year);
 
 unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],

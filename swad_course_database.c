@@ -213,7 +213,7 @@ bool Crs_DB_CheckIfCrsCodExists (long CrsCod)
 /*****************************************************************************/
 
 bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,
-					     long CrsCod,long DegCod,unsigned Year)
+					     long Cod,long PrtCod,unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a course already existed",
@@ -224,11 +224,10 @@ bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Nam
 		      " AND Year=%u"
 		      " AND %s='%s'"
 		      " AND CrsCod<>%ld)",
-		   DegCod,
+		   PrtCod,
 		   Year,
-		   FldName,
-		   Name,
-		   CrsCod);
+		   FldName,Name,
+		   Cod);
   }
 
 /*****************************************************************************/

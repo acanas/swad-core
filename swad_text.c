@@ -46840,29 +46840,6 @@ const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"The banner <strong>%s</strong> has been renamed as <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
-const char *Txt_The_building_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L'edifici <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Das Geb&auml;ude <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The building <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"El edificio <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"Le b&acirc;timent <strong>%s</strong> existe d&eacute;j&agrave;.";
-#elif L==6	// gn
-	"El edificio <strong>%s</strong> ya existe.";		// Okoteve traducción
-#elif L==7	// it
-	"L'edificio <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Budynek <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"O edif&iacute;cio <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The building <strong>%s</strong> already exists.";	// Çeviri lazim!
-#endif
-
 const char *Txt_The_building_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"L'edifici <strong>%s</strong> ha passat a anomenar-se <strong>%s</strong>.";
@@ -46999,29 +46976,6 @@ const char *Txt_The_capacity_of_room_X_is_now_Y =	// Warning: it is very importa
 	"A capacidade da sala <strong>%s</strong> &eacute; agora <strong>%u</strong>.";
 #elif L==10	// tr
 	"The capacity of room <strong>%s</strong> is now <strong>%u</strong>.";		// Çeviri lazim!
-#endif
-
-const char *Txt_The_center_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El centre <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Das Zentrum <strong>%s</strong> existiert bereits.";
-#elif L==3	// en
-	"The center <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"El centro <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"Le centre <strong>%s</strong> existe d&eacute;j&agrave;.";
-#elif L==6	// gn
-	"El centro <strong>%s</strong> ya existe.";		// Okoteve traducción
-#elif L==7	// it
-	"Il centro <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Centrum <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"O centro <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The center <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: it is very important to include two %s in the following sentences
@@ -47360,52 +47314,6 @@ const char *Txt_The_country_of_the_institution_X_has_changed_to_Y =	// Warning: 
 	" has changed to <strong>%s</strong>.";	// Çeviri lazim!
 #endif
 
-const char *Txt_The_course_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L´assignatura <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Die Kurs <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The course <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"La asignatura <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"La mati&egrave;re <strong>%s</strong> existe d&eacute;j&agrave;.";
-#elif L==6	// gn
-	"La asignatura <strong>%s</strong> ya existe.";		// Okoteve traducción
-#elif L==7	// it
-	"Il corso <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Kurs <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"A disciplina <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The course <strong>%s</strong> already exists.";	// Çeviri lazim!
-#endif
-
-const char *Txt_The_course_X_already_exists_in_year_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1	// ca
-	"L'assignatura <strong>%s</strong> ja existeix a l'any/semestre %s.";
-#elif L==2	// de
-	"Die Kurs <strong>%s</strong> wurde bereits in Studienjahr/Semester %s eingegeben.";
-#elif L==3	// en
-	"The course <strong>%s</strong> already exists in year/semester %s.";
-#elif L==4	// es
-	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";
-#elif L==5	// fr
-	"La mati&egrave;re <strong>%s</strong> existe d&eacute;j&agrave; en ann&eacute;e/semestre %s.";
-#elif L==6	// gn
-	"La asignatura <strong>%s</strong> ya existe en el a&ntilde;o/semestre %s.";	// Okoteve traducción
-#elif L==7	// it
-	"Il corso <strong>%s</strong> esiste gi&agrave; nell'anno/semester %s.";
-#elif L==8	// pl
-	"Kurs <strong>%s</strong> istnieje ju&zdot; na roku/semestrze %s.";
-#elif L==9	// pt
-	"A disciplina <strong>%s</strong> j&aacute; existe no ano/semestre %s.";
-#elif L==10	// tr
-	"The course <strong>%s</strong> already exists in year/semester %s.";		// Çeviri lazim!
-#endif
-
 const char *Txt_The_course_X_has_been_moved_to_the_degree_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"L'assignatura <strong>%s</strong>"
@@ -47541,29 +47449,6 @@ const char *Txt_The_date_time_of_opening_of_groups_has_changed =
 	"The date/time of opening of groups has changed.";	// Çeviri lazim!
 #endif
 
-const char *Txt_The_degree_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La titulaci&oacute; <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Der Studiengang <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The degree <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"La titulaci&oacute;n <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"L'&eacute;tude <strong>%s</strong> existe d&eacute;j&agrave;.";
-#elif L==6	// gn
-	"La titulaci&oacute;n <strong>%s</strong> ya existe.";	// Okoteve traducción
-#elif L==7	// it
-	"La laurea <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Stopie&nacute; <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"O grau <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The degree <strong>%s</strong> already exists.";	// Çeviri lazim!
-#endif
-
 const char *Txt_The_degree_X_has_been_moved_to_the_center_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"La titulaci&oacute; <strong>%s</strong> s'ha traslladat"
@@ -47628,29 +47513,6 @@ const char *Txt_The_degree_X_has_been_renamed_as_Y =	// Warning: it is very impo
 #elif L==10	// tr
 	"The degree <strong>%s</strong>"
 	" has been renamed as <strong>%s</strong>.";		// Çeviri lazim!
-#endif
-
-const char *Txt_The_department_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El departament <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Die Abteilung <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The department <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"El departamento <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"The department <strong>%s</strong> already exists.";	// Besoin de traduction
-#elif L==6	// gn
-	"El departamento <strong>%s</strong> ya existe.";	// Okoteve traducción
-#elif L==7	// it
-	"IL dipartimento <strong>%s</strong> esiste gi&agrave;.";
-#elif L==8	// pl
-	"The department <strong>%s</strong> already exists.";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"O departamento <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The department <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences

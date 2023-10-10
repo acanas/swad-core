@@ -1064,7 +1064,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_center_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_center_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -1093,10 +1093,9 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFullName)
          /***** If degree was in database... *****/
          if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_ParShrtOrFullName[ShrtOrFullName],
 					       NewName,Ctr->HieCod,
-					       Gbl.Hierarchy.Node[Hie_INS].HieCod))
-            Ale_CreateAlert (Ale_WARNING,NULL,
-        	             Txt_The_center_X_already_exists,
-			     NewName);
+					       Gbl.Hierarchy.Node[Hie_INS].HieCod,
+					       0))	// Unused
+            Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
@@ -1475,16 +1474,12 @@ void Ctr_ReceiveFormNewCtr (void)
 
 static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_Created_new_center_X;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
       [Nam_FULL_NAME] = Ctr_EditingCtr->FullName,
      };
-   bool Exists;
 
    /***** Get parameters from form *****/
    /* Set center institution */
@@ -1505,19 +1500,9 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
       if (Ctr_EditingCtr->WWW[0])
         {
          /***** If name of center was in database... *****/
-	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	      ShrtOrFullName++)
-	    if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_FldShrtOrFullName[ShrtOrFullName],
-						  Names[ShrtOrFullName],-1L,
-						  Gbl.Hierarchy.Node[Hie_INS].HieCod))
-	      {
-	       Ale_CreateAlert (Ale_WARNING,NULL,
-				Txt_The_center_X_already_exists,
-				Names[ShrtOrFullName]);
-	       Exists = true;
-	      }
-	 if (!Exists)	// Add new center to database
+	 if (!Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,Names,
+				     -1L,Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				     0))	// Unused
            {
             Ctr_EditingCtr->HieCod = Ctr_DB_CreateCenter (Ctr_EditingCtr,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_center_X,

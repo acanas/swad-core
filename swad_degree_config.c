@@ -348,12 +348,8 @@ static void DegCfg_NumCrss (void)
 
 void DegCfg_ChangeDegCtr (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_moved_to_the_center_Y;
    struct Hie_Node NewCtr;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
@@ -369,20 +365,10 @@ void DegCfg_ChangeDegCtr (void)
       /***** Get data of new center *****/
       Ctr_GetCenterDataByCod (&NewCtr);
 
-      /***** Check if it already exists a degree with the same name in the new center *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_FldShrtOrFullName[ShrtOrFullName],
-					       Names[ShrtOrFullName],
-					       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-					       NewCtr.HieCod))
-           {
-	    Ale_CreateAlert (Ale_WARNING,Txt_The_degree_X_already_exists,
-			     Names[ShrtOrFullName]);
-	    Exists = true;
-           }
-      if (Exists)
+      /***** Check if it already existed a degree with the same name in the new center *****/
+      if (!Nam_CheckIfNameExists (Deg_DB_CheckIfDegNameExistsInCtr,Names,
+				  Gbl.Hierarchy.Node[Hie_DEG].HieCod,NewCtr.HieCod,
+				  0))	// Unused
 	{
 	 /***** Update center in table of degrees *****/
 	 Deg_DB_UpdateDegCtr (Gbl.Hierarchy.Node[Hie_DEG].HieCod,NewCtr.HieCod);

@@ -458,13 +458,9 @@ static void CrsCfg_Indicators (void)
 
 void CrsCfg_ChangeCrsDeg (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    struct Hie_Node NewDeg;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName,
@@ -480,21 +476,10 @@ void CrsCfg_ChangeCrsDeg (void)
       /***** Get data of new degree *****/
       Deg_GetDegreeDataByCod (&NewDeg);
 
-      /***** If name of course was in database in the new degree... *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_FldShrtOrFullName[ShrtOrFullName],
-						     Names[ShrtOrFullName],-1L,
-						     NewDeg.HieCod,Gbl.Hierarchy.Node[Hie_CRS].Specific.Year))
-	   {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-			     Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Node[Hie_CRS].Specific.Year],
-			     NewDeg.FullName,Names[ShrtOrFullName]);
-	    Exists = true;
-           }
-      if (!Exists)	// Update degree in database
+      /***** If name of course was not in database in the new degree... *****/
+      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,Names,
+				  -1L,NewDeg.HieCod,
+				  Gbl.Hierarchy.Node[Hie_CRS].Specific.Year))
 	{
 	 /***** Update degree in table of courses *****/
 	 Crs_DB_UpdateCrsDeg (Gbl.Hierarchy.Node[Hie_CRS].HieCod,NewDeg.HieCod);
@@ -533,15 +518,11 @@ void CrsCfg_RenameCourseFull (void)
 
 void CrsCfg_ChangeCrsYear (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_course_X_already_exists_in_year_Y;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
    char YearStr[2 + 1];
    unsigned NewYear;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName,
@@ -554,20 +535,9 @@ void CrsCfg_ChangeCrsYear (void)
 
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
-      /***** If name of course was in database in the new year... *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_FldShrtOrFullName[ShrtOrFullName],
-						     Names[ShrtOrFullName],-1L,
-						     Gbl.Hierarchy.Node[Hie_CRS].PrtCod,NewYear))
-           {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_course_X_already_exists_in_year_Y,
-			     Names[ShrtOrFullName],Txt_YEAR_OF_DEGREE[NewYear]);
-	    Exists = true;
-           }
-      if (!Exists)	// Update year in database
+      /***** If name of course was not in database in the new year... *****/
+      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,Names,
+				  -1L,Gbl.Hierarchy.Node[Hie_CRS].PrtCod,NewYear))
 	{
 	 /***** Update year in table of courses *****/
          Crs_UpdateCrsYear (&Gbl.Hierarchy.Node[Hie_CRS],NewYear);

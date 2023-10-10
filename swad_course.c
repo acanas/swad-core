@@ -1248,13 +1248,9 @@ void Crs_ReceiveFormNewCrs (void)
 
 static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_Created_new_course_X;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Crs_EditingCrs->ShrtName,
@@ -1275,21 +1271,10 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
       if (Crs_EditingCrs->ShrtName[0] &&
 	  Crs_EditingCrs->FullName[0])	// If there's a course name
 	{
-	 /***** If name of course was in database... *****/
-	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	      ShrtOrFullName++)
-	    if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_FldShrtOrFullName[ShrtOrFullName],
-							Names[ShrtOrFullName],
-							-1L,Crs_EditingCrs->PrtCod,
-							Crs_EditingCrs->Specific.Year))
-	      {
-	       Ale_CreateAlert (Ale_WARNING,NULL,
-				Txt_The_course_X_already_exists,
-				Names[ShrtOrFullName]);
-	       Exists = true;
-	      }
-	 if (!Exists)	// Add new requested course to database
+	 /***** If name of course was not in database... *****/
+	 if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,Names,
+				     -1L,Crs_EditingCrs->PrtCod,
+				     Crs_EditingCrs->Specific.Year))
 	   {
 	    Crs_DB_CreateCourse (Crs_EditingCrs,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_course_X,
@@ -1612,15 +1597,11 @@ void Crs_ChangeInsCrsCod (void)
 
 void Crs_ChangeCrsYear (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_course_X_already_exists_in_year_Y;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
    char YearStr[2 + 1];
    unsigned NewYear;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
    char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Crs_EditingCrs->ShrtName,
@@ -1645,20 +1626,9 @@ void Crs_ChangeCrsYear (void)
 
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
-      /***** If name of course was in database in the new year... *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-        {
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_FldShrtOrFullName[ShrtOrFullName],
-						     Names[ShrtOrFullName],
-						     -1L,Crs_EditingCrs->PrtCod,NewYear))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_course_X_already_exists_in_year_Y,
-			     Names[ShrtOrFullName],Txt_YEAR_OF_DEGREE[NewYear]);
-	 Exists = true;
-        }
-      if (!Exists)	// Update year in database
+      /***** If name of course was not in database in the new year... *****/
+      if (!Nam_CheckIfNameExists (Crs_DB_CheckIfCrsNameExistsInYearOfDeg,Names,
+				  -1L,Crs_EditingCrs->PrtCod,NewYear))
 	{
 	 /***** Update year in table of courses *****/
 	 Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);
@@ -1735,7 +1705,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_course_X_already_exists;
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_course_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
    char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
@@ -1765,9 +1735,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFullName)
 	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_ParShrtOrFullName[ShrtOrFullName],
 						     NewName,Crs->HieCod,
 						     Crs->PrtCod,Crs->Specific.Year))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_course_X_already_exists,
-			     NewName);
+	    Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
 	 else
 	   {
 	    /* Update the table changing old name by new name */

@@ -1015,13 +1015,9 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
 
 void CtrCfg_ChangeCtrIns (void)
   {
-   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_The_center_X_has_been_moved_to_the_institution_Y;
    struct Hie_Node NewIns;
-   Nam_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
-   char *Name[Nam_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
       [Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CTR].FullName,
@@ -1037,20 +1033,9 @@ void CtrCfg_ChangeCtrIns (void)
       Ins_GetInstitDataByCod (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
-      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_FldShrtOrFullName[ShrtOrFullName],
-					       Name[ShrtOrFullName],
-					       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-					       NewIns.HieCod))
-	   {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_center_X_already_exists,
-			     Name[ShrtOrFullName]);
-	    Exists = true;
-	   }
-      if (!Exists)
+      if (!Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,Names,
+				  Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewIns.HieCod,
+				  0))	// Unused
 	{
 	 /***** Update institution in table of centers *****/
 	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewIns.HieCod);
