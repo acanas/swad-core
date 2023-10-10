@@ -1879,6 +1879,29 @@ const char *Txt_Already_existed_an_exam_with_the_title_X =	// Warning: it is ver
 	"Already existed an exam with the title <strong>%s</strong>.";			// Çeviri lazim!
 #endif
 
+const char *Txt_X_already_exists =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"<strong>%s</strong> ja existeix.";
+#elif L==2	// de
+	"<strong>%s</strong> wurde bereits eingegeben.";
+#elif L==3	// en
+	"<strong>%s</strong> already exists.";
+#elif L==4	// es
+	"<strong>%s</strong> ya existe.";
+#elif L==5	// fr
+	"<strong>%s</strong> existe d&eacute;j&grave;.";
+#elif L==6	// gn
+	"<strong>%s</strong> ya existe.";		// Okoteve traducción
+#elif L==7	// it
+	"<strong>%s</strong> gi&agrave; esiste.";
+#elif L==8	// pl
+	"<strong>%s</strong> ju&zdot; istnieje.";
+#elif L==9	// pt
+	"<strong>%s</strong> j&aacute; existe.";
+#elif L==10	// tr
+	"<strong>%s</strong> already exists.";		// Çeviri lazim!
+#endif
+
 const char *Txt_Altitude =
 #if   L==1	// ca
 	"Altitud";
@@ -46792,29 +46815,6 @@ const char *Txt_The_assignment_has_been_modified =
 	"A atividade foi modificada.";
 #elif L==10	// tr
 	"&Ouml;dev de&gbreve;i&scedil;tirildi.";
-#endif
-
-const char *Txt_The_banner_X_already_exists =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El banner <strong>%s</strong> ja existeix.";
-#elif L==2	// de
-	"Der Werbebanner <strong>%s</strong> wurde bereits eingegeben.";
-#elif L==3	// en
-	"The banner <strong>%s</strong> already exists.";
-#elif L==4	// es
-	"El banner <strong>%s</strong> ya existe.";
-#elif L==5	// fr
-	"La banni&egrave;re <strong>%s</strong> existe d&eacute;j&grave;.";
-#elif L==6	// gn
-	"El banner <strong>%s</strong> ya existe.";		// Okoteve traducción
-#elif L==7	// it
-	"Il banner <strong>%s</strong> gi&agrave; esiste.";
-#elif L==8	// pl
-	"Baner <strong>%s</strong> ju&zdot; istnieje.";
-#elif L==9	// pt
-	"O banner <strong>%s</strong> j&aacute; existe.";
-#elif L==10	// tr
-	"The banner <strong>%s</strong> already exists.";	// Çeviri lazim!
 #endif
 
 const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences

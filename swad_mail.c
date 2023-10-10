@@ -91,7 +91,7 @@ static void Mai_FreeListMailDomains (struct Mai_Mails *Mails);
 static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails);
 static void Mai_PutParMaiCod (void *MaiCod);
 
-static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
+static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFullName);
 
 static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
@@ -565,7 +565,7 @@ void Mai_RenameMailDomainShort (void)
    Mai_EditingMailDomainConstructor ();
 
    /***** Rename mail domain *****/
-   Mai_RenameMailDomain (Cns_SHRT_NAME);
+   Mai_RenameMailDomain (Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -578,37 +578,37 @@ void Mai_RenameMailDomainFull (void)
    Mai_EditingMailDomainConstructor ();
 
    /***** Rename mail domain *****/
-   Mai_RenameMailDomain (Cns_FULL_NAME);
+   Mai_RenameMailDomain (Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************* Change the name of a mail *************************/
 /*****************************************************************************/
 
-static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
+static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
    extern const char *Txt_The_email_domain_X_has_not_changed;
-   static const char *ParName[Cns_NUM_SHRT_FULL_NAMES] =
+   static const char *ParName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = "Domain",
-      [Cns_FULL_NAME] = "Info",
+      [Nam_SHRT_NAME] = "Domain",
+      [Nam_FULL_NAME] = "Info",
      };
-   static const char *FldName[Cns_NUM_SHRT_FULL_NAMES] =
+   static const char *FldName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = "Domain",
-      [Cns_FULL_NAME] = "Info",
+      [Nam_SHRT_NAME] = "Domain",
+      [Nam_FULL_NAME] = "Info",
      };
-   static unsigned MaxBytes[Cns_NUM_SHRT_FULL_NAMES] =
+   static unsigned MaxBytes[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Cns_MAX_BYTES_EMAIL_ADDRESS,
-      [Cns_FULL_NAME] = Mai_MAX_BYTES_MAIL_INFO,
+      [Nam_SHRT_NAME] = Cns_MAX_BYTES_EMAIL_ADDRESS,
+      [Nam_FULL_NAME] = Mai_MAX_BYTES_MAIL_INFO,
      };
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Mai_EditingMai->Domain,
-      [Cns_FULL_NAME] = Mai_EditingMai->Info,
+      [Nam_SHRT_NAME] = Mai_EditingMai->Domain,
+      [Nam_FULL_NAME] = Mai_EditingMai->Info,
      };
    char NewName[Mai_MAX_BYTES_MAIL_INFO + 1];
 

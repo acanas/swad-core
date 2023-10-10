@@ -73,7 +73,7 @@ bool Deg_GetDegreeDataByCod (struct Hie_Node *Deg);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName);
 void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
@@ -84,7 +84,7 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role);
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 
 void Deg_GetUsrMainDeg (long UsrCod,
-		        char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1],
+		        char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1],
 		        Rol_Role_t *MaxRole);
 
 #endif

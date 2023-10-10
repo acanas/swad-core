@@ -73,7 +73,7 @@ void Crs_UpdateCrsYear (struct Hie_Node *Crs,unsigned NewYear);
 
 void Crs_RenameCourseShort (void);
 void Crs_RenameCourseFull (void);
-void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFullName);
 
 void Crs_ChangeCrsStatus (void);
 void Crs_ContEditAfterChgCrs (void);

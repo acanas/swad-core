@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_action_list.h"
+#include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -357,42 +358,42 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
 /************************ Write short and full names *************************/
 /*****************************************************************************/
 
-void Frm_NewShortAndFullNames (const char *Names[Cns_NUM_SHRT_FULL_NAMES])
+void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES])
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   Nam_ShrtOrFullName_t ShrtOrFullName;
 
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
+   for (ShrtOrFullName  = Nam_SHRT_NAME;
+	ShrtOrFullName <= Nam_FULL_NAME;
 	ShrtOrFullName++)
      {
       HTM_TD_Begin ("class=\"CM\"");
-	 HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			 Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+	 HTM_INPUT_TEXT (Nam_ParShrtOrFullName[ShrtOrFullName],
+			 Nam_MaxCharsShrtOrFullName[ShrtOrFullName],
 			 Names[ShrtOrFullName],
 			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 "class=\"%s INPUT_%s\""
 			 " required=\"required\"",
-			 Cns_ClassShrtOrFullName[ShrtOrFullName],
+			 Nam_ClassShrtOrFullName[ShrtOrFullName],
 			 The_GetSuffix ());
       HTM_TD_End ();
      }
   }
 
-void Frm_ExistingShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES],
+void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
 			            ParCod_Param_t ParCod,long Cod,
-			            const char *Names[Cns_NUM_SHRT_FULL_NAMES],
+			            const char *Names[Nam_NUM_SHRT_FULL_NAMES],
 			            bool PutForm)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   Nam_ShrtOrFullName_t ShrtOrFullName;
 
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
+   for (ShrtOrFullName  = Nam_SHRT_NAME;
+	ShrtOrFullName <= Nam_FULL_NAME;
 	ShrtOrFullName++)
      {
       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -400,13 +401,13 @@ void Frm_ExistingShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_
 	   {
 	    Frm_BeginForm (ActionRename[ShrtOrFullName]);
 	       ParCod_PutPar (ParCod,Cod);
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+	       HTM_INPUT_TEXT (Nam_ParShrtOrFullName[ShrtOrFullName],
+			       Nam_MaxCharsShrtOrFullName[ShrtOrFullName],
 			       Names[ShrtOrFullName],
 			       HTM_SUBMIT_ON_CHANGE,
 			       "class=\"%s INPUT_%s\""
 			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
+			       Nam_ClassShrtOrFullName[ShrtOrFullName],
 			       The_GetSuffix ());
 	    Frm_EndForm ();
 	   }
@@ -414,4 +415,31 @@ void Frm_ExistingShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_
 	    HTM_Txt (Names[ShrtOrFullName]);
       HTM_TD_End ();
      }
+  }
+
+/*****************************************************************************/
+/****************** Check if a short or full name exists *********************/
+/*****************************************************************************/
+
+bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char *Name,
+					         long Cod,long PrtCod,unsigned Year),
+		            char *Names[Nam_NUM_SHRT_FULL_NAMES],
+			    long Cod,long PrtCod,unsigned Year)
+  {
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Txt_X_already_exists;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
+
+   for (ShrtOrFullName  = Nam_SHRT_NAME;
+	ShrtOrFullName <= Nam_FULL_NAME;
+	ShrtOrFullName++)
+      if (FuncToCheck (Nam_FldShrtOrFullName[ShrtOrFullName],
+		       Names[ShrtOrFullName],Cod,PrtCod,Year))
+	{
+	 Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,
+			  Names[ShrtOrFullName]);
+	 return true;	// Exists
+	}
+
+   return false;	// Does not exist
   }

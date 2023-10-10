@@ -263,8 +263,8 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 /********************** Check if the name of room exists *********************/
 /*****************************************************************************/
 
-bool Roo_DB_CheckIfRoomNameExists (long CtrCod,long RooCod,
-                                   const char *FldName,const char *Name)
+bool Roo_DB_CheckIfRoomNameExists (const char *FldName,const char *Name,
+				   long RooCod,long CtrCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a room already existed",

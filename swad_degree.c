@@ -317,10 +317,10 @@ void Deg_ShowDegsOfCurrentCtr (void)
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenDegSho,
-      [Cns_FULL_NAME] = ActRenDegFul,
+      [Nam_SHRT_NAME] = ActRenDegSho,
+      [Nam_FULL_NAME] = ActRenDegFul,
      };
    unsigned NumDeg;
    struct Hie_Node *Deg;
@@ -331,7 +331,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    bool ICanEdit;
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -385,9 +385,9 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Degree short name and full name */
-	    Names[Cns_SHRT_NAME] = Deg->ShrtName;
-	    Names[Cns_FULL_NAME] = Deg->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Deg->ShrtName;
+	    Names[Nam_FULL_NAME] = Deg->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Deg->HieCod,
 				           Names,
 				           ICanEdit);	// Put form?
@@ -509,10 +509,10 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
    Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
    struct DegTyp_DegreeType *DegTyp;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Deg_EditingDeg->ShrtName,
-      [Cns_FULL_NAME] = Deg_EditingDeg->FullName,
+      [Nam_SHRT_NAME] = Deg_EditingDeg->ShrtName,
+      [Nam_FULL_NAME] = Deg_EditingDeg->FullName,
      };
 
    /***** Set action depending on role *****/
@@ -548,7 +548,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 	 HTM_TD_End ();
 
 	 /***** Degree short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Degree type *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1045,15 +1045,15 @@ void Deg_ReceiveFormNewDeg (void)
 
 static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_Created_new_degree_X;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Deg_EditingDeg->ShrtName,
-      [Cns_FULL_NAME] = Deg_EditingDeg->FullName,
+      [Nam_SHRT_NAME] = Deg_EditingDeg->ShrtName,
+      [Nam_FULL_NAME] = Deg_EditingDeg->FullName,
      };
 
    /***** Get parameters from form *****/
@@ -1061,7 +1061,7 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
    Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 
    /* Get degree short name and full name */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
 
    /* Get degree type */
    Deg_EditingDeg->Specific.TypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
@@ -1075,10 +1075,10 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
       if (Deg_EditingDeg->WWW[0])
 	{
 	 /***** If name of degree was in database... *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
-	    if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_FldShrtOrFullName[ShrtOrFullName],
+	    if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_FldShrtOrFullName[ShrtOrFullName],
 						  Names[ShrtOrFullName],
 						  -1L,Deg_EditingDeg->PrtCod))
 	      {
@@ -1090,9 +1090,8 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 	 if (!Exists)	// Add new degree to database
 	   {
 	    Deg_DB_CreateDegree (Deg_EditingDeg,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_Created_new_degree_X,
-			     Deg_EditingDeg->FullName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_degree_X,
+			     Names[Nam_FULL_NAME]);
 	   }
 	}
       else	// If there is not a degree logo or web
@@ -1281,7 +1280,7 @@ void Deg_RenameDegreeShort (void)
 
    /***** Rename degree *****/
    Deg_EditingDeg->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Deg_RenameDegree (Deg_EditingDeg,Cns_SHRT_NAME);
+   Deg_RenameDegree (Deg_EditingDeg,Nam_SHRT_NAME);
   }
 
 void Deg_RenameDegreeFull (void)
@@ -1291,31 +1290,31 @@ void Deg_RenameDegreeFull (void)
 
    /***** Rename degree *****/
    Deg_EditingDeg->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
+   Deg_RenameDegree (Deg_EditingDeg,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Deg->ShrtName,
-      [Cns_FULL_NAME] = Deg->FullName,
+      [Nam_SHRT_NAME] = Deg->ShrtName,
+      [Nam_FULL_NAME] = Deg->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the new name for the degree */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get data of degree *****/
    Deg_GetDegreeDataByCod (Deg);
@@ -1328,7 +1327,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_ParShrtOrFullName[ShrtOrFullName],
+         if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_ParShrtOrFullName[ShrtOrFullName],
 					       NewName,Deg->HieCod,Deg->PrtCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_degree_X_already_exists,NewName);
@@ -1336,7 +1335,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Deg_DB_UpdateDegNameDB (Deg->HieCod,
-        			    Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			    Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1345,7 +1344,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
 
 	    /* Change current degree name in order to display it properly */
 	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+		      Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
            }
         }
       else	// The same name
@@ -1619,7 +1618,7 @@ static void Deg_EditingDegreeDestructor (void)
 /*****************************************************************************/
 
 void Deg_GetUsrMainDeg (long UsrCod,
-		        char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1],
+		        char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1],
 		        Rol_Role_t *MaxRole)
   {
    MYSQL_RES *mysql_res;
@@ -1631,7 +1630,7 @@ void Deg_GetUsrMainDeg (long UsrCod,
       row = mysql_fetch_row (mysql_res);
 
       /* Get degree name (row[0]) */
-      Str_Copy (ShrtName,row[0],Cns_MAX_BYTES_SHRT_NAME);
+      Str_Copy (ShrtName,row[0],Nam_MAX_BYTES_SHRT_NAME);
 
       /* Get maximum role (row[1]) */
       *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);

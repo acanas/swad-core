@@ -37,8 +37,8 @@ struct Plc_Place
   {
    long PlcCod;
    long InsCod;
-   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Nam_MAX_BYTES_FULL_NAME + 1];
    unsigned NumCtrs;
   };
 

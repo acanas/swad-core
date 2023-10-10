@@ -161,8 +161,8 @@ long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void)
 /*****************************************************************************/
 
 void Crs_DB_GetShortNamesByCod (long CrsCod,
-                                char CrsShortName[Cns_MAX_BYTES_SHRT_NAME + 1],
-                                char DegShortName[Cns_MAX_BYTES_SHRT_NAME + 1])
+                                char CrsShortName[Nam_MAX_BYTES_SHRT_NAME + 1],
+                                char DegShortName[Nam_MAX_BYTES_SHRT_NAME + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -185,8 +185,8 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
      {
       /***** Get the course short name and degree short name *****/
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (CrsShortName,row[0],Cns_MAX_BYTES_SHRT_NAME);
-      Str_Copy (DegShortName,row[1],Cns_MAX_BYTES_SHRT_NAME);
+      Str_Copy (CrsShortName,row[0],Nam_MAX_BYTES_SHRT_NAME);
+      Str_Copy (DegShortName,row[1],Nam_MAX_BYTES_SHRT_NAME);
      }
 
    /***** Free structure that stores the query result *****/
@@ -212,8 +212,8 @@ bool Crs_DB_CheckIfCrsCodExists (long CrsCod)
 /********** Check if the name of course exists in existing courses ***********/
 /*****************************************************************************/
 
-bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,long CrsCod,
-                                             long DegCod,unsigned Year)
+bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FldName,const char *Name,
+					     long CrsCod,long DegCod,unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a course already existed",

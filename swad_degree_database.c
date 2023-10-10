@@ -339,7 +339,7 @@ long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod)
 /************* Get the short name of a degree from its code ******************/
 /*****************************************************************************/
 
-void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1])
+void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: degree code should be > 0 *****/
    if (DegCod <= 0)
@@ -349,7 +349,7 @@ void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_MAX_BYTES_S
      }
 
    /***** Get the short name of a degree from database *****/
-   DB_QuerySELECTString (ShrtName,Cns_MAX_BYTES_SHRT_NAME,
+   DB_QuerySELECTString (ShrtName,Nam_MAX_BYTES_SHRT_NAME,
 			 "can not get the short name of a degree",
 			 "SELECT ShortName"
 			  " FROM deg_degrees"
@@ -689,7 +689,7 @@ void Deg_DB_UpdateDegTypName (long DegTypCod,
 /*****************************************************************************/
 
 void Deg_DB_UpdateDegNameDB (long DegCod,const char *FldName,
-                             const char NewDegName[Cns_MAX_BYTES_FULL_NAME + 1])
+                             const char NewDegName[Nam_MAX_BYTES_FULL_NAME + 1])
   {
    DB_QueryUPDATE ("can not update the name of a degree",
 		   "UPDATE deg_degrees"

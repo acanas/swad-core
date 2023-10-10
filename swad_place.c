@@ -83,7 +83,7 @@ static void Plc_GetPlaceDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc)
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
 static void Plc_PutParPlcCod (void *PlcCod);
 
-static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
+static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFullName);
 
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
@@ -445,14 +445,14 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenPlcSho,
-      [Cns_FULL_NAME] = ActRenPlcFul,
+      [Nam_SHRT_NAME] = ActRenPlcSho,
+      [Nam_FULL_NAME] = ActRenPlcFul,
      };
    unsigned NumPlc;
    struct Plc_Place *Plc;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -484,9 +484,9 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place short name and full name */
-	    Names[Cns_SHRT_NAME] = Plc->ShrtName;
-	    Names[Cns_FULL_NAME] = Plc->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Plc->ShrtName;
+	    Names[Nam_FULL_NAME] = Plc->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 					   ParCod_Plc,Plc->PlcCod,
 					   Names,
 					   true);	// Put form
@@ -557,7 +557,7 @@ void Plc_RenamePlaceShort (void)
    Plc_EditingPlaceConstructor ();
 
    /***** Rename place *****/
-   Plc_RenamePlace (Cns_SHRT_NAME);
+   Plc_RenamePlace (Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -570,34 +570,34 @@ void Plc_RenamePlaceFull (void)
    Plc_EditingPlaceConstructor ();
 
    /***** Rename place *****/
-   Plc_RenamePlace (Cns_FULL_NAME);
+   Plc_RenamePlace (Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a place *************************/
 /*****************************************************************************/
 
-static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
+static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
-      [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
+      [Nam_SHRT_NAME] = Plc_EditingPlc->ShrtName,
+      [Nam_FULL_NAME] = Plc_EditingPlc->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the place */
    Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
    /* Get the new name for the place */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get place old names from database  *****/
    Plc_GetPlaceDataByCod (Plc_EditingPlc);
@@ -610,7 +610,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If place was in database... *****/
-         if (Plc_DB_CheckIfPlaceNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+         if (Plc_DB_CheckIfPlaceNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
 					    NewName,Plc_EditingPlc->PlcCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_place_X_already_exists,
@@ -619,7 +619,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,
-        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			  Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -637,7 +637,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update place name *****/
    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+	     Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -662,10 +662,10 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
-      [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
+      [Nam_SHRT_NAME] = Plc_EditingPlc->ShrtName,
+      [Nam_FULL_NAME] = Plc_EditingPlc->FullName,
      };
 
    /***** Begin form to create *****/
@@ -685,7 +685,7 @@ static void Plc_PutFormToCreatePlace (void)
 	 HTM_TD_End ();
 
 	 /***** Place short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Number of centers *****/
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -724,15 +724,15 @@ static void Plc_PutHeadPlaces (void)
 
 void Plc_ReceiveFormNewPlace (void)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_Created_new_place_X;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
-      [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
+      [Nam_SHRT_NAME] = Plc_EditingPlc->ShrtName,
+      [Nam_FULL_NAME] = Plc_EditingPlc->FullName,
      };
 
    /***** Place constructor *****/
@@ -740,16 +740,16 @@ void Plc_ReceiveFormNewPlace (void)
 
    /***** Get parameters from form *****/
    /* Get place short name and full name */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
 
    if (Plc_EditingPlc->ShrtName[0] &&
        Plc_EditingPlc->FullName[0])	// If there's a place name
      {
       /***** If name of place was in database... *****/
-      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
-	 if (Plc_DB_CheckIfPlaceNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+	 if (Plc_DB_CheckIfPlaceNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
 					    Names[ShrtOrFullName],-1L))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
@@ -761,7 +761,7 @@ void Plc_ReceiveFormNewPlace (void)
         {
          Plc_DB_CreatePlace (Plc_EditingPlc);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_place_X,
-			  Plc_EditingPlc->FullName);
+			  Names[Nam_FULL_NAME]);
         }
      }
    else	// If there is not a place name

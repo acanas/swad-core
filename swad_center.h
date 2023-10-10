@@ -57,7 +57,7 @@ void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);
 void Ctr_RenameCenterShort (void);
 void Ctr_RenameCenterFull (void);
-void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFullName);
 void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);

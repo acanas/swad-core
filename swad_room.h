@@ -73,11 +73,11 @@ struct Roo_Room
    long RooCod;						// Room code
    long CtrCod;						// Center code
    long BldCod;						// Building code
-   char BldShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];	// Building short name
+   char BldShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];	// Building short name
    int  Floor;						// Room floor
    Roo_RoomType_t Type;					// Room type
-   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];		// Room short name
-   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];		// Room full name
+   char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];		// Room short name
+   char FullName[Nam_MAX_BYTES_FULL_NAME + 1];		// Room full name
    unsigned Capacity;		// Room seating capacity
 				// (maximum people who fit in the room)
    unsigned long long MACnum;

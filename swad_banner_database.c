@@ -114,7 +114,10 @@ unsigned Ban_DB_GetBannerDataByCod (MYSQL_RES **mysql_res,long BanCod)
 /********************* Check if the name of banner exists ********************/
 /*****************************************************************************/
 
-bool Ban_DB_CheckIfBannerNameExists (const char *FldName,const char *Name,long BanCod)
+// bool Ban_DB_CheckIfBannerNameExists (const char *FldName,const char *Name,long BanCod)
+bool Ban_DB_CheckIfBannerNameExists (const char *FldName,const char *Name,long Cod,
+				     __attribute__((unused)) long PrtCod,
+				     __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a banner already existed",
@@ -124,7 +127,7 @@ bool Ban_DB_CheckIfBannerNameExists (const char *FldName,const char *Name,long B
 		    " WHERE %s='%s'"
 		      " AND BanCod<>%ld)",
 		   FldName,Name,
-		   BanCod);
+		   Cod);
   }
 
 /*****************************************************************************/

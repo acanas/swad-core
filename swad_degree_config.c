@@ -266,7 +266,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 
 static void DegCfg_FullName (bool PutForm)
   {
-   HieCfg_Name (PutForm,Hie_DEG,Cns_FULL_NAME);
+   HieCfg_Name (PutForm,Hie_DEG,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -275,7 +275,7 @@ static void DegCfg_FullName (bool PutForm)
 
 static void DegCfg_ShrtName (bool PutForm)
   {
-   HieCfg_Name (PutForm,Hie_DEG,Cns_SHRT_NAME);
+   HieCfg_Name (PutForm,Hie_DEG,Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -348,16 +348,16 @@ static void DegCfg_NumCrss (void)
 
 void DegCfg_ChangeDegCtr (void)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_degree_X_has_been_moved_to_the_center_Y;
    struct Hie_Node NewCtr;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
-      [Cns_FULL_NAME] = Gbl.Hierarchy.Node[Hie_DEG].FullName,
+      [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
+      [Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_DEG].FullName,
      };
 
    /***** Get parameter with center code *****/
@@ -370,16 +370,16 @@ void DegCfg_ChangeDegCtr (void)
       Ctr_GetCenterDataByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new center *****/
-      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
-	 if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_FldShrtOrFullName[ShrtOrFullName],
-					       Name[ShrtOrFullName],
+	 if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_FldShrtOrFullName[ShrtOrFullName],
+					       Names[ShrtOrFullName],
 					       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 					       NewCtr.HieCod))
            {
 	    Ale_CreateAlert (Ale_WARNING,Txt_The_degree_X_already_exists,
-			     Name[ShrtOrFullName]);
+			     Names[ShrtOrFullName]);
 	    Exists = true;
            }
       if (Exists)
@@ -395,7 +395,7 @@ void DegCfg_ChangeDegCtr (void)
 	 /***** Create alert to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_degree_X_has_been_moved_to_the_center_Y,
-		          Gbl.Hierarchy.Node[Hie_DEG].FullName,
+		          Names[Nam_FULL_NAME],
 		          Gbl.Hierarchy.Node[Hie_CTR].FullName);
 	}
      }
@@ -407,12 +407,12 @@ void DegCfg_ChangeDegCtr (void)
 
 void DegCfg_RenameDegreeShort (void)
   {
-   Deg_RenameDegree (&Gbl.Hierarchy.Node[Hie_DEG],Cns_SHRT_NAME);
+   Deg_RenameDegree (&Gbl.Hierarchy.Node[Hie_DEG],Nam_SHRT_NAME);
   }
 
 void DegCfg_RenameDegreeFull (void)
   {
-   Deg_RenameDegree (&Gbl.Hierarchy.Node[Hie_DEG],Cns_FULL_NAME);
+   Deg_RenameDegree (&Gbl.Hierarchy.Node[Hie_DEG],Nam_FULL_NAME);
   }
 
 /*****************************************************************************/

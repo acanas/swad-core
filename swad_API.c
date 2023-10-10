@@ -872,8 +872,8 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userSurname2  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userPhoto     = soap_malloc (soap,Cns_MAX_BYTES_WWW                  + 1);
    loginBySessionKeyOut->userBirthday  = soap_malloc (soap,Dat_LENGTH_YYYYMMDD                + 1);
-   loginBySessionKeyOut->degreeName    = soap_malloc (soap,Cns_MAX_BYTES_FULL_NAME  + 1);
-   loginBySessionKeyOut->courseName    = soap_malloc (soap,Cns_MAX_BYTES_FULL_NAME  + 1);
+   loginBySessionKeyOut->degreeName    = soap_malloc (soap,Nam_MAX_BYTES_FULL_NAME  + 1);
+   loginBySessionKeyOut->courseName    = soap_malloc (soap,Nam_MAX_BYTES_FULL_NAME  + 1);
 
    /***** Default values returned on error *****/
    loginBySessionKeyOut->userCode          = -1;
@@ -916,7 +916,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Crs_GetCourseDataByCod (&Gbl.Hierarchy.Node[Hie_CRS]);
       loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Node[Hie_CRS].HieCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Node[Hie_CRS].FullName,
-                Cns_MAX_BYTES_FULL_NAME);
+                Nam_MAX_BYTES_FULL_NAME);
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -927,7 +927,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Node[Hie_DEG]);
       loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Node[Hie_DEG].HieCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Node[Hie_DEG].FullName,
-                Cns_MAX_BYTES_FULL_NAME);
+                Nam_MAX_BYTES_FULL_NAME);
      }
    else
       UsrFound = false;
@@ -1155,13 +1155,13 @@ int swad__getCourses (struct soap *soap,
          /* Get course short name (row[1])
             and course full name (row[2]) */
          getCoursesOut->coursesArray.__ptr[NumCrs].courseShortName =
-            soap_malloc (soap,Cns_MAX_BYTES_SHRT_NAME + 1);
+            soap_malloc (soap,Nam_MAX_BYTES_SHRT_NAME + 1);
          getCoursesOut->coursesArray.__ptr[NumCrs].courseFullName =
-            soap_malloc (soap,Cns_MAX_BYTES_FULL_NAME + 1);
+            soap_malloc (soap,Nam_MAX_BYTES_FULL_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumCrs].courseShortName,
-	           row[1],Cns_MAX_BYTES_SHRT_NAME);
+	           row[1],Nam_MAX_BYTES_SHRT_NAME);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumCrs].courseFullName,
-	           row[2],Cns_MAX_BYTES_FULL_NAME);
+	           row[2],Nam_MAX_BYTES_FULL_NAME);
 
          /* Get role (row[3]) */
          if (sscanf (row[3],"%u",&Role) != 1)	// Role in this course

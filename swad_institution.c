@@ -638,7 +638,7 @@ void Ins_GetFullListOfInstitutions (long CtyCod)
 void Ins_WriteInstitutionNameAndCty (long InsCod)
   {
    struct Hie_Node Ins;
-   char CtyName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char CtyName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution short name and country name *****/
    Ins.HieCod = InsCod;
@@ -746,7 +746,7 @@ void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
   }
 
 void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
-                                         char CtyName[Cns_MAX_BYTES_FULL_NAME + 1])
+                                         char CtyName[Nam_MAX_BYTES_FULL_NAME + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -766,7 +766,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
       Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
 		sizeof (Ins->ShrtName) - 1);
       Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
-		Cns_MAX_BYTES_FULL_NAME);
+		Nam_MAX_BYTES_FULL_NAME);
       return;
      }
 
@@ -796,7 +796,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
    Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
 	     sizeof (Ins->ShrtName) - 1);
    Str_Copy (CtyName      ,Gbl.Cache.InstitutionShrtNameAndCty.CtyName ,
-	     Cns_MAX_BYTES_FULL_NAME);
+	     Nam_MAX_BYTES_FULL_NAME);
    Gbl.Cache.InstitutionShrtNameAndCty.Valid = true;
   }
 
@@ -877,10 +877,10 @@ void Ins_WriteSelectorOfInstitution (void)
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenInsSho,
-      [Cns_FULL_NAME] = ActRenInsFul,
+      [Nam_SHRT_NAME] = ActRenInsSho,
+      [Nam_FULL_NAME] = ActRenInsFul,
      };
    unsigned NumIns;
    struct Hie_Node *Ins;
@@ -890,7 +890,7 @@ static void Ins_ListInstitutionsForEdition (void)
    unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -947,9 +947,9 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution short name and full name */
-	    Names[Cns_SHRT_NAME] = Ins->ShrtName;
-	    Names[Cns_FULL_NAME] = Ins->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Ins->ShrtName;
+	    Names[Nam_FULL_NAME] = Ins->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ins->HieCod,
 				           Names,
 				           ICanEdit);	// Put form?
@@ -1123,7 +1123,7 @@ void Ins_RenameInsShort (void)
 
    /***** Rename institution *****/
    Ins_EditingIns->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ins_RenameInstitution (Ins_EditingIns,Cns_SHRT_NAME);
+   Ins_RenameInstitution (Ins_EditingIns,Nam_SHRT_NAME);
   }
 
 void Ins_RenameInsFull (void)
@@ -1133,30 +1133,30 @@ void Ins_RenameInsFull (void)
 
    /***** Rename institution *****/
    Ins_EditingIns->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ins_RenameInstitution (Ins_EditingIns,Cns_FULL_NAME);
+   Ins_RenameInstitution (Ins_EditingIns,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
 
-void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_The_institution_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ins->ShrtName,
-      [Cns_FULL_NAME] = Ins->FullName,
+      [Nam_SHRT_NAME] = Ins->ShrtName,
+      [Nam_FULL_NAME] = Ins->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get the new name for the institution from form *****/
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the institution *****/
    Ins_GetInstitDataByCod (Ins);
@@ -1169,7 +1169,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If institution was in database... *****/
-         if (Ins_DB_CheckIfInsNameExistsInCty (Cns_ParShrtOrFullName[ShrtOrFullName],
+         if (Ins_DB_CheckIfInsNameExistsInCty (Nam_ParShrtOrFullName[ShrtOrFullName],
 					       NewName,Ins->HieCod,
                                                Gbl.Hierarchy.Node[Hie_CTY].HieCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1179,7 +1179,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
            {
             /* Update the table changing old name by new name */
             Ins_UpdateInsNameDB (Ins->HieCod,
-        			 Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			 Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Create message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1188,7 +1188,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
 
 	    /* Change current institution name in order to display it properly */
 	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+		      Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
            }
         }
       else	// The same name
@@ -1331,10 +1331,10 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 static void Ins_PutFormToCreateInstitution (void)
   {
    Act_Action_t NextAction = ActUnk;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ins_EditingIns->ShrtName,
-      [Cns_FULL_NAME] = Ins_EditingIns->FullName,
+      [Nam_SHRT_NAME] = Ins_EditingIns->ShrtName,
+      [Nam_FULL_NAME] = Ins_EditingIns->FullName,
      };
 
    /***** Set action depending on role *****/
@@ -1370,7 +1370,7 @@ static void Ins_PutFormToCreateInstitution (void)
 	 HTM_TD_End ();
 
 	 /***** Institution short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Institution WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1479,17 +1479,17 @@ void Ins_ReceiveFormNewIns (void)
 
 static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_Created_new_institution_X;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ins_EditingIns->ShrtName,
-      [Cns_FULL_NAME] = Ins_EditingIns->FullName,
+      [Nam_SHRT_NAME] = Ins_EditingIns->ShrtName,
+      [Nam_FULL_NAME] = Ins_EditingIns->FullName,
      };
 
    /***** Get parameters from form *****/
@@ -1497,7 +1497,7 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
    Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[Hie_CTY].HieCod;
 
    /* Get institution short name, full name and WWW */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
 
    /* Get institution URL */
    Par_GetParText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
@@ -1508,10 +1508,10 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
       if (Ins_EditingIns->WWW[0])
         {
          /***** If name of institution was in database... *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
-	    if (Ins_DB_CheckIfInsNameExistsInCty (Cns_FldShrtOrFullName[ShrtOrFullName],
+	    if (Ins_DB_CheckIfInsNameExistsInCty (Nam_FldShrtOrFullName[ShrtOrFullName],
 						  Names[ShrtOrFullName],
 						  -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
 	      {
@@ -1523,9 +1523,8 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
          if (!Exists)	// Add new institution to database
            {
             Ins_EditingIns->HieCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_Created_new_institution_X,
-			     Ins_EditingIns->FullName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_institution_X,
+			     Names[Nam_FULL_NAME]);
            }
         }
       else	// If there is not a web

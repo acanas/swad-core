@@ -31,30 +31,30 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES] =
+const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Cns_SHRT_NAME] = "ShortName",
-   [Cns_FULL_NAME] = "FullName",
+   [Nam_SHRT_NAME] = "ShortName",
+   [Nam_FULL_NAME] = "FullName",
   };
-const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES] =
+const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Cns_SHRT_NAME] = "ShortName",
-   [Cns_FULL_NAME] = "FullName",
+   [Nam_SHRT_NAME] = "ShortName",
+   [Nam_FULL_NAME] = "FullName",
   };
-unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES] =
+unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Cns_SHRT_NAME] = Cns_MAX_CHARS_SHRT_NAME,
-   [Cns_FULL_NAME] = Cns_MAX_CHARS_FULL_NAME,
+   [Nam_SHRT_NAME] = Nam_MAX_CHARS_SHRT_NAME,
+   [Nam_FULL_NAME] = Nam_MAX_CHARS_FULL_NAME,
   };
-unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES] =
+unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Cns_SHRT_NAME] = Cns_MAX_BYTES_SHRT_NAME,
-   [Cns_FULL_NAME] = Cns_MAX_BYTES_FULL_NAME,
+   [Nam_SHRT_NAME] = Nam_MAX_BYTES_SHRT_NAME,
+   [Nam_FULL_NAME] = Nam_MAX_BYTES_FULL_NAME,
   };
-const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES] =
+const char *Nam_ClassShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Cns_SHRT_NAME] = "INPUT_SHORT_NAME",
-   [Cns_FULL_NAME] = "INPUT_FULL_NAME",
+   [Nam_SHRT_NAME] = "INPUT_SHORT_NAME",
+   [Nam_FULL_NAME] = "INPUT_FULL_NAME",
   };
 
 /*****************************************************************************/

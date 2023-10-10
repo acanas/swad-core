@@ -98,7 +98,7 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,
                                   HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
-                              Cns_ShrtOrFullName_t ShrtOrFullName);
+                              Nam_ShrtOrFullName_t ShrtOrFullName);
 
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban);
 static void Ban_PutHeadBanners (void);
@@ -389,15 +389,15 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
       [HidVis_HIDDEN ] = ActUnhBan,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidBan,	// Visible ==> action to hide
      };
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenBanSho,
-      [Cns_FULL_NAME] = ActRenBanFul,
+      [Nam_SHRT_NAME] = ActRenBanSho,
+      [Nam_FULL_NAME] = ActRenBanFul,
      };
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -444,9 +444,9 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_End ();
 
 	    /* Banner short name and full name */
-	    Names[Cns_SHRT_NAME] = Ban->ShrtName;
-	    Names[Cns_FULL_NAME] = Ban->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Ban->ShrtName;
+	    Names[Nam_FULL_NAME] = Ban->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Ban,Banners->BanCodToEdit,
 				           Names,
 				           true);	// Put form
@@ -580,7 +580,7 @@ void Ban_RenameBannerShort (void)
    Ban_ResetBanner (Ban);
 
    /***** Rename banner *****/
-   Ban_RenameBanner (Ban,Cns_SHRT_NAME);
+   Ban_RenameBanner (Ban,Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -595,7 +595,7 @@ void Ban_RenameBannerFull (void)
    Ban_ResetBanner (Ban);
 
    /***** Rename banner *****/
-   Ban_RenameBanner (Ban,Cns_FULL_NAME);
+   Ban_RenameBanner (Ban,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -603,27 +603,27 @@ void Ban_RenameBannerFull (void)
 /*****************************************************************************/
 
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
-                              Cns_ShrtOrFullName_t ShrtOrFullName)
+                              Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_banner_X_already_exists;
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Txt_X_already_exists;
    extern const char *Txt_The_banner_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ban->ShrtName,
-      [Cns_FULL_NAME] = Ban->FullName,
+      [Nam_SHRT_NAME] = Ban->ShrtName,
+      [Nam_FULL_NAME] = Ban->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /* Get the new name for the banner */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get banner data from the database *****/
    Ban_GetBannerDataByCod (Ban);
@@ -638,14 +638,14 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If banner was in database... *****/
-         if (Ban_DB_CheckIfBannerNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
-					     NewName,Ban->BanCod))
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-		             Txt_The_banner_X_already_exists,NewName);
+         if (Ban_DB_CheckIfBannerNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
+					     NewName,Ban->BanCod,
+					     -1L,0))	// Unused
+	    Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Ban_DB_UpdateBanName (Ban->BanCod,Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+            Ban_DB_UpdateBanName (Ban->BanCod,Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -662,7 +662,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
 
    /***** Update name *****/
    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+	     Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -774,10 +774,10 @@ void Ban_ContEditAfterChgBan (void)
 
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ban->ShrtName,
-      [Cns_FULL_NAME] = Ban->FullName,
+      [Nam_SHRT_NAME] = Ban->ShrtName,
+      [Nam_FULL_NAME] = Ban->FullName,
      };
 
    /***** Begin form to create *****/
@@ -800,7 +800,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	 HTM_TD_Empty (1);
 
 	 /* Banner short name and full name */
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /* Banner image */
 	 HTM_TD_Begin ("class=\"CM\"");
@@ -860,25 +860,22 @@ static void Ban_PutHeadBanners (void)
 
 void Ban_ReceiveFormNewBanner (void)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Txt_The_banner_X_already_exists;
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_banner_X;
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   bool Exists;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ban->ShrtName,
-      [Cns_FULL_NAME] = Ban->FullName,
+      [Nam_SHRT_NAME] = Ban->ShrtName,
+      [Nam_FULL_NAME] = Ban->FullName,
      };
 
    /***** Reset banner *****/
    Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
    Par_GetParText ("Img",Ban->Img,Ban_MAX_BYTES_IMAGE);
    Par_GetParText ("WWW",Ban->WWW,Cns_MAX_BYTES_WWW);
 
@@ -886,18 +883,8 @@ void Ban_ReceiveFormNewBanner (void)
        Ban->FullName[0])	// If there's a banner name
      {
       /***** If name of banner was in database... *****/
-      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
-	   ShrtOrFullName++)
-	 if (Ban_DB_CheckIfBannerNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
-					     Names[ShrtOrFullName],-1L))
-	   {
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_banner_X_already_exists,
-			     Names[ShrtOrFullName]);
-	    Exists = true;
-	   }
-      if (!Exists)
+      if (!Nam_CheckIfNameExists (Ban_DB_CheckIfBannerNameExists,Names,-1L,
+				  -1L,0))	// Unused
         {
 	 if (!Ban->Img[0])
 	    Ale_CreateAlert (Ale_WARNING,NULL,
@@ -909,7 +896,7 @@ void Ban_ReceiveFormNewBanner (void)
 	   {
 	    Ban_DB_CreateBanner (Ban);
 	    Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
-			     Ban->ShrtName);
+			     Names[Nam_FULL_NAME]);
 	   }
         }
      }

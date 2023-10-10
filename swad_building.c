@@ -74,7 +74,7 @@ static void Bld_GetBuildingDataFromRow (MYSQL_RES *mysql_res,
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings);
 static void Bld_PutParBldCod (void *BldCod);
 
-static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName);
+static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFullName);
 
 static void Bld_PutFormToCreateBuilding (void);
 static void Bld_PutHeadBuildings (void);
@@ -390,15 +390,15 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings)
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
   {
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenBldSho,
-      [Cns_FULL_NAME] = ActRenBldFul,
+      [Nam_SHRT_NAME] = ActRenBldSho,
+      [Nam_FULL_NAME] = ActRenBldFul,
      };
    unsigned NumBld;
    struct Bld_Building *Building;
    char *Anchor = NULL;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -432,9 +432,9 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    HTM_TD_End ();
 
 	    /* Building short name and full name */
-	    Names[Cns_SHRT_NAME] = Building->ShrtName;
-	    Names[Cns_FULL_NAME] = Building->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Building->ShrtName;
+	    Names[Nam_FULL_NAME] = Building->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Bld,Building->BldCod,
 				           Names,
 				           true);	// Put form
@@ -506,7 +506,7 @@ void Bld_RenameBuildingShort (void)
    Bld_EditingBuildingConstructor ();
 
    /***** Rename building *****/
-   Bld_RenameBuilding (Cns_SHRT_NAME);
+   Bld_RenameBuilding (Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -519,34 +519,34 @@ void Bld_RenameBuildingFull (void)
    Bld_EditingBuildingConstructor ();
 
    /***** Rename building *****/
-   Bld_RenameBuilding (Cns_FULL_NAME);
+   Bld_RenameBuilding (Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /*********************** Change the name of a building ***********************/
 /*****************************************************************************/
 
-static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
+static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_building_X_already_exists;
    extern const char *Txt_The_building_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
-      [Cns_FULL_NAME] = Bld_EditingBuilding->FullName,
+      [Nam_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
+      [Nam_FULL_NAME] = Bld_EditingBuilding->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the building */
    Bld_EditingBuilding->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /* Get the new name for the building */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the building *****/
    Bld_GetBuildingDataByCod (Bld_EditingBuilding);
@@ -559,7 +559,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If building was in database... *****/
-         if (Bld_DB_CheckIfBuildingNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+         if (Bld_DB_CheckIfBuildingNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
 					       NewName,Bld_EditingBuilding->BldCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_building_X_already_exists,
@@ -568,7 +568,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,
-        			       Cns_FldShrtOrFullName[ShrtOrFullName],
+        			       Nam_FldShrtOrFullName[ShrtOrFullName],
         			       NewName);
 
             /* Write message to show the change made */
@@ -587,7 +587,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update building name *****/
    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+	     Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -598,7 +598,7 @@ void Bld_ChangeBuildingLocation (void)
   {
    extern const char *Txt_The_location_of_the_building_X_has_changed_to_Y;
    extern const char *Txt_The_location_of_the_building_X_has_not_changed;
-   char NewLocation[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewLocation[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Building constructor *****/
    Bld_EditingBuildingConstructor ();
@@ -655,10 +655,10 @@ void Bld_ContEditAfterChgBuilding (void)
 
 static void Bld_PutFormToCreateBuilding (void)
   {
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
-      [Cns_FULL_NAME] = Bld_EditingBuilding->FullName,
+      [Nam_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
+      [Nam_FULL_NAME] = Bld_EditingBuilding->FullName,
      };
 
    /***** Begin form to create *****/
@@ -678,7 +678,7 @@ static void Bld_PutFormToCreateBuilding (void)
 	 HTM_TD_End ();
 
 	 /***** Building short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Building location *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -722,15 +722,15 @@ static void Bld_PutHeadBuildings (void)
 
 void Bld_ReceiveFormNewBuilding (void)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_building_X_already_exists;
    extern const char *Txt_Created_new_building_X;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
-      [Cns_FULL_NAME] = Bld_EditingBuilding->FullName,
+      [Nam_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
+      [Nam_FULL_NAME] = Bld_EditingBuilding->FullName,
      };
 
    /***** Building constructor *****/
@@ -738,7 +738,7 @@ void Bld_ReceiveFormNewBuilding (void)
 
    /***** Get parameters from form *****/
    /* Get building short name and full name */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
 
    /* Get building location */
    Par_GetParText ("Location",Bld_EditingBuilding->Location,Bld_MAX_BYTES_LOCATION);
@@ -747,10 +747,10 @@ void Bld_ReceiveFormNewBuilding (void)
        Bld_EditingBuilding->FullName[0])	// If there's a building name
      {
       /***** If name of building was in database... *****/
-      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
-	 if (Bld_DB_CheckIfBuildingNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+	 if (Bld_DB_CheckIfBuildingNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
 					       Names[ShrtOrFullName],-1L))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
@@ -761,9 +761,8 @@ void Bld_ReceiveFormNewBuilding (void)
       if (!Exists)	// Add new building to database
         {
          Bld_DB_CreateBuilding (Bld_EditingBuilding);
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,
-	                  Txt_Created_new_building_X,
-			  Bld_EditingBuilding->FullName);
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_building_X,
+			  Names[Nam_FULL_NAME]);
         }
      }
    else	// If there is not a building name

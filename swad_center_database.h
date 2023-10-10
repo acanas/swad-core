@@ -48,7 +48,7 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod);
 unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long CtrCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
-void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1]);
+void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FldName,const char *Name,
 				       long CtrCod,long InsCod);

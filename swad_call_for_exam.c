@@ -172,7 +172,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    ExaCod = ParCod_GetPar (ParCod_Exa);
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Cns_MAX_BYTES_FULL_NAME);
+   Par_GetParText ("CrsName",CallsForExams->CallForExam.CrsFullName,Nam_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!CallsForExams->CallForExam.CrsFullName[0])
       Str_Copy (CallsForExams->CallForExam.CrsFullName,
@@ -854,7 +854,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 				 Cfe_TypeViewCallForExam_t TypeViewCallForExam,
 				 bool HighLight)
   {
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxCharsShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Hlp_ASSESSMENT_Calls_for_exams_new_call;
    extern const char *Hlp_ASSESSMENT_Calls_for_exams_edit_call;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -1002,7 +1002,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
 	                  The_GetSuffix ());
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
-		  HTM_INPUT_TEXT ("CrsName",Cns_MaxCharsShrtOrFullName[Cns_FULL_NAME],
+		  HTM_INPUT_TEXT ("CrsName",Nam_MaxCharsShrtOrFullName[Nam_FULL_NAME],
 				  CallsForExams->CallForExam.CrsFullName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"CrsName\" size=\"30\" class=\"INPUT_%s\"",

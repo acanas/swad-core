@@ -51,14 +51,14 @@ void Ins_WriteInstitutionNameAndCty (long InsCod);
 bool Ins_GetInstitDataByCod (struct Hie_Node *Ins);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
-                                         char CtyName[Cns_MAX_BYTES_FULL_NAME + 1]);
+                                         char CtyName[Nam_MAX_BYTES_FULL_NAME + 1]);
 
 void Ins_WriteSelectorOfInstitution (void);
 
 void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
-void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
+void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFullName);
 void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);

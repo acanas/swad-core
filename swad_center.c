@@ -732,10 +732,10 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenCtrSho,
-      [Cns_FULL_NAME] = ActRenCtrFul,
+      [Nam_SHRT_NAME] = ActRenCtrSho,
+      [Nam_FULL_NAME] = ActRenCtrFul,
      };
    unsigned NumCtr;
    struct Hie_Node *Ctr;
@@ -747,7 +747,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    unsigned NumDegs;
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -840,9 +840,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center short name and full name */
-	    Names[Cns_SHRT_NAME] = Ctr->ShrtName;
-	    Names[Cns_FULL_NAME] = Ctr->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Ctr->ShrtName;
+	    Names[Nam_FULL_NAME] = Ctr->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ctr->HieCod,
 				           Names,
 				           ICanEdit);	// Put form?
@@ -1042,7 +1042,7 @@ void Ctr_RenameCenterShort (void)
 
    /***** Rename center *****/
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ctr_RenameCenter (Ctr_EditingCtr,Cns_SHRT_NAME);
+   Ctr_RenameCenter (Ctr_EditingCtr,Nam_SHRT_NAME);
   }
 
 void Ctr_RenameCenterFull (void)
@@ -1052,31 +1052,31 @@ void Ctr_RenameCenterFull (void)
 
    /***** Rename center *****/
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ctr_RenameCenter (Ctr_EditingCtr,Cns_FULL_NAME);
+   Ctr_RenameCenter (Ctr_EditingCtr,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a center ************************/
 /*****************************************************************************/
 
-void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_The_center_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ctr->ShrtName,
-      [Cns_FULL_NAME] = Ctr->FullName,
+      [Nam_SHRT_NAME] = Ctr->ShrtName,
+      [Nam_FULL_NAME] = Ctr->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the new name for the center */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the center *****/
    Ctr_GetCenterDataByCod (Ctr);
@@ -1091,7 +1091,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns (Cns_ParShrtOrFullName[ShrtOrFullName],
+         if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_ParShrtOrFullName[ShrtOrFullName],
 					       NewName,Ctr->HieCod,
 					       Gbl.Hierarchy.Node[Hie_INS].HieCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1101,7 +1101,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Ctr_DB_UpdateCtrName (Ctr->HieCod,
-        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			  Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1110,7 +1110,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
 
 	    /* Change current center name in order to display it properly */
 	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+		      Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
            }
         }
       else	// The same name
@@ -1240,10 +1240,10 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
    Act_Action_t NextAction = ActUnk;
    unsigned NumPlc;
    const struct Plc_Place *Plc;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
-      [Cns_FULL_NAME] = Ctr_EditingCtr->FullName,
+      [Nam_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
+      [Nam_FULL_NAME] = Ctr_EditingCtr->FullName,
      };
 
    /***** Set action depending on role *****/
@@ -1303,7 +1303,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 HTM_TD_End ();
 
 	 /***** Center short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Center WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1475,14 +1475,14 @@ void Ctr_ReceiveFormNewCtr (void)
 
 static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_Created_new_center_X;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   Nam_ShrtOrFullName_t ShrtOrFullName;
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
-      [Cns_FULL_NAME] = Ctr_EditingCtr->FullName,
+      [Nam_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
+      [Nam_FULL_NAME] = Ctr_EditingCtr->FullName,
      };
    bool Exists;
 
@@ -1494,7 +1494,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
    Ctr_EditingCtr->Specific.PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /* Get center short name and full name */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
 
    /* Get center WWW */
    Par_GetParText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
@@ -1505,10 +1505,10 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
       if (Ctr_EditingCtr->WWW[0])
         {
          /***** If name of center was in database... *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
-	    if (Ctr_DB_CheckIfCtrNameExistsInIns (Cns_FldShrtOrFullName[ShrtOrFullName],
+	    if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_FldShrtOrFullName[ShrtOrFullName],
 						  Names[ShrtOrFullName],-1L,
 						  Gbl.Hierarchy.Node[Hie_INS].HieCod))
 	      {
@@ -1520,9 +1520,8 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
 	 if (!Exists)	// Add new center to database
            {
             Ctr_EditingCtr->HieCod = Ctr_DB_CreateCenter (Ctr_EditingCtr,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_Created_new_center_X,
-			     Ctr_EditingCtr->FullName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_center_X,
+			     Names[Nam_FULL_NAME]);
            }
         }
       else	// If there is not a web

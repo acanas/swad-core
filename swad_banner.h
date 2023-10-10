@@ -42,8 +42,8 @@ struct Ban_Banner
   {
    long BanCod;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
-   char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Nam_MAX_BYTES_FULL_NAME + 1];
    char Img[Ban_MAX_BYTES_IMAGE + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
   };

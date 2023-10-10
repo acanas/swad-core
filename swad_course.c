@@ -566,8 +566,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
    long CrsCod;
    long DegCod;
    long LastDegCod;
-   char CrsShortName[Cns_MAX_BYTES_SHRT_NAME + 1];
-   char DegShortName[Cns_MAX_BYTES_SHRT_NAME + 1];
+   char CrsShortName[Nam_MAX_BYTES_SHRT_NAME + 1];
+   char DegShortName[Nam_MAX_BYTES_SHRT_NAME + 1];
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
@@ -918,10 +918,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenCrsSho,
-      [Cns_FULL_NAME] = ActRenCrsFul,
+      [Nam_SHRT_NAME] = ActRenCrsSho,
+      [Nam_FULL_NAME] = ActRenCrsFul,
      };
    struct Hie_Node *Crs;
    unsigned YearAux;
@@ -929,7 +929,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumUsrs[Rol_NUM_ROLES];
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1014,9 +1014,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course short name and full name */
-	    Names[Cns_SHRT_NAME] = Crs->ShrtName;
-	    Names[Cns_FULL_NAME] = Crs->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Crs->ShrtName;
+	    Names[Nam_FULL_NAME] = Crs->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Crs->HieCod,
 				           Names,
 				           ICanEdit);	// Put form?
@@ -1075,10 +1075,10 @@ static void Crs_PutFormToCreateCourse (void)
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    Act_Action_t NextAction = ActUnk;
    unsigned Year;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Crs_EditingCrs->ShrtName,
-      [Cns_FULL_NAME] = Crs_EditingCrs->FullName,
+      [Nam_SHRT_NAME] = Crs_EditingCrs->ShrtName,
+      [Nam_FULL_NAME] = Crs_EditingCrs->FullName,
      };
 
    /***** Begin form *****/
@@ -1132,7 +1132,7 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_End ();
 
 	 /***** Course short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Current number of teachers in this course *****/
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -1248,17 +1248,17 @@ void Crs_ReceiveFormNewCrs (void)
 
 static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_Created_new_course_X;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Crs_EditingCrs->ShrtName,
-      [Cns_FULL_NAME] = Crs_EditingCrs->FullName,
+      [Nam_SHRT_NAME] = Crs_EditingCrs->ShrtName,
+      [Nam_FULL_NAME] = Crs_EditingCrs->FullName,
      };
 
    /***** Get parameters from form *****/
@@ -1276,25 +1276,24 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 	  Crs_EditingCrs->FullName[0])	// If there's a course name
 	{
 	 /***** If name of course was in database... *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
-	    if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Cns_FldShrtOrFullName[ShrtOrFullName],
-							Name[ShrtOrFullName],
+	    if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_FldShrtOrFullName[ShrtOrFullName],
+							Names[ShrtOrFullName],
 							-1L,Crs_EditingCrs->PrtCod,
 							Crs_EditingCrs->Specific.Year))
 	      {
 	       Ale_CreateAlert (Ale_WARNING,NULL,
 				Txt_The_course_X_already_exists,
-				Name[ShrtOrFullName]);
+				Names[ShrtOrFullName]);
 	       Exists = true;
 	      }
 	 if (!Exists)	// Add new requested course to database
 	   {
 	    Crs_DB_CreateCourse (Crs_EditingCrs,Status);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_Created_new_course_X,
-			     Crs_EditingCrs->FullName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_course_X,
+			     Names[Nam_FULL_NAME]);
 	   }
 	}
       else	// If there is not a course name
@@ -1313,10 +1312,10 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
   {
    char YearStr[2 + 1];
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Crs->ShrtName,
-      [Cns_FULL_NAME] = Crs->FullName,
+      [Nam_SHRT_NAME] = Crs->ShrtName,
+      [Nam_FULL_NAME] = Crs->FullName,
      };
 
    /***** Get parameters of the course from form *****/
@@ -1328,7 +1327,7 @@ static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
    Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get course short name and full name */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
   }
 
 /*****************************************************************************/
@@ -1613,19 +1612,19 @@ void Crs_ChangeInsCrsCod (void)
 
 void Crs_ChangeCrsYear (void)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_course_X_already_exists_in_year_Y;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
    char YearStr[2 + 1];
    unsigned NewYear;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Crs_EditingCrs->ShrtName,
-      [Cns_FULL_NAME] = Crs_EditingCrs->FullName,
+      [Nam_SHRT_NAME] = Crs_EditingCrs->ShrtName,
+      [Nam_FULL_NAME] = Crs_EditingCrs->FullName,
      };
 
    /***** Course constructor *****/
@@ -1647,16 +1646,16 @@ void Crs_ChangeCrsYear (void)
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       /***** If name of course was in database in the new year... *****/
-      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
         {
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Cns_FldShrtOrFullName[ShrtOrFullName],
-						     Name[ShrtOrFullName],
+	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_FldShrtOrFullName[ShrtOrFullName],
+						     Names[ShrtOrFullName],
 						     -1L,Crs_EditingCrs->PrtCod,NewYear))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_course_X_already_exists_in_year_Y,
-			     Name[ShrtOrFullName],Txt_YEAR_OF_DEGREE[NewYear]);
+			     Names[ShrtOrFullName],Txt_YEAR_OF_DEGREE[NewYear]);
 	 Exists = true;
         }
       if (!Exists)	// Update year in database
@@ -1665,9 +1664,8 @@ void Crs_ChangeCrsYear (void)
 	 Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);
 
 	 /***** Create message to show the change made *****/
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,
-			  Txt_The_year_of_the_course_X_has_changed,
-			  Crs_EditingCrs->ShrtName);
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_The_year_of_the_course_X_has_changed,
+			  Names[Nam_FULL_NAME]);
 	}
      }
    else	// Year not valid
@@ -1715,7 +1713,7 @@ void Crs_RenameCourseShort (void)
 
    /***** Rename course *****/
    Crs_EditingCrs->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Crs_RenameCourse (Crs_EditingCrs,Cns_SHRT_NAME);
+   Crs_RenameCourse (Crs_EditingCrs,Nam_SHRT_NAME);
   }
 
 void Crs_RenameCourseFull (void)
@@ -1725,31 +1723,31 @@ void Crs_RenameCourseFull (void)
 
    /***** Rename course *****/
    Crs_EditingCrs->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Crs_RenameCourse (Crs_EditingCrs,Cns_FULL_NAME);
+   Crs_RenameCourse (Crs_EditingCrs,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
-void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
+void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_The_course_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Crs->ShrtName,
-      [Cns_FULL_NAME] = Crs->FullName,
+      [Nam_SHRT_NAME] = Crs->ShrtName,
+      [Nam_FULL_NAME] = Crs->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the new name for the course */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the data of the degree *****/
    Crs_GetCourseDataByCod (Crs);
@@ -1764,7 +1762,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
 	{
 	 /***** If course was in database... *****/
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Cns_ParShrtOrFullName[ShrtOrFullName],
+	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_ParShrtOrFullName[ShrtOrFullName],
 						     NewName,Crs->HieCod,
 						     Crs->PrtCod,Crs->Specific.Year))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1774,7 +1772,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
 	   {
 	    /* Update the table changing old name by new name */
 	    Crs_DB_UpdateCrsName (Crs->HieCod,
-				  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+				  Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
 	    /* Create alert to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1783,7 +1781,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
 
 	    /* Change current course name in order to display it properly */
 	    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+		      Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
 	   }
 	}
       else	// The same name

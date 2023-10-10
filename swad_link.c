@@ -96,7 +96,7 @@ static void Lnk_FreeListLinks (struct Lnk_Links *Links);
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links);
 static void Lnk_PutParLnkCod (void *LnkCod);
 
-static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName);
+static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName);
 
 static void Lnk_PutFormToCreateLink (void);
 static void Lnk_PutHeadLinks (void);
@@ -397,14 +397,14 @@ static void Lnk_FreeListLinks (struct Lnk_Links *Links)
 
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
   {
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenLnkSho,
-      [Cns_FULL_NAME] = ActRenLnkFul,
+      [Nam_SHRT_NAME] = ActRenLnkSho,
+      [Nam_FULL_NAME] = ActRenLnkFul,
      };
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -433,9 +433,9 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    HTM_TD_End ();
 
 	    /* Link short name and full name */
-	    Names[Cns_SHRT_NAME] = Lnk->ShrtName;
-	    Names[Cns_FULL_NAME] = Lnk->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Lnk->ShrtName;
+	    Names[Nam_FULL_NAME] = Lnk->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Lnk,Lnk->LnkCod,
 				           Names,
 				           true);	// Put form
@@ -504,7 +504,7 @@ void Lnk_RenameLinkShort (void)
    Lnk_EditingLinkConstructor ();
 
    /***** Rename link *****/
-   Lnk_RenameLink (Cns_SHRT_NAME);
+   Lnk_RenameLink (Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -517,34 +517,34 @@ void Lnk_RenameLinkFull (void)
    Lnk_EditingLinkConstructor ();
 
    /***** Rename link *****/
-   Lnk_RenameLink (Cns_FULL_NAME);
+   Lnk_RenameLink (Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a link **************************/
 /*****************************************************************************/
 
-static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
+static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
-      [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
+      [Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
+      [Nam_FULL_NAME] = Lnk_EditingLnk->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
    Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /* Get the new name for the link */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get link data from the database *****/
    Lnk_GetLinkDataByCod (Lnk_EditingLnk);
@@ -557,7 +557,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If link was in database... *****/
-         if (Lnk_DB_CheckIfLinkNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+         if (Lnk_DB_CheckIfLinkNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
 					   NewName,Lnk_EditingLnk->LnkCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_link_X_already_exists,
@@ -566,7 +566,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Lnk_DB_UpdateLnkName (Lnk_EditingLnk->LnkCod,
-        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			  Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -584,7 +584,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update name *****/
    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+	     Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /*****************************************************************************/
@@ -649,10 +649,10 @@ void Lnk_ContEditAfterChgLnk (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
-      [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
+      [Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
+      [Nam_FULL_NAME] = Lnk_EditingLnk->FullName,
      };
 
    /***** Begin form to create *****/
@@ -672,7 +672,7 @@ static void Lnk_PutFormToCreateLink (void)
 	 HTM_TD_End ();
 
 	 /***** Link short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Link WWW *****/
 	 HTM_TD_Begin ("class=\"CM\"");
@@ -714,18 +714,18 @@ static void Lnk_PutHeadLinks (void)
 
 void Lnk_ReceiveFormNewLink (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_link_X;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
-      [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
+      [Nam_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
+      [Nam_FULL_NAME] = Lnk_EditingLnk->FullName,
      };
 
    /***** Link constructor *****/
@@ -733,7 +733,7 @@ void Lnk_ReceiveFormNewLink (void)
 
    /***** Get parameters from form *****/
    /* Get link short name and full name */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
 
    /* Get link URL */
    Par_GetParText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);
@@ -742,10 +742,10 @@ void Lnk_ReceiveFormNewLink (void)
        Lnk_EditingLnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+      for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	   ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
-	 if (Lnk_DB_CheckIfLinkNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+	 if (Lnk_DB_CheckIfLinkNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
 					   Names[ShrtOrFullName],-1L))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
@@ -761,9 +761,8 @@ void Lnk_ReceiveFormNewLink (void)
 	 else	// Add new link to database
 	   {
 	    Lnk_DB_CreateLink (Lnk_EditingLnk);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_Created_new_link_X,
-			     Lnk_EditingLnk->ShrtName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_link_X,
+			     Names[Nam_FULL_NAME]);
 	   }
 	}
      }

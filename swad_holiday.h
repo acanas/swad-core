@@ -55,7 +55,7 @@ struct Hld_Holiday
   {
    long HldCod;
    long PlcCod;
-   char PlaceFullName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char PlaceFullName[Nam_MAX_BYTES_FULL_NAME + 1];
    Hld_HolidayType_t HldTyp;
    struct Dat_Date StartDate;
    struct Dat_Date EndDate;

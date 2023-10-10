@@ -91,7 +91,7 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments);
 static void Dpt_PutParDptCod (void *DptCod);
 
-static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName);
+static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFullName);
 
 static void Dpt_PutFormToCreateDepartment (void);
 static void Dpt_PutHeadDepartments (void);
@@ -465,16 +465,16 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
    extern const char *Txt_Another_institution;
-   static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = ActRenDptSho,
-      [Cns_FULL_NAME] = ActRenDptFul,
+      [Nam_SHRT_NAME] = ActRenDptSho,
+      [Nam_FULL_NAME] = ActRenDptFul,
      };
    unsigned NumDpt;
    struct Dpt_Department *Dpt;
    unsigned NumIns;
    struct Hie_Node *Ins;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -534,9 +534,9 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_End ();
 
 	    /* Department short name and full name */
-	    Names[Cns_SHRT_NAME] = Dpt->ShrtName;
-	    Names[Cns_FULL_NAME] = Dpt->FullName;
-	    Frm_ExistingShortAndFullNames (ActionRename,
+	    Names[Nam_SHRT_NAME] = Dpt->ShrtName;
+	    Names[Nam_FULL_NAME] = Dpt->FullName;
+	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Dpt,Dpt->DptCod,
 				           Names,
 				           true);	// Put form
@@ -648,7 +648,7 @@ void Dpt_RenameDepartShort (void)
    Dpt_EditingDepartmentConstructor ();
 
    /***** Rename department *****/
-   Dpt_RenameDepartment (Cns_SHRT_NAME);
+   Dpt_RenameDepartment (Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -661,34 +661,34 @@ void Dpt_RenameDepartFull (void)
    Dpt_EditingDepartmentConstructor ();
 
    /***** Rename department *****/
-   Dpt_RenameDepartment (Cns_FULL_NAME);
+   Dpt_RenameDepartment (Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
+static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_ParShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
+   extern unsigned Nam_MaxBytesShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
-   char *CurrentName[Cns_NUM_SHRT_FULL_NAMES] =
+   char *CurrentName[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
-      [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
+      [Nam_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
+      [Nam_FULL_NAME] = Dpt_EditingDpt->FullName,
      };
-   char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
+   char NewName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
    Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /* Get the new name for the department */
-   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
+   Nam_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the department *****/
    Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
@@ -701,7 +701,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Dpt_DB_CheckIfDepartmentNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+         if (Dpt_DB_CheckIfDepartmentNameExists (Nam_ParShrtOrFullName[ShrtOrFullName],
 						 NewName,Dpt_EditingDpt->DptCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_department_X_already_exists,
@@ -710,7 +710,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             /* Update the table changing old name by new name */
             Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,
-        			  Cns_FldShrtOrFullName[ShrtOrFullName],NewName);
+        			  Nam_FldShrtOrFullName[ShrtOrFullName],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -728,7 +728,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update name *****/
    Str_Copy (CurrentName[ShrtOrFullName],NewName,
-	     Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+	     Nam_MaxBytesShrtOrFullName[ShrtOrFullName]);
   }
 
 /******************************************************************************/
@@ -796,10 +796,10 @@ static void Dpt_PutFormToCreateDepartment (void)
    extern const char *Txt_Another_institution;
    unsigned NumIns;
    const struct Hie_Node *Ins;
-   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
-      [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
+      [Nam_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
+      [Nam_FULL_NAME] = Dpt_EditingDpt->FullName,
      };
 
    /***** Begin form to create *****/
@@ -844,7 +844,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 	 HTM_TD_End ();
 
 	 /***** Department short name and full name *****/
-	 Frm_NewShortAndFullNames (Names);
+	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Department WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -895,15 +895,15 @@ static void Dpt_PutHeadDepartments (void)
 
 void Dpt_ReceiveFormNewDpt (void)
   {
-   extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Nam_FldShrtOrFullName[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_Created_new_department_X;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
+   Nam_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
-      [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
+      [Nam_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
+      [Nam_FULL_NAME] = Dpt_EditingDpt->FullName,
      };
 
    /***** Department constructor *****/
@@ -914,7 +914,7 @@ void Dpt_ReceiveFormNewDpt (void)
    Dpt_EditingDpt->InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /* Get department short name and full name */
-   Par_GetParsShrtAndFullName (Names);
+   Nam_GetParsShrtAndFullName (Names);
 
    /* Get department WWW */
    Par_GetParText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
@@ -925,10 +925,10 @@ void Dpt_ReceiveFormNewDpt (void)
       if (Dpt_EditingDpt->WWW[0])
         {
          /***** If name of department was in database... *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
-	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
+	 for (ShrtOrFullName  = Nam_SHRT_NAME, Exists = false;
+	      ShrtOrFullName <= Nam_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
-	    if (Dpt_DB_CheckIfDepartmentNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+	    if (Dpt_DB_CheckIfDepartmentNameExists (Nam_FldShrtOrFullName[ShrtOrFullName],
 						    Names[ShrtOrFullName],-1L))
 	      {
 	       Ale_CreateAlert (Ale_WARNING,NULL,
@@ -939,9 +939,8 @@ void Dpt_ReceiveFormNewDpt (void)
          if (!Exists)	// Add new department to database
            {
             Dpt_DB_CreateDepartment (Dpt_EditingDpt);
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-		             Txt_Created_new_department_X,
-			     Dpt_EditingDpt->FullName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_department_X,
+			     Names[Nam_FULL_NAME]);
            }
         }
       else	// If there is not a web

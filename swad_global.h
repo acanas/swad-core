@@ -249,8 +249,8 @@ struct Globals
       struct
 	{
 	 long HieCod;
-	 char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1];
-	 char CtyName[Cns_MAX_BYTES_FULL_NAME + 1];
+	 char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
+	 char CtyName[Nam_MAX_BYTES_FULL_NAME + 1];
          bool Valid;
 	} InstitutionShrtNameAndCty;
       struct

@@ -44,7 +44,7 @@ void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewName);
 void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod);
-void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Cns_MAX_BYTES_SHRT_NAME + 1]);
+void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod);
 bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
                                        const char *Name,
