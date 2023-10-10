@@ -1082,8 +1082,7 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
    Roo_EditingRoom->RooCod = ParCod_GetAndCheckPar (ParCod_Roo);
 
    /* Get the new name for the room */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the room *****/
    Roo_GetRoomDataByCod (Roo_EditingRoom);
@@ -1338,14 +1337,12 @@ static void Roo_PutHeadRooms (void)
 
 void Roo_ReceiveFormNewRoom (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_room_X_already_exists;
    extern const char *Txt_Created_new_room_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Roo_EditingRoom->ShrtName,
       [Cns_FULL_NAME] = Roo_EditingRoom->FullName,
@@ -1361,12 +1358,7 @@ void Roo_ReceiveFormNewRoom (void)
    Roo_EditingRoom->Type   = Roo_GetParType ();
 
    /* Get room short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    /* Get seating capacity */
    Roo_EditingRoom->Capacity = (unsigned)
@@ -1387,10 +1379,10 @@ void Roo_ReceiveFormNewRoom (void)
 	   ShrtOrFullName++)
 	 if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Node[Hie_CTR].HieCod,-1L,
 					   Cns_FldShrtOrFullName[ShrtOrFullName],
-					   Name[ShrtOrFullName]))
+					   Names[ShrtOrFullName]))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_The_room_X_already_exists,Name[ShrtOrFullName]);
+			     Txt_The_room_X_already_exists,Names[ShrtOrFullName]);
 	    Exists = true;
 	   }
       if (!Exists)	// Add new room to database

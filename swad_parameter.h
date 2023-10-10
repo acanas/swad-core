@@ -82,6 +82,8 @@ void Par_GetMainPars (void);
 
 //------------------------------ Get parameters -------------------------------
 unsigned Par_GetParText (const char *ParName,char *ParValue,size_t MaxBytes);
+void Par_GetParsShrtAndFullName (char *Names[Cns_NUM_SHRT_FULL_NAMES]);
+void Par_GetParShrtOrFullName (Cns_ShrtOrFullName_t ShrtOrFullName,char *Name);
 unsigned long Par_GetParUnsignedLong (const char *ParName,
                                       unsigned long Min,
                                       unsigned long Max,

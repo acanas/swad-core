@@ -1156,8 +1156,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Cns_ShrtOrFullName_t ShrtOrFull
    char NewName[Cns_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get the new name for the institution from form *****/
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the institution *****/
    Ins_GetInstitDataByCod (Ins);
@@ -1505,7 +1504,7 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
    extern const char *Txt_Created_new_institution_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Ins_EditingIns->ShrtName,
       [Cns_FULL_NAME] = Ins_EditingIns->FullName,
@@ -1516,12 +1515,7 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
    Ins_EditingIns->PrtCod = Gbl.Hierarchy.Node[Hie_CTY].HieCod;
 
    /* Get institution short name, full name and WWW */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    /* Get institution URL */
    Par_GetParText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
@@ -1536,12 +1530,12 @@ static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
 	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
 	    if (Ins_DB_CheckIfInsNameExistsInCty (Cns_FldShrtOrFullName[ShrtOrFullName],
-						  Name[ShrtOrFullName],
+						  Names[ShrtOrFullName],
 						  -1L,Gbl.Hierarchy.Node[Hie_CTY].HieCod))
 	      {
 	       Ale_CreateAlert (Ale_WARNING,NULL,
 				Txt_The_institution_X_already_exists,
-				Name[ShrtOrFullName]);
+				Names[ShrtOrFullName]);
 	       Exists = true;
 	      }
          if (!Exists)	// Add new institution to database

@@ -38,8 +38,7 @@ void Plc_DB_UpdatePlcName (long PlcCod,const char *FldName,const char *NewPlcNam
 
 unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder);
 unsigned Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod);
-bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
-                                    const char *FldName,const char *Name);
+bool Plc_DB_CheckIfPlaceNameExists (const char *FldName,const char *Name,long PlcCod);
 
 void Plc_DB_RemovePlace (long PlcCod);
 

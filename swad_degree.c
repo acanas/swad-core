@@ -1063,14 +1063,12 @@ void Deg_ReceiveFormNewDeg (void)
 
 static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_Created_new_degree_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Deg_EditingDeg->ShrtName,
       [Cns_FULL_NAME] = Deg_EditingDeg->FullName,
@@ -1081,12 +1079,7 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
    Deg_EditingDeg->PrtCod = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
 
    /* Get degree short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    /* Get degree type */
    Deg_EditingDeg->Specific.TypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
@@ -1104,12 +1097,12 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
 	    if (Deg_DB_CheckIfDegNameExistsInCtr (Cns_FldShrtOrFullName[ShrtOrFullName],
-						  Name[ShrtOrFullName],
+						  Names[ShrtOrFullName],
 						  -1L,Deg_EditingDeg->PrtCod))
 	      {
 	       Ale_CreateAlert (Ale_WARNING,NULL,
 				Txt_The_degree_X_already_exists,
-				Name[ShrtOrFullName]);
+				Names[ShrtOrFullName]);
 	       Exists = true;
 	      }
 	 if (!Exists)	// Add new degree to database
@@ -1340,8 +1333,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the new name for the degree */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get data of degree *****/
    Deg_GetDegreeDataByCod (Deg);

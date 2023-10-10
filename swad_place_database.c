@@ -149,8 +149,7 @@ unsigned Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
 /********************** Check if the name of place exists ********************/
 /*****************************************************************************/
 
-bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
-                                    const char *FldName,const char *Name)
+bool Plc_DB_CheckIfPlaceNameExists (const char *FldName,const char *Name,long PlcCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a place already existed",

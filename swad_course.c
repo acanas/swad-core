@@ -1332,11 +1332,8 @@ static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
 
 static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    char YearStr[2 + 1];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Crs->ShrtName,
       [Cns_FULL_NAME] = Crs->FullName,
@@ -1351,12 +1348,7 @@ static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
    Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get course short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
   }
 
 /*****************************************************************************/
@@ -1777,8 +1769,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the new name for the course */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the data of the degree *****/
    Crs_GetCourseDataByCod (Crs);

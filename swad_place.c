@@ -597,8 +597,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
    /* Get the new name for the place */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get place old names from database  *****/
    Plc_GetPlaceDataByCod (Plc_EditingPlc);
@@ -611,9 +610,8 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentName[ShrtOrFullName],NewName))	// Different names
         {
          /***** If place was in database... *****/
-         if (Plc_DB_CheckIfPlaceNameExists (Plc_EditingPlc->PlcCod,
-					    Cns_ParShrtOrFullName[ShrtOrFullName],
-					    NewName))
+         if (Plc_DB_CheckIfPlaceNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
+					    NewName,Plc_EditingPlc->PlcCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_place_X_already_exists,
                              NewName);
@@ -744,14 +742,12 @@ static void Plc_PutHeadPlaces (void)
 
 void Plc_ReceiveFormNewPlace (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_Created_new_place_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
       [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
@@ -762,12 +758,7 @@ void Plc_ReceiveFormNewPlace (void)
 
    /***** Get parameters from form *****/
    /* Get place short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    if (Plc_EditingPlc->ShrtName[0] &&
        Plc_EditingPlc->FullName[0])	// If there's a place name
@@ -776,12 +767,12 @@ void Plc_ReceiveFormNewPlace (void)
       for (ShrtOrFullName  = Cns_SHRT_NAME, Exists = false;
 	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
-	 if (Plc_DB_CheckIfPlaceNameExists (-1L,Cns_FldShrtOrFullName[ShrtOrFullName],
-					    Name[ShrtOrFullName]))
+	 if (Plc_DB_CheckIfPlaceNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
+					    Names[ShrtOrFullName],-1L))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_place_X_already_exists,
-			     Name[ShrtOrFullName]);
+			     Names[ShrtOrFullName]);
 	    Exists = true;
 	   }
       if (!Exists)	// Add new place to database

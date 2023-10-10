@@ -1076,8 +1076,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Get parameters from form *****/
    /* Get the new name for the center */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the center *****/
    Ctr_GetCenterDataByCod (Ctr);
@@ -1494,13 +1493,11 @@ void Ctr_ReceiveFormNewCtr (void)
 
 static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_Created_new_center_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
       [Cns_FULL_NAME] = Ctr_EditingCtr->FullName,
@@ -1515,12 +1512,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
    Ctr_EditingCtr->Specific.PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /* Get center short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-	              Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    /* Get center WWW */
    Par_GetParText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
@@ -1535,12 +1527,12 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
 	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
 	    if (Ctr_DB_CheckIfCtrNameExistsInIns (Cns_FldShrtOrFullName[ShrtOrFullName],
-						  Name[ShrtOrFullName],-1L,
+						  Names[ShrtOrFullName],-1L,
 						  Gbl.Hierarchy.Node[Hie_INS].HieCod))
 	      {
 	       Ale_CreateAlert (Ale_WARNING,NULL,
 				Txt_The_center_X_already_exists,
-				Name[ShrtOrFullName]);
+				Names[ShrtOrFullName]);
 	       Exists = true;
 	      }
 	 if (!Exists)	// Add new center to database

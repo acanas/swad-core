@@ -688,8 +688,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /* Get the new name for the department */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the department *****/
    Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
@@ -914,14 +913,12 @@ static void Dpt_PutHeadDepartments (void)
 
 void Dpt_ReceiveFormNewDpt (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_Created_new_department_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
       [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
@@ -935,12 +932,7 @@ void Dpt_ReceiveFormNewDpt (void)
    Dpt_EditingDpt->InsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /* Get department short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    /* Get department WWW */
    Par_GetParText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
@@ -955,11 +947,11 @@ void Dpt_ReceiveFormNewDpt (void)
 	      ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	      ShrtOrFullName++)
 	    if (Dpt_DB_CheckIfDepartmentNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
-						    Name[ShrtOrFullName],-1L))
+						    Names[ShrtOrFullName],-1L))
 	      {
 	       Ale_CreateAlert (Ale_WARNING,NULL,
 				Txt_The_department_X_already_exists,
-				Name[ShrtOrFullName]);
+				Names[ShrtOrFullName]);
 	       Exists = true;
 	      }
          if (!Exists)	// Add new department to database

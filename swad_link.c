@@ -544,8 +544,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /* Get the new name for the link */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get link data from the database *****/
    Lnk_GetLinkDataByCod (Lnk_EditingLnk);
@@ -741,7 +740,7 @@ void Lnk_ReceiveFormNewLink (void)
    extern const char *Txt_Created_new_link_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
       [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
@@ -752,12 +751,7 @@ void Lnk_ReceiveFormNewLink (void)
 
    /***** Get parameters from form *****/
    /* Get link short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    /* Get link URL */
    Par_GetParText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);
@@ -770,11 +764,11 @@ void Lnk_ReceiveFormNewLink (void)
 	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
 	 if (Lnk_DB_CheckIfLinkNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
-					   Name[ShrtOrFullName],-1L))
+					   Names[ShrtOrFullName],-1L))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_link_X_already_exists,
-			     Name[ShrtOrFullName]);
+			     Names[ShrtOrFullName]);
 	    Exists = true;
 	   }
       if (!Exists)

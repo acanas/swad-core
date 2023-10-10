@@ -623,8 +623,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /* Get the new name for the banner */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get banner data from the database *****/
    Ban_GetBannerDataByCod (Ban);
@@ -879,9 +878,7 @@ static void Ban_PutHeadBanners (void)
 
 void Ban_ReceiveFormNewBanner (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;
    extern const char *Txt_You_must_specify_the_web_address;
@@ -889,7 +886,7 @@ void Ban_ReceiveFormNewBanner (void)
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Ban->ShrtName,
       [Cns_FULL_NAME] = Ban->FullName,
@@ -899,12 +896,7 @@ void Ban_ReceiveFormNewBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Get parameters from form *****/
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-	              Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
    Par_GetParText ("Img",Ban->Img,Ban_MAX_BYTES_IMAGE);
    Par_GetParText ("WWW",Ban->WWW,Cns_MAX_BYTES_WWW);
 
@@ -916,11 +908,11 @@ void Ban_ReceiveFormNewBanner (void)
 	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
 	 if (Ban_DB_CheckIfBannerNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
-					     Name[ShrtOrFullName],-1L))
+					     Names[ShrtOrFullName],-1L))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_banner_X_already_exists,
-			     Name[ShrtOrFullName]);
+			     Names[ShrtOrFullName]);
 	    Exists = true;
 	   }
       if (!Exists)

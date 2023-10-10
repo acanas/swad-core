@@ -563,8 +563,7 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
    Bld_EditingBuilding->BldCod = ParCod_GetAndCheckPar (ParCod_Bld);
 
    /* Get the new name for the building */
-   Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],NewName,
-		   Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParShrtOrFullName (ShrtOrFullName,NewName);
 
    /***** Get from the database the old names of the building *****/
    Bld_GetBuildingDataByCod (Bld_EditingBuilding);
@@ -758,14 +757,12 @@ static void Bld_PutHeadBuildings (void)
 
 void Bld_ReceiveFormNewBuilding (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Cns_FldShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxBytesShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_The_building_X_already_exists;
    extern const char *Txt_Created_new_building_X;
    Cns_ShrtOrFullName_t ShrtOrFullName;
    bool Exists;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
       [Cns_FULL_NAME] = Bld_EditingBuilding->FullName,
@@ -776,12 +773,7 @@ void Bld_ReceiveFormNewBuilding (void)
 
    /***** Get parameters from form *****/
    /* Get building short name and full name */
-   for (ShrtOrFullName  = Cns_SHRT_NAME;
-	ShrtOrFullName <= Cns_FULL_NAME;
-	ShrtOrFullName++)
-      Par_GetParText (Cns_ParShrtOrFullName[ShrtOrFullName],
-		      Name[ShrtOrFullName],
-		      Cns_MaxBytesShrtOrFullName[ShrtOrFullName]);
+   Par_GetParsShrtAndFullName (Names);
 
    /* Get building location */
    Par_GetParText ("Location",Bld_EditingBuilding->Location,Bld_MAX_BYTES_LOCATION);
@@ -794,11 +786,11 @@ void Bld_ReceiveFormNewBuilding (void)
 	   ShrtOrFullName <= Cns_FULL_NAME && !Exists;
 	   ShrtOrFullName++)
 	 if (Bld_DB_CheckIfBuildingNameExists (Cns_FldShrtOrFullName[ShrtOrFullName],
-					       Name[ShrtOrFullName],-1L))
+					       Names[ShrtOrFullName],-1L))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_The_building_X_already_exists,
-			     Name[ShrtOrFullName]);
+			     Names[ShrtOrFullName]);
 	    Exists = true;
 	   }
       if (!Exists)	// Add new building to database
