@@ -79,9 +79,10 @@ void Frm_FreeAnchorStr (char **Anchor);
 
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label);
 
-void Frm_PutShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES],
-			       ParCod_Param_t ParCod,long Cod,
-			       const char *Name[Cns_NUM_SHRT_FULL_NAMES],
-			       bool PutForm);
+void Frm_NewShortAndFullNames (const char *Names[Cns_NUM_SHRT_FULL_NAMES]);
+void Frm_ExistingShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES],
+				    ParCod_Param_t ParCod,long Cod,
+				    const char *Names[Cns_NUM_SHRT_FULL_NAMES],
+				    bool PutForm);
 
 #endif

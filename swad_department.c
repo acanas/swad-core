@@ -474,7 +474,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
    struct Dpt_Department *Dpt;
    unsigned NumIns;
    struct Hie_Node *Ins;
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -534,12 +534,12 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_End ();
 
 	    /* Department short name and full name */
-	    Name[Cns_SHRT_NAME] = Dpt->ShrtName;
-	    Name[Cns_FULL_NAME] = Dpt->FullName;
-	    Frm_PutShortAndFullNames (ActionRename,
-				      ParCod_Dpt,Dpt->DptCod,
-				      Name,
-				      true);	// Put form
+	    Names[Cns_SHRT_NAME] = Dpt->ShrtName;
+	    Names[Cns_FULL_NAME] = Dpt->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+				           ParCod_Dpt,Dpt->DptCod,
+				           Names,
+				           true);	// Put form
 
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"LM\"");
@@ -793,14 +793,10 @@ void Dpt_ContEditAfterChgDpt (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_institution;
    unsigned NumIns;
    const struct Hie_Node *Ins;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Dpt_EditingDpt->ShrtName,
       [Cns_FULL_NAME] = Dpt_EditingDpt->FullName,
@@ -848,21 +844,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 	 HTM_TD_End ();
 
 	 /***** Department short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Department WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");

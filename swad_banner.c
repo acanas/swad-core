@@ -397,7 +397,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -444,12 +444,12 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_End ();
 
 	    /* Banner short name and full name */
-	    Name[Cns_SHRT_NAME] = Ban->ShrtName;
-	    Name[Cns_FULL_NAME] = Ban->FullName;
-	    Frm_PutShortAndFullNames (ActionRename,
-				      ParCod_Ban,Banners->BanCodToEdit,
-				      Name,
-				      true);	// Put form
+	    Names[Cns_SHRT_NAME] = Ban->ShrtName;
+	    Names[Cns_FULL_NAME] = Ban->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+				           ParCod_Ban,Banners->BanCodToEdit,
+				           Names,
+				           true);	// Put form
 
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"CM\"");
@@ -641,8 +641,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
          if (Ban_DB_CheckIfBannerNameExists (Cns_ParShrtOrFullName[ShrtOrFullName],
 					     NewName,Ban->BanCod))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
-		             Txt_The_banner_X_already_exists,
-                             NewName);
+		             Txt_The_banner_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
@@ -657,7 +656,8 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
       else	// The same name
          /* Write warning message */
 	 Ale_CreateAlert (Ale_INFO,NULL,
-	                  Txt_The_name_X_has_not_changed,CurrentName[ShrtOrFullName]);
+	                  Txt_The_name_X_has_not_changed,
+	                  CurrentName[ShrtOrFullName]);
      }
 
    /***** Update name *****/
@@ -774,15 +774,11 @@ void Ban_ContEditAfterChgBan (void)
 
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Ban->ShrtName,
       [Cns_FULL_NAME] = Ban->FullName,
      };
-   Cns_ShrtOrFullName_t ShrtOrFullName;
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewBan,NULL,NULL,NULL);
@@ -804,21 +800,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	 HTM_TD_Empty (1);
 
 	 /* Banner short name and full name */
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /* Banner image */
 	 HTM_TD_Begin ("class=\"CM\"");

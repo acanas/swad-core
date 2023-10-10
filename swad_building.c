@@ -390,9 +390,6 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings)
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = ActRenBldSho,
@@ -401,8 +398,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
    unsigned NumBld;
    struct Bld_Building *Building;
    char *Anchor = NULL;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -436,25 +432,12 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    HTM_TD_End ();
 
 	    /* Building short name and full name */
-	    Name[Cns_SHRT_NAME] = Building->ShrtName;
-	    Name[Cns_FULL_NAME] = Building->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"LM\"");
-		  Frm_BeginFormAnchor (ActionRename[ShrtOrFullName],Anchor);
-		     ParCod_PutPar (ParCod_Bld,Building->BldCod);
-		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-				     Name[ShrtOrFullName],
-				     HTM_SUBMIT_ON_CHANGE,
-				     "size=\"10\" class=\"%s INPUT_%s\"",
-				     Cns_ClassShrtOrFullName[ShrtOrFullName],
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-	       HTM_TD_End ();
-	      }
+	    Names[Cns_SHRT_NAME] = Building->ShrtName;
+	    Names[Cns_FULL_NAME] = Building->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+				           ParCod_Bld,Building->BldCod,
+				           Names,
+				           true);	// Put form
 
 	    /* Building location */
 	    HTM_TD_Begin ("class=\"LM\"");
@@ -672,11 +655,7 @@ void Bld_ContEditAfterChgBuilding (void)
 
 static void Bld_PutFormToCreateBuilding (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Bld_EditingBuilding->ShrtName,
       [Cns_FULL_NAME] = Bld_EditingBuilding->FullName,
@@ -699,21 +678,7 @@ static void Bld_PutFormToCreateBuilding (void)
 	 HTM_TD_End ();
 
 	 /***** Building short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Building location *****/
 	 HTM_TD_Begin ("class=\"LM\"");

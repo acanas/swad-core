@@ -929,7 +929,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    struct Usr_Data UsrDat;
    bool ICanEdit;
    unsigned NumUsrs[Rol_NUM_ROLES];
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1014,12 +1014,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course short name and full name */
-	    Name[Cns_SHRT_NAME] = Crs->ShrtName;
-	    Name[Cns_FULL_NAME] = Crs->FullName;
-	    Frm_PutShortAndFullNames (ActionRename,
-				      ParCod_OthHie,Crs->HieCod,
-				      Name,
-				      ICanEdit);	// Put form?
+	    Names[Cns_SHRT_NAME] = Crs->ShrtName;
+	    Names[Cns_FULL_NAME] = Crs->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+				           ParCod_OthHie,Crs->HieCod,
+				           Names,
+				           ICanEdit);	// Put form?
 
 	    /* Current number of teachers in this course */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -1072,20 +1072,14 @@ static bool Crs_CheckIfICanEdit (struct Hie_Node *Crs)
 
 static void Crs_PutFormToCreateCourse (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    Act_Action_t NextAction = ActUnk;
    unsigned Year;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Crs_EditingCrs->ShrtName,
       [Cns_FULL_NAME] = Crs_EditingCrs->FullName,
      };
-
-   /***** Set action depending on role *****/
 
    /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
@@ -1138,21 +1132,7 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_End ();
 
 	 /***** Course short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Current number of teachers in this course *****/
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());

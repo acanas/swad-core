@@ -747,7 +747,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    unsigned NumDegs;
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -840,12 +840,12 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center short name and full name */
-	    Name[Cns_SHRT_NAME] = Ctr->ShrtName;
-	    Name[Cns_FULL_NAME] = Ctr->FullName;
-	    Frm_PutShortAndFullNames (ActionRename,
-				      ParCod_OthHie,Ctr->HieCod,
-				      Name,
-				      ICanEdit);	// Put form?
+	    Names[Cns_SHRT_NAME] = Ctr->ShrtName;
+	    Names[Cns_FULL_NAME] = Ctr->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+				           ParCod_OthHie,Ctr->HieCod,
+				           Names,
+				           ICanEdit);	// Put form?
 
 	    /* Center WWW */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -1236,15 +1236,11 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
 
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Another_place;
    Act_Action_t NextAction = ActUnk;
    unsigned NumPlc;
    const struct Plc_Place *Plc;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Ctr_EditingCtr->ShrtName,
       [Cns_FULL_NAME] = Ctr_EditingCtr->FullName,
@@ -1307,21 +1303,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 HTM_TD_End ();
 
 	 /***** Center short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Center WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");

@@ -404,7 +404,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
      };
    unsigned NumLnk;
    struct Lnk_Link *Lnk;
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -433,12 +433,12 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    HTM_TD_End ();
 
 	    /* Link short name and full name */
-	    Name[Cns_SHRT_NAME] = Lnk->ShrtName;
-	    Name[Cns_FULL_NAME] = Lnk->FullName;
-	    Frm_PutShortAndFullNames (ActionRename,
-				      ParCod_Lnk,Lnk->LnkCod,
-				      Name,
-				      true);	// Put form
+	    Names[Cns_SHRT_NAME] = Lnk->ShrtName;
+	    Names[Cns_FULL_NAME] = Lnk->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+				           ParCod_Lnk,Lnk->LnkCod,
+				           Names,
+				           true);	// Put form
 
 	    /* Link WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
@@ -649,11 +649,7 @@ void Lnk_ContEditAfterChgLnk (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Lnk_EditingLnk->ShrtName,
       [Cns_FULL_NAME] = Lnk_EditingLnk->FullName,
@@ -676,21 +672,7 @@ static void Lnk_PutFormToCreateLink (void)
 	 HTM_TD_End ();
 
 	 /***** Link short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Link WWW *****/
 	 HTM_TD_Begin ("class=\"CM\"");

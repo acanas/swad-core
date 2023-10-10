@@ -452,7 +452,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
      };
    unsigned NumPlc;
    struct Plc_Place *Plc;
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -484,12 +484,12 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place short name and full name */
-	    Name[Cns_SHRT_NAME] = Plc->ShrtName;
-	    Name[Cns_FULL_NAME] = Plc->FullName;
-	    Frm_PutShortAndFullNames (ActionRename,
-				      ParCod_Plc,Plc->PlcCod,
-				      Name,
-				      true);	// Put form
+	    Names[Cns_SHRT_NAME] = Plc->ShrtName;
+	    Names[Cns_FULL_NAME] = Plc->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+					   ParCod_Plc,Plc->PlcCod,
+					   Names,
+					   true);	// Put form
 
 	    /* Number of centers */
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -662,11 +662,7 @@ void Plc_ContEditAfterChgPlc (void)
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Plc_EditingPlc->ShrtName,
       [Cns_FULL_NAME] = Plc_EditingPlc->FullName,
@@ -689,21 +685,7 @@ static void Plc_PutFormToCreatePlace (void)
 	 HTM_TD_End ();
 
 	 /***** Place short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Number of centers *****/
 	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());

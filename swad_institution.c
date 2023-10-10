@@ -890,7 +890,7 @@ static void Ins_ListInstitutionsForEdition (void)
    unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
-   const char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -947,12 +947,12 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution short name and full name */
-	    Name[Cns_SHRT_NAME] = Ins->ShrtName;
-	    Name[Cns_FULL_NAME] = Ins->FullName;
-	    Frm_PutShortAndFullNames (ActionRename,
-				      ParCod_OthHie,Ins->HieCod,
-				      Name,
-				      ICanEdit);	// Put form?
+	    Names[Cns_SHRT_NAME] = Ins->ShrtName;
+	    Names[Cns_FULL_NAME] = Ins->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+				           ParCod_OthHie,Ins->HieCod,
+				           Names,
+				           ICanEdit);	// Put form?
 
 	    /* Institution WWW */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -1330,12 +1330,8 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    Act_Action_t NextAction = ActUnk;
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Ins_EditingIns->ShrtName,
       [Cns_FULL_NAME] = Ins_EditingIns->FullName,
@@ -1374,21 +1370,7 @@ static void Ins_PutFormToCreateInstitution (void)
 	 HTM_TD_End ();
 
 	 /***** Institution short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Institution WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");

@@ -628,9 +628,6 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    static Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = ActRenRooSho,
@@ -640,8 +637,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
    struct Roo_Room *Room;
    char *Anchor = NULL;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES];
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES];
 
    HTM_TABLE_BeginWidePadding (2);
 
@@ -703,26 +699,12 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_End ();
 
 	    /* Room short name and full name */
-	    Name[Cns_SHRT_NAME] = Room->ShrtName;
-	    Name[Cns_FULL_NAME] = Room->FullName;
-	    for (ShrtOrFullName  = Cns_SHRT_NAME;
-		 ShrtOrFullName <= Cns_FULL_NAME;
-		 ShrtOrFullName++)
-	      {
-	       HTM_TD_Begin ("class=\"LT\"");
-		  Frm_BeginFormAnchor (ActionRename[ShrtOrFullName],Anchor);
-		     ParCod_PutPar (ParCod_Roo,Room->RooCod);
-		     HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-				     Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-				     Name[ShrtOrFullName],
-				     HTM_SUBMIT_ON_CHANGE,
-				     "size=\"10\""
-				     " class=\"%s INPUT_%s\"",
-				     Cns_ClassShrtOrFullName[ShrtOrFullName],
-				     The_GetSuffix ());
-		  Frm_EndForm ();
-	       HTM_TD_End ();
-	      }
+	    Names[Cns_SHRT_NAME] = Room->ShrtName;
+	    Names[Cns_FULL_NAME] = Room->FullName;
+	    Frm_ExistingShortAndFullNames (ActionRename,
+					   ParCod_Roo,Room->RooCod,
+					   Names,
+					   true);	// Put form
 
 	    /* Seating capacity */
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -1214,13 +1196,9 @@ void Roo_ContEditAfterChgRoom (void)
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
-   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
-   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
-   Cns_ShrtOrFullName_t ShrtOrFullName;
-   char *Name[Cns_NUM_SHRT_FULL_NAMES] =
+   const char *Names[Cns_NUM_SHRT_FULL_NAMES] =
      {
       [Cns_SHRT_NAME] = Roo_EditingRoom->ShrtName,
       [Cns_FULL_NAME] = Roo_EditingRoom->FullName,
@@ -1263,21 +1241,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 HTM_TD_End ();
 
 	 /***** Room short name and full name *****/
-	 for (ShrtOrFullName  = Cns_SHRT_NAME;
-	      ShrtOrFullName <= Cns_FULL_NAME;
-	      ShrtOrFullName++)
-	   {
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
-			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Cns_ClassShrtOrFullName[ShrtOrFullName],
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-	   }
+	 Frm_NewShortAndFullNames (Names);
 
 	 /***** Seating capacity *****/
 	 HTM_TD_Begin ("class=\"LM\"");
@@ -1363,9 +1327,9 @@ void Roo_ReceiveFormNewRoom (void)
    /* Get seating capacity */
    Roo_EditingRoom->Capacity = (unsigned)
 	                       Par_GetParUnsignedLong ("Capacity",
-                                                         0,
-                                                         Roo_MAX_CAPACITY,
-                                                         Roo_UNLIMITED_CAPACITY);
+                                                       0,
+                                                       Roo_MAX_CAPACITY,
+                                                       Roo_UNLIMITED_CAPACITY);
 
    /* Get MAC address */
    Roo_EditingRoom->MACnum = MAC_GetMACnumFromForm ("MAC");

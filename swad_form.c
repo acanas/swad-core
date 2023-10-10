@@ -357,10 +357,34 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
 /************************ Write short and full names *************************/
 /*****************************************************************************/
 
-void Frm_PutShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES],
-			       ParCod_Param_t ParCod,long Cod,
-			       const char *Name[Cns_NUM_SHRT_FULL_NAMES],
-			       bool PutForm)
+void Frm_NewShortAndFullNames (const char *Names[Cns_NUM_SHRT_FULL_NAMES])
+  {
+   extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   extern const char *Cns_ClassShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
+   Cns_ShrtOrFullName_t ShrtOrFullName;
+
+   for (ShrtOrFullName  = Cns_SHRT_NAME;
+	ShrtOrFullName <= Cns_FULL_NAME;
+	ShrtOrFullName++)
+     {
+      HTM_TD_Begin ("class=\"CM\"");
+	 HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
+			 Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
+			 Names[ShrtOrFullName],
+			 HTM_DONT_SUBMIT_ON_CHANGE,
+			 "class=\"%s INPUT_%s\""
+			 " required=\"required\"",
+			 Cns_ClassShrtOrFullName[ShrtOrFullName],
+			 The_GetSuffix ());
+      HTM_TD_End ();
+     }
+  }
+
+void Frm_ExistingShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES],
+			            ParCod_Param_t ParCod,long Cod,
+			            const char *Names[Cns_NUM_SHRT_FULL_NAMES],
+			            bool PutForm)
   {
    extern const char *Cns_ParShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
    extern unsigned Cns_MaxCharsShrtOrFullName[Cns_NUM_SHRT_FULL_NAMES];
@@ -378,15 +402,16 @@ void Frm_PutShortAndFullNames (Act_Action_t ActionRename[Cns_NUM_SHRT_FULL_NAMES
 	       ParCod_PutPar (ParCod,Cod);
 	       HTM_INPUT_TEXT (Cns_ParShrtOrFullName[ShrtOrFullName],
 			       Cns_MaxCharsShrtOrFullName[ShrtOrFullName],
-			       Name[ShrtOrFullName],
+			       Names[ShrtOrFullName],
 			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\"",
+			       "class=\"%s INPUT_%s\""
+			       " required=\"required\"",
 			       Cns_ClassShrtOrFullName[ShrtOrFullName],
 			       The_GetSuffix ());
 	    Frm_EndForm ();
 	   }
 	 else
-	    HTM_Txt (Name[ShrtOrFullName]);
+	    HTM_Txt (Names[ShrtOrFullName]);
       HTM_TD_End ();
      }
   }
