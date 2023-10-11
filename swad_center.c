@@ -875,19 +875,13 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Number of users who claim to belong to this center */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrsCtr);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrsCtr);
 
 	    /* Number of degrees */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumDegs);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumDegs);
 
 	    /* Number of users in courses of this center */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrsInCrssOfCtr);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrsInCrssOfCtr);
 
 	    /* Center requester */
 	    UsrDat.UsrCod = Ctr->RequesterUsrCod;
@@ -992,8 +986,7 @@ void Ctr_RemoveCenter (void)
       Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTR);
 
       /***** Write message to show the change made *****/
-      Ale_CreateAlert (Ale_SUCCESS,NULL,
-	               Txt_Center_X_removed,
+      Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Center_X_removed,
 	               Ctr_EditingCtr->FullName);
 
       Ctr_EditingCtr->HieCod = -1L;	// To not showing button to go to center
@@ -1027,8 +1020,7 @@ void Ctr_ChangeCtrPlc (void)
 
    /***** Create alert to show the change made
 	  and put button to go to center changed *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_place_of_the_center_has_changed);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_The_place_of_the_center_has_changed);
   }
 
 /*****************************************************************************/
@@ -1310,19 +1302,13 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this center *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Number of degrees *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Number of users in courses of this center *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Center requester *****/
 	 HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",

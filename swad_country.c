@@ -241,94 +241,68 @@ void Cty_ListCountries2 (void)
       /***** Write users and institutions in other countries *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	 HTM_TD_End ();
+	 HTM_TD_Empty (1);
 
 	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Other_countries);
 	 HTM_TD_End ();
 
 	 /* Number of users who claim to belong to another country */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
 
 	 /* Number of institutions in other countries */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,		// Number of institutions...
-						         Hie_CTY,0));	// ...in other countries
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
+						        Hie_CTY,0));	// ...in other countries
 
 	 /* Number of centers in other countries */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,		// Number of centers...
-						         Hie_CTY,0));	// ...in other countries
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+						        Hie_CTY,0));	// ...in other countries
 
 	 /* Number of degrees in other countries */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,		// Number of degrees...
-						         Hie_CTY,0));	// ...in other countries
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
+						        Hie_CTY,0));	// ...in other countries
 
 	 /* Number of courses in other countries */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,		// Number of courses...
-						         Hie_CTY,0));	// ...in other countries
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+						        Hie_CTY,0));	// ...in other countries
 
 	 /* Number of users in courses of other countries */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,0,
-						      1 << Rol_STD |
-						      1 << Rol_NET |
-						      1 << Rol_TCH));	// Any user
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,0,
+						     1 << Rol_STD |
+						     1 << Rol_NET |
+						     1 << Rol_TCH));	// Any user
 
       HTM_TR_End ();
 
       /***** Write users and institutions with unknown country *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	 HTM_TD_End ();
+	 HTM_TD_Empty (1);
 
 	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Country_unspecified);
 	 HTM_TD_End ();
 
 	 /* Number of users who do not claim to belong to any country */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
 
 	 /* Number of institutions with unknown country */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,		// Number of institutions...
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 						         Hie_CTY,-1L));	// ...with unknown country
-	 HTM_TD_End ();
 
 	 /* Number of centers with unknown country */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,		// Number of centers...
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 						         Hie_CTY,-1L));	// ...with unknown country
-	 HTM_TD_End ();
 
 	 /* Number of degrees with unknown country */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,		// Number of degrees...
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						         Hie_CTY,-1L));	// ...with unknown country
-	 HTM_TD_End ();
 
 	 /* Number of courses with unknown country */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,		// Number of courses...
+	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						         Hie_CTY,-1L));	// ...with unknown country
-	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
       HTM_TR_End ();
 

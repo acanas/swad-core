@@ -326,15 +326,8 @@ void The_GetAndShowNumUsrsPerTheme (void)
 	       free (URL);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[Theme]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[Theme]);
+	    HTM_TD_Percentage (NumUsrs[Theme],NumUsrsTotal);
 
 	 HTM_TR_End ();
 	}

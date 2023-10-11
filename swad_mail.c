@@ -504,9 +504,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 		  HTM_TD_End ();
 
 		  /* Number of users */
-		  HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		     HTM_Unsigned (Mai->NumUsrs);
-		  HTM_TD_End ();
+		  HTM_TD_Unsigned (Mai->NumUsrs);
 
 	       HTM_TR_End ();
 	   }
@@ -716,9 +714,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 	 HTM_TD_End ();
 
 	 /* Number of users */
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
       HTM_TR_End ();
 

@@ -1022,15 +1022,11 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 				           ICanEdit);	// Put form?
 
 	    /* Current number of teachers in this course */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[Rol_TCH] +
+	    HTM_TD_Unsigned (NumUsrs[Rol_TCH] +
 			     NumUsrs[Rol_NET]);
-	    HTM_TD_End ();
 
 	    /* Current number of students in this course */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[Rol_STD]);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[Rol_STD]);
 
 	    /* Course requester */
 	    UsrDat.UsrCod = Crs->RequesterUsrCod;
@@ -1133,14 +1129,10 @@ static void Crs_PutFormToCreateCourse (void)
 	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Current number of teachers in this course *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Current number of students in this course *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Course requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",The_GetSuffix ());

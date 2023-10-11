@@ -394,15 +394,8 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		  free (Icon);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (NumUsrs[FirstDayOfWeek]);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[FirstDayOfWeek] * 100.0 /
-						 (double) NumUsrsTotal :
-						  0.0);
-	       HTM_TD_End ();
+	       HTM_TD_Unsigned (NumUsrs[FirstDayOfWeek]);
+	       HTM_TD_Percentage (NumUsrs[FirstDayOfWeek],NumUsrsTotal);
 
 	    HTM_TR_End ();
 	   }

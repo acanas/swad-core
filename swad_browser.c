@@ -10218,13 +10218,8 @@ void Brw_GetAndShowOERsStats (void)
 	       HTM_Txt (Txt_LICENSES[License]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_UnsignedLong (NumFiles[0]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_UnsignedLong (NumFiles[1]);
-	    HTM_TD_End ();
+	    HTM_TD_UnsignedLong (NumFiles[0]);
+	    HTM_TD_UnsignedLong (NumFiles[1]);
 
 	 HTM_TR_End ();
 	}

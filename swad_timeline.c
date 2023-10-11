@@ -605,26 +605,10 @@ void Tml_GetAndShowTimelineActivityStats (void)
 	       HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumNotes);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes /
-			                      (double) NumUsrs :
-				              0.0);
-	    HTM_TD_End ();
-
+	    HTM_TD_Unsigned (NumNotes);
+	    HTM_TD_Unsigned (NumUsrs);
+	    HTM_TD_Percentage (NumUsrs,NumUsrsTotal);
+	    HTM_TD_Ratio (NumNotes,NumUsrs);
 	 HTM_TR_End ();
 	}
 

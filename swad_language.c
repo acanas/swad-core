@@ -305,15 +305,8 @@ void Lan_GetAndShowNumUsrsPerLanguage (void)
 	       HTM_Txt (Txt_STR_LANG_NAME[Lan]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[Lan]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Lan] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[Lan]);
+	    HTM_TD_Percentage (NumUsrs[Lan],NumUsrsTotal);
 
 	 HTM_TR_End ();
 	}

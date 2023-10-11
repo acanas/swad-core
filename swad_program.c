@@ -2224,14 +2224,13 @@ void Prg_GetAndShowCourseProgramStats (void)
    extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
    extern const char *Txt_Average_number_BR_of_items_BR_per_course;
    unsigned NumItems;
-   unsigned NumCoursesWithItems = 0;
-   double NumItemsPerCourse = 0.0;
+   unsigned NumCoursesWithItems;
 
    /***** Get the number of program items from this location *****/
    if ((NumItems = Prg_DB_GetNumItems (Gbl.Scope.Current)))
-      if ((NumCoursesWithItems = Prg_DB_GetNumCoursesWithItems (Gbl.Scope.Current)) != 0)
-         NumItemsPerCourse = (double) NumItems /
-	                     (double) NumCoursesWithItems;
+      NumCoursesWithItems = Prg_DB_GetNumCoursesWithItems (Gbl.Scope.Current);
+   else
+      NumCoursesWithItems = 0;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_COURSE_PROGRAMS],
@@ -2247,19 +2246,9 @@ void Prg_GetAndShowCourseProgramStats (void)
 
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumItems);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumCoursesWithItems);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumItemsPerCourse);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumItems);
+	 HTM_TD_Unsigned (NumCoursesWithItems);
+	 HTM_TD_Ratio (NumItems,NumCoursesWithItems);
       HTM_TR_End ();
 
    /***** End table and box *****/

@@ -196,9 +196,7 @@ void Dpt_SeeAllDepts (void)
 	       HTM_A_End ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (Departments.Lst[NumDpt].NumTchs);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (Departments.Lst[NumDpt].NumTchs);
 
 	 HTM_TR_End ();
 	}
@@ -220,9 +218,7 @@ void Dpt_SeeAllDepts (void)
 	    HTM_Txt (Txt_Other_departments);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumTchsInsInOtherDpts);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (NumTchsInsInOtherDpts);
 
       HTM_TR_End ();
 
@@ -235,9 +231,7 @@ void Dpt_SeeAllDepts (void)
 	    HTM_Txt (Txt_Department_unspecified);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumTchsInsWithNoDpt);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (NumTchsInsWithNoDpt);
 
       HTM_TR_End ();
 
@@ -553,9 +547,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_End ();
 
 	    /* Number of teachers */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (Dpt->NumTchs);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (Dpt->NumTchs);
 
 	 HTM_TR_End ();
 	}
@@ -852,9 +844,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 	 HTM_TD_End ();
 
 	 /***** Number of teachers *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
       HTM_TR_End ();
 

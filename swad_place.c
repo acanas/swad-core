@@ -213,12 +213,10 @@ void Plc_SeeAllPlaces (void)
 		  HTM_Txt (Txt_Place_unspecified);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Unsigned (Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+	       HTM_TD_Unsigned (Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 							 Hie_INS,	// ...in institution
 							 Gbl.Hierarchy.Node[Hie_INS].HieCod) -
 				NumCtrsWithPlc);
-	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 
@@ -492,9 +490,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 					   true);	// Put form
 
 	    /* Number of centers */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (Plc->NumCtrs);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (Plc->NumCtrs);
 
 	 HTM_TR_End ();
 	}
@@ -635,8 +631,7 @@ static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull)
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update place name *****/
-   Str_Copy (CurrentName[ShrtOrFull],NewName,
-	     Nam_MaxBytes[ShrtOrFull]);
+   Str_Copy (CurrentName[ShrtOrFull],NewName,Nam_MaxBytes[ShrtOrFull]);
   }
 
 /*****************************************************************************/
@@ -685,9 +680,7 @@ static void Plc_PutFormToCreatePlace (void)
 	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Number of centers *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
       HTM_TR_End ();
 

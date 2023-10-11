@@ -458,15 +458,8 @@ void Mnu_GetAndShowNumUsrsPerMenu (void)
 	                    Txt_MENU_NAMES[Menu],"ICOx20");
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[Menu]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[Menu]);
+	    HTM_TD_Percentage (NumUsrs[Menu],NumUsrsTotal);
 
 	 HTM_TR_End ();
 	}

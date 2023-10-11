@@ -982,19 +982,13 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of users who claim to belong to this institution */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrsIns);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrsIns);
 
 	    /* Number of centers */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumCtrs);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumCtrs);
 
 	    /* Number of users in courses of this institution */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrsInCrssOfIns);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrsInCrssOfIns);
 
 	    /* Institution requester */
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
@@ -1372,28 +1366,20 @@ static void Ins_PutFormToCreateInstitution (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
-			   " required=\"required\"",
-			   The_GetSuffix ());
+			   " required=\"required\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this institution ****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Number of centers *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Number of users in courses of this institution ****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Institution requester *****/
-	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",The_GetSuffix ());
 	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
 	 HTM_TD_End ();
 

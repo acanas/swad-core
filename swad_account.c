@@ -328,13 +328,13 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
    /***** Begin 2nd table row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Courses of this user *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-      UsrDat->Sex = Usr_SEX_UNKNOWN;
-      Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
-      Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
-      Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
-   HTM_TD_End ();
+      /***** Courses of this user *****/
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	 UsrDat->Sex = Usr_SEX_UNKNOWN;
+	 Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
+	 Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
+	 Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
+      HTM_TD_End ();
 
    /***** End 2nd table row *****/
    HTM_TR_End ();

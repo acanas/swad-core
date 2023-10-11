@@ -1121,17 +1121,19 @@ void Rub_GetAndShowRubricsStats (void)
    extern const char *Txt_Average_number_BR_of_rubrics_BR_per_course;
    extern const char *Txt_Average_number_BR_of_criteria_BR_per_rubric;
    unsigned NumRubrics;
-   unsigned NumCoursesWithRubrics = 0;
-   double NumRubricsPerCourse = 0.0;
-   double NumCriteriaPerRubric = 0.0;
+   unsigned NumCoursesWithRubrics;
+   double NumCriteriaPerRubric;
 
    /***** Get the number of rubrics from this location *****/
    if ((NumRubrics = Rub_DB_GetNumRubrics (Gbl.Scope.Current)))
      {
-      if ((NumCoursesWithRubrics = Rub_DB_GetNumCoursesWithRubrics (Gbl.Scope.Current)) != 0)
-         NumRubricsPerCourse = (double) NumRubrics /
-			       (double) NumCoursesWithRubrics;
+      NumCoursesWithRubrics = Rub_DB_GetNumCoursesWithRubrics (Gbl.Scope.Current);
       NumCriteriaPerRubric = Rub_DB_GetNumCriteriaPerRubric (Gbl.Scope.Current);
+     }
+   else
+     {
+      NumCoursesWithRubrics = 0;
+      NumCriteriaPerRubric = 0.0;
      }
 
    /***** Begin box and table *****/
@@ -1149,23 +1151,10 @@ void Rub_GetAndShowRubricsStats (void)
 
       /***** Write number of rubrics *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumRubrics);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumCoursesWithRubrics);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumRubricsPerCourse);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumCriteriaPerRubric);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumRubrics);
+	 HTM_TD_Unsigned (NumCoursesWithRubrics);
+	 HTM_TD_Ratio (NumRubrics,NumCoursesWithRubrics);
+	 HTM_TD_Double2Decimals (NumCriteriaPerRubric);
       HTM_TR_End ();
 
    /***** End table and box *****/

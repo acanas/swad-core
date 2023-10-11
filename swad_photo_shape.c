@@ -218,15 +218,8 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
 			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[Shape]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Shape] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[Shape]);
+	    HTM_TD_Percentage (NumUsrs[Shape],NumUsrsTotal);
 
 	 HTM_TR_End ();
 	}

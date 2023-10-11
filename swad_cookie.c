@@ -222,15 +222,8 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
                             *Accepted[RefAcc].Title,"ICOx16");
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[RefAcc]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[RefAcc] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[RefAcc]);
+	    HTM_TD_Percentage (NumUsrs[RefAcc],NumUsrsTotal);
 
 	 HTM_TR_End ();
 	}

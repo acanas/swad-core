@@ -2243,13 +2243,13 @@ void Gam_GetAndShowGamesStats (void)
    extern const char *Txt_Number_of_BR_courses_with_BR_games;
    extern const char *Txt_Average_number_BR_of_games_BR_per_course;
    unsigned NumGames;
-   unsigned NumCoursesWithGames = 0;
-   double NumGamesPerCourse = 0.0;
+   unsigned NumCoursesWithGames;
 
    /***** Get the number of games from this location *****/
    if ((NumGames = Gam_DB_GetNumGames (Gbl.Scope.Current)))
-      if ((NumCoursesWithGames = Gam_DB_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
-         NumGamesPerCourse = (double) NumGames / (double) NumCoursesWithGames;
+      NumCoursesWithGames = Gam_DB_GetNumCoursesWithGames (Gbl.Scope.Current);
+   else
+      NumCoursesWithGames = 0;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_GAMES],
@@ -2265,19 +2265,9 @@ void Gam_GetAndShowGamesStats (void)
 
       /***** Write number of games *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumGames);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumCoursesWithGames);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumGamesPerCourse);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumGames);
+	 HTM_TD_Unsigned (NumCoursesWithGames);
+	 HTM_TD_Ratio (NumGames,NumCoursesWithGames);
       HTM_TR_End ();
 
    /***** End table and box *****/

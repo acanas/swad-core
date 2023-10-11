@@ -1217,15 +1217,8 @@ void Fol_GetAndShowFollowStats (void)
 				   Txt_Followers);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs);
+	    HTM_TD_Percentage (NumUsrs,NumUsrsTotal);
 
 	 HTM_TR_End ();
 	}
@@ -1244,9 +1237,7 @@ void Fol_GetAndShowFollowStats (void)
 	       HTM_Txt (Txt_FollowPerFollow[Fol]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Double2Decimals (Average);
-	    HTM_TD_End ();
+	    HTM_TD_Double2Decimals (Average);
 
 	    HTM_TD_Empty (1);
 

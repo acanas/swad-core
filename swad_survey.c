@@ -3297,17 +3297,19 @@ void Svy_GetAndShowSurveysStats (void)
    extern const char *Txt_Number_of_BR_notifications;
    unsigned NumSurveys;
    unsigned NumNotif;
-   unsigned NumCoursesWithSurveys = 0;
-   double NumSurveysPerCourse = 0.0;
-   double NumQstsPerSurvey = 0.0;
+   unsigned NumCoursesWithSurveys;
+   double NumQstsPerSurvey;
 
    /***** Get the number of surveys and the average number of questions per survey from this location *****/
    if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
      {
-      if ((NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSurveys (Gbl.Scope.Current)) != 0)
-         NumSurveysPerCourse = (double) NumSurveys /
-	                       (double) NumCoursesWithSurveys;
+      NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSurveys (Gbl.Scope.Current);
       NumQstsPerSurvey = Svy_DB_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
+     }
+   else
+     {
+      NumCoursesWithSurveys = 0;
+      NumQstsPerSurvey = 0.0;
      }
 
    /***** Begin box and table *****/
@@ -3326,27 +3328,11 @@ void Svy_GetAndShowSurveysStats (void)
 
       /***** Write number of surveys *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumSurveys);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumCoursesWithSurveys);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumSurveysPerCourse);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumQstsPerSurvey);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumNotif);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumSurveys);
+	 HTM_TD_Unsigned (NumCoursesWithSurveys);
+	 HTM_TD_Ratio (NumSurveys,NumCoursesWithSurveys);
+	 HTM_TD_Double2Decimals (NumQstsPerSurvey);
+	 HTM_TD_Unsigned (NumNotif);
       HTM_TR_End ();
 
    /***** End table and box *****/

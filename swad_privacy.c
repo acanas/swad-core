@@ -372,15 +372,8 @@ static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	       HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[Visibility]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Visibility] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[Visibility]);
+	    HTM_TD_Percentage (NumUsrs[Visibility],NumUsrsTotal);
 
          HTM_TR_End ();
 	}

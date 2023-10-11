@@ -819,7 +819,7 @@ void Msg_RecMsgFromUsr (void)
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDstData.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,	// Get recipient's data from database
                                                    Usr_DONT_GET_PREFS,

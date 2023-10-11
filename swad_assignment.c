@@ -1778,14 +1778,13 @@ void Asg_GetAndShowAssignmentsStats (void)
    extern const char *Txt_Number_of_BR_notifications;
    unsigned NumAssignments;
    unsigned NumNotif;
-   unsigned NumCoursesWithAssignments = 0;
-   double NumAssignmentsPerCourse = 0.0;
+   unsigned NumCoursesWithAssignments;
 
    /***** Get the number of assignments from this location *****/
    if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
-      if ((NumCoursesWithAssignments = Asg_DB_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
-         NumAssignmentsPerCourse = (double) NumAssignments /
-	                           (double) NumCoursesWithAssignments;
+      NumCoursesWithAssignments = Asg_DB_GetNumCoursesWithAssignments (Gbl.Scope.Current);
+   else
+      NumCoursesWithAssignments = 0;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],
@@ -1802,23 +1801,10 @@ void Asg_GetAndShowAssignmentsStats (void)
 
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumAssignments);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumCoursesWithAssignments);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumAssignmentsPerCourse);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumNotif);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumAssignments);
+	 HTM_TD_Unsigned (NumCoursesWithAssignments);
+	 HTM_TD_Ratio (NumAssignments,NumCoursesWithAssignments);
+	 HTM_TD_Unsigned (NumNotif);
       HTM_TR_End ();
 
    /***** End table and box *****/

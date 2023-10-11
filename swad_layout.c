@@ -1782,15 +1782,8 @@ void Lay_GetAndShowNumUsrsPerSideColumns (void)
 	       free (Icon);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[SideCols]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrs[SideCols]);
+	    HTM_TD_Percentage (NumUsrs[SideCols],NumUsrsTotal);
 
 	 HTM_TR_End ();
 	}

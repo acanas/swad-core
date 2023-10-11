@@ -1583,13 +1583,13 @@ void Exa_GetAndShowExamsStats (void)
    extern const char *Txt_Number_of_BR_courses_with_BR_exams;
    extern const char *Txt_Average_number_BR_of_exams_BR_per_course;
    unsigned NumExams;
-   unsigned NumCoursesWithExams = 0;
-   double NumExamsPerCourse = 0.0;
+   unsigned NumCoursesWithExams;
 
    /***** Get the number of exams from this location *****/
    if ((NumExams = Exa_DB_GetNumExams (Gbl.Scope.Current)))
-      if ((NumCoursesWithExams = Exa_DB_GetNumCoursesWithExams (Gbl.Scope.Current)) != 0)
-         NumExamsPerCourse = (double) NumExams / (double) NumCoursesWithExams;
+      NumCoursesWithExams = Exa_DB_GetNumCoursesWithExams (Gbl.Scope.Current);
+   else
+      NumCoursesWithExams = 0;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_EXAMS],
@@ -1605,19 +1605,9 @@ void Exa_GetAndShowExamsStats (void)
 
       /***** Write number of exams *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumExams);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumCoursesWithExams);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumExamsPerCourse);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumExams);
+	 HTM_TD_Unsigned (NumCoursesWithExams);
+	 HTM_TD_Ratio (NumExams,NumCoursesWithExams);
       HTM_TR_End ();
 
    /***** End table and box *****/

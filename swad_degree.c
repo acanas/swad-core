@@ -455,14 +455,10 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Number of courses in this degree */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumCrss);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumCrss);
 
 	    /* Number of users in courses of this degree */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (NumUsrsInCrssOfDeg);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (NumUsrsInCrssOfDeg);
 
 	    /* Degree requester */
 	    UsrDat.UsrCod = Deg->RequesterUsrCod;
@@ -577,14 +573,10 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 	 HTM_TD_End ();
 
 	 /***** Number of courses in this degree *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Number of users in courses of this degree *****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
 	 /***** Degree requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",

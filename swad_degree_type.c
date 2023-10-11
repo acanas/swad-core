@@ -432,9 +432,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 	    HTM_TD_End ();
 
 	    /* Number of degrees of this type */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	       HTM_Unsigned (DegTypes->Lst[NumDegTyp].NumDegs);
-	    HTM_TD_End ();
+	    HTM_TD_Unsigned (DegTypes->Lst[NumDegTyp].NumDegs);
 
 	 /* End table row */
 	 HTM_TR_End ();
@@ -486,9 +484,7 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 	 HTM_TD_End ();
 
 	 /***** Number of degrees of this degree type ****/
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (0);
-	 HTM_TD_End ();
+	 HTM_TD_Unsigned (0);
 
       /***** End table row *****/
       HTM_TR_End ();

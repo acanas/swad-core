@@ -1601,27 +1601,10 @@ void Agd_GetAndShowAgendasStats (void)
 
       /***** Write number of users who have chosen each language *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumEvents);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (NumUsrs);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-					   (double) NumUsrsTotal :
-					   0);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-	    HTM_Double2Decimals (NumUsrs ? (double) NumEvents /
-					   (double) NumUsrs :
-					   0);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumEvents);
+	 HTM_TD_Unsigned (NumUsrs);
+	 HTM_TD_Percentage (NumUsrs,NumUsrsTotal);
+	 HTM_TD_Ratio (NumEvents,NumUsrs);
       HTM_TR_End ();
 
    /***** End table and box *****/
