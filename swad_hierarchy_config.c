@@ -174,7 +174,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 	   }
 	 else	// I can not change web
 	   {
-	    HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
+	    HTM_DIV_Begin ("class=\"EXTERNAL_WWW_FULL\"");
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_%s\"",

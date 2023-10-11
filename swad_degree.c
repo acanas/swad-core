@@ -442,7 +442,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	       else
 		 {
 		  Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
-		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
+		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 			          " class=\"DAT_%s\"",
 				  Deg->WWW,

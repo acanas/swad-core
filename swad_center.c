@@ -862,7 +862,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       else
 		 {
 		  Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
-		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
+		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 				  " class=\"DAT_%s\" title=\"%s\"",
 				  Ctr->WWW,

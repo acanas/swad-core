@@ -38,12 +38,12 @@
 
 const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Nam_SHRT_NAME] = "ShortName",
+   [Nam_SHRT_NAME] = "ShrtName",
    [Nam_FULL_NAME] = "FullName",
   };
 const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Nam_SHRT_NAME] = "ShortName",
+   [Nam_SHRT_NAME] = "ShortName",	// TODO: Change to ShrtName in databse tables?
    [Nam_FULL_NAME] = "FullName",
   };
 unsigned Nam_MaxChars[Nam_NUM_SHRT_FULL_NAMES] =
@@ -58,7 +58,7 @@ unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES] =
   };
 const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Nam_SHRT_NAME] = "INPUT_SHORT_NAME",
+   [Nam_SHRT_NAME] = "INPUT_SHRT_NAME",
    [Nam_FULL_NAME] = "INPUT_FULL_NAME",
   };
 
