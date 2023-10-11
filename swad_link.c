@@ -526,7 +526,6 @@ void Lnk_RenameLinkFull (void)
 
 static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -557,7 +556,7 @@ static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If link was in database... *****/
-         if (Lnk_DB_CheckIfLinkNameExists (Nam_Params[ShrtOrFull],
+         if (Lnk_DB_CheckIfLinkNameExists (Nam_Fields[ShrtOrFull],
 					   NewName,Lnk_EditingLnk->LnkCod,
 					   -1L,	// Unused
 					   0))	// Unused

@@ -670,7 +670,6 @@ void Dpt_RenameDepartFull (void)
 
 static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -701,7 +700,7 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If name department was not in database... *****/
-         if (Dpt_DB_CheckIfDepartmentNameExists (Nam_Params[ShrtOrFull],
+         if (Dpt_DB_CheckIfDepartmentNameExists (Nam_Fields[ShrtOrFull],
 						 NewName,Dpt_EditingDpt->DptCod,
 						 -1L,	// Unused
 						 0))	// Unused

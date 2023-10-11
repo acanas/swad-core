@@ -55,7 +55,8 @@ void Plc_DB_CreatePlace (const struct Plc_Place *Plc)
 /****************** Update place name in table of places *********************/
 /*****************************************************************************/
 
-void Plc_DB_UpdatePlcName (long PlcCod,const char *FldName,const char *NewPlcName)
+void Plc_DB_UpdatePlcName (long PlcCod,
+			   const char *FldName,const char *NewPlcName)
   {
    /***** Update place changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a place",

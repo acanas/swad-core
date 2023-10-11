@@ -528,7 +528,6 @@ void Bld_RenameBuildingFull (void)
 
 static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -559,16 +558,15 @@ static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If building was in database... *****/
-         if (Bld_DB_CheckIfBuildingNameExists (Nam_Params[ShrtOrFull],
+         if (Bld_DB_CheckIfBuildingNameExists (Nam_Fields[ShrtOrFull],
 					       NewName,Bld_EditingBuilding->BldCod,
 					       -1L,0))	// Unused
             Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);
          else
            {
             /* Update the table changing old name by new name */
-            Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,
-        			       Nam_Fields[ShrtOrFull],
-        			       NewName);
+            Bld_DB_UpdateBuildingField (Bld_EditingBuilding->BldCod,
+        			        Nam_Fields[ShrtOrFull],NewName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -617,7 +615,8 @@ void Bld_ChangeBuildingLocation (void)
    if (strcmp (Bld_EditingBuilding->Location,NewLocation))	// Different locations
      {
       /* Update the table changing old name by new name */
-      Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,"Location",NewLocation);
+      Bld_DB_UpdateBuildingField (Bld_EditingBuilding->BldCod,
+				  "Location",NewLocation);
       Str_Copy (Bld_EditingBuilding->Location,NewLocation,
 		sizeof (Bld_EditingBuilding->Location) - 1);
 

@@ -689,15 +689,14 @@ void Deg_DB_UpdateDegTypName (long DegTypCod,
 /***************** Update degree name in table of degrees ********************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegNameDB (long DegCod,const char *FldName,
-                             const char NewDegName[Nam_MAX_BYTES_FULL_NAME + 1])
+void Deg_DB_UpdateDegNameDB (long DegCod,
+			     const char *FldName,const char *NewDegName)
   {
    DB_QueryUPDATE ("can not update the name of a degree",
 		   "UPDATE deg_degrees"
 		     " SET %s='%s'"
 		   " WHERE DegCod=%ld",
-	           FldName,
-	           NewDegName,
+	           FldName,NewDegName,
 	           DegCod);
   }
 

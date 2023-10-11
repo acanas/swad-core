@@ -67,7 +67,8 @@ unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long PrtCod);
 
 void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod);
 void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear);
-void Crs_DB_UpdateCrsName (long CrsCod,const char *FldName,const char *NewCrsName);
+void Crs_DB_UpdateCrsName (long CrsCod,
+			   const char *FldName,const char *NewCrsName);
 void Crs_DB_UpdateCrsDeg (long CrsCod,long DegCod);
 void Crs_DB_UpdateCrsStatus (long CrsCod,Hie_Status_t Status);
 

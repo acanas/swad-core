@@ -510,7 +510,8 @@ void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear)
 /***************** Update course name in table of courses ********************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateCrsName (long CrsCod,const char *FldName,const char *NewCrsName)
+void Crs_DB_UpdateCrsName (long CrsCod,
+			   const char *FldName,const char *NewCrsName)
   {
    DB_QueryUPDATE ("can not update the name of a course",
 		   "UPDATE crs_courses"

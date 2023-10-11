@@ -579,7 +579,6 @@ void Plc_RenamePlaceFull (void)
 
 static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -610,7 +609,7 @@ static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If place was in database... *****/
-         if (Plc_DB_CheckIfPlaceNameExists (Nam_Params[ShrtOrFull],
+         if (Plc_DB_CheckIfPlaceNameExists (Nam_Fields[ShrtOrFull],
 					    NewName,Plc_EditingPlc->PlcCod,
 					    Gbl.Hierarchy.Node[Hie_INS].HieCod,
 					    0))	// Unused

@@ -135,17 +135,17 @@ bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long
 
 
 /*****************************************************************************/
-/*************** Update building changing old name by new name ***************/
+/************* Update building changing old field by new field **************/
 /*****************************************************************************/
 
-void Bld_DB_UpdateBuildingName (long BldCod,const char *FldName,const char *NewBuildingName)
+void Bld_DB_UpdateBuildingField (long BldCod,
+				 const char *FldName,const char *Value)
   {
-   DB_QueryUPDATE ("can not update the name of a building",
+   DB_QueryUPDATE ("can not update building",
 		   "UPDATE bld_buildings"
 		     " SET %s='%s'"
 		   " WHERE BldCod=%ld",
-		   FldName,
-		   NewBuildingName,
+		   FldName,Value,
 		   BldCod);
   }
 
@@ -173,4 +173,3 @@ void Bld_DB_RemoveAllBuildingsInCtr (long CtrCod)
                    " WHERE CtrCod=%ld",
 		   CtrCod);
   }
-

@@ -1698,7 +1698,6 @@ void Crs_RenameCourseFull (void)
 
 void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1728,7 +1727,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
 	{
 	 /***** If course was in database... *****/
-	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_Params[ShrtOrFull],
+	 if (Crs_DB_CheckIfCrsNameExistsInYearOfDeg (Nam_Fields[ShrtOrFull],
 						     NewName,Crs->HieCod,
 						     Crs->PrtCod,Crs->Specific.Year))
 	    Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);

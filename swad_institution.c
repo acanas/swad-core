@@ -1142,7 +1142,6 @@ void Ins_RenameInsFull (void)
 
 void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1169,7 +1168,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If institution was not in database... *****/
-         if (Ins_DB_CheckIfInsNameExistsInCty (Nam_Params[ShrtOrFull],
+         if (Ins_DB_CheckIfInsNameExistsInCty (Nam_Fields[ShrtOrFull],
 					       NewName,Ins->HieCod,
                                                Gbl.Hierarchy.Node[Hie_CTY].HieCod,
                                                0))	// Unused

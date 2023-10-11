@@ -45,8 +45,8 @@ bool Ban_DB_CheckIfBannerNameExists (const char *FldName,const char *Name,long C
 
 void Ban_DB_CreateBanner (const struct Ban_Banner *Ban);
 void Ban_DB_HideOrUnhideBanner (long BanCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Ban_DB_UpdateBanName (long BanCod,const char *FldName,
-			   const char *NewBanName);
+void Ban_DB_UpdateBanName (long BanCod,
+			   const char *FldName,const char *NewBanName);
 void Ban_DB_UpdateBanImg (long BanCod,
                           const char NewImg[Ban_MAX_BYTES_IMAGE + 1]);
 void Ban_DB_UpdateBanWWW (long BanCod,

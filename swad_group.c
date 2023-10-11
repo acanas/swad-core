@@ -3308,7 +3308,8 @@ void Grp_ReceiveFormNewGrp (void)
       if (Gbl.Crs.Grps.GrpName[0])	// If there's a group name
         {
          /***** If name of group was in database... *****/
-         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (Gbl.Crs.Grps.GrpTyp.GrpTypCod,Gbl.Crs.Grps.GrpName,-1L))
+         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+						   Gbl.Crs.Grps.GrpName,-1L))
            {
             AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4020,7 +4021,8 @@ void Grp_RenameGroupType (void)
       if (strcmp (Gbl.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp))	// Different names
         {
          /***** If group type was in database... *****/
-         if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewNameGrpTyp,Gbl.Crs.Grps.GrpTyp.GrpTypCod))
+         if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewNameGrpTyp,
+							 Gbl.Crs.Grps.GrpTyp.GrpTypCod))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4099,7 +4101,8 @@ void Grp_RenameGroup (void)
       if (strcmp (GrpDat.GrpName,NewNameGrp))	// Different names
         {
          /***** If group was in database... *****/
-         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (GrpDat.GrpTypCod,NewNameGrp,Gbl.Crs.Grps.GrpCod))
+         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (GrpDat.GrpTypCod,NewNameGrp,
+						   Gbl.Crs.Grps.GrpCod))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),

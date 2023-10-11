@@ -227,7 +227,8 @@ void Dpt_DB_UpdateDptIns (long DptCod,long NewInsCod)
 /************* Update department name in table of departments ****************/
 /*****************************************************************************/
 
-void Dpt_DB_UpdateDptName (long DptCod,const char *FldName,const char *NewDptName)
+void Dpt_DB_UpdateDptName (long DptCod,
+			   const char *FldName,const char *NewDptName)
   {
    DB_QueryUPDATE ("can not update the name of a department",
 		   "UPDATE dpt_departments"

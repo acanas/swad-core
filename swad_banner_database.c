@@ -167,8 +167,8 @@ void Ban_DB_HideOrUnhideBanner (long BanCod,HidVis_HiddenOrVisible_t HiddenOrVis
 /***************** Update banner name in table of banners ********************/
 /*****************************************************************************/
 
-void Ban_DB_UpdateBanName (long BanCod,const char *FldName,
-			   const char *NewBanName)
+void Ban_DB_UpdateBanName (long BanCod,
+			   const char *FldName,const char *NewBanName)
   {
    DB_QueryUPDATE ("can not update the name of a banner",
 		   "UPDATE ban_banners"

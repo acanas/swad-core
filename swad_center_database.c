@@ -548,15 +548,15 @@ void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod)
 /****************** Update center name in table of centers *******************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrName (long CtrCod,const char *FldName,const char *NewCtrName)
+void Ctr_DB_UpdateCtrName (long CtrCod,
+			   const char *FldName,const char *NewCtrName)
   {
    /***** Update center changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a center",
 		   "UPDATE ctr_centers"
 		     " SET %s='%s'"
 		   " WHERE CtrCod=%ld",
-	           FldName,
-	           NewCtrName,
+	           FldName,NewCtrName,
 	           CtrCod);
   }
 

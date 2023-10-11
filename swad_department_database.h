@@ -48,7 +48,8 @@ unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod);
 unsigned Dpt_DB_GetNumTchsCurrentInsInDepartment (long DptCod);
 
 void Dpt_DB_UpdateDptIns (long DptCod,long NewInsCod);
-void Dpt_DB_UpdateDptName (long DptCod,const char *FldName,const char *NewDptName);
+void Dpt_DB_UpdateDptName (long DptCod,
+			   const char *FldName,const char *NewDptName);
 void Dpt_DB_UpdateDptWWW (long DptCod,char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 void Dpt_DB_RemoveDepartment (long DptCod);

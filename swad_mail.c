@@ -630,7 +630,8 @@ static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If mail was in database... *****/
-         if (Mai_DB_CheckIfMailDomainNameExists (ParName[ShrtOrFull],NewName,Mai_EditingMai->MaiCod))
+         if (Mai_DB_CheckIfMailDomainNameExists (FldName[ShrtOrFull],NewName,
+						 Mai_EditingMai->MaiCod))
 	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_already_exists,
                              NewName);

@@ -1283,7 +1283,6 @@ void Deg_RenameDegreeFull (void)
 
 void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1311,7 +1310,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_Params[ShrtOrFull],
+         if (Deg_DB_CheckIfDegNameExistsInCtr (Nam_Fields[ShrtOrFull],
 					       NewName,Deg->HieCod,Deg->PrtCod,
 					       0))	// Unused
             Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);

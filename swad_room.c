@@ -1046,7 +1046,6 @@ void Roo_RenameRoomFull (void)
 
 static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1077,7 +1076,7 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If room was in database... *****/
-         if (Roo_DB_CheckIfRoomNameExists (Nam_Params[ShrtOrFull],
+         if (Roo_DB_CheckIfRoomNameExists (Nam_Fields[ShrtOrFull],
                                            NewName,Roo_EditingRoom->RooCod,
                                            Gbl.Hierarchy.Node[Hie_CTR].HieCod,
                                            0))	// Unused

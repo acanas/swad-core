@@ -45,7 +45,8 @@ bool Bld_DB_CheckIfBuildingNameExists (const char *FldName,const char *Name,long
 				       __attribute__((unused)) long PrtCod,
 				       __attribute__((unused)) unsigned Year);
 
-void Bld_DB_UpdateBuildingName (long BldCod,const char *FldName,const char *NewBuildingName);
+void Bld_DB_UpdateBuildingField (long BldCod,
+				 const char *FldName,const char *Value);
 
 void Bld_DB_RemoveBuilding (long BldCod);
 void Bld_DB_RemoveAllBuildingsInCtr (long CtrCod);

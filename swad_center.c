@@ -1061,7 +1061,6 @@ void Ctr_RenameCenterFull (void)
 
 void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1091,7 +1090,7 @@ void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_Params[ShrtOrFull],
+         if (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_Fields[ShrtOrFull],
 					       NewName,Ctr->HieCod,
 					       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 					       0))	// Unused

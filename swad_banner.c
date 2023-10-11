@@ -605,7 +605,6 @@ void Ban_RenameBannerFull (void)
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
                               Nam_ShrtOrFullName_t ShrtOrFull)
   {
-   extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -638,7 +637,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
         {
          /***** If banner was in database... *****/
-         if (Ban_DB_CheckIfBannerNameExists (Nam_Params[ShrtOrFull],
+         if (Ban_DB_CheckIfBannerNameExists (Nam_Fields[ShrtOrFull],
 					     NewName,Ban->BanCod,
 					     -1L,0))	// Unused
 	    Ale_CreateAlert (Ale_WARNING,NULL,Txt_X_already_exists,NewName);

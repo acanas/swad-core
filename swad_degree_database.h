@@ -74,8 +74,8 @@ unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);
 
 void Deg_DB_UpdateDegTypName (long DegTypCod,
                               const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
-void Deg_DB_UpdateDegNameDB (long DegCod,const char *FldName,
-                             const char NewDegName[Nam_MAX_BYTES_FULL_NAME + 1]);
+void Deg_DB_UpdateDegNameDB (long DegCod,
+			     const char *FldName,const char *NewDegName);
 void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod);
 void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);
 void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
