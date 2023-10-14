@@ -1301,13 +1301,11 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 			   The_GetSuffix ());
 	 HTM_TD_End ();
 
-	 /***** Number of users who claim to belong to this center *****/
+	 /***** Number of users who claim to belong to this center,
+	        number of degrees and
+	        number of users in courses of this center *****/
 	 HTM_TD_Unsigned (0);
-
-	 /***** Number of degrees *****/
 	 HTM_TD_Unsigned (0);
-
-	 /***** Number of users in courses of this center *****/
 	 HTM_TD_Unsigned (0);
 
 	 /***** Center requester *****/
@@ -1317,8 +1315,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 HTM_TD_End ();
 
 	 /***** Center status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	 HTM_TD_End ();
+	 HTM_TD_Empty (1);
 
       HTM_TR_End ();
 

@@ -821,32 +821,11 @@ void Not_GetAndShowNoticesStats (void)
 
       /***** Write number of notices *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumNoticesDeleted);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned ( NumTotalNotices);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumTotalNotifications);
-	 HTM_TD_End ();
-
+	 HTM_TD_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
+	 HTM_TD_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
+	 HTM_TD_Unsigned (NumNoticesDeleted);
+	 HTM_TD_Unsigned (NumTotalNotices);
+	 HTM_TD_Unsigned (NumTotalNotifications);
       HTM_TR_End ();
 
    /***** End table and box *****/

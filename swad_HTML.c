@@ -2049,9 +2049,37 @@ void HTM_Percentage (double Percentage)
    HTM_TxtF ("%5.2lf%%",Percentage);
   }
 
+void HTM_TD_Txt_Left (const char *Txt)
+  {
+   HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt);
+   HTM_TD_End ();
+  }
+
+void HTM_TD_Txt_Right (const char *Txt)
+  {
+   HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+      HTM_Txt (Txt);
+   HTM_TD_End ();
+  }
+
+void HTM_TD_LINE_TOP_Txt (const char *Txt)
+  {
+   HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
+      HTM_Txt (Txt);
+   HTM_TD_End ();
+  }
+
 void HTM_TD_Unsigned (unsigned Num)
   {
    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+      HTM_Unsigned (Num);
+   HTM_TD_End ();
+  }
+
+void HTM_TD_LINE_TOP_Unsigned (unsigned Num)
+  {
+   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
       HTM_Unsigned (Num);
    HTM_TD_End ();
   }
@@ -2063,9 +2091,24 @@ void HTM_TD_UnsignedLong (unsigned long Num)
    HTM_TD_End ();
   }
 
+void HTM_TD_LINE_TOP_UnsignedLong (unsigned long Num)
+  {
+   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
+      HTM_UnsignedLong (Num);
+   HTM_TD_End ();
+  }
+
 void HTM_TD_Percentage (unsigned Num,unsigned NumTotal)
   {
    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+      HTM_Percentage (NumTotal ? (double) Num * 100.0 / (double) NumTotal :
+				 0.0);
+   HTM_TD_End ();
+  }
+
+void HTM_TD_LINE_TOP_Percentage (unsigned Num,unsigned NumTotal)
+  {
+   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
       HTM_Percentage (NumTotal ? (double) Num * 100.0 / (double) NumTotal :
 				 0.0);
    HTM_TD_End ();
@@ -2079,9 +2122,24 @@ void HTM_TD_Ratio (unsigned Num,unsigned NumTotal)
    HTM_TD_End ();
   }
 
+void HTM_TD_LINE_TOP_Ratio (unsigned Num,unsigned NumTotal)
+  {
+   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
+      HTM_Double2Decimals (NumTotal ? (double) Num / (double) NumTotal :
+				      0.0);
+   HTM_TD_End ();
+  }
+
 void HTM_TD_Double2Decimals (double Num)
   {
    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+      HTM_Double2Decimals (Num);
+   HTM_TD_End ();
+  }
+
+void HTM_TD_LINE_TOP_Double2Decimals (double Num)
+  {
+   HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
       HTM_Double2Decimals (Num);
    HTM_TD_End ();
   }

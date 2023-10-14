@@ -579,14 +579,12 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 	 HTM_TD_Unsigned (0);
 
 	 /***** Degree requester *****/
-	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",The_GetSuffix ());
 	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
 	 HTM_TD_End ();
 
 	 /***** Degree status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	 HTM_TD_End ();
+	 HTM_TD_Empty (1);
 
       HTM_TR_End ();
 

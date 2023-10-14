@@ -2843,10 +2843,7 @@ void Msg_ListBannedUsrs (void)
 		  HTM_TD_End ();
 
 		  /* Write user's full name */
-		  HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                The_GetSuffix ());
-		     HTM_Txt (UsrDat.FullName);
-		  HTM_TD_End ();
+		  HTM_TD_Txt_Left (UsrDat.FullName);
 
 	       HTM_TR_End ();
 	      }
@@ -2908,61 +2905,19 @@ void Msg_GetAndShowMsgsStats (void)
 
       /***** Write number of messages *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_MSGS_Sent);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMsgsSentNotDeleted);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMsgsSentDeleted);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Hyphen ();
-	 HTM_TD_End ();
-
+	 HTM_TD_Txt_Left (Txt_MSGS_Sent);
+	 HTM_TD_Unsigned (NumMsgsSentNotDeleted);
+	 HTM_TD_Unsigned (NumMsgsSentDeleted);
+	 HTM_TD_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
+	 HTM_TD_Txt_Right ("-");
       HTM_TR_End ();
 
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_MSGS_Received);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMsgsReceivedNotDeleted);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMsgsReceivedAndDeleted);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMsgsReceivedAndNotified);
-	 HTM_TD_End ();
-
+	 HTM_TD_Txt_Left (Txt_MSGS_Received);
+	 HTM_TD_Unsigned (NumMsgsReceivedNotDeleted);
+	 HTM_TD_Unsigned (NumMsgsReceivedAndDeleted);
+	 HTM_TD_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
+	 HTM_TD_Unsigned (NumMsgsReceivedAndNotified);
       HTM_TR_End ();
 
    /***** End table and box *****/

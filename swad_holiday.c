@@ -178,21 +178,17 @@ void Hld_SeeAllHolidays (void)
 		  /* Write data of this holiday */
 		  HTM_TR_Begin (NULL);
 
-		     HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                   The_GetSuffix ());
-			HTM_Txt (Holidays.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
-								    Holidays.Lst[NumHld].PlaceFullName);
-		     HTM_TD_End ();
+		     HTM_TD_Txt_Left (Holidays.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
+								         Holidays.Lst[NumHld].PlaceFullName);
 
 		     Dat_ConvDateToDateStr (&Holidays.Lst[NumHld].StartDate,StrDate);
 
-		     HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                   The_GetSuffix ());
-			HTM_TxtF ("&nbsp;%s",StrDate);
+		     HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+			HTM_NBSP ();
+			HTM_Txt (StrDate);
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 			HTM_NBSP ();
 			switch (Holidays.Lst[NumHld].HldTyp)
 			  {
@@ -205,8 +201,7 @@ void Hld_SeeAllHolidays (void)
 			  }
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 			HTM_TxtF ("&nbsp;%s",Holidays.Lst[NumHld].Name);
 		     HTM_TD_End ();
 

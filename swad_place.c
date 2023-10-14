@@ -166,18 +166,10 @@ void Plc_SeeAllPlaces (void)
 	      {
 	       /* Write data of this place */
 	       HTM_TR_Begin (NULL);
-
-		  HTM_TD_Begin ("class=\"LM DAT_%s\"",
-		                The_GetSuffix ());
-		     HTM_Txt (Places.Lst[NumPlc].FullName);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"RM DAT_%s\"",
-		                The_GetSuffix ());
-		     HTM_Unsigned (Places.Lst[NumPlc].NumCtrs);
-		  HTM_TD_End ();
-
+		  HTM_TD_Txt_Left (Places.Lst[NumPlc].FullName);
+		  HTM_TD_Unsigned (Places.Lst[NumPlc].NumCtrs);
 	       HTM_TR_End ();
+
 	       NumCtrsWithPlc += Places.Lst[NumPlc].NumCtrs;
 	      }
 
@@ -191,33 +183,21 @@ void Plc_SeeAllPlaces (void)
 
 	    /***** Write centers (of the current institution) with other place *****/
 	    NumCtrsInOtherPlcs = Ctr_DB_GetNumCtrsInPlc (0);
+
 	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	                     The_GetSuffix ());
-		  HTM_Txt (Txt_Other_places);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                     The_GetSuffix ());
-		  HTM_Unsigned (NumCtrsInOtherPlcs);
-	       HTM_TD_End ();
-
+	       HTM_TD_Txt_Left (Txt_Other_places);
+	       HTM_TD_Unsigned (NumCtrsInOtherPlcs);
 	    HTM_TR_End ();
+
 	    NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
 	    /***** Write centers (of the current institution) with no place *****/
 	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-		  HTM_Txt (Txt_Place_unspecified);
-	       HTM_TD_End ();
-
+	       HTM_TD_Txt_Left (Txt_Place_unspecified);
 	       HTM_TD_Unsigned (Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 							 Hie_INS,	// ...in institution
 							 Gbl.Hierarchy.Node[Hie_INS].HieCod) -
 				NumCtrsWithPlc);
-
 	    HTM_TR_End ();
 
 	 /***** End table *****/

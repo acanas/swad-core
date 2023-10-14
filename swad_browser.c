@@ -10213,14 +10213,9 @@ void Brw_GetAndShowOERsStats (void)
 	 Brw_GetNumberOfOERs (License,NumFiles);
 
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_LICENSES[License]);
-	    HTM_TD_End ();
-
+	    HTM_TD_Txt_Left (Txt_LICENSES[License]);
 	    HTM_TD_UnsignedLong (NumFiles[0]);
 	    HTM_TD_UnsignedLong (NumFiles[1]);
-
 	 HTM_TR_End ();
 	}
 

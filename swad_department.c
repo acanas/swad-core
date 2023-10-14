@@ -131,8 +131,6 @@ void Dpt_SeeAllDepts (void)
       [Dpt_ORDER_BY_NUM_TCHS  ] = HTM_HEAD_RIGHT
      };
    unsigned NumDpt;
-   unsigned NumTchsInsInOtherDpts;
-   unsigned NumTchsInsWithNoDpt;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)	// No institution selected
@@ -210,29 +208,15 @@ void Dpt_SeeAllDepts (void)
       HTM_TR_End ();
 
       /***** Write teachers of this institution with other department *****/
-      NumTchsInsInOtherDpts = Dpt_DB_GetNumTchsCurrentInsInDepartment (0);
-
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Other_departments);
-	 HTM_TD_End ();
-
-	 HTM_TD_Unsigned (NumTchsInsInOtherDpts);
-
+	 HTM_TD_Txt_Left (Txt_Other_departments);
+	 HTM_TD_Unsigned (Dpt_DB_GetNumTchsCurrentInsInDepartment (0));
       HTM_TR_End ();
 
       /***** Write teachers with no department *****/
-      NumTchsInsWithNoDpt = Dpt_DB_GetNumTchsCurrentInsInDepartment (-1L);
-
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Department_unspecified);
-	 HTM_TD_End ();
-
-	 HTM_TD_Unsigned (NumTchsInsWithNoDpt);
-
+	 HTM_TD_Txt_Left (Txt_Department_unspecified);
+	 HTM_TD_Unsigned (Dpt_DB_GetNumTchsCurrentInsInDepartment (-1L));
       HTM_TR_End ();
 
    /***** End table and box *****/

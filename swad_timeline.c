@@ -600,11 +600,7 @@ void Tml_GetAndShowTimelineActivityStats (void)
 
 	 /***** Write number of timeline notes and number of users *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
-	    HTM_TD_End ();
-
+	    HTM_TD_Txt_Left (Txt_TIMELINE_NOTE[NoteType]);
 	    HTM_TD_Unsigned (NumNotes);
 	    HTM_TD_Unsigned (NumUsrs);
 	    HTM_TD_Percentage (NumUsrs,NumUsrsTotal);
@@ -624,33 +620,11 @@ void Tml_GetAndShowTimelineActivityStats (void)
       /* Write totals */
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_Total);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumNotes);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumUsrs);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-					   (double) NumUsrsTotal :
-					   0.0);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
-				 0.0);
-	 HTM_TD_End ();
+	 HTM_TD_LINE_TOP_Txt (Txt_Total);
+	 HTM_TD_LINE_TOP_Unsigned (NumNotes);
+	 HTM_TD_LINE_TOP_Unsigned (NumUsrs);
+	 HTM_TD_LINE_TOP_Percentage (NumUsrs,NumUsrsTotal);
+	 HTM_TD_LINE_TOP_Ratio (NumNotes,NumUsrs);
 
       HTM_TR_End ();
 

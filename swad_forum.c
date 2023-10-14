@@ -3466,15 +3466,15 @@ static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
    double NumPostsPerForum;
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
-   NumThrsPerForum  = (FiguresForum->NumForums ? (double) FiguresForum->NumThreads /
-	                                         (double) FiguresForum->NumForums :
-	                                         0.0);
+   NumThrsPerForum   = (FiguresForum->NumForums  ? (double) FiguresForum->NumThreads /
+	                                           (double) FiguresForum->NumForums :
+	                                           0.0);
    NumPostsPerThread = (FiguresForum->NumThreads ? (double) FiguresForum->NumPosts /
 	                                           (double) FiguresForum->NumThreads :
 	                                           0.0);
-   NumPostsPerForum = (FiguresForum->NumForums ? (double) FiguresForum->NumPosts /
-	                                         (double) FiguresForum->NumForums :
-	                                         0.0);
+   NumPostsPerForum  = (FiguresForum->NumForums  ? (double) FiguresForum->NumPosts /
+	                                           (double) FiguresForum->NumForums :
+	                                           0.0);
 
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
@@ -3483,45 +3483,14 @@ static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
                     The_GetSuffix ());
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
-                    The_GetSuffix ());
-	 HTM_Txt (Txt_Total);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_GetSuffix ());
-	 HTM_Unsigned (FiguresForum->NumForums);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_GetSuffix ());
-	 HTM_Unsigned (FiguresForum->NumThreads);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_GetSuffix ());
-	 HTM_Unsigned (FiguresForum->NumPosts);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP RM\"",
-                    The_GetSuffix ());
-	 HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_GetSuffix ());
-	 HTM_Double2Decimals (NumThrsPerForum);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_GetSuffix ());
-	 HTM_Double2Decimals (NumPostsPerThread);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-                    The_GetSuffix ());
-	 HTM_Double2Decimals (NumPostsPerForum);
-      HTM_TD_End ();
+      HTM_TD_LINE_TOP_Txt (Txt_Total);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumForums);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumThreads);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumPosts);
+      HTM_TD_LINE_TOP_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
+      HTM_TD_LINE_TOP_Double2Decimals (NumThrsPerForum);
+      HTM_TD_LINE_TOP_Double2Decimals (NumPostsPerThread);
+      HTM_TD_LINE_TOP_Double2Decimals (NumPostsPerForum);
 
    HTM_TR_End ();
   }

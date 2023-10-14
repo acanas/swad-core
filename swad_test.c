@@ -782,10 +782,7 @@ void Tst_GetAndShowTestsStats (void)
 	 /***** Write stats *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
-	    HTM_TD_End ();
-
+	    HTM_TD_Txt_Left (Txt_TST_STR_ANSWER_TYPES[AnsType]);
 	    HTM_TD_Unsigned (Stats.NumCoursesWithQuestions);
 
 	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
@@ -812,15 +809,8 @@ void Tst_GetAndShowTestsStats (void)
       /***** Write stats *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_Total);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (Stats.NumCoursesWithQuestions);
-	 HTM_TD_End ();
+	 HTM_TD_LINE_TOP_Txt (Txt_Total);
+	 HTM_TD_LINE_TOP_Unsigned (Stats.NumCoursesWithQuestions);
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
 	               The_GetSuffix ());
@@ -831,35 +821,12 @@ void Tst_GetAndShowTestsStats (void)
 						      0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (Stats.NumQsts);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Double2Decimals (Stats.AvgQstsPerCourse);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_UnsignedLong (Stats.NumHits);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Double2Decimals (Stats.AvgHitsPerCourse);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
-	 HTM_TD_End ();
+	 HTM_TD_LINE_TOP_Unsigned (Stats.NumQsts);
+	 HTM_TD_LINE_TOP_Double2Decimals (Stats.AvgQstsPerCourse);
+	 HTM_TD_LINE_TOP_UnsignedLong (Stats.NumHits);
+	 HTM_TD_LINE_TOP_Double2Decimals (Stats.AvgHitsPerCourse);
+	 HTM_TD_LINE_TOP_Double2Decimals (Stats.AvgHitsPerQuestion);
+	 HTM_TD_LINE_TOP_Double2Decimals (Stats.AvgScorePerQuestion);
 
       HTM_TR_End ();
 

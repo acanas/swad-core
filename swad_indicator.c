@@ -506,15 +506,8 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	 if (PutForm)
 	    HTM_TD_Empty (1);
 
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_Total);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumCrss);
-	 HTM_TD_End ();
+	 HTM_TD_LINE_TOP_Txt (Txt_Total);
+	 HTM_TD_LINE_TOP_Unsigned (NumCrss);
 
 	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
 	               The_GetSuffix ());

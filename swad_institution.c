@@ -1384,8 +1384,7 @@ static void Ins_PutFormToCreateInstitution (void)
 	 HTM_TD_End ();
 
 	 /***** Institution status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	 HTM_TD_End ();
+	 HTM_TD_Empty (1);
 
       HTM_TR_End ();
 
@@ -1894,10 +1893,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		  /***** Number of order *****/
 		  if (NumberThisRow != NumberLastRow)
 		     NumOrder = NumIns;
-		  HTM_TD_Begin ("class=\"RM DAT_%s\"",
-		                The_GetSuffix ());
-		     HTM_Unsigned (NumOrder);
-		  HTM_TD_End ();
+		  HTM_TD_Unsigned (NumOrder);
 
 		  /***** Write link to institution *****/
 		  HTM_TD_Begin ("class=\"LM FORM_IN_%s\"",
@@ -1921,10 +1917,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		  HTM_TD_End ();
 
 		  /***** Write statistic *****/
-		  HTM_TD_Begin ("class=\"RM DAT_%s\"",
-		                The_GetSuffix ());
-		     HTM_Unsigned (NumberThisRow);
-		  HTM_TD_End ();
+		  HTM_TD_Unsigned (NumberThisRow);
 
 	       HTM_TR_End ();
 

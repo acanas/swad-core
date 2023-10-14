@@ -278,10 +278,7 @@ void Cty_ListCountries2 (void)
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Empty (1);
-
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Country_unspecified);
-	 HTM_TD_End ();
+	 HTM_TD_Txt_Left (Txt_Country_unspecified);
 
 	 /* Number of users who do not claim to belong to any country */
 	 HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());

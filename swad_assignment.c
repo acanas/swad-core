@@ -546,8 +546,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	               The_GetSuffix ());
       else
 	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
       if (Assignments->Asg.SendWork == Asg_SEND_WORK)
 	 Asg_WriteAssignmentFolder (&Assignments->Asg,PrintView);
       HTM_TD_End ();
@@ -561,8 +560,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       if (PrintView)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       Asg_WriteAsgAuthor (&Assignments->Asg);
       HTM_TD_End ();
 

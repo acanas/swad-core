@@ -2815,18 +2815,11 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 		    NumAttEvent++)
 		  if (Events->Lst[NumAttEvent].Selected)
 		    {
-		     HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-		                   The_GetSuffix ());
-			HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
-		     HTM_TD_End ();
-
+		     HTM_TD_LINE_TOP_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
 		     Total += Events->Lst[NumAttEvent].NumStdsFromList;
 		    }
 
-	       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	                     The_GetSuffix ());
-		  HTM_Unsigned (Total);
-	       HTM_TD_End ();
+	       HTM_TD_LINE_TOP_Unsigned (Total);
 
 	    HTM_TR_End ();
 	   }

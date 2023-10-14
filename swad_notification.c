@@ -1814,67 +1814,21 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
 	   NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
 	{
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	                  The_GetSuffix ());
-	       HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_GetSuffix ());
-	       HTM_Unsigned (NumUsrs[NotifyEvent]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_GetSuffix ());
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
-					      (double) NumUsrsTotal :
-					      0.0);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_GetSuffix ());
-	       HTM_Unsigned (NumEvents[NotifyEvent]);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",
-	                  The_GetSuffix ());
-	       HTM_Unsigned (NumMails[NotifyEvent]);
-	    HTM_TD_End ();
-
+	    HTM_TD_Txt_Left (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+	    HTM_TD_Unsigned (NumUsrs[NotifyEvent]);
+	    HTM_TD_Percentage (NumUsrs[NotifyEvent],NumUsrsTotal );
+	    HTM_TD_Unsigned (NumEvents[NotifyEvent]);
+	    HTM_TD_Unsigned (NumMails[NotifyEvent]);
 	 HTM_TR_End ();
 	}
 
       /***** Write total number of users who want to be notified by email on some event *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Txt (Txt_Total);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
-					   (double) NumUsrsTotal :
-					   0.0);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumEventsTotal);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
-	    HTM_Unsigned (NumMailsTotal);
-	 HTM_TD_End ();
-
+	 HTM_TD_LINE_TOP_Txt (Txt_Total);
+	 HTM_TD_LINE_TOP_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
+	 HTM_TD_LINE_TOP_Percentage (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,NumUsrsTotal);
+	 HTM_TD_LINE_TOP_Unsigned (NumEventsTotal);
+	 HTM_TD_LINE_TOP_Unsigned (NumMailsTotal);
       HTM_TR_End ();
 
    /***** End table and box *****/

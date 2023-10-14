@@ -1128,10 +1128,8 @@ static void Crs_PutFormToCreateCourse (void)
 	 Names[Nam_FULL_NAME] = Crs_EditingCrs->FullName;
 	 Nam_NewShortAndFullNames (Names);
 
-	 /***** Current number of teachers in this course *****/
+	 /***** Current number of teachers and students in this course *****/
 	 HTM_TD_Unsigned (0);
-
-	 /***** Current number of students in this course *****/
 	 HTM_TD_Unsigned (0);
 
 	 /***** Course requester *****/
@@ -1140,8 +1138,7 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_End ();
 
 	 /***** Course status *****/
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	 HTM_TD_End ();
+	 HTM_TD_Empty (1);
 
       HTM_TR_End ();
 

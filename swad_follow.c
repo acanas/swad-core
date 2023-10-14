@@ -1211,15 +1211,10 @@ void Fol_GetAndShowFollowStats (void)
 
 	 /***** Write number of followed / followers *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_Txt (Fol == 0 ? Txt_Followed :
-				   Txt_Followers);
-	    HTM_TD_End ();
-
+	    HTM_TD_Txt_Left (Fol == 0 ? Txt_Followed :
+				        Txt_Followers);
 	    HTM_TD_Unsigned (NumUsrs);
 	    HTM_TD_Percentage (NumUsrs,NumUsrsTotal);
-
 	 HTM_TR_End ();
 	}
 
@@ -1232,15 +1227,9 @@ void Fol_GetAndShowFollowStats (void)
 
 	 /***** Write number of followed per follower *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_FollowPerFollow[Fol]);
-	    HTM_TD_End ();
-
+	    HTM_TD_Txt_Left (Txt_FollowPerFollow[Fol]);
 	    HTM_TD_Double2Decimals (Average);
-
 	    HTM_TD_Empty (1);
-
 	 HTM_TR_End ();
 	}
 

@@ -2221,8 +2221,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
       HTM_TD_End ();
 
       /* Room */
-      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-      HTM_TD_End ();
+      HTM_TD_Empty (1);
 
       /* Number of students who don't belong to any group of this type */
       for (Role  = Rol_TCH;

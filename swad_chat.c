@@ -273,15 +273,8 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 	    row = mysql_fetch_row (mysql_res);
 
 	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-		  HTM_Txt (row[0]);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
-		  HTM_Txt (row[1]);
-	       HTM_TD_End ();
-
+	       HTM_TD_Txt_Left  (row[0]);
+	       HTM_TD_Txt_Right (row[1]);
 	    HTM_TR_End ();
 	   }
 

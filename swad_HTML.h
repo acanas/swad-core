@@ -242,10 +242,18 @@ void HTM_DoubleFewDigits (double Num);
 void HTM_Double2Decimals (double Num);
 void HTM_Percentage (double Percentage);
 
+void HTM_TD_Txt_Left (const char *Txt);
+void HTM_TD_Txt_Right (const char *Txt);
+void HTM_TD_LINE_TOP_Txt (const char *Txt);
 void HTM_TD_Unsigned (unsigned Num);
+void HTM_TD_LINE_TOP_Unsigned (unsigned Num);
 void HTM_TD_UnsignedLong (unsigned long Num);
+void HTM_TD_LINE_TOP_UnsignedLong (unsigned long Num);
 void HTM_TD_Percentage (unsigned Num,unsigned NumTotal);
+void HTM_TD_LINE_TOP_Percentage (unsigned Num,unsigned NumTotal);
 void HTM_TD_Ratio (unsigned Num,unsigned NumTotal);
+void HTM_TD_LINE_TOP_Ratio (unsigned Num,unsigned NumTotal);
 void HTM_TD_Double2Decimals (double Num);
+void HTM_TD_LINE_TOP_Double2Decimals (double Num);
 
 #endif
