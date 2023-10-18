@@ -2063,6 +2063,13 @@ void HTM_TD_Txt_Right (const char *Txt)
    HTM_TD_End ();
   }
 
+void HTM_TD_TxtColon (const char *Txt)
+  {
+   HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
+      HTM_TxtColon (Txt);
+   HTM_TD_End ();
+  }
+
 void HTM_TD_LINE_TOP_Txt (const char *Txt)
   {
    HTM_TD_Begin ("class=\"LM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());

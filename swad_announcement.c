@@ -323,11 +323,7 @@ void Ann_ShowFormAnnouncement (void)
 
 	 /***** Users' roles who can view the announcement *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColonNBSP (Txt_Users);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Users);
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       Rol_WriteSelectorRoles (1 << Rol_UNK |
 				       1 << Rol_GST |
@@ -341,7 +337,6 @@ void Ann_ShowFormAnnouncement (void)
 				       1 << Rol_TCH,
 				       false,false);
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
       /***** End table, send button and end box *****/

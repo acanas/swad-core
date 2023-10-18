@@ -294,9 +294,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_Tags);
-      HTM_TD_End ();
+      HTM_TD_TxtColon (Txt_Tags);
 
       /***** Select all tags *****/
       HTM_TD_Begin ("class=\"LT\"");

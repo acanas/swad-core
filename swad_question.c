@@ -205,9 +205,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_Types_of_answers);
-      HTM_TD_End ();
+      HTM_TD_TxtColon (Txt_Types_of_answers);
 
       /***** Select all types of answers *****/
       HTM_TD_Begin ("class=\"LT\"");
@@ -1862,11 +1860,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	 /***** Write the tags *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Tags);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Tags);
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TABLE_BeginPadding (2);	// Table for tags
 
@@ -1944,7 +1938,6 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	       HTM_TABLE_End ();	// Table for tags
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
 	 /* Free structure that stores the query result */
@@ -1986,39 +1979,29 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	 /***** Type of answer *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Type);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Type);
 	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
-	    for (AnsType  = (Qst_AnswerType_t) 0;
-		 AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
-		 AnsType++)
-	      {
-	       HTM_LABEL_Begin (NULL);
-		  HTM_INPUT_RADIO ("AnswerType",HTM_DONT_SUBMIT_ON_CLICK,
-				   "value=\"%u\"%s onclick=\"enableDisableAns(this.form);\"",
-				   (unsigned) AnsType,
-				   AnsType == Question->Answer.Type ? " checked=\"checked\"" :
-								      "");
-		  HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
-	       HTM_LABEL_End ();
-	       HTM_BR ();
-	      }
+	       for (AnsType  = (Qst_AnswerType_t) 0;
+		    AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
+		    AnsType++)
+		 {
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO ("AnswerType",HTM_DONT_SUBMIT_ON_CLICK,
+				      "value=\"%u\"%s onclick=\"enableDisableAns(this.form);\"",
+				      (unsigned) AnsType,
+				      AnsType == Question->Answer.Type ? " checked=\"checked\"" :
+									 "");
+		     HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
+		  HTM_LABEL_End ();
+		  HTM_BR ();
+		 }
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
 	 /***** Answers *****/
 	 /* Integer answer */
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-	                  The_GetSuffix ());
-	       HTM_TxtColon (Txt_Answers);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Answers);
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 	                        The_GetSuffix ());
@@ -2033,7 +2016,6 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 									 " disabled=\"disabled\"");
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
 	 /* Floating point answer */

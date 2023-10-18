@@ -300,12 +300,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		  HTM_TABLE_BeginCenterPadding (2);
 
 		     HTM_TR_Begin (NULL);
-
-			HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-			              The_GetSuffix ());
-			   HTM_TxtColon (Txt_Users);
-			HTM_TD_End ();
-
+			HTM_TD_TxtColon (Txt_Users);
 			HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
 			              The_GetSuffix ());
 			   HTM_TABLE_Begin (NULL);
@@ -314,7 +309,6 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			      Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
 			   HTM_TABLE_End ();
 			HTM_TD_End ();
-
 		     HTM_TR_End ();
 
 		     /***** Initial and final dates of the search *****/

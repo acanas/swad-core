@@ -187,9 +187,7 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
    HTM_TR_Begin (NULL);
 
       /* Label */
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (Txt_PROJECT_RUBRIC[RubricType]);
-      HTM_TD_End ();
+      HTM_TD_TxtColon (Txt_PROJECT_RUBRIC[RubricType]);
 
       /* Selectors of rubrics */
       HTM_TD_Begin ("class=\"LT\"");

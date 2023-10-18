@@ -3757,12 +3757,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 
 			/* Put list of users to select some of them */
 			HTM_TR_Begin (NULL);
-
-			   HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-			                 The_GetSuffix ());
-			      HTM_TxtColon (Txt_Users);
-			   HTM_TD_End ();
-
+			   HTM_TD_TxtColon (Txt_Users);
 			   HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
 			                 The_GetSuffix ());
 			      HTM_TABLE_BeginCenterPadding (2);
@@ -3771,7 +3766,6 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				 Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
 			      HTM_TABLE_End ();
 			   HTM_TD_End ();
-
 			HTM_TR_End ();
 
 			/* Starting and ending dates in the search */

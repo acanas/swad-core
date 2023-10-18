@@ -174,12 +174,7 @@ static void TstCfg_ShowFormConfig (void)
 	 /***** Tests are visible from plugins? *****/
 	 HTM_TABLE_BeginCenterPadding (2);
 	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Plugins);
-	       HTM_TD_End ();
-
+	       HTM_TD_TxtColon (Txt_Plugins);
 	       HTM_TD_Begin ("class=\"LB\"");
 		  for (Pluggable  = TstCfg_PLUGGABLE_NO;
 		       Pluggable <= TstCfg_PLUGGABLE_YES;
@@ -197,17 +192,11 @@ static void TstCfg_ShowFormConfig (void)
 		     HTM_BR ();
 		    }
 	       HTM_TD_End ();
-
 	    HTM_TR_End ();
 
 	    /***** Number of questions *****/
 	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Number_of_questions);
-	       HTM_TD_End ();
-
+	       HTM_TD_TxtColon (Txt_Number_of_questions);
 	       HTM_TD_Begin ("class=\"LB\"");
 		  HTM_TABLE_BeginPadding (2);
 		     TstCfg_PutInputFieldNumQsts ("NumQstMin",Txt_minimum,
@@ -218,7 +207,6 @@ static void TstCfg_ShowFormConfig (void)
 					          TstCfg_GetConfigMax ());	// Maximum number of questions
 		  HTM_TABLE_End ();
 	       HTM_TD_End ();
-
 	    HTM_TR_End ();
 
 	    /***** Minimum time between consecutive tests, per question *****/
@@ -244,16 +232,10 @@ static void TstCfg_ShowFormConfig (void)
 
 	    /***** Visibility of test prints *****/
 	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",
-	                     The_GetSuffix ());
-		  HTM_TxtColon (Txt_Result_visibility);
-	       HTM_TD_End ();
-
+	       HTM_TD_TxtColon (Txt_Result_visibility);
 	       HTM_TD_Begin ("class=\"LB\"");
 		  TstVis_PutVisibilityCheckboxes (TstCfg_GetConfigVisibility ());
 	       HTM_TD_End ();
-
 	    HTM_TR_End ();
 
 	 HTM_TABLE_End ();

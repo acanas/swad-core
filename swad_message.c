@@ -332,11 +332,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 
 	    /***** "To:" section (recipients) *****/
 	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-		  HTM_TxtColon (Txt_MSG_To);
-	       HTM_TD_End ();
-
+	       HTM_TD_TxtColon (Txt_MSG_To);
 	       HTM_TD_Begin ("class=\"LT\"");
 		  if (Messages->ShowOnlyOneRecipient)
 		     /***** Show only one user as recipient *****/
@@ -355,7 +351,6 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 		     HTM_TABLE_End ();
 		    }
 	       HTM_TD_End ();
-
 	    HTM_TR_End ();
 
 	    /***** Subject and content sections *****/

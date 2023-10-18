@@ -1698,11 +1698,7 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	 /***** Users' roles who can answer the survey *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Users);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Users);
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       Rol_WriteSelectorRoles (1 << Rol_STD |
 				       1 << Rol_NET |
@@ -1710,7 +1706,6 @@ void Svy_ReqCreatOrEditSvy (void)
 				       Surveys.Svy.Roles,
 				       false,false);
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
 	 /***** Groups *****/
@@ -1823,11 +1818,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
      {
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_Groups);
-	 HTM_TD_End ();
-
+	 HTM_TD_TxtColon (Txt_Groups);
 	 HTM_TD_Begin ("class=\"LT\"");
 	    Box_BoxTableBegin ("95%",NULL,
 			       NULL,NULL,
@@ -2284,11 +2275,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 	 /***** Type of answer *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Type);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Type);
 	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
 	       for (AnsType  = (Svy_AnswerType_t) 0;
 		    AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
@@ -2304,16 +2291,11 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		  HTM_BR ();
 		 }
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
 	 /***** Answers *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Options);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Options);
 	    HTM_TD_Begin ("class=\"LT\"");
 
 	       /* Unique or multiple choice answers */
@@ -2346,16 +2328,11 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	       HTM_TABLE_End ();
 
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
 	 /***** Comments allowed? *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Comments);
-	    HTM_TD_End ();
-
+	    HTM_TD_TxtColon (Txt_Comments);
 	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_CHECKBOX ("Comment",HTM_DONT_SUBMIT_ON_CHANGE,
@@ -2365,7 +2342,6 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		  HTM_Txt (Txt_Comments_allowed);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
       /***** End table *****/

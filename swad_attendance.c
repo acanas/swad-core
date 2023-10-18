@@ -1087,11 +1087,7 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
      {
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_Groups);
-	 HTM_TD_End ();
-
+	 HTM_TD_TxtColon (Txt_Groups);
 	 HTM_TD_Begin ("class=\"LT\"");
 	    Box_BoxTableBegin ("100%",NULL,
 			       NULL,NULL,
@@ -1128,7 +1124,6 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 	    /***** End table and box *****/
 	    Box_BoxTableEnd ();
 	 HTM_TD_End ();
-
       HTM_TR_End ();
      }
 

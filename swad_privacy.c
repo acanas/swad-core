@@ -170,9 +170,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    HTM_TR_Begin (NULL);
 
       /***** Select visibility *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_TxtColon (TxtLabel);
-      HTM_TD_End ();
+      HTM_TD_TxtColon (TxtLabel);
 
       /***** Form with list of options *****/
       HTM_TD_Begin ("class=\"LT\"");

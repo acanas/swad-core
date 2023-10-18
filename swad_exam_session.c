@@ -1014,11 +1014,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
      {
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColon (Txt_Groups);
-	 HTM_TD_End ();
-
+	 HTM_TD_TxtColon (Txt_Groups);
 	 HTM_TD_Begin ("class=\"LT\"");
 	    Box_BoxTableBegin ("95%",NULL,
 			       NULL,NULL,

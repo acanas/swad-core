@@ -244,6 +244,7 @@ void HTM_Percentage (double Percentage);
 
 void HTM_TD_Txt_Left (const char *Txt);
 void HTM_TD_Txt_Right (const char *Txt);
+void HTM_TD_TxtColon (const char *Txt);
 void HTM_TD_LINE_TOP_Txt (const char *Txt);
 void HTM_TD_Unsigned (unsigned Num);
 void HTM_TD_LINE_TOP_Unsigned (unsigned Num);
