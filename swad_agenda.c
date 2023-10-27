@@ -860,7 +860,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
                                            struct Agd_Event *AgdEvent,
                                            const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhEvtMyAgd,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidEvtMyAgd,	// Visible ==> action to hide

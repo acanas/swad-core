@@ -877,7 +877,7 @@ void Ins_WriteSelectorOfInstitution (void)
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenInsSho,
       [Nam_FULL_NAME] = ActRenInsFul,

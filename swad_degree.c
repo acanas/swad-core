@@ -317,7 +317,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenDegSho,
       [Nam_FULL_NAME] = ActRenDegFul,

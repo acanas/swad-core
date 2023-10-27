@@ -217,7 +217,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
       [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_BOX NOTICE_BOX_WIDE",
       [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
      };
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhAnn,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidAnn,	// Visible ==> action to hide

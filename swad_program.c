@@ -666,7 +666,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
                                              bool Expanded,bool Editing)
   {
-   static Act_Action_t NextAction[2][2] =
+   static const Act_Action_t NextAction[2][2] =
      {
       [false][false] = ActExpSeePrgItm,	// Contracted, Not editing ==> action to expand
       [false][true ] = ActExpEdiPrgItm,	// Contracted,     Editing ==> action to expand
@@ -977,7 +977,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
                                           bool HighlightItem)
   {
    extern const char *Txt_Movement_not_allowed;
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhPrgItm,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidPrgItm,	// Visible ==> action to hide

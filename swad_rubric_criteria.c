@@ -657,7 +657,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_Criteria;
    extern const char *Txt_Movement_not_allowed;
    // Actions to change minimum/maximum criterion values
-   static Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
+   static const Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
      {
       [RubCri_MIN] = ActChgMinRubCri,
       [RubCri_MAX] = ActChgMaxRubCri,

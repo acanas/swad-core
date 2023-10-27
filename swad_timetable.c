@@ -1487,7 +1487,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    extern const char *Txt_Group;
    extern const char *Txt_All_groups;
    extern const char *Txt_Info;
-   static Act_Action_t NextAction[Tmt_NUM_VIEW_EDIT] =
+   static const Act_Action_t NextAction[Tmt_NUM_VIEW_EDIT] =
      {
       [Tmt_CRS_VIEW] = ActUnk,		// course view
       [Tmt_TUT_VIEW] = ActUnk,		// tutorials view

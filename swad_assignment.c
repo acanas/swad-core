@@ -697,7 +697,7 @@ Dat_StartEndTime_t Asg_GetParAsgOrder (void)
 static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhAsg,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidAsg,	// Visible ==> action to hide

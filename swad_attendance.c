@@ -574,7 +574,7 @@ static Dat_StartEndTime_t Att_GetParAttOrder (void)
 static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
                                            const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhAtt,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidAtt,	// Visible ==> action to hide

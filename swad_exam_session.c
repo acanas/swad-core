@@ -428,7 +428,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
 					       const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhExaSes,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidExaSes,	// Visible ==> action to hide

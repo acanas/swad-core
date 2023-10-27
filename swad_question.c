@@ -1383,7 +1383,7 @@ void Qst_ListOneQstToEdit (struct Qst_Questions *Questions)
       Qst_WriteQuestionListing (Questions,0);
 
    /***** End table and box *****/
-   Box_BoxEnd ();
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/

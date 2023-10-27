@@ -92,7 +92,7 @@ void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull
    extern const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
    extern const char *Txt_Short_name;
-   static Act_Action_t Action[Hie_NUM_LEVELS][Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t Action[Hie_NUM_LEVELS][Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Hie_INS][Nam_SHRT_NAME] = ActRenInsShoCfg,
       [Hie_INS][Nam_FULL_NAME] = ActRenInsFulCfg,

@@ -443,7 +443,7 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
    extern const char *Txt_Another_institution;
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenDptSho,
       [Nam_FULL_NAME] = ActRenDptFul,

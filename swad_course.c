@@ -918,7 +918,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenCrsSho,
       [Nam_FULL_NAME] = ActRenCrsFul,

@@ -1474,7 +1474,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 static void Cfe_PutIconsCallForExam (void *CallsForExams)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhCfe,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidCfe,	// Visible ==> action to hide

@@ -505,7 +505,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              bool Highlight)
   {
    extern const char *Txt_See_full_notice;
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhNot,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidNot,	// Visible ==> action to hide

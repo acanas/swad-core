@@ -423,7 +423,7 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenPlcSho,
       [Nam_FULL_NAME] = ActRenPlcFul,

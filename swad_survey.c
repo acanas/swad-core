@@ -836,7 +836,7 @@ void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder)
 static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
                                          const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhSvy,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidSvy,	// Visible ==> action to hide

@@ -628,7 +628,7 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms)
   {
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenRooSho,
       [Nam_FULL_NAME] = ActRenRooFul,

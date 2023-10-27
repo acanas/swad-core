@@ -732,7 +732,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenCtrSho,
       [Nam_FULL_NAME] = ActRenCtrFul,

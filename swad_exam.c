@@ -663,7 +663,7 @@ static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder)
 static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhExa,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidExa,	// Visible ==> action to hide
@@ -1320,7 +1320,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static Act_Action_t NextAction[] =
+   static const Act_Action_t NextAction[] =
      {
       [Exa_EXISTING_EXAM] = ActChgExa,
       [Exa_NEW_EXAM     ] = ActNewExa,

@@ -390,7 +390,7 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings)
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
   {
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenBldSho,
       [Nam_FULL_NAME] = ActRenBldFul,

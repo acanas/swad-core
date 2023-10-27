@@ -707,7 +707,7 @@ static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder)
 static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  const char *Anchor)
   {
-   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhGam,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidGam,	// Visible ==> action to hide
@@ -1310,7 +1310,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static Act_Action_t NextAction[] =
+   static const Act_Action_t NextAction[] =
      {
       [Gam_EXISTING_GAME] = ActChgGam,
       [Gam_NEW_GAME     ] = ActNewGam,

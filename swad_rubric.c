@@ -830,7 +830,7 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_Description;
    extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
-   static Act_Action_t NextAction[] =
+   static const Act_Action_t NextAction[] =
      {
       [Rub_EXISTING_RUBRIC] = ActChgRub,
       [Rub_NEW_RUBRIC     ] = ActNewRub,

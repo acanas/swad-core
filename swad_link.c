@@ -397,7 +397,7 @@ static void Lnk_FreeListLinks (struct Lnk_Links *Links)
 
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
   {
-   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenLnkSho,
       [Nam_FULL_NAME] = ActRenLnkFul,

@@ -2289,7 +2289,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    bool RecipientHasBannedMe;
-   static Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActReqMdfOth,
       [Rol_GST	  ] = ActReqMdfOth,
@@ -2302,32 +2302,32 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       [Rol_INS_ADM] = ActReqMdfOth,
       [Rol_SYS_ADM] = ActReqMdfOth,
      };
-   static Act_Action_t ActSeeAgd[Usr_NUM_ME_OR_OTHER] =
+   static const Act_Action_t ActSeeAgd[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyAgd,
       [Usr_OTHER] = ActSeeUsrAgd,
      };
-   static Act_Action_t ActSeeTstResCrs[Usr_NUM_ME_OR_OTHER] =
+   static const Act_Action_t ActSeeTstResCrs[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyTstResCrs,
       [Usr_OTHER] = ActSeeUsrTstResCrs,
      };
-   static Act_Action_t ActSeeExaResCrs[Usr_NUM_ME_OR_OTHER] =
+   static const Act_Action_t ActSeeExaResCrs[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyExaResCrs,
       [Usr_OTHER] = ActSeeUsrExaResCrs,
      };
-   static Act_Action_t ActSeeMchResCrs[Usr_NUM_ME_OR_OTHER] =
+   static const Act_Action_t ActSeeMchResCrs[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyMchResCrs,
       [Usr_OTHER] = ActSeeUsrMchResCrs,
      };
-   static Act_Action_t ActAdmAsgWrk[Usr_NUM_ME_OR_OTHER] =
+   static const Act_Action_t ActAdmAsgWrk[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActAdmAsgWrkUsr,
       [Usr_OTHER] = ActAdmAsgWrkCrs,	// Not me, I am not a student in current course
      };
-   static Act_Action_t ActSeeLstAtt[Usr_NUM_ME_OR_OTHER] =
+   static const Act_Action_t ActSeeLstAtt[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeLstMyAtt,
       [Usr_OTHER] = ActSeeLstUsrAtt,
