@@ -252,7 +252,7 @@ void RubCri_ReceiveFormCriterion (void)
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
+   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
 
    /***** Get rubric data from database *****/
@@ -399,7 +399,7 @@ static void RubCri_ChangeValueCriterion (RubCri_ValueRange_t ValueRange)
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
+   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
    Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
@@ -440,7 +440,7 @@ void RubCri_ChangeWeight (void)
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
+   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
    Rubrics.Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
@@ -1511,7 +1511,7 @@ void RubCri_MoveDownCriterion (void)
 static void RubCri_GetAndCheckRubricAndCriterion (struct Rub_Rubrics *Rubrics)
   {
    /***** Get parameters *****/
-   Rub_GetPars (Rubrics,true);
+   Rub_GetPars (Rubrics,Rub_CHECK_RUB_COD);
    Rubrics->Criterion.CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
 
    /***** Get rubric data from database *****/

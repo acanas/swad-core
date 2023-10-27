@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_contracted_expanded.h"
 #include "swad_hierarchy_type.h"
 #include "swad_program.h"
 #include "swad_program_resource.h"
@@ -80,7 +81,7 @@ void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
 void Prg_DB_UpdateRscLink (const struct Prg_Item *Item);
 
 void Prg_DB_InsertItemInExpandedItems (long ItmCod);
-bool Prg_DB_GetIfExpandedItem (long ItmCod);
+ConExp_ContractedOrExpanded_t Prg_DB_GetIfContractedOrExpandedItem (long ItmCod);
 void Prg_DB_RemoveItemFromExpandedItems (long ItmCod);
 
 #endif

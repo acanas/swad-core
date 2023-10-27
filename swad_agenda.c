@@ -613,7 +613,7 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
 static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
                                        Agd_AgendaType_t AgendaType)
   {
-   extern const char *Txt_START_END_TIME_HELP[2];
+   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Event;
    extern const char *Txt_Location;

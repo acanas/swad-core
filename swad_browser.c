@@ -3893,8 +3893,8 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 			IconSubtree = Brw_ICON_TREE_NOTHING;
 		     else
 			/***** Check if the tree starting at this subdirectory must be expanded *****/
-			IconSubtree = Brw_DB_GetIfExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full) ? Brw_ICON_TREE_CONTRACT :
-												    Brw_ICON_TREE_EXPAND;
+			IconSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full) == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
+												                       Brw_ICON_TREE_EXPAND;
 		     for (NumFileInSubdir = 0;
 			  NumFileInSubdir < NumFilesInSubdir;
 			  NumFileInSubdir++)
@@ -5737,7 +5737,7 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char 
      {
       if ((Ptr = strrchr (CopyOfPath,'/')))	// If '/' found (backwards from the end)
 	{
-	 if (!Brw_DB_GetIfExpandedFolder (CopyOfPath))
+	 if (Brw_DB_GetIfContractedOrExpandedFolder (CopyOfPath) == ConExp_CONTRACTED)
 	    Brw_DB_InsertFolderInExpandedFolders (CopyOfPath);
 	 // Now Ptr points to the last '/' in SubPath
 	 *Ptr = '\0';	// Substitute '/' for '\0' to shorten CopyOfPath

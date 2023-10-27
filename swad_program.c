@@ -35,6 +35,7 @@
 #include "swad_action_list.h"
 #include "swad_autolink.h"
 #include "swad_box.h"
+#include "swad_contracted_expanded.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
@@ -74,7 +75,7 @@ typedef enum
 struct Level
   {
    unsigned Number;	// Numbers for each level from 1 to maximum level
-   bool Expanded;	// If each level from 1 to maximum level is expanded
+   ConExp_ContractedOrExpanded_t ContractedOrExpanded;	// If each level from 1 to maximum level is expanded
    HidVis_HiddenOrVisible_t HiddenOrVisible;	// If each level...
 						// ...from 1 to maximum level...
 						// ...is hidden or visible
@@ -123,11 +124,12 @@ static void Prg_PutIconToViewResourceClipboard (void);
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item,
-                              bool Expanded,
+                              ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedItmCod,
                               long SelectedRscCod);
-static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
-                                             bool Expanded,bool Editing);
+static void Prg_PutIconToContractOrExpandItem (struct Prg_Item *Item,
+                                             ConExp_ContractedOrExpanded_t ContractedOrExpanded,
+                                             bool Editing);
 static void Prg_WriteItemText (long ItmCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void Prg_WriteRowToCreateItem (long ParentItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level);
@@ -143,9 +145,9 @@ static unsigned Prg_GetCurrentNumberInLevel (unsigned Level);
 static void Prg_WriteNumItem (unsigned Level);
 static void Prg_WriteNumNewItem (unsigned Level);
 
-static void Prg_SetExpandedLevel (unsigned Level,bool Expanded);
+static void Prg_SetExpandedLevel (unsigned Level,ConExp_ContractedOrExpanded_t ContractedOrExpanded);
 static void Prg_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOrVisible);
-static bool Prg_GetExpandedLevel (unsigned Level);
+static ConExp_ContractedOrExpanded_t Prg_GetExpandedLevel (unsigned Level);
 static HidVis_HiddenOrVisible_t Prg_GetHiddenLevel (unsigned Level);
 
 static bool Prg_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel);
@@ -232,7 +234,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    unsigned FormLevel = 0;	// Initialized to avoid warning
    struct Prg_Item Item;
    struct Prg_ItemRange ToHighlight;
-   bool Expanded;
+   ConExp_ContractedOrExpanded_t ContractedOrExpanded;
    char *Title;
    static bool FirstTBodyOpen = false;
    static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
@@ -326,14 +328,14 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	      }
 
 	    /* Set if this level is expanded */
-	    Expanded = Prg_DB_GetIfExpandedItem (Item.Hierarchy.ItmCod);
-	    Prg_SetExpandedLevel (Item.Hierarchy.Level,Expanded);
+	    ContractedOrExpanded = Prg_DB_GetIfContractedOrExpandedItem (Item.Hierarchy.ItmCod);
+	    Prg_SetExpandedLevel (Item.Hierarchy.Level,ContractedOrExpanded);
 
 	    /* Show this row only if all higher levels are expanded */
 	    if (Prg_CheckIfAllHigherLevelsAreExpanded (Item.Hierarchy.Level))
 	      {
 	       /* Write row with this item */
-	       Prg_WriteRowItem (ListingType,NumItem,&Item,Expanded,
+	       Prg_WriteRowItem (ListingType,NumItem,&Item,ContractedOrExpanded,
 				 SelectedItmCod,SelectedRscCod);
                The_ChangeRowColor ();
 
@@ -464,7 +466,7 @@ static void Prg_PutIconToViewResourceClipboard (void)
 
 static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               unsigned NumItem,struct Prg_Item *Item,
-                              bool Expanded,
+                              ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedItmCod,
                               long SelectedRscCod)
   {
@@ -485,10 +487,10 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       [Prg_CHANGE_RESOURCE_LINK] = true,
       [Prg_END_EDIT_RES        ] = true,
      };
-   static const char *RowSpan[2] =
+   static const char *RowSpan[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
-      [false] = "",			// Not expanded
-      [true ] = " rowspan=\"2\"",	// Expanded
+      [ConExp_CONTRACTED] = "",			// Not expanded
+      [ConExp_EXPANDED  ] = " rowspan=\"2\"",	// Expanded
      };
    HidVis_HiddenOrVisible_t HiddenOrVisible = HidVis_HIDDEN;	// Initialized to avoid warning
    char *Id;
@@ -532,28 +534,28 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	      NumCol++)
 	   {
 	    HTM_TD_Begin ("class=\"%s\"%s",
-	                  The_GetColorRows (),RowSpan[Expanded]);
+	                  The_GetColorRows (),RowSpan[ContractedOrExpanded]);
 	    HTM_TD_End ();
 	   }
 
 	 /* Expand/contract this program item */
 	 HTM_TD_Begin ("class=\"LT %s\"%s",
-	               The_GetColorRows (),RowSpan[Expanded]);
-	    Prg_PutIconToContractExpandItem (Item,Expanded,EditingProgram[ListingType]);
+	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
+	    Prg_PutIconToContractOrExpandItem (Item,ContractedOrExpanded,EditingProgram[ListingType]);
 	 HTM_TD_End ();
 
 	 /* Forms to remove/edit this program item */
 	 if (EditingProgram[ListingType])
 	   {
 	    HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"%s",
-			  The_GetColorRows (),RowSpan[Expanded]);
+			  The_GetColorRows (),RowSpan[ContractedOrExpanded]);
 	       Prg_PutFormsToRemEditOneItem (ListingType,NumItem,Item,HighlightItem);
 	    HTM_TD_End ();
 	   }
 
 	 /* Item number */
 	 HTM_TD_Begin ("class=\"PRG_NUM %s\"%s",
-	               The_GetColorRows (),RowSpan[Expanded]);
+	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
 	    HTM_DIV_Begin ("class=\"RT %s%s\"",
 			   TitleClass,
 			   HidVis_PrgClass[HiddenOrVisible]);
@@ -623,7 +625,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       HTM_TR_End ();
 
       /***** Second row (text and resources) *****/
-      if (Expanded)
+      if (ContractedOrExpanded == ConExp_EXPANDED)
 	{
 	 HTM_TR_Begin (NULL);
 
@@ -663,26 +665,28 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 /************************ Put icon to expand an item *************************/
 /*****************************************************************************/
 
-static void Prg_PutIconToContractExpandItem (struct Prg_Item *Item,
-                                             bool Expanded,bool Editing)
+static void Prg_PutIconToContractOrExpandItem (struct Prg_Item *Item,
+                                             ConExp_ContractedOrExpanded_t ContractedOrExpanded,
+                                             bool Editing)
   {
-   static const Act_Action_t NextAction[2][2] =
+   static const Act_Action_t NextAction[ConExp_NUM_CONTRACTED_EXPANDED][2] =
      {
-      [false][false] = ActExpSeePrgItm,	// Contracted, Not editing ==> action to expand
-      [false][true ] = ActExpEdiPrgItm,	// Contracted,     Editing ==> action to expand
-      [true ][false] = ActConSeePrgItm,	// Expanded  , Not editing ==> action to contract
-      [true ][true ] = ActConEdiPrgItm,	// Expanded  ,     Editing ==> action to contract
+      [ConExp_CONTRACTED][false] = ActExpSeePrgItm,	// Contracted, Not editing ==> action to expand
+      [ConExp_CONTRACTED][true ] = ActExpEdiPrgItm,	// Contracted,     Editing ==> action to expand
+      [ConExp_EXPANDED  ][false] = ActConSeePrgItm,	// Expanded  , Not editing ==> action to contract
+      [ConExp_EXPANDED  ][true ] = ActConEdiPrgItm,	// Expanded  ,     Editing ==> action to contract
      };
-   static void (*PutContextualIcon[2]) (const Act_Action_t NextAction,const char *Anchor,
-                                        void (*FuncPars) (void *Args),void *Args) =
+   static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (const Act_Action_t NextAction,const char *Anchor,
+								     void (*FuncPars) (void *Args),void *Args) =
      {
-      [false] = Ico_PutContextualIconToExpand,		// Contracted ==> function to expand
-      [true ] = Ico_PutContextualIconToContract,	// Expanded   ==> function to contract
+      [ConExp_CONTRACTED] = Ico_PutContextualIconToExpand,	// Contracted ==> function to expand
+      [ConExp_EXPANDED  ] = Ico_PutContextualIconToContract,	// Expanded   ==> function to contract
      };
 
    /***** Icon to hide/unhide program item *****/
-   PutContextualIcon[Expanded] (NextAction[Expanded][Editing],Prg_HIGHLIGHTED_SECTION_ID,
-			        Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
+   PutContextualIcon[ContractedOrExpanded] (NextAction[ContractedOrExpanded][Editing],
+					    Prg_HIGHLIGHTED_SECTION_ID,
+					    Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
   }
 
 /*****************************************************************************/
@@ -901,10 +905,10 @@ static void Prg_WriteNumNewItem (unsigned Level)
 /********************** Set / Get if a level is hidden ***********************/
 /*****************************************************************************/
 
-static void Prg_SetExpandedLevel (unsigned Level,bool Expanded)
+static void Prg_SetExpandedLevel (unsigned Level,ConExp_ContractedOrExpanded_t ContractedOrExpanded)
   {
    if (Prg_Gbl.Levels)
-      Prg_Gbl.Levels[Level].Expanded = Expanded;
+      Prg_Gbl.Levels[Level].ContractedOrExpanded = ContractedOrExpanded;
   }
 
 static void Prg_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOrVisible)
@@ -913,16 +917,16 @@ static void Prg_SetHiddenLevel (unsigned Level,HidVis_HiddenOrVisible_t HiddenOr
       Prg_Gbl.Levels[Level].HiddenOrVisible = HiddenOrVisible;
   }
 
-static bool Prg_GetExpandedLevel (unsigned Level)
+static ConExp_ContractedOrExpanded_t Prg_GetExpandedLevel (unsigned Level)
   {
    /* Level 0 (root) is always expanded */
    if (Level == 0)
-      return true;
+      return ConExp_EXPANDED;
 
    if (Prg_Gbl.Levels)
-      return Prg_Gbl.Levels[Level].Expanded;
+      return Prg_Gbl.Levels[Level].ContractedOrExpanded;
 
-   return false;
+   return ConExp_CONTRACTED;
   }
 
 static HidVis_HiddenOrVisible_t Prg_GetHiddenLevel (unsigned Level)
@@ -1899,8 +1903,8 @@ void Prg_ReqChangeItem (void)
    Prg_GetPars (&Item);
 
    /***** If item is contracted ==> expand it *****/
-   if (!Prg_DB_GetIfExpandedItem (Item.Hierarchy.ItmCod))	// If contracted...
-      Prg_DB_InsertItemInExpandedItems (Item.Hierarchy.ItmCod);	// ...expand it
+   if (Prg_DB_GetIfContractedOrExpandedItem (Item.Hierarchy.ItmCod) == ConExp_CONTRACTED)	// If contracted...
+      Prg_DB_InsertItemInExpandedItems (Item.Hierarchy.ItmCod);			// ...expand it
 
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_FORM_EDIT_ITEM,Item.Hierarchy.ItmCod,-1L);

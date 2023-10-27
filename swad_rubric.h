@@ -37,6 +37,13 @@
 
 #define RubCri_AFTER_LAST_CRITERION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database
 
+#define Rub_NUM_CHECK_RUB_COD 2
+typedef enum
+  {
+   Rub_DONT_CHECK_RUB_COD = 0,
+   Rub_CHECK_RUB_COD      = 1,
+  } Rub_CheckRubCod_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -56,7 +63,7 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 
 void Rub_SetCurrentRubCod (long GamCod);
 void Rub_PutPars (void *Rubrics);
-void Rub_GetPars (struct Rub_Rubrics *Rubrics,bool CheckRubCod);
+void Rub_GetPars (struct Rub_Rubrics *Rubrics,Rub_CheckRubCod_t CheckRubCod);
 
 void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics);
 void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric);

@@ -28,6 +28,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_program.h"
+#include "swad_program_database.h"
 #include "swad_program_resource.h"
 
 /*****************************************************************************/
@@ -667,7 +668,7 @@ void Prg_DB_InsertItemInExpandedItems (long ItmCod)
 /******************** Check if a program item is expanded ********************/
 /*****************************************************************************/
 
-bool Prg_DB_GetIfExpandedItem (long ItmCod)
+ConExp_ContractedOrExpanded_t Prg_DB_GetIfContractedOrExpandedItem (long ItmCod)
   {
    return
    DB_QueryEXISTS ("can not check if an item is expanded",
@@ -677,7 +678,8 @@ bool Prg_DB_GetIfExpandedItem (long ItmCod)
 		    " WHERE UsrCod=%ld"
 		      " AND ItmCod=%ld)",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   ItmCod);
+		   ItmCod) ? ConExp_EXPANDED :
+		             ConExp_CONTRACTED;
   }
 
 /*****************************************************************************/

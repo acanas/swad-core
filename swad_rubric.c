@@ -134,7 +134,7 @@ void Rub_SeeAllRubrics (void)
    Rub_ResetRubrics (&Rubrics);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,false);
+   Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
 
    /***** Show all rubrics *****/
    Rub_ListAllRubrics (&Rubrics);
@@ -328,7 +328,7 @@ void Rub_SeeOneRubric (void)
    Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
+   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
 
    /***** Get rubric data *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
@@ -522,12 +522,12 @@ void Rub_PutPars (void *Rubrics)
 /****************** Get parameters used to edit a rubric *********************/
 /*****************************************************************************/
 
-void Rub_GetPars (struct Rub_Rubrics *Rubrics,bool CheckRubCod)
+void Rub_GetPars (struct Rub_Rubrics *Rubrics,Rub_CheckRubCod_t CheckRubCod)
   {
-   long (*GetExaCo[2]) (ParCod_Param_t ParCode) =
+   long (*GetExaCo[Rub_NUM_CHECK_RUB_COD]) (ParCod_Param_t ParCode) =
      {
-      [false] = ParCod_GetPar,
-      [true ] = ParCod_GetAndCheckPar,
+      [Rub_DONT_CHECK_RUB_COD] = ParCod_GetPar,
+      [Rub_CHECK_RUB_COD     ] = ParCod_GetAndCheckPar,
      };
 
    /***** Get other parameters *****/
@@ -649,7 +649,7 @@ void Rub_AskRemRubric (void)
    Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
+   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
 
    /***** Get data of the rubric from database *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
@@ -683,7 +683,7 @@ void Rub_RemoveRubric (void)
    Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,true);
+   Rub_GetPars (&Rubrics,Rub_CHECK_RUB_COD);
 
    /***** Get data of the rubric from database *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
@@ -748,7 +748,7 @@ void Rub_ReqCreatOrEditRubric (void)
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,false);	// Don't check rubric code
+   Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
    ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
 						     Rub_NEW_RUBRIC;
@@ -918,7 +918,7 @@ void Rub_ReceiveFormRubric (void)
    RubCri_ResetCriterion (&Rubrics.Criterion);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,false);
+   Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
    Rubrics.Criterion.RubCod = Rubrics.Rubric.RubCod;
    ExistingNewRubric = (Rubrics.Rubric.RubCod > 0) ? Rub_EXISTING_RUBRIC :
 						     Rub_NEW_RUBRIC;

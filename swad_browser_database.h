@@ -31,6 +31,7 @@
 
 #include "swad_browser.h"
 #include "swad_browser_size.h"
+#include "swad_contracted_expanded.h"
 #include "swad_search.h"
 
 /*****************************************************************************/
@@ -107,7 +108,7 @@ bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct Brw_File
 //---------------------------- Expanded folders -------------------------------
 void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1]);
 void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void);
-bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1]);
+ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (const char Path[PATH_MAX + 1]);
 void Brw_DB_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1]);
 void Brw_DB_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1]);
 void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,

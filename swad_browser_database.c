@@ -2424,7 +2424,7 @@ void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
 /************* Check if a folder from a file browser is expanded *************/
 /*****************************************************************************/
 
-bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
+ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
@@ -2447,7 +2447,8 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
 			 (unsigned) FileBrowserForExpandedFolders,
 			 Cod,
 			 WorksUsrCod,
-			 Path);
+			 Path) ? ConExp_EXPANDED :
+				 ConExp_CONTRACTED;
       else
 	 return
 	 DB_QueryEXISTS ("can not check if a folder is expanded",
@@ -2461,7 +2462,8 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 (unsigned) FileBrowserForExpandedFolders,
 			 Cod,
-			 Path);
+			 Path) ? ConExp_EXPANDED :
+				 ConExp_CONTRACTED;
      }
    else	// Briefcase
       return
@@ -2474,7 +2476,8 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
 			 " AND Path='%s/')",
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      (unsigned) FileBrowserForExpandedFolders,
-		      Path);
+		      Path) ? ConExp_EXPANDED :
+			      ConExp_CONTRACTED;
   }
 
 /*****************************************************************************/

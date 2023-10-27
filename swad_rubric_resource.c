@@ -58,7 +58,7 @@ void RubRsc_GetLinkToRubric (void)
    Rub_RubricConstructor (&Rubrics.Rubric);
 
    /***** Get parameters *****/
-   Rub_GetPars (&Rubrics,false);
+   Rub_GetPars (&Rubrics,Rub_DONT_CHECK_RUB_COD);
 
    /***** Get rubric data *****/
    if (Rubrics.Rubric.RubCod > 0)
