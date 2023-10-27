@@ -1898,6 +1898,10 @@ void Prg_ReqChangeItem (void)
    /***** Get program item *****/
    Prg_GetPars (&Item);
 
+   /***** If item is contracted ==> expand it *****/
+   if (!Prg_DB_GetIfExpandedItem (Item.Hierarchy.ItmCod))	// If contracted...
+      Prg_DB_InsertItemInExpandedItems (Item.Hierarchy.ItmCod);	// ...expand it
+
    /***** Show current program items, if any *****/
    Prg_ShowAllItems (Prg_FORM_EDIT_ITEM,Item.Hierarchy.ItmCod,-1L);
 
