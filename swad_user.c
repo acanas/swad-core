@@ -474,11 +474,11 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
       /* Get roles */
       switch (GetRoleInCurrentCrs)
 	{
-	 case Usr_DONT_GET_ROLE_IN_CURRENT_CRS:
+	 case Usr_DONT_GET_ROLE_IN_CRS:
 	    UsrDat->Roles.InCurrentCrs = Rol_UNK;
 	    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
 	    break;
-	 case Usr_GET_ROLE_IN_CURRENT_CRS:
+	 case Usr_GET_ROLE_IN_CRS:
 	    UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
 							      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
@@ -1597,7 +1597,7 @@ bool Usr_GetParOtherUsrCodEncryptedAndGetUsrData (void)
    /***** Check if user exists and get her/his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_GET_ROLE_IN_CRS))
       // Existing user
       return true;
 
@@ -1709,7 +1709,7 @@ void Usr_ChkUsrAndGetUsrData (void)
             Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
             if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
                                                          Usr_GET_PREFS,
-                                                         Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                         Usr_GET_ROLE_IN_CRS))
 	      {
                // User logged in
 	       Gbl.Usrs.Me.Logged = true;
@@ -1881,7 +1881,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
    /***** Get user's data *****/
    Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
                                 Usr_GET_PREFS,
-                                Usr_GET_ROLE_IN_CURRENT_CRS);
+                                Usr_GET_ROLE_IN_CRS);
 
    /***** Check password *****/
    /* Check user's password:
@@ -1916,7 +1916,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromSession (void)
    /* Check if user exists in database, and get his/her data */
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
                                                  Usr_GET_PREFS,
-                                                 Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                 Usr_GET_ROLE_IN_CRS))
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
@@ -3319,7 +3319,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                /* Get user's data */
 	       Usr_GetUsrDataFromUsrCod (&UsrDat,	// Really only EncryptedUsrCod is needed
 	                                 Usr_DONT_GET_PREFS,
-	                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	                                 Usr_DONT_GET_ROLE_IN_CRS);
 
                /* Find if encrypted user's code is already in list */
                if (!Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
@@ -4300,7 +4300,7 @@ void Usr_ListAllDataGsts (void)
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr].UsrCod;
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS))
 	      {
 	       UsrDat.Roles.InCurrentCrs = Rol_GST;	// We know the user's role.
 							// It is not necessary to retrieve
@@ -4504,7 +4504,7 @@ void Usr_ListAllDataStds (void)
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS))
 	      {
 	       UsrDat.Roles.InCurrentCrs = Rol_STD;	// We know the user's role.
 							// It is not necessary to retrieve
@@ -4572,7 +4572,7 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role,
 	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
 	   {
 	    UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
 						// It is not necessary to retrieve
@@ -4711,7 +4711,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
 	{
 	 UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
 						// It is not necessary to retrieve
@@ -4959,7 +4959,7 @@ void Usr_ListDataAdms (void)
 	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].UsrCod;
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS))
 		 {
 		  UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
 		  Usr_WriteRowAdmData (++NumUsr,&UsrDat);
@@ -6379,7 +6379,7 @@ void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
    UsrDat.UsrCod = UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_DONT_GET_ROLE_IN_CRS))
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/

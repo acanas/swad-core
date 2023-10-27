@@ -55,11 +55,11 @@ void Prf_SeeSocialProfiles (void);
 char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
                                const char *NickWithoutArr);
 void Prf_PutLinkMyPublicProfile (void);
-void Prf_PutLinkRequestAnotherUserProfile (void);
+void Prf_PutLinkReqAnotherUsrProfile (void);
 void Prf_ReqUserProfile (void);
 void Prf_GetUsrDatAndShowUserProfile (void);
 
-bool Prf_ShowUserProfile (struct Usr_Data *UsrDat);
+bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat);
 void Prf_ChangeBasicProfileVis (void);
 void Prf_ChangeExtendedProfileVis (void);
 

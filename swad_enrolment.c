@@ -444,7 +444,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    UsrDat.UsrCod = UsrCod;
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 					    Usr_DONT_GET_PREFS,
-					    Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+					    Usr_DONT_GET_ROLE_IN_CRS);
 
    /* Set summary string depending on role and sex */
    Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
@@ -743,7 +743,7 @@ void Enr_RemoveOldUsrs (void)
          UsrDat.UsrCod = DB_GetNextCode (mysql_res);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                       Usr_DONT_GET_PREFS,
-                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                      Usr_DONT_GET_ROLE_IN_CRS))
            {
             // User's data exist...
             Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);
@@ -1127,7 +1127,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod;
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 	                                                    Usr_DONT_GET_PREFS,
-	                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                                    Usr_DONT_GET_ROLE_IN_CRS))
 		 {
 		  // User's data exist...
 		  if (WhatToDo.EliminateUsrs)                // Eliminate user completely from the platform
@@ -1654,7 +1654,7 @@ static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
       /* Get user's data */
       Usr_GetAllUsrDataFromUsrCod (UsrDat,
                                    Usr_DONT_GET_PREFS,
-                                   Usr_GET_ROLE_IN_CURRENT_CRS);
+                                   Usr_GET_ROLE_IN_CRS);
    else				// User does not exist in database, create it using his/her ID!
      {
       /* Reset user's data */
@@ -1912,7 +1912,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                               Usr_DONT_GET_ROLE_IN_CRS);
 
       /* Role (row[1]) */
       DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -1952,7 +1952,7 @@ void Enr_AskIfRejectSignUp (void)
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_DONT_GET_ROLE_IN_CRS))
      {
       // User's data exist...
       if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
@@ -2012,7 +2012,7 @@ void Enr_RejectSignUp (void)
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_DONT_GET_ROLE_IN_CRS))
      {
       // User's data exist...
       if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
@@ -2216,7 +2216,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 	       UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 								    Usr_DONT_GET_PREFS,
-								    Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+								    Usr_DONT_GET_ROLE_IN_CRS);
 
 	       /***** Get requested role (row[3]) *****/
 	       DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
@@ -2566,7 +2566,7 @@ static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
          Gbl.Usrs.Other.UsrDat.UsrCod = ListUsrCods->Lst[NumUsr];
          Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                       Usr_DONT_GET_PREFS,
-                                      Usr_GET_ROLE_IN_CURRENT_CRS);
+                                      Usr_GET_ROLE_IN_CRS);
 
          /* Show form to edit user */
 	 Enr_ShowFormToEditOtherUsr ();

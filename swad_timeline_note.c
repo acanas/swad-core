@@ -240,7 +240,7 @@ static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCo
    PublisherDat.UsrCod = PublisherCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherDat,	// Really we only need EncryptedUsrCod and FullName
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_DONT_GET_ROLE_IN_CRS))
      {
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"Tml_TOP_CONT Tml_TOP_PUBLISHER Tml_WIDTH\"");
@@ -273,7 +273,7 @@ static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
    UsrDat.UsrCod = Not->UsrCod;
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                             Usr_DONT_GET_PREFS,
-                                            Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                            Usr_DONT_GET_ROLE_IN_CRS);
 
    /***** Left top: author's photo *****/
    TmlNot_ShowAuthorPhoto (&UsrDat);
@@ -965,7 +965,7 @@ void TmlNot_ReqRemNoteUsr (void)
    Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+   Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
@@ -1059,7 +1059,7 @@ void TmlNot_RemoveNoteUsr (void)
    Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+   Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);

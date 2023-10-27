@@ -887,7 +887,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    UsrDat.UsrCod = Ctr->RequesterUsrCod;
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						     Usr_DONT_GET_PREFS,
-						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+						     Usr_DONT_GET_ROLE_IN_CRS);
 	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
 	                  The_GetSuffix ());
 	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);

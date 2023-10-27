@@ -361,7 +361,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show sessions results *****/
@@ -428,7 +428,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show sessions results *****/
@@ -500,7 +500,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show sessions results *****/
@@ -1354,7 +1354,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
       /* Get data of the user who answered the exam print */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
 						    Usr_DONT_GET_PREFS,
-						    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+						    Usr_DONT_GET_ROLE_IN_CRS))
 	 Err_WrongUserExit ();
       if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
 	 Err_NoPermissionExit ();

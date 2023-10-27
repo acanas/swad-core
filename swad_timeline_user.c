@@ -219,7 +219,7 @@ static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
       /***** Get user's data and show user's photo *****/
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
 	{
 	 /* Begin container */
 	 HTM_DIV_Begin ("class=\"Tml_SHARER\"");

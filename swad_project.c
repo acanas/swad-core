@@ -2098,7 +2098,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 		  /* Get user's data */
 		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 							       Usr_DONT_GET_PREFS,
-							       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							       Usr_DONT_GET_ROLE_IN_CRS))
 		    {
 		     /* Begin row for this user */
 		     HTM_TR_Begin (NULL);
@@ -2701,7 +2701,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 	       /* Get user's data */
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS))
 		 {
 		  /* Write user's name in "Surname1 Surname2, FirstName" format */
 		  HTM_LI_Begin (NULL);
@@ -2943,7 +2943,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
       /* Get user's data */
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
         {
 	 /* Add user to project */
 	 Prj_DB_AddUsrToPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);

@@ -1032,7 +1032,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    UsrDat.UsrCod = Crs->RequesterUsrCod;
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						     Usr_DONT_GET_PREFS,
-						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+						     Usr_DONT_GET_ROLE_IN_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	                  The_GetSuffix ());
 	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);

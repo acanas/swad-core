@@ -272,7 +272,7 @@ void TmlPst_ReceivePostUsr (void)
    Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+   Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);

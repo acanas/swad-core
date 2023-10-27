@@ -2785,7 +2785,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	    UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS))
 	       if (Usr_CheckIfICanViewAtt (&UsrDat))
 		 {
 		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
@@ -3019,7 +3019,7 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
 	    UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS))
 	       if (Usr_CheckIfICanViewAtt (&UsrDat))
 		 {
 		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);

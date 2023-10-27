@@ -1788,7 +1788,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
-						      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+						      Usr_DONT_GET_ROLE_IN_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show tests *****/
@@ -2245,7 +2245,7 @@ void TstPrn_ShowOnePrint (void)
 	 /* Get data of the user who made the test */
 	 if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						       Usr_DONT_GET_PREFS,
-						       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+						       Usr_DONT_GET_ROLE_IN_CRS))
 	    Err_WrongUserExit ();
 	 if (!Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	    Err_NoPermissionExit ();

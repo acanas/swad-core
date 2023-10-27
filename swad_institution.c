@@ -996,7 +996,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       UsrDat.UsrCod = Ins->RequesterUsrCod;
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							Usr_DONT_GET_PREFS,
-							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+							Usr_DONT_GET_ROLE_IN_CRS);
 	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
 	    HTM_TD_End ();
 

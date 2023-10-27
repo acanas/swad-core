@@ -241,7 +241,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	    /* Get user's data */
             Usr_GetAllUsrDataFromUsrCod (&UsrDat,
                                          Usr_DONT_GET_PREFS,
-                                         Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                         Usr_DONT_GET_ROLE_IN_CRS);
 
             /***** Write row with data of empty account *****/
             Acc_WriteRowEmptyAccount (NumUsr,ID,&UsrDat);

@@ -910,7 +910,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get guest's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_GET_ROLE_IN_CRS))
 	{
          /* Begin container for this user */
 	 snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
@@ -959,7 +959,7 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get student's data from database
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_GET_ROLE_IN_CRS))
       if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneStdCrs ();
   }
@@ -1109,7 +1109,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_GET_ROLE_IN_CRS))
          if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
@@ -1180,7 +1180,7 @@ void Rec_GetUsrAndShowRecOneTchCrs (void)
    /***** Show the record *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_GET_ROLE_IN_CRS))
       if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneTchCrs ();
   }
@@ -1330,7 +1330,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_GET_ROLE_IN_CRS))
          if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
@@ -1525,7 +1525,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                             Usr_DONT_GET_PREFS,
-                                            Usr_GET_ROLE_IN_CURRENT_CRS);
+                                            Usr_GET_ROLE_IN_CRS);
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -1975,7 +1975,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat)
    /***** Get password, user type and user's data from database *****/
    Usr_GetAllUsrDataFromUsrCod (UsrDat,
                                 Usr_DONT_GET_PREFS,
-                                Usr_GET_ROLE_IN_CURRENT_CRS);
+                                Usr_GET_ROLE_IN_CRS);
    UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Show user's record *****/
@@ -2092,193 +2092,189 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Rec_Record.UsrDat = UsrDat;
    Rec_Record.TypeOfView = TypeOfView;
-   if (TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM)
-      Box_BoxTableBegin (StrRecordWidth,NULL,
-			 NULL,NULL,	// New user ==> don't put icons
-			 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (StrRecordWidth,NULL,
-			 Rec_PutIconsCommands,NULL,
-			 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
+   Box_BoxTableBegin (StrRecordWidth,NULL,
+		      TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
+								 Rec_PutIconsCommands,NULL,
+		      Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
-   /***** Institution and user's photo *****/
-   HTM_TR_Begin (NULL);
-      Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
-      Rec_ShowPhoto (UsrDat);
-   HTM_TR_End ();
-
-   /***** Full name *****/
-   HTM_TR_Begin (NULL);
-      Rec_ShowFullName (UsrDat);
-   HTM_TR_End ();
-
-   /***** User's nickname *****/
-   HTM_TR_Begin (NULL);
-      Rec_ShowNickname (UsrDat,PutFormLinks);
-   HTM_TR_End ();
-
-   /***** User's country, web and social networks *****/
-   HTM_TR_Begin (NULL);
-      Rec_ShowCountryInHead (UsrDat,ShowData);
-      Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
-   HTM_TR_End ();
-
-   if (ShowIDRows ||
-       ShowAddressRows ||
-       ShowTeacherRows)
-     {
+      /***** Institution and user's photo *****/
       HTM_TR_Begin (NULL);
+	 Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
+	 Rec_ShowPhoto (UsrDat);
+      HTM_TR_End ();
 
-	 HTM_TD_Begin ("colspan=\"3\"");
+      /***** Full name *****/
+      HTM_TR_Begin (NULL);
+	 Rec_ShowFullName (UsrDat);
+      HTM_TR_End ();
 
-	    /***** Show email and user's IDs *****/
-	    if (ShowIDRows)
-	      {
-	       HTM_TABLE_BeginWidePadding (2);
+      /***** User's nickname *****/
+      HTM_TR_Begin (NULL);
+	 Rec_ShowNickname (UsrDat,PutFormLinks);
+      HTM_TR_End ();
 
-		  /* Show email */
-		  Rec_ShowEmail (UsrDat);
+      /***** User's country, web and social networks *****/
+      HTM_TR_Begin (NULL);
+	 Rec_ShowCountryInHead (UsrDat,ShowData);
+	 Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
+      HTM_TR_End ();
 
-		  /* Show user's IDs */
-		  Rec_ShowUsrIDs (UsrDat,Anchor);
+      if (ShowIDRows ||
+	  ShowAddressRows ||
+	  ShowTeacherRows)
+	{
+	 HTM_TR_Begin (NULL);
 
-	       HTM_TABLE_End ();
-	      }
+	    HTM_TD_Begin ("colspan=\"3\"");
 
-	    /***** Begin form *****/
-	    switch (TypeOfView)
-	      {
-	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-		  Frm_BeginForm (ActSignUp);
-		  break;
-	       case Rec_SHA_MY_RECORD_FORM:
-		  Frm_BeginForm (ActChgMyData);
-		  break;
-	       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-		  switch (Gbl.Action.Act)
-		    {
-		     case ActReqMdfStd:
-			NextAction = ActUpdStd;
-			break;
-		     case ActReqMdfNET:
-			NextAction = ActUpdNET;
-			break;
-		     case ActReqMdfTch:
-			NextAction = ActUpdTch;
-			break;
-		     default:
-			NextAction = ActUpdOth;
-			break;
-		    }
-		  Frm_BeginForm (NextAction);
-		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
-		  break;
-	       case Rec_SHA_OTHER_NEW_USR_FORM:
-		  switch (Gbl.Action.Act)
-		    {
-		     case ActReqMdfStd:
-			NextAction = ActCreStd;
-			break;
-		     case ActReqMdfNET:
-			NextAction = ActCreNET;
-			break;
-		     case ActReqMdfTch:
-			NextAction = ActCreTch;
-			break;
-		     default:
-			NextAction = ActCreOth;
-			break;
-		    }
-		  Frm_BeginForm (NextAction);
-		     ID_PutParOtherUsrIDPlain ();				// New user
-		  break;
-	       default:
-		  break;
-	      }
-
-	    HTM_TABLE_BeginWidePadding (2);
-
+	       /***** Show email and user's IDs *****/
 	       if (ShowIDRows)
 		 {
-		  /***** Role or sex *****/
-		  Rec_ShowRole (UsrDat,TypeOfView);
+		  HTM_TABLE_BeginWidePadding (2);
 
-		  /***** Name *****/
-		  Rec_ShowSurname1 (UsrDat,ICanEdit);
-		  Rec_ShowSurname2 (UsrDat,ICanEdit);
-		  Rec_ShowFirstName (UsrDat,ICanEdit);
+		     /* Show email */
+		     Rec_ShowEmail (UsrDat);
 
-		  /***** Country *****/
-		  if (CountryForm)
-		     Rec_ShowCountry (UsrDat,ICanEdit);
+		     /* Show user's IDs */
+		     Rec_ShowUsrIDs (UsrDat,Anchor);
+
+		  HTM_TABLE_End ();
 		 }
 
-	       /***** Address rows *****/
-	       if (ShowAddressRows)
+	       /***** Begin form *****/
+	       switch (TypeOfView)
 		 {
-		  /***** Date of birth *****/
-		  Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
-
-		  /***** Phones *****/
-		  Rec_ShowPhone (UsrDat,ShowData,ICanEdit,0);
-		  Rec_ShowPhone (UsrDat,ShowData,ICanEdit,1);
-
-		  /***** User's comments *****/
-		  Rec_ShowComments (UsrDat,ShowData,ICanEdit);
-		 }
-
-	       /***** Teacher's rows *****/
-	       if (ShowTeacherRows)
-		  Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
-
-	    HTM_TABLE_End ();
-
-	    /***** Button and end form *****/
-	    switch (TypeOfView)
-	      {
-	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-		  Btn_PutConfirmButton (Txt_Sign_up);
-		  Frm_EndForm ();
-		  break;
-	       case Rec_SHA_MY_RECORD_FORM:
-		  Btn_PutConfirmButton (Txt_Save_changes);
-		  Frm_EndForm ();
-		  break;
-	       case Rec_SHA_OTHER_NEW_USR_FORM:
-		  if (Gbl.Crs.Grps.NumGrps) // This course has groups?
-		     Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-		  Btn_PutConfirmButton (Txt_Register);
-		  Frm_EndForm ();
-		  break;
-	       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-		  /***** Show list of groups to register/remove me/user *****/
-		  if (Gbl.Crs.Grps.NumGrps) // This course has groups?
-		     switch (MeOrOther)
+		  case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+		     Frm_BeginForm (ActSignUp);
+		     break;
+		  case Rec_SHA_MY_RECORD_FORM:
+		     Frm_BeginForm (ActChgMyData);
+		     break;
+		  case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		     switch (Gbl.Action.Act)
 		       {
-			case Usr_ME:
-			   // Don't show groups if I don't belong to course
-			   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-			      Grp_ShowLstGrpsToChgMyGrps ();
+			case ActReqMdfStd:
+			   NextAction = ActUpdStd;
 			   break;
-			case Usr_OTHER:
+			case ActReqMdfNET:
+			   NextAction = ActUpdNET;
+			   break;
+			case ActReqMdfTch:
+			   NextAction = ActUpdTch;
+			   break;
 			default:
-			   Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+			   NextAction = ActUpdOth;
 			   break;
 		       }
+		     Frm_BeginForm (NextAction);
+			Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+		     break;
+		  case Rec_SHA_OTHER_NEW_USR_FORM:
+		     switch (Gbl.Action.Act)
+		       {
+			case ActReqMdfStd:
+			   NextAction = ActCreStd;
+			   break;
+			case ActReqMdfNET:
+			   NextAction = ActCreNET;
+			   break;
+			case ActReqMdfTch:
+			   NextAction = ActCreTch;
+			   break;
+			default:
+			   NextAction = ActCreOth;
+			   break;
+		       }
+		     Frm_BeginForm (NextAction);
+			ID_PutParOtherUsrIDPlain ();				// New user
+		     break;
+		  default:
+		     break;
+		 }
 
-		  /***** Which action, register or removing? *****/
-		  if (Enr_PutActionsRegRemOneUsr (MeOrOther))
-		     Btn_PutConfirmButton (Txt_Confirm);
+	       HTM_TABLE_BeginWidePadding (2);
 
-		  Frm_EndForm ();
-		  break;
-	       default:
-		  break;
-	      }
+		  if (ShowIDRows)
+		    {
+		     /***** Role or sex *****/
+		     Rec_ShowRole (UsrDat,TypeOfView);
 
-	 HTM_TD_End ();
-      HTM_TR_End ();
-     }
+		     /***** Name *****/
+		     Rec_ShowSurname1 (UsrDat,ICanEdit);
+		     Rec_ShowSurname2 (UsrDat,ICanEdit);
+		     Rec_ShowFirstName (UsrDat,ICanEdit);
+
+		     /***** Country *****/
+		     if (CountryForm)
+			Rec_ShowCountry (UsrDat,ICanEdit);
+		    }
+
+		  /***** Address rows *****/
+		  if (ShowAddressRows)
+		    {
+		     /***** Date of birth *****/
+		     Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
+
+		     /***** Phones *****/
+		     Rec_ShowPhone (UsrDat,ShowData,ICanEdit,0);
+		     Rec_ShowPhone (UsrDat,ShowData,ICanEdit,1);
+
+		     /***** User's comments *****/
+		     Rec_ShowComments (UsrDat,ShowData,ICanEdit);
+		    }
+
+		  /***** Teacher's rows *****/
+		  if (ShowTeacherRows)
+		     Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
+
+	       HTM_TABLE_End ();
+
+	       /***** Button and end form *****/
+	       switch (TypeOfView)
+		 {
+		  case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+		     Btn_PutConfirmButton (Txt_Sign_up);
+		     Frm_EndForm ();
+		     break;
+		  case Rec_SHA_MY_RECORD_FORM:
+		     Btn_PutConfirmButton (Txt_Save_changes);
+		     Frm_EndForm ();
+		     break;
+		  case Rec_SHA_OTHER_NEW_USR_FORM:
+		     if (Gbl.Crs.Grps.NumGrps) // This course has groups?
+			Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+		     Btn_PutConfirmButton (Txt_Register);
+		     Frm_EndForm ();
+		     break;
+		  case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		     /***** Show list of groups to register/remove me/user *****/
+		     if (Gbl.Crs.Grps.NumGrps) // This course has groups?
+			switch (MeOrOther)
+			  {
+			   case Usr_ME:
+			      // Don't show groups if I don't belong to course
+			      if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+				 Grp_ShowLstGrpsToChgMyGrps ();
+			      break;
+			   case Usr_OTHER:
+			   default:
+			      Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+			      break;
+			  }
+
+		     /***** Which action, register or removing? *****/
+		     if (Enr_PutActionsRegRemOneUsr (MeOrOther))
+			Btn_PutConfirmButton (Txt_Confirm);
+
+		     Frm_EndForm ();
+		     break;
+		  default:
+		     break;
+		 }
+
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -2293,7 +2289,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    bool RecipientHasBannedMe;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActReqMdfOth,
       [Rol_GST	  ] = ActReqMdfOth,

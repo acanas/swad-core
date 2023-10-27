@@ -818,7 +818,7 @@ void Msg_RecMsgFromUsr (void)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,	// Get recipient's data from database
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
         {
          /***** Check if recipient has banned me *****/
          RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod);
@@ -2085,7 +2085,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 			   "MSG_BG_NEW",The_GetSuffix ());
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
-						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+						  Usr_DONT_GET_ROLE_IN_CRS);
 	 Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
       HTM_TD_End ();
 
@@ -2521,7 +2521,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	    /* Get user's data */
 	    UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 								Usr_DONT_GET_PREFS,
-								Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+								Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Put an icon to show if user has read the message */
 	    Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
@@ -2710,7 +2710,7 @@ void Msg_BanSenderWhenShowingMsgs (void)
    /***** Get password, user type and user's data from database *****/
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                  Usr_DONT_GET_PREFS,
-                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                 Usr_DONT_GET_ROLE_IN_CRS))
       Err_WrongUserExit ();
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
@@ -2765,7 +2765,7 @@ static void Msg_UnbanSender (void)
    /***** Get password, user type and user's data from database *****/
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                  Usr_DONT_GET_PREFS,
-                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                 Usr_DONT_GET_ROLE_IN_CRS))
       Err_WrongUserExit ();
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
@@ -2819,7 +2819,7 @@ void Msg_ListBannedUsrs (void)
 	    /* Get user's data from database */
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS))
 	      {
 	       HTM_TR_Begin (NULL);
 

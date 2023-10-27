@@ -416,7 +416,7 @@ void Ntf_ShowMyNotifications (void)
 	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 							Usr_DONT_GET_PREFS,
-							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+							Usr_DONT_GET_ROLE_IN_CRS);
 
 	       /* Get institution code (row[2]) */
 	       Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1168,7 +1168,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
             if ((UsrDat.NtfEvents.CreateNotif & NotifyEventMask))	// Create notification
               {
 	       if ((UsrDat.NtfEvents.SendEmail & NotifyEventMask))	// Send notification by email
@@ -1227,7 +1227,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
          /* Get user's data */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&ToUsrDat,	// Get user's data from database
 	                                              Usr_GET_PREFS,	// User's language necessary to write email
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
            {
             /* Send one email to this user */
             Ntf_SendPendingNotifByEMailToOneUsr (&ToUsrDat,&NumNotif,&NumMails);
@@ -1333,7 +1333,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	    FromUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat,	// Get origin user's data from database
 	                                             Usr_DONT_GET_PREFS,
-	                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	                                             Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Get insti. code (row[2]),
 	           center code (row[3]),

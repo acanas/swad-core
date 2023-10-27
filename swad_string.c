@@ -345,7 +345,7 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		  /* Get user's data */
 		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 		                               Usr_DONT_GET_PREFS,
-		                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+		                               Usr_DONT_GET_ROLE_IN_CRS);
 
 		  /* Create notification for the mentioned user *****/
 		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TML_MENTION));

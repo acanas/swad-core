@@ -566,7 +566,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 /***** Get user's data *****/
 	 Usr_GetAllUsrDataFromUsrCod (&OtherUsrDat,
 				      Usr_DONT_GET_PREFS,
-				      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+				      Usr_DONT_GET_ROLE_IN_CRS);
 
 	 UsrDat = &OtherUsrDat;
 	 break;
@@ -674,7 +674,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Existing user
                                                       Usr_DONT_GET_PREFS,
-                                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                      Usr_DONT_GET_ROLE_IN_CRS))
            {
 	    /* Get course code (row[1]) */
 	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[Hie_CRS].HieCod);

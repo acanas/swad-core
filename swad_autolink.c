@@ -529,7 +529,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		     Type = ALn_LINK_NICK;
 		     Usr_GetUsrDataFromUsrCod (&UsrDat,
 					       Usr_DONT_GET_PREFS,
-					       Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+					       Usr_DONT_GET_ROLE_IN_CRS);
 		    }
 
 		  if (Type == ALn_LINK_NICK)

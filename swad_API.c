@@ -1080,7 +1080,7 @@ int swad__getNewPassword (struct soap *soap,
      {
       Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,	// Get my data
                                 Usr_DONT_GET_PREFS,
-                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                Usr_DONT_GET_ROLE_IN_CRS);
 
       if (Gbl.Usrs.Me.UsrDat.Email[0])
 	 if (Pwd_SendNewPasswordByEmail (NewRandomPlainPassword) == 0) // Message sent successfully
@@ -3244,7 +3244,7 @@ int swad__sendMessage (struct soap *soap,
 	    /* Get recipient data */
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS))
 	      {
 	       /* This received message must be notified by email? */
 	       NotifyByEmail = (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER &&
@@ -4843,7 +4843,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                               Usr_DONT_GET_ROLE_IN_CRS);
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
 
       fprintf (XML,"<file name=\"%s\">"
@@ -5030,7 +5030,7 @@ int swad__getFile (struct soap *soap,
       /* Get publisher's data */
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
 	{
 	 /* Copy publisher's data into output structure */
 	 Str_Copy (getFileOut->publisherName,Gbl.Usrs.Other.UsrDat.FullName,

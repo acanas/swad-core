@@ -177,7 +177,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Hie_Node *Crs)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
          Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
                                                   Usr_DONT_GET_PREFS,
-                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                                  Usr_DONT_GET_ROLE_IN_CRS);
 
          /***** Write item with notice *****/
          fprintf (FileRSS,"<item>\n");

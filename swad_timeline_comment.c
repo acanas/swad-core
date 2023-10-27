@@ -568,7 +568,7 @@ static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
    UsrDat.UsrCod = Com->UsrCod;
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                             Usr_DONT_GET_PREFS,
-                                            Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                            Usr_DONT_GET_ROLE_IN_CRS);
 
    /***** Left: author's photo *****/
    TmlCom_ShowAuthorPhoto (&UsrDat);
@@ -730,7 +730,7 @@ void TmlCom_ReceiveCommUsr (void)
    Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+   Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
@@ -835,7 +835,7 @@ void TmlCom_ReqRemComUsr (void)
    Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+   Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
@@ -944,7 +944,7 @@ void TmlCom_RemoveComUsr (void)
    Usr_GetParOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+   Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);

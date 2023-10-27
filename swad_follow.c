@@ -127,7 +127,7 @@ void Fol_SuggestUsrsToFollowOnMainZone (void)
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
       Prf_PutLinkMyPublicProfile ();		// My public profile
-      Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
+      Prf_PutLinkReqAnotherUsrProfile ();	// Request another user's profile
    Mnu_ContextMenuEnd ();
 
    /***** Get users *****/
@@ -159,7 +159,7 @@ void Fol_SuggestUsrsToFollowOnMainZone (void)
 	       HTM_TR_Begin (NULL);
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							 Usr_DONT_GET_ROLE_IN_CRS))
 	       Fol_ShowFollowedOrFollower (&UsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		NumUsr == NumUsrs - 1)
@@ -219,7 +219,7 @@ void Fol_SuggestUsrsToFollowOnRightColumn (void)
 	       /***** Show user *****/
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS))
 		  Fol_WriteRowUsrToFollowOnRightColumn (&UsrDat);
 	      }
 
@@ -433,7 +433,7 @@ void Fol_ListFollowing (void)
      {
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Other.UsrDat);
       else
          Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -451,7 +451,7 @@ static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat)
    struct Usr_Data FollowingUsrDat;
 
    /***** Show user's profile *****/
-   if (Prf_ShowUserProfile (UsrDat))
+   if (Prf_ShowUsrProfile (UsrDat))
      {
       /***** Get list of following *****/
       NumUsrs = Fol_DB_GetListFollowing (UsrDat->UsrCod,&mysql_res);
@@ -478,7 +478,7 @@ static void Fol_ListFollowingUsr (struct Usr_Data *UsrDat)
 		  HTM_TR_Begin (NULL);
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS))
 		  Fol_ShowFollowedOrFollower (&FollowingUsrDat);
 	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		   NumUsr == NumUsrs - 1)
@@ -512,7 +512,7 @@ void Fol_ListFollowers (void)
      {
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_DONT_GET_ROLE_IN_CRS))
 	 Fol_ListFollowersUsr (&Gbl.Usrs.Other.UsrDat);
       else
          Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -530,7 +530,7 @@ static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
    struct Usr_Data FollowerUsrDat;
 
    /***** Show user's profile *****/
-   if (Prf_ShowUserProfile (UsrDat))
+   if (Prf_ShowUsrProfile (UsrDat))
      {
       /***** Get list of followers *****/
       if ((NumUsrs = Fol_DB_GetListFollowers (UsrDat->UsrCod,&mysql_res)))
@@ -556,7 +556,7 @@ static void Fol_ListFollowersUsr (struct Usr_Data *UsrDat)
 
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,
 							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+							    Usr_DONT_GET_ROLE_IN_CRS))
 		  Fol_ShowFollowedOrFollower (&FollowerUsrDat);
 
 	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
@@ -776,7 +776,7 @@ void Fol_FollowUsr2 (void)
    if (Ale_GetTypeOfLastAlert () == Ale_SUCCESS)
      {
       /***** Show user's profile again *****/
-      if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
+      if (!Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat))
 	 /* 1) I had permission to follow the user and I've just follow him/her
 	    2) User restricted permission, so now I can not view his/her profile
 	    3) Now I can not view his/her profile ==> show users I follow */
@@ -812,7 +812,7 @@ void Fol_UnfollowUsr2 (void)
    if (Ale_GetTypeOfLastAlert () == Ale_SUCCESS)
      {
       /***** Show user's profile again *****/
-      if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile
+      if (!Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile
 	 /* 1) I followed a user when I had permission
 	    2) User restricted permission, so now I can not view his/her profile
 	    3) Now I can not view his/her profile ==> show users I follow */
@@ -946,7 +946,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))	// Get from the database the data of the student
+	                                              Usr_DONT_GET_ROLE_IN_CRS))	// Get from the database the data of the student
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	      {
 	       /* Check if I follow this user, and update number of users */
@@ -994,7 +994,7 @@ void Fol_FollowUsrs ()
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	       /* If I don't follow this user ==> follow him/her */
 	       if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1043,7 +1043,7 @@ void Fol_UnfollowUsrs (void)
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
 	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	       /* If I follow this user ==> unfollow him/her */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,

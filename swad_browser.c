@@ -2798,7 +2798,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
-						      Usr_GET_ROLE_IN_CURRENT_CRS))
+						      Usr_GET_ROLE_IN_CRS))
 	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted =
@@ -4979,7 +4979,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
       UsrDat.UsrCod = UsrCod;
       ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                          Usr_DONT_GET_PREFS,
-                                                         Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                                         Usr_DONT_GET_ROLE_IN_CRS);
      }
 
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
@@ -5428,7 +5428,7 @@ static void Brw_WriteCurrentClipboard (void)
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,
                                       Usr_DONT_GET_PREFS,
-                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                      Usr_DONT_GET_ROLE_IN_CRS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
@@ -5443,7 +5443,7 @@ static void Brw_WriteCurrentClipboard (void)
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat,
                                       Usr_DONT_GET_PREFS,
-                                      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                      Usr_DONT_GET_ROLE_IN_CRS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
@@ -5928,7 +5928,7 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
 	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
 	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 	                                    Usr_DONT_GET_PREFS,
-	                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS);	// Check that user exists
+	                                    Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
 	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
                          Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
@@ -7416,7 +7416,7 @@ void Brw_ShowFileMetadata (void)
 	    PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
 	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
 	                                                                Usr_DONT_GET_PREFS,
-	                                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	                                                                Usr_DONT_GET_ROLE_IN_CRS);
 	   }
 	 else
 	    FileHasPublisher = false;	// Get user's data from database
@@ -9145,7 +9145,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
 	 FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
 	                                                             Usr_DONT_GET_PREFS,
-	                                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	                                                             Usr_DONT_GET_ROLE_IN_CRS);
 	}
       else
 	 /* Unknown publisher */

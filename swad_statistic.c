@@ -1208,7 +1208,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
                                                Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                               Usr_DONT_GET_ROLE_IN_CRS);
 
       /* Get logged role */
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
@@ -1345,7 +1345,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
                                                Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+                                               Usr_DONT_GET_ROLE_IN_CRS);
 
       HTM_TR_Begin (NULL);
 

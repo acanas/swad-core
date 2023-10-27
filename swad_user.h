@@ -99,8 +99,8 @@ typedef enum
 
 typedef enum
   {
-   Usr_DONT_GET_ROLE_IN_CURRENT_CRS = 0,
-   Usr_GET_ROLE_IN_CURRENT_CRS      = 1,
+   Usr_DONT_GET_ROLE_IN_CRS = 0,
+   Usr_GET_ROLE_IN_CRS      = 1,
   } Usr_GetRoleInCurrentCrs_t;
 
 

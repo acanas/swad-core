@@ -545,19 +545,23 @@ void Grp_GetParCodsSeveralGrps (void)
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumGrp;
-   unsigned long MaxSizeLstGrpCods = ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Gbl.Crs.Grps.NumGrps) - 1;
+   unsigned long MaxSizeLstGrpCods;
 
    /***** Reset number of groups selected *****/
    Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
 
    if (Gbl.Crs.Grps.NumGrps)	// If course has groups
      {
+      MaxSizeLstGrpCods = ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Gbl.Crs.Grps.NumGrps) - 1;
+
       /***** Allocate memory for the list of group codes selected *****/
       if ((ParLstCodGrps = malloc (MaxSizeLstGrpCods + 1)) == NULL)
 	 Err_NotEnoughMemoryExit ();
 
       /***** Get parameter with list of groups to list *****/
       Par_GetParMultiToText ("GrpCods",ParLstCodGrps,MaxSizeLstGrpCods);
+
+      // Ale_ShowAlert (Ale_INFO,"ParLstCodGrps = &quot;%s&quot;",ParLstCodGrps);
 
       if (ParLstCodGrps[0])
 	{

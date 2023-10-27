@@ -1034,7 +1034,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                     The_GetSuffix ());
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
-						  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+						  Usr_DONT_GET_ROLE_IN_CRS);
          Usr_WriteAuthor (&UsrDat,DisabledOrEnabled);
 	 if (DisabledOrEnabled == Cns_ENABLED)
 	    /* Write number of posts from this user */
@@ -2305,7 +2305,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       UsrDat.UsrCod = Thr.UsrCod[Order];
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							Usr_DONT_GET_PREFS,
-							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+							Usr_DONT_GET_ROLE_IN_CRS);
 	       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 	                     Class,The_GetSuffix (),BgColor);
 		  Usr_WriteAuthor (&UsrDat,Thr.Enabled[Order]);

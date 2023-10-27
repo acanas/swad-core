@@ -159,7 +159,7 @@ void Prf_PutLinkMyPublicProfile (void)
 /***************** Put link to request another user's profile ****************/
 /*****************************************************************************/
 
-void Prf_PutLinkRequestAnotherUserProfile (void)
+void Prf_PutLinkReqAnotherUsrProfile (void)
   {
    extern const char *Txt_Another_user_s_profile;
 
@@ -237,9 +237,9 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    /***** Show profile and timeline *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_GET_ROLE_IN_CRS))
       /* Show profile */
-      if (Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
+      if (Prf_ShowUsrProfile (&Gbl.Usrs.Other.UsrDat))
 	{
 	 ProfileShown = true;
 
@@ -276,12 +276,12 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 /*****************************************************************************/
 // Return false on error
 
-bool Prf_ShowUserProfile (struct Usr_Data *UsrDat)
+bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
   {
    static void (*PutLinkToUsrProfile[Usr_NUM_ME_OR_OTHER]) (void) =
      {
-      [Usr_ME   ] = Prf_PutLinkRequestAnotherUserProfile,	// Request another user's profile
-      [Usr_OTHER] = Prf_PutLinkMyPublicProfile			// My public profile
+      [Usr_ME   ] = Prf_PutLinkReqAnotherUsrProfile,	// Request another user's profile
+      [Usr_OTHER] = Prf_PutLinkMyPublicProfile		// My public profile
      };
    unsigned NumFollowing;
    unsigned NumFollowers;
@@ -322,14 +322,16 @@ bool Prf_ShowUserProfile (struct Usr_Data *UsrDat)
 
 	 /***** Count following and followers *****/
 	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-	 UsrFollowsMe = false;
 	 if (NumFollowing)
 	    UsrFollowsMe = Fol_DB_CheckUsrIsFollowerOf (UsrDat->UsrCod,
 						        Gbl.Usrs.Me.UsrDat.UsrCod);
-	 IFollowUsr   = false;
+	 else
+	    UsrFollowsMe = false;
 	 if (NumFollowers)
 	    IFollowUsr   = Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 						        UsrDat->UsrCod);
+	 else
+	    IFollowUsr   = false;
 
 	 /***** Show following and followers *****/
 	 Fol_ShowFollowingAndFollowers (UsrDat,
@@ -350,7 +352,7 @@ void Prf_ChangeBasicProfileVis (void)
   {
    /***** Get param with public/private photo *****/
    Gbl.Usrs.Me.UsrDat.BaPrfVisibility = Pri_GetParVisibility ("VisBasPrf",
-	                                                        Pri_BASIC_PROFILE_ALLOWED_VIS);
+	                                                      Pri_BASIC_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private basic profile visibility in database *****/
    Set_DB_UpdateMySettingsAboutBasicProfile ();
@@ -363,7 +365,7 @@ void Prf_ChangeExtendedProfileVis (void)
   {
    /***** Get param with public/private photo *****/
    Gbl.Usrs.Me.UsrDat.ExPrfVisibility = Pri_GetParVisibility ("VisExtPrf",
-	                                                        Pri_EXTENDED_PROFILE_ALLOWED_VIS);
+	                                                      Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private extended profile visibility in database *****/
    Set_DB_UpdateMySettingsAboutExtendedProfile ();
@@ -1204,7 +1206,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 					 Usr_DONT_GET_PREFS,
-					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+					 Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Get figure (row[1]) */
 	    if (sscanf (row[1],"%ld",&Figure) != 1)
@@ -1279,7 +1281,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 					 Usr_DONT_GET_PREFS,
-					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+					 Usr_DONT_GET_ROLE_IN_CRS);
 
 	    /* Get average number of clicks per day (row[1]) */
 	    NumClicksPerDay = Str_GetDoubleFromStr (row[1]);
