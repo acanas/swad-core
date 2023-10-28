@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_view_edit.h"
+
+/*****************************************************************************/
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
@@ -69,9 +75,9 @@ struct MoveSubtrees
 struct Syl_Syllabus
   {
    char PathDir[PATH_MAX + 1];
-   unsigned NumItem;		// Item being edited
+   unsigned NumItem;	// Item being edited
    unsigned ParNumItem;	// Used as parameter in forms
-   bool EditionIsActive;
+   VieEdi_ViewOrEdit_t ViewingOrEditing;
    Syl_WhichSyllabus_t WhichSyllabus;
   };
 

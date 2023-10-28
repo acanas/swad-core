@@ -1,7 +1,7 @@
-// swad_contracted_expanded.h: types and constants related to contracted/expanded
+// swad_view_edit.h: types and constants related to view/edit
 
-#ifndef _SWAD_CON_EXP
-#define _SWAD_CON_EXP
+#ifndef _SWAD_VIE_EDI
+#define _SWAD_VIE_EDI
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -28,7 +28,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define ConExp_NUM_CONTRACTED_EXPANDED 2
+#define VieEdi_NUM_VIEW_EDIT 2
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -36,8 +36,8 @@
 
 typedef enum
   {
-   ConExp_CONTRACTED = 0,
-   ConExp_EXPANDED   = 1,
-  } ConExp_ContractedOrExpanded_t;
+   VieEdi_VIEW = 0,
+   VieEdi_EDIT = 1,
+  } VieEdi_ViewOrEdit_t;
 
 #endif

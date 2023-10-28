@@ -136,7 +136,7 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
   {
    Syllabus->PathDir[0] = '\0';
    Syllabus->NumItem = 0;
-   Syllabus->EditionIsActive = false;
+   Syllabus->ViewingOrEditing = VieEdi_VIEW;
    Syllabus->WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
   }
 
@@ -244,14 +244,15 @@ bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
       case ActLftIteSylLec:	case ActLftIteSylPra:
       case ActInsIteSylLec:	case ActInsIteSylPra:
       case ActModIteSylLec:	case ActModIteSylPra:
-         Syllabus->EditionIsActive = true;
+         Syllabus->ViewingOrEditing = VieEdi_EDIT;
          break;
       default:
-         Syllabus->EditionIsActive = false;
+         Syllabus->ViewingOrEditing = VieEdi_VIEW;
          break;
      }
 
-   if (Syllabus->EditionIsActive || Syl_LstItemsSyllabus.NumItems)
+   if (Syllabus->ViewingOrEditing == VieEdi_EDIT ||
+       Syl_LstItemsSyllabus.NumItems)
      {
       /***** Write the current syllabus *****/
       Syl_ShowSyllabus (Syllabus);
@@ -521,81 +522,84 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
    extern const char *Hlp_COURSE_Syllabus;
    extern const char *Txt_Done;
    unsigned NumItem;
-   int i;
-   int NumButtons = Syllabus->EditionIsActive ? 5 :
-	                                        0;
+   int Col;
+   static const char **HelpLink[VieEdi_NUM_VIEW_EDIT] =
+     {
+      [VieEdi_VIEW] = &Hlp_COURSE_Syllabus,
+      [VieEdi_EDIT] = &Hlp_COURSE_Syllabus_edit,
+     };
+   static int NumButtons[VieEdi_NUM_VIEW_EDIT] =
+     {
+      [VieEdi_VIEW] = 0,
+      [VieEdi_EDIT] = 5,
+     };
    bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSylLec || Gbl.Action.Act == ActInsIteSylPra ||
                                 Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
 				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
    bool ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   bool PutIconToEdit = ICanEdit && !Syllabus->EditionIsActive;
+   bool PutIconToEdit = Syllabus->ViewingOrEditing == VieEdi_VIEW && ICanEdit;
 
    /***** Begin box *****/
-   if (PutIconToEdit)
-      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-			 Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
-			 Syllabus->EditionIsActive ? Hlp_COURSE_Syllabus_edit :
-						     Hlp_COURSE_Syllabus,
-			 Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-			 NULL,NULL,
-			 Syllabus->EditionIsActive ? Hlp_COURSE_Syllabus_edit :
-						     Hlp_COURSE_Syllabus,
-			 Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+		 PutIconToEdit ? Inf_PutIconToEditInfo :
+				 NULL,
+		 PutIconToEdit ? &Gbl.Crs.Info.Type :
+				 NULL,
+		 *HelpLink[Syllabus->ViewingOrEditing],Box_NOT_CLOSABLE);
 
-   Syl_PutFormWhichSyllabus (Syllabus->WhichSyllabus);
+      /****** Form to select syllabus *****/
+      Syl_PutFormWhichSyllabus (Syllabus->WhichSyllabus);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWide ();
+      /***** Begin table *****/
+      HTM_TABLE_BeginWide ();
 
-      /***** Set width of columns of the table *****/
-      HTM_Txt ("<colgroup>");
-      for (i = 0;
-	   i < NumButtons;
-	   i++)
-	 HTM_Txt ("<col width=\"12\" />");
-      for (i  = 1;
-	   i <= Syl_LstItemsSyllabus.NumLevels;
-	   i++)
-	 HTM_TxtF ("<col width=\"%d\" />",i * Syl_WIDTH_NUM_SYLLABUS);
-      HTM_Txt ("<col width=\"*\" />");
-      HTM_Txt ("</colgroup>");
+	 /***** Set width of columns of the table *****/
+	 HTM_Txt ("<colgroup>");
+	    for (Col = 0;
+		 Col < NumButtons[Syllabus->ViewingOrEditing];
+		 Col++)
+	       HTM_Txt ("<col width=\"12\" />");
+	    for (Col  = 1;
+		 Col <= Syl_LstItemsSyllabus.NumLevels;
+		 Col++)
+	       HTM_TxtF ("<col width=\"%d\" />",Col * Syl_WIDTH_NUM_SYLLABUS);
+	    HTM_Txt ("<col width=\"*\" />");
+	 HTM_Txt ("</colgroup>");
 
-      if (Syl_LstItemsSyllabus.NumItems)
-	 /***** Loop writing all items of the syllabus *****/
-	 for (NumItem = 0;
-	      NumItem < Syl_LstItemsSyllabus.NumItems;
-	      NumItem++)
-	   {
-	    Syl_ShowRowSyllabus (Syllabus,NumItem,
-				 Syl_LstItemsSyllabus.Lst[NumItem].Level,
-				 Syl_LstItemsSyllabus.Lst[NumItem].CodItem,
-				 Syl_LstItemsSyllabus.Lst[NumItem].Text,false);
-	    if (ShowRowInsertNewItem && NumItem == Syllabus->NumItem)
-	       // Mostrar a new row where se puede insert a new item
-	       Syl_ShowRowSyllabus (Syllabus,NumItem + 1,
-				    Syl_LstItemsSyllabus.Lst[NumItem].Level,NULL,
-				    "",true);
-	   }
-      else if (Syllabus->EditionIsActive)
-	 /***** If the syllabus is empty ==>
-		show form to add a iten to the end *****/
-	 Syl_ShowRowSyllabus (Syllabus,0,
-			      1,Syl_LstItemsSyllabus.Lst[0].CodItem,"",true);
+	 if (Syl_LstItemsSyllabus.NumItems)
+	    /***** Loop writing all items of the syllabus *****/
+	    for (NumItem = 0;
+		 NumItem < Syl_LstItemsSyllabus.NumItems;
+		 NumItem++)
+	      {
+	       Syl_ShowRowSyllabus (Syllabus,NumItem,
+				    Syl_LstItemsSyllabus.Lst[NumItem].Level,
+				    Syl_LstItemsSyllabus.Lst[NumItem].CodItem,
+				    Syl_LstItemsSyllabus.Lst[NumItem].Text,false);
+	       if (ShowRowInsertNewItem && NumItem == Syllabus->NumItem)
+		  // Mostrar a new row where se puede insert a new item
+		  Syl_ShowRowSyllabus (Syllabus,NumItem + 1,
+				       Syl_LstItemsSyllabus.Lst[NumItem].Level,NULL,
+				       "",true);
+	      }
+	 else if (Syllabus->ViewingOrEditing == VieEdi_EDIT)
+	    /***** If the syllabus is empty ==>
+		   show form to add a iten to the end *****/
+	    Syl_ShowRowSyllabus (Syllabus,0,
+				 1,Syl_LstItemsSyllabus.Lst[0].CodItem,"",true);
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
-   if (Syllabus->EditionIsActive)
-     {
       /***** Button to view *****/
-      Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
-	 Btn_PutConfirmButton (Txt_Done);
-      Frm_EndForm ();
-     }
+      if (Syllabus->ViewingOrEditing == VieEdi_EDIT)
+	{
+	 Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
+	    Btn_PutConfirmButton (Txt_Done);
+	 Frm_EndForm ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -625,115 +629,115 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
    /***** Begin the row *****/
    HTM_TR_Begin (NULL);
 
-      if (Syllabus->EditionIsActive)
-	{
-	 if (NewItem)
-	   {
-	    HTM_TD_Begin ("colspan=\"5\" class=\"%s\"",
-	                  The_GetColorRows ());
-	    HTM_TD_End ();
-	   }
-	 else
-	   {
-	    /***** Icon to remove the row *****/
-	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-	       if (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren)
-		  Ico_PutIconRemovalNotAllowed ();
-	       else
-		  Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
-										     ActDelItmSylPra,NULL,
-						 Syl_PutParNumItem,&Syllabus->ParNumItem);
-	    HTM_TD_End ();
+      switch (Syllabus->ViewingOrEditing)
+        {
+         case VieEdi_VIEW:
+	    /***** Indent depending on the level *****/
+	    if (Level > 1)
+	      {
+	       HTM_TD_Begin ("colspan=\"%d\" class=\"%s\"",
+			     Level - 1,The_GetColorRows ());
+	       HTM_TD_End ();
+	      }
 
-	    /***** Icon to get up an item *****/
-	    Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
-	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-	       if (Subtree.MovAllowed)
-		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
-										     ActUp_IteSylPra,
-						 NULL,
-						 Syl_PutParNumItem,&Syllabus->ParNumItem,
-						 "arrow-up.svg",Ico_BLACK);
-	       else
-		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
-		                  Txt_Movement_not_allowed);
+	    /***** Code of the item *****/
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\" style=\"width:%dpx;\"",
+			  ClassSyllabus[Level],The_GetSuffix (),
+			  The_GetColorRows (),
+			  Level * Syl_WIDTH_NUM_SYLLABUS);
+	       if (Level == 1)
+		  HTM_NBSP ();
+	       HTM_TxtF ("%s&nbsp;",StrItemCod);
 	    HTM_TD_End ();
 
-	    /***** Icon to get down item *****/
-	    Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
-	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-	       if (Subtree.MovAllowed)
-		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
-										     ActDwnIteSylPra,
-						 NULL,
-						 Syl_PutParNumItem,&Syllabus->ParNumItem,
-						 "arrow-down.svg",Ico_BLACK);
-	       else
-		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
-		                  Txt_Movement_not_allowed);
+	    /***** Text of the item *****/
+	    HTM_TD_Begin ("colspan=\"%d\" class=\"LT %s_%s %s\"",
+			  Syl_LstItemsSyllabus.NumLevels - Level + 1,
+			  ClassSyllabus[Level],The_GetSuffix (),
+			  The_GetColorRows ());
+	       HTM_Txt (Text);
 	    HTM_TD_End ();
+            break;
+         case VieEdi_EDIT:
+	    if (NewItem)
+	      {
+	       HTM_TD_Begin ("colspan=\"5\" class=\"%s\"",
+			     The_GetColorRows ());
+	       HTM_TD_End ();
+	      }
+	    else
+	      {
+	       /***** Icon to remove the row *****/
+	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+		  if (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren)
+		     Ico_PutIconRemovalNotAllowed ();
+		  else
+		     Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
+											ActDelItmSylPra,NULL,
+						    Syl_PutParNumItem,&Syllabus->ParNumItem);
+	       HTM_TD_End ();
 
-	    /***** Icon to increase the level of an item *****/
-	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-	       if (Level > 1)
-		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
-										     ActRgtIteSylPra,
-						 NULL,
-						 Syl_PutParNumItem,&Syllabus->ParNumItem,
-						 "arrow-left.svg",Ico_BLACK);
-	       else
-		  Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
-		                  Txt_Movement_not_allowed);
-	    HTM_TD_End ();
+	       /***** Icon to get up an item *****/
+	       Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
+	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+		  if (Subtree.MovAllowed)
+		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
+											ActUp_IteSylPra,
+						    NULL,
+						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    "arrow-up.svg",Ico_BLACK);
+		  else
+		     Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
+				     Txt_Movement_not_allowed);
+	       HTM_TD_End ();
 
-	    /***** Icon to decrease level item *****/
-	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-	       if (Level < LastLevel + 1 &&
-		   Level < Syl_MAX_LEVELS_SYLLABUS)
-		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
-										     ActLftIteSylPra,
-						 NULL,
-						 Syl_PutParNumItem,&Syllabus->ParNumItem,
-						 "arrow-right.svg",Ico_BLACK);
-	       else
-		  Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,
-		                  Txt_Movement_not_allowed);
-	    HTM_TD_End ();
+	       /***** Icon to get down item *****/
+	       Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
+	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+		  if (Subtree.MovAllowed)
+		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
+											ActDwnIteSylPra,
+						    NULL,
+						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    "arrow-down.svg",Ico_BLACK);
+		  else
+		     Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
+				     Txt_Movement_not_allowed);
+	       HTM_TD_End ();
 
-	    LastLevel = Level;
-	   }
-	}
+	       /***** Icon to increase the level of an item *****/
+	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+		  if (Level > 1)
+		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
+											ActRgtIteSylPra,
+						    NULL,
+						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    "arrow-left.svg",Ico_BLACK);
+		  else
+		     Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
+				     Txt_Movement_not_allowed);
+	       HTM_TD_End ();
 
-      if (Syllabus->EditionIsActive)
-	 Syl_PutFormItemSyllabus (Syllabus,NewItem,NumItem,Level,CodItem,Text);
-      else
-	{
-	 /***** Indent depending on the level *****/
-	 if (Level > 1)
-	   {
-	    HTM_TD_Begin ("colspan=\"%d\" class=\"%s\"",
-	                  Level - 1,The_GetColorRows ());
-	    HTM_TD_End ();
-	   }
+	       /***** Icon to decrease level item *****/
+	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+		  if (Level < LastLevel + 1 &&
+		      Level < Syl_MAX_LEVELS_SYLLABUS)
+		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
+											ActLftIteSylPra,
+						    NULL,
+						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    "arrow-right.svg",Ico_BLACK);
+		  else
+		     Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,
+				     Txt_Movement_not_allowed);
+	       HTM_TD_End ();
 
-	 /***** Code of the item *****/
-	 HTM_TD_Begin ("class=\"RT %s_%s %s\" style=\"width:%dpx;\"",
-		       ClassSyllabus[Level],The_GetSuffix (),
-		       The_GetColorRows (),
-		       Level * Syl_WIDTH_NUM_SYLLABUS);
-	    if (Level == 1)
-	       HTM_NBSP ();
-	    HTM_TxtF ("%s&nbsp;",StrItemCod);
-	 HTM_TD_End ();
+	       LastLevel = Level;
+	      }
 
-	 /***** Text of the item *****/
-	 HTM_TD_Begin ("colspan=\"%d\" class=\"LT %s_%s %s\"",
-		       Syl_LstItemsSyllabus.NumLevels - Level + 1,
-		       ClassSyllabus[Level],The_GetSuffix (),
-		       The_GetColorRows ());
-	    HTM_Txt (Text);
-	 HTM_TD_End ();
-	}
+	    Syl_PutFormItemSyllabus (Syllabus,NewItem,NumItem,Level,CodItem,Text);
+            break;
+        }
 
    /***** End of the row *****/
    HTM_TR_End ();
@@ -931,7 +935,7 @@ void Syl_RemoveItemSyllabus (void)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.EditionIsActive = true;
+   Syllabus.ViewingOrEditing = VieEdi_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1008,7 +1012,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.EditionIsActive = true;
+   Syllabus.ViewingOrEditing = VieEdi_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1194,7 +1198,7 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.EditionIsActive = true;
+   Syllabus.ViewingOrEditing = VieEdi_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1257,7 +1261,7 @@ void Syl_InsertItemSyllabus (void)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.EditionIsActive = true;
+   Syllabus.ViewingOrEditing = VieEdi_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1326,14 +1330,14 @@ void Syl_ModifyItemSyllabus (void)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.EditionIsActive = true;
+   Syllabus.ViewingOrEditing = VieEdi_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
 
    /***** Get item body *****/
    Par_GetParHTML ("Txt",Syl_LstItemsSyllabus.Lst[Syllabus.NumItem].Text,
-                     Syl_MAX_BYTES_TEXT_ITEM);
+                   Syl_MAX_BYTES_TEXT_ITEM);
 
    /***** Create a new file where make the update *****/
    Syl_BuildPathFileSyllabus (&Syllabus,PathFile);
