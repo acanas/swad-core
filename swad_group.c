@@ -433,9 +433,9 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_INPUT_CHECKBOX ("AllGroups",HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
-			     ICanSelUnselGroup ? (Gbl.Usrs.ClassPhoto.AllGroups ? " checked=\"checked\""
-										  " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
-										  " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
+			     ICanSelUnselGroup ? (Gbl.Crs.Grps.AllGrps ? " checked=\"checked\""
+									 " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
+									 " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
 						 " disabled=\"disabled\"");
 	 HTM_TxtF ("&nbsp;%s",Txt_All_groups);
       HTM_LABEL_End ();
@@ -456,11 +456,11 @@ void Grp_PutParsCodGrps (void)
 
    /***** Write the boolean parameter that indicates if all groups must be listed *****/
    Par_PutParChar ("AllGroups",
-                           Gbl.Usrs.ClassPhoto.AllGroups ? 'Y' :
-                        	                           'N');
+		   Gbl.Crs.Grps.AllGrps ? 'Y' :
+					  'N');
 
    /***** Write the parameter with the list of group codes to show *****/
-   if (!Gbl.Usrs.ClassPhoto.AllGroups &&
+   if (!Gbl.Crs.Grps.AllGrps &&
        Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
       MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
@@ -498,7 +498,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
       return;
 
    /***** Get boolean parameter that indicates if all groups must be listed *****/
-   Gbl.Usrs.ClassPhoto.AllGroups = Par_GetParBool ("AllGroups");
+   Gbl.Crs.Grps.AllGrps = Par_GetParBool ("AllGroups");
 
    /***** Get parameter with list of groups selected *****/
    Grp_GetParCodsSeveralGrps ();
@@ -532,7 +532,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
 
    /***** If no groups selected ==> show all groups *****/
    if (!Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Gbl.Usrs.ClassPhoto.AllGroups = true;
+      Gbl.Crs.Grps.AllGrps = true;
   }
 
 /*****************************************************************************/
@@ -2146,7 +2146,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	   }
 
       /* This group should be checked? */
-      if (Gbl.Usrs.ClassPhoto.AllGroups)
+      if (Gbl.Crs.Grps.AllGrps)
          Checked = true;
       else
          for (NumGrpSel = 0, Checked = false;
@@ -2186,7 +2186,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    ICanSelUnselGroup = (Gbl.Usrs.Me.Role.Logged >= Rol_STD);
    if (ICanSelUnselGroup)
      {
-      if (Gbl.Usrs.ClassPhoto.AllGroups)
+      if (Gbl.Crs.Grps.AllGrps)
 	 Checked = true;
       else
 	 for (NumGrpSel = 0, Checked = false;

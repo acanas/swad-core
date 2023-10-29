@@ -4103,7 +4103,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
          Err_NotEnoughMemoryExit ();
 
       /***** Begin table with list of students *****/
-      if (!Gbl.Usrs.ClassPhoto.AllGroups)
+      if (!Gbl.Crs.Grps.AllGrps)
         {
          HTM_TR_Begin (NULL);
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",
@@ -4422,7 +4422,7 @@ void Usr_ListAllDataStds (void)
       /***** Begin table with list of students *****/
       HTM_TABLE_BeginWide ();
 
-	 if (!Gbl.Usrs.ClassPhoto.AllGroups)
+	 if (!Gbl.Crs.Grps.AllGrps)
 	   {
 	    HTM_TR_Begin (NULL);
 	       HTM_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",NumColsTotal);
@@ -5082,7 +5082,7 @@ void Usr_SeeGuests (void)
 
 	       /***** Draw a class photo with guests *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (Vie_VIEW,true);
+		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption);
@@ -5232,7 +5232,7 @@ void Usr_SeeStudents (void)
 
 	       /***** Draw a class photo with students of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (Vie_VIEW,true);
+		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);
@@ -5398,7 +5398,7 @@ void Usr_SeeTeachers (void)
 
 	       /***** Draw a class photo with teachers of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (Vie_VIEW,true);
+		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption);
@@ -5928,7 +5928,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_WriteHeaderClassPhoto (Vie_PRINT,true);
+      Lay_WriteHeaderClassPhoto (Vie_PRINT);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			     Rol_GST,&Gbl.Usrs.Selected,false);
@@ -5966,7 +5966,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_WriteHeaderClassPhoto (Vie_PRINT,true);
+      Lay_WriteHeaderClassPhoto (Vie_PRINT);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			     Rol_STD,&Gbl.Usrs.Selected,false);
@@ -6028,7 +6028,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_WriteHeaderClassPhoto (Vie_PRINT,true);
+      Lay_WriteHeaderClassPhoto (Vie_PRINT);
       HTM_TABLE_BeginWide ();
 
 	 /* List teachers and non-editing teachers */
@@ -6240,7 +6240,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
    extern const char *Txt_Register_students;
    extern const char *Txt_Register_teacher;
 
-   if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
+   if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
        Role == Rol_STD &&			// No students found
        Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
       /***** Show alert and button to enrol students *****/
@@ -6249,8 +6249,8 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
                               Btn_CREATE_BUTTON,Txt_Register_students,
 			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
-   else if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
-            Role == Rol_TCH &&				// No teachers found
+   else if (Gbl.Crs.Grps.AllGrps &&		// All groups selected
+            Role == Rol_TCH &&			// No teachers found
             Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/

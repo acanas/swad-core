@@ -1778,7 +1778,7 @@ unsigned Enr_RemAllStdsInCrs (struct Hie_Node *Crs)
    unsigned NumUsr;
 
    /***** Get list of students in current course *****/
-   Gbl.Usrs.ClassPhoto.AllGroups = true;        // Get all students of the current course
+   Gbl.Crs.Grps.AllGrps = true;        // Get all students of the current course
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
    NumStdsInCrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 

@@ -157,7 +157,6 @@ struct Globals
       struct
 	{
 	 unsigned Cols;
-	 bool AllGroups;
 	} ClassPhoto;
       struct
         {

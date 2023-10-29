@@ -1462,7 +1462,7 @@ static void Lay_WriteFootFromHTMLFile (void)
 /****** Write header and footer of the class photo or academic calendar ******/
 /*****************************************************************************/
 
-void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType,bool DrawingClassPhoto)
+void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType)
   {
    struct Hie_Node Hie[Hie_NUM_LEVELS];
 
@@ -1532,7 +1532,7 @@ void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType,bool DrawingClassPhoto)
 	    if (Hie[Hie_CRS].HieCod > 0)
 	      {
 	       HTM_Txt (Hie[Hie_CRS].FullName);
-	       if (DrawingClassPhoto && !Gbl.Usrs.ClassPhoto.AllGroups)
+	       if (!Gbl.Crs.Grps.AllGrps)
 		 {
 		  HTM_BR ();
 		  Grp_WriteNamesOfSelectedGrps ();

@@ -68,7 +68,7 @@ void Lay_WriteAboutZone (void);
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);
 
-void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType,bool DrawingClassPhoto);
+void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType);
 
 void Lay_AdvertisementMobile (void);
 

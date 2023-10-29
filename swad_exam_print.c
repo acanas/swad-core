@@ -581,7 +581,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
 
       /***** Heading *****/
       /* Institution, degree and course */
-      Lay_WriteHeaderClassPhoto (Vie_VIEW,false);
+      Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
       /***** Show user and time *****/
       HTM_TABLE_BeginWideMarginPadding (10);

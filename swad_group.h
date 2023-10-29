@@ -154,6 +154,7 @@ struct Grp_Groups
    unsigned MaxStudents;
    bool Open;
    bool FileZones;
+   bool AllGrps;	// All groups selected?
    struct ListCodGrps LstGrpsSel;
    Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
   };

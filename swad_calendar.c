@@ -267,7 +267,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	         Box_NOT_CLOSABLE);
 
       /***** Write header *****/
-      Lay_WriteHeaderClassPhoto (ViewType,false);
+      Lay_WriteHeaderClassPhoto (ViewType);
 
       /***** Preference selector to change first day of week *****/
       if (ViewType == Vie_VIEW)
