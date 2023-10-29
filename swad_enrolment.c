@@ -2170,7 +2170,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					  1 << Rol_NET |
 					  1 << Rol_TCH,
 					  RolesSelected,
-					  false,true);
+					  false,
+					  HTM_SUBMIT_ON_CHANGE);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

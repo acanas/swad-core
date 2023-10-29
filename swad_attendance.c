@@ -1432,7 +1432,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
                       Att_PutIconsOneEvent,Events,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
       Att_ShowOneEventRow (Events,
-			      true);	// Show only this event
+			   true);	// Show only this event
    Box_BoxTableEnd ();
 
    switch (Gbl.Usrs.Me.Role.Logged)

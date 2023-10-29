@@ -29,7 +29,7 @@
 
 #include "swad_action.h"
 #include "swad_icon.h"
-#include "swad_view_edit.h"
+#include "swad_view.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

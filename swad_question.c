@@ -574,7 +574,8 @@ void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
 	    Str_Copy (StemRigorousHTML,Stem,StemLength);
 
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      StemRigorousHTML,StemLength,false);
+			      StemRigorousHTML,StemLength,
+			      Str_DONT_REMOVE_SPACES);
 
 	    /* Write stem text */
 	    HTM_Txt (StemRigorousHTML);
@@ -2496,7 +2497,7 @@ bool Qst_GetQstDataByCod (struct Qst_Question *Question)
 
       /***** Get the answers from the database *****/
       Question->Answer.NumOptions = Qst_DB_GetAnswersData (&mysql_res,Question->QstCod,
-			                                     false);	// Don't shuffle
+			                                   false);	// Don't shuffle
       /*
       row[0] AnsInd
       row[1] Answer

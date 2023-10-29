@@ -147,14 +147,16 @@ static void Rec_ShowEmail (struct Usr_Data *UsrDat);
 static void Rec_ShowUsrIDs (struct Usr_Data *UsrDat,const char *Anchor);
 static void Rec_ShowRole (struct Usr_Data *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView);
-static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,bool PutForm);
-static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,bool PutForm);
-static void Rec_ShowFirstName (struct Usr_Data *UsrDat,bool PutForm);
-static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm);
-static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutForm);
-static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,bool PutForm,
-                           unsigned NumPhone);
-static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm);
+static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
+static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
+static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
+static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType);
+static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,
+				 Vie_ViewType_t ViewType);
+static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
+			   Vie_ViewType_t ViewType,unsigned NumPhone);
+static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
+			      Vie_ViewType_t ViewType);
 static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Hie_Node *Ins,
                                  bool ShowData);
 static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData);
@@ -2028,7 +2030,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Usr_MeOrOther_t MeOrOther;
    bool IAmLoggedAsTeacherOrSysAdm;
    bool CountryForm;
-   bool ICanEdit;
+   Vie_ViewType_t ViewType;
    bool PutFormLinks;	// Put links (forms) inside record card
    bool ShowData;
    bool ShowIDRows;
@@ -2069,13 +2071,14 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
      {
       case Rec_SHA_MY_RECORD_FORM:
       case Rec_SHA_OTHER_NEW_USR_FORM:
-	 ICanEdit = true;
+	 ViewType = Vie_EDIT;
 	 break;
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	 ICanEdit = Usr_ICanChangeOtherUsrData (UsrDat);
+	 ViewType = Usr_ICanChangeOtherUsrData (UsrDat) ? Vie_EDIT :
+							  Vie_VIEW;
 	 break;
       default:	// In other options, I can not edit user's data
-	 ICanEdit = false;
+	 ViewType = Vie_VIEW;
          break;
      }
 
@@ -2200,27 +2203,27 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		     Rec_ShowRole (UsrDat,TypeOfView);
 
 		     /***** Name *****/
-		     Rec_ShowSurname1 (UsrDat,ICanEdit);
-		     Rec_ShowSurname2 (UsrDat,ICanEdit);
-		     Rec_ShowFirstName (UsrDat,ICanEdit);
+		     Rec_ShowSurname1 (UsrDat,ViewType);
+		     Rec_ShowSurname2 (UsrDat,ViewType);
+		     Rec_ShowFirstName (UsrDat,ViewType);
 
 		     /***** Country *****/
 		     if (CountryForm)
-			Rec_ShowCountry (UsrDat,ICanEdit);
+			Rec_ShowCountry (UsrDat,ViewType);
 		    }
 
 		  /***** Address rows *****/
 		  if (ShowAddressRows)
 		    {
 		     /***** Date of birth *****/
-		     Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
+		     Rec_ShowDateOfBirth (UsrDat,ShowData,ViewType);
 
 		     /***** Phones *****/
-		     Rec_ShowPhone (UsrDat,ShowData,ICanEdit,0);
-		     Rec_ShowPhone (UsrDat,ShowData,ICanEdit,1);
+		     Rec_ShowPhone (UsrDat,ShowData,ViewType,0);
+		     Rec_ShowPhone (UsrDat,ShowData,ViewType,1);
 
 		     /***** User's comments *****/
-		     Rec_ShowComments (UsrDat,ShowData,ICanEdit);
+		     Rec_ShowComments (UsrDat,ShowData,ViewType);
 		    }
 
 		  /***** Teacher's rows *****/
@@ -3028,7 +3031,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 /*************************** Show user's surname 1 ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,bool PutForm)
+static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Surname_1;
    char *Label;
@@ -3036,31 +3039,46 @@ static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      if (PutForm)
-	{
-	 if (asprintf (&Label,"%s*",Txt_Surname_1) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Frm_LabelColumn ("REC_C1_BOT RM","Surname1",Label);
-	 free (Label);
-	}
-      else
-	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
+      switch (ViewType)
+        {
+         case Vie_VIEW:
+	    Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
+            break;
+         case Vie_EDIT:
+	    if (asprintf (&Label,"%s*",Txt_Surname_1) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("REC_C1_BOT RM","Surname1",Label);
+	    free (Label);
+            break;
+         default:
+            Err_WrongTypeExit ();
+            break;
+        }
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
                     The_GetSuffix ());
-	 if (PutForm)
-	    HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Surname1\" class=\"REC_C2_BOT_INPUT INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 else if (UsrDat->Surname1[0])
+	 switch (ViewType)
 	   {
-	    HTM_STRONG_Begin ();
-	       HTM_Txt (UsrDat->Surname1);
-	    HTM_STRONG_End ();
-	   }
+	    case Vie_VIEW:
+	       if (UsrDat->Surname1[0])
+		 {
+		  HTM_STRONG_Begin ();
+		     HTM_Txt (UsrDat->Surname1);
+		  HTM_STRONG_End ();
+		 }
+	       break;
+	    case Vie_EDIT:
+	       HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Surname1\" class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	       break;
+	    default:
+	       Err_WrongTypeExit ();
+	       break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3070,33 +3088,42 @@ static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,bool PutForm)
 /*************************** Show user's surname 2 ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,bool PutForm)
+static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Surname_2;
 
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Surname2" :
-						 NULL,
+      Frm_LabelColumn ("REC_C1_BOT RM",ViewType == Vie_EDIT ? "Surname2" :
+						              NULL,
 		       Txt_Surname_2);
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
                     The_GetSuffix ());
-	 if (PutForm)
-	    HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-			    UsrDat->Surname2,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Surname2\""
-			    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-			    The_GetSuffix ());
-	 else if (UsrDat->Surname2[0])
+	 switch (ViewType)
 	   {
-	    HTM_STRONG_Begin ();
-	       HTM_Txt (UsrDat->Surname2);
-	    HTM_STRONG_End ();
-	   }
+	    case Vie_VIEW:
+	       if (UsrDat->Surname2[0])
+		 {
+		  HTM_STRONG_Begin ();
+		     HTM_Txt (UsrDat->Surname2);
+		  HTM_STRONG_End ();
+		 }
+	       break;
+	    case Vie_EDIT:
+	       HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
+			       UsrDat->Surname2,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Surname2\""
+			       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			       The_GetSuffix ());
+	       break;
+	    default:
+	       Err_WrongTypeExit ();
+	       break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3106,7 +3133,7 @@ static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,bool PutForm)
 /************************** Show user's first name ***************************/
 /*****************************************************************************/
 
-static void Rec_ShowFirstName (struct Usr_Data *UsrDat,bool PutForm)
+static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
   {
    extern const char *Txt_First_name;
    char *Label;
@@ -3114,32 +3141,47 @@ static void Rec_ShowFirstName (struct Usr_Data *UsrDat,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      if (PutForm)
+      switch (ViewType)
 	{
-	 if (asprintf (&Label,"%s*",Txt_First_name) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Frm_LabelColumn ("REC_C1_BOT RM","FirstName",Label);
-	 free (Label);
+	 case Vie_VIEW:
+	    Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
+	    break;
+	 case Vie_EDIT:
+	    if (asprintf (&Label,"%s*",Txt_First_name) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("REC_C1_BOT RM","FirstName",Label);
+	    free (Label);
+	    break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
 	}
-      else
-	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
 
       /* Data */
       HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
                     The_GetSuffix ());
-	 if (PutForm)
-	    HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-			    UsrDat->FrstName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"FirstName\""
-			    " class=\"REC_C2_BOT_INPUT INPUT_%s\""
-			    " required=\"required\"",
-			    The_GetSuffix ());
-	 else if (UsrDat->FrstName[0])
+	 switch (ViewType)
 	   {
-	    HTM_STRONG_Begin ();
-	       HTM_Txt (UsrDat->FrstName);
-	    HTM_STRONG_End ();
+	    case Vie_VIEW:
+	       if (UsrDat->FrstName[0])
+		 {
+		  HTM_STRONG_Begin ();
+		     HTM_Txt (UsrDat->FrstName);
+		  HTM_STRONG_End ();
+		 }
+	       break;
+	    case Vie_EDIT:
+	       HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
+			       UsrDat->FrstName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"FirstName\""
+			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			       " required=\"required\"",
+			       The_GetSuffix ());
+	       break;
+	    default:
+	       Err_WrongTypeExit ();
+	       break;
 	   }
       HTM_TD_End ();
 
@@ -3150,7 +3192,7 @@ static void Rec_ShowFirstName (struct Usr_Data *UsrDat,bool PutForm)
 /**************************** Show user's country ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
+static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
@@ -3166,15 +3208,21 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      if (PutForm)
+      switch (ViewType)
 	{
-	 if (asprintf (&Label,"%s*",Txt_Country) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCty],Label);
-	 free (Label);
+	 case Vie_VIEW:
+	    Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
+	    break;
+	 case Vie_EDIT:
+	    if (asprintf (&Label,"%s*",Txt_Country) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCty],Label);
+	    free (Label);
+	    break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
 	}
-      else
-	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
 
       /* Data */
       HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
@@ -3215,7 +3263,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,bool PutForm)
 /************************ Show user's date of birth **************************/
 /*****************************************************************************/
 
-static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutForm)
+static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,
+				 Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Date_of_birth;
    unsigned CurrentYear = Dat_GetCurrentYear ();
@@ -3224,25 +3273,31 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutF
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "" :
-						 NULL,
+      Frm_LabelColumn ("REC_C1_BOT RM",ViewType == Vie_EDIT ? "" :
+						              NULL,
 		       Txt_Date_of_birth);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
-	   {
-	    if (PutForm)
-	       Dat_WriteFormDate (CurrentYear - Rec_USR_MAX_AGE,
-				  CurrentYear - Rec_USR_MIN_AGE,
-				  "Birth",
-				  &(UsrDat->Birthday),
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  false);
-	    else if (UsrDat->StrBirthday[0])
-	       HTM_Txt (UsrDat->StrBirthday);
-	   }
+	    switch (ViewType)
+	      {
+	       case Vie_VIEW:
+		  if (UsrDat->StrBirthday[0])
+		     HTM_Txt (UsrDat->StrBirthday);
+		  break;
+	       case Vie_EDIT:
+		  Dat_WriteFormDate (CurrentYear - Rec_USR_MAX_AGE,
+				     CurrentYear - Rec_USR_MIN_AGE,
+				     "Birth",
+				     &(UsrDat->Birthday),
+				     HTM_DONT_SUBMIT_ON_CHANGE,
+				     false);
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
+	      }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3253,8 +3308,8 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,bool PutF
 /*****************************************************************************/
 // NumPhone can be 0 or 1
 
-static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,bool PutForm,
-                           unsigned NumPhone)
+static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
+			   Vie_ViewType_t ViewType,unsigned NumPhone)
   {
    extern const char *Txt_Phone;
    char *Name;
@@ -3272,29 +3327,36 @@ static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,bool PutForm,
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? Name :
-						 NULL,
+      Frm_LabelColumn ("REC_C1_BOT RM",ViewType == Vie_EDIT ? Name :
+						              NULL,
 		       Label);
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
                     The_GetSuffix ());
 	 if (ShowData)
-	   {
-	    if (PutForm)
-	       HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
-			      HTM_DONT_SUBMIT_ON_CHANGE,
-			      "id=\"%s\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-			      Name,
-			      The_GetSuffix ());
-	    else if (UsrDat->Phone[NumPhone][0])
+	    switch (ViewType)
 	      {
-	       HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_STRONG_%s\"",
-	                    UsrDat->Phone[NumPhone],The_GetSuffix ());
-		  HTM_Txt (UsrDat->Phone[NumPhone]);
-	       HTM_A_End ();
+	       case Vie_VIEW:
+		  if (UsrDat->Phone[NumPhone][0])
+		    {
+		     HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_STRONG_%s\"",
+				  UsrDat->Phone[NumPhone],The_GetSuffix ());
+			HTM_Txt (UsrDat->Phone[NumPhone]);
+		     HTM_A_End ();
+		    }
+		  break;
+	       case Vie_EDIT:
+		  HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
+				 HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%s\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				 Name,
+				 The_GetSuffix ());
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
 	      }
-	   }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3310,7 +3372,8 @@ static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,bool PutForm,
 /************************** Show user's comments *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm)
+static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
+			      Vie_ViewType_t ViewType)
   {
    extern const char *Txt_USER_comments;
 
@@ -3318,32 +3381,37 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,bool PutForm
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT",PutForm ? "Comments" :
-						 NULL,
+      Frm_LabelColumn ("REC_C1_BOT RT",ViewType == Vie_EDIT ? "Comments" :
+							      NULL,
 		       Txt_USER_comments);
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
                     The_GetSuffix ());
 	 if (ShowData)
-	   {
-	    if (PutForm)
+	    switch (ViewType)
 	      {
-	       HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
-				   " rows=\"4\""
-				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				   The_GetSuffix ());
-		  HTM_Txt (UsrDat->Comments);
-	       HTM_TEXTAREA_End ();
+	       case Vie_VIEW:
+		  if (UsrDat->Comments[0])
+		    {
+		     Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				       UsrDat->Comments,Cns_MAX_BYTES_TEXT,
+				       Str_DONT_REMOVE_SPACES);
+		     HTM_Txt (UsrDat->Comments);
+		    }
+		  break;
+	       case Vie_EDIT:
+		  HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
+				      " rows=\"4\""
+				      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				      The_GetSuffix ());
+		     HTM_Txt (UsrDat->Comments);
+		  HTM_TEXTAREA_End ();
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
 	      }
-	    else if (UsrDat->Comments[0])
-	      {
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				 UsrDat->Comments,Cns_MAX_BYTES_TEXT,
-				 Str_DONT_REMOVE_SPACES);
-	       HTM_Txt (UsrDat->Comments);
-	      }
-	   }
       HTM_TD_End ();
 
    HTM_TR_End ();

@@ -106,7 +106,8 @@ void Pwd_GetParUsrPwdLogin (void)
 bool Pwd_CheckCurrentPassword (void)
   {
    return (Gbl.Usrs.Me.UsrDat.Password[0] ?
-           !strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,Gbl.Usrs.Me.UsrDat.Password) : true);
+           !strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,Gbl.Usrs.Me.UsrDat.Password) :
+           true);
   }
 
 /*****************************************************************************/

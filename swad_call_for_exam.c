@@ -154,7 +154,7 @@ void Cfe_PutFrmEditACallForExam (void)
 
    /***** Show call for exam *****/
    Cfe_ShowCallForExam (&CallsForExams,ExaCod,Cfe_FORM_VIEW,
-		       false);	// Don't highlight
+		        false);	// Don't highlight
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (&CallsForExams);

@@ -4548,25 +4548,25 @@ static void Brw_PutIconFolder (unsigned Level,
 	   {
 	    /***** Visible icon with folder closed *****/
 	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       false,	// Closed
-				       false);	// Visible
+				       false,		// Closed
+				       HidVis_VISIBLE);	// Visible
 
 	    /***** Hidden icon with folder open *****/
 	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       true,	// Open
-				       true);	// Hidden
+				       true,		// Open
+				       HidVis_HIDDEN);	// Hidden
 	   }
 	 else
 	   {
 	    /***** Hidden icon with folder closed *****/
 	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       false,	// Closed
-				       true);	// Hidden
+				       false,		// Closed
+				       HidVis_HIDDEN);	// Hidden
 
 	    /***** Visible icon with folder open *****/
 	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       true,	// Open
-				       false);	// Visible
+				       true,		// Open
+				       HidVis_VISIBLE);	// Visible
 	   }
 	}
       else	// I can't create a new file or folder

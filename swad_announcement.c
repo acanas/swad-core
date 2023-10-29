@@ -42,6 +42,22 @@
 #include "swad_role.h"
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Ann_DONT_SHOW_ALL = 0,
+   Ann_SHOW_ALL      = 1,
+  } Ann_ShowAll_t;
+
+typedef enum
+  {
+   Ann_I_CAN_NOT_EDIT = 0,
+   Ann_I_CAN_EDIT     = 1,
+  } Ann_ICanEdit_t;
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -57,8 +73,8 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
                                             struct Ann_Announcement *Announcement);
 
 static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
-                                    bool ShowAllAnnouncements,
-                                    bool ICanEdit);
+                                    Ann_ShowAll_t ShowAll,
+                                    Ann_ICanEdit_t ICanEdit);
 static void Ann_PutParAnnCod (void *AnnCod);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows);
@@ -76,7 +92,8 @@ void Ann_ShowAllAnnouncements (void)
    struct Ann_Announcement Announcement;
    unsigned NumAnnouncements;
    unsigned NumAnn;
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   Ann_ICanEdit_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Ann_I_CAN_EDIT :
+									Ann_I_CAN_NOT_EDIT;
 
    /***** Get announcements from database *****/
    if (ICanEdit)
@@ -108,7 +125,7 @@ void Ann_ShowAllAnnouncements (void)
 
 	 /* Show the announcement */
 	 Ann_DrawAnAnnouncement (&Announcement,
-	                         true,		// Show all announcements
+	                         Ann_SHOW_ALL,	// Show all announcements
 	                         ICanEdit);
 	}
 
@@ -157,8 +174,8 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 
 	    /* Show the announcement */
 	    Ann_DrawAnAnnouncement (&Announcement,
-	                            false,	// Don't show all announcements
-	                            false);	// I can not edit
+	                            Ann_DONT_SHOW_ALL,	// Don't show all announcements
+	                            Ann_I_CAN_NOT_EDIT);		// I can not edit
 	   }
 
       HTM_DIV_End ();
@@ -206,8 +223,8 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
 /*****************************************************************************/
 
 static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
-                                    bool ShowAllAnnouncements,
-                                    bool ICanEdit)
+                                    Ann_ShowAll_t ShowAll,
+                                    Ann_ICanEdit_t ICanEdit)
   {
    extern const char *Txt_Users;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -228,7 +245,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
    /***** Begin yellow note *****/
    HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Announcement->Status]);
 
-      if (ICanEdit)
+      if (ICanEdit == Ann_I_CAN_EDIT)
 	{
 	 /***** Icon to remove announcement *****/
 	 Ico_PutContextualIconToRemove (ActRemAnn,NULL,
@@ -257,27 +274,30 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
       /* Begin container for foot */
       HTM_DIV_Begin ("class=\"NOTICE_USERS\"");
 
-	 if (ShowAllAnnouncements)
+	 switch (ShowAll)
 	   {
-	    /* Users' roles who can view this announcement */
-	    HTM_TxtColon (Txt_Users);
-	    for (Role  = Rol_UNK, SomeRolesAreSelected = false;
-		 Role <= Rol_TCH;
-		 Role++)
-	       if (Announcement->Roles & (1 << Role))
-		 {
-		  if (SomeRolesAreSelected)
-		     HTM_Comma ();
-		  SomeRolesAreSelected = true;
-		  HTM_TxtF ("&nbsp;%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
-		 }
+	    case Ann_DONT_SHOW_ALL:
+	       /***** Put form to mark announcement as seen *****/
+	       Lay_PutContextualLinkIconText (ActAnnSee,NULL,
+					      Ann_PutParAnnCod,&Announcement->AnnCod,
+					      "times.svg",Ico_BLACK,
+					      Txt_Do_not_show_again,NULL);
+	       break;
+	    case Ann_SHOW_ALL:
+	       /* Users' roles who can view this announcement */
+	       HTM_TxtColon (Txt_Users);
+	       for (Role  = Rol_UNK, SomeRolesAreSelected = false;
+		    Role <= Rol_TCH;
+		    Role++)
+		  if (Announcement->Roles & (1 << Role))
+		    {
+		     if (SomeRolesAreSelected)
+			HTM_Comma ();
+		     SomeRolesAreSelected = true;
+		     HTM_TxtF ("&nbsp;%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+		    }
+	       break;
 	   }
-	 else
-	    /***** Put form to mark announcement as seen *****/
-	    Lay_PutContextualLinkIconText (ActAnnSee,NULL,
-					   Ann_PutParAnnCod,&Announcement->AnnCod,
-					   "times.svg",Ico_BLACK,
-					   Txt_Do_not_show_again,NULL);
 
       /* End container for foot */
       HTM_DIV_End ();
@@ -335,7 +355,8 @@ void Ann_ShowFormAnnouncement (void)
 				       1 << Rol_STD |
 				       1 << Rol_NET |
 				       1 << Rol_TCH,
-				       false,false);
+				       false,
+				       HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 

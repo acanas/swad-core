@@ -3952,7 +3952,7 @@ int swad__getTrivialQuestion (struct soap *soap,
      {
       /***** Get answer from database *****/
       NumAnss = Qst_DB_GetAnswersData (&mysql_res,QstCod,
-	                                 false);	// Don't shuffle
+	                               false);	// Don't shuffle
 
       getTrivialQuestionOut->answersArray.__size = (int) NumAnss;
 

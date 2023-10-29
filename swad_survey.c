@@ -608,7 +608,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 				 1 << Rol_NET |
 				 1 << Rol_TCH,
 				 Surveys->Svy.Roles,
-				 true,false);
+				 true,
+				 HTM_DONT_SUBMIT_ON_CHANGE);
       HTM_DIV_End ();
 
       /* Groups whose users can answer this survey */
@@ -1704,7 +1705,8 @@ void Svy_ReqCreatOrEditSvy (void)
 				       1 << Rol_NET |
 				       1 << Rol_TCH,
 				       Surveys.Svy.Roles,
-				       false,false);
+				       false,
+				       HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 

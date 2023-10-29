@@ -974,7 +974,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateFirstClickTimeUsr (UsrCod,UsrFigures.FirstClickTimeUTC);
       else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
      }
   }
 
@@ -998,7 +998,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumClicksUsr (UsrCod,UsrFigures.NumClicks);
       else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
      }
   }
 
@@ -1022,7 +1022,7 @@ static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumTimelinePubsUsr (UsrCod,UsrFigures.NumTimelinePubs);
       else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
      }
   }
 
@@ -1046,7 +1046,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumFileViewsUsr (UsrCod,UsrFigures.NumFileViews);
       else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
      }
   }
 
@@ -1070,7 +1070,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumForumPostsUsr (UsrCod,UsrFigures.NumForumPosts);
       else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
      }
   }
 
@@ -1094,7 +1094,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumMessagesSentUsr (UsrCod,UsrFigures.NumMessagesSent);
       else			// User entry does not exist
-	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,Usr_OTHER);
      }
   }
 

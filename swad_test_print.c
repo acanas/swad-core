@@ -1426,7 +1426,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	 HTM_TR_Begin (NULL);
 
 	    /* Draw icon depending on user's answer */
-	    if (UsrAnswers[Indexes[NumOpt]] == true)	// This answer has been selected by the user
+	    if (UsrAnswers[Indexes[NumOpt]])	// This answer has been selected by the user
 	      {
 	       if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 		 {

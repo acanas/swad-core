@@ -43,7 +43,7 @@
 #include "swad_program.h"
 #include "swad_program_database.h"
 #include "swad_resource_database.h"
-#include "swad_view_edit.h"
+#include "swad_view.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
