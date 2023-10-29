@@ -33,7 +33,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void CrsCfg_Configuration (bool PrintView);
+void CrsCfg_Configuration (Vie_ViewType_t ViewType);
 void CrsCfg_PrintConfiguration (void);
 
 void CrsCfg_ChangeCrsDeg (void);

@@ -57,13 +57,13 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void DegCfg_Configuration (bool PrintView);
+static void DegCfg_Configuration (Vie_ViewType_t ViewType);
 static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
-static void DegCfg_Center (bool PrintView,bool PutForm);
+static void DegCfg_Center (Vie_ViewType_t ViewType,bool PutForm);
 static void DegCfg_FullName (bool PutForm);
 static void DegCfg_ShrtName (bool PutForm);
-static void DegCfg_WWW (bool PrintView,bool PutForm);
-static void DegCfg_Shortcut (bool PrintView);
+static void DegCfg_WWW (Vie_ViewType_t ViewType,bool PutForm);
+static void DegCfg_Shortcut (Vie_ViewType_t ViewType);
 static void DegCfg_QR (void);
 static void DegCfg_NumCrss (void);
 
@@ -73,7 +73,7 @@ static void DegCfg_NumCrss (void);
 
 void DegCfg_ShowConfiguration (void)
   {
-   DegCfg_Configuration (false);
+   DegCfg_Configuration (Vie_VIEW);
 
    /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
@@ -85,14 +85,14 @@ void DegCfg_ShowConfiguration (void)
 
 void DegCfg_PrintConfiguration (void)
   {
-   DegCfg_Configuration (true);
+   DegCfg_Configuration (Vie_PRINT);
   }
 
 /*****************************************************************************/
 /******************* Information of the current degree ***********************/
 /*****************************************************************************/
 
-static void DegCfg_Configuration (bool PrintView)
+static void DegCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_DEGREE_Information;
    bool PutLink;
@@ -105,23 +105,20 @@ static void DegCfg_Configuration (bool PrintView)
       return;
 
    /***** Initializations *****/
-   PutLink     = !PrintView && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
-   PutFormCtr  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
-   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
-   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
+   PutLink     = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
+   PutFormCtr  = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
+   PutFormName = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   PutFormWWW  = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
    /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,
-                    DegCfg_PutIconsToPrintAndUpload,NULL,
-		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,NULL,
+		 ViewType == Vie_VIEW ? DegCfg_PutIconsToPrintAndUpload :
+					NULL,NULL,
+		 ViewType == Vie_VIEW ? Hlp_DEGREE_Information :
+					NULL,Box_NOT_CLOSABLE);
 
-   /***** Title *****/
-   HieCfg_Title (PutLink,Hie_DEG);
+      /***** Title *****/
+      HieCfg_Title (PutLink,Hie_DEG);
 
       /**************************** Left part ***********************************/
       HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
@@ -130,31 +127,36 @@ static void DegCfg_Configuration (bool PrintView)
 	 HTM_TABLE_BeginWidePadding (2);
 
 	    /***** Center *****/
-	    DegCfg_Center (PrintView,PutFormCtr);
+	    DegCfg_Center (ViewType,PutFormCtr);
 
 	    /***** Degree name *****/
 	    DegCfg_FullName (PutFormName);
 	    DegCfg_ShrtName (PutFormName);
 
 	    /***** Degree WWW *****/
-	    DegCfg_WWW (PrintView,PutFormWWW);
+	    DegCfg_WWW (ViewType,PutFormWWW);
 
 	    /***** Shortcut to the degree *****/
-	    DegCfg_Shortcut (PrintView);
+	    DegCfg_Shortcut (ViewType);
 
-	    if (PrintView)
-	       /***** QR code with link to the degree *****/
-	       DegCfg_QR ();
-	    else
+	    switch (ViewType)
 	      {
-	       /***** Number of courses *****/
-	       DegCfg_NumCrss ();
+	       case Vie_VIEW:
+		  /***** Number of courses *****/
+		  DegCfg_NumCrss ();
 
-	       /***** Number of users *****/
-	       HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_TCH);
-	       HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_NET);
-	       HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_STD);
-	       HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_UNK);
+		  /***** Number of users *****/
+		  HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod,Rol_UNK);
+		  break;
+	       case Vie_PRINT:
+		  /***** QR code with link to the degree *****/
+		  DegCfg_QR ();
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
 	      }
 
 	 /***** End table *****/
@@ -188,7 +190,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 /******************** Show center in degree configuration ********************/
 /*****************************************************************************/
 
-static void DegCfg_Center (bool PrintView,bool PutForm)
+static void DegCfg_Center (Vie_ViewType_t ViewType,bool PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Center;
@@ -235,7 +237,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	   }
 	 else	// I can not move degree to another center
 	   {
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
@@ -249,7 +251,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Node[Hie_CTR].FullName);
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -282,18 +284,18 @@ static void DegCfg_ShrtName (bool PutForm)
 /***************** Show degree WWW in degree configuration *******************/
 /*****************************************************************************/
 
-static void DegCfg_WWW (bool PrintView,bool PutForm)
+static void DegCfg_WWW (Vie_ViewType_t ViewType,bool PutForm)
   {
-   HieCfg_WWW (PrintView,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Node[Hie_DEG].WWW);
+   HieCfg_WWW (ViewType,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Node[Hie_DEG].WWW);
   }
 
 /*****************************************************************************/
 /*************** Show degree shortcut in degree configuration ****************/
 /*****************************************************************************/
 
-static void DegCfg_Shortcut (bool PrintView)
+static void DegCfg_Shortcut (Vie_ViewType_t ViewType)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+   HieCfg_Shortcut (ViewType,ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
   }
 
 /*****************************************************************************/

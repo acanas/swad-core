@@ -81,10 +81,10 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                                          const struct Prg_Item *Item);
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Prg_Item *Item,
-                                         VieEdi_ViewOrEdit_t ViewOrEditLink);
+                                         Vie_ViewType_t LinkViewType);
 static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Prg_Item *Item,
-                                        VieEdi_ViewOrEdit_t ViewOrEditLink);
+                                        Vie_ViewType_t LinkViewType);
 static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources);
@@ -155,42 +155,42 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
    unsigned NumResources;
-   VieEdi_ViewOrEdit_t ViewingOrEditingResourcesOfThisItem;
+   Vie_ViewType_t ViewingOrEditingResourcesOfThisItem;
    char *Title;
-   static VieEdi_ViewOrEdit_t ViewingOrEditing[Prg_NUM_LISTING_TYPES] =
+   static Vie_ViewType_t ViewingOrEditing[Prg_NUM_LISTING_TYPES] =
      {
-      [Prg_PRINT               ] = VieEdi_VIEW,
-      [Prg_VIEW                ] = VieEdi_VIEW,
-      [Prg_EDIT_ITEMS          ] = VieEdi_EDIT,
-      [Prg_FORM_NEW_END_ITEM   ] = VieEdi_EDIT,
-      [Prg_FORM_NEW_CHILD_ITEM ] = VieEdi_EDIT,
-      [Prg_FORM_EDIT_ITEM      ] = VieEdi_EDIT,
-      [Prg_END_EDIT_ITEM       ] = VieEdi_EDIT,
-      [Prg_RECEIVE_ITEM        ] = VieEdi_EDIT,
-      [Prg_EDIT_RESOURCES      ] = VieEdi_EDIT,
-      [Prg_EDIT_RESOURCE_LINK  ] = VieEdi_EDIT,
-      [Prg_CHANGE_RESOURCE_LINK] = VieEdi_EDIT,
-      [Prg_END_EDIT_RES        ] = VieEdi_EDIT,
+      [Prg_PRINT               ] = Vie_VIEW,
+      [Prg_VIEW                ] = Vie_VIEW,
+      [Prg_EDIT_ITEMS          ] = Vie_EDIT,
+      [Prg_FORM_NEW_END_ITEM   ] = Vie_EDIT,
+      [Prg_FORM_NEW_CHILD_ITEM ] = Vie_EDIT,
+      [Prg_FORM_EDIT_ITEM      ] = Vie_EDIT,
+      [Prg_END_EDIT_ITEM       ] = Vie_EDIT,
+      [Prg_RECEIVE_ITEM        ] = Vie_EDIT,
+      [Prg_EDIT_RESOURCES      ] = Vie_EDIT,
+      [Prg_EDIT_RESOURCE_LINK  ] = Vie_EDIT,
+      [Prg_CHANGE_RESOURCE_LINK] = Vie_EDIT,
+      [Prg_END_EDIT_RES        ] = Vie_EDIT,
      };
-   static VieEdi_ViewOrEdit_t ViewingOrEditingResources[Prg_NUM_LISTING_TYPES] =
+   static Vie_ViewType_t ViewingOrEditingResources[Prg_NUM_LISTING_TYPES] =
      {
-      [Prg_PRINT               ] = VieEdi_VIEW,
-      [Prg_VIEW                ] = VieEdi_VIEW,
-      [Prg_EDIT_ITEMS          ] = VieEdi_VIEW,
-      [Prg_FORM_NEW_END_ITEM   ] = VieEdi_VIEW,
-      [Prg_FORM_NEW_CHILD_ITEM ] = VieEdi_VIEW,
-      [Prg_FORM_EDIT_ITEM      ] = VieEdi_VIEW,
-      [Prg_END_EDIT_ITEM       ] = VieEdi_VIEW,
-      [Prg_RECEIVE_ITEM        ] = VieEdi_VIEW,
-      [Prg_EDIT_RESOURCES      ] = VieEdi_EDIT,
-      [Prg_EDIT_RESOURCE_LINK  ] = VieEdi_EDIT,
-      [Prg_CHANGE_RESOURCE_LINK] = VieEdi_EDIT,
-      [Prg_END_EDIT_RES        ] = VieEdi_VIEW,
+      [Prg_PRINT               ] = Vie_VIEW,
+      [Prg_VIEW                ] = Vie_VIEW,
+      [Prg_EDIT_ITEMS          ] = Vie_VIEW,
+      [Prg_FORM_NEW_END_ITEM   ] = Vie_VIEW,
+      [Prg_FORM_NEW_CHILD_ITEM ] = Vie_VIEW,
+      [Prg_FORM_EDIT_ITEM      ] = Vie_VIEW,
+      [Prg_END_EDIT_ITEM       ] = Vie_VIEW,
+      [Prg_RECEIVE_ITEM        ] = Vie_VIEW,
+      [Prg_EDIT_RESOURCES      ] = Vie_EDIT,
+      [Prg_EDIT_RESOURCE_LINK  ] = Vie_EDIT,
+      [Prg_CHANGE_RESOURCE_LINK] = Vie_EDIT,
+      [Prg_END_EDIT_RES        ] = Vie_VIEW,
      };
-   static void (*PrgRsc_PutIconsResources[VieEdi_NUM_VIEW_EDIT]) (void *ItmCod) =
+   static void (*PrgRsc_PutIconsResources[Vie_NUM_VIEW_TYPES]) (void *ItmCod) =
      {
-      PrgRsc_PutIconsViewResources,
-      PrgRsc_PutIconsEditResources,
+      [Vie_VIEW] = PrgRsc_PutIconsViewResources,
+      [Vie_EDIT] = PrgRsc_PutIconsEditResources,
      };
 
    /***** Trivial check *****/
@@ -199,9 +199,9 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
    /***** Get list of item resources from database *****/
    NumResources = Prg_DB_GetListResources (&mysql_res,Item->Hierarchy.ItmCod,
-                                           ViewingOrEditingResources[ListingType] == VieEdi_EDIT);
+                                           ViewingOrEditingResources[ListingType] == Vie_EDIT);
 
-   if (NumResources || ViewingOrEditing[ListingType] == VieEdi_EDIT)
+   if (NumResources || ViewingOrEditing[ListingType] == Vie_EDIT)
      {
       if (Item->Hierarchy.ItmCod == SelectedItmCod)
 	{
@@ -219,18 +219,18 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	}
 
       /***** Begin box *****/
-      ViewingOrEditingResourcesOfThisItem = ViewingOrEditingResources[ListingType] == VieEdi_EDIT &&
-				            (Item->Hierarchy.ItmCod == SelectedItmCod) ? VieEdi_EDIT :
-				        						 VieEdi_VIEW;
+      ViewingOrEditingResourcesOfThisItem = ViewingOrEditingResources[ListingType] == Vie_EDIT &&
+				            (Item->Hierarchy.ItmCod == SelectedItmCod) ? Vie_EDIT :
+				        						 Vie_VIEW;
 
       switch (ViewingOrEditing[ListingType])
         {
-         case VieEdi_VIEW:
+         case Vie_VIEW:
 	    Box_BoxBegin ("100%",NULL,
 			  NULL,NULL,
 			  NULL,Box_NOT_CLOSABLE);
 	    break;
-         case VieEdi_EDIT:
+         case Vie_EDIT:
 	    if (asprintf (&Title,Txt_Resources_of_X,Item->Title) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin ("100%",Title,
@@ -239,6 +239,9 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 			  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
 	    free (Title);
 	    break;
+         default:
+            Err_WrongTypeExit ();
+            break;
         }
 
       /***** Table *****/
@@ -256,25 +259,29 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	       /* Show item */
 	       switch (ViewingOrEditingResourcesOfThisItem)
 	         {
-	          case VieEdi_VIEW:
+	          case Vie_VIEW:
 		     PrgRsc_WriteRowViewResource (NumRsc,Item);
 		     break;
-	          case VieEdi_EDIT:
+	          case Vie_EDIT:
 		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
 						  (ListingType == Prg_EDIT_RESOURCE_LINK &&
-						   Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? VieEdi_EDIT :
-													VieEdi_VIEW);
+						   Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
+													Vie_VIEW);
+		     break;
+		  default:
+		     Err_WrongTypeExit ();
+		     break;
 	         }
 	      }
 
 	    /***** Form to create a new resource *****/
-	    if (ViewingOrEditingResourcesOfThisItem == VieEdi_EDIT)
+	    if (ViewingOrEditingResourcesOfThisItem == Vie_EDIT)
 	      {
 	       Prg_ResetResource (Item);
 	       PrgRsc_WriteRowNewResource (NumResources,Item,
 					   (ListingType == Prg_EDIT_RESOURCE_LINK &&
-					    Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? VieEdi_EDIT :
-												 VieEdi_VIEW);
+					    Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
+												 Vie_VIEW);
 	      }
 
 	 /***** End table *****/
@@ -413,7 +420,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
 
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
                                          struct Prg_Item *Item,
-                                         VieEdi_ViewOrEdit_t ViewOrEditLink)
+                                         Vie_ViewType_t LinkViewType)
   {
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -445,19 +452,22 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
          HTM_BR ();
 
 	 /* Edit link showing clipboard / Show current link */
-         switch (ViewOrEditLink)
+         switch (LinkViewType)
            {
-            case VieEdi_VIEW:
+            case Vie_VIEW:
 	       /* Show current link */
 	       Rsc_WriteLinkName (&Item->Resource.Link,Frm_PUT_FORM_TO_GO);
                break;
-            case VieEdi_EDIT:
+            case Vie_EDIT:
 	       /* Show clipboard to change resource link */
 	       Frm_BeginFormAnchor (ActChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 		  ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
 		  Rsc_ShowClipboardToChangeLink (&Item->Resource.Link);
 	       Frm_EndForm ();
                break;
+	    default:
+	       Err_WrongTypeExit ();
+	       break;
            }
 
       HTM_TD_End ();
@@ -472,7 +482,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 
 static void PrgRsc_WriteRowNewResource (unsigned NumResources,
                                         struct Prg_Item *Item,
-                                        VieEdi_ViewOrEdit_t ViewOrEditLink)
+                                        Vie_ViewType_t LinkViewType)
   {
    extern const char *Txt_New_resource;
 
@@ -505,7 +515,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 	 Frm_EndForm ();
 
 	 /* Edit link showing clipboard? */
-         if (ViewOrEditLink == VieEdi_EDIT)
+         if (LinkViewType == Vie_EDIT)
 	   {
             HTM_BR ();
 

@@ -136,7 +136,7 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
   {
    Syllabus->PathDir[0] = '\0';
    Syllabus->NumItem = 0;
-   Syllabus->ViewingOrEditing = VieEdi_VIEW;
+   Syllabus->ViewType = Vie_VIEW;
    Syllabus->WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
   }
 
@@ -244,14 +244,14 @@ bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
       case ActLftIteSylLec:	case ActLftIteSylPra:
       case ActInsIteSylLec:	case ActInsIteSylPra:
       case ActModIteSylLec:	case ActModIteSylPra:
-         Syllabus->ViewingOrEditing = VieEdi_EDIT;
+         Syllabus->ViewType = Vie_EDIT;
          break;
       default:
-         Syllabus->ViewingOrEditing = VieEdi_VIEW;
+         Syllabus->ViewType = Vie_VIEW;
          break;
      }
 
-   if (Syllabus->ViewingOrEditing == VieEdi_EDIT ||
+   if (Syllabus->ViewType == Vie_EDIT ||
        Syl_LstItemsSyllabus.NumItems)
      {
       /***** Write the current syllabus *****/
@@ -523,15 +523,15 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
    extern const char *Txt_Done;
    unsigned NumItem;
    int Col;
-   static const char **HelpLink[VieEdi_NUM_VIEW_EDIT] =
+   static const char **HelpLink[Vie_NUM_VIEW_TYPES] =
      {
-      [VieEdi_VIEW] = &Hlp_COURSE_Syllabus,
-      [VieEdi_EDIT] = &Hlp_COURSE_Syllabus_edit,
+      [Vie_VIEW] = &Hlp_COURSE_Syllabus,
+      [Vie_EDIT] = &Hlp_COURSE_Syllabus_edit,
      };
-   static int NumButtons[VieEdi_NUM_VIEW_EDIT] =
+   static int NumButtons[Vie_NUM_VIEW_TYPES] =
      {
-      [VieEdi_VIEW] = 0,
-      [VieEdi_EDIT] = 5,
+      [Vie_VIEW] = 0,
+      [Vie_EDIT] = 5,
      };
    bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSylLec || Gbl.Action.Act == ActInsIteSylPra ||
                                 Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
@@ -539,7 +539,7 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
    bool ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   bool PutIconToEdit = Syllabus->ViewingOrEditing == VieEdi_VIEW && ICanEdit;
+   bool PutIconToEdit = Syllabus->ViewType == Vie_VIEW && ICanEdit;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
@@ -547,7 +547,7 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
 				 NULL,
 		 PutIconToEdit ? &Gbl.Crs.Info.Type :
 				 NULL,
-		 *HelpLink[Syllabus->ViewingOrEditing],Box_NOT_CLOSABLE);
+		 *HelpLink[Syllabus->ViewType],Box_NOT_CLOSABLE);
 
       /****** Form to select syllabus *****/
       Syl_PutFormWhichSyllabus (Syllabus->WhichSyllabus);
@@ -558,7 +558,7 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
 	 /***** Set width of columns of the table *****/
 	 HTM_Txt ("<colgroup>");
 	    for (Col = 0;
-		 Col < NumButtons[Syllabus->ViewingOrEditing];
+		 Col < NumButtons[Syllabus->ViewType];
 		 Col++)
 	       HTM_Txt ("<col width=\"12\" />");
 	    for (Col  = 1;
@@ -584,7 +584,7 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
 				       Syl_LstItemsSyllabus.Lst[NumItem].Level,NULL,
 				       "",true);
 	      }
-	 else if (Syllabus->ViewingOrEditing == VieEdi_EDIT)
+	 else if (Syllabus->ViewType == Vie_EDIT)
 	    /***** If the syllabus is empty ==>
 		   show form to add a iten to the end *****/
 	    Syl_ShowRowSyllabus (Syllabus,0,
@@ -594,7 +594,7 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
       HTM_TABLE_End ();
 
       /***** Button to view *****/
-      if (Syllabus->ViewingOrEditing == VieEdi_EDIT)
+      if (Syllabus->ViewType == Vie_EDIT)
 	{
 	 Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
 	    Btn_PutConfirmButton (Txt_Done);
@@ -629,9 +629,9 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
    /***** Begin the row *****/
    HTM_TR_Begin (NULL);
 
-      switch (Syllabus->ViewingOrEditing)
+      switch (Syllabus->ViewType)
         {
-         case VieEdi_VIEW:
+         case Vie_VIEW:
 	    /***** Indent depending on the level *****/
 	    if (Level > 1)
 	      {
@@ -658,7 +658,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	       HTM_Txt (Text);
 	    HTM_TD_End ();
             break;
-         case VieEdi_EDIT:
+         case Vie_EDIT:
 	    if (NewItem)
 	      {
 	       HTM_TD_Begin ("colspan=\"5\" class=\"%s\"",
@@ -737,6 +737,9 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 
 	    Syl_PutFormItemSyllabus (Syllabus,NewItem,NumItem,Level,CodItem,Text);
             break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
         }
 
    /***** End of the row *****/
@@ -935,7 +938,7 @@ void Syl_RemoveItemSyllabus (void)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.ViewingOrEditing = VieEdi_EDIT;
+   Syllabus.ViewType = Vie_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1012,7 +1015,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.ViewingOrEditing = VieEdi_EDIT;
+   Syllabus.ViewType = Vie_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1198,7 +1201,7 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.ViewingOrEditing = VieEdi_EDIT;
+   Syllabus.ViewType = Vie_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1261,7 +1264,7 @@ void Syl_InsertItemSyllabus (void)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.ViewingOrEditing = VieEdi_EDIT;
+   Syllabus.ViewType = Vie_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();
@@ -1330,7 +1333,7 @@ void Syl_ModifyItemSyllabus (void)
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   Syllabus.ViewingOrEditing = VieEdi_EDIT;
+   Syllabus.ViewType = Vie_EDIT;
 
    /***** Get item number *****/
    Syllabus.NumItem = Syl_GetParItemNumber ();

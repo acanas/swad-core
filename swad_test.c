@@ -347,7 +347,7 @@ void Tst_AssessTest (void)
       Box_BoxBegin (NULL,Txt_Result,
 		    NULL,NULL,
 		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-	 Lay_WriteHeaderClassPhoto (false,false);
+	 Lay_WriteHeaderClassPhoto (Vie_VIEW,false);
 
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])

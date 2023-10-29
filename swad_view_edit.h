@@ -1,7 +1,7 @@
-// swad_view_edit.h: types and constants related to view/edit
+// swad_view.h: types and constants related to view/edit/print
 
-#ifndef _SWAD_VIE_EDI
-#define _SWAD_VIE_EDI
+#ifndef _SWAD_VIEW
+#define _SWAD_VIEW
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -28,7 +28,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define VieEdi_NUM_VIEW_EDIT 2
+#define Vie_NUM_VIEW_TYPES 3
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -36,8 +36,9 @@
 
 typedef enum
   {
-   VieEdi_VIEW = 0,
-   VieEdi_EDIT = 1,
-  } VieEdi_ViewOrEdit_t;
+   Vie_VIEW  = 0,
+   Vie_EDIT  = 1,
+   Vie_PRINT = 2,
+  } Vie_ViewType_t;
 
 #endif

@@ -132,7 +132,7 @@ void Crs_ShowIntroduction (void)
   {
    /***** Course configuration *****/
    HTM_DIV_Begin ("class=\"CM\"");
-      CrsCfg_Configuration (false);
+      CrsCfg_Configuration (Vie_VIEW);
    HTM_DIV_End ();
 
    /***** Course introduction *****/

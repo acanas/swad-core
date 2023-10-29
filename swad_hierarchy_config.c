@@ -147,7 +147,7 @@ void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull
 /************************* Show web in configuration *************************/
 /*****************************************************************************/
 
-void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
+void HieCfg_WWW (Vie_ViewType_t ViewType,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1])
   {
    extern const char *Txt_Web;
@@ -175,12 +175,12 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 	 else	// I can not change web
 	   {
 	    HTM_DIV_Begin ("class=\"EXTERNAL_WWW_FULL\"");
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_%s\"",
 		               WWW,The_GetSuffix ());
 	       HTM_Txt (WWW);
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	    HTM_DIV_End ();
 	   }
@@ -193,7 +193,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 /********************** Show shortcut in configuration ***********************/
 /*****************************************************************************/
 
-void HieCfg_Shortcut (bool PrintView,ParCod_Param_t ParCode,long HieCod)
+void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Shortcut;
@@ -206,7 +206,7 @@ void HieCfg_Shortcut (bool PrintView,ParCod_Param_t ParCode,long HieCod)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (!PrintView)
+	 if (ViewType == Vie_VIEW)
 	   {
 	    if (ParCode == ParCod_None)
 	       HTM_A_Begin ("href=\"%s/\" target=\"_blank\" class=\"DAT_%s\"",
@@ -226,7 +226,7 @@ void HieCfg_Shortcut (bool PrintView,ParCod_Param_t ParCode,long HieCod)
 	    HTM_TxtF ("%s/?%s=%ld",
 		      Cfg_URL_SWAD_CGI,
 		      Par_CodeStr[ParCode],HieCod);
-	 if (!PrintView)
+	 if (ViewType == Vie_VIEW)
 	    HTM_A_End ();
       HTM_TD_End ();
 

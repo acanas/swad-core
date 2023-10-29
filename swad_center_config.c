@@ -75,23 +75,23 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void CtrCfg_Configuration (bool PrintView);
+static void CtrCfg_Configuration (Vie_ViewType_t ViewType);
 static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args);
 static void CtrCfg_PutIconToChangePhoto (void);
 static void CtrCfg_Map (const struct Map_Coordinates *Coord);
 static void CtrCfg_Latitude (double Latitude);
 static void CtrCfg_Longitude (double Longitude);
 static void CtrCfg_Altitude (double Altitude);
-static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
+static void CtrCfg_Photo (Vie_ViewType_t ViewType,bool PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1]);
 static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution);
 static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
-static void CtrCfg_Institution (bool PrintView,bool PutForm);
+static void CtrCfg_Institution (Vie_ViewType_t ViewType,bool PutForm);
 static void CtrCfg_FullName (bool PutForm);
 static void CtrCfg_ShrtName (bool PutForm);
 static void CtrCfg_Place (bool PutForm);
-static void CtrCfg_WWW (bool PrintView,bool PutForm);
-static void CtrCfg_Shortcut (bool PrintView);
+static void CtrCfg_WWW (Vie_ViewType_t ViewType,bool PutForm);
+static void CtrCfg_Shortcut (Vie_ViewType_t ViewType);
 static void CtrCfg_QR (void);
 static void CtrCfg_NumUsrs (void);
 static void CtrCfg_NumDegs (void);
@@ -103,7 +103,7 @@ static void CtrCfg_NumCrss (void);
 
 void CtrCfg_ShowConfiguration (void)
   {
-   CtrCfg_Configuration (false);
+   CtrCfg_Configuration (Vie_VIEW);
 
    /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
@@ -115,14 +115,14 @@ void CtrCfg_ShowConfiguration (void)
 
 void CtrCfg_PrintConfiguration (void)
   {
-   CtrCfg_Configuration (true);
+   CtrCfg_Configuration (Vie_PRINT);
   }
 
 /*****************************************************************************/
 /******************* Information of the current center ***********************/
 /*****************************************************************************/
 
-static void CtrCfg_Configuration (bool PrintView)
+static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_CENTER_Information;
    struct Map_Coordinates Coord;
@@ -145,108 +145,111 @@ static void CtrCfg_Configuration (bool PrintView)
    Ctr_GetCoordByCod (Gbl.Hierarchy.Node[Hie_CTR].HieCod,&Coord);
 
    /***** Initializations *****/
-   PutLink      = !PrintView && Gbl.Hierarchy.Node[Hie_CTR].WWW[0];
-   PutFormIns   = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   PutFormName  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
+   PutLink      = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_CTR].WWW[0];
+   PutFormIns   = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   PutFormName  = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
    PutFormPlc   =
    PutFormCoor  =
    PutFormWWW   =
-   PutFormPhoto = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   PutFormPhoto = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
 
    /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,
-                    CtrCfg_PutIconsCtrConfig,NULL,
-		    Hlp_CENTER_Information,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,NULL,
+		 ViewType == Vie_VIEW ? CtrCfg_PutIconsCtrConfig :
+					NULL,NULL,
+		 ViewType == Vie_VIEW ? Hlp_CENTER_Information :
+					NULL,Box_NOT_CLOSABLE);
 
-   /***** Title *****/
-   HieCfg_Title (PutLink,Hie_CTR);
+      /***** Title *****/
+      HieCfg_Title (PutLink,Hie_CTR);
 
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      /**************************** Left part ***********************************/
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Institution *****/
-	 CtrCfg_Institution (PrintView,PutFormIns);
+	    /***** Institution *****/
+	    CtrCfg_Institution (ViewType,PutFormIns);
 
-	 /***** Center name *****/
-	 CtrCfg_FullName (PutFormName);
-	 CtrCfg_ShrtName (PutFormName);
+	    /***** Center name *****/
+	    CtrCfg_FullName (PutFormName);
+	    CtrCfg_ShrtName (PutFormName);
 
-	 /***** Place *****/
-	 CtrCfg_Place (PutFormPlc);
+	    /***** Place *****/
+	    CtrCfg_Place (PutFormPlc);
 
-	 /***** Coordinates *****/
-	 if (PutFormCoor)
-	   {
-	    CtrCfg_Latitude  (Coord.Latitude );
-	    CtrCfg_Longitude (Coord.Longitude);
-	    CtrCfg_Altitude  (Coord.Altitude );
-	   }
+	    /***** Coordinates *****/
+	    if (PutFormCoor)
+	      {
+	       CtrCfg_Latitude  (Coord.Latitude );
+	       CtrCfg_Longitude (Coord.Longitude);
+	       CtrCfg_Altitude  (Coord.Altitude );
+	      }
 
-	 /***** Center WWW *****/
-	 CtrCfg_WWW (PrintView,PutFormWWW);
+	    /***** Center WWW *****/
+	    CtrCfg_WWW (ViewType,PutFormWWW);
 
-	 /***** Shortcut to the center *****/
-	 CtrCfg_Shortcut (PrintView);
+	    /***** Shortcut to the center *****/
+	    CtrCfg_Shortcut (ViewType);
 
-	 if (PrintView)
-	    /***** QR code with link to the center *****/
-	    CtrCfg_QR ();
-	 else
-	   {
-	    /***** Number of users who claim to belong to this center,
-		   number of degrees,
-		   number of courses *****/
-	    CtrCfg_NumUsrs ();
-	    CtrCfg_NumDegs ();
-	    CtrCfg_NumCrss ();
+	    switch (ViewType)
+	      {
+	       case Vie_VIEW:
+		  /***** Number of users who claim to belong to this center,
+			 number of degrees,
+			 number of courses *****/
+		  CtrCfg_NumUsrs ();
+		  CtrCfg_NumDegs ();
+		  CtrCfg_NumCrss ();
 
-	    /***** Number of users in courses of this center *****/
-	    HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_UNK);
-	   }
+		  /***** Number of users in courses of this center *****/
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_UNK);
+		  break;
+	       case Vie_PRINT:
+		  /***** QR code with link to the center *****/
+		  CtrCfg_QR ();
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
+	      }
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** End of left part *****/
-   HTM_DIV_End ();
-
-   /**************************** Right part **********************************/
-   /***** Check map *****/
-   MapIsAvailable = Map_CheckIfCoordAreAvailable (&Coord);
-
-   /***** Check photo *****/
-   snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
-	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-	     (unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-	     (unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
-   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
-
-   if (MapIsAvailable || PhotoExists)
-     {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
-
-	 /***** Center map *****/
-	 if (MapIsAvailable)
-	    CtrCfg_Map (&Coord);
-
-	 /***** Center photo *****/
-	 if (PhotoExists)
-	    CtrCfg_Photo (PrintView,PutFormPhoto,PutLink,PathPhoto);
-
+      /***** End of left part *****/
       HTM_DIV_End ();
-     }
+
+      /**************************** Right part **********************************/
+      /***** Check map *****/
+      MapIsAvailable = Map_CheckIfCoordAreAvailable (&Coord);
+
+      /***** Check photo *****/
+      snprintf (PathPhoto,sizeof (PathPhoto),"%s/%02u/%u/%u.jpg",
+		Cfg_PATH_CTR_PUBLIC,
+		(unsigned) (Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+		(unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+		(unsigned)  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      PhotoExists = Fil_CheckIfPathExists (PathPhoto);
+
+      if (MapIsAvailable || PhotoExists)
+	{
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+
+	    /***** Center map *****/
+	    if (MapIsAvailable)
+	       CtrCfg_Map (&Coord);
+
+	    /***** Center photo *****/
+	    if (PhotoExists)
+	       CtrCfg_Photo (ViewType,PutFormPhoto,PutLink,PathPhoto);
+
+	 HTM_DIV_End ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -418,7 +421,7 @@ static void CtrCfg_Altitude (double Altitude)
 /***************************** Draw center photo *****************************/
 /*****************************************************************************/
 
-static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
+static void CtrCfg_Photo (Vie_ViewType_t ViewType,bool PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1])
   {
    char *PhotoAttribution = NULL;
@@ -448,8 +451,8 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 		    (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,Icon,Gbl.Hierarchy.Node[Hie_CTR].FullName,
-	       "class=\"%s\"",PrintView ? "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH" :
-					  "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH");
+	       "class=\"%s\"",ViewType == Vie_VIEW ? "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH" :
+						     "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH");
       free (Icon);
       free (URL);
       if (PutLink)
@@ -531,7 +534,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 /***************** Show institution in center configuration ******************/
 /*****************************************************************************/
 
-static void CtrCfg_Institution (bool PrintView,bool PutForm)
+static void CtrCfg_Institution (Vie_ViewType_t ViewType,bool PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Institution;
@@ -578,7 +581,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	   }
 	 else	// I can not move center to another institution
 	   {
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
@@ -594,7 +597,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
 
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -698,18 +701,18 @@ static void CtrCfg_Place (bool PutForm)
 /***************** Show center WWW in center configuration *******************/
 /*****************************************************************************/
 
-static void CtrCfg_WWW (bool PrintView,bool PutForm)
+static void CtrCfg_WWW (Vie_ViewType_t ViewType,bool PutForm)
   {
-   HieCfg_WWW (PrintView,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Node[Hie_CTR].WWW);
+   HieCfg_WWW (ViewType,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Node[Hie_CTR].WWW);
   }
 
 /*****************************************************************************/
 /*************** Show center shortcut in center configuration ****************/
 /*****************************************************************************/
 
-static void CtrCfg_Shortcut (bool PrintView)
+static void CtrCfg_Shortcut (Vie_ViewType_t ViewType)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+   HieCfg_Shortcut (ViewType,ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
   }
 
 /*****************************************************************************/

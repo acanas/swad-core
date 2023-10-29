@@ -5082,7 +5082,7 @@ void Usr_SeeGuests (void)
 
 	       /***** Draw a class photo with guests *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (false,true);
+		  Lay_WriteHeaderClassPhoto (Vie_VIEW,true);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption);
@@ -5232,7 +5232,7 @@ void Usr_SeeStudents (void)
 
 	       /***** Draw a class photo with students of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (false,true);
+		  Lay_WriteHeaderClassPhoto (Vie_VIEW,true);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);
@@ -5398,7 +5398,7 @@ void Usr_SeeTeachers (void)
 
 	       /***** Draw a class photo with teachers of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-		  Lay_WriteHeaderClassPhoto (false,true);
+		  Lay_WriteHeaderClassPhoto (Vie_VIEW,true);
 
 	       /* Set options allowed */
 	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption);
@@ -5928,7 +5928,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_WriteHeaderClassPhoto (true,true);
+      Lay_WriteHeaderClassPhoto (Vie_PRINT,true);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			     Rol_GST,&Gbl.Usrs.Selected,false);
@@ -5966,7 +5966,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_WriteHeaderClassPhoto (true,true);
+      Lay_WriteHeaderClassPhoto (Vie_PRINT,true);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			     Rol_STD,&Gbl.Usrs.Selected,false);
@@ -6028,7 +6028,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_WriteHeaderClassPhoto (true,true);
+      Lay_WriteHeaderClassPhoto (Vie_PRINT,true);
       HTM_TABLE_BeginWide ();
 
 	 /* List teachers and non-editing teachers */

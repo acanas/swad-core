@@ -130,7 +130,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               long SelectedRscCod);
 static void Prg_PutIconToContractOrExpandItem (struct Prg_Item *Item,
                                                ConExp_ContractedOrExpanded_t ContractedOrExpanded,
-                                               VieEdi_ViewOrEdit_t ViewingOrEditing);
+                                               Vie_ViewType_t ViewType);
 static void Prg_WriteItemText (long ItmCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void Prg_WriteRowToCreateItem (long ParentItmCod,unsigned FormLevel);
 static void Prg_SetTitleClass (char **TitleClass,unsigned Level);
@@ -473,20 +473,20 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
   {
    extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
    static unsigned UniqueId = 0;
-   static VieEdi_ViewOrEdit_t ViewingOrEditingProgram[Prg_NUM_LISTING_TYPES] =
+   static Vie_ViewType_t ViewingOrEditingProgram[Prg_NUM_LISTING_TYPES] =
      {
-      [Prg_PRINT               ] = VieEdi_VIEW,
-      [Prg_VIEW                ] = VieEdi_VIEW,
-      [Prg_EDIT_ITEMS          ] = VieEdi_EDIT,
-      [Prg_FORM_NEW_END_ITEM   ] = VieEdi_EDIT,
-      [Prg_FORM_NEW_CHILD_ITEM ] = VieEdi_EDIT,
-      [Prg_FORM_EDIT_ITEM      ] = VieEdi_EDIT,
-      [Prg_END_EDIT_ITEM       ] = VieEdi_EDIT,
-      [Prg_RECEIVE_ITEM        ] = VieEdi_EDIT,
-      [Prg_EDIT_RESOURCES      ] = VieEdi_EDIT,
-      [Prg_EDIT_RESOURCE_LINK  ] = VieEdi_EDIT,
-      [Prg_CHANGE_RESOURCE_LINK] = VieEdi_EDIT,
-      [Prg_END_EDIT_RES        ] = VieEdi_EDIT,
+      [Prg_PRINT               ] = Vie_VIEW,
+      [Prg_VIEW                ] = Vie_VIEW,
+      [Prg_EDIT_ITEMS          ] = Vie_EDIT,
+      [Prg_FORM_NEW_END_ITEM   ] = Vie_EDIT,
+      [Prg_FORM_NEW_CHILD_ITEM ] = Vie_EDIT,
+      [Prg_FORM_EDIT_ITEM      ] = Vie_EDIT,
+      [Prg_END_EDIT_ITEM       ] = Vie_EDIT,
+      [Prg_RECEIVE_ITEM        ] = Vie_EDIT,
+      [Prg_EDIT_RESOURCES      ] = Vie_EDIT,
+      [Prg_EDIT_RESOURCE_LINK  ] = Vie_EDIT,
+      [Prg_CHANGE_RESOURCE_LINK] = Vie_EDIT,
+      [Prg_END_EDIT_RES        ] = Vie_EDIT,
      };
    static const char *RowSpan[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
@@ -513,7 +513,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 break;
      }
 
-   if (ViewingOrEditingProgram[ListingType] == VieEdi_EDIT ||
+   if (ViewingOrEditingProgram[ListingType] == Vie_EDIT ||
        HiddenOrVisible == HidVis_VISIBLE)
      {
       /***** Increase number in level *****/
@@ -548,7 +548,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	 HTM_TD_End ();
 
 	 /* Forms to remove/edit this program item */
-	 if (ViewingOrEditingProgram[ListingType] == VieEdi_EDIT)
+	 if (ViewingOrEditingProgram[ListingType] == Vie_EDIT)
 	   {
 	    HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"%s",
 			  The_GetColorRows (),RowSpan[ContractedOrExpanded]);
@@ -670,14 +670,14 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 
 static void Prg_PutIconToContractOrExpandItem (struct Prg_Item *Item,
                                                ConExp_ContractedOrExpanded_t ContractedOrExpanded,
-                                               VieEdi_ViewOrEdit_t ViewingOrEditing)
+                                               Vie_ViewType_t ViewType)
   {
-   static const Act_Action_t NextAction[ConExp_NUM_CONTRACTED_EXPANDED][2] =
+   static const Act_Action_t NextAction[ConExp_NUM_CONTRACTED_EXPANDED][Vie_NUM_VIEW_TYPES] =
      {
-      [ConExp_CONTRACTED][VieEdi_VIEW] = ActExpSeePrgItm,	// Contracted, Not editing ==> action to expand
-      [ConExp_CONTRACTED][VieEdi_EDIT] = ActExpEdiPrgItm,	// Contracted,     Editing ==> action to expand
-      [ConExp_EXPANDED  ][VieEdi_VIEW] = ActConSeePrgItm,	// Expanded  , Not editing ==> action to contract
-      [ConExp_EXPANDED  ][VieEdi_EDIT] = ActConEdiPrgItm,	// Expanded  ,     Editing ==> action to contract
+      [ConExp_CONTRACTED][Vie_VIEW] = ActExpSeePrgItm,	// Contracted, Not editing ==> action to expand
+      [ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiPrgItm,	// Contracted,     Editing ==> action to expand
+      [ConExp_EXPANDED  ][Vie_VIEW] = ActConSeePrgItm,	// Expanded  , Not editing ==> action to contract
+      [ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiPrgItm,	// Expanded  ,     Editing ==> action to contract
      };
    static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (const Act_Action_t NextAction,const char *Anchor,
 								     void (*FuncPars) (void *Args),void *Args) =
@@ -687,7 +687,7 @@ static void Prg_PutIconToContractOrExpandItem (struct Prg_Item *Item,
      };
 
    /***** Icon to hide/unhide program item *****/
-   PutContextualIcon[ContractedOrExpanded] (NextAction[ContractedOrExpanded][ViewingOrEditing],
+   PutContextualIcon[ContractedOrExpanded] (NextAction[ContractedOrExpanded][ViewType],
 					    Prg_HIGHLIGHTED_SECTION_ID,
 					    Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
   }

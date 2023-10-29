@@ -323,8 +323,9 @@ void Tmt_ShowClassTimeTable (void)
       [Tmt_TUTORING_TIMETABLE] = ActUnk,
      };
    struct Tmt_Timetable Timetable;
-   bool PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
-	             Gbl.Action.Act == ActPrnMyTT);
+   Vie_ViewType_t ViewType = (Gbl.Action.Act == ActPrnCrsTT ||
+	                      Gbl.Action.Act == ActPrnMyTT) ? Vie_PRINT :
+	                				      Vie_VIEW;
    Grp_WhichGroups_t WhichGroups;
 
    /***** Initializations *****/
@@ -345,13 +346,13 @@ void Tmt_ShowClassTimeTable (void)
      }
 
    Timetable.ContextualIcons.PutIconEditCrsTT = (Timetable.Type == Tmt_COURSE_TIMETABLE &&
-	                                         !PrintView &&
+	                                         ViewType == Vie_VIEW &&
                                                  Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
    Timetable.ContextualIcons.PutIconEditOfficeHours = (Timetable.Type == Tmt_MY_TIMETABLE &&
-	                                               !PrintView &&
+	                                               ViewType == Vie_VIEW &&
                                                        (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH |
                                                 		                      1 << Rol_NET)));
-   Timetable.ContextualIcons.PutIconPrint = !PrintView;
+   Timetable.ContextualIcons.PutIconPrint = (ViewType == Vie_VIEW);
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParWhichGroups ();
@@ -370,28 +371,34 @@ void Tmt_ShowClassTimeTable (void)
 
    /***** Begin time table drawing *****/
    if (Timetable.Type == Tmt_COURSE_TIMETABLE)
-      Lay_WriteHeaderClassPhoto (PrintView,false);
+      Lay_WriteHeaderClassPhoto (ViewType,false);
 
-   if (PrintView)
-      /***** Show whether only my groups or all groups are selected *****/
-      Tmt_ShowTimeTableGrpsSelected ();
-   else
+   switch (ViewType)
      {
-      /***** Setting selector *****/
-      Set_BeginSettingsHead ();
+      case Vie_VIEW:
+	 /***** Setting selector *****/
+	 Set_BeginSettingsHead ();
 
-      /* Select whether show only my groups or all groups */
-      if ( Timetable.Type == Tmt_MY_TIMETABLE ||
-          (Timetable.Type == Tmt_COURSE_TIMETABLE &&
-           Gbl.Crs.Grps.NumGrps))
-         Tmt_PutFormToSelectWhichGroupsToShow (&Timetable);
+	 /* Select whether show only my groups or all groups */
+	 if ( Timetable.Type == Tmt_MY_TIMETABLE ||
+	     (Timetable.Type == Tmt_COURSE_TIMETABLE &&
+	      Gbl.Crs.Grps.NumGrps))
+	    Tmt_PutFormToSelectWhichGroupsToShow (&Timetable);
 
-      /* Show form to change first day of week */
-      WhichGroups = Grp_GetParWhichGroups ();
-      Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
-                                       Grp_PutParWhichGroups,&WhichGroups);
+	 /* Show form to change first day of week */
+	 WhichGroups = Grp_GetParWhichGroups ();
+	 Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
+					  Grp_PutParWhichGroups,&WhichGroups);
 
-      Set_EndSettingsHead ();
+	 Set_EndSettingsHead ();
+	 break;
+      case Vie_PRINT:
+	 /***** Show whether only my groups or all groups are selected *****/
+	 Tmt_ShowTimeTableGrpsSelected ();
+	 break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
      }
 
    /***** Show the time table *****/

@@ -62,14 +62,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void InsCfg_Configuration (bool PrintView);
+static void InsCfg_Configuration (Vie_ViewType_t ViewType);
 static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void InsCfg_Map (void);
-static void InsCfg_Country (bool PrintView,bool PutForm);
+static void InsCfg_Country (Vie_ViewType_t ViewType,bool PutForm);
 static void InsCfg_FullName (bool PutForm);
 static void InsCfg_ShrtName (bool PutForm);
-static void InsCfg_WWW (bool PrintView,bool PutForm);
-static void InsCfg_Shortcut (bool PrintView);
+static void InsCfg_WWW (Vie_ViewType_t ViewType,bool PutForm);
+static void InsCfg_Shortcut (Vie_ViewType_t ViewType);
 static void InsCfg_QR (void);
 static void InsCfg_NumUsrs (void);
 static void InsCfg_NumDegs (void);
@@ -82,7 +82,7 @@ static void InsCfg_NumDpts (void);
 
 void InsCfg_ShowConfiguration (void)
   {
-   InsCfg_Configuration (false);
+   InsCfg_Configuration (Vie_VIEW);
 
    /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
@@ -94,14 +94,14 @@ void InsCfg_ShowConfiguration (void)
 
 void InsCfg_PrintConfiguration (void)
   {
-   InsCfg_Configuration (true);
+   InsCfg_Configuration (Vie_PRINT);
   }
 
 /*****************************************************************************/
 /***************** Information of the current institution ********************/
 /*****************************************************************************/
 
-static void InsCfg_Configuration (bool PrintView)
+static void InsCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_INSTITUTION_Information;
    bool PutLink;
@@ -116,90 +116,93 @@ static void InsCfg_Configuration (bool PrintView)
       return;
 
    /***** Initializations *****/
-   PutLink     = !PrintView && Gbl.Hierarchy.Node[Hie_INS].WWW[0];
+   PutLink     = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_INS].WWW[0];
    PutFormCty  =
-   PutFormName = !PrintView && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   PutFormWWW  = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
+   PutFormName = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   PutFormWWW  = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
 
    /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,
-                    InsCfg_PutIconsToPrintAndUpload,NULL,
-		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,NULL,
+		 ViewType == Vie_VIEW ? InsCfg_PutIconsToPrintAndUpload :
+					NULL,NULL,
+		 ViewType == Vie_VIEW ? Hlp_INSTITUTION_Information :
+					NULL,Box_NOT_CLOSABLE);
 
+      /***** Title *****/
+      HieCfg_Title (PutLink,Hie_INS);
 
-   /***** Title *****/
-   HieCfg_Title (PutLink,Hie_INS);
+      /**************************** Left part ***********************************/
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+	    /***** Country *****/
+	    InsCfg_Country (ViewType,PutFormCty);
 
-	 /***** Country *****/
-	 InsCfg_Country (PrintView,PutFormCty);
+	    /***** Institution name *****/
+	    InsCfg_FullName (PutFormName);
+	    InsCfg_ShrtName (PutFormName);
 
-	 /***** Institution name *****/
-	 InsCfg_FullName (PutFormName);
-	 InsCfg_ShrtName (PutFormName);
+	    /***** Institution WWW *****/
+	    InsCfg_WWW (ViewType,PutFormWWW);
 
-	 /***** Institution WWW *****/
-	 InsCfg_WWW (PrintView,PutFormWWW);
+	    /***** Shortcut to the institution *****/
+	    InsCfg_Shortcut (ViewType);
 
-	 /***** Shortcut to the institution *****/
-	 InsCfg_Shortcut (PrintView);
+	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
-	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
-	 if (PrintView)
-	    /***** QR code with link to the institution *****/
-	    InsCfg_QR ();
-	 else
-	   {
-	    NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-					             Hie_INS,	// ...in institution
-					             Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	    switch (ViewType)
+	      {
+	       case Vie_VIEW:
+		  NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+							   Hie_INS,	// ...in institution
+							   Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
-	    /***** Number of users who claim to belong to this institution,
-		   number of centers,
-		   number of degrees,
-		   number of courses,
-		   number of departments *****/
-	    InsCfg_NumUsrs ();
-	    HieCfg_NumCtrs (NumCtrs,
-			    true);	// Put form
-	    HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
-	    InsCfg_NumDegs ();
-	    InsCfg_NumCrss ();
-	    InsCfg_NumDpts ();
+		  /***** Number of users who claim to belong to this institution,
+			 number of centers,
+			 number of degrees,
+			 number of courses,
+			 number of departments *****/
+		  InsCfg_NumUsrs ();
+		  HieCfg_NumCtrs (NumCtrs,
+				  true);	// Put form
+		  HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
+		  InsCfg_NumDegs ();
+		  InsCfg_NumCrss ();
+		  InsCfg_NumDpts ();
 
-	    /***** Number of users in courses of this institution *****/
-	    HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_UNK);
-	   }
+		  /***** Number of users in courses of this institution *****/
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_UNK);
+		  break;
+	       case Vie_PRINT:
+		  /***** QR code with link to the institution *****/
+		  InsCfg_QR ();
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
+	      }
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** End of left part *****/
-   HTM_DIV_End ();
-
-   /**************************** Right part **********************************/
-   if (NumCtrsWithMap)
-     {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
-
-	 /***** Institution map *****/
-	 InsCfg_Map ();
-
+      /***** End of left part *****/
       HTM_DIV_End ();
-     }
+
+      /**************************** Right part **********************************/
+      if (NumCtrsWithMap)
+	{
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+
+	    /***** Institution map *****/
+	    InsCfg_Map ();
+
+	 HTM_DIV_End ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -294,7 +297,7 @@ static void InsCfg_Map (void)
 /***************** Show country in institution configuration *****************/
 /*****************************************************************************/
 
-static void InsCfg_Country (bool PrintView,bool PutForm)
+static void InsCfg_Country (Vie_ViewType_t ViewType,bool PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Country;
@@ -338,7 +341,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	   }
 	 else	// I can not move institution to another country
 	   {
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
 		  ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
@@ -349,7 +352,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	    Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],"COUNTRY_MAP_TINY");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -384,18 +387,18 @@ static void InsCfg_ShrtName (bool PutForm)
 /************ Show institution WWW in institution configuration **************/
 /*****************************************************************************/
 
-static void InsCfg_WWW (bool PrintView,bool PutForm)
+static void InsCfg_WWW (Vie_ViewType_t ViewType,bool PutForm)
   {
-   HieCfg_WWW (PrintView,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Node[Hie_INS].WWW);
+   HieCfg_WWW (ViewType,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Node[Hie_INS].WWW);
   }
 
 /*****************************************************************************/
 /********** Show institution shortcut in institution configuration ***********/
 /*****************************************************************************/
 
-static void InsCfg_Shortcut (bool PrintView)
+static void InsCfg_Shortcut (Vie_ViewType_t ViewType)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   HieCfg_Shortcut (ViewType,ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
   }
 
 /*****************************************************************************/

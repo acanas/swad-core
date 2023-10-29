@@ -1413,7 +1413,7 @@ void Prj_PrintOneProject (void)
    Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Write header *****/
-   Lay_WriteHeaderClassPhoto (true,false);
+   Lay_WriteHeaderClassPhoto (Vie_PRINT,false);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);

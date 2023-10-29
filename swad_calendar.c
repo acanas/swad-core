@@ -78,7 +78,7 @@ static unsigned Cal_GetParFirstDayOfWeek (void);
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
                               void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
-                              bool PrintView);
+                              Vie_ViewType_t ViewType);
 static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
@@ -235,36 +235,42 @@ void Cal_ShowCalendar (void)
   {
    Cal_DrawCalendar (ActSeeCal,ActChgCal1stDay,
                      Cal_PutIconsCalendar,NULL,
-                     false);
+                     Vie_VIEW);
   }
 
 void Cal_PrintCalendar (void)
   {
    Cal_DrawCalendar (ActUnk,ActUnk,
                      NULL,NULL,
-                     true);
+                     Vie_PRINT);
   }
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
                               void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
-                              bool PrintView)
+                              Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_START_Calendar;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
+   static const char *Print[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW ] = "false",
+      [Vie_PRINT] = "true",
+     };
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,
                  FunctionToDrawContextualIcons,Args,
-	         PrintView ? NULL :
-	                     Hlp_START_Calendar,Box_NOT_CLOSABLE);
+	         ViewType == Vie_VIEW ? Hlp_START_Calendar :
+					NULL,
+	         Box_NOT_CLOSABLE);
 
       /***** Write header *****/
-      Lay_WriteHeaderClassPhoto (PrintView,false);
+      Lay_WriteHeaderClassPhoto (ViewType,false);
 
       /***** Preference selector to change first day of week *****/
-      if (!PrintView)
+      if (ViewType == Vie_VIEW)
 	{
 	 Set_BeginSettingsHead ();
 	    Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,
@@ -284,8 +290,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (long) Dat_GetStartExecutionTimeUTC (),
 		   Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
-		   PrintView ? "true" :
-			       "false",
+		   Print[ViewType],
 		   The_GetSuffix (),
 		   Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 Frm_SetParsForm (ParsStr,ActionSeeCalendar,true);

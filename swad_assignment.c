@@ -67,8 +67,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Asg_PutHead (struct Asg_Assignments *Assignments,
-                         bool OnlyOneAssignment,
-                         bool PrintView);
+                         bool OnlyOneAssignment,Vie_ViewType_t ViewType);
 static bool Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
@@ -76,9 +75,10 @@ static void Asg_ParsWhichGroupsToShow (void *Assignments);
 static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    bool OnlyOneAssignment,
-                                   bool PrintView);
+                                   Vie_ViewType_t ViewType);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
-static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView);
+static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
+				       Vie_ViewType_t ViewType);
 
 static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const char *Anchor);
@@ -179,7 +179,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	    /***** Table head *****/
 	    Asg_PutHead (Assignments,
 	                 false,		// Not only this assignment in table
-	                 false);	// Not print view
+	                 Vie_VIEW);	// Not print view
 
 	    /***** Write all assignments *****/
 	    for (NumAsg  = Pagination.FirstItemVisible, The_ResetRowColor ();
@@ -189,8 +189,8 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	       Assignments->Asg.AsgCod = Assignments->LstAsgCods[NumAsg - 1];
 	       Asg_GetAssignmentDataByCod (&Assignments->Asg);
 	       Asg_ShowAssignmentRow (Assignments,
-	                              false,	// Not only this assignment in table
-				      false);	// Not print view
+	                              false,		// Not only this assignment in table
+				      Vie_VIEW);	// Not print view
 	      }
 
 	 /***** End table *****/
@@ -215,8 +215,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 /*****************************************************************************/
 
 static void Asg_PutHead (struct Asg_Assignments *Assignments,
-                         bool OnlyOneAssignment,
-                         bool PrintView)
+                         bool OnlyOneAssignment,Vie_ViewType_t ViewType)
   {
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -237,7 +236,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	 /* Begin head cell */
          HTM_TH_Begin (HTM_HEAD_LEFT);
 
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 	       /* Begin form */
 	       Frm_BeginForm (ActSeeAllAsg);
@@ -256,7 +255,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	    /* Start / end text */
 	    HTM_Txt (Txt_START_END_TIME[Order]);
 
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 	          /* End link to select order */
 		  if (Order == Assignments->SelectedOrder)
@@ -388,7 +387,7 @@ void Asg_PrintOneAssignment (void)
    Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
    /***** Write header *****/
-   Lay_WriteHeaderClassPhoto (true,false);
+   Lay_WriteHeaderClassPhoto (Vie_PRINT,false);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
@@ -396,12 +395,12 @@ void Asg_PrintOneAssignment (void)
       /***** Table head *****/
       Asg_PutHead (&Assignments,
 	           true,	// Only this assignment in table
-		   true);	// Print view
+		   Vie_PRINT);	// Print view
 
       /***** Write assignment *****/
       Asg_ShowAssignmentRow (&Assignments,
-                             true,	// Only this assignment in table
-			     true);	// Print view
+                             true,		// Only this assignment in table
+			     Vie_PRINT);	// Print view
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -425,12 +424,12 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
       /***** Table head *****/
       Asg_PutHead (Assignments,
                    true,	// Only this assignment in table
-		   false);	// Not print view
+		   Vie_VIEW);	// Not print view
 
       /***** Write assignment *****/
       Asg_ShowAssignmentRow (Assignments,
                              true,	// Only this assignment in table
-			     false);	// Not print view
+			     Vie_VIEW);	// Not print view
 
    /***** End table and end box *****/
    Box_BoxTableEnd ();
@@ -463,7 +462,7 @@ static void Asg_PutIconsOneAsg (void *Assignments)
 
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    bool OnlyOneAssignment,
-                                   bool PrintView)
+                                   Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
@@ -500,19 +499,27 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	{
 	 if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 if (PrintView)
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,
-			  Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-						  HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
-			  The_GetSuffix ());
-	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,
-			  Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-						  HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
-			  The_GetSuffix (),
-			  The_GetColorRows ());
+	 switch (ViewType)
+	   {
+	    case Vie_VIEW:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			     Id,
+			     Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
+						     HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			     The_GetSuffix (),
+			     The_GetColorRows ());
+	       break;
+	    case Vie_PRINT:
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			     Id,
+			     Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
+						     HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			     The_GetSuffix ());
+	       break;
+	    default:
+	       Err_WrongTypeExit ();
+	       break;
+	   }
 	 Dat_WriteLocalDateHMSFromUTC (Id,Assignments->Asg.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
@@ -521,10 +528,18 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	}
 
       /* Assignment title */
-      if (PrintView)
-	 HTM_TD_Begin ("class=\"LT\"");
-      else
-	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      switch (ViewType)
+	{
+	 case Vie_VIEW:
+	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	 case Vie_PRINT:
+	    HTM_TD_Begin ("class=\"LT\"");
+	    break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
+	}
 
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeOneAsg);
@@ -541,14 +556,23 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       HTM_TD_End ();
 
       /* Assignment folder */
-      if (PrintView)
-	 HTM_TD_Begin ("class=\"LT DAT_%s\"",
-	               The_GetSuffix ());
-      else
-	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+      switch (ViewType)
+	{
+	 case Vie_VIEW:
+	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+			  The_GetSuffix (),The_GetColorRows ());
+	    break;
+	 case Vie_PRINT:
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",
+			  The_GetSuffix ());
+	    break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
+	}
+
       if (Assignments->Asg.SendWork == Asg_SEND_WORK)
-	 Asg_WriteAssignmentFolder (&Assignments->Asg,PrintView);
+	 Asg_WriteAssignmentFolder (&Assignments->Asg,ViewType);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -557,10 +581,18 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    HTM_TR_Begin (NULL);
 
       /* Author of the assignment */
-      if (PrintView)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      switch (ViewType)
+	{
+	 case Vie_VIEW:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	 case Vie_PRINT:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
+	}
       Asg_WriteAsgAuthor (&Assignments->Asg);
       HTM_TD_End ();
 
@@ -569,10 +601,18 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      if (PrintView)
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-      else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      switch (ViewType)
+	{
+	 case Vie_VIEW:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+	    break;
+	 case Vie_PRINT:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
+	}
       if (Gbl.Crs.Grps.NumGrps)
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Assignments->Asg);
 
@@ -606,17 +646,18 @@ static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg)
 /********************* Write the folder of an assignment *********************/
 /*****************************************************************************/
 
-static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView)
+static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
+				       Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Folder;
    Act_Action_t NextAction;
    bool ICanSendFiles = Asg->HiddenOrVisible == HidVis_VISIBLE &&	// It's visible (not hidden)
-                        Asg->Open &&				// It's open (inside dates)
-                        Asg->IBelongToCrsOrGrps;		// I belong to course or groups
+                        Asg->Open &&					// It's open (inside dates)
+                        Asg->IBelongToCrsOrGrps;			// I belong to course or groups
 
    /***** Folder icon *****/
-   if (!PrintView &&	// Not print view
-       ICanSendFiles)	// I can send files to this assignment folder
+   if (ViewType == Vie_VIEW &&	// Not print view
+       ICanSendFiles)		// I can send files to this assignment folder
      {
       /* Form to create a new file or folder */
       Gbl.FileBrowser.FullTree = true;	// By default, show all files

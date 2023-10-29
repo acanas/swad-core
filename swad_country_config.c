@@ -58,14 +58,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void CtyCfg_Configuration (bool PrintView);
+static void CtyCfg_Configuration (Vie_ViewType_t ViewType);
 static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args);
 static void CtyCfg_Title (bool PutLink);
 static void CtyCfg_Map (void);
-static void CtyCfg_MapImage (bool PrintView,bool PutLink);
-static void CtyCfg_Platform (bool PrintView);
+static void CtyCfg_MapImage (Vie_ViewType_t ViewType,bool PutLink);
+static void CtyCfg_Platform (Vie_ViewType_t ViewType);
 static void CtyCfg_Name (bool PutLink);
-static void CtyCfg_Shortcut (bool PrintView);
+static void CtyCfg_Shortcut (Vie_ViewType_t ViewType);
 static void CtyCfg_QR (void);
 static void CtyCfg_NumUsrs (void);
 static void CtyCfg_NumInss (void);
@@ -81,7 +81,7 @@ static void CtyCfg_FreeMapAttr (char **MapAttribution);
 
 void CtyCfg_ShowConfiguration (void)
   {
-   CtyCfg_Configuration (false);
+   CtyCfg_Configuration (Vie_VIEW);
 
    /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
@@ -93,14 +93,14 @@ void CtyCfg_ShowConfiguration (void)
 
 void CtyCfg_PrintConfiguration (void)
   {
-   CtyCfg_Configuration (true);
+   CtyCfg_Configuration (Vie_PRINT);
   }
 
 /*****************************************************************************/
 /******************** Information of the current country *********************/
 /*****************************************************************************/
 
-static void CtyCfg_Configuration (bool PrintView)
+static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COUNTRY_Information;
    bool PutLink;
@@ -113,92 +113,95 @@ static void CtyCfg_Configuration (bool PrintView)
       return;
 
    /***** Initializations *****/
-   PutLink = !PrintView && Gbl.Hierarchy.Node[Hie_CTY].WWW[0];
+   PutLink = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_CTY].WWW[0];
 
    /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,
-                    CtyCfg_PutIconToPrint,NULL,
-		    Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,NULL,
+		 ViewType == Vie_VIEW ? CtyCfg_PutIconToPrint :
+					NULL,NULL,
+		 ViewType == Vie_VIEW ? Hlp_COUNTRY_Information :
+					NULL,Box_NOT_CLOSABLE);
 
-   /***** Title *****/
-   CtyCfg_Title (PutLink);
+      /***** Title *****/
+      CtyCfg_Title (PutLink);
 
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      /**************************** Left part ***********************************/
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-      /* Begin table */
-      HTM_TABLE_BeginWidePadding (2);
+	 /* Begin table */
+	 HTM_TABLE_BeginWidePadding (2);
 
-	 /* Platform */
-	 CtyCfg_Platform (PrintView);
+	    /* Platform */
+	    CtyCfg_Platform (ViewType);
 
-	 /* Country name (an link to WWW if exists) */
-	 CtyCfg_Name (PutLink);
+	    /* Country name (an link to WWW if exists) */
+	    CtyCfg_Name (PutLink);
 
-	 /* Shortcut to the country */
-	 CtyCfg_Shortcut (PrintView);
+	    /* Shortcut to the country */
+	    CtyCfg_Shortcut (ViewType);
 
-	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
-	 if (PrintView)
-	    /* QR code with link to the country */
-	    CtyCfg_QR ();
-	 else
-	   {
-	    NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-						     Hie_CTY,	// ...in country
-						     Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	    switch (ViewType)
+	      {
+	       case Vie_VIEW:
+		  NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+							   Hie_CTY,	// ...in country
+							   Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
-	    /* Number of users who claim to belong to this country,
-	       number of institutions,
-	       number of centers,
-	       number of degrees,
-	       number of courses */
-	    CtyCfg_NumUsrs ();
-	    CtyCfg_NumInss ();
-	    HieCfg_NumCtrs (NumCtrs,
-			    false);	// Don't put form
-	    HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
-	    CtyCfg_NumDegs ();
-	    CtyCfg_NumCrss ();
+		  /* Number of users who claim to belong to this country,
+		     number of institutions,
+		     number of centers,
+		     number of degrees,
+		     number of courses */
+		  CtyCfg_NumUsrs ();
+		  CtyCfg_NumInss ();
+		  HieCfg_NumCtrs (NumCtrs,
+				  false);	// Don't put form
+		  HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
+		  CtyCfg_NumDegs ();
+		  CtyCfg_NumCrss ();
 
-	    /* Number of users in courses of this country */
-	    HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_UNK);
-	   }
+		  /* Number of users in courses of this country */
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_UNK);
+		  break;
+	       case Vie_PRINT:
+		  /* QR code with link to the country */
+		  CtyCfg_QR ();
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
+	      }
 
-      /* End table */
-      HTM_TABLE_End ();
+	 /* End table */
+	 HTM_TABLE_End ();
 
-   /* End of left part */
-   HTM_DIV_End ();
-
-   /**************************** Right part **********************************/
-   /* Check country map */
-   MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Node[Hie_CTY]);
-
-   if (NumCtrsWithMap || MapImageExists)
-     {
-      /* Begin container */
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
-
-	 /* Country map */
-	 if (NumCtrsWithMap)
-	    CtyCfg_Map ();
-
-	 /* Country map image */
-	 if (MapImageExists)
-	    CtyCfg_MapImage (PrintView,PutLink);
-
-      /* End container */
+      /* End of left part */
       HTM_DIV_End ();
-     }
+
+      /**************************** Right part **********************************/
+      /* Check country map */
+      MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Node[Hie_CTY]);
+
+      if (NumCtrsWithMap || MapImageExists)
+	{
+	 /* Begin container */
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+
+	    /* Country map */
+	    if (NumCtrsWithMap)
+	       CtyCfg_Map ();
+
+	    /* Country map image */
+	    if (MapImageExists)
+	       CtyCfg_MapImage (ViewType,PutLink);
+
+	 /* End container */
+	 HTM_DIV_End ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -319,7 +322,7 @@ static void CtyCfg_Map (void)
 /************* Show country map image in country configuration ***************/
 /*****************************************************************************/
 
-static void CtyCfg_MapImage (bool PrintView,bool PutLink)
+static void CtyCfg_MapImage (Vie_ViewType_t ViewType,bool PutLink)
   {
    char *MapAttribution = NULL;
 
@@ -332,18 +335,19 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
 		      Gbl.Hierarchy.Node[Hie_CTY].WWW);
       Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],
-			  PrintView ? "COUNTRY_MAP_PRINT" :
-				      "COUNTRY_MAP_SHOW");
+			  ViewType == Vie_VIEW ? "COUNTRY_MAP_SHOW" :
+						 "COUNTRY_MAP_PRINT");
       if (PutLink)
 	 HTM_A_End ();
    HTM_DIV_End ();
 
    /***** Map attribution *****/
-   if (!PrintView && Cty_CheckIfICanEditCountries ())
+   if (ViewType == Vie_VIEW && Cty_CheckIfICanEditCountries ())
      {
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActChgCtyMapAtt);
-	    HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
+	    HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\""
+				" rows=\"3\""
 				" onchange=\"this.form.submit();return false;\"");
 	       if (MapAttribution)
 		  HTM_Txt (MapAttribution);
@@ -366,7 +370,7 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
 /****************** Show platform in country configuration *******************/
 /*****************************************************************************/
 
-static void CtyCfg_Platform (bool PrintView)
+static void CtyCfg_Platform (Vie_ViewType_t ViewType)
   {
    extern const char *Txt_System;
 
@@ -378,7 +382,7 @@ static void CtyCfg_Platform (bool PrintView)
 
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	 if (!PrintView)
+	 if (ViewType == Vie_VIEW)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
 	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Cfg_PLATFORM_SHORT_NAME),
@@ -388,7 +392,7 @@ static void CtyCfg_Platform (bool PrintView)
 	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,Cfg_PLATFORM_FULL_NAME,"ICO20x20");
 	 HTM_NBSP ();
 	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
-	 if (!PrintView)
+	 if (ViewType == Vie_VIEW)
 	   {
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
@@ -430,9 +434,9 @@ static void CtyCfg_Name (bool PutLink)
 /************** Show country shortcut in country configuration ***************/
 /*****************************************************************************/
 
-static void CtyCfg_Shortcut (bool PrintView)
+static void CtyCfg_Shortcut (Vie_ViewType_t ViewType)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+   HieCfg_Shortcut (ViewType,ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
   }
 
 /*****************************************************************************/

@@ -60,13 +60,13 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args);
-static void CrsCfg_Degree (bool PrintView,bool PutForm);
+static void CrsCfg_Degree (Vie_ViewType_t ViewType,bool PutForm);
 static void CrsCfg_FullName (bool PutForm);
 static void CrsCfg_ShrtName (bool PutForm);
 static void CrsCfg_Year (bool PutForm);
 static void CrsCfg_InstitutionalCode (bool PutForm);
 static void CrsCfg_InternalCode (void);
-static void CrsCfg_Shortcut (bool PrintView);
+static void CrsCfg_Shortcut (Vie_ViewType_t ViewType);
 static void CrsCfg_QR (void);
 static void CrsCfg_Indicators (void);
 
@@ -74,7 +74,7 @@ static void CrsCfg_Indicators (void);
 /***************** Configuration of the current course ***********************/
 /*****************************************************************************/
 
-void CrsCfg_Configuration (bool PrintView)
+void CrsCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COURSE_Information;
    bool PutLink;
@@ -88,83 +88,86 @@ void CrsCfg_Configuration (bool PrintView)
       return;
 
    /***** Initializations *****/
-   PutLink       = !PrintView && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
-   PutFormDeg    = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
-   PutFormName   = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
+   PutLink       = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
+   PutFormDeg    = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   PutFormName   = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
    PutFormYear   =
-   PutFormInsCod = !PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
+   PutFormInsCod = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
 
    /***** Contextual menu *****/
-   if (!PrintView)
-      if (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_USR)
-	{
-         Mnu_ContextMenuBegin ();
-	    Enr_PutLinkToRequestSignUp ();	// Request enrolment in the current course
-         Mnu_ContextMenuEnd ();
-	}
+   if (ViewType == Vie_VIEW &&
+       (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
+	Gbl.Usrs.Me.Role.Logged == Rol_USR))
+     {
+      Mnu_ContextMenuBegin ();
+	 Enr_PutLinkToRequestSignUp ();	// Request enrolment in the current course
+      Mnu_ContextMenuEnd ();
+     }
 
    /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,NULL,
-                    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,NULL,
-                    CrsCfg_PutIconToPrint,NULL,
-		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,NULL,
+		 ViewType == Vie_VIEW ? CrsCfg_PutIconToPrint :
+					NULL,NULL,
+		 ViewType == Vie_VIEW ? Hlp_COURSE_Information :
+					NULL,Box_NOT_CLOSABLE);
 
-   /***** Title *****/
-   HieCfg_Title (PutLink,Hie_CRS);
+      /***** Title *****/
+      HieCfg_Title (PutLink,Hie_CRS);
 
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      /**************************** Left part ***********************************/
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Degree *****/
-	 CrsCfg_Degree (PrintView,PutFormDeg);
+	    /***** Degree *****/
+	    CrsCfg_Degree (ViewType,PutFormDeg);
 
-	 /***** Course name *****/
-	 CrsCfg_FullName (PutFormName);
-	 CrsCfg_ShrtName (PutFormName);
+	    /***** Course name *****/
+	    CrsCfg_FullName (PutFormName);
+	    CrsCfg_ShrtName (PutFormName);
 
-	 /***** Course year *****/
-	 CrsCfg_Year (PutFormYear);
+	    /***** Course year *****/
+	    CrsCfg_Year (PutFormYear);
 
-	 if (!PrintView)
-	   {
-	    /***** Institutional code of the course *****/
-	    CrsCfg_InstitutionalCode (PutFormInsCod);
+	    if (ViewType == Vie_VIEW)
+	      {
+	       /***** Institutional code of the course *****/
+	       CrsCfg_InstitutionalCode (PutFormInsCod);
 
-	    /***** Internal code of the course *****/
-	    CrsCfg_InternalCode ();
-	   }
+	       /***** Internal code of the course *****/
+	       CrsCfg_InternalCode ();
+	      }
 
-	 /***** Shortcut to the couse *****/
-	 CrsCfg_Shortcut (PrintView);
+	    /***** Shortcut to the couse *****/
+	    CrsCfg_Shortcut (ViewType);
 
-	 if (PrintView)
-	    /***** QR code with link to the course *****/
-	    CrsCfg_QR ();
-	 else
-	   {
-	    /***** Number of users *****/
-	    HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_NET);
-	    HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_STD);
-	    HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_UNK);
+	    switch (ViewType)
+	      {
+	       case Vie_VIEW:
+		  /***** Number of users *****/
+		  HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,Rol_UNK);
 
-	    /***** Indicators *****/
-	    CrsCfg_Indicators ();
-	   }
+		  /***** Indicators *****/
+		  CrsCfg_Indicators ();
+		  break;
+	       case Vie_PRINT:
+		  /***** QR code with link to the course *****/
+		  CrsCfg_QR ();
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
+	      }
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** End of left part *****/
-   HTM_DIV_End ();
+      /***** End of left part *****/
+      HTM_DIV_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -186,14 +189,14 @@ static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args)
 
 void CrsCfg_PrintConfiguration (void)
   {
-   CrsCfg_Configuration (true);
+   CrsCfg_Configuration (Vie_PRINT);
   }
 
 /*****************************************************************************/
 /******************** Show degree in course configuration ********************/
 /*****************************************************************************/
 
-static void CrsCfg_Degree (bool PrintView,bool PutForm)
+static void CrsCfg_Degree (Vie_ViewType_t ViewType,bool PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Degree;
@@ -240,7 +243,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	   }
 	 else	// I can not move course to another degree
 	   {
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
@@ -254,7 +257,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 			  20,"LM");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
-	    if (!PrintView)
+	    if (ViewType == Vie_VIEW)
 	      {
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -393,9 +396,9 @@ static void CrsCfg_InternalCode (void)
 /*************** Show course shortcut in course configuration ****************/
 /*****************************************************************************/
 
-static void CrsCfg_Shortcut (bool PrintView)
+static void CrsCfg_Shortcut (Vie_ViewType_t ViewType)
   {
-   HieCfg_Shortcut (PrintView,ParCod_Crs,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   HieCfg_Shortcut (ViewType,ParCod_Crs,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

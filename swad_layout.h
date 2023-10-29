@@ -29,6 +29,7 @@
 
 #include "swad_action.h"
 #include "swad_icon.h"
+#include "swad_view_edit.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -67,7 +68,7 @@ void Lay_WriteAboutZone (void);
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);
 
-void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto);
+void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType,bool DrawingClassPhoto);
 
 void Lay_AdvertisementMobile (void);
 

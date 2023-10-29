@@ -59,11 +59,11 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void SysCfg_Configuration (bool PrintView);
+static void SysCfg_Configuration (Vie_ViewType_t ViewType);
 static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
-static void SysCfg_Shortcut (bool PrintView);
+static void SysCfg_Shortcut (Vie_ViewType_t ViewType);
 static void SysCfg_QR (void);
 static void SysCfg_NumCtys (void);
 static void SysCfg_NumInss (void);
@@ -76,7 +76,7 @@ static void SysCfg_NumCrss (void);
 
 void SysCfg_ShowConfiguration (void)
   {
-   SysCfg_Configuration (false);
+   SysCfg_Configuration (Vie_VIEW);
 
    /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
@@ -88,90 +88,93 @@ void SysCfg_ShowConfiguration (void)
 
 void SysCfg_PrintConfiguration (void)
   {
-   SysCfg_Configuration (true);
+   SysCfg_Configuration (Vie_PRINT);
   }
 
 /*****************************************************************************/
 /******************** Information of the current country *********************/
 /*****************************************************************************/
 
-static void SysCfg_Configuration (bool PrintView)
+static void SysCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_SYSTEM_Information;
    unsigned NumCtrs;
    unsigned NumCtrsWithMap;
 
    /***** Begin box *****/
-   if (PrintView)
-      Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
-                    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
-                    SysCfg_PutIconToPrint,NULL,
-		    Hlp_SYSTEM_Information,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
+		 ViewType == Vie_VIEW ? SysCfg_PutIconToPrint :
+					NULL,NULL,
+		 ViewType == Vie_VIEW ? Hlp_SYSTEM_Information :
+					NULL,Box_NOT_CLOSABLE);
 
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      /**************************** Left part ***********************************/
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Platform *****/
-	 SysCfg_Platform ();
+	    /***** Platform *****/
+	    SysCfg_Platform ();
 
-	 /***** Shortcut to the country *****/
-	 SysCfg_Shortcut (PrintView);
+	    /***** Shortcut to the country *****/
+	    SysCfg_Shortcut (ViewType);
 
-	 /***** Get number of centers with map *****/
-	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
+	    /***** Get number of centers with map *****/
+	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
 
-	 if (PrintView)
-	    /***** QR code with link to the country *****/
-	    SysCfg_QR ();
-	 else
-	   {
-	    /***** Get number of centers *****/
-	    NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-						     Hie_SYS,	// ...in system
-						     Gbl.Hierarchy.Node[Hie_SYS].HieCod);
+	    switch (ViewType)
+	      {
+	       case Vie_VIEW:
+		  /***** Get number of centers *****/
+		  NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+							   Hie_SYS,	// ...in system
+							   Gbl.Hierarchy.Node[Hie_SYS].HieCod);
 
-	    /***** Number of countries,
-		   number of institutions,
-		   number of centers,
-		   number of degrees,
-		   number of courses *****/
-	    SysCfg_NumCtys ();
-	    SysCfg_NumInss ();
-	    HieCfg_NumCtrs (NumCtrs,
-			    false);	// Don't put form
-	    HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
-	    SysCfg_NumDegs ();
-	    SysCfg_NumCrss ();
+		  /***** Number of countries,
+			 number of institutions,
+			 number of centers,
+			 number of degrees,
+			 number of courses *****/
+		  SysCfg_NumCtys ();
+		  SysCfg_NumInss ();
+		  HieCfg_NumCtrs (NumCtrs,
+				  false);	// Don't put form
+		  HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
+		  SysCfg_NumDegs ();
+		  SysCfg_NumCrss ();
 
-	    /***** Number of users in courses of this country *****/
-	    HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_TCH);
-	    HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_NET);
-	    HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_STD);
-	    HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_UNK);
-	   }
+		  /***** Number of users in courses of this country *****/
+		  HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_SYS,-1L,Rol_UNK);
+		  break;
+	       case Vie_PRINT:
+		  /***** QR code with link to the country *****/
+		  SysCfg_QR ();
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
+	      }
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** End of left part *****/
-   HTM_DIV_End ();
-
-   /**************************** Right part **********************************/
-   if (NumCtrsWithMap)
-     {
-      HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
-
-	 /***** Country map *****/
-	 SysCfg_Map ();
-
+      /***** End of left part *****/
       HTM_DIV_End ();
-     }
+
+      /**************************** Right part **********************************/
+      if (NumCtrsWithMap)
+	{
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+
+	    /***** Country map *****/
+	    SysCfg_Map ();
+
+	 HTM_DIV_End ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -285,9 +288,9 @@ static void SysCfg_Platform (void)
 /************** Show platform shortcut in system configuration ***************/
 /*****************************************************************************/
 
-static void SysCfg_Shortcut (bool PrintView)
+static void SysCfg_Shortcut (Vie_ViewType_t ViewType)
   {
-   HieCfg_Shortcut (PrintView,ParCod_None,-1L);
+   HieCfg_Shortcut (ViewType,ParCod_None,-1L);
   }
 
 /*****************************************************************************/

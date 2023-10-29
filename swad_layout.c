@@ -1462,7 +1462,7 @@ static void Lay_WriteFootFromHTMLFile (void)
 /****** Write header and footer of the class photo or academic calendar ******/
 /*****************************************************************************/
 
-void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
+void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType,bool DrawingClassPhoto)
   {
    struct Hie_Node Hie[Hie_NUM_LEVELS];
 
@@ -1492,13 +1492,13 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 	 HTM_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
 	    if (Hie[Hie_INS].HieCod > 0)
 	      {
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[Hie_INS].WWW);
 	       Lgo_DrawLogo (Hie_INS,
 			     Hie[Hie_INS].HieCod,
 			     Hie[Hie_INS].ShrtName,
 			     40,NULL);
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	      }
 	 HTM_TD_End ();
@@ -1508,24 +1508,24 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 	               The_GetSuffix ());
 	    if (Hie[Hie_INS].HieCod > 0)
 	      {
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
 			       Hie[Hie_INS].WWW,The_GetSuffix ());
 	       HTM_Txt (Hie[Hie_INS].FullName);
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	      }
 	    if (Hie[Hie_DEG].HieCod > 0)
 	      {
 	       if (Hie[Hie_INS].HieCod > 0)
 		  HTM_Txt (" - ");
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
 			       Hie[Hie_DEG].WWW,The_GetSuffix ());
 	       HTM_Txt (Hie[Hie_DEG].FullName);
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	      }
 	    HTM_BR ();
@@ -1544,7 +1544,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 	 HTM_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
 	    if (Hie[Hie_DEG].HieCod > 0)
 	      {
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
 			       Hie[Hie_DEG].WWW,The_GetSuffix ());
@@ -1552,7 +1552,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto)
 			     Hie[Hie_DEG].HieCod,
 			     Hie[Hie_DEG].ShrtName,
 			     40,NULL);
-	       if (!PrintView)
+	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	      }
 	 HTM_TD_End ();
