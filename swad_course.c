@@ -1787,7 +1787,7 @@ void Crs_ContEditAfterChgCrs (void)
    if (Ale_GetTypeOfLastAlert () == Ale_SUCCESS)
      {
       /***** Begin alert *****/
-      Ale_ShowLastAlertAndButton1 ();
+      Ale_ShowLastAlertAndButtonBegin ();
 
       /***** Put button to go to course changed *****/
       Crs_PutButtonToGoToCrs ();
@@ -1822,7 +1822,7 @@ void Crs_ContEditAfterChgCrs (void)
 	 Crs_PutButtonToRegisterInCrs ();
 
       /***** End alert *****/
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
                                NULL,NULL,
                                Btn_NO_BUTTON,NULL);
      }

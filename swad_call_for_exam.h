@@ -133,7 +133,7 @@ bool Cfe_CheckIfICanEditCallsForExams (void);
 
 void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                           char **ContentStr,
-                                          long ExaCod,bool GetContent);
+                                          long ExaCod,Ntf_GetContent_t GetContent);
 
 void Cfe_BuildSessionAndDate (const struct Cfe_CallsForExams *CallsForExams,
                               char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE]);

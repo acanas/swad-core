@@ -434,14 +434,14 @@ void Pho_ReqRemMyPhoto (void)
      {
       /***** Show question and button to remove my photo *****/
       /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
 
       /* Show current photo */
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
 			ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
+      Ale_ShowAlertAndButtonEnd (ActRemMyPho,NULL,NULL,
                                NULL,NULL,
                                Btn_REMOVE_BUTTON,Txt_Remove);
      }
@@ -521,7 +521,7 @@ void Pho_ReqRemUsrPhoto (void)
 	   {
 	    /***** Show question and button to remove user's photo *****/
 	    /* Begin alert */
-	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_photo_of_X,
+	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_photo_of_X,
 	                             Gbl.Usrs.Other.UsrDat.FullName);
 
 	    /* Show current photo */
@@ -529,7 +529,7 @@ void Pho_ReqRemUsrPhoto (void)
 			      ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
 	    /* End alert */
-	    Ale_ShowAlertAndButton2 (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
+	    Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
 	                             Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	   }
@@ -734,29 +734,29 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
 
    /***** Begin alert to the user about the number of faces detected in the image *****/
    if (NumFaces.Total == 0)
-      Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
+      Ale_ShowAlertAndButtonBegin (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
    else if (NumFaces.Total == 1)
      {
       if (NumFaces.Green == 1)
-         Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
+         Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
       else
-         Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
+         Ale_ShowAlertAndButtonBegin (Ale_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
      }
    else        // NumFacesTotal > 1
      {
       if (NumFaces.Red == 0)
-         Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_marked_in_green_have_been_detected_,
+         Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_X_faces_marked_in_green_have_been_detected_,
                                   NumFaces.Green);
       else if (NumFaces.Green == 0)
-         Ale_ShowAlertAndButton1 (Ale_WARNING,Txt_X_faces_marked_in_red_have_been_detected_,
+         Ale_ShowAlertAndButtonBegin (Ale_WARNING,Txt_X_faces_marked_in_red_have_been_detected_,
                                   NumFaces.Red);
       else        // NumFaces.Green > 0
         {
          if (NumFaces.Green == 1)
-            Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
+            Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
                                      NumFaces.Total,NumFaces.Red);
          else
-            Ale_ShowAlertAndButton1 (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
+            Ale_ShowAlertAndButtonBegin (Ale_SUCCESS,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
                                      NumFaces.Total,NumFaces.Green,NumFaces.Red);
         }
      }
@@ -798,7 +798,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    HTM_DIV_End ();
 
    /***** End alert *****/
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
                             NULL,NULL,
                             Btn_NO_BUTTON,NULL);
 
@@ -892,7 +892,7 @@ static void Pho_ChangePhoto2 (void)
    char *Img;
 
    /***** Begin alert *****/
-   Ale_ShowLastAlertAndButton1 ();
+   Ale_ShowLastAlertAndButtonBegin ();
 
    /***** Show the three images resulting of the processing *****/
    HTM_TABLE_BeginWide ();
@@ -917,7 +917,7 @@ static void Pho_ChangePhoto2 (void)
    HTM_TABLE_End ();
 
    /***** End alert *****/
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
                             NULL,NULL,
                             Btn_NO_BUTTON,NULL);
   }

@@ -3038,7 +3038,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	{
 	 /***** Show question and button to remove user as a role from project *****/
 	 /* Begin alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
+	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
 				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
 				  Projects->Prj.Title);
 
@@ -3056,7 +3056,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	    Frm_EndForm ();
 
 	 /* End alert */
-	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
 	}
       else
          Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

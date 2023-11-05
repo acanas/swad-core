@@ -1065,9 +1065,9 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
 	                       ClassFeedback[Question->Validity]);
 
 	 /* Show answers */
-	 Qst_WriteAnswersBank (Question,
-			       ClassTxt[Question->Validity],
-			       ClassFeedback[Question->Validity]);
+	 Qst_WriteAnswers (Question,
+			   ClassTxt[Question->Validity],
+			   ClassFeedback[Question->Validity]);
 
       HTM_ARTICLE_End ();
    HTM_TD_End ();

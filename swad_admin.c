@@ -109,14 +109,14 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
               {
 	       /***** Show question and button to register user as administrator *****/
 	       /* Begin alert */
-	       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
+	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
 				        Gbl.Hierarchy.Node[Level].FullName);
 
 	       /* Show user's record */
                Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	       /* End alert */
-	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Level],NULL,NULL,
+	       Ale_ShowAlertAndButtonEnd (Enr_ActNewAdm[Level],NULL,NULL,
 	                                Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 	                                Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
@@ -369,14 +369,14 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
      {
       /***** Show question and button to remove user as administrator *****/
       /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[MeOrOther],
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
 			       Gbl.Hierarchy.Node[Level].FullName);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActRemAdm[Level],NULL,NULL,
+      Ale_ShowAlertAndButtonEnd (ActRemAdm[Level],NULL,NULL,
                                Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
                                Btn_REMOVE_BUTTON,TxtButton[MeOrOther]);
      }

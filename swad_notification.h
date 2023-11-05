@@ -109,6 +109,14 @@ typedef enum
    Ntf_STATUS_EMAIL_SENT      = 3,	// --11  (Status & Ntf_STATUS_BIT_EMAIL) &&  (Status & Ntf_STATUS_BIT_SENT)
   } Ntf_StatusTxt_t;
 
+
+#define Ntf_NUM_GET_CONTENT	2
+typedef enum
+  {
+   Ntf_DONT_GET_CONTENT = 0,
+   Ntf_GET_CONTENT      = 1,
+  } Ntf_GetContent_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -122,7 +130,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
-                                    bool GetContent);
+                                    Ntf_GetContent_t GetContent);
 
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path);
 void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path);

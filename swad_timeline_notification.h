@@ -38,7 +38,7 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 
 void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                  char **ContentStr,
-                                 long PubCod,bool GetContent);
+                                 long PubCod,Ntf_GetContent_t GetContent);
 
 void TmlNtf_MarkMyNotifAsSeen (void);
 

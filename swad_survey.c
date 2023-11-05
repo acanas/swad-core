@@ -1321,7 +1321,7 @@ void Svy_FreeListSurveys (struct Svy_Surveys *Surveys)
 
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
-                         long SvyCod,bool GetContent)
+                         long SvyCod,Ntf_GetContent_t GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1339,7 +1339,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Get content *****/
-      if (GetContent)
+      if (GetContent == Ntf_GET_CONTENT)
 	{
 	 Length = strlen (row[1]);
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)

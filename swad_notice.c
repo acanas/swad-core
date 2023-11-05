@@ -262,13 +262,13 @@ void Not_ReqRemNotice (void)
 
    /***** Show question and button to remove this notice *****/
    /* Begin alert */
-   Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
+   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
 
    /* Show notice */
    Not_GetDataAndShowNotice (NotCod);
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,
+   Ale_ShowAlertAndButtonEnd (ActRemNot,NULL,NULL,
                             Not_PutParNotCod,&NotCod,
 			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemNot));
 
@@ -639,7 +639,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
 void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
-                                     long NotCod,bool GetContent)
+                                     long NotCod,Ntf_GetContent_t GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -667,7 +667,7 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Copy content *****/
-      if (GetContent)
+      if (GetContent == Ntf_GET_CONTENT)
 	{
 	 Length = strlen (row[0]);
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)

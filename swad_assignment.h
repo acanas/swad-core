@@ -96,7 +96,7 @@ void Asg_GetAssignmentDataByFolder (struct Asg_Assignment *Asg);
 
 void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,
-                             long AsgCod,bool GetContent);
+                             long AsgCod,Ntf_GetContent_t GetContent);
 
 void Asg_ReqRemAssignment (void);
 void Asg_RemoveAssignment (void);

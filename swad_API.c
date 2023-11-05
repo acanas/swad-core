@@ -3030,7 +3030,7 @@ int swad__getNotifications (struct soap *soap,
          ContentStr = NULL;
          Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
                                         Cod,Hie[Hie_CRS].HieCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                        true);
+                                        Ntf_GET_CONTENT);
 
          Length = strlen (SummaryStr);
          getNotificationsOut->notificationsArray.__ptr[NumNotif].summary =
@@ -5123,7 +5123,8 @@ int swad__getMarks (struct soap *soap,
    ContentStr = NULL;
    Mrk_GetNotifMyMarks (SummaryStr,	// Not used
                         &ContentStr,
-                        FileMetadata.FilCod,Gbl.Usrs.Me.UsrDat.UsrCod,true);
+                        FileMetadata.FilCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                        Ntf_GET_CONTENT);
    if (ContentStr != NULL)
      {
       Length = strlen (ContentStr);

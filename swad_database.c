@@ -886,33 +886,6 @@ mysql> DESCRIBE crs_requests;
 		   "UNIQUE INDEX(CrsCod,UsrCod),"
 		   "INDEX(UsrCod))");
 
-   /***** Table crs_users *****/
-/*
-mysql> DESCRIBE crs_users;
-+----------+---------------+------+-----+---------+-------+
-| Field    | Type          | Null | Key | Default | Extra |
-+----------+---------------+------+-----+---------+-------+
-| CrsCod   | int(11)       | NO   | PRI | NULL    |       |
-| UsrCod   | int(11)       | NO   | PRI | NULL    |       |
-| Role     | tinyint(4)    | NO   | MUL | 0       |       |
-| Accepted | enum('N','Y') | NO   |     | N       |       |
-+----------+---------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_users ("
-			"CrsCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"Role TINYINT NOT NULL DEFAULT 0,"
-			"Accepted ENUM('N','Y') NOT NULL DEFAULT 'N',"
-	           "UNIQUE INDEX(CrsCod,UsrCod),"
-		   "UNIQUE INDEX(CrsCod,UsrCod,Role),"
-		   "UNIQUE INDEX(UsrCod,CrsCod),"
-		   "UNIQUE INDEX(UsrCod,CrsCod,Role),"
-		   "UNIQUE INDEX(Role,CrsCod,UsrCod),"
-		   "UNIQUE INDEX(Role,UsrCod,CrsCod),"
-		   "INDEX(CrsCod,Role),"
-		   "INDEX(UsrCod,Role))");
-
    /***** Table crs_user_settings *****/
 /*
 mysql> DESCRIBE crs_user_settings;
@@ -946,6 +919,33 @@ mysql> DESCRIBE crs_user_settings;
 			"ColsClassPhoto TINYINT NOT NULL,"
 			"ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 		   "UNIQUE INDEX(UsrCod,CrsCod))");
+
+   /***** Table crs_users *****/
+/*
+mysql> DESCRIBE crs_users;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| CrsCod   | int(11)       | NO   | PRI | NULL    |       |
+| UsrCod   | int(11)       | NO   | PRI | NULL    |       |
+| Role     | tinyint(4)    | NO   | MUL | 0       |       |
+| Accepted | enum('N','Y') | NO   |     | N       |       |
++----------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_users ("
+			"CrsCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"Role TINYINT NOT NULL DEFAULT 0,"
+			"Accepted ENUM('N','Y') NOT NULL DEFAULT 'N',"
+	           "UNIQUE INDEX(CrsCod,UsrCod),"
+		   "UNIQUE INDEX(CrsCod,UsrCod,Role),"
+		   "UNIQUE INDEX(UsrCod,CrsCod),"
+		   "UNIQUE INDEX(UsrCod,CrsCod,Role),"
+		   "UNIQUE INDEX(Role,CrsCod,UsrCod),"
+		   "UNIQUE INDEX(Role,UsrCod,CrsCod),"
+		   "INDEX(CrsCod,Role),"
+		   "INDEX(UsrCod,Role))");
 
    /***** Table ctr_centers *****/
 /*
@@ -2525,12 +2525,12 @@ mysql> DESCRIBE prg_resources;
 +--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
 | Field  | Type                                                                          | Null | Key | Default | Extra          |
 +--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
-| RscCod | int                                                                           | NO   | PRI | NULL    | auto_increment |
-| ItmCod | int                                                                           | NO   | MUL | -1      |                |
-| RscInd | int                                                                           | NO   |     | 0       |                |
+| RscCod | int(11)                                                                       | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int(11)                                                                       | NO   | MUL | -1      |                |
+| RscInd | int(11)                                                                       | NO   |     | 0       |                |
 | Hidden | enum('N','Y')                                                                 | NO   |     | N       |                |
 | Type   | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   |     | non     |                |
-| Cod    | int                                                                           | NO   |     | -1      |                |
+| Cod    | int(11)                                                                       | NO   |     | -1      |                |
 | Title  | varchar(2047)                                                                 | NO   |     | NULL    |                |
 +--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
@@ -2567,13 +2567,13 @@ mysql> DESCRIBE prj_projects;
 +--------------+--------------------------------------------+------+-----+---------------------+----------------+
 | Field        | Type                                       | Null | Key | Default             | Extra          |
 +--------------+--------------------------------------------+------+-----+---------------------+----------------+
-| PrjCod       | int                                        | NO   | PRI | NULL                | auto_increment |
-| CrsCod       | int                                        | NO   | MUL | -1                  |                |
-| DptCod       | int                                        | NO   |     | -1                  |                |
+| PrjCod       | int(11)                                    | NO   | PRI | NULL                | auto_increment |
+| CrsCod       | int(11)                                    | NO   | MUL | -1                  |                |
+| DptCod       | int(11)                                    | NO   |     | -1                  |                |
 | Locked       | enum('N','Y')                              | NO   |     | N                   |                |
 | Hidden       | enum('N','Y')                              | NO   |     | N                   |                |
 | Assigned     | enum('N','Y')                              | NO   |     | N                   |                |
-| NumStds      | int                                        | NO   |     | 1                   |                |
+| NumStds      | int(11)                                    | NO   |     | 1                   |                |
 | Proposal     | enum('new','modified','unmodified')        | NO   |     | new                 |                |
 | CreatTime    | datetime                                   | NO   |     | NULL                |                |
 | ModifTime    | datetime                                   | NO   |     | NULL                |                |
@@ -2613,27 +2613,6 @@ mysql> DESCRIBE prj_projects;
 		   "INDEX(CrsCod,ModifTime),"
 		   "INDEX(CrsCod,DptCod),"
 		   "INDEX(CrsCod,ReviewStatus))");
-
-   /***** Table prj_reviews *****/
-/*
-mysql> DESCRIBE prj_reviews;
-+------------+--------------------------------------+------+-----+----------+-------+
-| Field      | Type                                 | Null | Key | Default  | Extra |
-+------------+--------------------------------------+------+-----+----------+-------+
-| PrjCod     | int                                  | NO   | MUL | NULL     |       |
-| ReviewTime | datetime                             | NO   |     | NULL     |       |
-| Result     | enum('negative','solved','positive') | NO   |     | negative |       |
-| Txt        | text                                 | NO   |     | NULL     |       |
-+------------+--------------------------------------+------+-----+----------+-------+
-4 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_reviews ("
-			"PrjCod INT NOT NULL,"
-			"ReviewTime DATETIME NOT NULL,"
-			"Result ENUM('negative','solved','positive') NOT NULL DEFAULT 'negative',"
-			"Txt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
-		   "INDEX(PrjCod,ReviewTime),"
-		   "INDEX(PrjCod,Result))");
 
    /***** Table prj_rubrics *****/
 /*
@@ -2767,15 +2746,15 @@ mysql> DESCRIBE roo_check_in;
    /***** Table rsc_clipboards *****/
 /*
 mysql> DESCRIBE rsc_clipboards;
-+----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field    | Type                                                                          | Null | Key | Default | Extra |
-+----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod   | int                                                                           | NO   | PRI | NULL    |       |
-| CrsCod   | int                                                                           | NO   | PRI | NULL    |       |
-| Type     | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non     |       |
-| Cod      | int                                                                           | NO   | PRI | -1      |       |
-| CopyTime | timestamp                                                                     | YES  | MUL | NULL    |       |
-+----------+-------------------------------------------------------------------------------+------+-----+---------+-------+
++----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| Field    | Type                                                                          | Null | Key | Default           | Extra                       |
++----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| UsrCod   | int(11)                                                                       | NO   | PRI | NULL              |                             |
+| CrsCod   | int(11)                                                                       | NO   | PRI | NULL              |                             |
+| Type     | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non               |                             |
+| Cod      | int(11)                                                                       | NO   | PRI | -1                |                             |
+| CopyTime | timestamp                                                                     | NO   | MUL | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
 5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rsc_clipboards ("

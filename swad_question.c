@@ -81,6 +81,23 @@ const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES] =
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static void Qst_WriteIntAns (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             __attribute__((unused)) const char *ClassFeedback);
+static void Qst_WriteFltAns (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             __attribute__((unused)) const char *ClassFeedback);
+static void Qst_WriteTF_Ans (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             __attribute__((unused)) const char *ClassFeedback);
+static void Qst_WriteChoAns (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             const char *ClassFeedback);
+
+/*****************************************************************************/
 /***************************** Test constructor ******************************/
 /*****************************************************************************/
 
@@ -524,7 +541,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 	    Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
 
 	    /* Show answers */
-	    Qst_WriteAnswersBank (Question,"Qst_TXT","Qst_TXT_LIGHT");
+	    Qst_WriteAnswers (Question,"Qst_TXT","Qst_TXT_LIGHT");
 	   }
 	 else
 	   {
@@ -994,7 +1011,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	    /* Feedback (row[4]) and answers */
 	    Qst_WriteQstFeedback (Questions->Question.Feedback,"Qst_TXT_LIGHT");
-	    Qst_WriteAnswersBank (&Questions->Question,"Qst_TXT","Qst_TXT_LIGHT");
+	    Qst_WriteAnswers (&Questions->Question,"Qst_TXT","Qst_TXT_LIGHT");
 	 HTM_TD_End ();
 
 	 /* Number of times this question has been answered */
@@ -1305,7 +1322,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	    Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
 
 	    /* Write answers */
-	    Qst_WriteAnswersBank (Question,"Qst_TXT","Qst_TXT_LIGHT");
+	    Qst_WriteAnswers (Question,"Qst_TXT","Qst_TXT_LIGHT");
 	 HTM_TD_End ();
 
       /***** End table row *****/
@@ -1340,24 +1357,24 @@ void Qst_PutParsEditQst (void *Questions)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-void Qst_WriteAnswersBank (struct Qst_Question *Question,
-                           const char *ClassTxt,
-                           const char *ClassFeedback)
+void Qst_WriteAnswers (struct Qst_Question *Question,
+                       const char *ClassTxt,
+                       const char *ClassFeedback)
   {
-   void (*Tst_WriteAnsBank[Qst_NUM_ANS_TYPES]) (struct Qst_Question *Question,
-                                                const char *ClassTxt,
-                                                const char *ClassFeedback) =
+   void (*Tst_WriteAns[Qst_NUM_ANS_TYPES]) (struct Qst_Question *Question,
+                                            const char *ClassTxt,
+                                            const char *ClassFeedback) =
     {
-     [Qst_ANS_INT            ] = Qst_WriteIntAnsBank,
-     [Qst_ANS_FLOAT          ] = Qst_WriteFltAnsBank,
-     [Qst_ANS_TRUE_FALSE     ] = Qst_WriteTF_AnsBank,
-     [Qst_ANS_UNIQUE_CHOICE  ] = Qst_WriteChoAnsBank,
-     [Qst_ANS_MULTIPLE_CHOICE] = Qst_WriteChoAnsBank,
-     [Qst_ANS_TEXT           ] = Qst_WriteChoAnsBank,
+     [Qst_ANS_INT            ] = Qst_WriteIntAns,
+     [Qst_ANS_FLOAT          ] = Qst_WriteFltAns,
+     [Qst_ANS_TRUE_FALSE     ] = Qst_WriteTF_Ans,
+     [Qst_ANS_UNIQUE_CHOICE  ] = Qst_WriteChoAns,
+     [Qst_ANS_MULTIPLE_CHOICE] = Qst_WriteChoAns,
+     [Qst_ANS_TEXT           ] = Qst_WriteChoAns,
     };
 
    /***** Write answers *****/
-   Tst_WriteAnsBank[Question->Answer.Type] (Question,ClassTxt,ClassFeedback);
+   Tst_WriteAns[Question->Answer.Type] (Question,ClassTxt,ClassFeedback);
   }
 
 /*****************************************************************************/
@@ -1391,9 +1408,9 @@ void Qst_ListOneQstToEdit (struct Qst_Questions *Questions)
 /****************** Write integer answer when editing a test *****************/
 /*****************************************************************************/
 
-void Qst_WriteIntAnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          __attribute__((unused)) const char *ClassFeedback)
+static void Qst_WriteIntAns (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             __attribute__((unused)) const char *ClassFeedback)
   {
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
       HTM_TxtF ("(%ld)",Question->Answer.Integer);
@@ -1404,9 +1421,9 @@ void Qst_WriteIntAnsBank (struct Qst_Question *Question,
 /****************** Write float answer when editing a test *******************/
 /*****************************************************************************/
 
-void Qst_WriteFltAnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          __attribute__((unused)) const char *ClassFeedback)
+static void Qst_WriteFltAns (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             __attribute__((unused)) const char *ClassFeedback)
   {
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
       HTM_Txt ("([");
@@ -1421,9 +1438,9 @@ void Qst_WriteFltAnsBank (struct Qst_Question *Question,
 /*********** Write false / true answer when listing test questions ***********/
 /*****************************************************************************/
 
-void Qst_WriteTF_AnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          __attribute__((unused)) const char *ClassFeedback)
+static void Qst_WriteTF_Ans (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             __attribute__((unused)) const char *ClassFeedback)
   {
    /***** Write answer *****/
    HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
@@ -1437,9 +1454,9 @@ void Qst_WriteTF_AnsBank (struct Qst_Question *Question,
 /**** Write single or multiple choice answer when listing test questions *****/
 /*****************************************************************************/
 
-void Qst_WriteChoAnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          const char *ClassFeedback)
+static void Qst_WriteChoAns (struct Qst_Question *Question,
+                             const char *ClassTxt,
+                             const char *ClassFeedback)
   {
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;

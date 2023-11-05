@@ -111,7 +111,7 @@ void Enr_ReqSignUpInCrs (void);
 void Enr_SignUpInCrs (void);
 void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                    char **ContentStr,
-                                   long ReqCod,bool GetContent);
+                                   long ReqCod,Ntf_GetContent_t GetContent);
 void Enr_AskIfRejectSignUp (void);
 void Enr_RejectSignUp (void);
 void Enr_ShowEnrolmentRequests (void);

@@ -113,7 +113,7 @@ void Svy_GetSurveyDataByFolder (struct Svy_Survey *Svy);
 void Svy_FreeListSurveys (struct Svy_Surveys *Surveys);
 void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
-                         long SvyCod,bool GetContent);
+                         long SvyCod,Ntf_GetContent_t GetContent);
 void Svy_AskRemSurvey (void);
 void Svy_RemoveSurvey (void);
 void Svy_AskResetSurvey (void);

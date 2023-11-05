@@ -72,7 +72,7 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                                  void (*FuncPars) (void *Args),void *Args,
 				 Btn_Button_t Button,const char *TxtButton);
-void Ale_ShowLastAlertAndButton1 (void);
+void Ale_ShowLastAlertAndButtonBegin (void);
 void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
                           void (*FuncPars) (void *Args),void *Args,
 			  const char *Txt,const char *Title);
@@ -80,10 +80,10 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
                              void (*FuncPars) (void *Args),void *Args,
                              Btn_Button_t Button,const char *TxtButton,
 			     Ale_AlertType_t AlertType,const char *fmt,...);
-void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...);
-void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                              void (*FuncPars) (void *Args),void *Args,
-                              Btn_Button_t Button,const char *TxtButton);
+void Ale_ShowAlertAndButtonBegin (Ale_AlertType_t AlertType,const char *fmt,...);
+void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
+                                void (*FuncPars) (void *Args),void *Args,
+                                Btn_Button_t Button,const char *TxtButton);
 
 void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void);
 void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);

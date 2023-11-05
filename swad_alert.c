@@ -72,7 +72,7 @@ static void Ale_ResetAlert (size_t NumAlert);
 
 static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt);
 
-static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt);
+static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char *Txt);
 
 /*****************************************************************************/
 /**************************** Create a new alert *****************************/
@@ -281,8 +281,8 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
    if (AlertType != Ale_NONE)
      {
       /****** Print fix alert and button ******/
-      Ale_ShowFixAlertAndButton1 (AlertType,Txt);
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+      Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
+      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
 			       NULL,NULL,
 			       Btn_NO_BUTTON,NULL);
      }
@@ -297,22 +297,23 @@ void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,cons
 				 Btn_Button_t Button,const char *TxtButton)
   {
    /***** Show last alert and then reset it *****/
-   Ale_ShowLastAlertAndButton1 ();
+   Ale_ShowLastAlertAndButtonBegin ();
 
    /***** Show button *****/
-   Ale_ShowAlertAndButton2 (NextAction,Anchor,OnSubmit,
-                            FuncPars,Args,
-                            Button,TxtButton);
+   Ale_ShowAlertAndButtonEnd (NextAction,Anchor,OnSubmit,
+                              FuncPars,Args,
+                              Button,TxtButton);
   }
 
 /*****************************************************************************/
 /********** Show the first part of more recent alert with a button ***********/
 /*****************************************************************************/
 
-void Ale_ShowLastAlertAndButton1 (void)
+void Ale_ShowLastAlertAndButtonBegin (void)
   {
    /***** Show last alert *****/
-   Ale_ShowFixAlertAndButton1 (Ale_GetTypeOfLastAlert (),Ale_GetTextOfLastAlert ());
+   Ale_ShowFixAlertAndButtonBegin (Ale_GetTypeOfLastAlert (),
+				   Ale_GetTextOfLastAlert ());
 
    /***** Reset last alert *****/
    Ale_ResetLastAlert ();
@@ -356,10 +357,10 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
       Err_NotEnoughMemoryExit ();
 
    /****** Print fix alert and button ******/
-   Ale_ShowFixAlertAndButton1 (AlertType,Txt);
-   Ale_ShowAlertAndButton2 (NextAction,Anchor,OnSubmit,
-                            FuncPars,Args,
-                            Button,TxtButton);
+   Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
+   Ale_ShowAlertAndButtonEnd (NextAction,Anchor,OnSubmit,
+                              FuncPars,Args,
+                              Button,TxtButton);
 
    /***** Free text *****/
    free (Txt);
@@ -369,7 +370,7 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
 /******** Show the first part of a formatted-text alert with a button ********/
 /*****************************************************************************/
 
-void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
+void Ale_ShowAlertAndButtonBegin (Ale_AlertType_t AlertType,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -383,7 +384,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
       Err_NotEnoughMemoryExit ();
 
    /****** Print start of fix alert and button ******/
-   Ale_ShowFixAlertAndButton1 (AlertType,Txt);
+   Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
 
    /***** Free text *****/
    free (Txt);
@@ -393,7 +394,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
 /*********** Show the first part of a fix-text alert with a button ***********/
 /*****************************************************************************/
 
-static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
+static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char *Txt)
   {
    extern const char *Txt_Close;
    char IdAlert[Frm_MAX_BYTES_ID + 1];
@@ -463,9 +464,9 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
 /*************** Show the second part of an alert with a button **************/
 /*****************************************************************************/
 
-void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                              void (*FuncPars) (void *Args),void *Args,
-                              Btn_Button_t Button,const char *TxtButton)
+void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
+                                void (*FuncPars) (void *Args),void *Args,
+                                Btn_Button_t Button,const char *TxtButton)
   {
       /***** Optional button *****/
       if (NextAction != ActUnk &&

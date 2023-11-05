@@ -634,7 +634,7 @@ void Mrk_ShowMyMarks (void)
 
 void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,
-                          long MrkCod,long UsrCod,bool GetContent)
+                          long MrkCod,long UsrCod,Ntf_GetContent_t GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -693,7 +693,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 					    FileName);
       Str_Copy (SummaryStr,FileName,Cns_MAX_BYTES_TEXT);
 
-      if (GetContent)
+      if (GetContent == Ntf_GET_CONTENT)
 	{
 	 /* Header (row[3]) */
 	 if (sscanf (row[3],"%u",&(Marks.Header)) != 1)

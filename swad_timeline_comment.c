@@ -104,7 +104,7 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 
 static long TmlCom_ReceiveComm (void);
 
-static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline);
+static void TmlCom_ReqRemComm (struct Tml_Timeline *Timeline);
 static void TmlCom_PutParsRemoveComm (void *Timeline);
 static void TmlCom_RemoveComm (void);
 
@@ -841,7 +841,7 @@ void TmlCom_ReqRemComUsr (void)
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Request the removal of comment in note *****/
-      TmlCom_RequestRemovalComm (&Timeline);
+      TmlCom_ReqRemComm (&Timeline);
 
       /***** Write timeline again (user) *****/
       Tml_ShowTimelineUsr (&Timeline);
@@ -858,13 +858,13 @@ void TmlCom_ReqRemComGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Request the removal of comment in note *****/
-   TmlCom_RequestRemovalComm (&Timeline);
+   TmlCom_ReqRemComm (&Timeline);
 
    /***** Write timeline again (global) *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
+static void TmlCom_ReqRemComm (struct Tml_Timeline *Timeline)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    struct TmlCom_Comment Com;
@@ -906,8 +906,7 @@ static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
 
    /* End alert */
    Timeline->PubCod = Com.PubCod;	// Publication to be removed
-   TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_COMM,
-			  TmlCom_PutParsRemoveComm);
+   TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_COMM,TmlCom_PutParsRemoveComm);
 
    /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);

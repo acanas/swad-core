@@ -9112,7 +9112,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat)
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
-                                     long FilCod,bool GetContent)
+                                     long FilCod,Ntf_GetContent_t GetContent)
   {
    extern const char *Txt_Filename;
    extern const char *Txt_Folder;
@@ -9124,7 +9124,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    /***** Return nothing on error *****/
    SummaryStr[0] = '\0';	// Return nothing on error
-   if (GetContent && ContentStr)
+   if (GetContent == Ntf_GET_CONTENT && ContentStr)
       *ContentStr = NULL;
 
    /***** Get file metadata *****/
@@ -9135,7 +9135,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Str_Copy (SummaryStr,FileMetadata.FilFolLnk.Name,Ntf_MAX_BYTES_SUMMARY);
 
    /***** Copy some file metadata into content string *****/
-   if (GetContent && ContentStr)
+   if (GetContent == Ntf_GET_CONTENT && ContentStr)
      {
       /* Get publisher */
       if (FileMetadata.PublisherUsrCod > 0)

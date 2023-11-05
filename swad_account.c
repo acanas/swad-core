@@ -896,7 +896,7 @@ void Acc_AskIfRemoveMyAccount (void)
 
    /***** Show question and button to remove my user account *****/
    /* Begin alert */
-   Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
+   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
 
    /* Show my record */
    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
@@ -908,7 +908,7 @@ void Acc_AskIfRemoveMyAccount (void)
    Frm_EndForm ();
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
                             NULL,NULL,
                             Btn_NO_BUTTON,NULL);
 
@@ -925,7 +925,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
      {
       /***** Show question and button to remove user account *****/
       /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -938,7 +938,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Frm_EndForm ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
                                NULL,NULL,
                                Btn_NO_BUTTON,NULL);
      }

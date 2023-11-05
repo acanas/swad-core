@@ -90,7 +90,7 @@ void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 
 void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                  char **ContentStr,
-                                 long PubCod,bool GetContent)
+                                 long PubCod,Ntf_GetContent_t GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -140,7 +140,7 @@ void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
             DB_FreeMySQLResult (&mysql_res);
 
 	    /***** Copy content string *****/
-	    if (GetContent)
+	    if (GetContent == Ntf_GET_CONTENT)
 	      {
 	       Length = strlen (Content.Txt);
 	       if ((*ContentStr = malloc (Length + 1)) != NULL)

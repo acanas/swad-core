@@ -330,7 +330,7 @@ void TmlFrm_FormToShowHiddenComms (long NotCod,
 
 void TmlFrm_BeginAlertRemove (const char *QuestionTxt)
   {
-   Ale_ShowAlertAndButton1 (Ale_QUESTION,QuestionTxt);
+   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,QuestionTxt);
   }
 
 void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
@@ -338,11 +338,11 @@ void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
                             void (*FuncPars) (void *Args))
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Ale_ShowAlertAndButton2 (TmlFrm_ActionUsr[Action],"timeline",NULL,
-			       FuncPars,Timeline,
-			       Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionUsr[Action]));
+      Ale_ShowAlertAndButtonEnd (TmlFrm_ActionUsr[Action],"timeline",NULL,
+			         FuncPars,Timeline,
+			         Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionUsr[Action]));
    else
-      Ale_ShowAlertAndButton2 (TmlFrm_ActionGbl[Action],NULL,NULL,
-			       FuncPars,Timeline,
-			       Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionGbl[Action]));
+      Ale_ShowAlertAndButtonEnd (TmlFrm_ActionGbl[Action],NULL,NULL,
+			         FuncPars,Timeline,
+			         Btn_REMOVE_BUTTON,Act_GetActionText (TmlFrm_ActionGbl[Action]));
   }

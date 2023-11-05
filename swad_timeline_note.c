@@ -723,19 +723,23 @@ void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,
       case TmlNot_DEG_SHA_PUB_FILE:
       case TmlNot_CRS_DOC_PUB_FILE:
       case TmlNot_CRS_SHA_PUB_FILE:
-	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,Not->Cod,false);
+	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,Not->Cod,
+					 Ntf_DONT_GET_CONTENT);
          break;
       case TmlNot_CALL_FOR_EXAM:
-         Cfe_GetSummaryAndContentCallForExam (SummaryStr,NULL,Not->Cod,false);
+         Cfe_GetSummaryAndContentCallForExam (SummaryStr,NULL,Not->Cod,
+					      Ntf_DONT_GET_CONTENT);
          break;
       case TmlNot_POST:
 	 // Not applicable
          break;
       case TmlNot_FORUM_POST:
-         For_GetSummaryAndContentForumPst (SummaryStr,NULL,Not->Cod,false);
+         For_GetSummaryAndContentForumPst (SummaryStr,NULL,Not->Cod,
+					   Ntf_DONT_GET_CONTENT);
          break;
       case TmlNot_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Not->Cod,false);
+         Not_GetSummaryAndContentNotice (SummaryStr,NULL,Not->Cod,
+					 Ntf_DONT_GET_CONTENT);
          break;
      }
   }
@@ -1017,15 +1021,14 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
 		 NULL,Box_CLOSABLE);
       HTM_DIV_Begin ("class=\"Tml_WIDTH\"");
 	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					      Tml_TOP_MESSAGE_NONE,
-					      -1L);
+					     Tml_TOP_MESSAGE_NONE,
+					     -1L);
       HTM_DIV_End ();
    Box_BoxEnd ();
 
    /* End alert */
    Timeline->NotCod = Not.NotCod;	// Note to be removed
-   TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_NOTE,
-			  TmlNot_PutParsRemoveNote);
+   TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_NOTE,TmlNot_PutParsRemoveNote);
   }
 
 /*****************************************************************************/

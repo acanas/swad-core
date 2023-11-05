@@ -110,7 +110,7 @@ void Msg_ShowRecMsgs (void);
 
 void Msg_PutParsMsgsFilters (void *Messages);
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                          char **ContentStr,long MsgCod,bool GetContent);
+                          char **ContentStr,long MsgCod,Ntf_GetContent_t GetContent);
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);
 void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg);

@@ -175,26 +175,12 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 void Qst_PutParsEditQst (void *Questions);
 
-void Qst_WriteAnswersBank (struct Qst_Question *Question,
-                           const char *ClassTxt,
-                           const char *ClassFeedback);
+void Qst_WriteAnswers (struct Qst_Question *Question,
+                       const char *ClassTxt,
+                       const char *ClassFeedback);
 
 void Qst_ListOneQstToEdit (struct Qst_Questions *Questions);
 
-//-----------------------------------------------------------------------------
-
-void Qst_WriteIntAnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          __attribute__((unused)) const char *ClassFeedback);
-void Qst_WriteFltAnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          __attribute__((unused)) const char *ClassFeedback);
-void Qst_WriteTF_AnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          __attribute__((unused)) const char *ClassFeedback);
-void Qst_WriteChoAnsBank (struct Qst_Question *Question,
-                          const char *ClassTxt,
-                          const char *ClassFeedback);
 //-----------------------------------------------------------------------------
 
 void Qst_GetCorrectIntAnswerFromDB (struct Qst_Question *Question);

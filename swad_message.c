@@ -942,12 +942,12 @@ void Msg_ReqDelAllRecMsgs (void)
    if (Messages.FilterContent[0])
      {
       if (Messages.ShowOnlyUnreadMsgs)
-         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+         Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 							     Txt_any_user,
 				  Messages.FilterCrsShrtName,Messages.FilterContent);
       else
-         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+         Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 							     Txt_any_user,
 				  Messages.FilterCrsShrtName,Messages.FilterContent);
@@ -955,12 +955,12 @@ void Msg_ReqDelAllRecMsgs (void)
    else
      {
       if (Messages.ShowOnlyUnreadMsgs)
-         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
+         Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
 				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 							     Txt_any_user,
 				  Messages.FilterCrsShrtName);
       else
-         Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
+         Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
 				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 							     Txt_any_user,
 				  Messages.FilterCrsShrtName);
@@ -971,7 +971,7 @@ void Msg_ReqDelAllRecMsgs (void)
    Msg_ShowSntOrRcvMessages (&Messages);
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,NULL,
+   Ale_ShowAlertAndButtonEnd (ActDelAllRcvMsg,NULL,NULL,
                             Msg_PutParsMsgsFilters,&Messages,
                             Btn_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
@@ -999,12 +999,12 @@ void Msg_ReqDelAllSntMsgs (void)
    /***** Show question and button to remove messages received *****/
    /* Begin alert */
    if (Messages.FilterContent[0])
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 			       Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 							  Txt_any_user,
 			       Messages.FilterCrsShrtName,Messages.FilterContent);
    else
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
 			       Messages.FilterFromTo[0] ? Messages.FilterFromTo :
 							  Txt_any_user,
 			       Messages.FilterCrsShrtName);
@@ -1014,7 +1014,7 @@ void Msg_ReqDelAllSntMsgs (void)
    Msg_ShowSntOrRcvMessages (&Messages);
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,NULL,
+   Ale_ShowAlertAndButtonEnd (ActDelAllSntMsg,NULL,NULL,
                             Msg_PutParsMsgsFilters,&Messages,
                             Btn_REMOVE_BUTTON,Txt_Delete_messages_sent);
   }
@@ -2188,7 +2188,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 /*****************************************************************************/
 
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                          char **ContentStr,long MsgCod,bool GetContent)
+                          char **ContentStr,long MsgCod,Ntf_GetContent_t GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2214,7 +2214,7 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Copy subject *****/
-      if (GetContent)
+      if (GetContent == Ntf_GET_CONTENT)
 	{
 	 Length = strlen (row[1]);
 	 if ((*ContentStr = malloc (Length + 1)) == NULL)

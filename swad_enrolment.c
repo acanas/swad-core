@@ -1723,7 +1723,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 	{
 	 /***** Show question and button to remove students *****/
 	 /* Begin alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
+	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
 				  NumStds,
 				  Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
@@ -1735,7 +1735,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 	 Frm_EndForm ();
 
 	 /* End alert */
-	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
 				  NULL,NULL,
 				  Btn_NO_BUTTON,NULL);
 	}
@@ -1889,7 +1889,7 @@ void Enr_SignUpInCrs (void)
 
 void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                    char **ContentStr,
-                                   long ReqCod,bool GetContent)
+                                   long ReqCod,Ntf_GetContent_t GetContent)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
@@ -1919,7 +1919,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex],
 		Ntf_MAX_BYTES_SUMMARY);
 
-      if (GetContent)
+      if (GetContent == Ntf_GET_CONTENT)
 	 /* Write desired role into content */
 	 if (asprintf (ContentStr,
 		       "%s",	// TODO: Write more info in this content
@@ -1977,7 +1977,7 @@ void Enr_AskIfRejectSignUp (void)
            {
 	    /***** Show question and button to reject user's enrolment request *****/
 	    /* Begin alert */
-	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
+	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
 				     Gbl.Usrs.Other.UsrDat.FullName,
 				     Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
 				     Gbl.Hierarchy.Node[Hie_CRS].FullName);
@@ -1986,7 +1986,7 @@ void Enr_AskIfRejectSignUp (void)
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	    /* End alert */
-	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,NULL,
+	    Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
 	                             Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Reject);
            }
@@ -3105,7 +3105,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
 
       /***** Show question and button to remove user as administrator *****/
       /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Question[MeOrOther],
+      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
 			       Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
       /* Show user's record */
@@ -3121,7 +3121,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
       Frm_EndForm ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
                                NULL,NULL,
                                Btn_NO_BUTTON,NULL);
      }

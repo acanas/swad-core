@@ -950,7 +950,7 @@ unsigned Tml_DB_GetPubDataByCod (long PubCod,MYSQL_RES **mysql_res)
    if (PubCod <= 0)
       return 0;
 
-   /***** Get data of note from database *****/
+   /***** Get data of publication from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of publication",
 		   "SELECT PubCod,"		// row[0]

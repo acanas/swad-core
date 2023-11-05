@@ -1107,7 +1107,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
-                                       long PstCod,bool GetContent)
+                                       long PstCod,Ntf_GetContent_t GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1125,7 +1125,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
       Str_Copy (SummaryStr,row[0],Ntf_MAX_BYTES_SUMMARY);
 
       /***** Copy content *****/
-      if (GetContent)
+      if (GetContent == Ntf_GET_CONTENT)
 	{
 	 Length = strlen (row[1]);
 

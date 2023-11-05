@@ -262,7 +262,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct Usr_Data *UsrDat);
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
-                                     long FilCod,bool GetContent);
+                                     long FilCod,Ntf_GetContent_t GetContent);
 
 void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 			const char *TitleSingular,const char *TitlePlural);

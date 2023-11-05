@@ -614,8 +614,9 @@ void Ntf_ShowMyNotifications (void)
 		  ContentStr = NULL;
 
 		  Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-						 Cod,Hie[Hie_CRS].HieCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-						 false);
+						 Cod,Hie[Hie_CRS].HieCod,
+						 Gbl.Usrs.Me.UsrDat.UsrCod,
+						 Ntf_DONT_GET_CONTENT);
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("colspan=\"2\"");
@@ -893,7 +894,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
-                                    bool GetContent)
+                                    Ntf_GetContent_t GetContent)
   {
    SummaryStr[0] = '\0';
 

@@ -53,6 +53,6 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks);
 void Mrk_ShowMyMarks (void);
 void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,
-                          long MrkCod,long UsrCod,bool GetContent);
+                          long MrkCod,long UsrCod,Ntf_GetContent_t GetContent);
 
 #endif

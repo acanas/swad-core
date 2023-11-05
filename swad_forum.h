@@ -135,7 +135,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
-                                       long PstCod,bool GetContent);
+                                       long PstCod,Ntf_GetContent_t GetContent);
 
 void For_PutAllParsForum (unsigned NumPageThreads,
                           unsigned NumPagePosts,

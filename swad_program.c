@@ -54,7 +54,7 @@
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
-#include "swad_view_edit.h"
+#include "swad_view.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

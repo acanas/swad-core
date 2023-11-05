@@ -411,7 +411,7 @@ void Cfe_ReqRemCallForExam (void)
 
    /***** Show question and button to remove call for exam *****/
    /* Begin alert */
-   Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_call_for_exam);
+   Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_call_for_exam);
 
       /* Show call for exam */
       Cfe_AllocMemCallForExam (&CallsForExams);
@@ -421,7 +421,7 @@ void Cfe_ReqRemCallForExam (void)
       Cfe_FreeMemCallForExam (&CallsForExams);
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActRemCfe,NULL,NULL,
+   Ale_ShowAlertAndButtonEnd (ActRemCfe,NULL,NULL,
                             Cfe_PutParExaCod,&CallsForExams.ExaCod,
 			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemCfe));
   }
@@ -1554,7 +1554,7 @@ static void Cfe_PutParExaCod (void *ExaCod)
 
 void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                           char **ContentStr,
-                                          long ExaCod,bool GetContent)
+                                          long ExaCod,Ntf_GetContent_t GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;
    struct Cfe_CallsForExams CallsForExams;
@@ -1573,7 +1573,7 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
    Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
    /***** Content *****/
-   if (GetContent)
+   if (GetContent == Ntf_GET_CONTENT)
       Cfe_GetNotifContentCallForExam (&CallsForExams,ContentStr);
 
    /***** Summary *****/

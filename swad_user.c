@@ -1245,7 +1245,7 @@ void Usr_WelcomeUsr (void)
                   Usr_DB_MarkMyBirthdayAsCongratulated ();
 
 		  /* Begin alert */
-		  Ale_ShowAlertAndButton1 (Ale_INFO,Txt_Happy_birthday_X,
+		  Ale_ShowAlertAndButtonBegin (Ale_INFO,Txt_Happy_birthday_X,
 			                   Gbl.Usrs.Me.UsrDat.FrstName);
 
 		  /* Show cake icon */
@@ -1255,7 +1255,7 @@ void Usr_WelcomeUsr (void)
 			   "class=\"ICO160x160\"");
 
 		  /* End alert */
-		  Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+		  Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
 		                           NULL,NULL,
 		                           Btn_NO_BUTTON,NULL);
                  }
