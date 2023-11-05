@@ -963,7 +963,7 @@ static void RubCri_WriteTitle (const struct RubCri_Criterion *Criterion)
 static void RubCri_WriteLink (const struct RubCri_Criterion *Criterion)
   {
    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
-      Rsc_WriteLinkName (&Criterion->Link,Frm_DONT_PUT_FORM_TO_GO);
+      Rsc_WriteLinkName (&Criterion->Link,Frm_DONT_PUT_FORM);
    HTM_TD_End ();
   }
 

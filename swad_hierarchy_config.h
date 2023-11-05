@@ -34,11 +34,12 @@
 /*****************************************************************************/
 
 void HieCfg_Title (bool PutLink,Hie_Level_t LogoScope);
-void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull);
-void HieCfg_WWW (Vie_ViewType_t ViewType,bool PutForm,Act_Action_t NextAction,
-		 const char WWW[Cns_MAX_BYTES_WWW + 1]);
+void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
+		  Nam_ShrtOrFullName_t ShrtOrFull);
+void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
+		 Act_Action_t NextAction,const char WWW[Cns_MAX_BYTES_WWW + 1]);
 void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod);
-void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
+void HieCfg_NumCtrs (unsigned NumCtrs,Frm_PutForm_t PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 void HieCfg_QR (ParCod_Param_t ParCode,long HieCod);
 void HieCfg_NumUsrsInCrss (Hie_Level_t Level,long Cod,Rol_Role_t Role);

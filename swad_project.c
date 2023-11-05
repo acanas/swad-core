@@ -1692,7 +1692,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
    extern const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS];
    extern const char *Txt_Comments;
    extern const char *Txt_Save_changes;
-   bool PutForm;
+   Frm_PutForm_t PutForm;
    static unsigned UniqueId = 0;
    char *Id;
 
@@ -1700,10 +1700,11 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
    switch (Projects->View)
      {
       case Prj_PRINT_ONE_PROJECT:
-	 PutForm = false;
+	 PutForm = Frm_DONT_PUT_FORM;
 	 break;
       default:
-	 PutForm = Prj_CheckIfICanReviewProjects ();
+	 PutForm = Prj_CheckIfICanReviewProjects () ? Frm_PUT_FORM :
+						      Frm_DONT_PUT_FORM;
 	 break;
      }
 
@@ -1735,17 +1736,20 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	    break;
 	}
 
-      if (PutForm)
+      switch (PutForm)
 	{
-	 /***** Begin form to change review status and text *****/
-	 Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
-	    Prj_PutCurrentPars (Projects);
+	 case Frm_DONT_PUT_FORM:
+	    HTM_Txt (Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
+	    break;
+	 case Frm_PUT_FORM:
+	    /***** Begin form to change review status and text *****/
+	    Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
+	       Prj_PutCurrentPars (Projects);
 
-	    /***** Selector to change review status *****/
-	    Prj_PutSelectorReviewStatus (Projects);
+	       /***** Selector to change review status *****/
+	       Prj_PutSelectorReviewStatus (Projects);
+	    break;
 	}
-      else
-	 HTM_Txt (Txt_PROJECT_REVIEW_SINGUL[Projects->Prj.Review.Status]);
 
       HTM_NBSP ();
       Ico_PutIconOff (ReviewIcon[Projects->Prj.Review.Status].Icon,
@@ -1776,47 +1780,51 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 Prj_PutWarningIcon ();
 
       /***** Revision text *****/
-      if (PutForm)
+      switch (PutForm)
 	{
-	    /* Show text form */
-	    HTM_BR ();
-	    HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"1\""
-				" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
-				" placeholder=\"%s&hellip;\""
-				" onchange=\"unhideElement('prj_rev_%ld');return false;\"",
-				The_GetSuffix (),Txt_Comments,
-				Projects->Prj.PrjCod);
+	 case Frm_DONT_PUT_FORM:
+	    if (Projects->Prj.Review.Txt[0])
+	      {
+	       /* Change text format */
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,
+				 Str_DONT_REMOVE_SPACES);
+	       switch (Projects->View)
+		 {
+		  case Prj_PRINT_ONE_PROJECT:
+		     break;
+		  default:
+		     ALn_InsertLinks (Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+		     break;
+		 }
+
+	       /* Show text */
+	       HTM_BR ();
 	       HTM_Txt (Projects->Prj.Review.Txt);
-	    HTM_TEXTAREA_End ();
+	      }
+	    break;
+	 case Frm_PUT_FORM:
+	       /* Show text form */
+	       HTM_BR ();
+	       HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"1\""
+				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+				   " placeholder=\"%s&hellip;\""
+				   " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
+				   The_GetSuffix (),Txt_Comments,
+				   Projects->Prj.PrjCod);
+		  HTM_Txt (Projects->Prj.Review.Txt);
+	       HTM_TEXTAREA_End ();
 
-            /* Button to save changes.
-               Initially hidden, is shown when clicking on selector or text */
-	    HTM_DIV_Begin ("id=\"prj_rev_%ld\" style=\"display:none;\"",
-			   Projects->Prj.PrjCod);
-	       Btn_PutConfirmButtonInline (Txt_Save_changes);
-	    HTM_DIV_End ();
+	       /* Button to save changes.
+		  Initially hidden, is shown when clicking on selector or text */
+	       HTM_DIV_Begin ("id=\"prj_rev_%ld\" style=\"display:none;\"",
+			      Projects->Prj.PrjCod);
+		  Btn_PutConfirmButtonInline (Txt_Save_changes);
+	       HTM_DIV_End ();
 
-         /* End form */
-	 Frm_EndForm ();
-	}
-      else if (Projects->Prj.Review.Txt[0])
-	{
-	 /* Change text format */
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,
-			   Str_DONT_REMOVE_SPACES);
-	 switch (Projects->View)
-	   {
-	    case Prj_PRINT_ONE_PROJECT:
-	       break;
-	    default:
-	       ALn_InsertLinks (Projects->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-	       break;
-	   }
-
-	 /* Show text */
-	 HTM_BR ();
-	 HTM_Txt (Projects->Prj.Review.Txt);
+	    /* End form */
+	    Frm_EndForm ();
+	    break;
 	}
 
       HTM_TD_End ();

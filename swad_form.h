@@ -44,11 +44,12 @@
 #define Frm_MAX_BYTES_PARAM_LOCATION	256
 #define Frm_MAX_BYTES_PARAMS_STR	(Frm_MAX_BYTES_PARAM_ACTION + Frm_MAX_BYTES_PARAM_SESSION + Frm_MAX_BYTES_PARAM_LOCATION)
 
+#define Frm_NUM_PUT_FORM 2
 typedef enum
   {
-   Frm_DONT_PUT_FORM_TO_GO,
-   Frm_PUT_FORM_TO_GO,
-  } Frm_PutFormToGo_t;
+   Frm_DONT_PUT_FORM,
+   Frm_PUT_FORM,
+  } Frm_PutForm_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

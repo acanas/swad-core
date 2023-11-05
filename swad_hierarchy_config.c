@@ -85,7 +85,8 @@ void HieCfg_Title (bool PutLink,Hie_Level_t Level)
 /******************* Show short/full name in configuration *******************/
 /*****************************************************************************/
 
-void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull)
+void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
+		  Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxChars[Nam_NUM_SHRT_FULL_NAMES];
@@ -103,7 +104,12 @@ void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull
       [Hie_CRS][Nam_SHRT_NAME] = ActRenCrsShoCfg,
       [Hie_CRS][Nam_FULL_NAME] = ActRenCrsFulCfg,
      };
-   char *Name[Nam_NUM_SHRT_FULL_NAMES] =
+   const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = Nam_Params[ShrtOrFull],
+     };
+   const char *Name[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Level].ShrtName,
       [Nam_FULL_NAME] = Gbl.Hierarchy.Node[Level].FullName,
@@ -113,31 +119,33 @@ void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Nam_Params[ShrtOrFull] :
-				      NULL,
+      Frm_LabelColumn ("RT",Id[PutForm],
 		       ShrtOrFull == Nam_SHRT_NAME ? Txt_Short_name :
-							 *Hie_TxtLevel[Level]);
+						     *Hie_TxtLevel[Level]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    /* Form to change full name */
-	    Frm_BeginForm (Action[Level][ShrtOrFull]);
-	       HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],
-			       Nam_MaxChars[ShrtOrFull],
-			       Name[ShrtOrFull],
-			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"%s\""
-			       " class=\"%s INPUT_%s\""
-			       " required=\"required\"",
-			       Nam_Params[ShrtOrFull],
-			       Nam_Classes[ShrtOrFull],
-			       The_GetSuffix ());
-	    Frm_EndForm ();
-	   }
-	 else	// I can not edit full name
-	    HTM_Txt (Name[ShrtOrFull]);
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:	// I can not edit full name
+               HTM_Txt (Name[ShrtOrFull]);
+               break;
+            case Frm_PUT_FORM:
+	       /* Form to change full name */
+	       Frm_BeginForm (Action[Level][ShrtOrFull]);
+		  HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],
+				  Nam_MaxChars[ShrtOrFull],
+				  Name[ShrtOrFull],
+				  HTM_SUBMIT_ON_CHANGE,
+				  "id=\"%s\""
+				  " class=\"%s INPUT_%s\""
+				  " required=\"required\"",
+				  Nam_Params[ShrtOrFull],
+				  Nam_Classes[ShrtOrFull],
+				  The_GetSuffix ());
+	       Frm_EndForm ();
+               break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -147,43 +155,47 @@ void HieCfg_Name (bool PutForm,Hie_Level_t Level,Nam_ShrtOrFullName_t ShrtOrFull
 /************************* Show web in configuration *************************/
 /*****************************************************************************/
 
-void HieCfg_WWW (Vie_ViewType_t ViewType,bool PutForm,Act_Action_t NextAction,
-		 const char WWW[Cns_MAX_BYTES_WWW + 1])
+void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
+		 Act_Action_t NextAction,const char WWW[Cns_MAX_BYTES_WWW + 1])
   {
    extern const char *Txt_Web;
+   static const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = "WWW",
+     };
 
    /***** Web *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "WWW" :
-				      NULL,
-		       Txt_Web);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_Web);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    /* Form to change web */
-	    Frm_BeginForm (NextAction);
-	       HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
-			      "id=\"WWW\" class=\"INPUT_WWW_WIDE INPUT_%s\""
-			      " required=\"required\"",
-			      The_GetSuffix ());
-	    Frm_EndForm ();
-	   }
-	 else	// I can not change web
-	   {
-	    HTM_DIV_Begin ("class=\"EXTERNAL_WWW_FULL\"");
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-			       " class=\"DAT_%s\"",
-		               WWW,The_GetSuffix ());
-	       HTM_Txt (WWW);
-	       if (ViewType == Vie_VIEW)
-		  HTM_A_End ();
-	    HTM_DIV_End ();
-	   }
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:	// I can not change web
+	       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_FULL\"");
+		  if (ViewType == Vie_VIEW)
+		     HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+				  " class=\"DAT_%s\"",
+				  WWW,The_GetSuffix ());
+		  HTM_Txt (WWW);
+		  if (ViewType == Vie_VIEW)
+		     HTM_A_End ();
+	       HTM_DIV_End ();
+               break;
+            case Frm_PUT_FORM:
+	       /* Form to change web */
+	       Frm_BeginForm (NextAction);
+		  HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
+				 "id=\"WWW\" class=\"INPUT_WWW_WIDE INPUT_%s\""
+				 " required=\"required\"",
+				 The_GetSuffix ());
+	       Frm_EndForm ();
+               break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -237,7 +249,7 @@ void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod
 /************************** Show number of centers ***************************/
 /*****************************************************************************/
 
-void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
+void HieCfg_NumCtrs (unsigned NumCtrs,Frm_PutForm_t PutForm)
   {
    extern const char *Txt_Centers;
    extern const char *Txt_Centers_of_INSTITUTION_X;
@@ -251,7 +263,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
+	 if (PutForm == Frm_PUT_FORM)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
 	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
@@ -262,7 +274,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	       free (Title);
 	   }
 	 HTM_Unsigned (NumCtrs);
-	 if (PutForm)
+	 if (PutForm == Frm_PUT_FORM)
 	   {
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();

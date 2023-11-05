@@ -85,7 +85,8 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
 static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indicators,
                                               unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
-                                              unsigned NumCrss,bool PutForm);
+                                              unsigned NumCrss,
+                                              Frm_PutForm_t PutForm);
 static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *Indicators,
 	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
@@ -434,7 +435,8 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
 
 static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indicators,
                                               unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
-                                              unsigned NumCrss,bool PutForm)
+                                              unsigned NumCrss,
+                                              Frm_PutForm_t PutForm)
   {
    extern const char *Txt_Indicators;
    extern const char *Txt_Courses;
@@ -455,7 +457,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 
       /* Header */
       HTM_TR_Begin (NULL);
-	 if (PutForm)
+	 if (PutForm == Frm_PUT_FORM)
 	    HTM_TH_Empty (1);
 	 HTM_TH      (Txt_Indicators,HTM_HEAD_RIGHT);
 	 HTM_TH_Span (Txt_Courses   ,HTM_HEAD_RIGHT,1,2,NULL);
@@ -469,7 +471,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 						       ClassNormal;
 	 HTM_TR_Begin (NULL);
 
-	    if (PutForm)
+	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       HTM_TD_Begin ("class=\"%s\"",Class);
 		  HTM_INPUT_CHECKBOX ("Indicators",HTM_SUBMIT_ON_CHANGE,
@@ -503,7 +505,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
       /***** Write total of courses *****/
       HTM_TR_Begin (NULL);
 
-	 if (PutForm)
+	 if (PutForm == Frm_PUT_FORM)
 	    HTM_TD_Empty (1);
 
 	 HTM_TD_LINE_TOP_Txt (Txt_Total);

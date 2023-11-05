@@ -106,7 +106,7 @@ void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES])
 void Nam_ExistingShortAndFullNames (const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
 			            ParCod_Param_t ParCod,long Cod,
 			            const char *Names[Nam_NUM_SHRT_FULL_NAMES],
-			            bool PutForm)
+			            Frm_PutForm_t PutForm)
   {
    Nam_ShrtOrFullName_t ShrtOrFull;
 
@@ -115,19 +115,22 @@ void Nam_ExistingShortAndFullNames (const Act_Action_t ActionRename[Nam_NUM_SHRT
 	ShrtOrFull++)
      {
       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    Frm_BeginForm (ActionRename[ShrtOrFull]);
-	       ParCod_PutPar (ParCod,Cod);
-	       HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],Nam_MaxChars[ShrtOrFull],
-			       Names[ShrtOrFull],
-			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"%s INPUT_%s\" required=\"required\"",
-			       Nam_Classes[ShrtOrFull],The_GetSuffix ());
-	    Frm_EndForm ();
-	   }
-	 else
-	    HTM_Txt (Names[ShrtOrFull]);
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:
+               HTM_Txt (Names[ShrtOrFull]);
+               break;
+            case Frm_PUT_FORM:
+	       Frm_BeginForm (ActionRename[ShrtOrFull]);
+		  ParCod_PutPar (ParCod,Cod);
+		  HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],Nam_MaxChars[ShrtOrFull],
+				  Names[ShrtOrFull],
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"%s INPUT_%s\" required=\"required\"",
+				  Nam_Classes[ShrtOrFull],The_GetSuffix ());
+	       Frm_EndForm ();
+               break;
+           }
       HTM_TD_End ();
      }
   }

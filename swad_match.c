@@ -269,8 +269,7 @@ void Mch_ResetMatch (struct Mch_Match *Match)
 /************************* List the matches of a game ************************/
 /*****************************************************************************/
 
-void Mch_ListMatches (struct Gam_Games *Games,
-                      bool PutFormNewMatch)
+void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Matches;
@@ -315,7 +314,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    if (PutFormNewMatch)
+	    if (PutFormNewMatch == Frm_PUT_FORM)
 	       Mch_PutFormNewMatch (&Games->Game);	// Form to fill in data and start playing a new match
 	    break;
 	 default:
@@ -904,7 +903,7 @@ void Mch_ToggleVisResultsMchUsr (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+                        Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -1020,7 +1019,7 @@ void Mch_ReqRemMatch (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+			Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -1055,7 +1054,7 @@ void Mch_RemoveMatch (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+			Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -1144,7 +1143,7 @@ void Mch_EditMatch (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+			Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -1431,7 +1430,7 @@ void Mch_ChangeMatch (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+			Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -2332,10 +2331,21 @@ static void Mch_PutFormsCountdown (struct Mch_Match *Match)
 static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const char *Color)
   {
    extern const char *Txt_Countdown;
+   static const char *fmt[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = "class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN\"",
+      [Frm_PUT_FORM     ] = "class=\"BT_LINK MCH_BUTTON_ON\"",
+     };
    char *OnSubmit;
-   bool PutForm = Match->Status.Showing != Mch_END;
+   Frm_PutForm_t PutForm = (Match->Status.Showing != Mch_END) ? Frm_PUT_FORM :
+								Frm_DONT_PUT_FORM;
+   const char *Title[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = Txt_Countdown,
+     };
 
-   if (PutForm)
+   if (PutForm == Frm_PUT_FORM)
      {
       /***** Begin form *****/
       if (asprintf (&OnSubmit,"updateMatchTch('match_left',"
@@ -2350,10 +2360,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       /***** Put icon *****/
       HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT %s\"",Color);
 
-	 HTM_BUTTON_Submit_Begin (PutForm ? Txt_Countdown :
-					    NULL,
-				  PutForm ? "class=\"BT_LINK MCH_BUTTON_ON\"" :
-					    "class=\"BT_LINK_OFF MCH_BUTTON_HIDDEN\"");
+	 HTM_BUTTON_Submit_Begin (Title[PutForm],fmt[PutForm]);
 
 	    HTM_NBSP ();
 	    if (Seconds >= 0)
@@ -2369,7 +2376,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       HTM_DIV_End ();
 
    /***** End form *****/
-   if (PutForm)
+   if (PutForm == Frm_PUT_FORM)
      {
       Frm_EndForm ();
       free (OnSubmit);

@@ -82,15 +82,15 @@ static void CtrCfg_Map (const struct Map_Coordinates *Coord);
 static void CtrCfg_Latitude (double Latitude);
 static void CtrCfg_Longitude (double Longitude);
 static void CtrCfg_Altitude (double Altitude);
-static void CtrCfg_Photo (Vie_ViewType_t ViewType,bool PutForm,bool PutLink,
+static void CtrCfg_Photo (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1]);
 static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution);
 static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
-static void CtrCfg_Institution (Vie_ViewType_t ViewType,bool PutForm);
-static void CtrCfg_FullName (bool PutForm);
-static void CtrCfg_ShrtName (bool PutForm);
-static void CtrCfg_Place (bool PutForm);
-static void CtrCfg_WWW (Vie_ViewType_t ViewType,bool PutForm);
+static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
+static void CtrCfg_FullName (Frm_PutForm_t PutForm);
+static void CtrCfg_ShrtName (Frm_PutForm_t PutForm);
+static void CtrCfg_Place (Frm_PutForm_t PutForm);
+static void CtrCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void CtrCfg_Shortcut (Vie_ViewType_t ViewType);
 static void CtrCfg_QR (void);
 static void CtrCfg_NumUsrs (void);
@@ -127,12 +127,12 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
    extern const char *Hlp_CENTER_Information;
    struct Map_Coordinates Coord;
    bool PutLink;
-   bool PutFormIns;
-   bool PutFormName;
-   bool PutFormPlc;
-   bool PutFormCoor;
-   bool PutFormWWW;
-   bool PutFormPhoto;
+   Frm_PutForm_t PutFormIns;
+   Frm_PutForm_t PutFormName;
+   Frm_PutForm_t PutFormPlc;
+   Frm_PutForm_t PutFormCoor;
+   Frm_PutForm_t PutFormWWW;
+   Frm_PutForm_t PutFormPhoto;
    bool MapIsAvailable;
    char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
@@ -146,12 +146,18 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 
    /***** Initializations *****/
    PutLink      = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_CTR].WWW[0];
-   PutFormIns   = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   PutFormName  = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
+   PutFormIns   = (ViewType == Vie_VIEW &&
+		   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Frm_PUT_FORM :
+	        					     Frm_DONT_PUT_FORM;
+   PutFormName  = (ViewType == Vie_VIEW &&
+		   Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ? Frm_PUT_FORM :
+	        					     Frm_DONT_PUT_FORM;
    PutFormPlc   =
    PutFormCoor  =
    PutFormWWW   =
-   PutFormPhoto = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   PutFormPhoto = (ViewType == Vie_VIEW &&
+	           Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Frm_PUT_FORM :
+	        					     Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,
@@ -180,7 +186,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 	    CtrCfg_Place (PutFormPlc);
 
 	    /***** Coordinates *****/
-	    if (PutFormCoor)
+	    if (PutFormCoor == Frm_PUT_FORM)
 	      {
 	       CtrCfg_Latitude  (Coord.Latitude );
 	       CtrCfg_Longitude (Coord.Longitude);
@@ -421,7 +427,7 @@ static void CtrCfg_Altitude (double Altitude)
 /***************************** Draw center photo *****************************/
 /*****************************************************************************/
 
-static void CtrCfg_Photo (Vie_ViewType_t ViewType,bool PutForm,bool PutLink,
+static void CtrCfg_Photo (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1])
   {
    char *PhotoAttribution = NULL;
@@ -460,23 +466,27 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,bool PutForm,bool PutLink,
    HTM_DIV_End ();
 
    /****** Photo attribution ******/
-   if (PutForm)
+   switch (PutForm)
      {
-      HTM_DIV_Begin ("class=\"CM\"");
-	 Frm_BeginForm (ActChgCtrPhoAtt);
-	    HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
-				" onchange=\"this.form.submit();return false;\"");
-	       if (PhotoAttribution)
-		  HTM_Txt (PhotoAttribution);
-	    HTM_TEXTAREA_End ();
-	 Frm_EndForm ();
-      HTM_DIV_End ();
-     }
-   else if (PhotoAttribution)
-     {
-      HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
-	 HTM_Txt (PhotoAttribution);
-      HTM_DIV_End ();
+      case Frm_DONT_PUT_FORM:
+	 if (PhotoAttribution)
+	   {
+	    HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
+	       HTM_Txt (PhotoAttribution);
+	    HTM_DIV_End ();
+	   }
+	 break;
+      case Frm_PUT_FORM:
+	 HTM_DIV_Begin ("class=\"CM\"");
+	    Frm_BeginForm (ActChgCtrPhoAtt);
+	       HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
+				   " onchange=\"this.form.submit();return false;\"");
+		  if (PhotoAttribution)
+		     HTM_Txt (PhotoAttribution);
+	       HTM_TEXTAREA_End ();
+	    Frm_EndForm ();
+	 HTM_DIV_End ();
+	 break;
      }
 
    /****** Free memory used for photo attribution ******/
@@ -534,75 +544,79 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 /***************** Show institution in center configuration ******************/
 /*****************************************************************************/
 
-static void CtrCfg_Institution (Vie_ViewType_t ViewType,bool PutForm)
+static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Institution;
    unsigned NumIns;
    const struct Hie_Node *Ins;
+   const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = Par_CodeStr[ParCod_OthIns],
+     };
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_OthIns] :
-				      NULL,
-		       Txt_Institution);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_Institution);
 
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    /* Get list of institutions of the current country */
-	    Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:
+	       if (ViewType == Vie_VIEW)
+		 {
+		  Frm_BeginFormGoTo (ActSeeInsInf);
+		     ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_INS].ShrtName),
+					      "class=\"LT BT_LINK\"");
+		     Str_FreeGoToTitle ();
+		 }
 
-	    /* Put form to select institution */
-	    Frm_BeginForm (ActChgCtrInsCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				 "id=\"OthInsCod\" name=\"OthInsCod\""
-				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				 The_GetSuffix ());
-		  for (NumIns = 0;
-		       NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
-		       NumIns++)
-		    {
-		     Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
-		     HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				 Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
-										     HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
-				 "%s",Ins->ShrtName);
-		    }
-	       HTM_SELECT_End ();
-	    Frm_EndForm ();
+	       Lgo_DrawLogo (Hie_INS,
+			     Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			     Gbl.Hierarchy.Node[Hie_INS].ShrtName,
+			     20,"LM");
+	       HTM_NBSP ();
+	       HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
 
-	    /* Free list of institutions */
-	    Hie_FreeList (Hie_CTY);
-	   }
-	 else	// I can not move center to another institution
-	   {
-	    if (ViewType == Vie_VIEW)
-	      {
-	       Frm_BeginFormGoTo (ActSeeInsInf);
-		  ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_INS].ShrtName),
-		                           "class=\"LT BT_LINK\"");
-		  Str_FreeGoToTitle ();
-	      }
+	       if (ViewType == Vie_VIEW)
+		 {
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		 }
+               break;
+            case Frm_PUT_FORM:
+	       /* Get list of institutions of the current country */
+	       Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
-	    Lgo_DrawLogo (Hie_INS,
-			  Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			  Gbl.Hierarchy.Node[Hie_INS].ShrtName,
-			  20,"LM");
-	    HTM_NBSP ();
-	    HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
-
-	    if (ViewType == Vie_VIEW)
-	      {
-		  HTM_BUTTON_End ();
+	       /* Put form to select institution */
+	       Frm_BeginForm (ActChgCtrInsCfg);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"OthInsCod\" name=\"OthInsCod\""
+				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (NumIns = 0;
+			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
+			  NumIns++)
+		       {
+			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
+				    Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
+											HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Ins->ShrtName);
+		       }
+		  HTM_SELECT_End ();
 	       Frm_EndForm ();
-	      }
-	   }
+
+	       /* Free list of institutions */
+	       Hie_FreeList (Hie_CTY);
+               break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -612,7 +626,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,bool PutForm)
 /************** Show center full name in center configuration ****************/
 /*****************************************************************************/
 
-static void CtrCfg_FullName (bool PutForm)
+static void CtrCfg_FullName (Frm_PutForm_t PutForm)
   {
    HieCfg_Name (PutForm,Hie_CTR,Nam_FULL_NAME);
   }
@@ -621,7 +635,7 @@ static void CtrCfg_FullName (bool PutForm)
 /************** Show center short name in center configuration ***************/
 /*****************************************************************************/
 
-static void CtrCfg_ShrtName (bool PutForm)
+static void CtrCfg_ShrtName (Frm_PutForm_t PutForm)
   {
    HieCfg_Name (PutForm,Hie_CTR,Nam_SHRT_NAME);
   }
@@ -630,7 +644,7 @@ static void CtrCfg_ShrtName (bool PutForm)
 /**************** Show center place in center configuration ******************/
 /*****************************************************************************/
 
-static void CtrCfg_Place (bool PutForm)
+static void CtrCfg_Place (Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Place;
@@ -638,6 +652,11 @@ static void CtrCfg_Place (bool PutForm)
    struct Plc_Places Places;
    struct Plc_Place Plc;
    unsigned NumPlc;
+   const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = Par_CodeStr[ParCod_Plc],
+     };
 
    /***** Reset places context *****/
    Plc_ResetPlaces (&Places);
@@ -646,51 +665,50 @@ static void CtrCfg_Place (bool PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_Plc] :
-				      NULL,
-		       Txt_Place);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_Place);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 
-	 if (PutForm)
-	   {
-	    /* Get list of places of the current institution */
-	    Places.SelectedOrder = Plc_ORDER_BY_PLACE;
-	    Plc_GetListPlaces (&Places);
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:	// I can not change center place
+	       /* Text with the place name */
+	       Plc.PlcCod = Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod;
+	       Plc_GetPlaceDataByCod (&Plc);
+	       HTM_Txt (Plc.FullName);
+               break;
+            case Frm_PUT_FORM:
+	       /* Get list of places of the current institution */
+	       Places.SelectedOrder = Plc_ORDER_BY_PLACE;
+	       Plc_GetListPlaces (&Places);
 
-	    /* Put form to select place */
-	    Frm_BeginForm (ActChgCtrPlcCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				 "name=\"PlcCod\""
-				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				 The_GetSuffix ());
-		  HTM_OPTION (HTM_Type_STRING,"0",
-			      Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
-										 HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
-			      "%s",Txt_Another_place);
-		  for (NumPlc = 0;
-		       NumPlc < Places.Num;
-		       NumPlc++)
-		     HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
-				 Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod ? HTM_OPTION_SELECTED :
-													    HTM_OPTION_UNSELECTED,
+	       /* Put form to select place */
+	       Frm_BeginForm (ActChgCtrPlcCfg);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "name=\"PlcCod\""
+				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    The_GetSuffix ());
+		     HTM_OPTION (HTM_Type_STRING,"0",
+				 Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
+										    HTM_OPTION_UNSELECTED,
 				 HTM_OPTION_ENABLED,
-				 "%s",Places.Lst[NumPlc].ShrtName);
-	       HTM_SELECT_End ();
-	    Frm_EndForm ();
+				 "%s",Txt_Another_place);
+		     for (NumPlc = 0;
+			  NumPlc < Places.Num;
+			  NumPlc++)
+			HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
+				    Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod ? HTM_OPTION_SELECTED :
+													       HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Places.Lst[NumPlc].ShrtName);
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
 
-	    /* Free list of places */
-	    Plc_FreeListPlaces (&Places);
-	   }
-	 else	// I can not change center place
-	   {
-	    /* Text with the place name */
-	    Plc.PlcCod = Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod;
-	    Plc_GetPlaceDataByCod (&Plc);
-	    HTM_Txt (Plc.FullName);
-	   }
+	       /* Free list of places */
+	       Plc_FreeListPlaces (&Places);
+               break;
+           }
 
       HTM_TD_End ();
 
@@ -701,7 +719,7 @@ static void CtrCfg_Place (bool PutForm)
 /***************** Show center WWW in center configuration *******************/
 /*****************************************************************************/
 
-static void CtrCfg_WWW (Vie_ViewType_t ViewType,bool PutForm)
+static void CtrCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    HieCfg_WWW (ViewType,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Node[Hie_CTR].WWW);
   }

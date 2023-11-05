@@ -59,10 +59,10 @@ extern struct Globals Gbl;
 
 static void DegCfg_Configuration (Vie_ViewType_t ViewType);
 static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
-static void DegCfg_Center (Vie_ViewType_t ViewType,bool PutForm);
-static void DegCfg_FullName (bool PutForm);
-static void DegCfg_ShrtName (bool PutForm);
-static void DegCfg_WWW (Vie_ViewType_t ViewType,bool PutForm);
+static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
+static void DegCfg_FullName (Frm_PutForm_t PutForm);
+static void DegCfg_ShrtName (Frm_PutForm_t PutForm);
+static void DegCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void DegCfg_Shortcut (Vie_ViewType_t ViewType);
 static void DegCfg_QR (void);
 static void DegCfg_NumCrss (void);
@@ -96,9 +96,9 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_DEGREE_Information;
    bool PutLink;
-   bool PutFormCtr;
-   bool PutFormName;
-   bool PutFormWWW;
+   Frm_PutForm_t PutFormCtr;
+   Frm_PutForm_t PutFormName;
+   Frm_PutForm_t PutFormWWW;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0)	// No degree selected
@@ -106,9 +106,15 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
 
    /***** Initializations *****/
    PutLink     = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
-   PutFormCtr  = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
-   PutFormName = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
-   PutFormWWW  = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
+   PutFormCtr  = (ViewType == Vie_VIEW &&
+		  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
+   PutFormName = (ViewType == Vie_VIEW &&
+		  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
+   PutFormWWW  = (ViewType == Vie_VIEW &&
+		  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM) ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,
@@ -190,73 +196,77 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 /******************** Show center in degree configuration ********************/
 /*****************************************************************************/
 
-static void DegCfg_Center (Vie_ViewType_t ViewType,bool PutForm)
+static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Center;
    unsigned NumCtr;
    const struct Hie_Node *Ctr;
+   const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = Par_CodeStr[ParCod_OthCtr],
+     };
 
    /***** Center *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_OthCtr] :
-				      NULL,
-		       Txt_Center);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_Center);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    /* Get list of centers of the current institution */
-	    Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:	// I can not move degree to another center
+	       if (ViewType == Vie_VIEW)
+		 {
+		  Frm_BeginFormGoTo (ActSeeCtrInf);
+		     ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_CTR].ShrtName),
+					      "class=\"LB BT_LINK\"");
+		     Str_FreeGoToTitle ();
+		 }
+	       Lgo_DrawLogo (Hie_CTR,
+			     Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			     Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
+			     20,"LM");
+	       HTM_NBSP ();
+	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CTR].FullName);
+	       if (ViewType == Vie_VIEW)
+		 {
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		 }
+	       break;
+            case Frm_PUT_FORM:
+	       /* Get list of centers of the current institution */
+	       Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
-	    /* Put form to select center */
-	    Frm_BeginForm (ActChgDegCtrCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				 "id=\"OthCtrCod\" name=\"OthCtrCod\""
-				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				 The_GetSuffix ());
-		  for (NumCtr = 0;
-		       NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
-		       NumCtr++)
-		    {
-		     Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
-		     HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
-				 Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
-										     HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
-				 "%s",Ctr->ShrtName);
-		    }
-	       HTM_SELECT_End ();
-	    Frm_EndForm ();
-
-	    /* Free list of centers */
-	    Hie_FreeList (Hie_INS);
-	   }
-	 else	// I can not move degree to another center
-	   {
-	    if (ViewType == Vie_VIEW)
-	      {
-	       Frm_BeginFormGoTo (ActSeeCtrInf);
-		  ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_CTR].ShrtName),
-					   "class=\"LB BT_LINK\"");
-		  Str_FreeGoToTitle ();
-	      }
-	    Lgo_DrawLogo (Hie_CTR,
-			  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-			  Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
-			  20,"LM");
-	    HTM_NBSP ();
-	    HTM_Txt (Gbl.Hierarchy.Node[Hie_CTR].FullName);
-	    if (ViewType == Vie_VIEW)
-	      {
-		  HTM_BUTTON_End ();
+	       /* Put form to select center */
+	       Frm_BeginForm (ActChgDegCtrCfg);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"OthCtrCod\" name=\"OthCtrCod\""
+				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (NumCtr = 0;
+			  NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
+			  NumCtr++)
+		       {
+			Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
+			HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
+				    Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
+											HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Ctr->ShrtName);
+		       }
+		  HTM_SELECT_End ();
 	       Frm_EndForm ();
-	      }
-	   }
+
+	       /* Free list of centers */
+	       Hie_FreeList (Hie_INS);
+               break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -266,7 +276,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,bool PutForm)
 /************** Show degree full name in degree configuration ****************/
 /*****************************************************************************/
 
-static void DegCfg_FullName (bool PutForm)
+static void DegCfg_FullName (Frm_PutForm_t PutForm)
   {
    HieCfg_Name (PutForm,Hie_DEG,Nam_FULL_NAME);
   }
@@ -275,7 +285,7 @@ static void DegCfg_FullName (bool PutForm)
 /************** Show degree short name in degree configuration ***************/
 /*****************************************************************************/
 
-static void DegCfg_ShrtName (bool PutForm)
+static void DegCfg_ShrtName (Frm_PutForm_t PutForm)
   {
    HieCfg_Name (PutForm,Hie_DEG,Nam_SHRT_NAME);
   }
@@ -284,7 +294,7 @@ static void DegCfg_ShrtName (bool PutForm)
 /***************** Show degree WWW in degree configuration *******************/
 /*****************************************************************************/
 
-static void DegCfg_WWW (Vie_ViewType_t ViewType,bool PutForm)
+static void DegCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    HieCfg_WWW (ViewType,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Node[Hie_DEG].WWW);
   }

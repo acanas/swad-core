@@ -123,10 +123,10 @@ static void Svy_PutIconToAddNewQuestion (void *Surveys);
 static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
                                     struct Svy_Question *SvyQst,
-                                    bool PutFormAnswerSurvey);
+                                    Frm_PutForm_t PutFormAnswerSurvey);
 static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
                                      struct Svy_Question *SvyQst,
-                                     bool PutFormAnswerSurvey);
+                                     Frm_PutForm_t PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
 static void Svy_PutIconToRemoveOneQst (void *Surveys);
@@ -2604,7 +2604,9 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	           Gbl.Action.Act == ActEdiOneSvyQst ||
 	           Gbl.Action.Act == ActNewSvyQst    ||
 	           Gbl.Action.Act == ActChgSvyQst);
-   bool PutFormAnswerSurvey = Surveys->Svy.Status.ICanAnswer && !Editing;
+   Frm_PutForm_t PutFormAnswerSurvey = (Surveys->Svy.Status.ICanAnswer &&
+			                !Editing) ? Frm_PUT_FORM :
+					            Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
    if (Surveys->Svy.Status.ICanEdit)
@@ -2619,7 +2621,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
    /***** Get data of questions from database *****/
    if ((NumQsts = Svy_DB_GetSurveyQsts (&mysql_res,Surveys->Svy.SvyCod)))
      {
-      if (PutFormAnswerSurvey)
+      if (PutFormAnswerSurvey == Frm_PUT_FORM)
 	{
 	 /***** Begin form to send answers to survey *****/
 	 Frm_BeginForm (ActAnsSvy);
@@ -2687,9 +2689,11 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  Svy_WriteQstStem (Stem);
-		  Svy_WriteAnswersOfAQst (&Surveys->Svy,&SvyQst,PutFormAnswerSurvey);
+		  Svy_WriteAnswersOfAQst (&Surveys->Svy,&SvyQst,
+					  PutFormAnswerSurvey);
 		  if (SvyQst.CommentsAllowed)
-		     Svy_WriteCommentsOfAQst (&Surveys->Svy,&SvyQst,PutFormAnswerSurvey);
+		     Svy_WriteCommentsOfAQst (&Surveys->Svy,&SvyQst,
+					      PutFormAnswerSurvey);
 
 	       HTM_TD_End ();
 
@@ -2698,7 +2702,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 
       HTM_TABLE_End ();
 
-      if (PutFormAnswerSurvey)
+      if (PutFormAnswerSurvey == Frm_PUT_FORM)
 	{
 	 /***** Button to create/modify survey *****/
 	 Btn_PutConfirmButton (Txt_Done);
@@ -2799,7 +2803,7 @@ static void Svy_WriteQstStem (const char *Stem)
 
 static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
                                     struct Svy_Question *SvyQst,
-                                    bool PutFormAnswerSurvey)
+                                    Frm_PutForm_t PutFormAnswerSurvey)
   {
    unsigned NumAnswers;
    unsigned NumAns;
@@ -2844,7 +2848,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 	    /* Selectors and label with the letter of the answer */
 	    HTM_TR_Begin (NULL);
 
-	       if (PutFormAnswerSurvey)
+	       if (PutFormAnswerSurvey == Frm_PUT_FORM)
 		 {
 		  /* Write selector to choice this answer */
 		  HTM_TD_Begin ("class=\"LT\"");
@@ -2913,7 +2917,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 
 static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
                                      struct Svy_Question *SvyQst,
-                                     bool PutFormAnswerSurvey)
+                                     Frm_PutForm_t PutFormAnswerSurvey)
   {
    extern const char *Txt_Comments;
    unsigned NumComments;
@@ -2921,56 +2925,60 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if (PutFormAnswerSurvey)
+   switch (PutFormAnswerSurvey)
      {
-      HTM_TEXTAREA_Begin ("name=\"Com%010u\""
-			  " cols=\"60\" rows=\"4\""
-			  " class=\"INPUT_%s\""
-			  " placeholder=\"%s&hellip;\"",
-			  (unsigned) SvyQst->QstCod,
-			  The_GetSuffix (),
-			  Txt_Comments);
-      HTM_TEXTAREA_End ();
-     }
-   else if (Svy->Status.ICanViewComments)
-     {
-      HTM_DL_Begin ();
+      case Frm_DONT_PUT_FORM:
+         if (Svy->Status.ICanViewComments)
+	   {
+	    HTM_DL_Begin ();
 
-	 HTM_DT_Begin ();
-	    HTM_TxtColon (Txt_Comments);
-	 HTM_DT_End ();
+	       HTM_DT_Begin ();
+		  HTM_TxtColon (Txt_Comments);
+	       HTM_DT_End ();
 
-	 HTM_DD_Begin ();
+	       HTM_DD_Begin ();
 
-	    /***** Get comments of this question *****/
-	    NumComments = Svy_DB_GetCommentsQst (&mysql_res,SvyQst->QstCod);
+		  /***** Get comments of this question *****/
+		  NumComments = Svy_DB_GetCommentsQst (&mysql_res,SvyQst->QstCod);
 
-	    /***** Write the answers *****/
-	    if (NumComments)
-	      {
-	       HTM_OL_Begin ();
-
-		  /* Write one row for each user who has commented */
-		  for (NumCom = 0;
-		       NumCom < NumComments;
-		       NumCom++)
+		  /***** Write the answers *****/
+		  if (NumComments)
 		    {
-		     row = mysql_fetch_row (mysql_res);
+		     HTM_OL_Begin ();
 
-		     HTM_LI_Begin (NULL);
-			HTM_Txt (row[0]);
-		     HTM_LI_End ();
+			/* Write one row for each user who has commented */
+			for (NumCom = 0;
+			     NumCom < NumComments;
+			     NumCom++)
+			  {
+			   row = mysql_fetch_row (mysql_res);
+
+			   HTM_LI_Begin (NULL);
+			      HTM_Txt (row[0]);
+			   HTM_LI_End ();
+			  }
+
+		     HTM_OL_End ();
 		    }
 
-	       HTM_OL_End ();
-	      }
+		  /***** Free structure that stores the query result *****/
+		  DB_FreeMySQLResult (&mysql_res);
 
-	    /***** Free structure that stores the query result *****/
-	    DB_FreeMySQLResult (&mysql_res);
+	       HTM_DD_End ();
 
-	 HTM_DD_End ();
-
-      HTM_DL_End ();
+	    HTM_DL_End ();
+	   }
+	 break;
+      case Frm_PUT_FORM:
+	 HTM_TEXTAREA_Begin ("name=\"Com%010u\""
+			     " cols=\"60\" rows=\"4\""
+			     " class=\"INPUT_%s\""
+			     " placeholder=\"%s&hellip;\"",
+			     (unsigned) SvyQst->QstCod,
+			     The_GetSuffix (),
+			     Txt_Comments);
+	 HTM_TEXTAREA_End ();
+	 break;
      }
   }
 

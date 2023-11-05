@@ -244,7 +244,7 @@ void Brw_DB_RemoveExpiredExpandedFolders (void);
 void Brw_SetFullPathInTree (void);
 
 void Brw_PutIconFile (const char *FileName,
-		      const char *Class,Frm_PutFormToGo_t PutFormToGo);
+		      const char *Class,Frm_PutForm_t PutFormToGo);
 
 //-----------------------------------------------------------------------------
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,

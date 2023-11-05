@@ -1773,7 +1773,7 @@ void Qst_ShowFormEditOneQst (void)
   {
    extern const char *Txt_Question_removed;
    struct Qst_Question Question;
-   bool PutFormToEditQuestion;
+   Frm_PutForm_t PutFormToEditQuestion;
 
    /***** Create test question *****/
    Qst_QstConstructor (&Question);
@@ -1781,15 +1781,21 @@ void Qst_ShowFormEditOneQst (void)
    /***** Get question data *****/
    Question.QstCod = ParCod_GetPar (ParCod_Qst);
    if (Question.QstCod <= 0)	// New question
-      PutFormToEditQuestion = true;
+      PutFormToEditQuestion = Frm_PUT_FORM;
    else
-      PutFormToEditQuestion = Qst_GetQstDataByCod (&Question);
+      PutFormToEditQuestion = Qst_GetQstDataByCod (&Question) ? Frm_PUT_FORM :
+								Frm_DONT_PUT_FORM;
 
    /***** Put form to edit question *****/
-   if (PutFormToEditQuestion)
-      Qst_PutFormEditOneQst (&Question);
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+   switch (PutFormToEditQuestion)
+     {
+      case Frm_DONT_PUT_FORM:
+	 Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
+	 break;
+      case Frm_PUT_FORM:
+         Qst_PutFormEditOneQst (&Question);
+	 break;
+     }
 
    /***** Destroy test question *****/
    Qst_QstDestructor (&Question);

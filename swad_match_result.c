@@ -167,7 +167,7 @@ void MchRes_ShowMyMchResultsInGam (void)
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
-	                     false);	// Do not put form to start new match
+			     Frm_DONT_PUT_FORM);
 
    /***** List my matches results in game *****/
    if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
@@ -217,7 +217,7 @@ void MchRes_ShowMyMchResultsInMch (void)
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
-	                     false);	// Do not put form to start new match
+			     Frm_DONT_PUT_FORM);
 
    /***** List my matches results in match *****/
    if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
@@ -360,7 +360,7 @@ void MchRes_ShowAllMchResultsInGam (void)
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
-	                     false);	// Do not put form to start new match
+			     Frm_DONT_PUT_FORM);
 
    /***** List matches results in game *****/
    if (asprintf (&Title,Txt_Results_of_game_X,Games.Game.Title) < 0)
@@ -432,7 +432,7 @@ void MchRes_ShowAllMchResultsInMch (void)
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
                              false,	// Do not list game questions
-	                     false);	// Do not put form to start new match
+			     Frm_DONT_PUT_FORM);
 
    /***** List matches results in match *****/
    if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)

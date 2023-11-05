@@ -403,7 +403,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton,
-				       bool PutFormDateRange);
+				       Frm_PutForm_t PutFormDateRange);
 void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);

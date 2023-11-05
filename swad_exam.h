@@ -44,10 +44,10 @@ bool Exa_CheckIfICanEditExams (void);
 void Exa_SeeOneExam (void);
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 			  struct ExaSes_Session *Session,
-			  bool PutFormSession);
+			  Frm_PutForm_t PutFormSession);
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       struct ExaSes_Session *Session,
-			       bool PutFormSession);
+			       Frm_PutForm_t PutFormSession);
 void Exa_ShowOnlyOneExamEnd (void);
 
 void Exa_SetCurrentExaCod (long ExaCod);

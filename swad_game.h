@@ -117,10 +117,10 @@ void Gam_ListAllGames (struct Gam_Games *Games);
 void Gam_SeeOneGame (void);
 void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
 			  bool ListGameQuestions,
-			  bool PutFormNewMatch);
+			  Frm_PutForm_t PutFormNewMatch);
 void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
 			       bool ListGameQuestions,
-			       bool PutFormNewMatch);
+			       Frm_PutForm_t PutFormNewMatch);
 void Gam_ShowOnlyOneGameEnd (void);
 
 void Gam_SetCurrentGamCod (long GamCod);

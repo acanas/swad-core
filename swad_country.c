@@ -867,26 +867,30 @@ void Cty_WriteSelectorOfCountry (void)
 void Cty_WriteCountryName (long CtyCod)
   {
    char CtyName[Cty_MAX_BYTES_NAME + 1];
-   bool PutForm = !Frm_CheckIfInside () &&						// Only if not inside another form
-                  Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
+   Frm_PutForm_t PutForm = (!Frm_CheckIfInside () &&							// Only if not inside another form
+                            Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB) ? Frm_PUT_FORM :	// Only in main browser tab
+                        							     Frm_DONT_PUT_FORM;
 
    /***** Get country name *****/
    Cty_GetCountryNameInLanguage (CtyCod,Gbl.Prefs.Language,CtyName);
 
-   if (PutForm)
+   switch (PutForm)
      {
-      /***** Write country name with link to country information *****/
-      Frm_BeginForm (ActSeeCtyInf);
-	 ParCod_PutPar (ParCod_Cty,CtyCod);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
-	                          "class=\"BT_LINK\"");
-	    HTM_Txt (CtyName);
-	 HTM_BUTTON_End ();
-      Frm_EndForm ();
+      case Frm_DONT_PUT_FORM:
+	 /***** Write country name without link *****/
+	 HTM_Txt (CtyName);
+	 break;
+      case Frm_PUT_FORM:
+	 /***** Write country name with link to country information *****/
+	 Frm_BeginForm (ActSeeCtyInf);
+	    ParCod_PutPar (ParCod_Cty,CtyCod);
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
+				     "class=\"BT_LINK\"");
+	       HTM_Txt (CtyName);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	 break;
      }
-   else
-      /***** Write country name without link *****/
-      HTM_Txt (CtyName);
   }
 
 /*****************************************************************************/

@@ -137,7 +137,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
 		          struct ExaSes_Session *Session,
-                          bool PutFormSession)
+                          Frm_PutForm_t PutFormSession)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
    extern const char *Txt_Sessions;
@@ -183,7 +183,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 if (PutFormSession && Session->SesCod <= 0)
+	 if (PutFormSession == Frm_PUT_FORM && Session->SesCod <= 0)
 	   {
 	    /* Reset session */
 	    ExaSes_ResetSession (Session);
@@ -720,8 +720,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
    Exa_DB_ToggleVisResultsSesUsr (&Session);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-	                false);	// Do not put form for session
+   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -809,8 +808,7 @@ void ExaSes_ReqRemSession (void)
 	                Session.Title);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-	                false);	// Do not put form for session
+   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -855,8 +853,7 @@ void ExaSes_RemoveSession (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-	                false);	// Do not put form for session
+   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -894,8 +891,7 @@ static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Exa_DB_HideUnhideSession (&Session,HiddenOrVisible);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-	                false);	// Do not put form for session
+   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -1098,8 +1094,7 @@ void ExaSes_ReqCreatOrEditSes (void)
      }
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-                        true);	// Put form for session
+   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_PUT_FORM);	// Put form for session
   }
 
 /*****************************************************************************/
@@ -1181,8 +1176,7 @@ void ExaSes_ReceiveFormSession (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-	                false);	// Do not put form for session
+   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/

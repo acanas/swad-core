@@ -228,8 +228,8 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
-static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
-                                           bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
+                                                    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label);
@@ -1613,12 +1613,12 @@ void Usr_ChkUsrAndGetUsrData (void)
    extern const char *Txt_The_session_has_expired;
    struct
      {
-      bool PutForm;
+      Frm_PutForm_t PutForm;
       Act_Action_t Action;
       void (*FuncPars) (void);
      } FormLogin =
      {
-      false,
+      Frm_DONT_PUT_FORM,
       ActLogIn,
       NULL
      };
@@ -1631,7 +1631,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 Gbl.Action.Act = ActLogOut;
 	 Tab_SetCurrentTab ();
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_session_has_expired);
-	 FormLogin.PutForm = true;
+	 FormLogin.PutForm = Frm_PUT_FORM;
 	}
      }
    else	// !Gbl.Session.HasBeenDisconnected
@@ -1677,7 +1677,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 		 }
 	      }
 	    else
-	       FormLogin.PutForm = true;
+	       FormLogin.PutForm = Frm_PUT_FORM;
 	   }
 	 else if (Gbl.Action.Act == ActLogIn ||
 	          Gbl.Action.Act == ActLogInUsrAgd)	// Login using @nickname, email or ID from form
@@ -1694,7 +1694,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	      }
 	    else
 	      {
-	       FormLogin.PutForm = true;
+	       FormLogin.PutForm = Frm_PUT_FORM;
 	       if (Gbl.Action.Act == ActLogInUsrAgd)
 		 {
 	          FormLogin.Action = ActLogInUsrAgd;
@@ -1721,13 +1721,13 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Set_SetSettingsFromIP ();	// Set settings from current IP
 	      }
 	    else
-	       FormLogin.PutForm = true;
+	       FormLogin.PutForm = Frm_PUT_FORM;
 	   }
 	}
      }
 
    /***** If session disconnected or error in login, show form to login *****/
-   if (FormLogin.PutForm)
+   if (FormLogin.PutForm == Frm_PUT_FORM)
      {
       Usr_WriteFormLogin (FormLogin.Action,FormLogin.FuncPars);
       Err_ShowErrorAndExit (NULL);
@@ -3683,7 +3683,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton,
-				       bool PutFormDateRange)
+				       Frm_PutForm_t PutFormDateRange)
   {
    extern const char *Txt_Select_users;
    extern const char *Txt_Users;
@@ -3769,7 +3769,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 			HTM_TR_End ();
 
 			/* Starting and ending dates in the search */
-			if (PutFormDateRange)
+			if (PutFormDateRange == Frm_PUT_FORM)
 			   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
 		     HTM_TABLE_End ();
@@ -5026,7 +5026,7 @@ void Usr_SeeGuests (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
-   bool PutForm;
+   Frm_PutForm_t PutForm;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -5085,10 +5085,11 @@ void Usr_SeeGuests (void)
 		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption);
+	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption) ? Frm_PUT_FORM :
+										    Frm_DONT_PUT_FORM;
 
 	       /* Begin form */
-	       if (PutForm)
+	       if (PutForm == Frm_PUT_FORM)
 		  Frm_BeginForm (ActDoActOnSevGst);
 
 	       /* Begin table */
@@ -5113,7 +5114,7 @@ void Usr_SeeGuests (void)
 	       HTM_TABLE_End ();
 
 	       /***** Which action, show records, follow...? *****/
-	       if (PutForm)
+	       if (PutForm == Frm_PUT_FORM)
 		 {
 		     Usr_PutOptionsListUsrs (ICanChooseOption);
 		  Frm_EndForm ();
@@ -5144,7 +5145,7 @@ void Usr_SeeStudents (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
-   bool PutForm;
+   Frm_PutForm_t PutForm;
 
    /***** Put contextual links *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -5235,10 +5236,11 @@ void Usr_SeeStudents (void)
 		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);
+	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption) ? Frm_PUT_FORM :
+										    Frm_DONT_PUT_FORM;
 
 	       /* Begin form */
-	       if (PutForm)
+	       if (PutForm == Frm_PUT_FORM)
 		 {
 		  Frm_BeginForm (ActDoActOnSevStd);
 		     Grp_PutParsCodGrps ();
@@ -5266,7 +5268,7 @@ void Usr_SeeStudents (void)
 	       HTM_TABLE_End ();
 
 	       /***** Which action, show records, follow...? *****/
-	       if (PutForm)
+	       if (PutForm == Frm_PUT_FORM)
 		 {
 		     Usr_PutOptionsListUsrs (ICanChooseOption);
 		  Frm_EndForm ();
@@ -5301,7 +5303,7 @@ void Usr_SeeTeachers (void)
    extern const char *Txt_Scope;
    unsigned NumUsrs;
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
-   bool PutForm;
+   Frm_PutForm_t PutForm;
 
    /***** Put contextual links *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -5401,10 +5403,11 @@ void Usr_SeeTeachers (void)
 		  Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
 	       /* Set options allowed */
-	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption);
+	       PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption) ? Frm_PUT_FORM :
+										    Frm_DONT_PUT_FORM;
 
 	       /* Begin form */
-	       if (PutForm)
+	       if (PutForm == Frm_PUT_FORM)
 		 {
 		  Frm_BeginForm (ActDoActOnSevTch);
 		     Grp_PutParsCodGrps ();
@@ -5443,7 +5446,7 @@ void Usr_SeeTeachers (void)
 	       HTM_TABLE_End ();
 
 	       /***** Which action, show records, follow...? *****/
-	       if (PutForm)
+	       if (PutForm == Frm_PUT_FORM)
 		 {
 		     Usr_PutOptionsListUsrs (ICanChooseOption);
 		  Frm_EndForm ();
@@ -5473,11 +5476,10 @@ void Usr_SeeTeachers (void)
 /*****************************************************************************/
 // Returns true if any option is allowed
 
-static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
-                                           bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
+                                                    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    Usr_ListUsrsOption_t Opt;
-   bool OptionsAllowed;
 
    /***** Check which options I can choose *****/
    /* Set default (I can not choose options) */
@@ -5525,19 +5527,17 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 	 break;
       default:
-	 return false;
+	 return Frm_DONT_PUT_FORM;
      }
 
    /***** Count allowed options *****/
-   OptionsAllowed = false;
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
-	!OptionsAllowed &&
 	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
       if (ICanChooseOption[Opt])
-	 OptionsAllowed = true;
+	 return Frm_PUT_FORM;
 
-   return OptionsAllowed;
+   return Frm_DONT_PUT_FORM;
   }
 
 /*****************************************************************************/

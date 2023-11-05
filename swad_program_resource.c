@@ -407,7 +407,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
                     The_GetSuffix (),The_GetColorRows1 (1));
 	 HTM_Txt (Item->Resource.Title);
 	 HTM_BR ();
-	 Rsc_WriteLinkName (&Item->Resource.Link,Frm_PUT_FORM_TO_GO);
+	 Rsc_WriteLinkName (&Item->Resource.Link,Frm_PUT_FORM);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -456,7 +456,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
            {
             case Vie_VIEW:
 	       /* Show current link */
-	       Rsc_WriteLinkName (&Item->Resource.Link,Frm_PUT_FORM_TO_GO);
+	       Rsc_WriteLinkName (&Item->Resource.Link,Frm_PUT_FORM);
                break;
             case Vie_EDIT:
 	       /* Show clipboard to change resource link */

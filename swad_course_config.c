@@ -60,11 +60,11 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args);
-static void CrsCfg_Degree (Vie_ViewType_t ViewType,bool PutForm);
-static void CrsCfg_FullName (bool PutForm);
-static void CrsCfg_ShrtName (bool PutForm);
-static void CrsCfg_Year (bool PutForm);
-static void CrsCfg_InstitutionalCode (bool PutForm);
+static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
+static void CrsCfg_FullName (Frm_PutForm_t PutForm);
+static void CrsCfg_ShrtName (Frm_PutForm_t PutForm);
+static void CrsCfg_Year (Frm_PutForm_t PutForm);
+static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm);
 static void CrsCfg_InternalCode (void);
 static void CrsCfg_Shortcut (Vie_ViewType_t ViewType);
 static void CrsCfg_QR (void);
@@ -78,10 +78,10 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COURSE_Information;
    bool PutLink;
-   bool PutFormDeg;
-   bool PutFormName;
-   bool PutFormYear;
-   bool PutFormInsCod;
+   Frm_PutForm_t PutFormDeg;
+   Frm_PutForm_t PutFormName;
+   Frm_PutForm_t PutFormYear;
+   Frm_PutForm_t PutFormInsCod;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)	// No course selected
@@ -89,10 +89,16 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
 
    /***** Initializations *****/
    PutLink       = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
-   PutFormDeg    = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
-   PutFormName   = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
+   PutFormDeg    = (ViewType == Vie_VIEW &&
+	            Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Frm_PUT_FORM :
+							      Frm_DONT_PUT_FORM;
+   PutFormName   = (ViewType == Vie_VIEW &&
+		    Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM) ? Frm_PUT_FORM :
+							      Frm_DONT_PUT_FORM;
    PutFormYear   =
-   PutFormInsCod = ViewType == Vie_VIEW && Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
+   PutFormInsCod = (ViewType == Vie_VIEW &&
+		    Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Frm_PUT_FORM :
+							  Frm_DONT_PUT_FORM;
 
    /***** Contextual menu *****/
    if (ViewType == Vie_VIEW &&
@@ -196,73 +202,77 @@ void CrsCfg_PrintConfiguration (void)
 /******************** Show degree in course configuration ********************/
 /*****************************************************************************/
 
-static void CrsCfg_Degree (Vie_ViewType_t ViewType,bool PutForm)
+static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_Degree;
    unsigned NumDeg;
    const struct Hie_Node *Deg;
+   const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = Par_CodeStr[ParCod_OthDeg],
+     };
 
    /***** Degree *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? Par_CodeStr[ParCod_OthDeg] :
-				      NULL,
-		       Txt_Degree);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_Degree);
 
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    /* Get list of degrees of the current center */
-	    Deg_GetListDegsInCurrentCtr ();
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:	// I can not move course to another degree
+	       if (ViewType == Vie_VIEW)
+		 {
+		  Frm_BeginFormGoTo (ActSeeDegInf);
+		     ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_DEG].ShrtName),
+					      "class=\"LT BT_LINK\"");
+		     Str_FreeGoToTitle ();
+		 }
+	       Lgo_DrawLogo (Hie_DEG,
+			     Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+			     Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
+			     20,"LM");
+	       HTM_NBSP ();
+	       HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
+	       if (ViewType == Vie_VIEW)
+		 {
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		 }
+               break;
+            case Frm_PUT_FORM:
+	       /* Get list of degrees of the current center */
+	       Deg_GetListDegsInCurrentCtr ();
 
-	    /* Put form to select degree */
-	    Frm_BeginForm (ActChgCrsDegCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				 "id=\"OthDegCod\" name=\"OthDegCod\""
-				 " class=\"INPUT_SHORT_NAME INPUT_%s\"",
-				 The_GetSuffix ());
-		  for (NumDeg = 0;
-		       NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
-		       NumDeg++)
-		    {
-		     Deg = &Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg];
-		     HTM_OPTION (HTM_Type_LONG,&Deg->HieCod,
-				 Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
-										     HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
-				 "%s",Deg->ShrtName);
-		    }
-	       HTM_SELECT_End ();
-	    Frm_EndForm ();
-
-	    /* Free list of degrees of the current center */
-	    Hie_FreeList (Hie_CTR);
-	   }
-	 else	// I can not move course to another degree
-	   {
-	    if (ViewType == Vie_VIEW)
-	      {
-	       Frm_BeginFormGoTo (ActSeeDegInf);
-		  ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
-		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_DEG].ShrtName),
-					   "class=\"LT BT_LINK\"");
-		  Str_FreeGoToTitle ();
-	      }
-	    Lgo_DrawLogo (Hie_DEG,
-			  Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-			  Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
-			  20,"LM");
-	    HTM_NBSP ();
-	    HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
-	    if (ViewType == Vie_VIEW)
-	      {
-		  HTM_BUTTON_End ();
+	       /* Put form to select degree */
+	       Frm_BeginForm (ActChgCrsDegCfg);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"OthDegCod\" name=\"OthDegCod\""
+				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (NumDeg = 0;
+			  NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
+			  NumDeg++)
+		       {
+			Deg = &Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg];
+			HTM_OPTION (HTM_Type_LONG,&Deg->HieCod,
+				    Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
+											HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Deg->ShrtName);
+		       }
+		  HTM_SELECT_End ();
 	       Frm_EndForm ();
-	      }
-	   }
+
+	       /* Free list of degrees of the current center */
+	       Hie_FreeList (Hie_CTR);
+               break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -272,7 +282,7 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,bool PutForm)
 /************** Show course full name in course configuration ****************/
 /*****************************************************************************/
 
-static void CrsCfg_FullName (bool PutForm)
+static void CrsCfg_FullName (Frm_PutForm_t PutForm)
   {
    HieCfg_Name (PutForm,Hie_CRS,Nam_FULL_NAME);
   }
@@ -281,7 +291,7 @@ static void CrsCfg_FullName (bool PutForm)
 /************** Show course short name in course configuration ***************/
 /*****************************************************************************/
 
-static void CrsCfg_ShrtName (bool PutForm)
+static void CrsCfg_ShrtName (Frm_PutForm_t PutForm)
   {
    HieCfg_Name (PutForm,Hie_CRS,Nam_SHRT_NAME);
   }
@@ -290,44 +300,50 @@ static void CrsCfg_ShrtName (bool PutForm)
 /***************** Show course year in course configuration ******************/
 /*****************************************************************************/
 
-static void CrsCfg_Year (bool PutForm)
+static void CrsCfg_Year (Frm_PutForm_t PutForm)
   {
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Not_applicable;
    unsigned Year;
+   static const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = "OthCrsYear",
+     };
 
    /***** Academic year *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "OthCrsYear" :
-				      NULL,
-		       Txt_Year_OF_A_DEGREE);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_Year_OF_A_DEGREE);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    Frm_BeginForm (ActChgCrsYeaCfg);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				 "id=\"OthCrsYear\" name=\"OthCrsYear\""
-				 " class=\"INPUT_%s\"",
-				 The_GetSuffix ());
-		  for (Year  = 0;
-		       Year <= Deg_MAX_YEARS_PER_DEGREE;
-		       Year++)
-		     HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				 Year == Gbl.Hierarchy.Node[Hie_CRS].Specific.Year ? HTM_OPTION_SELECTED :
-											HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_YEAR_OF_DEGREE[Year]);
-	       HTM_SELECT_End ();
-	    Frm_EndForm ();
-	   }
-	 else
-	    HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].Specific.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Node[Hie_CRS].Specific.Year] :
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:
+	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].Specific.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Node[Hie_CRS].Specific.Year] :
 								    Txt_Not_applicable);
+               break;
+            case Frm_PUT_FORM:
+	       Frm_BeginForm (ActChgCrsYeaCfg);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"OthCrsYear\" name=\"OthCrsYear\""
+				    " class=\"INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (Year  = 0;
+			  Year <= Deg_MAX_YEARS_PER_DEGREE;
+			  Year++)
+			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+				    Year == Gbl.Hierarchy.Node[Hie_CRS].Specific.Year ? HTM_OPTION_SELECTED :
+											   HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_YEAR_OF_DEGREE[Year]);
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
+               break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -337,34 +353,40 @@ static void CrsCfg_Year (bool PutForm)
 /************* Show institutional code in course configuration ***************/
 /*****************************************************************************/
 
-static void CrsCfg_InstitutionalCode (bool PutForm)
+static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm)
   {
    extern const char *Txt_Institutional_code;
+   static const char *Id[Frm_NUM_PUT_FORM] =
+     {
+      [Frm_DONT_PUT_FORM] = NULL,
+      [Frm_PUT_FORM     ] = "InsCrsCod",
+     };
 
    /***** Institutional course code *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",PutForm ? "InsCrsCod" :
-				      NULL,
-		       Txt_Institutional_code);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_Institutional_code);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (PutForm)
-	   {
-	    Frm_BeginForm (ActChgInsCrsCodCfg);
-	       HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
-			       Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod,
-			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"InsCrsCod\" size=\"%u\""
-			       " class=\"INPUT_INS_CODE INPUT_%s\"",
-			       Hie_MAX_CHARS_INSTITUTIONAL_COD,
-			       The_GetSuffix ());
-	    Frm_EndForm ();
-	   }
-	 else
-	    HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod);
+         switch (PutForm)
+           {
+            case Frm_DONT_PUT_FORM:
+               HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod);
+               break;
+            case Frm_PUT_FORM:
+	       Frm_BeginForm (ActChgInsCrsCodCfg);
+		  HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
+				  Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "id=\"InsCrsCod\" size=\"%u\""
+				  " class=\"INPUT_INS_CODE INPUT_%s\"",
+				  Hie_MAX_CHARS_INSTITUTIONAL_COD,
+				  The_GetSuffix ());
+	       Frm_EndForm ();
+               break;
+           }
       HTM_TD_End ();
 
    HTM_TR_End ();

@@ -453,7 +453,7 @@ void Gam_SeeOneGame (void)
 
 void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
 			  bool ListGameQuestions,
-			  bool PutFormNewMatch)
+			  Frm_PutForm_t PutFormNewMatch)
   {
    Gam_ShowOnlyOneGameBegin (Games,ListGameQuestions,PutFormNewMatch);
    Gam_ShowOnlyOneGameEnd ();
@@ -461,7 +461,7 @@ void Gam_ShowOnlyOneGame (struct Gam_Games *Games,
 
 void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
 			       bool ListGameQuestions,
-			       bool PutFormNewMatch)
+			       Frm_PutForm_t PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
@@ -2169,7 +2169,7 @@ void Gam_ReqNewMatch (void)
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-                        true);	// Put form to start new match
+                        Frm_PUT_FORM);
   }
 
 /*****************************************************************************/

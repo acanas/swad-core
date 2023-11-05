@@ -129,7 +129,7 @@ void Rsc_ShowClipboard (void)
 	{
 	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
 	 HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
-	    Rsc_WriteLinkName (&Link,Frm_PUT_FORM_TO_GO);
+	    Rsc_WriteLinkName (&Link,Frm_PUT_FORM);
 	 HTM_LI_End ();
 	}
       DB_FreeMySQLResult (&mysql_res);
@@ -213,7 +213,7 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 				    "");
 
 	 /***** Name *****/
-         Rsc_WriteLinkName (Link,Frm_DONT_PUT_FORM_TO_GO);
+         Rsc_WriteLinkName (Link,Frm_DONT_PUT_FORM);
 
       HTM_LABEL_End ();
 
@@ -225,7 +225,7 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 /************* Write link name (filename, assignment title...) ***************/
 /*****************************************************************************/
 
-void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToGo)
+void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
@@ -293,13 +293,13 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutFormToGo_t PutFormToG
    /***** Put icon and title of resource *****/
    switch (PutFormToGo)
      {
-      case Frm_DONT_PUT_FORM_TO_GO:
+      case Frm_DONT_PUT_FORM:
 	 /* Icon and title of resource */
 	 Ico_PutIconOn (Rsc_ResourceTypesIcons[Link->Type],Ico_BLACK,
 	                Txt_RESOURCE_TYPES[Link->Type]);
 	 HTM_Txt (Title);
 	 break;
-      case Frm_PUT_FORM_TO_GO:
+      case Frm_PUT_FORM:
 	 /* Begin form to go to resource */
 	 NextAction = (Link->Cod > 0) ? NextActions[Link->Type].IfCod :		// Resource specified
 					NextActions[Link->Type].IfNotCod;	// All resources of this type

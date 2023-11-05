@@ -1704,7 +1704,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    unsigned NumGrpTyp;
    unsigned NumGrpsThisTypeIBelong;
    unsigned NumGrpsIBelong = 0;
-   bool PutFormToChangeGrps = !Frm_CheckIfInside ();	// Not inside another form (record card)
+   Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
+							      Frm_PUT_FORM;
    bool ICanEdit = !Frm_CheckIfInside () &&
 	           (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);

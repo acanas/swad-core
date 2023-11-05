@@ -94,8 +94,7 @@ long Mch_GetMchCodBeingPlayed (void);
 
 void Mch_ResetMatch (struct Mch_Match *Match);
 
-void Mch_ListMatches (struct Gam_Games *Games,
-                      bool PutFormNewMatch);
+void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch);
 void Mch_GetMatchDataByCod (struct Mch_Match *Match);
 
 void Mch_ToggleVisResultsMchUsr (void);

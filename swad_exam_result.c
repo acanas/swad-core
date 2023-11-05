@@ -201,16 +201,15 @@ void ExaRes_ShowMyResultsInExa (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
-	                     false);	// Do not put form to start new session
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
 
-   /***** List my sessions results in exam *****/
-   if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
-   free (Title);
-   ExaRes_ListMyResultsInExa (&Exams);
-   ExaRes_ShowResultsEnd ();
+      /***** List my sessions results in exam *****/
+      if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      free (Title);
+      ExaRes_ListMyResultsInExa (&Exams);
+      ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
@@ -249,16 +248,15 @@ void ExaRes_ShowMyResultsInSes (void)
    ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
-	                     false);	// Do not put form to start new session
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
 
-   /***** List my sessions results in session *****/
-   if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
-   free (Title);
-   ExaRes_ListMyResultsInSes (&Exams,Session.SesCod);
-   ExaRes_ShowResultsEnd ();
+      /***** List my sessions results in session *****/
+      if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      free (Title);
+      ExaRes_ListMyResultsInSes (&Exams,Session.SesCod);
+      ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
@@ -393,16 +391,15 @@ void ExaRes_ShowAllResultsInExa (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
-	                     false);	// Do not put form to start new session
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
 
-   /***** List sessions results in exam *****/
-   if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
-   free (Title);
-   ExaRes_ListAllResultsInExa (&Exams);
-   ExaRes_ShowResultsEnd ();
+      /***** List sessions results in exam *****/
+      if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      free (Title);
+      ExaRes_ListAllResultsInExa (&Exams);
+      ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
@@ -465,16 +462,15 @@ void ExaRes_ShowAllResultsInSes (void)
    ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,
-	                     false);	// Do not put form to start new session
+   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
 
-   /***** List sessions results in session *****/
-   if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
-      Err_NotEnoughMemoryExit ();
-   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
-   free (Title);
-   ExaRes_ListAllResultsInSes (&Exams,Session.SesCod);
-   ExaRes_ShowResultsEnd ();
+      /***** List sessions results in session *****/
+      if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
+	 Err_NotEnoughMemoryExit ();
+      ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+      free (Title);
+      ExaRes_ListAllResultsInSes (&Exams,Session.SesCod);
+      ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();

@@ -136,10 +136,12 @@ static void Rec_PutParsStdResults (__attribute__((unused)) void *Args);
 static void Rec_PutParsWorks (__attribute__((unused)) void *Args);
 static void Rec_PutParsStudent (__attribute__((unused)) void *Args);
 static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args);
-static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,bool PutFormLinks);
+static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,
+				       Frm_PutForm_t PutFormLinks);
 static void Rec_ShowPhoto (struct Usr_Data *UsrDat);
 static void Rec_ShowFullName (struct Usr_Data *UsrDat);
-static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks);
+static void Rec_ShowNickname (struct Usr_Data *UsrDat,
+			      Frm_PutForm_t PutFormLinks);
 static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,bool ShowData);
 static void Rec_ShowWebsAndSocialNets (struct Usr_Data *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView);
@@ -2031,7 +2033,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    bool IAmLoggedAsTeacherOrSysAdm;
    bool CountryForm;
    Vie_ViewType_t ViewType;
-   bool PutFormLinks;	// Put links (forms) inside record card
+   Frm_PutForm_t PutFormLinks;	// Put links (forms) inside record card
    bool ShowData;
    bool ShowIDRows;
    bool ShowAddressRows;
@@ -2084,8 +2086,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs];
 
-   PutFormLinks = !Frm_CheckIfInside () &&					// Only if not inside another form
-                  Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
+   PutFormLinks = (!Frm_CheckIfInside () &&							// Only if not inside another form
+                   Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB) ? Frm_PUT_FORM :	// Only in main browser tab
+                							    Frm_DONT_PUT_FORM;
 
    Ins.HieCod = UsrDat->InsCod;
    if (Ins.HieCod > 0)
@@ -2523,14 +2526,15 @@ static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args)
 /*********************** Show institution in record card *********************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,bool PutFormLinks)
+static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,
+				       Frm_PutForm_t PutFormLinks)
   {
    /***** Institution logo *****/
    HTM_TD_Begin ("rowspan=\"4\" class=\"REC_C1_TOP CM\"");
       if (Ins->HieCod > 0)
 	{
 	 /* Form to go to the institution */
-	 if (PutFormLinks)
+	 if (PutFormLinks == Frm_PUT_FORM)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
 	       ParCod_PutPar (ParCod_Ins,Ins->HieCod);
@@ -2540,7 +2544,7 @@ static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,bool PutFormLinks)
 		       Ins->HieCod,
 		       Ins->ShrtName,
 		       Rec_INSTITUTION_LOGO_SIZE,NULL);
-	 if (PutFormLinks)
+	 if (PutFormLinks == Frm_PUT_FORM)
 	   {
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
@@ -2553,14 +2557,14 @@ static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,bool PutFormLinks)
       if (Ins->HieCod > 0)
 	{
 	 /* Form to go to the institution */
-	 if (PutFormLinks)
+	 if (PutFormLinks == Frm_PUT_FORM)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
 	       ParCod_PutPar (ParCod_Ins,Ins->HieCod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
 	 HTM_Txt (Ins->FullName);
-	 if (PutFormLinks)
+	 if (PutFormLinks == Frm_PUT_FORM)
 	   {
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
@@ -2618,7 +2622,8 @@ static void Rec_ShowFullName (struct Usr_Data *UsrDat)
 /*************************** Show user's nickname ****************************/
 /*****************************************************************************/
 
-static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks)
+static void Rec_ShowNickname (struct Usr_Data *UsrDat,
+			      Frm_PutForm_t PutFormLinks)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -2632,7 +2637,7 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks)
       HTM_DIV_Begin ("class=\"REC_NICK\"");
 	 if (UsrDat->Nickname[0])
 	   {
-	    if (PutFormLinks)
+	    if (PutFormLinks == Frm_PUT_FORM)
 	      {
 	       /* Put form to go to public profile */
 	       Frm_BeginForm (ActSeeOthPubPrf);
@@ -2641,7 +2646,7 @@ static void Rec_ShowNickname (struct Usr_Data *UsrDat,bool PutFormLinks)
 					   "class=\"BT_LINK\"");
 	      }
 	    HTM_TxtF ("@%s",UsrDat->Nickname);
-	    if (PutFormLinks)
+	    if (PutFormLinks == Frm_PUT_FORM)
 	      {
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();

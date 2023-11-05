@@ -406,8 +406,7 @@ void Exa_SeeOneExam (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,
-	                false);	// Do not put form for session
+   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -416,7 +415,7 @@ void Exa_SeeOneExam (void)
 
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 			  struct ExaSes_Session *Session,
-			  bool PutFormSession)
+			  Frm_PutForm_t PutFormSession)
   {
    Exa_ShowOnlyOneExamBegin (Exams,Session,PutFormSession);
    Exa_ShowOnlyOneExamEnd ();
@@ -424,7 +423,7 @@ void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
 
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 			       struct ExaSes_Session *Session,
-			       bool PutFormSession)
+			       Frm_PutForm_t PutFormSession)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
    extern const char *Txt_Exam;

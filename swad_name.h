@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_action.h"
+#include "swad_form.h"
 #include "swad_parameter_code.h"
 #include "swad_string.h"
 
@@ -64,7 +65,7 @@ void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES]);
 void Nam_ExistingShortAndFullNames (const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
 				    ParCod_Param_t ParCod,long Cod,
 				    const char *Names[Nam_NUM_SHRT_FULL_NAMES],
-				    bool PutForm);
+				    Frm_PutForm_t PutForm);
 
 bool Nam_CheckIfNameExists (bool (*FuncToCheck) (const char *FldName,const char *Name,
 					         long Cod,long PrtCod,unsigned Year),
