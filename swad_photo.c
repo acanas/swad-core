@@ -1275,13 +1275,14 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
 	                      BrowserTab == Act_AJAX_NORMAL ||
 			      BrowserTab == Act_AJAX_RFRESH);
-   bool PutLinkToPublicProfile = !Frm_CheckIfInside () &&	// Only if not inside another form
-                                 BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
+   Frm_PutForm_t PutFormPublicProfile = (!Frm_CheckIfInside () &&		// Only if not inside another form
+                                         BrowserTabIs1stTab) ? Frm_PUT_FORM :	// Only in main browser tab (or AJAX)
+							       Frm_DONT_PUT_FORM;
    char *CaptionStr;
    char *ImgStr;
 
    /***** Begin form to go to public profile *****/
-   if (PutLinkToPublicProfile)
+   if (PutFormPublicProfile == Frm_PUT_FORM)
      {
       Frm_BeginForm (ActSeeOthPubPrf);
          Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -1299,7 +1300,7 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    free (CaptionStr);
 
    /***** End form to go to public profile *****/
-   if (PutLinkToPublicProfile)
+   if (PutFormPublicProfile == Frm_PUT_FORM)
      {
 	 HTM_BUTTON_End ();
       Frm_EndForm ();

@@ -314,6 +314,7 @@ static void Ntf_GetParsNotifyEvents (void);
 
 void Ntf_ShowMyNotifications (void)
   {
+   extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
    extern const char *Hlp_START_Notifications;
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
@@ -326,10 +327,6 @@ void Ntf_ShowMyNotifications (void)
    extern const char *Txt_Email;
    extern const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Center;
-   extern const char *Txt_Institution;
    extern const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT];
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
@@ -349,12 +346,16 @@ void Ntf_ShowMyNotifications (void)
    Ntf_StatusTxt_t StatusTxt;
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
-   const char *ClassTxt;
-   const char *ClassLink;
-   const char *ClassAuthor;
-   const char *ClassBg;
-   bool PutLink;
+   struct
+     {
+      const char *Txt;
+      const char *Link;
+      const char *Author;
+      const char *Bg;
+     } Class;
+   Frm_PutForm_t PutForm;
    Act_Action_t Action = ActUnk;
+   Hie_Level_t Level;
 
    /***** Get my notifications from database *****/
    AllNotifications = Ntf_GetAllNotificationsFromForm ();
@@ -457,27 +458,29 @@ void Ntf_ShowMyNotifications (void)
 
 	       if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
 		 {
-		  ClassTxt    = "MSG_TIT_REM";
-		  ClassLink   = "BT_LINK MSG_TIT_REM";
-		  ClassAuthor = "MSG_AUT_LIGHT";
-		  ClassBg     = "MSG_BG_REM";
-		  PutLink = false;
+		  Class.Txt    = "MSG_TIT_REM";
+		  Class.Link   = "BT_LINK MSG_TIT_REM";
+		  Class.Author = "MSG_AUT_LIGHT";
+		  Class.Bg     = "MSG_BG_REM";
+		  PutForm = Frm_DONT_PUT_FORM;
 		 }
-	       else if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
+	       else
 		 {
-		  ClassTxt    = "MSG_TIT";
-		  ClassLink   = "LT BT_LINK MSG_TIT";
-		  ClassAuthor = "MSG_AUT";
-		  ClassBg     = "MSG_BG";
-		  PutLink = true;
-		 }
-	       else					// I have not seen the source of the notification
-		 {
-		  ClassTxt    = "MSG_TIT_NEW";
-		  ClassLink   = "LT BT_LINK MSG_TIT_NEW";
-		  ClassAuthor = "MSG_AUT_NEW";
-		  ClassBg     = "MSG_BG_NEW";
-		  PutLink = true;
+		  if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
+		    {
+		     Class.Txt    = "MSG_TIT";
+		     Class.Link   = "LT BT_LINK MSG_TIT";
+		     Class.Author = "MSG_AUT";
+		     Class.Bg     = "MSG_BG";
+		    }
+		  else					// I have not seen the source of the notification
+		    {
+		     Class.Txt    = "MSG_TIT_NEW";
+		     Class.Link   = "LT BT_LINK MSG_TIT_NEW";
+		     Class.Author = "MSG_AUT_NEW";
+		     Class.Bg     = "MSG_BG_NEW";
+		    }
+		  PutForm = Frm_PUT_FORM;
 		 }
 
 	       /***** Write row for this notification *****/
@@ -485,131 +488,156 @@ void Ntf_ShowMyNotifications (void)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"LT %s_%s\" style=\"width:25px;\"",
-		                ClassBg,The_GetSuffix ());
-		     if (PutLink)
+		                Class.Bg,The_GetSuffix ());
+		     if (PutForm == Frm_PUT_FORM)
 		       {
 			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			PutLink = Frm_CheckIfInside ();
+			PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+							 Frm_DONT_PUT_FORM;
 		       }
-
-		     if (PutLink)
+		     switch (PutForm)
 		       {
-			Ico_PutIconLink (Ntf_Icons[NotifyEvent],Ico_BLACK,Action);
-			Frm_EndForm ();
+			case Frm_DONT_PUT_FORM:
+			   Ico_PutIconOff (Ntf_Icons[NotifyEvent],Ico_BLACK,
+					   Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+			   break;
+			case Frm_PUT_FORM:
+			   Ico_PutIconLink (Ntf_Icons[NotifyEvent],Ico_BLACK,Action);
+			   Frm_EndForm ();
+			   break;
 		       }
-		     else
-			Ico_PutIconOff (Ntf_Icons[NotifyEvent],Ico_BLACK,
-					Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 		  HTM_TD_End ();
 
 		  /* Write event type */
-		  HTM_TD_Begin ("class=\"LT %s_%s\"",ClassBg,The_GetSuffix ());
-		     if (PutLink)
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
+		     switch (PutForm)
 		       {
-			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			PutLink = Frm_CheckIfInside ();
-
-			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"LT %s_%s\"",
-			                            ClassLink,The_GetSuffix ());
+			case Frm_DONT_PUT_FORM:
+			   HTM_SPAN_Begin ("class=\"%s\"",Class.Txt);
 			      HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-			   HTM_BUTTON_End ();
-			Frm_EndForm ();
-		       }
-		     else
-		       {
-			HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-			   HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-			HTM_SPAN_End ();
+			   HTM_SPAN_End ();
+			   break;
+			case Frm_PUT_FORM:
+			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
+			   PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
+
+			      HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+						       "class=\"LT %s_%s\"",
+						       Class.Link,The_GetSuffix ());
+				 HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+			      HTM_BUTTON_End ();
+			   Frm_EndForm ();
+			   break;
 		       }
 		  HTM_TD_End ();
 
 		  /* Write user (from) */
 		  HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		                ClassAuthor,The_GetSuffix (),
-		                ClassBg,The_GetSuffix ());
+		                Class.Author,The_GetSuffix (),
+		                Class.Bg,The_GetSuffix ());
 		     Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
 		  HTM_TD_End ();
 
 		  /* Write location */
-		  HTM_TD_Begin ("class=\"LT %s_%s\"",
-		                ClassBg,The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
 		     if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 			 NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 		       {
-			if (PutLink)
+			if (PutForm == Frm_PUT_FORM)
 			  {
 			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			   PutLink = Frm_CheckIfInside ();
+			   PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
 		          }
 
-			if (PutLink)
-			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"LT %s_%s\"",
-			                            ClassLink,The_GetSuffix ());
-			else
-			   HTM_SPAN_Begin ("class=\"%s_%s\"",
-			                   ClassTxt,The_GetSuffix ());
-			HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
-			if (PutLink)
+			switch (PutForm)
 			  {
-			   HTM_BUTTON_End ();
-			   Frm_EndForm ();
+			   case Frm_DONT_PUT_FORM:
+			      HTM_SPAN_Begin ("class=\"%s_%s\"",
+					      Class.Txt,The_GetSuffix ());
+			      break;
+			   case Frm_PUT_FORM:
+			      HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+						       "class=\"LT %s_%s\"",
+						       Class.Link,The_GetSuffix ());
+			      break;
 			  }
-			else
-			   HTM_SPAN_End ();
+			HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
+			switch (PutForm)
+			  {
+			   case Frm_DONT_PUT_FORM:
+			      HTM_SPAN_End ();
+			      break;
+			   case Frm_PUT_FORM:
+			      HTM_BUTTON_End ();
+			      Frm_EndForm ();
+			      break;
+			  }
 		       }
 		     else
 		       {
-			if (PutLink)
+			if (PutForm == Frm_PUT_FORM)
 			  {
 			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			   PutLink = Frm_CheckIfInside ();
+			   PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+							    Frm_DONT_PUT_FORM;
 		          }
 
-			if (PutLink)
-			   HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-			                            "class=\"LT %s_%s\"",
-			                            ClassLink,The_GetSuffix ());
-			else
-			   HTM_SPAN_Begin ("class=\"%s_%s\"",
-			                   ClassTxt,The_GetSuffix ());
+			switch (PutForm)
+			  {
+			   case Frm_DONT_PUT_FORM:
+			      HTM_SPAN_Begin ("class=\"%s_%s\"",
+					      Class.Txt,The_GetSuffix ());
+			      break;
+			   case Frm_PUT_FORM:
+			      HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+						       "class=\"LT %s_%s\"",
+						       Class.Link,The_GetSuffix ());
+			      break;
+			  }
 
-			if (Hie[Hie_CRS].HieCod > 0)
-			   HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie[Hie_CRS].ShrtName);
-			else if (Hie[Hie_DEG].HieCod > 0)
-			   HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie[Hie_DEG].ShrtName);
-			else if (Hie[Hie_CTR].HieCod > 0)
-			   HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie[Hie_CTR].ShrtName);
-			else if (Hie[Hie_INS].HieCod > 0)
-			   HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie[Hie_INS].ShrtName);
-			else
+			for (Level  = Hie_CRS;
+			     Level >= Hie_INS;
+			     Level--)
+			   if (Hie[Level].HieCod > 0)
+			     {
+			      HTM_TxtF ("%s:&nbsp;%s",
+					*Hie_TxtLevel[Level],
+					Hie[Level].ShrtName);
+			      break;
+		             }
+			if (Level < Hie_INS)
 			   HTM_Hyphen ();
 
-			if (PutLink)
+			switch (PutForm)
 			  {
-			   HTM_BUTTON_End ();
-			   Frm_EndForm ();
+			   case Frm_DONT_PUT_FORM:
+			      HTM_SPAN_End ();
+			      break;
+			   case Frm_PUT_FORM:
+			      HTM_BUTTON_End ();
+			      Frm_EndForm ();
+			      break;
 			  }
-			else
-			   HTM_SPAN_End ();
 		       }
+
 		  HTM_TD_End ();
 
 		  /* Write date and time */
-		  Msg_WriteMsgDate (DateTimeUTC,ClassTxt,ClassBg);
+		  Msg_WriteMsgDate (DateTimeUTC,Class.Txt,Class.Bg);
 
 		  /* Write status (sent by email / pending to be sent by email) */
 		  HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		                ClassTxt,The_GetSuffix (),
-		                ClassBg,The_GetSuffix ());
+		                Class.Txt,The_GetSuffix (),
+		                Class.Bg,The_GetSuffix ());
 		     HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
 
 	       /***** Write content of the event *****/
-	       if (PutLink)
+	       if (PutForm == Frm_PUT_FORM)
 		 {
 		  ContentStr = NULL;
 

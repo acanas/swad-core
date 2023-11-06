@@ -651,11 +651,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    time_t TimeDiff;
    const char *ClassTxt;
    struct Usr_Data UsrDat;
-   bool PutLinkToRecord = (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
-	                   Gbl.Scope.Current   == Hie_CRS &&	// Scope is current course
-	                   (Role == Rol_STD ||			// Role is student,...
-	                    Role == Rol_NET ||			// ...non-editing teacher...
-	                    Role == Rol_TCH));			// ...or teacher
+   Frm_PutForm_t PutFormRecord = (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+	                          Gbl.Scope.Current   == Hie_CRS &&	// Scope is current course
+	                          (Role == Rol_STD ||			// Role is student,...
+	                           Role == Rol_NET ||			// ...non-editing teacher...
+	                           Role == Rol_TCH)) ? Frm_PUT_FORM :	// ...or teacher
+	                        		       Frm_DONT_PUT_FORM;
 
    /***** Get connected users who belong to current location from database *****/
    if ((NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role)))
@@ -697,23 +698,21 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       HTM_TD_Begin ("class=\"%s %s\"",
 	                     ClassTxt,The_GetColorRows ());
 
-		  if (PutLinkToRecord)
+		  if (PutFormRecord == Frm_PUT_FORM)
 		    {
 		     if (!NextAction[Role])
 			Err_WrongRoleExit ();
 		     Frm_BeginForm (NextAction[Role]);
-			Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
+		     Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
+			HTM_BUTTON_Submit_Begin (UsrDat.FullName,
+						 "class=\"LT BT_LINK\"");
 		    }
-
-		  if (PutLinkToRecord)
-		     HTM_BUTTON_Submit_Begin (UsrDat.FullName,
-					      "class=\"LT BT_LINK\"");
 		  Usr_WriteFirstNameBRSurnames (&UsrDat);
-		  if (PutLinkToRecord)
-		     HTM_BUTTON_End ();
-
-		  if (PutLinkToRecord)
+		  if (PutFormRecord == Frm_PUT_FORM)
+		    {
+		        HTM_BUTTON_End ();
 		     Frm_EndForm ();
+                    }
 
 	       HTM_TD_End ();
 
