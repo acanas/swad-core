@@ -547,7 +547,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[];
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumIns;
    const struct Hie_Node *Ins;
    const char *Id[Frm_NUM_PUT_FORM] =
@@ -560,7 +560,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_Institution);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());

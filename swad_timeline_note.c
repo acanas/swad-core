@@ -484,10 +484,7 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 					     struct Hie_Node Hie[Hie_NUM_LEVELS],
                                              const char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
-   extern const char *Txt_Institution;
-   extern const char *Txt_Center;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Forum;
 
    /***** Begin container *****/
@@ -499,24 +496,28 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 	 case TmlNot_INS_DOC_PUB_FILE:
 	 case TmlNot_INS_SHA_PUB_FILE:
 	    /* Write location (institution) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie[Hie_INS].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",
+		      Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Hie[Hie_INS].ShrtName);
 	    break;
 	 case TmlNot_CTR_DOC_PUB_FILE:
 	 case TmlNot_CTR_SHA_PUB_FILE:
 	    /* Write location (center) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie[Hie_CTR].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",
+		      Txt_HIERARCHY_SINGUL_Abc[Hie_CTR],Hie[Hie_CTR].ShrtName);
 	    break;
 	 case TmlNot_DEG_DOC_PUB_FILE:
 	 case TmlNot_DEG_SHA_PUB_FILE:
 	    /* Write location (degree) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie[Hie_DEG].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",
+		      Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Hie[Hie_DEG].ShrtName);
 	    break;
 	 case TmlNot_CRS_DOC_PUB_FILE:
 	 case TmlNot_CRS_SHA_PUB_FILE:
 	 case TmlNot_CALL_FOR_EXAM:
 	 case TmlNot_NOTICE:
 	    /* Write location (course) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s", Txt_Course,Hie[Hie_CRS].ShrtName);
+	    HTM_TxtF ("%s:&nbsp;%s",
+		      Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
 	    break;
 	 case TmlNot_FORUM_POST:
 	    /* Write forum name */

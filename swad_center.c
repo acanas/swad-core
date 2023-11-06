@@ -113,7 +113,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Centers_with_pending_degrees;
-   extern const char *Txt_Center;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_There_are_no_centers_with_requests_for_degrees_to_be_confirmed;
    MYSQL_RES *mysql_res;
@@ -133,10 +133,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	 /***** Wrtie heading *****/
 	 HTM_TR_Begin (NULL);
-
-            HTM_TH (Txt_Center              ,HTM_HEAD_LEFT );
-            HTM_TH (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
-
+            HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR],HTM_HEAD_LEFT );
+            HTM_TH (Txt_Degrees_ABBREVIATION  ,HTM_HEAD_RIGHT);
 	 HTM_TR_End ();
 
 	 /***** List the centers *****/
@@ -663,7 +661,7 @@ static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 
 void Ctr_WriteSelectorOfCenter (void)
   {
-   extern const char *Txt_Center;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCtrs;
@@ -687,7 +685,7 @@ void Ctr_WriteSelectorOfCenter (void)
 		  Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0 ? HTM_OPTION_SELECTED :
 							   HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
-		  "[%s]",Txt_Center);
+		  "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
       if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
 	{
@@ -1596,8 +1594,8 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role)
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
   {
-   extern const char *Txt_center;
-   extern const char *Txt_centers;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    unsigned NumCtr;
    char *Title;
    struct Hie_Node Ctr;
@@ -1608,8 +1606,8 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
       /***** Begin box and table *****/
       /* Number of centers found */
       if (asprintf (&Title,"%u %s",NumCtrs,
-				   NumCtrs == 1 ? Txt_center :
-	                                          Txt_centers) < 0)
+				   NumCtrs == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CTR] :
+	                                          Txt_HIERARCHY_PLURAL_abc[Hie_CTR]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);

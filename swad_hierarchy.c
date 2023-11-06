@@ -71,27 +71,6 @@ static FigCch_FigureCached_t Hie_FiguresCached[Hie_NUM_LEVELS] =
   };
 
 /*****************************************************************************/
-/**************************** Public constants *******************************/
-/*****************************************************************************/
-
-extern const char *Txt_System;
-extern const char *Txt_Country;
-extern const char *Txt_Institution;
-extern const char *Txt_Center;
-extern const char *Txt_Degree;
-extern const char *Txt_Course;
-
-const char **Hie_TxtLevel[Hie_NUM_LEVELS] =
-  {
-   [Hie_SYS] = &Txt_System,
-   [Hie_CTY] = &Txt_Country,
-   [Hie_INS] = &Txt_Institution,
-   [Hie_CTR] = &Txt_Center,
-   [Hie_DEG] = &Txt_Degree,
-   [Hie_CRS] = &Txt_Course,
-  };
-
-/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -135,11 +114,7 @@ void Hie_SeePending (void)
 void Hie_WriteMenuHierarchy (void)
   {
    extern const char *Par_CodeStr[];
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Center;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
    /***** Begin table *****/
    HTM_TABLE_BeginCenterPadding (2);
@@ -148,7 +123,8 @@ void Hie_WriteMenuHierarchy (void)
       HTM_TR_Begin (NULL);
 
 	 /* Label */
-	 Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Cty],Txt_Country);
+	 Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Cty],
+			  Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
@@ -164,7 +140,8 @@ void Hie_WriteMenuHierarchy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ins],Txt_Institution);
+	    Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ins],
+			     Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
@@ -180,7 +157,8 @@ void Hie_WriteMenuHierarchy (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ctr],Txt_Center);
+	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ctr],
+				Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
@@ -196,7 +174,8 @@ void Hie_WriteMenuHierarchy (void)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Deg],Txt_Degree);
+		  Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Deg],
+				   Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"LT\"");
@@ -212,7 +191,8 @@ void Hie_WriteMenuHierarchy (void)
 		  HTM_TR_Begin (NULL);
 
 		     /* Label */
-		     Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Crs],Txt_Course);
+		     Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Crs],
+				      Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
 
 		     /* Data */
 		     HTM_TD_Begin ("class=\"LT\"");
@@ -235,11 +215,7 @@ void Hie_WriteMenuHierarchy (void)
 
 void Hie_WriteHierarchyInBreadcrumb (void)
   {
-   extern const char *Txt_System;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Center;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
    /***** Form to go to the system *****/
    HTM_DIV_Begin ("class=\"BC BC_%s\"",The_GetSuffix ());
@@ -248,8 +224,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
       Frm_BeginFormGoTo (ActMnu);
 	 Par_PutParUnsigned (NULL,"NxtTab",(unsigned) TabSys);
-	 HTM_BUTTON_Submit_Begin (Txt_System,"class=\"BT_LINK\"");
-	    HTM_Txt (Txt_System);
+	 HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_SYS],"class=\"BT_LINK\"");
+	    HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
 
@@ -282,8 +258,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select countries *****/
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_Submit_Begin (Txt_Country,"class=\"BT_LINK\"");
-	       HTM_Txt (Txt_Country);
+	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY],"class=\"BT_LINK\"");
+	       HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
@@ -317,8 +293,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select institutions *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    HTM_BUTTON_Submit_Begin (Txt_Institution,"class=\"BT_LINK\"");
-	       HTM_Txt (Txt_Institution);
+	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],"class=\"BT_LINK\"");
+	       HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
@@ -332,7 +308,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
 	 /***** Hidden institution *****/
-	 HTM_Txt (Txt_Institution);
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
       HTM_DIV_End ();
      }
@@ -364,8 +340,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select centers *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
-	    HTM_BUTTON_Submit_Begin (Txt_Center,"class=\"BT_LINK\"");
-	       HTM_Txt (Txt_Center);
+	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR],"class=\"BT_LINK\"");
+	       HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
@@ -379,7 +355,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
 	 /***** Hidden center *****/
-	 HTM_Txt (Txt_Center);
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
       HTM_DIV_End ();
      }
@@ -411,8 +387,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select degrees *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    HTM_BUTTON_Submit_Begin (Txt_Degree,"class=\"BT_LINK\"");
-	       HTM_Txt (Txt_Degree);
+	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],"class=\"BT_LINK\"");
+	       HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
@@ -426,7 +402,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
 	 /***** Hidden degree *****/
-	 HTM_Txt (Txt_Degree);
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 
       HTM_DIV_End ();
      }
@@ -1228,17 +1204,7 @@ static void Hie_WriteHeadHierarchy (void)
 static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel)
   {
    extern const char *Txt_With_;
-   extern const char *Txt_institutions;
-   extern const char *Txt_centers;
-   extern const char *Txt_degrees;
-   extern const char *Txt_courses;
-   static const char **Txt[Hie_NUM_LEVELS] =
-     {
-      [Hie_INS] = &Txt_institutions,	// Number of ... with institutions
-      [Hie_CTR] = &Txt_centers,		// Number of ... with centers
-      [Hie_DEG] = &Txt_degrees,		// Number of ... with degrees
-      [Hie_CRS] = &Txt_courses,		// Number of ... with courses
-     };
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    int NumNodes[Hie_NUM_LEVELS];
    Hie_Level_t LevelChildren;
 
@@ -1258,7 +1224,7 @@ static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel)
         							            HavingNodesOfLevel);// Grand child
 
    /***** Write number of elements with courses *****/
-   Hie_ShowHierarchyRow (Txt_With_,*Txt[HavingNodesOfLevel],"DAT",NumNodes);
+   Hie_ShowHierarchyRow (Txt_With_,Txt_HIERARCHY_PLURAL_abc[HavingNodesOfLevel],"DAT",NumNodes);
   }
 
 /*****************************************************************************/

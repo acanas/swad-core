@@ -3200,7 +3200,7 @@ static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
   {
    extern const char *Par_CodeStr[];
-   extern const char *Txt_Country;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Another_country;
    char *Label;
    unsigned NumCty;
@@ -3216,10 +3216,10 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
       switch (ViewType)
 	{
 	 case Vie_VIEW:
-	    Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
+	    Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 	    break;
 	 case Vie_EDIT:
-	    if (asprintf (&Label,"%s*",Txt_Country) < 0)
+	    if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCty],Label);
 	    free (Label);
@@ -3239,7 +3239,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	    HTM_OPTION (HTM_Type_STRING,"",
 	                HTM_OPTION_UNSELECTED,
 	                HTM_OPTION_ENABLED,
-			"%s",Txt_Country);
+			"%s",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 	    HTM_OPTION (HTM_Type_STRING,"0",
 	                UsrDat->CtyCod == 0 ? HTM_OPTION_SELECTED :
 	                		      HTM_OPTION_UNSELECTED,
@@ -3451,13 +3451,13 @@ static void Rec_ShowTeacherRows (struct Usr_Data *UsrDat,struct Hie_Node *Ins,
 
 static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
   {
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Institution);
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
@@ -3484,14 +3484,14 @@ static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
 
 static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
   {
-   extern const char *Txt_Center;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    struct Hie_Node Ctr;
 
    /***** Center *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Center);
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
@@ -3842,10 +3842,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    extern const char *Hlp_PROFILE_Institution;
    extern const char *Par_CodeStr[];
    extern const char *Txt_Institution_center_and_department;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Country;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Another_institution;
-   extern const char *Txt_Center;
    extern const char *Txt_Another_center;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
@@ -3870,7 +3868,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
       Box_BoxTableBegin (StrRecordWidth,
 			 IAmATeacher ? Txt_Institution_center_and_department :
-				       Txt_Institution,
+				       Txt_HIERARCHY_SINGUL_Abc[Hie_INS],
 			 NULL,NULL,
 			 Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
 
@@ -3878,7 +3876,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    if (asprintf (&Label,"%s*",Txt_Country) < 0)
+	    if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",Label);
 	    free (Label);
@@ -3919,7 +3917,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    if (asprintf (&Label,"%s*",Txt_Institution) < 0)
+	    if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthIns],Label);
 	    free (Label);
@@ -3971,7 +3969,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       if (asprintf (&Label,"%s*",Txt_Center) < 0)
+	       if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCtr],Label);
 	       free (Label);

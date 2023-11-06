@@ -117,7 +117,7 @@ void Deg_SeeDegWithPendingCrss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Degrees_with_pending_courses;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed;
    MYSQL_RES *mysql_res;
@@ -137,8 +137,8 @@ void Deg_SeeDegWithPendingCrss (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-            HTM_TH (Txt_Degree              ,HTM_HEAD_LEFT );
-            HTM_TH (Txt_Courses_ABBREVIATION,HTM_HEAD_RIGHT);
+            HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT );
+            HTM_TH (Txt_Courses_ABBREVIATION  ,HTM_HEAD_RIGHT);
 	 HTM_TR_End ();
 
 	 /***** List the degrees *****/
@@ -222,7 +222,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action
 
 void Deg_WriteSelectorOfDegree (void)
   {
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDegs;
@@ -246,7 +246,7 @@ void Deg_WriteSelectorOfDegree (void)
 		  Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0 ? HTM_OPTION_SELECTED :
 							    HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
-		  "[%s]",Txt_Degree);
+		  "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 
       if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
@@ -598,18 +598,18 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 static void Deg_PutHeadDegreesForSeeing (void)
   {
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Type;
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH_Span (NULL               ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL                 ,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH_Empty (1);
-      HTM_TH (Txt_Degree              ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Type                ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Courses_ABBREVIATION,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Type                  ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Courses_ABBREVIATION  ,HTM_HEAD_RIGHT );
       HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
@@ -1507,8 +1507,8 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
   {
-   extern const char *Txt_degree;
-   extern const char *Txt_degrees;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    char *Title;
    unsigned NumDeg;
    struct Hie_Node Deg;
@@ -1519,8 +1519,8 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
       /***** Begin box and table *****/
       /* Number of degrees found */
       if (asprintf (&Title,"%u %s",NumDegs,
-				   NumDegs == 1 ? Txt_degree :
-						  Txt_degrees) < 0)
+				   NumDegs == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_DEG] :
+						  Txt_HIERARCHY_PLURAL_abc[Hie_DEG]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);

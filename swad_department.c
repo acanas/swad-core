@@ -843,7 +843,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 static void Dpt_PutHeadDepartments (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
@@ -852,7 +852,7 @@ static void Dpt_PutHeadDepartments (void)
    HTM_TR_Begin (NULL);
       HTM_TH_Empty (1);
       HTM_TH (Txt_Code                           ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Institution                    ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]         ,HTM_HEAD_LEFT );
       HTM_TH (Txt_Short_name                     ,HTM_HEAD_LEFT );
       HTM_TH (Txt_Full_name                      ,HTM_HEAD_LEFT );
       HTM_TH (Txt_WWW                            ,HTM_HEAD_LEFT );

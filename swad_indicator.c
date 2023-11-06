@@ -532,8 +532,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res)
   {
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Institutional_BR_code;
    extern const char *Txt_Web_page_of_the_course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
@@ -574,8 +573,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	{
 	 case Ind_INDICATORS_BRIEF:
 	    HTM_TR_Begin (NULL);
-	       HTM_TH_Span (Txt_Degree                ,HTM_HEAD_LEFT  ,3, 1,NULL);
-	       HTM_TH_Span (Txt_Course                ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_Institutional_BR_code ,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_Web_page_of_the_course,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_Indicators            ,HTM_HEAD_CENTER,1,11,NULL);
@@ -615,8 +614,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	    break;
 	 case Ind_INDICATORS_FULL:
 	    HTM_TR_Begin (NULL);
-	       HTM_TH_Span (Txt_Degree                         ,HTM_HEAD_LEFT  ,3, 1,NULL);
-	       HTM_TH_Span (Txt_Course                         ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]         ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_Institutional_BR_code          ,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_Web_page_of_the_course         ,HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_LEFT  ,3, 1,NULL);

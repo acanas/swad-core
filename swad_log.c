@@ -190,10 +190,7 @@ void Log_GetAndShowLastClicks (void)
    extern const char *Txt_Click;
    extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Center;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Action;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
@@ -214,14 +211,14 @@ void Log_GetAndShowLastClicks (void)
 
       /* Heading row */
       HTM_TR_Begin (NULL);
-	 HTM_TH_Span (Txt_Click       ,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
-	 HTM_TH_Span (Txt_ELAPSED_TIME,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
-	 HTM_TH_Span (Txt_Role        ,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
-	 HTM_TH_Span (Txt_Country     ,HTM_HEAD_LEFT ,1,1,"LC_CTY");	// Country
-	 HTM_TH_Span (Txt_Institution ,HTM_HEAD_LEFT ,1,1,"LC_INS");	// Institution
-	 HTM_TH_Span (Txt_Center      ,HTM_HEAD_LEFT ,1,1,"LC_CTR");	// Center
-	 HTM_TH_Span (Txt_Degree      ,HTM_HEAD_LEFT ,1,1,"LC_DEG");	// Degree
-	 HTM_TH_Span (Txt_Action      ,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
+	 HTM_TH_Span (Txt_Click       		,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
+	 HTM_TH_Span (Txt_ELAPSED_TIME		,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
+	 HTM_TH_Span (Txt_Role        		,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
+	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY],HTM_HEAD_LEFT ,1,1,"LC_CTY");	// Country
+	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT ,1,1,"LC_INS");	// Institution
+	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR],HTM_HEAD_LEFT ,1,1,"LC_CTR");	// Center
+	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT ,1,1,"LC_DEG");	// Degree
+	 HTM_TH_Span (Txt_Action     		,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
       HTM_TR_End ();
 
       for (NumClick = 0;

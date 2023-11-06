@@ -2091,7 +2091,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
    extern const char *Txt_Role;
@@ -2192,7 +2192,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	    /* Table heading */
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH      (Txt_Course                         ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  );
 	       HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
 	       HTM_TH_Span (Txt_Requester                      ,HTM_HEAD_LEFT  ,1,2,NULL);
 	       HTM_TH      (Txt_Role                           ,HTM_HEAD_LEFT  );

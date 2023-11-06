@@ -91,8 +91,8 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
    extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxChars[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
    extern const char *Txt_Short_name;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    static const Act_Action_t Action[Hie_NUM_LEVELS][Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Hie_INS][Nam_SHRT_NAME] = ActRenInsShoCfg,
@@ -121,7 +121,7 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
       /* Label */
       Frm_LabelColumn ("RT",Id[PutForm],
 		       ShrtOrFull == Nam_SHRT_NAME ? Txt_Short_name :
-						     *Hie_TxtLevel[Level]);
+						     Txt_HIERARCHY_SINGUL_Abc[Level]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());

@@ -102,7 +102,7 @@ void Cty_SeeCtyWithPendingInss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Countries_with_pending_institutions;
-   extern const char *Txt_Country;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Institutions_ABBREVIATION;
    extern const char *Txt_There_are_no_countries_with_requests_for_institutions_to_be_confirmed;
    MYSQL_RES *mysql_res;
@@ -131,7 +131,7 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (Txt_Country                  ,HTM_HEAD_LEFT );
+	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]   ,HTM_HEAD_LEFT );
 	    HTM_TH (Txt_Institutions_ABBREVIATION,HTM_HEAD_RIGHT);
 	 HTM_TR_End ();
 
@@ -815,7 +815,7 @@ static void Cty_GetFullListOfCountries (void)
 
 void Cty_WriteSelectorOfCountry (void)
   {
-   extern const char *Txt_Country;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumCty;
    const struct Hie_Node *Cty;
 
@@ -835,7 +835,7 @@ void Cty_WriteSelectorOfCountry (void)
 	             Gbl.Hierarchy.Node[Hie_CTY].HieCod < 0 ? HTM_OPTION_SELECTED :
 	        					      HTM_OPTION_UNSELECTED,
 	             HTM_OPTION_DISABLED,
-		     "[%s]",Txt_Country);
+		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
 	 /***** List countries *****/
 	 for (NumCty = 0;
@@ -1656,8 +1656,8 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role)
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
   {
-   extern const char *Txt_country;
-   extern const char *Txt_countries;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    char *Title;
    unsigned NumCty;
    struct Hie_Node Cty;
@@ -1668,8 +1668,8 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
       /***** Begin box and table *****/
       /* Number of countries found */
       if (asprintf (&Title,"%u %s",NumCtys,
-				   NumCtys == 1 ? Txt_country :
-						  Txt_countries) < 0)
+				   NumCtys == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CTY] :
+						  Txt_HIERARCHY_PLURAL_abc[Hie_CTY]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxTableBegin (NULL,Title,
 			 NULL,NULL,

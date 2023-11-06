@@ -5265,10 +5265,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_project_assessment;
    extern const char *Txt_marks_management_area;
    extern const char *Txt_temporary_private_storage_area;
-   extern const char *Txt_institution;
-   extern const char *Txt_center;
-   extern const char *Txt_degree;
-   extern const char *Txt_course;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_group;
    extern const char *Txt_project;
    extern const char *Txt_user[Usr_NUM_SEXS];
@@ -5304,7 +5301,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_institution,Hie[Hie_INS].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_INS],Hie[Hie_INS].ShrtName);
          break;
       case Brw_ADMI_SHR_INS:
 	 Hie[Hie_INS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5312,7 +5309,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_institution,Hie[Hie_INS].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_INS],Hie[Hie_INS].ShrtName);
          break;
       case Brw_ADMI_DOC_CTR:
 	 Hie[Hie_CTR].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5320,7 +5317,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_center,Hie[Hie_CTR].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CTR],Hie[Hie_CTR].ShrtName);
          break;
       case Brw_ADMI_SHR_CTR:
 	 Hie[Hie_CTR].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5328,7 +5325,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_center,Hie[Hie_CTR].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CTR],Hie[Hie_CTR].ShrtName);
          break;
       case Brw_ADMI_DOC_DEG:
 	 Hie[Hie_DEG].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5336,7 +5333,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_degree,Hie[Hie_DEG].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_DEG],Hie[Hie_DEG].ShrtName);
          break;
       case Brw_ADMI_SHR_DEG:
 	 Hie[Hie_DEG].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5344,7 +5341,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_degree,Hie[Hie_DEG].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_DEG],Hie[Hie_DEG].ShrtName);
          break;
       case Brw_ADMI_DOC_CRS:
 	 Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5352,7 +5349,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_documents_management_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_DOC_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5362,7 +5359,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_documents_management_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_TCH_CRS:
@@ -5371,7 +5368,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_teachers_files_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_TCH_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5381,7 +5378,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_teachers_files_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_SHR_CRS:
@@ -5390,7 +5387,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_shared_files_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_SHR_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5400,7 +5397,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_shared_files_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_ASG_USR:
@@ -5409,7 +5406,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_WRK_USR:
@@ -5418,7 +5415,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_ASG_CRS:
@@ -5432,7 +5429,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
@@ -5447,7 +5444,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
@@ -5462,7 +5459,7 @@ static void Brw_WriteCurrentClipboard (void)
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Gbl.FileBrowser.Clipboard.FileBrowser == Brw_ADMI_DOC_PRJ ? Txt_project_documents :
                                                                                Txt_project_assessment,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_project,Prj.Title);
          Prj_FreeMemProject (&Prj);
          break;
@@ -5472,7 +5469,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>",
                    Txt_marks_management_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName);
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
          break;
       case Brw_ADMI_MRK_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
@@ -5482,7 +5479,7 @@ static void Brw_WriteCurrentClipboard (void)
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                    Txt_marks_management_area,
-                   Txt_course,Hie[Hie_CRS].ShrtName,
+                   Txt_HIERARCHY_SINGUL_abc[Hie_CRS],Hie[Hie_CRS].ShrtName,
                    Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_BRF_USR:
@@ -9174,16 +9171,14 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 			const char *TitleSingular,const char *TitlePlural)
   {
-   extern const char *Txt_Institution;
-   extern const char *Txt_Center;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_File_zone;
    extern const char *Txt_Document;
    extern const char *Txt_hidden_document;
    extern const char *Txt_hidden_documents;
    MYSQL_ROW row;
    char *Title;
+   Hie_Level_t Level;
    unsigned NumDoc;
    unsigned NumDocsNotHidden = 0;
    unsigned NumDocsHidden;
@@ -9201,13 +9196,13 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH_Span (NULL      ,HTM_HEAD_CENTER,1,1,"BT");
-            HTM_TH (Txt_Institution,HTM_HEAD_LEFT  );
-            HTM_TH (Txt_Center     ,HTM_HEAD_LEFT  );
-            HTM_TH (Txt_Degree     ,HTM_HEAD_LEFT  );
-            HTM_TH (Txt_Course     ,HTM_HEAD_LEFT  );
-            HTM_TH (Txt_File_zone  ,HTM_HEAD_LEFT  );
-            HTM_TH (Txt_Document   ,HTM_HEAD_LEFT  );
+	    HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"BT");
+	    for (Level  = Hie_INS;
+		 Level >= Hie_CRS;
+		 Level++)
+               HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Level],HTM_HEAD_LEFT);
+            HTM_TH (Txt_File_zone,HTM_HEAD_LEFT);
+            HTM_TH (Txt_Document ,HTM_HEAD_LEFT);
 	 HTM_TR_End ();
 
 	 /***** List documents found *****/
@@ -9941,7 +9936,7 @@ static void Brw_WriteStatsFileZonesTableHead2 (void)
    extern const char *Txt_Folders;
    extern const char *Txt_Files;
    extern const char *Txt_Size;
-   extern const char *Txt_course;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
 
    HTM_TR_Begin (NULL);
 
@@ -9950,19 +9945,19 @@ static void Brw_WriteStatsFileZonesTableHead2 (void)
       HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s/",Txt_Folders);
 	 HTM_BR ();
-	 HTM_Txt (Txt_course);
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_abc[Hie_CRS]);
       HTM_TH_End ();
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s/",Txt_Files);
 	 HTM_BR ();
-	 HTM_Txt (Txt_course);
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_abc[Hie_CRS]);
       HTM_TH_End ();
 
       HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s/",Txt_Size);
 	 HTM_BR ();
-	 HTM_Txt (Txt_course);
+	 HTM_Txt (Txt_HIERARCHY_SINGUL_abc[Hie_CRS]);
       HTM_TH_End ();
 
    HTM_TR_End ();

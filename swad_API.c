@@ -2849,10 +2849,7 @@ int swad__getNotifications (struct soap *soap,
   {
    extern const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_Forum;
-   extern const char *Txt_Course;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Center;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2870,6 +2867,7 @@ int swad__getNotifications (struct soap *soap,
    char *ContentStr;
    Ntf_Status_t Status;
    size_t Length;
+   Hie_Level_t Level;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -3005,21 +3003,21 @@ int swad__getNotifications (struct soap *soap,
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Forum,ForumName);
            }
-         else if (Hie[Hie_CRS].HieCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Course,Hie[Hie_CRS].ShrtName);
-         else if (Hie[Hie_DEG].HieCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Degree,Hie[Hie_DEG].ShrtName);
-         else if (Hie[Hie_CTR].HieCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Center,Hie[Hie_CTR].ShrtName);
-         else if (Hie[Hie_INS].HieCod > 0)
-            sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Institution,Hie[Hie_INS].ShrtName);
          else
-            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-",
-                      Ntf_MAX_BYTES_NOTIFY_LOCATION);
+           {
+	    for (Level  = Hie_CRS;
+		 Level >= Hie_INS;
+		 Level--)
+	       if (Hie[Level].HieCod > 0)
+		 {
+		  sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
+			   Txt_HIERARCHY_SINGUL_Abc[Level],Hie[Level].ShrtName);
+		  break;
+		 }
+	    if (Level < Hie_INS)
+	       Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-",
+			 Ntf_MAX_BYTES_NOTIFY_LOCATION);
+           }
 
          /* Get status (row[9]) */
          if (sscanf (row[9],"%u",&Status) != 1)

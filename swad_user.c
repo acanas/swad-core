@@ -3992,7 +3992,7 @@ void Usr_SetUsrDatMainFieldNames (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
    /***** Initialize field names *****/
    Usr_UsrDatMainFieldNames[0] = "&nbsp;";
@@ -4002,7 +4002,7 @@ void Usr_SetUsrDatMainFieldNames (void)
    Usr_UsrDatMainFieldNames[4] = Txt_Surname_1;
    Usr_UsrDatMainFieldNames[5] = Txt_Surname_2;
    Usr_UsrDatMainFieldNames[6] = Txt_First_name;
-   Usr_UsrDatMainFieldNames[7] = Txt_Institution;
+   Usr_UsrDatMainFieldNames[7] = Txt_HIERARCHY_SINGUL_Abc[Hie_INS];
   }
 
 /*****************************************************************************/
@@ -4228,9 +4228,8 @@ void Usr_ListAllDataGsts (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Email;
-   extern const char *Txt_Center;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
@@ -4248,8 +4247,8 @@ void Usr_ListAllDataGsts (void)
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
    FieldNames[ 5] = Txt_Email;
-   FieldNames[ 6] = Txt_Institution;
-   FieldNames[ 7] = Txt_Center;
+   FieldNames[ 6] = Txt_HIERARCHY_SINGUL_Abc[Hie_INS];
+   FieldNames[ 7] = Txt_HIERARCHY_SINGUL_Abc[Hie_CTR];
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
    FieldNames[10] = Txt_Phone;
@@ -4340,8 +4339,8 @@ void Usr_ListAllDataStds (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Institution;
    extern const char *Txt_Email;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Phone;
    extern const char *Txt_Date_of_birth;
    extern const char *Txt_Group;
@@ -4364,7 +4363,7 @@ void Usr_ListAllDataStds (void)
    FieldNames[3] = Txt_Surname_2;
    FieldNames[4] = Txt_First_name;
    FieldNames[5] = Txt_Email;
-   FieldNames[6] = Txt_Institution;
+   FieldNames[6] = Txt_HIERARCHY_SINGUL_Abc[Hie_INS];
    FieldNames[7] = Txt_Phone;
    FieldNames[8] = Txt_Phone;
    FieldNames[9] = Txt_Date_of_birth;
@@ -4600,9 +4599,8 @@ void Usr_ListAllDataTchs (void)
    extern const char *Txt_Surname_1;
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Email;
-   extern const char *Txt_Center;
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
@@ -4617,8 +4615,8 @@ void Usr_ListAllDataTchs (void)
    FieldNames[ 3] = Txt_Surname_2;
    FieldNames[ 4] = Txt_First_name;
    FieldNames[ 5] = Txt_Email;
-   FieldNames[ 6] = Txt_Institution;
-   FieldNames[ 7] = Txt_Center;
+   FieldNames[ 6] = Txt_HIERARCHY_SINGUL_Abc[Hie_INS];
+   FieldNames[ 7] = Txt_HIERARCHY_SINGUL_Abc[Hie_CTR];
    FieldNames[ 8] = Txt_Department;
    FieldNames[ 9] = Txt_Office;
    FieldNames[10] = Txt_Phone;
@@ -4854,7 +4852,7 @@ void Usr_ListDataAdms (void)
    extern const char *Txt_Surname_2;
    extern const char *Txt_First_name;
    extern const char *Txt_Email;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumCol;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
@@ -4891,7 +4889,7 @@ void Usr_ListDataAdms (void)
    FieldNames[3] = Txt_Surname_1;
    FieldNames[4] = Txt_Surname_2;
    FieldNames[5] = Txt_First_name;
-   FieldNames[6] = Txt_Institution;
+   FieldNames[6] = Txt_HIERARCHY_SINGUL_Abc[Hie_INS];
 
    /***** Get and update type of list,
           number of columns in class photo

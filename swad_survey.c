@@ -391,7 +391,11 @@ void Svy_SeeOneSurvey (void)
 static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
                                bool ShowOnlyThisSvyComplete)
   {
-   extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
+   extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Hlp_ANALYTICS_Surveys;
    extern const char *Txt_Survey;
    extern const char *Txt_View_survey;
@@ -401,11 +405,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    extern const char *Txt_Users;
    extern const char *Txt_Answer_survey;
    extern const char *Txt_View_results;
-   extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -594,7 +594,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     HidVis_GroupClass[Surveys->Svy.Status.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Scope);
-	 HTM_TxtF ("%s&nbsp;%s",*Hie_TxtLevel[Surveys->Svy.Level],
+	 HTM_TxtF ("%s&nbsp;%s",Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.Level],
 		   Gbl.Hierarchy.Node[Surveys->Svy.Level].ShrtName);
       HTM_DIV_End ();
 

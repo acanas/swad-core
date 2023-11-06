@@ -482,8 +482,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Personal_information;
    extern const char *Txt_Name;
    extern const char *Txt_Email;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    char CtyName[Nam_MAX_BYTES_FULL_NAME + 1];
    struct Hie_Node Ins;
 
@@ -506,15 +505,13 @@ static void Rep_WriteSectionUsrInfo (void)
    /***** User's country *****/
    Cty_GetCountryNameInLanguage (Gbl.Usrs.Me.UsrDat.CtyCod,Gbl.Prefs.Language,CtyName);
    fprintf (Rep_File,"<li>%s: %s</li>",
-            Txt_Country,
-            CtyName);
+            Txt_HIERARCHY_SINGUL_Abc[Hie_CTY],CtyName);
 
    /***** User's institution *****/
    Ins.HieCod = Gbl.Usrs.Me.UsrDat.InsCod;
    Ins_GetInstitDataByCod (&Ins);
    fprintf (Rep_File,"<li>%s: %s</li>",
-            Txt_Institution,
-            Ins.FullName);
+            Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Ins.FullName);
 
    /***** End section *****/
    fprintf (Rep_File,"</ul>"
@@ -887,8 +884,8 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
   {
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_course;
-   extern const char *Txt_courses;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    MYSQL_RES *mysql_res;
@@ -903,8 +900,8 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	    Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
    fprintf (Rep_File," %u %s",
 	    NumCrss,
-	    NumCrss == 1 ? Txt_course :
-			   Txt_courses);
+	    NumCrss == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CRS] :
+			   Txt_HIERARCHY_PLURAL_abc[Hie_CRS]);
 
    if (NumCrss)
      {

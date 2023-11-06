@@ -268,13 +268,13 @@ static void SysCfg_Map (void)
 
 static void SysCfg_Platform (void)
   {
-   extern const char *Txt_System;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_System);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());

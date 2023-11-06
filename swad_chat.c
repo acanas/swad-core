@@ -111,8 +111,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS];
    unsigned NumMyDeg;
    struct Hie_Node Deg;
@@ -185,7 +184,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
 		      Deg.ShrtName);
 	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
-		      Txt_Degree,Deg.ShrtName);
+		      Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Deg.ShrtName);
 	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
 	       Lgo_DrawLogo (Hie_DEG,
 			     Deg.HieCod,
@@ -217,7 +216,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		  snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
 			    Crs.ShrtName);
 		  snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
-			    Txt_Course,Crs.ShrtName);
+			    Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],Crs.ShrtName);
 		  Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
 		     Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
 		  Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
@@ -367,8 +366,7 @@ void Cht_OpenChatWindow (void)
    extern const char *Txt_General;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    char RoomCode[Cht_MAX_BYTES_ROOM_CODE + 1];
    char RoomShrtName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
    char RoomFullName [Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
@@ -480,7 +478,7 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomShrtNames,ThisRoomShortName,sizeof (ListRoomShrtNames) - 1);
 
          snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
-		   Txt_Degree,Deg.ShrtName);
+		   Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Deg.ShrtName);
          Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
          Str_Concat (ListRoomFullNames,ThisRoomFullName,sizeof (ListRoomFullNames) - 1);
         }
@@ -508,7 +506,7 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomShrtNames,ThisRoomShortName,sizeof (ListRoomShrtNames) - 1);
 
          snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
-		   Txt_Course,Crs.ShrtName);
+		   Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],Crs.ShrtName);
          Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
          Str_Concat (ListRoomFullNames,ThisRoomFullName,sizeof (ListRoomFullNames) - 1);
         }

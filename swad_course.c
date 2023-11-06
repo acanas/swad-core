@@ -153,7 +153,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *Hlp_PROFILE_Courses;
    extern const char *Par_CodeStr[];
    extern const char *Txt_My_courses;
-   extern const char *Txt_System;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    bool IsLastItemInLevel[1 + 6];
    bool Highlight;	// Highlight because degree, course, etc. is selected
@@ -190,11 +190,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
 	    Frm_BeginForm (ActMyCrs);
 	       Par_PutParLong (NULL,Par_CodeStr[ParCod_Cty],-1L);
-	       HTM_BUTTON_Submit_Begin (Txt_System,
+	       HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_SYS],
 	                                "class=\"BT_LINK FORM_IN_%s\"",
 					The_GetSuffix ());
-		  Ico_PutIcon ("sitemap.svg",Ico_BLACK,Txt_System,"ICO16x16");
-		  HTM_TxtF ("&nbsp;%s",Txt_System);
+		  Ico_PutIcon ("sitemap.svg",Ico_BLACK,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS],"ICO16x16");
+		  HTM_TxtF ("&nbsp;%s",Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	 HTM_LI_End ();
@@ -437,7 +437,7 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
 
 void Crs_WriteSelectorOfCourse (void)
   {
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -463,7 +463,7 @@ void Crs_WriteSelectorOfCourse (void)
                   Gbl.Hierarchy.Node[Hie_CRS].HieCod < 0 ? HTM_OPTION_SELECTED :
                 					   HTM_OPTION_UNSELECTED,
                   HTM_OPTION_DISABLED,
-		  "[%s]",Txt_Course);
+		  "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
 
       if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	{
@@ -561,7 +561,7 @@ static void Crs_GetListCrssInCurrentDeg (void)
 
 void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
   {
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumMyCrs;
    long CrsCod;
    long DegCod;
@@ -587,7 +587,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 	                HTM_OPTION_SELECTED,
 	                HTM_OPTION_DISABLED,
-			"%s",Txt_Course);
+			"%s",Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
 
 	 if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
 	   {
@@ -1154,7 +1154,7 @@ static void Crs_PutHeadCoursesForSeeing (void)
   {
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Institutional_BR_code;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    HTM_TR_Begin (NULL);
@@ -1162,7 +1162,7 @@ static void Crs_PutHeadCoursesForSeeing (void)
       HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
       HTM_TH      (Txt_Institutional_BR_code          ,HTM_HEAD_CENTER);
-      HTM_TH      (Txt_Course                         ,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  );
       HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
       HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
       HTM_TH_Empty (1);
@@ -1949,9 +1949,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_Course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1988,9 +1987,9 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
 
             HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
             HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
-	    HTM_TH      (Txt_Degree                         ,HTM_HEAD_LEFT  );
+	    HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]         ,HTM_HEAD_LEFT  );
 	    HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
-	    HTM_TH      (Txt_Course                         ,HTM_HEAD_LEFT  );
+	    HTM_TH      (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  );
 	    HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
 	    HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NET],HTM_HEAD_RIGHT );
 	    HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );
@@ -2023,11 +2022,10 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
 
 void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
   {
-   extern const char *Txt_course;
-   extern const char *Txt_courses;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_Course;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    char *Title;
    MYSQL_ROW row;
@@ -2039,8 +2037,8 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
       /***** Begin box and table *****/
       /* Number of courses found */
       if (asprintf (&Title,"%u %s",NumCrss,
-				   NumCrss == 1 ? Txt_course :
-						  Txt_courses) < 0)
+				   NumCrss == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CRS] :
+						  Txt_HIERARCHY_PLURAL_abc[Hie_CRS]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
@@ -2049,9 +2047,9 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 	 HTM_TR_Begin (NULL);
 
             HTM_TH_Span (NULL                          ,HTM_HEAD_CENTER,1,1,"BT");
-	    HTM_TH (Txt_Degree                         ,HTM_HEAD_LEFT  );
+	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]         ,HTM_HEAD_LEFT  );
 	    HTM_TH (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
-	    HTM_TH (Txt_Course                         ,HTM_HEAD_LEFT  );
+	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]         ,HTM_HEAD_LEFT  );
 	    HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
 	    HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NET],HTM_HEAD_RIGHT );
 	    HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_RIGHT );

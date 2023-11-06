@@ -4505,52 +4505,6 @@ const char *Txt_Capacity_OF_A_ROOM =
 	"Capacity";	// Çeviri lazim!
 #endif
 
-const char *Txt_Center =
-#if   L==1	// ca
-	"Center";
-#elif L==2	// de
-	"Lehrinstitut";
-#elif L==3	// en
-	"Center";
-#elif L==4	// es
-	"Centro";
-#elif L==5	// fr
-	"Center";
-#elif L==6	// gn
-	"Mbo'ehao";
-#elif L==7	// it
-	"Centro";
-#elif L==8	// pl
-	"Centrum";
-#elif L==9	// pt
-	"Centro";
-#elif L==10	// tr
-	"Merkez";
-#endif
-
-const char *Txt_center =
-#if   L==1	// ca
-	"center";
-#elif L==2	// de
-	"Lehrinstitut";
-#elif L==3	// en
-	"center";
-#elif L==4	// es
-	"centro";
-#elif L==5	// fr
-	"center";
-#elif L==6	// gn
-	"mbo'ehao";
-#elif L==7	// it
-	"centro";
-#elif L==8	// pl
-	"centrum";
-#elif L==9	// pt
-	"centro";
-#elif L==10	// tr
-	"merkez";
-#endif
-
 const char *Txt_Center_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Center <strong>%s</strong> eliminat.";
@@ -4713,29 +4667,6 @@ const char *Txt_Centers_ABBREVIATION =
 	"Cent.";
 #elif L==10	// tr
 	"Merk.";
-#endif
-
-const char *Txt_centers =
-#if   L==1	// ca
-	"centers";
-#elif L==2	// de
-	"Lehrinstitute";
-#elif L==3	// en
-	"centers";
-#elif L==4	// es
-	"centros";
-#elif L==5	// fr
-	"centers";
-#elif L==6	// gn
-	"mbo'ehao";
-#elif L==7	// it
-	"centri";
-#elif L==8	// pl
-	"centra";
-#elif L==9	// pt
-	"centros";
-#elif L==10	// tr
-	"merkezler";
 #endif
 
 const char *Txt_CENTERS_HELP_ORDER[Hie_NUM_ORDERS] =
@@ -6013,29 +5944,6 @@ const char *Txt_Countries =
 	"Countries";	// Çeviri lazim!
 #endif
 
-const char *Txt_countries =
-#if   L==1	// ca
-	"pa&iuml;sos";
-#elif L==2	// de
-	"L&auml;nder";
-#elif L==3	// en
-	"countries";
-#elif L==4	// es
-	"pa&iacute;ses";
-#elif L==5	// fr
-	"pays";
-#elif L==6	// gn
-	"tet&atilde;";
-#elif L==7	// it
-	"paesi";
-#elif L==8	// pl
-	"kraje";
-#elif L==9	// pt
-	"pa&iacute;ses";
-#elif L==10	// tr
-	"countries";	// Çeviri lazim!
-#endif
-
 const char *Txt_COUNTRIES_HELP_ORDER[Hie_NUM_ORDERS] =
 	{
 	[Hie_ORDER_BY_NAME] =
@@ -6157,52 +6065,6 @@ const char *Txt_COUNTRIES_ORDER[Hie_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_Country =
-#if   L==1	// ca
-	"Pa&iacute;s";
-#elif L==2	// de
-	"Land";
-#elif L==3	// en
-	"Country";
-#elif L==4	// es
-	"Pa&iacute;s";
-#elif L==5	// fr
-	"Pays;";
-#elif L==6	// gn
-	"Tet&atilde;";
-#elif L==7	// it
-	"Paese";
-#elif L==8	// pl
-	"Kraj";
-#elif L==9	// pt
-	"Pa&iacute;s";
-#elif L==10	// tr
-	"&Uuml;lke";
-#endif
-
-const char *Txt_country =
-#if   L==1	// ca
-	"pa&iacute;s";
-#elif L==2	// de
-	"Land";
-#elif L==3	// en
-	"country";
-#elif L==4	// es
-	"pa&iacute;s";
-#elif L==5	// fr
-	"pays;";
-#elif L==6	// gn
-	"tet&atilde;";
-#elif L==7	// it
-	"paese";
-#elif L==8	// pl
-	"kraj";
-#elif L==9	// pt
-	"pa&iacute;s";
-#elif L==10	// tr
-	"&uuml;lke";
-#endif
-
 const char *Txt_Country_unspecified =
 #if   L==1	// ca
 	"Pa&iacute;s sense especificar";
@@ -6247,52 +6109,6 @@ const char *Txt_Country_X_removed =	// Warning: it is very important to include 
 	"Pa&iacute;s <strong>%s</strong> removido.";
 #elif L==10	// tr
 	"Country <strong>%s</strong> removed.";		// Çeviri lazim!
-#endif
-
-const char *Txt_Course =
-#if   L==1	// ca
-	"Assignatura";
-#elif L==2	// de
-	"Kurs";
-#elif L==3	// en
-	"Course";
-#elif L==4	// es
-	"Asignatura";
-#elif L==5	// fr
-	"Mati&egrave;re";
-#elif L==6	// gn
-	"Mbo'esyry";
-#elif L==7	// it
-	"Corso";
-#elif L==8	// pl
-	"Kurs";
-#elif L==9	// pt
-	"Disciplina";
-#elif L==10	// tr
-	"Kurs";
-#endif
-
-const char *Txt_course =
-#if   L==1	// ca
-	"assignatura";
-#elif L==2	// de
-	"Kurs";
-#elif L==3	// en
-	"course";
-#elif L==4	// es
-	"asignatura";
-#elif L==5	// fr
-	"mati&egrave;re";
-#elif L==6	// gn
-	"mbo'esyry";
-#elif L==7	// it
-	"corso";
-#elif L==8	// pl
-	"kurs";
-#elif L==9	// pt
-	"disciplina";
-#elif L==10	// tr
-	"kurs";
 #endif
 
 const char *Txt_Course_forum =
@@ -6549,29 +6365,6 @@ const char *Txt_Courses_ABBREVIATION =
 	"Disc.";
 #elif L==10	// tr
 	"Ders.";
-#endif
-
-const char *Txt_courses =
-#if   L==1	// ca
-	"assignatures";
-#elif L==2	// de
-	"Kursen";
-#elif L==3	// en
-	"courses";
-#elif L==4	// es
-	"asignaturas";
-#elif L==5	// fr
-	"mati&egrave;res";
-#elif L==6	// gn
-	"mbo'esyry";
-#elif L==7	// it
-	"corsi";
-#elif L==8	// pl
-	"kurs&oacute;w";
-#elif L==9	// pt
-	"disciplinas";
-#elif L==10	// tr
-	"dersler";
 #endif
 
 const char *Txt_courses_ABBREVIATION =
@@ -8199,52 +7992,6 @@ const char *Txt_default =
 	"default";	// Çeviri lazim!
 #endif
 
-const char *Txt_Degree =
-#if   L==1	// ca
-	"Titulaci&oacute;";
-#elif L==2	// de
-	"Studiengang";
-#elif L==3	// en
-	"Degree";
-#elif L==4	// es
-	"Titulaci&oacute;n";
-#elif L==5	// fr
-	"&Eacute;tude";
-#elif L==6	// gn
-	"Arandur&atilde;";
-#elif L==7	// it
-	"Laurea";
-#elif L==8	// pl
-	"Stopien";
-#elif L==9	// pt
-	"Grau";
-#elif L==10	// tr
-	"Derece";
-#endif
-
-const char *Txt_degree =
-#if   L==1	// ca
-	"titulaci&oacute;";
-#elif L==2	// de
-	"Studiengang";
-#elif L==3	// en
-	"degree";
-#elif L==4	// es
-	"titulaci&oacute;n";
-#elif L==5	// fr
-	"&eacute;tude";
-#elif L==6	// gn
-	"arandur&atilde;";
-#elif L==7	// it
-	"laurea";
-#elif L==8	// pl
-	"stopien";
-#elif L==9	// pt
-	"grau";
-#elif L==10	// tr
-	"derece";
-#endif
-
 const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 	{
 	[Hie_STATUS_UNKNOWN] =
@@ -8551,29 +8298,6 @@ const char *Txt_Degrees_ABBREVIATION =
 	"Titul.";
 #elif L==10	// tr
 	"Derece";
-#endif
-
-const char *Txt_degrees =
-#if   L==1	// ca
-	"titulacions";
-#elif L==2	// de
-	"Studiengang";
-#elif L==3	// en
-	"degrees";
-#elif L==4	// es
-	"titulaciones";
-#elif L==5	// fr
-	"&eacute;tudes";
-#elif L==6	// gn
-	"arandur&atilde;";
-#elif L==7	// it
-	"lauree";
-#elif L==8	// pl
-	"stopnie";
-#elif L==9	// pt
-	"graus";
-#elif L==10	// tr
-	"derece";
 #endif
 
 const char *Txt_Degrees_of_CENTER_X =	// Warning: it is very important to include %s in the following sentences
@@ -15917,6 +15641,406 @@ const char *Txt_Hide_right_column =
 	"Hide right column";		// Çeviri lazim!
 #endif
 
+const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS] =
+	{
+	[Hie_CTY] =
+#if   L==1	// ca
+	"pa&iuml;sos"
+#elif L==2	// de
+	"L&auml;nder"
+#elif L==3	// en
+	"countries"
+#elif L==4	// es
+	"pa&iacute;ses"
+#elif L==5	// fr
+	"pays"
+#elif L==6	// gn
+	"tet&atilde;"
+#elif L==7	// it
+	"paesi"
+#elif L==8	// pl
+	"kraje"
+#elif L==9	// pt
+	"pa&iacute;ses"
+#elif L==10	// tr
+	"countries"	// Çeviri lazim!
+#endif
+	,
+	[Hie_INS] =
+#if   L==1	// ca
+	"institucions"
+#elif L==2	// de
+	"Hochschulen"
+#elif L==3	// en
+	"institutions"
+#elif L==4	// es
+	"instituciones"
+#elif L==5	// fr
+	"&eacute;tablissements"
+#elif L==6	// gn
+	"mbo'ehao"
+#elif L==7	// it
+	"istituzioni"
+#elif L==8	// pl
+	"instytucje"
+#elif L==9	// pt
+	"institu&ccedil;&otilde;es"
+#elif L==10	// tr
+	"institutions"	// Çeviri lazim!
+#endif
+	,
+	[Hie_CTR] =
+#if   L==1	// ca
+	"centers"
+#elif L==2	// de
+	"Lehrinstitute"
+#elif L==3	// en
+	"centers"
+#elif L==4	// es
+	"centros"
+#elif L==5	// fr
+	"centers"
+#elif L==6	// gn
+	"mbo'ehao"
+#elif L==7	// it
+	"centri"
+#elif L==8	// pl
+	"centra"
+#elif L==9	// pt
+	"centros"
+#elif L==10	// tr
+	"merkezler"
+#endif
+	,
+	[Hie_DEG] =
+#if   L==1	// ca
+	"titulacions"
+#elif L==2	// de
+	"Studiengang"
+#elif L==3	// en
+	"degrees"
+#elif L==4	// es
+	"titulaciones"
+#elif L==5	// fr
+	"&eacute;tudes"
+#elif L==6	// gn
+	"arandur&atilde;"
+#elif L==7	// it
+	"lauree"
+#elif L==8	// pl
+	"stopnie"
+#elif L==9	// pt
+	"graus"
+#elif L==10	// tr
+	"derece"
+#endif
+	,
+	[Hie_CRS] =
+#if   L==1	// ca
+	"assignatures"
+#elif L==2	// de
+	"Kursen"
+#elif L==3	// en
+	"courses"
+#elif L==4	// es
+	"asignaturas"
+#elif L==5	// fr
+	"mati&egrave;res"
+#elif L==6	// gn
+	"mbo'esyry"
+#elif L==7	// it
+	"corsi"
+#elif L==8	// pl
+	"kurs&oacute;w"
+#elif L==9	// pt
+	"disciplinas"
+#elif L==10	// tr
+	"dersler"
+#endif
+	};
+
+const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS] =
+	{
+	[Hie_SYS] =
+#if   L==1	// ca
+	"Plataforma"
+#elif L==2	// de
+	"Plattform"
+#elif L==3	// en
+	"System"
+#elif L==4	// es
+	"Plataforma"
+#elif L==5	// fr
+	"Plate-forme"
+#elif L==6	// gn
+	"Ypykatu"
+#elif L==7	// it
+	"Piattaforma"
+#elif L==8	// pl
+	"System"
+#elif L==9	// pt
+	"Sistema"
+#elif L==10	// tr
+	"Platformu"
+#endif
+	,
+	[Hie_CTY] =
+#if   L==1	// ca
+	"Pa&iacute;s"
+#elif L==2	// de
+	"Land"
+#elif L==3	// en
+	"Country"
+#elif L==4	// es
+	"Pa&iacute;s"
+#elif L==5	// fr
+	"Pays;"
+#elif L==6	// gn
+	"Tet&atilde;"
+#elif L==7	// it
+	"Paese"
+#elif L==8	// pl
+	"Kraj"
+#elif L==9	// pt
+	"Pa&iacute;s"
+#elif L==10	// tr
+	"&Uuml;lke"
+#endif
+	,
+	[Hie_INS] =
+#if   L==1	// ca
+	"Instituci&oacute;"
+#elif L==2	// de
+	"Hochschule"
+#elif L==3	// en
+	"Institution"
+#elif L==4	// es
+	"Instituci&oacute;n"
+#elif L==5	// fr
+	"&Eacute;tablissement"
+#elif L==6	// gn
+	"Mbo'ehao"
+#elif L==7	// it
+	"Istituzione"
+#elif L==8	// pl
+	"Instytucji"
+#elif L==9	// pt
+	"Institu&ccedil;&atilde;o"
+#elif L==10	// tr
+	"Kurum"
+#endif
+	,
+	[Hie_CTR] =
+#if   L==1	// ca
+	"Center"
+#elif L==2	// de
+	"Lehrinstitut"
+#elif L==3	// en
+	"Center"
+#elif L==4	// es
+	"Centro"
+#elif L==5	// fr
+	"Center"
+#elif L==6	// gn
+	"Mbo'ehao"
+#elif L==7	// it
+	"Centro"
+#elif L==8	// pl
+	"Centrum"
+#elif L==9	// pt
+	"Centro"
+#elif L==10	// tr
+	"Merkez"
+#endif
+	,
+	[Hie_DEG] =
+#if   L==1	// ca
+	"Titulaci&oacute;"
+#elif L==2	// de
+	"Studiengang"
+#elif L==3	// en
+	"Degree"
+#elif L==4	// es
+	"Titulaci&oacute;n"
+#elif L==5	// fr
+	"&Eacute;tude"
+#elif L==6	// gn
+	"Arandur&atilde;"
+#elif L==7	// it
+	"Laurea"
+#elif L==8	// pl
+	"Stopien"
+#elif L==9	// pt
+	"Grau"
+#elif L==10	// tr
+	"Derece"
+#endif
+	,
+	[Hie_CRS] =
+#if   L==1	// ca
+	"Assignatura"
+#elif L==2	// de
+	"Kurs"
+#elif L==3	// en
+	"Course"
+#elif L==4	// es
+	"Asignatura"
+#elif L==5	// fr
+	"Mati&egrave;re"
+#elif L==6	// gn
+	"Mbo'esyry"
+#elif L==7	// it
+	"Corso"
+#elif L==8	// pl
+	"Kurs"
+#elif L==9	// pt
+	"Disciplina"
+#elif L==10	// tr
+	"Kurs"
+#endif
+	};
+
+const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS] =
+	{
+	[Hie_SYS] =
+#if   L==1	// ca
+	"plataforma"
+#elif L==2	// de
+	"Plattform"
+#elif L==3	// en
+	"system"
+#elif L==4	// es
+	"plataforma"
+#elif L==5	// fr
+	"plate-forme"
+#elif L==6	// gn
+	"ypykatu"
+#elif L==7	// it
+	"piattaforma"
+#elif L==8	// pl
+	"system"
+#elif L==9	// pt
+	"sistema"
+#elif L==10	// tr
+	"platformu"
+#endif
+	,
+	[Hie_CTY] =
+#if   L==1	// ca
+	"pa&iacute;s"
+#elif L==2	// de
+	"Land"
+#elif L==3	// en
+	"country"
+#elif L==4	// es
+	"pa&iacute;s"
+#elif L==5	// fr
+	"pays;"
+#elif L==6	// gn
+	"tet&atilde;"
+#elif L==7	// it
+	"paese"
+#elif L==8	// pl
+	"kraj"
+#elif L==9	// pt
+	"pa&iacute;s"
+#elif L==10	// tr
+	"&uuml;lke"
+#endif
+	,
+	[Hie_INS] =
+#if   L==1	// ca
+	"instituci&oacute;"
+#elif L==2	// de
+	"Hochschule"
+#elif L==3	// en
+	"institution"
+#elif L==4	// es
+	"instituci&oacute;n"
+#elif L==5	// fr
+	"&eacute;tablissement"
+#elif L==6	// gn
+	"mbo'ehao"
+#elif L==7	// it
+	"istituzione"
+#elif L==8	// pl
+	"instytucji"
+#elif L==9	// pt
+	"institu&ccedil;&atilde;o"
+#elif L==10	// tr
+	"kurum"
+#endif
+	,
+	[Hie_CTR] =
+#if   L==1	// ca
+	"center"
+#elif L==2	// de
+	"Lehrinstitut"
+#elif L==3	// en
+	"center"
+#elif L==4	// es
+	"centro"
+#elif L==5	// fr
+	"center"
+#elif L==6	// gn
+	"mbo'ehao"
+#elif L==7	// it
+	"centro"
+#elif L==8	// pl
+	"centrum"
+#elif L==9	// pt
+	"centro"
+#elif L==10	// tr
+	"merkez"
+#endif
+	,
+	[Hie_DEG] =
+#if   L==1	// ca
+	"titulaci&oacute;"
+#elif L==2	// de
+	"Studiengang"
+#elif L==3	// en
+	"degree"
+#elif L==4	// es
+	"titulaci&oacute;n"
+#elif L==5	// fr
+	"&eacute;tude"
+#elif L==6	// gn
+	"arandur&atilde;"
+#elif L==7	// it
+	"laurea"
+#elif L==8	// pl
+	"stopien"
+#elif L==9	// pt
+	"grau"
+#elif L==10	// tr
+	"derece"
+#endif
+	,
+	[Hie_CRS] =
+#if   L==1	// ca
+	"assignatura"
+#elif L==2	// de
+	"Kurs"
+#elif L==3	// en
+	"course"
+#elif L==4	// es
+	"asignatura"
+#elif L==5	// fr
+	"mati&egrave;re"
+#elif L==6	// gn
+	"mbo'esyry"
+#elif L==7	// it
+	"corso"
+#elif L==8	// pl
+	"kurs"
+#elif L==9	// pt
+	"disciplina"
+#elif L==10	// tr
+	"kurs"
+#endif
+	};
+
 const char *Txt_historical_log =
 #if   L==1	// ca
 	"registre hist&ograve;ric";
@@ -17728,52 +17852,6 @@ const char *Txt_Inline_math =
 	"Inline math";		// Çeviri lazim!
 #endif
 
-const char *Txt_Institution =
-#if   L==1	// ca
-	"Instituci&oacute;";
-#elif L==2	// de
-	"Hochschule";
-#elif L==3	// en
-	"Institution";
-#elif L==4	// es
-	"Instituci&oacute;n";
-#elif L==5	// fr
-	"&Eacute;tablissement";
-#elif L==6	// gn
-	"Mbo'ehao";
-#elif L==7	// it
-	"Istituzione";
-#elif L==8	// pl
-	"Instytucji";
-#elif L==9	// pt
-	"Institu&ccedil;&atilde;o";
-#elif L==10	// tr
-	"Kurum";
-#endif
-
-const char *Txt_institution =
-#if   L==1	// ca
-	"instituci&oacute;";
-#elif L==2	// de
-	"Hochschule";
-#elif L==3	// en
-	"institution";
-#elif L==4	// es
-	"instituci&oacute;n";
-#elif L==5	// fr
-	"&eacute;tablissement";
-#elif L==6	// gn
-	"mbo'ehao";
-#elif L==7	// it
-	"istituzione";
-#elif L==8	// pl
-	"instytucji";
-#elif L==9	// pt
-	"institu&ccedil;&atilde;o";
-#elif L==10	// tr
-	"kurum";
-#endif
-
 const char *Txt_Institution_center_and_department =
 #if   L==1	// ca
 	"Instituci&oacute;, center i departament";
@@ -18006,29 +18084,6 @@ const char *Txt_Institutions_ABBREVIATION =
 	"Instit.";
 #elif L==10	// tr
 	"Instit.";	// Çeviri lazim!
-#endif
-
-const char *Txt_institutions =
-#if   L==1	// ca
-	"institucions";
-#elif L==2	// de
-	"Hochschulen";
-#elif L==3	// en
-	"institutions";
-#elif L==4	// es
-	"instituciones";
-#elif L==5	// fr
-	"&eacute;tablissements";
-#elif L==6	// gn
-	"mbo'ehao";
-#elif L==7	// it
-	"istituzioni";
-#elif L==8	// pl
-	"instytucje";
-#elif L==9	// pt
-	"institu&ccedil;&otilde;es";
-#elif L==10	// tr
-	"institutions";	// Çeviri lazim!
 #endif
 
 const char *Txt_INSTITUTIONS_HELP_ORDER[Hie_NUM_ORDERS] =
@@ -45700,28 +45755,6 @@ const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 #endif
 	};
 
-const char *Txt_System =
-#if   L==1	// ca
-	"Plataforma";
-#elif L==2	// de
-	"Plattform";
-#elif L==3	// en
-	"System";
-#elif L==4	// es
-	"Plataforma";
-#elif L==5	// fr
-	"Plate-forme";
-#elif L==6	// gn
-	"Ypykatu";
-#elif L==7	// it
-	"Piattaforma";
-#elif L==8	// pl
-	"System";
-#elif L==9	// pt
-	"Sistema";
-#elif L==10	// tr
-	"Platformu";
-#endif
 /*
 const char *Txt_Platform =
 #if   L==1	// ca

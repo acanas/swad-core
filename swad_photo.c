@@ -2199,7 +2199,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2222,8 +2222,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (Txt_No_INDEX,HTM_HEAD_RIGHT);
-	    HTM_TH (Txt_Degree  ,HTM_HEAD_CENTER);
+	    HTM_TH (Txt_No_INDEX	      ,HTM_HEAD_RIGHT );
+	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_CENTER);
 	    for (Sex  = (Usr_Sex_t) 0;
 		 Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 		 Sex++)

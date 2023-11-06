@@ -304,7 +304,7 @@ static void InsCfg_Map (void)
 static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[];
-   extern const char *Txt_Country;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumCty;
    const struct Hie_Node *Cty;
    const char *Id[Frm_NUM_PUT_FORM] =
@@ -320,7 +320,7 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_Country);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());

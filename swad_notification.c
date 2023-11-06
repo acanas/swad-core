@@ -314,7 +314,6 @@ static void Ntf_GetParsNotifyEvents (void);
 
 void Ntf_ShowMyNotifications (void)
   {
-   extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
    extern const char *Hlp_START_Notifications;
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
@@ -328,6 +327,7 @@ void Ntf_ShowMyNotifications (void)
    extern const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_Forum;
    extern const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT];
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
    MYSQL_RES *mysql_res;
@@ -603,7 +603,7 @@ void Ntf_ShowMyNotifications (void)
 			   if (Hie[Level].HieCod > 0)
 			     {
 			      HTM_TxtF ("%s:&nbsp;%s",
-					*Hie_TxtLevel[Level],
+					Txt_HIERARCHY_SINGUL_Abc[Level],
 					Hie[Level].ShrtName);
 			      break;
 		             }

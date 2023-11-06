@@ -2896,7 +2896,7 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
                                        MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Country;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
@@ -2907,7 +2907,7 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
       HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Country                   ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]    ,HTM_HEAD_CENTER);
       HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
@@ -2984,7 +2984,7 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
                                            MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
@@ -2995,7 +2995,7 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
       HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Institution               ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS]    ,HTM_HEAD_CENTER);
       HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
@@ -3075,7 +3075,7 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Center;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
@@ -3086,7 +3086,7 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
       HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Center                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]    ,HTM_HEAD_CENTER);
       HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
@@ -3166,7 +3166,7 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
    unsigned Ranking;
@@ -3177,7 +3177,7 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
       HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Degree                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]    ,HTM_HEAD_CENTER);
       HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
@@ -3257,9 +3257,8 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
                                       MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_Course;
    extern const char *Txt_STAT_COUNT_TYPE[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];	// Declaration in swad_degree.c
    unsigned NumHit;
@@ -3272,9 +3271,9 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
       HTM_TH (Txt_No_INDEX                  ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Degree                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]    ,HTM_HEAD_CENTER);
       HTM_TH (Txt_Year_OF_A_DEGREE          ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Course                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]    ,HTM_HEAD_CENTER);
       HTM_TH (Txt_STAT_COUNT_TYPE[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 

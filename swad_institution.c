@@ -120,7 +120,7 @@ void Ins_SeeInsWithPendingCtrs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Institutions_with_pending_centers;
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Centers_ABBREVIATION;
    extern const char *Txt_There_are_no_institutions_with_requests_for_centers_to_be_confirmed;
    MYSQL_RES *mysql_res;
@@ -154,8 +154,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (Txt_Institution         ,HTM_HEAD_LEFT );
-	    HTM_TH (Txt_Centers_ABBREVIATION,HTM_HEAD_RIGHT);
+	    HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT );
+	    HTM_TH (Txt_Centers_ABBREVIATION  ,HTM_HEAD_RIGHT);
 	 HTM_TR_End ();
 
 	 /***** List the institutions *****/
@@ -806,7 +806,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
 
 void Ins_WriteSelectorOfInstitution (void)
   {
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumInss;
@@ -831,7 +831,7 @@ void Ins_WriteSelectorOfInstitution (void)
 		  Gbl.Hierarchy.Node[Hie_INS].HieCod < 0 ? HTM_OPTION_SELECTED :
 							   HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_DISABLED,
-		  "[%s]",Txt_Institution);
+		  "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
       if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
 	{
@@ -1533,8 +1533,8 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role)
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
   {
-   extern const char *Txt_institution;
-   extern const char *Txt_institutions;
+   extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    char *Title;
    unsigned NumIns;
    struct Hie_Node Ins;
@@ -1545,8 +1545,8 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
       /***** Begin box and table *****/
       /* Number of institutions found */
       if (asprintf (&Title,"%u %s",NumInss,
-                                   NumInss == 1 ? Txt_institution :
-						  Txt_institutions) < 0)
+                                   NumInss == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_INS] :
+						  Txt_HIERARCHY_PLURAL_abc[Hie_INS]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
@@ -1827,7 +1827,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		          const char *TxtFigure)
   {
-   extern const char *Txt_Institution;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumIns;
    unsigned NumOrder;
    unsigned NumberLastRow;
@@ -1877,8 +1877,8 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	    /***** Draw institutions as a list *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH (Txt_Institution,HTM_HEAD_LEFT);
-	       HTM_TH (TxtFigure      ,HTM_HEAD_RIGHT);
+	       HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT);
+	       HTM_TH (TxtFigure      		 ,HTM_HEAD_RIGHT);
 	    HTM_TR_End ();
 
 	    for (NumIns  = 1, NumOrder = 1, NumberLastRow = 0;

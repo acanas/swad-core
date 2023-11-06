@@ -123,11 +123,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
    extern const char *Txt_all;
-   extern const char *Txt_countries;
-   extern const char *Txt_institutions;
-   extern const char *Txt_centers;
-   extern const char *Txt_degrees;
-   extern const char *Txt_courses;
+   extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_my_documents;
@@ -138,11 +134,11 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
      {
       [Sch_SEARCH_UNKNOWN            ] = NULL,
       [Sch_SEARCH_ALL                ] = &Txt_all,
-      [Sch_SEARCH_COUNTRIES          ] = &Txt_countries,
-      [Sch_SEARCH_INSTITS            ] = &Txt_institutions,
-      [Sch_SEARCH_CENTERS            ] = &Txt_centers,
-      [Sch_SEARCH_DEGREES            ] = &Txt_degrees,
-      [Sch_SEARCH_COURSES            ] = &Txt_courses,
+      [Sch_SEARCH_COUNTRIES          ] = &Txt_HIERARCHY_PLURAL_abc[Hie_CTY],
+      [Sch_SEARCH_INSTITS            ] = &Txt_HIERARCHY_PLURAL_abc[Hie_INS],
+      [Sch_SEARCH_CENTERS            ] = &Txt_HIERARCHY_PLURAL_abc[Hie_CTR],
+      [Sch_SEARCH_DEGREES            ] = &Txt_HIERARCHY_PLURAL_abc[Hie_DEG],
+      [Sch_SEARCH_COURSES            ] = &Txt_HIERARCHY_PLURAL_abc[Hie_CRS],
       [Sch_SEARCH_USERS              ] = &Txt_users[0],
       [Sch_SEARCH_TEACHERS           ] = &Txt_ROLES_PLURAL_abc[Rol_TCH][0],
       [Sch_SEARCH_STUDENTS           ] = &Txt_ROLES_PLURAL_abc[Rol_STD][0],

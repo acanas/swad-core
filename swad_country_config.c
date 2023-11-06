@@ -372,13 +372,13 @@ static void CtyCfg_MapImage (Vie_ViewType_t ViewType,bool PutLink)
 
 static void CtyCfg_Platform (Vie_ViewType_t ViewType)
   {
-   extern const char *Txt_System;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_System);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
@@ -408,13 +408,13 @@ static void CtyCfg_Platform (Vie_ViewType_t ViewType)
 
 static void CtyCfg_Name (bool PutLink)
   {
-   extern const char *Txt_Country;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
    /***** Country name *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Country);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());

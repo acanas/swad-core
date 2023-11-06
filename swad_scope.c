@@ -46,7 +46,7 @@ extern struct Globals Gbl;
 
 void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange)
   {
-   extern const char **Hie_TxtLevel[Hie_NUM_LEVELS];
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    Hie_Level_t Level;
    unsigned ScopeUnsigned;
    bool WriteScope;
@@ -88,7 +88,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 							HTM_OPTION_UNSELECTED,
 			   HTM_OPTION_ENABLED,
 			   "%s: %s",
-			   *Hie_TxtLevel[Level],
+			   Txt_HIERARCHY_SINGUL_Abc[Level],
 			   Gbl.Hierarchy.Node[Level].ShrtName);
 	      }
 	   }

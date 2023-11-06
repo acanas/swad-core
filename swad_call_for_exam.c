@@ -1592,8 +1592,7 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
 static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *CallsForExams,
                                             char **ContentStr)
   {
-   extern const char *Txt_Institution;
-   extern const char *Txt_Degree;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_CALL_FOR_EXAM_Course;
    extern const char *Txt_CALL_FOR_EXAM_Year_or_semester;
@@ -1643,8 +1642,8 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                             "%s: %s<br />"
                             "%s: %s<br />"
                             "%s: %s",
-                 Txt_Institution,Hie[Hie_INS].FullName,
-                 Txt_Degree,Hie[Hie_DEG].FullName,
+                 Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Hie[Hie_INS].FullName,
+                 Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Hie[Hie_DEG].FullName,
                  Txt_CALL_FOR_EXAM_Course,CallsForExams->CallForExam.CrsFullName,
                  Txt_CALL_FOR_EXAM_Year_or_semester,Txt_YEAR_OF_DEGREE[CallsForExams->CallForExam.Year],
                  Txt_CALL_FOR_EXAM_Session,CallsForExams->CallForExam.Session,

@@ -199,7 +199,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[];
-   extern const char *Txt_Center;
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumCtr;
    const struct Hie_Node *Ctr;
    const char *Id[Frm_NUM_PUT_FORM] =
@@ -212,7 +212,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_Center);
+      Frm_LabelColumn ("RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
