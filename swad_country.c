@@ -208,7 +208,7 @@ void Cty_ListCountries1 (void)
 void Cty_ListCountries2 (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
-   extern const char *Txt_Countries;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
    unsigned NumCty;
@@ -217,7 +217,7 @@ void Cty_ListCountries2 (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Countries,
+   Box_BoxTableBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
                       Cty_PutIconsListingCountries,NULL,
                       Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
 
@@ -660,7 +660,7 @@ void Cty_EditCountries (void)
 static void Cty_EditCountriesInternal (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
-   extern const char *Txt_Countries;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    /***** Get list of countries *****/
    Gbl.Hierarchy.List[Hie_SYS].SelectedOrder = Hie_ORDER_BY_NAME;
@@ -670,7 +670,7 @@ static void Cty_EditCountriesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Countries,
+   Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
                  Cty_PutIconsEditingCountries,NULL,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 

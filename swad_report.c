@@ -793,13 +793,13 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 
 static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
   {
-   extern const char *Txt_Courses;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    Rol_Role_t Role;
 
    /***** Begin section *****/
    fprintf (Rep_File,"<section>"
                      "<h3>%s",
-            Txt_Courses);
+            Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
    if (Report->CurrentTimeUTC.StrDate[0])
       fprintf (Rep_File," (%s)",Report->CurrentTimeUTC.StrDate);
    fprintf (Rep_File,"</h3>");
@@ -823,7 +823,7 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
 
 static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
   {
-   extern const char *Txt_Courses;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_historical_log;
    extern const char *Txt_Only_courses_with_more_than_X_clicks_are_shown;
    Rol_Role_t Role;
@@ -831,7 +831,7 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
    /***** Begin section *****/
    fprintf (Rep_File,"<section>"
                      "<h3>%s (%s)</h3>",
-	    Txt_Courses,Txt_historical_log);
+	    Txt_HIERARCHY_PLURAL_Abc[Hie_CRS],Txt_historical_log);
    fprintf (Rep_File,Txt_Only_courses_with_more_than_X_clicks_are_shown,
             Rep_MIN_CLICKS_CRS);
    fprintf (Rep_File,"<ul>");

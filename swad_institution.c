@@ -1641,11 +1641,11 @@ void Ins_PutParInsCod (void *InsCod)
 void Ins_GetAndShowInstitutionsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_institutions;
-   extern const char *Txt_Institutions;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    struct Fig_Figures Figures;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Institutions,
+   Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_INS],
                  NULL,NULL,
                  Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
@@ -1681,7 +1681,7 @@ void Ins_GetAndShowInstitutionsStats (void)
 static void Ins_GetAndShowInssOrderedByNumCtrs (void)
   {
    extern const char *Txt_Institutions_by_number_of_centers;
-   extern const char *Txt_Centers;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
@@ -1694,7 +1694,7 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (void)
       NumInss = Ins_DB_GetInssOrderedByNumCtrs (&mysql_res);
 
       /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_Centers);
+      Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1710,7 +1710,7 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (void)
 static void Ins_GetAndShowInssOrderedByNumDegs (void)
   {
    extern const char *Txt_Institutions_by_number_of_degrees;
-   extern const char *Txt_Degrees;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
@@ -1723,7 +1723,7 @@ static void Ins_GetAndShowInssOrderedByNumDegs (void)
       NumInss = Ins_DB_GetInssOrderedByNumDegs (&mysql_res);
 
       /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_Degrees);
+      Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -1739,7 +1739,7 @@ static void Ins_GetAndShowInssOrderedByNumDegs (void)
 static void Ins_GetAndShowInssOrderedByNumCrss (void)
   {
    extern const char *Txt_Institutions_by_number_of_courses;
-   extern const char *Txt_Courses;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
@@ -1752,7 +1752,7 @@ static void Ins_GetAndShowInssOrderedByNumCrss (void)
       NumInss = Ins_DB_GetInssOrderedByNumCrss (&mysql_res);
 
       /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_Courses);
+      Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);

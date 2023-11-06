@@ -3334,10 +3334,7 @@ static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
 				      long HieCod[Hie_NUM_LEVELS],
                                       struct For_FiguresForum *FiguresForum)
   {
-   extern const char *Txt_Courses;
-   extern const char *Txt_Degrees;
-   extern const char *Txt_Centers;
-   extern const char *Txt_Institutions;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_General;
    extern const char *Txt_only_teachers;
    static const char *PlatformShortName = Cfg_PLATFORM_SHORT_NAME;
@@ -3349,18 +3346,18 @@ static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
       const char **ForumName2;
      } Pars[For_NUM_TYPES_FORUM] =
      {
-      [For_FORUM_COURSE_USRS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&EmptyName        },
-      [For_FORUM_COURSE_TCHS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&Txt_only_teachers},
-      [For_FORUM_DEGREE_USRS] = {"graduation-cap.svg"    ,&Txt_Degrees      ,&EmptyName        },
-      [For_FORUM_DEGREE_TCHS] = {"graduation-cap.svg"    ,&Txt_Degrees      ,&Txt_only_teachers},
-      [For_FORUM_CENTER_USRS] = {"building.svg"          ,&Txt_Centers      ,&EmptyName        },
-      [For_FORUM_CENTER_TCHS] = {"building.svg"          ,&Txt_Centers      ,&Txt_only_teachers},
-      [For_FORUM_INSTIT_USRS] = {"university.svg"        ,&Txt_Institutions ,&EmptyName        },
-      [For_FORUM_INSTIT_TCHS] = {"university.svg"        ,&Txt_Institutions ,&Txt_only_teachers},
-      [For_FORUM_GLOBAL_USRS] = {"comments.svg"          ,&Txt_General      ,&EmptyName        },
-      [For_FORUM_GLOBAL_TCHS] = {"comments.svg"          ,&Txt_General      ,&Txt_only_teachers},
-      [For_FORUM__SWAD__USRS] = {"swad64x64.png"         ,&PlatformShortName,&EmptyName        },
-      [For_FORUM__SWAD__TCHS] = {"swad64x64.png"         ,&PlatformShortName,&Txt_only_teachers},
+      [For_FORUM_COURSE_USRS] = {"chalkboard-teacher.svg",&Txt_HIERARCHY_PLURAL_Abc[Hie_CRS],&EmptyName        },
+      [For_FORUM_COURSE_TCHS] = {"chalkboard-teacher.svg",&Txt_HIERARCHY_PLURAL_Abc[Hie_CRS],&Txt_only_teachers},
+      [For_FORUM_DEGREE_USRS] = {"graduation-cap.svg"    ,&Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],&EmptyName        },
+      [For_FORUM_DEGREE_TCHS] = {"graduation-cap.svg"    ,&Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],&Txt_only_teachers},
+      [For_FORUM_CENTER_USRS] = {"building.svg"          ,&Txt_HIERARCHY_PLURAL_Abc[Hie_CTR],&EmptyName        },
+      [For_FORUM_CENTER_TCHS] = {"building.svg"          ,&Txt_HIERARCHY_PLURAL_Abc[Hie_CTR],&Txt_only_teachers},
+      [For_FORUM_INSTIT_USRS] = {"university.svg"        ,&Txt_HIERARCHY_PLURAL_Abc[Hie_INS],&EmptyName        },
+      [For_FORUM_INSTIT_TCHS] = {"university.svg"        ,&Txt_HIERARCHY_PLURAL_Abc[Hie_INS],&Txt_only_teachers},
+      [For_FORUM_GLOBAL_USRS] = {"comments.svg"          ,&Txt_General      		    ,&EmptyName        },
+      [For_FORUM_GLOBAL_TCHS] = {"comments.svg"          ,&Txt_General      		    ,&Txt_only_teachers},
+      [For_FORUM__SWAD__USRS] = {"swad64x64.png"         ,&PlatformShortName		    ,&EmptyName        },
+      [For_FORUM__SWAD__TCHS] = {"swad64x64.png"         ,&PlatformShortName		    ,&Txt_only_teachers},
      };
 
    if (Pars[ForumType].Icon)

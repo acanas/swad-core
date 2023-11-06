@@ -308,18 +308,19 @@ static void SysCfg_QR (void)
 
 static void SysCfg_NumCtys (void)
   {
-   extern const char *Txt_Countries;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    /***** Number of countries ******/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Countries);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_Submit_Begin (Txt_Countries,"class=\"LB BT_LINK\"");
+	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
+				     "class=\"LB BT_LINK\"");
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTY,	// Number of countries...
 						            Hie_SYS,	// ...in system
 						            Gbl.Hierarchy.Node[Hie_SYS].HieCod));
@@ -336,13 +337,13 @@ static void SysCfg_NumCtys (void)
 
 static void SysCfg_NumInss (void)
   {
-   extern const char *Txt_Institutions;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    /***** Number of institutions ******/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Institutions);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_INS]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -360,13 +361,13 @@ static void SysCfg_NumInss (void)
 
 static void SysCfg_NumDegs (void)
   {
-   extern const char *Txt_Degrees;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Degrees);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
@@ -384,13 +385,13 @@ static void SysCfg_NumDegs (void)
 
 static void SysCfg_NumCrss (void)
   {
-   extern const char *Txt_Courses;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Courses);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());

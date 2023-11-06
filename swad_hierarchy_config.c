@@ -251,7 +251,7 @@ void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod
 
 void HieCfg_NumCtrs (unsigned NumCtrs,Frm_PutForm_t PutForm)
   {
-   extern const char *Txt_Centers;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Centers_of_INSTITUTION_X;
    char *Title;
 
@@ -259,7 +259,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Centers);
+      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());

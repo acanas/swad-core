@@ -439,7 +439,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
                                               Frm_PutForm_t PutForm)
   {
    extern const char *Txt_Indicators;
-   extern const char *Txt_Courses;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Total;
    char *ClassNormal;
    char *ClassHighlight;
@@ -459,8 +459,8 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
       HTM_TR_Begin (NULL);
 	 if (PutForm == Frm_PUT_FORM)
 	    HTM_TH_Empty (1);
-	 HTM_TH      (Txt_Indicators,HTM_HEAD_RIGHT);
-	 HTM_TH_Span (Txt_Courses   ,HTM_HEAD_RIGHT,1,2,NULL);
+	 HTM_TH      (Txt_Indicators		       ,HTM_HEAD_RIGHT);
+	 HTM_TH_Span (Txt_HIERARCHY_PLURAL_Abc[Hie_CRS],HTM_HEAD_RIGHT,1,2,NULL);
       HTM_TR_End ();
 
       for (Ind  = 0;
@@ -555,7 +555,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    extern const char *Txt_YES;
    extern const char *Txt_NO;
    extern const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES];
-   extern const char *Txt_Courses;
    MYSQL_ROW row;
    unsigned NumCrs;
    long CrsCod;
@@ -575,9 +574,9 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT  ,3, 1,NULL);
 	       HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],HTM_HEAD_LEFT  ,3, 1,NULL);
-	       HTM_TH_Span (Txt_Institutional_BR_code ,HTM_HEAD_LEFT  ,3, 1,NULL);
-	       HTM_TH_Span (Txt_Web_page_of_the_course,HTM_HEAD_LEFT  ,3, 1,NULL);
-	       HTM_TH_Span (Txt_Indicators            ,HTM_HEAD_CENTER,1,11,NULL);
+	       HTM_TH_Span (Txt_Institutional_BR_code 	     ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Web_page_of_the_course	     ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Indicators		     ,HTM_HEAD_CENTER,1,11,NULL);
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);

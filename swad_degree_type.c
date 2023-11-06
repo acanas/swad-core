@@ -558,14 +558,14 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Type_of_degree;
-   extern const char *Txt_Degrees;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH_Span (NULL         ,HTM_HEAD_CENTER,1,1,"BT");
-      HTM_TH (Txt_Code          ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Type_of_degree,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Degrees       ,HTM_HEAD_RIGHT );
+      HTM_TH_Span (NULL			       ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code			       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Type_of_degree	       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],HTM_HEAD_RIGHT );
 
    HTM_TR_End ();
   }

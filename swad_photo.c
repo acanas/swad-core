@@ -1691,7 +1691,7 @@ void Pho_PrintPhotoDegree (void)
 static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Hlp_ANALYTICS_Degrees;
-   extern const char *Txt_Degrees;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    static void (*ShowOrPrintDegrees[Set_NUM_USR_LIST_TYPES]) (struct Pho_DegPhotos *DegPhotos,
                                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint) =
      {
@@ -1714,7 +1714,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
      {
       case Pho_DEGREES_SEE:
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Degrees,
+	 Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],
 	               Pho_PutIconToPrintDegreeStats,&DegPhotos,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
 
@@ -1737,7 +1737,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 break;
       case Pho_DEGREES_PRINT:
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Degrees,
+	 Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],
 	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 	 break;

@@ -677,14 +677,14 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Code;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
-   extern const char *Txt_Centers;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (NULL     ,HTM_HEAD_CENTER,1,1,"BT");
-      HTM_TH (Txt_Code      ,HTM_HEAD_RIGHT );
-      HTM_TH (Txt_Short_name,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Full_name ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Centers   ,HTM_HEAD_RIGHT );
+      HTM_TH_Span (NULL			       ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code			       ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_Short_name		       ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Full_name 		       ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_HIERARCHY_PLURAL_Abc[Hie_CTR],HTM_HEAD_RIGHT );
    HTM_TR_End ();
   }
 

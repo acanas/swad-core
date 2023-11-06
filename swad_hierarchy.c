@@ -1106,11 +1106,7 @@ void Hie_GetAndShowHierarchyStats (void)
 
 static void Hie_WriteHeadHierarchy (void)
   {
-   extern const char *Txt_Countries;
-   extern const char *Txt_Institutions;
-   extern const char *Txt_Centers;
-   extern const char *Txt_Degrees;
-   extern const char *Txt_Courses;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    static const char *Icons[Hie_NUM_LEVELS] =
      {
       [Hie_CTY] = "globe-americas.svg",
@@ -1118,14 +1114,6 @@ static void Hie_WriteHeadHierarchy (void)
       [Hie_CTR] = "building.svg",
       [Hie_DEG] = "graduation-cap.svg",
       [Hie_CRS] = "chalkboard-teacher.svg",
-     };
-   static const char **Txt[Hie_NUM_LEVELS] =
-     {
-      [Hie_CTY] = &Txt_Countries,
-      [Hie_INS] = &Txt_Institutions,
-      [Hie_CTR] = &Txt_Centers,
-      [Hie_DEG] = &Txt_Degrees,
-      [Hie_CRS] = &Txt_Courses,
      };
    Hie_Level_t Level;
 
@@ -1138,9 +1126,9 @@ static void Hie_WriteHeadHierarchy (void)
 	   Level++)
 	{
 	 HTM_TH_Begin (HTM_HEAD_RIGHT);
-	    Ico_PutIcon (Icons[Level],Ico_BLACK,*Txt[Level],"ICOx16");
+	    Ico_PutIcon (Icons[Level],Ico_BLACK,Txt_HIERARCHY_PLURAL_Abc[Level],"ICOx16");
 	    HTM_BR ();
-	    HTM_Txt (*Txt[Level]);
+	    HTM_Txt (Txt_HIERARCHY_PLURAL_Abc[Level]);
 	 HTM_TH_End ();
 	}
 

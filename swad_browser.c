@@ -9910,7 +9910,7 @@ void Brw_GetAndShowFileBrowsersStats (void)
 static void Brw_WriteStatsFileZonesTableHead1 (void)
   {
    extern const char *Txt_File_zones;
-   extern const char *Txt_Courses;
+   extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Groups;
    extern const char *Txt_Users;
    extern const char *Txt_Max_levels;
@@ -9919,14 +9919,14 @@ static void Brw_WriteStatsFileZonesTableHead1 (void)
    extern const char *Txt_Size;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (Txt_File_zones,HTM_HEAD_LEFT);
-      HTM_TH (Txt_Courses   ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Groups    ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Users     ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Max_levels,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Folders   ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Files     ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Size      ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_File_zones		       ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_HIERARCHY_PLURAL_Abc[Hie_CRS],HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Groups		       ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Users			       ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Max_levels		       ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Folders		       ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Files			       ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Size			       ,HTM_HEAD_RIGHT);
    HTM_TR_End ();
   }
 

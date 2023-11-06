@@ -4623,29 +4623,6 @@ const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
 #endif
 	};
 
-const char *Txt_Centers =
-#if   L==1	// ca
-	"Centers";
-#elif L==2	// de
-	"Lehrinstitute";
-#elif L==3	// en
-	"Centers";
-#elif L==4	// es
-	"Centros";
-#elif L==5	// fr
-	"Centers";
-#elif L==6	// gn
-	"Mbo'ehao";
-#elif L==7	// it
-	"Centri";
-#elif L==8	// pl
-	"Centra";
-#elif L==9	// pt
-	"Centros";
-#elif L==10	// tr
-	"Merkezler";
-#endif
-
 const char *Txt_Centers_ABBREVIATION =
 #if   L==1	// ca
 	"Cent.";
@@ -5921,29 +5898,6 @@ const char *Txt_Countdown =
 	"Countdown";		// Çeviri lazim!
 #endif
 
-const char *Txt_Countries =
-#if   L==1	// ca
-	"Pa&iuml;sos";
-#elif L==2	// de
-	"L&auml;nder";
-#elif L==3	// en
-	"Countries";
-#elif L==4	// es
-	"Pa&iacute;ses";
-#elif L==5	// fr
-	"Pays";
-#elif L==6	// gn
-	"Tet&atilde;";
-#elif L==7	// it
-	"Paesi";
-#elif L==8	// pl
-	"Kraje";
-#elif L==9	// pt
-	"Pa&iacute;ses";
-#elif L==10	// tr
-	"Countries";	// Çeviri lazim!
-#endif
-
 const char *Txt_COUNTRIES_HELP_ORDER[Hie_NUM_ORDERS] =
 	{
 	[Hie_ORDER_BY_NAME] =
@@ -6319,29 +6273,6 @@ const char *Txt_Course_X_removed =	// Warning: it is very important to include %
 	"Disciplina <strong>%s</strong> removida.";
 #elif L==10	// tr
 	"Course <strong>%s</strong> removed.";		// Çeviri lazim!
-#endif
-
-const char *Txt_Courses =
-#if   L==1	// ca
-	"Assignatures";
-#elif L==2	// de
-	"Kursen";
-#elif L==3	// en
-	"Courses";
-#elif L==4	// es
-	"Asignaturas";
-#elif L==5	// fr
-	"Mati&egrave;res";
-#elif L==6	// gn
-	"Mbo'esyry";
-#elif L==7	// it
-	"Corsi";
-#elif L==8	// pl
-	"Kurs&oacute;w";
-#elif L==9	// pt
-	"Disciplinas";
-#elif L==10	// tr
-	"Dersler";
 #endif
 
 const char *Txt_Courses_ABBREVIATION =
@@ -8252,29 +8183,6 @@ const char *Txt_Degree_X_removed =	// Warning: it is very important to include %
 	"Grau <strong>%s</strong> removido.";
 #elif L==10	// tr
 	"Degree <strong>%s</strong> removed.";			// Çeviri lazim!
-#endif
-
-const char *Txt_Degrees =
-#if   L==1	// ca
-	"Titulacions";
-#elif L==2	// de
-	"Studiengang";
-#elif L==3	// en
-	"Degrees";
-#elif L==4	// es
-	"Titulaciones";
-#elif L==5	// fr
-	"&Eacute;tudes";
-#elif L==6	// gn
-	"Arandur&atilde;";
-#elif L==7	// it
-	"Lauree";
-#elif L==8	// pl
-	"Stopnie";
-#elif L==9	// pt
-	"Graus";
-#elif L==10	// tr
-	"Derece";
 #endif
 
 const char *Txt_Degrees_ABBREVIATION =
@@ -15641,6 +15549,124 @@ const char *Txt_Hide_right_column =
 	"Hide right column";		// Çeviri lazim!
 #endif
 
+const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS] =
+	{
+	[Hie_CTY] =
+#if   L==1	// ca
+	"Pa&iuml;sos"
+#elif L==2	// de
+	"L&auml;nder"
+#elif L==3	// en
+	"Countries"
+#elif L==4	// es
+	"Pa&iacute;ses"
+#elif L==5	// fr
+	"Pays"
+#elif L==6	// gn
+	"Tet&atilde;"
+#elif L==7	// it
+	"Paesi"
+#elif L==8	// pl
+	"Kraje"
+#elif L==9	// pt
+	"Pa&iacute;ses"
+#elif L==10	// tr
+	"Countries"	// Çeviri lazim!
+#endif
+	,
+	[Hie_INS] =
+#if   L==1	// ca
+	"Institucions"
+#elif L==2	// de
+	"Hochschulen"
+#elif L==3	// en
+	"Institutions"
+#elif L==4	// es
+	"instituciones"
+#elif L==5	// fr
+	"&Eacute;tablissements"
+#elif L==6	// gn
+	"Mbo'ehao"
+#elif L==7	// it
+	"Istituzioni"
+#elif L==8	// pl
+	"Instytucje"
+#elif L==9	// pt
+	"Institu&ccedil;&otilde;es"
+#elif L==10	// tr
+	"Institutions"	// Çeviri lazim!
+#endif
+	,
+	[Hie_CTR] =
+#if   L==1	// ca
+	"Centers"
+#elif L==2	// de
+	"Lehrinstitute"
+#elif L==3	// en
+	"Centers"
+#elif L==4	// es
+	"Centros"
+#elif L==5	// fr
+	"Centers"
+#elif L==6	// gn
+	"Mbo'ehao"
+#elif L==7	// it
+	"Centri"
+#elif L==8	// pl
+	"Centra"
+#elif L==9	// pt
+	"Centros"
+#elif L==10	// tr
+	"Merkezler"
+#endif
+	,
+	[Hie_DEG] =
+#if   L==1	// ca
+	"Titulacions"
+#elif L==2	// de
+	"Studiengang"
+#elif L==3	// en
+	"Degrees"
+#elif L==4	// es
+	"Titulaciones"
+#elif L==5	// fr
+	"&Eacute;tudes"
+#elif L==6	// gn
+	"Arandur&atilde;"
+#elif L==7	// it
+	"Lauree"
+#elif L==8	// pl
+	"Stopnie"
+#elif L==9	// pt
+	"Graus"
+#elif L==10	// tr
+	"Derece"
+#endif
+	,
+	[Hie_CRS] =
+#if   L==1	// ca
+	"Assignatures"
+#elif L==2	// de
+	"Kursen"
+#elif L==3	// en
+	"Courses"
+#elif L==4	// es
+	"Asignaturas"
+#elif L==5	// fr
+	"Mati&egrave;res"
+#elif L==6	// gn
+	"Mbo'esyry"
+#elif L==7	// it
+	"Corsi"
+#elif L==8	// pl
+	"Kurs&oacute;w"
+#elif L==9	// pt
+	"Disciplinas"
+#elif L==10	// tr
+	"Dersler"
+#endif
+	};
+
 const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS] =
 	{
 	[Hie_CTY] =
@@ -18038,29 +18064,6 @@ const char *Txt_Institutional_BR_code =
 	"C&oacute;digo<br />instituc.";
 #elif L==10	// tr
 	"Institut.<br />code";		// Çeviri lazim!
-#endif
-
-const char *Txt_Institutions =
-#if   L==1	// ca
-	"Institucions";
-#elif L==2	// de
-	"Hochschulen";
-#elif L==3	// en
-	"Institutions";
-#elif L==4	// es
-	"Instituciones";
-#elif L==5	// fr
-	"&Eacute;tablissements";
-#elif L==6	// gn
-	"Mbo'ehao";
-#elif L==7	// it
-	"Istituzioni";
-#elif L==8	// pl
-	"Instytucje";
-#elif L==9	// pt
-	"Institu&ccedil;&otilde;es";
-#elif L==10	// tr
-	"Institutions";	// Çeviri lazim!
 #endif
 
 const char *Txt_Institutions_ABBREVIATION =
