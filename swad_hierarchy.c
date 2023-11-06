@@ -115,95 +115,45 @@ void Hie_WriteMenuHierarchy (void)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+   static const char **Id[Hie_NUM_LEVELS] =
+     {
+      [Hie_CTY] = &Par_CodeStr[ParCod_Cty],
+      [Hie_INS] = &Par_CodeStr[ParCod_Ins],
+      [Hie_CTR] = &Par_CodeStr[ParCod_Ctr],
+      [Hie_DEG] = &Par_CodeStr[ParCod_Deg],
+      [Hie_CRS] = &Par_CodeStr[ParCod_Crs],
+     };
+   static void (*FunctionWriteSelector[Hie_NUM_LEVELS]) (void) =
+     {
+      [Hie_CTY] = Cty_WriteSelectorOfCountry,
+      [Hie_INS] = Ins_WriteSelectorOfInstitution,
+      [Hie_CTR] = Ctr_WriteSelectorOfCenter,
+      [Hie_DEG] = Deg_WriteSelectorOfDegree,
+      [Hie_CRS] = Crs_WriteSelectorOfCourse,
+     };
+   Hie_Level_t Level;
+   Hie_Level_t LastLevel = Gbl.Hierarchy.Level + 1;
 
    /***** Begin table *****/
    HTM_TABLE_BeginCenterPadding (2);
 
-      /***** Write a 1st selector with all countries *****/
-      HTM_TR_Begin (NULL);
-
-	 /* Label */
-	 Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Cty],
-			  Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    Cty_WriteSelectorOfCountry ();
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
-	{
-	 /***** Write a 2nd selector
-		with the institutions of selected country *****/
+      for (Level  = Hie_CTY;
+	   Level <= LastLevel;
+	   Level++)
+        {
+	 /***** Write selector of nodes *****/
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ins],
-			     Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
+	    Frm_LabelColumn ("RT",*Id[Level],Txt_HIERARCHY_SINGUL_Abc[Level]);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       Ins_WriteSelectorOfInstitution ();
+	       FunctionWriteSelector[Level] ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
-
-	 if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
-	   {
-	    /***** Write a 3rd selector
-		   with all the centers of selected institution *****/
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Ctr],
-				Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  Ctr_WriteSelectorOfCenter ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
-	      {
-	       /***** Write a 4th selector
-		      with all degrees of selected center *****/
-	       HTM_TR_Begin (NULL);
-
-		  /* Label */
-		  Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Deg],
-				   Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
-
-		  /* Data */
-		  HTM_TD_Begin ("class=\"LT\"");
-		     Deg_WriteSelectorOfDegree ();
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
-
-	       if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
-		 {
-		  /***** Write a 5th selector
-			 with all courses of selected degree *****/
-		  HTM_TR_Begin (NULL);
-
-		     /* Label */
-		     Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Crs],
-				      Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
-
-		     /* Data */
-		     HTM_TD_Begin ("class=\"LT\"");
-			Crs_WriteSelectorOfCourse ();
-		     HTM_TD_End ();
-
-		  HTM_TR_End ();
-		 }
-	      }
-	   }
-	}
+        }
 
    /***** End table *****/
    HTM_TABLE_End ();
