@@ -75,16 +75,11 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Remove_me_from_THE_COURSE_X;
    extern const char *Txt_Remove_me;
    extern const char *Txt_Register_me_in_X;
-   extern const char *Txt_Select_create_course_in_X;
-   extern const char *Txt_Select_or_create_one_course_in_X;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
-   extern const char *Txt_Select_or_create_another_degree_in_X;
+   extern const char *Txt_Select_or_create_one_course_in_X;
    extern const char *Txt_Select_or_create_one_degree_in_X;
-   extern const char *Txt_Select_or_create_another_center_in_X;
    extern const char *Txt_Select_or_create_one_center_in_X;
-   extern const char *Txt_Select_or_create_another_institution_in_X;
    extern const char *Txt_Select_or_create_one_institution_in_X;
-   extern const char *Txt_Select_another_country;
    extern const char *Txt_Select_one_country;
    extern const char *Txt_Upload_my_picture;
    extern const char *Txt_Upload_photo;
@@ -104,7 +99,24 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       [Rol_INS_ADM] = ActUnk,
       [Rol_SYS_ADM] = ActUnk,
      };
+   static const Act_Action_t ActionsSelect[Hie_NUM_LEVELS] =
+     {
+      [Hie_DEG] = ActSeeCrs,
+      [Hie_CTR] = ActSeeDeg,
+      [Hie_INS] = ActSeeCtr,
+      [Hie_CTY] = ActSeeIns,
+      [Hie_SYS] = ActSeeCty,
+     };
+   static const char **Select_or_create[Hie_NUM_LEVELS] =
+     {
+      [Hie_DEG] = &Txt_Select_or_create_one_course_in_X,
+      [Hie_CTR] = &Txt_Select_or_create_one_degree_in_X,
+      [Hie_INS] = &Txt_Select_or_create_one_center_in_X,
+      [Hie_CTY] = &Txt_Select_or_create_one_institution_in_X,
+      [Hie_SYS] = &Txt_Select_one_country,
+     };
    char *Description;
+   Hie_Level_t Level;
 
    /***** Alert message *****/
    if (Gbl.Usrs.Me.Logged &&
@@ -177,65 +189,21 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						    Btn_CONFIRM_BUTTON,Txt_My_courses);
 	   }
 
-	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)		// Degree selected
-	   {
-	    /* Select a course */
-	    if (asprintf (&Description,Gbl.Hierarchy.Level == Hie_CRS ? Txt_Select_create_course_in_X :
-									Txt_Select_or_create_one_course_in_X,
-			  Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						 ActSeeCrs,
-						 Btn_CONFIRM_BUTTON,
-						 Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
-	    free (Description);
-	   }
-	 else if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)	// Center selected
-	   {
-	    /* Select a degree */
-	    if (asprintf (&Description,Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 ? Txt_Select_or_create_another_degree_in_X :
-									        Txt_Select_or_create_one_degree_in_X,
-			  Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						 ActSeeDeg,
-						 Btn_CONFIRM_BUTTON,
-						 Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
-	    free (Description);
-	   }
-	 else if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)	// Institution selected
-	   {
-	    /* Select a center */
-	    if (asprintf (&Description,Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 ? Txt_Select_or_create_another_center_in_X :
-									        Txt_Select_or_create_one_center_in_X,
-			  Gbl.Hierarchy.Node[Hie_INS].ShrtName) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						 ActSeeCtr,
-						 Btn_CONFIRM_BUTTON,
-						 Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
-	    free (Description);
-	   }
-	 else if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)	// Country selected
-	   {
-	    /* Select an institution */
-	    if (asprintf (&Description,Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 ? Txt_Select_or_create_another_institution_in_X :
-									        Txt_Select_or_create_one_institution_in_X,
-			  Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						 ActSeeIns,
-						 Btn_CONFIRM_BUTTON,
-						 Txt_HIERARCHY_PLURAL_Abc[Hie_INS]);
-	    free (Description);
-	   }
-	 else
-	    /* Select a country */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0 ? Txt_Select_another_country :
-											  Txt_Select_one_country,
-						 ActSeeCty,
-						 Btn_CONFIRM_BUTTON,
-						 Txt_HIERARCHY_PLURAL_Abc[Hie_CTY]);
+	 for (Level  = Hie_DEG;
+	      Level >= Hie_SYS;
+	      Level--)
+	    if (Gbl.Hierarchy.Node[Level].HieCod > 0)	// Level selected
+	      {
+	       if (asprintf (&Description,*Select_or_create[Level],
+			     Gbl.Hierarchy.Node[Level].ShrtName) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+						    ActionsSelect[Level],
+						    Btn_CONFIRM_BUTTON,
+						    Txt_HIERARCHY_PLURAL_Abc[Level]);
+	       free (Description);
+	       break;
+	      }
 
 	 if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,

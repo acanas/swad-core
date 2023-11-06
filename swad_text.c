@@ -41050,29 +41050,6 @@ const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important t
 	"See the previous %u";		// Çeviri lazim!
 #endif
 
-const char *Txt_Select_another_country =
-#if   L==1	// ca
-	"Seleccionar un altre país";
-#elif L==2	// de
-	"W&auml;hlen Sie eine anderes Land";
-#elif L==3	// en
-	"Select another country";
-#elif L==4	// es
-	"Seleccionar otro pa&iacute;s";
-#elif L==5	// fr
-	"S&eacute;lectionnez un autre pays";
-#elif L==6	// gn
-	"Seleccionar otro pa&iacute;s";	// Okoteve traducción
-#elif L==7	// it
-	"Selezionare un altro paese";
-#elif L==8	// pl
-	"Wybierz inny kraj";
-#elif L==9	// pt
-	"Selecionar outro pa&iacute;s";
-#elif L==10	// tr
-	"Select another country";	// Çeviri lazim!
-#endif
-
 const char *Txt_Select_one_country =
 #if   L==1	// ca
 	"Seleccionar un pa&iacute;s";
@@ -41094,98 +41071,6 @@ const char *Txt_Select_one_country =
 	"Selecionar um pa&iacute;s";
 #elif L==10	// tr
 	"Select one country";		// Çeviri lazim!
-#endif
-
-const char *Txt_Select_or_create_another_center_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Seleccionar o crear un altre center en la instituci&oacute; <strong>%s</strong>";
-#elif L==2	// de
-	"W&auml;hlen oder erstellen Sie einen anderen Lehrinstitut der Hochschule <strong>%s</strong>";
-#elif L==3	// en
-	"Select or create another center in the institution <strong>%s</strong>";
-#elif L==4	// es
-	"Seleccionar o crear otro centro en la instituci&oacute;n <strong>%s</strong>";
-#elif L==5	// fr
-	"S&eacute;lectionnez ou cr&eacute;ez un autre &eacute;tude de l'&eacute;tablissement <strong>%s</strong>";
-#elif L==6	// gn
-	"Seleccionar o crear otro centro en la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Selezionare o creare un altro centro di istituzione <strong>%s</strong>";
-#elif L==8	// pl
-	"Select or create another center in the institution <strong>%s</strong>";	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Selecionar ou criar um outro centro da institu&ccedil;&atilde;o <strong>%s</strong>";
-#elif L==10	// tr
-	"Select or create another center in the institution <strong>%s</strong>";	// Çeviri lazim!
-#endif
-
-const char *Txt_Select_create_course_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Seleccionar/crear assignatura en <strong>%s</strong>";
-#elif L==2	// de
-	"W&auml;hlen/erstellen Kurs von <strong>%s</strong>";
-#elif L==3	// en
-	"Select/create in <strong>%s</strong>";
-#elif L==4	// es
-	"Seleccionar/crear asignatura en <strong>%s</strong>";
-#elif L==5	// fr
-	"S&eacute;lectionner/cr&eacute;er mati&egrave;re dans <strong>%s</strong>";
-#elif L==6	// gn
-	"Seleccionar/crear asignatura en <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Selezionare/creare corso di <strong>%s</strong>";
-#elif L==8	// pl
-	"Select/create course in <strong>%s</strong>";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Selecionar/criar disciplina de <strong>%s</strong>";
-#elif L==10	// tr
-	"Select/create in <strong>%s</strong>";			// Çeviri lazim!
-#endif
-
-const char *Txt_Select_or_create_another_degree_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Seleccionar o crear una altra titulaci&oacute; en <strong>%s</strong>";
-#elif L==2	// de
-	"W&auml;hlen oder erstellen Sie einen anderen Studiengang von <strong>%s</strong>";
-#elif L==3	// en
-	"Select or create another degree in <strong>%s</strong>";
-#elif L==4	// es
-	"Seleccionar o crear otra titulaci&oacute;n en <strong>%s</strong>";
-#elif L==5	// fr
-	"S&eacute;lectionnez ou cr&eacute;ez un autre &eacute;tude dans <strong>%s</strong>";
-#elif L==6	// gn
-	"Seleccionar o crear otra titulaci&oacute;n en <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Selezionare o creare una altra laurea di <strong>%s</strong>";
-#elif L==8	// pl
-	"Select or create another degree in <strong>%s</strong>";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Selecionar ou criar outro grau de <strong>%s</strong>";
-#elif L==10	// tr
-	"Select or create another degree in <strong>%s</strong>";		// Çeviri lazim!
-#endif
-
-const char *Txt_Select_or_create_another_institution_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Seleccionar o crear una altra instituci&oacute; en <strong>%s</strong>";
-#elif L==2	// de
-	"W&auml;hlen oder erstellen Sie einen anderen Hochschule von <strong>%s</strong>";
-#elif L==3	// en
-	"Select or create another institution in <strong>%s</strong>";
-#elif L==4	// es
-	"Seleccionar o crear otra instituci&oacute;n en <strong>%s</strong>";
-#elif L==5	// fr
-	"S&eacute;lectionnez ou cr&eacute;ez un autre &eacute;tablissement de <strong>%s</strong>";
-#elif L==6	// gn
-	"Seleccionar o crear otra instituci&oacute;n en <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Selezionare o creare una altra istituzione di <strong>%s</strong>";
-#elif L==8	// pl
-	"Select or create another institution in <strong>%s</strong>";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Selecionar ou criar outra institu&ccedil;&atilde;o de <strong>%s</strong>";
-#elif L==10	// tr
-	"Select or create another institution in <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_one_center_in_X =	// Warning: it is very important to include %s in the following sentences
