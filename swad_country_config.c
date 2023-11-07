@@ -60,11 +60,11 @@ extern struct Globals Gbl;
 
 static void CtyCfg_Configuration (Vie_ViewType_t ViewType);
 static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args);
-static void CtyCfg_Title (bool PutLink);
+static void CtyCfg_Title (Hie_PutLink_t PutLink);
 static void CtyCfg_Map (void);
-static void CtyCfg_MapImage (Vie_ViewType_t ViewType,bool PutLink);
+static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink);
 static void CtyCfg_Platform (Vie_ViewType_t ViewType);
-static void CtyCfg_Name (bool PutLink);
+static void CtyCfg_Name (Hie_PutLink_t PutLink);
 static void CtyCfg_Shortcut (Vie_ViewType_t ViewType);
 static void CtyCfg_QR (void);
 static void CtyCfg_NumUsrs (void);
@@ -103,7 +103,7 @@ void CtyCfg_PrintConfiguration (void)
 static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COUNTRY_Information;
-   bool PutLink;
+   Hie_PutLink_t PutLink;
    bool MapImageExists;
    unsigned NumCtrs;
    unsigned NumCtrsWithMap;
@@ -113,7 +113,9 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_CTY].WWW[0];
+   PutLink = (ViewType == Vie_VIEW &&
+	      Gbl.Hierarchy.Node[Hie_CTY].WWW[0]) ? Hie_PUT_LINK :
+						    Hie_DONT_PUT_LINK;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,
@@ -221,14 +223,14 @@ static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args)
 /******************** Show title in country configuration ********************/
 /*****************************************************************************/
 
-static void CtyCfg_Title (bool PutLink)
+static void CtyCfg_Title (Hie_PutLink_t PutLink)
   {
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG FRAME_TITLE_%s\"",
                   The_GetSuffix ());
 
       /* Begin link */
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
 		      Gbl.Hierarchy.Node[Hie_CTY].WWW,
@@ -239,7 +241,7 @@ static void CtyCfg_Title (bool PutLink)
       HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
 
       /* End link */
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
 
    /***** End container *****/
@@ -322,7 +324,7 @@ static void CtyCfg_Map (void)
 /************* Show country map image in country configuration ***************/
 /*****************************************************************************/
 
-static void CtyCfg_MapImage (Vie_ViewType_t ViewType,bool PutLink)
+static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink)
   {
    char *MapAttribution = NULL;
 
@@ -331,13 +333,13 @@ static void CtyCfg_MapImage (Vie_ViewType_t ViewType,bool PutLink)
 
    /***** Map image *****/
    HTM_DIV_Begin ("class=\"CM\"");
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
 		      Gbl.Hierarchy.Node[Hie_CTY].WWW);
       Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],
 			  ViewType == Vie_VIEW ? "COUNTRY_MAP_SHOW" :
 						 "COUNTRY_MAP_PRINT");
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
    HTM_DIV_End ();
 
@@ -406,7 +408,7 @@ static void CtyCfg_Platform (Vie_ViewType_t ViewType)
 /**************** Show country name in country configuration *****************/
 /*****************************************************************************/
 
-static void CtyCfg_Name (bool PutLink)
+static void CtyCfg_Name (Hie_PutLink_t PutLink)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
 
@@ -418,12 +420,12 @@ static void CtyCfg_Name (bool PutLink)
 
       /* Data */
       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-	 if (PutLink)
+	 if (PutLink == Hie_PUT_LINK)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_STRONG_%s\"",
 			 Gbl.Hierarchy.Node[Hie_CTY].WWW,
 			 The_GetSuffix ());
 	 HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
-	 if (PutLink)
+	 if (PutLink == Hie_PUT_LINK)
 	    HTM_A_End ();
       HTM_TD_End ();
 

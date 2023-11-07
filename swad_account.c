@@ -168,7 +168,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 	    HTM_TxtColonNBSP (Txt_ID);
 	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
 	                    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"18\" class=\"INPUT_%s\" required=\"required\"",
+			    "size=\"16\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_LABEL_End ();
 	 Btn_PutCreateButtonInline (Txt_Check);
@@ -397,7 +397,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
 		  NewNickWithArr[0] = '\0';
 	       HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 			       NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"NewNick\" size=\"18\" placeholder=\"%s\""
+			       "id=\"NewNick\" size=\"16\" placeholder=\"%s\""
 			       " class=\"INPUT_%s\" required=\"required\"",
 			       Txt_HELP_nickname,
 			       The_GetSuffix ());
@@ -416,7 +416,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
-				"id=\"NewEmail\" size=\"18\" placeholder=\"%s\""
+				"id=\"NewEmail\" size=\"16\" placeholder=\"%s\""
 				" class=\"INPUT_%s\" required=\"required\"",
 				Txt_HELP_email,
 			        The_GetSuffix ());

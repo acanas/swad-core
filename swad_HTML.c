@@ -1342,7 +1342,7 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
    int NumBytesPrinted;
    char *Attr;
 
-   HTM_TxtF ("<input type=\"password\" name=\"%s\" size=\"18\" maxlength=\"%u\"",
+   HTM_TxtF ("<input type=\"password\" name=\"%s\" size=\"16\" maxlength=\"%u\"",
 	     Name,Pwd_MAX_CHARS_PLAIN_PASSWORD);
    if (PlaceHolder)
       if (PlaceHolder[0])

@@ -276,7 +276,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
    /***** String to find *****/
    // Input field not required, because it can be hidden (display:none)
    HTM_INPUT_SEARCH ("Search",Sch_MAX_CHARS_STRING_TO_FIND,Search->Str,
-	             "id=\"%s\" size=\"18\" class=\"INPUT_%s\""
+	             "id=\"%s\" size=\"16\" class=\"INPUT_%s\""
 	             " placeholder=\"%s&hellip;\"",
 		     IdInputText,
 		     The_GetSuffix (),

@@ -30,10 +30,20 @@
 #include "swad_parameter_code.h"
 
 /*****************************************************************************/
+/************************** Public constants and types ***********************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Hie_DONT_PUT_LINK,
+   Hie_PUT_LINK,
+  } Hie_PutLink_t;
+
+/*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void HieCfg_Title (bool PutLink,Hie_Level_t LogoScope);
+void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level);
 void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
 		  Nam_ShrtOrFullName_t ShrtOrFull);
 void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,

@@ -82,7 +82,8 @@ static void CtrCfg_Map (const struct Map_Coordinates *Coord);
 static void CtrCfg_Latitude (double Latitude);
 static void CtrCfg_Longitude (double Longitude);
 static void CtrCfg_Altitude (double Altitude);
-static void CtrCfg_Photo (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,bool PutLink,
+static void CtrCfg_Photo (Vie_ViewType_t ViewType,
+			  Frm_PutForm_t PutForm,Hie_PutLink_t PutLink,
 			  const char PathPhoto[PATH_MAX + 1]);
 static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution);
 static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
@@ -126,7 +127,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_CENTER_Information;
    struct Map_Coordinates Coord;
-   bool PutLink;
+   Hie_PutLink_t PutLink;
    Frm_PutForm_t PutFormIns;
    Frm_PutForm_t PutFormName;
    Frm_PutForm_t PutFormPlc;
@@ -145,7 +146,9 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
    Ctr_GetCoordByCod (Gbl.Hierarchy.Node[Hie_CTR].HieCod,&Coord);
 
    /***** Initializations *****/
-   PutLink      = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_CTR].WWW[0];
+   PutLink      = (ViewType == Vie_VIEW &&
+		   Gbl.Hierarchy.Node[Hie_CTR].WWW[0]) ? Hie_PUT_LINK :
+							 Hie_DONT_PUT_LINK;
    PutFormIns   = (ViewType == Vie_VIEW &&
 		   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Frm_PUT_FORM :
 	        					     Frm_DONT_PUT_FORM;
@@ -427,7 +430,8 @@ static void CtrCfg_Altitude (double Altitude)
 /***************************** Draw center photo *****************************/
 /*****************************************************************************/
 
-static void CtrCfg_Photo (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,bool PutLink,
+static void CtrCfg_Photo (Vie_ViewType_t ViewType,
+			  Frm_PutForm_t PutForm,Hie_PutLink_t PutLink,
 			  const char PathPhoto[PATH_MAX + 1])
   {
    char *PhotoAttribution = NULL;
@@ -445,7 +449,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,bool Put
 
    /***** Photo image *****/
    HTM_DIV_Begin ("class=\"CM\"");
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
 		      Gbl.Hierarchy.Node[Hie_CTR].WWW);
       if (asprintf (&URL,"%s/%02u/%u",
@@ -461,7 +465,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,bool Put
 						     "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH");
       free (Icon);
       free (URL);
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
    HTM_DIV_End ();
 

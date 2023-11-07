@@ -47,6 +47,7 @@
 #include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_config.h"
 #include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
@@ -207,9 +208,10 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size)
   {
-   bool PutLink = !Frm_CheckIfInside ();	// Don't put link to institution if already inside a form
+   Hie_PutLink_t PutLink = Frm_CheckIfInside () ? Hie_DONT_PUT_LINK :	// Don't put link to institution if already inside a form
+						  Hie_PUT_LINK;
 
-   if (PutLink)
+   if (PutLink == Hie_PUT_LINK)
      {
       Frm_BeginForm (ActSeeInsInf);
 	 ParCod_PutPar (ParCod_Ins,Ins->HieCod);
@@ -219,7 +221,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size)
 		 Ins->HieCod,
 		 Ins->FullName,
 		 Size,NULL);
-   if (PutLink)
+   if (PutLink == Hie_PUT_LINK)
      {
 	 HTM_BUTTON_End ();
       Frm_EndForm ();

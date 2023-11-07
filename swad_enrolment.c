@@ -351,7 +351,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
       /***** Input box to enter user *****/
       HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
 		      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"OtherUsrIDNickOrEMail\" size=\"18\""
+		      "id=\"OtherUsrIDNickOrEMail\" size=\"16\""
 		      " class=\"INPUT_%s\""
 		      " required=\"required\"",
 		      The_GetSuffix ());

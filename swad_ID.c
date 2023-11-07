@@ -643,7 +643,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 				  UsrDat[MeOrOther]->IDs.Num ? UsrDat[MeOrOther]->IDs.List[UsrDat[MeOrOther]->IDs.Num - 1].ID :
 						               "",	// Show the most recent ID
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"NewID\" class=\"INPUT_%s\" size=\"18\"",
+				  "id=\"NewID\" class=\"INPUT_%s\" size=\"16\"",
 				  The_GetSuffix ());
 		  HTM_BR ();
 		  Btn_PutCreateButtonInline (Txt_Add_this_ID);

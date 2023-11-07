@@ -936,7 +936,7 @@ int swad__loginBySessionKey (struct soap *soap,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    if (UsrFound)
      {
@@ -1594,7 +1594,7 @@ int swad__getUsers (struct soap *soap,
 				  "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Check requested users' role *****/
    if (userRole != API_ROLE_STUDENT &&	// Students
@@ -1678,7 +1678,7 @@ int swad__findUsers (struct soap *soap,
 
    if (Gbl.Hierarchy.Level == Hie_CRS)
       /***** Get degree of current course *****/
-      Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+      Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Check requested users' role *****/
    if (userRole < API_ROLE_UNKNOWN ||
@@ -3360,7 +3360,7 @@ int swad__sendNotice (struct soap *soap,
       return ReturnCode;
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Check if I am a teacher *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
@@ -3430,7 +3430,7 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Set default result to empty *****/
    getTestConfigOut->numQuestions =
@@ -3524,7 +3524,7 @@ int swad__getTests (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
+   Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Set default result to empty *****/
    getTestsOut->tagsArray.__size         = 0;

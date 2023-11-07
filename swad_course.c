@@ -152,6 +152,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
    extern const char *Par_CodeStr[];
+   extern ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS];
    extern const char *Txt_My_courses;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    struct Hie_Node Hie[Hie_NUM_LEVELS];
@@ -189,7 +190,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    IsLastItemInLevel[1] = true;
 	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
 	    Frm_BeginForm (ActMyCrs);
-	       Par_PutParLong (NULL,Par_CodeStr[ParCod_Cty],-1L);
+	       Par_PutParLong (NULL,Par_CodeStr[Hie_ParCod[Hie_CTY]],-1L);
 	       HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_SYS],
 	                                "class=\"BT_LINK FORM_IN_%s\"",
 					The_GetSuffix ());
@@ -221,7 +222,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1);
 	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 	       Frm_BeginForm (ActMyCrs);
-		  ParCod_PutPar (ParCod_Cty,Hie[Hie_CTY].HieCod);
+		  ParCod_PutPar (Hie_ParCod[Hie_CTY],Hie[Hie_CTY].HieCod);
 		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
 					   "class=\"BT_LINK FORM_IN_%s\"",
 					   The_GetSuffix ());
@@ -254,7 +255,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  IsLastItemInLevel[3] = (NumIns == NumInss - 1);
 		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 		  Frm_BeginForm (ActMyCrs);
-		     ParCod_PutPar (ParCod_Ins,Hie[Hie_INS].HieCod);
+		     ParCod_PutPar (Hie_ParCod[Hie_INS],Hie[Hie_INS].HieCod);
 		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
 					      "class=\"BT_LINK FORM_IN_%s\"",
 					      The_GetSuffix ());
@@ -289,7 +290,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1);
 		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 		     Frm_BeginForm (ActMyCrs);
-			ParCod_PutPar (ParCod_Ctr,Hie[Hie_CTR].HieCod);
+			ParCod_PutPar (Hie_ParCod[Hie_CTR],Hie[Hie_CTR].HieCod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
 						 "class=\"BT_LINK FORM_IN_%s\"",
 						 The_GetSuffix ());
@@ -324,7 +325,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1);
 			Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 			Frm_BeginForm (ActMyCrs);
-			   ParCod_PutPar (ParCod_Deg,Hie[Hie_DEG].HieCod);
+			   ParCod_PutPar (Hie_ParCod[Hie_DEG],Hie[Hie_DEG].HieCod);
 			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
 						    "class=\"BT_LINK FORM_IN_%s\"",
 						    The_GetSuffix ());
@@ -361,13 +362,19 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   IsLastItemInLevel[6] = (NumCrs == NumCrss - 1);
 			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel);
 			   Frm_BeginForm (ActMyCrs);
-			      ParCod_PutPar (ParCod_Crs,Hie[Hie_CRS].HieCod);
+			      ParCod_PutPar (Hie_ParCod[Hie_CRS],Hie[Hie_CRS].HieCod);
 			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CRS].ShrtName),
 						       "class=\"BT_LINK FORM_IN_%s\"",
 						       The_GetSuffix ());
 			      Str_FreeGoToTitle ();
-				 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie[Hie_CRS].FullName,"ICO16x16");
-				 HTM_TxtF ("&nbsp;%s",Hie[Hie_CRS].ShrtName);
+				 // Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie[Hie_CRS].FullName,"ICO16x16");
+				 Lgo_DrawLogo (Hie_CRS,
+					       Hie[Hie_CRS].HieCod,
+					       Hie[Hie_CRS].ShrtName,
+					       16,NULL);
+				    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
+				       HTM_TxtF ("&nbsp;%s",Hie[Hie_CRS].ShrtName);
+				    HTM_DIV_End ();
 			      HTM_BUTTON_End ();
 			   Frm_EndForm ();
 

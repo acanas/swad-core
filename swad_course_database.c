@@ -144,16 +144,21 @@ unsigned Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long CrsCod)
   }
 
 /*****************************************************************************/
-/********************* Get degree code from course code **********************/
+/************* Get the degree code of a course from its code *****************/
 /*****************************************************************************/
 
-long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void)
+long Crs_DB_GetDegCodOfCourseByCod (long CrsCod)
   {
+   /***** Trivial check: course code should be > 0 *****/
+   if (CrsCod <= 0)
+      return -1L;
+
+   /***** Get the degree code of a course from database *****/
    return DB_QuerySELECTCode ("can not get the degree of a course",
 			      "SELECT DegCod"
 			       " FROM crs_courses"
 			      " WHERE CrsCod=%ld",
-			      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			      CrsCod);
   }
 
 /*****************************************************************************/

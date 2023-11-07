@@ -749,11 +749,17 @@ a:hover						/* Default ==> underlined */
 		vertical-align:top;
 		overflow:hidden;
 		}
+	.TAB_ICO
+		{
+		height:28px;
+		vertical-align:middle;
+		padding:4px 0;
+		}
 	.TAB_TXT
 		{
 		font-size:9pt;
 		font-weight:bold;
-		max-width:30px;
+		max-width:26px;
 		white-space:nowrap;
 		overflow:hidden;
 		padding-top:2px;
@@ -796,6 +802,12 @@ a:hover						/* Default ==> underlined */
 		text-align:center;
 		vertical-align:top;
 		overflow:hidden;
+		}
+	.TAB_ICO
+		{
+		height:28px;
+		vertical-align:middle;
+		padding:4px 0;
 		}
 	.TAB_TXT
 		{
@@ -845,6 +857,12 @@ a:hover						/* Default ==> underlined */
 		vertical-align:top;
 		overflow:hidden;
 		}
+	.TAB_ICO
+		{
+		height:28px;
+		vertical-align:middle;
+		padding:4px 0;
+		}
 	.TAB_TXT
 		{
 		font-size:9pt;
@@ -889,12 +907,6 @@ a:hover						/* Default ==> underlined */
 .TAB_ON_TXT_PINK	{color:#63474e;}
 .TAB_ON_TXT_DARK	{color:#e0e0e0;}
 
-.TAB_ICO
-	{
-	height:28px;
-	vertical-align:middle;
-	padding:4px 0;
-	}
 /* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
 .TAB_ICO_WHITE,
 .TAB_ICO_GREY,
@@ -1226,7 +1238,7 @@ a:hover						/* Default ==> underlined */
 		line-height:110%;
 		white-space:nowrap;
 		overflow:hidden;
-		width:30px;
+		width:26px;
 		margin:0 auto;
 		padding:2px 0;
 		}
@@ -1677,7 +1689,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .BT_SUBMIT_INLINE
 	{
 	box-sizing:border-box;
-	min-width:170px;
+	width:120px;
 	margin:0 10px;
 	padding:2px 4px;
 	border-radius:2px;
@@ -1690,6 +1702,8 @@ a:hover img.CENTER_PHOTO_SHOW
 	line-height:normal;
 	white-space:nowrap;
 	vertical-align:middle;
+	overflow:hidden;
+	text-overflow:ellipsis;
 	}
 .BT_SUBMIT:hover
 	{
@@ -1874,7 +1888,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	overflow:hidden;
 	}
 .NOTICE_BOX_NARROW	{width:148px;}
-.NOTICE_BOX_WIDE	{width:500px;}
+.NOTICE_BOX_WIDE	{max-width:500px;}
 .NOTICE_DATE
 	{
 	float:right;
@@ -3992,7 +4006,7 @@ legend {font-size:12pt;}
 	}
 .PREF_OFF
 	{
-	display:table-cell;
+	display:inline-block;
 	box-sizing:border-box;
 	padding:6px;
 	text-align:center;
@@ -4002,7 +4016,7 @@ legend {font-size:12pt;}
 	}
 .PREF_ON
 	{
-	display:table-cell;
+	display:inline-block;
 	box-sizing:border-box;
 	padding:6px;
 	text-align:center;
@@ -4247,29 +4261,29 @@ legend {font-size:12pt;}
 
 @media only screen and (max-width: 590px)
 	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
-	.Tml_WIDTH		{width:316px;}	/* 556-240 */
-	.Tml_RIGHT_WIDTH	{width:260px;}	/* 500-240 */
-	.Tml_RIGHT_AUTHOR_WIDTH	{width:100px;}	/* 340-240 */
-	.Tml_COM_WIDTH		{width:220px;}	/* 460-240 */
-	.Tml_COM_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
-	.Tml_MED_INPUT_WIDTH	{width:160px;}	/* 400-240 */
-	.TmlNot_FOOT_WIDTH	{width:260px;}	/* 500-240 */
-	.Tml_COMM_FOOT_WIDTH	{width:220px;}	/* 460-240 */
-	.Tml_FAV_NOT_WIDTH	{width:120px;}	/* (480-240)/2 */
-	.Tml_SHA_NOT_WIDTH	{width:120px;}	/* (480-240)/2 */
-	.Tml_FAV_COM_WIDTH	{width:200px;}	/* 440-240 */
+	.Tml_WIDTH		{width:276px;}	/* 556-280 */
+	.Tml_RIGHT_WIDTH	{width:220px;}	/* 500-280 */
+	.Tml_RIGHT_AUTHOR_WIDTH	{width: 60px;}	/* 340-280 */
+	.Tml_COM_WIDTH		{width:180px;}	/* 460-280 */
+	.Tml_COM_AUTHOR_WIDTH	{width: 20px;}	/* 300-280 */
+	.Tml_MED_INPUT_WIDTH	{width:120px;}	/* 400-280 */
+	.TmlNot_FOOT_WIDTH	{width:220px;}	/* 500-280 */
+	.Tml_COMM_FOOT_WIDTH	{width:180px;}	/* 460-280 */
+	.Tml_FAV_NOT_WIDTH	{width:100px;}	/* (480-280)/2 */
+	.Tml_SHA_NOT_WIDTH	{width:100px;}	/* (480-280)/2 */
+	.Tml_FAV_COM_WIDTH	{width:160px;}	/* 440-280 */
 	}
 @media only screen and (min-width: 590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
-	.Tml_WIDTH				{width:556px;}
-	.Tml_RIGHT_WIDTH		{width:500px;}
+	.Tml_WIDTH		{width:556px;}
+	.Tml_RIGHT_WIDTH	{width:500px;}
 	.Tml_RIGHT_AUTHOR_WIDTH	{width:340px;}
-	.Tml_COM_WIDTH			{width:460px;}
+	.Tml_COM_WIDTH		{width:460px;}
 	.Tml_COM_AUTHOR_WIDTH	{width:300px;}
 	.Tml_MED_INPUT_WIDTH	{width:400px;}
-	.Tml_FAV_NOT_WIDTH		{width:240px;}
-	.Tml_SHA_NOT_WIDTH		{width:240px;}
-	.Tml_FAV_COM_WIDTH		{width:440px;}
+	.Tml_FAV_NOT_WIDTH	{width:240px;}
+	.Tml_SHA_NOT_WIDTH	{width:240px;}
+	.Tml_FAV_COM_WIDTH	{width:440px;}
 	}
 
 .Tml_NEW_PUB_WHITE,
@@ -4945,12 +4959,12 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 .INPUT_INS_CODE
 	{
 	box-sizing:border-box;
-	width:180px;
+	width:160px;
 	}
 .INPUT_SHRT_NAME
 	{
 	box-sizing:border-box;
-	width:180px;
+	width:160px;
 	}
 .INPUT_FULL_NAME
 	{
@@ -5009,6 +5023,28 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 .LC_CTR	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .LC_DEG	{text-align:left;  vertical-align:top; min-width:150px; max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .LC_ACT	{text-align:left;  vertical-align:top; min-width:200px; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+/*********************** Listing my courses as a tree ************************/
+@media only screen and (max-width: 800px)
+	{	/* For mobile-phones */
+	.MY_CRS_TXT
+		{
+		display:inline-block;
+		text-align:left;
+		vertical-align:middle;
+		max-width:120px;
+		overflow:hidden;
+		}
+	}
+@media only screen and (min-width: 800px)
+	{	/* For tablets and desktop */
+	.MY_CRS_TXT
+		{
+		display:inline-block;
+		text-align:left;
+		vertical-align:middle;
+		}
+	}
 
 /********************************** Privacy **********************************/
 .PRI_LIST

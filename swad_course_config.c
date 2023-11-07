@@ -77,7 +77,7 @@ static void CrsCfg_Indicators (void);
 void CrsCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_COURSE_Information;
-   bool PutLink;
+   Hie_PutLink_t PutLink;
    Frm_PutForm_t PutFormDeg;
    Frm_PutForm_t PutFormName;
    Frm_PutForm_t PutFormYear;
@@ -88,7 +88,9 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink       = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
+   PutLink       = (ViewType == Vie_VIEW &&
+		    Gbl.Hierarchy.Node[Hie_DEG].WWW[0]) ? Hie_PUT_LINK :
+							  Hie_DONT_PUT_LINK;
    PutFormDeg    = (ViewType == Vie_VIEW &&
 	            Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Frm_PUT_FORM :
 							      Frm_DONT_PUT_FORM;
@@ -380,7 +382,7 @@ static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm)
 		  HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 				  Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "id=\"InsCrsCod\" size=\"%u\""
+				  "id=\"InsCrsCod\" maxlength=\"%u\""
 				  " class=\"INPUT_INS_CODE INPUT_%s\"",
 				  Hie_MAX_CHARS_INSTITUTIONAL_COD,
 				  The_GetSuffix ());

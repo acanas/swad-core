@@ -1179,7 +1179,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"UsrId\" size=\"18\" placeholder=\"%s\""
+			       "id=\"UsrId\" size=\"16\" placeholder=\"%s\""
 			       " class=\"INPUT_%s\" autofocus=\"autofocus\""
 			       " required=\"required\"",
 			       Txt_nick_email_or_ID,

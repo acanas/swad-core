@@ -1647,16 +1647,16 @@ static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
                                        const char *ClassData)
   {
    struct Dpt_Department Dpt;
-   bool PutLink;
+   bool PutLinkToDpt;
 
    /***** Get data of department *****/
    Dpt.DptCod = Projects->Prj.DptCod;
    Dpt_GetDepartmentDataByCod (&Dpt);
 
    /***** Show department *****/
-   PutLink = (Dpt.WWW[0] &&
-	      (Projects->View == Prj_LIST_PROJECTS ||
-	       Projects->View == Prj_VIEW_ONE_PROJECT));
+   PutLinkToDpt = (Dpt.WWW[0] &&
+	           (Projects->View == Prj_LIST_PROJECTS ||
+	            Projects->View == Prj_VIEW_ONE_PROJECT));
 
    switch (Projects->View)
      {
@@ -1669,13 +1669,15 @@ static void Prj_ShowProjectDepartment (const struct Prj_Projects *Projects,
 	               ClassData,The_GetSuffix ());
 	 break;
      }
-	 if (PutLink)
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s_%s\"",
-			 Dpt.WWW,ClassData,The_GetSuffix ());
-	 HTM_Txt (Dpt.FullName);
-	 if (PutLink)
-	    HTM_A_End ();
-      HTM_TD_End ();
+
+      if (PutLinkToDpt)
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s_%s\"",
+		      Dpt.WWW,ClassData,The_GetSuffix ());
+      HTM_Txt (Dpt.FullName);
+      if (PutLinkToDpt)
+	 HTM_A_End ();
+
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -2350,9 +2352,9 @@ static void Prj_ShowURL (const struct Prj_Projects *Projects,
                          const char *id,unsigned UniqueId)
   {
    extern const char *Txt_URL;
-   bool PutLink = (Projects->Prj.URL[0] &&
-	           (Projects->View == Prj_LIST_PROJECTS ||
-	            Projects->View == Prj_VIEW_ONE_PROJECT));
+   bool PutLinkToURL = (Projects->Prj.URL[0] &&
+	                (Projects->View == Prj_LIST_PROJECTS ||
+	                 Projects->View == Prj_VIEW_ONE_PROJECT));
 
    /***** Write row with label and text *****/
    switch (Projects->View)
@@ -2391,11 +2393,13 @@ static void Prj_ShowURL (const struct Prj_Projects *Projects,
 			  ClassData,The_GetSuffix ());
 	    break;
 	}
-	 if (PutLink)
+
+	 if (PutLinkToURL)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Projects->Prj.URL);
 	 HTM_Txt (Projects->Prj.URL);
-	 if (PutLink)
+	 if (PutLinkToURL)
 	    HTM_A_End ();
+
       HTM_TD_End ();
 
    HTM_TR_End ();

@@ -34,6 +34,7 @@
 #include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_config.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_QR.h"
@@ -48,17 +49,17 @@ extern struct Globals Gbl;
 /************************ Show title in configuration ************************/
 /*****************************************************************************/
 
-void HieCfg_Title (bool PutLink,Hie_Level_t Level)
+void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level)
   {
    Hie_Level_t LevelLogo = (Level == Hie_CRS) ? Hie_DEG :
-						      Level;
+						Level;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG FRAME_TITLE_%s\"",
                   The_GetSuffix ());
 
       /* Begin link */
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
 		      Gbl.Hierarchy.Node[LevelLogo].WWW,
@@ -74,7 +75,7 @@ void HieCfg_Title (bool PutLink,Hie_Level_t Level)
       HTM_Txt (Gbl.Hierarchy.Node[Level].FullName);
 
       /* End link */
-      if (PutLink)
+      if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
 
    /***** End container *****/

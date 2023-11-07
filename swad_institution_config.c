@@ -104,7 +104,7 @@ void InsCfg_PrintConfiguration (void)
 static void InsCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_INSTITUTION_Information;
-   bool PutLink;
+   Hie_PutLink_t PutLink;
    Frm_PutForm_t PutFormCty;
    Frm_PutForm_t PutFormName;
    Frm_PutForm_t PutFormWWW;
@@ -116,7 +116,9 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink     = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_INS].WWW[0];
+   PutLink     = (ViewType == Vie_VIEW &&
+		  Gbl.Hierarchy.Node[Hie_INS].WWW[0]) ? Hie_PUT_LINK :
+							Hie_DONT_PUT_LINK;
    PutFormCty  =
    PutFormName = (ViewType == Vie_VIEW &&
 		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Frm_PUT_FORM :

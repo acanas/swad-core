@@ -58,6 +58,19 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/**************************** Public constants ******************************/
+/*****************************************************************************/
+
+ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS] =
+  {
+   [Hie_CTY] = ParCod_Cty,
+   [Hie_INS] = ParCod_Ins,
+   [Hie_CTR] = ParCod_Ctr,
+   [Hie_DEG] = ParCod_Deg,
+   [Hie_CRS] = ParCod_Crs,
+  };
+
+/*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
@@ -115,14 +128,6 @@ void Hie_WriteMenuHierarchy (void)
   {
    extern const char *Par_CodeStr[];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-   static const char **Id[Hie_NUM_LEVELS] =
-     {
-      [Hie_CTY] = &Par_CodeStr[ParCod_Cty],
-      [Hie_INS] = &Par_CodeStr[ParCod_Ins],
-      [Hie_CTR] = &Par_CodeStr[ParCod_Ctr],
-      [Hie_DEG] = &Par_CodeStr[ParCod_Deg],
-      [Hie_CRS] = &Par_CodeStr[ParCod_Crs],
-     };
    static void (*FunctionWriteSelector[Hie_NUM_LEVELS]) (void) =
      {
       [Hie_CTY] = Cty_WriteSelectorOfCountry,
@@ -145,7 +150,8 @@ void Hie_WriteMenuHierarchy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT",*Id[Level],Txt_HIERARCHY_SINGUL_Abc[Level]);
+	    Frm_LabelColumn ("RT",Par_CodeStr[Hie_ParCod[Level]],
+			     Txt_HIERARCHY_SINGUL_Abc[Level]);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");

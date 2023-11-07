@@ -1239,7 +1239,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
             if (MeOrOther == Usr_OTHER)
 	       Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,UsrDat[MeOrOther]->Email,
-			     "id=\"NewEmail\" class=\"INPUT_%s\" size=\"18\"",
+			     "id=\"NewEmail\" class=\"INPUT_%s\" size=\"16\"",
 			     The_GetSuffix ());
 	    HTM_BR ();
 	    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address

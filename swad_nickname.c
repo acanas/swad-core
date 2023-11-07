@@ -315,7 +315,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"NewNick\" class=\"INPUT_%s\""
-				     " size=\"18\"",
+				     " size=\"16\"",
 				     The_GetSuffix ());
 		     HTM_BR ();
 		     Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname

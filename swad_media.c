@@ -1483,7 +1483,6 @@ static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMe
       [Med_WEBM] = Med_ShowVideo,
       [Med_OGG ] = Med_ShowVideo,
      };
-   bool PutLink;
    char PathMedPriv[PATH_MAX + 1];
 
    /***** If no media to show ==> nothing to do *****/
@@ -1493,12 +1492,9 @@ static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMe
       return;
 
    /***** Begin optional link to external URL *****/
-   PutLink = false;
    if (Media->URL)
       if (Media->URL[0])
-	 PutLink = true;
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
 
    /***** Build path to private directory with the media *****/
    snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
@@ -1511,8 +1507,9 @@ static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMe
       Show[Media->Type] (Media,PathMedPriv,ClassMedia);
 
    /***** End optional link to external URL *****/
-   if (PutLink)
-      HTM_A_End ();
+   if (Media->URL)
+      if (Media->URL[0])
+         HTM_A_End ();
   }
 
 /*****************************************************************************/

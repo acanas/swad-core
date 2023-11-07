@@ -208,7 +208,7 @@ void Prf_ReqUserProfile (void)
 		      Gbl.Usrs.Me.UsrDat.Nickname);
 	    HTM_INPUT_TEXT ("usr",sizeof (NickWithArr) - 1,NickWithArr,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"18\" class=\"INPUT_%s\""
+			    "size=\"16\" class=\"INPUT_%s\""
 			    " required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_LABEL_End ();

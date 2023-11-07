@@ -95,7 +95,7 @@ void DegCfg_PrintConfiguration (void)
 static void DegCfg_Configuration (Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_DEGREE_Information;
-   bool PutLink;
+   Hie_PutLink_t PutLink;
    Frm_PutForm_t PutFormCtr;
    Frm_PutForm_t PutFormName;
    Frm_PutForm_t PutFormWWW;
@@ -105,7 +105,9 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
       return;
 
    /***** Initializations *****/
-   PutLink     = ViewType == Vie_VIEW && Gbl.Hierarchy.Node[Hie_DEG].WWW[0];
+   PutLink     = (ViewType == Vie_VIEW &&
+		  Gbl.Hierarchy.Node[Hie_DEG].WWW[0]) ? Hie_PUT_LINK :
+							Hie_DONT_PUT_LINK;
    PutFormCtr  = (ViewType == Vie_VIEW &&
 		  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ? Frm_PUT_FORM :
 							    Frm_DONT_PUT_FORM;
