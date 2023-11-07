@@ -1604,31 +1604,36 @@ void Lay_AdvertisementMobile (void)
   }
 
 /*****************************************************************************/
-/*********************** Indent forum or chat title **************************/
+/****************** Indent forum, chat or course tree title ******************/
 /*****************************************************************************/
-// IsLastItemInLevel[] is a vector with at least 1 + Level booleans
+// IsLastItemInLevel[] is a vector with at least 1 + Level elements
 
-void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
+void Lay_IndentDependingOnLevel (unsigned Level,
+				 Lay_LastItem_t IsLastItemInLevel[],
+				 Lay_HorizontalLineAtRight_t HorizontalLineAtRight)
   {
-   unsigned i;
+   static const char *Icons[Lay_NUM_HORIZONTAL_LINE_AT_RIGHT][Lay_NUM_LAST_ITEM] =
+     {
+      [Lay_NO_HORIZONTAL_LINE_AT_RIGHT][Lay_NO_LAST_ITEM] = "subleft20x20.gif",
+      [Lay_NO_HORIZONTAL_LINE_AT_RIGHT][Lay_LAST_ITEM   ] = "tr20x20.gif",
+      [Lay_HORIZONTAL_LINE_AT_RIGHT   ][Lay_NO_LAST_ITEM] = "submid20x20.gif",
+      [Lay_HORIZONTAL_LINE_AT_RIGHT   ][Lay_LAST_ITEM   ] = "subend20x20.gif",
+     };
+   unsigned L;
 
    if (Level <= 1)
       return;
 
    /***** Indent (from 1 to Level-1) *****/
-   for (i = 2;
-	i < Level;
-	i++)
-      Ico_PutIcon (IsLastItemInLevel[i] ? "tr20x20.gif" :
-		                          "subleft20x20.gif",
-		   Ico_BLACK,
-		   "","ICO25x25");
+   for (L = 2;
+	L < Level;
+	L++)
+      Ico_PutIcon (Icons[Lay_NO_HORIZONTAL_LINE_AT_RIGHT][IsLastItemInLevel[L]],
+		   Ico_BLACK,"","ICO25x25");
 
    /***** Level *****/
-   Ico_PutIcon (IsLastItemInLevel[Level] ? "subend20x20.gif" :
-					   "submid20x20.gif",
-		Ico_BLACK,
-		"","ICO25x25");
+   Ico_PutIcon (Icons[HorizontalLineAtRight][IsLastItemInLevel[Level]],
+	        Ico_BLACK,"","ICO25x25");
   }
 
 /*****************************************************************************/

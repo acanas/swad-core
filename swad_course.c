@@ -156,7 +156,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *Txt_My_courses;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    struct Hie_Node Hie[Hie_NUM_LEVELS];
-   bool IsLastItemInLevel[1 + 6];
+   Lay_LastItem_t IsLastItemInLevel[1 + 6];
    bool Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
    MYSQL_RES *mysql_resIns;
@@ -187,8 +187,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Highlight = (Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0);
 	 HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 				   NULL);
-	    IsLastItemInLevel[1] = true;
-	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
+	    IsLastItemInLevel[1] = Lay_LAST_ITEM;
+	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel,
+					Lay_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActMyCrs);
 	       Par_PutParLong (NULL,Par_CodeStr[Hie_ParCod[Hie_CTY]],-1L);
 	       HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_SYS],
@@ -219,8 +220,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			 Gbl.Hierarchy.Node[Hie_CTY].HieCod == Hie[Hie_CTY].HieCod);
 	    HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 				      NULL);
-	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1);
-	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
+	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1) ? Lay_LAST_ITEM :
+								Lay_NO_LAST_ITEM;
+	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel,
+					   Lay_HORIZONTAL_LINE_AT_RIGHT);
 	       Frm_BeginForm (ActMyCrs);
 		  ParCod_PutPar (Hie_ParCod[Hie_CTY],Hie[Hie_CTY].HieCod);
 		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
@@ -252,8 +255,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			    Gbl.Hierarchy.Node[Hie_INS].HieCod == Hie[Hie_INS].HieCod);
 	       HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					 NULL);
-		  IsLastItemInLevel[3] = (NumIns == NumInss - 1);
-		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
+		  IsLastItemInLevel[3] = (NumIns == NumInss - 1) ? Lay_LAST_ITEM :
+								   Lay_NO_LAST_ITEM;
+		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel,
+					      Lay_HORIZONTAL_LINE_AT_RIGHT);
 		  Frm_BeginForm (ActMyCrs);
 		     ParCod_PutPar (Hie_ParCod[Hie_INS],Hie[Hie_INS].HieCod);
 		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
@@ -287,8 +292,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			       Gbl.Hierarchy.Node[Hie_CTR].HieCod == Hie[Hie_CTR].HieCod);
 		  HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					    NULL);
-		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1);
-		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
+		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1) ? Lay_LAST_ITEM :
+								      Lay_NO_LAST_ITEM;
+		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel,
+						 Lay_HORIZONTAL_LINE_AT_RIGHT);
 		     Frm_BeginForm (ActMyCrs);
 			ParCod_PutPar (Hie_ParCod[Hie_CTR],Hie[Hie_CTR].HieCod);
 			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
@@ -322,8 +329,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				  Gbl.Hierarchy.Node[Hie_DEG].HieCod == Hie[Hie_DEG].HieCod);
 		     HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 					       NULL);
-			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1);
-			Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
+			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1) ? Lay_LAST_ITEM :
+									 Lay_NO_LAST_ITEM;
+			Lay_IndentDependingOnLevel (5,IsLastItemInLevel,
+						    Lay_HORIZONTAL_LINE_AT_RIGHT);
 			Frm_BeginForm (ActMyCrs);
 			   ParCod_PutPar (Hie_ParCod[Hie_DEG],Hie[Hie_DEG].HieCod);
 			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
@@ -357,10 +366,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			/***** Write link to course *****/
 			Highlight = (Gbl.Hierarchy.Level == Hie_CRS &&
 				     Gbl.Hierarchy.Node[Hie_CRS].HieCod == Hie[Hie_CRS].HieCod);
+			IsLastItemInLevel[6] = (NumCrs == NumCrss - 1) ? Lay_LAST_ITEM :
+									 Lay_NO_LAST_ITEM;
 			HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
 						  NULL);
-			   IsLastItemInLevel[6] = (NumCrs == NumCrss - 1);
-			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel);
+			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel,
+						       Lay_HORIZONTAL_LINE_AT_RIGHT);
 			   Frm_BeginForm (ActMyCrs);
 			      ParCod_PutPar (Hie_ParCod[Hie_CRS],Hie[Hie_CRS].HieCod);
 			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CRS].ShrtName),
@@ -377,11 +388,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				    HTM_DIV_End ();
 			      HTM_BUTTON_End ();
 			   Frm_EndForm ();
-
-			   /***** Put link to register students *****/
-			   Enr_PutButtonInlineToRegisterStds (Hie[Hie_CRS].HieCod);
-
 			HTM_LI_End ();
+
+			/***** Put link to register students *****/
+			Enr_PutButtonInlineToRegisterStds (Hie[Hie_CRS].HieCod,
+							   6,IsLastItemInLevel,
+							   Highlight);
 		       }
 
 		     /* Free structure that stores the query result */

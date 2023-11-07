@@ -74,7 +74,9 @@ typedef enum
 /*****************************************************************************/
 
 void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void);
-void Enr_PutButtonInlineToRegisterStds (long CrsCod);
+void Enr_PutButtonInlineToRegisterStds (long CrsCod,
+				        unsigned Level,Lay_LastItem_t IsLastItemInLevel[],
+					bool Highlight);
 
 void Enr_PutLinkToRequestSignUp (void);
 

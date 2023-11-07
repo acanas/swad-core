@@ -40,6 +40,20 @@
 #define Lay_SHOW_LEFT_COLUMN	2						// 10
 #define Lay_SHOW_BOTH_COLUMNS (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN)	// 11
 
+#define Lay_NUM_LAST_ITEM 2
+typedef enum
+  {
+   Lay_NO_LAST_ITEM,
+   Lay_LAST_ITEM,
+  } Lay_LastItem_t;
+
+#define Lay_NUM_HORIZONTAL_LINE_AT_RIGHT 2
+typedef enum
+  {
+   Lay_NO_HORIZONTAL_LINE_AT_RIGHT,
+   Lay_HORIZONTAL_LINE_AT_RIGHT,
+  } Lay_HorizontalLineAtRight_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -72,7 +86,9 @@ void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType);
 
 void Lay_AdvertisementMobile (void);
 
-void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[]);
+void Lay_IndentDependingOnLevel (unsigned Level,
+				 Lay_LastItem_t IsLastItemInLevel[],
+				 Lay_HorizontalLineAtRight_t HorizontalLineAtRight);
 
 void Lay_HelpPlainEditor (void);
 void Lay_HelpRichEditor (void);

@@ -172,19 +172,25 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
 /****************** Put inline button to register students *******************/
 /*****************************************************************************/
 
-void Enr_PutButtonInlineToRegisterStds (long CrsCod)
+void Enr_PutButtonInlineToRegisterStds (long CrsCod,
+				        unsigned Level,Lay_LastItem_t IsLastItemInLevel[],
+					bool Highlight)
   {
    extern const char *Txt_Register_students;
 
-   // if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
    if (Rol_GetMyRoleInCrs (CrsCod) == Rol_TCH)	// I am a teacher in the given course
       if (!Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
 				 1 << Rol_STD))	// No students in course
 	{
-	 Frm_BeginForm (ActReqEnrSevStd);
-	    ParCod_PutPar (ParCod_Crs,CrsCod);
-	    Btn_PutCreateButtonInline (Txt_Register_students);
-	 Frm_EndForm ();
+	 HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
+				   NULL);
+	    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,
+					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
+	    Frm_BeginForm (ActReqEnrSevStd);
+	       ParCod_PutPar (ParCod_Crs,CrsCod);
+	       Btn_PutCreateButtonInline (Txt_Register_students);
+	    Frm_EndForm ();
+	 HTM_LI_End ();
 	}
   }
 

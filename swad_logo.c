@@ -88,10 +88,11 @@ void Lgo_DrawLogo (Hie_Level_t Level,
      };
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
-   bool LogoFound;
-   long InsCod;
-   long CtrCod;
-   long DegCod;
+   bool LogoFound = false;
+   long InsCod = HieCod;
+   long CtrCod = HieCod;
+   long DegCod = HieCod;
+   long CrsCod = HieCod;
    char *URL;
    char *Icon;
    bool ClassNotEmpty;
@@ -102,16 +103,13 @@ void Lgo_DrawLogo (Hie_Level_t Level,
       if (HieCod > 0)	// Institution, center or degree exists
 	{
 	 /* Course */
-	 LogoFound = false;
 
 	 /* Degree */
 	 if (!LogoFound && Level >= Hie_DEG)
 	   {
 	    Folder = Cfg_FOLDER_DEG;
-	    if (Level >= Hie_CRS)	// && !LogoFound
-	       DegCod = Crs_DB_GetDegCodOfCourseByCod (HieCod);
-	    else
-	       DegCod = HieCod;
+	    if (Level >= Hie_CRS)
+	       DegCod = Crs_DB_GetDegCodOfCourseByCod (CrsCod);
 	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_DEG_PUBLIC,
 		      (unsigned) (DegCod % 100),
@@ -126,7 +124,7 @@ void Lgo_DrawLogo (Hie_Level_t Level,
 	 if (!LogoFound && Level >= Hie_CTR)
 	   {
 	    Folder = Cfg_FOLDER_CTR;
-	    if (Level >= Hie_DEG)	// && !LogoFound
+	    if (Level >= Hie_DEG)
 	       CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (DegCod);
 	    else
 	       CtrCod = HieCod;
@@ -144,10 +142,8 @@ void Lgo_DrawLogo (Hie_Level_t Level,
 	 if (!LogoFound)
 	   {
 	    Folder = Cfg_FOLDER_INS;
-	    if (Level >= Hie_CTR)	// && !LogoFound
+	    if (Level >= Hie_CTR)
 	       InsCod = Ctr_DB_GetInsCodOfCenterByCod (CtrCod);
-	    else
-	       InsCod = HieCod;
 	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
 		      Cfg_PATH_INS_PUBLIC,
 		      (unsigned) (InsCod % 100),
