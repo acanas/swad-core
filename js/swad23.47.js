@@ -55,7 +55,7 @@ function handleMatchKeys(event) {
 /*****************************************************************************/
 
 function submitForm(FormId) {
-	var Form = document.getElementById(FormId);
+	const Form = document.getElementById(FormId);
 	
 	if (Form)
 		Form.submit();
@@ -77,7 +77,7 @@ function submitForm(FormId) {
 // WriteDateOnSameDay = false ==> don't write date if it's the same day than the last call
 // WriteWeekDay = true ==> write day of the week ('monday', 'tuesday'...)
 // WriteHMS = 3 least significant bits for hour, minute and second
-var txtToday = [
+const txtToday = [
 	"",					// Unknown
 	"Avui",				// CA
 	"Heute",			// DE
@@ -88,6 +88,7 @@ var txtToday = [
 	"Oggi",				// IT
 	"Dzisiaj",			// PL
 	"Hoje",				// PT
+	"Bug&uuml;n",		// TR
 ];
 
 function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
@@ -1016,6 +1017,30 @@ function moveNewTimelineToTimeline () {
 /************* Refresh old publications in timeline using AJAX ***************/
 /*****************************************************************************/
 
+// See https://webdesign.tutsplus.com/how-to-implement-infinite-scrolling-with-javascript--cms-37055t
+
+var throttleWait;
+
+const throttle = (callback, time) => {
+	if (throttleWait) return;
+	throttleWait = true;
+
+	setTimeout(() => {
+		callback();
+		throttleWait = false;
+	}, time);
+};
+
+const handleInfiniteScroll = () => {
+	throttle(() => {
+		const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 320;
+
+		if (endOfPage)
+			refreshOldTimeline ();
+
+	}, 250);
+};
+
 // This function is called when user clicks in 'See more'
 
 var objXMLHttpReqOldTml = false;
@@ -1066,9 +1091,12 @@ function readOldTimelineData () {
 					for (var i=0; i<countOldTimeline; i++)
 						timeline.appendChild(oldTimeline.firstChild);
 				}
-				else	// No old publications retrieved, so we have reached the oldest pub.
-						// Hide container with link to get old publications
+				else {	// No old publications retrieved, so we have reached the oldest pub.
+					// Remove event listener
+					window.removeEventListener("scroll", handleInfiniteScroll);
+					// Hide container with link to get old publications
 					document.getElementById("view_old_pubs_container").style.display = 'none';
+				}
 			}
 		}
 }
