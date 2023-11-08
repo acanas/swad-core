@@ -1018,27 +1018,18 @@ function moveNewTimelineToTimeline () {
 /*****************************************************************************/
 
 // See https://webdesign.tutsplus.com/how-to-implement-infinite-scrolling-with-javascript--cms-37055t
+// See https://www.educative.io/answers/how-to-implement-infinite-scrolling-in-javascript
 
-var throttleWait;
+var refreshingOldTimeline = false;
 
-const throttle = (callback, time) => {
-	if (throttleWait) return;
-	throttleWait = true;
+function handleInfiniteScroll () {
+	if (refreshingOldTimeline) return;
 
-	setTimeout(() => {
-		callback();
-		throttleWait = false;
-	}, time);
-};
-
-const handleInfiniteScroll = () => {
-	throttle(() => {
-		const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 320;
-
-		if (endOfPage)
-			refreshOldTimeline ();
-
-	}, 250);
+	const endOfPage = window.scrollY + window.innerHeight >= document.body.scrollHeight - 100;
+	if (endOfPage) {
+		refreshingOldTimeline = true;
+		refreshOldTimeline ();
+	}
 };
 
 // This function is called when user clicks in 'See more'
@@ -1097,6 +1088,8 @@ function readOldTimelineData () {
 					// Hide container with link to get old publications
 					document.getElementById("view_old_pubs_container").style.display = 'none';
 				}
+				
+				refreshingOldTimeline = false;	// Refreshing is finished
 			}
 		}
 }

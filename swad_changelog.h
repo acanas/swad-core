@@ -637,7 +637,7 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 #define CSS_FILE		"swad23.46.1.css"
 #define JS_FILE			"swad23.47.js"
 /*
-	Version 23.47:    Nov 08, 2023  Infinite scroll in timeline. (335565 lines)
+	Version 23.47:    Nov 08, 2023  Infinite scroll in timeline. (335561 lines)
 	Version 23.46.1:  Nov 07, 2023  Improvements in responsive design. (? lines)
 	Version 23.46:    Nov 07, 2023  Code refactoring and layout changes in lists of my courses, forums and chat. (335525 lines)
 	Version 23.45:    Nov 07, 2023  Improvements in responsive design. (335468 lines)
