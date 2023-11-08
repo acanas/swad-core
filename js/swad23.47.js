@@ -1023,10 +1023,9 @@ function moveNewTimelineToTimeline () {
 var refreshingOldTimeline = false;
 
 function handleInfiniteScroll () {
-	if (refreshingOldTimeline) return;
+	if (refreshingOldTimeline) return;	// Don't check scroll while refreshing
 
-	const endOfPage = window.scrollY + window.innerHeight >= document.body.scrollHeight - 100;
-	if (endOfPage) {
+	if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 240) {	// Near the end of the page
 		refreshingOldTimeline = true;
 		refreshOldTimeline ();
 	}
