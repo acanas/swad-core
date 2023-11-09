@@ -189,8 +189,8 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
      };
    static void (*PrgRsc_PutIconsResources[Vie_NUM_VIEW_TYPES]) (void *ItmCod) =
      {
-      [Vie_VIEW] = PrgRsc_PutIconsViewResources,
-      [Vie_EDIT] = PrgRsc_PutIconsEditResources,
+      [Vie_VIEW] = PrgRsc_PutIconsEditResources,
+      [Vie_EDIT] = PrgRsc_PutIconsViewResources,
      };
 
    /***** Trivial check *****/

@@ -490,16 +490,24 @@ void TmlPub_PutLinkToViewOldPubs (void)
    extern const char *Txt_See_more;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"view_old_pubs_container\""
-	          " class=\"Tml_WIDTH Tml_SEP BG_HIGHLIGHT\"");
+   HTM_DIV_Begin ("id=\"view_old_pubs_container\" class=\"Tml_WIDTH Tml_SEP\"");
 
-      /***** Put button to refresh *****/
-      HTM_BUTTON_Begin (Txt_See_more,
-			"class=\"BT_LINK FORM_IN_%s BOLD\""
-			" onclick=\"refreshOldTimeline();return false;\"",
-			The_GetSuffix ());
-	 Ico_PutIconTextUpdate (Txt_See_more);
-      HTM_BUTTON_End ();
+     /***** Put button to refresh *****/
+     // div is visible. When refresh starts, div is hidden
+      HTM_DIV_Begin ("id=\"view_more\"");
+	 HTM_BUTTON_Begin (Txt_See_more,
+			   "class=\"BT_LINK FORM_IN_%s BOLD\""
+			   " onclick=\"refreshOldTimeline();return false;\"",
+			   The_GetSuffix ());
+	    Ico_PutIconTextUpdate (Txt_See_more);
+	 HTM_BUTTON_End ();
+      HTM_DIV_End ();
+
+      /***** Put icon refreshing *****/
+      // div is hidden. When refresh starts, div is unhidden
+      HTM_DIV_Begin ("id=\"loading_old_timeline\" style=\"display:none;\"");
+	 Ico_PutIcon ("Spin-1s-200px.gif",Ico_BLACK,Txt_See_more,"Tml_WAIT_IMG");
+      HTM_DIV_End ();
 
    /***** End container *****/
    HTM_DIV_End ();

@@ -1025,7 +1025,8 @@ var refreshingOldTimeline = false;
 function handleInfiniteScroll () {
 	if (refreshingOldTimeline) return;	// Don't check scroll while refreshing
 
-	if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 240) {	// Near the end of the page
+	if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 360) {
+		// Near the end of the page (subtract at least 360 pixels so it works well on mobile)
 		refreshingOldTimeline = true;
 		refreshOldTimeline ();
 	}
@@ -1059,6 +1060,10 @@ function refreshOldTimeline () {
 }
 
 function readOldTimelineData () {
+	// Hide view more button, unhide waiting image
+	document.getElementById("view_more").style.display = 'none';
+	document.getElementById("loading_old_timeline").style.display = '';
+
 	if (objXMLHttpReqOldTml.readyState == 4)	// Check if data have been received
 		if (objXMLHttpReqOldTml.status == 200) {
 			// Access to UL with the old timeline
@@ -1080,6 +1085,9 @@ function readOldTimelineData () {
 					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
 						timeline.appendChild(oldTimeline.firstChild);
+
+					// Unhide view more button only if oldest pub not reached
+					document.getElementById("view_more").style.display = '';
 				}
 				else {	// No old publications retrieved, so we have reached the oldest pub.
 					// Remove event listener
@@ -1087,7 +1095,10 @@ function readOldTimelineData () {
 					// Hide container with link to get old publications
 					document.getElementById("view_old_pubs_container").style.display = 'none';
 				}
-				
+
+				// Hide waiting image
+				document.getElementById("loading_old_timeline").style.display = 'none';
+
 				refreshingOldTimeline = false;	// Refreshing is finished
 			}
 		}
