@@ -193,14 +193,12 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action
 
       /***** Link to action *****/
       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Ctr->FullName),
-                               "class=\"BT_LINK LT\"");
+                               "class=\"LT BT_LINK\"");
       Str_FreeGoToTitle ();
 
 	 /***** Center logo and name *****/
-	 Lgo_DrawLogo (Hie_CTR,
-		       Ctr->HieCod,
-		       Ctr->ShrtName,
-		       16,ClassLogo);
+	 Lgo_DrawLogo (Hie_CTR,Ctr->HieCod,Ctr->ShrtName,
+		       "ICO16x16",ClassLogo);
 	 HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
       /***** End link *****/
@@ -794,10 +792,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Center logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
-	       Lgo_DrawLogo (Hie_CTR,
-			     Ctr->HieCod,
-			     Ctr->ShrtName,
-			     20,NULL);
+	       Lgo_DrawLogo (Hie_CTR,Ctr->HieCod,Ctr->ShrtName,
+			     "ICO20x20",NULL);
 	    HTM_TD_End ();
 
 	    /* Place */
@@ -1256,10 +1252,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Center logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
-	    Lgo_DrawLogo (Hie_CTR,
-			  -1L,
-			  "",
-			  20,NULL);
+	    Lgo_DrawLogo (Hie_CTR,-1L,"",
+			  "ICO20x20",NULL);
 	 HTM_TD_End ();
 
 	 /***** Place *****/

@@ -456,7 +456,7 @@ static void Hie_DrawLogo (void)
 	 Lgo_DrawLogo (LogoScope[Gbl.Hierarchy.Level],
 		       *LogoCode[Gbl.Hierarchy.Level],
 		       Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName,
-		       40,"TOP_LOGO");
+		       "ICO40x40","TOP_LOGO");
 	 break;
      }
   }

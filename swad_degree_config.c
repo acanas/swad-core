@@ -232,7 +232,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       Lgo_DrawLogo (Hie_CTR,
 			     Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			     Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
-			     20,"LM");
+			     "ICO20x20","LM");
 	       HTM_NBSP ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CTR].FullName);
 	       if (ViewType == Vie_VIEW)

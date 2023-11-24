@@ -70,7 +70,7 @@ void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level)
       Lgo_DrawLogo (LevelLogo,
 	            Gbl.Hierarchy.Node[LevelLogo].HieCod,
 	            Gbl.Hierarchy.Node[LevelLogo].ShrtName,
-		    64,NULL);
+		    "ICO64x64",NULL);
       HTM_BR ();
       HTM_Txt (Gbl.Hierarchy.Node[Level].FullName);
 

@@ -445,22 +445,22 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID;
-   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
    /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-      Box_BoxBegin (StrRecordWidth,Txt_ID,
-		    Acc_PutLinkToRemoveMyAccount,NULL,
-		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      HTM_DIV_Begin ("class=\"REC_CONT\"");
+	 Box_BoxBegin ("100%",Txt_ID,
+		       Acc_PutLinkToRemoveMyAccount,NULL,
+		       Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-	 /***** Show form to change ID *****/
-	 ID_ShowFormChangeUsrID (Usr_ME,IShouldFillInID);
+	    /***** Show form to change ID *****/
+	    ID_ShowFormChangeUsrID (Usr_ME,IShouldFillInID);
 
-      /***** End box *****/
-      Box_BoxEnd ();
+	 /***** End box *****/
+	 Box_BoxEnd ();
+      HTM_DIV_End ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -474,23 +474,23 @@ void ID_ShowFormChangeOtherUsrID (void)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_ID;
-   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
 
    /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-      Box_BoxBegin (StrRecordWidth,Txt_ID,
-		    NULL,NULL,
-		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      HTM_DIV_Begin ("class=\"REC_CONT\"");
+	 Box_BoxBegin ("100%",Txt_ID,
+		       NULL,NULL,
+		       Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-	 /***** Show form to change ID *****/
-	 ID_ShowFormChangeUsrID (Usr_OTHER,
-				 false);	// IShouldFillInID
+	    /***** Show form to change ID *****/
+	    ID_ShowFormChangeUsrID (Usr_OTHER,
+				    false);	// IShouldFillInID
 
-      /***** End box *****/
-      Box_BoxEnd ();
+	 /***** End box *****/
+	 Box_BoxEnd ();
+     HTM_DIV_End ();
 
    /***** End section *****/
    HTM_SECTION_End ();

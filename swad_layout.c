@@ -1515,7 +1515,7 @@ void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType)
 	       Lgo_DrawLogo (Hie_INS,
 			     Hie[Hie_INS].HieCod,
 			     Hie[Hie_INS].ShrtName,
-			     40,NULL);
+			     "ICO40x40",NULL);
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	      }
@@ -1569,7 +1569,7 @@ void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType)
 	       Lgo_DrawLogo (Hie_DEG,
 			     Hie[Hie_DEG].HieCod,
 			     Hie[Hie_DEG].ShrtName,
-			     40,NULL);
+			     "ICO40x40",NULL);
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	      }

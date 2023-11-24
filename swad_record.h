@@ -35,8 +35,6 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Rec_RECORD_WIDTH	560
-
 #define Rec_MAX_CHARS_NAME_FIELD	(128 - 1)	// 127
 #define Rec_MAX_BYTES_NAME_FIELD	((Rec_MAX_CHARS_NAME_FIELD + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 

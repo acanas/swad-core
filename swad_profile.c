@@ -387,56 +387,61 @@ void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
    /***** Get figures *****/
    Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
 
-   /***** Left list *****/
-   /* Begin left list */
-   HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONT\"");
-      HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
-                    The_GetSuffix ());
+   /***** Container *****/
+   HTM_DIV_Begin ("class=\"PRF_FIG_CONT\"");
 
-	 /* Time since first click */
-	 Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
-
-	 /* Number of courses in which the user has a role */
-	 for (Role  = Rol_TCH;
-	      Role >= Rol_STD;
-	      Role--)
-	    Prf_ShowNumCrssWithRole (UsrDat,Role);
-
-	 /* Number of files currently published */
-	 Prf_ShowNumFilesCurrentlyPublished (UsrDat);
-
-      /* End left list */
-      HTM_UL_End ();
-   HTM_DIV_End ();
-
-   /***** Right list *****/
-   HTM_DIV_Begin ("class=\"PRF_FIG_RIGHT_CONT\"");
-
-      UsrIsBannedFromRanking = Prf_DB_CheckIfUsrBanned (UsrDat->UsrCod);
-      if (!UsrIsBannedFromRanking)
-	{
-	 /* Begin right list */
+      /***** Left list *****/
+      /* Begin left list */
+      HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_RIGHT\"");
 	 HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
-	               The_GetSuffix ());
+		       The_GetSuffix ());
 
-	    /* Number of clicks */
-	    Prf_ShowNumClicks (UsrDat,&UsrFigures);
+	    /* Time since first click */
+	    Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
 
-	    /* Number of file views */
-	    Prf_ShowNumFileViews (UsrDat,&UsrFigures);
+	    /* Number of courses in which the user has a role */
+	    for (Role  = Rol_TCH;
+		 Role >= Rol_STD;
+		 Role--)
+	       Prf_ShowNumCrssWithRole (UsrDat,Role);
 
-	    /* Number of timeline publications */
-	    Prf_ShowNumTimelinePubs (UsrDat,&UsrFigures);
+	    /* Number of files currently published */
+	    Prf_ShowNumFilesCurrentlyPublished (UsrDat);
 
-	    /* Number of posts in forums */
-	    Prf_ShowNumForumPosts (UsrDat,&UsrFigures);
-
-	    /* Number of messages sent */
-	    Prf_ShowNumMessagesSent (UsrDat,&UsrFigures);
-
-	 /* End right list */
+	 /* End left list */
 	 HTM_UL_End ();
-	}
+      HTM_DIV_End ();
+
+      /***** Right list *****/
+      HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_RIGHT\"");
+
+	 UsrIsBannedFromRanking = Prf_DB_CheckIfUsrBanned (UsrDat->UsrCod);
+	 if (!UsrIsBannedFromRanking)
+	   {
+	    /* Begin right list */
+	    HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
+			  The_GetSuffix ());
+
+	       /* Number of clicks */
+	       Prf_ShowNumClicks (UsrDat,&UsrFigures);
+
+	       /* Number of file views */
+	       Prf_ShowNumFileViews (UsrDat,&UsrFigures);
+
+	       /* Number of timeline publications */
+	       Prf_ShowNumTimelinePubs (UsrDat,&UsrFigures);
+
+	       /* Number of posts in forums */
+	       Prf_ShowNumForumPosts (UsrDat,&UsrFigures);
+
+	       /* Number of messages sent */
+	       Prf_ShowNumMessagesSent (UsrDat,&UsrFigures);
+
+	    /* End right list */
+	    HTM_UL_End ();
+	   }
+
+      HTM_DIV_End ();
 
    HTM_DIV_End ();
   }

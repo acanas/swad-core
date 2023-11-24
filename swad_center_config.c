@@ -583,7 +583,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       Lgo_DrawLogo (Hie_INS,
 			     Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			     Gbl.Hierarchy.Node[Hie_INS].ShrtName,
-			     20,"LM");
+			     "ICO20x20","LM");
 	       HTM_NBSP ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
 

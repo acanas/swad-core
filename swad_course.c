@@ -267,7 +267,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			Lgo_DrawLogo (Hie_INS,
 				      Hie[Hie_INS].HieCod,
 				      Hie[Hie_INS].ShrtName,
-				      16,NULL);
+				      "ICO16x16",NULL);
 			HTM_TxtF ("&nbsp;%s",Hie[Hie_INS].ShrtName);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
@@ -304,7 +304,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   Lgo_DrawLogo (Hie_CTR,
 					 Hie[Hie_CTR].HieCod,
 					 Hie[Hie_CTR].ShrtName,
-					 16,NULL);
+					 "ICO16x16",NULL);
 			   HTM_TxtF ("&nbsp;%s",Hie[Hie_CTR].ShrtName);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
@@ -341,7 +341,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			      Lgo_DrawLogo (Hie_DEG,
 					    Hie[Hie_DEG].HieCod,
 					    Hie[Hie_DEG].ShrtName,
-					    16,NULL);
+					    "ICO16x16",NULL);
 			      HTM_TxtF ("&nbsp;%s",Hie[Hie_DEG].ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
@@ -382,7 +382,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 				 Lgo_DrawLogo (Hie_CRS,
 					       Hie[Hie_CRS].HieCod,
 					       Hie[Hie_CRS].ShrtName,
-					       16,NULL);
+					       "ICO16x16",NULL);
 				    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
 				       HTM_TxtF ("&nbsp;%s",Hie[Hie_CRS].ShrtName);
 				    HTM_DIV_End ();
@@ -2175,10 +2175,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
-	       Lgo_DrawLogo (Hie_DEG,
-			     Deg.HieCod,
-			     Deg.ShrtName,
-			     20,"CT");
+	       Lgo_DrawLogo (Hie_DEG,Deg.HieCod,Deg.ShrtName,
+			     "ICO20x20","CT");
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

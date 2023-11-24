@@ -238,7 +238,7 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       Lgo_DrawLogo (Hie_DEG,
 			     Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			     Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
-			     20,"LM");
+			     "ICO20x20","LM");
 	       HTM_NBSP ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
 	       if (ViewType == Vie_VIEW)

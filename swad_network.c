@@ -197,68 +197,68 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    extern const char *Txt_Save_changes;
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
-   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    char StrName[32];
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Net_MY_WEBS_ID);
 
       /***** Begin box *****/
-      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-      Box_BoxBegin (StrRecordWidth,Txt_Webs_social_networks,
-		    Net_PutIconsWebsSocialNetworks,NULL,
-		    Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
+      HTM_DIV_Begin ("class=\"REC_CONT\"");
+	 Box_BoxBegin ("100%",Txt_Webs_social_networks,
+		       Net_PutIconsWebsSocialNetworks,NULL,
+		       Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
-	 /***** Begin form *****/
-	 Frm_BeginFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
+	    /***** Begin form *****/
+	    Frm_BeginFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
 
-	    /***** Begin table *****/
-	    HTM_TABLE_BeginPadding (2);
+	       /***** Begin table *****/
+	       HTM_TABLE_BeginWidePadding (2);
 
-	       /***** List webs and social networks *****/
-	       for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
-		    NumURL <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
-		    NumURL++)
-		 {
-		  /***** Get user's web / social network from database *****/
-		  Net_DB_GetURL (Gbl.Usrs.Me.UsrDat.UsrCod,NumURL,URL);
+		  /***** List webs and social networks *****/
+		  for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
+		       NumURL <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
+		       NumURL++)
+		    {
+		     /***** Get user's web / social network from database *****/
+		     Net_DB_GetURL (Gbl.Usrs.Me.UsrDat.UsrCod,NumURL,URL);
 
-		  /***** Row for this web / social network *****/
-		  snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);
-		  HTM_TR_Begin (NULL);
+		     /***** Row for this web / social network *****/
+		     snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);
+		     HTM_TR_Begin (NULL);
 
-		     HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
-			HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
-					 StrName,The_GetSuffix ());
-			   Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
-			                Net_WebsAndSocialNetworksTitle[NumURL],
-			                "CONTEXT_OPT CONTEXT_ICO16x16");
-			   HTM_TxtF ("&nbsp;%s:",Net_WebsAndSocialNetworksTitle[NumURL]);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
+			HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
+			   HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
+					    StrName,The_GetSuffix ());
+			      Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
+					   Net_WebsAndSocialNetworksTitle[NumURL],
+					   "CONTEXT_OPT CONTEXT_ICO16x16");
+			      HTM_TxtF ("&nbsp;%s:",Net_WebsAndSocialNetworksTitle[NumURL]);
+			   HTM_LABEL_End ();
+			HTM_TD_End ();
 
-		     HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-			HTM_INPUT_URL (StrName,URL,HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"%s\""
-				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				       StrName,
-				       The_GetSuffix ());
-		     HTM_TD_End ();
+			HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+			   HTM_INPUT_URL (StrName,URL,HTM_DONT_SUBMIT_ON_CHANGE,
+					  "id=\"%s\""
+					  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+					  StrName,
+					  The_GetSuffix ());
+			HTM_TD_End ();
 
-		  HTM_TR_End ();
-		 }
+		     HTM_TR_End ();
+		    }
 
-	    /***** End table *****/
-	    HTM_TABLE_End ();
+	       /***** End table *****/
+	       HTM_TABLE_End ();
 
-	    /***** Confirm button *****/
-	    Btn_PutConfirmButton (Txt_Save_changes);
+	       /***** Confirm button *****/
+	       Btn_PutConfirmButton (Txt_Save_changes);
 
-	 /***** End form *****/
-	 Frm_EndForm ();
+	    /***** End form *****/
+	    Frm_EndForm ();
 
-      /***** End box *****/
-      Box_BoxEnd ();
+	 /***** End box *****/
+	 Box_BoxEnd ();
+      HTM_DIV_End ();
 
    /***** End section *****/
    HTM_SECTION_End ();

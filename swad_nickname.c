@@ -179,7 +179,6 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    unsigned NumNicks;
    unsigned NumNick;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
@@ -212,121 +211,123 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
       NumNicks = Nck_DB_GetUsrNicknames (&mysql_res,UsrDat[MeOrOther]->UsrCod);
 
       /***** Begin box *****/
-      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-      Box_BoxBegin (StrRecordWidth,Txt_Nickname,
-		    Acc_PutLinkToRemoveMyAccount,NULL,
-		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      HTM_DIV_Begin ("class=\"REC_CONT\"");
+	 Box_BoxBegin ("100%",Txt_Nickname,
+		       Acc_PutLinkToRemoveMyAccount,NULL,
+		       Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-	 /***** Show possible alerts *****/
-	 Ale_ShowAlerts (Nck_NICKNAME_SECTION_ID);
+	    /***** Show possible alerts *****/
+	    Ale_ShowAlerts (Nck_NICKNAME_SECTION_ID);
 
-	 /***** Help message *****/
-	 if (IMustFillNickname)
-	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+	    /***** Help message *****/
+	    if (IMustFillNickname)
+	       Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
 
-	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-	    /***** List nicknames *****/
-	    for (NumNick  = 1;
-		 NumNick <= NumNicks;
-		 NumNick++)
-	      {
-	       /* Get nickname */
-	       row = mysql_fetch_row (mysql_res);
-
-	       if (NumNick == 1)
+	       /***** List nicknames *****/
+	       for (NumNick  = 1;
+		    NumNick <= NumNicks;
+		    NumNick++)
 		 {
-		  /* The first nickname is the current one */
-		  HTM_TR_Begin (NULL);
+		  /* Get nickname */
+		  row = mysql_fetch_row (mysql_res);
 
-		     /* Label */
-		     Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
-
-		     /* Data */
-		     HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
-		 }
-	       else	// NumNick >= 2
-		 {
-		  if (NumNick == 2)
+		  if (NumNick == 1)
 		    {
+		     /* The first nickname is the current one */
 		     HTM_TR_Begin (NULL);
 
 			/* Label */
-			Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
+			Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-			              The_GetSuffix ());
+			HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
+				      The_GetSuffix ());
+		    }
+		  else	// NumNick >= 2
+		    {
+		     if (NumNick == 2)
+		       {
+			HTM_TR_Begin (NULL);
+
+			   /* Label */
+			   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
+
+			   /* Data */
+			   HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
+					 The_GetSuffix ());
+		       }
+
+		     /* Form to remove old nickname */
+		     Ico_PutContextualIconToRemove (ActNck[MeOrOther].Remove,Nck_NICKNAME_SECTION_ID,
+						    FuncParsRemove[MeOrOther],row[0]);
 		    }
 
-		  /* Form to remove old nickname */
-		  Ico_PutContextualIconToRemove (ActNck[MeOrOther].Remove,Nck_NICKNAME_SECTION_ID,
-						 FuncParsRemove[MeOrOther],row[0]);
-		 }
+		  /* Nickname */
+		  HTM_TxtF ("@%s",row[0]);
 
-	       /* Nickname */
-	       HTM_TxtF ("@%s",row[0]);
+		  /* Link to QR code */
+		  if (NumNick == 1 && UsrDat[MeOrOther]->Nickname[0])
+		     QR_PutLinkToPrintQRCode (ActPrnUsrQR,
+					      Usr_PutParOtherUsrCodEncrypted,UsrDat[MeOrOther]->EnUsrCod);
 
-	       /* Link to QR code */
-	       if (NumNick == 1 && UsrDat[MeOrOther]->Nickname[0])
-		  QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-					   Usr_PutParOtherUsrCodEncrypted,UsrDat[MeOrOther]->EnUsrCod);
-
-	       /* Form to change the nickname */
-	       if (NumNick > 1)
-		 {
-		  HTM_BR ();
-	          Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
-	             if (MeOrOther == Usr_OTHER)
-		        Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
-		     Par_PutParString (NULL,"NewNick",NickWithArr);	// Nickname
-			Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
-		  Frm_EndForm ();
-		 }
-
-	       if (NumNick == 1 ||
-		   NumNick == NumNicks)
-		 {
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-		 }
-	       else
-		  HTM_BR ();
-	      }
-
-	    /***** Form to enter new nickname *****/
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
-				NumNicks ? Txt_New_nickname :	// A new nickname
-					   Txt_Nickname);	// The first nickname
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-	                     The_GetSuffix ());
-	          Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
-	             if (MeOrOther == Usr_OTHER)
-		        Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
-			       UsrDat[MeOrOther]->Nickname);
-		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-				     "id=\"NewNick\" class=\"INPUT_%s\""
-				     " size=\"16\"",
-				     The_GetSuffix ());
+		  /* Form to change the nickname */
+		  if (NumNick > 1)
+		    {
 		     HTM_BR ();
-		     Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
-							   Txt_Save_changes);	// I have no nickname yet);
-		  Frm_EndForm ();
-	       HTM_TD_End ();
+		     Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
+			if (MeOrOther == Usr_OTHER)
+			   Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
+			Par_PutParString (NULL,"NewNick",NickWithArr);	// Nickname
+			   Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
+		     Frm_EndForm ();
+		    }
 
-	    HTM_TR_End ();
+		  if (NumNick == 1 ||
+		      NumNick == NumNicks)
+		    {
+			HTM_TD_End ();
+		     HTM_TR_End ();
+		    }
+		  else
+		     HTM_BR ();
+		 }
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
+	       /***** Form to enter new nickname *****/
+	       HTM_TR_Begin (NULL);
+
+		  /* Label */
+		  Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
+				   NumNicks ? Txt_New_nickname :	// A new nickname
+					      Txt_Nickname);	// The first nickname
+
+		  /* Data */
+		  HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
+				The_GetSuffix ());
+		     Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
+			if (MeOrOther == Usr_OTHER)
+			   Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
+				  UsrDat[MeOrOther]->Nickname);
+			HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
+					NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+					"id=\"NewNick\" class=\"INPUT_%s\""
+					" size=\"16\"",
+					The_GetSuffix ());
+			HTM_BR ();
+			Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
+							      Txt_Save_changes);	// I have no nickname yet);
+		     Frm_EndForm ();
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	 /***** End table and box *****/
+	 Box_BoxTableEnd ();
+      HTM_DIV_End ();
 
    /***** End section *****/
    HTM_SECTION_End ();

@@ -1004,93 +1004,86 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    unsigned Day;
    unsigned NumDaysSelectedMonth;
 
-   /***** Begin table *****/
-   HTM_TABLE_Begin (NULL);
-      HTM_TR_Begin (NULL);
 
-	 if (asprintf (&FuncOnChange,"adjustDateForm('%s');",Id) < 0)
-	    Err_NotEnoughMemoryExit ();
+   if (asprintf (&FuncOnChange,"adjustDateForm('%s');",Id) < 0)
+      Err_NotEnoughMemoryExit ();
 
-	 /***** Year *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
-			      "id=\"%sYear\" name=\"%sYear\""
-			      " class=\"INPUT_%s\"%s",
-			      Id,Id,
-			      The_GetSuffix (),
-			      Disabled ? " disabled=\"disabled\"" :
-				         "");
-	       HTM_OPTION (HTM_Type_STRING,"0",
-		           HTM_OPTION_UNSELECTED,
-		           HTM_OPTION_ENABLED,
-			   "-");
-	       for (Year  = FirstYear;
-		    Year <= LastYear;
-		    Year++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-			      Year == DateSelected->Year ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
-			      "%u",Year);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+   /***** Year *****/
+   // HTM_TD_Begin ("class=\"CM\"");
+      HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+			"id=\"%sYear\" name=\"%sYear\""
+			" class=\"INPUT_%s\"%s",
+			Id,Id,
+			The_GetSuffix (),
+			Disabled ? " disabled=\"disabled\"" :
+				   "");
+	 HTM_OPTION (HTM_Type_STRING,"0",
+		     HTM_OPTION_UNSELECTED,
+		     HTM_OPTION_ENABLED,
+		     "-");
+	 for (Year  = FirstYear;
+	      Year <= LastYear;
+	      Year++)
+	    HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+			Year == DateSelected->Year ? HTM_OPTION_SELECTED :
+						     HTM_OPTION_UNSELECTED,
+			HTM_OPTION_ENABLED,
+			"%u",Year);
+      HTM_SELECT_End ();
+   // HTM_TD_End ();
 
-	 /***** Month *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
-			      "id=\"%sMonth\" name=\"%sMonth\""
-			      " class=\"INPUT_%s\"%s",
-			      Id,Id,
-			      The_GetSuffix (),
-			      Disabled ? " disabled=\"disabled\"" :
-				         "");
-	       HTM_OPTION (HTM_Type_STRING,"0",
-		           HTM_OPTION_UNSELECTED,
-		           HTM_OPTION_ENABLED,
-			   "-");
-	       for (Month  =  1;
-		    Month <= 12;
-		    Month++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,
-			      Month == DateSelected->Month ? HTM_OPTION_SELECTED :
-							     HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
-			      "%s",Txt_MONTHS_SMALL[Month - 1]);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+   /***** Month *****/
+   // HTM_TD_Begin ("class=\"CM\"");
+      HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
+			"id=\"%sMonth\" name=\"%sMonth\""
+			" class=\"INPUT_%s\"%s",
+			Id,Id,
+			The_GetSuffix (),
+			Disabled ? " disabled=\"disabled\"" :
+				   "");
+	 HTM_OPTION (HTM_Type_STRING,"0",
+		     HTM_OPTION_UNSELECTED,
+		     HTM_OPTION_ENABLED,
+		     "-");
+	 for (Month  =  1;
+	      Month <= 12;
+	      Month++)
+	    HTM_OPTION (HTM_Type_UNSIGNED,&Month,
+			Month == DateSelected->Month ? HTM_OPTION_SELECTED :
+						       HTM_OPTION_UNSELECTED,
+			HTM_OPTION_ENABLED,
+			"%s",Txt_MONTHS_SMALL[Month - 1]);
+      HTM_SELECT_End ();
+   // HTM_TD_End ();
 
-	 free (FuncOnChange);
+   free (FuncOnChange);
 
-	 /***** Day *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,NULL,
-			      "id=\"%sDay\" name=\"%sDay\""
-	                      " class=\"INPUT_%s\"%s",
-			      Id,Id,
-			      The_GetSuffix (),
-			      Disabled ? " disabled=\"disabled\"" :
-				         "");
-		  HTM_OPTION (HTM_Type_STRING,"0",
-			      HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
-			      "-");
-		  NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
-								      ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
-												    Dat_NumDaysMonth[DateSelected->Month]);
-		  for (Day  = 1;
-		       Day <= NumDaysSelectedMonth;
-		       Day++)
-		     HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-				 Day == DateSelected->Day ? HTM_OPTION_SELECTED :
-							    HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
-				 "%u",Day);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
-
-      /***** End table *****/
-      HTM_TR_End ();
-   HTM_TABLE_End ();
+   /***** Day *****/
+   // HTM_TD_Begin ("class=\"CM\"");
+      HTM_SELECT_Begin (SubmitOnChange,NULL,
+			"id=\"%sDay\" name=\"%sDay\""
+			" class=\"INPUT_%s\"%s",
+			Id,Id,
+			The_GetSuffix (),
+			Disabled ? " disabled=\"disabled\"" :
+				   "");
+	    HTM_OPTION (HTM_Type_STRING,"0",
+			HTM_OPTION_UNSELECTED,
+			HTM_OPTION_ENABLED,
+			"-");
+	    NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
+								((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
+											      Dat_NumDaysMonth[DateSelected->Month]);
+	    for (Day  = 1;
+		 Day <= NumDaysSelectedMonth;
+		 Day++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Day,
+			   Day == DateSelected->Day ? HTM_OPTION_SELECTED :
+						      HTM_OPTION_UNSELECTED,
+			   HTM_OPTION_ENABLED,
+			   "%u",Day);
+      HTM_SELECT_End ();
+   // HTM_TD_End ();
   }
 
 /*****************************************************************************/

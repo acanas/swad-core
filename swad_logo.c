@@ -74,10 +74,8 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 /***************** Draw institution, center or degree logo *******************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (Hie_Level_t Level,
-		   long HieCod,
-		   const char *AltText,
-                   unsigned Size,const char *Class)
+void Lgo_DrawLogo (Hie_Level_t Level,long HieCod,const char *AltText,
+                   const char *IconClass,const char *Class)
   {
    static const char *HieIcon[Hie_NUM_LEVELS] =
      {
@@ -171,9 +169,8 @@ void Lgo_DrawLogo (Hie_Level_t Level,
 	       Err_NotEnoughMemoryExit ();
 
 	    HTM_IMG (URL,Icon,AltText,
-		     "class=\"ICO%ux%u"
-			     "%s%s\"",
-		     Size,Size,
+		     "class=\"%s%s%s\"",
+		     IconClass,
 		     ClassNotEmpty ? " " :
 				     "",
 		     ClassNotEmpty ? Class :
@@ -183,9 +180,8 @@ void Lgo_DrawLogo (Hie_Level_t Level,
 	   }
 	 else
 	    HTM_IMG (Cfg_URL_ICON_PUBLIC,HieIcon[Level],AltText,
-		     "class=\"ICO%ux%u ICO_%s_%s"
-			     "%s%s\"",
-		     Size,Size,
+		     "class=\"%s ICO_%s_%s%s%s\"",
+		     IconClass,
 		     Ico_GetPreffix (Ico_BLACK),The_GetSuffix (),
 		     ClassNotEmpty ? " " :
 				     "",
