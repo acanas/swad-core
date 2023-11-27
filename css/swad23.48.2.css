@@ -3036,13 +3036,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		overflow:hidden;
 		text-overflow:ellipsis;
 		color:#808080;
-		font-size:12pt;
+		font-size:14pt;
 		font-weight:bold;
 		}
 	.REC_NICK
 		{
 		color:#808080;
-		font-size:12pt;
+		font-size:13pt;
 		font-weight:bold;
 		}
 
@@ -3126,7 +3126,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	.REC_NICK
 		{
 		color:#808080;
-		font-size:13pt;
+		font-size:14pt;
 		font-weight:bold;
 		}
 

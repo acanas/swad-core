@@ -82,6 +82,8 @@ static const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Not_PutLinkToRSSFile (void);
+
 static bool Not_CheckIfICanEditNotices (void);
 static void Not_PutIconsListNotices (__attribute__((unused)) void *Args);
 static void Not_PutIconToAddNewNotice (void);
@@ -316,47 +318,44 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
    char StrWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
-   char PathRelRSSFile[PATH_MAX + 1];
    struct Not_Notice Notice;
    unsigned NumNot;
    unsigned NumNotices = 0;	// Initialized to avoid warning
-   char RSSLink[Cns_MAX_BYTES_WWW + 1];
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Level != Hie_CRS)	// No course selected
       return;
 
-   /***** Get notices from database *****/
    switch (TypeNoticesListing)
      {
       case Not_LIST_BRIEF_NOTICES:
+	 /***** Get notices from database *****/
 	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Not_LIST_FULL_NOTICES:
+	 /***** Get notices from database *****/
 	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
+
+	 /***** Begin box *****/
+	 snprintf (StrWidth,sizeof (StrWidth),"%upx",
+		   Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
+	 Box_BoxBegin (StrWidth,Txt_Notices,
+		       Not_PutIconsListNotices,NULL,
+		       Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
+	    if (!NumNotices)
+	       Ale_ShowAlert (Ale_INFO,Txt_No_notices);
 	 break;
      }
 
-   if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
-     {
-      /***** Begin box *****/
-      snprintf (StrWidth,sizeof (StrWidth),"%upx",
-		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
-      Box_BoxBegin (StrWidth,Txt_Notices,
-		    Not_PutIconsListNotices,NULL,
-		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
-	 if (!NumNotices)
-	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
-     }
-
-   /***** Show the notices *****/
+   /***** Show notices *****/
    for (NumNot = 0;
 	NumNot < NumNotices;
 	NumNot++)
      {
+      /* Get notice data */
       Not_GetNoticeDataFromRow (mysql_res,&Notice,TypeNoticesListing);
 
-      /* Draw the notice */
+      /* Draw notice */
       Not_DrawANotice (TypeNoticesListing,&Notice,
 		       (Notice.NotCod == HighlightNotCod));	// Highlighted?
      }
@@ -365,20 +364,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
      {
       case Not_LIST_BRIEF_NOTICES:
 	 /***** Link to RSS file *****/
-	 /* Create RSS file if not exists */
-	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
-		   Cfg_PATH_CRS_PUBLIC,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
-	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
-	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
-
-	 /* Put a link to the RSS file */
-	 HTM_DIV_Begin ("class=\"CM\"");
-	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
-	       Ico_PutIcon ("rss-square.svg",Ico_BLACK,"RSS","ICO16x16");
-	    HTM_A_End ();
-	 HTM_DIV_End ();
+	 Not_PutLinkToRSSFile ();
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 /***** End box *****/
@@ -391,6 +377,31 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
    /***** Mark possible notification as seen *****/
    Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_EVENT_NOTICE);
+  }
+
+/*****************************************************************************/
+/****************************** Link to RSS file *****************************/
+/*****************************************************************************/
+
+static void Not_PutLinkToRSSFile (void)
+  {
+   char PathRelRSSFile[PATH_MAX + 1];
+   char RSSLink[Cns_MAX_BYTES_WWW + 1];
+
+   /***** Create RSS file if not exists *****/
+   snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",
+	     Cfg_PATH_CRS_PUBLIC,
+	     Gbl.Hierarchy.Node[Hie_CRS].HieCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+   if (!Fil_CheckIfPathExists (PathRelRSSFile))
+      RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
+
+   /***** Put a link to the RSS file *****/
+   HTM_DIV_Begin ("class=\"CM\"");
+      RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
+	 Ico_PutIcon ("rss-square.svg",Ico_BLACK,"RSS","ICO16x16");
+      HTM_A_End ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
