@@ -39,7 +39,7 @@
 
 void Ins_SeeInsWithPendingCtrs (void);
 
-void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size);
+void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass);
 void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
                                         const char *ClassLogo);
 

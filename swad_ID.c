@@ -450,17 +450,15 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      HTM_DIV_Begin ("class=\"REC_CONT\"");
-	 Box_BoxBegin ("100%",Txt_ID,
-		       Acc_PutLinkToRemoveMyAccount,NULL,
-		       Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      Box_BoxBegin (NULL,Txt_ID,
+		    Acc_PutLinkToRemoveMyAccount,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-	    /***** Show form to change ID *****/
-	    ID_ShowFormChangeUsrID (Usr_ME,IShouldFillInID);
+	 /***** Show form to change ID *****/
+	 ID_ShowFormChangeUsrID (Usr_ME,IShouldFillInID);
 
-	 /***** End box *****/
-	 Box_BoxEnd ();
-      HTM_DIV_End ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -479,18 +477,16 @@ void ID_ShowFormChangeOtherUsrID (void)
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      HTM_DIV_Begin ("class=\"REC_CONT\"");
-	 Box_BoxBegin ("100%",Txt_ID,
-		       NULL,NULL,
-		       Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      Box_BoxBegin (NULL,Txt_ID,
+		    NULL,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-	    /***** Show form to change ID *****/
-	    ID_ShowFormChangeUsrID (Usr_OTHER,
-				    false);	// IShouldFillInID
+	 /***** Show form to change ID *****/
+	 ID_ShowFormChangeUsrID (Usr_OTHER,
+				 false);	// IShouldFillInID
 
-	 /***** End box *****/
-	 Box_BoxEnd ();
-     HTM_DIV_End ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();

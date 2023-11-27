@@ -2262,9 +2262,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
 		  else	// Pho_DEGREES_PRINT
 		    {
-		     Lgo_DrawLogo (Hie_DEG,
-				   Deg.HieCod,
-				   Deg.ShrtName,
+		     Lgo_DrawLogo (Hie_DEG,Deg.HieCod,Deg.ShrtName,
 				   "ICO20x20","CT");
 		     HTM_TxtF ("&nbsp;%s",Deg.FullName);
 		    }

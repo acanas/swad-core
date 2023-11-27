@@ -206,7 +206,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 /********************** Draw institution logo with link **********************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size)
+void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass)
   {
    Hie_PutLink_t PutLink = Frm_CheckIfInside () ? Hie_DONT_PUT_LINK :	// Don't put link to institution if already inside a form
 						  Hie_PUT_LINK;
@@ -217,10 +217,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,unsigned Size)
 	 ParCod_PutPar (ParCod_Ins,Ins->HieCod);
 	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
      }
-   Lgo_DrawLogo (Hie_INS,
-		 Ins->HieCod,
-		 Ins->FullName,
-		 Size,NULL);
+   Lgo_DrawLogo (Hie_INS,Ins->HieCod,Ins->FullName,IconClass,NULL);
    if (PutLink == Hie_PUT_LINK)
      {
 	 HTM_BUTTON_End ();
@@ -245,10 +242,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
       Str_FreeGoToTitle ();
 
 	 /***** Institution logo and name *****/
-	 Lgo_DrawLogo (Hie_INS,
-		       Ins->HieCod,
-		       Ins->ShrtName,
-		       16,ClassLogo);
+	 Lgo_DrawLogo (Hie_INS,Ins->HieCod,Ins->ShrtName,"ICO16x16",ClassLogo);
 	 HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
       /***** End link *****/
@@ -942,10 +936,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Institution logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-	       Lgo_DrawLogo (Hie_INS,
-			     Ins->HieCod,
-			     Ins->ShrtName,
-			     20,NULL);
+	       Lgo_DrawLogo (Hie_INS,Ins->HieCod,Ins->ShrtName,"ICO20x20",NULL);
 	    HTM_TD_End ();
 
 	    /* Institution short name and full name */
@@ -1353,10 +1344,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-	    Lgo_DrawLogo (Hie_INS,
-			  -1L,
-			  "",
-			  20,NULL);
+	    Lgo_DrawLogo (Hie_INS,-1L,"","ICO20x20",NULL);
 	 HTM_TD_End ();
 
 	 /***** Institution short name and full name *****/
@@ -1860,7 +1848,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       /***** Write link to institution *****/
 	       HTM_TD_Begin ("class=\"CM FORM_IN_%s\"",
 	                     The_GetSuffix ());
-		  Ins_DrawInstitutionLogoWithLink (&Ins,40);
+		  Ins_DrawInstitutionLogoWithLink (&Ins,"ICO40x40");
 		  HTM_BR ();
 		  HTM_Unsigned (NumberThisRow);
                HTM_TD_End ();
@@ -1907,10 +1895,8 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 			                         "class=\"LM BT_LINK\"");
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
-			      Lgo_DrawLogo (Hie_INS,
-					    Ins.HieCod,
-					    Ins.ShrtName,
-					    40,NULL);
+			      Lgo_DrawLogo (Hie_INS,Ins.HieCod,Ins.ShrtName,
+					    "ICO40x40",NULL);
 			      HTM_NBSP ();
 			     }
 			   HTM_Txt (Ins.FullName);

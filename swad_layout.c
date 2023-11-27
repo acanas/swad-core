@@ -1512,9 +1512,7 @@ void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType)
 	      {
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie[Hie_INS].WWW);
-	       Lgo_DrawLogo (Hie_INS,
-			     Hie[Hie_INS].HieCod,
-			     Hie[Hie_INS].ShrtName,
+	       Lgo_DrawLogo (Hie_INS,Hie[Hie_INS].HieCod,Hie[Hie_INS].ShrtName,
 			     "ICO40x40",NULL);
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
@@ -1566,9 +1564,7 @@ void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
 			       Hie[Hie_DEG].WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (Hie_DEG,
-			     Hie[Hie_DEG].HieCod,
-			     Hie[Hie_DEG].ShrtName,
+	       Lgo_DrawLogo (Hie_DEG,Hie[Hie_DEG].HieCod,Hie[Hie_DEG].ShrtName,
 			     "ICO40x40",NULL);
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();

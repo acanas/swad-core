@@ -588,60 +588,58 @@ void Pwd_ShowFormChgMyPwd (void)
       Frm_BeginFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
 
 	 /***** Begin box *****/
-	 HTM_DIV_Begin ("class=\"REC_CONT\"");
-	    Box_BoxBegin ("100%",Txt_Password,
-			  NULL,NULL,
-			  Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
+	 Box_BoxBegin (NULL,Txt_Password,
+		       NULL,NULL,
+		       Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
-	       /***** Show possible alerts *****/
-	       Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
+	    /***** Show possible alerts *****/
+	    Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
 
-	       /***** Help message *****/
-	       if (!IHaveAPasswordInDB) // If I don't have a password in database...
-		  Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
-	       else if (Gbl.Usrs.Me.LoginPlainPassword[0])
-		 {
-		  if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
-		     Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
-		 }
+	    /***** Help message *****/
+	    if (!IHaveAPasswordInDB) // If I don't have a password in database...
+	       Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
+	    else if (Gbl.Usrs.Me.LoginPlainPassword[0])
+	      {
+	       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
+		  Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
+	      }
 
-	       /***** Begin table *****/
-	       HTM_TABLE_BeginWidePadding (2);
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-	       /***** Current password *****/
-	       if (IHaveAPasswordInDB) // If I have a password in database...
-		 {
-		  HTM_TR_Begin (NULL);
-
-		     /* Label */
-		     Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",Txt_Current_password);
-
-		     /* Data */
-		     HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-			HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
-					    "id=\"UsrPwd\" class=\"INPUT_%s\"",
-					    The_GetSuffix ());
-		     HTM_TD_End ();
-
-		  HTM_TR_End ();
-		 }
-
-	       /***** Help message *****/
+	    /***** Current password *****/
+	    if (IHaveAPasswordInDB) // If I have a password in database...
+	      {
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"2\"");
-		     Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
-				    Pwd_MIN_CHARS_PLAIN_PASSWORD);
+
+		  /* Label */
+		  Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",Txt_Current_password);
+
+		  /* Data */
+		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
+					 "id=\"UsrPwd\" class=\"INPUT_%s\"",
+					 The_GetSuffix ());
 		  HTM_TD_End ();
+
 	       HTM_TR_End ();
+	      }
 
-	       /***** New password *****/
-	       Pwd_PutFormToGetNewPasswordTwice ();
+	    /***** Help message *****/
+	    HTM_TR_Begin (NULL);
+	       HTM_TD_Begin ("colspan=\"2\"");
+		  Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
+				 Pwd_MIN_CHARS_PLAIN_PASSWORD);
+	       HTM_TD_End ();
+	    HTM_TR_End ();
 
-	    /***** End table, send button and end box *****/
-	    Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,
-				       IHaveAPasswordInDB ? Txt_Change_password :
-							    Txt_Set_password);
-	 HTM_DIV_End ();
+	    /***** New password *****/
+	    Pwd_PutFormToGetNewPasswordTwice ();
+
+	 /***** End table, send button and end box *****/
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,
+				    IHaveAPasswordInDB ? Txt_Change_password :
+							 Txt_Set_password);
 
       /***** End form *****/
       Frm_EndForm ();

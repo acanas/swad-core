@@ -2253,7 +2253,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
 
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-	 Ins_DrawInstitutionLogoWithLink (&Ins,25);
+	 Ins_DrawInstitutionLogoWithLink (&Ins,"ICO25x25");
       HTM_TD_End ();
 
    /***** End row *****/
@@ -2592,7 +2592,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
 
       HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
-	 Ins_DrawInstitutionLogoWithLink (&Ins,25);
+	 Ins_DrawInstitutionLogoWithLink (&Ins,"ICO25x25");
       HTM_TD_End ();
 
    HTM_TR_End ();

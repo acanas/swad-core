@@ -1025,19 +1025,17 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
       /***** Begin box *****/
-      HTM_DIV_Begin ("class=\"REC_CONT\"");
-	 Box_BoxBegin ("100%",Txt_Email,
-		       Acc_PutLinkToRemoveMyAccount,NULL,
-		       Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      Box_BoxBegin ("100%",Txt_Email,
+		    Acc_PutLinkToRemoveMyAccount,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-	    /***** Show form to change email *****/
-	    Mai_ShowFormChangeUsrEmail (Usr_ME,
-					IMustFillInEmail,
-					IShouldConfirmEmail);
+	 /***** Show form to change email *****/
+	 Mai_ShowFormChangeUsrEmail (Usr_ME,
+				     IMustFillInEmail,
+				     IShouldConfirmEmail);
 
-	 /***** End box *****/
-	 Box_BoxEnd ();
-      HTM_DIV_End ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -1056,19 +1054,17 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
       /***** Begin box *****/
-      HTM_DIV_Begin ("class=\"REC_CONT\"");
-	 Box_BoxBegin ("100%",Txt_Email,
-		       NULL,NULL,
-		       Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      Box_BoxBegin ("100%",Txt_Email,
+		    NULL,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-	    /***** Show form to change email *****/
-	    Mai_ShowFormChangeUsrEmail (Usr_OTHER,
-					false,	// IMustFillInEmail
-					false);	// IShouldConfirmEmail
+	 /***** Show form to change email *****/
+	 Mai_ShowFormChangeUsrEmail (Usr_OTHER,
+				     false,	// IMustFillInEmail
+				     false);	// IShouldConfirmEmail
 
-	 /***** End box *****/
-	 Box_BoxEnd ();
-      HTM_DIV_End ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();

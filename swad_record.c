@@ -2092,194 +2092,192 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    /***** Begin box and table *****/
    Rec_Record.UsrDat = UsrDat;
    Rec_Record.TypeOfView = TypeOfView;
-   HTM_DIV_Begin ("class=\"REC_CONT\"");
-      Box_BoxTableBegin ("100%",NULL,
-			 TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
-								    Rec_PutIconsCommands,NULL,
-			 Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
+   Box_BoxTableBegin (NULL,NULL,
+		      TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
+								 Rec_PutIconsCommands,NULL,
+		      Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
-	 /***** Institution and user's photo *****/
+      /***** Institution and user's photo *****/
+      HTM_TR_Begin (NULL);
+	 Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
+	 Rec_ShowPhoto (UsrDat);
+      HTM_TR_End ();
+
+      /***** Full name *****/
+      HTM_TR_Begin (NULL);
+	 Rec_ShowFullName (UsrDat);
+      HTM_TR_End ();
+
+      /***** User's nickname *****/
+      HTM_TR_Begin (NULL);
+	 Rec_ShowNickname (UsrDat,PutFormLinks);
+      HTM_TR_End ();
+
+      /***** User's country, web and social networks *****/
+      HTM_TR_Begin (NULL);
+	 Rec_ShowCountryInHead (UsrDat,ShowData);
+	 Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
+      HTM_TR_End ();
+
+      if (ShowIDRows ||
+	  ShowAddressRows ||
+	  ShowTeacherRows)
+	{
 	 HTM_TR_Begin (NULL);
-	    Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
-	    Rec_ShowPhoto (UsrDat);
-	 HTM_TR_End ();
 
-	 /***** Full name *****/
-	 HTM_TR_Begin (NULL);
-	    Rec_ShowFullName (UsrDat);
-	 HTM_TR_End ();
+	    HTM_TD_Begin ("colspan=\"3\"");
 
-	 /***** User's nickname *****/
-	 HTM_TR_Begin (NULL);
-	    Rec_ShowNickname (UsrDat,PutFormLinks);
-	 HTM_TR_End ();
-
-	 /***** User's country, web and social networks *****/
-	 HTM_TR_Begin (NULL);
-	    Rec_ShowCountryInHead (UsrDat,ShowData);
-	    Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
-	 HTM_TR_End ();
-
-	 if (ShowIDRows ||
-	     ShowAddressRows ||
-	     ShowTeacherRows)
-	   {
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("colspan=\"3\"");
-
-		  /***** Show email and user's IDs *****/
-		  if (ShowIDRows)
-		    {
-		     HTM_TABLE_BeginWidePadding (2);
-
-			/* Show email */
-			Rec_ShowEmail (UsrDat);
-
-			/* Show user's IDs */
-			Rec_ShowUsrIDs (UsrDat,Anchor);
-
-		     HTM_TABLE_End ();
-		    }
-
-		  /***** Begin form *****/
-		  switch (TypeOfView)
-		    {
-		     case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-			Frm_BeginForm (ActSignUp);
-			break;
-		     case Rec_SHA_MY_RECORD_FORM:
-			Frm_BeginForm (ActChgMyData);
-			break;
-		     case Rec_SHA_OTHER_EXISTING_USR_FORM:
-			switch (Gbl.Action.Act)
-			  {
-			   case ActReqMdfStd:
-			      NextAction = ActUpdStd;
-			      break;
-			   case ActReqMdfNET:
-			      NextAction = ActUpdNET;
-			      break;
-			   case ActReqMdfTch:
-			      NextAction = ActUpdTch;
-			      break;
-			   default:
-			      NextAction = ActUpdOth;
-			      break;
-			  }
-			Frm_BeginForm (NextAction);
-			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
-			break;
-		     case Rec_SHA_OTHER_NEW_USR_FORM:
-			switch (Gbl.Action.Act)
-			  {
-			   case ActReqMdfStd:
-			      NextAction = ActCreStd;
-			      break;
-			   case ActReqMdfNET:
-			      NextAction = ActCreNET;
-			      break;
-			   case ActReqMdfTch:
-			      NextAction = ActCreTch;
-			      break;
-			   default:
-			      NextAction = ActCreOth;
-			      break;
-			  }
-			Frm_BeginForm (NextAction);
-			   ID_PutParOtherUsrIDPlain ();				// New user
-			break;
-		     default:
-			break;
-		    }
-
+	       /***** Show email and user's IDs *****/
+	       if (ShowIDRows)
+		 {
 		  HTM_TABLE_BeginWidePadding (2);
 
-		     if (ShowIDRows)
-		       {
-			/***** Role or sex *****/
-			Rec_ShowRole (UsrDat,TypeOfView);
+		     /* Show email */
+		     Rec_ShowEmail (UsrDat);
 
-			/***** Name *****/
-			Rec_ShowSurname1 (UsrDat,ViewType);
-			Rec_ShowSurname2 (UsrDat,ViewType);
-			Rec_ShowFirstName (UsrDat,ViewType);
-
-			/***** Country *****/
-			if (CountryForm)
-			   Rec_ShowCountry (UsrDat,ViewType);
-		       }
-
-		     /***** Address rows *****/
-		     if (ShowAddressRows)
-		       {
-			/***** Date of birth *****/
-			Rec_ShowDateOfBirth (UsrDat,ShowData,ViewType);
-
-			/***** Phones *****/
-			Rec_ShowPhone (UsrDat,ShowData,ViewType,0);
-			Rec_ShowPhone (UsrDat,ShowData,ViewType,1);
-
-			/***** User's comments *****/
-			Rec_ShowComments (UsrDat,ShowData,ViewType);
-		       }
-
-		     /***** Teacher's rows *****/
-		     if (ShowTeacherRows)
-			Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
+		     /* Show user's IDs */
+		     Rec_ShowUsrIDs (UsrDat,Anchor);
 
 		  HTM_TABLE_End ();
+		 }
 
-		  /***** Button and end form *****/
-		  switch (TypeOfView)
+	       /***** Begin form *****/
+	       switch (TypeOfView)
+		 {
+		  case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+		     Frm_BeginForm (ActSignUp);
+		     break;
+		  case Rec_SHA_MY_RECORD_FORM:
+		     Frm_BeginForm (ActChgMyData);
+		     break;
+		  case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		     switch (Gbl.Action.Act)
+		       {
+			case ActReqMdfStd:
+			   NextAction = ActUpdStd;
+			   break;
+			case ActReqMdfNET:
+			   NextAction = ActUpdNET;
+			   break;
+			case ActReqMdfTch:
+			   NextAction = ActUpdTch;
+			   break;
+			default:
+			   NextAction = ActUpdOth;
+			   break;
+		       }
+		     Frm_BeginForm (NextAction);
+			Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+		     break;
+		  case Rec_SHA_OTHER_NEW_USR_FORM:
+		     switch (Gbl.Action.Act)
+		       {
+			case ActReqMdfStd:
+			   NextAction = ActCreStd;
+			   break;
+			case ActReqMdfNET:
+			   NextAction = ActCreNET;
+			   break;
+			case ActReqMdfTch:
+			   NextAction = ActCreTch;
+			   break;
+			default:
+			   NextAction = ActCreOth;
+			   break;
+		       }
+		     Frm_BeginForm (NextAction);
+			ID_PutParOtherUsrIDPlain ();				// New user
+		     break;
+		  default:
+		     break;
+		 }
+
+	       HTM_TABLE_BeginWidePadding (2);
+
+		  if (ShowIDRows)
 		    {
-		     case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-			Btn_PutConfirmButton (Txt_Sign_up);
-			Frm_EndForm ();
-			break;
-		     case Rec_SHA_MY_RECORD_FORM:
-			Btn_PutConfirmButton (Txt_Save_changes);
-			Frm_EndForm ();
-			break;
-		     case Rec_SHA_OTHER_NEW_USR_FORM:
-			if (Gbl.Crs.Grps.NumGrps) // This course has groups?
-			   Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-			Btn_PutConfirmButton (Txt_Register);
-			Frm_EndForm ();
-			break;
-		     case Rec_SHA_OTHER_EXISTING_USR_FORM:
-			/***** Show list of groups to register/remove me/user *****/
-			if (Gbl.Crs.Grps.NumGrps) // This course has groups?
-			   switch (MeOrOther)
-			     {
-			      case Usr_ME:
-				 // Don't show groups if I don't belong to course
-				 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-				    Grp_ShowLstGrpsToChgMyGrps ();
-				 break;
-			      case Usr_OTHER:
-			      default:
-				 Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-				 break;
-			     }
+		     /***** Role or sex *****/
+		     Rec_ShowRole (UsrDat,TypeOfView);
 
-			/***** Which action, register or removing? *****/
-			if (Enr_PutActionsRegRemOneUsr (MeOrOther))
-			   Btn_PutConfirmButton (Txt_Confirm);
+		     /***** Name *****/
+		     Rec_ShowSurname1 (UsrDat,ViewType);
+		     Rec_ShowSurname2 (UsrDat,ViewType);
+		     Rec_ShowFirstName (UsrDat,ViewType);
 
-			Frm_EndForm ();
-			break;
-		     default:
-			break;
+		     /***** Country *****/
+		     if (CountryForm)
+			Rec_ShowCountry (UsrDat,ViewType);
 		    }
 
-	       HTM_TD_End ();
-	    HTM_TR_End ();
-	   }
+		  /***** Address rows *****/
+		  if (ShowAddressRows)
+		    {
+		     /***** Date of birth *****/
+		     Rec_ShowDateOfBirth (UsrDat,ShowData,ViewType);
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-   HTM_DIV_End ();
+		     /***** Phones *****/
+		     Rec_ShowPhone (UsrDat,ShowData,ViewType,0);
+		     Rec_ShowPhone (UsrDat,ShowData,ViewType,1);
+
+		     /***** User's comments *****/
+		     Rec_ShowComments (UsrDat,ShowData,ViewType);
+		    }
+
+		  /***** Teacher's rows *****/
+		  if (ShowTeacherRows)
+		     Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
+
+	       HTM_TABLE_End ();
+
+	       /***** Button and end form *****/
+	       switch (TypeOfView)
+		 {
+		  case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+		     Btn_PutConfirmButton (Txt_Sign_up);
+		     Frm_EndForm ();
+		     break;
+		  case Rec_SHA_MY_RECORD_FORM:
+		     Btn_PutConfirmButton (Txt_Save_changes);
+		     Frm_EndForm ();
+		     break;
+		  case Rec_SHA_OTHER_NEW_USR_FORM:
+		     if (Gbl.Crs.Grps.NumGrps) // This course has groups?
+			Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+		     Btn_PutConfirmButton (Txt_Register);
+		     Frm_EndForm ();
+		     break;
+		  case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		     /***** Show list of groups to register/remove me/user *****/
+		     if (Gbl.Crs.Grps.NumGrps) // This course has groups?
+			switch (MeOrOther)
+			  {
+			   case Usr_ME:
+			      // Don't show groups if I don't belong to course
+			      if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+				 Grp_ShowLstGrpsToChgMyGrps ();
+			      break;
+			   case Usr_OTHER:
+			   default:
+			      Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+			      break;
+			  }
+
+		     /***** Which action, register or removing? *****/
+		     if (Enr_PutActionsRegRemOneUsr (MeOrOther))
+			Btn_PutConfirmButton (Txt_Confirm);
+
+		     Frm_EndForm ();
+		     break;
+		  default:
+		     break;
+		 }
+
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -2689,17 +2687,15 @@ static void Rec_ShowEmail (struct Usr_Data *UsrDat)
                     The_GetSuffix ());
 	 if (UsrDat->Email[0])
 	   {
-	    HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
-	       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
-		 {
-		  HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_STRONG_%s\"",
-		               UsrDat->Email,The_GetSuffix ());
-		     HTM_Txt (UsrDat->Email);
-		  HTM_A_End ();
-		 }
-	       else
-		  HTM_Txt ("********");
-	    HTM_DIV_End ();
+	    if (Mai_ICanSeeOtherUsrEmail (UsrDat))
+	      {
+	       HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_STRONG_%s\"",
+			    UsrDat->Email,The_GetSuffix ());
+		  HTM_Txt (UsrDat->Email);
+	       HTM_A_End ();
+	      }
+	    else
+	       HTM_Txt ("********");
 	   }
       HTM_TD_End ();
 
@@ -3881,226 +3877,224 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);
 
       /***** Begin box and table *****/
-      HTM_DIV_Begin ("class=\"REC_CONT\"");
-	 Box_BoxTableBegin ("100%",
-			    IAmATeacher ? Txt_Institution_center_and_department :
-					  Txt_HIERARCHY_SINGUL_Abc[Hie_INS],
-			    NULL,NULL,
-			    Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,
+			 IAmATeacher ? Txt_Institution_center_and_department :
+				       Txt_HIERARCHY_SINGUL_Abc[Hie_INS],
+			 NULL,NULL,
+			 Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
 
-	    /***** Country *****/
+	 /***** Country *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",Label);
+	    free (Label);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+
+	       /* Begin form to select the country of my institution */
+	       Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_GetSuffix ());
+		     HTM_OPTION (HTM_Type_STRING,"-1",
+				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0 ? HTM_OPTION_SELECTED :
+								     HTM_OPTION_UNSELECTED,
+				 HTM_OPTION_DISABLED,
+				 NULL);
+		     for (NumCty = 0;
+			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+			  NumCty++)
+		       {
+			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
+				    Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
+										  HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Cty->FullName);
+		       }
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
+
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Institution *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthIns],Label);
+	    free (Label);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+
+	       /* Get list of institutions in this country */
+	       Hie_FreeList (Hie_CTY);
+	       if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
+		  Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
+
+	       /* Begin form to select institution */
+	       Frm_BeginFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				    "id=\"OthInsCod\" name=\"OthInsCod\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_GetSuffix ());
+		     HTM_OPTION (HTM_Type_STRING,"-1",
+				 Gbl.Usrs.Me.UsrDat.InsCod < 0 ? HTM_OPTION_SELECTED :
+								 HTM_OPTION_UNSELECTED,
+				 HTM_OPTION_DISABLED,
+				 NULL);
+		     HTM_OPTION (HTM_Type_STRING,"0",
+				 Gbl.Usrs.Me.UsrDat.InsCod == 0 ? HTM_OPTION_SELECTED :
+								  HTM_OPTION_UNSELECTED,
+				 HTM_OPTION_ENABLED,
+				 "%s",Txt_Another_institution);
+		     for (NumIns = 0;
+			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
+			  NumIns++)
+		       {
+			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
+				    Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
+									       HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Ins->FullName);
+		       }
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 if (IAmATeacher)
+	   {
+	    /***** Center *****/
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]) < 0)
+	       if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",Label);
+	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCtr],Label);
 	       free (Label);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
-		  /* Begin form to select the country of my institution */
-		  Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
+		  /* Get list of centers in this institution */
+		  Hie_FreeList (Hie_INS);
+		  if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
+		     Ctr_GetBasicListOfCenters (Gbl.Usrs.Me.UsrDat.InsCod);
+
+		  /* Begin form to select center */
+		  Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				       "id=\"InsCtyCod\" name=\"OthCtyCod\""
+				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
 				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"-1",
-				    Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0 ? HTM_OPTION_SELECTED :
+				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ? HTM_OPTION_SELECTED :
 									HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_DISABLED,
 				    NULL);
-			for (NumCty = 0;
-			     NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
-			     NumCty++)
+			HTM_OPTION (HTM_Type_STRING,"0",
+				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0 ? HTM_OPTION_SELECTED :
+									 HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    Txt_Another_center);
+			for (NumCtr = 0;
+			     NumCtr < Gbl.Hierarchy.List[Hie_SYS].Num;
+			     NumCtr++)
 			  {
-			   Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
-			   HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-				       Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
-										     HTM_OPTION_UNSELECTED,
+			   Ctr = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCtr];
+			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
+				       Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
+										      HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
-				       "%s",Cty->FullName);
+				       Ctr->FullName);
 			  }
 		     HTM_SELECT_End ();
 		  Frm_EndForm ();
-
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 
-	    /***** Institution *****/
+	    /***** Department *****/
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]) < 0)
+	       if (asprintf (&Label,"%s*",Txt_Department) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthIns],Label);
+	       Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_Dpt],Label);
 	       free (Label);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-
-		  /* Get list of institutions in this country */
-		  Hie_FreeList (Hie_CTY);
-		  if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
-		     Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
-
-		  /* Begin form to select institution */
-		  Frm_BeginFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				       "id=\"OthInsCod\" name=\"OthInsCod\""
-				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				       The_GetSuffix ());
-			HTM_OPTION (HTM_Type_STRING,"-1",
-				    Gbl.Usrs.Me.UsrDat.InsCod < 0 ? HTM_OPTION_SELECTED :
-								    HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_DISABLED,
-				    NULL);
-			HTM_OPTION (HTM_Type_STRING,"0",
-				    Gbl.Usrs.Me.UsrDat.InsCod == 0 ? HTM_OPTION_SELECTED :
-								     HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
-				    "%s",Txt_Another_institution);
-			for (NumIns = 0;
-			     NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
-			     NumIns++)
-			  {
-			   Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
-			   HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				       Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
-										  HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
-				       "%s",Ins->FullName);
-			  }
-		     HTM_SELECT_End ();
+		  Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
+		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
+				   The_GetSuffix ()) < 0)
+			Err_NotEnoughMemoryExit ();
+		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
+						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
+						  Par_CodeStr[ParCod_Dpt],		// Parameter name
+						  SelectClass,				// Selector class
+						  -1L,					// First option
+						  "",					// Text when no department selected
+						  HTM_SUBMIT_ON_CHANGE);
+		     free (SelectClass);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 
-	    if (IAmATeacher)
-	      {
-	       /***** Center *****/
-	       HTM_TR_Begin (NULL);
+	    /***** Office *****/
+	    HTM_TR_Begin (NULL);
 
-		  /* Label */
-		  if (asprintf (&Label,"%s*",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_OthCtr],Label);
-		  free (Label);
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM","Office",Txt_Office);
 
-		  /* Data */
-		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		  Frm_BeginFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
+		     HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
+				     HTM_SUBMIT_ON_CHANGE,
+				     "id=\"Office\""
+				     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				     The_GetSuffix ());
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-		     /* Get list of centers in this institution */
-		     Hie_FreeList (Hie_INS);
-		     if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
-			Ctr_GetBasicListOfCenters (Gbl.Usrs.Me.UsrDat.InsCod);
+	    HTM_TR_End ();
 
-		     /* Begin form to select center */
-		     Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
-			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-					  "id=\"OthCtrCod\" name=\"OthCtrCod\""
-					  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-					  The_GetSuffix ());
-			   HTM_OPTION (HTM_Type_STRING,"-1",
-				       Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ? HTM_OPTION_SELECTED :
-									   HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_DISABLED,
-				       NULL);
-			   HTM_OPTION (HTM_Type_STRING,"0",
-				       Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0 ? HTM_OPTION_SELECTED :
-									    HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
-				       Txt_Another_center);
-			   for (NumCtr = 0;
-				NumCtr < Gbl.Hierarchy.List[Hie_SYS].Num;
-				NumCtr++)
-			     {
-			      Ctr = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCtr];
-			      HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
-					  Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
-											 HTM_OPTION_UNSELECTED,
-					  HTM_OPTION_ENABLED,
-					  Ctr->FullName);
-			     }
-			HTM_SELECT_End ();
-		     Frm_EndForm ();
-		  HTM_TD_End ();
+	    /***** Office phone *****/
+	    HTM_TR_Begin (NULL);
 
-	       HTM_TR_End ();
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM","OfficePhone",Txt_Phone);
 
-	       /***** Department *****/
-	       HTM_TR_Begin (NULL);
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		  Frm_BeginFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
+		     HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
+				    HTM_SUBMIT_ON_CHANGE,
+				    "id=\"OfficePhone\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_GetSuffix ());
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-		  /* Label */
-		  if (asprintf (&Label,"%s*",Txt_Department) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  Frm_LabelColumn ("REC_C1_BOT RM",Par_CodeStr[ParCod_Dpt],Label);
-		  free (Label);
+	    HTM_TR_End ();
+	   }
 
-		  /* Data */
-		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		     Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
-			if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
-				      The_GetSuffix ()) < 0)
-			   Err_NotEnoughMemoryExit ();
-			Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
-						     Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-						     Par_CodeStr[ParCod_Dpt],		// Parameter name
-						     SelectClass,				// Selector class
-						     -1L,					// First option
-						     "",					// Text when no department selected
-						     HTM_SUBMIT_ON_CHANGE);
-			free (SelectClass);
-		     Frm_EndForm ();
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
-
-	       /***** Office *****/
-	       HTM_TR_Begin (NULL);
-
-		  /* Label */
-		  Frm_LabelColumn ("REC_C1_BOT RM","Office",Txt_Office);
-
-		  /* Data */
-		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		     Frm_BeginFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
-			HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
-					HTM_SUBMIT_ON_CHANGE,
-					"id=\"Office\""
-					" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-					The_GetSuffix ());
-		     Frm_EndForm ();
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
-
-	       /***** Office phone *****/
-	       HTM_TR_Begin (NULL);
-
-		  /* Label */
-		  Frm_LabelColumn ("REC_C1_BOT RM","OfficePhone",Txt_Phone);
-
-		  /* Data */
-		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		     Frm_BeginFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
-			HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-				       HTM_SUBMIT_ON_CHANGE,
-				       "id=\"OfficePhone\""
-				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				       The_GetSuffix ());
-		     Frm_EndForm ();
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
-	      }
-
-	 /***** End table and box *****/
-	 Box_BoxTableEnd ();
-      HTM_DIV_End ();
+      /***** End table and box *****/
+      Box_BoxTableEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
