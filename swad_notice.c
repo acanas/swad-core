@@ -93,7 +93,7 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
                                       Not_Listing_t TypeNoticesListing);
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              struct Not_Notice *Notice,
-                             bool Highlight);
+                             Lay_Highlight_t Highlight);
 
 static void Not_PutParNotCod (void *NotCod);
 
@@ -357,7 +357,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
       /* Draw notice */
       Not_DrawANotice (TypeNoticesListing,&Notice,
-		       (Notice.NotCod == HighlightNotCod));	// Highlighted?
+		       (Notice.NotCod == HighlightNotCod) ? Lay_HIGHLIGHT :
+							    Lay_NO_HIGHLIGHT);
      }
 
    switch (TypeNoticesListing)
@@ -452,8 +453,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
       Not_GetNoticeDataFromRow (mysql_res,&Notice,Not_LIST_FULL_NOTICES);
 
       /***** Draw the notice *****/
-      Not_DrawANotice (Not_LIST_FULL_NOTICES,&Notice,
-		       false);	// Not highlighted
+      Not_DrawANotice (Not_LIST_FULL_NOTICES,&Notice,Lay_NO_HIGHLIGHT);
      }
 
    /***** Free structure that stores the query result *****/
@@ -513,7 +513,7 @@ static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
 
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              struct Not_Notice *Notice,
-                             bool Highlight)
+                             Lay_Highlight_t Highlight)
   {
    extern const char *Txt_See_full_notice;
    static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -531,6 +531,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       [Not_LIST_BRIEF_NOTICES] = "NOTICE_BOX_NARROW",
       [Not_LIST_FULL_NOTICES ] = "NOTICE_BOX_WIDE",
      };
+   static const char *ContainerHighLightClass[Lay_NUM_HIGHLIGHT] =
+     {
+      [Lay_NO_HIGHLIGHT] = "",
+      [Lay_HIGHLIGHT   ] = " NOTICE_HIGHLIGHT",
+     };
    static unsigned UniqueId = 0;
    char *Id;
    struct Usr_Data UsrDat;
@@ -544,8 +549,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      {
       HTM_ARTICLE_Begin (Anchor);
          HTM_DIV_Begin ("class=\"NOTICE_CONT%s\"",
-                        Highlight ? " NOTICE_HIGHLIGHT" :
-                        	    "");
+			ContainerHighLightClass[Highlight]);
      }
 
    /***** Begin yellow note *****/

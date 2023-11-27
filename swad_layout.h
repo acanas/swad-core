@@ -54,6 +54,13 @@ typedef enum
    Lay_HORIZONTAL_LINE_AT_RIGHT,
   } Lay_HorizontalLineAtRight_t;
 
+#define Lay_NUM_HIGHLIGHT 2
+typedef enum
+  {
+   Lay_NO_HIGHLIGHT,
+   Lay_HIGHLIGHT,
+  } Lay_Highlight_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/

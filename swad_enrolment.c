@@ -174,16 +174,16 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
 
 void Enr_PutButtonInlineToRegisterStds (long CrsCod,
 				        unsigned Level,Lay_LastItem_t IsLastItemInLevel[],
-					bool Highlight)
+					Lay_Highlight_t Highlight)
   {
+   extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
    extern const char *Txt_Register_students;
 
    if (Rol_GetMyRoleInCrs (CrsCod) == Rol_TCH)	// I am a teacher in the given course
       if (!Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
 				 1 << Rol_STD))	// No students in course
 	{
-	 HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-				   NULL);
+	 HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 	    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,
 					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActReqEnrSevStd);

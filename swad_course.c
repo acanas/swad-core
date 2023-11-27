@@ -151,13 +151,14 @@ void Crs_ShowIntroduction (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
+   extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
    extern const char *Par_CodeStr[];
    extern ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS];
    extern const char *Txt_My_courses;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    Lay_LastItem_t IsLastItemInLevel[1 + 6];
-   bool Highlight;	// Highlight because degree, course, etc. is selected
+   Lay_Highlight_t Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
    MYSQL_RES *mysql_resIns;
    MYSQL_RES *mysql_resCtr;
@@ -184,9 +185,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Write link to platform *****/
-	 Highlight = (Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0);
-	 HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-				   NULL);
+	 Highlight = (Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0) ? Lay_HIGHLIGHT :
+								 Lay_NO_HIGHLIGHT;
+	 HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 	    IsLastItemInLevel[1] = Lay_LAST_ITEM;
 	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel,
 					Lay_HORIZONTAL_LINE_AT_RIGHT);
@@ -217,9 +218,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	    /***** Write link to country *****/
 	    Highlight = (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0 &&
-			 Gbl.Hierarchy.Node[Hie_CTY].HieCod == Hie[Hie_CTY].HieCod);
-	    HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-				      NULL);
+			 Gbl.Hierarchy.Node[Hie_CTY].HieCod == Hie[Hie_CTY].HieCod) ? Lay_HIGHLIGHT :
+										      Lay_NO_HIGHLIGHT;
+	    HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1) ? Lay_LAST_ITEM :
 								Lay_NO_LAST_ITEM;
 	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel,
@@ -252,9 +253,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	       /***** Write link to institution *****/
 	       Highlight = (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0 &&
-			    Gbl.Hierarchy.Node[Hie_INS].HieCod == Hie[Hie_INS].HieCod);
-	       HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-					 NULL);
+			    Gbl.Hierarchy.Node[Hie_INS].HieCod == Hie[Hie_INS].HieCod) ? Lay_HIGHLIGHT :
+											 Lay_NO_HIGHLIGHT;
+	       HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 		  IsLastItemInLevel[3] = (NumIns == NumInss - 1) ? Lay_LAST_ITEM :
 								   Lay_NO_LAST_ITEM;
 		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel,
@@ -289,9 +290,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 		  /***** Write link to center *****/
 		  Highlight = (Gbl.Hierarchy.Level == Hie_CTR &&
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod == Hie[Hie_CTR].HieCod);
-		  HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-					    NULL);
+			       Gbl.Hierarchy.Node[Hie_CTR].HieCod == Hie[Hie_CTR].HieCod) ? Lay_HIGHLIGHT :
+											    Lay_NO_HIGHLIGHT;
+		  HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1) ? Lay_LAST_ITEM :
 								      Lay_NO_LAST_ITEM;
 		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel,
@@ -326,9 +327,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 		     /***** Write link to degree *****/
 		     Highlight = (Gbl.Hierarchy.Level == Hie_DEG &&
-				  Gbl.Hierarchy.Node[Hie_DEG].HieCod == Hie[Hie_DEG].HieCod);
-		     HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-					       NULL);
+				  Gbl.Hierarchy.Node[Hie_DEG].HieCod == Hie[Hie_DEG].HieCod) ? Lay_HIGHLIGHT :
+											       Lay_NO_HIGHLIGHT;
+		     HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1) ? Lay_LAST_ITEM :
 									 Lay_NO_LAST_ITEM;
 			Lay_IndentDependingOnLevel (5,IsLastItemInLevel,
@@ -365,11 +366,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 			/***** Write link to course *****/
 			Highlight = (Gbl.Hierarchy.Level == Hie_CRS &&
-				     Gbl.Hierarchy.Node[Hie_CRS].HieCod == Hie[Hie_CRS].HieCod);
+				     Gbl.Hierarchy.Node[Hie_CRS].HieCod == Hie[Hie_CRS].HieCod) ? Lay_HIGHLIGHT :
+												  Lay_NO_HIGHLIGHT;
 			IsLastItemInLevel[6] = (NumCrs == NumCrss - 1) ? Lay_LAST_ITEM :
 									 Lay_NO_LAST_ITEM;
-			HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-						  NULL);
+			HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel,
 						       Lay_HORIZONTAL_LINE_AT_RIGHT);
 			   Frm_BeginForm (ActMyCrs);

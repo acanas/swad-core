@@ -355,7 +355,7 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
                                        Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	                          const struct For_Forum *Forum,
-                                  bool Highlight,
+                                  Lay_Highlight_t Highlight,
                                   unsigned Level,
                                   Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
@@ -1456,7 +1456,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
                                        Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   bool Highlight;
+   Lay_Highlight_t Highlight;
    bool ICanSeeTeacherForum;
    struct For_Forum Forum;
 
@@ -1469,7 +1469,8 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
    /***** Link to forum global *****/
    Forum.Type = For_FORUM_GLOBAL_USRS;
    Forum.HieCod = -1L;
-   Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_USRS);
+   Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_USRS) ? Lay_HIGHLIGHT :
+							       Lay_NO_HIGHLIGHT;
    IsLastItemInLevel[1] = Lay_NO_LAST_ITEM;
    For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
 
@@ -1479,7 +1480,8 @@ static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
      {
       Forum.Type = For_FORUM_GLOBAL_TCHS;
       Forum.HieCod = -1L;
-      Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_TCHS);
+      Highlight = (Forums->Forum.Type == For_FORUM_GLOBAL_TCHS) ? Lay_HIGHLIGHT :
+								  Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[1] = Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
      }
@@ -1493,7 +1495,7 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
 					    bool IsLastForum,
                                             Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   bool Highlight;
+   Lay_Highlight_t Highlight;
    bool ICanSeeTeacherForum;
    struct For_Forum Forum;
 
@@ -1506,7 +1508,8 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
    /***** Link to forum of users about the platform *****/
    Forum.Type = For_FORUM__SWAD__USRS;
    Forum.HieCod = -1L;
-   Highlight = (Forums->Forum.Type == For_FORUM__SWAD__USRS);
+   Highlight = (Forums->Forum.Type == For_FORUM__SWAD__USRS) ? Lay_HIGHLIGHT :
+							       Lay_NO_HIGHLIGHT;
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum) ? Lay_LAST_ITEM :
 								  Lay_NO_LAST_ITEM;
    For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
@@ -1516,7 +1519,8 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
      {
       Forum.Type = For_FORUM__SWAD__TCHS;
       Forum.HieCod = -1L;
-      Highlight = (Forums->Forum.Type == For_FORUM__SWAD__TCHS);
+      Highlight = (Forums->Forum.Type == For_FORUM__SWAD__TCHS) ? Lay_HIGHLIGHT :
+								  Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[1] = IsLastForum ? Lay_LAST_ITEM :
 					   Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
@@ -1532,7 +1536,7 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
 				       long InsCod,bool IsLastIns,
                                        Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   bool Highlight;
+   Lay_Highlight_t Highlight;
    Rol_Role_t MaxRoleInIns;
    bool ICanSeeTeacherForum;
    struct For_Forum Forum;
@@ -1548,7 +1552,8 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
       Forum.Type = For_FORUM_INSTIT_USRS;
       Forum.HieCod = InsCod;
       Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_USRS &&
-	           Forums->Forum.HieCod == InsCod);
+	           Forums->Forum.HieCod == InsCod) ? Lay_HIGHLIGHT :
+						     Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[2] = (IsLastIns && !ICanSeeTeacherForum) ? Lay_LAST_ITEM :
 								   Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
@@ -1559,7 +1564,8 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
 	 Forum.Type = For_FORUM_INSTIT_TCHS;
 	 Forum.HieCod = InsCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_TCHS &&
-		      Forums->Forum.HieCod == InsCod);
+		      Forums->Forum.HieCod == InsCod) ? Lay_HIGHLIGHT :
+							Lay_NO_HIGHLIGHT;
          IsLastItemInLevel[2] = IsLastIns ? Lay_LAST_ITEM :
 					    Lay_NO_LAST_ITEM;
          For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
@@ -1577,7 +1583,7 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
 				       long CtrCod,bool IsLastCtr,
                                        Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   bool Highlight;
+   Lay_Highlight_t Highlight;
    Rol_Role_t MaxRoleInCtr;
    bool ICanSeeTeacherForum;
    struct For_Forum Forum;
@@ -1593,7 +1599,8 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
       Forum.Type = For_FORUM_CENTER_USRS;
       Forum.HieCod = CtrCod;
       Highlight = (Forums->Forum.Type == For_FORUM_CENTER_USRS &&
-	           Forums->Forum.HieCod == CtrCod);
+	           Forums->Forum.HieCod == CtrCod) ? Lay_HIGHLIGHT :
+						     Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[3] = (IsLastCtr && !ICanSeeTeacherForum) ? Lay_LAST_ITEM :
 								   Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
@@ -1604,7 +1611,8 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
 	 Forum.Type = For_FORUM_CENTER_TCHS;
 	 Forum.HieCod = CtrCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_CENTER_TCHS &&
-		      Forums->Forum.HieCod == CtrCod);
+		      Forums->Forum.HieCod == CtrCod) ? Lay_HIGHLIGHT :
+							Lay_NO_HIGHLIGHT;
          IsLastItemInLevel[3] = IsLastCtr ? Lay_LAST_ITEM :
 					    Lay_NO_LAST_ITEM;
          For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
@@ -1622,7 +1630,7 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
 				       long DegCod,bool IsLastDeg,
                                        Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   bool Highlight;
+   Lay_Highlight_t Highlight;
    Rol_Role_t MaxRoleInDeg;
    bool ICanSeeTeacherForum;
    struct For_Forum Forum;
@@ -1638,7 +1646,8 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
       Forum.Type = For_FORUM_DEGREE_USRS;
       Forum.HieCod = DegCod;
       Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_USRS &&
-	           Forums->Forum.HieCod == DegCod);
+	           Forums->Forum.HieCod == DegCod) ? Lay_HIGHLIGHT :
+						     Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[4] = (IsLastDeg && !ICanSeeTeacherForum) ? Lay_LAST_ITEM :
 								   Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
@@ -1649,7 +1658,8 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
 	 Forum.Type = For_FORUM_DEGREE_TCHS;
 	 Forum.HieCod = DegCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_TCHS &&
-		      Forums->Forum.HieCod == DegCod);
+		      Forums->Forum.HieCod == DegCod) ? Lay_HIGHLIGHT :
+							Lay_NO_HIGHLIGHT;
 	 IsLastItemInLevel[4] = IsLastDeg ? Lay_LAST_ITEM :
 					    Lay_NO_LAST_ITEM;
          For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
@@ -1667,7 +1677,7 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
 				       long CrsCod,bool IsLastCrs,
                                        Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   bool Highlight;
+   Lay_Highlight_t Highlight;
    Rol_Role_t MyRoleInCrs;
    bool ICanSeeTeacherForum;
    struct For_Forum Forum;
@@ -1683,7 +1693,8 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
       Forum.Type = For_FORUM_COURSE_USRS;
       Forum.HieCod = CrsCod;
       Highlight = (Forums->Forum.Type == For_FORUM_COURSE_USRS &&
-	           Forums->Forum.HieCod == CrsCod);
+	           Forums->Forum.HieCod == CrsCod) ? Lay_HIGHLIGHT :
+						     Lay_NO_HIGHLIGHT;
       IsLastItemInLevel[5] = (IsLastCrs && !ICanSeeTeacherForum) ? Lay_LAST_ITEM :
 								   Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
@@ -1694,7 +1705,8 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
 	 Forum.Type = For_FORUM_COURSE_TCHS;
 	 Forum.HieCod = CrsCod;
 	 Highlight = (Forums->Forum.Type == For_FORUM_COURSE_TCHS &&
-		      Forums->Forum.HieCod == CrsCod);
+		      Forums->Forum.HieCod == CrsCod) ? Lay_HIGHLIGHT :
+							Lay_NO_HIGHLIGHT;
          IsLastItemInLevel[5] = IsLastCrs ? Lay_LAST_ITEM :
 					    Lay_NO_LAST_ITEM;
          For_WriteLinkToForum (Forums,&Forum,Highlight,5,IsLastItemInLevel);
@@ -1709,10 +1721,11 @@ static long For_WriteLinksToCrsForums (const struct For_Forums *Forums,
 
 static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	                          const struct For_Forum *Forum,
-                                  bool Highlight,
+                                  Lay_Highlight_t Highlight,
                                   unsigned Level,
                                   Lay_LastItem_t IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
+   extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
    extern const char *Txt_Copy_not_allowed;
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
@@ -1723,8 +1736,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
    NumThrsWithNewPosts = For_GetNumThrsWithNewPstsInForum (Forum,NumThrs);
 
    /***** Begin row *****/
-   HTM_LI_Begin (Highlight ? "class=\"BG_HIGHLIGHT\"" :
-		             NULL);
+   HTM_LI_Begin (Lay_HighlightClass[Highlight]);
 
       /***** Indent forum title *****/
       Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,

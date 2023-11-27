@@ -125,7 +125,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod);
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
                                               Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
-static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight);
+static void Grp_WriteRowGrp (struct Group *Grp,Lay_Highlight_t Highlight);
 static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
 static void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
@@ -1671,7 +1671,8 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 									   " disabled=\"disabled\"");
 	 HTM_TD_End ();
 
-	 Grp_WriteRowGrp (Grp,IBelongToThisGroup);
+	 Grp_WriteRowGrp (Grp,IBelongToThisGroup ? Lay_HIGHLIGHT :
+						   Lay_NO_HIGHLIGHT);
 
       HTM_TR_End ();
      }
@@ -1980,7 +1981,8 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 
 	 HTM_TD_End ();
 
-	 Grp_WriteRowGrp (Grp,IBelongToThisGroup);
+	 Grp_WriteRowGrp (Grp,IBelongToThisGroup ? Lay_HIGHLIGHT :
+						   Lay_NO_HIGHLIGHT);
 
       HTM_TR_End ();
      }
@@ -2077,7 +2079,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 	 HTM_TD_End ();
 
 	 /* Write cell for group */
-	 Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup);
+	 Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup ? Lay_HIGHLIGHT :
+						      Lay_NO_HIGHLIGHT);
 
       /* End row */
       HTM_TR_End ();
@@ -2173,7 +2176,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 						    " disabled=\"disabled\"");
 	 HTM_TD_End ();
 
-	 Grp_WriteRowGrp (Grp,IBelongToThisGroup);
+	 Grp_WriteRowGrp (Grp,IBelongToThisGroup ? Lay_HIGHLIGHT :
+						   Lay_NO_HIGHLIGHT);
 
       HTM_TR_End ();
      }
@@ -2302,7 +2306,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 /****************** Write a row with the data of a group *********************/
 /*****************************************************************************/
 
-static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
+static void Grp_WriteRowGrp (struct Group *Grp,Lay_Highlight_t Highlight)
   {
    extern const char *Txt_Group_X_open;
    extern const char *Txt_Group_X_closed;
@@ -2310,10 +2314,14 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    int Vacant;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   static const char *HighlightClass[Lay_NUM_HIGHLIGHT] =
+     {
+      [Lay_NO_HIGHLIGHT] = "",
+      [Lay_HIGHLIGHT   ] = " BG_HIGHLIGHT",
+     };
 
    /***** Write icon to show if group is open or closed *****/
-   HTM_TD_Begin (Highlight ? "class=\"BM BG_HIGHLIGHT\"" :
-			     "class=\"BM\"");
+   HTM_TD_Begin ("class=\"BM%s\"",HighlightClass[Highlight]);
       if (asprintf (&Title,Grp->Open ? Txt_Group_X_open :
 				       Txt_Group_X_closed,
 		    Grp->GrpName) < 0)
@@ -2327,8 +2335,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    HTM_TD_End ();
 
    /***** Group name *****/
-   HTM_TD_Begin (Highlight ? "class=\"LM BG_HIGHLIGHT\"" :
-			     "class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM%s\"",HighlightClass[Highlight]);
       HTM_LABEL_Begin ("for=\"Grp%ld\" class=\"DAT_%s\"",
 		       Grp->GrpCod,The_GetSuffix ());
 	 HTM_Txt (Grp->GrpName);
@@ -2337,9 +2344,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
    /***** Room *****/
    HTM_TD_Begin ("class=\"LM DAT_%s%s\"",
-                 The_GetSuffix (),
-                 Highlight ? " BG_HIGHLIGHT" :
-                             "");
+		 The_GetSuffix (),HighlightClass[Highlight]);
       HTM_Txt (Grp->Room.ShrtName);
    HTM_TD_End ();
 
@@ -2349,27 +2354,21 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	Role--)
      {
       HTM_TD_Begin ("class=\"CM DAT_%s%s\"",
-                    The_GetSuffix (),
-		    Highlight ? " BG_HIGHLIGHT" :
-				"");
+                    The_GetSuffix (),HighlightClass[Highlight]);
 	 HTM_Int (Grp->NumUsrs[Role]);
       HTM_TD_End ();
      }
 
    /***** Max. number of students in this group *****/
    HTM_TD_Begin ("class=\"CM DAT_%s%s\"",
-                 The_GetSuffix (),
-		 Highlight ? " BG_HIGHLIGHT" :
-		             "");
+                 The_GetSuffix (),HighlightClass[Highlight]);
       Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
       HTM_TxtF ("%s&nbsp;",StrMaxStudents);
    HTM_TD_End ();
 
    /***** Vacants in this group *****/
    HTM_TD_Begin ("class=\"CM DAT_%s%s\"",
-                 The_GetSuffix (),
-		 Highlight ? " BG_HIGHLIGHT" :
-			     "");
+                 The_GetSuffix (),HighlightClass[Highlight]);
       if (Grp->MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
 	{
 	 Vacant = (int) Grp->MaxStudents - (int) Grp->NumUsrs[Rol_STD];
