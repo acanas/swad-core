@@ -158,7 +158,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
 	                     The_GetSuffix (),BgColor);
-		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM");
+		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
@@ -185,7 +185,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 /*****************************************************************************/
 
 void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
-                                        const char *ClassLogo)
+                                        const char *IconClass)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
@@ -197,7 +197,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action
       Str_FreeGoToTitle ();
 
 	 /***** Center logo and name *****/
-	 Lgo_DrawLogo (Hie_CTR,Ctr->HieCod,Ctr->ShrtName,"ICO16x16",ClassLogo);
+	 Lgo_DrawLogo (Hie_CTR,Ctr,IconClass);
 	 HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
       /***** End link *****/
@@ -342,7 +342,7 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       /***** Center logo and name *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
                     TxtClassStrong,The_GetSuffix (),BgColor);
-	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CM");
+	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CM ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
@@ -537,40 +537,40 @@ void Ctr_GetFullListOfCenters (long InsCod,Hie_Order_t SelectedOrder)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-bool Ctr_GetCenterDataByCod (struct Hie_Node *Ctr)
+bool Ctr_GetCenterDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
-   bool CtrFound = false;
+   bool Found = false;
 
    /***** Clear data *****/
-   Ctr->PrtCod          = -1L;
-   Ctr->Specific.PlcCod = -1L;
-   Ctr->Status          = (Hie_Status_t) 0;
-   Ctr->RequesterUsrCod = -1L;
-   Ctr->ShrtName[0]     = '\0';
-   Ctr->FullName[0]     = '\0';
-   Ctr->WWW[0]          = '\0';
-   Ctr->NumUsrsWhoClaimToBelong.Valid = false;
+   Node->PrtCod          = -1L;
+   Node->Specific.PlcCod = -1L;
+   Node->Status          = (Hie_Status_t) 0;
+   Node->RequesterUsrCod = -1L;
+   Node->ShrtName[0]     = '\0';
+   Node->FullName[0]     = '\0';
+   Node->WWW[0]          = '\0';
+   Node->NumUsrsWhoClaimToBelong.Valid = false;
 
    /***** Check if center code is correct *****/
-   if (Ctr->HieCod > 0)
+   if (Node->HieCod > 0)
      {
       /***** Get data of a center from database *****/
-      if (Ctr_DB_GetCenterDataByCod (&mysql_res,Ctr->HieCod)) // Center found...
+      if (Ctr_DB_GetCenterDataByCod (&mysql_res,Node->HieCod)) // Center found...
         {
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,Ctr,
+         Ctr_GetCenterDataFromRow (mysql_res,Node,
                                    false);	// Don't get number of users who claim to belong to this center
 
          /* Set return value */
-         CtrFound = true;
+         Found = true;
         }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   return CtrFound;
+   return Found;
   }
 
 /*****************************************************************************/
@@ -791,7 +791,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Center logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
-	       Lgo_DrawLogo (Hie_CTR,Ctr->HieCod,Ctr->ShrtName,"ICO20x20",NULL);
+	       Lgo_DrawLogo (Hie_CTR,Ctr,"ICO20x20");
 	    HTM_TD_End ();
 
 	    /* Place */
@@ -1220,6 +1220,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
    Act_Action_t NextAction = ActUnk;
+   struct Hie_Node Ctr;
    unsigned NumPlc;
    const struct Plc_Place *Plc;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
@@ -1250,7 +1251,9 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Center logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
-	    Lgo_DrawLogo (Hie_CTR,-1L,"","ICO20x20",NULL);
+	    Ctr.HieCod = -1L;
+	    Ctr.ShrtName[0] = '\0';
+	    Lgo_DrawLogo (Hie_CTR,&Ctr,"ICO20x20");
 	 HTM_TD_End ();
 
 	 /***** Place *****/

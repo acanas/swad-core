@@ -952,10 +952,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
 			       Gbl.Hierarchy.Node[Hie_INS].WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (Hie_INS,
-			     Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			     Gbl.Hierarchy.Node[Hie_INS].FullName,
-			     "ICO64x64",NULL);
+	       Lgo_DrawLogo (Hie_INS,&Gbl.Hierarchy.Node[Hie_INS],"ICO64x64");
 	       HTM_BR ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)

@@ -235,10 +235,7 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 					      "class=\"LT BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
-	       Lgo_DrawLogo (Hie_DEG,
-			     Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-			     Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
-			     "ICO20x20","LM");
+	       Lgo_DrawLogo (Hie_DEG,&Gbl.Hierarchy.Node[Hie_DEG],"LM ICO20x20");
 	       HTM_NBSP ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
 	       if (ViewType == Vie_VIEW)

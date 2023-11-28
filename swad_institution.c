@@ -180,7 +180,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
 	                     The_GetSuffix (),BgColor);
-		   Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeCtr,"CM");
+		   Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeCtr,"CM ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Number of pending centers (row[1]) */
@@ -217,7 +217,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass
 	 ParCod_PutPar (ParCod_Ins,Ins->HieCod);
 	 HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
      }
-   Lgo_DrawLogo (Hie_INS,Ins->HieCod,Ins->FullName,IconClass,NULL);
+   Lgo_DrawLogo (Hie_INS,Ins,IconClass);
    if (PutLink == Hie_PUT_LINK)
      {
 	 HTM_BUTTON_End ();
@@ -230,7 +230,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass
 /*****************************************************************************/
 
 void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
-                                        const char *ClassLogo)
+                                        const char *IconClass)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
@@ -242,7 +242,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
       Str_FreeGoToTitle ();
 
 	 /***** Institution logo and name *****/
-	 Lgo_DrawLogo (Hie_INS,Ins->HieCod,Ins->ShrtName,"ICO16x16",ClassLogo);
+	 Lgo_DrawLogo (Hie_INS,Ins,IconClass);
 	 HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
       /***** End link *****/
@@ -381,7 +381,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       /***** Institution logo and name *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
                     TxtClassStrong,The_GetSuffix (),BgColor);
-	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CM");
+	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CM ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/
@@ -648,39 +648,39 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-bool Ins_GetInstitDataByCod (struct Hie_Node *Ins)
+bool Ins_GetInstitDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
-   bool InsFound = false;
+   bool Found = false;
 
    /***** Clear data *****/
-   Ins->PrtCod          = -1L;
-   Ins->Status          = (Hie_Status_t) 0;
-   Ins->RequesterUsrCod = -1L;
-   Ins->ShrtName[0]     =
-   Ins->FullName[0]     =
-   Ins->WWW[0]          = '\0';
-   Ins->NumUsrsWhoClaimToBelong.Valid = false;
+   Node->PrtCod          = -1L;
+   Node->Status          = (Hie_Status_t) 0;
+   Node->RequesterUsrCod = -1L;
+   Node->ShrtName[0]     =
+   Node->FullName[0]     =
+   Node->WWW[0]          = '\0';
+   Node->NumUsrsWhoClaimToBelong.Valid = false;
 
    /***** Check if institution code is correct *****/
-   if (Ins->HieCod > 0)
+   if (Node->HieCod > 0)
      {
       /***** Get data of an institution from database *****/
-      if (Ins_DB_GetInsDataByCod (&mysql_res,Ins->HieCod))	// Institution found...
+      if (Ins_DB_GetInsDataByCod (&mysql_res,Node->HieCod))	// Institution found...
 	{
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,Ins,
+         Ins_GetInstitDataFromRow (mysql_res,Node,
                                    false);	// Don't get number of users who claim to belong to this institution
 
          /* Set return value */
-	 InsFound = true;
+	 Found = true;
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   return InsFound;
+   return Found;
   }
 
 /*****************************************************************************/
@@ -936,7 +936,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Institution logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-	       Lgo_DrawLogo (Hie_INS,Ins->HieCod,Ins->ShrtName,"ICO20x20",NULL);
+	       Lgo_DrawLogo (Hie_INS,Ins,"ICO20x20");
 	    HTM_TD_End ();
 
 	    /* Institution short name and full name */
@@ -1317,6 +1317,7 @@ static void Ins_PutFormToCreateInstitution (void)
   {
    Act_Action_t NextAction = ActUnk;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
+   struct Hie_Node Node;
 
    /***** Set action depending on role *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -1344,7 +1345,9 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-	    Lgo_DrawLogo (Hie_INS,-1L,"","ICO20x20",NULL);
+	    Node.HieCod = -1L;
+	    Node.ShrtName[0] = '\0';
+	    Lgo_DrawLogo (Hie_INS,&Node,"ICO20x20");
 	 HTM_TD_End ();
 
 	 /***** Institution short name and full name *****/
@@ -1867,8 +1870,8 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	    /***** Draw institutions as a list *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT);
-	       HTM_TH (TxtFigure      		 ,HTM_HEAD_RIGHT);
+	       HTM_TH (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT );
+	       HTM_TH (TxtFigure      		 	,HTM_HEAD_RIGHT);
 	    HTM_TR_End ();
 
 	    for (NumIns  = 1, NumOrder = 1, NumberLastRow = 0;
@@ -1895,8 +1898,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 			                         "class=\"LM BT_LINK\"");
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
-			      Lgo_DrawLogo (Hie_INS,Ins.HieCod,Ins.ShrtName,
-					    "ICO40x40",NULL);
+			      Lgo_DrawLogo (Hie_INS,&Ins,"ICO40x40");
 			      HTM_NBSP ();
 			     }
 			   HTM_Txt (Ins.FullName);

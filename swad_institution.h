@@ -41,7 +41,7 @@ void Ins_SeeInsWithPendingCtrs (void);
 
 void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,const char *IconClass);
 void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
-                                        const char *ClassLogo);
+                                        const char *IconClass);
 
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
@@ -49,7 +49,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod);
 void Ins_GetFullListOfInstitutions (long CtyCod);
 
 void Ins_WriteInstitutionNameAndCty (long InsCod);
-bool Ins_GetInstitDataByCod (struct Hie_Node *Ins);
+bool Ins_GetInstitDataByCod (struct Hie_Node *Node);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
                                          char CtyName[Nam_MAX_BYTES_FULL_NAME + 1]);

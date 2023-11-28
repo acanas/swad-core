@@ -3053,7 +3053,7 @@ static void Sta_WriteInstit (long InsCod)
                     The_GetSuffix (),Ins.FullName);
 
 	 /***** Form to go to institution *****/
-	 Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeInsInf,"CT");
+	 Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeInsInf,"CT ICO16x16");
      }
    else			// Hit with no institution selected
      {
@@ -3144,7 +3144,7 @@ static void Sta_WriteCenter (long CtrCod)
                     The_GetSuffix (),Ctr.FullName);
 
 	 /***** Form to go to center *****/
-	 Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,"CT");
+	 Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,"CT ICO16x16");
      }
    else			// Hit with no center selected
      {
@@ -3235,7 +3235,7 @@ static void Sta_WriteDegree (long DegCod)
                     The_GetSuffix (),Deg.FullName);
 
 	 /***** Form to go to degree *****/
-	 Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
+	 Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT ICO20x20");
      }
    else			// Hit with no degree selected
      {

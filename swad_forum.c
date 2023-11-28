@@ -1730,6 +1730,22 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
+   Hie_Level_t Levels[For_NUM_TYPES_FORUM] =
+     {
+      [For_FORUM_GLOBAL_USRS] = Hie_SYS,
+      [For_FORUM_GLOBAL_TCHS] = Hie_SYS,
+      [For_FORUM__SWAD__USRS] = Hie_SYS,
+      [For_FORUM__SWAD__TCHS] = Hie_SYS,
+      [For_FORUM_INSTIT_USRS] = Hie_INS,
+      [For_FORUM_INSTIT_TCHS] = Hie_INS,
+      [For_FORUM_CENTER_USRS] = Hie_CTR,
+      [For_FORUM_CENTER_TCHS] = Hie_CTR,
+      [For_FORUM_DEGREE_USRS] = Hie_DEG,
+      [For_FORUM_DEGREE_TCHS] = Hie_DEG,
+      [For_FORUM_COURSE_USRS] = Hie_CRS,
+      [For_FORUM_COURSE_TCHS] = Hie_CRS,
+     };
+   struct Hie_Node Node;
 
    /***** Get number of threads and number of posts *****/
    NumThrs = For_DB_GetNumThrsInForum (Forum);
@@ -1786,27 +1802,25 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	      {
 	       case For_FORUM_GLOBAL_USRS:
 	       case For_FORUM_GLOBAL_TCHS:
-		  Ico_PutIcon ("comments.svg",Ico_BLACK,ForumName,"ICO16x16");
+		  Ico_PutIcon ("comments.svg",Ico_BLACK,ForumName,
+			       "ICO16x16");
 		  break;
 	       case For_FORUM__SWAD__USRS:
 	       case For_FORUM__SWAD__TCHS:
-		  Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,ForumName,"ICO16x16");
+		  Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,ForumName,
+			       "ICO16x16");
 		  break;
 	       case For_FORUM_INSTIT_USRS:
 	       case For_FORUM_INSTIT_TCHS:
-		  Lgo_DrawLogo (Hie_INS,Forum->HieCod,ForumName,"ICO16x16",NULL);
-		  break;
 	       case For_FORUM_CENTER_USRS:
 	       case For_FORUM_CENTER_TCHS:
-		  Lgo_DrawLogo (Hie_CTR,Forum->HieCod,ForumName,"ICO16x16",NULL);
-		  break;
 	       case For_FORUM_DEGREE_USRS:
 	       case For_FORUM_DEGREE_TCHS:
-		  Lgo_DrawLogo (Hie_DEG,Forum->HieCod,ForumName,"ICO16x16",NULL);
-		  break;
 	       case For_FORUM_COURSE_USRS:
 	       case For_FORUM_COURSE_TCHS:
-		  Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,ForumName,"ICO16x16");
+		  Node.HieCod = Forum->HieCod;
+		  Str_Copy (Node.ShrtName,ForumName,sizeof (Node.ShrtName) - 1);
+		  Lgo_DrawLogo (Levels[Forum->Type],&Node,"ICO16x16");
 		  break;
 	       default:
 		  break;

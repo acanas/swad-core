@@ -580,10 +580,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		     Str_FreeGoToTitle ();
 		 }
 
-	       Lgo_DrawLogo (Hie_INS,
-			     Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			     Gbl.Hierarchy.Node[Hie_INS].ShrtName,
-			     "ICO20x20","LM");
+	       Lgo_DrawLogo (Hie_INS,&Gbl.Hierarchy.Node[Hie_INS],"LM ICO20x20");
 	       HTM_NBSP ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
 

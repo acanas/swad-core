@@ -50,7 +50,7 @@
 void Deg_SeeDegWithPendingCrss (void);
 
 void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
-                                        const char *ClassLogo);
+                                        const char *IconClass);
 
 void Deg_WriteSelectorOfDegree (void);
 
@@ -70,7 +70,7 @@ void Deg_ReceiveFormReqDeg (void);
 void Deg_ReceiveFormNewDeg (void);
 void Deg_RemoveDegree (void);
 
-bool Deg_GetDegreeDataByCod (struct Hie_Node *Deg);
+bool Deg_GetDegreeDataByCod (struct Hie_Node *Node);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);

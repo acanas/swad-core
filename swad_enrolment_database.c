@@ -79,10 +79,12 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod)
 void Enr_DB_CreateTmpTableMyCourses (void)
   {
    DB_CreateTmpTable ("CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
-		      " (CrsCod INT NOT NULL,"
-			  "Role TINYINT NOT NULL,"
-		        "DegCod INT NOT NULL,"
-		        "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
+		      "(CrsInd INT NOT NULL AUTO_INCREMENT,"
+		       "CrsCod INT NOT NULL,"
+			 "Role TINYINT NOT NULL,"
+		       "DegCod INT NOT NULL,"
+	               "UNIQUE INDEX(CrsInd),"
+		       "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
 		      " SELECT crs_users.CrsCod,"
 			      "crs_users.Role,"
 			      "crs_courses.DegCod"
@@ -101,15 +103,26 @@ void Enr_DB_CreateTmpTableMyCourses (void)
 /************************* Get my courses from database **********************/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,
-			   __attribute__((unused)) long PrtCod)
+unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,long PrtCod)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get which courses you belong to",
-		   "SELECT CrsCod,"	// row[0]
-			  "Role,"	// row[1]
-			  "DegCod"	// row[2]
-		   " FROM my_courses_tmp");
+   if (PrtCod > 0)
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get which courses you belong to",
+		      "SELECT CrsCod,"	// row[0]
+			     "Role,"	// row[1]
+			     "DegCod"	// row[2]
+		       " FROM my_courses_tmp"
+		      " WHERE DegCod=%ld"
+		      " ORDER BY CrsInd",
+		      PrtCod);
+   else
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get which courses you belong to",
+		      "SELECT CrsCod,"	// row[0]
+			     "Role,"	// row[1]
+			     "DegCod"	// row[2]
+		      " FROM my_courses_tmp"
+		      " ORDER BY CrsInd");
   }
 
 /*****************************************************************************/

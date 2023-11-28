@@ -330,7 +330,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
      {
       case Not_LIST_BRIEF_NOTICES:
 	 /***** Get notices from database *****/
-	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,
+					       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 /***** Get notices from database *****/

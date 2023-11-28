@@ -58,8 +58,8 @@ bool Cty_CheckIfICanEditCountries (void);
 void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
                                         const char *ClassContainer,
                                         const char *ClassMap);
-void Cty_DrawCountryMap (struct Hie_Node *Cty,const char *Class);
-bool Cty_CheckIfCountryPhotoExists (struct Hie_Node *Cty);
+void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class);
+bool Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutParCtyOrder (void);
@@ -67,7 +67,7 @@ void Cty_EditCountries (void);
 void Cty_GetBasicListOfCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod);
-bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Cty);
+bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Node);
 void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1]);

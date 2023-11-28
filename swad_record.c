@@ -1654,10 +1654,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Rec_DEGREE_LOGO_SIZE);
-		     Lgo_DrawLogo (Hie_DEG,
-				   Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-				   Gbl.Hierarchy.Node[Hie_DEG].ShrtName,
-				   "ICO64x64",NULL);
+		     Lgo_DrawLogo (Hie_DEG,&Gbl.Hierarchy.Node[Hie_DEG],
+				   "ICO64x64");
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"REC_HEAD CM\"");
@@ -2534,8 +2532,7 @@ static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,
 	       ParCod_PutPar (ParCod_Ins,Ins->HieCod);
 	       HTM_BUTTON_Submit_Begin (Ins->FullName,"class=\"BT_LINK\"");
 	   }
-	 Lgo_DrawLogo (Hie_INS,Ins->HieCod,Ins->ShrtName,
-		       "ICO",NULL);
+	 Lgo_DrawLogo (Hie_INS,Ins,"ICO");
 	 if (PutFormLinks == Frm_PUT_FORM)
 	   {
 	       HTM_BUTTON_End ();

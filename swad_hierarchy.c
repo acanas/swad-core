@@ -58,7 +58,7 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/**************************** Public constants ******************************/
+/****************************** Public constants *****************************/
 /*****************************************************************************/
 
 ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS] =
@@ -68,6 +68,26 @@ ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS] =
    [Hie_CTR] = ParCod_Ctr,
    [Hie_DEG] = ParCod_Deg,
    [Hie_CRS] = ParCod_Crs,
+  };
+
+const char *Hie_Icons[Hie_NUM_LEVELS] =
+  {
+   [Hie_SYS] = "sitemap.svg",
+   [Hie_CTY] = "globe-americas.svg",
+   [Hie_INS] = "university.svg",
+   [Hie_CTR] = "building.svg",
+   [Hie_DEG] = "graduation-cap.svg",
+   [Hie_CRS] = "chalkboard-teacher.svg",
+  };
+
+unsigned (*Hie_GetMyNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
+						  long PrtCod) =
+  {
+   [Hie_CTY] = Cty_DB_GetMyCtys,
+   [Hie_INS] = Ins_DB_GetMyInss,
+   [Hie_CTR] = Ctr_DB_GetMyCtrs,
+   [Hie_DEG] = Deg_DB_GetMyDegs,
+   [Hie_CRS] = Enr_DB_GetMyCrss,
   };
 
 /*****************************************************************************/
@@ -427,38 +447,9 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 
 static void Hie_DrawLogo (void)
   {
-   static Hie_Level_t LogoScope[Hie_NUM_LEVELS] =
-     {
-      [Hie_INS] = Hie_INS,
-      [Hie_CTR] = Hie_CTR,
-      [Hie_DEG] = Hie_DEG,
-      [Hie_CRS] = Hie_DEG,	// Draw logo of degree
-     };
-   static const long *LogoCode[Hie_NUM_LEVELS] =
-     {
-      [Hie_INS] = &Gbl.Hierarchy.Node[Hie_INS].HieCod,
-      [Hie_CTR] = &Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-      [Hie_DEG] = &Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-      [Hie_CRS] = &Gbl.Hierarchy.Node[Hie_DEG].HieCod,	// Degree code
-     };
-
    /***** Logo *****/
-   switch (Gbl.Hierarchy.Level)
-     {
-      case Hie_SYS:	// System
-	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,
-		      Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName,"TOP_LOGO");
-	 break;
-      case Hie_CTY:	// Country
-	 Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],"TOP_LOGO");
-	 break;
-      default:
-	 Lgo_DrawLogo (LogoScope[Gbl.Hierarchy.Level],
-		       *LogoCode[Gbl.Hierarchy.Level],
-		       Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName,
-		       "ICO40x40","TOP_LOGO");
-	 break;
-     }
+   Lgo_DrawLogo (Gbl.Hierarchy.Level,&Gbl.Hierarchy.Node[Gbl.Hierarchy.Level],
+		 "TOP_LOGO ICO40x40");
   }
 
 /*****************************************************************************/
@@ -650,7 +641,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		     Ins_GetInstitDataByCod (&Hie[Hie_INS]);
 
 		     /* Write institution logo and name */
-		     Ins_DrawInstitLogoAndNameWithLink (&Hie[Hie_INS],ActSeeInsInf,"LT");
+		     Ins_DrawInstitLogoAndNameWithLink (&Hie[Hie_INS],ActSeeInsInf,"LT ICO16x16");
 		    }
 		  break;
 	       case Hie_CTR:	// Center
@@ -660,7 +651,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		     Ctr_GetCenterDataByCod (&Hie[Hie_CTR]);
 
 		     /* Write center logo and name */
-		     Ctr_DrawCenterLogoAndNameWithLink (&Hie[Hie_CTR],ActSeeCtrInf,"LT");
+		     Ctr_DrawCenterLogoAndNameWithLink (&Hie[Hie_CTR],ActSeeCtrInf,"LT ICO16x16");
 		    }
 		  break;
 	       case Hie_DEG:	// Degree
@@ -670,7 +661,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		     Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
 
 		     /* Write degree logo and name */
-		     Deg_DrawDegreeLogoAndNameWithLink (&Hie[Hie_DEG],ActSeeDegInf,"LT");
+		     Deg_DrawDegreeLogoAndNameWithLink (&Hie[Hie_DEG],ActSeeDegInf,"LT ICO20x20");
 		    }
 		  break;
 	       default:	// There are no administrators in other scopes
@@ -930,15 +921,6 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
    unsigned NumNode;
    unsigned NumNodes;
    long HieCod;
-   static unsigned (*GetNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
-						      long PrtCod) =
-     {
-      [Hie_CTY] = Cty_DB_GetMyCtys,
-      [Hie_INS] = Ins_DB_GetMyInss,
-      [Hie_CTR] = Ctr_DB_GetMyCtrs,
-      [Hie_DEG] = Deg_DB_GetMyDegs,
-      [Hie_CRS] = Enr_DB_GetMyCrss,
-     };
 
    /***** Trivial check 1: if list of nodes is already filled, there's nothing to do *****/
    if (Gbl.Usrs.Me.Hierarchy[Level].Filled)
@@ -960,7 +942,7 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
    Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
 
    /***** Get my courses/degrees/centers/institutions/countries from database *****/
-   if ((NumNodes = GetNodesFromDB[Level] (&mysql_res,-1L)))
+   if ((NumNodes = Hie_GetMyNodesFromDB[Level] (&mysql_res,-1L)))
      {
       if ((Gbl.Usrs.Me.Hierarchy[Level].Nodes = malloc (NumNodes *
 							sizeof (*Gbl.Usrs.Me.Hierarchy[Level].Nodes))) == NULL)
@@ -982,7 +964,7 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
 
 	    /* Get parent hierarchy code */
 	    if (Level == Hie_CRS)
-	       Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].PrtCod  = Str_ConvertStrCodToLongCod (row[2]);
+	       Gbl.Usrs.Me.Hierarchy[Level].Nodes[Gbl.Usrs.Me.Hierarchy[Level].Num].PrtCod = Str_ConvertStrCodToLongCod (row[2]);
 
 	    Gbl.Usrs.Me.Hierarchy[Level].Num++;
 	   }
@@ -1113,14 +1095,6 @@ void Hie_GetAndShowHierarchyStats (void)
 static void Hie_WriteHeadHierarchy (void)
   {
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
-   static const char *Icons[Hie_NUM_LEVELS] =
-     {
-      [Hie_CTY] = "globe-americas.svg",
-      [Hie_INS] = "university.svg",
-      [Hie_CTR] = "building.svg",
-      [Hie_DEG] = "graduation-cap.svg",
-      [Hie_CRS] = "chalkboard-teacher.svg",
-     };
    Hie_Level_t Level;
 
    HTM_TR_Begin (NULL);
@@ -1132,7 +1106,8 @@ static void Hie_WriteHeadHierarchy (void)
 	   Level++)
 	{
 	 HTM_TH_Begin (HTM_HEAD_RIGHT);
-	    Ico_PutIcon (Icons[Level],Ico_BLACK,Txt_HIERARCHY_PLURAL_Abc[Level],"ICOx16");
+	    Ico_PutIcon (Hie_Icons[Level],Ico_BLACK,
+			 Txt_HIERARCHY_PLURAL_Abc[Level],"ICOx16");
 	    HTM_BR ();
 	    HTM_Txt (Txt_HIERARCHY_PLURAL_Abc[Level]);
 	 HTM_TH_End ();

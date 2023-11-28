@@ -163,7 +163,7 @@ void Deg_SeeDegWithPendingCrss (void)
 	       /* Degree logo and full name */
 	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
 	                     The_GetSuffix (),BgColor);
-		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,"CM");
+		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,"CM ICO20x20");
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
@@ -191,7 +191,7 @@ void Deg_SeeDegWithPendingCrss (void)
 /*****************************************************************************/
 
 void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
-                                        const char *ClassLogo)
+                                        const char *IconClass)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
@@ -203,7 +203,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action
       Str_FreeGoToTitle ();
 
 	 /***** Degree logo and name *****/
-	 Lgo_DrawLogo (Hie_DEG,Deg->HieCod,Deg->ShrtName,"ICO20x20",ClassLogo);
+	 Lgo_DrawLogo (Hie_DEG,Deg,IconClass);
 	 HTM_TxtF ("&nbsp;%s",Deg->FullName);
 
       /***** End link *****/
@@ -375,7 +375,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
-	       Lgo_DrawLogo (Hie_DEG,Deg->HieCod,Deg->ShrtName,"ICO20x20",NULL);
+	       Lgo_DrawLogo (Hie_DEG,Deg,"ICO20x20");
 	    HTM_TD_End ();
 
 	    /* Degree short name and full name */
@@ -499,6 +499,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
    Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
    struct DegTyp_DegreeType *DegTyp;
+   struct Hie_Node Deg;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Set action depending on role *****/
@@ -527,7 +528,9 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree logo *****/
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
-	    Lgo_DrawLogo (Hie_DEG,-1L,"","ICO20x20",NULL);
+	    Deg.HieCod = -1L;
+	    Deg.ShrtName[0] = '\0';
+	    Lgo_DrawLogo (Hie_DEG,&Deg,"ICO20x20");
 	 HTM_TD_End ();
 
 	 /***** Degree short name and full name *****/
@@ -792,7 +795,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       /***** Degree logo and name *****/
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
                     TxtClassStrong,The_GetSuffix (),BgColor);
-	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,"CM");
+	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,"CM ICO20x20");
       HTM_TD_End ();
 
       /***** Type of degree *****/
@@ -1109,38 +1112,38 @@ void Deg_RemoveDegree (void)
 /*****************************************************************************/
 // Returns true if degree found
 
-bool Deg_GetDegreeDataByCod (struct Hie_Node *Deg)
+bool Deg_GetDegreeDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
-   bool DegFound = false;
+   bool Found = false;
 
    /***** Clear data *****/
-   Deg->PrtCod          = -1L;
-   Deg->Specific.TypCod = -1L;
-   Deg->Status          = (Hie_Status_t) 0;
-   Deg->RequesterUsrCod = -1L;
-   Deg->ShrtName[0]     = '\0';
-   Deg->FullName[0]     = '\0';
-   Deg->WWW[0]          = '\0';
+   Node->PrtCod          = -1L;
+   Node->Specific.TypCod = -1L;
+   Node->Status          = (Hie_Status_t) 0;
+   Node->RequesterUsrCod = -1L;
+   Node->ShrtName[0]     = '\0';
+   Node->FullName[0]     = '\0';
+   Node->WWW[0]          = '\0';
 
    /***** Check if degree code is correct *****/
-   if (Deg->HieCod > 0)
+   if (Node->HieCod > 0)
      {
       /***** Get data of a degree from database *****/
-      if (Deg_DB_GetDegreeDataByCod (&mysql_res,Deg->HieCod)) // Degree found...
+      if (Deg_DB_GetDegreeDataByCod (&mysql_res,Node->HieCod)) // Degree found...
 	{
 	 /***** Get data of degree *****/
-	 Deg_GetDegreeDataFromRow (mysql_res,Deg);
+	 Deg_GetDegreeDataFromRow (mysql_res,Node);
 
          /* Set return value */
-	 DegFound = true;
+	 Found = true;
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   return DegFound;
+   return Found;
   }
 
 /*****************************************************************************/

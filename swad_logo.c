@@ -74,120 +74,118 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 /***************** Draw institution, center or degree logo *******************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (Hie_Level_t Level,long HieCod,const char *AltText,
-                   const char *IconClass,const char *Class)
+void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
+                   const char *IconClass)
   {
-   static const char *HieIcon[Hie_NUM_LEVELS] =
-     {
-      [Hie_INS] = "university.svg",
-      [Hie_CTR] = "building.svg",
-      [Hie_DEG] = "graduation-cap.svg",
-      [Hie_CRS] = "chalkboard-teacher.svg",
-     };
+   extern const char *Hie_Icons[Hie_NUM_LEVELS];
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
    bool LogoFound = false;
-   long InsCod = HieCod;
-   long CtrCod = HieCod;
-   long DegCod = HieCod;
-   long CrsCod = HieCod;
+   long HieCod;
+   long InsCod;
+   long CtrCod;
+   long DegCod;
+   long CrsCod;
    char *URL;
    char *Icon;
-   bool ClassNotEmpty;
 
-   /***** Path to logo *****/
-   if (HieIcon[Level])	// Scope is correct
+   switch (Level)
      {
-      if (HieCod > 0)	// Institution, center or degree exists
-	{
-	 /* Course */
-
-	 /* Degree */
-	 if (!LogoFound && Level >= Hie_DEG)
+      case Hie_SYS:
+	 Ico_PutIcon (Hie_Icons[Hie_SYS],Ico_BLACK,Node->ShrtName,IconClass);
+	 break;
+      case Hie_CTY:
+	 Cty_DrawCountryMap (Node,IconClass);
+	 break;
+      case Hie_INS:
+      case Hie_CTR:
+      case Hie_DEG:
+      case Hie_CRS:
+	 if (Node->HieCod > 0)	// Institution, center, degree or course exists
 	   {
-	    Folder = Cfg_FOLDER_DEG;
-	    if (Level >= Hie_CRS)
-	       DegCod = Crs_DB_GetDegCodOfCourseByCod (CrsCod);
-	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
-		      Cfg_PATH_DEG_PUBLIC,
-		      (unsigned) (DegCod % 100),
-		      (unsigned)  DegCod,
-		      (unsigned)  DegCod);
-	    LogoFound = Fil_CheckIfPathExists (PathLogo);
+	    HieCod =
+	    InsCod =
+	    CtrCod =
+	    DegCod =
+	    CrsCod = Node->HieCod;
+
+	    /* Course */
+
+	    /* Degree */
+	    if (!LogoFound && Level >= Hie_DEG)
+	      {
+	       Folder = Cfg_FOLDER_DEG;
+	       if (Level >= Hie_CRS)
+		  DegCod = Crs_DB_GetDegCodOfCourseByCod (CrsCod);
+	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
+			 Cfg_PATH_DEG_PUBLIC,
+			 (unsigned) (DegCod % 100),
+			 (unsigned)  DegCod,
+			 (unsigned)  DegCod);
+	       LogoFound = Fil_CheckIfPathExists (PathLogo);
+	       if (LogoFound)
+		  HieCod = DegCod;
+	      }
+
+	    /* Center */
+	    if (!LogoFound && Level >= Hie_CTR)
+	      {
+	       Folder = Cfg_FOLDER_CTR;
+	       if (Level >= Hie_DEG)
+		  CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (DegCod);
+	       else
+		  CtrCod = HieCod;
+	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
+			 Cfg_PATH_CTR_PUBLIC,
+			 (unsigned) (CtrCod % 100),
+			 (unsigned)  CtrCod,
+			 (unsigned)  CtrCod);
+	       LogoFound = Fil_CheckIfPathExists (PathLogo);
+	       if (LogoFound)
+		  HieCod = CtrCod;
+	      }
+
+	    /* Institution */
+	    if (!LogoFound)
+	      {
+	       Folder = Cfg_FOLDER_INS;
+	       if (Level >= Hie_CTR)
+		  InsCod = Ctr_DB_GetInsCodOfCenterByCod (CtrCod);
+	       snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
+			 Cfg_PATH_INS_PUBLIC,
+			 (unsigned) (InsCod % 100),
+			 (unsigned)  InsCod,
+			 (unsigned)  InsCod);
+	       LogoFound = Fil_CheckIfPathExists (PathLogo);
+	       if (LogoFound)
+		  HieCod = InsCod;
+	      }
+
+	    /***** Draw logo *****/
 	    if (LogoFound)
-	       HieCod = DegCod;
-	   }
+	      {
+	       if (asprintf (&URL,"%s/%s/%02u/%u/logo",
+			     Cfg_URL_SWAD_PUBLIC,Folder,
+			     (unsigned) (HieCod % 100),
+			     (unsigned) HieCod) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
+		  Err_NotEnoughMemoryExit ();
 
-	 /* Center */
-	 if (!LogoFound && Level >= Hie_CTR)
-	   {
-	    Folder = Cfg_FOLDER_CTR;
-	    if (Level >= Hie_DEG)
-	       CtrCod = Deg_DB_GetCtrCodOfDegreeByCod (DegCod);
+	       HTM_IMG (URL,Icon,Node->FullName,
+			"class=\"%s\"",IconClass);
+	       free (Icon);
+	       free (URL);
+	      }
 	    else
-	       CtrCod = HieCod;
-	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
-		      Cfg_PATH_CTR_PUBLIC,
-		      (unsigned) (CtrCod % 100),
-		      (unsigned)  CtrCod,
-		      (unsigned)  CtrCod);
-	    LogoFound = Fil_CheckIfPathExists (PathLogo);
-	    if (LogoFound)
-	       HieCod = CtrCod;
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,Hie_Icons[Level],Node->ShrtName,
+			"class=\"%s ICO_%s_%s\"",
+			IconClass,
+			Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
 	   }
-
-	 /* Institution */
-	 if (!LogoFound)
-	   {
-	    Folder = Cfg_FOLDER_INS;
-	    if (Level >= Hie_CTR)
-	       InsCod = Ctr_DB_GetInsCodOfCenterByCod (CtrCod);
-	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",
-		      Cfg_PATH_INS_PUBLIC,
-		      (unsigned) (InsCod % 100),
-		      (unsigned)  InsCod,
-		      (unsigned)  InsCod);
-	    LogoFound = Fil_CheckIfPathExists (PathLogo);
-	    if (LogoFound)
-	       HieCod = InsCod;
-	   }
-
-	 /***** Draw logo *****/
-	 ClassNotEmpty = false;
-	 if (Class)
-	    if (Class[0])
-	       ClassNotEmpty = true;
-
-	 if (LogoFound)
-	   {
-	    if (asprintf (&URL,"%s/%s/%02u/%u/logo",
-			  Cfg_URL_SWAD_PUBLIC,Folder,
-			  (unsigned) (HieCod % 100),
-			  (unsigned) HieCod) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
-	       Err_NotEnoughMemoryExit ();
-
-	    HTM_IMG (URL,Icon,AltText,
-		     "class=\"%s%s%s\"",
-		     IconClass,
-		     ClassNotEmpty ? " " :
-				     "",
-		     ClassNotEmpty ? Class :
-				     "");
-	    free (Icon);
-	    free (URL);
-	   }
-	 else
-	    HTM_IMG (Cfg_URL_ICON_PUBLIC,HieIcon[Level],AltText,
-		     "class=\"%s ICO_%s_%s%s%s\"",
-		     IconClass,
-		     Ico_GetPreffix (Ico_BLACK),The_GetSuffix (),
-		     ClassNotEmpty ? " " :
-				     "",
-		     ClassNotEmpty ? Class :
-				     "");
-	}
+	 break;
+      default:
+	 break;
      }
   }
 

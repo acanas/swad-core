@@ -67,10 +67,7 @@ void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level)
 		      The_GetSuffix ());
 
       /* Logo and name */
-      Lgo_DrawLogo (LevelLogo,
-	            Gbl.Hierarchy.Node[LevelLogo].HieCod,
-	            Gbl.Hierarchy.Node[LevelLogo].ShrtName,
-		    "ICO64x64",NULL);
+      Lgo_DrawLogo (LevelLogo,&Gbl.Hierarchy.Node[LevelLogo],"ICO64x64");
       HTM_BR ();
       HTM_Txt (Gbl.Hierarchy.Node[Level].FullName);
 

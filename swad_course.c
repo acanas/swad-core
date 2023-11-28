@@ -91,6 +91,13 @@ static struct Hie_Node *Crs_EditingCrs = NULL;	// Static variable to keep the co
 /*****************************************************************************/
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
+static void Crs_WriteNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
+			    Lay_LastItem_t IsLastItemInLevel[1 + 6],
+			    Hie_Level_t Level);
+static void Crs_WriteRowMyCourses (Hie_Level_t Level,
+				   const struct Hie_Node Hie[Hie_NUM_LEVELS],
+				   Lay_Highlight_t Highlight,
+				   Lay_LastItem_t IsLastItemInLevel[1 + 6]);
 
 static void Crs_GetListCrssInCurrentDeg (void);
 static void Crs_ListCourses (void);
@@ -151,30 +158,9 @@ void Crs_ShowIntroduction (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
-   extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
-   extern const char *Par_CodeStr[];
-   extern ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS];
    extern const char *Txt_My_courses;
-   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    Lay_LastItem_t IsLastItemInLevel[1 + 6];
-   Lay_Highlight_t Highlight;	// Highlight because degree, course, etc. is selected
-   MYSQL_RES *mysql_resCty;
-   MYSQL_RES *mysql_resIns;
-   MYSQL_RES *mysql_resCtr;
-   MYSQL_RES *mysql_resDeg;
-   MYSQL_RES *mysql_resCrs;
-   MYSQL_ROW row;
-   unsigned NumCty;
-   unsigned NumCtys;
-   unsigned NumIns;
-   unsigned NumInss;
-   unsigned NumCtr;
-   unsigned NumCtrs;
-   unsigned NumDeg;
-   unsigned NumDegs;
-   unsigned NumCrs;
-   unsigned NumCrss;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,
@@ -184,243 +170,118 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
-	 /***** Write link to platform *****/
-	 Highlight = (Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0) ? Lay_HIGHLIGHT :
-								 Lay_NO_HIGHLIGHT;
-	 HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-	    IsLastItemInLevel[1] = Lay_LAST_ITEM;
-	    Lay_IndentDependingOnLevel (1,IsLastItemInLevel,
-					Lay_HORIZONTAL_LINE_AT_RIGHT);
-	    Frm_BeginForm (ActMyCrs);
-	       Par_PutParLong (NULL,Par_CodeStr[Hie_ParCod[Hie_CTY]],-1L);
-	       HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_SINGUL_Abc[Hie_SYS],
-	                                "class=\"BT_LINK FORM_IN_%s\"",
-					The_GetSuffix ());
-		  Ico_PutIcon ("sitemap.svg",Ico_BLACK,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS],"ICO16x16");
-		  HTM_TxtF ("&nbsp;%s",Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	 HTM_LI_End ();
-
-	 /***** Get my countries *****/
-	 NumCtys = Cty_DB_GetMyCtys (&mysql_resCty,-1L);
-	 for (NumCty = 0;
-	      NumCty < NumCtys;
-	      NumCty++)
-	   {
-	    /***** Get next country *****/
-	    row = mysql_fetch_row (mysql_resCty);
-
-	    /***** Get data of this country *****/
-	    Hie[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    if (!Cty_GetBasicCountryDataByCod (&Hie[Hie_CTY]))
-	       Err_WrongCountrExit ();
-
-	    /***** Write link to country *****/
-	    Highlight = (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0 &&
-			 Gbl.Hierarchy.Node[Hie_CTY].HieCod == Hie[Hie_CTY].HieCod) ? Lay_HIGHLIGHT :
-										      Lay_NO_HIGHLIGHT;
-	    HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-	       IsLastItemInLevel[2] = (NumCty == NumCtys - 1) ? Lay_LAST_ITEM :
-								Lay_NO_LAST_ITEM;
-	       Lay_IndentDependingOnLevel (2,IsLastItemInLevel,
-					   Lay_HORIZONTAL_LINE_AT_RIGHT);
-	       Frm_BeginForm (ActMyCrs);
-		  ParCod_PutPar (Hie_ParCod[Hie_CTY],Hie[Hie_CTY].HieCod);
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),
-					   "class=\"BT_LINK FORM_IN_%s\"",
-					   The_GetSuffix ());
-		     Cty_DrawCountryMap (&Hie[Hie_CTY],"ICO16x16");
-		     HTM_TxtF ("&nbsp;%s",Hie[Hie_CTY].FullName);
-		  HTM_BUTTON_End ();
-	       Frm_EndForm ();
-	    HTM_LI_End ();
-
-	    /***** Get my institutions in this country *****/
-	    NumInss = Ins_DB_GetMyInss (&mysql_resIns,
-	                                Hie[Hie_CTY].HieCod);
-	    for (NumIns = 0;
-		 NumIns < NumInss;
-		 NumIns++)
-	      {
-	       /***** Get next institution *****/
-	       row = mysql_fetch_row (mysql_resIns);
-
-	       /***** Get data of this institution *****/
-	       Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	       if (!Ins_GetInstitDataByCod (&Hie[Hie_INS]))
-		  Err_WrongInstitExit ();
-
-	       /***** Write link to institution *****/
-	       Highlight = (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0 &&
-			    Gbl.Hierarchy.Node[Hie_INS].HieCod == Hie[Hie_INS].HieCod) ? Lay_HIGHLIGHT :
-											 Lay_NO_HIGHLIGHT;
-	       HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-		  IsLastItemInLevel[3] = (NumIns == NumInss - 1) ? Lay_LAST_ITEM :
-								   Lay_NO_LAST_ITEM;
-		  Lay_IndentDependingOnLevel (3,IsLastItemInLevel,
-					      Lay_HORIZONTAL_LINE_AT_RIGHT);
-		  Frm_BeginForm (ActMyCrs);
-		     ParCod_PutPar (Hie_ParCod[Hie_INS],Hie[Hie_INS].HieCod);
-		     HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeInsInf),
-					      "class=\"BT_LINK FORM_IN_%s\"",
-					      The_GetSuffix ());
-			Lgo_DrawLogo (Hie_INS,
-				      Hie[Hie_INS].HieCod,
-				      Hie[Hie_INS].ShrtName,
-				      "ICO16x16",NULL);
-			HTM_TxtF ("&nbsp;%s",Hie[Hie_INS].ShrtName);
-		     HTM_BUTTON_End ();
-		  Frm_EndForm ();
-	       HTM_LI_End ();
-
-	       /***** Get my centers in this institution *****/
-	       NumCtrs = Ctr_DB_GetMyCtrs (&mysql_resCtr,Hie[Hie_INS].HieCod);
-	       for (NumCtr = 0;
-		    NumCtr < NumCtrs;
-		    NumCtr++)
-		 {
-		  /***** Get next center *****/
-		  row = mysql_fetch_row (mysql_resCtr);
-
-		  /***** Get data of this center *****/
-		  Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[0]);
-		  if (!Ctr_GetCenterDataByCod (&Hie[Hie_CTR]))
-		     Err_WrongCenterExit ();
-
-		  /***** Write link to center *****/
-		  Highlight = (Gbl.Hierarchy.Level == Hie_CTR &&
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod == Hie[Hie_CTR].HieCod) ? Lay_HIGHLIGHT :
-											    Lay_NO_HIGHLIGHT;
-		  HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-		     IsLastItemInLevel[4] = (NumCtr == NumCtrs - 1) ? Lay_LAST_ITEM :
-								      Lay_NO_LAST_ITEM;
-		     Lay_IndentDependingOnLevel (4,IsLastItemInLevel,
-						 Lay_HORIZONTAL_LINE_AT_RIGHT);
-		     Frm_BeginForm (ActMyCrs);
-			ParCod_PutPar (Hie_ParCod[Hie_CTR],Hie[Hie_CTR].HieCod);
-			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtrInf),
-						 "class=\"BT_LINK FORM_IN_%s\"",
-						 The_GetSuffix ());
-			   Lgo_DrawLogo (Hie_CTR,
-					 Hie[Hie_CTR].HieCod,
-					 Hie[Hie_CTR].ShrtName,
-					 "ICO16x16",NULL);
-			   HTM_TxtF ("&nbsp;%s",Hie[Hie_CTR].ShrtName);
-			HTM_BUTTON_End ();
-		     Frm_EndForm ();
-		  HTM_LI_End ();
-
-		  /***** Get my degrees in this center *****/
-		  NumDegs = Deg_DB_GetMyDegs (&mysql_resDeg,Hie[Hie_CTR].HieCod);
-		  for (NumDeg = 0;
-		       NumDeg < NumDegs;
-		       NumDeg++)
-		    {
-		     /***** Get next degree *****/
-		     row = mysql_fetch_row (mysql_resDeg);
-
-		     /***** Get data of this degree *****/
-		     Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[0]);
-		     if (!Deg_GetDegreeDataByCod (&Hie[Hie_DEG]))
-			Err_WrongDegreeExit ();
-
-		     /***** Write link to degree *****/
-		     Highlight = (Gbl.Hierarchy.Level == Hie_DEG &&
-				  Gbl.Hierarchy.Node[Hie_DEG].HieCod == Hie[Hie_DEG].HieCod) ? Lay_HIGHLIGHT :
-											       Lay_NO_HIGHLIGHT;
-		     HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-			IsLastItemInLevel[5] = (NumDeg == NumDegs - 1) ? Lay_LAST_ITEM :
-									 Lay_NO_LAST_ITEM;
-			Lay_IndentDependingOnLevel (5,IsLastItemInLevel,
-						    Lay_HORIZONTAL_LINE_AT_RIGHT);
-			Frm_BeginForm (ActMyCrs);
-			   ParCod_PutPar (Hie_ParCod[Hie_DEG],Hie[Hie_DEG].HieCod);
-			   HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeDegInf),
-						    "class=\"BT_LINK FORM_IN_%s\"",
-						    The_GetSuffix ());
-			      Lgo_DrawLogo (Hie_DEG,
-					    Hie[Hie_DEG].HieCod,
-					    Hie[Hie_DEG].ShrtName,
-					    "ICO16x16",NULL);
-			      HTM_TxtF ("&nbsp;%s",Hie[Hie_DEG].ShrtName);
-			   HTM_BUTTON_End ();
-			Frm_EndForm ();
-		     HTM_LI_End ();
-
-		     /***** Get my courses in this degree *****/
-		     NumCrss = Crs_DB_GetCrssFromUsr (&mysql_resCrs,
-		                                      Gbl.Usrs.Me.UsrDat.UsrCod,
-		                                      Hie[Hie_DEG].HieCod);
-		     for (NumCrs = 0;
-			  NumCrs < NumCrss;
-			  NumCrs++)
-		       {
-			/***** Get next course *****/
-			row = mysql_fetch_row (mysql_resCrs);
-
-			/***** Get data of this course *****/
-			Hie[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[0]);
-			if (!Crs_GetCourseDataByCod (&Hie[Hie_CRS]))
-			   Err_WrongCourseExit ();
-
-			/***** Write link to course *****/
-			Highlight = (Gbl.Hierarchy.Level == Hie_CRS &&
-				     Gbl.Hierarchy.Node[Hie_CRS].HieCod == Hie[Hie_CRS].HieCod) ? Lay_HIGHLIGHT :
-												  Lay_NO_HIGHLIGHT;
-			IsLastItemInLevel[6] = (NumCrs == NumCrss - 1) ? Lay_LAST_ITEM :
-									 Lay_NO_LAST_ITEM;
-			HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-			   Lay_IndentDependingOnLevel (6,IsLastItemInLevel,
-						       Lay_HORIZONTAL_LINE_AT_RIGHT);
-			   Frm_BeginForm (ActMyCrs);
-			      ParCod_PutPar (Hie_ParCod[Hie_CRS],Hie[Hie_CRS].HieCod);
-			      HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CRS].ShrtName),
-						       "class=\"BT_LINK FORM_IN_%s\"",
-						       The_GetSuffix ());
-			      Str_FreeGoToTitle ();
-				 // Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie[Hie_CRS].FullName,"ICO16x16");
-				 Lgo_DrawLogo (Hie_CRS,
-					       Hie[Hie_CRS].HieCod,
-					       Hie[Hie_CRS].ShrtName,
-					       "ICO16x16",NULL);
-				    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
-				       HTM_TxtF ("&nbsp;%s",Hie[Hie_CRS].ShrtName);
-				    HTM_DIV_End ();
-			      HTM_BUTTON_End ();
-			   Frm_EndForm ();
-			HTM_LI_End ();
-
-			/***** Put link to register students *****/
-			Enr_PutButtonInlineToRegisterStds (Hie[Hie_CRS].HieCod,
-							   6,IsLastItemInLevel,
-							   Highlight);
-		       }
-
-		     /* Free structure that stores the query result */
-		     DB_FreeMySQLResult (&mysql_resCrs);
-		    }
-
-		  /* Free structure that stores the query result */
-		  DB_FreeMySQLResult (&mysql_resDeg);
-		 }
-
-	       /* Free structure that stores the query result */
-	       DB_FreeMySQLResult (&mysql_resCtr);
-	      }
-
-	    /* Free structure that stores the query result */
-	    DB_FreeMySQLResult (&mysql_resIns);
-	   }
-
-	 /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_resCty);
+	 /***** Write nodes recursively *****/
+	 Crs_WriteNodes (Hie,IsLastItemInLevel,Hie_SYS);
 
       /***** End list *****/
       HTM_UL_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+static void Crs_WriteNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
+			    Lay_LastItem_t IsLastItemInLevel[1 + 6],
+			    Hie_Level_t Level)
+  {
+   extern unsigned (*Hie_GetMyNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
+							    long PrtCod);
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+   Lay_Highlight_t Highlight;	// Highlight because degree, course, etc. is selected
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumNode;
+   unsigned NumNodes;
+   static bool (*GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node) =
+     {
+      [Hie_CTY] = Cty_GetBasicCountryDataByCod,
+      [Hie_INS] = Ins_GetInstitDataByCod,
+      [Hie_CTR] = Ctr_GetCenterDataByCod,
+      [Hie_DEG] = Deg_GetDegreeDataByCod,
+      [Hie_CRS] = Crs_GetCourseDataByCod,
+     };
+
+   if (Level > Hie_SYS)
+      NumNodes = Hie_GetMyNodesFromDB[Level] (&mysql_res,Hie[Level - 1].HieCod);
+   else
+      NumNodes = 1;
+
+   for (NumNode = 0;
+	NumNode < NumNodes;
+	NumNode++)
+     {
+      if (Level > Hie_SYS)
+        {
+         /***** Get next node *****/
+         row = mysql_fetch_row (mysql_res);
+         Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /***** Get data of this node *****/
+	 if (!GetDataByCod[Level] (&Hie[Level]))
+	    Err_WrongCountrExit ();
+        }
+      else
+        {
+	 Hie[Level].HieCod = -1L;
+	 Str_Copy (Hie[Level].ShrtName,Txt_HIERARCHY_SINGUL_Abc[Level],
+		   sizeof (Hie[Level].ShrtName) - 1);
+        }
+
+      /***** Write link to node *****/
+      if (Level < Hie_CRS)
+	 Highlight = (Gbl.Hierarchy.Node[Level + 1].HieCod <= 0 &&
+		      Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
+									       Lay_NO_HIGHLIGHT;
+      else
+	 Highlight = (Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
+									       Lay_NO_HIGHLIGHT;
+
+      IsLastItemInLevel[Level] = (NumNode == NumNodes - 1) ? Lay_LAST_ITEM :
+							     Lay_NO_LAST_ITEM;
+      Crs_WriteRowMyCourses (Level,Hie,Highlight,IsLastItemInLevel);
+
+      /***** Write subnodes recursively ******/
+      if (Level < Hie_CRS)
+	 Crs_WriteNodes (Hie,IsLastItemInLevel,Level + 1);
+     }
+
+   if (Level > Hie_SYS)
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void Crs_WriteRowMyCourses (Hie_Level_t Level,
+				   const struct Hie_Node Hie[Hie_NUM_LEVELS],
+				   Lay_Highlight_t Highlight,
+				   Lay_LastItem_t IsLastItemInLevel[1 + 6])
+  {
+   extern ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS];
+   extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
+   static Act_Action_t Actions[Hie_NUM_LEVELS] =
+     {
+      [Hie_SYS] = ActSeeSysInf,
+      [Hie_CTY] = ActSeeCtyInf,
+      [Hie_INS] = ActSeeInsInf,
+      [Hie_CTR] = ActSeeCtrInf,
+      [Hie_DEG] = ActSeeDegInf,
+      [Hie_CRS] = ActSeeCrsInf,
+     };
+
+   HTM_LI_Begin (Lay_HighlightClass[Highlight]);
+      Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,
+				  Lay_HORIZONTAL_LINE_AT_RIGHT);
+      Frm_BeginForm (ActMyCrs);
+	 ParCod_PutPar (Hie_ParCod[Level],Hie[Level].HieCod);
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Actions[Level]),
+				  "class=\"BT_LINK FORM_IN_%s\"",
+				  The_GetSuffix ());
+	    Lgo_DrawLogo (Level,&Hie[Level],"ICO16x16");
+	    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
+	       HTM_TxtF ("&nbsp;%s",Hie[Level].ShrtName);
+	    HTM_DIV_End ();
+	 HTM_BUTTON_End ();
+      Frm_EndForm ();
+   HTM_LI_End ();
   }
 
 /*****************************************************************************/
@@ -1363,37 +1224,37 @@ void Crs_RemoveCourse (void)
 /********************* Get data of a course from its code ********************/
 /*****************************************************************************/
 
-bool Crs_GetCourseDataByCod (struct Hie_Node *Crs)
+bool Crs_GetCourseDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
-   bool CrsFound = false;
+   bool Found = false;
 
    /***** Clear data *****/
-   Crs->PrtCod 		= -1L;
-   Crs->Specific.Year   = 0;
-   Crs->Status          = (Hie_Status_t) 0;
-   Crs->RequesterUsrCod = -1L;
-   Crs->ShrtName[0]     = '\0';
-   Crs->FullName[0]     = '\0';
+   Node->PrtCod 	 = -1L;
+   Node->Specific.Year   = 0;
+   Node->Status          = (Hie_Status_t) 0;
+   Node->RequesterUsrCod = -1L;
+   Node->ShrtName[0]     = '\0';
+   Node->FullName[0]     = '\0';
 
    /***** Check if course code is correct *****/
-   if (Crs->HieCod > 0)
+   if (Node->HieCod > 0)
      {
       /***** Get data of a course from database *****/
-      if (Crs_DB_GetCourseDataByCod (&mysql_res,Crs->HieCod)) // Course found...
+      if (Crs_DB_GetCourseDataByCod (&mysql_res,Node->HieCod)) // Course found...
 	{
 	 /***** Get data of the course *****/
-	 Crs_GetCourseDataFromRow (mysql_res,Crs);
+	 Crs_GetCourseDataFromRow (mysql_res,Node);
 
          /* Set return value */
-	 CrsFound = true;
+	 Found = true;
 	}
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   return CrsFound;
+   return Found;
   }
 
 /*****************************************************************************/
@@ -1931,6 +1792,7 @@ static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args)
 
 void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
   {
+   extern const char *Hie_Icons[Hie_NUM_LEVELS];
    extern const char *Txt_My_courses;
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
@@ -1939,7 +1801,7 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
       Frm_BeginForm (ActMyCrs);
 
 	 /***** Put icon with link *****/
-	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"sitemap.svg",Txt_My_courses,
+	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Hie_Icons[Hie_SYS],Txt_My_courses,
 			  "class=\"BC_ICO BC_ICO_%s ICO_HIGHLIGHT\"",
 			  The_GetSuffix ());
 
@@ -2176,8 +2038,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),
 	                             "class=\"LT BT_LINK\"");
             Str_FreeGoToTitle ();
-	       Lgo_DrawLogo (Hie_DEG,Deg.HieCod,Deg.ShrtName,
-			     "ICO20x20","CT");
+	       Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20");
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

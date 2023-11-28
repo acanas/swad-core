@@ -191,7 +191,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		      Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Deg.ShrtName);
 	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,
 				  ThisRoomFullName,1,IsLastItemInLevel);
-	       Lgo_DrawLogo (Hie_DEG,Deg.HieCod,Deg.ShrtName,"ICO16x16",NULL);
+	       Lgo_DrawLogo (Hie_DEG,&Deg,"ICO16x16");
 	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
 	    /* Get my courses in this degree from database */
@@ -222,7 +222,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 			    Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],Crs.ShrtName);
 		  Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,
 				        ThisRoomFullName,2,IsLastItemInLevel);
-		     Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
+		     Lgo_DrawLogo (Hie_CRS,&Crs,"ICO16x16");
 		  Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 		 }
 	      }

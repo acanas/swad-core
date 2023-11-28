@@ -229,10 +229,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 					      "class=\"LB BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
-	       Lgo_DrawLogo (Hie_CTR,
-			     Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-			     Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
-			     "ICO20x20","LM");
+	       Lgo_DrawLogo (Hie_CTR,&Gbl.Hierarchy.Node[Hie_CTR],"LM ICO20x20");
 	       HTM_NBSP ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CTR].FullName);
 	       if (ViewType == Vie_VIEW)

@@ -534,7 +534,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
 /***************************** Draw country map ******************************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMap (struct Hie_Node *Cty,const char *Class)
+void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class)
   {
    char *URL;
    char *Icon;
@@ -559,7 +559,7 @@ void Cty_DrawCountryMap (struct Hie_Node *Cty,const char *Class)
 /*********************** Check if country map exists *************************/
 /*****************************************************************************/
 
-bool Cty_CheckIfCountryPhotoExists (struct Hie_Node *Cty)
+bool Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty)
   {
    char PathMap[PATH_MAX + 1];
 
@@ -897,51 +897,50 @@ void Cty_WriteCountryName (long CtyCod)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Cty)
+bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Node)
   {
    extern const char *Txt_Another_country;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool CtyFound;
+   bool Found;
 
-   if (Cty->HieCod < 0)
+   if (Node->HieCod < 0)
       return false;
 
    /***** Clear data *****/
-   Cty->ShrtName[0] = '\0';
-   Cty->FullName[0] = '\0';
-   Cty->WWW[0]      = '\0';
-   Cty->NumUsrsWhoClaimToBelong.Valid = false;
+   Node->ShrtName[0] = '\0';
+   Node->FullName[0] = '\0';
+   Node->WWW[0]      = '\0';
+   Node->NumUsrsWhoClaimToBelong.Valid = false;
 
    /***** If another country *****/
-   if (Cty->HieCod == 0)
+   if (Node->HieCod == 0)
      {
-      Str_Copy (Cty->FullName,Txt_Another_country,
-                sizeof (Cty->FullName) - 1);
+      Str_Copy (Node->FullName,Txt_Another_country,sizeof (Node->FullName) - 1);
       return false;
      }
 
    // Here Cty->CtyCod > 0
 
    /***** Get data of a country from database *****/
-   CtyFound = (Cty_DB_GetBasicCountryDataByCod (&mysql_res,Cty->HieCod) != 0);
-   if (CtyFound) // Country found...
+   Found = (Cty_DB_GetBasicCountryDataByCod (&mysql_res,Node->HieCod) != 0);
+   if (Found) // Country found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
       /* Get Alpha-2 country code (row[0]) */
-      Str_Copy (Cty->ShrtName,row[0],sizeof (Cty->ShrtName) - 1);
+      Str_Copy (Node->ShrtName,row[0],sizeof (Node->ShrtName) - 1);
 
       /* Get name and WWW of the country in current language */
-      Str_Copy (Cty->FullName,row[1],sizeof (Cty->FullName) - 1);
-      Str_Copy (Cty->WWW     ,row[2],sizeof (Cty->WWW     ) - 1);
+      Str_Copy (Node->FullName,row[1],sizeof (Node->FullName) - 1);
+      Str_Copy (Node->WWW     ,row[2],sizeof (Node->WWW     ) - 1);
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return CtyFound;
+   return Found;
   }
 
 /*****************************************************************************/
