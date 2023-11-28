@@ -107,7 +107,7 @@ void Ann_ShowAllAnnouncements (void)
       NumAnnouncements = Ann_DB_GetAnnouncementsForUnknownUsers (&mysql_res);
 
    /***** Begin box *****/
-   Box_BoxBegin ("550px",Txt_Announcements,
+   Box_BoxBegin (NULL,Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 			    NULL,NULL,
 		 Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE);
@@ -243,66 +243,68 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
    bool SomeRolesAreSelected;
 
    /***** Begin yellow note *****/
-   HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Announcement->Status]);
+   HTM_DIV_Begin ("class=\"NOTICE_CONT\"");
+      HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Announcement->Status]);
 
-      if (ICanEdit == Ann_I_CAN_EDIT)
-	{
-	 /***** Icon to remove announcement *****/
-	 Ico_PutContextualIconToRemove (ActRemAnn,NULL,
-					Ann_PutParAnnCod,&Announcement->AnnCod);
-
-	 /***** Icon to hide/unhide the announcement *****/
-	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
-					    Ann_PutParAnnCod,&Announcement->AnnCod,
-					    Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT ? HidVis_HIDDEN :
-												HidVis_VISIBLE);
-	}
-
-      /***** Write the subject of the announcement *****/
-      HTM_DIV_Begin ("class=\"NOTICE_SUBJECT NOTICE_SUBJECT_%s\"",
-                     The_GetSuffix ());
-	 HTM_Txt (Announcement->Subject);
-      HTM_DIV_End ();
-
-      /***** Write the content of the announcement *****/
-      HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",
-                     The_GetSuffix ());
-	 HTM_Txt (Announcement->Content);
-      HTM_DIV_End ();
-
-      /***** Write announcement foot *****/
-      /* Begin container for foot */
-      HTM_DIV_Begin ("class=\"NOTICE_USERS\"");
-
-	 switch (ShowAll)
+	 if (ICanEdit == Ann_I_CAN_EDIT)
 	   {
-	    case Ann_DONT_SHOW_ALL:
-	       /***** Put form to mark announcement as seen *****/
-	       Lay_PutContextualLinkIconText (ActAnnSee,NULL,
-					      Ann_PutParAnnCod,&Announcement->AnnCod,
-					      "times.svg",Ico_BLACK,
-					      Txt_Do_not_show_again,NULL);
-	       break;
-	    case Ann_SHOW_ALL:
-	       /* Users' roles who can view this announcement */
-	       HTM_TxtColon (Txt_Users);
-	       for (Role  = Rol_UNK, SomeRolesAreSelected = false;
-		    Role <= Rol_TCH;
-		    Role++)
-		  if (Announcement->Roles & (1 << Role))
-		    {
-		     if (SomeRolesAreSelected)
-			HTM_Comma ();
-		     SomeRolesAreSelected = true;
-		     HTM_TxtF ("&nbsp;%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
-		    }
-	       break;
+	    /***** Icon to remove announcement *****/
+	    Ico_PutContextualIconToRemove (ActRemAnn,NULL,
+					   Ann_PutParAnnCod,&Announcement->AnnCod);
+
+	    /***** Icon to hide/unhide the announcement *****/
+	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,NULL,	// TODO: Put anchor
+					       Ann_PutParAnnCod,&Announcement->AnnCod,
+					       Announcement->Status == Ann_OBSOLETE_ANNOUNCEMENT ? HidVis_HIDDEN :
+												   HidVis_VISIBLE);
 	   }
 
-      /* End container for foot */
-      HTM_DIV_End ();
+	 /***** Write the subject of the announcement *****/
+	 HTM_DIV_Begin ("class=\"NOTICE_SUBJECT NOTICE_SUBJECT_%s\"",
+			The_GetSuffix ());
+	    HTM_Txt (Announcement->Subject);
+	 HTM_DIV_End ();
 
-   /***** End yellow note *****/
+	 /***** Write the content of the announcement *****/
+	 HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",
+			The_GetSuffix ());
+	    HTM_Txt (Announcement->Content);
+	 HTM_DIV_End ();
+
+	 /***** Write announcement foot *****/
+	 /* Begin container for foot */
+	 HTM_DIV_Begin ("class=\"NOTICE_USERS\"");
+
+	    switch (ShowAll)
+	      {
+	       case Ann_DONT_SHOW_ALL:
+		  /***** Put form to mark announcement as seen *****/
+		  Lay_PutContextualLinkIconText (ActAnnSee,NULL,
+						 Ann_PutParAnnCod,&Announcement->AnnCod,
+						 "times.svg",Ico_BLACK,
+						 Txt_Do_not_show_again,NULL);
+		  break;
+	       case Ann_SHOW_ALL:
+		  /* Users' roles who can view this announcement */
+		  HTM_TxtColon (Txt_Users);
+		  for (Role  = Rol_UNK, SomeRolesAreSelected = false;
+		       Role <= Rol_TCH;
+		       Role++)
+		     if (Announcement->Roles & (1 << Role))
+		       {
+			if (SomeRolesAreSelected)
+			   HTM_Comma ();
+			SomeRolesAreSelected = true;
+			HTM_SPTxt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+		       }
+		  break;
+	      }
+
+	 /* End container for foot */
+	 HTM_DIV_End ();
+
+      /***** End yellow note *****/
+      HTM_DIV_End ();
    HTM_DIV_End ();
   }
 

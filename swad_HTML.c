@@ -103,8 +103,6 @@ static void HTM_TEXTAREA_BeginWithoutAttr (void);
 
 static void HTM_SELECT_BeginWithoutAttr (void);
 
-static void HTM_SPTxt (const char *Txt);
-
 /*****************************************************************************/
 /******************************* Begin/end title *****************************/
 /*****************************************************************************/
@@ -1922,7 +1920,7 @@ void HTM_TxtF (const char *fmt,...)
 	}
   }
 
-static void HTM_SPTxt (const char *Txt)
+void HTM_SPTxt (const char *Txt)
   {
    HTM_Txt (" ");
    HTM_Txt (Txt);

@@ -66,12 +66,6 @@ extern struct Globals Gbl;
 
 #define Not_MAX_CHARS_ON_NOTICE	40	// Maximum number of characters in notices (when not expanded)
 
-static const unsigned Not_ContainerWidth[Not_NUM_TYPES_LISTING] =
-  {
-   [Not_LIST_BRIEF_NOTICES] = 148 + 50,
-   [Not_LIST_FULL_NOTICES ] = 500 + 50,
-  };
-
 static const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
   {
    [Not_LIST_BRIEF_NOTICES] = 15,
@@ -317,7 +311,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
-   char StrWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
+   // char StrWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    struct Not_Notice Notice;
    unsigned NumNot;
    unsigned NumNotices = 0;	// Initialized to avoid warning
@@ -338,9 +332,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
 
 	 /***** Begin box *****/
-	 snprintf (StrWidth,sizeof (StrWidth),"%upx",
-		   Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
-	 Box_BoxBegin (StrWidth,Txt_Notices,
+	 Box_BoxBegin (NULL,Txt_Notices,
 		       Not_PutIconsListNotices,NULL,
 		       Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
 	    if (!NumNotices)
