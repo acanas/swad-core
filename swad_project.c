@@ -1273,7 +1273,7 @@ void Prj_PutIconsListProjects (void *Projects)
 
       /***** Put form to go to configuration of projects *****/
       if (ICanConfigAllProjects)
-	 Ico_PutContextualIconToConfigure (ActCfgPrj,
+	 Ico_PutContextualIconToConfigure (ActCfgPrj,NULL,
 	                                   NULL,NULL);
 
       /***** Link to get resource link *****/

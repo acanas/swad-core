@@ -2639,7 +2639,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg)
 
       /***** Write date and time *****/
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,false,0x6);
 
    /***** End cell *****/

@@ -303,10 +303,10 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,const char *Anchor,
 				  "list.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
+void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,const char *Anchor,
                                        void (*FuncPars) (void *Args),void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncPars,Args,
 				  "cog.svg",Ico_BLACK);
   }

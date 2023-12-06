@@ -286,9 +286,9 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Ntf_PutContextualLinks (bool AllNotifications,
+				    unsigned NumNotifications);
 static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args);
-
-static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static void Ntf_WriteHeading (void);
 static void Ntf_GetNotif (MYSQL_RES *mysql_res,
 			  Ntf_NotifyEvent_t *NotifyEvent,
@@ -328,9 +328,6 @@ static void Ntf_GetParsNotifyEvents (void);
 void Ntf_ShowMyNotifications (void)
   {
    extern const char *Hlp_START_Notifications;
-   extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
-   extern const char *Txt_Settings;
-   extern const char *Txt_Domains;
    extern const char *Txt_Notifications;
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
@@ -350,22 +347,7 @@ void Ntf_ShowMyNotifications (void)
    NumNotifications = Ntf_DB_GetMyNotifications (&mysql_res,AllNotifications);
 
    /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-      Ntf_WriteFormAllNotifications (AllNotifications);	// Show all notifications
-      if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
-	 Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,
-					NULL,NULL,
-					"eye.svg",Ico_BLACK,
-					Txt_Mark_all_NOTIFICATIONS_as_read,NULL);	// Mark notifications as read
-      Lay_PutContextualLinkIconText (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
-				     NULL,NULL,
-				     "cog.svg",Ico_BLACK,
-				     Txt_Settings,NULL);	// Change notification settings
-      Lay_PutContextualLinkIconText (ActSeeMai,NULL,
-				     NULL,NULL,
-				     "envelope.svg",Ico_BLACK,
-				     Txt_Domains,NULL);	// View allowed mail domains
-   Mnu_ContextMenuEnd ();
+   Ntf_PutContextualLinks (AllNotifications,NumNotifications);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Notifications,
@@ -418,30 +400,54 @@ void Ntf_ShowMyNotifications (void)
   }
 
 /*****************************************************************************/
+/*************************** Put contextual links ****************************/
+/*****************************************************************************/
+
+static void Ntf_PutContextualLinks (bool AllNotifications,
+				    unsigned NumNotifications)
+  {
+   extern const char *Txt_Show_all_notifications;
+   extern const char *Txt_Show_all_NOTIFICATIONS;
+   extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
+   extern const char *Txt_Domains;
+
+   Mnu_ContextMenuBegin ();
+
+      /***** Show all notifications *****/
+      Lay_PutContextualCheckbox (ActSeeNtf,NULL,
+				 "All",
+				 AllNotifications,false,
+				 Txt_Show_all_notifications,
+				 Txt_Show_all_NOTIFICATIONS);
+
+      /***** Mark notifications as read *****/
+      if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
+	 Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,
+					NULL,NULL,
+					"eye.svg",Ico_BLACK,
+					Txt_Mark_all_NOTIFICATIONS_as_read,NULL);
+
+      /***** View allowed mail domains *****/
+      Lay_PutContextualLinkIconText (ActSeeMai,NULL,
+				     NULL,NULL,
+				     "envelope.svg",Ico_BLACK,
+				     Txt_Domains,NULL);
+
+   Mnu_ContextMenuEnd ();
+  }
+
+/*****************************************************************************/
 /****************** Put contextual icons in notifications ********************/
 /*****************************************************************************/
 
 static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args)
   {
+   /***** Edit notification settings *****/
+   Ico_PutContextualIconToConfigure (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
+				     NULL,NULL);
+
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_NOTIFY_EVENTS);
-  }
-
-/*****************************************************************************/
-/********** Write a form to select whether show all notifications ************/
-/*****************************************************************************/
-
-static void Ntf_WriteFormAllNotifications (bool AllNotifications)
-  {
-   extern const char *Txt_Show_all_notifications;
-   extern const char *Txt_Show_all_NOTIFICATIONS;
-
-   Lay_PutContextualCheckbox (ActSeeNtf,
-                              NULL,
-                              "All",
-                              AllNotifications,false,
-                              Txt_Show_all_notifications,
-                              Txt_Show_all_NOTIFICATIONS);
   }
 
 /*****************************************************************************/
@@ -457,11 +463,11 @@ static void Ntf_WriteHeading (void)
    extern const char *Txt_Email;
 
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (Txt_Event   ,HTM_HEAD_LEFT  ,1,2,NULL);
-      HTM_TH      (Txt_MSG_From,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_Location,HTM_HEAD_LEFT  );
-      HTM_TH      (Txt_Date    ,HTM_HEAD_CENTER);
-      HTM_TH      (Txt_Email   ,HTM_HEAD_LEFT  );
+      HTM_TH_Span (Txt_Event   ,HTM_HEAD_LEFT ,1,2,NULL);
+      HTM_TH      (Txt_MSG_From,HTM_HEAD_LEFT );
+      HTM_TH      (Txt_Location,HTM_HEAD_LEFT );
+      HTM_TH      (Txt_Date    ,HTM_HEAD_RIGHT);
+      HTM_TH      (Txt_Email   ,HTM_HEAD_LEFT );
    HTM_TR_End ();
   }
 
@@ -603,7 +609,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	 switch (PutForm)
 	   {
 	    case Frm_DONT_PUT_FORM:
-	       HTM_SPAN_Begin ("class=\"%s\"",Class.Txt);
+	       HTM_SPAN_Begin ("class=\"Ntf_TYPE %s\"",Class.Txt);
 		  HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 	       HTM_SPAN_End ();
 	       break;
@@ -611,9 +617,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
 	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
 						Frm_DONT_PUT_FORM;
-
 		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-					   "class=\"LT %s_%s\"",
+					   "class=\"Ntf_TYPE LT %s_%s\"",
 					   Class.Link,The_GetSuffix ());
 		     HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 		  HTM_BUTTON_End ();
@@ -644,12 +649,12 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    switch (PutForm)
 	      {
 	       case Frm_DONT_PUT_FORM:
-		  HTM_SPAN_Begin ("class=\"%s_%s\"",
+		  HTM_DIV_Begin ("class=\"Ntf_LOCATION %s_%s\"",
 				  Class.Txt,The_GetSuffix ());
 		  break;
 	       case Frm_PUT_FORM:
 		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-					   "class=\"LT %s_%s\"",
+					   "class=\"Ntf_LOCATION %s_%s\"",
 					   Class.Link,The_GetSuffix ());
 		  break;
 	      }
@@ -657,11 +662,11 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    For_ResetForums (&Forums);
 	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums.Forum);
 	    For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
+	    HTM_TxtF ("%s: %s",Txt_Forum,ForumName);
 	    switch (PutForm)
 	      {
 	       case Frm_DONT_PUT_FORM:
-		  HTM_SPAN_End ();
+		  HTM_DIV_End ();
 		  break;
 	       case Frm_PUT_FORM:
 		  HTM_BUTTON_End ();
@@ -681,12 +686,12 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    switch (PutForm)
 	      {
 	       case Frm_DONT_PUT_FORM:
-		  HTM_SPAN_Begin ("class=\"%s_%s\"",
-				  Class.Txt,The_GetSuffix ());
+		  HTM_DIV_Begin ("class=\"Ntf_LOCATION %s_%s\"",
+				 Class.Txt,The_GetSuffix ());
 		  break;
 	       case Frm_PUT_FORM:
 		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-					   "class=\"LT %s_%s\"",
+					   "class=\"Ntf_LOCATION %s_%s\"",
 					   Class.Link,The_GetSuffix ());
 		  break;
 	      }
@@ -696,7 +701,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 		 Level--)
 	       if (Hie[Level].HieCod > 0)
 		 {
-		  HTM_TxtF ("%s:&nbsp;%s",
+		  HTM_TxtF ("%s: %s",
 			    Txt_HIERARCHY_SINGUL_Abc[Level],
 			    Hie[Level].ShrtName);
 		  break;
@@ -707,7 +712,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	    switch (PutForm)
 	      {
 	       case Frm_DONT_PUT_FORM:
-		  HTM_SPAN_End ();
+		  HTM_DIV_End ();
 		  break;
 	       case Frm_PUT_FORM:
 		  HTM_BUTTON_End ();

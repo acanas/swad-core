@@ -90,7 +90,7 @@ void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
                                        void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToView (Act_Action_t NextAction,const char *Anchor,
                                   void (*FuncPars) (void *Args),void *Args);
-void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
+void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,const char *Anchor,
                                        void (*FuncPars) (void *Args),void *Args);
 void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE],
                                         const char *Anchor,

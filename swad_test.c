@@ -450,7 +450,7 @@ void Tst_PutIconsTests (__attribute__((unused)) void *Args)
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put icon to go to test configuration *****/
-	 Ico_PutContextualIconToConfigure (ActCfgTst,
+	 Ico_PutContextualIconToConfigure (ActCfgTst,NULL,
 					   NULL,NULL);
 
 	 /***** Put icon to edit tags *****/

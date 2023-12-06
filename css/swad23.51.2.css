@@ -4362,29 +4362,40 @@ legend {font-size:12pt;}
 	}
 
 /********** Author of assignments, attendance, messages, surveys... **********/
-.AUTHOR_1_LINE
-	{
-	display:inline-block;
-	box-sizing:border-box;
-	max-width:100px;
-	height:20px;
-	text-align:left;
-	vertical-align:middle;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
+
+@media only screen and (max-width: 600px)
+	{	/* For mobile-phones */
+	.AUTHOR_1_LINE, .AUTHOR_2_LINES
+		{
+		display:none;
+		}
 	}
-.AUTHOR_2_LINES
-	{
-	display:inline-block;
-	box-sizing:border-box;
-	max-width:60px;
-	height:40px;
-	text-align:left;
-	vertical-align:middle;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
+@media only screen and (min-width: 600px)
+	{	/* For tablets and desktop */
+	.AUTHOR_1_LINE
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		max-width:100px;
+		height:20px;
+		text-align:left;
+		vertical-align:middle;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
+	.AUTHOR_2_LINES
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		max-width:60px;
+		height:40px;
+		text-align:left;
+		vertical-align:middle;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
 	}
 
 /************************** Owner of assignments and works *******************/
@@ -4780,6 +4791,29 @@ legend {font-size:12pt;}
 	{
 	/* box-sizing:border-box; */
 	width:32px;
+	}
+
+/********************************* Notifications *****************************/
+@media only screen and (max-width: 600px)
+	{	/* For mobile-phones */
+	.Ntf_TYPE		{display:none;}
+	.Ntf_LOCATION	{
+					display:inline-block;
+					max-width:80px;
+					overflow:hidden;
+					text-overflow:ellipsis;
+					text-align:left;
+					vertical-align:bottom;
+					}
+	}
+@media only screen and (min-width: 600px)
+	{	/* For tablets and desktop */
+	.Ntf_TYPE		{display:inline;}
+	.Ntf_LOCATION	{
+					display:inline-block;
+					text-align:left;
+					vertical-align:bottom;
+					}
 	}
 
 /************************************ Forum **********************************/
