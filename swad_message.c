@@ -1098,6 +1098,7 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
 
 static void Msg_GetParMsgsCrsCod (struct Msg_Messages *Messages)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_any_course;
    struct Hie_Node Crs;
 
@@ -1105,7 +1106,7 @@ static void Msg_GetParMsgsCrsCod (struct Msg_Messages *Messages)
      {
       /* Get data of course */
       Crs.HieCod = Messages->FilterCrsCod;
-      Crs_GetCourseDataByCod (&Crs);
+      Hie_GetDataByCod[Hie_CRS] (&Crs);
      }
 
    Str_Copy (Messages->FilterCrsShrtName,Messages->FilterCrsCod > 0 ? Crs.ShrtName :
@@ -2295,6 +2296,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
 static bool Msg_WriteCrsOrgMsg (long CrsCod)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_from_this_course;
    extern const char *Txt_no_course_of_origin;
    struct Hie_Node Crs;
@@ -2307,7 +2309,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
       Crs.HieCod = CrsCod;
 
       /* Get data of current degree */
-      if (Crs_GetCourseDataByCod (&Crs))
+      if (Hie_GetDataByCod[Hie_CRS] (&Crs))
         {
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)))	// Message sent from current course

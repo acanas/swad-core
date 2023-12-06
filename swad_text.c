@@ -15582,7 +15582,7 @@ const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS] =
 #elif L==3	// en
 	"Institutions"
 #elif L==4	// es
-	"instituciones"
+	"Instituciones"
 #elif L==5	// fr
 	"&Eacute;tablissements"
 #elif L==6	// gn
@@ -41050,27 +41050,27 @@ const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important t
 	"See the previous %u";		// Çeviri lazim!
 #endif
 
-const char *Txt_Select_one_country =
+const char *Txt_Select_one_country_in_X =
 #if   L==1	// ca
-	"Seleccionar un pa&iacute;s";
+	"Seleccionar un pa&iacute;s en <strong>%s</strong>";
 #elif L==2	// de
-	"W&auml;hlen Sie ein Land";
+	"W&auml;hlen Sie ein Land von <strong>%s</strong>";
 #elif L==3	// en
-	"Select one country";
+	"Select one country in <strong>%s</strong>";
 #elif L==4	// es
-	"Seleccionar un pa&iacute;s";
+	"Seleccionar un pa&iacute;s en <strong>%s</strong>";
 #elif L==5	// fr
-	"S&eacute;lectionnez un pays";
+	"S&eacute;lectionnez un pays dans <strong>%s</strong>";
 #elif L==6	// gn
-	"Seleccionar un pa&iacute;s";	// Okoteve traducción
+	"Seleccionar un pa&iacute;s en <strong>%s</strong>";	// Okoteve traducción
 #elif L==7	// it
-	"Selezionare un paese";
+	"Selezionare un paese di <strong>%s</strong>";
 #elif L==8	// pl
-	"Wybierz jeden kraj";
+	"Wybierz jeden kraj w <strong>%s</strong>";
 #elif L==9	// pt
-	"Selecionar um pa&iacute;s";
+	"Selecionar um pa&iacute;s de <strong>%s</strong>";
 #elif L==10	// tr
-	"Select one country";		// Çeviri lazim!
+	"Select one country in <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Select_or_create_one_center_in_X =	// Warning: it is very important to include %s in the following sentences
@@ -41089,7 +41089,7 @@ const char *Txt_Select_or_create_one_center_in_X =	// Warning: it is very import
 #elif L==7	// it
 	"Selezionare o creare un centro di <strong>%s</strong>";
 #elif L==8	// pl
-	"Select or create one degree in <strong>%s</strong>";		// Potrzebujesz tlumaczenie
+	"Wybierz lub utw&oacute;rz jeden stopie&nacute; w <strong>%s</strong>.";
 #elif L==9	// pt
 	"Selecionar ou criar um centro de <strong>%s</strong>";
 #elif L==10	// tr
@@ -41112,7 +41112,7 @@ const char *Txt_Select_or_create_one_course_in_X =	// Warning: it is very import
 #elif L==7	// it
 	"Selezionare o creare un corso di <strong>%s</strong>";
 #elif L==8	// pl
-	"Select or create one course in <strong>%s</strong>";		// Potrzebujesz tlumaczenie
+	"Wybierz lub utw&oacute;rz jeden kurs w <strong>%s</strong>";
 #elif L==9	// pt
 	"Selecionar ou criar uma disciplina de <strong>%s</strong>";
 #elif L==10	// tr
@@ -41135,7 +41135,7 @@ const char *Txt_Select_or_create_one_degree_in_X =	// Warning: it is very import
 #elif L==7	// it
 	"Selezionare o creare una laurea di <strong>%s</strong>";
 #elif L==8	// pl
-	"Select or create one degree in <strong>%s</strong>";			// Potrzebujesz tlumaczenie
+	"Wybierz lub utw&oacute;rz jeden stopie&nacute; w <strong>%s</strong>";
 #elif L==9	// pt
 	"Selecionar ou criar um grau de <strong>%s</strong>";
 #elif L==10	// tr
@@ -41158,7 +41158,7 @@ const char *Txt_Select_or_create_one_institution_in_X =	// Warning: it is very i
 #elif L==7	// it
 	"Selezionare o creare una istituzione di <strong>%s</strong>";
 #elif L==8	// pl
-	"Select or create one institution in <strong>%s</strong>";		// Potrzebujesz tlumaczenie
+	"Wybierz lub utw&oacute;rz jedn&aogon; instytucj&eogon; w <strong>%s</strong>";
 #elif L==9	// pt
 	"Selecionar ou criar uma institu&ccedil;&atilde;o de <strong>%s</strong>";
 #elif L==10	// tr

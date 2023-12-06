@@ -105,6 +105,7 @@ void Cht_ShowChatRooms (void)
 
 void Cht_ShowListOfAvailableChatRooms (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Chat_rooms;
    extern const char *Txt_General;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -178,7 +179,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	   {
 	    /* Get data of this degree */
 	    Deg.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod;
-	    if (!Deg_GetDegreeDataByCod (&Deg))
+	    if (!Hie_GetDataByCod[Hie_DEG] (&Deg))
 	       Err_WrongDegreeExit ();
 
 	    /* Link to the room of this degree */
@@ -209,7 +210,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	       if ((Crs.HieCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 		 {
 		  /* Get data of this course */
-		  Crs_GetCourseDataByCod (&Crs);
+		  Hie_GetDataByCod[Hie_CRS] (&Crs);
 
 		  /* Link to the room of this course */
 		  IsLastItemInLevel[2] = (NumCrs == NumCrss - 1) ? Lay_LAST_ITEM :
@@ -365,6 +366,7 @@ void Cht_WriteParsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtNam
 
 void Cht_OpenChatWindow (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_General;
@@ -474,7 +476,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this degree */
          Deg.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_DEG].Nodes[NumMyDeg].HieCod;
-         Deg_GetDegreeDataByCod (&Deg);
+         Hie_GetDataByCod[Hie_DEG] (&Deg);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),"%s",
 		   Deg.ShrtName);
@@ -501,7 +503,7 @@ void Cht_OpenChatWindow (void)
 
          /* Get data of this course */
          Crs.HieCod = Gbl.Usrs.Me.Hierarchy[Hie_CRS].Nodes[NumMyCrs].HieCod;
-         Crs_GetCourseDataByCod (&Crs);
+         Hie_GetDataByCod[Hie_CRS] (&Crs);
 
          snprintf (ThisRoomShortName,sizeof (ThisRoomShortName),
                    "%s",

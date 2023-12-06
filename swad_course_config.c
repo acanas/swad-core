@@ -482,6 +482,7 @@ static void CrsCfg_Indicators (void)
 
 void CrsCfg_ChangeCrsDeg (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    struct Hie_Node NewDeg;
@@ -494,7 +495,7 @@ void CrsCfg_ChangeCrsDeg (void)
    if (NewDeg.HieCod != Gbl.Hierarchy.Node[Hie_CRS].PrtCod)
      {
       /***** Get data of new degree *****/
-      Deg_GetDegreeDataByCod (&NewDeg);
+      Hie_GetDataByCod[Hie_DEG] (&NewDeg);
 
       /***** If name of course was not in database in the new degree... *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CRS].ShrtName;

@@ -479,6 +479,7 @@ static void Rep_WriteSectionPlatform (void)
 
 static void Rep_WriteSectionUsrInfo (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Personal_information;
    extern const char *Txt_Name;
    extern const char *Txt_Email;
@@ -509,7 +510,7 @@ static void Rep_WriteSectionUsrInfo (void)
 
    /***** User's institution *****/
    Ins.HieCod = Gbl.Usrs.Me.UsrDat.InsCod;
-   Ins_GetInstitDataByCod (&Ins);
+   Hie_GetDataByCod[Hie_INS] (&Ins);
    fprintf (Rep_File,"<li>%s: %s</li>",
             Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Ins.FullName);
 
@@ -1028,6 +1029,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
                                  bool WriteNumUsrs)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
@@ -1038,11 +1040,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 
    /***** Get course data *****/
    Crs.HieCod = CrsCod;
-   Crs_GetCourseDataByCod (&Crs);
+   Hie_GetDataByCod[Hie_CRS] (&Crs);
 
    /***** Get degree data *****/
    Deg.HieCod = Crs.PrtCod;
-   Deg_GetDegreeDataByCod (&Deg);
+   Hie_GetDataByCod[Hie_DEG] (&Deg);
 
    /***** Begin row *****/
    fprintf (Rep_File,"<li>");

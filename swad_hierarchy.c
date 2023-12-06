@@ -90,6 +90,15 @@ unsigned (*Hie_GetMyNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
    [Hie_CRS] = Enr_DB_GetMyCrss,
   };
 
+bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node) =
+  {
+   [Hie_CTY] = Cty_GetCountrDataByCod,
+   [Hie_INS] = Ins_GetInstitDataByCod,
+   [Hie_CTR] = Ctr_GetCenterDataByCod,
+   [Hie_DEG] = Deg_GetDegreeDataByCod,
+   [Hie_CRS] = Crs_GetCourseDataByCod,
+  };
+
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
@@ -474,10 +483,12 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
 
 void Hie_InitHierarchy (void)
   {
+   Hie_Level_t Level;
+
    /***** If course code is available, get course data *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod > 0)
      {
-      if (Crs_GetCourseDataByCod (&Gbl.Hierarchy.Node[Hie_CRS]))	// Course found
+      if (Hie_GetDataByCod[Hie_CRS] (&Gbl.Hierarchy.Node[Hie_CRS]))	// Course found
          Gbl.Hierarchy.Node[Hie_DEG].HieCod = Gbl.Hierarchy.Node[Hie_CRS].PrtCod;
       else
          Hie_ResetHierarchy ();
@@ -486,7 +497,7 @@ void Hie_InitHierarchy (void)
    /***** If degree code is available, get degree data *****/
    if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
      {
-      if (Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Node[Hie_DEG]))	// Degree found
+      if (Hie_GetDataByCod[Hie_DEG] (&Gbl.Hierarchy.Node[Hie_DEG]))	// Degree found
 	{
 	 Gbl.Hierarchy.Node[Hie_CTR].HieCod = Gbl.Hierarchy.Node[Hie_DEG].PrtCod;
          Gbl.Hierarchy.Node[Hie_INS].HieCod = Deg_DB_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Node[Hie_DEG].HieCod);
@@ -498,7 +509,7 @@ void Hie_InitHierarchy (void)
    /***** If center code is available, get center data *****/
    if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
      {
-      if (Ctr_GetCenterDataByCod (&Gbl.Hierarchy.Node[Hie_CTR]))	// Center found
+      if (Hie_GetDataByCod[Hie_CTR] (&Gbl.Hierarchy.Node[Hie_CTR]))	// Center found
          Gbl.Hierarchy.Node[Hie_INS].HieCod = Gbl.Hierarchy.Node[Hie_CTR].PrtCod;
       else
          Hie_ResetHierarchy ();
@@ -507,7 +518,7 @@ void Hie_InitHierarchy (void)
    /***** If institution code is available, get institution data *****/
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
      {
-      if (Ins_GetInstitDataByCod (&Gbl.Hierarchy.Node[Hie_INS]))	// Institution found
+      if (Hie_GetDataByCod[Hie_INS] (&Gbl.Hierarchy.Node[Hie_INS]))	// Institution found
 	 Gbl.Hierarchy.Node[Hie_CTY].HieCod = Gbl.Hierarchy.Node[Hie_INS].PrtCod;
       else
          Hie_ResetHierarchy ();
@@ -515,7 +526,7 @@ void Hie_InitHierarchy (void)
 
    /***** If country code is available, get country data *****/
    if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
-      if (!Cty_GetBasicCountryDataByCod (&Gbl.Hierarchy.Node[Hie_CTY]))		// Country not found
+      if (!Hie_GetDataByCod[Hie_CTY] (&Gbl.Hierarchy.Node[Hie_CTY]))		// Country not found
          Hie_ResetHierarchy ();
 
    /***** Set system data *****/
@@ -527,12 +538,15 @@ void Hie_InitHierarchy (void)
 	     sizeof (Gbl.Hierarchy.Node[Hie_SYS].WWW     ) - 1);
 
    /***** Set current hierarchy level *****/
-   Gbl.Hierarchy.Level = (Gbl.Hierarchy.Node[Hie_CRS].HieCod > 0) ? Hie_CRS :	// Course selected
-			 (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0) ? Hie_DEG :	// Degree selected
-			 (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0) ? Hie_CTR :	// Center selected
-			 (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0) ? Hie_INS :	// Institution selected
-			 (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0) ? Hie_CTY :	// Country selected
-								    Hie_SYS;	// System/nothing selected
+   Gbl.Hierarchy.Level = Hie_SYS;
+   for (Level  = Hie_CRS;
+	Level >= Hie_CTY;
+	Level--)
+      if (Gbl.Hierarchy.Node[Level].HieCod > 0)
+        {
+	 Gbl.Hierarchy.Level = Level;
+         break;
+        }
 
    /***** Initialize paths *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
@@ -638,7 +652,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  if ((Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of institution */
-		     Ins_GetInstitDataByCod (&Hie[Hie_INS]);
+		     Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
 
 		     /* Write institution logo and name */
 		     Ins_DrawInstitLogoAndNameWithLink (&Hie[Hie_INS],ActSeeInsInf,"LT ICO16x16");
@@ -648,7 +662,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  if ((Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of center */
-		     Ctr_GetCenterDataByCod (&Hie[Hie_CTR]);
+		     Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
 
 		     /* Write center logo and name */
 		     Ctr_DrawCenterLogoAndNameWithLink (&Hie[Hie_CTR],ActSeeCtrInf,"LT ICO16x16");
@@ -658,7 +672,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  if ((Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of degree */
-		     Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
+		     Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
 
 		     /* Write degree logo and name */
 		     Deg_DrawDegreeLogoAndNameWithLink (&Hie[Hie_DEG],ActSeeDegInf,"LT ICO20x20");

@@ -2951,6 +2951,7 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
 static void Sta_WriteCountry (long CtyCod)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Cty;
 
    /***** Begin cell *****/
@@ -2960,7 +2961,7 @@ static void Sta_WriteCountry (long CtyCod)
 	{
 	 /***** Get data of country *****/
 	 Cty.HieCod = CtyCod;
-	 Cty_GetBasicCountryDataByCod (&Cty);
+	 Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	 /***** Form to go to country *****/
 	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
@@ -3039,6 +3040,7 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
 static void Sta_WriteInstit (long InsCod)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ins;
 
    /***** Begin cell *****/
@@ -3046,7 +3048,7 @@ static void Sta_WriteInstit (long InsCod)
      {
       /***** Get data of institution *****/
       Ins.HieCod = InsCod;
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3130,6 +3132,7 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
 static void Sta_WriteCenter (long CtrCod)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ctr;
 
    /***** Begin cell *****/
@@ -3137,7 +3140,7 @@ static void Sta_WriteCenter (long CtrCod)
      {
       /***** Get data of center *****/
       Ctr.HieCod = CtrCod;
-      Ctr_GetCenterDataByCod (&Ctr);
+      Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3221,6 +3224,7 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
 static void Sta_WriteDegree (long DegCod)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Deg;
 
    /***** Begin cell *****/
@@ -3228,7 +3232,7 @@ static void Sta_WriteDegree (long DegCod)
      {
       /***** Get data of degree *****/
       Deg.HieCod = DegCod;
-      Deg_GetDegreeDataByCod (&Deg);
+      Hie_GetDataByCod[Hie_DEG] (&Deg);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LM LOG_%s\" title=\"%s\"",
@@ -3256,6 +3260,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_No_INDEX;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Year_OF_A_DEGREE;
@@ -3293,7 +3298,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
       Crs.HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get data of current degree */
-      CrsOK = Crs_GetCourseDataByCod (&Crs);
+      CrsOK = Hie_GetDataByCod[Hie_CRS] (&Crs);
 
       HTM_TR_Begin (NULL);
 

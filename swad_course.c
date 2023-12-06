@@ -186,20 +186,13 @@ static void Crs_WriteNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
   {
    extern unsigned (*Hie_GetMyNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
 							    long PrtCod);
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    Lay_Highlight_t Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumNode;
    unsigned NumNodes;
-   static bool (*GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node) =
-     {
-      [Hie_CTY] = Cty_GetBasicCountryDataByCod,
-      [Hie_INS] = Ins_GetInstitDataByCod,
-      [Hie_CTR] = Ctr_GetCenterDataByCod,
-      [Hie_DEG] = Deg_GetDegreeDataByCod,
-      [Hie_CRS] = Crs_GetCourseDataByCod,
-     };
 
    if (Level > Hie_SYS)
       NumNodes = Hie_GetMyNodesFromDB[Level] (&mysql_res,Hie[Level - 1].HieCod);
@@ -217,7 +210,7 @@ static void Crs_WriteNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
          Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /***** Get data of this node *****/
-	 if (!GetDataByCod[Level] (&Hie[Level]))
+	 if (!Hie_GetDataByCod[Level] (&Hie[Level]))
 	    Err_WrongCountrExit ();
         }
       else
@@ -1186,6 +1179,7 @@ static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
 
 void Crs_RemoveCourse (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course;
    extern const char *Txt_Course_X_removed;
 
@@ -1196,7 +1190,7 @@ void Crs_RemoveCourse (void)
    Crs_EditingCrs->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the course from database *****/
-   Crs_GetCourseDataByCod (Crs_EditingCrs);
+   Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
    if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
       Err_NoPermissionExit ();
 
@@ -1321,6 +1315,7 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 
 static void Crs_EmptyCourseCompletely (long CrsCod)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Crs;
    char PathRelCrs[PATH_MAX + 1];
 
@@ -1328,7 +1323,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
      {
       /***** Get course data *****/
       Crs.HieCod = CrsCod;
-      Crs_GetCourseDataByCod (&Crs);
+      Hie_GetDataByCod[Hie_CRS] (&Crs);
 
       /***** Remove all students in the course *****/
       Enr_RemAllStdsInCrs (&Crs);
@@ -1422,6 +1417,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
 void Crs_ChangeInsCrsCod (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
@@ -1437,7 +1433,7 @@ void Crs_ChangeInsCrsCod (void)
    Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get data of the course */
-   Crs_GetCourseDataByCod (Crs_EditingCrs);
+   Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
    if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
       Err_NoPermissionExit ();
 
@@ -1462,6 +1458,7 @@ void Crs_ChangeInsCrsCod (void)
 
 void Crs_ChangeCrsYear (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
@@ -1481,7 +1478,7 @@ void Crs_ChangeCrsYear (void)
    NewYear = Deg_ConvStrToYear (YearStr);
 
    /* Get data of the course */
-   Crs_GetCourseDataByCod (Crs_EditingCrs);
+   Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
    if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
       Err_NoPermissionExit ();
 
@@ -1568,6 +1565,7 @@ void Crs_RenameCourseFull (void)
 
 void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1585,7 +1583,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
    Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get from the database the data of the degree *****/
-   Crs_GetCourseDataByCod (Crs);
+   Hie_GetDataByCod[Hie_CRS] (Crs);
    if (!Crs_CheckIfICanEdit (Crs))
       Err_NoPermissionExit ();
 
@@ -1631,6 +1629,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
 
 void Crs_ChangeCrsStatus (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_status_of_the_course_X_has_changed;
    Hie_Status_t Status;
 
@@ -1645,7 +1644,7 @@ void Crs_ChangeCrsStatus (void)
    Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of course *****/
-   Crs_GetCourseDataByCod (Crs_EditingCrs);
+   Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
 
    /***** Update status *****/
    Crs_DB_UpdateCrsStatus (Crs_EditingCrs->HieCod,Status);
@@ -1964,6 +1963,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -1990,7 +1990,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Get degree code (row[0]) *****/
    if ((Deg.HieCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongDegreeExit ();
-   if (!Deg_GetDegreeDataByCod (&Deg))
+   if (!Hie_GetDataByCod[Hie_DEG] (&Deg))
       Err_WrongDegreeExit ();
 
    /***** Get course code (row[1]) *****/

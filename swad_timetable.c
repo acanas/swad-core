@@ -1426,6 +1426,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
                                        unsigned DurationNumIntervals,
                                        const char *Info)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
    struct Hie_Node Crs;
@@ -1440,7 +1441,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 	   ClassType == Tmt_PRACTICAL))
 	{
 	 Crs.HieCod = CrsCod;
-	 Crs_GetCourseDataByCod (&Crs);
+	 Hie_GetDataByCod[Hie_CRS] (&Crs);
 	 HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
 				    Txt_unknown_removed_course);
 	 HTM_BR ();

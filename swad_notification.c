@@ -289,10 +289,17 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args);
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications);
+static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
+			       struct Usr_Data *UsrDat,
+			       const struct Hie_Node Hie[Hie_NUM_LEVELS],
+			       long Cod,time_t DateTimeUTC,
+			       Ntf_Status_t Status,
+			       struct For_Forums *Forums);
+
 static bool Ntf_GetAllNotificationsFromForm (void);
 
 static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                             long CrsCod,struct Usr_Data *UsrDat,long Cod,
+                                             long CrsCod,const struct Usr_Data *UsrDat,long Cod,
                                              const struct For_Forums *Forums);
 static void Ntf_PutParNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
 
@@ -314,20 +321,17 @@ static void Ntf_GetParsNotifyEvents (void);
 
 void Ntf_ShowMyNotifications (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_START_Notifications;
+   extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
-   extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
    extern const char *Txt_Notifications;
    extern const char *Txt_Date;
    extern const char *Txt_Event;
    extern const char *Txt_Location;
    extern const char *Txt_MSG_From;
    extern const char *Txt_Email;
-   extern const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS];
-   extern const char *Txt_Forum;
-   extern const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT];
-   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
    MYSQL_RES *mysql_res;
@@ -337,25 +341,13 @@ void Ntf_ShowMyNotifications (void)
    bool AllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Usr_Data UsrDat;
+   Hie_Level_t Level;
+   unsigned Col;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    long Cod;
    struct For_Forums Forums;
-   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
-   Ntf_StatusTxt_t StatusTxt;
-   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
-   char *ContentStr;
-   struct
-     {
-      const char *Txt;
-      const char *Link;
-      const char *Author;
-      const char *Bg;
-     } Class;
-   Frm_PutForm_t PutForm;
-   Act_Action_t Action = ActUnk;
-   Hie_Level_t Level;
 
    /***** Get my notifications from database *****/
    AllNotifications = Ntf_GetAllNotificationsFromForm ();
@@ -419,34 +411,18 @@ void Ntf_ShowMyNotifications (void)
 							Usr_DONT_GET_PREFS,
 							Usr_DONT_GET_ROLE_IN_CRS);
 
-	       /* Get institution code (row[2]) */
-	       Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
-	       Ins_GetInstitDataByCod (&Hie[Hie_INS]);
-
-		/* Get center code (row[3]) */
-	       Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[3]);
-	       Ctr_GetCenterDataByCod (&Hie[Hie_CTR]);
-
-	       /* Get degree code (row[4]) */
-	       Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[4]);
-	       Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
-
-	       /* Get course code (row[5]) */
-	       Hie[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[5]);
-	       Crs_GetCourseDataByCod (&Hie[Hie_CRS]);
+	       /* Get institution code, center code, degree code and course code
+	          (row[2], row[3], row[4] and row[5]) */
+	       for (Level  = Hie_INS, Col = 2;
+		    Level <= Hie_CRS;
+		    Level++, Col++)
+	         {
+		  Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
+		  Hie_GetDataByCod[Level] (&Hie[Level]);
+	         }
 
 	       /* Get message/post/... code (row[6]) */
 	       Cod = Str_ConvertStrCodToLongCod (row[6]);
-
-	       /* Get forum type of the post */
-	       if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
-		   NotifyEvent == Ntf_EVENT_FORUM_REPLY)
-		 {
-		  For_ResetForums (&Forums);
-		  For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums.Forum);
-		  For_SetForumName (&Forums.Forum,
-				    ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-		 }
 
 	       /* Get time of the event (row[7]) */
 	       DateTimeUTC = Dat_GetUNIXTimeFromStr (row[7]);
@@ -454,210 +430,10 @@ void Ntf_ShowMyNotifications (void)
 	       /* Get status (row[8]) */
 	       if (sscanf (row[8],"%u",&Status) != 1)
 		  Err_WrongStatusExit ();
-	       StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
 
-	       if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
-		 {
-		  Class.Txt    = "MSG_TIT_REM";
-		  Class.Link   = "BT_LINK MSG_TIT_REM";
-		  Class.Author = "MSG_AUT_LIGHT";
-		  Class.Bg     = "MSG_BG_REM";
-		  PutForm = Frm_DONT_PUT_FORM;
-		 }
-	       else
-		 {
-		  if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
-		    {
-		     Class.Txt    = "MSG_TIT";
-		     Class.Link   = "LT BT_LINK MSG_TIT";
-		     Class.Author = "MSG_AUT";
-		     Class.Bg     = "MSG_BG";
-		    }
-		  else					// I have not seen the source of the notification
-		    {
-		     Class.Txt    = "MSG_TIT_NEW";
-		     Class.Link   = "LT BT_LINK MSG_TIT_NEW";
-		     Class.Author = "MSG_AUT_NEW";
-		     Class.Bg     = "MSG_BG_NEW";
-		    }
-		  PutForm = Frm_PUT_FORM;
-		 }
-
-	       /***** Write row for this notification *****/
-	       /* Write event icon */
-	       HTM_TR_Begin (NULL);
-
-		  HTM_TD_Begin ("class=\"LT %s_%s\" style=\"width:25px;\"",
-		                Class.Bg,The_GetSuffix ());
-		     if (PutForm == Frm_PUT_FORM)
-		       {
-			Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-							 Frm_DONT_PUT_FORM;
-		       }
-		     switch (PutForm)
-		       {
-			case Frm_DONT_PUT_FORM:
-			   Ico_PutIconOff (Ntf_Icons[NotifyEvent],Ico_BLACK,
-					   Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-			   break;
-			case Frm_PUT_FORM:
-			   Ico_PutIconLink (Ntf_Icons[NotifyEvent],Ico_BLACK,Action);
-			   Frm_EndForm ();
-			   break;
-		       }
-		  HTM_TD_End ();
-
-		  /* Write event type */
-		  HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
-		     switch (PutForm)
-		       {
-			case Frm_DONT_PUT_FORM:
-			   HTM_SPAN_Begin ("class=\"%s\"",Class.Txt);
-			      HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-			   HTM_SPAN_End ();
-			   break;
-			case Frm_PUT_FORM:
-			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			   PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
-
-			      HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-						       "class=\"LT %s_%s\"",
-						       Class.Link,The_GetSuffix ());
-				 HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-			      HTM_BUTTON_End ();
-			   Frm_EndForm ();
-			   break;
-		       }
-		  HTM_TD_End ();
-
-		  /* Write user (from) */
-		  HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		                Class.Author,The_GetSuffix (),
-		                Class.Bg,The_GetSuffix ());
-		     Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
-		  HTM_TD_End ();
-
-		  /* Write location */
-		  HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
-		     if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
-			 NotifyEvent == Ntf_EVENT_FORUM_REPLY)
-		       {
-			if (PutForm == Frm_PUT_FORM)
-			  {
-			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			   PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
-		          }
-
-			switch (PutForm)
-			  {
-			   case Frm_DONT_PUT_FORM:
-			      HTM_SPAN_Begin ("class=\"%s_%s\"",
-					      Class.Txt,The_GetSuffix ());
-			      break;
-			   case Frm_PUT_FORM:
-			      HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-						       "class=\"LT %s_%s\"",
-						       Class.Link,The_GetSuffix ());
-			      break;
-			  }
-			HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
-			switch (PutForm)
-			  {
-			   case Frm_DONT_PUT_FORM:
-			      HTM_SPAN_End ();
-			      break;
-			   case Frm_PUT_FORM:
-			      HTM_BUTTON_End ();
-			      Frm_EndForm ();
-			      break;
-			  }
-		       }
-		     else
-		       {
-			if (PutForm == Frm_PUT_FORM)
-			  {
-			   Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,&UsrDat,Cod,&Forums);
-			   PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
-							    Frm_DONT_PUT_FORM;
-		          }
-
-			switch (PutForm)
-			  {
-			   case Frm_DONT_PUT_FORM:
-			      HTM_SPAN_Begin ("class=\"%s_%s\"",
-					      Class.Txt,The_GetSuffix ());
-			      break;
-			   case Frm_PUT_FORM:
-			      HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
-						       "class=\"LT %s_%s\"",
-						       Class.Link,The_GetSuffix ());
-			      break;
-			  }
-
-			for (Level  = Hie_CRS;
-			     Level >= Hie_INS;
-			     Level--)
-			   if (Hie[Level].HieCod > 0)
-			     {
-			      HTM_TxtF ("%s:&nbsp;%s",
-					Txt_HIERARCHY_SINGUL_Abc[Level],
-					Hie[Level].ShrtName);
-			      break;
-		             }
-			if (Level < Hie_INS)
-			   HTM_Hyphen ();
-
-			switch (PutForm)
-			  {
-			   case Frm_DONT_PUT_FORM:
-			      HTM_SPAN_End ();
-			      break;
-			   case Frm_PUT_FORM:
-			      HTM_BUTTON_End ();
-			      Frm_EndForm ();
-			      break;
-			  }
-		       }
-
-		  HTM_TD_End ();
-
-		  /* Write date and time */
-		  Msg_WriteMsgDate (DateTimeUTC,Class.Txt,Class.Bg);
-
-		  /* Write status (sent by email / pending to be sent by email) */
-		  HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		                Class.Txt,The_GetSuffix (),
-		                Class.Bg,The_GetSuffix ());
-		     HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
-
-	       /***** Write content of the event *****/
-	       if (PutForm == Frm_PUT_FORM)
-		 {
-		  ContentStr = NULL;
-
-		  Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-						 Cod,Hie[Hie_CRS].HieCod,
-						 Gbl.Usrs.Me.UsrDat.UsrCod,
-						 Ntf_DONT_GET_CONTENT);
-		  HTM_TR_Begin (NULL);
-
-		     HTM_TD_Begin ("colspan=\"2\"");
-		     HTM_TD_End ();
-
-		     HTM_TD_Begin ("colspan=\"4\" class=\"LT DAT_%s\""
-			           " style=\"padding-bottom:12px;\"",
-			           The_GetSuffix ());
-			HTM_Txt (SummaryStr);
-		     HTM_TD_End ();
-
-		  HTM_TR_End ();
-		 }
+	       /* Write row for this notification */
+	       Ntf_WriteRowNotif (NotifyEvent,&UsrDat,Hie,Cod,DateTimeUTC,
+				  Status,&Forums);
 	      }
 
 	 /***** End table *****/
@@ -708,6 +484,248 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
   }
 
 /*****************************************************************************/
+/********** Write a form to select whether show all notifications ************/
+/*****************************************************************************/
+
+static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
+			       struct Usr_Data *UsrDat,
+			       const struct Hie_Node Hie[Hie_NUM_LEVELS],
+			       long Cod,time_t DateTimeUTC,
+			       Ntf_Status_t Status,
+			       struct For_Forums *Forums)
+  {
+   extern const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS];
+   extern const char *Txt_Forum;
+   extern const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT];
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+   extern const char *Txt_You_have_no_notifications;
+   extern const char *Txt_You_have_no_unread_notifications;
+   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
+   char *ContentStr;
+   struct
+     {
+      const char *Txt;
+      const char *Link;
+      const char *Author;
+      const char *Bg;
+     } Class;
+   Frm_PutForm_t PutForm;
+   Act_Action_t Action = ActUnk;
+   Hie_Level_t Level;
+   Ntf_StatusTxt_t StatusTxt;
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
+
+   if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
+     {
+      Class.Txt    = "MSG_TIT_REM";
+      Class.Link   = "BT_LINK MSG_TIT_REM";
+      Class.Author = "MSG_AUT_LIGHT";
+      Class.Bg     = "MSG_BG_REM";
+      PutForm = Frm_DONT_PUT_FORM;
+     }
+   else
+     {
+      if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
+	{
+	 Class.Txt    = "MSG_TIT";
+	 Class.Link   = "LT BT_LINK MSG_TIT";
+	 Class.Author = "MSG_AUT";
+	 Class.Bg     = "MSG_BG";
+	}
+      else					// I have not seen the source of the notification
+	{
+	 Class.Txt    = "MSG_TIT_NEW";
+	 Class.Link   = "LT BT_LINK MSG_TIT_NEW";
+	 Class.Author = "MSG_AUT_NEW";
+	 Class.Bg     = "MSG_BG_NEW";
+	}
+      PutForm = Frm_PUT_FORM;
+     }
+
+   /***** Write row for this notification *****/
+   /* Write event icon */
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"LT %s_%s\" style=\"width:25px;\"",
+		    Class.Bg,The_GetSuffix ());
+	 if (PutForm == Frm_PUT_FORM)
+	   {
+	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	    PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+					     Frm_DONT_PUT_FORM;
+	   }
+	 switch (PutForm)
+	   {
+	    case Frm_DONT_PUT_FORM:
+	       Ico_PutIconOff (Ntf_Icons[NotifyEvent],Ico_BLACK,
+			       Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+	       break;
+	    case Frm_PUT_FORM:
+	       Ico_PutIconLink (Ntf_Icons[NotifyEvent],Ico_BLACK,Action);
+	       Frm_EndForm ();
+	       break;
+	   }
+      HTM_TD_End ();
+
+      /* Write event type */
+      HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
+	 switch (PutForm)
+	   {
+	    case Frm_DONT_PUT_FORM:
+	       HTM_SPAN_Begin ("class=\"%s\"",Class.Txt);
+		  HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+	       HTM_SPAN_End ();
+	       break;
+	    case Frm_PUT_FORM:
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+						Frm_DONT_PUT_FORM;
+
+		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+					   "class=\"LT %s_%s\"",
+					   Class.Link,The_GetSuffix ());
+		     HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	       break;
+	   }
+      HTM_TD_End ();
+
+      /* Write user (from) */
+      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
+		    Class.Author,The_GetSuffix (),
+		    Class.Bg,The_GetSuffix ());
+	 Usr_WriteAuthor (UsrDat,Cns_ENABLED);
+      HTM_TD_End ();
+
+      /* Write location */
+      HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
+	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
+	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
+	   {
+	    if (PutForm == Frm_PUT_FORM)
+	      {
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+						Frm_DONT_PUT_FORM;
+	      }
+
+	    switch (PutForm)
+	      {
+	       case Frm_DONT_PUT_FORM:
+		  HTM_SPAN_Begin ("class=\"%s_%s\"",
+				  Class.Txt,The_GetSuffix ());
+		  break;
+	       case Frm_PUT_FORM:
+		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+					   "class=\"LT %s_%s\"",
+					   Class.Link,The_GetSuffix ());
+		  break;
+	      }
+	    /* Get forum type of the post */
+	    For_ResetForums (Forums);
+	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums->Forum);
+	    For_SetForumName (&Forums->Forum,
+			      ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+	    HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
+	    switch (PutForm)
+	      {
+	       case Frm_DONT_PUT_FORM:
+		  HTM_SPAN_End ();
+		  break;
+	       case Frm_PUT_FORM:
+		  HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		  break;
+	      }
+	   }
+	 else
+	   {
+	    if (PutForm == Frm_PUT_FORM)
+	      {
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
+						Frm_DONT_PUT_FORM;
+	      }
+
+	    switch (PutForm)
+	      {
+	       case Frm_DONT_PUT_FORM:
+		  HTM_SPAN_Begin ("class=\"%s_%s\"",
+				  Class.Txt,The_GetSuffix ());
+		  break;
+	       case Frm_PUT_FORM:
+		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],
+					   "class=\"LT %s_%s\"",
+					   Class.Link,The_GetSuffix ());
+		  break;
+	      }
+
+	    for (Level  = Hie_CRS;
+		 Level >= Hie_INS;
+		 Level--)
+	       if (Hie[Level].HieCod > 0)
+		 {
+		  HTM_TxtF ("%s:&nbsp;%s",
+			    Txt_HIERARCHY_SINGUL_Abc[Level],
+			    Hie[Level].ShrtName);
+		  break;
+		 }
+	    if (Level < Hie_INS)
+	       HTM_Hyphen ();
+
+	    switch (PutForm)
+	      {
+	       case Frm_DONT_PUT_FORM:
+		  HTM_SPAN_End ();
+		  break;
+	       case Frm_PUT_FORM:
+		  HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		  break;
+	      }
+	   }
+
+      HTM_TD_End ();
+
+      /* Write date and time */
+      Msg_WriteMsgDate (DateTimeUTC,Class.Txt,Class.Bg);
+
+      /* Write status (sent by email / pending to be sent by email) */
+      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
+		    Class.Txt,The_GetSuffix (),
+		    Class.Bg,The_GetSuffix ());
+	 StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
+	 HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Write content of the event *****/
+   if (PutForm == Frm_PUT_FORM)
+     {
+      ContentStr = NULL;
+
+      Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
+				     Cod,Hie[Hie_CRS].HieCod,
+				     Gbl.Usrs.Me.UsrDat.UsrCod,
+				     Ntf_DONT_GET_CONTENT);
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("colspan=\"2\"");
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("colspan=\"4\" class=\"LT DAT_%s\""
+		       " style=\"padding-bottom:12px;\"",
+		       The_GetSuffix ());
+	    HTM_Txt (SummaryStr);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+     }
+  }
+
+/*****************************************************************************/
 /************* Get whether to show all notifications from form ***************/
 /*****************************************************************************/
 
@@ -721,7 +739,7 @@ static bool Ntf_GetAllNotificationsFromForm (void)
 /*****************************************************************************/
 
 static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
-                                             long CrsCod,struct Usr_Data *UsrDat,long Cod,
+                                             long CrsCod,const struct Usr_Data *UsrDat,long Cod,
                                              const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
@@ -1284,6 +1302,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
                                                  unsigned *NumNotif,
                                                  unsigned *NumMails)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NUM_LANGUAGES];
@@ -1302,6 +1321,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
    struct Usr_Data FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Hie_Node Hie[Hie_NUM_LEVELS];
+   Hie_Level_t Level;
+   unsigned Col;
    long Cod;
    struct For_Forum ForumSelected;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -1364,20 +1385,15 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (const struct Usr_Data *ToUsrDat
 	                                             Usr_DONT_GET_PREFS,
 	                                             Usr_DONT_GET_ROLE_IN_CRS);
 
-	    /* Get insti. code (row[2]),
-	           center code (row[3]),
-	           degree code (row[4]),
-	           course code (row[5]) */
-	    Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
-	    Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[4]);
-	    Hie[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[5]);
-
-	    /* Get data of institution, center, degree and course */
-	    Ins_GetInstitDataByCod (&Hie[Hie_INS]);
-	    Ctr_GetCenterDataByCod (&Hie[Hie_CTR]);
-	    Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
-	    Crs_GetCourseDataByCod (&Hie[Hie_CRS]);
+	    /* Get data of institution, center, degree and course
+	       (row[2], row[3], row[4], row[5]) */
+	    for (Level  = Hie_INS, Col = 2;
+		 Level <= Hie_CRS;
+		 Level++, Col++)
+	       {
+	        Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
+		Hie_GetDataByCod[Level] (&Hie[Level]);
+	       }
 
 	    /* Get message/post/... code (row[6]) */
 	    Cod = Str_ConvertStrCodToLongCod (row[6]);

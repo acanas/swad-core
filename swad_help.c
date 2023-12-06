@@ -80,7 +80,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Select_or_create_one_degree_in_X;
    extern const char *Txt_Select_or_create_one_center_in_X;
    extern const char *Txt_Select_or_create_one_institution_in_X;
-   extern const char *Txt_Select_one_country;
+   extern const char *Txt_Select_one_country_in_X;
    extern const char *Txt_Upload_my_picture;
    extern const char *Txt_Upload_photo;
    extern const char *Txt_Log_in;
@@ -99,24 +99,19 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       [Rol_INS_ADM] = ActUnk,
       [Rol_SYS_ADM] = ActUnk,
      };
-   static const Act_Action_t ActionsSelect[Hie_NUM_LEVELS] =
+   static struct
      {
-      [Hie_DEG] = ActSeeCrs,
-      [Hie_CTR] = ActSeeDeg,
-      [Hie_INS] = ActSeeCtr,
-      [Hie_CTY] = ActSeeIns,
-      [Hie_SYS] = ActSeeCty,
-     };
-   static const char **Select_or_create[Hie_NUM_LEVELS] =
+      Act_Action_t Action;
+      const char **Description;
+     } SelectOrCreate[Hie_NUM_LEVELS]=
      {
-      [Hie_DEG] = &Txt_Select_or_create_one_course_in_X,
-      [Hie_CTR] = &Txt_Select_or_create_one_degree_in_X,
-      [Hie_INS] = &Txt_Select_or_create_one_center_in_X,
-      [Hie_CTY] = &Txt_Select_or_create_one_institution_in_X,
-      [Hie_SYS] = &Txt_Select_one_country,
+      [Hie_SYS] = {ActSeeCty,&Txt_Select_one_country_in_X		},
+      [Hie_CTY] = {ActSeeIns,&Txt_Select_or_create_one_institution_in_X	},
+      [Hie_INS] = {ActSeeCtr,&Txt_Select_or_create_one_center_in_X	},
+      [Hie_CTR] = {ActSeeDeg,&Txt_Select_or_create_one_degree_in_X	},
+      [Hie_DEG] = {ActSeeCrs,&Txt_Select_or_create_one_course_in_X	},
      };
    char *Description;
-   Hie_Level_t Level;
 
    /***** Alert message *****/
    if (Gbl.Usrs.Me.Logged &&
@@ -142,7 +137,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		   Gbl.Action.Act != ActLogInLan)	// I am not just logged
 		  if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
 		    {
-		     /* Request my removing from this course */
+		     /***** Request my removing from this course *****/
 		     if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
 		                   Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
 			Err_NotEnoughMemoryExit ();
@@ -154,7 +149,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	      }
 	    else					// I do not belong to this course
 	      {
-	       /* Request my registration in this course */
+	       /***** Request my registration in this course *****/
 	       if (asprintf (&Description,Txt_Register_me_in_X,
 			     Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
@@ -172,7 +167,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	       if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 						1 << Rol_STD))		// Current course probably has no students
 		 {
-		  /* Request students enrolment */
+		  /***** Request students enrolment *****/
 		  if (asprintf (&Description,Txt_Register_students_in_COURSE_X,
 				Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
 		     Err_NotEnoughMemoryExit ();
@@ -183,41 +178,41 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		 }
 
 	    if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
-	       /* Request list my courses */
+	       /***** Request list my courses *****/
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
 						    ActMyCrs,
 						    Btn_CONFIRM_BUTTON,Txt_My_courses);
 	   }
 
-	 for (Level  = Hie_DEG;
-	      Level >= Hie_SYS;
-	      Level--)
-	    if (Gbl.Hierarchy.Node[Level].HieCod > 0)	// Level selected
-	      {
-	       if (asprintf (&Description,*Select_or_create[Level],
-			     Gbl.Hierarchy.Node[Level].ShrtName) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						    ActionsSelect[Level],
-						    Btn_CONFIRM_BUTTON,
-						    Txt_HIERARCHY_PLURAL_Abc[Level]);
-	       free (Description);
-	       break;
-	      }
+	 /***** Go to list of hierarchy subnodes
+	        to select or create a new one *****/
+	 if (Gbl.Hierarchy.Level >= Hie_SYS &&
+	     Gbl.Hierarchy.Level <= Hie_DEG)
+	   {
+	    if (asprintf (&Description,*(SelectOrCreate[Gbl.Hierarchy.Level].Description),
+			  Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+						 SelectOrCreate[Gbl.Hierarchy.Level].Action,
+						 Btn_CONFIRM_BUTTON,
+						 Txt_HIERARCHY_PLURAL_Abc[Gbl.Hierarchy.Level + 1]);
+	    free (Description);
+	   }
 
 	 if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
+	    /***** Upload my photo *****/
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
 						 ActReqMyPho,
 						 Btn_CREATE_BUTTON,Txt_Upload_photo);
 	}
       else					// I am not logged
 	{
-	 /* Log in */
+	 /***** Log in *****/
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
 					      ActFrmLogIn,
 					      Btn_CONFIRM_BUTTON,Txt_Log_in);
 
-	 /* Sign up */
+	 /***** Sign up *****/
 	 if (asprintf (&Description,Txt_New_on_PLATFORM_Sign_up,
 	               Cfg_PLATFORM_SHORT_NAME) < 0)
 	    Err_NotEnoughMemoryExit ();

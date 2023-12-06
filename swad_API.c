@@ -853,6 +853,7 @@ int swad__loginBySessionKey (struct soap *soap,
                              char *sessionID,char *appKey,					// input
                              struct swad__loginBySessionKeyOutput *loginBySessionKeyOut)	// output
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -913,18 +914,19 @@ int swad__loginBySessionKey (struct soap *soap,
 
       /***** Get course (row[2]) *****/
       Gbl.Hierarchy.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
-      Crs_GetCourseDataByCod (&Gbl.Hierarchy.Node[Hie_CRS]);
+      Hie_GetDataByCod[Hie_CRS] (&Gbl.Hierarchy.Node[Hie_CRS]);
       loginBySessionKeyOut->courseCode = (int) Gbl.Hierarchy.Node[Hie_CRS].HieCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.Hierarchy.Node[Hie_CRS].FullName,
                 Nam_MAX_BYTES_FULL_NAME);
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      UsrFound = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Gbl.Hierarchy.Node[Hie_CRS].HieCod);	// Get some user's data from database
+      UsrFound = API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,
+					       Gbl.Hierarchy.Node[Hie_CRS].HieCod);	// Get some user's data from database
 
       /***** Get degree (row[1]) *****/
       Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[1]);
-      Deg_GetDegreeDataByCod (&Gbl.Hierarchy.Node[Hie_DEG]);
+      Hie_GetDataByCod[Hie_DEG] (&Gbl.Hierarchy.Node[Hie_DEG]);
       loginBySessionKeyOut->degreeCode = (int) Gbl.Hierarchy.Node[Hie_DEG].HieCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.Hierarchy.Node[Hie_DEG].FullName,
                 Nam_MAX_BYTES_FULL_NAME);
@@ -2847,6 +2849,7 @@ int swad__getNotifications (struct soap *soap,
                             char *wsKey,long beginTime,					// input
                             struct swad__getNotificationsOutput *getNotificationsOut)	// output
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_Forum;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -2868,6 +2871,7 @@ int swad__getNotifications (struct soap *soap,
    Ntf_Status_t Status;
    size_t Length;
    Hie_Level_t Level;
+   unsigned Col;
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -2926,12 +2930,18 @@ int swad__getNotifications (struct soap *soap,
             sscanf (row[2],"%ld",&EventTime);
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventTime = EventTime;
 
-         /* Get course (row[7]) */
-         Hie[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[7]);
-         Crs_GetCourseDataByCod (&Hie[Hie_CRS]);
-
          /* Get user's code of the user who caused the event (row[3]) */
          Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+	 /* Get institution code, center code, degree code and course code
+	    (row[4], row[5], row[6] and row[7]) */
+	 for (Level  = Hie_INS, Col = 4;
+	      Level <= Hie_CRS;
+	      Level++, Col++)
+	   {
+	    Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
+	    Hie_GetDataByCod[Level] (&Hie[Level]);
+	   }
 
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Hie[Hie_CRS].HieCod))	// Get some user's data from database
            {
@@ -2973,18 +2983,6 @@ int swad__getNotifications (struct soap *soap,
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = NULL;
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto     = NULL;
            }
-
-         /* Get institution (row[4]) */
-         Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[4]);
-         Ins_GetInstitDataByCod (&Hie[Hie_INS]);
-
-         /* Get center (row[5]) */
-         Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[5]);
-         Ctr_GetCenterDataByCod (&Hie[Hie_CTR]);
-
-         /* Get degree (row[6]) */
-         Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[6]);
-         Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
 
          /* Get message/post/... code (row[8]) */
          Cod = Str_ConvertStrCodToLongCod (row[8]);

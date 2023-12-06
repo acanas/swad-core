@@ -1994,6 +1994,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsPars (void *DegPhotos)
 
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
@@ -2011,7 +2012,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       Deg_GetListAllDegsWithStds (&Degs);
 
       /***** Get data of the degree from database *****/
-      Deg_GetDegreeDataByCod (&Deg);
+      Hie_GetDataByCod[Hie_DEG] (&Deg);
 
       /***** Contextual menu *****/
       HTM_DIV_Begin ("class=\"UPD\"");
@@ -2121,6 +2122,7 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
    unsigned long NumDeg;
    unsigned long NumDegs;
@@ -2149,7 +2151,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
-	    Deg_GetDegreeDataByCod (&Deg);
+	    Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    /* Get number of students and number of students with photo in this degree */
 	    Pho_GetNumStdsInDegree (Deg.HieCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
@@ -2198,6 +2200,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_No_INDEX;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -2243,7 +2246,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	       Err_WrongDegreeExit ();
 
 	    /* Get data of degree */
-	    Deg_GetDegreeDataByCod (&Deg);
+	    Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    HTM_TR_Begin (NULL);
 

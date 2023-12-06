@@ -256,6 +256,7 @@ static void CtyCfg_Title (Hie_PutLink_t PutLink)
 
 static void CtyCfg_Map (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_RES *mysql_res;
    struct Map_Coordinates CtyAvgCoord;
    unsigned Zoom;
@@ -297,14 +298,14 @@ static void CtyCfg_Map (void)
 	 Ctr.HieCod = DB_GetNextCode (mysql_res);
 
 	 /* Get data of center */
-	 Ctr_GetCenterDataByCod (&Ctr);
+	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
 	 /* Get coordinates of center */
 	 Ctr_GetCoordByCod (Ctr.HieCod,&Coord);
 
 	 /* Get data of institution */
 	 Ins.HieCod = Ctr.PrtCod;
-	 Ins_GetInstitDataByCod (&Ins);
+	 Hie_GetDataByCod[Hie_INS] (&Ins);
 
 	 /* Add marker */
 	 Map_AddMarker (&Coord);

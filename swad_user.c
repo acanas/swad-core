@@ -2168,6 +2168,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct Usr_SelectedUsrs *SelectedUsrs)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2249,7 +2250,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
       /***** Write rest of main user's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
 
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
@@ -2266,6 +2267,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2299,7 +2301,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
 
       /***** Write rest of guest's main data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2310,7 +2312,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
       if (UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.HieCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetCenterDataByCod (&Ctr);
+	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
@@ -2356,6 +2358,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2395,7 +2398,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
 
       /***** Write rest of main student's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2467,6 +2470,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2504,7 +2508,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
 
       /***** Write rest of main teacher's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
@@ -2515,7 +2519,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       if (ShowData && UsrDat->Tch.CtrCod > 0)
 	{
 	 Ctr.HieCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetCenterDataByCod (&Ctr);
+	 Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
@@ -2548,6 +2552,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2588,7 +2593,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
 
       /***** Write rest of main administrator's data *****/
       Ins.HieCod = UsrDat->InsCod;
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
 
       HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());

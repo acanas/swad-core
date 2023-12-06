@@ -1488,24 +1488,21 @@ static void Lay_WriteFootFromHTMLFile (void)
 
 void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Hie[Hie_NUM_LEVELS];
 
    /***** Initialize institution, degree and course to show in header *****/
-   Hie[Hie_INS].HieCod = (Gbl.Scope.Current == Hie_CRS ||
-		          Gbl.Scope.Current == Hie_DEG ||
-			  Gbl.Scope.Current == Hie_CTR ||
-			  Gbl.Scope.Current == Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+   Hie[Hie_INS].HieCod = (Gbl.Scope.Current >= Hie_INS) ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
 							  -1L;
-   Hie[Hie_DEG].HieCod = (Gbl.Scope.Current == Hie_CRS ||
-			  Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+   Hie[Hie_DEG].HieCod = (Gbl.Scope.Current >= Hie_DEG) ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
 							  -1L;
    Hie[Hie_CRS].HieCod = (Gbl.Scope.Current == Hie_CRS) ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
 							  -1L;
 
    /***** Get data of institution, degree and course *****/
-   Ins_GetInstitDataByCod (&Hie[Hie_INS]);
-   Deg_GetDegreeDataByCod (&Hie[Hie_DEG]);
-   Crs_GetCourseDataByCod (&Hie[Hie_CRS]);
+   Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
+   Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
+   Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (10);

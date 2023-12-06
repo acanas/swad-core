@@ -1853,6 +1853,7 @@ void For_SetForumName (const struct For_Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Lan_Language_t Language,bool UseHTMLEntities)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_General;
    extern const char *Txt_General_NO_HTML[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_only_teachers;
@@ -1885,13 +1886,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_INSTIT_USRS:
 	 Hie[Hie_INS].HieCod = Forum->HieCod;
-	 if (!Ins_GetInstitDataByCod (&Hie[Hie_INS]))
+	 if (!Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
 	    Err_WrongInstitExit ();
          Str_Copy (ForumName,Hie[Hie_INS].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 Hie[Hie_INS].HieCod = Forum->HieCod;
-	 if (!Ins_GetInstitDataByCod (&Hie[Hie_INS]))
+	 if (!Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
 	    Err_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
 		   Hie[Hie_INS].ShrtName,
@@ -1900,13 +1901,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_CENTER_USRS:
 	 Hie[Hie_CTR].HieCod = Forum->HieCod;
-	 if (!Ctr_GetCenterDataByCod (&Hie[Hie_CTR]))
+	 if (!Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
 	    Err_WrongCenterExit ();
          Str_Copy (ForumName,Hie[Hie_CTR].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTER_TCHS:
 	 Hie[Hie_CTR].HieCod = Forum->HieCod;
-	 if (!Ctr_GetCenterDataByCod (&Hie[Hie_CTR]))
+	 if (!Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
 	    Err_WrongCenterExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
 		   Hie[Hie_CTR].ShrtName,
@@ -1915,13 +1916,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_DEGREE_USRS:
 	 Hie[Hie_DEG].HieCod = Forum->HieCod;
-	 if (!Deg_GetDegreeDataByCod (&Hie[Hie_DEG]))
+	 if (!Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
 	    Err_WrongDegreeExit ();
          Str_Copy (ForumName,Hie[Hie_DEG].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
 	 Hie[Hie_DEG].HieCod = Forum->HieCod;
-	 if (!Deg_GetDegreeDataByCod (&Hie[Hie_DEG]))
+	 if (!Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
 	    Err_WrongDegreeExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
 		   Hie[Hie_DEG].ShrtName,
@@ -1930,13 +1931,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_COURSE_USRS:
 	 Hie[Hie_CRS].HieCod = Forum->HieCod;
-	 if (!Crs_GetCourseDataByCod (&Hie[Hie_CRS]))
+	 if (!Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
 	    Err_WrongCourseExit ();
          Str_Copy (ForumName,Hie[Hie_CRS].ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
 	 Hie[Hie_CRS].HieCod = Forum->HieCod;
-	 if (!Crs_GetCourseDataByCod (&Hie[Hie_CRS]))
+	 if (!Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
 	    Err_WrongCourseExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
 		   Hie[Hie_CRS].ShrtName,

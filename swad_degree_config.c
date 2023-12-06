@@ -359,6 +359,7 @@ static void DegCfg_NumCrss (void)
 
 void DegCfg_ChangeDegCtr (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_degree_X_has_been_moved_to_the_center_Y;
    struct Hie_Node NewCtr;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
@@ -370,7 +371,7 @@ void DegCfg_ChangeDegCtr (void)
    if (NewCtr.HieCod != Gbl.Hierarchy.Node[Hie_DEG].PrtCod)
      {
       /***** Get data of new center *****/
-      Ctr_GetCenterDataByCod (&NewCtr);
+      Hie_GetDataByCod[Hie_CTR] (&NewCtr);
 
       /***** Check if it already existed a degree with the same name in the new center *****/
       Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_DEG].ShrtName;

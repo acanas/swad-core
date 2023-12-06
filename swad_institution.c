@@ -119,6 +119,7 @@ static unsigned Ins_GetInsAndStat (struct Hie_Node *Ins,MYSQL_RES *mysql_res);
 
 void Ins_SeeInsWithPendingCtrs (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Institutions_with_pending_centers;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -173,7 +174,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 								           The_GetColorRows ();
 
 	    /* Get data of institution */
-	    Ins_GetInstitDataByCod (&Ins);
+	    Hie_GetDataByCod[Hie_INS] (&Ins);
 
 	    /* Institution logo and name */
 	    HTM_TR_Begin (NULL);
@@ -1025,6 +1026,7 @@ static bool Ins_CheckIfICanEdit (struct Hie_Node *Ins)
 
 void Ins_RemoveInstitution (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution;
    extern const char *Txt_Institution_X_removed;
    char PathIns[PATH_MAX + 1];
@@ -1036,7 +1038,7 @@ void Ins_RemoveInstitution (void)
    Ins_EditingIns->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of the institution from database *****/
-   Ins_GetInstitDataByCod (Ins_EditingIns);
+   Hie_GetDataByCod[Hie_INS] (Ins_EditingIns);
 
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
@@ -1129,6 +1131,7 @@ void Ins_RenameInsFull (void)
 
 void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1145,7 +1148,7 @@ void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull
    Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get from the database the old names of the institution *****/
-   Ins_GetInstitDataByCod (Ins);
+   Hie_GetDataByCod[Hie_INS] (Ins);
 
    /***** Check if new name is empty *****/
    if (NewName[0])
@@ -1204,6 +1207,7 @@ static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *New
 
 void Ins_ChangeInsWWW (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
@@ -1218,7 +1222,7 @@ void Ins_ChangeInsWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of institution *****/
-   Ins_GetInstitDataByCod (Ins_EditingIns);
+   Hie_GetDataByCod[Hie_INS] (Ins_EditingIns);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1243,6 +1247,7 @@ void Ins_ChangeInsWWW (void)
 
 void Ins_ChangeInsStatus (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
    Hie_Status_t Status;
 
@@ -1257,7 +1262,7 @@ void Ins_ChangeInsStatus (void)
    Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of institution *****/
-   Ins_GetInstitDataByCod (Ins_EditingIns);
+   Hie_GetDataByCod[Hie_INS] (Ins_EditingIns);
 
    /***** Update status *****/
    Ins_DB_UpdateInsStatus (Ins_EditingIns->HieCod,Status);
@@ -1526,6 +1531,7 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role)
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    char *Title;
@@ -1556,7 +1562,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 	 Ins.HieCod = DB_GetNextCode (*mysql_res);
 
 	 /* Get data of institution */
-	 Ins_GetInstitDataByCod (&Ins);
+	 Hie_GetDataByCod[Hie_INS] (&Ins);
 
 	 /* Write data of this institution */
 	 Ins_ListOneInstitutionForSeeing (&Ins,NumIns);
@@ -1926,6 +1932,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 static unsigned Ins_GetInsAndStat (struct Hie_Node *Ins,MYSQL_RES *mysql_res)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    MYSQL_ROW row;
    unsigned NumberThisRow;
 
@@ -1934,7 +1941,7 @@ static unsigned Ins_GetInsAndStat (struct Hie_Node *Ins,MYSQL_RES *mysql_res)
 
    /***** Get data of this institution (row[0]) *****/
    Ins->HieCod = Str_ConvertStrCodToLongCod (row[0]);
-   if (!Ins_GetInstitDataByCod (Ins))
+   if (!Hie_GetDataByCod[Hie_INS] (Ins))
       Err_WrongInstitExit ();
 
    /***** Get statistic (row[1]) *****/

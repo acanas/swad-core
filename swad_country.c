@@ -100,6 +100,7 @@ static void Cty_FormToGoToMap (struct Hie_Node *Cty);
 
 void Cty_SeeCtyWithPendingInss (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -149,7 +150,7 @@ void Cty_SeeCtyWithPendingInss (void)
 									The_GetColorRows ();
 
 	    /* Get data of country */
-	    Cty_GetBasicCountryDataByCod (&Cty);
+	    Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	    /* Begin row for this country */
 	    HTM_TR_Begin (NULL);
@@ -897,7 +898,7 @@ void Cty_WriteCountryName (long CtyCod)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-bool Cty_GetBasicCountryDataByCod (struct Hie_Node *Node)
+bool Cty_GetCountrDataByCod (struct Hie_Node *Node)
   {
    extern const char *Txt_Another_country;
    MYSQL_RES *mysql_res;
@@ -1163,6 +1164,7 @@ static void Cty_PutParOthCtyCod (void *CtyCod)
 
 void Cty_RemoveCountry (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
    extern const char *Txt_Country_X_removed;
 
@@ -1173,7 +1175,7 @@ void Cty_RemoveCountry (void)
    Cty_EditingCty->HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Get data of the country from database *****/
-   Cty_GetBasicCountryDataByCod (Cty_EditingCty);
+   Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
 
    /***** Check if this country has users *****/
    if (Hie_GetNumNodesInHieLvl (Hie_INS,	// Number of institutions...
@@ -1221,6 +1223,7 @@ void Cty_RemoveCountry (void)
 
 void Cty_RenameCountry (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -1243,7 +1246,7 @@ void Cty_RenameCountry (void)
    Par_GetParText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetBasicCountryDataByCod (Cty_EditingCty);
+   Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
 
    /***** Check if new name is empty *****/
    if (NewCtyName[0])
@@ -1299,8 +1302,9 @@ static void Cty_UpdateCtyName (long CtyCod,const char *FldName,const char *NewCt
 
 void Cty_ChangeCtyWWW (void)
   {
-   extern const char *Txt_The_new_web_address_is_X;
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
    char FldName[3 + 1 + 2 + 1];	// Example: "WWW_en"
@@ -1318,7 +1322,7 @@ void Cty_ChangeCtyWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetBasicCountryDataByCod (Cty_EditingCty);
+   Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
 
    /***** Update the table changing old WWW by new WWW *****/
    snprintf (FldName,sizeof (FldName),"WWW_%s",
@@ -1655,6 +1659,7 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role)
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    char *Title;
@@ -1687,7 +1692,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	    Cty.HieCod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of country */
-	    Cty_GetBasicCountryDataByCod (&Cty);
+	    Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	    /* Write data of this country */
 	    Cty_ListOneCountryForSeeing (&Cty,NumCty);

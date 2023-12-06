@@ -115,6 +115,7 @@ static void Deg_PutParDegCod (void *DegCod);
 
 void Deg_SeeDegWithPendingCrss (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -155,7 +156,7 @@ void Deg_SeeDegWithPendingCrss (void)
 								        The_GetColorRows ();
 
 	    /* Get data of degree */
-	    Deg_GetDegreeDataByCod (&Deg);
+	    Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    /* Begin table row */
 	    HTM_TR_Begin (NULL);
@@ -1075,6 +1076,7 @@ static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
 
 void Deg_RemoveDegree (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree;
    extern const char *Txt_Degree_X_removed;
 
@@ -1085,7 +1087,7 @@ void Deg_RemoveDegree (void)
    Deg_EditingDeg->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get data of degree *****/
-   Deg_GetDegreeDataByCod (Deg_EditingDeg);
+   Hie_GetDataByCod[Hie_DEG] (Deg_EditingDeg);
 
    /***** Check if this degree has courses *****/
    if (Hie_GetNumNodesInHieLvl (Hie_CRS,	// Number of courses...
@@ -1267,6 +1269,7 @@ void Deg_RenameDegreeFull (void)
 
 void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_X_already_exists;
@@ -1284,7 +1287,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
    Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get data of degree *****/
-   Deg_GetDegreeDataByCod (Deg);
+   Hie_GetDataByCod[Hie_DEG] (Deg);
 
    /***** Check if new name is empty *****/
    if (NewName[0])
@@ -1329,6 +1332,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
 
 void Deg_ChangeDegreeType (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
    long NewDegTypCod;
 
@@ -1343,7 +1347,7 @@ void Deg_ChangeDegreeType (void)
    NewDegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /***** Get data of degree *****/
-   Deg_GetDegreeDataByCod (Deg_EditingDeg);
+   Hie_GetDataByCod[Hie_DEG] (Deg_EditingDeg);
 
    /***** Update the table of degrees changing old type by new type *****/
    Deg_DB_UpdateDegTyp (Deg_EditingDeg->HieCod,NewDegTypCod);
@@ -1362,6 +1366,7 @@ void Deg_ChangeDegreeType (void)
 
 void Deg_ChangeDegWWW (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_new_web_address_is_X;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
@@ -1376,7 +1381,7 @@ void Deg_ChangeDegWWW (void)
    Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of degree *****/
-   Deg_GetDegreeDataByCod (Deg_EditingDeg);
+   Hie_GetDataByCod[Hie_DEG] (Deg_EditingDeg);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1401,6 +1406,7 @@ void Deg_ChangeDegWWW (void)
 
 void Deg_ChangeDegStatus (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_status_of_the_degree_X_has_changed;
    Hie_Status_t Status;
 
@@ -1415,7 +1421,7 @@ void Deg_ChangeDegStatus (void)
    Status = Hie_GetParStatus ();	// New status
 
    /***** Get data of degree *****/
-   Deg_GetDegreeDataByCod (Deg_EditingDeg);
+   Hie_GetDataByCod[Hie_DEG] (Deg_EditingDeg);
 
    /***** Update status *****/
    Deg_DB_UpdateDegStatus (Deg_EditingDeg->HieCod,Status);
@@ -1501,6 +1507,7 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_abc[Hie_NUM_LEVELS];
    extern const char *Txt_HIERARCHY_PLURAL_abc[Hie_NUM_LEVELS];
    char *Title;
@@ -1531,7 +1538,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	    Deg.HieCod = DB_GetNextCode (*mysql_res);
 
 	    /* Get data of degree */
-	    Deg_GetDegreeDataByCod (&Deg);
+	    Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    /* Write data of this degree */
 	    Deg_ListOneDegreeForSeeing (&Deg,NumDeg);

@@ -1999,6 +1999,7 @@ void Rec_ShowPublicSharedRecordOtherUsr (void)
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct Usr_Data *UsrDat,const char *Anchor)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_USERS_SignUp;
    extern const char *Hlp_PROFILE_Record;
    extern const char *Hlp_START_Profiles_view_public_profile;
@@ -2085,7 +2086,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    Ins.HieCod = UsrDat->InsCod;
    if (Ins.HieCod > 0)
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
 
    /***** Begin box and table *****/
    Rec_Record.UsrDat = UsrDat;
@@ -3468,6 +3469,7 @@ static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
 
 static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    struct Hie_Node Ctr;
 
@@ -3485,7 +3487,7 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
 	    if (UsrDat->Tch.CtrCod > 0)
 	      {
 	       Ctr.HieCod = UsrDat->Tch.CtrCod;
-	       Ctr_GetCenterDataByCod (&Ctr);
+	       Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	       if (Ctr.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_STRONG_%s\"",
@@ -4140,6 +4142,7 @@ void Rec_ChgCountryOfMyInstitution (void)
 
 void Rec_UpdateMyInstitution (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ins;
    unsigned NumCtrs;
    unsigned NumDpts;
@@ -4151,7 +4154,7 @@ void Rec_UpdateMyInstitution (void)
    /* Get country of institution */
    if (Ins.HieCod > 0)
      {
-      Ins_GetInstitDataByCod (&Ins);
+      Hie_GetDataByCod[Hie_INS] (&Ins);
       if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.PrtCod)
 	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.PrtCod;
      }
@@ -4180,6 +4183,7 @@ void Rec_UpdateMyInstitution (void)
 
 void Rec_UpdateMyCenter (void)
   {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Ctr;
 
    /***** Get my center *****/
@@ -4189,7 +4193,7 @@ void Rec_UpdateMyCenter (void)
    /* Get institution of center */
    if (Ctr.HieCod > 0)
      {
-      Ctr_GetCenterDataByCod (&Ctr);
+      Hie_GetDataByCod[Hie_CTR] (&Ctr);
       if (Gbl.Usrs.Me.UsrDat.InsCod != Ctr.PrtCod)
 	{
 	 Gbl.Usrs.Me.UsrDat.InsCod = Ctr.PrtCod;
