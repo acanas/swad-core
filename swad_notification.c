@@ -289,12 +289,18 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args);
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications);
-static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
-			       struct Usr_Data *UsrDat,
-			       const struct Hie_Node Hie[Hie_NUM_LEVELS],
-			       long Cod,time_t DateTimeUTC,
-			       Ntf_Status_t Status,
-			       struct For_Forums *Forums);
+static void Ntf_WriteHeading (void);
+static void Ntf_GetNotif (MYSQL_RES *mysql_res,
+			  Ntf_NotifyEvent_t *NotifyEvent,
+			  struct Usr_Data *UsrDat,
+			  struct Hie_Node Hie[Hie_NUM_LEVELS],
+			  long *Cod,time_t *DateTimeUTC,
+			  Ntf_Status_t *Status);
+static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
+			    struct Usr_Data *UsrDat,
+			    const struct Hie_Node Hie[Hie_NUM_LEVELS],
+			    long Cod,time_t DateTimeUTC,
+			    Ntf_Status_t Status);
 
 static bool Ntf_GetAllNotificationsFromForm (void);
 
@@ -321,31 +327,21 @@ static void Ntf_GetParsNotifyEvents (void);
 
 void Ntf_ShowMyNotifications (void)
   {
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Hlp_START_Notifications;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
    extern const char *Txt_Notifications;
-   extern const char *Txt_Date;
-   extern const char *Txt_Event;
-   extern const char *Txt_Location;
-   extern const char *Txt_MSG_From;
-   extern const char *Txt_Email;
    extern const char *Txt_You_have_no_notifications;
    extern const char *Txt_You_have_no_unread_notifications;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumNotif;
    unsigned NumNotifications;
    bool AllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct Usr_Data UsrDat;
-   Hie_Level_t Level;
-   unsigned Col;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    long Cod;
-   struct For_Forums Forums;
    time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
 
@@ -386,54 +382,19 @@ void Ntf_ShowMyNotifications (void)
 	 HTM_TABLE_BeginWideMarginPadding (2);
 
 	    /***** Heading *****/
-	    HTM_TR_Begin (NULL);
-	       HTM_TH_Span (Txt_Event   ,HTM_HEAD_LEFT  ,1,2,NULL);
-	       HTM_TH      (Txt_MSG_From,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_Location,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_Date    ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_Email   ,HTM_HEAD_LEFT  );
-	    HTM_TR_End ();
+	    Ntf_WriteHeading ();
 
 	    /***** List notifications one by one *****/
 	    for (NumNotif = 0;
 		 NumNotif < NumNotifications;
 		 NumNotif++)
 	      {
-	       /***** Get next notification *****/
-	       row = mysql_fetch_row (mysql_res);
-
-	       /* Get event type (row[0]) */
-	       NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
-
-	       /* Get (from) user code (row[1]) */
-	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
-							Usr_DONT_GET_PREFS,
-							Usr_DONT_GET_ROLE_IN_CRS);
-
-	       /* Get institution code, center code, degree code and course code
-	          (row[2], row[3], row[4] and row[5]) */
-	       for (Level  = Hie_INS, Col = 2;
-		    Level <= Hie_CRS;
-		    Level++, Col++)
-	         {
-		  Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
-		  Hie_GetDataByCod[Level] (&Hie[Level]);
-	         }
-
-	       /* Get message/post/... code (row[6]) */
-	       Cod = Str_ConvertStrCodToLongCod (row[6]);
-
-	       /* Get time of the event (row[7]) */
-	       DateTimeUTC = Dat_GetUNIXTimeFromStr (row[7]);
-
-	       /* Get status (row[8]) */
-	       if (sscanf (row[8],"%u",&Status) != 1)
-		  Err_WrongStatusExit ();
+	       /* Get notification */
+	       Ntf_GetNotif (mysql_res,
+			     &NotifyEvent,&UsrDat,Hie,&Cod,&DateTimeUTC,&Status);
 
 	       /* Write row for this notification */
-	       Ntf_WriteRowNotif (NotifyEvent,&UsrDat,Hie,Cod,DateTimeUTC,
-				  Status,&Forums);
+	       Ntf_WriteNotif (NotifyEvent,&UsrDat,Hie,Cod,DateTimeUTC,Status);
 	      }
 
 	 /***** End table *****/
@@ -484,15 +445,84 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
   }
 
 /*****************************************************************************/
-/********** Write a form to select whether show all notifications ************/
+/**************************** Write table heading ****************************/
 /*****************************************************************************/
 
-static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
-			       struct Usr_Data *UsrDat,
-			       const struct Hie_Node Hie[Hie_NUM_LEVELS],
-			       long Cod,time_t DateTimeUTC,
-			       Ntf_Status_t Status,
-			       struct For_Forums *Forums)
+static void Ntf_WriteHeading (void)
+  {
+   extern const char *Txt_Event;
+   extern const char *Txt_MSG_From;
+   extern const char *Txt_Location;
+   extern const char *Txt_Date;
+   extern const char *Txt_Email;
+
+   HTM_TR_Begin (NULL);
+      HTM_TH_Span (Txt_Event   ,HTM_HEAD_LEFT  ,1,2,NULL);
+      HTM_TH      (Txt_MSG_From,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Location,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Date    ,HTM_HEAD_CENTER);
+      HTM_TH      (Txt_Email   ,HTM_HEAD_LEFT  );
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/****************** Get a notification from database result ******************/
+/*****************************************************************************/
+
+static void Ntf_GetNotif (MYSQL_RES *mysql_res,
+			  Ntf_NotifyEvent_t *NotifyEvent,
+			  struct Usr_Data *UsrDat,
+			  struct Hie_Node Hie[Hie_NUM_LEVELS],
+			  long *Cod,time_t *DateTimeUTC,
+			  Ntf_Status_t *Status)
+  {
+   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   MYSQL_ROW row;
+   Hie_Level_t Level;
+   unsigned Col;
+
+   /***** Get next notification *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get event type (row[0]) *****/
+   *NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
+
+   /***** Get (from) user code (row[1]) *****/
+   UsrDat->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,	// Get user's data from database
+					    Usr_DONT_GET_PREFS,
+					    Usr_DONT_GET_ROLE_IN_CRS);
+
+   /***** Get institution code, center code, degree code and course code
+          (row[2], row[3], row[4] and row[5]) *****/
+   for (Level  = Hie_INS, Col = 2;
+	Level <= Hie_CRS;
+	Level++, Col++)
+     {
+      Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[Col]);
+      Hie_GetDataByCod[Level] (&Hie[Level]);
+     }
+
+   /***** Get message/post/... code (row[6]) *****/
+   *Cod = Str_ConvertStrCodToLongCod (row[6]);
+
+   /***** Get time of the event (row[7]) *****/
+   *DateTimeUTC = Dat_GetUNIXTimeFromStr (row[7]);
+
+   /***** Get status (row[8]) *****/
+   if (sscanf (row[8],"%u",Status) != 1)
+      Err_WrongStatusExit ();
+  }
+
+/*****************************************************************************/
+/******************* Write a table row for a notification ********************/
+/*****************************************************************************/
+
+static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
+			    struct Usr_Data *UsrDat,
+			    const struct Hie_Node Hie[Hie_NUM_LEVELS],
+			    long Cod,time_t DateTimeUTC,
+			    Ntf_Status_t Status)
   {
    extern const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS];
    extern const char *Txt_Forum;
@@ -513,6 +543,7 @@ static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
    Act_Action_t Action = ActUnk;
    Hie_Level_t Level;
    Ntf_StatusTxt_t StatusTxt;
+   struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
 
    if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
@@ -550,7 +581,7 @@ static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
 		    Class.Bg,The_GetSuffix ());
 	 if (PutForm == Frm_PUT_FORM)
 	   {
-	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
 	    PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
 					     Frm_DONT_PUT_FORM;
 	   }
@@ -577,7 +608,7 @@ static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
 	       HTM_SPAN_End ();
 	       break;
 	    case Frm_PUT_FORM:
-	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
 	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
 						Frm_DONT_PUT_FORM;
 
@@ -605,7 +636,7 @@ static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    if (PutForm == Frm_PUT_FORM)
 	      {
-	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
 	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
 						Frm_DONT_PUT_FORM;
 	      }
@@ -623,10 +654,9 @@ static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
 		  break;
 	      }
 	    /* Get forum type of the post */
-	    For_ResetForums (Forums);
-	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums->Forum);
-	    For_SetForumName (&Forums->Forum,
-			      ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+	    For_ResetForums (&Forums);
+	    For_GetThreadForumTypeAndHieCodOfAPost (Cod,&Forums.Forum);
+	    For_SetForumName (&Forums.Forum,ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
 	    HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
 	    switch (PutForm)
 	      {
@@ -643,7 +673,7 @@ static void Ntf_WriteRowNotif (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    if (PutForm == Frm_PUT_FORM)
 	      {
-	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,Forums);
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
 	       PutForm = Frm_CheckIfInside () ? Frm_PUT_FORM :
 						Frm_DONT_PUT_FORM;
 	      }
