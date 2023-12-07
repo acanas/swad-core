@@ -1167,7 +1167,8 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_email);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
+			     The_GetSuffix ());
 	   }
 	 else if (NumEmail == 2)
 	   {
@@ -1235,7 +1236,8 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
             if (MeOrOther == Usr_OTHER)
 	       Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,UsrDat[MeOrOther]->Email,
-			     "id=\"NewEmail\" class=\"INPUT_%s\" size=\"16\"",
+			     "id=\"NewEmail\""
+			     " class=\"REC_C2_BOT_INPUT INPUT_%s\" size=\"16\"",
 			     The_GetSuffix ());
 	    HTM_BR ();
 	    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address

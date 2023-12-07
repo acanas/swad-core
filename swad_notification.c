@@ -443,8 +443,9 @@ static void Ntf_PutContextualLinks (bool AllNotifications,
 static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args)
   {
    /***** Edit notification settings *****/
-   Ico_PutContextualIconToConfigure (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
-				     NULL,NULL);
+   if (Gbl.Action.Act != ActReqEdiSet)
+      Ico_PutContextualIconToConfigure (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
+					NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_NOTIFY_EVENTS);

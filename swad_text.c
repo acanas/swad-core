@@ -2125,11 +2125,11 @@ const char *Txt_Another_ID =
 #elif L==7	// it
 	"Un'altra carta d'identit&agrave;";
 #elif L==8	// pl
-	"Another ID";		// Potrzebujesz tlumaczenie
+	"Kolejny dow&oacute;d to&zdot;samo&sacute;ci";
 #elif L==9	// pt
 	"Outro n&ordm; de identif.";
 #elif L==10	// tr
-	"Another ID";	// Çeviri lazim!
+	"Ba&scedil;ka bir kimlik";
 #endif
 
 const char *Txt_Another_institution =

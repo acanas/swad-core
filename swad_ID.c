@@ -570,7 +570,8 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID_identity_number);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
+			     The_GetSuffix ());
 	   }
 	 else	// NumID >= 1
 	    HTM_BR ();
@@ -639,7 +640,9 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 				  UsrDat[MeOrOther]->IDs.Num ? UsrDat[MeOrOther]->IDs.List[UsrDat[MeOrOther]->IDs.Num - 1].ID :
 						               "",	// Show the most recent ID
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"NewID\" class=\"INPUT_%s\" size=\"16\"",
+				  "id=\"NewID\""
+				  " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				  " size=\"16\"",
 				  The_GetSuffix ());
 		  HTM_BR ();
 		  Btn_PutCreateButtonInline (Txt_Add_this_ID);

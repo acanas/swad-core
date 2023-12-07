@@ -613,12 +613,14 @@ void Pwd_ShowFormChgMyPwd (void)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",Txt_Current_password);
+		  Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",
+				   Txt_Current_password);
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
-					 "id=\"UsrPwd\" class=\"INPUT_%s\"",
+					 "id=\"UsrPwd\""
+					 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 					 The_GetSuffix ());
 		  HTM_TD_End ();
 
@@ -661,12 +663,12 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","Paswd",Txt_Password);
+      Frm_LabelColumn ("REC_C1_BOT RM","Paswd",Txt_Password);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
-			     "id=\"Paswd\" class=\"INPUT_%s\"",
+			     "id=\"Paswd\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
 
@@ -692,7 +694,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true,
-			     "id=\"Paswd1\" class=\"INPUT_%s\"",
+			     "id=\"Paswd1\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
 
@@ -707,7 +709,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true,
-			     "id=\"Paswd2\" class=\"INPUT_%s\"",
+			     "id=\"Paswd2\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
 
@@ -754,7 +756,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
 	    /* New password */
 	    HTM_TABLE_BeginWidePadding (2);
-	    Pwd_PutFormToGetNewPasswordTwice ();
+	       Pwd_PutFormToGetNewPasswordTwice ();
 	    HTM_TABLE_End ();
 
 	    Btn_PutConfirmButton (Txt_Change_password);
