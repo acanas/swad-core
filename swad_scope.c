@@ -52,7 +52,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    bool WriteScope;
 
    HTM_SELECT_Begin (SubmitOnChange,NULL,
-		     "id=\"%s\" name=\"%s\" class=\"INPUT_%s\"",
+		     "id=\"%s\" name=\"%s\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());
 
       for (Level  = (Hie_Level_t) 1;

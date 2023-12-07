@@ -88,6 +88,15 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
    Fig_FigureType_t FigType;
    unsigned FigureTypeUnsigned;
 
+   /***** Get scope *****/
+   Gbl.Scope.Allowed = 1 << Hie_SYS |
+		       1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
+   Sco_GetScope ("FigScope",Hie_SYS);
+
    /***** Form to show statistic *****/
    Frm_BeginForm (ActSeeUseGbl);
 
@@ -96,40 +105,52 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 		    NULL,NULL,
 		    Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
-	 /***** Compute stats for anywhere, degree or course? *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_Scope);
-	    Gbl.Scope.Allowed = 1 << Hie_SYS |
-				1 << Hie_CTY |
-				1 << Hie_INS |
-				1 << Hie_CTR |
-				1 << Hie_DEG |
-				1 << Hie_CRS;
-	    Sco_GetScope ("FigScope",Hie_SYS);
-	    Sco_PutSelectorScope ("FigScope",HTM_DONT_SUBMIT_ON_CHANGE);
-	 HTM_LABEL_End ();
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-	 HTM_BR ();
+	    /***** Compute stats for anywhere, degree or course? *****/
+	    HTM_TR_Begin (NULL);
 
-	 /***** Type of statistic *****/
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_Statistic);
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			      "name=\"FigureType\" class=\"INPUT_%s\"",
-			      The_GetSuffix ());
-	       for (FigType  = (Fig_FigureType_t) 0;
-		    FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
-		    FigType++)
-		 {
-		  FigureTypeUnsigned = (unsigned) FigType;
-		  HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
-			      FigType == SelectedFigureType ? HTM_OPTION_SELECTED :
-							      HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
-			      "%s",Txt_FIGURE_TYPES[FigType]);
-		 }
-	    HTM_SELECT_End ();
-	 HTM_LABEL_End ();
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM","FigScope",Txt_Scope);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_%s\"",The_GetSuffix ());
+		  Sco_PutSelectorScope ("FigScope",HTM_DONT_SUBMIT_ON_CHANGE);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Type of statistic *****/
+	    HTM_TR_Begin (NULL);
+
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM","FigureType",Txt_Statistic);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_%s\"",The_GetSuffix ());
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+				    "name=\"FigureType\""
+				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    The_GetSuffix ());
+		     for (FigType  = (Fig_FigureType_t) 0;
+			  FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
+			  FigType++)
+		       {
+			FigureTypeUnsigned = (unsigned) FigType;
+			HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
+				    FigType == SelectedFigureType ? HTM_OPTION_SELECTED :
+								    HTM_OPTION_UNSELECTED,
+				    HTM_OPTION_ENABLED,
+				    "%s",Txt_FIGURE_TYPES[FigType]);
+		       }
+		  HTM_SELECT_End ();
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+      /***** End table *****/
+      HTM_TABLE_End ();
 
       /***** Send button and end box *****/
       Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Show_statistic);

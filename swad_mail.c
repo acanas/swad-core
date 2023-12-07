@@ -1224,26 +1224,26 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
       /***** Form to enter new email *****/
       HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT","NewEmail",
-		       NumEmails ? Txt_New_email :	// A new email
-				   Txt_Email);	// The first email
+	 /* Label */
+	 Frm_LabelColumn ("REC_C1_BOT RT","NewEmail",
+			  NumEmails ? Txt_New_email :	// A new email
+				      Txt_Email);	// The first email
 
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-                    The_GetSuffix ());
-	 Frm_BeginFormAnchor (ActMail[MeOrOther].Change,Mai_EMAIL_SECTION_ID);
-            if (MeOrOther == Usr_OTHER)
-	       Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,UsrDat[MeOrOther]->Email,
-			     "id=\"NewEmail\""
-			     " class=\"REC_C2_BOT_INPUT INPUT_%s\" size=\"16\"",
-			     The_GetSuffix ());
-	    HTM_BR ();
-	    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
-						   Txt_Save_changes);	// User has no email address yet
-	 Frm_EndForm ();
-      HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
+		       The_GetSuffix ());
+	    Frm_BeginFormAnchor (ActMail[MeOrOther].Change,Mai_EMAIL_SECTION_ID);
+	       if (MeOrOther == Usr_OTHER)
+		  Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,UsrDat[MeOrOther]->Email,
+				"id=\"NewEmail\""
+				" class=\"REC_C2_BOT_INPUT INPUT_%s\" size=\"16\"",
+				The_GetSuffix ());
+	       HTM_BR ();
+	       Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
+						      Txt_Save_changes);	// User has no email address yet
+	    Frm_EndForm ();
+	 HTM_TD_End ();
 
       HTM_TR_End ();
 
