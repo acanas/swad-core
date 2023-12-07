@@ -151,6 +151,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
+   extern const char *Txt_ID_identity_number;
    extern const char *Txt_Check;
    extern const char *Txt_Skip_this_step;
 
@@ -168,8 +169,9 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 	    HTM_TxtColonNBSP (Txt_ID);
 	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
 	                    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"16\" class=\"INPUT_%s\" required=\"required\"",
-			    The_GetSuffix ());
+			    "size=\"16\" placeholder=\"%s\" class=\"INPUT_%s\""
+			    " required=\"required\"",
+			    Txt_ID_identity_number,The_GetSuffix ());
 	 HTM_LABEL_End ();
 	 Btn_PutCreateButtonInline (Txt_Check);
       Frm_EndForm ();

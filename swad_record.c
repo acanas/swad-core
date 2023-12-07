@@ -2706,13 +2706,13 @@ static void Rec_ShowEmail (struct Usr_Data *UsrDat)
 
 static void Rec_ShowUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
   {
-   extern const char *Txt_ID;
+   extern const char *Txt_ID_identity_number;
 
    /***** User's IDs *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID_identity_number);
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",

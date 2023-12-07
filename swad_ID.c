@@ -444,13 +444,13 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
 void ID_ShowFormChangeMyID (bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *Txt_ID;
+   extern const char *Txt_ID_identity_number;
 
    /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_ID,
+      Box_BoxBegin (NULL,Txt_ID_identity_number,
 		    Acc_PutLinkToRemoveMyAccount,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
@@ -471,13 +471,13 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
 void ID_ShowFormChangeOtherUsrID (void)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *Txt_ID;
+   extern const char *Txt_ID_identity_number;
 
    /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_ID,
+      Box_BoxBegin (NULL,Txt_ID_identity_number,
 		    NULL,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
@@ -502,7 +502,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
    extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_ID_X_not_confirmed;
-   extern const char *Txt_ID;
+   extern const char *Txt_ID_identity_number;
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
@@ -567,7 +567,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
+	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID_identity_number);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
@@ -626,8 +626,8 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 
 	    /* Label */
 	    Frm_LabelColumn ("REC_C1_BOT RT","NewID",
-			     UsrDat[MeOrOther]->IDs.Num ? Txt_Another_ID :	// A new user's ID
-					                  Txt_ID);		// The first user's ID
+			     UsrDat[MeOrOther]->IDs.Num ? Txt_Another_ID :		// A new user's ID
+					                  Txt_ID_identity_number);	// The first user's ID
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",

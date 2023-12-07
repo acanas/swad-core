@@ -16607,6 +16607,29 @@ const char *Txt_Icons =
 
 const char *Txt_ID =
 #if   L==1	// ca
+	"ID";
+#elif L==2	// de
+	"Ausweis";
+#elif L==3	// en
+	"ID";
+#elif L==4	// es
+	"ID";
+#elif L==5	// fr
+	"ID";
+#elif L==6	// gn
+	"ID";	// Okoteve traducción
+#elif L==7	// it
+	"ID";
+#elif L==8	// pl
+	"ID";
+#elif L==9	// pt
+	"ID";
+#elif L==10	// tr
+	"Kimlik";
+#endif
+
+const char *Txt_ID_identity_number =
+#if   L==1	// ca
 	"ID (DNI/c&egrave;dula)";
 #elif L==2	// de
 	"Ausweis-Nr.";
