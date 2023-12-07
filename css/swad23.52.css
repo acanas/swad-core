@@ -1540,12 +1540,12 @@ a:hover img.CENTER_PHOTO_SHOW
 .BLD_SEL, .ROOM_TYPE_SEL	{width:80px;}
 
 /*********************************** Month ***********************************/
-.CALENDAR
-	{
-	margin:0 auto;
-	border-spacing:12px 0;
-	}
 .MONTH_CONT
+	{
+	display:inline-block;	
+	margin:0 6px;
+	}
+.MONTH
 	{
 	box-sizing:border-box;
 	width:148px;
@@ -1555,8 +1555,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	border-width:1px;
 	border-color:#8cbcce;
 	border-radius:2px;
-	text-align:center;
-	overflow:hidden;
 	}
 .MONTH_TABLE_DAYS
 	{
@@ -1568,7 +1566,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	border-width:1px 0 0 0;
 	border-color:rgba(140,188,206,0.2);
 	}
-.MONTH
+.MONTH_NAME
 	{
 	font-size:9pt;
 	white-space:nowrap;
@@ -1642,14 +1640,15 @@ a:hover img.CENTER_PHOTO_SHOW
 
 .DAY
 	{
-	border:solid 1px;
+	border:solid 2px;
 	border-color:transparent;
 	font-size:9pt;
 	text-align:center;
 	}
 .TODAY
 	{
-	border:solid 1px;
+	border:solid 2px;
+	border-radius:2px;
 	border-color:#50b800;
 	font-size:9pt;
 	text-align:center;
@@ -3326,13 +3325,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .CLASSPHOTO_DARK	{color:#d0d0d0;}
 
 /************************** Left column menu *********************************/
-.INS_LNK_WHITE,		.MFU_WHITE,	.MONTH_WHITE,
-.INS_LNK_GREY,		.MFU_GREY,	.MONTH_GREY,
-.INS_LNK_PURPLE,	.MFU_PURPLE,	.MONTH_PURPLE,
-.INS_LNK_BLUE,		.MFU_BLUE,	.MONTH_BLUE,
-.INS_LNK_YELLOW,	.MFU_YELLOW,	.MONTH_YELLOW,
-.INS_LNK_PINK,		.MFU_PINK,	.MONTH_PINK	{color:#4d88a1;}
-.INS_LNK_DARK,		.MFU_DARK,	.MONTH_DARK	{color:#8cbcce;}
+.INS_LNK_WHITE,		.MFU_WHITE,		.MONTH_NAME_WHITE,
+.INS_LNK_GREY,		.MFU_GREY,		.MONTH_NAME_GREY,
+.INS_LNK_PURPLE,	.MFU_PURPLE,	.MONTH_NAME_PURPLE,
+.INS_LNK_BLUE,		.MFU_BLUE,		.MONTH_NAME_BLUE,
+.INS_LNK_YELLOW,	.MFU_YELLOW,	.MONTH_NAME_YELLOW,
+.INS_LNK_PINK,		.MFU_PINK,		.MONTH_NAME_PINK	{color:#4d88a1;}
+.INS_LNK_DARK,		.MFU_DARK,		.MONTH_NAME_DARK	{color:#8cbcce;}
 
 /***************** Text decoration of fieldset and legend ********************/
 fieldset
@@ -4799,7 +4798,7 @@ legend {font-size:12pt;}
 	.Ntf_TYPE		{display:none;}
 	.Ntf_LOCATION	{
 					display:inline-block;
-					max-width:80px;
+					max-width:72px;
 					overflow:hidden;
 					text-overflow:ellipsis;
 					text-align:left;

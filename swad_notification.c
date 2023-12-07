@@ -456,18 +456,17 @@ static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args)
 
 static void Ntf_WriteHeading (void)
   {
-   extern const char *Txt_Event;
    extern const char *Txt_MSG_From;
    extern const char *Txt_Location;
    extern const char *Txt_Date;
    extern const char *Txt_Email;
 
    HTM_TR_Begin (NULL);
-      HTM_TH_Span (Txt_Event   ,HTM_HEAD_LEFT ,1,2,NULL);
-      HTM_TH      (Txt_MSG_From,HTM_HEAD_LEFT );
-      HTM_TH      (Txt_Location,HTM_HEAD_LEFT );
-      HTM_TH      (Txt_Date    ,HTM_HEAD_RIGHT);
-      HTM_TH      (Txt_Email   ,HTM_HEAD_LEFT );
+      HTM_TH_Empty (2);
+      HTM_TH (Txt_MSG_From,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Location,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Date    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Email   ,HTM_HEAD_LEFT );
    HTM_TR_End ();
   }
 

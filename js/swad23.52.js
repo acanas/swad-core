@@ -1764,7 +1764,7 @@ function disableDetailedClicks () {
 function Cal_DrawCalendar (id,FirstDayOfWeek,
 							TimeUTC,CurrentPlcCod,PrintView,ColorSuffix,
 							CGI,FormGoToCalendarParams,FormEventParams) {
-	var StartingMonth = [	// Calendar starts one row before current month
+	/* var StartingMonth = [	// Calendar starts one row before current month
 		10,	// January   --> October
 		10,	// February  --> October
 		10,	// Mars      --> October
@@ -1777,48 +1777,52 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,
 		 7,	// October   --> July
 		 7,	// November  --> July
 		 7	// December  --> July
+	]; */
+	var StartingMonth = [	// Calendar starts one row before current month
+		 2,	// January   --> February
+		 3,	// February  --> Mars
+		 4,	// Mars      --> April
+		 5,	// April     --> May
+		 6,	// May       --> June
+		 7,	// June      --> July
+		 8,	// July      --> August
+		 9,	// August    --> September
+		10,	// September --> October
+		11,	// October   --> November
+		12,	// November  --> December
+		 1	// December  --> January
 	];
 	var d = new Date();
 	d.setTime(TimeUTC * 1000);
-	var CurrentMonth = d.getMonth() + 1;
 	var CurrentYear = d.getFullYear();
+	var CurrentMonth = d.getMonth() + 1;
 	var CurrentDay = d.getDate();
 	var Month = StartingMonth[CurrentMonth - 1];
 	var Year = (Month < CurrentMonth) ? CurrentYear :
 										CurrentYear - 1;
-	var Row;
-	var Col;
+	var i;
 	var MonthIdNum = 0;
 	var MonthId;
 
 	/***** Draw several months *****/
-	Gbl_HTMLContent += '<table class="CALENDAR">';
+	for (i = 0;
+		 i < 24;
+		 i++) {
+		MonthIdNum++;
+		MonthId = id + '_month_' + MonthIdNum;
 
-	for (Row = 0;
-		 Row < 5;
-		 Row++) {
-		Gbl_HTMLContent += '<tr>';
-		for (Col = 0;
-			 Col < 3;
-			 Col++) {
-			MonthIdNum++;
-			MonthId = id + '_month_' + MonthIdNum;
-
-			Gbl_HTMLContent += '<td class="CT" style="width:150px;">';
-			DrawMonth (MonthId,FirstDayOfWeek,
-						Year,Month,
-						CurrentMonth,CurrentDay,
-						CurrentPlcCod,true,PrintView,ColorSuffix,
-						CGI,FormGoToCalendarParams,FormEventParams);
-			Gbl_HTMLContent += '</td>';
-			if (++Month == 13) {
-				Month = 1;
-				Year++;
-			}
+		Gbl_HTMLContent += '<div class="MONTH_CONT">';
+		DrawMonth (MonthId,FirstDayOfWeek,
+					Year,Month,
+					CurrentYear,CurrentMonth,CurrentDay,
+					CurrentPlcCod,true,PrintView,ColorSuffix,
+					CGI,FormGoToCalendarParams,FormEventParams);
+		Gbl_HTMLContent += '</div>';
+		if (++Month == 13) {
+			Month = 1;
+			Year++;
 		}
-		Gbl_HTMLContent += '</tr>';
 	}
-	Gbl_HTMLContent += '</table>';
 
 	document.getElementById(id).innerHTML = Gbl_HTMLContent;
 }
@@ -1837,7 +1841,7 @@ function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,ColorSuffix,
 
 	DrawMonth (id,FirstDayOfWeek,
 				Year,Month,
-				Month,CurrentDay,
+				Year,Month,CurrentDay,
 				CurrentPlcCod,false,false,ColorSuffix,
 				CGI,FormGoToCalendarParams,FormEventParams);
 	document.getElementById(id).innerHTML = Gbl_HTMLContent;
@@ -1851,7 +1855,7 @@ function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,ColorSuffix,
 
 function DrawMonth (id,FirstDayOfWeek,
 					YearToDraw,MonthToDraw,
-					CurrentMonth,CurrentDay,
+					CurrentYear,CurrentMonth,CurrentDay,
 					CurrentPlcCod,DrawingCalendar,PrintView,ColorSuffix,
 					CGI,FormGoToCalendarParams,FormEventParams) {
 	var Hld_HOLIDAY = 0;
@@ -1901,17 +1905,17 @@ function DrawMonth (id,FirstDayOfWeek,
 	}
 
 	/***** Start of month *****/
-	Gbl_HTMLContent += '<div class="MONTH_CONT">';
+	Gbl_HTMLContent += '<div class="MONTH">';
 
 	/***** Month name *****/
 	if (DrawingCalendar)
-		Gbl_HTMLContent += '<div class="MONTH MONTH_' + ColorSuffix + '">';
+		Gbl_HTMLContent += '<div class="MONTH_NAME MONTH_NAME_' + ColorSuffix + '">';
 	else {
 		FormId = id + '_show_calendar';
 		Gbl_HTMLContent += '<form method="post" action="' + CGI + '" id="' + FormId + '">' +
 							FormGoToCalendarParams +
-							'<div class="MONTH">' +
-							'<a href="" class="MONTH_' + ColorSuffix +
+							'<div class="MONTH_NAME">' +
+							'<a href="" class="MONTH_NAME_' + ColorSuffix +
 							'" onclick="document.getElementById(\'' + FormId +
 							'\').submit();return false;">';
 	}
@@ -1985,6 +1989,7 @@ function DrawMonth (id,FirstDayOfWeek,
 			/* Date being drawn is today? */
 			IsToday = (Yea == YearToDraw   &&
 					   Mon == MonthToDraw  &&
+					   Yea == CurrentYear  &&
 					   Mon == CurrentMonth &&
 					   Day == CurrentDay);
 
