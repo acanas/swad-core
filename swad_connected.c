@@ -89,7 +89,6 @@ void Con_ShowConnectedUsrs (void)
    extern const char *Txt_Connected_users;
    extern const char *Txt_Sessions;
    extern const char *Txt_Connected_PLURAL;
-   char *Title;
 
    /***** Contextual menu *****/
    if (Gbl.Usrs.Me.Logged)
@@ -104,18 +103,14 @@ void Con_ShowConnectedUsrs (void)
    Sco_GetScope ("ScopeCon",Hie_CRS);
 
    /***** Begin box *****/
-   /* Current time */
-   if (asprintf (&Title,"%s"
-	                "<div id=\"connected_current_time\">"
-	                "</div>",
-	         Txt_Connected_users) < 0)
-      Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,
+   Box_BoxBegin (NULL,Txt_Connected_users,
                  Con_PutIconToUpdateConnected,NULL,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
-   free (Title);
 
       /***** Current time *****/
+      HTM_DIV_Begin ("id=\"connected_current_time\" class=\"CON_%s\"",
+		     The_GetSuffix ());
+      HTM_DIV_End ();
       Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Dat_GetStartExecutionTimeUTC (),
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    false,false,true,0x7);

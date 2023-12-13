@@ -5703,7 +5703,7 @@ const char *Txt_Connected_users =
 #elif L==5	// fr
 	"Utilisateurs connect&eacute;s";
 #elif L==6	// gn
-	"Usuarios conectados";	// Okoteve traducción
+	"Umi oipor&uacute;va en l&iacute;nea";
 #elif L==7	// it
 	"Utenti connessi";
 #elif L==8	// pl
@@ -5711,7 +5711,7 @@ const char *Txt_Connected_users =
 #elif L==9	// pt
 	"Utilizadores conectados";
 #elif L==10	// tr
-	"Connected users";	// Çeviri lazim!
+	"Ba&gbreve;l&inodot; kullan&inodot;c&inodot;lar";
 #endif
 
 const char *Txt_Continue =
