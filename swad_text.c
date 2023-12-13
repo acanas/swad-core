@@ -57463,7 +57463,7 @@ const char *Txt_Who_to_follow =
 #elif L==5	// fr
 	"Qui &agrave; suivre";
 #elif L==6	// gn
-	"A qui&eacute;n seguir";	// Okoteve traducción
+	"M&aacute;vapepa oseg&iacute;ta";
 #elif L==7	// it
 	"Chi da seguire";
 #elif L==8	// pl
@@ -57471,7 +57471,7 @@ const char *Txt_Who_to_follow =
 #elif L==9	// pt
 	"Quem seguir";
 #elif L==10	// tr
-	"Who to follow";		// Çeviri lazim!
+	"Kimi takip etmeli";
 #endif
 
 const char *Txt_With_ =	// Example: "With students"

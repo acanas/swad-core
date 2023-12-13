@@ -5145,32 +5145,38 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	font-size:30pt;
 	font-weight:bold;
 	}
+.FOLLOW_USR
+	{
+	display:inline-block;
+	}
 .FOLLOW_PHOTO
 	{
+	display:inline-block;
 	box-sizing:border-box;
 	width:72px;
 	height:90px;
 	text-align:left;
-	vertical-align:bottom;
+	vertical-align:middle;
 	}
-.FOLLOW_USR
+.FOLLOW_TXT
 	{
+	display:inline-block;
 	box-sizing:border-box;
 	width:100px;
-	height:90px;
+	height:80px;
 	text-align:left;
+	vertical-align:middle;
 	}
-.FOLLOW_USR_NAME
+.FOLLOW_TXT_NAME
 	{
 	box-sizing:border-box;
-	max-width:100px;
+	max-width:90px;
 	text-align:left;
-	vertical-align:bottom;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.FOLLOW_USR_ICO
+.FOLLOW_TXT_ICO
 	{
 	text-align:left;
 	padding:4px;
