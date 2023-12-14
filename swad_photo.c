@@ -1720,13 +1720,12 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
 	    HTM_TABLE_BeginCenterPadding (2);
 
-	       /***** Put a selector for the type of average *****/
+	       /***** Put selectors for:
+	              - the type of average
+	              - the size of photos
+	              - the order of degrees *****/
 	       Pho_PutSelectorForTypeOfAvg (&DegPhotos);
-
-	       /***** Put a selector for the size of photos *****/
 	       Pho_PutSelectorForHowComputePhotoSize (&DegPhotos);
-
-	       /***** Put a selector for the order of degrees *****/
 	       Pho_PutSelectorForHowOrderDegrees (&DegPhotos);
 
 	    HTM_TABLE_End ();
@@ -1785,17 +1784,17 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","AvgType",Txt_Average_type);
+      Frm_LabelColumn ("REC_C1_BOT RM","AvgType",Txt_Average_type);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 Frm_BeginForm (ActSeePhoDeg);
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"AvgType\" name=\"AvgType\""
-			      " class=\"INPUT_%s\"",
+			      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
 		    TypeOfAvg <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
@@ -1852,17 +1851,17 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","PhotoSize",Txt_Size_of_photos);
+      Frm_LabelColumn ("REC_C1_BOT RM","PhotoSize",Txt_Size_of_photos);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 Frm_BeginForm (ActSeePhoDeg);
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"PhotoSize\" name=\"PhotoSize\""
-			      " class=\"INPUT_%s\"",
+			      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
 		    PhoSi <= (Pho_HowComputePhotoSize_t) (Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1);
@@ -1919,16 +1918,17 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","Order",Txt_Sort_degrees_by);
+      Frm_LabelColumn ("REC_C1_BOT RM","Order",Txt_Sort_degrees_by);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 Frm_BeginForm (ActSeePhoDeg);
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Set_PutParsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-			      "id=\"Order\" name=\"Order\" class=\"INPUT_%s\"",
+			      "id=\"Order\" name=\"Order\""
+			      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Order  = (Pho_HowOrderDegrees_t) 0;
 		    Order <= (Pho_HowOrderDegrees_t) (Pho_NUM_HOW_ORDER_DEGREES - 1);

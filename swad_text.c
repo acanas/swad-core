@@ -3357,7 +3357,7 @@ const char *Txt_Average_type =
 #elif L==9	// pt
 	"Tipo de m&eacute;dia";
 #elif L==10	// tr
-	"Average type";		// Çeviri lazim!
+	"Ortalama t&uuml;r";
 #endif
 
 const char *Txt_Banned_users =
