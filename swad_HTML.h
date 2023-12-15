@@ -234,6 +234,7 @@ void HTM_Comma (void);
 void HTM_Hyphen (void);
 void HTM_Asterisk (void);
 void HTM_Unsigned (unsigned Num);
+void HTM_UnsignedColon (unsigned Num);
 void HTM_Light0 (void);
 void HTM_Int (int Num);
 void HTM_UnsignedLong (unsigned long Num);

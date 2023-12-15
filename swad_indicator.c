@@ -63,6 +63,7 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+#define Ind_NUM_LAYOUTS 2
 typedef enum
   {
    Ind_INDICATORS_BRIEF,
@@ -133,10 +134,10 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT","ScopeInd",Txt_Scope);
+	       Frm_LabelColumn ("REC_C1_BOT RT","ScopeInd",Txt_Scope);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 		  Sco_PutSelectorScope ("ScopeInd",HTM_SUBMIT_ON_CHANGE);
 	       HTM_TD_End ();
 
@@ -146,10 +147,10 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_OthDegTyp],Txt_Types_of_degree);
+	       Frm_LabelColumn ("REC_C1_BOT RT",Par_CodeStr[ParCod_OthDegTyp],Txt_Types_of_degree);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",The_GetSuffix ());
 		  DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
 		  HTM_Txt (" (");
 		  HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
@@ -162,11 +163,11 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
+	       Frm_LabelColumn ("REC_C1_BOT RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  if (asprintf (&SelectClass,"INDICATORS_INPUT INPUT_%s",
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+		  if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
 		                The_GetSuffix ()) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current insitution
@@ -195,9 +196,9 @@ void Ind_ReqIndicatorsCourses (void)
 	    /* Selection of the number of indicators */
 	    HTM_TR_Begin (NULL);
 
-	       Frm_LabelColumn ("RT","",Txt_Number_of_indicators);
+	       Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Number_of_indicators);
 
-	       HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 		  Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,true);
 	       HTM_TD_End ();
 
@@ -438,7 +439,6 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
                                               unsigned NumCrss,
                                               Frm_PutForm_t PutForm)
   {
-   extern const char *Txt_Indicators;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Total;
    char *ClassNormal;
@@ -459,7 +459,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
       HTM_TR_Begin (NULL);
 	 if (PutForm == Frm_PUT_FORM)
 	    HTM_TH_Empty (1);
-	 HTM_TH      (Txt_Indicators		       ,HTM_HEAD_RIGHT);
+	 HTM_TH_Empty (1);
 	 HTM_TH_Span (Txt_HIERARCHY_PLURAL_Abc[Hie_CRS],HTM_HEAD_RIGHT,1,2,NULL);
       HTM_TR_End ();
 
@@ -484,7 +484,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 
 	    HTM_TD_Begin ("class=\"%s\"",Class);
 	       HTM_LABEL_Begin ("for=\"Indicators%u\"",Ind);
-		  HTM_Unsigned (Ind);
+		  HTM_UnsignedColon (Ind);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
@@ -563,9 +563,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    unsigned NumIndicators;
    struct Ind_IndicatorsCrs IndicatorsCrs;
    long ActCod;
+   static const char *TableClass[Ind_NUM_LAYOUTS] =
+     {
+      [Ind_INDICATORS_BRIEF] = "Ind_TBL TBL_SCROLL",
+      [Ind_INDICATORS_FULL ] = "Ind_TBL",
+    };
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("INDICATORS");
+   HTM_TABLE_Begin (TableClass[IndicatorsLayout]);
 
       /***** Write table heading *****/
       switch (IndicatorsLayout)

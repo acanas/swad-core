@@ -3902,7 +3902,7 @@ const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =	// Warning: should end
 #elif L==5	// fr
 	"Calculer la photo moyenne de ";
 #elif L==6	// gn
-	"Calcular fotograf&iacute;a promedio de ";	// Okoteve traducción
+	"Okalkula ta'anga promedio ";
 #elif L==7	// it
 	"Calcolare la media della foto di ";
 #elif L==8	// pl
@@ -3910,7 +3910,7 @@ const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =	// Warning: should end
 #elif L==9	// pt
 	"Calcular a foto m&eacute;dia de ";
 #elif L==10	// tr
-	"Calculate average photo of ";			// Çeviri lazim!
+	"Ortalama foto&gbreve;raf&inodot;n&inodot; hesaplay&inodot;n ";
 #endif
 
 const char *Txt_Calendar =
@@ -17232,7 +17232,7 @@ const char *Txt_Indicators_of_courses =
 #elif L==5	// fr
 	"Indicateurs de mati&egrave;res";
 #elif L==6	// gn
-	"Indicadores de asignaturas";	// Okoteve traducción
+	"Umi mba'e ohechauk&aacute;va tema rehegua";
 #elif L==7	// it
 	"Indicatori di corsi";
 #elif L==8	// pl
@@ -17240,7 +17240,7 @@ const char *Txt_Indicators_of_courses =
 #elif L==9	// pt
 	"Indicadores de disciplinas";
 #elif L==10	// tr
-	"Indicators of courses";	// Çeviri lazim!
+	"Kurs g&ouml;stergeleri";
 #endif
 
 const char *Txt_Info =

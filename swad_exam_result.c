@@ -613,7 +613,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		                The_GetSuffix (),
 		                The_GetColorRows ());
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumExam);
-			HTM_TxtF ("%u:",NumExam + 1);
+			HTM_UnsignedColon (NumExam + 1);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 

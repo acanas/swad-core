@@ -114,7 +114,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
    /* List degree types */
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\""
-		     " class=\"INPUT_%s\"",
+		     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"-1",
 		  SelectedDegTypCod <= 0 ? HTM_OPTION_SELECTED :

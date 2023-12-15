@@ -2678,7 +2678,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
-		     HTM_TxtF ("%u:",NumAttEvent + 1);
+		     HTM_UnsignedColon (NumAttEvent + 1);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -3071,7 +3071,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 				       "DAT",
 		    The_GetSuffix (),
 		    The_GetColorRows ());
-	 HTM_TxtF ("%u:",NumUsr);
+	 HTM_UnsignedColon (NumUsr);
       HTM_TD_End ();
 
       /***** Show student's photo *****/
@@ -3140,7 +3140,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 				    "DAT_RED",
 			  The_GetSuffix (),
 			  The_GetColorRows ());
-	       HTM_TxtF ("%u:",NumAttEvent + 1);
+	       HTM_UnsignedColon (NumAttEvent + 1);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());

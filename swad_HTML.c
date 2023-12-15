@@ -1987,6 +1987,11 @@ void HTM_Unsigned (unsigned Num)
    HTM_TxtF ("%u",Num);
   }
 
+void HTM_UnsignedColon (unsigned Num)
+  {
+   HTM_TxtF ("%u:",Num);
+  }
+
 void HTM_Light0 (void)
   {
    HTM_SPAN_Begin ("class=\"VERY_LIGHT\"");

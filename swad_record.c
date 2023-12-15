@@ -1310,9 +1310,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	 Frm_BeginForm (ActPrnRecSevTch);
 	    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Par_PutParChar ("ParamOfficeHours",'Y');
-	    Par_PutParChar ("ShowOfficeHours",
-				    ShowOfficeHours ? 'Y' :
-						      'N');
+	    Par_PutParChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
+						                'N');
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
 	 Frm_EndForm ();
 
@@ -1365,7 +1364,9 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 		     Timetable.Type = Tmt_TUTORING_TIMETABLE;
 		     Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
 				   NULL,NULL,
-				   Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
+				   Gbl.Action.Act == ActSeeRecSevTch ? Hlp_USERS_Teachers_timetable :
+								       NULL,
+				   Box_NOT_CLOSABLE);
 			Tmt_ShowTimeTable (&Timetable,UsrDat.UsrCod);
 		     Box_BoxEnd ();
 		  HTM_DIV_End ();

@@ -575,7 +575,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 		                The_GetSuffix (),
 		                The_GetColorRows ());
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumGame);
-			HTM_TxtF ("%u:",NumGame + 1);
+			HTM_UnsignedColon (NumGame + 1);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 

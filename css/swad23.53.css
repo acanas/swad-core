@@ -4168,9 +4168,9 @@ legend {font-size:12pt;}
 
 .Tmt_HOURCOL	{box-sizing:border-box; height:16px; width:7%;}
 .Tmt_MINICOL	{box-sizing:border-box; height:16px; width:2%;}
-.Tmt_ALIGN	{box-sizing:border-box; height:16px; width:1%;}
+.Tmt_ALIGN		{box-sizing:border-box; height:16px; width:1%;}
 
-.Tmt_CELL	{box-sizing:border-box; height:16px; border:solid 1px;}
+.Tmt_CELL		{box-sizing:border-box; height:16px; border:solid 1px;}
 
 .Tmt_FREE0_WHITE,
 .Tmt_FREE0_GREY,
@@ -5200,16 +5200,58 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	height:48px;
  	}
 
-/************************* Indicators about courses **************************/
-.INDICATORS td,.INDICATORS th
+/************************* Table with horizontal scroll **********************/
+@media only screen and (max-width: 480px)
+	{	/* For mobile-phones */
+	.TBL_SCROLL
+		{
+	    display: block;
+	    overflow-x: auto;
+	    width: 280px;
+	    margin: 0 auto;
+		}
+	}
+@media only screen and (min-width: 480px) and (max-width: 800px)
+	{	/* For mobile-phones */
+	.TBL_SCROLL
+		{
+	    display: block;
+	    overflow-x: auto;
+	    width: 400px;
+	    margin: 0 auto;
+		}
+	}
+@media only screen and (min-width: 800px) and (max-width: 1024px)
+	{	/* For tablets */
+	.TBL_SCROLL
+		{
+	    display: block;
+	    overflow-x: auto;
+	    width: 640px;
+	    margin: 0 auto;
+		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For desktop */
+	.TBL_SCROLL
+		{
+	    display: block;
+	    overflow-x: auto;
+	    width: 900px;
+	    margin: 0 auto;
+		}
+	}
+
+.TBL_SCROLL tbody {
+    display: table;
+    width: 100%;
+}
+
+.Ind_TBL td,.Ind_TBL th
 	{
 	border:1px solid silver;
 	border-collapse:collapse;
 	padding:1px;
-	}
-.INDICATORS_INPUT
-	{
-	max-width:500px;
 	}
 
 /************* Forms to edit institution, center, degree, course *************/

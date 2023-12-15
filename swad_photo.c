@@ -2033,7 +2033,8 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 
 	    /* Selector with all degrees with students */
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			      "name=\"OthDegCod\" class=\"INPUT_%s\"",
+			      "name=\"OthDegCod\""
+			      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (NumDeg = 0;
 		    NumDeg < Degs.Num;

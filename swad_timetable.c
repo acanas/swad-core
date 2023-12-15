@@ -367,7 +367,7 @@ void Tmt_ShowClassTimeTable (void)
    else
       Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
 		    NULL,NULL,
-		    Help[Timetable.Type],Box_NOT_CLOSABLE);
+		    NULL,Box_NOT_CLOSABLE);
 
    /***** Begin time table drawing *****/
    if (Timetable.Type == Tmt_COURSE_TIMETABLE)
@@ -519,27 +519,28 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
    extern const char *Txt_The_timetable_is_empty;
 
    /***** Set type of view depending on current action *****/
-   Timetable->View = Tmt_CRS_VIEW;
+   Timetable->View = Vie_VIEW;
    switch (Gbl.Action.Act)
      {
-      case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
-      case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
-	 Timetable->View = Tmt_CRS_VIEW;
-	 break;
-      case ActSeeRecOneTch:	case ActSeeRecSevTch:
-	 Timetable->View = Tmt_TUT_VIEW;
+      case ActSeeCrsTT:		case ActChgCrsTT1stDay:
+      case ActSeeMyTT:		case ActChgMyTT1stDay:
+      case ActSeeRecOneTch:
+      case ActSeeRecSevTch:
+	 Timetable->View = Vie_VIEW;
 	 break;
       case ActEdiCrsTT:		case ActChgCrsTT:
-	 Timetable->View = Tmt_CRS_EDIT;
-	 break;
       case ActEdiTut:		case ActChgTut:
-	 Timetable->View = Tmt_TUT_EDIT;
+	 Timetable->View = Vie_EDIT;
+	 break;
+      case ActPrnCrsTT:
+      case ActPrnMyTT:
+      case ActPrnRecSevTch:
+	 Timetable->View = Vie_PRINT;
 	 break;
      }
 
    /***** If editing ==> configure and allocate timetable *****/
-   if (Timetable->View == Tmt_CRS_EDIT ||
-       Timetable->View == Tmt_TUT_EDIT)
+   if (Timetable->View == Vie_EDIT)
      {
       Timetable->Config.Range.Hours.Start        = Tmt_START_HOUR;		// Day starts at this hour
       Timetable->Config.Range.Hours.End	         = Tmt_END_HOUR;		// Day  ends  at this hour
@@ -692,10 +693,9 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
    /***** Get timetable from database *****/
    NumRows = Tmt_DB_GetTimeTable (&mysql_res,Timetable->Type,UsrCod);
 
-   /***** If viewing (not editing) ==>
+   /***** If viewing of printing (not editing) ==>
           calculate range of hours and resolution *****/
-   if (Timetable->View == Tmt_CRS_VIEW ||
-       Timetable->View == Tmt_TUT_VIEW)
+   if (Timetable->View != Vie_EDIT)
      {
       /* Initialize hours and resolution for timetable */
       Timetable->Config.Range.Hours.Start        = Tmt_END_HOUR;		// Initialized to maximum hour
@@ -1007,9 +1007,15 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
    unsigned ColumnsToDraw;
    unsigned ColumnsToDrawIncludingExtraColumn;
    unsigned ContinuousFreeMinicolumns;
+   static const char *TableClass[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW ] = "TBL_SCROLL",
+      [Vie_EDIT ] = "TBL_SCROLL",
+      [Vie_PRINT] = "TT",
+    };
 
    /***** Begin table *****/
-   HTM_TABLE_Begin ("TT");
+   HTM_TABLE_Begin (TableClass[Timetable->View]);
 
       /***** Top row used for column adjustement *****/
       Tmt_TimeTableDrawAdjustRow ();
@@ -1064,15 +1070,13 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 							      true,	// Top call, non recursive
 							      WhichCell.Weekday,WhichCell.Interval);
 	       if (ColumnsToDraw == 0 &&
-		   (Timetable->View == Tmt_CRS_VIEW ||
-		    Timetable->View == Tmt_TUT_VIEW))
+		   Timetable->View != Vie_EDIT)
 		  ColumnsToDraw = 1;
 	       // If editing and there's place for more columns,
 	       // a potential new column is added at the end of each day
 	       ColumnsToDrawIncludingExtraColumn = ColumnsToDraw;
 	       if (ColumnsToDraw < Tmt_MAX_COLUMNS_PER_CELL &&
-		   (Timetable->View == Tmt_CRS_EDIT ||
-		    Timetable->View == Tmt_TUT_EDIT))
+		   Timetable->View == Vie_EDIT)
 		  ColumnsToDrawIncludingExtraColumn++;
 
 	       /* Draw cells */
@@ -1395,26 +1399,19 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
    free (ClassStr);
 
       /***** Draw cell depending on type of view *****/
-      switch (Timetable->View)
-	{
-	 case Tmt_CRS_VIEW:	// View course timetable
-	 case Tmt_TUT_VIEW:	// View tutoring timetable
-	    if (IntervalType != Tmt_FREE_INTERVAL) // If cell is not empty...
-	       Tmt_TimeTableDrawCellView (Timetable,
-                                          CrsCod,GrpCod,
-                                          ClassType,
-                                          DurationNumIntervals,
-                                          Info);
-	    break;
-	 case Tmt_CRS_EDIT:	// Edit course timetable
-	 case Tmt_TUT_EDIT:	// Edit tutoring timetable
-	    Tmt_TimeTableDrawCellEdit (Timetable,WhichCell,
-                                       GrpCod,
-                                       IntervalType,ClassType,
-                                       DurationNumIntervals,
-                                       Info);
-	    break;
-	}
+      if (Timetable->View == Vie_EDIT)	// Editing
+	 Tmt_TimeTableDrawCellEdit (Timetable,WhichCell,
+				    GrpCod,
+				    IntervalType,ClassType,
+				    DurationNumIntervals,
+				    Info);
+      else				// Viewing or printing
+	 if (IntervalType != Tmt_FREE_INTERVAL) // If cell is not empty...
+	    Tmt_TimeTableDrawCellView (Timetable,
+				       CrsCod,GrpCod,
+				       ClassType,
+				       DurationNumIntervals,
+				       Info);
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -1455,8 +1452,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
 		Timetable->Config.Range.MinutesPerInterval);			// Minutes
 
       /***** Group *****/
-      if (Timetable->View == Tmt_CRS_VIEW &&
-	  GrpCod > 0)
+      if (GrpCod > 0 && Timetable->Type != Tmt_TUTORING_TIMETABLE)
 	{
 	 GrpDat.GrpCod = GrpCod;
          Grp_GetGroupDataByCod (&GrpDat);
@@ -1495,12 +1491,11 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    extern const char *Txt_Group;
    extern const char *Txt_All_groups;
    extern const char *Txt_Info;
-   static const Act_Action_t NextAction[Tmt_NUM_VIEW_EDIT] =
+   static const Act_Action_t NextAction[Tmt_NUM_TIMETABLE_TYPES] =
      {
-      [Tmt_CRS_VIEW] = ActUnk,		// course view
-      [Tmt_TUT_VIEW] = ActUnk,		// tutorials view
-      [Tmt_CRS_EDIT] = ActChgCrsTT,	// course edit
-      [Tmt_TUT_EDIT] = ActChgTut,	// tutorials edit
+      [Tmt_COURSE_TIMETABLE  ] = ActChgCrsTT,
+      [Tmt_MY_TIMETABLE      ] = ActChgTut,
+      [Tmt_TUTORING_TIMETABLE] = ActChgTut,
      };
    char *CellStr;	// Unique string for this cell used in labels
    Tmt_ClassType_t CT;
@@ -1515,7 +1510,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    char *Room;
 
    /***** Form to modify this cell *****/
-   Frm_BeginForm (NextAction[Timetable->View]);
+   Frm_BeginForm (NextAction[Timetable->Type]);
 
       /***** Put hidden parameters *****/
       Par_PutParUnsigned (NULL,"TTDay",WhichCell->Weekday );
@@ -1530,8 +1525,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	      CT <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
 	      CT++)
 	    if ((CT == Tmt_FREE) ||
-		((Timetable->View == Tmt_CRS_EDIT) && (CT == Tmt_LECTURE || CT == Tmt_PRACTICAL)) ||
-		((Timetable->View == Tmt_TUT_EDIT) && (CT == Tmt_TUTORING)))
+		((Timetable->Type == Tmt_COURSE_TIMETABLE  ) && (CT == Tmt_LECTURE || CT == Tmt_PRACTICAL)) ||
+		((Timetable->Type == Tmt_TUTORING_TIMETABLE) && (CT == Tmt_TUTORING)))
 	       HTM_OPTION (HTM_Type_STRING,Tmt_DB_ClassType[CT],
 			   CT == ClassType ? HTM_OPTION_SELECTED :
 	                		     HTM_OPTION_UNSELECTED,
@@ -1597,7 +1592,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 		       WhichCell->Column) < 0)
 	    Err_NotEnoughMemoryExit ();
 
-	 if (Timetable->View == Tmt_CRS_EDIT)
+	 if (Timetable->Type == Tmt_COURSE_TIMETABLE)
 	   {
 	    /***** Group *****/
 	    HTM_BR ();
@@ -1658,7 +1653,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			    " class=\"Tmt_INF INPUT_%s\"",
 			    CellStr,The_GetSuffix ());
 	   }
-	 else // TimeTableView == Tmt_TUT_EDIT
+	 else // Timetable->Type != Tmt_COURSE_TIMETABLE
 	   {
 	    /***** Info *****/
 	    HTM_BR ();
