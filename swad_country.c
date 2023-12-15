@@ -217,102 +217,104 @@ void Cty_ListCountries2 (void)
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
-                      Cty_PutIconsListingCountries,NULL,
-                      Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
-
-      /***** Write heading *****/
-      Cty_PutHeadCountriesForSeeing (true);	// Order selectable
-
-      /***** Write all countries and their number of users and institutions *****/
-      for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
-	   NumCty++)
-	 Cty_ListOneCountryForSeeing (&Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty],NumCty + 1);
-
-      /***** Separation row *****/
-      HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"8\" class=\"CM DAT_%s\"",
-	               The_GetSuffix ());
-	    HTM_NBSP ();
-	 HTM_TD_End ();
-      HTM_TR_End ();
-
-      /***** Write users and institutions in other countries *****/
-      HTM_TR_Begin (NULL);
-
-	 HTM_TD_Empty (1);
-
-	 HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Other_countries);
-	 HTM_TD_End ();
-
-	 /* Number of users who claim to belong to another country */
-	 HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
-
-	 /* Number of institutions in other countries */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
-						        Hie_CTY,0));	// ...in other countries
-
-	 /* Number of centers in other countries */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-						        Hie_CTY,0));	// ...in other countries
-
-	 /* Number of degrees in other countries */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
-						        Hie_CTY,0));	// ...in other countries
-
-	 /* Number of courses in other countries */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
-						        Hie_CTY,0));	// ...in other countries
-
-	 /* Number of users in courses of other countries */
-	 HTM_TD_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,0,
-						     1 << Rol_STD |
-						     1 << Rol_NET |
-						     1 << Rol_TCH));	// Any user
-
-      HTM_TR_End ();
-
-      /***** Write users and institutions with unknown country *****/
-      HTM_TR_Begin (NULL);
-
-	 HTM_TD_Empty (1);
-	 HTM_TD_Txt_Left (Txt_Country_unspecified);
-
-	 /* Number of users who do not claim to belong to any country */
-	 HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
-
-	 /* Number of institutions with unknown country */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
-						         Hie_CTY,-1L));	// ...with unknown country
-
-	 /* Number of centers with unknown country */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-						         Hie_CTY,-1L));	// ...with unknown country
-
-	 /* Number of degrees with unknown country */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
-						         Hie_CTY,-1L));	// ...with unknown country
-
-	 /* Number of courses with unknown country */
-	 HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
-						         Hie_CTY,-1L));	// ...with unknown country
-
-	 HTM_TD_Unsigned (0);
-
-      HTM_TR_End ();
-
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
-
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
      {
       HTM_DIV_Begin ("id=\"chart_div\"");
       HTM_DIV_End ();
      }
+
+   /***** Begin box and table *****/
+   Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
+		 Cty_PutIconsListingCountries,NULL,
+		 Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
+      HTM_TABLE_Begin ("TBL_SCROLL");
+
+	 /***** Write heading *****/
+	 Cty_PutHeadCountriesForSeeing (true);	// Order selectable
+
+	 /***** Write all countries and their number of users and institutions *****/
+	 for (NumCty = 0;
+	      NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+	      NumCty++)
+	    Cty_ListOneCountryForSeeing (&Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty],NumCty + 1);
+
+	 /***** Separation row *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"8\" class=\"CM DAT_%s\"",
+			  The_GetSuffix ());
+	       HTM_NBSP ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+
+	 /***** Write users and institutions in other countries *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Empty (1);
+
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	       HTM_Txt (Txt_Other_countries);
+	    HTM_TD_End ();
+
+	    /* Number of users who claim to belong to another country */
+	    HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
+
+	    /* Number of institutions in other countries */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
+							   Hie_CTY,0));	// ...in other countries
+
+	    /* Number of centers in other countries */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+							   Hie_CTY,0));	// ...in other countries
+
+	    /* Number of degrees in other countries */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
+							   Hie_CTY,0));	// ...in other countries
+
+	    /* Number of courses in other countries */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+							   Hie_CTY,0));	// ...in other countries
+
+	    /* Number of users in courses of other countries */
+	    HTM_TD_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,0,
+							1 << Rol_STD |
+							1 << Rol_NET |
+							1 << Rol_TCH));	// Any user
+
+	 HTM_TR_End ();
+
+	 /***** Write users and institutions with unknown country *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Empty (1);
+	    HTM_TD_Txt_Left (Txt_Country_unspecified);
+
+	    /* Number of users who do not claim to belong to any country */
+	    HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
+
+	    /* Number of institutions with unknown country */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
+							    Hie_CTY,-1L));	// ...with unknown country
+
+	    /* Number of centers with unknown country */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+							    Hie_CTY,-1L));	// ...with unknown country
+
+	    /* Number of degrees with unknown country */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
+							    Hie_CTY,-1L));	// ...with unknown country
+
+	    /* Number of courses with unknown country */
+	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
+							    Hie_CTY,-1L));	// ...with unknown country
+
+	    HTM_TD_Unsigned (0);
+
+	 HTM_TR_End ();
+
+   /***** End table and box *****/
+      HTM_TABLE_End ();
+   Box_BoxEnd ();
 
    /***** Free list of countries *****/
    Hie_FreeList (Hie_SYS);
@@ -629,8 +631,7 @@ void Cty_WriteScriptGoogleGeochart (void)
       /***** Write end of the script *****/
       HTM_TxtF ("	]);\n"
 		"	var options = {\n"
-		"		width:600,\n"
-		"		height:360,\n"
+	        "		width:300,\n"
 		"		backgroundColor:'white',\n"
 		"		datalessRegionColor:'white',\n"
 		"		colorAxis:{colors:['#EAF1F4','#4D88A1'],minValue:0,maxValue:%u}};\n"

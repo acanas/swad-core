@@ -1444,10 +1444,10 @@ a:hover						/* Default ==> underlined */
 
 #chart_div
 	{
-	width:600px;
-	margin:12px auto;
+	width: 300px;
+	margin: 12px auto;
 	}
-	
+			
 .HIE_CFG_LEFT, .HIE_CFG_RIGHT
 	{
 	display:inline-block;
