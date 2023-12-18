@@ -261,9 +261,9 @@ static void Ctr_ListCenters (void)
       if (Gbl.Hierarchy.List[Hie_INS].Num)	// There are centers in the current institution
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
-	    /***** Write heading *****/
+	    /***** Heading *****/
 	    Ctr_PutHeadCentersForSeeing (true);	// Order selectable
 
 	    /***** Write all centers and their nuber of teachers *****/
@@ -330,31 +330,30 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       TxtClassStrong = "DAT_STRONG";
      }
    BgColor = (Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? "BG_HIGHLIGHT" :
-								The_GetColorRows ();
+								   The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 
       /***** Number of center in this list *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCtr);
       HTM_TD_End ();
 
       /***** Center logo and name *****/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     TxtClassStrong,The_GetSuffix (),BgColor);
-	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CM ICO16x16");
+	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CT ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTR,
-								  Ctr));
+	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTR,Ctr));
       HTM_TD_End ();
 
       /***** Place *****/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 Plc.PlcCod = Ctr->Specific.PlcCod;
 	 Plc_GetPlaceDataByCod (&Plc);
@@ -362,7 +361,7 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_CTR,	// ...in center
@@ -370,7 +369,7 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       HTM_TD_End ();
 
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTR,	// ...in center
@@ -378,7 +377,7 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTR,Ctr->HieCod,
 						   1 << Rol_STD |
@@ -1336,7 +1335,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
    Hie_Order_t Order;
    static HTM_HeadAlign Align[Hie_NUM_ORDERS] =
      {
-      [Hie_ORDER_BY_NAME  ] = HTM_HEAD_LEFT,
+      [Hie_ORDER_BY_NAME    ] = HTM_HEAD_LEFT,
       [Hie_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
      };
 
@@ -1354,7 +1353,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	       Frm_BeginForm (ActSeeCtr);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_CENTERS_HELP_ORDER[Order],
-					   "class=\"BT_LINK\"");
+					   "class=\"BT_LINK RT\"");
 		     if (Order == Gbl.Hierarchy.List[Hie_INS].SelectedOrder)
 			HTM_U_Begin ();
 	      }

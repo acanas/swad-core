@@ -5242,10 +5242,12 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 		}
 	}
 
-.TBL_SCROLL tbody {
+.TBL_SCROLL tbody
+	{
     display: table;
     width: 100%;
-}
+	}
+.TBL_SCROLL th,.TBL_SCROLL td {padding: 2px;}
 
 .Ind_TBL td,.Ind_TBL th
 	{

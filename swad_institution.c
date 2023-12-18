@@ -304,8 +304,10 @@ static void Ins_ListInstitutions (void)
       if (Gbl.Hierarchy.List[Hie_CTY].Num)	// There are institutions in the current country
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
-	 Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
+	 HTM_TABLE_Begin ("TBL_SCROLL");
+
+	    /***** Heading *****/
+	    Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
 	    /***** Write all institutions and their nuber of users *****/
 	    for (NumIns = 0, The_ResetRowColor ();
@@ -374,26 +376,26 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
    HTM_TR_Begin (NULL);
 
       /***** Number of institution in this list *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumIns);
       HTM_TD_End ();
 
       /***** Institution logo and name *****/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     TxtClassStrong,The_GetSuffix (),BgColor);
-	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CM ICO16x16");
+	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CT ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_INS,Ins));
       HTM_TD_End ();
 
       /***** Other stats *****/
       /* Number of centers in this institution */
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 						      Hie_INS,	// ...in institution
@@ -401,7 +403,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_INS,	// ...in institution
@@ -409,7 +411,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       HTM_TD_End ();
 
       /* Number of courses in this institution */
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_INS,	// ...in institution
@@ -417,13 +419,13 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
       HTM_TD_End ();
 
       /* Number of departments in this institution */
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Dpt_GetNumDptsInIns (Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of users in courses of this institution */
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_INS,Ins->HieCod,
 						   1 << Rol_STD |
@@ -470,7 +472,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	       Frm_BeginForm (ActSeeIns);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],
-		                           "class=\"BT_LINK\"");
+		                           "class=\"BT_LINK RT\"");
 		     if (Order == Gbl.Hierarchy.List[Hie_CTY].SelectedOrder)
 			HTM_U_Begin ();
 	      }

@@ -18288,7 +18288,7 @@ const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to 
 #elif L==5	// fr
 	"&Eacute;tablissements de %s";
 #elif L==6	// gn
-	"Instituciones de %s";	// Okoteve traducción
+	"Instituciones %s-pegua";
 #elif L==7	// it
 	"Istituzioni di %s";
 #elif L==8	// pl
@@ -18296,7 +18296,7 @@ const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to 
 #elif L==9	// pt
 	"Institu&ccedil;&otilde;es de %s";
 #elif L==10	// tr
-	"Institutions of %s";	// Çeviri lazim!
+	"%s Kurumlar&inodot;";
 #endif
 
 const char *Txt_INSTITUTIONS_ORDER[Hie_NUM_ORDERS] =

@@ -691,9 +691,9 @@ static void Deg_ListDegrees (void)
       if (Gbl.Hierarchy.List[Hie_CTR].Num)	// There are degrees in the current center
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
-	    /***** Write heading *****/
+	    /***** Heading *****/
 	    Deg_PutHeadDegreesForSeeing ();
 
 	    /***** List the degrees *****/
@@ -779,7 +779,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
    HTM_TR_Begin (NULL);
 
       /***** Put tip if degree has courses *****/
-      HTM_TD_Begin ("class=\"CM %s_%s %s\" title=\"%s\"",
+      HTM_TD_Begin ("class=\"CT %s_%s %s\" title=\"%s\"",
 		    TxtClassNormal,The_GetSuffix (),BgColor,
 		    NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses);
@@ -788,31 +788,31 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       HTM_TD_End ();
 
       /***** Number of degree in this list *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumDeg);
       HTM_TD_End ();
 
       /***** Degree logo and name *****/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     TxtClassStrong,The_GetSuffix (),BgColor);
 	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,"CM ICO20x20");
       HTM_TD_End ();
 
       /***** Type of degree *****/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Txt (DegTyp.DegTypName);
       HTM_TD_End ();
 
       /***** Current number of courses in this degree *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCrss);
       HTM_TD_End ();
 
       /***** Number of users in courses of this degree *****/
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
                     TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_DEG,Deg->HieCod,
 						   1 << Rol_STD |

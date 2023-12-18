@@ -174,7 +174,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
       if (Assignments->Num)
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Table head *****/
 	    Asg_PutHead (Assignments,
@@ -415,24 +415,30 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignment;
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Assignments->Asg.Title[0] ? Assignments->Asg.Title :
-						       Txt_Assignment,
-                      Asg_PutIconsOneAsg,Assignments,
-		      Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE,2);
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Assignments->Asg.Title[0] ? Assignments->Asg.Title :
+						  Txt_Assignment,
+		 Asg_PutIconsOneAsg,Assignments,
+		 Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
-      /***** Table head *****/
-      Asg_PutHead (Assignments,
-                   true,	// Only this assignment in table
-		   Vie_VIEW);	// Not print view
+      /***** Begin table *****/
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** Write assignment *****/
-      Asg_ShowAssignmentRow (Assignments,
-                             true,	// Only this assignment in table
-			     Vie_VIEW);	// Not print view
+	 /***** Table head *****/
+	 Asg_PutHead (Assignments,
+		      true,	// Only this assignment in table
+		      Vie_VIEW);		// Not print view
 
-   /***** End table and end box *****/
-   Box_BoxTableEnd ();
+	 /***** Write assignment *****/
+	 Asg_ShowAssignmentRow (Assignments,
+				true,		// Only this assignment in table
+				Vie_VIEW);	// Not print view
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

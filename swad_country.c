@@ -230,7 +230,7 @@ void Cty_ListCountries2 (void)
 		 Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");
 
-	 /***** Write heading *****/
+	 /***** Heading *****/
 	 Cty_PutHeadCountriesForSeeing (true);	// Order selectable
 
 	 /***** Write all countries and their number of users and institutions *****/

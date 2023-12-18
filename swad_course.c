@@ -532,13 +532,13 @@ static void Crs_ListCourses (void)
       if (Gbl.Hierarchy.List[Hie_DEG].Num)	// There are courses in the current degree
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
-	    /* Heading */
+	    /***** Heading *****/
 	    Crs_PutHeadCoursesForSeeing ();
 
-	    /* List the courses */
-	    for (Year = 1;
+	    /***** List the courses *****/
+	    for (Year  = 1;
 		 Year <= Deg_MAX_YEARS_PER_DEGREE;
 		 Year++)
 	       if (Crs_ListCoursesOfAYearForSeeing (Year))	// If this year has courses ==>
@@ -633,7 +633,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			       NumUsrs[Rol_TCH];
 
 	    /* Put green tip if course has users */
-	    HTM_TD_Begin ("class=\"CM %s_%s %s\" title=\"%s\"",
+	    HTM_TD_Begin ("class=\"CT %s_%s %s\" title=\"%s\"",
 			  TxtClassNormal,The_GetSuffix (),BgColor,
 			  NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 					     Txt_COURSE_Without_users);
@@ -642,24 +642,24 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course year */
-	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
+	    HTM_TD_Begin ("class=\"CT %s_%s %s\"",
 	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Specific.Year]);
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
+	    HTM_TD_Begin ("class=\"CT %s_%s %s\"",
 	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
 	    /* Course full name */
-	    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+	    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 	                  TxtClassStrong,The_GetSuffix (),BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  ParCod_PutPar (ParCod_Crs,Crs->HieCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),
-					   "class=\"LM BT_LINK\"");
+					   "class=\"BT_LINK LT\"");
 		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs->FullName);
 		  HTM_BUTTON_End ();
@@ -667,14 +667,14 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Number of teachers in this course */
-	    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Unsigned (NumUsrs[Rol_TCH] +
 			     NumUsrs[Rol_NET]);
 	    HTM_TD_End ();
 
 	    /* Number of students in this course */
-	    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 	                  TxtClassNormal,The_GetSuffix (),BgColor);
 	       HTM_Unsigned (NumUsrs[Rol_STD]);
 	    HTM_TD_End ();
