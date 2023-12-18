@@ -566,7 +566,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	    Prj_AllocMemProject (&((struct Prj_Projects *) Projects)->Prj);
 
 	    /***** Begin table *****/
-	    HTM_TABLE_BeginWideMarginPadding (2);
+	    HTM_TABLE_Begin ("TBL_SCROLL");
 
 	       /***** Table head *****/
 	       ((struct Prj_Projects *) Projects)->View = Prj_LIST_PROJECTS;
@@ -845,7 +845,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 		      -1L);
 
 	 /***** Write selector with departments *****/
-	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
+	 if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
 	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
@@ -1808,8 +1808,8 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 case Frm_PUT_FORM:
 	       /* Show text form */
 	       HTM_BR ();
-	       HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"1\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+	       HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"2\""
+				   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 				   " placeholder=\"%s&hellip;\""
 				   " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
 				   The_GetSuffix (),Txt_Comments,
@@ -1850,7 +1850,7 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
       Err_NotEnoughMemoryExit ();
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
-		     " class=\"INPUT_%s\"",
+		     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
    free (FuncOnChange);
       for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
