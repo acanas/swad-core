@@ -198,11 +198,11 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	 /***** Warning message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_No_questions);
 
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
    /***** End box *****/
    Box_BoxEnd ();
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -225,7 +225,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
       HTM_TD_TxtColon (Txt_Types_of_answers);
 
       /***** Select all types of answers *****/
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	 HTM_TABLE_BeginPadding (2);
 
 	 HTM_TR_Begin (NULL);

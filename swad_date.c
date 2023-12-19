@@ -622,10 +622,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_STR_TIME]);
+      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_START_END_TIME[Dat_STR_TIME]);
 
       /* Data (date-time) */
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
 						      Dat_STR_TIME,
 						      Dat_Time.Range.TimeUTC[Dat_STR_TIME],
@@ -636,11 +636,13 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
 						      HTM_DONT_SUBMIT_ON_CHANGE);
 
 	 /* "Yesterday" and "Today" buttons */
-	 HTM_NBSP ();
-	 HTM_INPUT_BUTTON ("Yesterday",Txt_Yesterday,
-			   "onclick=\"setDateToYesterday('Start','End');\"");
-	 HTM_INPUT_BUTTON ("Today",Txt_Today,
-			   "onclick=\"setDateToToday('Start','End');\"");
+	 HTM_DIV_Begin ("class=\"DATE_FORM_TODAY\"");
+	    // HTM_SP ();
+	    HTM_INPUT_BUTTON ("Yesterday",Txt_Yesterday,
+			      "onclick=\"setDateToYesterday('Start','End');\"");
+	    HTM_INPUT_BUTTON ("Today",Txt_Today,
+			      "onclick=\"setDateToToday('Start','End');\"");
+	 HTM_DIV_End ();
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -649,10 +651,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_END_TIME]);
+      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_START_END_TIME[Dat_END_TIME]);
 
       /* Data (date-time) */
-      HTM_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
 						      Dat_END_TIME,
 						      Dat_Time.Range.TimeUTC[Dat_END_TIME],
@@ -752,118 +754,108 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 		 Id) < 0)
       Err_NotEnoughMemoryExit ();
 
-   /***** Begin table *****/
-   HTM_TABLE_Begin ("DATE_RANGE");
-      HTM_TR_Begin (NULL);
+   /***** Year, month, day *****/
+   HTM_DIV_Begin ("class=\"DATE_FORM_YMD\"");
 
-	 /***** Year *****/
-	 HTM_TD_Begin ("class=\"RM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
-			      "id=\"%sYear\" name=\"%sYear\""
-			      " class=\"INPUT_%s\"",
-			      Id,Dat_ParName[StartEndTime],
-			      The_GetSuffix ());
-	       for (Year  = FirstYear;
-		    Year <= LastYear;
-		    Year++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-		              HTM_OPTION_UNSELECTED,
-		              HTM_OPTION_ENABLED,
-			      "%u",Year);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+      /* Year */
+      HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
+			"id=\"%sYear\" name=\"%sYear\""
+			" class=\"INPUT_%s\"",
+			Id,Dat_ParName[StartEndTime],
+			The_GetSuffix ());
+	 for (Year  = FirstYear;
+	      Year <= LastYear;
+	      Year++)
+	    HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+			HTM_OPTION_UNSELECTED,
+			HTM_OPTION_ENABLED,
+			"%u",Year);
+      HTM_SELECT_End ();
 
-	 /***** Month *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
-			      "id=\"%sMonth\" name=\"%sMonth\""
-			      " class=\"INPUT_%s\"",
-			      Id,Dat_ParName[StartEndTime],
-			      The_GetSuffix ());
-	       for (Month = 1;
-		    Month <= 12;
-		    Month++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Month,
-		              HTM_OPTION_UNSELECTED,
-		              HTM_OPTION_ENABLED,
-			      "%s",Txt_MONTHS_SMALL[Month - 1]);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+      /* Month */
+      HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
+			"id=\"%sMonth\" name=\"%sMonth\""
+			" class=\"DATE_FORM_MONTH INPUT_%s\"",
+			Id,Dat_ParName[StartEndTime],
+			The_GetSuffix ());
+	 for (Month = 1;
+	      Month <= 12;
+	      Month++)
+	    HTM_OPTION (HTM_Type_UNSIGNED,&Month,
+			HTM_OPTION_UNSELECTED,
+			HTM_OPTION_ENABLED,
+			"%s",Txt_MONTHS_SMALL[Month - 1]);
+      HTM_SELECT_End ();
 
-	 /***** Day *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
-			      "id=\"%sDay\" name=\"%sDay\""
-			      " class=\"INPUT_%s\"",
-			      Id,Dat_ParName[StartEndTime],
-			      The_GetSuffix ());
-	       for (Day  = 1;
-		    Day <= 31;
-		    Day++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-		              HTM_OPTION_UNSELECTED,
-		              HTM_OPTION_ENABLED,
-			      "%u",Day);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+      /* Day */
+      HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
+			"id=\"%sDay\" name=\"%sDay\""
+			" class=\"INPUT_%s\"",
+			Id,Dat_ParName[StartEndTime],
+			The_GetSuffix ());
+	 for (Day  = 1;
+	      Day <= 31;
+	      Day++)
+	    HTM_OPTION (HTM_Type_UNSIGNED,&Day,
+			HTM_OPTION_UNSELECTED,
+			HTM_OPTION_ENABLED,
+			"%u",Day);
+      HTM_SELECT_End ();
 
-	 /***** Hour *****/
-	 HTM_TD_Begin ("class=\"RM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
-			      "id=\"%sHour\" name=\"%sHour\""
-			      " class=\"INPUT_%s\"",
-			      Id,Dat_ParName[StartEndTime],
-			      The_GetSuffix ());
-	       for (Hour  = 0;
-		    Hour <= 23;
-		    Hour++)
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-		              HTM_OPTION_UNSELECTED,
-		              HTM_OPTION_ENABLED,
-			      "%02u h",Hour);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+   HTM_DIV_End ();
 
-	 /***** Minute *****/
-	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
-			      "id=\"%sMinute\" name=\"%sMinute\""
-			      " class=\"INPUT_%s\"",
-			      Id,Dat_ParName[StartEndTime],
-			      The_GetSuffix ());
-	       for (Minute = 0;
-		    Minute < 60;
-		    Minute += MinutesIInterval[FormSeconds])
-		  HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-		              HTM_OPTION_UNSELECTED,
-		              HTM_OPTION_ENABLED,
-			      "%02u &prime;",Minute);
-	    HTM_SELECT_End ();
-	 HTM_TD_End ();
+   /***** Hour, minute, second *****/
+   HTM_DIV_Begin ("class=\"DATE_FORM_HMS\"");
 
-	 /***** Second *****/
+	 /* Hour */
+	 HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
+			   "id=\"%sHour\" name=\"%sHour\""
+			   " class=\"INPUT_%s\"",
+			   Id,Dat_ParName[StartEndTime],
+			   The_GetSuffix ());
+	    for (Hour  = 0;
+		 Hour <= 23;
+		 Hour++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
+			   HTM_OPTION_UNSELECTED,
+			   HTM_OPTION_ENABLED,
+			   "%02u h",Hour);
+	 HTM_SELECT_End ();
+
+	 /* Minute */
+	 HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
+			   "id=\"%sMinute\" name=\"%sMinute\""
+			   " class=\"INPUT_%s\"",
+			   Id,Dat_ParName[StartEndTime],
+			   The_GetSuffix ());
+	    for (Minute = 0;
+		 Minute < 60;
+		 Minute += MinutesIInterval[FormSeconds])
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
+			   HTM_OPTION_UNSELECTED,
+			   HTM_OPTION_ENABLED,
+			   "%02u &prime;",Minute);
+	 HTM_SELECT_End ();
+
+	 /* Second */
 	 if (FormSeconds == Dat_FORM_SECONDS_ON)
 	   {
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
-				 "id=\"%sSecond\" name=\"%sSecond\""
-				 " class=\"INPUT_%s\"",
-				 Id,Dat_ParName[StartEndTime],
-				 The_GetSuffix ());
-		  for (Second  = 0;
-		       Second <= 59;
-		       Second++)
-		     HTM_OPTION (HTM_Type_UNSIGNED,&Second,
-				 HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
-				 "%02u &Prime;",Second);
-	       HTM_SELECT_End ();
-	    HTM_TD_End ();
+	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
+			      "id=\"%sSecond\" name=\"%sSecond\""
+			      " class=\"INPUT_%s\"",
+			      Id,Dat_ParName[StartEndTime],
+			      The_GetSuffix ());
+	       for (Second  = 0;
+		    Second <= 59;
+		    Second++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Second,
+			      HTM_OPTION_UNSELECTED,
+			      HTM_OPTION_ENABLED,
+			      "%02u &Prime;",Second);
+	    HTM_SELECT_End ();
 	   }
 
-      /***** End table *****/
-      HTM_TR_End ();
-   HTM_TABLE_End ();
+   HTM_DIV_End ();
 
    /***** Free strings for onchange functions *****/
    free (FuncsYearMonth);

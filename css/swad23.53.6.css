@@ -2674,9 +2674,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /****************************** Date range form ******************************/
-.DATE_RANGE
+.DATE_FORM_YMD, .DATE_FORM_HMS, .DATE_FORM_TODAY
 	{
-	float:left;	/* To display something after the table in the same line */
+	display: inline-block;
+	}
+.DATE_FORM_MONTH
+	{
+	width: 60px;
 	}
 
 /*********************************** Lists ***********************************/
@@ -3082,21 +3086,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	.REC_C1_BOT
 		{
 		box-sizing:border-box;
-		width:120px;
-		max-width:120px;
+		width:80px;
+		max-width:80px;
 		overflow:hidden;
 		}
 	.REC_C2_BOT
 		{
 		box-sizing:border-box;
-		width:148px;
-		max-width:148px;
+		width:188px;
+		max-width:188px;
 		overflow:hidden;
 		}
 	.REC_C2_BOT_INPUT
 		{
 		box-sizing:border-box;
-		width:144px;
+		width:184px;
 		}
 	}
 @media only screen and (min-width: 480px) and (max-width: 600px)
@@ -5207,7 +5211,7 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 		{
 	    display: block;
 	    overflow-x: auto;
-	    width: 280px;
+	    width: 260px;
 	    margin: 0 auto;
 		}
 	}

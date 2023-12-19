@@ -1922,8 +1922,13 @@ void HTM_TxtF (const char *fmt,...)
 
 void HTM_SPTxt (const char *Txt)
   {
-   HTM_Txt (" ");
+   HTM_SP ();
    HTM_Txt (Txt);
+  }
+
+void HTM_SP (void)
+  {
+   HTM_Txt (" ");
   }
 
 void HTM_Txt (const char *Txt)
@@ -2068,7 +2073,7 @@ void HTM_TD_Txt_Right (const char *Txt)
 
 void HTM_TD_TxtColon (const char *Txt)
   {
-   HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
+   HTM_TD_Begin ("class=\"REC_C1_BOT RT FORM_IN_%s\"",The_GetSuffix ());
       HTM_TxtColon (Txt);
    HTM_TD_End ();
   }

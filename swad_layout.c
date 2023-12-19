@@ -1234,8 +1234,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    const char *Text,const char *OnSubmit)
   {
    /***** Separator *****/
-   HTM_Txt (" ");	// This space is necessary to enable
-			// jumping to the next line on narrow screens
+   HTM_SP ();	// This space is necessary to enable
+		// jumping to the next line on narrow screens
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
@@ -1258,8 +1258,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
    Frm_EndForm ();
 
    /***** Separator *****/
-   HTM_Txt (" ");	// This space is necessary to enable
-			// jumping to the next line on narrow screens
+   HTM_SP ();	// This space is necessary to enable
+		// jumping to the next line on narrow screens
   }
 
 /*****************************************************************************/
@@ -1274,7 +1274,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
   {
    /***** Separator *****/
    if (Text)
-      HTM_Txt (" ");	// This space is necessary to enable
+      HTM_SP ();	// This space is necessary to enable
 			// jumping to the next line on narrow screens
 
    /***** Begin form *****/
@@ -1316,7 +1316,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
    /***** Separator *****/
    if (Text)
-      HTM_Txt (" ");	// This space is necessary to enable
+      HTM_SP ();	// This space is necessary to enable
 			// jumping to the next line on narrow screens
   }
 

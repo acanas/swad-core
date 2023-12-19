@@ -154,7 +154,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
    Assignments->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Assignments,
+   Box_BoxBegin (NULL,Txt_Assignments,
                  Asg_PutIconsListAssignments,Assignments,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 

@@ -297,76 +297,76 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
       HTM_TD_TxtColon (Txt_Tags);
 
       /***** Select all tags *****/
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 
-      HTM_TABLE_BeginPadding (2);
+	 HTM_TABLE_BeginPadding (2);
 
-	 HTM_TR_Begin (NULL);
-
-	    if (!ShowOnlyEnabledTags)
-	       HTM_TD_Empty (1);
-
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_GetSuffix ());
-		  HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
-				      "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
-				      Tags->All ? " checked=\"checked\"" :
-						  "");
-		  HTM_TxtF ("&nbsp;%s",Txt_All_tags);
-	       HTM_LABEL_End ();
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Select tags one by one *****/
-	 for (NumTag = 1;
-	      NumTag <= Tags->Num;
-	      NumTag++)
-	   {
-	    row = mysql_fetch_row (mysql_res);
 	    HTM_TR_Begin (NULL);
 
 	       if (!ShowOnlyEnabledTags)
-		 {
-		  TagHidden = (row[2][0] == 'Y');
-		  HTM_TD_Begin ("class=\"LM\"");
-		     if (TagHidden)
-			Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Tag_not_allowed);
-		     else
-			Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Tag_allowed    );
-		  HTM_TD_End ();
-		 }
+		  HTM_TD_Empty (1);
 
-	       Checked = false;
-	       if (Tags->List)
-		 {
-		  Ptr = Tags->List;
-		  while (*Ptr)
-		    {
-		     Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
-		     if (!strcmp (row[1],TagText))
-		       {
-			Checked = true;
-			break;
-		       }
-		    }
-		 }
-
-	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_LABEL_Begin ("class=\"DAT_%s\"",
-		                   The_GetSuffix ());
-		     HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
-					 "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
-					 row[1],
-					 Checked ? " checked=\"checked\"" :
-						   "");
-		     HTM_TxtF ("&nbsp;%s",row[1]);
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+				   The_GetSuffix ());
+		     HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
+					 "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
+					 Tags->All ? " checked=\"checked\"" :
+						     "");
+		     HTM_TxtF ("&nbsp;%s",Txt_All_tags);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
-	   }
+
+	    /***** Select tags one by one *****/
+	    for (NumTag = 1;
+		 NumTag <= Tags->Num;
+		 NumTag++)
+	      {
+	       row = mysql_fetch_row (mysql_res);
+	       HTM_TR_Begin (NULL);
+
+		  if (!ShowOnlyEnabledTags)
+		    {
+		     TagHidden = (row[2][0] == 'Y');
+		     HTM_TD_Begin ("class=\"LT\"");
+			if (TagHidden)
+			   Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Tag_not_allowed);
+			else
+			   Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Tag_allowed    );
+		     HTM_TD_End ();
+		    }
+
+		  Checked = false;
+		  if (Tags->List)
+		    {
+		     Ptr = Tags->List;
+		     while (*Ptr)
+		       {
+			Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+			if (!strcmp (row[1],TagText))
+			  {
+			   Checked = true;
+			   break;
+			  }
+		       }
+		    }
+
+		  HTM_TD_Begin ("class=\"LT\"");
+		     HTM_LABEL_Begin ("class=\"DAT_%s\"",
+				      The_GetSuffix ());
+			HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
+					    "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
+					    row[1],
+					    Checked ? " checked=\"checked\"" :
+						      "");
+			HTM_TxtF ("&nbsp;%s",row[1]);
+		     HTM_LABEL_End ();
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+	      }
 
 	 HTM_TABLE_End ();
       HTM_TD_End ();

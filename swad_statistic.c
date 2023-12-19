@@ -387,7 +387,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   HTM_LABEL_End ();
 
 			   /* Separator */
-			   HTM_Txt (" ");
+			   HTM_SP ();
 
 			   /* Number of rows per page */
 			   // To use getElementById in Firefox, it's necessary to have the id attribute

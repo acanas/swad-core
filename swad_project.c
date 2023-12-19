@@ -528,7 +528,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
       ((struct Prj_Projects *) Projects)->CurrentPage = (unsigned) Pagination.CurrentPage;
 
       /***** Begin box *****/
-      Box_BoxBegin ("100%",Txt_Projects,
+      Box_BoxBegin (NULL,Txt_Projects,
 		    Prj_PutIconsListProjects,Projects,
 		    Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 

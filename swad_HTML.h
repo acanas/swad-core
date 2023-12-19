@@ -223,6 +223,7 @@ void HTM_BR (void);
 
 void HTM_TxtF (const char *fmt,...);
 void HTM_SPTxt (const char *Txt);
+void HTM_SP (void);
 void HTM_Txt (const char *Txt);
 void HTM_TxtColon (const char *Txt);
 void HTM_TxtSemicolon (const char *Txt);
