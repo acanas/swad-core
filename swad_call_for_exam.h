@@ -37,15 +37,15 @@
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define Cfe_NUM_VIEWS 3
+/*
+#define Vie_NUM_VIEW_TYPES 3
 typedef enum
   {
-   Cfe_NORMAL_VIEW,
-   Cfe_PRINT_VIEW,
-   Cfe_FORM_VIEW,
+   Vie_VIEW,
+   Vie_PRINT,
+   Vie_EDIT,
   } Cfe_TypeViewCallForExam_t;
-
+*/
 #define Cfe_NUM_STATUS 3
 typedef enum
   {
