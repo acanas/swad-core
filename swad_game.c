@@ -111,6 +111,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Gam_ListAllGamesHeading (const struct Gam_Games *Games);
+
 static bool Gam_CheckIfICanEditGames (void);
 static bool Gam_CheckIfICanListGameQuestions (void);
 static void Gam_PutIconsListingGames (void *Games);
@@ -230,11 +232,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Games;
-   extern const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS];
-   extern const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS];
-   extern const char *Txt_Matches;
    extern const char *Txt_No_games;
-   Gam_Order_t Order;
    struct Pag_Pagination Pagination;
    unsigned NumGame;
 
@@ -255,52 +253,20 @@ void Gam_ListAllGames (struct Gam_Games *Games)
    Games->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Games,
+   Box_BoxBegin (NULL,Txt_Games,
                  Gam_PutIconsListingGames,Games,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
-				     Games,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,Games,-1L);
 
       if (Games->Num)
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (5);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Table head *****/
-	    HTM_TR_Begin (NULL);
-
-               HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
-
-	       for (Order  = (Gam_Order_t) 0;
-		    Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
-		    Order++)
-		 {
-                  HTM_TH_Begin (HTM_HEAD_LEFT);
-
-		     /* Form to change order */
-		     Frm_BeginForm (ActSeeAllGam);
-			Pag_PutParPagNum (Pag_GAMES,Games->CurrentPage);
-			Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
-
-			HTM_BUTTON_Submit_Begin (Txt_GAMES_ORDER_HELP[Order],
-			                         "class=\"BT_LINK\"");
-			   if (Order == Games->SelectedOrder)
-			      HTM_U_Begin ();
-			   HTM_Txt (Txt_GAMES_ORDER[Order]);
-			   if (Order == Games->SelectedOrder)
-			      HTM_U_End ();
-			HTM_BUTTON_End ();
-
-		     Frm_EndForm ();
-
-		  HTM_TH_End ();
-		 }
-
-	       HTM_TH (Txt_Matches,HTM_HEAD_RIGHT);
-
-	    HTM_TR_End ();
+	    Gam_ListAllGamesHeading (Games);
 
 	    /***** Write all games *****/
 	    for (NumGame  = Pagination.FirstItemVisible;
@@ -323,14 +289,59 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_games);
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
-				     Games,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,Games,-1L);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of games *****/
    Gam_FreeListGames (Games);
+  }
+
+/*****************************************************************************/
+/**************** Write table heading when showing all games *****************/
+/*****************************************************************************/
+
+static void Gam_ListAllGamesHeading (const struct Gam_Games *Games)
+  {
+   extern const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS];
+   extern const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS];
+   extern const char *Txt_Matches;
+
+   Gam_Order_t Order;
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
+
+      for (Order  = (Gam_Order_t) 0;
+	   Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
+	   Order++)
+	{
+	 HTM_TH_Begin (HTM_HEAD_LEFT);
+
+	    /* Form to change order */
+	    Frm_BeginForm (ActSeeAllGam);
+	       Pag_PutParPagNum (Pag_GAMES,Games->CurrentPage);
+	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
+
+	       HTM_BUTTON_Submit_Begin (Txt_GAMES_ORDER_HELP[Order],
+					"class=\"BT_LINK\"");
+		  if (Order == Games->SelectedOrder)
+		     HTM_U_Begin ();
+		  HTM_Txt (Txt_GAMES_ORDER[Order]);
+		  if (Order == Games->SelectedOrder)
+		     HTM_U_End ();
+	       HTM_BUTTON_End ();
+
+	    Frm_EndForm ();
+
+	 HTM_TH_End ();
+	}
+
+      HTM_TH (Txt_Matches,HTM_HEAD_RIGHT);
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -444,7 +455,7 @@ void Gam_SeeOneGame (void)
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -519,7 +530,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
    /***** Begin box and table *****/
    if (ShowOnlyThisGame)
-      HTM_TABLE_BeginWidePadding (2);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
    /***** Begin first row of this game *****/
    HTM_TR_Begin (NULL);
@@ -1194,7 +1205,7 @@ void Gam_ListGame (void)
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -1558,7 +1569,7 @@ void Gam_ReqSelectQstsToAddToGame (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -1865,7 +1876,7 @@ void Gam_AddQstsToGame (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -1935,7 +1946,7 @@ void Gam_ReqRemQstFromGame (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -1983,7 +1994,7 @@ void Gam_RemoveQstFromGame (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2032,7 +2043,7 @@ void Gam_MoveUpQst (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2085,7 +2096,7 @@ void Gam_MoveDownQst (void)
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,
                         true,	// List game questions
-	                false);	// Do not put form to start new match
+	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
   }
 
 /*****************************************************************************/

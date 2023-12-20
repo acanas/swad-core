@@ -46,15 +46,16 @@ typedef enum
    } Ico_IconSet_t;
 #define Ico_ICON_SET_DEFAULT Ico_ICON_SET_AWESOME
 
-#define Ico_NUM_COLORS 6
+#define Ico_NUM_COLORS 7
 typedef enum
   {
-   Ico_UNCHANGED = 0,
-   Ico_BLACK     = 1,
-   Ico_GREEN     = 2,
-   Ico_RED       = 3,
-   Ico_WHITE     = 4,
-   Ico_YELLOW    = 5,
+   Ico_UNCHANGED,
+   Ico_BLACK,
+   Ico_BLUE,
+   Ico_GREEN,
+   Ico_RED,
+   Ico_WHITE,
+   Ico_YELLOW,
   } Ico_Color_t;
 
 struct Ico_IconColor

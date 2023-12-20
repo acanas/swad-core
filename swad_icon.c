@@ -101,6 +101,7 @@ const char *Ico_GetPreffix (Ico_Color_t Color)
      {
       [Ico_UNCHANGED] = NULL,
       [Ico_BLACK    ] = "BLACK",
+      [Ico_BLUE     ] = "BLUE",
       [Ico_GREEN    ] = "GREEN",
       [Ico_RED      ] = "RED",
       [Ico_WHITE    ] = "WHITE",

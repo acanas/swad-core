@@ -2164,6 +2164,14 @@ a:hover img.CENTER_PHOTO_SHOW
 .ICO_BLACK_PINK		{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
 .ICO_BLACK_DARK		{filter: invert(92%) sepia(44%) saturate(2%) hue-rotate(176deg) brightness(110%) contrast(88%);}	/* #f0f0f0 */
 
+.ICO_BLUE_WHITE,
+.ICO_BLUE_GREY,
+.ICO_BLUE_PURPLE,
+.ICO_BLUE_BLUE,
+.ICO_BLUE_YELLOW,
+.ICO_BLUE_PINK		{filter: invert(50%) sepia(27%) saturate(624%) hue-rotate(153deg) brightness(93%) contrast(97%);}		/* #4d88a1 */
+.ICO_BLUE_DARK		{filter: invert(81%) sepia(15%) saturate(249%) hue-rotate(151deg) brightness(91%) contrast(95%);}	/* #afc4cc */
+
 .ICO_GREEN_WHITE,
 .ICO_GREEN_GREY,
 .ICO_GREEN_PURPLE,

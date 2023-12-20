@@ -280,7 +280,7 @@ void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
    NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,Games->Game.GamCod);
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Matches,
+   Box_BoxBegin (NULL,Txt_Matches,
                  Mch_PutIconsInListOfMatches,Games,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
@@ -309,17 +309,8 @@ void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Put button to play a new match in this game *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    if (PutFormNewMatch == Frm_PUT_FORM)
-	       Mch_PutFormNewMatch (&Games->Game);	// Form to fill in data and start playing a new match
-	    break;
-	 default:
-	    break;
-	}
+      if (PutFormNewMatch == Frm_PUT_FORM)
+	 Mch_PutFormNewMatch (&Games->Game);	// Form to fill in data and start playing a new match
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -394,7 +385,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    Mch_ResetMatch (&Match);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write the heading *****/
       Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
@@ -421,9 +412,6 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       if (ICanEditMatches)
 		  Mch_ListOneOrMoreMatchesIcons (Games,&Match,Anchor);
 
-	       /* Match author */
-	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
-
 	       /* Start/end date/time */
 	       Mch_ListOneOrMoreMatchesTimes (Games,&Match,UniqueId);
 
@@ -442,22 +430,32 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	    /* End first row */
 	    HTM_TR_End ();
 
-	    /***** Second row for this match used for edition ****/
+	    /***** Second row for this match with author ****/
+	    /* Begin second row */
+	    HTM_TR_Begin (NULL);
+
+	       /* Match author */
+	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
+
+	    /* End second row */
+	    HTM_TR_End ();
+
+	    /***** Third row for this match used for edition ****/
 	    if (Gbl.Action.Act == ActEdiMch &&		// Editing...
 		Match.MchCod == Games->MchCod.Selected)	// ...this match
 	       /***** Check if I can edit this match *****/
 	       if (Mch_CheckIfICanEditThisMatch (&Match))
 		 {
-		  /* Begin second row */
+		  /* Begin third row */
 		  HTM_TR_Begin (NULL);
 
 		     /* Form to edit match */
-		     HTM_TD_Begin ("colspan=\"8\" class=\"LT %s\"",
+		     HTM_TD_Begin ("colspan=\"7\" class=\"LT %s\"",
 		                   The_GetColorRows ());
 			Mch_PutFormExistingMatch (Games,&Match,Anchor);	// Form to fill in data and edit this match
 		     HTM_TD_End ();
 
-		  /* End second row */
+		  /* End third row */
 		  HTM_TR_End ();
 		 }
 
@@ -476,7 +474,6 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
   {
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Match;
    extern const char *Txt_Players;
@@ -491,11 +488,12 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT  );
       HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]   ,HTM_HEAD_LEFT  );
       HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]   ,HTM_HEAD_LEFT  );
       HTM_TH (Txt_Match                                     ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Players                                   ,HTM_HEAD_RIGHT );
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 Ico_PutIconOn ("users.svg",Ico_BLUE,Txt_Players);
+      HTM_TH_End ();
       HTM_TH (Txt_Status                                    ,HTM_HEAD_CENTER);
       HTM_TH (Txt_Results                                   ,HTM_HEAD_CENTER);
 
@@ -559,7 +557,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match,
                                            const char *Anchor)
   {
-   HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",The_GetColorRows ());
 
       if (Mch_CheckIfICanEditThisMatch (Match))
 	{
@@ -588,7 +586,7 @@ static void Mch_ListOneOrMoreMatchesAuthor (const struct Gam_Games *Games,
 				            const struct Mch_Match *Match)
   {
    /***** Match author (teacher) *****/
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       Usr_WriteAuthor1Line (Match->UsrCod,Games->Game.HiddenOrVisible);
    HTM_TD_End ();
   }
@@ -644,7 +642,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Gam_Games *Games,
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
 
 	 /***** Match title *****/
@@ -742,7 +740,7 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Gam_Games *Games,
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Number of players who have answered any question in the match ******/
-   HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+   HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
                  HidVis_DataClass[Games->Game.HiddenOrVisible],The_GetSuffix (),
                  The_GetColorRows ());
       HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
@@ -759,7 +757,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
 
-   HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
+   HTM_TD_Begin ("rowspan=\"2\" class=\"CT DAT_%s %s\"",
                  The_GetSuffix (),The_GetColorRows ());
 
       if (Match->Status.Showing != Mch_END)	// Match not over
@@ -809,7 +807,7 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
       [Rol_SYS_ADM] = Mch_ListOneOrMoreMatchesResultTch,
      };
 
-   HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("rowspan=\"2\" class=\"CT %s\"",The_GetColorRows ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Games,Match);
@@ -1252,6 +1250,18 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
    extern const char *Txt_Match;
    extern const char *Txt_Title;
    extern const char *Txt_Play;
+
+   /***** Trivial check: roles allowed *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 break;
+      default:
+	 Err_NoPermissionExit ();
+	 break;
+     }
 
    /***** Begin section for a new match *****/
    HTM_SECTION_Begin (Mch_NEW_MATCH_SECTION_ID);
