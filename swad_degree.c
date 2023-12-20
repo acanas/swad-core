@@ -359,7 +359,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	 HTM_TR_Begin (NULL);
 
 	    /* Put icon to remove degree */
-	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_Begin ("class=\"BT\"");
 	       if (!ICanEdit ||
 		   NumCrss ||	// Degree has courses ==> deletion forbidden
 		   NumUsrsInCrssOfDeg)
@@ -370,7 +370,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Degree code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Deg->HieCod);
 	    HTM_TD_End ();
 
@@ -388,7 +388,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 				           ICanEdit);	// Put form?
 
 	    /* Degree type */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
@@ -423,7 +423,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Degree WWW */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);

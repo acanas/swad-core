@@ -114,7 +114,7 @@ void Nam_ExistingShortAndFullNames (const Act_Action_t ActionRename[Nam_NUM_SHRT
 	ShrtOrFull <= Nam_FULL_NAME;
 	ShrtOrFull++)
      {
-      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:

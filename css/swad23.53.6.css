@@ -1434,7 +1434,7 @@ a:hover						/* Default ==> underlined */
 .HIE_LOGO
 	{
 	text-align:left;
-	vertical-align:middle;
+	vertical-align:top;
 	width:25px;
 	}
 .HIE_SEL_NARROW
@@ -5266,7 +5266,7 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	box-sizing:border-box;
 	min-width:60px;
 	text-align:right;
-	vertical-align:middle;
+	vertical-align:top;
 	}
 .INPUT_INS_CODE
 	{

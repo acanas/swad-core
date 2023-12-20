@@ -920,7 +920,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Put icon to remove institution */
-	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_Begin ("class=\"BT\"");
 	       if (!ICanEdit ||
 		   NumCtrs ||		// Institution has centers
 		   NumUsrsIns ||		// Institution has users
@@ -933,7 +933,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Ins->HieCod);
 	    HTM_TD_End ();
 
@@ -951,7 +951,7 @@ static void Ins_ListInstitutionsForEdition (void)
 				           ICanEdit);	// Put form?
 
 	    /* Institution WWW */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);

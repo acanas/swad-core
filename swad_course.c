@@ -830,7 +830,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 HTM_TR_Begin (NULL);
 
 	    /* Put icon to remove course */
-	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_Begin ("class=\"BT\"");
 	       if (NumUsrs[Rol_UNK] ||	// Course has users ==> deletion forbidden
 		   !ICanEdit)
 		  Ico_PutIconRemovalNotAllowed ();
@@ -840,12 +840,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course code */
-	    HTM_TD_Begin ("class=\"DAT_%s CODE\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_Long (Crs->HieCod);
 	    HTM_TD_End ();
 
 	    /* Course year */
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
@@ -872,7 +872,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);

@@ -773,7 +773,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	 HTM_TR_Begin (NULL);
 
 	    /* Put icon to remove center */
-	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_Begin ("class=\"BT\"");
 	       if (!ICanEdit ||				// I cannot edit
 		   NumDegs ||				// Center has degrees
 		   NumUsrsCtr ||			// Center has users who claim to belong to it
@@ -795,7 +795,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Place */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
@@ -840,7 +840,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 				           ICanEdit);	// Put form?
 
 	    /* Center WWW */
-	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);

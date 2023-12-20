@@ -217,7 +217,9 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"RM\"");
 	    HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
 			    HTM_DONT_SUBMIT_ON_CHANGE,false,
-			    "class=\"INPUT_LONG\" required=\"required\"");
+			    "class=\"INPUT_LONG INPUT_%s\""
+			    " required=\"required\"",
+			    The_GetSuffix ());
 	 HTM_TD_End ();
 
       /***** End row *****/
@@ -666,7 +668,9 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		     ExaSet_PutParsOneSet (Exams);
 		     HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
 				     HTM_SUBMIT_ON_CHANGE,false,
-				      "class=\"INPUT_LONG\" required=\"required\"");
+				      "class=\"INPUT_LONG INPUT_%s\""
+				      " required=\"required\"",
+				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }
 	       else

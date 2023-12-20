@@ -150,17 +150,21 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 		  HTM_TR_Begin (NULL);
 
 		     /* Label */
-		     Frm_LabelColumn ("RT","NumQst",Txt_Number_of_questions);
+		     Frm_LabelColumn ("REC_C1_BOT RT","NumQst",
+				      Txt_Number_of_questions);
 
 		     /* Data */
-		     HTM_TD_Begin ("class=\"LT\"");
+		     HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 			HTM_INPUT_LONG ("NumQst",
 					(long) TstCfg_GetConfigMin (),
 					(long) TstCfg_GetConfigMax (),
 					(long) TstCfg_GetConfigDef (),
 					HTM_DONT_SUBMIT_ON_CHANGE,
 					TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
-					"id=\"NumQst\"");
+					"id=\"NumQst\""
+					" class=\"REC_C2_BOT_INPUT INPUT_%s\""
+					" required=\"required\"",
+					The_GetSuffix ());
 		     HTM_TD_End ();
 
 		  HTM_TR_End ();
