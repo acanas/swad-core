@@ -762,7 +762,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActInvSetQst	] = {1910,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSet_InvalidateQst		,NULL},
 
    [ActReqNewExaSes	] = {1852,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ReqCreatOrEditSes	,NULL},
-   [ActEdiOneExaSes	] = {1902,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ReqCreatOrEditSes	,NULL},
+   [ActReqChgExaSes	] = {1902,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ReqCreatOrEditSes	,NULL},
    [ActNewExaSes	] = {1853,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ReceiveFormSession	,NULL},
    [ActChgExaSes	] = {1903,-1,TabUnk,ActSeeAllExa	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ReceiveFormSession	,NULL},
    [ActReqRemExaSes	] = {1850,-1,TabUnk,ActSeeAllExa	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ExaSes_ReqRemSession		,NULL},
@@ -789,12 +789,12 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    [ActSeeOneGam	] = {1650,-1,TabUnk,ActSeeAllGam	,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
+   [ActReqNewMch	] = {1670,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ReqCreatOrEditMatch	,NULL},
+   [ActReqChgMch	] = {1913,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ReqCreatOrEditMatch	,NULL},
+   [ActNewMch		] = {1671,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatch		,Mch_ResumeMatch		,NULL},
+   [ActChgMch		] = {1914,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ChangeMatch		,NULL},
    [ActReqRemMch	] = {1783,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ReqRemMatch		,NULL},
    [ActRemMch		] = {1784,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RemoveMatch		,NULL},
-   [ActEdiMch		] = {1913,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_EditMatch			,NULL},
-   [ActChgMch		] = {1914,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ChangeMatch		,NULL},
-   [ActReqNewMch	] = {1670,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReqNewMatch		,NULL},
-   [ActNewMch		] = {1671,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatch		,Mch_ResumeMatch		,NULL},
    [ActResMch		] = {1785,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatch		,NULL},
    [ActBckMch		] = {1790,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatch			,NULL},
    [ActPlyPauMch	] = {1789,-1,TabUnk,ActSeeAllGam	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PlayPauseMatch		,NULL},
@@ -3797,7 +3797,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgNumQstExaSet,	// #1899
 	ActHidExaSes,		// #1900
 	ActUnhExaSes,		// #1901
-	ActEdiOneExaSes,	// #1902
+	ActReqChgExaSes,	// #1902
 	ActChgExaSes,		// #1903
 	ActSeeExaPrn,		// #1904
 	-1,			// #1905 (obsolete action)
@@ -3808,7 +3808,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActInvSetQst,		// #1910
 	ActChgRooMAC,		// #1911
 	ActLstOneGam,		// #1912
-	ActEdiMch,		// #1913
+	ActReqChgMch,		// #1913
 	ActChgMch,		// #1914
 	-1,			// #1915 (obsolete action)
 	-1,			// #1916 (obsolete action)

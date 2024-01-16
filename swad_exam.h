@@ -42,11 +42,8 @@ void Exa_ListAllExams (struct Exa_Exams *Exams);
 bool Exa_CheckIfICanEditExams (void);
 
 void Exa_SeeOneExam (void);
-void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
-			  struct ExaSes_Session *Session,
-			  Frm_PutForm_t PutFormSession);
+void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession);
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
-			       struct ExaSes_Session *Session,
 			       Frm_PutForm_t PutFormSession);
 void Exa_ShowOnlyOneExamEnd (void);
 

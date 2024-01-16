@@ -51,7 +51,6 @@ struct ExaSes_UsrAnswer
 void ExaSes_ResetSession (struct ExaSes_Session *Session);
 
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
-		          struct ExaSes_Session *Session,
                           Frm_PutForm_t PutFormSession);
 void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session);
 

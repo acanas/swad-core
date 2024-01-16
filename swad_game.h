@@ -97,11 +97,7 @@ struct Gam_Games
    char *ListQuestions;
    char *GamCodsSelected;	// String with selected game codes separated by separator multiple
    struct Gam_Game Game;	// Selected/current game
-   struct
-     {
-      long Selected;		// Current match code
-      long Current;
-     } MchCod;
+   long MchCod;			// Selected/current match
    unsigned QstInd;		// Current question index
   };
 
@@ -159,8 +155,6 @@ void Gam_RemoveQstFromGame (void);
 
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
-
-void Gam_ReqNewMatch (void);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);
 

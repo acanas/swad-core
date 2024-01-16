@@ -1793,7 +1793,7 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
    static const char *SeparatorStr[Dat_NUM_SEPARATORS] =
      {
       [Dat_SEPARATOR_NONE ] = "",
-      [Dat_SEPARATOR_COMMA] = ",&nbsp;",
+      [Dat_SEPARATOR_COMMA] = ", ",
       [Dat_SEPARATOR_BREAK] = "<br />",
      };
 

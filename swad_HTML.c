@@ -2073,7 +2073,7 @@ void HTM_TD_Txt_Right (const char *Txt)
 
 void HTM_TD_TxtColon (const char *Txt)
   {
-   HTM_TD_Begin ("class=\"REC_C1_BOT RT FORM_IN_%s\"",The_GetSuffix ());
+   HTM_TD_Begin ("class=\"RT FORM_IN_%s\"",The_GetSuffix ());
       HTM_TxtColon (Txt);
    HTM_TD_End ();
   }

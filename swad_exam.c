@@ -239,7 +239,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
    Exams->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Exams,
+   Box_BoxBegin (NULL,Txt_Exams,
                  Exa_PutIconsListExams,Exams,
                  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
@@ -250,7 +250,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
       if (Exams->Num)
 	{
 	 /***** Table head *****/
-	 HTM_TABLE_BeginWideMarginPadding (5);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 	    HTM_TR_Begin (NULL);
                HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
@@ -406,23 +406,20 @@ void Exa_SeeOneExam (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
 /******************************* Show one exam *******************************/
 /*****************************************************************************/
 
-void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,
-			  struct ExaSes_Session *Session,
-			  Frm_PutForm_t PutFormSession)
+void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession)
   {
-   Exa_ShowOnlyOneExamBegin (Exams,Session,PutFormSession);
+   Exa_ShowOnlyOneExamBegin (Exams,PutFormSession);
    Exa_ShowOnlyOneExamEnd ();
   }
 
 void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
-			       struct ExaSes_Session *Session,
 			       Frm_PutForm_t PutFormSession)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
@@ -439,7 +436,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 		       true);	// Show only this exam
 
       /***** List sessions *****/
-      ExaSes_ListSessions (Exams,Session,PutFormSession);
+      ExaSes_ListSessions (Exams,PutFormSession);
   }
 
 void Exa_ShowOnlyOneExamEnd (void)
@@ -472,7 +469,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,bool ShowOnlyThisExam)
 
    /***** Begin box and table *****/
    if (ShowOnlyThisExam)
-      HTM_TABLE_BeginWidePadding (2);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
    /***** Begin first row of this exam *****/
    HTM_TR_Begin (NULL);

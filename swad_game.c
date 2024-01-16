@@ -180,8 +180,7 @@ void Gam_ResetGames (struct Gam_Games *Games)
    Games->ListQuestions     = NULL;
    Games->GamCodsSelected   = NULL;	// String with selected game codes separated by separator multiple
    Games->Game.GamCod       = -1L;	// Current/selected game code
-   Games->MchCod.Current    =
-   Games->MchCod.Selected   = -1L;	// Current/selected match code
+   Games->MchCod            = -1L;	// Current/selected match code
    Games->QstInd            = 0;	// Current question index
   }
 
@@ -2156,31 +2155,6 @@ static bool Gam_CheckIfEditable (const struct Gam_Game *Game)
       return Game->NumMchs == 0;	// Games with matches should not be edited
    else
       return false;			// Questions are not editable
-  }
-
-/*****************************************************************************/
-/************* Request the creation of a new match as a teacher **************/
-/*****************************************************************************/
-
-void Gam_ReqNewMatch (void)
-  {
-   struct Gam_Games Games;
-
-   /***** Reset games context *****/
-   Gam_ResetGames (&Games);
-
-   /***** Reset game *****/
-   Gam_ResetGame (&Games.Game);
-
-   /***** Get parameters *****/
-   if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
-      Err_WrongGameExit ();
-   Gam_GetGameDataByCod (&Games.Game);
-
-   /***** Show game *****/
-   Gam_ShowOnlyOneGame (&Games,
-                        false,	// Do not list game questions
-                        Frm_PUT_FORM);
   }
 
 /*****************************************************************************/

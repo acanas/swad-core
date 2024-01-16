@@ -874,8 +874,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	               The_GetColorRows ());
 	    if (ICanView.Result)
 	      {
-	       Games->Game.GamCod    = Match.GamCod;
-	       Games->MchCod.Current = Match.MchCod;
+	       Games->Game.GamCod = Match.GamCod;
+	       Games->MchCod      = Match.MchCod;
 	       switch (MeOrOther)
 		 {
 		  case Usr_ME:

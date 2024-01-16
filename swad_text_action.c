@@ -12459,7 +12459,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Request new exam session"			// Çeviri lazim!
 #endif
 	,
-	[ActEdiOneExaSes] =
+	[ActReqChgExaSes] =
 #if   L==1	// ca
 	"Edit exam session"			// Necessita traducció
 #elif L==2	// de
@@ -12942,52 +12942,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See game"	// Çeviri lazim!
 #endif
 	,
-	[ActReqRemMch] =
-#if   L==1	// ca
-	"Request removal of match"			// Necessita traducció
-#elif L==2	// de
-	"Request removal of match"			// Need Übersetzung
-#elif L==3	// en
-	"Request removal of match"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de partida"
-#elif L==5	// fr
-	"Request removal of match"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de partida"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of match"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of match"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of match"			// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of match"			// Çeviri lazim!
-#endif
-	,
-	[ActRemMch] =
-#if   L==1	// ca
-	"Eliminar partida"
-#elif L==2	// de
-	"Spiel entfernen"
-#elif L==3	// en
-	"Remove match"
-#elif L==4	// es
-	"Eliminar partida"
-#elif L==5	// fr
-	"Supprimer match"
-#elif L==6	// gn
-	"Eliminar partida"	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovere partita"
-#elif L==8	// pl
-	"Usu&nacute; mecz"
-#elif L==9	// pt
-	"Remover jogo"
-#elif L==10	// tr
-	"E&scedil;le&scedil;meyi kald&inodot;r"
-#endif
-	,
 	[ActReqNewMch] =
 #if   L==1	// ca
 	"Request creation of new match"			// Necessita traducció
@@ -13009,6 +12963,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Request creation of new match"			// Precisa de tradução
 #elif L==10	// tr
 	"Request creation of new match"			// Çeviri lazim!
+#endif
+	,
+	[ActReqChgMch] =
+#if   L==1	// ca
+	"Request edition of match"			// Necessita traducció
+#elif L==2	// de
+	"Request edition of match"			// Need Übersetzung
+#elif L==3	// en
+	"Request edition of match"
+#elif L==4	// es
+	"Solicitar creaci&oacute;n de nueva partida"
+#elif L==5	// fr
+	"Request edition of match"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar creaci&oacute;n de nueva partida"	// Okoteve traducción
+#elif L==7	// it
+	"Request edition of match"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request edition of match"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request edition of match"			// Precisa de tradução
+#elif L==10	// tr
+	"Request edition of match"			// Çeviri lazim!
 #endif
 	,
 	[ActNewMch] =
@@ -13055,6 +13032,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change match"		// Precisa de tradução
 #elif L==10	// tr
 	"Change match"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemMch] =
+#if   L==1	// ca
+	"Request removal of match"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of match"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of match"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de partida"
+#elif L==5	// fr
+	"Request removal of match"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de partida"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of match"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of match"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of match"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of match"			// Çeviri lazim!
+#endif
+	,
+	[ActRemMch] =
+#if   L==1	// ca
+	"Eliminar partida"
+#elif L==2	// de
+	"Spiel entfernen"
+#elif L==3	// en
+	"Remove match"
+#elif L==4	// es
+	"Eliminar partida"
+#elif L==5	// fr
+	"Supprimer match"
+#elif L==6	// gn
+	"Eliminar partida"	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere partita"
+#elif L==8	// pl
+	"Usu&nacute; mecz"
+#elif L==9	// pt
+	"Remover jogo"
+#elif L==10	// tr
+	"E&scedil;le&scedil;meyi kald&inodot;r"
 #endif
 	,
 	[ActResMch] =

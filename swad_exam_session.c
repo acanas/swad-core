@@ -69,7 +69,7 @@ static void ExaSes_PutIconsInListOfSessions (void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
 
 static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
-                                          long SesCodToBeEdited,
+      					  Frm_PutForm_t PutFormSession,
 				          unsigned NumSessions,
                                           MYSQL_RES *mysql_res);
 static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions);
@@ -136,7 +136,6 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 /*****************************************************************************/
 
 void ExaSes_ListSessions (struct Exa_Exams *Exams,
-		          struct ExaSes_Session *Session,
                           Frm_PutForm_t PutFormSession)
   {
    extern const char *Hlp_ASSESSMENT_Exams_sessions;
@@ -144,61 +143,28 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
    MYSQL_RES *mysql_res;
    unsigned NumSessions;
 
+   /***** Get data of sessions from database *****/
+   NumSessions = Exa_DB_GetSessions (&mysql_res,Exams->Exam.ExaCod);
+
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Sessions,
+   Box_BoxBegin (NULL,Txt_Sessions,
                  ExaSes_PutIconsInListOfSessions,Exams,
                  Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE);
 
-   /***** Select whether show only my groups or all groups *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 if (Gbl.Crs.Grps.NumGrps)
-	   {
-	    Set_BeginSettingsHead ();
+      /***** Select whether show only my groups or all groups *****/
+      if (Gbl.Crs.Grps.NumGrps && ExaSes_CheckIfICanEditSessions ())
+	{
+	 Set_BeginSettingsHead ();
 	    Grp_ShowFormToSelWhichGrps (ActSeeOneExa,Exa_PutPars,Exams);
-	    Set_EndSettingsHead ();
-	   }
-	 break;
-      default:
-	 break;
-     }
+	 Set_EndSettingsHead ();
+	}
 
-   /***** Show the table with the sessions *****/
-   if ((NumSessions = Exa_DB_GetSessions (&mysql_res,Exams->Exam.ExaCod)))
-      ExaSes_ListOneOrMoreSessions (Exams,
-                                    PutFormSession &&
-				    Session->SesCod > 0 ? Session->SesCod :
-							  -1L,
-	                            NumSessions,mysql_res);
+      /***** Show the table with the sessions *****/
+      ExaSes_ListOneOrMoreSessions (Exams,PutFormSession,
+				    NumSessions,mysql_res);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Put button to create a new exam session in this exam *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 if (PutFormSession == Frm_PUT_FORM && Session->SesCod <= 0)
-	   {
-	    /* Reset session */
-	    ExaSes_ResetSession (Session);
-	    Session->ExaCod = Exams->Exam.ExaCod;
-	    Session->TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();			// Now
-	    Session->TimeUTC[Dat_END_TIME] = Session->TimeUTC[Dat_STR_TIME] + (1 * 60 * 60);	// Now + 1 hour
-            Str_Copy (Session->Title,Exams->Exam.Title,sizeof (Session->Title) - 1);
-
-	    /* Put form to create new session */
-	    ExaSes_PutFormSession (Session);	// Form to create session
-	   }
-	 break;
-      default:
-	 break;
-     }
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -264,28 +230,28 @@ static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams)
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
-                                          long SesCodToBeEdited,
+      					  Frm_PutForm_t PutFormSession,
 				          unsigned NumSessions,
                                           MYSQL_RES *mysql_res)
   {
    unsigned NumSession;
    unsigned UniqueId;
-   char *Anchor;
    struct ExaSes_Session Session;
+   char *Anchor;
    bool ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
-
-   /***** Trivial check *****/
-   if (!NumSessions)
-      return;
+   long SesCodToBeEdited = PutFormSession == Frm_PUT_FORM &&
+			   Exams->SesCod > 0 ? Exams->SesCod :
+					       -1L;
 
    /***** Reset session *****/
    ExaSes_ResetSession (&Session);
 
    /***** Begin table with sessions *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write the heading *****/
-      ExaSes_ListOneOrMoreSessionsHeading (ICanEditSessions);
+      if (NumSessions)
+	 ExaSes_ListOneOrMoreSessionsHeading (ICanEditSessions);
 
       /***** Write rows *****/
       for (NumSession = 0, UniqueId = 1, The_ResetRowColor ();
@@ -301,15 +267,12 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	    if (asprintf (&Anchor,"evt_%ld_%ld",Exams->Exam.ExaCod,Session.SesCod) < 0)
 	       Err_NotEnoughMemoryExit ();
 
-	    /***** Begin row for this exam session ****/
+	    /***** First row for this session ****/
 	    HTM_TR_Begin (NULL);
 
 	       /* Icons */
 	       if (ICanEditSessions)
 		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
-
-	       /* Session participant */
-	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
 
 	       /* Start/end date/time */
 	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
@@ -320,16 +283,21 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       /* Session result visible? */
 	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
 
-	    /***** End row for this session ****/
 	    HTM_TR_End ();
 
-	    /***** For to edit this session ****/
-	    if (Session.SesCod == SesCodToBeEdited)
+	    /***** Second row: session author */
+	    HTM_TR_Begin (NULL);
+	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
+	    HTM_TR_End ();
+
+	    /***** Third row: form to edit this session ****/
+	    if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&	// Editing...
+		Session.SesCod == SesCodToBeEdited)			// ...this session
 	      {
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"6\" class=\"CT %s\"",
+		  HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",
 		                The_GetColorRows ());
-		     ExaSes_PutFormSession (&Session);	// Form to edit existing session
+		     ExaSes_PutFormSession (&Session);	// Form to edit this session
 		  HTM_TD_End ();
 	       HTM_TR_End ();
 	      }
@@ -337,6 +305,25 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	    /***** Free anchor string *****/
 	    free (Anchor);
 	   }
+	}
+
+      /***** Put form to create a new exam session in this exam *****/
+      if (ICanEditSessions && PutFormSession == Frm_PUT_FORM &&
+	  SesCodToBeEdited <= 0)
+	{
+	 /* Reset session */
+	 ExaSes_ResetSession (&Session);
+	 Session.ExaCod = Exams->Exam.ExaCod;
+	 Session.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();		// Now
+	 Session.TimeUTC[Dat_END_TIME] = Session.TimeUTC[Dat_STR_TIME] + (1 * 60 * 60);	// Now + 1 hour
+	 Str_Copy (Session.Title,Exams->Exam.Title,sizeof (Session.Title) - 1);
+
+	 /* Put form to create new session */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",The_GetColorRows ());
+	       ExaSes_PutFormSession (&Session);	// Form to create session
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 	}
 
    /***** End table with sessions *****/
@@ -349,7 +336,6 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
   {
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Session;
    extern const char *Txt_Results;
@@ -362,7 +348,6 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT  );
       HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]   ,HTM_HEAD_LEFT  );
       HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]   ,HTM_HEAD_LEFT  );
       HTM_TH (Txt_Session                                   ,HTM_HEAD_LEFT  );
@@ -438,7 +423,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
    Exams->SesCod      = Session->SesCod;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",The_GetColorRows ());
 
       if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
 	{
@@ -452,7 +437,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 					    Session->HiddenOrVisible);
 
 	 /***** Icon to edit the exam session *****/
-	 Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,
+	 Ico_PutContextualIconToEdit (ActReqChgExaSes,Anchor,
 				      ExaSes_PutParsEdit,Exams);
 	}
 
@@ -467,7 +452,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session)
   {
    /***** Session author (teacher) *****/
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       Usr_WriteAuthor1Line (Session->UsrCod,Session->HiddenOrVisible);
    HTM_TD_End ();
   }
@@ -516,7 +501,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
    extern const char *Txt_Resume;
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
 
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
@@ -627,7 +612,7 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
       [Rol_SYS_ADM] = ExaSes_ListOneOrMoreSessionsResultTch,
      };
 
-   HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
+   HTM_TD_Begin ("rowspan=\"2\" class=\"CT DAT_%s %s\"",
                  The_GetSuffix (),The_GetColorRows ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
@@ -720,7 +705,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
    Exa_DB_ToggleVisResultsSesUsr (&Session);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -808,7 +793,7 @@ void ExaSes_ReqRemSession (void)
 	                Session.Title);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -853,7 +838,7 @@ void ExaSes_RemoveSession (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -891,7 +876,7 @@ static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Exa_DB_HideUnhideSession (&Session,HiddenOrVisible);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -945,10 +930,10 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
      };
    bool ItsANewSession = (Session->SesCod <= 0);
 
-   /***** Begin section for a new exam session *****/
+   /***** Begin section for exam session *****/
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
 
-      /***** Begin form to create *****/
+      /***** Begin form to create/edit *****/
       Frm_BeginFormTable (ItsANewSession ? ActNewExaSes :
 				           ActChgExaSes,
 			  ExaSes_NEW_SESSION_SECTION_ID,
@@ -964,7 +949,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
+			       "id=\"Title\" class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -983,7 +968,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
       Frm_EndFormTable (ItsANewSession ? Btn_CREATE_BUTTON :
 					 Btn_CONFIRM_BUTTON);
 
-   /***** End section for a new exam session *****/
+   /***** End section for exam session *****/
    HTM_SECTION_End ();
   }
 
@@ -1012,7 +997,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
       HTM_TR_Begin (NULL);
 	 HTM_TD_TxtColon (Txt_Groups);
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Box_BoxTableBegin ("95%",NULL,
+	    Box_BoxTableBegin ("100%",NULL,
 			       NULL,NULL,
 			       NULL,Box_NOT_CLOSABLE,0);
 
@@ -1055,7 +1040,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   }
 
 /*****************************************************************************/
-/****************** Request the creation of a new session ********************/
+/*************** Request the creation or edition of a session ****************/
 /*****************************************************************************/
 
 void ExaSes_ReqCreatOrEditSes (void)
@@ -1094,7 +1079,7 @@ void ExaSes_ReqCreatOrEditSes (void)
      }
 
    /***** Show exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_PUT_FORM);	// Put form for session
+   Exa_ShowOnlyOneExam (&Exams,Frm_PUT_FORM);	// Put form for session
   }
 
 /*****************************************************************************/
@@ -1176,7 +1161,7 @@ void ExaSes_ReceiveFormSession (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Show current exam *****/
-   Exa_ShowOnlyOneExam (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
   }
 
 /*****************************************************************************/

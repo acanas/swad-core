@@ -1779,7 +1779,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	.PRG_DATE
 		{
 		box-sizing:border-box;
-		max-width:80px;
+		max-width:72px;
 		overflow:hidden;
 		text-overflow:ellipsis;
 		}
@@ -1798,7 +1798,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	.PRG_DATE
 		{
 		box-sizing:border-box;
-		max-width:132px;
+		max-width:120px;
 		overflow:hidden;
 		text-overflow:ellipsis;
 		}
@@ -1813,7 +1813,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	.PRG_DATE
 		{
 		box-sizing:border-box;
-		max-width:132px;
+		max-width:120px;
 		overflow:hidden;
 		text-overflow:ellipsis;
 		}
@@ -2216,7 +2216,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	width:100%;
 	text-align:center;
-	vertical-align:middle;
 	}
 
 .FRAME
@@ -3258,21 +3257,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	.REC_C1_BOT
 		{
 		box-sizing:border-box;
-		width:170px;
-		max-width:170px;
+		width:150px;
+		max-width:150px;
 		overflow:hidden;
 		}
 	.REC_C2_BOT
 		{
 		box-sizing:border-box;
-		width:366px;
-		max-width:366px;
+		width:386px;
+		max-width:386px;
 		overflow:hidden;
 		}
 	.REC_C2_BOT_INPUT
 		{
 		box-sizing:border-box;
-		width:362px;
+		width:382px;
 		}
 	}
 
@@ -3427,48 +3426,48 @@ legend {font-size:12pt;}
 .DATE_RED_PURPLE,
 .DATE_RED_BLUE,
 .DATE_RED_YELLOW,
-.DATE_RED_PINK			{color:#660000; font-size:12pt;}
-.DATE_RED_DARK			{color:#f98a8a; font-size:12pt;}
+.DATE_RED_PINK			{color:#660000; font-size:10pt;}
+.DATE_RED_DARK			{color:#f98a8a; font-size:10pt;}
 
 .DATE_RED_LIGHT_WHITE,
 .DATE_RED_LIGHT_GREY,
 .DATE_RED_LIGHT_PURPLE,
 .DATE_RED_LIGHT_BLUE,
 .DATE_RED_LIGHT_YELLOW,
-.DATE_RED_LIGHT_PINK		{color:rgba(102,  0,  0,0.3); font-size:12pt;}
-.DATE_RED_LIGHT_DARK		{color:rgba(249,138,138,0.3); font-size:12pt;}
+.DATE_RED_LIGHT_PINK		{color:rgba(102,  0,  0,0.3); font-size:10pt;}
+.DATE_RED_LIGHT_DARK		{color:rgba(249,138,138,0.3); font-size:10pt;}
 
 .DATE_GREEN_WHITE,
 .DATE_GREEN_GREY,
 .DATE_GREEN_PURPLE,
 .DATE_GREEN_BLUE,
 .DATE_GREEN_YELLOW,
-.DATE_GREEN_PINK		{color:#246600; font-size:12pt;}
-.DATE_GREEN_DARK		{color:#80c040; font-size:12pt;}
+.DATE_GREEN_PINK		{color:#246600; font-size:10pt;}
+.DATE_GREEN_DARK		{color:#80c040; font-size:10pt;}
 
 .DATE_GREEN_LIGHT_WHITE,
 .DATE_GREEN_LIGHT_GREY,
 .DATE_GREEN_LIGHT_PURPLE,
 .DATE_GREEN_LIGHT_BLUE,
 .DATE_GREEN_LIGHT_YELLOW,
-.DATE_GREEN_LIGHT_PINK		{color:rgba( 36,100,  0,0.3); font-size:12pt;}
-.DATE_GREEN_LIGHT_DARK		{color:rgba(128,196, 64,0.3); font-size:12pt;}
+.DATE_GREEN_LIGHT_PINK		{color:rgba( 36,100,  0,0.3); font-size:10pt;}
+.DATE_GREEN_LIGHT_DARK		{color:rgba(128,196, 64,0.3); font-size:10pt;}
 
 .DATE_BLUE_WHITE,
 .DATE_BLUE_GREY,
 .DATE_BLUE_PURPLE,
 .DATE_BLUE_BLUE,
 .DATE_BLUE_YELLOW,
-.DATE_BLUE_PINK			{color:#4d88a1; font-size:12pt;}
-.DATE_BLUE_DARK			{color:#afc4cc; font-size:12pt;}
+.DATE_BLUE_PINK			{color:#4d88a1; font-size:10pt;}
+.DATE_BLUE_DARK			{color:#afc4cc; font-size:10pt;}
 
 .DATE_BLUE_LIGHT_WHITE,
 .DATE_BLUE_LIGHT_GREY,
 .DATE_BLUE_LIGHT_PURPLE,
 .DATE_BLUE_LIGHT_BLUE,
 .DATE_BLUE_LIGHT_YELLOW,
-.DATE_BLUE_LIGHT_PINK		{color:rgba( 77,136,161,0.3); font-size:12pt;}
-.DATE_BLUE_LIGHT_DARK		{color:rgba(175,196,204,0.3); font-size:12pt;}
+.DATE_BLUE_LIGHT_PINK		{color:rgba( 77,136,161,0.3); font-size:10pt;}
+.DATE_BLUE_LIGHT_DARK		{color:rgba(175,196,204,0.3); font-size:10pt;}
 
 .ASG_LST_DATE_GREEN_WHITE,
 .ASG_LST_DATE_GREEN_GREY,

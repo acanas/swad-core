@@ -1822,7 +1822,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_TR_Begin (NULL);
 	 HTM_TD_TxtColon (Txt_Groups);
 	 HTM_TD_Begin ("class=\"LT\"");
-	    Box_BoxTableBegin ("95%",NULL,
+	    Box_BoxTableBegin ("100%",NULL,
 			       NULL,NULL,
 			       NULL,Box_NOT_CLOSABLE,0);
 

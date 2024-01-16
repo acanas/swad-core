@@ -94,7 +94,8 @@ long Mch_GetMchCodBeingPlayed (void);
 
 void Mch_ResetMatch (struct Mch_Match *Match);
 
-void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch);
+void Mch_ListMatches (struct Gam_Games *Games,
+		      Frm_PutForm_t PutFormNewMatch);
 void Mch_GetMatchDataByCod (struct Mch_Match *Match);
 
 void Mch_ToggleVisResultsMchUsr (void);
@@ -107,11 +108,11 @@ void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod);
 void Mch_RemoveMatchesMadeByUsrInAllCrss (long UsrCod);
 void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod);
 
-void Mch_EditMatch (void);
+void Mch_ReqCreatOrEditMatch (void);
 
 void Mch_PutParsEdit (void *Games);
 void Mch_GetAndCheckPars (struct Gam_Games *Games,
-                                struct Mch_Match *Match);
+                          struct Mch_Match *Match);
 
 void Mch_CreateNewMatch (void);
 void Mch_ChangeMatch (void);

@@ -100,6 +100,7 @@ static void Mch_PutIconsInListOfMatches (void *Games);
 static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games);
 
 static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
+      				      Frm_PutForm_t PutFormMatch,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches);
@@ -135,10 +136,8 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Mch_Match *Match);
 
-static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
-                                      const struct Mch_Match *Match,
-                                      const char *Anchor);
-static void Mch_PutFormNewMatch (const struct Gam_Game *Game);
+static void Mch_PutFormMatch (struct Mch_Match *Match);
+static void Mch_ParsFormMatch (void *Match);
 static void Mch_ShowLstGrpsToEditMatch (long MchCod);
 static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match);
 
@@ -269,7 +268,8 @@ void Mch_ResetMatch (struct Mch_Match *Match)
 /************************* List the matches of a game ************************/
 /*****************************************************************************/
 
-void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
+void Mch_ListMatches (struct Gam_Games *Games,
+		      Frm_PutForm_t PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Matches;
@@ -285,32 +285,19 @@ void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
+      if (Gbl.Crs.Grps.NumGrps && Mch_CheckIfICanEditMatches ())
 	{
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    if (Gbl.Crs.Grps.NumGrps)
-	      {
-	       Set_BeginSettingsHead ();
-	       Grp_ShowFormToSelWhichGrps (ActSeeOneGam,Gam_PutPars,Games);
-	       Set_EndSettingsHead ();
-	      }
-	    break;
-	 default:
-	    break;
+	 Set_BeginSettingsHead ();
+	    Grp_ShowFormToSelWhichGrps (ActSeeOneGam,Gam_PutPars,Games);
+	 Set_EndSettingsHead ();
 	}
 
       /***** Show the table with the matches *****/
-      if (NumMatches)
-	 Mch_ListOneOrMoreMatches (Games,NumMatches,mysql_res);
+      Mch_ListOneOrMoreMatches (Games,PutFormNewMatch,
+				NumMatches,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
-
-      /***** Put button to play a new match in this game *****/
-      if (PutFormNewMatch == Frm_PUT_FORM)
-	 Mch_PutFormNewMatch (&Games->Game);	// Form to fill in data and start playing a new match
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -368,6 +355,7 @@ static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games)
 /*****************************************************************************/
 
 static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
+      				      Frm_PutForm_t PutFormMatch,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res)
   {
@@ -376,10 +364,9 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    struct Mch_Match Match;
    char *Anchor;
    bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
-
-   /***** Trivial check *****/
-   if (!NumMatches)
-      return;
+   long MchCodToBeEdited = PutFormMatch == Frm_PUT_FORM &&
+			   Games->MchCod > 0 ? Games->MchCod :
+					       -1L;
 
    /***** Reset match *****/
    Mch_ResetMatch (&Match);
@@ -388,7 +375,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write the heading *****/
-      Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
+      if (NumMatches)
+	 Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
       /***** Write rows *****/
       for (NumMatch = 0, UniqueId = 1, The_ResetRowColor ();
@@ -405,7 +393,6 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this match with match data ****/
-	    /* Begin first row */
 	    HTM_TR_Begin (NULL);
 
 	       /* Icons */
@@ -427,35 +414,24 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       /* Match result visible? */
 	       Mch_ListOneOrMoreMatchesResult (Games,&Match);
 
-	    /* End first row */
 	    HTM_TR_End ();
 
-	    /***** Second row for this match with author ****/
-	    /* Begin second row */
+	    /***** Second row: match author ****/
 	    HTM_TR_Begin (NULL);
-
-	       /* Match author */
 	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
-
-	    /* End second row */
 	    HTM_TR_End ();
 
 	    /***** Third row for this match used for edition ****/
-	    if (Gbl.Action.Act == ActEdiMch &&		// Editing...
-		Match.MchCod == Games->MchCod.Selected)	// ...this match
+	    if (ICanEditMatches && PutFormMatch == Frm_PUT_FORM &&	// Editing...
+		Match.MchCod == MchCodToBeEdited)			// ...this match
 	       /***** Check if I can edit this match *****/
 	       if (Mch_CheckIfICanEditThisMatch (&Match))
 		 {
-		  /* Begin third row */
 		  HTM_TR_Begin (NULL);
-
-		     /* Form to edit match */
 		     HTM_TD_Begin ("colspan=\"7\" class=\"LT %s\"",
 		                   The_GetColorRows ());
-			Mch_PutFormExistingMatch (Games,&Match,Anchor);	// Form to fill in data and edit this match
+			Mch_PutFormMatch (&Match);	// Form to edit this match
 		     HTM_TD_End ();
-
-		  /* End third row */
 		  HTM_TR_End ();
 		 }
 
@@ -463,6 +439,23 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	    free (Anchor);
 	   }
 	}
+
+      /***** Put button to play a new match in this game *****/
+      if (ICanEditMatches && PutFormMatch == Frm_PUT_FORM &&
+	  MchCodToBeEdited <= 0)
+	{
+	 /* Reset match */
+         Mch_ResetMatch (&Match);
+	 Match.GamCod = Games->Game.GamCod;
+	 Str_Copy (Match.Title,Games->Game.Title,sizeof (Match.Title) - 1);
+
+	 /* Put form to create new match */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"7\" class=\"LT %s\"",The_GetColorRows ());
+	       Mch_PutFormMatch (&Match);	// Form to create match
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+        }
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -523,6 +516,9 @@ static bool Mch_CheckIfICanEditMatches (void)
 
 static bool Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match)
   {
+   if (Match->MchCod <= 0)
+      return true;
+
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
@@ -561,15 +557,14 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 
       if (Mch_CheckIfICanEditThisMatch (Match))
 	{
-	 // Games->Game.GamCod    = Match->GamCod;
-	 Games->MchCod.Current = Match->MchCod;
+	 Games->MchCod = Match->MchCod;
 
 	 /***** Put icon to remove the match *****/
 	 Ico_PutContextualIconToRemove (ActReqRemMch,NULL,
 					Mch_PutParsEdit,Games);
 
 	 /***** Put icon to edit the match *****/
-	 Ico_PutContextualIconToEdit (ActEdiMch,Anchor,
+	 Ico_PutContextualIconToEdit (ActReqChgMch,Anchor,
 				      Mch_PutParsEdit,Games);
 	}
       else
@@ -820,16 +815,14 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
 static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
                                                const struct Mch_Match *Match)
   {
+   Games->MchCod = Match->MchCod;
+
    /***** Is match result visible or hidden? *****/
    if (Match->Status.ShowUsrResults)
-     {
       /* Result is visible by me */
-      Games->Game.GamCod = Match->GamCod;
-      Games->MchCod.Current = Match->MchCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParsEdit,Games,
 				     "trophy.svg",Ico_BLACK);
-     }
    else
       /* Result is forbidden to me */
       Ico_PutIconNotVisible ();
@@ -841,8 +834,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    extern const char *Txt_Visible_results;
    extern const char *Txt_Hidden_results;
 
-   Games->Game.GamCod = Match->GamCod;
-   Games->MchCod.Current = Match->MchCod;
+   Games->MchCod = Match->MchCod;
 
    /***** Show match results *****/
    if (Mch_CheckIfICanEditThisMatch (Match))
@@ -1118,10 +1110,10 @@ void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/************************ Edit a match (game instance) ***********************/
+/**************** Request the creation or edition of a match *****************/
 /*****************************************************************************/
 
-void Mch_EditMatch (void)
+void Mch_ReqCreatOrEditMatch (void)
   {
    struct Gam_Games Games;
    struct Mch_Match Match;
@@ -1138,10 +1130,10 @@ void Mch_EditMatch (void)
    if (!Mch_CheckIfICanEditThisMatch (&Match))
       Err_NoPermissionExit ();
 
-   /***** Show current game *****/
+   /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
                         false,	// Do not list game questions
-			Frm_DONT_PUT_FORM);
+                        Frm_PUT_FORM);
   }
 
 /*****************************************************************************/
@@ -1153,7 +1145,7 @@ void Mch_PutParsEdit (void *Games)
    if (Games)
      {
       Gam_PutPars (Games);
-      ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod.Current);
+      ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod);
      }
   }
 
@@ -1162,7 +1154,7 @@ void Mch_PutParsEdit (void *Games)
 /*****************************************************************************/
 
 void Mch_GetAndCheckPars (struct Gam_Games *Games,
-                                struct Mch_Match *Match)
+                          struct Mch_Match *Match)
   {
    /***** Get parameters *****/
    /* Get parameters of game */
@@ -1170,148 +1162,74 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
       Err_WrongGameExit ();
    Grp_GetParWhichGroups ();
    Gam_GetGameDataByCod (&Games->Game);
-
-   /* Get match code */
-   Match->MchCod = ParCod_GetAndCheckPar (ParCod_Mch);
-   Mch_GetMatchDataByCod (Match);
-
-   /***** Ensure parameters are correct *****/
-   if (Games->Game.GamCod != Match->GamCod)
-      Err_WrongGameExit ();
    if (Games->Game.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongGameExit ();
 
+   /* Get match code */
+   if ((Match->MchCod = ParCod_GetPar (ParCod_Mch)) > 0)
+     {
+      Mch_GetMatchDataByCod (Match);
+      if (Games->Game.GamCod != Match->GamCod)
+	 Err_WrongGameExit ();
+     }
+   else
+      Mch_ResetMatch (Match);
+
    /***** Initialize context *****/
-   Games->MchCod.Current  =
-   Games->MchCod.Selected = Match->MchCod;
+   Games->MchCod = Match->MchCod;
   }
 
 /*****************************************************************************/
 /******************* Put a form to change and existing match *****************/
 /*****************************************************************************/
 
-static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
-				      const struct Mch_Match *Match,
-				      const char *Anchor)
+static void Mch_PutFormMatch (struct Mch_Match *Match)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Title;
-   extern const char *Txt_Save_changes;
+   bool ItsANewMatch = (Match->MchCod <= 0);
 
-   /***** Begin form *****/
-   Frm_BeginFormAnchor (ActChgMch,Anchor);
-      Mch_PutParsEdit (Games);
-
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Match->Title,
-			 NULL,NULL,
-			 Hlp_ASSESSMENT_Games_matches,Box_CLOSABLE,2);
-
-	    /***** Match title *****/
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("RT","Title",Txt_Title);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
-				  " required=\"required\"",
-				  The_GetSuffix ());
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Groups *****/
-	    Mch_ShowLstGrpsToEditMatch (Match->MchCod);
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** Put button to submit the form *****/
-      Btn_PutConfirmButton (Txt_Save_changes);
-
-      /***** End box *****/
-      Box_BoxEnd ();
-
-   /***** End form *****/
-   Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/********************** Put a form to create a new match *********************/
-/*****************************************************************************/
-
-static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
-  {
-   extern const char *Hlp_ASSESSMENT_Games_matches;
-   extern const char *Txt_Match;
-   extern const char *Txt_Title;
-   extern const char *Txt_Play;
-
-   /***** Trivial check: roles allowed *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 break;
-      default:
-	 Err_NoPermissionExit ();
-	 break;
-     }
-
-   /***** Begin section for a new match *****/
+   /***** Begin section for match *****/
    HTM_SECTION_Begin (Mch_NEW_MATCH_SECTION_ID);
 
-      /***** Begin form *****/
-      Frm_BeginForm (ActNewMch);
-	 ParCod_PutPar (ParCod_Gam,Game->GamCod);
-	 Gam_PutParQstInd (0);	// Start by first question in game
+      /***** Begin form to create/edit *****/
+      Frm_BeginFormTable (ItsANewMatch ? ActNewMch :
+				         ActChgMch,
+			  Mch_NEW_MATCH_SECTION_ID,
+			  Mch_ParsFormMatch,Match);
 
-	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,Txt_Match,
-			    NULL,NULL,
-			    Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
+	 /***** Match title *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Match title *****/
-	    HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	       /* Label */
-	       Frm_LabelColumn ("RT","Title",Txt_Title);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Game->Title,
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\" size=\"45\" class=\"INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
-	       HTM_TD_End ();
+	    HTM_TD_End ();
 
-	    HTM_TR_End ();
+	 HTM_TR_End ();
 
-	    /***** Groups *****/
-	    Mch_ShowLstGrpsToEditMatch (-1L);
+	 /***** Groups *****/
+	 Mch_ShowLstGrpsToEditMatch (Match->MchCod);
 
-	 /***** End table *****/
-	 HTM_TABLE_End ();
+      /***** End form to create *****/
+      Frm_EndFormTable (ItsANewMatch ? Btn_CREATE_BUTTON :
+				       Btn_CONFIRM_BUTTON);
 
-	 /***** Put icon to submit the form *****/
-	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"play.svg",
-			  Txt_Play,
-			  "class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\"");
-
-	 /***** End box *****/
-	 Box_BoxEnd ();
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End section for a new match *****/
+   /***** End section for exam session *****/
    HTM_SECTION_End ();
+  }
+
+static void Mch_ParsFormMatch (void *Match)
+  {
+   ParCod_PutPar (ParCod_Gam,((struct Mch_Match *) Match)->GamCod);
+   ParCod_PutPar (ParCod_Mch,((struct Mch_Match *) Match)->MchCod);
   }
 
 /*****************************************************************************/
@@ -1334,7 +1252,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 	 HTM_TD_TxtColon (Txt_Groups);
 	 HTM_TD_Begin ("class=\"LT\"");
 
-	    Box_BoxTableBegin ("95%",NULL,
+	    Box_BoxTableBegin ("100%",NULL,
 			       NULL,NULL,
 			       NULL,Box_NOT_CLOSABLE,0);
 
@@ -2759,7 +2677,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
   }
 
 /*****************************************************************************/
-/***************** Put checkbox to select if show results ********************/
+/******************** Put checkbox to remove my answer ***********************/
 /*****************************************************************************/
 
 static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
@@ -2771,7 +2689,7 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 
       /***** Begin form *****/
       Frm_BeginForm (ActRemMchAnsQstStd);
-	 ParCod_PutPar (ParCod_Mch,Match->MchCod);		// Current match being played
+	 ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 	 Gam_PutParQstInd (Match->Status.QstInd);	// Current question index shown
 
 	 /***** Put icon with link *****/
@@ -3027,9 +2945,9 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		  is necessary in order to be fast
 		  and not lose clicks due to refresh */
 	       Frm_BeginForm (ActAnsMchQstStd);
-		  ParCod_PutPar (ParCod_Mch,Match->MchCod);		// Current match being played
+		  ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 		  Gam_PutParQstInd (Match->Status.QstInd);	// Current question index shown
-		  Mch_PutParNumOpt (NumOpt);		// Number of button
+		  Mch_PutParNumOpt (NumOpt);			// Number of button
 
 		  HTM_BUTTON_Submit_Begin (NULL,
 					   "class=\"MCH_STD_BUTTON%s BT_%c\""

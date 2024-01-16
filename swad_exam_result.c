@@ -79,7 +79,7 @@ struct ExaRes_ICanView
 
 static void ExaRes_ListMyResultsInCrs (struct Exa_Exams *Exams);
 static void ExaRes_ListMyResultsInExa (struct Exa_Exams *Exams);
-static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams,long SesCod);
+static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams);
 
 static void ExaRes_PutFormToSelUsrsToViewResults (__attribute__((unused)) void *Args);
 static void ExaRes_ShowAllResultsInSelectedExams (void *Exams);
@@ -186,13 +186,11 @@ void ExaRes_ShowMyResultsInExa (void)
   {
    extern const char *Txt_Results_of_exam_X;
    struct Exa_Exams Exams;
-   struct ExaSes_Session Session;
    char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exams.Exam);
-   ExaSes_ResetSession (&Session);
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
@@ -201,7 +199,7 @@ void ExaRes_ShowMyResultsInExa (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
       /***** List my sessions results in exam *****/
       if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
@@ -243,33 +241,33 @@ void ExaRes_ShowMyResultsInSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
       /***** List my sessions results in session *****/
       if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
 	 Err_NotEnoughMemoryExit ();
       ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
       free (Title);
-      ExaRes_ListMyResultsInSes (&Exams,Session.SesCod);
+      ExaRes_ListMyResultsInSes (&Exams);
       ExaRes_ShowResultsEnd ();
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
   }
 
-static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams,long SesCod)
+static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams)
   {
    /***** Table header *****/
    ExaRes_ShowHeaderResults (Usr_ME);
 
    /***** List my sessions results in exam *****/
    TstCfg_GetConfig ();	// Get feedback type
-   ExaRes_ShowResults (Exams,Usr_ME,SesCod,-1L,NULL);
+   ExaRes_ShowResults (Exams,Usr_ME,Exams->SesCod,-1L,NULL);
   }
 
 /*****************************************************************************/
@@ -391,7 +389,7 @@ void ExaRes_ShowAllResultsInExa (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
       /***** List sessions results in exam *****/
       if (asprintf (&Title,Txt_Results_of_exam_X,Exams.Exam.Title) < 0)
@@ -455,14 +453,14 @@ void ExaRes_ShowAllResultsInSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
 
    /***** Exam begin *****/
-   Exa_ShowOnlyOneExamBegin (&Exams,&Session,Frm_DONT_PUT_FORM);
+   Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
 
       /***** List sessions results in session *****/
       if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
