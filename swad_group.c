@@ -356,47 +356,43 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args
    ICanEdit = !Frm_CheckIfInside () &&
 	      (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   if (ICanEdit)
-      Box_BoxBegin (NULL,Txt_Groups,
-		    Grp_PutIconToEditGroups,NULL,
-		    Hlp_USERS_Groups,Box_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Groups,
-		    NULL,NULL,
-		    Hlp_USERS_Groups,Box_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_Groups,
+		 ICanEdit ? Grp_PutIconToEditGroups :
+			    NULL,NULL,
+		 Hlp_USERS_Groups,Box_CLOSABLE);
 
-   /***** Begin form to update the students listed
-	  depending on the groups selected *****/
-   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
-			Usr_USER_LIST_SECTION_ID);
-      Set_PutParsPrefsAboutUsrList ();
-      if (FuncPars)
-	 FuncPars (Args);
+      /***** Begin form to update the students listed
+	     depending on the groups selected *****/
+      Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
+			   Usr_USER_LIST_SECTION_ID);
+	 Set_PutParsPrefsAboutUsrList ();
+	 if (FuncPars)
+	    FuncPars (Args);
 
-      /***** Select all groups *****/
-      Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
+	 /***** Select all groups *****/
+	 Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
 
-      /***** Get list of groups types and groups in this course *****/
-      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+	 /***** Get list of groups types and groups in this course *****/
+	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-      /***** List the groups for each group type *****/
-      HTM_TABLE_BeginWidePadding (2);
-	 for (NumGrpTyp = 0;
-	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	      NumGrpTyp++)
-	    if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-	       Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-						 GroupsSelectableByStdsOrNETs);
-      HTM_TABLE_End ();
+	 /***** List the groups for each group type *****/
+	 HTM_TABLE_Begin ("TBL_SCROLL");
+	    for (NumGrpTyp = 0;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+		 NumGrpTyp++)
+	       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+		  Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+						    GroupsSelectableByStdsOrNETs);
+	 HTM_TABLE_End ();
 
-      /***** Free list of groups types and groups in this course *****/
-      Grp_FreeListGrpTypesAndGrps ();
+	 /***** Free list of groups types and groups in this course *****/
+	 Grp_FreeListGrpTypesAndGrps ();
 
-      /***** Submit button *****/
-      Lay_WriteLinkToUpdate (Txt_Update_users);
+	 /***** Submit button *****/
+	 Lay_WriteLinkToUpdate (Txt_Update_users);
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();

@@ -1523,7 +1523,7 @@ const char *Txt_All_groups =
 #elif L==5	// fr
 	"Tous les groupes";
 #elif L==6	// gn
-	"Todos los grupos";	// Okoteve traducción
+	"Mayma aty";
 #elif L==7	// it
 	"Tutti i gruppi";
 #elif L==8	// pl
@@ -1531,7 +1531,7 @@ const char *Txt_All_groups =
 #elif L==9	// pt
 	"Todos os grupos";
 #elif L==10	// tr
-	"All groups";		// Çeviri lazim!
+	"T&uuml;m gruplar";
 #endif
 
 const char *Txt_All_places =
@@ -41304,29 +41304,6 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";		// Çeviri lazim!
-#endif
-
-const char *Txt_Select_users =
-#if   L==1	// ca
-	"Seleccioneu usuaris";
-#elif L==2	// de
-	"W&auml;hlen Sie Benutzer aus";
-#elif L==3	// en
-	"Select users";
-#elif L==4	// es
-	"Seleccione usuarios";
-#elif L==5	// fr
-	"S&eacute;lectionnez des utilisateurs";
-#elif L==6	// gn
-	"Seleccione usuarios";	// Okoteve traducción
-#elif L==7	// it
-	"Seleziona utenti";
-#elif L==8	// pl
-	"Wybierz u&zdot;ytkownik&oacute;w";
-#elif L==9	// pt
-	"Selecione usu&aacute;rios";
-#elif L==10	// tr
-	"Select users";		// Çeviri lazim!
 #endif
 
 const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z =	// Warning: it is very important to include three %u in the following sentences

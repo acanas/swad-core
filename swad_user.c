@@ -3690,7 +3690,6 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
                                        const char *TxtButton,
 				       Frm_PutForm_t PutFormDateRange)
   {
-   extern const char *Txt_Select_users;
    extern const char *Txt_Users;
    unsigned NumTotalUsrs;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
@@ -3720,81 +3719,73 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		     Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
-      /***** Draw class photos to select users *****/
-      Box_BoxBegin (NULL,Txt_Select_users,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      /***** Show form to select the groups *****/
+      Grp_ShowFormToSelectSeveralGroups (FuncPars,Args,
+					 Grp_MY_GROUPS);
 
-	 /***** Show form to select the groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (FuncPars,Args,
-					    Grp_MY_GROUPS);
+      /***** Begin section with user list *****/
+      HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
-	 /***** Begin section with user list *****/
-	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
-
-	    if (NumTotalUsrs)
+	 if (NumTotalUsrs)
+	   {
+	    if (Usr_GetIfShowBigList (NumTotalUsrs,
+				      FuncPars,Args,
+				      NULL))
 	      {
-	       if (Usr_GetIfShowBigList (NumTotalUsrs,
-					 FuncPars,Args,
-					 NULL))
-		 {
-		  /***** Form to select type of list used for select several users *****/
-		  Usr_ShowFormsToSelectUsrListType (FuncPars,Args);
+	       /***** Form to select type of list used for select several users *****/
+	       Usr_ShowFormsToSelectUsrListType (FuncPars,Args);
 
-		  /***** Link to register students *****/
-		  Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+	       /***** Link to register students *****/
+	       Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-		  /***** Form to select users and select date range ****/
-		  /* Begin form */
-		  Frm_BeginForm (NextAction);
+	       /***** Form to select users and select date range ****/
+	       /* Begin form */
+	       Frm_BeginForm (NextAction);
 
-		     /* Hidden parameters */
-		     Grp_PutParsCodGrps ();
-		     if (NextAction == ActAdmAsgWrkCrs)
-		       {
-			Gbl.FileBrowser.FullTree = true;	// By default, show all files
-			Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-		       }
-		     if (FuncPars)
-			FuncPars (Args);
+		  /* Hidden parameters */
+		  Grp_PutParsCodGrps ();
+		  if (NextAction == ActAdmAsgWrkCrs)
+		    {
+		     Gbl.FileBrowser.FullTree = true;	// By default, show all files
+		     Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+		    }
+		  if (FuncPars)
+		     FuncPars (Args);
 
-		     HTM_TABLE_BeginCenterPadding (2);
+		  HTM_TABLE_BeginCenterPadding (2);
 
-			/* Put list of users to select some of them */
-			HTM_TR_Begin (NULL);
-			   HTM_TD_TxtColon (Txt_Users);
-			   HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
-			                 The_GetSuffix ());
-			      HTM_TABLE_BeginCenterPadding (2);
-				 Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
-				 Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
-				 Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
-			      HTM_TABLE_End ();
-			   HTM_TD_End ();
-			HTM_TR_End ();
+		     /* Put list of users to select some of them */
+		     HTM_TR_Begin (NULL);
+			HTM_TD_TxtColon (Txt_Users);
+			HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
+				      The_GetSuffix ());
+			   HTM_TABLE_BeginCenterPadding (2);
+			      Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
+			      Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
+			      Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
+			   HTM_TABLE_End ();
+			HTM_TD_End ();
+		     HTM_TR_End ();
 
-			/* Starting and ending dates in the search */
-			if (PutFormDateRange == Frm_PUT_FORM)
-			   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+		     /* Starting and ending dates in the search */
+		     if (PutFormDateRange == Frm_PUT_FORM)
+			Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
-		     HTM_TABLE_End ();
+		  HTM_TABLE_End ();
 
-		     /***** Send button *****/
-		     Btn_PutConfirmButton (TxtButton);
+		  /***** Send button *****/
+		  Btn_PutConfirmButton (TxtButton);
 
-		  /***** End form *****/
-		  Frm_EndForm ();
-		 }
+	       /***** End form *****/
+	       Frm_EndForm ();
 	      }
-	    else	// NumTotalUsrs == 0
-	       /***** Show warning indicating no users found *****/
-	       Usr_ShowWarningNoUsersFound (Rol_UNK);
+	   }
+	 else	// NumTotalUsrs == 0
+	    /***** Show warning indicating no users found *****/
+	    Usr_ShowWarningNoUsersFound (Rol_UNK);
 
-	 /***** End section with user list *****/
-	 HTM_SECTION_End ();
-
-      /***** End box *****/
-      Box_BoxEnd ();
+      /***** End section with user list *****/
+      HTM_SECTION_End ();
 
       /***** Free memory for users' list *****/
       Usr_FreeUsrsList (Rol_TCH);
