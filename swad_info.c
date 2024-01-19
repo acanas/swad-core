@@ -299,15 +299,13 @@ void Inf_ShowInfo (void)
 
    if (ShowWarningNoInfo)
      {
-      if (ICanEdit)
-	 Box_BoxBegin ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       Inf_PutIconToEditInfo,&Gbl.Crs.Info.Type,
-		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
-      else
-	 Box_BoxBegin ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		       NULL,NULL,
-		       Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
-      Ale_ShowAlert (Ale_INFO,Txt_No_information);
+      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+		    ICanEdit ? Inf_PutIconToEditInfo :
+			       NULL,
+		    ICanEdit ? &Gbl.Crs.Info.Type :
+			       NULL,
+		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+	 Ale_ShowAlert (Ale_INFO,Txt_No_information);
       Box_BoxEnd ();
      }
   }

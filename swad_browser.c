@@ -2785,9 +2785,9 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    Brw_WriteTopBeforeShowingFileBrowser ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin ("100%",Txt_Assignments_and_other_works,
-		      Brw_PutIconShowFigure,NULL,
-		      Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
+   Box_BoxBegin (NULL,Txt_Assignments_and_other_works,
+		 Brw_PutIconShowFigure,NULL,
+		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
@@ -2804,31 +2804,31 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	       Gbl.Usrs.Other.UsrDat.Accepted =
 	       Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
-	       /***** Show a row with the data of the owner of the works *****/
-	       HTM_TR_Begin (NULL);
+	       /***** Owner of the works *****/
+	       Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
 
-		  Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
+	       /***** File browsers *****/
+	       HTM_DIV_Begin ("class=\"BROWSER_ASG_WRK\"");
 
-		  HTM_TD_Begin ("class=\"LT\"");
+		  /* File browser with the assignments */
+		  Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
+		  Brw_InitializeFileBrowser ();
+		  Brw_ShowFileBrowser ();
 
-		     /* Show the tree with the assignments */
-		     Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
-		     Brw_InitializeFileBrowser ();
-		     Brw_ShowFileBrowser ();
+		  /* File browser with the works */
+		  Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
+		  Brw_InitializeFileBrowser ();
+		  Brw_ShowFileBrowser ();
 
-		     /* Show the tree with the works */
-		     Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
-		     Brw_InitializeFileBrowser ();
-		     Brw_ShowFileBrowser ();
+	       HTM_DIV_End ();
 
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
+	       HTM_BR ();
+	       HTM_BR ();
 	      }
 	}
 
    /***** End table and box *****/
-   Box_BoxTableEnd ();
+   Box_BoxEnd ();
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
@@ -2999,52 +2999,48 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
      };
 
    /***** Show user's photo *****/
-   HTM_TD_Begin ("class=\"OWNER_WORKS_PHOTO\"");
+   HTM_DIV_Begin ("class=\"OWNER_WORKS_PHOTO\"");
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
                                  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-   HTM_TD_End ();
+   HTM_DIV_End ();
 
    /***** Begin form to send a message to this user *****/
-   HTM_TD_Begin ("class=\"LT\"");
+   HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA MSG_AUT_%s\"",The_GetSuffix ());
 
-      HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA MSG_AUT_%s\"",The_GetSuffix ());
+      if (!NextAction[UsrDat->Roles.InCurrentCrs])
+	 Err_WrongRoleExit ();
+      Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
+	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
-	 if (!NextAction[UsrDat->Roles.InCurrentCrs])
-	    Err_WrongRoleExit ();
-	 Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
-	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
+	 /***** Show user's ID *****/
+	 ID_WriteUsrIDs (UsrDat,NULL);
 
-	    /***** Show user's ID *****/
-	    ID_WriteUsrIDs (UsrDat,NULL);
+	 /***** Show user's name *****/
+	 HTM_BR ();
 
-	    /***** Show user's name *****/
+	 HTM_BUTTON_Submit_Begin (Txt_View_record_for_this_course,
+				  "class=\"BT_LINK\"");
+	    HTM_Txt (UsrDat->Surname1);
+	    if (UsrDat->Surname2[0])
+	       HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	    if (UsrDat->FrstName[0])
+	       HTM_TxtF (", %s",UsrDat->FrstName);
+	 HTM_BUTTON_End ();
+
+	 /***** Show user's email *****/
+	 if (UsrDat->Email[0])
+	   {
 	    HTM_BR ();
+	    HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\""
+			 " class=\"MSG_AUT_%s\"",
+			 UsrDat->Email,The_GetSuffix ());
+	       HTM_Txt (UsrDat->Email);
+	    HTM_A_End ();
+	   }
 
-	    HTM_BUTTON_Submit_Begin (Txt_View_record_for_this_course,
-	                             "class=\"BT_LINK\"");
-	       HTM_Txt (UsrDat->Surname1);
-	       if (UsrDat->Surname2[0])
-		  HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-	       if (UsrDat->FrstName[0])
-		  HTM_TxtF (", %s",UsrDat->FrstName);
-	    HTM_BUTTON_End ();
+      Frm_EndForm ();
 
-	    /***** Show user's email *****/
-	    if (UsrDat->Email[0])
-	      {
-	       HTM_BR ();
-	       HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\""
-			    " class=\"MSG_AUT_%s\"",
-			    UsrDat->Email,The_GetSuffix ());
-		  HTM_Txt (UsrDat->Email);
-	       HTM_A_End ();
-	      }
-
-	 Frm_EndForm ();
-
-      HTM_DIV_End ();
-
-   HTM_TD_End ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -3108,10 +3104,8 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Hlp_FILES_Private;
    extern const char *Hlp_FILES_Shared;
    extern const char *Hlp_FILES_Homework_for_students;
-   extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Hlp_FILES_Marks;
    extern const char *Hlp_FILES_Briefcase;
-   // extern const char *Hlp_ASSESSMENT_Projects;
 
    extern const char *Txt_Documents_area;
    extern const char *Txt_Documents_management_area;
@@ -3122,9 +3116,6 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Assignments_area;
    extern const char *Txt_Works_area;
    extern const char *Txt_Temporary_private_storage_area;
-   extern const char *Txt_Project_documents;
-   extern const char *Txt_Project_assessment;
-   extern const char *Txt_NULL;
    extern const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_;
 
    static const char **Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER] =
@@ -3136,7 +3127,7 @@ static void Brw_ShowFileBrowser (void)
       [Brw_ADMI_SHR_CRS] = &Txt_Shared_files_area,
       [Brw_ADMI_SHR_GRP] = &Txt_Shared_files_area,
       [Brw_ADMI_WRK_USR] = &Txt_Works_area,
-      [Brw_ADMI_WRK_CRS] = &Txt_Works_area,
+      [Brw_ADMI_WRK_CRS] = NULL,
       [Brw_ADMI_MRK_CRS] = &Txt_Marks_management_area,
       [Brw_ADMI_BRF_USR] = &Txt_Temporary_private_storage_area,
       [Brw_SHOW_DOC_GRP] = &Txt_Documents_area,
@@ -3144,7 +3135,7 @@ static void Brw_ShowFileBrowser (void)
       [Brw_SHOW_MRK_GRP] = &Txt_Marks_area,
       [Brw_ADMI_MRK_GRP] = &Txt_Marks_management_area,
       [Brw_ADMI_ASG_USR] = &Txt_Assignments_area,
-      [Brw_ADMI_ASG_CRS] = &Txt_Assignments_area,
+      [Brw_ADMI_ASG_CRS] = NULL,
       [Brw_SHOW_DOC_DEG] = &Txt_Documents_area,
       [Brw_ADMI_DOC_DEG] = &Txt_Documents_management_area,
       [Brw_SHOW_DOC_CTR] = &Txt_Documents_area,
@@ -3156,8 +3147,8 @@ static void Brw_ShowFileBrowser (void)
       [Brw_ADMI_SHR_INS] = &Txt_Shared_files_area,
       [Brw_ADMI_TCH_CRS] = &Txt_Teachers_files_area,
       [Brw_ADMI_TCH_GRP] = &Txt_Teachers_files_area,
-      [Brw_ADMI_DOC_PRJ] = &Txt_Project_documents,
-      [Brw_ADMI_ASS_PRJ] = &Txt_Project_assessment,
+      [Brw_ADMI_DOC_PRJ] = NULL,
+      [Brw_ADMI_ASS_PRJ] = NULL,
      };
    static const char **Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER] =
      {
@@ -3168,7 +3159,7 @@ static void Brw_ShowFileBrowser (void)
       [Brw_ADMI_SHR_CRS] = &Hlp_FILES_Shared,
       [Brw_ADMI_SHR_GRP] = &Hlp_FILES_Shared,
       [Brw_ADMI_WRK_USR] = &Hlp_FILES_Homework_for_students,
-      [Brw_ADMI_WRK_CRS] = &Hlp_FILES_Homework_for_teachers,
+      [Brw_ADMI_WRK_CRS] = NULL,
       [Brw_ADMI_MRK_CRS] = &Hlp_FILES_Marks,
       [Brw_ADMI_BRF_USR] = &Hlp_FILES_Briefcase,
       [Brw_SHOW_DOC_GRP] = &Hlp_FILES_Documents,
@@ -3176,7 +3167,7 @@ static void Brw_ShowFileBrowser (void)
       [Brw_SHOW_MRK_GRP] = &Hlp_FILES_Marks,
       [Brw_ADMI_MRK_GRP] = &Hlp_FILES_Marks,
       [Brw_ADMI_ASG_USR] = &Hlp_FILES_Homework_for_students,
-      [Brw_ADMI_ASG_CRS] = &Hlp_FILES_Homework_for_teachers,
+      [Brw_ADMI_ASG_CRS] = NULL,
       [Brw_SHOW_DOC_DEG] = &Hlp_FILES_Documents,
       [Brw_ADMI_DOC_DEG] = &Hlp_FILES_Documents,
       [Brw_SHOW_DOC_CTR] = &Hlp_FILES_Documents,
@@ -3188,8 +3179,8 @@ static void Brw_ShowFileBrowser (void)
       [Brw_ADMI_SHR_INS] = &Hlp_FILES_Shared,
       [Brw_ADMI_TCH_CRS] = &Hlp_FILES_Private,
       [Brw_ADMI_TCH_GRP] = &Hlp_FILES_Private,
-      [Brw_ADMI_DOC_PRJ] = &Txt_NULL,
-      [Brw_ADMI_ASS_PRJ] = &Txt_NULL,
+      [Brw_ADMI_DOC_PRJ] = NULL,
+      [Brw_ADMI_ASS_PRJ] = NULL,
      };
    struct Brw_NumObjects Removed;
    char FileBrowserSectionId[32];
@@ -3219,36 +3210,38 @@ static void Brw_ShowFileBrowser (void)
              "file_browser_%u",Gbl.FileBrowser.Id);
    HTM_SECTION_Begin (FileBrowserSectionId);
 
-      Box_BoxBegin ("100%",*Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
-		    Brw_PutIconsFileBrowser,NULL,
-		    *Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
+      if (Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type])
+	 Box_BoxBegin (NULL,*Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+		       Brw_PutIconsFileBrowser,NULL,
+		       *Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
-	 /***** Subtitle *****/
-	 Brw_WriteSubtitleOfFileBrowser ();
+      /***** Subtitle *****/
+      Brw_WriteSubtitleOfFileBrowser ();
 
-	 /***** List recursively the directory *****/
-	 HTM_TABLE_Begin ("BROWSER_TABLE");
-	    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,
-		      Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
-		      sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
-	    Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,".",
-		      sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
-	    Brw_SetFullPathInTree ();
-	    Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
-	    if (Brw_WriteRowFileBrowser (0,"1",
-					 false,	// Tree not contracted
-					 Brw_ICON_TREE_NOTHING))
-	       Brw_ListDir (1,"1",
-			    false,	// Tree not contracted
-			    Gbl.FileBrowser.Path.RootFolder,
-			    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-	 HTM_TABLE_End ();
+      /***** List recursively the directory *****/
+      HTM_TABLE_Begin ("TBL_SCROLL");
+	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,
+		   Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
+		   sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
+	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,".",
+		   sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
+	 Brw_SetFullPathInTree ();
+	 Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
+	 if (Brw_WriteRowFileBrowser (0,"1",
+				      false,	// Tree not contracted
+				      Brw_ICON_TREE_NOTHING))
+	    Brw_ListDir (1,"1",
+			 false,	// Tree not contracted
+			 Gbl.FileBrowser.Path.RootFolder,
+			 Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
+      HTM_TABLE_End ();
 
-	 /***** Show and store number of documents found *****/
-	 BrwSiz_ShowAndStoreSizeOfFileBrowser (Size);
+      /***** Show and store number of documents found *****/
+      BrwSiz_ShowAndStoreSizeOfFileBrowser (Size);
 
       /***** End box *****/
-      Box_BoxEnd ();
+      if (Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type])
+         Box_BoxEnd ();
 
    HTM_SECTION_End ();
 
@@ -3476,27 +3469,57 @@ static void Brw_UpdateLastAccess (void)
 
 static void Brw_WriteSubtitleOfFileBrowser (void)
   {
-   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution;
-   extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution;
-   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution;
-   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_center;
-   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center;
-   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree;
    extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree;
-   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree;
-   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course;
-   extern const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course;
-   extern const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course;
-   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course;
-   extern const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course;
-   extern const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course;
-   extern const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course;
-   extern const char *Txt_the_marks_of_a_student_chosen_at_random_;
+   extern const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution;
    extern const char *Txt_accessible_for_reading_and_writing_by_project_members;
    extern const char *Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluators;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course;
+   extern const char *Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course;
+   extern const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course;
+   extern const char *Txt_accessible_for_reading_and_writing_by_you_and_the_course_teachers;
+   extern const char *Txt_accessible_only_for_reading_by_the_student_and_the_course_teachers;
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution;
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center;
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree;
+   extern const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course;
+   extern const char *Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course;
    extern const char *Txt_nobody_else_can_access_this_content;
-   char Subtitle[1024 + Usr_MAX_BYTES_FULL_NAME];
+   static const char **Brw_SubtitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_UNKNOWN     ] = NULL,
+      [Brw_SHOW_DOC_CRS] = &Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course,
+      [Brw_SHOW_MRK_CRS] = &Txt_accessible_only_for_reading_by_the_student_and_the_course_teachers,
+      [Brw_ADMI_DOC_CRS] = &Txt_accessible_for_reading_and_writing_by_teachers_of_the_course,
+      [Brw_ADMI_SHR_CRS] = &Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course,
+      [Brw_ADMI_SHR_GRP] = &Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course,
+      [Brw_ADMI_WRK_USR] = &Txt_accessible_for_reading_and_writing_by_you_and_the_course_teachers,
+      [Brw_ADMI_WRK_CRS] = NULL,
+      [Brw_ADMI_MRK_CRS] = &Txt_accessible_for_reading_and_writing_by_teachers_of_the_course,
+      [Brw_ADMI_BRF_USR] = &Txt_nobody_else_can_access_this_content,
+      [Brw_SHOW_DOC_GRP] = &Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course,
+      [Brw_ADMI_DOC_GRP] = &Txt_accessible_for_reading_and_writing_by_teachers_of_the_course,
+      [Brw_SHOW_MRK_GRP] = &Txt_accessible_only_for_reading_by_the_student_and_the_course_teachers,
+      [Brw_ADMI_MRK_GRP] = &Txt_accessible_for_reading_and_writing_by_teachers_of_the_course,
+      [Brw_ADMI_ASG_USR] = &Txt_accessible_for_reading_and_writing_by_you_and_the_course_teachers,
+      [Brw_ADMI_ASG_CRS] = NULL,
+      [Brw_SHOW_DOC_DEG] = &Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree,
+      [Brw_ADMI_DOC_DEG] = &Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree,
+      [Brw_SHOW_DOC_CTR] = &Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center,
+      [Brw_ADMI_DOC_CTR] = &Txt_accessible_for_reading_and_writing_by_administrators_of_the_center,
+      [Brw_SHOW_DOC_INS] = &Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution,
+      [Brw_ADMI_DOC_INS] = &Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution,
+      [Brw_ADMI_SHR_DEG] = &Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree,
+      [Brw_ADMI_SHR_CTR] = &Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center,
+      [Brw_ADMI_SHR_INS] = &Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution,
+      [Brw_ADMI_TCH_CRS] = &Txt_accessible_for_reading_and_writing_by_teachers_of_the_course,
+      [Brw_ADMI_TCH_GRP] = &Txt_accessible_for_reading_and_writing_by_teachers_of_the_course,
+      [Brw_ADMI_DOC_PRJ] = &Txt_accessible_for_reading_and_writing_by_project_members,
+      [Brw_ADMI_ASS_PRJ] = &Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluators,
+     };
 
    /***** Form to change zone (course and group browsers) *****/
    switch (Gbl.FileBrowser.Type)
@@ -3520,123 +3543,24 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
      }
 
    /***** Write subtitle *****/
+   /*
+   Subtitle = NULL;
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_SHOW_DOC_INS:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_institution);
-	 break;
-      case Brw_ADMI_DOC_INS:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_institution);
-	 break;
-      case Brw_ADMI_SHR_INS:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_institution);
-	 break;
-      case Brw_SHOW_DOC_CTR:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center);
-	 break;
-      case Brw_ADMI_DOC_CTR:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_center);
-	 break;
-      case Brw_ADMI_SHR_CTR:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_center);
-	 break;
-      case Brw_SHOW_DOC_DEG:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_degree);
-	 break;
-      case Brw_ADMI_DOC_DEG:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_administrators_of_the_degree);
-	 break;
-      case Brw_ADMI_SHR_DEG:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_degree);
-	 break;
-      case Brw_SHOW_DOC_CRS:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_only_for_reading_by_students_and_teachers_of_the_course);
-	 break;
-      case Brw_SHOW_DOC_GRP:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_only_for_reading_by_students_of_the_group_and_teachers_of_the_course);
-	 break;
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_TCH_GRP:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_teachers_of_the_course);
-	 break;
-      case Brw_ADMI_SHR_CRS:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_students_and_teachers_of_the_course);
-	 break;
-      case Brw_ADMI_SHR_GRP:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_students_of_the_group_and_teachers_of_the_course);
-	 break;
-      case Brw_SHOW_MRK_CRS:
-      case Brw_SHOW_MRK_GRP:
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-			 Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course);
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_SYS_ADM:
-	       snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-			 Txt_the_marks_of_a_student_chosen_at_random_);
-	       break;
-	    default:
-	       Subtitle[0] = '\0';
-	       Err_WrongRoleExit ();
-	       break;
-	   }
- 	 break;
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_MRK_GRP:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_teachers_of_the_course);
-	 break;
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_WRK_USR:
-         snprintf (Subtitle,sizeof (Subtitle),"%s<br />(%s)",
-                   Gbl.Usrs.Me.UsrDat.FullName,
-                   Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course);
-	 break;
-      case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
-         snprintf (Subtitle,sizeof (Subtitle),"%s",
-                   Gbl.Usrs.Other.UsrDat.FullName);
+      case Brw_ADMI_ASG_CRS:
+         Subtitle = Gbl.Usrs.Other.UsrDat.FullName;
 	 break;
-      case Brw_ADMI_DOC_PRJ:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_project_members);
-	 break;
-      case Brw_ADMI_ASS_PRJ:
-         snprintf (Subtitle,sizeof (Subtitle),"(%s)",
-                   Txt_accessible_for_reading_and_writing_by_project_tutors_and_evaluators);
-	 break;
-      case Brw_ADMI_BRF_USR:
-         snprintf (Subtitle,sizeof (Subtitle),"%s<br />(%s)",
-                   Gbl.Usrs.Me.UsrDat.FullName,
-                   Txt_nobody_else_can_access_this_content);
-	 break;
-      case Brw_UNKNOWN:
-         return;
+      default:
+	 if (Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type])
+	    Subtitle = *Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type];
+         break;
      }
-   if (Subtitle[0])
+   */
+   if (Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type])
      {
       HTM_DIV_Begin ("class=\"BROWSER_SUBTITLE\"");
-	 HTM_Txt (Subtitle);
+	 HTM_Txt (*Brw_SubtitleOfFileBrowser[Gbl.FileBrowser.Type]);
       HTM_DIV_End ();
      }
   }
@@ -9263,20 +9187,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Link;
    struct Brw_FileMetadata FileMetadata;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
-   /*
-   long InsCod;
-   long CtrCod;
-   long DegCod;
-   long CrsCod;
-   */
    long GrpCod;
    Act_Action_t Action;
-   /*
-   const char *InsShortName;
-   const char *CtrShortName;
-   const char *DegShortName;
-   const char *CrsShortName;
-   */
    const char *BgColor;
    const char *Title;
    char FileNameToShow[NAME_MAX + 1];
@@ -9443,8 +9355,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       break;
 	   }
 
-	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	               The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
 	    HTM_Txt (Title);
 	 HTM_TD_End ();
 
@@ -9454,8 +9365,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 				FileNameToShow);
 
 	 /***** Write file name using path (row[1]) *****/
-	 HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",
-	               The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
 
 	    /* Begin form */
 	    Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];

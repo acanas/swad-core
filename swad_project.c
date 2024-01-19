@@ -1343,15 +1343,15 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
    extern const char *Txt_Project;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Projects->Prj.Title[0] ? Projects->Prj.Title :
-						 Txt_Project,
+   Box_BoxBegin (NULL,Projects->Prj.Title[0] ? Projects->Prj.Title :
+					       Txt_Project,
                  Prj_PutIconsOnePrj,Projects,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
       /***** Show project data *****/
       HTM_FIELDSET_Begin (NULL);
 	 HTM_LEGEND (Txt_Project);
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Table head and project *****/
 	    Projects->View = Prj_VIEW_ONE_PROJECT;

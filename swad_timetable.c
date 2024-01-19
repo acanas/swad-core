@@ -361,11 +361,11 @@ void Tmt_ShowClassTimeTable (void)
    if (Timetable.ContextualIcons.PutIconEditCrsTT ||
        Timetable.ContextualIcons.PutIconEditOfficeHours ||
        Timetable.ContextualIcons.PutIconPrint)
-      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
+      Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
 		    Tmt_PutContextualIcons,&Timetable,
 		    Help[Timetable.Type],Box_NOT_CLOSABLE);
    else
-      Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
+      Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
 		    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
 
@@ -464,7 +464,7 @@ void Tmt_EditCrsTimeTable (void)
 
    /***** Editable time table *****/
    Timetable.Type = Tmt_COURSE_TIMETABLE;
-   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
+   Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewCrsTT,NULL,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
       Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -483,7 +483,7 @@ void Tmt_EditMyTutTimeTable (void)
 
    /***** Time table *****/
    Timetable.Type = Tmt_TUTORING_TIMETABLE;
-   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
+   Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewMyTT,NULL,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
       Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);

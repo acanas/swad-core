@@ -113,7 +113,6 @@
 
 const unsigned Txt_Current_CGI_SWAD_Language = ((unsigned) L);
 
-const char *Txt_NULL = NULL;
 const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n the file does not look good in some Windows text editors
 
 // The HTML entity for "ß" is &szlig; It stands for "S-Z ligature", because this symbol comes from the ligature of a Gothic S and a Z.
@@ -894,50 +893,50 @@ const char *Txt_accessible_for_reading_and_writing_by_teachers_of_the_course =
 	"accessible for reading and writing by teachers of the course";		// Çeviri lazim!
 #endif
 
-const char *Txt_accessible_for_reading_and_writing_by_you_and_the_teachers_of_the_course =
+const char *Txt_accessible_for_reading_and_writing_by_you_and_the_course_teachers =
 #if   L==1	// ca
-	"accessible per a lectura per vost&egrave; i els professors de l'assignatura";
+	"accessible per a lectura i escriptura per vosaltres i els professors de l'assignatura";
 #elif L==2	// de
-	"zum Schreiben zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
+	"f&uuml;r Sie und die Kursleiter zum Lesen und Schreiben zug&auml;nglich";
 #elif L==3	// en
-	"accessible for reading and writing by you and the teachers of the course";
+	"accessible for reading and writing by you and the course teachers";
 #elif L==4	// es
-	"accesible para lectura por usted y los profesores de la asignatura";
+	"accesible para lectura y escritura por usted y los profesores de la asignatura";
 #elif L==5	// fr
-	"accessible en lecture et en &eacute;criture par vous et par les &eacute;tudiants et les enseignants de la mati&egrave;re";
+	"accessible en lecture et en &eacute;criture par vous et les professeurs de la mati&egrave;re";
 #elif L==6	// gn
-	"accesible para lectura por usted y los profesores de la asignatura";		// Okoteve traducción
+	"accesible omo&ntilde;e'&etilde; ha ohai hagu&atilde; nde ha umi mbo'eh&aacute;ra asignatura rehegua";
 #elif L==7	// it
-	"accessibile per la lettura e la scrittura per te e i professori del corso";
+	"accessibile in lettura e scrittura da te e dai docenti del corso";
 #elif L==8	// pl
-	"dostep do odczytu i zapisu przez Ciebie i nauczycieli zajec";
+	"dost&eogon;pne do czytania i pisania przez Ciebie i nauczycieli kursu";
 #elif L==9	// pt
-	"acess&iacute;vel para leitura e escrita por voc&ecirc; e os professores da disciplina";
+	"acess&iacute;vel para leitura e escrita por voc&ecirc; e pelos professores da disciplina";
 #elif L==10	// tr
-	"accessible for reading and writing by you and the teachers of the course";	// Çeviri lazim!
+	"siz ve kurs &ouml;&gbreve;retmenleri taraf&inodot;ndan okuma ve yazma i&ccedil;in eri&scedil;ilebilir";
 #endif
 
-const char *Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course =
+const char *Txt_accessible_only_for_reading_by_the_student_and_the_course_teachers =
 #if   L==1	// ca
-	"accesible nom&egrave; per a lectura per vost&eacute; i els professors de l'assignatura";
+	"accessible nom&eacute;s per a lectura per l'estudiant i els professors de l'assignatura";
 #elif L==2	// de
-	"zum Lesen zug&auml;nglich f&uuml;r Sie und die Lehrkr&auml;fte der Kurs";
+	"nur zur Lekt&uuml;re durch Studierende und Kursleiter zug&auml;nglich";
 #elif L==3	// en
-	"accessible only for reading by you and the teachers of the course";
+	"accessible only for reading by the student and the course teachers";
 #elif L==4	// es
-	"accesible solo para lectura por usted y los profesores de la asignatura";
+	"accesible solo para lectura por el estudiante y los profesores de la asignatura";
 #elif L==5	// fr
-	"accessible uniquement pour la lecture par vous et par les &eacute;tudiants et les enseignants de la mati&egrave;re";
+	"accessible uniquement &agrave; la lecture par l'&eacute;tudiant et les professeurs de la mati&egrave;re";
 #elif L==6	// gn
-	"accesible solo para lectura por usted y los profesores de la asignatura";	// Okoteve traducción
+	"ojeikekuaa omo&ntilde;e'&etilde; ha&gcirc;u&aacute;nte temimbo'e ha mbo'eh&aacute;ra asignatura rehegua";
 #elif L==7	// it
-	"accessibile solo per la lettura per te e i professori del corso";
+	"accessibile in sola lettura da parte dello studente e dei docenti del corso";
 #elif L==8	// pl
-	"dost&eogon;pne tylko do czytania przez Ciebie i nauczycieli prowadzacych ten kurs";
+	"dost&eogon;pne wy&lstrok;&aogon;cznie do czytania przez ucznia i nauczyciela przedmiotu";
 #elif L==9	// pt
-	"acess&iacute;vel apenas para leitura por voc&ecirc; e os professores da disciplina";
+	"acess&iacute;vel apenas para leitura pelo aluno e pelos professores da disciplina";
 #elif L==10	// tr
-	"accessible only for reading by you and the teachers of the course";		// Çeviri lazim!
+	"yaln&inodot;zca &ouml;&gbreve;renci ve ders &ouml;&gbreve;retmenlerinin okuyabilece&gbreve;i &scedil;ekilde eri&scedil;ilebilir";
 #endif
 
 const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_center =
@@ -950,7 +949,7 @@ const char *Txt_accessible_only_for_reading_by_students_and_teachers_of_the_cent
 #elif L==4	// es
 	"accesible solo para lectura por estudiantes y profesores del centro";
 #elif L==5	// fr
-	"accessible uniquement pour la lecture par les &eacute;tudiants et les enseignants du center";
+	"accessible uniquement &agrave; la lecture par les &eacute;tudiants et les enseignants du center";
 #elif L==6	// gn
 	"accesible solo para lectura por estudiantes y profesores del centro";	// Okoteve traducción
 #elif L==7	// it
@@ -25693,7 +25692,7 @@ const char *Txt_nobody_else_can_access_this_content =
 #elif L==5	// fr
 	"personne d'autre ne peut acc&eacute;der &agrave; ce contenu";
 #elif L==6	// gn
-	"nadie m&aacute;s puede acceder a este contenido";	// Okoteve traducción
+	"avave ambue ndaikat&uacute;i oike ko contenido-pe";
 #elif L==7	// it
 	"nessun altro pu&ograve; accedere a questo contenuto";
 #elif L==8	// pl
@@ -25701,7 +25700,7 @@ const char *Txt_nobody_else_can_access_this_content =
 #elif L==9	// pt
 	"ningu&eacute;m mais pode acessar este conte&uacute;do";
 #elif L==10	// tr
-	"nobody else can access this content";			// Çeviri lazim!
+	"bu i&ccedil;eri&gbreve;e ba&scedil;ka kimse eri&scedil;emez";
 #endif
 
 const char *Txt_Non_editing_teachers_can_create_new_projects =
@@ -48915,39 +48914,6 @@ const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to
 #elif L==10	// tr
 	"The lower limit of correct answers"
 	" must be less than or equal to the upper limit.";		// Çeviri lazim!
-#endif
-
-const char *Txt_the_marks_of_a_student_chosen_at_random_ =
-#if   L==1	// ca
-	"se mostrar&aacute;n las calificaciones de un estudiante de la asignatura escogido al azar;<br />"
-	" si ve m&aacute;s de un estudiante, significa que los n&uacute;meros de filas de cabecera o de pie no son correctos";	// Necessita traducció
-#elif L==2	// de
-	"es wird die Bewertung eines nach dem Zufallsprinzip ausgew&auml;ten Studenten angezeigt;<br />"
-	" wenn Sie mehr als einen Student bedeutet dies, dass die Anzahl der Kopf oder Fuß von Zeilen ist nicht korrekt";
-#elif L==3	// en
-	"the marks of a student chosen at random from the course will be shown;<br />"
-	" if you see more than one student, it means that the number of header or footer rows is not correct";
-#elif L==4	// es
-	"se mostrar&aacute;n las calificaciones de un estudiante de la asignatura escogido al azar;<br />"
-	" si ve m&aacute;s de un estudiante, significa que los n&uacute;meros de filas de cabecera o de pie no son correctos";
-#elif L==5	// fr
-	"les notes d'un &eacute;tudiant choisi au hasard dans la mati&egrave;re seront pr&eacute;sent&eacute;s;<br />"
-	" si vous voyez plus d'un &eacute;tudiant, cela signifie que le nombre de ligned de la t&ecirc;te ou du pied n'est pas correcte";
-#elif L==6	// gn
-	"se mostrar&aacute;n las calificaciones de un estudiante de la asignatura escogido al azar;<br />"
-	" si ve m&aacute;s de un estudiante, significa que los n&uacute;meros de filas de cabecera o de pie no son correctos";	// Okoteve traducción
-#elif L==7	// it
-	"i risultati di uno studente scelto a caso dal corso verranno mostrati;<br />"
-	" se si vede pi&uacute; di uno studente, significa che il numero di righe di intestazione o a pi&egrave; di pagina non &egrave; corretto";
-#elif L==8	// pl
-	"the marks of a student chosen at random from the course will be shown;<br />"
-	" if you see more than one student, it means that the number of header or footer rows is not correct";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"vai mostrar as notas de um estudante da disciplina escolhido ao acaso;<br />"
-	" se voc&ecirc; vir mais de um estudante, isso significa que o n&uacute;mero de cabe&ccedil;a ou p&eacute; linhas n&atilde;o est&aacute; correto";
-#elif L==10	// tr
-	"the marks of a student chosen at random from the course will be shown;<br />"
-	" if you see more than one student, it means that the number of header or footer rows is not correct";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_maximum_number_of_students_in_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences

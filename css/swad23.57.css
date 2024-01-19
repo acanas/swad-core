@@ -2226,7 +2226,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	padding:10px;
 	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
-	text-align:center;
+	/* text-align:center; */
 	overflow:hidden;
 	}
 .FRAME_WHITE,
@@ -2742,14 +2742,17 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FILENAME_BIG_PINK	{color:#202020; font-size:18pt; font-weight:bold;}
 .FILENAME_BIG_DARK	{color:#f0f0f0; font-size:18pt; font-weight:bold;}
 
-.BROWSER_TITLE		{color:#94745C; font-size:12pt; font-weight:bold;}
+.BROWSER_TITLE			{color:#94745C; font-size:12pt; font-weight:bold;}
 .BROWSER_TITLE_LIGHT	{color:#D5C6BB; font-size:12pt; font-weight:bold;}
-.BROWSER_SUBTITLE	{color:#94745C; font-size:12pt;}
-.BROWSER_TABLE
+.BROWSER_SUBTITLE		{color:#94745C; font-size:11pt;}
+
+.BROWSER_ASG_WRK
 	{
-	box-sizing:border-box;
-	width:100%;
+	display: inline-block;
+	text-align: left;
+	vertical-align: top;
 	}
+
 .LST_WHITE,
 .LST_GREY,
 .LST_PURPLE,
@@ -2818,7 +2821,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .LST_EDIT_REC_HID_DARK		{color:#89be87; border-color:#404040;}
 
 .PUBLIC_FILE	{max-width:400px;}
-.LICENSE	{max-width:400px;}
+.LICENSE		{max-width:400px;}
 
 /************** Paragraph (margin on top and bottom of a div) ****************/
 .PAR
@@ -4403,7 +4406,7 @@ legend {font-size:12pt;}
 /************************** Owner of assignments and works *******************/
 .OWNER_WORKS_PHOTO
 	{
-	box-sizing:border-box;
+	display:inline-block;
 	width:64px;
 	text-align:left;
 	vertical-align:top;
@@ -4412,7 +4415,7 @@ legend {font-size:12pt;}
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:100px;
+	width:160px;
 	text-align:left;
 	vertical-align:top;
 	white-space:nowrap;
@@ -5258,7 +5261,7 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
     display: table;
     width: 100%;
 	}
-.TBL_SCROLL th,.TBL_SCROLL td {padding: 2px;}
+.TBL_SCROLL th,.TBL_SCROLL td {padding: 1px;}
 
 .Ind_TBL td,.Ind_TBL th
 	{

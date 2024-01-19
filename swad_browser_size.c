@@ -457,7 +457,7 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size
       if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type))
 	{
 	 Fil_WriteFileSizeFull ((double) Size->TotalSiz,FileSizeStr);
-	 HTM_TxtF ("%u %s; %lu %s; %lu %s; %s",
+	 HTM_TxtF ("%u %s; %lu %s; %lu %s",
 		   Size->NumLevls,
 		   Size->NumLevls == 1 ? Txt_level :
 					 Txt_levels ,
@@ -466,8 +466,9 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size
 					 Txt_folders,
 		   Size->NumFiles,
 		   Size->NumFiles == 1 ? Txt_file :
-					 Txt_files,
-		   FileSizeStr);
+					 Txt_files);
+	 HTM_BR ();
+	 HTM_Txt (FileSizeStr);
 
 	 if (Size->MaxQuota)
 	   {
@@ -481,8 +482,8 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct BrwSiz_BrowserSize *Size
 
 	 Brw_DB_StoreSizeOfFileBrowser (Size);
 	}
-      else
-	 HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
+      // else
+	//  HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
 
    HTM_DIV_End ();
   }
