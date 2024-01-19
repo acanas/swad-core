@@ -8616,7 +8616,7 @@ const char *Txt_Details =
 #elif L==5	// fr
 	"D&eacute;tails";
 #elif L==6	// gn
-	"Detalles";	// Okoteve traducción
+	"Sa'&ytilde;ijo pete&itilde;te&itilde;";
 #elif L==7	// it
 	"Dettagli";
 #elif L==8	// pl
@@ -8624,7 +8624,7 @@ const char *Txt_Details =
 #elif L==9	// pt
 	"Detalhes";
 #elif L==10	// tr
-	"Details";	// Çeviri lazim!
+	"Detaylar";
 #endif
 
 const char *Txt_Disclaimer_the_files_hosted_here_ =	// Warning: it is very important to include two %s in the following sentences

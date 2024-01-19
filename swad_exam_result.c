@@ -519,7 +519,7 @@ static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
    HTM_SECTION_Begin (ExaRes_RESULTS_BOX_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin ("100%",Title,
+      Box_BoxBegin (NULL,Title,
 		    NULL,NULL,
 		    Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
@@ -531,7 +531,7 @@ static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
 	 HTM_SECTION_Begin (ExaRes_RESULTS_TABLE_ID);
 
 	    /* Begin session results table */
-	    HTM_TABLE_BeginWidePadding (5);
+	    HTM_TABLE_Begin ("TBL_SCROLL");
   }
 
 static void ExaRes_ShowResultsEnd (void)
