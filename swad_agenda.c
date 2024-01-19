@@ -182,7 +182,7 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
    extern const char *Txt_My_agenda;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_My_agenda,
+   Box_BoxBegin (NULL,Txt_My_agenda,
                  Agd_PutIconsMyFullAgenda,Agenda,
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
@@ -398,7 +398,7 @@ void Agd_ShowUsrAgenda (void)
 	 MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
             Err_NotEnoughMemoryExit ();
-	 Box_BoxBegin ("100%",Title,
+	 Box_BoxBegin (NULL,Title,
 	               FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
 		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          free (Title);
@@ -458,7 +458,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	    if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin ("100%",Title,
+	    Box_BoxBegin (NULL,Title,
 	                  FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             free (Title);
@@ -522,7 +522,7 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
    if (Agenda->Num)
      {
       /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Table head *****/
 	 Agd_WriteHeaderListEvents (Agenda,AgendaType);

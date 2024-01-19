@@ -198,6 +198,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeeFlg		] = {1412,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowing		,NULL},
    [ActSeeFlr		] = {1413,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_ListFollowers		,NULL},
 
+   [ActSeeUsrAgd	] = {1611,-1,TabUnk,ActSeeSocPrf	,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowUsrAgenda		,NULL},
+
    [ActPrnCal		] = {1623,-1,TabUnk,ActSeeCal		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Cal_PrintCalendar		,NULL},
    [ActChgCal1stDay	] = {1624,-1,TabUnk,ActSeeCal		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Cal_ShowCalendar		,NULL},
 
@@ -1420,7 +1422,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActFrmLogInUsrAgd	] = {1614,-1,TabUnk,ActLstTch		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_PutFormLogInToShowUsrAgenda,NULL},
    [ActLogInUsrAgd	] = {1615,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowOtherAgendaAfterLogIn	,NULL},
    [ActLogInUsrAgdLan	] = {1616,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowOtherAgendaAfterLogIn	,NULL},
-   [ActSeeUsrAgd	] = {1611,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowUsrAgenda		,NULL},
 
    [ActReqEnrSevStd	] = {1426,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReqAdminStds		,NULL},
    [ActReqEnrSevNET	] = {1642,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReqAdminNonEditingTchs	,NULL},
