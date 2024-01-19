@@ -42381,7 +42381,7 @@ const char *Txt_Show_more_details =
 #elif L==5	// fr
 	"Montrer plus de d&eacute;tails";
 #elif L==6	// gn
-	"Mostrar m&aacute;s detalles";	// Okoteve traducción
+	"Ehechauka hetave detalle";
 #elif L==7	// it
 	"Mostra pi&ugrave; dettagli";
 #elif L==8	// pl
@@ -42389,7 +42389,7 @@ const char *Txt_Show_more_details =
 #elif L==9	// pt
 	"Mostrar mais detalhes";
 #elif L==10	// tr
-	"Show more details";		// Çeviri lazim!
+	"Daha fazla ayr&inodot;nt&inodot; g&ouml;ster";
 #endif
 
 const char *Txt_Show_more_recipients =
@@ -45119,7 +45119,7 @@ const char *Txt_Student_comment =
 #elif L==5	// fr
 	"Commentaire de l'&eacute;tudiant";
 #elif L==6	// gn
-	"Comentario del estudiante";	// Okoteve traducción
+	"Temimbo'e he'&iacute;va";
 #elif L==7	// it
 	"Commento di student";
 #elif L==8	// pl
@@ -45127,7 +45127,7 @@ const char *Txt_Student_comment =
 #elif L==9	// pt
 	"Coment&aacute;rio do estudante";
 #elif L==10	// tr
-	"Student's comment";		// Çeviri lazim!
+	"&Ouml;&gbreve;rencinin yorumu";
 #endif
 
 const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"

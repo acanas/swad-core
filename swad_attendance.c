@@ -230,7 +230,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
    Events->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Events,
+   Box_BoxBegin (NULL,Txt_Events,
                  Att_PutIconsInListOfEvents,Events,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
@@ -250,7 +250,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
       if (Events->Num)
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Table head *****/
 	    HTM_TR_Begin (NULL);
@@ -1501,7 +1501,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
 
 	 /***** List students (only me) *****/
 	 /* Begin table */
-	 HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /* Header */
 	    HTM_TR_Begin (NULL);
@@ -1579,7 +1579,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 	       Grp_PutParsCodGrps ();
 
 	       /* Begin table */
-	       HTM_TABLE_BeginWideMarginPadding (2);
+	       HTM_TABLE_Begin ("TBL_SCROLL");
 
 		  /* Header */
 		  HTM_TR_Begin (NULL);
@@ -2643,7 +2643,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	}
 
       /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Heading row *****/
 	 HTM_TR_Begin (NULL);
@@ -2772,7 +2772,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
    HTM_SECTION_Begin (Att_ATTENDANCE_TABLE_ID);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginCenterPadding (2);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Heading row *****/
 	 Att_WriteTableHeadSeveralAttEvents (Events);
@@ -3006,29 +3006,35 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
    /***** Begin section with attendance details *****/
    HTM_SECTION_Begin (Att_ATTENDANCE_DETAILS_ID);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Details,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Details,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-	 /***** List students with attendance details *****/
-	 for (NumUsr = 0;
-	      NumUsr < NumUsrsInList;
-	      NumUsr++)
-	   {
-	    UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
-							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
-	       if (Usr_CheckIfICanViewAtt (&UsrDat))
-		 {
-		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-		  Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);
-		 }
-	   }
+	 /***** Begin table *****/
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
+	    /***** List students with attendance details *****/
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrsInList;
+		 NumUsr++)
+	      {
+	       UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
+							    Usr_DONT_GET_PREFS,
+							    Usr_DONT_GET_ROLE_IN_CRS))
+		  if (Usr_CheckIfICanViewAtt (&UsrDat))
+		    {
+		     UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+		     Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);
+		    }
+	      }
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section with attendance details *****/
    HTM_SECTION_End ();
