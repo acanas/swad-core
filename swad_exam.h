@@ -66,7 +66,6 @@ void Exa_UnhideExam (void);
 
 void Exa_ReqCreatOrEditExam (void);
 void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
-			  struct ExaSet_Set *Set,
 			  Exa_ExistingNewExam_t ExistingNewExam);
 
 void Exa_ReceiveFormExam (void);

@@ -46,8 +46,7 @@ void ExaSet_ChangeNumQstsToExam (void);
 void ExaSet_ReqSelectQstsToAddToSet (void);
 void ExaSet_ListQstsToAddToSet (void);
 
-void ExaSet_ListExamSets (struct Exa_Exams *Exams,
-			  struct ExaSet_Set *Set);
+void ExaSet_ListExamSets (struct Exa_Exams *Exams);
 
 void ExaSet_ResetSet (struct ExaSet_Set *Set);
 void ExaSet_GetSetDataFromRow (MYSQL_RES *mysql_res,struct ExaSet_Set *Set);

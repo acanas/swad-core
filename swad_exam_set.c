@@ -203,7 +203,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	    HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			    " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			    " required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -260,7 +260,7 @@ void ExaSet_ReceiveFormSet (void)
       ExaSet_CreateSet (&Set);	// Add new set to database
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
@@ -347,7 +347,7 @@ void ExaSet_ChangeSetTitle (void)
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -393,7 +393,7 @@ void ExaSet_ChangeNumQstsToExam (void)
      }
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -438,7 +438,7 @@ void ExaSet_ReqSelectQstsToAddToSet (void)
    Qst_RequestSelectQstsForExamSet (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -466,15 +466,14 @@ void ExaSet_ListQstsToAddToSet (void)
    Qst_ListQuestionsToSelectForExamSet (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
 /************************* List the sets of an exam **************************/
 /*****************************************************************************/
 
-void ExaSet_ListExamSets (struct Exa_Exams *Exams,
-			  struct ExaSet_Set *Set)
+void ExaSet_ListExamSets (struct Exa_Exams *Exams)
   {
    extern const char *Hlp_ASSESSMENT_Exams_question_sets;
    extern const char *Txt_Sets_of_questions;
@@ -495,18 +494,13 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 		 Hlp_ASSESSMENT_Exams_question_sets,Box_NOT_CLOSABLE);
 
       /***** Show table with sets *****/
-      if (NumSets)
-	 ExaSet_ListOneOrMoreSetsForEdition (Exams,
-					     MaxSetInd,
-					     NumSets,mysql_res,
-					     ICanEditSets);
+      ExaSet_ListOneOrMoreSetsForEdition (Exams,
+					  MaxSetInd,
+					  NumSets,mysql_res,
+					  ICanEditSets);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
-
-      /***** Put forms to create/edit a set *****/
-      if (ICanEditSets)
-	 ExaSet_PutFormNewSet (Exams,Set,MaxSetInd);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -555,21 +549,17 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
                                                 MYSQL_RES *mysql_res,
                                                 bool ICanEditSets)
   {
-   extern const char *Txt_Sets_of_questions;
    extern const char *Txt_Movement_not_allowed;
    unsigned NumSet;
    struct ExaSet_Set Set;
    char *Anchor;
 
-   /***** Trivial check *****/
-   if (!NumSets)
-      return;
-
    /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write the heading *****/
-      ExaSet_PutTableHeadingForSets ();
+      if (NumSets)
+	 ExaSet_PutTableHeadingForSets ();
 
       /***** Write rows *****/
       for (NumSet = 0, The_ResetRowColor ();
@@ -639,7 +629,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
 					HTM_SUBMIT_ON_CHANGE,
 					"id=\"Title\""
-					" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+					" class=\"REC_C2_BOT_INPUT INPUT_%s\""
 					" required=\"required\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -702,6 +692,17 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 /***** Free anchor string *****/
 	 Frm_FreeAnchorStr (&Anchor);
 	}
+
+      /***** Put form to create a new set *****/
+      if (ICanEditSets)
+        {
+	 /* Put form to create new set */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",The_GetColorRows ());
+	       ExaSet_PutFormNewSet (Exams,&Set,MaxSetInd);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+        }
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -805,14 +806,14 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
      };
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
+   HTM_TABLE_BeginWidePadding (2);
 
       /***** Write the heading *****/
       HTM_TR_Begin (NULL);
 
 	 HTM_TH_Empty (1);
-         HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
-         HTM_TH (Txt_Question,HTM_HEAD_CENTER);
+         HTM_TH (Txt_No_INDEX,HTM_HEAD_RIGHT);
+         HTM_TH (Txt_Question,HTM_HEAD_LEFT);
 
       HTM_TR_End ();
 
@@ -1132,7 +1133,7 @@ void ExaSet_AddQstsToSet (void)
    ExaSet_FreeListsSelectedQuestions (&Exams);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1260,7 +1261,7 @@ void ExaSet_ReqRemSet (void)
 			Set.Title);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1299,7 +1300,7 @@ void ExaSet_RemoveSet (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Set_of_questions_removed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1344,7 +1345,7 @@ void ExaSet_MoveUpSet (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1393,7 +1394,7 @@ void ExaSet_MoveDownSet (void)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1429,7 +1430,7 @@ void ExaSet_ReqRemQstFromSet (void)
    Frm_FreeAnchorStr (&Anchor);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1465,7 +1466,7 @@ void ExaSet_RemoveQstFromSet (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/
@@ -1540,7 +1541,7 @@ static void ExaSet_ChangeValidityQst (Qst_Validity_t Validity)
                              Validity);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,Exa_EXISTING_EXAM);
+   Exa_PutFormsOneExam (&Exams,Exa_EXISTING_EXAM);
   }
 
 /*****************************************************************************/

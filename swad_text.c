@@ -41659,7 +41659,7 @@ const char *Txt_Sets_of_questions =
 #elif L==5	// fr
 	"Ensembles de questions";
 #elif L==6	// gn
-	"Conjuntos de preguntas";	// Okoteve traducción
+	"Porandu &ntilde;emohenda";
 #elif L==7	// it
 	"Set di domande";
 #elif L==8	// pl
@@ -41667,7 +41667,7 @@ const char *Txt_Sets_of_questions =
 #elif L==9	// pt
 	"Conjuntos de perguntas";
 #elif L==10	// tr
-	"Sets of questions";		// Çeviri lazim!
+	"Soru setleri";
 #endif
 
 const char *Txt_Settings =

@@ -1214,7 +1214,6 @@ static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible)
 void Exa_ReqCreatOrEditExam (void)
   {
    struct Exa_Exams Exams;
-   struct ExaSet_Set Set;
    Exa_ExistingNewExam_t ExistingNewExam;
 
    /***** Check if I can edit exams *****/
@@ -1224,7 +1223,6 @@ void Exa_ReqCreatOrEditExam (void)
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exams.Exam);
-   ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
@@ -1243,7 +1241,7 @@ void Exa_ReqCreatOrEditExam (void)
      }
 
    /***** Put form to create/edit an exam and show sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,ExistingNewExam);
+   Exa_PutFormsOneExam (&Exams,ExistingNewExam);
   }
 
 /*****************************************************************************/
@@ -1251,7 +1249,6 @@ void Exa_ReqCreatOrEditExam (void)
 /*****************************************************************************/
 
 void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
-			  struct ExaSet_Set *Set,
 			  Exa_ExistingNewExam_t ExistingNewExam)
   {
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
@@ -1281,9 +1278,8 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 Exams->Exam.Title[0] ? Exams->Exam.Title :
-					Txt_Exam,
+   Box_BoxBegin (NULL,Exams->Exam.Title[0] ? Exams->Exam.Title :
+					     Txt_Exam,
 		 FunctionToDrawContextualIcons[ExistingNewExam],Exams,
 		 *HelpLink[ExistingNewExam],Box_NOT_CLOSABLE);
 
@@ -1292,7 +1288,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 
       /***** Show list of sets inside box *****/
       if (ExistingNewExam == Exa_EXISTING_EXAM)
-	 ExaSet_ListExamSets (Exams,Set);
+	 ExaSet_ListExamSets (Exams);
 
    /***** End box ****/
    Box_BoxEnd ();
@@ -1343,14 +1339,14 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	    Frm_LabelColumn ("REC_C1_BOT RM","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	       HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1360,11 +1356,11 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 /***** Maximum grade *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"REC_C1_BOT RM FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColon (Txt_Maximum_grade);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,
 				HTM_DONT_SUBMIT_ON_CHANGE,false,
 				" class=\"INPUT_%s\" required=\"required\"",
@@ -1375,8 +1371,10 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
 	 /***** Visibility of results *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_TxtColon (Txt_Result_visibility);
-	    HTM_TD_Begin ("class=\"LB\"");
+	    HTM_TD_Begin ("class=\"REC_C1_BOT RT FORM_IN_%s\"",The_GetSuffix ());
+	       HTM_TxtColon (Txt_Result_visibility);
+	    HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LB\"");
 	       TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -1385,12 +1383,12 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  HTM_Txt (Txt);
 	       HTM_TEXTAREA_End ();
@@ -1416,7 +1414,6 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 void Exa_ReceiveFormExam (void)
   {
    struct Exa_Exams Exams;
-   struct ExaSet_Set Set;
    Exa_ExistingNewExam_t ExistingNewExam;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1427,7 +1424,6 @@ void Exa_ReceiveFormExam (void)
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
    Exa_ResetExam (&Exams.Exam);
-   ExaSet_ResetSet (&Set);
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
@@ -1465,7 +1461,7 @@ void Exa_ReceiveFormExam (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show current exam and its sets *****/
-   Exa_PutFormsOneExam (&Exams,&Set,ExistingNewExam);
+   Exa_PutFormsOneExam (&Exams,ExistingNewExam);
   }
 
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
