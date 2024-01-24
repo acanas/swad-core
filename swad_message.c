@@ -340,7 +340,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 		  else
 		    {
 		     /***** Show potential recipients *****/
-		     HTM_TABLE_BeginWide ();
+		     HTM_TABLE_Begin ("TBL_SCROLL");
 			if (ShowUsrsInCrs)
 			  {
 			   Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course

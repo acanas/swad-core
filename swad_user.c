@@ -3756,10 +3756,13 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 
 		     /* Put list of users to select some of them */
 		     HTM_TR_Begin (NULL);
-			HTM_TD_TxtColon (Txt_Users);
+			/* Label */
+			Frm_LabelColumn ("RT","Txt",Txt_Users);
+
+			/* Data */
 			HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
 				      The_GetSuffix ());
-			   HTM_TABLE_BeginCenterPadding (2);
+		           HTM_TABLE_Begin ("TBL_SCROLL");
 			      Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
 			      Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
 			      Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
@@ -4932,7 +4935,7 @@ void Usr_ListDataAdms (void)
 	 HTM_DIV_End ();
 
 	 /***** Heading row with column names *****/
-	 HTM_TABLE_Begin (NULL);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 	    HTM_TR_Begin (NULL);
 
 	       for (NumCol = 0;
@@ -5087,7 +5090,7 @@ void Usr_SeeGuests (void)
 		  Frm_BeginForm (ActDoActOnSevGst);
 
 	       /* Begin table */
-	       HTM_TABLE_BeginWide ();
+	       HTM_TABLE_Begin ("TBL_SCROLL");
 
 		  /* Draw the classphoto/list */
 		  switch (Gbl.Usrs.Me.ListType)
@@ -5241,7 +5244,7 @@ void Usr_SeeStudents (void)
 		 }
 
 	       /* Begin table */
-	       HTM_TABLE_BeginWide ();
+	       HTM_TABLE_Begin ("TBL_SCROLL");
 
 		  /* Draw the classphoto/list */
 		  switch (Gbl.Usrs.Me.ListType)
@@ -5408,7 +5411,7 @@ void Usr_SeeTeachers (void)
 		 }
 
 	       /* Begin table */
-	       HTM_TABLE_BeginWide ();
+	       HTM_TABLE_Begin ("TBL_SCROLL");
 
 		  /***** Draw the classphoto/list  *****/
 		  switch (Gbl.Usrs.Me.ListType)

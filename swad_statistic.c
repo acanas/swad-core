@@ -308,7 +308,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			/* Data */
 			HTM_TD_Begin ("class=\"REC_C2_BOT LT FORM_IN_%s\"",
 			              The_GetSuffix ());
-			   HTM_TABLE_Begin (NULL);
+		           HTM_TABLE_Begin ("TBL_SCROLL");
 			      Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
 			      Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
 			      Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
