@@ -1801,7 +1801,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemSvyQst	] = { 981,-1,TabUnk,ActSeeAllSvy	,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Svy_RemoveQst			,NULL},
 
    [ActSeeAccGbl	] = {  79,-1,TabUnk,ActReqAccGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_SeeGblAccesses		,NULL},
-   [ActReqAccCrs	] = { 594,-1,TabUnk,ActReqAccGbl	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDatesToRecentWeeks,Sta_AskShowCrsHits		,NULL},
+   [ActReqAccCrs	] = { 594,-1,TabUnk,ActReqAccGbl	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDatesToRecentWeeks,Sta_ReqCrsHits		,NULL},
    [ActSeeAccCrs	] = { 119,-1,TabUnk,ActReqAccGbl	,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_SeeCrsAccesses		,NULL},
 
    [ActLstClk		] = { 989,-1,TabUnk,ActReqAccGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Log_ShowLastClicks		,NULL},

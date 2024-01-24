@@ -192,10 +192,10 @@ void Sta_ResetStats (struct Sta_Stats *Stats)
   }
 
 /*****************************************************************************/
-/******************** Show a form to make a query of clicks ******************/
+/**************** Show a form to make a query of course hits *****************/
 /*****************************************************************************/
 
-void Sta_AskShowCrsHits (void)
+void Sta_ReqCrsHits (void)
   {
    struct Sta_Stats Stats;
 
@@ -212,6 +212,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
    extern const char *Txt_Show;
+   extern const char *Txt_Graph;
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
    extern const char *Txt_results_per_page;
@@ -296,12 +297,16 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		  Par_PutParLong (NULL,"FirstRow",0);
 		  Par_PutParLong (NULL,"LastRow",0);
 
-		  /***** Put list of users to select some of them *****/
 		  HTM_TABLE_BeginCenterPadding (2);
 
+		     /***** List of users to select some of them *****/
 		     HTM_TR_Begin (NULL);
-			HTM_TD_TxtColon (Txt_Users);
-			HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
+
+			/* Label */
+			Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Users);
+
+			/* Data */
+			HTM_TD_Begin ("class=\"REC_C2_BOT LT FORM_IN_%s\"",
 			              The_GetSuffix ());
 			   HTM_TABLE_Begin (NULL);
 			      Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
@@ -327,26 +332,33 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		     /***** Selection of action *****/
 		     Sta_WriteSelectorAction (Stats);
 
-		     /***** Option a) Listing of clicks distributed by some metric *****/
+		     /***** Listing of clicks (graphic or detailed) *****/
 		     HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
-			              The_GetSuffix ());
-			   HTM_TxtColon (Txt_Show);
-			HTM_TD_End ();
+			/* Label */
+			Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Show);
 
-			HTM_TD_Begin ("class=\"LM\"");
+			/* Data */
+			HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
 			   if ((Stats->ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
 				Stats->ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
 				Stats->ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
 			      Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
 
-			   HTM_INPUT_RADIO ("GroupedOrDetailed",HTM_DONT_SUBMIT_ON_CLICK,
-					    "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
-					    (unsigned) Sta_CLICKS_GROUPED,
-					    Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
-												     " checked=\"checked\"");
+			   /***** Option a) Graphic of clicks in this course *****/
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
+					    The_GetSuffix ());
+			      HTM_INPUT_RADIO ("GroupedOrDetailed",HTM_DONT_SUBMIT_ON_CLICK,
+					       "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
+					       (unsigned) Sta_CLICKS_GROUPED,
+					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+													" checked=\"checked\"");
+			      HTM_Txt (Txt_Graph);
+			   HTM_LABEL_End ();
+
+			   /* Separator */
+			   HTM_BR ();
 
 			   /* Selection of count type (number of pages generated, accesses per user, etc.) */
 			   Sta_WriteSelectorCountType (Stats);
@@ -377,7 +389,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
 			   /***** Option b) Listing of detailed clicks to this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-			                    The_GetSuffix ());
+					    The_GetSuffix ());
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",HTM_DONT_SUBMIT_ON_CLICK,
 					       "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_DETAILED,
@@ -387,7 +399,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   HTM_LABEL_End ();
 
 			   /* Separator */
-			   HTM_SP ();
+			   HTM_BR ();
 
 			   /* Number of rows per page */
 			   // To use getElementById in Firefox, it's necessary to have the id attribute

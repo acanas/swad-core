@@ -14995,6 +14995,29 @@ const char *Txt_Grade =
 	"Vas&inodot;f";
 #endif
 
+const char *Txt_Graph =
+#if   L==1	// ca
+	"Gr&agrave;fica";
+#elif L==2	// de
+	"Graph";
+#elif L==3	// en
+	"Graph";
+#elif L==4	// es
+	"Gr&aacute;fica";
+#elif L==5	// fr
+	"Graphique";
+#elif L==6	// gn
+	"Gr&aacute;fica";	// Okoteve traducción
+#elif L==7	// it
+	"Grafico";
+#elif L==8	// pl
+	"Wykres";
+#elif L==9	// pt
+	"Gr&aacute;fico";
+#elif L==10	// tr
+	"Grafik";
+#endif
+
 const char *Txt_Group =
 #if   L==1	// ca
 	"Grup";
@@ -42764,25 +42787,25 @@ const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
 	{
 	[Sta_CLICKS_CRS_DETAILED_LIST] =
 #if   L==1	// ca
-	"clics detallats"
+	"Clics detallats"
 #elif L==2	// de
-	"detaillierte Klicks"
+	"Detaillierte Klicks"
 #elif L==3	// en
-	"detailed clicks"
+	"Detailed clicks"
 #elif L==4	// es
-	"clics detallados"
+	"Clics detallados"
 #elif L==5	// fr
-	"clics d&eacute;taill&eacute;es"
+	"Clics d&eacute;taill&eacute;es"
 #elif L==6	// gn
-	"clics detallados"	// Okoteve traducción
+	"Clics detallados"	// Okoteve traducción
 #elif L==7	// it
-	"dettagli di scatto"
+	"Dettagli di scatto"
 #elif L==8	// pl
-	"szczeg&oacute;&lstrok;owe klikni&eogon;&cacute;"
+	"Szczeg&oacute;&lstrok;owe klikni&eogon;&cacute;"
 #elif L==9	// pt
-	"detalhadamente cliques"
+	"Detalhadamente cliques"
 #elif L==10	// tr
-	"detailed clicks"	// Çeviri lazim!
+	"Detailed clicks"	// Çeviri lazim!
 #endif
 	,
 	[Sta_CLICKS_CRS_PER_USR] =

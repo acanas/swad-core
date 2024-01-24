@@ -152,7 +152,7 @@ struct Sta_Stats
 
 void Sta_ResetStats (struct Sta_Stats *Stats);
 
-void Sta_AskShowCrsHits (void);
+void Sta_ReqCrsHits (void);
 void Sta_AskShowGblHits (void);
 void Sta_PutLinkToCourseHits (void);
 void Sta_PutLinkToGlobalHits (void);

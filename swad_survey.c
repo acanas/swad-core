@@ -1701,7 +1701,7 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Users);
+	    Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Users);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
