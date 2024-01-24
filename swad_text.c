@@ -44948,7 +44948,7 @@ const char *Txt_Statistic =
 
 const char *Txt_Statistics_of_all_visits =
 #if   L==1	// ca
-	"Estad&iacute;stica de todos los accesos";	// Necessita traducció
+	"Estad&iacute;stica de tots els accessos";
 #elif L==2	// de
 	"Statistik aller Besuche";
 #elif L==3	// en
@@ -44958,7 +44958,7 @@ const char *Txt_Statistics_of_all_visits =
 #elif L==5	// fr
 	"Statistiques de toutes les visites";
 #elif L==6	// gn
-	"Estad&iacute;stica de todos los accesos";	// Okoteve traducción
+	"Estad&iacute;stica opaite jeike rehegua";
 #elif L==7	// it
 	"Statistiche di tutte gli accessi";
 #elif L==8	// pl
@@ -44966,7 +44966,7 @@ const char *Txt_Statistics_of_all_visits =
 #elif L==9	// pt
 	"Estat&iacute;sticas de todas as visitas";
 #elif L==10	// tr
-	"Statistics of all visits";			// Çeviri lazim!
+	"T&uuml;m ziyaretlerin istatistikleri";
 #endif
 
 const char *Txt_Statistics_of_visits_to_the_course_X =	// Warning: it is very important to include %s in the following sentences

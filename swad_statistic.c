@@ -501,10 +501,10 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Role",Txt_Users);
+	    Frm_LabelColumn ("REC_C1_BOT RT","Role",Txt_Users);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C1_BOT LT\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"Role\" name=\"Role\""
 				 " class=\"STAT_SEL INPUT_%s\"",
@@ -532,10 +532,10 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","ScopeSta",Txt_Scope);
+	    Frm_LabelColumn ("REC_C1_BOT RT","ScopeSta",Txt_Scope);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C1_BOT LT\"");
 	       Gbl.Scope.Allowed = 1 << Hie_SYS |
 				   1 << Hie_CTY |
 				   1 << Hie_INS |
@@ -552,10 +552,10 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","CountType",Txt_Show);
+	    Frm_LabelColumn ("REC_C1_BOT RT","CountType",Txt_Show);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C1_BOT LT\"");
 	       Sta_WriteSelectorCountType (Stats);
 
 	       /***** Type of statistic *****/
