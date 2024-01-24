@@ -34208,25 +34208,25 @@ const char *Txt_Required_reading =
 
 const char *Txt_Reset_survey =
 #if   L==1	// ca
-	"Posar enquesta a zero";
+	"Posar a zero";
 #elif L==2	// de
-	"Reset Umfrage";
+	"Reset";
 #elif L==3	// en
-	"Reset survey";
+	"Reset";
 #elif L==4	// es
-	"Poner encuesta a cero";
+	"Poner a cero";
 #elif L==5	// fr
-	"Reset sondage";
+	"Reset";
 #elif L==6	// gn
-	"Poner encuesta a cero";	// Okoteve traducción
+	"Poner a cero";		// Okoteve traducción
 #elif L==7	// it
-	"Resettare sondaggio";
+	"Resettare";
 #elif L==8	// pl
-	"Reset badania";
+	"Reset";
 #elif L==9	// pt
-	"Reiniciar inqu&eacute;rito";
+	"Reiniciar";
 #elif L==10	// tr
-	"Reset survey";			// Çeviri lazim!
+	"S&inodot;f&inodot;rla";
 #endif
 
 const char *Txt_Resource_clipboard =

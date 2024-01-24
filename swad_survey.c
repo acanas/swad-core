@@ -201,7 +201,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
    Surveys->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Surveys,
+   Box_BoxBegin (NULL,Txt_Surveys,
                  Svy_PutIconsListSurveys,Surveys,
                  Hlp_ANALYTICS_Surveys,Box_NOT_CLOSABLE);
 
@@ -221,7 +221,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
       if (Surveys->Num)
 	{
 	 /***** Table head *****/
-	 HTM_TABLE_BeginWideMarginPadding (5);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 	    HTM_TR_Begin (NULL);
 
 	       if (Surveys->Svy.Status.ICanEdit ||
@@ -1645,10 +1645,10 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","ScopeSvy",Txt_Scope);
+	    Frm_LabelColumn ("REC_C1_BOT RT","ScopeSvy",Txt_Scope);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       Svy_SetAllowedScopes (&Surveys.Svy);
 	       Sco_GetScope ("ScopeSvy",Surveys.Svy.Level);
 	       Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
@@ -1660,14 +1660,14 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	    Frm_LabelColumn ("REC_C1_BOT RT","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Surveys.Svy.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1683,12 +1683,12 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewSurvey)
 		     HTM_Txt (Txt);
@@ -1699,7 +1699,11 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	 /***** Users' roles who can answer the survey *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_TxtColon (Txt_Users);
+
+	    /* Label */
+	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Users);
+
+	    /* Data */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       Rol_WriteSelectorRoles (1 << Rol_STD |
 				       1 << Rol_NET |
@@ -1721,6 +1725,8 @@ void Svy_ReqCreatOrEditSvy (void)
 
    /***** End form *****/
    Frm_EndForm ();
+
+   HTM_BR ();
 
    /***** Show questions of the survey ready to be edited *****/
    if (!ItsANewSurvey)
@@ -2630,7 +2636,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 	}
 
       /***** Write the heading *****/
-      HTM_TABLE_BeginWideMarginPadding (5);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 HTM_TR_Begin (NULL);
 	    if (Surveys->Svy.Status.ICanEdit)
