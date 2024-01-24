@@ -122,108 +122,110 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	             Txt_If_you_can_not_find_your_institution_your_center_your_degree_or_your_courses_you_can_create_them);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_What_would_you_like_to_do,
-                      NULL,NULL,
-                      NULL,Box_CLOSABLE,2);
+   HTM_DIV_Begin (NULL);
+      Box_BoxTableBegin (NULL,Txt_What_would_you_like_to_do,
+			 NULL,NULL,
+			 NULL,Box_CLOSABLE,2);
 
-      if (Gbl.Usrs.Me.Logged)		// I am logged
-	{
-	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
+	 if (Gbl.Usrs.Me.Logged)		// I am logged
 	   {
-	    if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])	// I belong to this course
+	    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	      {
-	       if (Gbl.Action.Act != ActLogIn &&
-		   Gbl.Action.Act != ActLogInNew &&
-		   Gbl.Action.Act != ActLogInLan)	// I am not just logged
-		  if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
-		    {
-		     /***** Request my removing from this course *****/
-		     if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
-		                   Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
-			Err_NotEnoughMemoryExit ();
-		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-							  ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
-							  Btn_REMOVE_BUTTON,Txt_Remove_me);
-		     free (Description);
-		    }
-	      }
-	    else					// I do not belong to this course
-	      {
-	       /***** Request my registration in this course *****/
-	       if (asprintf (&Description,Txt_Register_me_in_X,
-			     Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						    ActReqSignUp,
-						    Btn_CREATE_BUTTON,Txt_Sign_up);
-	       free (Description);
-	      }
-	   }
-
-	 if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I am enroled in some courses
-	   {
-	    if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
-		Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
-	       if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						1 << Rol_STD))		// Current course probably has no students
+	       if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])	// I belong to this course
 		 {
-		  /***** Request students enrolment *****/
-		  if (asprintf (&Description,Txt_Register_students_in_COURSE_X,
+		  if (Gbl.Action.Act != ActLogIn &&
+		      Gbl.Action.Act != ActLogInNew &&
+		      Gbl.Action.Act != ActLogInLan)	// I am not just logged
+		     if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
+		       {
+			/***** Request my removing from this course *****/
+			if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
+				      Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
+			   Err_NotEnoughMemoryExit ();
+			Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+							     ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
+							     Btn_REMOVE_BUTTON,Txt_Remove_me);
+			free (Description);
+		       }
+		 }
+	       else					// I do not belong to this course
+		 {
+		  /***** Request my registration in this course *****/
+		  if (asprintf (&Description,Txt_Register_me_in_X,
 				Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						       ActReqEnrSevStd,
-						       Btn_CREATE_BUTTON,Txt_Register_students);
+						       ActReqSignUp,
+						       Btn_CREATE_BUTTON,Txt_Sign_up);
 		  free (Description);
 		 }
+	      }
 
-	    if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
-	       /***** Request list my courses *****/
-	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
-						    ActMyCrs,
-						    Btn_CONFIRM_BUTTON,Txt_My_courses);
+	    if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I am enroled in some courses
+	      {
+	       if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
+		   Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
+		  if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+						   1 << Rol_STD))		// Current course probably has no students
+		    {
+		     /***** Request students enrolment *****/
+		     if (asprintf (&Description,Txt_Register_students_in_COURSE_X,
+				   Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
+			Err_NotEnoughMemoryExit ();
+		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+							  ActReqEnrSevStd,
+							  Btn_CREATE_BUTTON,Txt_Register_students);
+		     free (Description);
+		    }
+
+	       if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
+		  /***** Request list my courses *****/
+		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
+						       ActMyCrs,
+						       Btn_CONFIRM_BUTTON,Txt_My_courses);
+	      }
+
+	    /***** Go to list of hierarchy subnodes
+		   to select or create a new one *****/
+	    if (Gbl.Hierarchy.Level >= Hie_SYS &&
+		Gbl.Hierarchy.Level <= Hie_DEG)
+	      {
+	       if (asprintf (&Description,*(SelectOrCreate[Gbl.Hierarchy.Level].Description),
+			     Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+						    SelectOrCreate[Gbl.Hierarchy.Level].Action,
+						    Btn_CONFIRM_BUTTON,
+						    Txt_HIERARCHY_PLURAL_Abc[Gbl.Hierarchy.Level + 1]);
+	       free (Description);
+	      }
+
+	    if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
+	       /***** Upload my photo *****/
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
+						    ActReqMyPho,
+						    Btn_CREATE_BUTTON,Txt_Upload_photo);
 	   }
-
-	 /***** Go to list of hierarchy subnodes
-	        to select or create a new one *****/
-	 if (Gbl.Hierarchy.Level >= Hie_SYS &&
-	     Gbl.Hierarchy.Level <= Hie_DEG)
+	 else					// I am not logged
 	   {
-	    if (asprintf (&Description,*(SelectOrCreate[Gbl.Hierarchy.Level].Description),
-			  Gbl.Hierarchy.Node[Gbl.Hierarchy.Level].ShrtName) < 0)
+	    /***** Log in *****/
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
+						 ActFrmLogIn,
+						 Btn_CONFIRM_BUTTON,Txt_Log_in);
+
+	    /***** Sign up *****/
+	    if (asprintf (&Description,Txt_New_on_PLATFORM_Sign_up,
+			  Cfg_PLATFORM_SHORT_NAME) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						 SelectOrCreate[Gbl.Hierarchy.Level].Action,
-						 Btn_CONFIRM_BUTTON,
-						 Txt_HIERARCHY_PLURAL_Abc[Gbl.Hierarchy.Level + 1]);
+						 ActFrmMyAcc,
+						 Btn_CREATE_BUTTON,Txt_Actions[ActCreUsrAcc]);
 	    free (Description);
 	   }
 
-	 if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
-	    /***** Upload my photo *****/
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
-						 ActReqMyPho,
-						 Btn_CREATE_BUTTON,Txt_Upload_photo);
-	}
-      else					// I am not logged
-	{
-	 /***** Log in *****/
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
-					      ActFrmLogIn,
-					      Btn_CONFIRM_BUTTON,Txt_Log_in);
-
-	 /***** Sign up *****/
-	 if (asprintf (&Description,Txt_New_on_PLATFORM_Sign_up,
-	               Cfg_PLATFORM_SHORT_NAME) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-					      ActFrmMyAcc,
-					      Btn_CREATE_BUTTON,Txt_Actions[ActCreUsrAcc]);
-	 free (Description);
-	}
-
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      /***** End table and box *****/
+      Box_BoxTableEnd ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

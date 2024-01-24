@@ -520,7 +520,7 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    bool ICanEditQuestions = Exa_CheckIfEditable (&Exams->Exam);
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Questions,
+   Box_BoxBegin (NULL,Txt_Questions,
 		 ICanEditQuestions ? ExaSet_PutIconToAddNewQuestions :
 				     NULL,
 		 ICanEditQuestions ? Exams :

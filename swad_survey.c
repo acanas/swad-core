@@ -1820,11 +1820,13 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
      {
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_TxtColon (Txt_Groups);
-	 HTM_TD_Begin ("class=\"LT\"");
-	    Box_BoxTableBegin ("100%",NULL,
-			       NULL,NULL,
-			       NULL,Box_NOT_CLOSABLE,0);
+
+         /* Label */
+	 Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Groups);
+
+	 /* Groups */
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TABLE_Begin (NULL);
 
 	    /***** First row: checkbox to select the whole course *****/
 	    HTM_TR_Begin (NULL);
@@ -1852,8 +1854,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 		  Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
 						     Grp_SURVEY,SvyCod);
 
-	    /***** End table and box *****/
-	    Box_BoxTableEnd ();
+	    HTM_TABLE_End ();
 	 HTM_TD_End ();
       HTM_TR_End ();
      }

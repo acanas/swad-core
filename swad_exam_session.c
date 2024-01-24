@@ -943,10 +943,10 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	    Frm_LabelColumn ("REC_C1_BOT RT","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\" class=\"REC_C2_BOT_INPUT INPUT_%s\""
@@ -993,13 +993,15 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 
    if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
      {
-      /***** Begin box and table *****/
+      /***** Begin row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_TxtColon (Txt_Groups);
-	 HTM_TD_Begin ("class=\"LT\"");
-	    Box_BoxTableBegin ("100%",NULL,
-			       NULL,NULL,
-			       NULL,Box_NOT_CLOSABLE,0);
+
+         /* Label */
+	 Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Groups);
+
+	 /* Groups */
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TABLE_Begin (NULL);
 
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
@@ -1029,8 +1031,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
 							Grp_EXA_EVENT,SesCod);
 
-	    /***** End table and box *****/
-	    Box_BoxTableEnd ();
+	    HTM_TABLE_End ();
 	 HTM_TD_End ();
       HTM_TR_End ();
      }

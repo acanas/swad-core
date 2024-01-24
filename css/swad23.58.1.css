@@ -1089,8 +1089,7 @@ a:hover						/* Default ==> underlined */
 	width:100%;
 	padding:4px 8px;
 	margin:0 auto;
-	text-align:left;
-	vertical-align:top;
+	text-align:center;
 	}
 
 /************** Main central zone with vertical menu and canvas **************/
@@ -1151,8 +1150,7 @@ a:hover						/* Default ==> underlined */
 		width:100%;
 		padding:4px 8px;
 		margin:0 auto;
-		text-align:left;
-		vertical-align:top;
+		text-align:center;
 		}
 	#action_title	/* Do not display action title */
 		{
@@ -1215,8 +1213,7 @@ a:hover						/* Default ==> underlined */
 		box-sizing:border-box;
 		padding:4px 8px;
 		margin:0 auto;
-		text-align:left;
-		vertical-align:top;
+		text-align:center;
 		}
 	#action_title
 		{
@@ -2211,13 +2208,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	margin:0 8px;
 	vertical-align:top;
 	}
-.FRAME_CONT
-	{
-	box-sizing:border-box;
-	width:100%;
-	text-align:center;
-	}
-
 .FRAME
 	{
 	display:inline-block;
@@ -2226,7 +2216,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	padding:10px;
 	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
-	/* text-align:center; */
+	text-align:center;
 	overflow:hidden;
 	}
 .FRAME_WHITE,

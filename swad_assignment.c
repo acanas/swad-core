@@ -1148,8 +1148,7 @@ void Asg_ReqCreatOrEditAsg (void)
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
    extern const char *Txt_Assignment;
    extern const char *Txt_Title;
-   extern const char *Txt_Upload_files_QUESTION;
-   extern const char *Txt_Folder;
+   extern const char *Folder_to_upload_files;
    extern const char *Txt_Description;
    extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
@@ -1224,14 +1223,14 @@ void Asg_ReqCreatOrEditAsg (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RM","Title",Txt_Title);
+	    Frm_LabelColumn ("REC_C1_BOT RM","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments.Asg.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1248,15 +1247,15 @@ void Asg_ReqCreatOrEditAsg (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RM","Folder",Txt_Upload_files_QUESTION);
+	    Frm_LabelColumn ("REC_C1_BOT RM","Folder",Folder_to_upload_files);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		  HTM_TxtColon (Txt_Folder);
 		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments.Asg.Folder,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"Folder\" size=\"30\" class=\"INPUT_%s\"",
+				  "id=\"Folder\""
+				  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -1267,12 +1266,12 @@ void Asg_ReqCreatOrEditAsg (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewAssignment)
 		     HTM_Txt (Txt);
@@ -1303,7 +1302,6 @@ void Asg_ReqCreatOrEditAsg (void)
 
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
-   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1313,29 +1311,30 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
    if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
      {
-      /***** Begin box and table *****/
+      /***** Begin row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_TxtColon (Txt_Groups);
-	 HTM_TD_Begin ("class=\"LT\"");
 
-	    Box_BoxTableBegin ("100%",NULL,
-			       NULL,NULL,
-			       Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
+         /* Label */
+	 Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Groups);
+
+	 /* Groups */
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TABLE_Begin (NULL);
 
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
-		                The_GetSuffix ());
+				The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
 					    Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
-					                                    "AsgCod",
-					                                    AsgCod) ? "" :
+									    "AsgCod",
+									    AsgCod) ? "" :
 										      " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-			          Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -1348,9 +1347,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
 							Grp_ASSIGNMENT,AsgCod);
 
-	    /***** End table and box *****/
-	    Box_BoxTableEnd ();
-
+	    HTM_TABLE_End ();
 	 HTM_TD_End ();
       HTM_TR_End ();
      }

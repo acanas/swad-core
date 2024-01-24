@@ -13326,6 +13326,29 @@ const char *Txt_Folder_X_removed =	// Warning: it is very important to include %
 	"Folder <strong>%s</strong> removed.";		// Çeviri lazim!
 #endif
 
+const char *Folder_to_upload_files =
+#if   L==1	// ca
+	"Carpeta per pujar arxius?";
+#elif L==2	// de
+	"Ordner zum Hochladen von Dateien?";
+#elif L==3	// en
+	"Folder to upload files?";
+#elif L==4	// es
+	"&iquest;Carpeta para subir archivos?";
+#elif L==5	// fr
+	"Dossier pour t%eacute;l&eacute;charger des fichiers?";
+#elif L==6	// gn
+	"Carpeta ojegueraha hag&gtilde;ua archivo-ku&eacute;ra?";
+#elif L==7	// it
+	"Cartella per caricare i file?";
+#elif L==8	// pl
+	"Folder do przes&lstrok;ania plik&oacute;w?";
+#elif L==9	// pt
+	"Pasta para fazer upload de arquivos?";
+#elif L==10	// tr
+	"Dosyalar&inodot;n y&uuml;klenece&gbreve;i klas&ouml;r?";
+#endif
+
 const char *Txt_Folders =
 #if   L==1	// ca
 	"Carpetes";
@@ -55514,29 +55537,6 @@ const char *Txt_Upload_files =
 	"Fazer upload de arquivos";
 #elif L==10	// tr
 	"Upload files";		// Çeviri lazim!
-#endif
-
-const char *Txt_Upload_files_QUESTION =
-#if   L==1	// ca
-	"Enviar arxius?";
-#elif L==2	// de
-	"Upload Dateien?";
-#elif L==3	// en
-	"Upload files?";
-#elif L==4	// es
-	"&iquest;Enviar archivos?";
-#elif L==5	// fr
-	"T&eacute;l&eacute;charger fichiers?";
-#elif L==6	// gn
-	"&iquest;Envia archivos?";	// Okoteve traducción
-#elif L==7	// it
-	"Caricare file?";
-#elif L==8	// pl
-	"Przesy&lstrok;a&cacute; pliki?";
-#elif L==9	// pt
-	"Fazer upload de arquivos?";
-#elif L==10	// tr
-	"Upload files?";		// Çeviri lazim!
 #endif
 
 const char *Txt_Upload_my_picture =

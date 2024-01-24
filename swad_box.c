@@ -145,23 +145,26 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    else
       Box_Boxes.Ids[Box_Boxes.Nested] = NULL;
 
-   /***** Begin box container *****/
+   /***** Begin box *****/
    if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
       Frm_SetUniqueId (Box_Boxes.Ids[Box_Boxes.Nested]);
 
-      HTM_DIV_Begin ("class=\"FRAME_CONT\" id=\"%s\"",
-                     Box_Boxes.Ids[Box_Boxes.Nested]);
+      if (Width)
+	 HTM_DIV_Begin ("id=\"%s\" class=\"%s\" style=\"width:%s;\"",
+			Box_Boxes.Ids[Box_Boxes.Nested],ClassFrame,Width);
+      else
+	 HTM_DIV_Begin ("id=\"%s\" class=\"%s\"",
+			Box_Boxes.Ids[Box_Boxes.Nested],ClassFrame);
      }
    else
-      HTM_DIV_Begin ("class=\"FRAME_CONT\"");
-
-   /***** Begin box *****/
-   if (Width)
-      HTM_DIV_Begin ("class=\"%s\" style=\"width:%s;\"",ClassFrame,Width);
-   else
-      HTM_DIV_Begin ("class=\"%s\"",ClassFrame);
+     {
+      if (Width)
+	 HTM_DIV_Begin ("class=\"%s\" style=\"width:%s;\"",ClassFrame,Width);
+      else
+	 HTM_DIV_Begin ("class=\"%s\"",ClassFrame);
+     }
 
    /***** Row for left and right icons *****/
    if (FunctionToDrawContextualIcons ||
@@ -237,16 +240,15 @@ void Box_BoxWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
 
 void Box_BoxEnd (void)
   {
-	 /***** Check level of nesting *****/
-	 if (Box_Boxes.Nested < 0)
-	    Err_ShowErrorAndExit ("Trying to end a box not open.");
+      /***** Check level of nesting *****/
+      if (Box_Boxes.Nested < 0)
+	 Err_ShowErrorAndExit ("Trying to end a box not open.");
 
-	 /***** Free memory allocated for box id string *****/
-	 if (Box_Boxes.Ids[Box_Boxes.Nested])
-	    free (Box_Boxes.Ids[Box_Boxes.Nested]);
+      /***** Free memory allocated for box id string *****/
+      if (Box_Boxes.Ids[Box_Boxes.Nested])
+	 free (Box_Boxes.Ids[Box_Boxes.Nested]);
 
-      /***** End box and box container *****/
-      HTM_DIV_End ();
+   /***** End box *****/
    HTM_DIV_End ();
 
    /***** Decrease level of nesting *****/
