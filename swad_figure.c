@@ -264,5 +264,6 @@ void Fig_ShowFigures (void)
    Fig_ReqShowFigure (SelectedFigureType);
 
    /***** Show the stat of use selected by user *****/
+   HTM_BR ();
    Fig_Function[SelectedFigureType] ();
   }

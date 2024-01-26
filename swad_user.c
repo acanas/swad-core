@@ -4756,8 +4756,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
    Usr_SearchListUsrs (Role);
    if ((NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs))
      {
-      /***** Begin box and table *****/
-      /* Number of users found */
+      /***** Begin box with number of users found *****/
       Sex = Usr_GetSexOfUsrsLst (Role);
       if (asprintf (&Title,"%u %s",NumUsrs,
 				   (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
@@ -4765,65 +4764,67 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 						       (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 								       Txt_ROLES_PLURAL_abc[Role][Sex])) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
       free (Title);
 
-	 /***** Heading row with column names *****/
-	 Gbl.Usrs.Listing.WithPhotos = true;
-	 Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
+         HTM_TABLE_Begin ("TBL_SCROLL");
 
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&UsrDat);
+	    /***** Heading row with column names *****/
+	    Gbl.Usrs.Listing.WithPhotos = true;
+	    Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
 
-	 /***** List data of users *****/
-	 for (NumUsr = 0, The_ResetRowColor ();
-	      NumUsr < NumUsrs;
-	      NumUsr++, The_ChangeRowColor ())
-	   {
-	    UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&UsrDat);
 
-	    /* Copy user's basic data from list */
-	    Usr_CopyBasicUsrDataFromList (&UsrDat,UsrInList);
-
-	    /* Get list of user's IDs */
-	    ID_GetListIDsFromUsrCod (&UsrDat);
-
-	    /* Write data of this user */
-	    Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false,Role,
-				     &Gbl.Usrs.Selected);
-
-	    /* Write all courses this user belongs to */
-	    if (Role != Rol_GST &&				// Guests do not belong to any course
-		Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)		// Only admins can view the courses
+	    /***** List data of users *****/
+	    for (NumUsr = 0, The_ResetRowColor ();
+		 NumUsr < NumUsrs;
+		 NumUsr++, The_ChangeRowColor ())
 	      {
-	       HTM_TR_Begin (NULL);
+	       UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
-		  HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                The_GetColorRows ());
-		  HTM_TD_End ();
+	       /* Copy user's basic data from list */
+	       Usr_CopyBasicUsrDataFromList (&UsrDat,UsrInList);
 
-		  HTM_TD_Begin ("colspan=\"%u\" class=\"%s\"",
-				Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-				The_GetColorRows ());
-		     if (Role == Rol_UNK)
-		       {
-			Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
-			Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
-			Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
-		       }
-		     else
-			Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
-		  HTM_TD_End ();
+	       /* Get list of user's IDs */
+	       ID_GetListIDsFromUsrCod (&UsrDat);
 
-	       HTM_TR_End ();
+	       /* Write data of this user */
+	       Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false,Role,
+					&Gbl.Usrs.Selected);
+
+	       /* Write all courses this user belongs to */
+	       if (Role != Rol_GST &&				// Guests do not belong to any course
+		   Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)		// Only admins can view the courses
+		 {
+		  HTM_TR_Begin (NULL);
+
+		     HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
+				   The_GetColorRows ());
+		     HTM_TD_End ();
+
+		     HTM_TD_Begin ("colspan=\"%u\" class=\"%s\"",
+				   Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+				   The_GetColorRows ());
+			if (Role == Rol_UNK)
+			  {
+			   Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
+			   Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
+			   Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
+			  }
+			else
+			   Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
+		     HTM_TD_End ();
+
+		  HTM_TR_End ();
+		 }
 	      }
-	   }
 
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&UsrDat);
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&UsrDat);
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
+	 HTM_TABLE_End ();
+      Box_BoxEnd ();
      }
 
    /***** Free memory for teachers list *****/

@@ -1660,15 +1660,19 @@ void Ins_GetAndShowInstitutionsStats (void)
       Ins_GetAndShowInssOrderedByNumCtrs ();
 
       /***** Institutions ordered by number of degrees *****/
+      HTM_BR ();
       Ins_GetAndShowInssOrderedByNumDegs ();
 
       /***** Institutions ordered by number of courses *****/
+      HTM_BR ();
       Ins_GetAndShowInssOrderedByNumCrss ();
 
       /***** Institutions ordered by number of users in courses *****/
+      HTM_BR ();
       Ins_GetAndShowInssOrderedByNumUsrsInCrss ();
 
       /***** Institutions ordered by number of users who claim to belong to them *****/
+      HTM_BR ();
       Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
 
    /***** End box *****/
@@ -1686,22 +1690,22 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_centers,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_centers,
+                 NULL,NULL,
+                 NULL,Box_NOT_CLOSABLE);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** Get institutions ordered by number of centers *****/
-      NumInss = Ins_DB_GetInssOrderedByNumCtrs (&mysql_res);
+	 /***** Get institutions ordered by number of centers *****/
+	 NumInss = Ins_DB_GetInssOrderedByNumCtrs (&mysql_res);
 
-      /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
+	 /***** Show institutions *****/
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      HTM_TABLE_End ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1715,22 +1719,22 @@ static void Ins_GetAndShowInssOrderedByNumDegs (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_degrees,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_degrees,
+                 NULL,NULL,
+                 NULL,Box_NOT_CLOSABLE);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** Get institutions ordered by number of degrees *****/
-      NumInss = Ins_DB_GetInssOrderedByNumDegs (&mysql_res);
+	 /***** Get institutions ordered by number of degrees *****/
+	 NumInss = Ins_DB_GetInssOrderedByNumDegs (&mysql_res);
 
-      /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
+	 /***** Show institutions *****/
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      HTM_TABLE_End ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1744,22 +1748,22 @@ static void Ins_GetAndShowInssOrderedByNumCrss (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_courses,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_courses,
+                 NULL,NULL,
+                 NULL,Box_NOT_CLOSABLE);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** Get institutions ordered by number of courses *****/
-      NumInss = Ins_DB_GetInssOrderedByNumCrss (&mysql_res);
+	 /***** Get institutions ordered by number of courses *****/
+	 NumInss = Ins_DB_GetInssOrderedByNumCrss (&mysql_res);
 
-      /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
+	 /***** Show institutions *****/
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      HTM_TABLE_End ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1773,22 +1777,22 @@ static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_users_in_courses,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_users_in_courses,
+                 NULL,NULL,
+                 NULL,Box_NOT_CLOSABLE);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** Get institutions ordered by number of users in courses *****/
-      NumInss = Ins_DB_GetInssOrderedByNumUsrsInCrss (&mysql_res);
+	 /***** Get institutions ordered by number of users in courses *****/
+	 NumInss = Ins_DB_GetInssOrderedByNumUsrsInCrss (&mysql_res);
 
-      /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
+	 /***** Show institutions *****/
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      HTM_TABLE_End ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1803,22 +1807,22 @@ static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
+                 NULL,NULL,
+                 NULL,Box_NOT_CLOSABLE);
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** Get institutions ordered by number of users who claim to belong to them *****/
-      NumInss = Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (&mysql_res);
+	 /***** Get institutions ordered by number of users who claim to belong to them *****/
+	 NumInss = Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (&mysql_res);
 
-      /***** Show institutions *****/
-      Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
+	 /***** Show institutions *****/
+	 Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      HTM_TABLE_End ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

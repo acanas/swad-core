@@ -1642,7 +1642,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
    if (NumCrss)
      {
       /* Begin box and table */
-      Box_BoxTableBegin ("100%",NULL,
+      Box_BoxTableBegin (NULL,NULL,
                          NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
