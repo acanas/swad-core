@@ -381,7 +381,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	                     The_GetSuffix ());
 	          Ico_PutIcon (Net_WebsAndSocialNetworksIcons[Web],Ico_BLACK,
 	                       Net_WebsAndSocialNetworksTitle[Web],"ICOx16");
-	          HTM_TxtF ("&nbsp;%s",Net_WebsAndSocialNetworksTitle[Web]);
+	          HTM_NBSPTxt (Net_WebsAndSocialNetworksTitle[Web]);
 	       HTM_TD_End ();
 
 	       HTM_TD_Unsigned (NumUsrs);

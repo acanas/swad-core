@@ -574,7 +574,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name (row[0]) and group name (row[1]) */
-	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+	    HTM_TxtF ("%s %s",row[0],row[1]);
 
 	    if (NumGrps >= 2)
 	      {
@@ -587,8 +587,8 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-		   Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 HTM_TxtF ("%s %s",
+		   Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -1016,7 +1016,8 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 					                                    "SesCod",
 					                                    SesCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+			HTM_TxtF ("%s %s",
+			          Txt_The_whole_course,
 				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();

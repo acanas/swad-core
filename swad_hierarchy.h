@@ -93,4 +93,10 @@ unsigned Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
 unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
 					   struct Hie_Node *Node);
 
+//--------------------------- My hierarchy ------------------------------------
+void Hie_PutIconToSelectMyHierarchyInBreadcrumb (void);
+void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) void *Args);
+
+void Hie_ReqSelectOneNodeFromMyHierarchy (void);
+
 #endif

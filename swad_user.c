@@ -715,7 +715,7 @@ void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat)
 
    /***** Write surname2 if exists *****/
    if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+      HTM_SPTxt (UsrDat->Surname2);
   }
 
 /*****************************************************************************/
@@ -3671,7 +3671,7 @@ static void Set_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Arg
 							        "");
 	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
 	              Txt_USR_LIST_TYPES[ListType],"ICO20x20");
-	 HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);
+	 HTM_NBSPTxt (Txt_USR_LIST_TYPES[ListType]);
       HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -4450,7 +4450,7 @@ void Usr_ListAllDataStds (void)
 		     if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
 		       {
 			HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
-			   HTM_TxtF ("%s&nbsp;%s",
+			   HTM_TxtF ("%s %s",
 				     Txt_Group,
 				     Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
 			HTM_TH_End ();
@@ -6453,7 +6453,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
    HTM_BR ();
    HTM_Txt (UsrDat->Surname1);
    if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+      HTM_SPTxt (UsrDat->Surname2);
    if (UsrDat->FrstName[0])
      {
       HTM_Comma ();

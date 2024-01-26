@@ -237,7 +237,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 				      "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
 				      AnswerTypes->All ? " checked=\"checked\"" :
 							 "");
-		  HTM_TxtF ("&nbsp;%s",Txt_All_types_of_answers);
+		  HTM_NBSPTxt (Txt_All_types_of_answers);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
@@ -262,14 +262,14 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 		    }
 		 }
 	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_LABEL_Begin ("class=\"DAT_%s\"",
-		                   The_GetSuffix ());
+		  HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 		     HTM_INPUT_CHECKBOX ("AnswerType",HTM_DONT_SUBMIT_ON_CHANGE,
-					 "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
+					 "value=\"%u\"%s"
+					 " onclick=\"checkParent(this,'AllAnsTypes');\"",
 					 (unsigned) AnsType,
 					 Checked ? " checked=\"checked\"" :
 						   "");
-		     HTM_TxtF ("&nbsp;%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
+		     HTM_NBSPTxt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -1220,18 +1220,17 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
   }
 
 /*****************************************************************************/
-/************** Select all questions to add them to set/game *****************/
+/********* Checkbox to select all questions to add them to set/game **********/
 /*****************************************************************************/
 
 void Qst_PutCheckboxToSelectAllQuestions (void)
   {
    extern const char *Txt_All_questions;
 
-   /***** Checkbox to select all listed questions *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_CHECKBOX ("AllQsts",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\" onclick=\"togglecheckChildren(this,'QstCods');\"");
-      HTM_TxtF ("&nbsp;%s",Txt_All_questions);
+      HTM_NBSPTxt (Txt_All_questions);
    HTM_LABEL_End ();
   }
 

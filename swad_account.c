@@ -299,7 +299,8 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",
                     The_GetSuffix (),
                     The_GetColorRows ());
-	 HTM_TxtF ("%s:&nbsp;%s",Txt_ID,ID);
+         HTM_TxtColon (Txt_ID);
+         HTM_NBSPTxt (ID);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Name);
 	 if (UsrDat->FullName[0])

@@ -90,15 +90,6 @@ static struct Hie_Node *Crs_EditingCrs = NULL;	// Static variable to keep the co
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Crs_WriteListMyCoursesToSelectOne (void);
-static void Crs_WriteNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
-			    Lay_LastItem_t IsLastItemInLevel[1 + 6],
-			    Hie_Level_t Level);
-static void Crs_WriteRowMyCourses (Hie_Level_t Level,
-				   const struct Hie_Node Hie[Hie_NUM_LEVELS],
-				   Lay_Highlight_t Highlight,
-				   Lay_LastItem_t IsLastItemInLevel[1 + 6]);
-
 static void Crs_GetListCrssInCurrentDeg (void);
 static void Crs_ListCourses (void);
 static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args);
@@ -124,8 +115,6 @@ static void Crs_EmptyCourseCompletely (long CrsCod);
 static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
 
-static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args);
-
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
 
 static void Crs_EditingCourseConstructor (void);
@@ -147,132 +136,6 @@ void Crs_ShowIntroduction (void)
 
    /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
-  }
-
-/*****************************************************************************/
-/************************ Write menu with my courses *************************/
-/*****************************************************************************/
-
-static void Crs_WriteListMyCoursesToSelectOne (void)
-  {
-   extern const char *Hlp_PROFILE_Courses;
-   extern const char *Txt_My_courses;
-   struct Hie_Node Hie[Hie_NUM_LEVELS];
-   Lay_LastItem_t IsLastItemInLevel[1 + 6];
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_My_courses,
-                 Crs_PutIconToSearchCourses,NULL,
-                 Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
-
-      /***** Begin list *****/
-      HTM_UL_Begin ("class=\"LIST_TREE\"");
-
-	 /***** Write nodes recursively *****/
-	 Crs_WriteNodes (Hie,IsLastItemInLevel,Hie_SYS);
-
-      /***** End list *****/
-      HTM_UL_End ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-static void Crs_WriteNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
-			    Lay_LastItem_t IsLastItemInLevel[1 + 6],
-			    Hie_Level_t Level)
-  {
-   extern unsigned (*Hie_GetMyNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
-							    long PrtCod);
-   extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-   Lay_Highlight_t Highlight;	// Highlight because degree, course, etc. is selected
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumNode;
-   unsigned NumNodes;
-
-   if (Level > Hie_SYS)
-      NumNodes = Hie_GetMyNodesFromDB[Level] (&mysql_res,Hie[Level - 1].HieCod);
-   else
-      NumNodes = 1;
-
-   for (NumNode = 0;
-	NumNode < NumNodes;
-	NumNode++)
-     {
-      if (Level > Hie_SYS)
-        {
-         /***** Get next node *****/
-         row = mysql_fetch_row (mysql_res);
-         Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /***** Get data of this node *****/
-	 if (!Hie_GetDataByCod[Level] (&Hie[Level]))
-	    Err_WrongCountrExit ();
-        }
-      else
-        {
-	 Hie[Level].HieCod = -1L;
-	 Str_Copy (Hie[Level].ShrtName,Txt_HIERARCHY_SINGUL_Abc[Level],
-		   sizeof (Hie[Level].ShrtName) - 1);
-        }
-
-      /***** Write link to node *****/
-      if (Level < Hie_CRS)
-	 Highlight = (Gbl.Hierarchy.Node[Level + 1].HieCod <= 0 &&
-		      Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
-									       Lay_NO_HIGHLIGHT;
-      else
-	 Highlight = (Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
-									       Lay_NO_HIGHLIGHT;
-
-      IsLastItemInLevel[Level] = (NumNode == NumNodes - 1) ? Lay_LAST_ITEM :
-							     Lay_NO_LAST_ITEM;
-      Crs_WriteRowMyCourses (Level,Hie,Highlight,IsLastItemInLevel);
-
-      /***** Write subnodes recursively ******/
-      if (Level < Hie_CRS)
-	 Crs_WriteNodes (Hie,IsLastItemInLevel,Level + 1);
-     }
-
-   if (Level > Hie_SYS)
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
-  }
-
-static void Crs_WriteRowMyCourses (Hie_Level_t Level,
-				   const struct Hie_Node Hie[Hie_NUM_LEVELS],
-				   Lay_Highlight_t Highlight,
-				   Lay_LastItem_t IsLastItemInLevel[1 + 6])
-  {
-   extern ParCod_Param_t Hie_ParCod[Hie_NUM_LEVELS];
-   extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
-   static Act_Action_t Actions[Hie_NUM_LEVELS] =
-     {
-      [Hie_SYS] = ActSeeSysInf,
-      [Hie_CTY] = ActSeeCtyInf,
-      [Hie_INS] = ActSeeInsInf,
-      [Hie_CTR] = ActSeeCtrInf,
-      [Hie_DEG] = ActSeeDegInf,
-      [Hie_CRS] = ActSeeCrsInf,
-     };
-
-   HTM_LI_Begin (Lay_HighlightClass[Highlight]);
-      Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,
-				  Lay_HORIZONTAL_LINE_AT_RIGHT);
-      Frm_BeginForm (ActMyCrs);
-	 ParCod_PutPar (Hie_ParCod[Level],Hie[Level].HieCod);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Actions[Level]),
-				  "class=\"BT_LINK FORM_IN_%s\"",
-				  The_GetSuffix ());
-	    Lgo_DrawLogo (Level,&Hie[Level],"ICO16x16");
-	    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
-	       HTM_TxtF ("&nbsp;%s",Hie[Level].ShrtName);
-	    HTM_DIV_End ();
-	 HTM_BUTTON_End ();
-      Frm_EndForm ();
-   HTM_LI_End ();
   }
 
 /*****************************************************************************/
@@ -1752,71 +1615,6 @@ static void Crs_PutButtonToRegisterInCrs (void)
       free (TxtButton);
 
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/************************* Select one of my courses **************************/
-/*****************************************************************************/
-
-void Crs_ReqSelectOneOfMyCourses (void)
-  {
-   /***** Fill the list with the courses I belong to, if not filled *****/
-   Hie_GetMyHierarchy (Hie_CRS);
-
-   /***** Select one of my courses *****/
-   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
-      /* Show my courses */
-      Crs_WriteListMyCoursesToSelectOne ();
-   else	// I am not enroled in any course
-      /* Show help to enrol me */
-      Hlp_ShowHelpWhatWouldYouLikeToDo ();
-  }
-
-/*****************************************************************************/
-/******************* Put an icon (form) to search courses ********************/
-/*****************************************************************************/
-
-static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args)
-  {
-   Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
-				  Sch_PutLinkToSearchCoursesPars,NULL,
-				  "search.svg",Ico_BLACK);
-  }
-
-/*****************************************************************************/
-/********** Put an icon (form) to select my courses in breadcrumb ************/
-/*****************************************************************************/
-
-void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
-  {
-   extern const char *Hie_Icons[Hie_NUM_LEVELS];
-   extern const char *Txt_My_courses;
-
-   if (Gbl.Usrs.Me.Logged)		// I am logged
-     {
-      /***** Begin form *****/
-      Frm_BeginForm (ActMyCrs);
-
-	 /***** Put icon with link *****/
-	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Hie_Icons[Hie_SYS],Txt_My_courses,
-			  "class=\"BC_ICO BC_ICO_%s ICO_HIGHLIGHT\"",
-			  The_GetSuffix ());
-
-      /***** End form *****/
-      Frm_EndForm ();
-     }
-  }
-
-/*****************************************************************************/
-/****************** Put an icon (form) to select my courses ******************/
-/*****************************************************************************/
-
-void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
-  {
-   if (Gbl.Usrs.Me.Logged)		// I am logged
-      Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
-				     NULL,NULL,
-				     "sitemap.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/

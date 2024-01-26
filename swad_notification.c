@@ -1778,8 +1778,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
 		     "class=\"ICO16x16 NOTIF_ICO_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("&nbsp;%u",NumNewNtfs);
 	    HTM_SPAN_Begin ("id=\"notif_new\"");
-	       HTM_TxtF ("&nbsp;%s",NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
-						      Txt_NOTIF_new_PLURAL);
+	       HTM_NBSPTxt (NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
+					      Txt_NOTIF_new_PLURAL);
 	    HTM_SPAN_End ();
 	   }
 

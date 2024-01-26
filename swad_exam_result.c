@@ -1527,11 +1527,14 @@ void ExaRes_ShowExamResultUser (struct Usr_Data *UsrDat)
       /***** User's data *****/
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
-	 HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
+	 HTM_NBSPTxt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
-	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	    HTM_SPTxt (UsrDat->Surname2);
 	 if (UsrDat->FrstName[0])
-	    HTM_TxtF (", %s",UsrDat->FrstName);
+	   {
+	    HTM_Comma ();
+	    HTM_SPTxt (UsrDat->FrstName);
+	   }
 	 HTM_BR ();
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);

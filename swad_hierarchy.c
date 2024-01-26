@@ -43,6 +43,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
+#include "swad_help.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_database.h"
 #include "swad_hierarchy_type.h"
@@ -129,6 +130,17 @@ static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  const char *ClassTxt,
 				  int NumNodes[Hie_NUM_LEVELS]);
 static void Hie_ShowHierarchyCell (const char *ClassTxt,int Num);
+
+//--------------------------- My hierarchy ------------------------------------
+static void Hie_WriteListMyHierarchyToSelectNode (void);
+static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args);
+static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
+			               Lay_LastItem_t IsLastItemInLevel[1 + 6],
+			               Hie_Level_t Level);
+static void Hie_WriteRowMyHierarchy (Hie_Level_t Level,
+				     const struct Hie_Node Hie[Hie_NUM_LEVELS],
+				     Lay_Highlight_t Highlight,
+				     Lay_LastItem_t IsLastItemInLevel[1 + 6]);
 
 /*****************************************************************************/
 /********** List pending institutions, centers, degrees and courses **********/
@@ -1157,7 +1169,8 @@ static void Hie_GetAndShowHierarchyWithNodes (Hie_Level_t HavingNodesOfLevel)
         							            HavingNodesOfLevel);// Grand child
 
    /***** Write number of elements with courses *****/
-   Hie_ShowHierarchyRow (Txt_With_,Txt_HIERARCHY_PLURAL_abc[HavingNodesOfLevel],"DAT",NumNodes);
+   Hie_ShowHierarchyRow (Txt_With_,Txt_HIERARCHY_PLURAL_abc[HavingNodesOfLevel],
+			 "DAT",NumNodes);
   }
 
 /*****************************************************************************/
@@ -1456,4 +1469,203 @@ static void Hie_ShowHierarchyCell (const char *ClassTxt,int Num)
       else		// < 0 ==> do not show number
 	 HTM_Hyphen ();
    HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/********** Put an icon (form) to select my courses in breadcrumb ************/
+/*****************************************************************************/
+
+void Hie_PutIconToSelectMyHierarchyInBreadcrumb (void)
+  {
+   extern const char *Txt_My_courses;
+
+   if (Gbl.Usrs.Me.Logged)		// I am logged
+     {
+      /***** Begin form *****/
+      Frm_BeginForm (ActMyCrs);
+
+	 /***** Put icon with link *****/
+	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Hie_Icons[Hie_SYS],Txt_My_courses,
+			  "class=\"BC_ICO BC_ICO_%s ICO_HIGHLIGHT\"",
+			  The_GetSuffix ());
+
+      /***** End form *****/
+      Frm_EndForm ();
+     }
+  }
+
+/*****************************************************************************/
+/***************** Put an icon (form) to select my hierarchy *****************/
+/*****************************************************************************/
+
+void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) void *Args)
+  {
+   if (Gbl.Usrs.Me.Logged)		// I am logged
+      Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
+				     NULL,NULL,
+				     "sitemap.svg",Ico_BLACK);
+  }
+
+/*****************************************************************************/
+/****************** Select one node from my hierarchy ************************/
+/*****************************************************************************/
+
+void Hie_ReqSelectOneNodeFromMyHierarchy (void)
+  {
+   /***** Fill the list with the courses I belong to, if not filled *****/
+   Hie_GetMyHierarchy (Hie_CRS);
+
+   /***** Select one of my courses *****/
+   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
+      /* Show my courses */
+      Hie_WriteListMyHierarchyToSelectNode ();
+   else	// I am not enroled in any course
+      /* Show help to enrol me */
+      Hlp_ShowHelpWhatWouldYouLikeToDo ();
+  }
+
+/*****************************************************************************/
+/************************ Write menu with my courses *************************/
+/*****************************************************************************/
+
+static void Hie_WriteListMyHierarchyToSelectNode (void)
+  {
+   extern const char *Hlp_PROFILE_Courses;
+   extern const char *Txt_My_courses;
+   struct Hie_Node Hie[Hie_NUM_LEVELS];
+   Lay_LastItem_t IsLastItemInLevel[1 + 6];
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_My_courses,
+                 Hie_PutIconToSearchCourses,NULL,
+                 Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
+
+      /***** Begin list *****/
+      HTM_UL_Begin ("class=\"LIST_TREE\"");
+
+	 /***** Write nodes recursively *****/
+	 Hie_WriteMyHierarchyNodes (Hie,IsLastItemInLevel,Hie_SYS);
+
+      /***** End list *****/
+      HTM_UL_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/******************* Put an icon (form) to search courses ********************/
+/*****************************************************************************/
+
+static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args)
+  {
+   Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
+				  Sch_PutLinkToSearchCoursesPars,NULL,
+				  "search.svg",Ico_BLACK);
+  }
+
+/*****************************************************************************/
+/****************** Write my hierarchy nodes recursively *********************/
+/*****************************************************************************/
+
+static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
+			               Lay_LastItem_t IsLastItemInLevel[1 + 6],
+			               Hie_Level_t Level)
+  {
+   extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
+   Lay_Highlight_t Highlight;	// Highlight because degree, course, etc. is selected
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumNode;
+   unsigned NumNodes;
+
+   if (Level > Hie_SYS)
+      NumNodes = Hie_GetMyNodesFromDB[Level] (&mysql_res,Hie[Level - 1].HieCod);
+   else
+      NumNodes = 1;
+
+   for (NumNode = 0;
+	NumNode < NumNodes;
+	NumNode++)
+     {
+      if (Level > Hie_SYS)
+        {
+         /***** Get next node *****/
+         row = mysql_fetch_row (mysql_res);
+         Hie[Level].HieCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /***** Get data of this node *****/
+	 if (!Hie_GetDataByCod[Level] (&Hie[Level]))
+	    Err_WrongCountrExit ();
+        }
+      else
+        {
+	 Hie[Level].HieCod = -1L;
+	 Str_Copy (Hie[Level].ShrtName,Txt_HIERARCHY_SINGUL_Abc[Level],
+		   sizeof (Hie[Level].ShrtName) - 1);
+        }
+
+      /***** Write link to node *****/
+      if (Level < Hie_CRS)
+	 Highlight = (Gbl.Hierarchy.Node[Level + 1].HieCod <= 0 &&
+		      Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
+									       Lay_NO_HIGHLIGHT;
+      else
+	 Highlight = (Gbl.Hierarchy.Node[Level].HieCod == Hie[Level].HieCod) ? Lay_HIGHLIGHT :
+									       Lay_NO_HIGHLIGHT;
+
+      IsLastItemInLevel[Level] = (NumNode == NumNodes - 1) ? Lay_LAST_ITEM :
+							     Lay_NO_LAST_ITEM;
+      Hie_WriteRowMyHierarchy (Level,Hie,Highlight,IsLastItemInLevel);
+
+      /***** Write subnodes recursively ******/
+      if (Level < Hie_CRS)
+	 Hie_WriteMyHierarchyNodes (Hie,IsLastItemInLevel,Level + 1);
+     }
+
+   if (Level > Hie_SYS)
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************************ Write a row in my hierarchy ************************/
+/*****************************************************************************/
+
+static void Hie_WriteRowMyHierarchy (Hie_Level_t Level,
+				     const struct Hie_Node Hie[Hie_NUM_LEVELS],
+				     Lay_Highlight_t Highlight,
+				     Lay_LastItem_t IsLastItemInLevel[1 + 6])
+  {
+   extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
+   static Act_Action_t Actions[Hie_NUM_LEVELS] =
+     {
+      [Hie_SYS] = ActSeeSysInf,
+      [Hie_CTY] = ActSeeCtyInf,
+      [Hie_INS] = ActSeeInsInf,
+      [Hie_CTR] = ActSeeCtrInf,
+      [Hie_DEG] = ActSeeDegInf,
+      [Hie_CRS] = ActSeeCrsInf,
+     };
+
+   HTM_LI_Begin (Lay_HighlightClass[Highlight]);
+      Lay_IndentDependingOnLevel (Level,IsLastItemInLevel,
+				  Lay_HORIZONTAL_LINE_AT_RIGHT);
+      Frm_BeginForm (ActMyCrs);
+	 ParCod_PutPar (Hie_ParCod[Level],Hie[Level].HieCod);
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Actions[Level]),
+				  "class=\"BT_LINK FORM_IN_%s\"",
+				  The_GetSuffix ());
+
+	    /* Node logo */
+	    Lgo_DrawLogo (Level,&Hie[Level],"ICO16x16");
+
+	    /* Node name */
+	    HTM_DIV_Begin ("class=\"MY_CRS_TXT\"");
+	       HTM_NBSPTxt (Hie[Level].ShrtName);
+	    HTM_DIV_End ();
+
+	 HTM_BUTTON_End ();
+      Frm_EndForm ();
+   HTM_LI_End ();
   }

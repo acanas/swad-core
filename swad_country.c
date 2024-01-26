@@ -498,8 +498,6 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
                                         const char *ClassContainer,
                                         const char *ClassMap)
   {
-   char CountryName[Cty_MAX_BYTES_NAME + 1];
-
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
       ParCod_PutPar (ParCod_Cty,Cty->HieCod);
@@ -516,9 +514,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
 	    Cty_DrawCountryMap (Cty,ClassMap);
 
 	    /***** Write country name *****/
-	    Str_Copy (CountryName,Cty->FullName,sizeof (CountryName) - 1);
-	    HTM_TxtF ("&nbsp;%s&nbsp;",CountryName);
-	    HTM_TxtF ("(%s)",Cty->ShrtName);
+	    HTM_TxtF ("&nbsp;%s&nbsp;(%s)",Cty->FullName,Cty->ShrtName);
 
 	 /***** End link *****/
 	 HTM_BUTTON_End ();

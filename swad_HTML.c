@@ -1957,6 +1957,12 @@ void HTM_TxtColonNBSP (const char *Txt)
    HTM_NBSP ();
   }
 
+void HTM_NBSPTxt (const char *Txt)
+  {
+   HTM_NBSP ();
+   HTM_Txt (Txt);
+  }
+
 void HTM_NBSP (void)
   {
    HTM_Txt ("&nbsp;");

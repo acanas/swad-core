@@ -1812,7 +1812,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // TabPrf ******************************************************************
    // Actions in menu:
    [ActFrmRolSes	] = { 843, 0,TabPrf,ActFrmRolSes	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteFormLogout		,"power-off"		},
-   [ActMyCrs		] = { 987, 1,TabPrf,ActMyCrs		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_ReqSelectOneOfMyCourses	,"sitemap"		},
+   [ActMyCrs		] = { 987, 1,TabPrf,ActMyCrs		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hie_ReqSelectOneNodeFromMyHierarchy	,"sitemap"		},
    [ActSeeMyTT		] = { 408, 2,TabPrf,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_ShowClassTimeTable		,"clock"		},
    [ActSeeMyAgd		] = {1602, 3,TabPrf,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_GetParsAndShowMyAgenda	,"calendar"		},
    [ActFrmMyAcc		] = {  36, 4,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"at"			},

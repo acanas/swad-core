@@ -313,7 +313,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 					 "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
 					 Tags->All ? " checked=\"checked\"" :
 						     "");
-		     HTM_TxtF ("&nbsp;%s",Txt_All_tags);
+		     HTM_NBSPTxt (Txt_All_tags);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -361,7 +361,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 					    row[1],
 					    Checked ? " checked=\"checked\"" :
 						      "");
-			HTM_TxtF ("&nbsp;%s",row[1]);
+			HTM_NBSPTxt (row[1]);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 

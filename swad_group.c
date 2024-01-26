@@ -169,7 +169,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
         {
          GrpDat.GrpCod = GrpCod;
          Grp_GetGroupDataByCod (&GrpDat);
-         HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
+         HTM_TxtF ("%s %s",GrpDat.GrpTypName,GrpDat.GrpName);
         }
       else	// GrpCod < 0 ==> students not belonging to any group of type (-GrpCod)
         {
@@ -433,7 +433,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 									 " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 									 " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
 						 " disabled=\"disabled\"");
-	 HTM_TxtF ("&nbsp;%s",Txt_All_groups);
+	 HTM_NBSPTxt (Txt_All_groups);
       HTM_LABEL_End ();
    HTM_DIV_End ();
   }

@@ -1112,7 +1112,7 @@ static void Lay_WritePageTopHeading (void)
 static void Lay_WriteBreadcrumb (void)
   {
    HTM_Txt ("<nav id=\"breadcrumb\">");
-      Crs_PutIconToSelectMyCoursesInBreadcrumb ();
+      Hie_PutIconToSelectMyHierarchyInBreadcrumb ();
       Hie_WriteHierarchyInBreadcrumb ();
       Crs_WriteSelectorMyCoursesInBreadcrumb ();
    HTM_Txt ("</nav>");
@@ -1303,7 +1303,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	    /***** Text *****/
 	    if (Text)
 	       if (Text[0])
-		  HTM_TxtF ("&nbsp;%s",Text);
+		  HTM_NBSPTxt (Text);
 
 	 /***** End label *****/
 	 HTM_LABEL_End ();

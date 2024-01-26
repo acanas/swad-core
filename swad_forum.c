@@ -1825,7 +1825,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	       default:
 		  break;
 	      }
-	    HTM_TxtF ("&nbsp;%s",ForumName);
+	    HTM_NBSPTxt (ForumName);
 
 	    /***** Write total number of threads and posts in this forum *****/
 	    if (NumThrs)

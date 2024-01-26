@@ -1333,7 +1333,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 									    "AsgCod",
 									    AsgCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+			HTM_TxtF ("%s %s",
+			          Txt_The_whole_course,
 				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
@@ -1598,7 +1599,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name and group name */
-	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+	    HTM_TxtF ("%s %s",row[0],row[1]);
 
 	    if (NumGrps >= 2)
 	      {
@@ -1610,8 +1611,8 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	      }
 	   }
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-	           Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 HTM_TxtF ("%s %s",
+	           Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    HTM_DIV_End ();
 

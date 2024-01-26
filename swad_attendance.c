@@ -1108,7 +1108,8 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 					                                    "AttCod",
 					                                    AttCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+			HTM_TxtF ("%s %s",
+			          Txt_The_whole_course,
 				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
@@ -1314,7 +1315,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name (row[0]) and group name (row[1]) */
-	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+	    HTM_TxtF ("%s %s",row[0],row[1]);
 
 	    /* Write the name of the room (row[2]) */
 	    if (row[2])	// May be NULL because of LEFT JOIN
@@ -1333,8 +1334,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-	           Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 HTM_TxtF ("% %s",
+	           Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -1755,7 +1756,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
-	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	    HTM_SPTxt (UsrDat->Surname2);
 	 HTM_TxtF (", %s",UsrDat->FrstName);
       HTM_TD_End ();
 
@@ -2929,7 +2930,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
-	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	    HTM_SPTxt (UsrDat->Surname2);
 	 HTM_TxtF (", %s",UsrDat->FrstName);
       HTM_TD_End ();
 
@@ -3108,7 +3109,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 			     The_GetSuffix ());
 		  HTM_Txt (UsrDat->Surname1);
 		  if (UsrDat->Surname2[0])
-		     HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+		     HTM_SPTxt (UsrDat->Surname2);
 		  HTM_TxtF (", %s",UsrDat->FrstName);
 	       HTM_TD_End ();
 

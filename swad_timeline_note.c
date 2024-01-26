@@ -498,19 +498,19 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 	 case TmlNot_INS_DOC_PUB_FILE:
 	 case TmlNot_INS_SHA_PUB_FILE:
 	    /* Write location (institution) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
+	    HTM_TxtF ("%s: %s",
 		      Txt_HIERARCHY_SINGUL_Abc[Hie_INS],Hie[Hie_INS].ShrtName);
 	    break;
 	 case TmlNot_CTR_DOC_PUB_FILE:
 	 case TmlNot_CTR_SHA_PUB_FILE:
 	    /* Write location (center) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
+	    HTM_TxtF ("%s: %s",
 		      Txt_HIERARCHY_SINGUL_Abc[Hie_CTR],Hie[Hie_CTR].ShrtName);
 	    break;
 	 case TmlNot_DEG_DOC_PUB_FILE:
 	 case TmlNot_DEG_SHA_PUB_FILE:
 	    /* Write location (degree) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
+	    HTM_TxtF ("%s: %s",
 		      Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],Hie[Hie_DEG].ShrtName);
 	    break;
 	 case TmlNot_CRS_DOC_PUB_FILE:
@@ -518,12 +518,12 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 	 case TmlNot_CALL_FOR_EXAM:
 	 case TmlNot_NOTICE:
 	    /* Write location (course) in hierarchy */
-	    HTM_TxtF ("%s:&nbsp;%s",
+	    HTM_TxtF ("%s: %s",
 		      Txt_HIERARCHY_SINGUL_Abc[Hie_CRS],Hie[Hie_CRS].ShrtName);
 	    break;
 	 case TmlNot_FORUM_POST:
 	    /* Write forum name */
-	    HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
+	    HTM_TxtF ("%s: %s",Txt_Forum,ForumName);
 	    break;
 	 default:
 	    break;
@@ -692,7 +692,7 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,
 	                    Txt_TIMELINE_NOTE[Not->Type],"CONTEXT_ICOx16");
-	       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->Type]);
+	       HTM_NBSPTxt (Txt_TIMELINE_NOTE[Not->Type]);
 
 	    /* End button */
 	    HTM_BUTTON_End ();

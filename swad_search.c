@@ -156,7 +156,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Search,
-		    Crs_PutIconToSelectMyCourses,NULL,
+		    Hie_PutIconToSelectMyHierarchy,NULL,
 		    Hlp_START_Search,Box_NOT_CLOSABLE);
 
 	 /***** Begin form *****/

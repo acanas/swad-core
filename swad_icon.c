@@ -459,7 +459,7 @@ void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
       Ico_PutIcon (Icon,Color,Text,"CONTEXT_ICOx16");
-      HTM_TxtF ("&nbsp;%s",Text);
+      HTM_NBSPTxt (Text);
    HTM_DIV_End ();
   }
 

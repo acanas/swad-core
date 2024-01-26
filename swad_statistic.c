@@ -365,7 +365,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 			                    The_GetSuffix ());
-			      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
+			      HTM_Txt (Txt_distributed_by);
+			      HTM_NBSP ();
 			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 						"id=\"GroupedBy\" name=\"GroupedBy\""
 						" class=\"INPUT_%s\"",
@@ -573,7 +574,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	       /***** Type of statistic *****/
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 	                        The_GetSuffix ());
-		  HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
+	       	  HTM_Txt (Txt_distributed_by);
+	       	  HTM_NBSP ();
 
 		  if (Stats->ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
 		      Stats->ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)

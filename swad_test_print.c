@@ -529,7 +529,7 @@ static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
 			     "value=\"Y\"%s",
 			     AllowTeachers ? " checked=\"checked\"" :	// Teachers can see test exam
 					     "");
-	 HTM_TxtF ("&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
+	 HTM_NBSPTxt (Txt_Allow_teachers_to_consult_this_test);
       HTM_LABEL_End ();
    HTM_DIV_End ();
   }
@@ -2260,9 +2260,9 @@ void TstPrn_ShowOnePrint (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
 	       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-	       HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
+	       HTM_SPTxt (Gbl.Usrs.Other.UsrDat.Surname1);
 	       if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-		  HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
+		  HTM_SPTxt (Gbl.Usrs.Other.UsrDat.Surname2);
 	       if (Gbl.Usrs.Other.UsrDat.FrstName[0])
 		  HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
 	       HTM_BR ();

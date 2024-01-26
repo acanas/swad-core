@@ -594,7 +594,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		     HidVis_GroupClass[Surveys->Svy.Status.HiddenOrVisible],
 		     The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_Scope);
-	 HTM_TxtF ("%s&nbsp;%s",Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.Level],
+	 HTM_TxtF ("%s %s",
+	           Txt_HIERARCHY_SINGUL_Abc[Surveys->Svy.Level],
 		   Gbl.Hierarchy.Node[Surveys->Svy.Level].ShrtName);
       HTM_DIV_End ();
 
@@ -1846,7 +1847,9 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 					                                 "SvyCod",
 					                                 SvyCod) ? "" :
 									           " checked=\"checked\"");
-		     HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+		     HTM_TxtF ("%s %s",
+			       Txt_The_whole_course,
+			       Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -2096,7 +2099,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name and group name */
-	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+	    HTM_TxtF ("%s %s",row[0],row[1]);
 
 	    if (NumGrps >= 2)
 	      {
@@ -2109,8 +2112,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-		   Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 HTM_TxtF ("%s %s",
+	           Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -3030,7 +3033,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	       "class=\"LT\" style=\"width:%upx; height:20px;\"",BarWidth);
 
       /***** Write the number of users *****/
-      HTM_TxtF ("&nbsp;%s",Title);
+      HTM_NBSPTxt (Title);
 
       /***** Free string with the number of users *****/
       free (Title);

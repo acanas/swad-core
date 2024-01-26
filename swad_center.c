@@ -199,7 +199,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action
 
 	 /***** Center logo and name *****/
 	 Lgo_DrawLogo (Hie_CTR,Ctr,IconClass);
-	 HTM_TxtF ("&nbsp;%s",Ctr->FullName);
+	 HTM_NBSPTxt (Ctr->FullName);
 
       /***** End link *****/
       HTM_BUTTON_End ();

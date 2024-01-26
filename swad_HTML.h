@@ -228,6 +228,7 @@ void HTM_Txt (const char *Txt);
 void HTM_TxtColon (const char *Txt);
 void HTM_TxtSemicolon (const char *Txt);
 void HTM_TxtColonNBSP (const char *Txt);
+void HTM_NBSPTxt (const char *Txt);
 void HTM_NBSP (void);
 void HTM_Colon (void);
 void HTM_Semicolon (void);

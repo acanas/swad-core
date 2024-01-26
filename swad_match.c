@@ -703,7 +703,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
 	    row = mysql_fetch_row (mysql_res);
 
 	    /* Write group type name and group name */
-	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+	    HTM_TxtF ("%s %s",row[0],row[1]);
 
 	    if (NumGrps >= 2)
 	      {
@@ -716,8 +716,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
 	   }
 	}
       else
-	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
-		   Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 HTM_TxtF ("%s %s",
+		   Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
    HTM_DIV_End ();
 
@@ -1270,7 +1270,8 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 					                                    "MchCod",
 					                                    MchCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,
+			HTM_TxtF ("%s %s",
+				  Txt_The_whole_course,
 				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
@@ -2613,7 +2614,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 						     "fas fa-toggle-off");
-	    HTM_TxtF ("&nbsp;%s",Txt_View_results);
+	    HTM_NBSPTxt (Txt_View_results);
 	 HTM_BUTTON_End ();
 
       /***** End form *****/
@@ -2650,7 +2651,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	                             " onmousedown=\"this.form.submit();return false;\"",
 	                             The_GetSuffix ());
 	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
-	       HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
+	       HTM_NBSPTxt (Txt_MATCH_QUESTION_Answered);
 	    HTM_BUTTON_End ();
 
 	 /* End form */
@@ -2666,8 +2667,8 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 				 "fas fa-exclamation-circle",
 		      Answered ? Txt_MATCH_QUESTION_Answered :
 				 Txt_MATCH_QUESTION_Unanswered);
-	    HTM_TxtF ("&nbsp;%s",Answered ? Txt_MATCH_QUESTION_Answered :
-					    Txt_MATCH_QUESTION_Unanswered);
+	    HTM_NBSPTxt (Answered ? Txt_MATCH_QUESTION_Answered :
+				    Txt_MATCH_QUESTION_Unanswered);
 	 HTM_DIV_End ();
 	}
 

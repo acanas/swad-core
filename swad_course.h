@@ -79,11 +79,6 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull);
 void Crs_ChangeCrsStatus (void);
 void Crs_ContEditAfterChgCrs (void);
 
-void Crs_PutIconToSelectMyCoursesInBreadcrumb (void);
-void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args);
-
-void Crs_ReqSelectOneOfMyCourses (void);
-
 void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role);
 
 void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss);

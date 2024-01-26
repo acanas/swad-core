@@ -540,7 +540,9 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 			 URL,FileName);
 	       HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
 			"class=\"ICO40x40\"");
-	       HTM_TxtF ("&nbsp;%s&nbsp;",FileName);
+	       HTM_NBSP ();
+	       HTM_Txt (FileName);
+	       HTM_NBSP ();
 	       Ico_PutIcon ("download.svg",Ico_BLACK,Txt_Download,"ICO40x40");
 	    HTM_A_End ();
 	 HTM_TD_End ();
