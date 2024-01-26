@@ -2106,7 +2106,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 					   Forums,-1L);
 
 	    /***** Heading row *****/
-	    HTM_TABLE_BeginWideMarginPadding (2);
+	    HTM_TABLE_Begin ("TBL_SCROLL");
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TH_Span (NULL      ,HTM_HEAD_CENTER,1,1,"BT");
@@ -2769,85 +2769,85 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    char *ClassInput;
 
    /***** Begin box *****/
-   if (IsReply)
-      Box_BoxBegin (NULL,Txt_Post,
-                    NULL,NULL,
-		    Hlp_COMMUNICATION_Forums_new_post,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Thread,
-                    NULL,NULL,
-		    Hlp_COMMUNICATION_Forums_new_thread,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,IsReply ? Txt_Post :
+				Txt_Thread,
+		 NULL,NULL,
+		 IsReply ? Hlp_COMMUNICATION_Forums_new_post :
+			   Hlp_COMMUNICATION_Forums_new_thread,
+		 Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   if (IsReply)	// Form to write a reply to a post of an existing thread
-     {
-      Frm_BeginFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
-                           For_FORUM_POSTS_SECTION_ID);
-	 For_PutParsNewPost (Forums);
-     }
-   else		// Form to write the first post of a new thread
-     {
-      Frm_BeginFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
-                           For_FORUM_POSTS_SECTION_ID);
-	 For_PutParsNewThread (Forums);
-     }
+      /***** Begin form *****/
+      if (IsReply)	// Form to write a reply to a post of an existing thread
+	{
+	 Frm_BeginFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
+			      For_FORUM_POSTS_SECTION_ID);
+	    For_PutParsNewPost (Forums);
+	}
+      else		// Form to write the first post of a new thread
+	{
+	 Frm_BeginFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
+			      For_FORUM_POSTS_SECTION_ID);
+	    For_PutParsNewThread (Forums);
+	}
 
-      /***** Subject and content *****/
-      HTM_TABLE_BeginCenterPadding (2);
+	 /***** Subject and content *****/
+	 HTM_TABLE_BeginCenterPadding (2);
 
-	 // If writing a reply to a message of an existing thread ==> write subject
-	 /* Subject */
-	 HTM_TR_Begin (NULL);
+	    // If writing a reply to a message of an existing thread ==> write subject
+	    /* Subject */
+	    HTM_TR_Begin (NULL);
 
-	    /* Label */
-	    Frm_LabelColumn ("RT","Subject",Txt_MSG_Subject);
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RT","Subject",Txt_MSG_Subject);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
-			       IsReply ? Subject :
-					 "",
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Subject\" class=\"MSG_SUBJECT INPUT_%s\""
-			       " required=\"required\"",
-			       The_GetSuffix ());
-	    HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+		  HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
+				  IsReply ? Subject :
+					    "",
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"Subject\""
+				  " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				  " required=\"required\"",
+				  The_GetSuffix ());
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-	 /* Content */
-	 HTM_TR_Begin (NULL);
+	    /* Content */
+	    HTM_TR_Begin (NULL);
 
-	    /* Label */
-	    Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RT","Content",Txt_MSG_Content);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\""
-			           " class=\"MSG_CONTENT INPUT_%s\" rows=\"10\"",
-			           The_GetSuffix ());
-	       HTM_TEXTAREA_End ();
-	    HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+		  HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\""
+				      " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				      " rows=\"10\"",
+				      The_GetSuffix ());
+		  HTM_TEXTAREA_End ();
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-      HTM_TABLE_End ();
+	 HTM_TABLE_End ();
 
-      /***** Help for text editor *****/
-      Lay_HelpPlainEditor ();
+	 /***** Help for text editor *****/
+	 Lay_HelpPlainEditor ();
 
-      /***** Attached image (optional) *****/
-      if (asprintf (&ClassInput,"FOR_MED_INPUT INPUT_%s",
-                    The_GetSuffix ()) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Med_PutMediaUploader (-1,ClassInput);
-      free (ClassInput);
+	 /***** Attached image (optional) *****/
+	 if (asprintf (&ClassInput,"FOR_MED_INPUT INPUT_%s",
+		       The_GetSuffix ()) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Med_PutMediaUploader (-1,ClassInput);
+	 free (ClassInput);
 
-      /***** Send button *****/
-      Btn_PutCreateButton (Txt_Send);
+	 /***** Send button *****/
+	 Btn_PutCreateButton (Txt_Send);
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();

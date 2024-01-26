@@ -546,7 +546,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
 	 HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
-			     " class=\"MSG_RECIPIENTS INPUT_%s\" rows=\"2\""
+			     " class=\"REC_C2_BOT_INPUT INPUT_%s\" rows=\"2\""
 			     " placeholder=\"%s\"",
 			     The_GetSuffix (),
 			     Txt_nicks_emails_or_IDs_separated_by_commas);
@@ -587,12 +587,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","MsgSubject",Txt_MSG_Subject);
+      Frm_LabelColumn ("REC_C1_BOT RT","MsgSubject",Txt_MSG_Subject);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
       HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
-			  " class=\"MSG_SUBJECT INPUT_%s\" rows=\"2\"",
+			  " class=\"REC_C2_BOT_INPUT INPUT_%s\" rows=\"2\"",
 			  The_GetSuffix ());
 
       /* If message is a reply ==> get original message */
@@ -627,12 +627,13 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
+	    Frm_LabelColumn ("REC_C1_BOT RT","MsgContent",Txt_MSG_Content);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-				   " class=\"MSG_CONTENT INPUT_%s\" rows=\"20\"",
+				   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				   " rows=\"20\"",
 				   The_GetSuffix ());
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.
@@ -662,12 +663,13 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
+	    Frm_LabelColumn ("REC_C1_BOT RT","MsgContent",Txt_MSG_Content);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-				   " class=\"MSG_CONTENT INPUT_%s\" rows=\"20\"",
+				   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				   " rows=\"20\"",
 				   The_GetSuffix ());
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.

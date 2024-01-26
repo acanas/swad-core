@@ -4832,12 +4832,6 @@ legend {font-size:12pt;}
 	}
 
 /*********************************** Messages ********************************/
-.MSG_RECIPIENTS, .MSG_SUBJECT, .MSG_CONTENT
-	{
-	box-sizing:border-box;
-	width:640px;
-	}
-
 .MSG_TO_ONE_RCP
 	{
 	display:inline-block;

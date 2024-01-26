@@ -153,8 +153,6 @@ void Crs_ShowIntroduction (void)
 /************************ Write menu with my courses *************************/
 /*****************************************************************************/
 
-#define Crs_MAX_BYTES_TXT_LINK 40
-
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;

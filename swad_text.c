@@ -14111,7 +14111,7 @@ const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"Primeira post"
 #elif L==10	// tr
-	"First post"		// Çeviri lazim!
+	"&Idot;lk posta"
 #endif
 	,
 	[Dat_END_TIME] =
@@ -14134,7 +14134,7 @@ const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME] =
 #elif L==9	// pt
 	"&Uacute;ltima post"
 #elif L==10	// tr
-	"Last post"			// Çeviri lazim!
+	"Son posta"
 #endif
 	};
 
