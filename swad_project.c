@@ -3687,6 +3687,7 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects)
    Prj_FreeMemProject (&Projects->Prj);
 
    /***** Show projects again *****/
+   HTM_BR ();
    Prj_ShowProjects (Projects);
   }
 

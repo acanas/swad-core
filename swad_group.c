@@ -1602,6 +1602,15 @@ static void Grp_WriteHeadingGroups (void)
    HTM_TR_End ();
   }
 
+/*********************** Write text "the whole course" ***********************/
+
+void Grp_WriteTheWholeCourse (void)
+  {
+   extern const char *Txt_The_whole_course;
+
+   HTM_TxtF ("%s %s",Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+  }
+
 /*****************************************************************************/
 /****** List groups of a type to edit                                   ******/
 /****** assignments, attendance events, surveys, exam events or matches ******/

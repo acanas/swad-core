@@ -1727,13 +1727,15 @@ void Svy_ReqCreatOrEditSvy (void)
    /***** End form *****/
    Frm_EndForm ();
 
-   HTM_BR ();
-
    /***** Show questions of the survey ready to be edited *****/
    if (!ItsANewSurvey)
+     {
+      HTM_BR ();
       Svy_ListSvyQuestions (&Surveys);
+     }
 
    /***** Show all surveys *****/
+   HTM_BR ();
    Svy_ListAllSurveys (&Surveys);
   }
 
@@ -1817,7 +1819,6 @@ static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
    extern const char *Txt_Groups;
-   extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
@@ -1847,9 +1848,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 					                                 "SvyCod",
 					                                 SvyCod) ? "" :
 									           " checked=\"checked\"");
-		     HTM_TxtF ("%s %s",
-			       Txt_The_whole_course,
-			       Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+		     Grp_WriteTheWholeCourse ();
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -2071,7 +2070,6 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
    extern const char *Txt_and;
-   extern const char *Txt_The_whole_course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -2112,8 +2110,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 	   }
 	}
       else
-	 HTM_TxtF ("%s %s",
-	           Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 Grp_WriteTheWholeCourse ();
 
    HTM_DIV_End ();
 

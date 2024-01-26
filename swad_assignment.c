@@ -1293,6 +1293,7 @@ void Asg_ReqCreatOrEditAsg (void)
    Frm_EndForm ();
 
    /***** Show current assignments, if any *****/
+   HTM_BR ();
    Asg_ShowAllAssignments (&Assignments);
   }
 
@@ -1303,7 +1304,6 @@ void Asg_ReqCreatOrEditAsg (void)
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Txt_Groups;
-   extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
@@ -1333,9 +1333,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 									    "AsgCod",
 									    AsgCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s %s",
-			          Txt_The_whole_course,
-				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+			Grp_WriteTheWholeCourse ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -1571,7 +1569,6 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
    extern const char *Txt_and;
-   extern const char *Txt_The_whole_course;
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1611,8 +1608,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
 	      }
 	   }
       else
-	 HTM_TxtF ("%s %s",
-	           Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 Grp_WriteTheWholeCourse ();
 
    HTM_DIV_End ();
 

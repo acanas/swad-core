@@ -674,7 +674,6 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
    extern const char *Txt_and;
-   extern const char *Txt_The_whole_course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
@@ -716,8 +715,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
 	   }
 	}
       else
-	 HTM_TxtF ("%s %s",
-		   Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 Grp_WriteTheWholeCourse ();
 
    HTM_DIV_End ();
 
@@ -1240,7 +1238,6 @@ static void Mch_ParsFormMatch (void *Match)
 static void Mch_ShowLstGrpsToEditMatch (long MchCod)
   {
    extern const char *Txt_Groups;
-   extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
@@ -1270,9 +1267,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 					                                    "MchCod",
 					                                    MchCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s %s",
-				  Txt_The_whole_course,
-				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+			Grp_WriteTheWholeCourse ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 

@@ -1077,7 +1077,6 @@ void Att_ReqCreatOrEditEvent (void)
 static void Att_ShowLstGrpsToEditEvent (long AttCod)
   {
    extern const char *Txt_Groups;
-   extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
@@ -1108,9 +1107,7 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 					                                    "AttCod",
 					                                    AttCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s %s",
-			          Txt_The_whole_course,
-				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+			Grp_WriteTheWholeCourse ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -1285,7 +1282,6 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
    extern const char *Txt_and;
-   extern const char *Txt_The_whole_course;
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1334,8 +1330,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 	   }
 	}
       else
-	 HTM_TxtF ("% %s",
-	           Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 Grp_WriteTheWholeCourse ();
 
    /***** End container *****/
    HTM_DIV_End ();

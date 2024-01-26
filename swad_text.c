@@ -40816,7 +40816,7 @@ const char *Txt_Save_changes =
 #elif L==9	// pt
 	"Salvar altera&ccedil;&otilde;es";
 #elif L==10	// tr
-	"Save changes";	// Çeviri lazim!
+	"De&gbreve;i&scedil;iklikleri kaydet";
 #endif
 
 const char *Txt_Save_file_properties =

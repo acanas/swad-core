@@ -545,7 +545,6 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
    extern const char *Txt_and;
-   extern const char *Txt_The_whole_course;
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -587,8 +586,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 	   }
 	}
       else
-	 HTM_TxtF ("%s %s",
-		   Txt_The_whole_course,Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	 Grp_WriteTheWholeCourse ();
 
    HTM_DIV_End ();
 
@@ -985,7 +983,6 @@ static void ExaSes_ParsFormSession (void *Session)
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   {
    extern const char *Txt_Groups;
-   extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
@@ -1016,9 +1013,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 					                                    "SesCod",
 					                                    SesCod) ? "" :
 										      " checked=\"checked\"");
-			HTM_TxtF ("%s %s",
-			          Txt_The_whole_course,
-				  Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+			Grp_WriteTheWholeCourse ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
