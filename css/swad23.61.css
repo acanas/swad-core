@@ -5234,7 +5234,38 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 		}
 	}
 
-.TBL_SCROLL tbody
+@media only screen and (max-width: 480px)
+	{	/* For mobile-phones */
+	.TBL_SCROLL_C2
+		{
+	    display: block;
+	    overflow-x: auto;
+	    width: 186px;
+	    margin: 0 auto;
+		}
+	}
+@media only screen and (min-width: 480px) and (max-width: 600px)
+	{	/* For mobile-phones */
+	.TBL_SCROLL_C2
+		{
+	    display: block;
+	    overflow-x: auto;
+		width: 278px;
+	    margin: 0 auto;
+		}
+	}
+@media only screen and (min-width: 600px)
+	{	/* For desktop */
+	.TBL_SCROLL_C2
+		{
+	    display: block;
+	    overflow-x: auto;
+		width: 384px;
+	    margin: 0 auto;
+		}
+	}
+
+.TBL_SCROLL tbody,.TBL_SCROLL_C2 tbody
 	{
     display: table;
     width: 100%;

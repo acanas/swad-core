@@ -204,7 +204,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Begin box *****/
       HTM_DIV_Begin ("class=\"REC_CONT\"");
-	 Box_BoxBegin ("100%",Txt_Webs_social_networks,
+	 Box_BoxBegin (NULL,Txt_Webs_social_networks,
 		       Net_PutIconsWebsSocialNetworks,NULL,
 		       Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 

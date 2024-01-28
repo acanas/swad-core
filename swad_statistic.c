@@ -308,7 +308,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			/* Data */
 			HTM_TD_Begin ("class=\"REC_C2_BOT LT FORM_IN_%s\"",
 			              The_GetSuffix ());
-		           HTM_TABLE_Begin ("TBL_SCROLL");
+		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
 			      Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
 			      Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
 			      Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
@@ -933,7 +933,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       /***** Put the table with the clicks *****/
       if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	 Box_BoxBegin ("100%",Txt_List_of_detailed_clicks,
+	 Box_BoxBegin (NULL,Txt_List_of_detailed_clicks,
 	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
       else

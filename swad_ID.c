@@ -555,7 +555,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginPadding (2);
 
       /***** List existing user's IDs *****/
       for (NumID = 0;

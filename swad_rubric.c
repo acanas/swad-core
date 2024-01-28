@@ -167,7 +167,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
    Rubrics->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin ("100%",Txt_Rubrics,
+   Box_BoxBegin (NULL,Txt_Rubrics,
                  Rub_PutIconsListRubrics,Rubrics,
                  Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 

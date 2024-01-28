@@ -1025,7 +1025,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin ("100%",Txt_Email,
+      Box_BoxBegin (NULL,Txt_Email,
 		    Acc_PutLinkToRemoveMyAccount,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
@@ -1054,7 +1054,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin ("100%",Txt_Email,
+      Box_BoxBegin (NULL,Txt_Email,
 		    NULL,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
@@ -1147,7 +1147,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    NumEmails = Mai_DB_GetMyEmails (&mysql_res,UsrDat[MeOrOther]->UsrCod);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginPadding (2);
 
       /***** List emails *****/
       for (NumEmail  = 1;

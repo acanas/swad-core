@@ -332,15 +332,18 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 
 	    /***** "To:" section (recipients) *****/
 	    HTM_TR_Begin (NULL);
-	       HTM_TD_TxtColon (Txt_MSG_To);
-	       HTM_TD_Begin ("class=\"LT\"");
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RT","",Txt_MSG_To);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 		  if (Messages->ShowOnlyOneRecipient)
 		     /***** Show only one user as recipient *****/
 		     Msg_ShowOneUniqueRecipient ();
 		  else
 		    {
 		     /***** Show potential recipients *****/
-		     HTM_TABLE_Begin ("TBL_SCROLL");
+		     HTM_TABLE_Begin ("TBL_SCROLL_C2");
 			if (ShowUsrsInCrs)
 			  {
 			   Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course
@@ -591,9 +594,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
-      HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
-			  " class=\"REC_C2_BOT_INPUT INPUT_%s\" rows=\"2\"",
-			  The_GetSuffix ());
+	 HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
+			     " class=\"REC_C2_BOT_INPUT INPUT_%s\" rows=\"2\"",
+			     The_GetSuffix ());
 
       /* If message is a reply ==> get original message */
       if (MsgCod > 0)	// It's a reply
