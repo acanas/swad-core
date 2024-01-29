@@ -6289,7 +6289,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
-      Box_BoxBegin ("95%",Txt_Upload_files,
+      Box_BoxBegin (NULL,Txt_Upload_files,
 		    NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
 
@@ -9119,7 +9119,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
       if (asprintf (&Title,"%u %s",NumDocs,NumDocs == 1 ? TitleSingular :
 							  TitlePlural) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
 
 	 /***** Write heading *****/
@@ -10100,8 +10100,7 @@ void Brw_GetAndShowOERsStats (void)
    unsigned long NumFiles[2];
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_OER],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_OER],NULL,NULL,
                       Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

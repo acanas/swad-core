@@ -1828,8 +1828,7 @@ void Dat_GetAndShowNumUsrsPerDateFormat (void)
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_DATE_FORMAT],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_DATE_FORMAT],NULL,NULL,
                       Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

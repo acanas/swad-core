@@ -51,7 +51,7 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Box_BoxTableBegin (const char *Width,const char *Title,
+void Box_BoxTableBegin (const char *Title,
                         void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding);

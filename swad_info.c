@@ -882,7 +882,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Form to choice between alternatives *****/
    /* Begin box and table */
-   Box_BoxTableBegin (NULL,Txt_Source_of_information,
+   Box_BoxTableBegin (Txt_Source_of_information,
                       Inf_PutIconToViewInfo,&Gbl.Crs.Info.Type,
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 

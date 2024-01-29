@@ -759,8 +759,7 @@ void Tst_GetAndShowTestsStats (void)
    struct Qst_Stats Stats;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_TESTS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_TESTS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

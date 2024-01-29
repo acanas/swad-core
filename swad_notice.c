@@ -814,8 +814,7 @@ void Not_GetAndShowNoticesStats (void)
    NumTotalNotifications += NumNotif;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_NOTICES],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_NOTICES],NULL,NULL,
                       Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

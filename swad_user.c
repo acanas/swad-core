@@ -1167,8 +1167,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	    FuncPars ();
 
 	 /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,Txt_Log_in,
-			    NULL,NULL,
+	 Box_BoxTableBegin (Txt_Log_in,NULL,NULL,
 			    Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
 	    /***** User's ID/nickname *****/
@@ -6552,8 +6551,7 @@ void Usr_GetAndShowUsersStats (void)
    extern const char *Txt_Average_number_of_users_belonging_to_a_course;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_USERS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_USERS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -6685,8 +6683,7 @@ void Usr_GetAndShowUsersRanking (void)
    extern const char *Txt_Followers;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_USERS_RANKING],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_USERS_RANKING],NULL,NULL,
                       Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/

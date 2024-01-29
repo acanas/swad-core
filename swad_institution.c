@@ -150,8 +150,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    if (NumInss)
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Institutions_with_pending_centers,
-                         NULL,NULL,
+      Box_BoxTableBegin (Txt_Institutions_with_pending_centers,NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
 	 /***** Write heading *****/
@@ -1549,7 +1548,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
                                    NumInss == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_INS] :
 						  Txt_HIERARCHY_PLURAL_abc[Hie_INS]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
 
       /***** Write heading *****/

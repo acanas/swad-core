@@ -568,8 +568,7 @@ void Tml_GetAndShowTimelineActivityStats (void)
    unsigned NumUsrsTotal;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_TIMELINE],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_TIMELINE],NULL,NULL,
                       Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

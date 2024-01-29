@@ -258,9 +258,8 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    if (NumRooms) // If not empty chat rooms found
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Rooms_with_users,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Txt_Rooms_with_users,NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);

@@ -4743,8 +4743,7 @@ void Prj_GetAndShowProjectsStats (void)
       NumCoursesWithProjects = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_PROJECTS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_PROJECTS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

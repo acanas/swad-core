@@ -1136,8 +1136,7 @@ void Rub_GetAndShowRubricsStats (void)
      }
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_RUBRICS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_RUBRICS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_rubrics,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

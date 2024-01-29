@@ -1818,8 +1818,7 @@ void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
    unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_NOTIFY_EVENTS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_NOTIFY_EVENTS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

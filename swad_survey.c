@@ -1636,8 +1636,7 @@ void Svy_ReqCreatOrEditSvy (void)
       Svy_PutPars (&Surveys);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,
-			 Surveys.Svy.Title[0] ? Surveys.Svy.Title :
+      Box_BoxTableBegin (Surveys.Svy.Title[0] ? Surveys.Svy.Title :
 						Txt_Survey,
 			 NULL,NULL,
 			 Hlp_ANALYTICS_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
@@ -3306,8 +3305,7 @@ void Svy_GetAndShowSurveysStats (void)
      }
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SURVEYS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_SURVEYS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

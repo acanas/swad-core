@@ -829,8 +829,7 @@ void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
    MYSQL_ROW row;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Questions,
-                      Qst_PutIconsEditBankQsts,Questions,
+   Box_BoxTableBegin (Txt_Questions,Qst_PutIconsEditBankQsts,Questions,
 		      Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE,5);
 
       /***** Write the heading *****/
@@ -1389,8 +1388,7 @@ void Qst_ListOneQstToEdit (struct Qst_Questions *Questions)
    Questions->NumQsts = 1;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Questions,
-                      Qst_PutIconsEditBankQsts,Questions,
+   Box_BoxTableBegin (Txt_Questions,Qst_PutIconsEditBankQsts,Questions,
 		      Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE,5);
 
       /***** Write the heading *****/

@@ -110,8 +110,7 @@ void Pri_EditMyPrivacy (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_Please_check_your_privacy_settings);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Privacy,
-			 Pri_PutIconsPrivacy,NULL,
+      Box_BoxTableBegin (Txt_Privacy,Pri_PutIconsPrivacy,NULL,
 			 Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
 
 	 /***** Edit photo visibility *****/
@@ -296,8 +295,7 @@ void Pri_GetAndShowNumUsrsPerPrivacy (void)
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_PRIVACY],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_PRIVACY],NULL,NULL,
                       Hlp_ANALYTICS_Figures_privacy,Box_NOT_CLOSABLE,2);
 
       /***** Privacy for photo *****/

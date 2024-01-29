@@ -2014,8 +2014,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Groups,
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_Groups,NULL,NULL,
                       Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
       /***** List to select the groups the user belongs to *****/

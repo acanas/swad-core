@@ -351,8 +351,7 @@ void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_FIRST_DAY_OF_WEEK],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_FIRST_DAY_OF_WEEK],NULL,NULL,
                       Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

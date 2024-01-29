@@ -222,9 +222,8 @@ void Acc_CheckIfEmptyAccountExists (void)
       if ((NumUsrs = Acc_DB_GetUsrsWithID (&mysql_res,ID)))
 	{
          /***** Begin box and table *****/
-	 Box_BoxTableBegin (NULL,
-	                    (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
-					     Txt_Do_you_think_you_are_one_of_these_users,
+	 Box_BoxTableBegin (NumUsrs == 1 ? Txt_Do_you_think_you_are_this_user :
+					   Txt_Do_you_think_you_are_one_of_these_users,
 			    NULL,NULL,
 			    NULL,Box_CLOSABLE,5);
 
@@ -380,8 +379,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
    Frm_BeginForm (ActCreUsrAcc);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Actions[ActCreUsrAcc],
-			 NULL,NULL,
+      Box_BoxTableBegin (Txt_Actions[ActCreUsrAcc],NULL,NULL,
 			 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
 	 /***** Nickname *****/

@@ -149,8 +149,7 @@ void Dpt_SeeAllDepts (void)
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
 		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxTableBegin (NULL,Title,
-		      Dpt_PutIconToEditDpts,NULL,
+   Box_BoxTableBegin (Title,Dpt_PutIconToEditDpts,NULL,
 		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    free (Title);
 

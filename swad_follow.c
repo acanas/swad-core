@@ -1173,8 +1173,7 @@ void Fol_GetAndShowFollowStats (void)
    double Average;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_FOLLOW],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_FOLLOW],NULL,NULL,
                       Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

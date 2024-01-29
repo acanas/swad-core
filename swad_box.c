@@ -66,12 +66,12 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 /*****************************************************************************/
 // CellPadding must be 0, 1, 2, 4 or 8
 
-void Box_BoxTableBegin (const char *Width,const char *Title,
+void Box_BoxTableBegin (const char *Title,
                         void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_BoxBegin (Width,Title,
+   Box_BoxBegin (NULL,Title,
                  FunctionToDrawContextualIcons,Args,
                  HelpLink,Closable);
       HTM_TABLE_BeginWidePadding (CellPadding);

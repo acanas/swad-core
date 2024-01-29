@@ -1579,8 +1579,7 @@ void Exa_GetAndShowExamsStats (void)
       NumCoursesWithExams = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_EXAMS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_EXAMS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_exams,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

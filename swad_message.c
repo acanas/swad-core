@@ -1488,7 +1488,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 
    /***** Begin box with messages *****/
    Msg_SetNumMsgsStr (Messages,&NumMsgsStr,NumUnreadMsgs);
-   Box_BoxBegin ("97%",NumMsgsStr,
+   Box_BoxBegin (NULL,NumMsgsStr,
                  Msg_PutIconsListMsgs,Messages,
                  Help[Messages->TypeOfMessages],Box_NOT_CLOSABLE);
    free (NumMsgsStr);
@@ -2811,9 +2811,7 @@ void Msg_ListBannedUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Banned_users,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Txt_Banned_users,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
 
 	 /***** List users *****/
 	 for (NumUsr  = 1;
@@ -2892,8 +2890,7 @@ void Msg_GetAndShowMsgsStats (void)
    NumMsgsReceivedAndNotified = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_MESSAGES],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_MESSAGES],NULL,NULL,
                       Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

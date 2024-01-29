@@ -1088,8 +1088,7 @@ void Hie_GetAndShowHierarchyStats (void)
    Rol_Role_t Role;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_HIERARCHY],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_HIERARCHY],NULL,NULL,
                       Hlp_ANALYTICS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
 
       /* Head row */

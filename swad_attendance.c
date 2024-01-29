@@ -980,8 +980,7 @@ void Att_ReqCreatOrEditEvent (void)
       Pag_PutParPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,
-			 Events.Event.Title[0] ? Events.Event.Title :
+      Box_BoxTableBegin (Events.Event.Title[0] ? Events.Event.Title :
 						 Txt_Event,
 			 NULL,NULL,
 			 Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
@@ -1424,8 +1423,8 @@ static void Att_ShowEvent (struct Att_Events *Events)
    Events->Event.NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInEvent (Events->Event.AttCod);
 
    /***** Show attendance event inside a box *****/
-   Box_BoxTableBegin (NULL,Events->Event.Title[0] ? Events->Event.Title :
-						    Txt_Event,
+   Box_BoxTableBegin (Events->Event.Title[0] ? Events->Event.Title :
+					       Txt_Event,
                       Att_PutIconsOneEvent,Events,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
       Att_ShowOneEventRow (Events,

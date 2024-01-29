@@ -1213,8 +1213,7 @@ void Asg_ReqCreatOrEditAsg (void)
    Asg_PutPars (&Assignments);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,
-			 Assignments.Asg.Title[0] ? Assignments.Asg.Title :
+      Box_BoxTableBegin (Assignments.Asg.Title[0] ? Assignments.Asg.Title :
 						    Txt_Assignment,
 			 NULL,NULL,
 			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
@@ -1821,8 +1820,7 @@ void Asg_GetAndShowAssignmentsStats (void)
       NumCoursesWithAssignments = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

@@ -139,14 +139,10 @@ void Mai_SeeMailDomains (void)
    Mai_GetListMailDomainsAllowedForNotif (&Mails);
 
    /***** Begin box and table *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
-			 Mai_PutIconToEditMailDomains,NULL,
-			 Hlp_START_Domains,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,Txt_Email_domains_allowed_for_notifications,
-			 NULL,NULL,
-			 Hlp_START_Domains,Box_NOT_CLOSABLE,2);
+   Box_BoxTableBegin (Txt_Email_domains_allowed_for_notifications,
+		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
+							       NULL,NULL,
+		      Hlp_START_Domains,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);

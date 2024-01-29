@@ -503,8 +503,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    Frm_BeginFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Statistics_of_all_visits,
-			 NULL,NULL,
+      Box_BoxTableBegin (Txt_Statistics_of_all_visits,NULL,NULL,
 			 Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
 	 /***** Start and end dates for the search *****/

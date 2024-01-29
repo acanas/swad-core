@@ -70,8 +70,7 @@ void Coo_EditMyPrefsOnCookies (void)
    HTM_SECTION_Begin (Coo_COOKIES_ID);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Cookies,
-			 Coo_PutIconsCookies,NULL,
+      Box_BoxTableBegin (Txt_Cookies,Coo_PutIconsCookies,NULL,
 			 Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
 
 	 /***** Edit my preference about cookies *****/
@@ -183,8 +182,7 @@ void Coo_GetAndShowNumUsrsPerCookies (void)
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_COOKIES],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_COOKIES],NULL,NULL,
                       Hlp_ANALYTICS_Figures_cookies,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

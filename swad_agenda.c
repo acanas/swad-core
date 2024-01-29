@@ -1369,8 +1369,8 @@ void Agd_ReqCreatOrEditEvent (void)
    Agd_PutCurrentParsMyAgenda (&Agenda);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,AgdEvent.Title[0] ? AgdEvent.Title :
-						  Txt_Event,
+      Box_BoxTableBegin (AgdEvent.Title[0] ? AgdEvent.Title :
+					     Txt_Event,
 			 NULL,NULL,
 			 Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
 
@@ -1578,8 +1578,7 @@ void Agd_GetAndShowAgendasStats (void)
    unsigned NumUsrsTotal;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_AGENDAS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_AGENDAS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_agendas,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

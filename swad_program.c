@@ -2244,8 +2244,7 @@ void Prg_GetAndShowCourseProgramStats (void)
       NumCoursesWithItems = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_COURSE_PROGRAMS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_COURSE_PROGRAMS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_course_programs,Box_NOT_CLOSABLE,2);
 
       /***** Write table heading *****/

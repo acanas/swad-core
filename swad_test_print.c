@@ -1706,8 +1706,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
    Frm_BeginForm (ActSeeMyTstResCrs);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Results,
-			 NULL,NULL,
+      Box_BoxTableBegin (Txt_Results,NULL,NULL,
 			 Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
 	 Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
@@ -1732,8 +1731,7 @@ void TstPrn_ShowMyPrints (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_Results,NULL,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
       /***** Header of the table with the list of users *****/
@@ -1772,8 +1770,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Results,
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_Results,NULL,NULL,
 		      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,5);
 
       /***** Header of the table with the list of users *****/

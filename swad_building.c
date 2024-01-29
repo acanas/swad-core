@@ -121,8 +121,7 @@ void Bld_SeeBuildings (void)
    Bld_GetListBuildings (&Buildings,Bld_ALL_DATA);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Buildings,
-                      Bld_PutIconsListingBuildings,NULL,
+   Box_BoxTableBegin (Txt_Buildings,Bld_PutIconsListingBuildings,NULL,
 		      Hlp_CENTER_Buildings,Box_NOT_CLOSABLE,2);
 
       HTM_TR_Begin (NULL);

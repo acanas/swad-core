@@ -1644,8 +1644,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
      }
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,NULL,
-                      NULL,NULL,
+   Box_BoxTableBegin (NULL,NULL,NULL,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
@@ -2092,7 +2091,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    /***** Begin box and table *****/
    Rec_Record.UsrDat = UsrDat;
    Rec_Record.TypeOfView = TypeOfView;
-   Box_BoxTableBegin (NULL,NULL,
+   Box_BoxTableBegin (NULL,
 		      TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
 								 Rec_PutIconsCommands,NULL,
 		      Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
@@ -3877,8 +3876,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,
-			 IAmATeacher ? Txt_Institution_center_and_department :
+      Box_BoxTableBegin (IAmATeacher ? Txt_Institution_center_and_department :
 				       Txt_HIERARCHY_SINGUL_Abc[Hie_INS],
 			 NULL,NULL,
 			 Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);

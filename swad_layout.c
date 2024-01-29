@@ -1593,9 +1593,7 @@ void Lay_AdvertisementMobile (void)
       HTM_DIV_Begin ("style=\"margin-top:25px;\"");
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,NULL,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,8);
+      Box_BoxTableBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE,8);
 
 	 /***** Show advertisement *****/
 	 HTM_TR_Begin (NULL);
@@ -1759,8 +1757,7 @@ void Lay_GetAndShowNumUsrsPerSideColumns (void)
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SIDE_COLUMNS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_SIDE_COLUMNS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

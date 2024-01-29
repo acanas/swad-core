@@ -393,8 +393,7 @@ void Tag_ShowFormEditTags (void)
    if ((NumTags = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Tags,
-                         NULL,NULL,
+      Box_BoxTableBegin (Txt_Tags,NULL,NULL,
                          Hlp_ASSESSMENT_Questions_editing_tags,Box_NOT_CLOSABLE,2);
 
 	 /***** Show tags *****/

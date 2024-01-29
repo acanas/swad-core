@@ -259,9 +259,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
       UserAgent = NULL;
 
       /***** Begin box *****/
-      Box_BoxTableBegin (NULL,Txt_Hits,
-                         NULL,NULL,
-                         NULL,Box_CLOSABLE,2);
+      Box_BoxTableBegin (Txt_Hits,NULL,NULL,NULL,Box_CLOSABLE,2);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);

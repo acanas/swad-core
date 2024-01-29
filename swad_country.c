@@ -126,8 +126,7 @@ void Cty_SeeCtyWithPendingInss (void)
    if ((NumCtys = Cty_DB_GetCtysWithPendingInss (&mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Countries_with_pending_institutions,
-                         NULL,NULL,
+      Box_BoxTableBegin (Txt_Countries_with_pending_institutions,NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
 	 /***** Write heading *****/
@@ -1672,9 +1671,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 				   NumCtys == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CTY] :
 						  Txt_HIERARCHY_PLURAL_abc[Hie_CTY]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxTableBegin (NULL,Title,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
 
 	 /***** Write heading *****/

@@ -1642,9 +1642,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct Usr_Data *UsrDat,Rol_Role_t Role)
    if (NumCrss)
      {
       /* Begin box and table */
-      Box_BoxTableBegin (NULL,NULL,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
 
 	 /* Heading row */
 	 HTM_TR_Begin (NULL);
@@ -1717,7 +1715,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 				   NumCrss == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CRS] :
 						  Txt_HIERARCHY_PLURAL_abc[Hie_CRS]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
 
 	 /***** Heading row *****/

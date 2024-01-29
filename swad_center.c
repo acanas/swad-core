@@ -128,8 +128,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    if ((NumCtrs = Ctr_DB_GetCtrsWithPendingDegs (&mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Centers_with_pending_degrees,
-                         NULL,NULL,
+      Box_BoxTableBegin (Txt_Centers_with_pending_degrees,NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
 	 /***** Wrtie heading *****/
@@ -1609,7 +1608,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 				   NumCtrs == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_CTR] :
 	                                          Txt_HIERARCHY_PLURAL_abc[Hie_CTR]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
 
 	 /***** Write heading *****/

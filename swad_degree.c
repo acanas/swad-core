@@ -132,8 +132,7 @@ void Deg_SeeDegWithPendingCrss (void)
    if ((NumDegs = Deg_DB_GetDegsWithPendingCrss (&mysql_res)))
      {
       /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Degrees_with_pending_courses,
-                         NULL,NULL,
+      Box_BoxTableBegin (Txt_Degrees_with_pending_courses,NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
 	 /***** Write heading *****/
@@ -1523,7 +1522,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 				   NumDegs == 1 ? Txt_HIERARCHY_SINGUL_abc[Hie_DEG] :
 						  Txt_HIERARCHY_PLURAL_abc[Hie_DEG]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      Box_BoxTableBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
       free (Title);
 
 	 /***** Write heading *****/

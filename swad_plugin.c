@@ -122,7 +122,7 @@ void Plg_ListPlugins (void)
    Plg_GetListPlugins (&Plugins);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Plugins,
+   Box_BoxTableBegin (Txt_Plugins,
 		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
 							       NULL,
 		      NULL,

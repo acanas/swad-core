@@ -177,8 +177,7 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_PHOTO_SHAPES],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_PHOTO_SHAPES],NULL,NULL,
                       Hlp_ANALYTICS_Figures_user_photos,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/

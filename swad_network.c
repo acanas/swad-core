@@ -343,8 +343,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    NumNetworks = Net_DB_GetWebAndSocialNetworksStats (&mysql_res);
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],
-                      NULL,NULL,
+   Box_BoxTableBegin (Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],NULL,NULL,
                       Hlp_ANALYTICS_Figures_webs_social_networks,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/

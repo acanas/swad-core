@@ -123,8 +123,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    /***** Begin box and table *****/
    HTM_DIV_Begin (NULL);
-      Box_BoxTableBegin (NULL,Txt_What_would_you_like_to_do,
-			 NULL,NULL,
+      Box_BoxTableBegin (Txt_What_would_you_like_to_do,NULL,NULL,
 			 NULL,Box_CLOSABLE,2);
 
 	 if (Gbl.Usrs.Me.Logged)		// I am logged
