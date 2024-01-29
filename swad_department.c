@@ -453,7 +453,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Dpt_PutHeadDepartments ();
@@ -772,7 +772,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewDpt,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewDpt,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Dpt_PutHeadDepartments ();

@@ -1034,7 +1034,7 @@ static void Cty_ListCountriesForEdition (void)
    char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Cty_PutHeadCountriesForEdition ();
@@ -1390,7 +1390,7 @@ static void Cty_PutFormToCreateCountry (void)
    char StrName[32];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewCty,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewCty,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Cty_PutHeadCountriesForEdition ();

@@ -359,7 +359,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
    char *Icon;
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Plg_PutHeadPlugins ();
@@ -396,7 +396,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_End ();
 
 	    /* Plugin name */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenPlg);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
@@ -407,7 +407,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_End ();
 
 	    /* Plugin description */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgPlgDes);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
@@ -418,7 +418,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_End ();
 
 	    /* Plugin logo */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgPlgLog);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
@@ -429,7 +429,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_End ();
 
 	    /* Plugin application key */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgPlgAppKey);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
@@ -440,7 +440,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_End ();
 
 	    /* Plugin URL */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgPlgURL);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
@@ -450,7 +450,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_End ();
 
 	    /* Plugin IP address */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgPlgIP);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
@@ -788,7 +788,7 @@ void Plg_ContEditAfterChgPlg (void)
 static void Plg_PutFormToCreatePlugin (void)
   {
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewPlg,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewPlg,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Plg_PutHeadPlugins ();
@@ -810,7 +810,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	 HTM_TD_End ();
 
 	 /***** Plugin name *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"8\" class=\"INPUT_%s\""
@@ -819,7 +819,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	 HTM_TD_End ();
 
 	 /***** Plugin description *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
 			    Plg_EditingPlg->Description,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -829,7 +829,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	 HTM_TD_End ();
 
 	 /***** Plugin logo *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"4\" class=\"INPUT_%s\""
@@ -838,7 +838,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	 HTM_TD_End ();
 
 	 /***** Plugin application key *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"8\" class=\"INPUT_%s\""
@@ -847,7 +847,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	 HTM_TD_End ();
 
 	 /***** Plugin URL *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "size=\"8\" class=\"INPUT_%s\""
 			   " required=\"required\"",
@@ -855,7 +855,7 @@ static void Plg_PutFormToCreatePlugin (void)
 	 HTM_TD_End ();
 
 	 /***** Plugin IP address *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"8\" class=\"INPUT_%s\""

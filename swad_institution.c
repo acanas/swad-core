@@ -894,7 +894,7 @@ static void Ins_ListInstitutionsForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForEdition ();
@@ -1334,7 +1334,7 @@ static void Ins_PutFormToCreateInstitution (void)
       Err_NoPermissionExit ();
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (NextAction,NULL,NULL,NULL);
+   Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForEdition ();

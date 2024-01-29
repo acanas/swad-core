@@ -70,7 +70,8 @@ void Frm_SetParsForm (char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1],
 void Frm_EndForm (void);
 
 void Frm_BeginFormTable (Act_Action_t NextAction,const char *Anchor,
-                         void (*FuncPars) (void *Args),void *Args);
+                         void (*FuncPars) (void *Args),void *Args,
+                         const char *ClassTable);
 void Frm_EndFormTable (Btn_Button_t Button);
 
 void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1]);

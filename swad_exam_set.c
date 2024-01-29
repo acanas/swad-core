@@ -181,7 +181,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  unsigned MaxSetInd)
   {
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewExaSet,NULL,Exa_PutPars,Exams);
+   Frm_BeginFormTable (ActNewExaSet,NULL,Exa_PutPars,Exams,"TBL_WIDE");
 
       /***** Table heading *****/
       ExaSet_PutTableHeadingForSets ();

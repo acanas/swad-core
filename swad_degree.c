@@ -334,7 +334,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Begin table of degrees *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Deg_PutHeadDegreesForEdition ();
@@ -511,7 +511,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
       Err_NoPermissionExit ();
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (NextAction,NULL,NULL,NULL);
+   Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Deg_PutHeadDegreesForEdition ();

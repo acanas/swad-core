@@ -398,7 +398,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Table head *****/
       Ban_PutHeadBanners ();
@@ -433,7 +433,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_End ();
 
 	    /* Banner code */
-	    HTM_TD_Begin ("class=\"RM %s_%s\"",
+	    HTM_TD_Begin ("class=\"CODE %s_%s\"",
 			  HidVis_DataClass[Ban->HiddenOrVisible],
 			  The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
@@ -450,7 +450,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 				           true);	// Put form
 
 	    /* Banner image */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgBanImg);
 		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
@@ -461,7 +461,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_End ();
 
 	    /* Banner WWW */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgBanWWW);
 		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
@@ -773,7 +773,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewBan,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewBan,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Ban_PutHeadBanners ();
@@ -782,14 +782,16 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
       /* Begin table row */
       HTM_TR_Begin (NULL);
 
+	 /* Icons */
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
+
 	 /* Banner code */
-	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_Begin ("class=\"CODE\"");
 	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"BM\"");
-	 HTM_TD_End ();
-
-	 HTM_TD_Empty (1);
 
 	 /* Banner short name and full name */
 	 Names[Nam_SHRT_NAME] = Ban->ShrtName;
@@ -797,7 +799,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	 Nam_NewShortAndFullNames (Names);
 
 	 /* Banner image */
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"12\" class=\"INPUT_%s\""
@@ -806,7 +808,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	 HTM_TD_End ();
 
 	 /* Banner WWW */
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			   " required=\"required\"",

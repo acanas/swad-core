@@ -747,7 +747,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Ctr_PutHeadCentersForEdition ();
@@ -1238,7 +1238,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
       Err_NoPermissionExit ();
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (NextAction,NULL,NULL,NULL);
+   Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Ctr_PutHeadCentersForEdition ();

@@ -276,10 +276,9 @@ static void Rec_ListFieldsRecordsForEdition (void)
    struct RecordField *Fld;
    Rec_VisibilityRecordFields_t Vis;
    unsigned VisUnsigned;
-   char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Rec_WriteHeadingRecordFields ();
@@ -299,8 +298,8 @@ static void Rec_ListFieldsRecordsForEdition (void)
 					      Rec_PutParFldCod,&Fld->FieldCod);
 	    HTM_TD_End ();
 
-	    /* Name of the field */
-	    HTM_TD_Begin ("class=\"LM\"");
+	    /* Field name */
+	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenFie);
 		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
 		  HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
@@ -315,11 +314,10 @@ static void Rec_ListFieldsRecordsForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgRowFie);
 		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
-		  snprintf (StrNumLines,sizeof (StrNumLines),"%u",
-			    Fld->NumLines);
-		  HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"2\" class=\"INPUT_%s\"",
+		  HTM_INPUT_LONG ("NumLines",1,UINT_MAX,(long) Fld->NumLines,
+				  HTM_SUBMIT_ON_CHANGE,false,
+				  "class=\"INPUT_LONG INPUT_%s\""
+				  " required=\"required\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -363,10 +361,9 @@ void Rec_ShowFormCreateRecordField (void)
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    Rec_VisibilityRecordFields_t Vis;
    unsigned VisUnsigned;
-   char StrNumLines[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewFie,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewFie,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Rec_WriteHeadingRecordFields ();
@@ -379,7 +376,7 @@ void Rec_ShowFormCreateRecordField (void)
 	 HTM_TD_End ();
 
 	 /***** Field name *****/
-	 HTM_TD_Begin ("class=\"LM\"");
+	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"REC_FIELDNAME INPUT_%s\""
@@ -389,11 +386,10 @@ void Rec_ShowFormCreateRecordField (void)
 
 	 /***** Number of lines in form ******/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    snprintf (StrNumLines,sizeof (StrNumLines),"%u",
-		      Gbl.Crs.Records.Field.NumLines);
-	    HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"2\" class=\"INPUT_%s\""
+	    HTM_INPUT_LONG ("NumLines",1,UINT_MAX,
+			    (long) Gbl.Crs.Records.Field.NumLines,
+			    HTM_DONT_SUBMIT_ON_CHANGE,false,
+			    "class=\"INPUT_LONG INPUT_%s\""
 			    " required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();

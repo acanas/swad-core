@@ -405,7 +405,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Table head *****/
       Lnk_PutHeadLinks ();
@@ -439,7 +439,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 				           true);	// Put form
 
 	    /* Link WWW */
-	    HTM_TD_Begin ("class=\"CM\"");
+	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgLnkWWW);
 	       ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
 		  HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
@@ -649,7 +649,7 @@ static void Lnk_PutFormToCreateLink (void)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewLnk,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewLnk,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Lnk_PutHeadLinks ();
@@ -670,7 +670,7 @@ static void Lnk_PutFormToCreateLink (void)
 	 Nam_NewShortAndFullNames (Names);
 
 	 /***** Link WWW *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
 			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
 			   " required=\"required\"",

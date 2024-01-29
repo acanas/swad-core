@@ -637,7 +637,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Roo_PutHeadRooms ();
@@ -1197,7 +1197,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewRoo,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewRoo,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Roo_PutHeadRooms ();
@@ -1213,7 +1213,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 HTM_TD_End ();
 
 	 /***** Building *****/
-	 HTM_TD_Begin ("class=\"LM\"");
+	 HTM_TD_Begin ("class=\"CM\"");
 	    Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings,
 				     HTM_DONT_SUBMIT_ON_CHANGE);
 	 HTM_TD_End ();
@@ -1279,7 +1279,7 @@ static void Roo_PutHeadRooms (void)
    HTM_TR_Begin (NULL);
       HTM_TH_Span (NULL             ,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH (Txt_Code              ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Building          ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Building          ,HTM_HEAD_CENTER);
       HTM_TH (Txt_Floor             ,HTM_HEAD_LEFT  );
       HTM_TH (Txt_Type              ,HTM_HEAD_LEFT  );
       HTM_TH (Txt_Short_name        ,HTM_HEAD_LEFT  );

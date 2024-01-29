@@ -72,7 +72,7 @@ void Box_BoxTableBegin (const char *Title,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
    Box_BoxBegin (Title,FunctionToDrawContextualIcons,Args,HelpLink,Closable);
-      HTM_TABLE_BeginWidePadding (CellPadding);
+      HTM_TABLE_BeginPadding (CellPadding);
   }
 
 void Box_BoxTableShadowBegin (const char *Title,
@@ -83,7 +83,7 @@ void Box_BoxTableShadowBegin (const char *Title,
    Box_BoxShadowBegin (Title,
                        FunctionToDrawContextualIcons,Args,
                        HelpLink);
-      HTM_TABLE_BeginWidePadding (CellPadding);
+      HTM_TABLE_BeginPadding (CellPadding);
   }
 
 void Box_BoxBegin (const char *Title,

@@ -79,6 +79,8 @@ void Mai_GetSelUsrsAndListEmails (void);
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat);
 
+void Mai_PutFormToGetNewEmail (const char *NewEmail);
+
 void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail);
 void Mai_ShowFormChangeOtherUsrEmail (void);
 

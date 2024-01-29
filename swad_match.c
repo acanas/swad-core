@@ -1193,7 +1193,7 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
       Frm_BeginFormTable (ItsANewMatch ? ActNewMch :
 				         ActChgMch,
 			  Mch_NEW_MATCH_SECTION_ID,
-			  Mch_ParsFormMatch,Match);
+			  Mch_ParsFormMatch,Match,"TBL_WIDE");
 
 	 /***** Match title *****/
 	 HTM_TR_Begin (NULL);

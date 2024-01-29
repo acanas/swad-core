@@ -172,7 +172,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
    RubCri_ValueRange_t ValueRange;
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewRubCri,NULL,Rub_PutPars,Rubrics);
+   Frm_BeginFormTable (ActNewRubCri,NULL,Rub_PutPars,Rubrics,"TBL_SCROLL");
 
       /***** Table heading *****/
       RubCri_PutTableHeadingForEdition ();
@@ -666,7 +666,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    double SumOfWeights = 0.0;
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write the heading *****/
       RubCri_PutTableHeadingForEdition ();

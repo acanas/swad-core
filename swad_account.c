@@ -366,12 +366,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
   {
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *Txt_Nickname;
-   extern const char *Txt_HELP_nickname;
-   extern const char *Txt_HELP_email;
-   extern const char *Txt_Email;
    extern const char *Txt_Create;
-   char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    /***** Begin form to enter some data of the new user *****/
    Frm_BeginForm (ActCreUsrAcc);
@@ -381,48 +376,10 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
 			 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
 	 /***** Nickname *****/
-	 /* Begin table row */
-	 HTM_TR_Begin (NULL);
-
-	    /* Label */
-	    Frm_LabelColumn ("RT","NewNick",Txt_Nickname);
-
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       if (NewNickWithoutArr[0])
-		  snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
-			    NewNickWithoutArr);
-	       else
-		  NewNickWithArr[0] = '\0';
-	       HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-			       NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"NewNick\" size=\"16\" placeholder=\"%s\""
-			       " class=\"INPUT_%s\" required=\"required\"",
-			       Txt_HELP_nickname,
-			       The_GetSuffix ());
-	    HTM_TD_End ();
-
-	 /* End table row */
-	 HTM_TR_End ();
+         Nck_PutFormToGetNewNickname (NewNickWithoutArr);
 
 	 /***** Email *****/
-	 /* Begin table row */
-	 HTM_TR_Begin (NULL);
-
-	    /* Label */
-	    Frm_LabelColumn ("RT","NewEmail",Txt_Email);
-
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
-				"id=\"NewEmail\" size=\"16\" placeholder=\"%s\""
-				" class=\"INPUT_%s\" required=\"required\"",
-				Txt_HELP_email,
-			        The_GetSuffix ());
-	    HTM_TD_End ();
-
-	 /* End table row */
-	 HTM_TR_End ();
+	 Mai_PutFormToGetNewEmail (NewEmail);
 
 	 /***** Password *****/
 	 Pwd_PutFormToGetNewPasswordOnce ();

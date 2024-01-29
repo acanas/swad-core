@@ -221,7 +221,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_TxtColon (Txt_Types_of_answers);
+      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Types_of_answers);
 
       /***** Select all types of answers *****/
       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
@@ -1861,7 +1861,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       ParCod_PutPar (ParCod_Qst,Question->QstCod);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginPadding (2);	// Table for this question
+      HTM_TABLE_Begin ("TBL_SCROLL");	// Table for this question
 
 	 /***** Help for text editor *****/
 	 HTM_TR_Begin (NULL);
@@ -1875,8 +1875,13 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	 /***** Write the tags *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_TxtColon (Txt_Tags);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","",Txt_Tags);
+
+	    /* Tags */
 	    HTM_TD_Begin ("class=\"LT\"");
+
 	       HTM_TABLE_BeginPadding (2);	// Table for tags
 
 		  for (IndTag = 0;
@@ -1994,7 +1999,11 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	 /***** Type of answer *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_TxtColon (Txt_Type);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","",Txt_Type);
+
+	    /* Data */
 	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
 	       for (AnsType  = (Qst_AnswerType_t) 0;
 		    AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
@@ -2016,10 +2025,13 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	 /***** Answers *****/
 	 /* Integer answer */
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_TxtColon (Txt_Answers);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","",Txt_Answers);
+
+	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_GetSuffix ());
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Integer_number);
 		  snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
 		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
@@ -2055,9 +2067,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	 /* Questions can be shuffled? */
 	 HTM_TR_Begin (NULL);
-
 	    HTM_TD_Empty (1);
-
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
@@ -2070,7 +2080,6 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  HTM_Txt (Txt_Shuffle);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
-
 	 HTM_TR_End ();
 
 	 /* Simple or multiple choice answers */

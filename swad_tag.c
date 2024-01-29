@@ -294,7 +294,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_TxtColon (Txt_Tags);
+      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Tags);
 
       /***** Select all tags *****/
       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");

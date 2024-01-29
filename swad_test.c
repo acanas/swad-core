@@ -79,6 +79,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions);
+static void Tst_ShowFormNumQsts (void);
 
 static bool Tst_CheckIfNextTstAllowed (void);
 
@@ -116,7 +117,6 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
-   extern const char *Txt_Number_of_questions;
    extern const char *Txt_Generate_test;
    extern const char *Txt_No_questions;
    MYSQL_RES *mysql_res;
@@ -146,32 +146,13 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 		  Qst_ShowFormAnswerTypes (&Questions->AnswerTypes);
 
 		  /***** Number of questions to generate ****/
-		  HTM_TR_Begin (NULL);
-
-		     /* Label */
-		     Frm_LabelColumn ("REC_C1_BOT RT","NumQst",
-				      Txt_Number_of_questions);
-
-		     /* Data */
-		     HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
-			HTM_INPUT_LONG ("NumQst",
-					(long) TstCfg_GetConfigMin (),
-					(long) TstCfg_GetConfigMax (),
-					(long) TstCfg_GetConfigDef (),
-					HTM_DONT_SUBMIT_ON_CHANGE,
-					TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
-					"id=\"NumQst\""
-					" class=\"REC_C2_BOT_INPUT INPUT_%s\""
-					" required=\"required\"",
-					The_GetSuffix ());
-		     HTM_TD_End ();
-
-		  HTM_TR_End ();
+		  Tst_ShowFormNumQsts ();
 
 	       HTM_TABLE_End ();
 
 	       /***** Send button *****/
 	       Btn_PutConfirmButton (Txt_Generate_test);
+
 	    Frm_EndForm ();
 	   }
 	}
@@ -184,6 +165,37 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************ Show form for enter number of questions to generate ************/
+/*****************************************************************************/
+
+static void Tst_ShowFormNumQsts (void)
+  {
+   extern const char *Txt_Number_of_questions;
+
+   HTM_TR_Begin (NULL);
+
+      /***** Label *****/
+      Frm_LabelColumn ("REC_C1_BOT RT","NumQst",
+		       Txt_Number_of_questions);
+
+      /***** Data *****/
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	 HTM_INPUT_LONG ("NumQst",
+			 (long) TstCfg_GetConfigMin (),
+			 (long) TstCfg_GetConfigMax (),
+			 (long) TstCfg_GetConfigDef (),
+			 HTM_DONT_SUBMIT_ON_CHANGE,
+			 TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
+			 "id=\"NumQst\""
+			 " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			 " required=\"required\"",
+			 The_GetSuffix ());
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

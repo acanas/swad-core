@@ -433,7 +433,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Plc_PutHeadPlaces ();
@@ -639,7 +639,7 @@ static void Plc_PutFormToCreatePlace (void)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewPlc,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewPlc,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Plc_PutHeadPlaces ();

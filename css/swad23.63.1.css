@@ -1746,74 +1746,29 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	width:44px;
 	}
-	
 .PRG_TITLE_DESCRIPTION_WIDTH
 	{
 	box-sizing:border-box;
 	width:100%;
 	}
-
 .PRG_NUM
 	{
-	width:30px;
+	width:44px;
 	text-align:left;
 	vertical-align:top;
 	}
-
-
-/******************************* Record card *********************************/
-@media only screen and (max-width: 480px)
-	{	/* For mobile-phones */
-	.PRG_MAIN
-		{
-		box-sizing:border-box;
-		max-width:100px;
-		overflow:hidden;
-		text-overflow:ellipsis;
-		text-align:left;
-		vertical-align:top;
-		}
-	.PRG_DATE
-		{
-		box-sizing:border-box;
-		max-width:72px;
-		overflow:hidden;
-		text-overflow:ellipsis;
-		}
+.PRG_MAIN
+	{
+	box-sizing:border-box;
+	text-align:left;
+	vertical-align:top;
 	}
-@media only screen and (min-width: 480px) and (max-width: 600px)
-	{	/* For mobile-phones */
-	.PRG_MAIN
-		{
-		box-sizing:border-box;
-		max-width:244px;
-		overflow:hidden;
-		text-overflow:ellipsis;
-		text-align:left;
-		vertical-align:top;
-		}
-	.PRG_DATE
-		{
-		box-sizing:border-box;
-		max-width:120px;
-		overflow:hidden;
-		text-overflow:ellipsis;
-		}
-	}
-@media only screen and (min-width: 600px)
-	{	/* For desktop */
-	.PRG_MAIN
-		{
-		text-align:left;
-		vertical-align:top;
-		}
-	.PRG_DATE
-		{
-		box-sizing:border-box;
-		max-width:120px;
-		overflow:hidden;
-		text-overflow:ellipsis;
-		}
+.PRG_DATE
+	{
+	box-sizing:border-box;
+	min-width:120px;
+	overflow:hidden;
+	text-overflow:ellipsis;
 	}
 
 .PRG_TIT_1_WHITE,
@@ -1867,16 +1822,6 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_HIDDEN
 	{
 	opacity:0.33;
-	}
-
-#prg_highlighted
-	{
-	animation:itemfadein 1s ease forwards;
-	}
-@keyframes itemfadein
-	{
-	from	{opacity:0;}
-	to	{opacity:1;}
 	}
 	
 .PRG_RSC_COL1
@@ -3528,28 +3473,10 @@ legend {font-size:12pt;}
 .PrjCfg_RUBRIC_SEL	{max-width:400px;}
 
 /********************************** Tests ************************************/
-.TAG_SEL	{box-sizing:border-box; width:346px;}
-.TAG_TXT	{box-sizing:border-box; width:346px;}
-.STEM
-	{
-	box-sizing:border-box;
-	margin:0 auto;
-	width:700px;
-	}
-.STEM_TEXTAREA
-	{
-	width:696px;
-	}
-.ANSWER
-	{
-	box-sizing:border-box;
-	margin:0 auto;
-	width:600px;
-	}
-.ANSWER_TEXTAREA
-	{
-	width:596px;
-	}
+.TAG_SEL			{box-sizing: border-box; width: 390px;}
+.TAG_TXT			{box-sizing: border-box; width: 390px;}
+.STEM_TEXTAREA		{width: 780px;}
+.ANSWER_TEXTAREA	{width: 682px;}
 
 .Tst_SUBTITLE
 	{
@@ -5192,6 +5119,14 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	height:48px;
  	}
 
+/*********************** Table with no horizontal scroll *********************/
+.TBL_WIDE
+	{
+	box-sizing:border-box;
+	width:100%;
+	}
+table.TBL_WIDE > tbody > tr > th {padding: 2px;}
+
 /************************* Table with horizontal scroll **********************/
 @media only screen and (max-width: 480px)
 	{	/* For mobile-phones */
@@ -5223,13 +5158,23 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	    margin: 0 auto;
 		}
 	}
-@media only screen and (min-width: 1024px)
+@media only screen and (min-width: 1024px) and (max-width: 1600px)
 	{	/* For desktop */
 	.TBL_SCROLL
 		{
 	    display: block;
 	    overflow-x: auto;
 	    width: 900px;
+	    margin: 0 auto;
+		}
+	}
+@media only screen and (min-width: 1600px)
+	{	/* For desktop */
+	.TBL_SCROLL
+		{
+	    display: block;
+	    overflow-x: auto;
+	    width: 1200px;
 	    margin: 0 auto;
 		}
 	}

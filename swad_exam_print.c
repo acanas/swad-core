@@ -829,7 +829,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/******** Write single or multiple choice answer when seeing a test **********/
+/***** Write single or multiple choice answer when seeing an exam print ******/
 /*****************************************************************************/
 
 static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,

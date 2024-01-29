@@ -497,7 +497,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       if (Places->Num)
 	{
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Write heading *****/
 	    Hld_PutHeadHolidays ();
@@ -884,7 +884,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
    unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewHld,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewHld,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Hld_PutHeadHolidays ();
@@ -995,11 +995,11 @@ static void Hld_PutHeadHolidays (void)
    HTM_TR_Begin (NULL);
       HTM_TH_Span (NULL                       ,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH (Txt_Code                        ,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Place                       ,HTM_HEAD_LEFT );
-      HTM_TH (Txt_Type                        ,HTM_HEAD_LEFT );
-      HTM_TH (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_LEFT );
-      HTM_TH (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_LEFT );
-      HTM_TH (Txt_Holiday                     ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Place                       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Type                        ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_CENTER);
+      HTM_TH (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_CENTER);
+      HTM_TH (Txt_Holiday                     ,HTM_HEAD_CENTER);
    HTM_TR_End ();
   }
 

@@ -934,7 +934,8 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
       Frm_BeginFormTable (ItsANewSession ? ActNewExaSes :
 				           ActChgExaSes,
 			  ExaSes_NEW_SESSION_SECTION_ID,
-			  ExaSes_ParsFormSession,Session);
+			  ExaSes_ParsFormSession,Session,
+			  "TBL_WIDE");
 
 	 /***** Session title *****/
 	 HTM_TR_Begin (NULL);

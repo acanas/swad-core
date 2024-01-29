@@ -93,7 +93,7 @@ void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES])
 	ShrtOrFull <= Nam_FULL_NAME;
 	ShrtOrFull++)
      {
-      HTM_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"LM\"");
 	 HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],Nam_MaxChars[ShrtOrFull],
 			 Names[ShrtOrFull],
 			 HTM_DONT_SUBMIT_ON_CHANGE,

@@ -399,7 +399,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Bld_PutHeadBuildings ();
@@ -423,7 +423,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    HTM_TD_End ();
 
 	    /* Building code */
-	    HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CODE DAT_%s\"",The_GetSuffix ());
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Building->BldCod);
 	       HTM_ARTICLE_End ();
@@ -654,7 +654,7 @@ static void Bld_PutFormToCreateBuilding (void)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewBld,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewBld,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Bld_PutHeadBuildings ();

@@ -125,6 +125,41 @@ long Nck_GetUsrCodFromNickname (const char *NickWithArr)
   }
 
 /*****************************************************************************/
+/******************* Put form to request the new nickname ********************/
+/*****************************************************************************/
+
+void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr)
+  {
+   extern const char *Txt_Nickname;
+   extern const char *Txt_HELP_nickname;
+   char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
+
+   /***** Nickname *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM","NewNick",Txt_Nickname);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	 if (NewNickWithoutArr[0])
+	    snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
+		      NewNickWithoutArr);
+	 else
+	    NewNickWithArr[0] = '\0';
+	 HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
+			 NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+			 "id=\"NewNick\" size=\"16\" placeholder=\"%s\""
+			 " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			 " required=\"required\"",
+			 Txt_HELP_nickname,
+			 The_GetSuffix ());
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /*********************** Show form to change my nickname *********************/
 /*****************************************************************************/
 

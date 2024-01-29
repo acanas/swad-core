@@ -1213,7 +1213,7 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Grp_WriteHeadingGroupTypes ();
@@ -1232,7 +1232,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Name of group type */
-	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
@@ -1288,7 +1288,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Open time */
-	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_TABLE_BeginCenterPadding (2);
@@ -1399,7 +1399,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Grp_WriteHeadingGroups ();
@@ -2397,7 +2397,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
       /***** Begin form to create *****/
       Frm_BeginFormTable (ActNewGrpTyp,Grp_NEW_GROUP_TYPE_SECTION_ID,
-                             NULL,NULL);
+                          NULL,NULL,"TBL_SCROLL");
 
 	 /***** Write heading *****/
 	 Grp_WriteHeadingGroupTypes ();
@@ -2409,7 +2409,7 @@ static void Grp_PutFormToCreateGroupType (void)
 	    HTM_TD_End ();
 
 	    /***** Name of group type *****/
-	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 			       Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"12\" class=\"INPUT_%s\""
@@ -2456,8 +2456,8 @@ static void Grp_PutFormToCreateGroupType (void)
 	    HTM_TD_End ();
 
 	    /***** Open time *****/
-	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_TABLE_BeginPadding (2);
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_TABLE_BeginCenterPadding (2);
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
@@ -2521,7 +2521,8 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
 
       /***** Begin form to create *****/
-      Frm_BeginFormTable (ActNewGrp,Grp_GROUPS_SECTION_ID,NULL,NULL);
+      Frm_BeginFormTable (ActNewGrp,Grp_GROUPS_SECTION_ID,NULL,NULL,
+			  "TBL_SCROLL");
 
 	 /***** Write heading *****/
 	 Grp_WriteHeadingGroups ();

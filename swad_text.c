@@ -46342,11 +46342,11 @@ const char *Txt_Tags =		// Tags used in test
 #elif L==7	// it
 	"Etichette";
 #elif L==8	// pl
-	"Tags";		// Potrzebujesz tlumaczenie
+	"Tagi";
 #elif L==9	// pt
 	"Descritores";
 #elif L==10	// tr
-	"Tags";		// Çeviri lazim!
+	"Etiketler";
 #endif
 
 const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"

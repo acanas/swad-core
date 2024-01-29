@@ -451,7 +451,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
       if (Mails->Num)
 	{
          /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
+         HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Write heading *****/
 	    Mai_PutHeadMailDomains ();
@@ -477,7 +477,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 		  HTM_TD_End ();
 
 		  /* Mail domain */
-		  HTM_TD_Begin ("class=\"CM\"");
+		  HTM_TD_Begin ("class=\"LM\"");
 		     Frm_BeginForm (ActRenMaiSho);
 			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 			HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
@@ -488,7 +488,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 		  HTM_TD_End ();
 
 		  /* Mail domain info */
-		  HTM_TD_Begin ("class=\"CM\"");
+		  HTM_TD_Begin ("class=\"LM\"");
 		     Frm_BeginForm (ActRenMaiFul);
 			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 			HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
@@ -674,7 +674,7 @@ void Mai_ContEditAfterChgMai (void)
 static void Mai_PutFormToCreateMailDomain (void)
   {
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewMai,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewMai,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Mai_PutHeadMailDomains ();
@@ -691,7 +691,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 	 HTM_TD_End ();
 
 	 /* Mail domain */
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"15\" class=\"INPUT_%s\""
@@ -700,7 +700,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 	 HTM_TD_End ();
 
 	 /* Mail domain info */
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"40\" class=\"INPUT_%s\""
@@ -1004,6 +1004,34 @@ bool Mai_GetEmailFromUsrCod (struct Usr_Data *UsrDat)
    DB_FreeMySQLResult (&mysql_res);
 
    return Found;
+  }
+
+/*****************************************************************************/
+/******************** Put form to request the new email **********************/
+/*****************************************************************************/
+
+void Mai_PutFormToGetNewEmail (const char *NewEmail)
+  {
+   extern const char *Txt_Email;
+   extern const char *Txt_HELP_email;
+
+   /***** Email *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM","NewEmail",Txt_Email);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	 HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
+			  "id=\"NewEmail\" size=\"16\" placeholder=\"%s\""
+			  " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			  " required=\"required\"",
+			  Txt_HELP_email,
+			  The_GetSuffix ());
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

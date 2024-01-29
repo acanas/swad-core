@@ -110,7 +110,6 @@ static struct
   };
 
 static const char *Prg_ITEM_SECTION_ID = "item_section";
-static const char *Prg_HIGHLIGHTED_SECTION_ID = "prg_highlighted";
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -179,7 +178,6 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight);
 
 static void Prg_ExpandContractItem (Prg_ExpandContract_t ExpandContract);
 
-static void Prg_SetItemRangeOnlyItem (unsigned NumItem,struct Prg_ItemRange *ItemRange);
 static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange);
 static unsigned Prg_GetLastChild (int NumItem);
 
@@ -234,10 +232,8 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    unsigned NumItem;
    unsigned FormLevel = 0;	// Initialized to avoid warning
    struct Prg_Item Item;
-   struct Prg_ItemRange ToHighlight;
    ConExp_ContractedOrExpanded_t ContractedOrExpanded;
    char *Title;
-   static bool FirstTBodyOpen = false;
    static void (*FunctionToDrawContextualIcons[Prg_NUM_LISTING_TYPES]) (void *Args) =
      {
       [Prg_PRINT               ] = NULL,
@@ -259,33 +255,12 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    Prg_CreateLevels ();
 
    /***** Compute form level *****/
-   ToHighlight.Begin =
-   ToHighlight.End   = 0;
-   switch (ListingType)
+   if (ListingType == Prg_FORM_NEW_CHILD_ITEM)
      {
-      case Prg_VIEW:
-      case Prg_EDIT_ITEMS:
-	 if (SelectedItmCod > 0)
-	    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (SelectedItmCod),
-					     &ToHighlight);
-	 break;
-      case Prg_RECEIVE_ITEM:
-      // case Prg_EDIT_RESOURCES:	// Uncomment to higlight item
-      // case Prg_EDIT_RESOURCE_LINK:	// Uncomment to higlight item
-      // case Prg_CHANGE_RESOURCE_LINK:	// Uncomment to higlight item
-      // case Prg_END_EDIT_RES:		// Uncomment to higlight item
-	 if (SelectedItmCod > 0)
-            Prg_SetItemRangeOnlyItem (Prg_GetNumItemFromItmCod (SelectedItmCod),
-                                      &ToHighlight);
-         break;
-      case Prg_FORM_NEW_CHILD_ITEM:
-	 ParentItmCod = SelectedItmCod;		// Item code here is parent of the item to create
-	 NumItem = Prg_GetNumItemFromItmCod (SelectedItmCod);
-	 SelectedItmCod = Prg_GetItmCodFromNumItem (Prg_GetLastChild (NumItem));
-	 FormLevel = Prg_GetLevelFromNumItem (NumItem) + 1;
-	 break;
-      default:
-	 break;
+      ParentItmCod = SelectedItmCod;	// Item code here is parent of the item to create
+      NumItem = Prg_GetNumItemFromItmCod (SelectedItmCod);
+      SelectedItmCod = Prg_GetItmCodFromNumItem (Prg_GetLastChild (NumItem));
+      FormLevel = Prg_GetLevelFromNumItem (NumItem) + 1;
      }
 
    /***** Begin box *****/
@@ -297,14 +272,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    free (Title);
 
       /***** Table *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
-
-	 /* In general, the table is divided into three bodys:
-	 1. Rows before highlighted: <tbody></tbody>
-	 2. Rows highlighted:        <tbody id="prg_highlighted"></tbody>
-	 3. Rows after highlighted:  <tbody></tbody> */
-	 HTM_TBODY_Begin (NULL);		// 1st tbody start
-	 FirstTBodyOpen = true;
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Write all program items *****/
 	 for (NumItem = 0, The_ResetRowColor ();
@@ -314,18 +282,6 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	    /* Get data of this program item */
 	    Item.Hierarchy.ItmCod = Prg_GetItmCodFromNumItem (NumItem);
 	    Prg_GetItemDataByCod (&Item);
-
-	    /* Begin range to highlight? */
-	    if (Item.Hierarchy.ItmInd == ToHighlight.Begin)	// Begin of the highlighted range
-	      {
-	       if (FirstTBodyOpen)
-		 {
-		  HTM_TBODY_End ();				// 1st tbody end
-		  FirstTBodyOpen = false;
-		 }
-	       HTM_TBODY_Begin ("id=\"%s\"",
-	                        Prg_HIGHLIGHTED_SECTION_ID);	// Highlighted tbody start
-	      }
 
 	    /* Set if this level is expanded */
 	    ContractedOrExpanded = Prg_DB_GetIfContractedOrExpandedItem (Item.Hierarchy.ItmCod);
@@ -347,14 +303,6 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 		  The_ChangeRowColor ();
 		 }
 	      }
-
-	    /* End range to highlight? */
-	    if (Item.Hierarchy.ItmInd == ToHighlight.End)	// End of the highlighted range
-	      {
-	       HTM_TBODY_End ();				// Highlighted tbody end
-	       if (NumItem < Prg_Gbl.List.NumItems - 1)		// Not the last item
-		  HTM_TBODY_Begin (NULL);			// 3rd tbody begin
-	      }
 	   }
 
 	 /***** Create item at the end? *****/
@@ -362,7 +310,6 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 	    Prg_WriteRowToCreateItem (-1L,1);
 
 	 /***** End table *****/
-	 HTM_TBODY_End ();					// 3rd tbody end
       HTM_TABLE_End ();
 
    /***** End box *****/
@@ -519,9 +466,12 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       Prg_IncreaseNumberInLevel (Item->Hierarchy.Level);
 
       /***** Is this the item selected? *****/
+      /*
       HighlightItem = Item->Hierarchy.ItmCod == SelectedItmCod &&
 		      (ListingType == Prg_FORM_EDIT_ITEM ||
 		       ListingType == Prg_END_EDIT_ITEM);
+      */
+      HighlightItem = Item->Hierarchy.ItmCod == SelectedItmCod;
 
       /***** First row (title and dates) *****/
       HTM_TR_Begin (NULL);
@@ -687,7 +637,8 @@ static void Prg_PutIconToContractOrExpandItem (struct Prg_Item *Item,
 
    /***** Icon to hide/unhide program item *****/
    PutContextualIcon[ContractedOrExpanded] (NextAction[ContractedOrExpanded][ViewType],
-					    Prg_HIGHLIGHTED_SECTION_ID,
+					    // Prg_HIGHLIGHTED_SECTION_ID,
+					    Prg_ITEM_SECTION_ID,
 					    Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
   }
 
@@ -1002,7 +953,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 	                                Prg_PutParItmCod,&Item->Hierarchy.ItmCod);
 
 	 /***** Icon to hide/unhide program item *****/
-	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Prg_HIGHLIGHTED_SECTION_ID,
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Prg_ITEM_SECTION_ID /*Prg_HIGHLIGHTED_SECTION_ID */,
 					    Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					    Item->Hierarchy.HiddenOrVisible);
 
@@ -1022,7 +973,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,Prg_HIGHLIGHTED_SECTION_ID,
+	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,Prg_ITEM_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-up.svg",Ico_BLACK);
 	 else
@@ -1030,7 +981,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
+	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,Prg_ITEM_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-down.svg",Ico_BLACK);
 	 else
@@ -1038,7 +989,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
+	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,Prg_ITEM_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-left.svg",Ico_BLACK);
 	 else
@@ -1046,7 +997,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
 
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
-	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
+	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,Prg_ITEM_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Prg_PutParItmCod,&Item->Hierarchy.ItmCod,
 					   "arrow-right.svg",Ico_BLACK);
 	 else
@@ -1808,25 +1759,6 @@ static void Prg_ExpandContractItem (Prg_ExpandContract_t ExpandContract)
    Prg_FreeListItems ();
   }
 
-/*****************************************************************************/
-/****** Set subtree begin and end from number of item in course program ******/
-/*****************************************************************************/
-
-static void Prg_SetItemRangeOnlyItem (unsigned NumItem,struct Prg_ItemRange *ItemRange)
-  {
-   /***** List of items must be filled *****/
-   if (!Prg_Gbl.List.IsRead)
-      Err_WrongItemsListExit ();
-
-   /***** Number of item must be in the correct range *****/
-   if (NumItem >= Prg_Gbl.List.NumItems)
-      Err_WrongItemExit ();
-
-   /***** Range includes only this item *****/
-   ItemRange->Begin =
-   ItemRange->End   = Prg_GetItmIndFromNumItem (NumItem);
-  }
-
 static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
@@ -1971,7 +1903,8 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
 
    /***** Begin form to create *****/
    Frm_BeginFormTable (ActNewPrgItm,NULL,
-                       Prg_ParsFormItem,&ParentItem.Hierarchy.ItmCod);
+                       Prg_ParsFormItem,&ParentItem.Hierarchy.ItmCod,
+                       "TBL_WIDE");
 
       /***** Show form *****/
       Prg_ShowFormItem (&Item,SetHMS,NULL);
@@ -1996,8 +1929,8 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    Prg_DB_GetItemTxt (Item.Hierarchy.ItmCod,Txt);
 
    /***** Begin form to change *****/
-   Frm_BeginFormTable (ActChgPrgItm,Prg_HIGHLIGHTED_SECTION_ID,
-                       Prg_ParsFormItem,&Item.Hierarchy.ItmCod);
+   Frm_BeginFormTable (ActChgPrgItm,Prg_ITEM_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+                       Prg_ParsFormItem,&Item.Hierarchy.ItmCod,"TBL_WIDE");
 
       /***** Show form *****/
       Prg_ShowFormItem (&Item,SetHMS,Txt);

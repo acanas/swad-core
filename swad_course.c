@@ -629,7 +629,7 @@ static void Crs_ListCoursesForEdition (void)
    unsigned Year;
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       Crs_PutHeadCoursesForEdition ();
@@ -733,7 +733,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
@@ -817,7 +817,7 @@ static void Crs_PutFormToCreateCourse (void)
       Err_NoPermissionExit ();
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (NextAction,NULL,NULL,NULL);
+   Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       Crs_PutHeadCoursesForEdition ();
@@ -850,7 +850,7 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_End ();
 
 	 /***** Institutional code of the course *****/
-	 HTM_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 			    Crs_EditingCrs->InstitutionalCod,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -925,7 +925,7 @@ static void Crs_PutHeadCoursesForEdition (void)
       HTM_TH_Span (NULL                               ,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH      (Txt_Code                           ,HTM_HEAD_RIGHT );
       HTM_TH      (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
-      HTM_TH_Begin (HTM_HEAD_CENTER);
+      HTM_TH_Begin (HTM_HEAD_LEFT);
 	 HTM_TxtF ("%s&nbsp;(%s)",Txt_Institutional_code,Txt_optional);
       HTM_TH_End ();
       HTM_TH      (Txt_Short_name_of_the_course       ,HTM_HEAD_LEFT  );

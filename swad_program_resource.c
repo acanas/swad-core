@@ -244,46 +244,44 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
       /***** Table *****/
       HTM_TABLE_BeginWidePadding (2);
-	 HTM_TBODY_Begin (NULL);
 
-	    /***** Write all item resources *****/
-	    for (NumRsc = 0, The_ResetRowColor1 (1);
-		 NumRsc < NumResources;
-		 NumRsc++, The_ChangeRowColor1 (1))
+	 /***** Write all item resources *****/
+	 for (NumRsc = 0, The_ResetRowColor1 (1);
+	      NumRsc < NumResources;
+	      NumRsc++, The_ChangeRowColor1 (1))
+	   {
+	    /* Get data of this item resource */
+	    PrgRsc_GetResourceDataFromRow (mysql_res,Item);
+
+	    /* Show item */
+	    switch (ViewingOrEditingResourcesOfThisItem)
 	      {
-	       /* Get data of this item resource */
-	       PrgRsc_GetResourceDataFromRow (mysql_res,Item);
-
-	       /* Show item */
-	       switch (ViewingOrEditingResourcesOfThisItem)
-	         {
-	          case Vie_VIEW:
-		     PrgRsc_WriteRowViewResource (NumRsc,Item);
-		     break;
-	          case Vie_EDIT:
-		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
-						  (ListingType == Prg_EDIT_RESOURCE_LINK &&
-						   Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
-													Vie_VIEW);
-		     break;
-		  default:
-		     Err_WrongTypeExit ();
-		     break;
-	         }
+	       case Vie_VIEW:
+		  PrgRsc_WriteRowViewResource (NumRsc,Item);
+		  break;
+	       case Vie_EDIT:
+		  PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
+					       (ListingType == Prg_EDIT_RESOURCE_LINK &&
+						Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
+												     Vie_VIEW);
+		  break;
+	       default:
+		  Err_WrongTypeExit ();
+		  break;
 	      }
+	   }
 
-	    /***** Form to create a new resource *****/
-	    if (ViewingOrEditingResourcesOfThisItem == Vie_EDIT)
-	      {
-	       Prg_ResetResource (Item);
-	       PrgRsc_WriteRowNewResource (NumResources,Item,
-					   (ListingType == Prg_EDIT_RESOURCE_LINK &&
-					    Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
-												 Vie_VIEW);
-	      }
+	 /***** Form to create a new resource *****/
+	 if (ViewingOrEditingResourcesOfThisItem == Vie_EDIT)
+	   {
+	    Prg_ResetResource (Item);
+	    PrgRsc_WriteRowNewResource (NumResources,Item,
+					(ListingType == Prg_EDIT_RESOURCE_LINK &&
+					 Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
+											      Vie_VIEW);
+	   }
 
-	 /***** End table *****/
-	 HTM_TBODY_End ();
+      /***** End table *****/
       HTM_TABLE_End ();
 
       /***** End box *****/

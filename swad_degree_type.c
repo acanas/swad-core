@@ -389,7 +389,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
    unsigned NumDegTyp;
 
    /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
       DegTyp_PutHeadDegreeTypesForEdition ();
@@ -457,7 +457,7 @@ bool DegTyp_CheckIfICanCreateDegreeTypes (void)
 static void DegTyp_PutFormToCreateDegreeType (void)
   {
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewDegTyp,NULL,NULL,NULL);
+   Frm_BeginFormTable (ActNewDegTyp,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
       DegTyp_PutHeadDegreeTypesForEdition ();
@@ -562,8 +562,8 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Span (NULL			       ,HTM_HEAD_CENTER,1,1,"BT");
-      HTM_TH (Txt_Code			       ,HTM_HEAD_CENTER);
-      HTM_TH (Txt_Type_of_degree	       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Code			       ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Type_of_degree	       ,HTM_HEAD_LEFT);
       HTM_TH (Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],HTM_HEAD_RIGHT );
 
    HTM_TR_End ();
