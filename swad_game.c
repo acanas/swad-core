@@ -252,8 +252,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
    Games->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Games,
-                 Gam_PutIconsListingGames,Games,
+   Box_BoxBegin (Txt_Games,Gam_PutIconsListingGames,Games,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
       /***** Write links to pages *****/
@@ -477,8 +476,8 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
    extern const char *Txt_Game;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Games->Game.Title[0] ? Games->Game.Title :
-					     Txt_Game,
+   Box_BoxBegin (Games->Game.Title[0] ? Games->Game.Title :
+					Txt_Game,
                  Gam_PutIconsViewingOneGame,Games,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
@@ -1283,8 +1282,7 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 Games->Game.Title[0] ? Games->Game.Title :
+   Box_BoxBegin (Games->Game.Title[0] ? Games->Game.Title :
 					Txt_Game,
 		 FunctionToDrawContextualIcons[ExistingNewGame],Games,
 		 *HelpLink[ExistingNewGame],Box_NOT_CLOSABLE);
@@ -1637,22 +1635,20 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
    NumQsts = Gam_DB_GetGameQuestionsBasic (&mysql_res,Games->Game.GamCod);
 
    /***** Begin box *****/
-   if (ICanEditQuestions)
-      Box_BoxBegin (NULL,Txt_Questions,
-		    Gam_PutIconToAddNewQuestions,Games,
-		    Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Questions,
-		    NULL,NULL,
-		    Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Txt_Questions,
+		 ICanEditQuestions ? Gam_PutIconToAddNewQuestions :
+				     NULL,
+		 ICanEditQuestions ? Games :
+				     NULL,
+		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
-   /***** Show table with questions *****/
-   if (NumQsts)
-      Gam_ListOneOrMoreQuestionsForEdition (Games,NumQsts,mysql_res,
-					    ICanEditQuestions);
+      /***** Show table with questions *****/
+      if (NumQsts)
+	 Gam_ListOneOrMoreQuestionsForEdition (Games,NumQsts,mysql_res,
+					       ICanEditQuestions);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End box *****/
    Box_BoxEnd ();

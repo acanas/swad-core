@@ -305,8 +305,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Photo,
-                 FunctionToDrawContextualIcons[MeOrOther],NULL,
+   Box_BoxBegin (Txt_Photo,FunctionToDrawContextualIcons[MeOrOther],NULL,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
@@ -1714,7 +1713,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
      {
       case Pho_DEGREES_SEE:
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],
+	 Box_BoxBegin (Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],
 	               Pho_PutIconToPrintDegreeStats,&DegPhotos,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
 
@@ -1736,8 +1735,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 break;
       case Pho_DEGREES_PRINT:
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],
-	               NULL,NULL,
+	 Box_BoxBegin (Txt_HIERARCHY_PLURAL_Abc[Hie_DEG],NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 	 break;
      }

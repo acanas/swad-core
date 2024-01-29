@@ -502,8 +502,7 @@ void RubCri_ListCriteriaForSeeing (const struct Rub_Rubrics *Rubrics)
    NumCriteria = Rub_DB_GetCriteria (&mysql_res,Rubrics->Rubric.RubCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Criteria,
-		 NULL,NULL,
+   Box_BoxBegin (Txt_Criteria,NULL,NULL,
 		 Hlp_ASSESSMENT_Rubrics_criteria,Box_NOT_CLOSABLE);
 
       /***** Show table with rubric criteria *****/
@@ -537,8 +536,7 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
    NumCriteria = Rub_DB_GetCriteria (&mysql_res,Rubrics->Rubric.RubCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Criteria,
-		 NULL,NULL,
+   Box_BoxBegin (Txt_Criteria,NULL,NULL,
 		 Hlp_ASSESSMENT_Rubrics_criteria,Box_NOT_CLOSABLE);
 
       /***** Show table with rubric criteria *****/

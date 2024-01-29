@@ -2074,8 +2074,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Session,
-                 Usr_PutLinkToLogOut,NULL,
+   Box_BoxBegin (Txt_Session,Usr_PutLinkToLogOut,NULL,
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
       /***** Put a form to change my role *****/
@@ -3698,9 +3697,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,
-                 NULL,NULL,
-                 HelpLink,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Title,NULL,NULL,HelpLink,Box_NOT_CLOSABLE);
 
       /***** Get and update type of list,
 	     number of columns in class photo
@@ -4763,7 +4760,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 						       (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 								       Txt_ROLES_PLURAL_abc[Role][Sex])) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
       free (Title);
 
          HTM_TABLE_Begin ("TBL_SCROLL");
@@ -4907,8 +4904,7 @@ void Usr_ListDataAdms (void)
    Adm_GetAdmsLst (Gbl.Scope.Current);
 
    /***** Begin box with list of administrators *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
-                 NULL,NULL,
+   Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,NULL,
                  Hlp_USERS_Administrators,Box_NOT_CLOSABLE);
 
       /***** Form to select scope *****/
@@ -5046,7 +5042,7 @@ void Usr_SeeGuests (void)
    Usr_GetGstsLst (Gbl.Scope.Current);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
+   Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
                  Usr_PutIconsListGsts,NULL,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
@@ -5185,7 +5181,7 @@ void Usr_SeeStudents (void)
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+   Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
                  Usr_PutIconsListStds,NULL,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
@@ -5362,7 +5358,7 @@ void Usr_SeeTeachers (void)
 				      1 << Rol_TCH);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+   Box_BoxBegin (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
                  Usr_PutIconsListTchs,NULL,
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 

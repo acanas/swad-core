@@ -167,8 +167,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
    Rubrics->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Rubrics,
-                 Rub_PutIconsListRubrics,Rubrics,
+   Box_BoxBegin (Txt_Rubrics,Rub_PutIconsListRubrics,Rubrics,
                  Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 
       /***** Write links to pages *****/
@@ -351,8 +350,8 @@ void Rub_ShowOnlyOneRubric (struct Rub_Rubrics *Rubrics)
    struct Rub_Node *TOS = NULL;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
-						 Txt_Rubric,
+   Box_BoxBegin (Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
+					    Txt_Rubric,
                  Rub_PutIconsViewingOneRubric,Rubrics,
 		 Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 
@@ -794,8 +793,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
    struct Rub_Node *TOS = NULL;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,
-		 Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
+   Box_BoxBegin (Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
 					    Txt_Rubric,
 		 FunctionToDrawContextualIcons[ExistingNewRubric],Rubrics,
 		 *HelpLink[ExistingNewRubric],Box_NOT_CLOSABLE);

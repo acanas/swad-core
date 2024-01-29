@@ -327,6 +327,7 @@ void Tmt_ShowClassTimeTable (void)
 	                      Gbl.Action.Act == ActPrnMyTT) ? Vie_PRINT :
 	                				      Vie_VIEW;
    Grp_WhichGroups_t WhichGroups;
+   bool PutContextualIcons;
 
    /***** Initializations *****/
    switch (Gbl.Action.Act)
@@ -358,51 +359,51 @@ void Tmt_ShowClassTimeTable (void)
    Grp_GetParWhichGroups ();
 
    /***** Begin box *****/
-   if (Timetable.ContextualIcons.PutIconEditCrsTT ||
-       Timetable.ContextualIcons.PutIconEditOfficeHours ||
-       Timetable.ContextualIcons.PutIconPrint)
-      Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
-		    Tmt_PutContextualIcons,&Timetable,
-		    Help[Timetable.Type],Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+   PutContextualIcons = Timetable.ContextualIcons.PutIconEditCrsTT ||
+			Timetable.ContextualIcons.PutIconEditOfficeHours ||
+			Timetable.ContextualIcons.PutIconPrint;
+   Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
+		 PutContextualIcons ? Tmt_PutContextualIcons :
+				      NULL,
+		 PutContextualIcons ? &Timetable :
+				      NULL,
+		 PutContextualIcons ? Help[Timetable.Type] :
+				      NULL,Box_NOT_CLOSABLE);
 
-   /***** Begin time table drawing *****/
-   if (Timetable.Type == Tmt_COURSE_TIMETABLE)
-      Lay_WriteHeaderClassPhoto (ViewType);
+      /***** Begin time table drawing *****/
+      if (Timetable.Type == Tmt_COURSE_TIMETABLE)
+	 Lay_WriteHeaderClassPhoto (ViewType);
 
-   switch (ViewType)
-     {
-      case Vie_VIEW:
-	 /***** Setting selector *****/
-	 Set_BeginSettingsHead ();
+      switch (ViewType)
+	{
+	 case Vie_VIEW:
+	    /***** Setting selector *****/
+	    Set_BeginSettingsHead ();
 
-	 /* Select whether show only my groups or all groups */
-	 if ( Timetable.Type == Tmt_MY_TIMETABLE ||
-	     (Timetable.Type == Tmt_COURSE_TIMETABLE &&
-	      Gbl.Crs.Grps.NumGrps))
-	    Tmt_PutFormToSelectWhichGroupsToShow (&Timetable);
+	    /* Select whether show only my groups or all groups */
+	    if ( Timetable.Type == Tmt_MY_TIMETABLE ||
+		(Timetable.Type == Tmt_COURSE_TIMETABLE &&
+		 Gbl.Crs.Grps.NumGrps))
+	       Tmt_PutFormToSelectWhichGroupsToShow (&Timetable);
 
-	 /* Show form to change first day of week */
-	 WhichGroups = Grp_GetParWhichGroups ();
-	 Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
-					  Grp_PutParWhichGroups,&WhichGroups);
+	    /* Show form to change first day of week */
+	    WhichGroups = Grp_GetParWhichGroups ();
+	    Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
+					     Grp_PutParWhichGroups,&WhichGroups);
 
-	 Set_EndSettingsHead ();
-	 break;
-      case Vie_PRINT:
-	 /***** Show whether only my groups or all groups are selected *****/
-	 Tmt_ShowTimeTableGrpsSelected ();
-	 break;
-      default:
-	 Err_WrongTypeExit ();
-	 break;
-     }
+	    Set_EndSettingsHead ();
+	    break;
+	 case Vie_PRINT:
+	    /***** Show whether only my groups or all groups are selected *****/
+	    Tmt_ShowTimeTableGrpsSelected ();
+	    break;
+	 default:
+	    Err_WrongTypeExit ();
+	    break;
+	}
 
-   /***** Show the time table *****/
-   Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
+      /***** Show the time table *****/
+      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -464,7 +465,7 @@ void Tmt_EditCrsTimeTable (void)
 
    /***** Editable time table *****/
    Timetable.Type = Tmt_COURSE_TIMETABLE;
-   Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
+   Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewCrsTT,NULL,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
       Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -483,7 +484,7 @@ void Tmt_EditMyTutTimeTable (void)
 
    /***** Time table *****/
    Timetable.Type = Tmt_TUTORING_TIMETABLE;
-   Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
+   Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewMyTT,NULL,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
       Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);

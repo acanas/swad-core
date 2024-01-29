@@ -137,8 +137,7 @@ void Ban_ShowAllBanners (void)
    Ban_GetListBanners (&Banners,&mysql_res);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsListingBanners,NULL,
+   Box_BoxBegin (Txt_Banners,Ban_PutIconsListingBanners,NULL,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
       /***** Write all banners *****/
@@ -241,8 +240,7 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
    Ban_GetListBanners (Banners,&mysql_res);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Banners,
-                 Ban_PutIconsEditingBanners,NULL,
+   Box_BoxBegin (Txt_Banners,Ban_PutIconsEditingBanners,NULL,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new banner *****/

@@ -103,8 +103,7 @@ void Con_ShowConnectedUsrs (void)
    Sco_GetScope ("ScopeCon",Hie_CRS);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Connected_users,
-                 Con_PutIconToUpdateConnected,NULL,
+   Box_BoxBegin (Txt_Connected_users,Con_PutIconToUpdateConnected,NULL,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
 
       /***** Current time *****/

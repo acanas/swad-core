@@ -244,7 +244,7 @@ void Lgo_RequestLogo (Hie_Level_t Level)
 	     (unsigned)  Cod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Logo,
+   Box_BoxBegin (Txt_Logo,
 	         Fil_CheckIfPathExists (PathLogo) ? FunctionToDrawContextualIcons[Level] :
 						    NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);

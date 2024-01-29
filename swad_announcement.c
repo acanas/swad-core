@@ -107,7 +107,7 @@ void Ann_ShowAllAnnouncements (void)
       NumAnnouncements = Ann_DB_GetAnnouncementsForUnknownUsers (&mysql_res);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Announcements,
+   Box_BoxBegin (Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 			    NULL,NULL,
 		 Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE);

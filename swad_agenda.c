@@ -182,8 +182,7 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
    extern const char *Txt_My_agenda;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_My_agenda,
-                 Agd_PutIconsMyFullAgenda,Agenda,
+   Box_BoxBegin (Txt_My_agenda,Agd_PutIconsMyFullAgenda,Agenda,
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
       /***** Put forms to choice which events to show *****/
@@ -398,7 +397,7 @@ void Agd_ShowUsrAgenda (void)
 	 MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
             Err_NotEnoughMemoryExit ();
-	 Box_BoxBegin (NULL,Title,
+	 Box_BoxBegin (Title,
 	               FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
 		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          free (Title);
@@ -458,7 +457,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	    if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin (NULL,Title,
+	    Box_BoxBegin (Title,
 	                  FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             free (Title);
@@ -574,16 +573,12 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
-	    Box_BoxTableShadowBegin (NULL,Txt_Today,
-	                             NULL,NULL,
-				     Hlp_PROFILE_Agenda,
-				     2);
+	    Box_BoxTableShadowBegin (Txt_Today,NULL,NULL,
+				     Hlp_PROFILE_Agenda,2);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
-	    Box_BoxTableShadowBegin (NULL,Txt_Today,
-	                             NULL,NULL,
-			             Hlp_PROFILE_Agenda_public_agenda,
-				     2);
+	    Box_BoxTableShadowBegin (Txt_Today,NULL,NULL,
+			             Hlp_PROFILE_Agenda_public_agenda,2);
             break;
 	 default:
 	    break;
@@ -1551,7 +1546,7 @@ void Agd_PrintAgdQRCode (void)
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
    free (Title);
 
       /***** Print QR code ****/

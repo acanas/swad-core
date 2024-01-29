@@ -224,8 +224,7 @@ static void Plg_EditPluginsInternal (void)
    Plg_GetListPlugins (&Plugins);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Plugins,
-                 Plg_PutIconToViewPlugins,NULL,
+   Box_BoxBegin (Txt_Plugins,Plg_PutIconToViewPlugins,NULL,
                  Hlp_SYSTEM_Plugins_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new plugin *****/

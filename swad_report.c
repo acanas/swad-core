@@ -136,7 +136,7 @@ void Rep_ReqMyUsageReport (void)
       /***** Begin box *****/
       if (asprintf (&Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxBegin (NULL,Title,NULL,NULL,Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Title,NULL,NULL,Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
       free (Title);
 
 	 /***** Header *****/
@@ -244,7 +244,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,NULL,NULL,Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Title,NULL,NULL,Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
    free (Title);
 
       /***** Header *****/

@@ -280,8 +280,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
    NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,Games->Game.GamCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Matches,
-                 Mch_PutIconsInListOfMatches,Games,
+   Box_BoxBegin (Txt_Matches,Mch_PutIconsInListOfMatches,Games,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/

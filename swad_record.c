@@ -190,8 +190,7 @@ void Rec_ReqEditRecordFields (void)
    Rec_GetListRecordFieldsInCurrentCrs ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Record_fields,
-		 NULL,NULL,
+   Box_BoxBegin (Txt_Record_fields,NULL,NULL,
 		 Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new record field *****/
@@ -1246,8 +1245,7 @@ static void Rec_ShowRecordOneTchCrs (void)
 	{
 	 HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 	    Timetable.Type = Tmt_TUTORING_TIMETABLE;
-	    Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
-			  NULL,NULL,
+	    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],NULL,NULL,
 			  Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
 	       Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Other.UsrDat.UsrCod);
 	    Box_BoxEnd ();
@@ -1362,7 +1360,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 		 {
 		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 		     Timetable.Type = Tmt_TUTORING_TIMETABLE;
-		     Box_BoxBegin (NULL,Txt_TIMETABLE_TYPES[Timetable.Type],
+		     Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
 				   NULL,NULL,
 				   Gbl.Action.Act == ActSeeRecSevTch ? Hlp_USERS_Teachers_timetable :
 								       NULL,

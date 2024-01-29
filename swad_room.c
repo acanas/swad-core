@@ -175,8 +175,7 @@ void Roo_SeeRooms (void)
    Roo_GetListRooms (&Rooms,Roo_ALL_DATA);
 
    /***** Table head *****/
-   Box_BoxBegin (NULL,Txt_Rooms,
-                 Roo_PutIconsListingRooms,NULL,
+   Box_BoxBegin (Txt_Rooms,Roo_PutIconsListingRooms,NULL,
 		 Hlp_CENTER_Rooms,Box_NOT_CLOSABLE);
       HTM_TABLE_BeginWideMarginPadding (2);
 	 HTM_TR_Begin (NULL);
@@ -436,8 +435,7 @@ static void Roo_EditRoomsInternal (void)
    Roo_GetListRooms (&Rooms,Roo_ALL_DATA);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Rooms,
-                 Roo_PutIconsEditingRooms,NULL,
+   Box_BoxBegin (Txt_Rooms,Roo_PutIconsEditingRooms,NULL,
                  Hlp_CENTER_Rooms_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new room *****/

@@ -291,8 +291,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    Dat_Format_t Format;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Dates,
-                 Dat_PutIconsDateFormat,NULL,
+   Box_BoxBegin (Txt_Dates,Dat_PutIconsDateFormat,NULL,
                  Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
       /***** Form with list of options *****/

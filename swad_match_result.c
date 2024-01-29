@@ -489,8 +489,7 @@ static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
 
    /***** Begin box *****/
    HTM_SECTION_Begin (MchRes_RESULTS_BOX_ID);
-      Box_BoxBegin (NULL,Title,
-		    NULL,NULL,
+      Box_BoxBegin (Title,NULL,NULL,
 		    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
 	 /***** List games to select *****/
@@ -530,9 +529,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
    Gam_ResetGame (&Games->Game);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Games,
-                 NULL,NULL,
-                 NULL,Box_CLOSABLE);
+   Box_BoxBegin (Txt_Games,NULL,NULL,NULL,Box_CLOSABLE);
 
       /***** Begin form to update the results
 	     depending on the games selected *****/
@@ -1094,8 +1091,7 @@ void MchRes_ShowOneMchResult (void)
    Mch_GetMatchQuestionsFromDB (&Print);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Match.Title,
-		 NULL,NULL,
+   Box_BoxBegin (Match.Title,NULL,NULL,
 		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (Vie_VIEW);
 

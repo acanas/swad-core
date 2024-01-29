@@ -350,8 +350,7 @@ void Ntf_ShowMyNotifications (void)
    Ntf_PutContextualLinks (AllNotifications,NumNotifications);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Notifications,
-                 Ntf_PutIconsNotif,NULL,
+   Box_BoxBegin (Txt_Notifications,Ntf_PutIconsNotif,NULL,
                  Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
       /***** List my notifications *****/
@@ -1626,8 +1625,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Notifications,
-		    Ntf_PutIconsNotif,NULL,
+      Box_BoxBegin (Txt_Notifications,Ntf_PutIconsNotif,NULL,
 		    Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
 	 /***** Begin form *****/

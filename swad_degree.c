@@ -683,7 +683,7 @@ static void Deg_ListDegrees (void)
    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
 		 Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Deg_PutIconsListingDegrees,NULL,
+   Box_BoxBegin (Title,Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -863,7 +863,7 @@ static void Deg_EditDegreesInternal (void)
    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
 		 Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Deg_PutIconsEditingDegrees,NULL,
+   Box_BoxBegin (Title,Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    free (Title);
 

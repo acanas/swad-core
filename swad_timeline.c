@@ -418,8 +418,7 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,
-                 Tml_PutIconsTimeline,NULL,
+   Box_BoxBegin (Title,Tml_PutIconsTimeline,NULL,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
       /***** Put form to select users whom public activity is displayed *****/

@@ -131,10 +131,11 @@ void Plc_SeeAllPlaces (void)
       /***** Get list of places *****/
       Plc_GetListPlaces (&Places);
 
-      /***** Table head *****/
-      Box_BoxBegin (NULL,Txt_Places,
-                    Plc_PutIconsListingPlaces,NULL,
+      /***** Begin box *****/
+      Box_BoxBegin (Txt_Places,Plc_PutIconsListingPlaces,NULL,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
+
+         /***** Table head *****/
 	 HTM_TABLE_BeginWideMarginPadding (2);
 	    HTM_TR_Begin (NULL);
 	    for (Order  = (Plc_Order_t) 0;
@@ -273,16 +274,15 @@ static void Plc_EditPlacesInternal (void)
    Plc_GetListPlaces (&Places);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Places,
-                 Plc_PutIconsEditingPlaces,NULL,
+   Box_BoxBegin (Txt_Places,Plc_PutIconsEditingPlaces,NULL,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
-   /***** Put a form to create a new place *****/
-   Plc_PutFormToCreatePlace ();
+      /***** Put a form to create a new place *****/
+      Plc_PutFormToCreatePlace ();
 
-   /***** Forms to edit current places *****/
-   if (Places.Num)
-      Plc_ListPlacesForEdition (&Places);
+      /***** Forms to edit current places *****/
+      if (Places.Num)
+	 Plc_ListPlacesForEdition (&Places);
 
    /***** End box *****/
    Box_BoxEnd ();

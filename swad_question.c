@@ -166,8 +166,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Question_bank,
-                 Qst_PutIconsRequestBankQsts,NULL,
+   Box_BoxBegin (Txt_Question_bank,Qst_PutIconsRequestBankQsts,NULL,
                  Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE);
 
       /***** Get tags already present in the table of questions *****/
@@ -336,8 +335,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Select_questions,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Select_questions,NULL,NULL,
                  Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
       /***** Get tags already present in the table of questions *****/
@@ -394,8 +392,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Select_questions,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Select_questions,NULL,NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
       /***** Get tags already present in the table of questions *****/
@@ -1077,8 +1074,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
    MYSQL_ROW row;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Questions,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Questions,NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
@@ -1159,8 +1155,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
    MYSQL_ROW row;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Questions,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Questions,NULL,NULL,
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
@@ -1852,13 +1847,12 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
      {
       if (asprintf (&Title,Txt_Question_code_X,Question->QstCod) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxBegin (NULL,Title,Qst_PutIconToRemoveOneQst,&Question->QstCod,
+      Box_BoxBegin (Title,Qst_PutIconToRemoveOneQst,&Question->QstCod,
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
       free (Title);
      }
    else
-      Box_BoxBegin (NULL,Txt_Question,
-                    NULL,NULL,
+      Box_BoxBegin (Txt_Question,NULL,NULL,
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/

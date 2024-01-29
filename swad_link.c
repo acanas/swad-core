@@ -119,8 +119,7 @@ void Lnk_SeeLinks (void)
    Lnk_GetListLinks (&Links);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Links,
-                 Lnk_PutIconsListingLinks,NULL,
+   Box_BoxBegin (Txt_Links,Lnk_PutIconsListingLinks,NULL,
 		 Hlp_SYSTEM_Links,Box_NOT_CLOSABLE);
 
       /***** Write all links *****/
@@ -246,8 +245,7 @@ static void Lnk_EditLinksInternal (void)
    Lnk_GetListLinks (&Links);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Links,
-                 Lnk_PutIconsEditingLinks,NULL,
+   Box_BoxBegin (Txt_Links,Lnk_PutIconsEditingLinks,NULL,
                  Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new link *****/

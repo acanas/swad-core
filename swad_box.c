@@ -56,7 +56,7 @@ static struct
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Box_BoxInternalBegin (const char *Width,const char *Title,
+static void Box_BoxInternalBegin (const char *Title,
 				  void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame);
@@ -71,24 +71,22 @@ void Box_BoxTableBegin (const char *Title,
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_BoxBegin (NULL,Title,
-                 FunctionToDrawContextualIcons,Args,
-                 HelpLink,Closable);
+   Box_BoxBegin (Title,FunctionToDrawContextualIcons,Args,HelpLink,Closable);
       HTM_TABLE_BeginWidePadding (CellPadding);
   }
 
-void Box_BoxTableShadowBegin (const char *Width,const char *Title,
+void Box_BoxTableShadowBegin (const char *Title,
                               void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                               const char *HelpLink,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_BoxShadowBegin (Width,Title,
+   Box_BoxShadowBegin (Title,
                        FunctionToDrawContextualIcons,Args,
                        HelpLink);
       HTM_TABLE_BeginWidePadding (CellPadding);
   }
 
-void Box_BoxBegin (const char *Width,const char *Title,
+void Box_BoxBegin (const char *Title,
                    void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                    const char *HelpLink,Box_Closable_t Closable)
   {
@@ -97,14 +95,14 @@ void Box_BoxBegin (const char *Width,const char *Title,
    /***** Begin box *****/
    if (asprintf (&ClassFrame,"FRAME FRAME_%s",The_GetSuffix ()) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxInternalBegin (Width,Title,
+   Box_BoxInternalBegin (Title,
 			 FunctionToDrawContextualIcons,Args,
 			 HelpLink,Closable,
 			 ClassFrame);
    free (ClassFrame);
   }
 
-void Box_BoxShadowBegin (const char *Width,const char *Title,
+void Box_BoxShadowBegin (const char *Title,
                          void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                          const char *HelpLink)
   {
@@ -113,7 +111,7 @@ void Box_BoxShadowBegin (const char *Width,const char *Title,
    /***** Begin box *****/
    if (asprintf (&ClassFrame,"FRAME_SHADOW FRAME_SHADOW_%s",The_GetSuffix ()) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxInternalBegin (Width,Title,
+   Box_BoxInternalBegin (Title,
                          FunctionToDrawContextualIcons,Args,
 			 HelpLink,Box_NOT_CLOSABLE,
 			 ClassFrame);
@@ -121,7 +119,7 @@ void Box_BoxShadowBegin (const char *Width,const char *Title,
   }
 
 // Return pointer to box id string
-static void Box_BoxInternalBegin (const char *Width,const char *Title,
+static void Box_BoxInternalBegin (const char *Title,
 				  void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame)
@@ -151,20 +149,11 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
       /* Create unique id for alert */
       Frm_SetUniqueId (Box_Boxes.Ids[Box_Boxes.Nested]);
 
-      if (Width)
-	 HTM_DIV_Begin ("id=\"%s\" class=\"%s\" style=\"width:%s;\"",
-			Box_Boxes.Ids[Box_Boxes.Nested],ClassFrame,Width);
-      else
-	 HTM_DIV_Begin ("id=\"%s\" class=\"%s\"",
-			Box_Boxes.Ids[Box_Boxes.Nested],ClassFrame);
+      HTM_DIV_Begin ("id=\"%s\" class=\"%s\"",
+		     Box_Boxes.Ids[Box_Boxes.Nested],ClassFrame);
      }
    else
-     {
-      if (Width)
-	 HTM_DIV_Begin ("class=\"%s\" style=\"width:%s;\"",ClassFrame,Width);
-      else
-	 HTM_DIV_Begin ("class=\"%s\"",ClassFrame);
-     }
+      HTM_DIV_Begin ("class=\"%s\"",ClassFrame);
 
    /***** Row for left and right icons *****/
    if (FunctionToDrawContextualIcons ||

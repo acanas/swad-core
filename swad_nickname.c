@@ -211,8 +211,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
       NumNicks = Nck_DB_GetUsrNicknames (&mysql_res,UsrDat[MeOrOther]->UsrCod);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Nickname,
-		    Acc_PutLinkToRemoveMyAccount,NULL,
+      Box_BoxBegin (Txt_Nickname,Acc_PutLinkToRemoveMyAccount,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show possible alerts *****/

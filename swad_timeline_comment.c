@@ -888,9 +888,7 @@ static void TmlCom_ReqRemComm (struct Tml_Timeline *Timeline)
    TmlFrm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
 
       /* Begin box for the comment */
-      Box_BoxBegin (NULL,NULL,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
          /* Indent the comment */
 	 HTM_DIV_Begin ("class=\"Tml_LEFT_PHOTO\"");

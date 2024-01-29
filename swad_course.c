@@ -386,7 +386,7 @@ static void Crs_ListCourses (void)
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Crs_PutIconsListCourses,NULL,
+   Box_BoxBegin (Title,Crs_PutIconsListCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -585,7 +585,7 @@ static void Crs_EditCoursesInternal (void)
    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,
 		 Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Crs_PutIconsEditingCourses,NULL,
+   Box_BoxBegin (Title,Crs_PutIconsEditingCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -1925,8 +1925,7 @@ void Crs_AskRemoveOldCrss (void)
    Frm_BeginForm (ActRemOldCrs);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Eliminate_old_courses,
-		    NULL,NULL,
+      Box_BoxBegin (Txt_Eliminate_old_courses,NULL,NULL,
 		    Hlp_SYSTEM_Maintenance_eliminate_old_courses,Box_NOT_CLOSABLE);
 
       /***** Form to request number of months without clicks *****/

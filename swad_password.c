@@ -262,8 +262,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Frm_BeginForm (ActSndNewPwd);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Forgotten_password,
-		    NULL,NULL,
+      Box_BoxBegin (Txt_Forgotten_password,NULL,NULL,
 		    Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
 	 /***** Help text *****/
@@ -588,8 +587,7 @@ void Pwd_ShowFormChgMyPwd (void)
       Frm_BeginFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
 
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Password,
-		       NULL,NULL,
+	 Box_BoxBegin (Txt_Password,NULL,NULL,
 		       Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
 	    /***** Show possible alerts *****/
@@ -742,9 +740,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Password,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Password,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Show possible alerts *****/
 	 Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);

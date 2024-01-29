@@ -206,12 +206,12 @@ static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
    switch (NextAction)
      {
       case ActSeeDegTyp:
-	 Box_BoxBegin (NULL,Txt_Types_of_degree,
+	 Box_BoxBegin (Txt_Types_of_degree,
 	               DegTyp_PutIconsListingDegTypes,NULL,
 		       Hlp_CENTER_DegreeTypes,Box_NOT_CLOSABLE);
 	 break;
       case ActSeeUseGbl:
-	 Box_BoxBegin (NULL,Txt_Types_of_degree,
+	 Box_BoxBegin (Txt_Types_of_degree,
 	               DegTyp_PutIconToEditDegTypes,NULL,
 		       Hlp_ANALYTICS_Figures_types_of_degree,Box_NOT_CLOSABLE);
 	 break;
@@ -266,8 +266,7 @@ static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTyp
    extern const char *Txt_Types_of_degree;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Types_of_degree,
-                 DegTyp_PutIconsEditingDegreeTypes,NULL,
+   Box_BoxBegin (Txt_Types_of_degree,DegTyp_PutIconsEditingDegreeTypes,NULL,
                  Hlp_CENTER_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new degree type *****/

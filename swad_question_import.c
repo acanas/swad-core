@@ -135,8 +135,7 @@ void QstImp_ShowFormImpQstsFromXML (void)
    extern const char *Txt_XML_file;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Import_questions,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Import_questions,NULL,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Write help message *****/
@@ -477,8 +476,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    XML_GetTree (XMLBuffer,&RootElem);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Imported_questions,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Imported_questions,NULL,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Print XML tree *****/

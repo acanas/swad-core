@@ -85,8 +85,7 @@ void Set_EditSettings (void)
    extern const char *Txt_Design;
 
    /***** Internationalization: language, first day of week, date format *****/
-   Box_BoxBegin (NULL,Txt_Internationalization,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Internationalization,NULL,NULL,
                  Hlp_PROFILE_Settings_internationalization,Box_NOT_CLOSABLE);
 
       HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
@@ -104,8 +103,7 @@ void Set_EditSettings (void)
    Box_BoxEnd ();
 
    /***** Design: icon set, menu, theme, side columns *****/
-   Box_BoxBegin (NULL,Txt_Design,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Design,NULL,NULL,
                  Hlp_PROFILE_Settings_design,Box_NOT_CLOSABLE);
 
       HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
@@ -207,8 +205,7 @@ static void Set_PutIconsToSelectSideCols (void)
    unsigned SideCols;
    char Icon[32 + 1];
 
-   Box_BoxBegin (NULL,Txt_Columns,
-                 Set_PutIconsSideColumns,NULL,
+   Box_BoxBegin (Txt_Columns,Set_PutIconsSideColumns,NULL,
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
       Set_BeginSettingsHead ();
 	 Set_BeginOneSettingSelector ();

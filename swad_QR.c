@@ -100,8 +100,7 @@ void QR_PrintUsrQRCode (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,
-                    NULL,NULL,
+      Box_BoxBegin (Gbl.Usrs.Other.UsrDat.FullName,NULL,NULL,
                     NULL,Box_NOT_CLOSABLE);
 
 	 /***** Show QR code *****/

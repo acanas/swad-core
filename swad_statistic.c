@@ -267,7 +267,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
                  Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,NULL,NULL,
+   Box_BoxBegin (Title,NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -931,83 +931,79 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                                   NumUsrsInList,LstSelectedUsrCods)))
      {
       /***** Put the table with the clicks *****/
-      if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	 Box_BoxBegin (NULL,Txt_List_of_detailed_clicks,
-	               NULL,NULL,
-	               NULL,Box_NOT_CLOSABLE);
-      else
-	 Box_BoxBegin (NULL,Txt_STAT_COUNT_TYPE[Stats.CountType],
-	               NULL,NULL,
-	               NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? Txt_List_of_detailed_clicks :
+									    Txt_STAT_COUNT_TYPE[Stats.CountType],
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-      HTM_TABLE_BeginWidePadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
-	 switch (Stats.ClicksGroupedBy)
-	   {
-	    case Sta_CLICKS_CRS_DETAILED_LIST:
-	       Sta_ShowDetailedAccessesList (&Stats,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_USR:
-	       Sta_ShowNumHitsPerUsr (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_DAY:
-	    case Sta_CLICKS_GBL_PER_DAY:
-	       Sta_ShowNumHitsPerDay (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
-	    case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-	       Sta_ShowDistrAccessesPerDayAndHour (&Stats,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_WEEK:
-	    case Sta_CLICKS_GBL_PER_WEEK:
-	       Sta_ShowNumHitsPerWeek (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_MONTH:
-	    case Sta_CLICKS_GBL_PER_MONTH:
-	       Sta_ShowNumHitsPerMonth (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_YEAR:
-	    case Sta_CLICKS_GBL_PER_YEAR:
-	       Sta_ShowNumHitsPerYear (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_HOUR:
-	    case Sta_CLICKS_GBL_PER_HOUR:
-	       Sta_ShowNumHitsPerHour (NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_MINUTE:
-	    case Sta_CLICKS_GBL_PER_MINUTE:
-	       Sta_ShowNumHitsPerMinute (NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_CRS_PER_ACTION:
-	    case Sta_CLICKS_GBL_PER_ACTION:
-	       Sta_ShowNumHitsPerAction (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_PLUGIN:
-	       Sta_ShowNumHitsPerPlugin (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_API_FUNCTION:
-	       Sta_ShowNumHitsPerWSFunction (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_BANNER:
-	       Sta_ShowNumHitsPerBanner (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_COUNTRY:
-	       Sta_ShowNumHitsPerCountry (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_INSTITUTION:
-	       Sta_ShowNumHitsPerInstitution (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_CENTER:
-	       Sta_ShowNumHitsPerCenter (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_DEGREE:
-	       Sta_ShowNumHitsPerDegree (Stats.CountType,NumHits,mysql_res);
-	       break;
-	    case Sta_CLICKS_GBL_PER_COURSE:
-	       Sta_ShowNumHitsPerCourse (Stats.CountType,NumHits,mysql_res);
-	       break;
-	   }
+	 HTM_TABLE_BeginWidePadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
+	    switch (Stats.ClicksGroupedBy)
+	      {
+	       case Sta_CLICKS_CRS_DETAILED_LIST:
+		  Sta_ShowDetailedAccessesList (&Stats,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_USR:
+		  Sta_ShowNumHitsPerUsr (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_DAY:
+	       case Sta_CLICKS_GBL_PER_DAY:
+		  Sta_ShowNumHitsPerDay (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
+	       case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
+		  Sta_ShowDistrAccessesPerDayAndHour (&Stats,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_WEEK:
+	       case Sta_CLICKS_GBL_PER_WEEK:
+		  Sta_ShowNumHitsPerWeek (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_MONTH:
+	       case Sta_CLICKS_GBL_PER_MONTH:
+		  Sta_ShowNumHitsPerMonth (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_YEAR:
+	       case Sta_CLICKS_GBL_PER_YEAR:
+		  Sta_ShowNumHitsPerYear (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_HOUR:
+	       case Sta_CLICKS_GBL_PER_HOUR:
+		  Sta_ShowNumHitsPerHour (NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_MINUTE:
+	       case Sta_CLICKS_GBL_PER_MINUTE:
+		  Sta_ShowNumHitsPerMinute (NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_CRS_PER_ACTION:
+	       case Sta_CLICKS_GBL_PER_ACTION:
+		  Sta_ShowNumHitsPerAction (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_PLUGIN:
+		  Sta_ShowNumHitsPerPlugin (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_API_FUNCTION:
+		  Sta_ShowNumHitsPerWSFunction (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_BANNER:
+		  Sta_ShowNumHitsPerBanner (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_COUNTRY:
+		  Sta_ShowNumHitsPerCountry (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_INSTITUTION:
+		  Sta_ShowNumHitsPerInstitution (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_CENTER:
+		  Sta_ShowNumHitsPerCenter (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_DEGREE:
+		  Sta_ShowNumHitsPerDegree (Stats.CountType,NumHits,mysql_res);
+		  break;
+	       case Sta_CLICKS_GBL_PER_COURSE:
+		  Sta_ShowNumHitsPerCourse (Stats.CountType,NumHits,mysql_res);
+		  break;
+	      }
 
-      HTM_TABLE_End ();
+	 HTM_TABLE_End ();
 
       /* End box and section */
       Box_BoxEnd ();

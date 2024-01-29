@@ -575,8 +575,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
    extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Exams->Exam.Title,
-		 NULL,NULL,
+   Box_BoxBegin (Exams->Exam.Title,NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
       /***** Heading *****/

@@ -196,8 +196,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_My_frequent_actions,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_My_frequent_actions,NULL,NULL,
                  Hlp_ANALYTICS_Frequent,Box_NOT_CLOSABLE);
 
       /***** Begin container *****/

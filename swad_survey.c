@@ -201,8 +201,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
    Surveys->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Surveys,
-                 Svy_PutIconsListSurveys,Surveys,
+   Box_BoxBegin (Txt_Surveys,Svy_PutIconsListSurveys,Surveys,
                  Hlp_ANALYTICS_Surveys,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
@@ -419,8 +418,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /***** Begin box *****/
    if (ShowOnlyThisSvyComplete)
-      Box_BoxBegin (NULL,Surveys->Svy.Title[0] ? Surveys->Svy.Title :
-					         Txt_Survey,
+      Box_BoxBegin (Surveys->Svy.Title[0] ? Surveys->Svy.Title :
+					    Txt_Survey,
                     Svy_PutIconsOneSvy,Surveys,
                     Hlp_ANALYTICS_Surveys,Box_NOT_CLOSABLE);
 
@@ -2238,8 +2237,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
    /***** Begin box *****/
    if (NewQuestion)
-      Box_BoxBegin (NULL,Txt_Question,
-                    NULL,NULL,
+      Box_BoxBegin (Txt_Question,NULL,NULL,
                     Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
    else
      {
@@ -2248,8 +2246,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
       if (asprintf (&Title,"%s %u",Txt_Question,SvyQst->QstInd + 1) < 0)	// Question index may be 0, 1, 2, 3,...
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxBegin (NULL,Title,
-                    Svy_PutIconToRemoveOneQst,Surveys,
+      Box_BoxBegin (Title,Svy_PutIconToRemoveOneQst,Surveys,
                     NULL,Box_NOT_CLOSABLE);
       free (Title);
      }
@@ -2615,113 +2612,111 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys)
 					            Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
-   if (Surveys->Svy.Status.ICanEdit)
-      Box_BoxBegin (NULL,Txt_Questions,
-		    Svy_PutIconToAddNewQuestion,Surveys,
-		    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Questions,
-		    NULL,NULL,
-		    Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Txt_Questions,
+		 Surveys->Svy.Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
+						NULL,
+		 Surveys->Svy.Status.ICanEdit ? Surveys :
+						NULL,
+		 Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
 
-   /***** Get data of questions from database *****/
-   if ((NumQsts = Svy_DB_GetSurveyQsts (&mysql_res,Surveys->Svy.SvyCod)))
-     {
-      if (PutFormAnswerSurvey == Frm_PUT_FORM)
+      /***** Get data of questions from database *****/
+      if ((NumQsts = Svy_DB_GetSurveyQsts (&mysql_res,Surveys->Svy.SvyCod)))
 	{
-	 /***** Begin form to send answers to survey *****/
-	 Frm_BeginForm (ActAnsSvy);
-	    ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
-	}
-
-      /***** Write the heading *****/
-      HTM_TABLE_Begin ("TBL_SCROLL");
-
-	 HTM_TR_Begin (NULL);
-	    if (Surveys->Svy.Status.ICanEdit)
-	       HTM_TH_Empty (1);
-	    HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
-	    HTM_TH (Txt_Type    ,HTM_HEAD_CENTER);
-	    HTM_TH (Txt_Question,HTM_HEAD_LEFT  );
-	 HTM_TR_End ();
-
-	 /***** Write questions one by one *****/
-	 for (NumQst = 0, The_ResetRowColor ();
-	      NumQst < NumQsts;
-	      NumQst++, The_ChangeRowColor ())
+	 if (PutFormAnswerSurvey == Frm_PUT_FORM)
 	   {
-	    /* Initialize question to zero */
-	    Svy_InitQst (&SvyQst);
-
-	    /* Get question data from row */
-	    Svy_GetQstDataFromRow (mysql_res,&SvyQst,Stem);
-
-	    HTM_TR_Begin (NULL);
-
-	       if (Surveys->Svy.Status.ICanEdit)
-		 {
-		  HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-
-		     /* Initialize context */
-		     Surveys->QstCod = SvyQst.QstCod;
-
-		     /* Write icon to remove the question */
-		     Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
-						    Svy_PutParsToEditQuestion,Surveys);
-
-		     /* Write icon to edit the question */
-		     Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
-						  Svy_PutParsToEditQuestion,Surveys);
-
-		  HTM_TD_End ();
-		 }
-
-	       /* Write index of question inside survey */
-	       HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
-		  HTM_Unsigned (SvyQst.QstInd + 1);
-	       HTM_TD_End ();
-
-	       /* Write the question type (row[2]) */
-	       HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
-		  HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
-	       HTM_TD_End ();
-
-	       /* Write the stem and the answers of this question */
-	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
-		  Svy_WriteQstStem (Stem);
-		  Svy_WriteAnswersOfAQst (&Surveys->Svy,&SvyQst,
-					  PutFormAnswerSurvey);
-		  if (SvyQst.CommentsAllowed)
-		     Svy_WriteCommentsOfAQst (&Surveys->Svy,&SvyQst,
-					      PutFormAnswerSurvey);
-
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
+	    /***** Begin form to send answers to survey *****/
+	    Frm_BeginForm (ActAnsSvy);
+	       ParCod_PutPar (ParCod_Svy,Surveys->Svy.SvyCod);
 	   }
 
-      HTM_TABLE_End ();
+	 /***** Write the heading *****/
+	 HTM_TABLE_Begin ("TBL_SCROLL");
 
-      if (PutFormAnswerSurvey == Frm_PUT_FORM)
-	{
-	 /***** Button to create/modify survey *****/
-	 Btn_PutConfirmButton (Txt_Done);
+	    HTM_TR_Begin (NULL);
+	       if (Surveys->Svy.Status.ICanEdit)
+		  HTM_TH_Empty (1);
+	       HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Type    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Question,HTM_HEAD_LEFT  );
+	    HTM_TR_End ();
 
-	 /***** End form *****/
-	 Frm_EndForm ();
+	    /***** Write questions one by one *****/
+	    for (NumQst = 0, The_ResetRowColor ();
+		 NumQst < NumQsts;
+		 NumQst++, The_ChangeRowColor ())
+	      {
+	       /* Initialize question to zero */
+	       Svy_InitQst (&SvyQst);
+
+	       /* Get question data from row */
+	       Svy_GetQstDataFromRow (mysql_res,&SvyQst,Stem);
+
+	       HTM_TR_Begin (NULL);
+
+		  if (Surveys->Svy.Status.ICanEdit)
+		    {
+		     HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+
+			/* Initialize context */
+			Surveys->QstCod = SvyQst.QstCod;
+
+			/* Write icon to remove the question */
+			Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
+						       Svy_PutParsToEditQuestion,Surveys);
+
+			/* Write icon to edit the question */
+			Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
+						     Svy_PutParsToEditQuestion,Surveys);
+
+		     HTM_TD_End ();
+		    }
+
+		  /* Write index of question inside survey */
+		  HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+				The_GetSuffix (),
+				The_GetColorRows ());
+		     HTM_Unsigned (SvyQst.QstInd + 1);
+		  HTM_TD_End ();
+
+		  /* Write the question type (row[2]) */
+		  HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+				The_GetSuffix (),
+				The_GetColorRows ());
+		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
+		  HTM_TD_End ();
+
+		  /* Write the stem and the answers of this question */
+		  HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+				The_GetSuffix (),
+				The_GetColorRows ());
+		     Svy_WriteQstStem (Stem);
+		     Svy_WriteAnswersOfAQst (&Surveys->Svy,&SvyQst,
+					     PutFormAnswerSurvey);
+		     if (SvyQst.CommentsAllowed)
+			Svy_WriteCommentsOfAQst (&Surveys->Svy,&SvyQst,
+						 PutFormAnswerSurvey);
+
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+	      }
+
+	 HTM_TABLE_End ();
+
+	 if (PutFormAnswerSurvey == Frm_PUT_FORM)
+	   {
+	    /***** Button to create/modify survey *****/
+	    Btn_PutConfirmButton (Txt_Done);
+
+	    /***** End form *****/
+	    Frm_EndForm ();
+	   }
 	}
-     }
-   else	// This survey has no questions
-      Ale_ShowAlert (Ale_INFO,Txt_This_survey_has_no_questions);
+      else	// This survey has no questions
+	 Ale_ShowAlert (Ale_INFO,Txt_This_survey_has_no_questions);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End box *****/
    Box_BoxEnd ();

@@ -128,7 +128,7 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 							    Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,NULL,
+   Box_BoxBegin (NULL,
 		 ViewType == Vie_VIEW ? InsCfg_PutIconsToPrintAndUpload :
 					NULL,NULL,
 		 ViewType == Vie_VIEW ? Hlp_INSTITUTION_Information :

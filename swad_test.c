@@ -125,8 +125,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
    TstCfg_GetConfig ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Test,
-                 Tst_PutIconsTests,NULL,
+   Box_BoxBegin (Txt_Test,Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Get tags *****/
@@ -348,8 +347,7 @@ void Tst_AssessTest (void)
       Tst_DB_UpdatePrint (&Print);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Result,
-		    NULL,NULL,
+      Box_BoxBegin (Txt_Result,NULL,NULL,
 		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
 

@@ -164,8 +164,7 @@ static void TstCfg_ShowFormConfig (void)
    TstCfg_GetConfig ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Configure_tests,
-                 Tst_PutIconsTests,NULL,
+   Box_BoxBegin (Txt_Configure_tests,Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/

@@ -396,8 +396,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Enrolment,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Enrolment,NULL,NULL,
                  Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
       /***** Show message *****/
@@ -594,9 +593,9 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Frm_BeginForm (WhatToDo[Role].NextAction);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,*WhatToDo[Role].Title,
-		    NULL,NULL,
-		    Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
+      Box_BoxBegin (*WhatToDo[Role].Title,NULL,NULL,
+		    Hlp_USERS_Administration_administer_multiple_users,
+		    Box_NOT_CLOSABLE);
 
 	 /***** Step 1: List of students to be enroled / removed *****/
 	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
@@ -673,9 +672,7 @@ void Enr_AskRemoveOldUsrs (void)
    Frm_BeginForm (ActRemOldUsr);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Eliminate_old_users,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Eliminate_old_users,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Form to request number of months without clicks *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -1721,8 +1718,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 				            1 << Rol_STD);	// This course has students
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Remove_all_students,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Remove_all_students,NULL,NULL,
                  Hlp_USERS_Administration_remove_all_students,Box_NOT_CLOSABLE);
 
       if (NumStds)
@@ -2145,8 +2141,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr",Hie_CRS);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Enrolment_requests,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Enrolment_requests,NULL,NULL,
                  Hlp_USERS_Requests,Box_NOT_CLOSABLE);
 
       /***** Selection of scope and roles *****/
@@ -2475,8 +2470,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Administer_one_user,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Administer_one_user,NULL,NULL,
                  Hlp_USERS_Administration_administer_one_user,Box_NOT_CLOSABLE);
 
       /***** Write form to request another user's ID *****/

@@ -147,8 +147,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
    NumSessions = Exa_DB_GetSessions (&mysql_res,Exams->Exam.ExaCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Sessions,
-                 ExaSes_PutIconsInListOfSessions,Exams,
+   Box_BoxBegin (Txt_Sessions,ExaSes_PutIconsInListOfSessions,Exams,
                  Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/

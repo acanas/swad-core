@@ -425,8 +425,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 		     Id);
 
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Multimedia,
-		       NULL,NULL,
+	 Box_BoxBegin (Txt_Multimedia,NULL,NULL,
 		       Hlp_Multimedia,Box_NOT_CLOSABLE);
 
 	    /***** Action to perform on media *****/

@@ -450,8 +450,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_ID_identity_number,
-		    Acc_PutLinkToRemoveMyAccount,NULL,
+      Box_BoxBegin (Txt_ID_identity_number,Acc_PutLinkToRemoveMyAccount,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change ID *****/
@@ -477,8 +476,7 @@ void ID_ShowFormChangeOtherUsrID (void)
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_ID_identity_number,
-		    NULL,NULL,
+      Box_BoxBegin (Txt_ID_identity_number,NULL,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change ID *****/

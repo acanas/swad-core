@@ -101,8 +101,7 @@ static void RubRsc_ShowClipboard (void)
    extern const char *Hlp_ASSESSMENT_Rubrics_resource_clipboard;
    extern const char *Txt_Resource_clipboard;
 
-   Box_BoxBegin (NULL,Txt_Resource_clipboard,
-		 RubRsc_PutIconsClipboard,NULL,
+   Box_BoxBegin (Txt_Resource_clipboard,RubRsc_PutIconsClipboard,NULL,
 		 Hlp_ASSESSMENT_Rubrics_resource_clipboard,Box_CLOSABLE);
       Rsc_ShowClipboard ();
    Box_BoxEnd ();

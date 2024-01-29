@@ -737,8 +737,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
       /***** Begin box *****/
       snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",
 		Txt_Thread,Thread.Subject);
-      Box_BoxBegin (NULL,FrameTitle,
-		    For_PutIconsOneThread,Forums,
+      Box_BoxBegin (FrameTitle,For_PutIconsOneThread,Forums,
 		    Hlp_COMMUNICATION_Forums_posts,Box_NOT_CLOSABLE);
 
 	 /***** Get posts of a thread from database *****/
@@ -1241,8 +1240,7 @@ void For_ShowForumList (struct For_Forums *Forums)
    Hie_GetMyHierarchy (Hie_INS);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Forums,
-                 For_PutIconsForums,NULL,
+   Box_BoxBegin (Txt_Forums,For_PutIconsForums,NULL,
                  Hlp_COMMUNICATION_Forums,Box_NOT_CLOSABLE);
 
       /***** Put a form to select which forums *****/
@@ -2094,8 +2092,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 
       /***** Begin box for threads of this forum *****/
       snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",Txt_Forum,ForumName);
-      Box_BoxBegin (NULL,FrameTitle,
-		    For_PutIconsThreads,Forums,
+      Box_BoxBegin (FrameTitle,For_PutIconsThreads,Forums,
 		    Hlp_COMMUNICATION_Forums_threads,Box_NOT_CLOSABLE);
 
 	 /***** List the threads *****/
@@ -2769,8 +2766,8 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    char *ClassInput;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,IsReply ? Txt_Post :
-				Txt_Thread,
+   Box_BoxBegin (IsReply ? Txt_Post :
+			   Txt_Thread,
 		 NULL,NULL,
 		 IsReply ? Hlp_COMMUNICATION_Forums_new_post :
 			   Hlp_COMMUNICATION_Forums_new_thread,

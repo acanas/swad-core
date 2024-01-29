@@ -296,7 +296,7 @@ static void Ins_ListInstitutions (void)
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
                  Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Ins_PutIconsListingInstitutions,NULL,
+   Box_BoxBegin (Title,Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -531,7 +531,7 @@ static void Ins_EditInstitutionsInternal (void)
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
                  Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Ins_PutIconsEditingInstitutions,NULL,
+   Box_BoxBegin (Title,Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -1645,8 +1645,7 @@ void Ins_GetAndShowInstitutionsStats (void)
    struct Fig_Figures Figures;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_INS],
-                 NULL,NULL,
+   Box_BoxBegin (Txt_HIERARCHY_PLURAL_Abc[Hie_INS],NULL,NULL,
                  Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
       /***** Form to select type of list used to display degree photos *****/
@@ -1689,8 +1688,7 @@ static void Ins_GetAndShowInssOrderedByNumCtrs (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_centers,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Institutions_by_number_of_centers,NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");
 
@@ -1718,8 +1716,7 @@ static void Ins_GetAndShowInssOrderedByNumDegs (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_degrees,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Institutions_by_number_of_degrees,NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");
 
@@ -1747,8 +1744,7 @@ static void Ins_GetAndShowInssOrderedByNumCrss (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_courses,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Institutions_by_number_of_courses,NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");
 
@@ -1776,8 +1772,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_users_in_courses,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Institutions_by_number_of_users_in_courses,NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");
 
@@ -1806,7 +1801,7 @@ static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   Box_BoxBegin (NULL,Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
+   Box_BoxBegin (Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
                  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");

@@ -153,9 +153,7 @@ void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
 
    /***** Show the note highlighted *****/
    /* Begin box */
-   Box_BoxBegin (NULL,NULL,
-		 NULL,NULL,
-		 NULL,Box_CLOSABLE);
+   Box_BoxBegin (NULL,NULL,NULL,NULL,Box_CLOSABLE);
 
       /* Begin container */
       HTM_DIV_Begin ("class=\"Tml_WIDTH Tml_NEW_PUB_%s\"",The_GetSuffix ());
@@ -1019,9 +1017,7 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
    TmlFrm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
 
    /* Show note */
-   Box_BoxBegin (NULL,NULL,
-		 NULL,NULL,
-		 NULL,Box_CLOSABLE);
+   Box_BoxBegin (NULL,NULL,NULL,NULL,Box_CLOSABLE);
       HTM_DIV_Begin ("class=\"Tml_WIDTH\"");
 	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
 					     Tml_TOP_MESSAGE_NONE,

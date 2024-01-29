@@ -168,8 +168,7 @@ void Log_ShowLastClicks (void)
    Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Last_clicks_in_real_time,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Last_clicks_in_real_time,NULL,NULL,
                  Hlp_USERS_Connected_last_clicks,Box_NOT_CLOSABLE);
 
       /***** Get and show last clicks *****/

@@ -230,8 +230,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
    Events->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Events,
-                 Att_PutIconsInListOfEvents,Events,
+   Box_BoxBegin (Txt_Events,Att_PutIconsInListOfEvents,Events,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
@@ -1484,8 +1483,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
 
    /***** List students (only me) *****/
    /* Begin box */
-   Box_BoxBegin (NULL,Txt_Attendance,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Attendance,NULL,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
@@ -1551,8 +1549,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Attendance,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Attendance,NULL,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Form to select groups *****/
@@ -2242,14 +2239,11 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 switch (TypeOfView)
 	   {
 	    case Att_VIEW_ONLY_ME:
-	       Box_BoxBegin (NULL,Txt_Attendance,
-			     Att_PutIconsMyAttList,&Events,
+	       Box_BoxBegin (Txt_Attendance,Att_PutIconsMyAttList,&Events,
 			     Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
 	       break;
 	    case Att_PRNT_ONLY_ME:
-	       Box_BoxBegin (NULL,Txt_Attendance,
-			     NULL,NULL,
-			     NULL,Box_NOT_CLOSABLE);
+	       Box_BoxBegin (Txt_Attendance,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 	       break;
 	    default:
 	       Err_WrongTypeExit ();
@@ -2358,13 +2352,12 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	    switch (*((Att_TypeOfView_t *) TypeOfView))
 	      {
 	       case Att_VIEW_SEL_USR:
-		  Box_BoxBegin (NULL,Txt_Attendance_list,
+		  Box_BoxBegin (Txt_Attendance_list,
 				Att_PutIconsStdsAttList,&Events,
 				Hlp_USERS_Attendance_attendance_list,Box_NOT_CLOSABLE);
 		  break;
 	       case Att_PRNT_SEL_USR:
-		  Box_BoxBegin (NULL,Txt_Attendance_list,
-				NULL,NULL,
+		  Box_BoxBegin (Txt_Attendance_list,NULL,NULL,
 				NULL,Box_NOT_CLOSABLE);
 		  break;
 	       default:
@@ -2625,8 +2618,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
                       TypeOfView == Att_VIEW_SEL_USR);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Events,
-		 FunctionToDrawContextualIcons[TypeOfView],NULL,
+   Box_BoxBegin (Txt_Events,FunctionToDrawContextualIcons[TypeOfView],NULL,
 		 NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to update the attendance
@@ -3003,9 +2995,7 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
    HTM_SECTION_Begin (Att_ATTENDANCE_DETAILS_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Details,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Details,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_Begin ("TBL_SCROLL");

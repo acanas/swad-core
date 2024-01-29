@@ -163,7 +163,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 	        					     Frm_DONT_PUT_FORM;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,NULL,
+   Box_BoxBegin (NULL,
 		 ViewType == Vie_VIEW ? CtrCfg_PutIconsCtrConfig :
 					NULL,NULL,
 		 ViewType == Vie_VIEW ? Hlp_CENTER_Information :
@@ -868,9 +868,7 @@ void CtrCfg_ReqPhoto (void)
    Frm_BeginForm (ActRecCtrPho);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Photo,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Photo,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Write help message *****/
 	 Ale_ShowAlert (Ale_INFO,"%s: %s<br />"

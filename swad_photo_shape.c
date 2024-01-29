@@ -73,9 +73,9 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
      };
    PhoSha_Shape_t Shape;
 
-   Box_BoxBegin (NULL,Txt_User_photos,
-                 PhoSha_PutIconsPhotoShape,NULL,
+   Box_BoxBegin (Txt_User_photos,PhoSha_PutIconsPhotoShape,NULL,
                  Hlp_PROFILE_Settings_user_photos,Box_NOT_CLOSABLE);
+
       Set_BeginSettingsHead ();
 	 Set_BeginOneSettingSelector ();
 	 for (Shape  = (PhoSha_Shape_t) 0;
@@ -95,6 +95,7 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
 	   }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();
+
    Box_BoxEnd ();
   }
 

@@ -253,7 +253,7 @@ static void Ctr_ListCenters (void)
    if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Ctr_PutIconsListingCenters,NULL,
+   Box_BoxBegin (Title,Ctr_PutIconsListingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -432,7 +432,7 @@ static void Ctr_EditCentersInternal (void)
    if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,Ctr_PutIconsEditingCenters,NULL,
+   Box_BoxBegin (Title,Ctr_PutIconsEditingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    free (Title);
 

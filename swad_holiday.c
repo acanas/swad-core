@@ -136,8 +136,7 @@ void Hld_SeeAllHolidays (void)
       Hld_GetListHolidays (&Holidays);
 
       /***** Table head *****/
-      Box_BoxBegin (NULL,Txt_Holidays,
-                    Hld_PutIconsSeeHolidays,NULL,
+      Box_BoxBegin (Txt_Holidays,Hld_PutIconsSeeHolidays,NULL,
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
 
 	 if (Holidays.Num)
@@ -489,9 +488,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
    unsigned CurrentYear = Dat_GetCurrentYear ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Holidays,
-                 Hld_PutIconsEditHolidays,NULL,
-                 // Cal_PutIconToSeeCalendar,NULL,
+   Box_BoxBegin (Txt_Holidays,Hld_PutIconsEditHolidays,NULL,
                  Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new holiday *****/

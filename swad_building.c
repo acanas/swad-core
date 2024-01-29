@@ -251,8 +251,7 @@ static void Bld_EditBuildingsInternal (void)
    Bld_GetListBuildings (&Buildings,Bld_ALL_DATA);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Buildings,
-                 Bld_PutIconsEditingBuildings,NULL,
+   Box_BoxBegin (Txt_Buildings,Bld_PutIconsEditingBuildings,NULL,
                  Hlp_CENTER_Buildings_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new building *****/

@@ -102,7 +102,7 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
    unsigned NumCtrsWithMap;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Cfg_PLATFORM_SHORT_NAME,
+   Box_BoxBegin (Cfg_PLATFORM_SHORT_NAME,
 		 ViewType == Vie_VIEW ? SysCfg_PutIconToPrint :
 					NULL,NULL,
 		 ViewType == Vie_VIEW ? Hlp_SYSTEM_Information :

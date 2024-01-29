@@ -121,8 +121,7 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetParsIndicators (&Indicators);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Indicators_of_courses,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Indicators_of_courses,NULL,NULL,
                  Hlp_ANALYTICS_Indicators,Box_NOT_CLOSABLE);
 
       /***** Form to update indicators *****/

@@ -542,7 +542,7 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
    bool PutIconToEdit = Syllabus->ViewType == Vie_VIEW && ICanEdit;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
 		 PutIconToEdit ? Inf_PutIconToEditInfo :
 				 NULL,
 		 PutIconToEdit ? &Gbl.Crs.Info.Type :

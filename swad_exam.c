@@ -239,8 +239,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
    Exams->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Exams,
-                 Exa_PutIconsListExams,Exams,
+   Box_BoxBegin (Txt_Exams,Exa_PutIconsListExams,Exams,
                  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
       /***** Write links to pages *****/
@@ -426,8 +425,8 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
    extern const char *Txt_Exam;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Exams->Exam.Title[0] ? Exams->Exam.Title :
-					     Txt_Exam,
+   Box_BoxBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
+					Txt_Exam,
                  Exa_PutIconsViewingOneExam,Exams,
 		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
@@ -1278,8 +1277,8 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Exams->Exam.Title[0] ? Exams->Exam.Title :
-					     Txt_Exam,
+   Box_BoxBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
+					Txt_Exam,
 		 FunctionToDrawContextualIcons[ExistingNewExam],Exams,
 		 *HelpLink[ExistingNewExam],Box_NOT_CLOSABLE);
 

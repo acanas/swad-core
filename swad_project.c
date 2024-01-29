@@ -528,8 +528,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
       ((struct Prj_Projects *) Projects)->CurrentPage = (unsigned) Pagination.CurrentPage;
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Projects,
-		    Prj_PutIconsListProjects,Projects,
+      Box_BoxBegin (Txt_Projects,Prj_PutIconsListProjects,Projects,
 		    Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
 	 /***** Put filters to choice which projects to show *****/
@@ -1343,8 +1342,8 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
    extern const char *Txt_Project;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Projects->Prj.Title[0] ? Projects->Prj.Title :
-					       Txt_Project,
+   Box_BoxBegin (Projects->Prj.Title[0] ? Projects->Prj.Title :
+					  Txt_Project,
                  Prj_PutIconsOnePrj,Projects,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
@@ -3722,8 +3721,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 					      ActChgPrj;
 
    /***** Begin project box *****/
-   Box_BoxBegin (NULL,Projects->Prj.Title[0] ? Projects->Prj.Title :
-					       Txt_Project,
+   Box_BoxBegin (Projects->Prj.Title[0] ? Projects->Prj.Title :
+					  Txt_Project,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
 

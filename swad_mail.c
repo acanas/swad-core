@@ -442,8 +442,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
    struct Mail *Mai;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Email_domains_allowed_for_notifications,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Email_domains_allowed_for_notifications,NULL,NULL,
                  Hlp_START_Domains_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new mail *****/
@@ -835,8 +834,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
    const char *Ptr;
 
    /***** Begin the box used to list the emails *****/
-   Box_BoxBegin (NULL,Txt_Email_addresses,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Email_addresses,NULL,NULL,
 		 Hlp_COMMUNICATION_Email,Box_NOT_CLOSABLE);
 
       /***** Begin list with users' email addresses *****/
@@ -1021,8 +1019,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Email,
-		    Acc_PutLinkToRemoveMyAccount,NULL,
+      Box_BoxBegin (Txt_Email,Acc_PutLinkToRemoveMyAccount,NULL,
 		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change email *****/
@@ -1050,9 +1047,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Email,
-		    NULL,NULL,
-		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Email,NULL,NULL,Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
 	 /***** Show form to change email *****/
 	 Mai_ShowFormChangeUsrEmail (Usr_OTHER,

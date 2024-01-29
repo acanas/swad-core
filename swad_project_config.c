@@ -109,8 +109,7 @@ void PrjCfg_ShowFormConfig (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Configure_projects,
-                 Prj_PutIconsListProjects,&Projects,
+   Box_BoxBegin (Txt_Configure_projects,Prj_PutIconsListProjects,&Projects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
       /***** Projects are editable by non-editing teachers? *****/

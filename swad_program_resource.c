@@ -226,14 +226,12 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       switch (ViewingOrEditing[ListingType])
         {
          case Vie_VIEW:
-	    Box_BoxBegin (NULL,NULL,
-			  NULL,NULL,
-			  NULL,Box_NOT_CLOSABLE);
+	    Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 	    break;
          case Vie_EDIT:
 	    if (asprintf (&Title,Txt_Resources_of_X,Item->Title) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Box_BoxBegin (NULL,Title,
+	    Box_BoxBegin (Title,
 			  PrgRsc_PutIconsResources[ViewingOrEditingResourcesOfThisItem],
 			  &Item->Hierarchy.ItmCod,
 			  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
@@ -886,8 +884,7 @@ static void PrgRsc_ShowClipboard (void)
    extern const char *Hlp_COURSE_Program_resource_clipboard;
    extern const char *Txt_Resource_clipboard;
 
-   Box_BoxBegin (NULL,Txt_Resource_clipboard,
-		 PrgRsc_PutIconsClipboard,NULL,
+   Box_BoxBegin (Txt_Resource_clipboard,PrgRsc_PutIconsClipboard,NULL,
 		 Hlp_COURSE_Program_resource_clipboard,Box_CLOSABLE);
       Rsc_ShowClipboard ();
    Box_BoxEnd ();

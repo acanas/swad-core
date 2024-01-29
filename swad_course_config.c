@@ -113,7 +113,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,NULL,
+   Box_BoxBegin (NULL,
 		 ViewType == Vie_VIEW ? CrsCfg_PutIconToPrint :
 					NULL,NULL,
 		 ViewType == Vie_VIEW ? Hlp_COURSE_Information :

@@ -90,8 +90,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    extern const char *Hlp_PROFILE_Settings_calendar;
    extern const char *Txt_Calendar;
 
-   Box_BoxBegin (NULL,Txt_Calendar,
-                 Cal_PutIconsFirstDayOfWeek,NULL,
+   Box_BoxBegin (Txt_Calendar,Cal_PutIconsFirstDayOfWeek,NULL,
                  Hlp_PROFILE_Settings_calendar,Box_NOT_CLOSABLE);
       Set_BeginSettingsHead ();
 	 Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,
@@ -260,8 +259,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
      };
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,NULL,
-                 FunctionToDrawContextualIcons,Args,
+   Box_BoxBegin (NULL,FunctionToDrawContextualIcons,Args,
 	         ViewType == Vie_VIEW ? Hlp_START_Calendar :
 					NULL,
 	         Box_NOT_CLOSABLE);

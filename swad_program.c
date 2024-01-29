@@ -292,8 +292,7 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
    if (asprintf (&Title,Txt_COURSE_program,
 		 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (NULL,Title,
-                 FunctionToDrawContextualIcons[ListingType],NULL,
+   Box_BoxBegin (Title,FunctionToDrawContextualIcons[ListingType],NULL,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
    free (Title);
 

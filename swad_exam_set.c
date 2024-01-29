@@ -489,8 +489,7 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams)
    NumSets = Exa_DB_GetExamSets (&mysql_res,Exams->Exam.ExaCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Sets_of_questions,
-		 NULL,NULL,
+   Box_BoxBegin (Txt_Sets_of_questions,NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_question_sets,Box_NOT_CLOSABLE);
 
       /***** Show table with sets *****/
@@ -520,7 +519,7 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    bool ICanEditQuestions = Exa_CheckIfEditable (&Exams->Exam);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Questions,
+   Box_BoxBegin (Txt_Questions,
 		 ICanEditQuestions ? ExaSet_PutIconToAddNewQuestions :
 				     NULL,
 		 ICanEditQuestions ? Exams :

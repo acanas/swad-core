@@ -268,8 +268,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Message,
-                 Msg_PutIconsListMsgs,Messages,
+   Box_BoxBegin (Txt_Message,Msg_PutIconsListMsgs,Messages,
 		 Hlp_COMMUNICATION_Messages_write,Box_NOT_CLOSABLE);
 
       if (Messages->ShowOnlyOneRecipient)
@@ -1488,15 +1487,13 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 
    /***** Begin box with messages *****/
    Msg_SetNumMsgsStr (Messages,&NumMsgsStr,NumUnreadMsgs);
-   Box_BoxBegin (NULL,NumMsgsStr,
-                 Msg_PutIconsListMsgs,Messages,
+   Box_BoxBegin (NumMsgsStr,Msg_PutIconsListMsgs,Messages,
                  Help[Messages->TypeOfMessages],Box_NOT_CLOSABLE);
    free (NumMsgsStr);
 
       /***** Filter messages *****/
       /* Begin box with filter */
-      Box_BoxBegin (NULL,Txt_Filter,
-		    NULL,NULL,
+      Box_BoxBegin (Txt_Filter,NULL,NULL,
 		    HelpFilter[Messages->TypeOfMessages],Box_CLOSABLE);
 
 	 /* Form to see messages again */

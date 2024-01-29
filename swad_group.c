@@ -278,8 +278,7 @@ static void Grp_EditGroupTypes (void)
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Types_of_group,
-                 Grp_PutIconsEditingGroupTypes,NULL,
+   Box_BoxBegin (Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,NULL,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new group type *****/
@@ -307,8 +306,7 @@ static void Grp_EditGroups (const struct Roo_Rooms *Rooms)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Groups,
-                 Grp_PutIconsEditingGroups,NULL,
+   Box_BoxBegin (Txt_Groups,Grp_PutIconsEditingGroups,NULL,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new group *****/
@@ -356,7 +354,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args
    ICanEdit = !Frm_CheckIfInside () &&
 	      (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   Box_BoxBegin (NULL,Txt_Groups,
+   Box_BoxBegin (Txt_Groups,
 		 ICanEdit ? Grp_PutIconToEditGroups :
 			    NULL,NULL,
 		 Hlp_USERS_Groups,Box_CLOSABLE);
@@ -1729,46 +1727,43 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
 
    /***** Begin box *****/
-   if (ICanEdit)
-      Box_BoxBegin (NULL,Txt_My_groups,
-		    Grp_PutIconToEditGroups,NULL,
-		    Hlp_USERS_Groups,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_My_groups,
-		    NULL,NULL,
-		    Hlp_USERS_Groups,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Txt_My_groups,
+		 ICanEdit ? Grp_PutIconToEditGroups :
+			    NULL,
+		 NULL,
+		 Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
-   if (Gbl.Crs.Grps.NumGrps) // This course has groups
-     {
-      /***** Begin form *****/
-      if (PutFormToChangeGrps)
-	 Frm_BeginForm (ActChgGrp);
-
-      /***** List the groups the user belongs to for change *****/
-      HTM_TABLE_BeginWidePadding (2);
-	 for (NumGrpTyp = 0;
-	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	      NumGrpTyp++)
-	    if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
-	      {
-	       ICanChangeMyGrps |= Grp_ListGrpsForChangeMySelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-								     &NumGrpsThisTypeIBelong);
-	       NumGrpsIBelong += NumGrpsThisTypeIBelong;
-	      }
-      HTM_TABLE_End ();
-
-      /***** End form *****/
-      if (PutFormToChangeGrps)
+      if (Gbl.Crs.Grps.NumGrps) // This course has groups
 	{
-	    if (ICanChangeMyGrps)
-	       Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
-						      Txt_Enrol_in_groups);
-	 Frm_EndForm ();
+	 /***** Begin form *****/
+	 if (PutFormToChangeGrps)
+	    Frm_BeginForm (ActChgGrp);
+
+	 /***** List the groups the user belongs to for change *****/
+	 HTM_TABLE_BeginWidePadding (2);
+	    for (NumGrpTyp = 0;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+		 NumGrpTyp++)
+	       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
+		 {
+		  ICanChangeMyGrps |= Grp_ListGrpsForChangeMySelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+									&NumGrpsThisTypeIBelong);
+		  NumGrpsIBelong += NumGrpsThisTypeIBelong;
+		 }
+	 HTM_TABLE_End ();
+
+	 /***** End form *****/
+	 if (PutFormToChangeGrps)
+	   {
+	       if (ICanChangeMyGrps)
+		  Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+							 Txt_Enrol_in_groups);
+	    Frm_EndForm ();
+	   }
 	}
-     }
-   else	// This course has no groups
-      Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
-                     Gbl.Hierarchy.Node[Hie_CRS].FullName);
+      else	// This course has no groups
+	 Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
+			Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
    /***** End box *****/
    Box_BoxEnd ();

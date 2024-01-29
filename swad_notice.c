@@ -110,8 +110,7 @@ void Not_ShowFormNotice (void)
    Frm_BeginForm (ActNewNot);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Notice,
-		    NULL,NULL,
+      Box_BoxBegin (Txt_Notice,NULL,NULL,
 		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
 
 	 /***** Message body *****/
@@ -332,8 +331,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
 
 	 /***** Begin box *****/
-	 Box_BoxBegin (NULL,Txt_Notices,
-		       Not_PutIconsListNotices,NULL,
+	 Box_BoxBegin (Txt_Notices,Not_PutIconsListNotices,NULL,
 		       Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
 	    if (!NumNotices)
 	       Ale_ShowAlert (Ale_INFO,Txt_No_notices);

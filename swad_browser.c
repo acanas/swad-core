@@ -2785,8 +2785,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    Brw_WriteTopBeforeShowingFileBrowser ();
 
    /***** Begin box and table *****/
-   Box_BoxBegin (NULL,Txt_Assignments_and_other_works,
-		 Brw_PutIconShowFigure,NULL,
+   Box_BoxBegin (Txt_Assignments_and_other_works,Brw_PutIconShowFigure,NULL,
 		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
       /***** List the assignments and works of the selected users *****/
@@ -3211,7 +3210,7 @@ static void Brw_ShowFileBrowser (void)
    HTM_SECTION_Begin (FileBrowserSectionId);
 
       if (Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type])
-	 Box_BoxBegin (NULL,*Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+	 Box_BoxBegin (*Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
 		       Brw_PutIconsFileBrowser,NULL,
 		       *Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
@@ -6250,9 +6249,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
       Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Create_folder,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Create_folder,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
          /* Alert */
 	 Ale_ShowAlert (Ale_INFO,Txt_You_can_create_a_new_folder_inside_the_folder_X,
@@ -6289,9 +6286,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
-      Box_BoxBegin (NULL,Txt_Upload_files,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Upload_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_new_files_to_the_folder_X,
@@ -6350,9 +6345,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"classic-upload\" style=\"display:none;\"");
-      Box_BoxBegin (NULL,Txt_Upload_file,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Upload_file,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
@@ -6391,9 +6384,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
       Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Paste,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Paste,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
@@ -6425,9 +6416,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
       Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Create_link,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Create_link,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
       /***** Help message *****/
       Ale_ShowAlert (Ale_INFO,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
@@ -7367,12 +7356,10 @@ void Brw_ShowFileMetadata (void)
 	     (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
 	      FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
 	     Rsc_CheckIfICanGetLink ())
-	    Box_BoxShadowBegin (NULL,NULL,
-				Brw_PutIconToGetLinkToFile,&FileMetadata,
+	    Box_BoxShadowBegin (NULL,Brw_PutIconToGetLinkToFile,&FileMetadata,
 				NULL);
 	 else
-	    Box_BoxShadowBegin (NULL,NULL,
-				NULL,NULL,
+	    Box_BoxShadowBegin (NULL,NULL,NULL,
 			        NULL);
 
 
@@ -9470,9 +9457,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
       Brw_PutParFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Remove_old_files,
-		    NULL,NULL,
-		    NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Remove_old_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Form to request number of months (to remove files older) *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -9772,8 +9757,7 @@ void Brw_GetAndShowFileBrowsersStats (void)
 				&SizeOfFileZone[NumStat]);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_FIGURE_TYPES[Fig_FOLDERS_AND_FILES],
-                 NULL,NULL,
+   Box_BoxBegin (Txt_FIGURE_TYPES[Fig_FOLDERS_AND_FILES],NULL,NULL,
                  Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
 
       /***** Write sizes of all file zones *****/

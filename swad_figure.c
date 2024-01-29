@@ -101,8 +101,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
    Frm_BeginForm (ActSeeUseGbl);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Txt_Figures,
-		    NULL,NULL,
+      Box_BoxBegin (Txt_Figures,NULL,NULL,
 		    Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
 	 /***** Begin table *****/

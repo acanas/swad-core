@@ -120,8 +120,7 @@ void Dup_ListDuplicateUsrs (void)
    unsigned NumInformants;
 
    /***** Begin box with list of possible duplicate users *****/
-   Box_BoxBegin (NULL,Txt_Possibly_duplicate_users,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Possibly_duplicate_users,NULL,NULL,
                  Hlp_USERS_Duplicates_possibly_duplicate_users,Box_NOT_CLOSABLE);
 
       /***** List possible duplicated users *****/
@@ -241,8 +240,7 @@ static void Dup_ListSimilarUsrs (void)
    unsigned NumUsr;
 
    /***** Begin box with list of possible duplicate users *****/
-   Box_BoxBegin (NULL,Txt_Similar_users,
-                 NULL,NULL,
+   Box_BoxBegin (Txt_Similar_users,NULL,NULL,
                  Hlp_USERS_Duplicates_similar_users,Box_NOT_CLOSABLE);
 
    /***** List possible similar users *****/

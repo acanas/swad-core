@@ -154,8 +154,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
    Assignments->CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Assignments,
-                 Asg_PutIconsListAssignments,Assignments,
+   Box_BoxBegin (Txt_Assignments,Asg_PutIconsListAssignments,Assignments,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
@@ -416,8 +415,8 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
    extern const char *Txt_Assignment;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Assignments->Asg.Title[0] ? Assignments->Asg.Title :
-						  Txt_Assignment,
+   Box_BoxBegin (Assignments->Asg.Title[0] ? Assignments->Asg.Title :
+					     Txt_Assignment,
 		 Asg_PutIconsOneAsg,Assignments,
 		 Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 

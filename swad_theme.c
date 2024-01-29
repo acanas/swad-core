@@ -97,9 +97,9 @@ void The_PutIconsToSelectTheme (void)
    The_Theme_t Theme;
    char Icon[PATH_MAX + 1];
 
-   Box_BoxBegin (NULL,Txt_Theme_SKIN,
-                 The_PutIconsTheme,NULL,
+   Box_BoxBegin (Txt_Theme_SKIN,The_PutIconsTheme,NULL,
                  Hlp_PROFILE_Settings_theme,Box_NOT_CLOSABLE);
+
       Set_BeginSettingsHead ();
 	 Set_BeginOneSettingSelector ();
 	    for (Theme  = (The_Theme_t) 0;
@@ -117,6 +117,7 @@ void The_PutIconsToSelectTheme (void)
 	      }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();
+
    Box_BoxEnd ();
   }
 

@@ -1535,8 +1535,7 @@ static void Hie_WriteListMyHierarchyToSelectNode (void)
    Lay_LastItem_t IsLastItemInLevel[1 + 6];
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_My_courses,
-                 Hie_PutIconToSearchCourses,NULL,
+   Box_BoxBegin (Txt_My_courses,Hie_PutIconToSearchCourses,NULL,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
 
       /***** Begin list *****/

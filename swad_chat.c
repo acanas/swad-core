@@ -129,9 +129,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Hie_GetMyHierarchy (Hie_DEG);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Chat_rooms,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Txt_Chat_rooms,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
       /***** Begin list *****/
       HTM_UL_Begin ("class=\"LIST_TREE\"");

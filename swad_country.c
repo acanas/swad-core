@@ -224,7 +224,7 @@ void Cty_ListCountries2 (void)
      }
 
    /***** Begin box and table *****/
-   Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
+   Box_BoxBegin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
 		 Cty_PutIconsListingCountries,NULL,
 		 Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");
@@ -667,7 +667,7 @@ static void Cty_EditCountriesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
+   Box_BoxBegin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
                  Cty_PutIconsEditingCountries,NULL,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 

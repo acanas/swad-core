@@ -623,8 +623,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    NumCalls = Cfe_DB_GetCallsForExamsInCurrentCrs (&mysql_res);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Calls_for_exams,
-		 Cfe_PutIconsCallsForExams,NULL,
+   Box_BoxBegin (Txt_Calls_for_exams,Cfe_PutIconsCallsForExams,NULL,
 		 Hlp_ASSESSMENT_Calls_for_exams,Box_NOT_CLOSABLE);
 
       /***** List the existing calls for exams *****/
@@ -921,14 +920,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
       Ale_ShowAlerts (Anchor);
 
       /* Begin highlighted box */
-      Box_BoxShadowBegin (NULL,NULL,
-                          FunctionToDrawContextualIcons,CallsForExams,
+      Box_BoxShadowBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
                           HelpLink);
      }
    else	// Don't highlight
       /* Begin normal box */
-      Box_BoxBegin (NULL,NULL,
-                    FunctionToDrawContextualIcons,CallsForExams,
+      Box_BoxBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
                     HelpLink,Box_NOT_CLOSABLE);
 
    if (ViewType == Vie_EDIT)

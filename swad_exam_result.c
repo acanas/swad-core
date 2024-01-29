@@ -519,8 +519,7 @@ static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
    HTM_SECTION_Begin (ExaRes_RESULTS_BOX_ID);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Title,
-		    NULL,NULL,
+      Box_BoxBegin (Title,NULL,NULL,
 		    Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
 	 /***** List exams to select *****/
@@ -566,9 +565,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
    Exa_ResetExam (&Exams->Exam);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Exams,
-		 NULL,NULL,
-		 NULL,Box_CLOSABLE);
+   Box_BoxBegin (Txt_Exams,NULL,NULL,NULL,Box_CLOSABLE);
 
       /***** Begin form to update the results
 	     depending on the exams selected *****/
@@ -1337,8 +1334,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    ExaRes_ComputeValidPrintScore (Print);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Session->Title,
-		 NULL,NULL,
+   Box_BoxBegin (Session->Title,NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
       /***** Header *****/

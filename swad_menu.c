@@ -309,9 +309,9 @@ void Mnu_PutIconsToSelectMenu (void)
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
 
-   Box_BoxBegin (NULL,Txt_Menu,
-                 Mnu_PutIconsMenu,NULL,
+   Box_BoxBegin (Txt_Menu,Mnu_PutIconsMenu,NULL,
                  Hlp_PROFILE_Settings_menu,Box_NOT_CLOSABLE);
+
       Set_BeginSettingsHead ();
 	 Set_BeginOneSettingSelector ();
 	    for (Menu  = (Mnu_Menu_t) 0;
@@ -328,6 +328,7 @@ void Mnu_PutIconsToSelectMenu (void)
 	      }
 	 Set_EndOneSettingSelector ();
       Set_EndSettingsHead ();
+
    Box_BoxEnd ();
   }
 

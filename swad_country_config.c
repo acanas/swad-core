@@ -118,7 +118,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 						    Hie_DONT_PUT_LINK;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,NULL,
+   Box_BoxBegin (NULL,
 		 ViewType == Vie_VIEW ? CtyCfg_PutIconToPrint :
 					NULL,NULL,
 		 ViewType == Vie_VIEW ? Hlp_COUNTRY_Information :
