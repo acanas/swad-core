@@ -1086,10 +1086,10 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
       HTM_TR_Begin (NULL);
 
          /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Groups);
+	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
 
 	 /* Groups */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	    HTM_TABLE_Begin (NULL);
 
 	       /***** First row: checkbox to select the whole course *****/

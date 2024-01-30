@@ -303,10 +303,10 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		     HTM_TR_Begin (NULL);
 
 			/* Label */
-			Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Users);
+			Frm_LabelColumn ("Frm_C1 RT","",Txt_Users);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+			HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
 			      Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
 			   HTM_TABLE_End ();
@@ -333,10 +333,10 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		     HTM_TR_Begin (NULL);
 
 			/* Label */
-			Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Show);
+			Frm_LabelColumn ("Frm_C1 RT","",Txt_Show);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+			HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 
 			   if ((Stats->ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
 				Stats->ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
@@ -510,13 +510,13 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","Role",Txt_Users);
+	    Frm_LabelColumn ("Frm_C1 RT","Role",Txt_Users);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"Role\" name=\"Role\""
-				 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				 " class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
 		  for (RoleStat  = (Sta_Role_t) 0;
 		       RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
@@ -541,10 +541,10 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","ScopeSta",Txt_Scope);
+	    Frm_LabelColumn ("Frm_C1 RT","ScopeSta",Txt_Scope);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       Gbl.Scope.Allowed = 1 << Hie_SYS |
 				   1 << Hie_CTY |
 				   1 << Hie_INS |
@@ -561,10 +561,10 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","CountType",Txt_Show);
+	    Frm_LabelColumn ("Frm_C1 RT","CountType",Txt_Show);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       Sta_WriteSelectorCountType (Stats);
 
 	       /***** Type of statistic *****/
@@ -579,7 +579,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"GroupedBy\""
-				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (ClicksGroupedBy  = Sta_CLICKS_GBL_PER_DAY;
 			  ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
@@ -662,7 +662,7 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
    /**** Count type *****/
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 		     "id=\"CountType\" name=\"CountType\""
-		     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
       for (StatCountType  = (Sta_CountType_t) 0;
 	   StatCountType <= (Sta_CountType_t) (Sta_NUM_COUNT_TYPES - 1);
@@ -695,12 +695,12 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT","StatAct",Txt_Action);
+      Frm_LabelColumn ("Frm_C1 RT","StatAct",Txt_Action);
 
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "id=\"StatAct\" name=\"StatAct\""
-			   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			   " class=\"Frm_C2_INPUT INPUT_%s\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",
 	                Stats->NumAction == 0 ? HTM_OPTION_SELECTED :

@@ -1341,7 +1341,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	    Frm_LabelColumn ("REC_C1_BOT RM","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
@@ -1359,7 +1359,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	       HTM_TxtColon (Txt_Maximum_grade);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,
 				HTM_DONT_SUBMIT_ON_CHANGE,false,
 				" class=\"INPUT_%s\" required=\"required\"",
@@ -1373,7 +1373,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"REC_C1_BOT RT FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColon (Txt_Result_visibility);
 	    HTM_TD_End ();
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 	       TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -1385,7 +1385,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				   The_GetSuffix ());

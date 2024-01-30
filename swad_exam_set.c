@@ -203,7 +203,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	    HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			    " class=\"Frm_C2_INPUT INPUT_%s\""
 			    " required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -628,7 +628,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
 					HTM_SUBMIT_ON_CHANGE,
 					"id=\"Title\""
-					" class=\"REC_C2_BOT_INPUT INPUT_%s\""
+					" class=\"Frm_C2_INPUT INPUT_%s\""
 					" required=\"required\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();

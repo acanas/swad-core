@@ -111,10 +111,10 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RM","FigScope",Txt_Scope);
+	       Frm_LabelColumn ("Frm_C1 RM","FigScope",Txt_Scope);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_%s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
 		  Sco_PutSelectorScope ("FigScope",HTM_DONT_SUBMIT_ON_CHANGE);
 	       HTM_TD_End ();
 
@@ -124,13 +124,13 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RM","FigureType",Txt_Statistic);
+	       Frm_LabelColumn ("Frm_C1 RM","FigureType",Txt_Statistic);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_%s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"FigureType\""
-				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (FigType  = (Fig_FigureType_t) 0;
 			  FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);

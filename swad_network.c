@@ -226,7 +226,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 		     snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);
 		     HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
+			HTM_TD_Begin ("class=\"Frm_C1 LM\"");
 			   HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
 					    StrName,The_GetSuffix ());
 			      Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
@@ -236,10 +236,10 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			   HTM_LABEL_End ();
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+			HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 			   HTM_INPUT_URL (StrName,URL,HTM_DONT_SUBMIT_ON_CHANGE,
 					  "id=\"%s\""
-					  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+					  " class=\"Frm_C2_INPUT INPUT_%s\"",
 					  StrName,
 					  The_GetSuffix ());
 			HTM_TD_End ();

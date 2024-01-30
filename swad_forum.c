@@ -2795,16 +2795,16 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT","Subject",Txt_MSG_Subject);
+	       Frm_LabelColumn ("Frm_C1 RT","Subject",Txt_MSG_Subject);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		  HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 				  IsReply ? Subject :
 					    "",
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"Subject\""
-				  " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				  " class=\"Frm_C2_INPUT INPUT_%s\""
 				  " required=\"required\"",
 				  The_GetSuffix ());
 	       HTM_TD_End ();
@@ -2815,12 +2815,12 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT","Content",Txt_MSG_Content);
+	       Frm_LabelColumn ("Frm_C1 RT","Content",Txt_MSG_Content);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		  HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\""
-				      " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				      " class=\"Frm_C2_INPUT INPUT_%s\""
 				      " rows=\"10\"",
 				      The_GetSuffix ());
 		  HTM_TEXTAREA_End ();

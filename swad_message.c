@@ -332,10 +332,10 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	    /***** "To:" section (recipients) *****/
 	    HTM_TR_Begin (NULL);
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT","",Txt_MSG_To);
+	       Frm_LabelColumn ("Frm_C1 RT","",Txt_MSG_To);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		  if (Messages->ShowOnlyOneRecipient)
 		     /***** Show only one user as recipient *****/
 		     Msg_ShowOneUniqueRecipient ();
@@ -544,7 +544,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
 	 HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
-			     " class=\"REC_C2_BOT_INPUT INPUT_%s\" rows=\"2\""
+			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\""
 			     " placeholder=\"%s\"",
 			     The_GetSuffix (),
 			     Txt_nicks_emails_or_IDs_separated_by_commas);
@@ -585,12 +585,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT","MsgSubject",Txt_MSG_Subject);
+      Frm_LabelColumn ("Frm_C1 RT","MsgSubject",Txt_MSG_Subject);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
-			     " class=\"REC_C2_BOT_INPUT INPUT_%s\" rows=\"2\"",
+			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\"",
 			     The_GetSuffix ());
 
       /* If message is a reply ==> get original message */
@@ -625,12 +625,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","MsgContent",Txt_MSG_Content);
+	    Frm_LabelColumn ("Frm_C1 RT","MsgContent",Txt_MSG_Content);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-				   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " rows=\"20\"",
 				   The_GetSuffix ());
 
@@ -661,12 +661,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","MsgContent",Txt_MSG_Content);
+	    Frm_LabelColumn ("Frm_C1 RT","MsgContent",Txt_MSG_Content);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-				   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " rows=\"20\"",
 				   The_GetSuffix ());
 

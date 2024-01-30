@@ -133,10 +133,10 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT","ScopeInd",Txt_Scope);
+	       Frm_LabelColumn ("Frm_C1 RT","ScopeInd",Txt_Scope);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		  Sco_PutSelectorScope ("ScopeInd",HTM_SUBMIT_ON_CHANGE);
 	       HTM_TD_End ();
 
@@ -146,10 +146,10 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT",Par_CodeStr[ParCod_OthDegTyp],Txt_Types_of_degree);
+	       Frm_LabelColumn ("Frm_C1 RT",Par_CodeStr[ParCod_OthDegTyp],Txt_Types_of_degree);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 		  DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
 		  HTM_Txt (" (");
 		  HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
@@ -162,11 +162,11 @@ void Ind_ReqIndicatorsCourses (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
+	       Frm_LabelColumn ("Frm_C1 RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
-		  if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
+	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+		  if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",
 		                The_GetSuffix ()) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current insitution
@@ -195,9 +195,9 @@ void Ind_ReqIndicatorsCourses (void)
 	    /* Selection of the number of indicators */
 	    HTM_TR_Begin (NULL);
 
-	       Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Number_of_indicators);
+	       Frm_LabelColumn ("Frm_C1 RT","",Txt_Number_of_indicators);
 
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		  Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,true);
 	       HTM_TD_End ();
 

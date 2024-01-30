@@ -1199,14 +1199,13 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","Title",Txt_Title);
+	    Frm_LabelColumn ("Frm_C1 RT","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\""
-			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1247,10 +1246,10 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
       HTM_TR_Begin (NULL);
 
          /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Groups);
+	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
 
 	 /* Groups */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	    HTM_TABLE_Begin (NULL);
 
 	       /***** First row: checkbox to select the whole course *****/

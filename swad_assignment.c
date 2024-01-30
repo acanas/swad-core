@@ -1221,14 +1221,14 @@ void Asg_ReqCreatOrEditAsg (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RM","Title",Txt_Title);
+	    Frm_LabelColumn ("Frm_C1 RM","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments.Asg.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			       " class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1245,15 +1245,15 @@ void Asg_ReqCreatOrEditAsg (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RM","Folder",Folder_to_upload_files);
+	    Frm_LabelColumn ("Frm_C1 RM","Folder",Folder_to_upload_files);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments.Asg.Folder,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"Folder\""
-				  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -1264,12 +1264,12 @@ void Asg_ReqCreatOrEditAsg (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("Frm_C1 RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
-				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewAssignment)
 		     HTM_Txt (Txt);
@@ -1313,10 +1313,10 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_TR_Begin (NULL);
 
          /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Groups);
+	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
 
 	 /* Groups */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	    HTM_TABLE_Begin (NULL);
 
 	       /***** First row: checkbox to select the whole course *****/

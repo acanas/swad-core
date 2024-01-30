@@ -844,7 +844,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 		      -1L);
 
 	 /***** Write selector with departments *****/
-	 if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
+	 if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",
 	               The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
@@ -1808,7 +1808,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	       /* Show text form */
 	       HTM_BR ();
 	       HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"2\""
-				   " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " placeholder=\"%s&hellip;\""
 				   " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
 				   The_GetSuffix (),Txt_Comments,
@@ -1849,7 +1849,7 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
       Err_NotEnoughMemoryExit ();
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
-		     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
    free (FuncOnChange);
       for (ReviewStatus  = (Prj_ReviewStatus_t) 0;

@@ -221,10 +221,10 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Types_of_answers);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_Types_of_answers);
 
       /***** Select all types of answers *****/
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_TABLE_BeginPadding (2);
 
 	 HTM_TR_Begin (NULL);

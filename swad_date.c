@@ -621,10 +621,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_START_END_TIME[Dat_STR_TIME]);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_START_END_TIME[Dat_STR_TIME]);
 
       /* Data (date-time) */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
 						      Dat_STR_TIME,
 						      Dat_Time.Range.TimeUTC[Dat_STR_TIME],
@@ -650,10 +650,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_START_END_TIME[Dat_END_TIME]);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_START_END_TIME[Dat_END_TIME]);
 
       /* Data (date-time) */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
 						      Dat_END_TIME,
 						      Dat_Time.Range.TimeUTC[Dat_END_TIME],

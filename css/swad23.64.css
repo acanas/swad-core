@@ -3235,6 +3235,96 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	width:200px;	
 	}
 
+/**************************** Forms with 2 colums ****************************/
+@media only screen and (max-width: 480px)
+	{	/* For mobile-phones */
+	.Frm_C1
+		{
+		box-sizing:border-box;
+		width:80px;
+		max-width:80px;
+		overflow:hidden;
+		}
+	.Frm_C2
+		{
+		box-sizing:border-box;
+		width:188px;
+		max-width:188px;
+		overflow:hidden;
+		}
+	.Frm_C2_INPUT
+		{
+		box-sizing:border-box;
+		width:184px;
+		}
+	}
+@media only screen and (min-width: 480px) and (max-width: 600px)
+	{	/* For mobile-phones */
+	.Frm_C1
+		{
+		box-sizing:border-box;
+		width:150px;
+		max-width:150px;
+		overflow:hidden;
+		}
+	.Frm_C2
+		{
+		box-sizing:border-box;
+		width:280px;
+		max-width:280px;
+		overflow:hidden;
+		}
+	.Frm_C2_INPUT
+		{
+		box-sizing:border-box;
+		width:276px;
+		}
+	}
+@media only screen and (min-width: 600px) and (max-width: 1024px)
+	{	/* For desktop */
+	.Frm_C1
+		{
+		box-sizing:border-box;
+		width:150px;
+		max-width:150px;
+		overflow:hidden;
+		}
+	.Frm_C2
+		{
+		box-sizing:border-box;
+		width:386px;
+		max-width:386px;
+		overflow:hidden;
+		}
+	.Frm_C2_INPUT
+		{
+		box-sizing:border-box;
+		width:382px;
+		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For desktop */
+	.Frm_C1
+		{
+		box-sizing:border-box;
+		width:150px;
+		max-width:150px;
+		overflow:hidden;
+		}
+	.Frm_C2
+		{
+		box-sizing:border-box;
+		width:704px;
+		max-width:704px;
+		overflow:hidden;
+		}
+	.Frm_C2_INPUT
+		{
+		box-sizing:border-box;
+		width:700px;
+		}
+	}
+
 /******************************** Class photo ********************************/
 .CLASSPHOTO_TITLE
 	{
@@ -5184,7 +5274,7 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 		{
 	    display: block;
 	    overflow-x: auto;
-	    width: 186px;
+	    width: 186px;	/* Frm_C2 - 2px */
 	    margin: 0 auto;
 		}
 	}
@@ -5194,17 +5284,27 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 		{
 	    display: block;
 	    overflow-x: auto;
-		width: 278px;
+		width: 278px;	/* Frm_C2 - 2px */
 	    margin: 0 auto;
 		}
 	}
-@media only screen and (min-width: 600px)
+@media only screen and (min-width: 600px) and (max-width: 1024px)
 	{	/* For desktop */
 	.TBL_SCROLL_C2
 		{
 	    display: block;
 	    overflow-x: auto;
-		width: 384px;
+		width: 384px;	/* Frm_C2 - 2px */
+	    margin: 0 auto;
+		}
+	}
+@media only screen and (min-width: 1024px)
+	{	/* For desktop */
+	.TBL_SCROLL_C2
+		{
+	    display: block;
+	    overflow-x: auto;
+		width: 702px;	/* Frm_C2 - 2px */
 	    margin: 0 auto;
 		}
 	}

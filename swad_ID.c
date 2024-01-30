@@ -565,11 +565,10 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID_identity_number);
+	       Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_ID_identity_number);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-			     The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_STRONG_%s\"",The_GetSuffix ());
 	   }
 	 else	// NumID >= 1
 	    HTM_BR ();
@@ -624,13 +623,12 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","NewID",
+	    Frm_LabelColumn ("Frm_C1 RT","NewID",
 			     UsrDat[MeOrOther]->IDs.Num ? Txt_Another_ID :		// A new user's ID
 					                  Txt_ID_identity_number);	// The first user's ID
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 	       Frm_BeginFormAnchor (ActID[MeOrOther].Change,ID_ID_SECTION_ID);
 		  if (MeOrOther == Usr_OTHER)
 		     Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
@@ -638,8 +636,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 				  UsrDat[MeOrOther]->IDs.Num ? UsrDat[MeOrOther]->IDs.List[UsrDat[MeOrOther]->IDs.Num - 1].ID :
 						               "",	// Show the most recent ID
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"NewID\""
-				  " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				  "id=\"NewID\" class=\"Frm_C2_INPUT INPUT_%s\""
 				  " size=\"16\"",
 				  The_GetSuffix ());
 		  HTM_BR ();

@@ -138,10 +138,10 @@ void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","NewNick",Txt_Nickname);
+      Frm_LabelColumn ("Frm_C1 RM","NewNick",Txt_Nickname);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	 if (NewNickWithoutArr[0])
 	    snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
 		      NewNickWithoutArr);
@@ -150,7 +150,7 @@ void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr)
 	 HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 			 NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
 			 "id=\"NewNick\" size=\"16\" placeholder=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			 " class=\"Frm_C2_INPUT INPUT_%s\""
 			 " required=\"required\"",
 			 Txt_HELP_nickname,
 			 The_GetSuffix ());
@@ -273,10 +273,10 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 		  HTM_TR_Begin (NULL);
 
 		     /* Label */
-		     Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
+		     Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Current_nickname);
 
 		     /* Data */
-		     HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
+		     HTM_TD_Begin ("class=\"Frm_C2 LT DAT_STRONG_%s\"",
 				   The_GetSuffix ());
 		 }
 	       else	// NumNick >= 2
@@ -286,10 +286,10 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 		     HTM_TR_Begin (NULL);
 
 			/* Label */
-			Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
+			Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Other_nicknames);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
+			HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",
 				      The_GetSuffix ());
 		    }
 
@@ -333,13 +333,12 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
+	       Frm_LabelColumn ("Frm_C1 RT","NewNick",
 				NumNicks ? Txt_New_nickname :	// A new nickname
 					   Txt_Nickname);	// The first nickname
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_%s\"",
-			     The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 		  Frm_BeginFormAnchor (ActNck[MeOrOther].Change,Nck_NICKNAME_SECTION_ID);
 		     if (MeOrOther == Usr_OTHER)
 			Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
@@ -348,7 +347,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"NewNick\""
-				     " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+				     " class=\"Frm_C2_INPUT INPUT_%s\""
 				     " size=\"16\"",
 				     The_GetSuffix ());
 		     HTM_BR ();

@@ -294,10 +294,10 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Tags);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_Tags);
 
       /***** Select all tags *****/
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 
 	 HTM_TABLE_BeginPadding (2);
 

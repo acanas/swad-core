@@ -984,20 +984,19 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "CrsName" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Course);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		  HTM_INPUT_TEXT ("CrsName",Nam_MaxChars[Nam_FULL_NAME],
 				  CallsForExams->CallForExam.CrsFullName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"CrsName\" size=\"30\""
-				  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
 	       else
 		 {
@@ -1013,14 +1012,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "Year" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Year_or_semester);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
@@ -1047,19 +1045,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "ExamSession" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Session);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		  HTM_INPUT_TEXT ("ExamSession",Cfe_MAX_CHARS_SESSION,CallsForExams->CallForExam.Session,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"ExamSession\" size=\"30\""
-				  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
 	       else
 		  HTM_Txt (CallsForExams->CallForExam.Session);
@@ -1071,7 +1068,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "ExamYear" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Exam_date);
@@ -1079,7 +1076,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    /* Data */
 	    if (ViewType == Vie_EDIT)
 	      {
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LB\"");
+	       HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 		  Dat_WriteFormDate (CallsForExams->CallForExam.ExamDate.Year < CurrentYear ? CallsForExams->CallForExam.ExamDate.Year :
 											      CurrentYear,
 				     CurrentYear + 1,"Exam",
@@ -1092,8 +1089,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	      {
 	       Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,
 				      StrExamDate);
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                     The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 		  HTM_Txt (StrExamDate);
 	       HTM_TD_End ();
 	      }
@@ -1103,14 +1099,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "ExamHour" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Start_time);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
@@ -1157,14 +1152,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "DurationHour" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Approximate_duration);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
@@ -1224,19 +1218,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "Place" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Place_of_exam);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\""
 			              " rows=\"4\""
-			              " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			              " class=\"Frm_C2_INPUT INPUT_%s\"",
 			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.Place);
 		  HTM_TEXTAREA_End ();
@@ -1256,19 +1249,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "ExamMode" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Mode);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	    if (ViewType == Vie_EDIT)
 	      {
 	       HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\""
 			           " rows=\"2\""
-			           " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			           " class=\"Frm_C2_INPUT INPUT_%s\"",
 			           The_GetSuffix ());
 		  HTM_Txt (CallsForExams->CallForExam.Mode);
 	       HTM_TEXTAREA_End ();
@@ -1288,19 +1280,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "Structure" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Structure_of_the_exam);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\""
 				      " rows=\"8\""
-				      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				      " class=\"Frm_C2_INPUT INPUT_%s\"",
 				      The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.Structure);
 		  HTM_TEXTAREA_End ();
@@ -1320,19 +1311,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "DocRequired" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Documentation_required);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\""
 			              " rows=\"2\""
-			              " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			              " class=\"Frm_C2_INPUT INPUT_%s\"",
 			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.DocRequired);
 		  HTM_TEXTAREA_End ();
@@ -1352,19 +1342,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "MatRequired" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Material_required);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\""
 				      " rows=\"4\""
-				      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				      " class=\"Frm_C2_INPUT INPUT_%s\"",
 				      The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.MatRequired);
 		  HTM_TEXTAREA_End ();
@@ -1384,19 +1373,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "MatAllowed" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Material_allowed);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\""
 			              " rows=\"4\""
-			              " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			              " class=\"Frm_C2_INPUT INPUT_%s\"",
 			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.MatAllowed);
 		  HTM_TEXTAREA_End ();
@@ -1416,19 +1404,18 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",
+	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "OtherInfo" :
 						    NULL,
 			     Txt_CALL_FOR_EXAM_Other_information);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LB DAT_STRONG_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\""
 			              " rows=\"5\""
-			              " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			              " class=\"Frm_C2_INPUT INPUT_%s\"",
 			              The_GetSuffix ());
 		     HTM_Txt (CallsForExams->CallForExam.OtherInfo);
 		  HTM_TEXTAREA_End ();

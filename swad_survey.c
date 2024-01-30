@@ -1644,10 +1644,10 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","ScopeSvy",Txt_Scope);
+	    Frm_LabelColumn ("Frm_C1 RT","ScopeSvy",Txt_Scope);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       Svy_SetAllowedScopes (&Surveys.Svy);
 	       Sco_GetScope ("ScopeSvy",Surveys.Svy.Level);
 	       Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
@@ -1659,14 +1659,14 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","Title",Txt_Title);
+	    Frm_LabelColumn ("Frm_C1 RT","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Surveys.Svy.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			       " class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1682,12 +1682,12 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("Frm_C1 RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewSurvey)
 		     HTM_Txt (Txt);
@@ -1700,7 +1700,7 @@ void Svy_ReqCreatOrEditSvy (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Users);
+	    Frm_LabelColumn ("Frm_C1 RT","",Txt_Users);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
@@ -1828,10 +1828,10 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_TR_Begin (NULL);
 
          /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Groups);
+	 Frm_LabelColumn ("Frm_C1 RT","",Txt_Groups);
 
 	 /* Groups */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	    HTM_TABLE_Begin (NULL);
 
 	    /***** First row: checkbox to select the whole course *****/

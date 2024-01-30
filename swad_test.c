@@ -178,19 +178,18 @@ static void Tst_ShowFormNumQsts (void)
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      Frm_LabelColumn ("REC_C1_BOT RT","NumQst",
+      Frm_LabelColumn ("Frm_C1 RT","NumQst",
 		       Txt_Number_of_questions);
 
       /***** Data *****/
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_INPUT_LONG ("NumQst",
 			 (long) TstCfg_GetConfigMin (),
 			 (long) TstCfg_GetConfigMax (),
 			 (long) TstCfg_GetConfigDef (),
 			 HTM_DONT_SUBMIT_ON_CHANGE,
 			 TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
-			 "id=\"NumQst\""
-			 " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			 "id=\"NumQst\" class=\"Frm_C2_INPUT INPUT_%s\""
 			 " required=\"required\"",
 			 The_GetSuffix ());
       HTM_TD_End ();

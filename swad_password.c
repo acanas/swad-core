@@ -611,15 +611,14 @@ void Pwd_ShowFormChgMyPwd (void)
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",
-				   Txt_Current_password);
+		  Frm_LabelColumn ("Frm_C1 RM","UsrPwd",Txt_Current_password);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",
 					 true,	// Required
 					 "id=\"UsrPwd\""
-					 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+					 " class=\"Frm_C2_INPUT INPUT_%s\"",
 					 The_GetSuffix ());
 		  HTM_TD_End ();
 
@@ -662,10 +661,10 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","Paswd",Txt_Password);
+      Frm_LabelColumn ("Frm_C1 RM","Paswd",Txt_Password);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,
 			     true,	// Required
 			     "id=\"Paswd\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
@@ -690,13 +689,13 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","Paswd1",Txt_New_password);
+      Frm_LabelColumn ("Frm_C1 RM","Paswd1",Txt_New_password);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,
 			     true,	// Required
-			     "id=\"Paswd1\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			     "id=\"Paswd1\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
 
@@ -706,13 +705,13 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","Paswd2",Txt_Retype_new_password);
+      Frm_LabelColumn ("Frm_C1 RM","Paswd2",Txt_Retype_new_password);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,
 			     true,	// Required
-			     "id=\"Paswd2\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+			     "id=\"Paswd2\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
 
