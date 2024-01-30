@@ -5157,7 +5157,7 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 	    margin: 0 auto;
 		}
 	}
-@media only screen and (min-width: 1024px) and (max-width: 1600px)
+@media only screen and (min-width: 1024px) and (max-width: 1800px)
 	{	/* For desktop */
 	.TBL_SCROLL
 		{
@@ -5167,13 +5167,13 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 	    margin: 0 auto;
 		}
 	}
-@media only screen and (min-width: 1600px)
+@media only screen and (min-width: 1800px)
 	{	/* For desktop */
 	.TBL_SCROLL
 		{
 	    display: block;
 	    overflow-x: auto;
-	    width: 1200px;
+	    width: 1440px;
 	    margin: 0 auto;
 		}
 	}

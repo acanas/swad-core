@@ -344,11 +344,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 		     /***** Show potential recipients *****/
 		     HTM_TABLE_Begin ("TBL_SCROLL_C2");
 			if (ShowUsrsInCrs)
-			  {
-			   Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course
-			   Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);	// All non-editing teachers in course
-			   Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);	// All students in selected groups
-			  }
+			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
 			Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
 		     HTM_TABLE_End ();
 		    }

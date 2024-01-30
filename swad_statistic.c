@@ -306,12 +306,9 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			Frm_LabelColumn ("REC_C1_BOT RT","",Txt_Users);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"REC_C2_BOT LT FORM_IN_%s\"",
-			              The_GetSuffix ());
+			HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
 		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			      Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
-			      Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
-			      Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
+			      Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
 			   HTM_TABLE_End ();
 			HTM_TD_End ();
 		     HTM_TR_End ();

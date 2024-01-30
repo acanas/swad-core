@@ -206,8 +206,12 @@ static void Usr_AllocateListOtherRecipients (void);
 
 static void Set_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
                                          Set_ShowUsrsType_t ListType);
-static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
-			                     struct Usr_SelectedUsrs *SelectedUsrs);
+static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
+					 Rol_Role_t Role);
+static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
+				      Rol_Role_t Role);
+static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
+					     Rol_Role_t Role);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          const char *EncryptedUsrCod,
@@ -219,8 +223,6 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataTchs (Rol_Role_t Role,
 				  bool PutCheckBoxToSelectUsr);
-static void Usr_ListUsrsForSelection (Rol_Role_t Role,
-				      struct Usr_SelectedUsrs *SelectedUsrs);
 static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
                                      unsigned NumColumns);
@@ -249,9 +251,9 @@ static void Usr_ShowGstsAllDataPars (__attribute__((unused)) void *Args);
 static void Usr_ShowStdsAllDataPars (__attribute__((unused)) void *Args);
 static void Usr_ShowTchsAllDataPars (__attribute__((unused)) void *Args);
 
-static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
+static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
-				struct Usr_SelectedUsrs *SelectedUsrs,
+				Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr);
 
 static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role);
@@ -3754,15 +3756,12 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		     /* Put list of users to select some of them */
 		     HTM_TR_Begin (NULL);
 			/* Label */
-			Frm_LabelColumn ("RT","Txt",Txt_Users);
+			Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Users);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",
-				      The_GetSuffix ());
-		           HTM_TABLE_Begin ("TBL_SCROLL");
-			      Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
-			      Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
-			      Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
+			HTM_TD_Begin ("class=\"REC_C2_BOT LT\"");
+		           HTM_TABLE_Begin ("TBL_SCROLL_C2");
+			      Usr_ListUsersToSelect (SelectedUsrs);
 			   HTM_TABLE_End ();
 			HTM_TD_End ();
 		     HTM_TR_End ();
@@ -3824,10 +3823,22 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
   }
 
 /*****************************************************************************/
+/********************** List users to select some of them ********************/
+/*****************************************************************************/
+
+void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs)
+  {
+   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_TCH);
+   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_NET);
+   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_STD);
+  }
+
+/*****************************************************************************/
 /*********** List users with a given role to select some of them *************/
 /*****************************************************************************/
 
-void Usr_ListUsersToSelect (Rol_Role_t Role,struct Usr_SelectedUsrs *SelectedUsrs)
+static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
+					 Rol_Role_t Role)
   {
    /***** If there are no users, don't list anything *****/
    if (!Gbl.Usrs.LstUsrs[Role].NumUsrs)
@@ -3837,10 +3848,11 @@ void Usr_ListUsersToSelect (Rol_Role_t Role,struct Usr_SelectedUsrs *SelectedUsr
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
-         Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL,Role,SelectedUsrs,true);
+         Usr_DrawClassPhoto (SelectedUsrs,Role,Usr_CLASS_PHOTO_SEL,
+			     true);	// Put checkbox to select user
          break;
       case Set_USR_LIST_AS_LISTING:
-         Usr_ListUsrsForSelection (Role,SelectedUsrs);
+         Usr_ListUsrsForSelection (SelectedUsrs,Role);
          break;
       default:
 	 break;
@@ -3848,11 +3860,59 @@ void Usr_ListUsersToSelect (Rol_Role_t Role,struct Usr_SelectedUsrs *SelectedUsr
   }
 
 /*****************************************************************************/
+/*************** List users (of current course) for selection ****************/
+/*****************************************************************************/
+
+static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
+				      Rol_Role_t Role)
+  {
+   unsigned NumUsr;
+   struct Usr_Data UsrDat;
+
+   if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
+     {
+      /***** Initialize field names *****/
+      Usr_SetUsrDatMainFieldNames ();
+
+      /***** Put a row to select all users *****/
+      Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role);
+
+      /***** Heading row with column names *****/
+      Usr_WriteHeaderFieldsUsrDat (true);	// Columns for the data
+
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** List users' data *****/
+      for (NumUsr = 0, The_ResetRowColor ();
+	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
+	{
+	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+	                                              Usr_DONT_GET_PREFS,
+	                                              Usr_DONT_GET_ROLE_IN_CRS))
+	   {
+	    UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
+						// It is not necessary to retrieve
+						// his/her role from database.
+	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
+	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role,SelectedUsrs);
+
+	    The_ChangeRowColor ();
+	   }
+	}
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+     }
+  }
+
+/*****************************************************************************/
 /******** Put a row, in a classphoto or a list, to select all users **********/
 /*****************************************************************************/
 
-static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
-			                     struct Usr_SelectedUsrs *SelectedUsrs)
+static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
+					     Rol_Role_t Role)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -4041,7 +4101,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-         Usr_PutCheckboxToSelectAllUsers (Rol_GST,&Gbl.Usrs.Selected);
+         Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_GST);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
@@ -4111,7 +4171,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (Rol_STD,&Gbl.Usrs.Selected);
+	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Rol_STD);
 
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
@@ -4168,7 +4228,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (Role,&Gbl.Usrs.Selected);
+	 Usr_PutCheckboxToSelectAllUsers (&Gbl.Usrs.Selected,Role);
 
       /***** Heading row with column names *****/
       /* Begin row */
@@ -4534,54 +4594,6 @@ void Usr_ListAllDataStds (void)
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
-  }
-
-/*****************************************************************************/
-/*************** List users (of current course) for selection ****************/
-/*****************************************************************************/
-
-static void Usr_ListUsrsForSelection (Rol_Role_t Role,
-				      struct Usr_SelectedUsrs *SelectedUsrs)
-  {
-   unsigned NumUsr;
-   struct Usr_Data UsrDat;
-
-   if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
-     {
-      /***** Initialize field names *****/
-      Usr_SetUsrDatMainFieldNames ();
-
-      /***** Put a row to select all users *****/
-      Usr_PutCheckboxToSelectAllUsers (Role,SelectedUsrs);
-
-      /***** Heading row with column names *****/
-      Usr_WriteHeaderFieldsUsrDat (true);	// Columns for the data
-
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
-      /***** List users' data *****/
-      for (NumUsr = 0, The_ResetRowColor ();
-	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
-	{
-	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
-	   {
-	    UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
-						// It is not necessary to retrieve
-						// his/her role from database.
-	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
-	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role,SelectedUsrs);
-
-	    The_ChangeRowColor ();
-	   }
-	}
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-     }
   }
 
 /*****************************************************************************/
@@ -5093,12 +5105,12 @@ void Usr_SeeGuests (void)
 		  switch (Gbl.Usrs.Me.ListType)
 		    {
 		     case Set_USR_LIST_AS_CLASS_PHOTO:
-			Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-					    Rol_GST,&Gbl.Usrs.Selected,
-					    PutForm);	// Put checkbox to select users?
+			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
+					    Usr_CLASS_PHOTO_SEL_SEE,
+					    PutForm);	// Put checkbox to select user?
 			break;
 		     case Set_USR_LIST_AS_LISTING:
-			Usr_ListMainDataGsts (PutForm);	// Put checkbox to select users?
+			Usr_ListMainDataGsts (PutForm);	// Put checkbox to select user?
 			break;
 		     default:
 			break;
@@ -5247,12 +5259,12 @@ void Usr_SeeStudents (void)
 		  switch (Gbl.Usrs.Me.ListType)
 		    {
 		     case Set_USR_LIST_AS_CLASS_PHOTO:
-			Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-					    Rol_STD,&Gbl.Usrs.Selected,
-					    PutForm);	// Put checkbox to select users?
+			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
+					    Usr_CLASS_PHOTO_SEL_SEE,
+					    PutForm);	// Put checkbox to select user?
 			break;
 		     case Set_USR_LIST_AS_LISTING:
-			Usr_ListMainDataStds (PutForm);	// Put checkbox to select users?
+			Usr_ListMainDataStds (PutForm);	// Put checkbox to select user?
 			break;
 		     default:
 			break;
@@ -5415,12 +5427,12 @@ void Usr_SeeTeachers (void)
 		    {
 		     case Set_USR_LIST_AS_CLASS_PHOTO:
 			/* List teachers and non-editing teachers */
-			Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-					    Rol_TCH,&Gbl.Usrs.Selected,
-					    PutForm);	// Put checkbox to select users?
-			Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-					    Rol_NET,&Gbl.Usrs.Selected,
-					    PutForm);	// Put checkbox to select users?
+			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
+					    Usr_CLASS_PHOTO_SEL_SEE,
+					    PutForm);	// Put checkbox to select user?
+			Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_NET,
+					    Usr_CLASS_PHOTO_SEL_SEE,
+					    PutForm);	// Put checkbox to select user?
 			break;
 		     case Set_USR_LIST_AS_LISTING:
 			/* Initialize field names */
@@ -5428,9 +5440,9 @@ void Usr_SeeTeachers (void)
 
 			/* List teachers and non-editing teachers */
 			Usr_ListMainDataTchs (Rol_TCH,
-					      PutForm);	// Put checkbox to select users?
+					      PutForm);	// Put checkbox to select user?
 			Usr_ListMainDataTchs (Rol_NET,
-					      PutForm);	// Put checkbox to select users?
+					      PutForm);	// Put checkbox to select user?
 			break;
 		     default:
 			break;
@@ -5924,8 +5936,9 @@ void Usr_SeeGstClassPhotoPrn (void)
       /***** Draw the guests' class photo *****/
       Lay_WriteHeaderClassPhoto (Vie_PRINT);
       HTM_TABLE_BeginWide ();
-	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-			     Rol_GST,&Gbl.Usrs.Selected,false);
+	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_GST,
+			     Usr_CLASS_PHOTO_PRN,
+			     false);	// Don't put checkbox to select user
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs
@@ -5962,8 +5975,9 @@ void Usr_SeeStdClassPhotoPrn (void)
       /***** Draw the students' class photo *****/
       Lay_WriteHeaderClassPhoto (Vie_PRINT);
       HTM_TABLE_BeginWide ();
-	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-			     Rol_STD,&Gbl.Usrs.Selected,false);
+	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_STD,
+			     Usr_CLASS_PHOTO_PRN,
+			     false);	// Don't put checkbox to select user
       HTM_TABLE_End ();
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
@@ -6026,10 +6040,12 @@ void Usr_SeeTchClassPhotoPrn (void)
       HTM_TABLE_BeginWide ();
 
 	 /* List teachers and non-editing teachers */
-	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-			     Rol_TCH,&Gbl.Usrs.Selected,false);
-	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-			     Rol_NET,&Gbl.Usrs.Selected,false);
+	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_TCH,
+			     Usr_CLASS_PHOTO_PRN,
+			     false);	// Don't put checkbox to select user
+	 Usr_DrawClassPhoto (&Gbl.Usrs.Selected,Rol_NET,
+			     Usr_CLASS_PHOTO_PRN,
+			     false);	// Don't put checkbox to select user
 
       HTM_TABLE_End ();
      }
@@ -6049,9 +6065,9 @@ void Usr_SeeTchClassPhotoPrn (void)
 /****************** Draw class photo with students or teachers ***************/
 /*****************************************************************************/
 
-static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
+static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
-				struct Usr_SelectedUsrs *SelectedUsrs,
+				Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr)
   {
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][PhoSha_NUM_SHAPES] =
@@ -6078,7 +6094,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
      {
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
-	 Usr_PutCheckboxToSelectAllUsers (Role,SelectedUsrs);
+	 Usr_PutCheckboxToSelectAllUsers (SelectedUsrs,Role);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
