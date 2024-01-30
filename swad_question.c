@@ -1882,7 +1882,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    /* Tags */
 	    HTM_TD_Begin ("class=\"LT\"");
 
-	       HTM_TABLE_BeginPadding (2);	// Table for tags
+	       HTM_TABLE_BeginWidePadding (2);	// Table for tags
 
 		  for (IndTag = 0;
 		       IndTag < Tag_MAX_TAGS_PER_QUESTION;
@@ -1891,12 +1891,12 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     HTM_TR_Begin (NULL);
 
 			/***** Write the tags already existing in a selector *****/
-			HTM_TD_Begin ("class=\"LM\"");
+			HTM_TD_Begin ("class=\"Qst_TAG_CELL LM\"");
 			   if (asprintf (&FuncOnChange,"changeTxtTag('%u');",IndTag) < 0)
 			      Err_NotEnoughMemoryExit ();
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 					     "id=\"SelTag%u\" name=\"SelTag%u\""
-					     " class=\"TAG_SEL INPUT_%s\"",
+					     " class=\"Qst_TAG_SEL INPUT_%s\"",
 					     IndTag,IndTag,
 					     The_GetSuffix ());
 			   free (FuncOnChange);
@@ -1942,11 +1942,13 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			HTM_TD_End ();
 
 			/***** Input of a new tag *****/
-			HTM_TD_Begin ("class=\"RM\"");
+			HTM_TD_Begin ("class=\"Qst_TAG_CELL RM\"");
 			   snprintf (StrTagTxt,sizeof (StrTagTxt),"TagTxt%u",IndTag);
-			   HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
+			   HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,
+					   Question->Tags.Txt[IndTag],
 					   HTM_DONT_SUBMIT_ON_CHANGE,
-					   "id=\"%s\" class=\"TAG_TXT INPUT_%s\""
+					   "id=\"%s\""
+					   " class=\"Qst_TAG_TXT INPUT_%s\""
 					   " onchange=\"changeSelTag('%u')\"",
 					   StrTagTxt,
 					   The_GetSuffix (),
@@ -1972,7 +1974,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" rows=\"5\""
-			           " class=\"STEM_TEXTAREA INPUT_%s\""
+			           " class=\"Qst_STEM_TXT INPUT_%s\""
 				   " required=\"required\"",
 				   The_GetSuffix ());
 		  HTM_Txt (Question->Stem);
@@ -1987,7 +1989,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 		  HTM_BR ();
 		  HTM_TEXTAREA_Begin ("name=\"Feedback\" rows=\"2\""
-			              " class=\"STEM_TEXTAREA INPUT_%s\"",
+			              " class=\"Qst_STEM_TXT INPUT_%s\"",
 			              The_GetSuffix ());
 		     if (Question->Feedback[0])
 			HTM_Txt (Question->Feedback);
@@ -2086,7 +2088,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	 HTM_TR_Begin (NULL);
 	    HTM_TD_Empty (1);
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TABLE_BeginPadding (2);	// Table with choice answers
+	       HTM_TABLE_BeginWidePadding (2);	// Table with choice answers
 
 	       OptionsDisabled = Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 				 Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE &&
@@ -2106,7 +2108,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  HTM_TR_Begin (NULL);
 
 		     /***** Left column: selectors *****/
-		     HTM_TD_Begin ("class=\"Tst_EDI_ANS_LEFT_COL %s\"",
+		     HTM_TD_Begin ("class=\"Qst_ANS_LEFT_COL %s\"",
 		                   The_GetColorRows ());
 
 			/* Radio selector for unique choice answers */
@@ -2132,7 +2134,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     HTM_TD_End ();
 
 		     /***** Center column: letter of the answer and expand / contract icon *****/
-		     HTM_TD_Begin ("class=\"FORM_IN_%s Tst_EDI_ANS_CENTER_COL %s\"",
+		     HTM_TD_Begin ("class=\"FORM_IN_%s Qst_ANS_CENTER_COL %s\"",
 				   The_GetSuffix (),
 				   The_GetColorRows ());
 			HTM_TxtF ("%c)",'a' + (char) NumOpt);
@@ -2166,7 +2168,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     HTM_TD_End ();
 
 		     /***** Right column: content of the answer *****/
-		     HTM_TD_Begin ("class=\"Tst_EDI_ANS_RIGHT_COL %s\"",
+		     HTM_TD_Begin ("class=\"Qst_ANS_RIGHT_COL %s\"",
 		                   The_GetColorRows ());
 			HTM_DIV_Begin ("id=\"ans_%u\"%s",
 				       NumOpt,
@@ -2175,7 +2177,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 			   /* Answer text */
 			   HTM_TEXTAREA_Begin ("name=\"AnsStr%u\" rows=\"5\""
-				               " class=\"ANSWER_TEXTAREA INPUT_%s\"%s",
+				               " class=\"Qst_ANS_TXT INPUT_%s\""
+				               "%s",
 					       NumOpt,
 					       The_GetSuffix (),
 					       OptionsDisabled ? " disabled=\"disabled\"" :
@@ -2195,7 +2198,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 			      HTM_BR ();
 			      HTM_TEXTAREA_Begin ("name=\"FbStr%u\" rows=\"2\""
-				                  " class=\"ANSWER_TEXTAREA INPUT_%s\"%s",
+				                  " class=\"Qst_ANS_TXT INPUT_%s\""
+				                  "%s",
 						  NumOpt,
 						  The_GetSuffix (),
 						  OptionsDisabled ? " disabled=\"disabled\"" :

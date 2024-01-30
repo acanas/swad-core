@@ -3472,11 +3472,33 @@ legend {font-size:12pt;}
 	}
 .PrjCfg_RUBRIC_SEL	{max-width:400px;}
 
-/********************************** Tests ************************************/
-.TAG_SEL			{box-sizing: border-box; width: 390px;}
-.TAG_TXT			{box-sizing: border-box; width: 390px;}
-.STEM_TEXTAREA		{width: 780px;}
-.ANSWER_TEXTAREA	{width: 682px;}
+/******************************** Questions **********************************/
+.Qst_TAG_CELL	{width: 50%;}
+.Qst_TAG_SEL	{box-sizing: border-box; width: 100%;}
+.Qst_TAG_TXT	{box-sizing: border-box; width: 100%;}
+.Qst_STEM_TXT	{box-sizing: border-box; width: 100%;}
+.Qst_ANS_LEFT_COL
+	{
+	box-sizing:border-box;
+	width:48px;
+	text-align:left;
+	vertical-align:top;
+	}
+.Qst_ANS_CENTER_COL
+	{
+	box-sizing:border-box;
+	width:48px;
+	text-align:right;
+	vertical-align:top;
+	}
+.Qst_ANS_RIGHT_COL
+	{
+	box-sizing:border-box;
+	width:100%;
+	text-align:left;
+	vertical-align:top;
+	}
+.Qst_ANS_TXT	{box-sizing: border-box; width: 100%;}
 
 .Tst_SUBTITLE
 	{
@@ -3597,29 +3619,6 @@ legend {font-size:12pt;}
 	width:100%;
 	border-radius:2px;
 	}
-
-.Tst_EDI_ANS_LEFT_COL
-	{
-	box-sizing:border-box;
-	width:48px;
-	text-align:left;
-	vertical-align:top;
-	}
-.Tst_EDI_ANS_CENTER_COL
-	{
-	box-sizing:border-box;
-	width:48px;
-	text-align:right;
-	vertical-align:top;
-	}
-.Tst_EDI_ANS_RIGHT_COL
-	{
-	box-sizing:border-box;
-	width:600px;
-	text-align:left;
-	vertical-align:top;
-	}
-	
 .Tst_FILE_CONTENT
 	{
 	padding-bottom:20px;
