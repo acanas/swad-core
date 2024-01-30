@@ -4467,13 +4467,6 @@ legend {font-size:12pt;}
 .ATT_CROSS_YELLOW,
 .ATT_CROSS_PINK		{color:#660000;}
 .ATT_CROSS_DARK		{color:#ff8080;}
-	
-/********************* Edition of attendance events, games *******************/
-.TITLE_DESCRIPTION_WIDTH
-	{
-	box-sizing:border-box;
-	width:500px;
-	}
 
 /**************************** Enrolment requests *****************************/
 .REQUESTER_NAME
@@ -5344,7 +5337,7 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 .INPUT_FULL_NAME
 	{
 	box-sizing:border-box;
-	width:180px;
+	width:240px;
 	}
 .INPUT_LONG
 	{

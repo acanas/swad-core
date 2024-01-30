@@ -194,7 +194,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	    HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			    " class=\"INPUT_FULL_NAME INPUT_%s\""
 			    " required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -723,7 +723,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		     HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "id=\"Title\""
-				     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+				     " class=\"INPUT_FULL_NAME INPUT_%s\""
 				     " required=\"required\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();

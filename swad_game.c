@@ -1292,14 +1292,20 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
 
       /***** Show list of questions inside box *****/
       if (ExistingNewGame == Gam_EXISTING_GAME)
+        {
+	 HTM_BR ();
 	 Gam_ListGameQuestions (Games);
+        }
 
    /***** End box ****/
    Box_BoxEnd ();
 
    /***** Show games again outside box *****/
    if (ExistingNewGame == Gam_NEW_GAME)
+     {
+      HTM_BR ();
       Gam_ListAllGames (Games);
+     }
   }
 
 /*****************************************************************************/
@@ -1339,20 +1345,20 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
       Gam_PutPars (Games);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+      HTM_TABLE_BeginPadding (2);
 
 	 /***** Game title *****/
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	    Frm_LabelColumn ("Frm_C1 RT","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Games->Game.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1362,14 +1368,14 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 	 /***** Maximum grade *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Maximum_grade);
-	    HTM_TD_End ();
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1 RT","MaxGrade",Txt_Maximum_grade);
 
-	    HTM_TD_Begin ("class=\"LM\"");
+	    /* Data */
+	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,
 				HTM_DONT_SUBMIT_ON_CHANGE,false,
-				" class=\"INPUT_%s\" required=\"required\"",
+				" class=\"Frm_C2_INPUT INPUT_%s\" required=\"required\"",
 				The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -1377,22 +1383,27 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 
 	 /***** Visibility of results *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_TxtColon (Txt_Result_visibility);
-	    HTM_TD_Begin ("class=\"LB\"");
+
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1 RT","",Txt_Result_visibility);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 	       TstVis_PutVisibilityCheckboxes (Games->Game.Visibility);
 	    HTM_TD_End ();
+
 	 HTM_TR_End ();
 
 	 /***** Game text *****/
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("Frm_C1 RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  HTM_Txt (Txt);
 	       HTM_TEXTAREA_End ();

@@ -947,7 +947,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session)
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();

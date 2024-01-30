@@ -1287,14 +1287,20 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 
       /***** Show list of sets inside box *****/
       if (ExistingNewExam == Exa_EXISTING_EXAM)
+        {
+	 HTM_BR ();
 	 ExaSet_ListExamSets (Exams);
+        }
 
    /***** End box ****/
    Box_BoxEnd ();
 
    /***** Show exams again outside box *****/
    if (ExistingNewExam == Exa_NEW_EXAM)
+     {
+      HTM_BR ();
       Exa_ListAllExams (Exams);
+     }
   }
 
 /*****************************************************************************/
@@ -1338,14 +1344,14 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RM","Title",Txt_Title);
+	    Frm_LabelColumn ("Frm_C1_BOT RM","Title",Txt_Title);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"REC_C2_BOT_INPUT INPUT_%s\""
+			       " class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1355,14 +1361,15 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 /***** Maximum grade *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"REC_C1_BOT RM FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Maximum_grade);
-	    HTM_TD_End ();
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1_BOT RT","MaxGrade",Txt_Maximum_grade);
 
+	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,
 				HTM_DONT_SUBMIT_ON_CHANGE,false,
-				" class=\"INPUT_%s\" required=\"required\"",
+				" class=\"Frm_C2_INPUT INPUT_%s\""
+				" required=\"required\"",
 				The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -1370,24 +1377,27 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
 	 /***** Visibility of results *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("class=\"REC_C1_BOT RT FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColon (Txt_Result_visibility);
-	    HTM_TD_End ();
+
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1_BOT RT","",Txt_Result_visibility);
+
+	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 	       TstVis_PutVisibilityCheckboxes (Exams->Exam.Visibility);
 	    HTM_TD_End ();
+
 	 HTM_TR_End ();
 
 	 /***** Exam text *****/
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("Frm_C1_BOT RT","Txt",Txt_Description);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  HTM_Txt (Txt);
 	       HTM_TEXTAREA_End ();

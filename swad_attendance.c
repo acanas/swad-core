@@ -988,13 +988,13 @@ void Att_ReqCreatOrEditEvent (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	    Frm_LabelColumn ("Frm_C1 RT","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Events.Event.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1010,13 +1010,13 @@ void Att_ReqCreatOrEditEvent (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","ComTchVisible",Txt_Teachers_comment);
+	    Frm_LabelColumn ("Frm_C1 RT","ComTchVisible",Txt_Teachers_comment);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"ComTchVisible\" name=\"ComTchVisible\""
-				 " class=\"INPUT_%s\"",
+				 " class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
 			      Events.Event.CommentTchVisible ? HTM_OPTION_UNSELECTED :
@@ -1037,12 +1037,12 @@ void Att_ReqCreatOrEditEvent (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("Frm_C1 RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewAttEvent)
 		     HTM_Txt (Description);

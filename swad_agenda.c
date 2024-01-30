@@ -1374,13 +1374,13 @@ void Agd_ReqCreatOrEditEvent (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Event",Txt_Event);
+	    Frm_LabelColumn ("Frm_C1 RT","Event",Txt_Event);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Event\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       "id=\"Event\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1393,13 +1393,13 @@ void Agd_ReqCreatOrEditEvent (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Location",Txt_Location);
+	    Frm_LabelColumn ("Frm_C1 RT","Location",Txt_Location);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Location\" class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       "id=\"Location\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1417,12 +1417,12 @@ void Agd_ReqCreatOrEditEvent (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("Frm_C1 RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewEvent)
 		     HTM_Txt (Txt);

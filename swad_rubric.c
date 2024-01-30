@@ -814,7 +814,10 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 
    /***** Show rubrics again outside box *****/
    if (ExistingNewRubric == Rub_NEW_RUBRIC)
+     {
+      HTM_BR ();
       Rub_ListAllRubrics (Rubrics);
+     }
   }
 
 /*****************************************************************************/
@@ -855,14 +858,14 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	    Frm_LabelColumn ("Frm_C1 RT","Title",Txt_Title);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+			       " class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -873,12 +876,12 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("RT","Txt",Txt_Description);
+	    Frm_LabelColumn ("Frm_C1 RT","Txt",Txt_Description);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				   " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  HTM_Txt (Rubrics->Rubric.Txt);
 	       HTM_TEXTAREA_End ();

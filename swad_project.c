@@ -3756,14 +3756,14 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("RT","Title",Txt_Title);
+		  Frm_LabelColumn ("Frm_C1 RT","Title",Txt_Title);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"LT\"");
+		  HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		     HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_TITLE,Projects->Prj.Title,
 				     HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"Title\""
-				     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\""
+				     " class=\"Frm_C2_INPUT INPUT_%s\""
 				     " required=\"required\"",
 				     The_GetSuffix ());
 		  HTM_TD_End ();
@@ -3774,11 +3774,11 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
+		  Frm_LabelColumn ("Frm_C1 RT",Par_CodeStr[ParCod_Dpt],Txt_Department);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"LT\"");
-		     if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH INPUT_%s",
+		  HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+		     if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
@@ -3796,13 +3796,14 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       /* Assigned? */
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-		     HTM_TxtColon (Txt_Assigned_QUESTION);
-		  HTM_TD_End ();
+		  /* Label */
+		  Frm_LabelColumn ("Frm_C1 RT","",Txt_Assigned_QUESTION);
 
-		  HTM_TD_Begin ("class=\"LM\"");
+		  /* Data */
+		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				       "name=\"Assigned\" class=\"INPUT_%s\"",
+				       "name=\"Assigned\""
+				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"Y",
 				    Projects->Prj.Assigned == Prj_ASSIGNED ? HTM_OPTION_SELECTED :
@@ -3822,14 +3823,14 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       /* Number of students */
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-		     HTM_TxtColon (Txt_Number_of_students);
-		  HTM_TD_End ();
+		  /* Label */
+		  Frm_LabelColumn ("Frm_C1 RT","",Txt_Number_of_students);
 
-		  HTM_TD_Begin ("class=\"LM\"");
+		  /* Data */
+		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 		     HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Projects->Prj.NumStds,
 				     HTM_DONT_SUBMIT_ON_CHANGE,false,
-				     "class=\"INPUT_%s\"",
+				     "class=\"Frm_C2_INPUT INPUT_%s\"",
 				     The_GetSuffix ());
 		  HTM_TD_End ();
 
@@ -3838,14 +3839,14 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       /* Proposal */
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
-		     HTM_TxtColon (Txt_Proposal);
-		  HTM_TD_End ();
+		  /* Label */
+		  Frm_LabelColumn ("Frm_C1 RT","",Txt_Proposal);
 
-		  HTM_TD_Begin ("class=\"LM\"");
+		  /* Data */
+		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"Proposal\""
-				       " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			for (Proposal  = (Prj_Proposal_t) 0;
 			     Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
@@ -3882,12 +3883,12 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
-		  Frm_LabelColumn ("RT","WWW",Txt_URL);
+		  Frm_LabelColumn ("Frm_C1 RT","WWW",Txt_URL);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 		     HTM_INPUT_URL ("URL",Projects->Prj.URL,HTM_DONT_SUBMIT_ON_CHANGE,
-				    "class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
+				    "class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		  HTM_TD_End ();
 
@@ -3923,12 +3924,12 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id,Label);
+      Frm_LabelColumn ("Frm_C1 RT",Id,Label);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\""
-			     " class=\"TITLE_DESCRIPTION_WIDTH INPUT_%s\"%s",
+			     " class=\"Frm_C2_INPUT INPUT_%s\"%s",
 			     Id,Id,NumRows,
 			     The_GetSuffix (),
 			     Required ? " required=\"required\"" :

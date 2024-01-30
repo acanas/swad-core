@@ -637,7 +637,7 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 #define CSS_FILE		"swad23.64.css"
 #define JS_FILE			"swad23.53.6.js"
 /*
-	Version 23.64:    Jan 30, 2024  Responsive design. (335491 lines)
+	Version 23.64:    Jan 30, 2024  Responsive design. (335503 lines)
 	Version 23.63.4:  Jan 30, 2024  Code refactoring in users. (335414 lines)
 	Version 23.63.3:  Jan 30, 2024  Responsive design. (335406 lines)
 	Version 23.63.2:  Jan 30, 2024  Responsive design in questions. (335405 lines)
