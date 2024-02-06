@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2023 Antonio Cañas Vargas
+    Copyright (C) 1999-2024 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -127,6 +127,7 @@ void Not_ShowFormNotice (void)
    Frm_EndForm ();
 
    /***** Show all notices *****/
+   HTM_BR ();
    Not_ShowNotices (Not_LIST_FULL_NOTICES,
 	            -1L);	// No notice highlighted
   }
@@ -259,13 +260,13 @@ void Not_ReqRemNotice (void)
    /* Begin alert */
    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
 
-   /* Show notice */
-   Not_GetDataAndShowNotice (NotCod);
+      /* Show notice */
+      Not_GetDataAndShowNotice (NotCod);
 
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActRemNot,NULL,NULL,
-                            Not_PutParNotCod,&NotCod,
-			    Btn_REMOVE_BUTTON,Act_GetActionText (ActRemNot));
+                              Not_PutParNotCod,&NotCod,
+			      Btn_REMOVE_BUTTON,Act_GetActionText (ActRemNot));
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES,

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2023 Antonio Cañas Vargas
+    Copyright (C) 1999-2024 Antonio Cañas Vargas
 
     Català translation:
 	Antonio Cañas Vargas
@@ -25986,7 +25986,7 @@ const char *Txt_Notice =
 #elif L==9	// pt
 	"Aviso";
 #elif L==10	// tr
-	"Notice";	// Çeviri lazim!
+	"Uyar&inodot;";
 #endif
 
 const char *Txt_Notice_created =

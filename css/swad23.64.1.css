@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2023 Antonio Cañas Vargas
+    Copyright (C) 1999-2024 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -201,7 +201,7 @@ a:hover						/* Default ==> underlined */
 	text-align:left;
 	vertical-align:middle;
 	}
-@media only screen and (max-width: 1024px)
+@media only screen and (max-width:1024px)
 	{	/* For mobile-phones */
 	#head_row_1_logo_small
 		{
@@ -216,7 +216,7 @@ a:hover						/* Default ==> underlined */
 		display:none;
     	}
 	}
-@media only screen and (min-width: 1024px)
+@media only screen and (min-width:1024px)
 	{	/* For tablets and desktop */
 	#head_row_1_logo_small
 		{
@@ -252,7 +252,7 @@ a:hover						/* Default ==> underlined */
 	display:inline-block;
 	padding:0 10px;
 	}
-@media only screen and (max-width: 1280px)
+@media only screen and (max-width:1280px)
 	{	/* For mobile phones and tablets */
 	#head_search_text
 		{
@@ -260,7 +260,7 @@ a:hover						/* Default ==> underlined */
     		}
 	}
 
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile phones */
 	.SEL_ROLE	{width:55px;}
 	.HEAD_USR
@@ -275,7 +275,7 @@ a:hover						/* Default ==> underlined */
 		text-overflow:ellipsis;
 		}
 	}
-@media only screen and (min-width: 480px)
+@media only screen and (min-width:480px)
 	{	/* For mobile phones */
 	.SEL_ROLE	{width:130px;}
 	.HEAD_USR
@@ -370,7 +370,7 @@ a:hover						/* Default ==> underlined */
 	width:80px;
 	margin-left:6px;
 	border-radius:2px;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
+	box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	}
 #current_month
 	{
@@ -406,7 +406,7 @@ a:hover						/* Default ==> underlined */
 	font-weight:bold;
 	}
 	
-@media only screen and (max-width: 1024px)
+@media only screen and (max-width:1024px)
 	{	/* For mobile phones */
 	#head_row_2_time
 		{
@@ -428,7 +428,7 @@ a:hover						/* Default ==> underlined */
 	text-align:left;
 	vertical-align:middle !important;
 	}
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile-phones */
 	#breadcrumb
 		{
@@ -450,7 +450,7 @@ a:hover						/* Default ==> underlined */
 		margin:1px;
 		}
 	}
-@media only screen and (min-width: 480px) and (max-width: 800px)
+@media only screen and (min-width:480px) and (max-width:800px)
 	{	/* For mobile-phones */
 	#breadcrumb
 		{
@@ -472,7 +472,7 @@ a:hover						/* Default ==> underlined */
 		margin:1px;
 		}
 	}
-@media only screen and (min-width: 800px) and (max-width: 1024px)
+@media only screen and (min-width:800px) and (max-width:1024px)
 	{	/* For tablets */
 	#breadcrumb
 		{
@@ -494,7 +494,7 @@ a:hover						/* Default ==> underlined */
 		margin:1px;
 		}
 	}
-@media only screen and (min-width: 1024px)
+@media only screen and (min-width:1024px)
 	{	/* For desktop */
 	#breadcrumb
 		{
@@ -537,14 +537,14 @@ a:hover						/* Default ==> underlined */
 	margin:-1px 0 1px 0;
 	}
 
-/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
-.BC_ICO_WHITE	{filter: invert(45%) sepia(0%) saturate(14%) hue-rotate(159deg) brightness(96%) contrast(89%);}		/* #707070 */
-.BC_ICO_GREY	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
-.BC_ICO_PURPLE	{filter: invert(77%) sepia(91%) saturate(1669%) hue-rotate(327deg) brightness(110%) contrast(103%);}	/* #ffc040 */
-.BC_ICO_BLUE	{filter: invert(77%) sepia(91%) saturate(1669%) hue-rotate(327deg) brightness(110%) contrast(103%);}	/* #ffc040 */
-.BC_ICO_YELLOW	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
-.BC_ICO_PINK	{filter: invert(77%) sepia(91%) saturate(1669%) hue-rotate(327deg) brightness(110%) contrast(103%);}	/* #ffc040 */
-.BC_ICO_DARK	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
+/* Creating filter from RGB:https://codepen.io/sosuke/pen/Pjoqqp */
+.BC_ICO_WHITE	{filter:invert(45%) sepia(0%) saturate(14%) hue-rotate(159deg) brightness(96%) contrast(89%);}		/* #707070 */
+.BC_ICO_GREY	{filter:invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
+.BC_ICO_PURPLE	{filter:invert(77%) sepia(91%) saturate(1669%) hue-rotate(327deg) brightness(110%) contrast(103%);}	/* #ffc040 */
+.BC_ICO_BLUE	{filter:invert(77%) sepia(91%) saturate(1669%) hue-rotate(327deg) brightness(110%) contrast(103%);}	/* #ffc040 */
+.BC_ICO_YELLOW	{filter:invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
+.BC_ICO_PINK	{filter:invert(77%) sepia(91%) saturate(1669%) hue-rotate(327deg) brightness(110%) contrast(103%);}	/* #ffc040 */
+.BC_ICO_DARK	{filter:invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
 
 /******** Big name of country, institution, center, degree or course *********/
 #main_title
@@ -561,7 +561,7 @@ a:hover						/* Default ==> underlined */
 	display:inline-block;
 	}
 	
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile-phones */
 	#big_short_name
 		{
@@ -578,7 +578,7 @@ a:hover						/* Default ==> underlined */
 		display:none;
 		}
 	}
-@media only screen and (min-width: 480px) and (max-width: 800px)
+@media only screen and (min-width:480px) and (max-width:800px)
 	{	/* For mobile-phones */
 	#big_short_name
 		{
@@ -595,7 +595,7 @@ a:hover						/* Default ==> underlined */
 		display:none;
 		}
 	}
-@media only screen and (min-width: 800px) and (max-width: 1024px)
+@media only screen and (min-width:800px) and (max-width:1024px)
 	{	/* For mobile-phones and tablets */
 	#big_short_name
 		{
@@ -612,7 +612,7 @@ a:hover						/* Default ==> underlined */
 		display:none;
 		}
 	}
-@media only screen and (min-width: 1024px)
+@media only screen and (min-width:1024px)
 	{	/* For tablets and desktop */
 	#big_short_name
 		{
@@ -650,14 +650,14 @@ a:hover						/* Default ==> underlined */
 	vertical-align:top;
 	padding-top:10px;
 	}
-@media only screen and (max-width: 1024px)
+@media only screen and (max-width:1024px)
 	{	/* For mobile phones */
 	#msg
 		{
 		display:none;
     	}
 	}
-@media only screen and (min-width: 1024px) and (max-width: 1280px)
+@media only screen and (min-width:1024px) and (max-width:1280px)
 	{	/* For tablets */
 	#notif_all
 		{
@@ -672,14 +672,14 @@ a:hover						/* Default ==> underlined */
 .NOTIF_PINK		{color:white;   font-size:12pt; white-space:nowrap;}
 .NOTIF_DARK		{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
 
-/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
-.NOTIF_ICO_WHITE	{filter: invert(45%) sepia(0%) saturate(14%) hue-rotate(159deg) brightness(96%) contrast(89%);}			/* #707070 */
-.NOTIF_ICO_GREY		{filter: invert(98%) sepia(44%) saturate(30%) hue-rotate(167deg) brightness(116%) contrast(76%);}		/* #e0e0e0 */
-.NOTIF_ICO_PURPLE	{filter: invert(98%) sepia(44%) saturate(30%) hue-rotate(167deg) brightness(116%) contrast(76%);}		/* #e0e0e0 */
-.NOTIF_ICO_BLUE		{filter: invert(100%) sepia(19%) saturate(4118%) hue-rotate(214deg) brightness(115%) contrast(100%);}		/* #ffffff */
-.NOTIF_ICO_YELLOW	{filter: invert(89%) sepia(3%) saturate(180%) hue-rotate(251deg) brightness(79%) contrast(92%);}		/* #b3b0b3 */
-.NOTIF_ICO_PINK		{filter: invert(100%) sepia(19%) saturate(4118%) hue-rotate(214deg) brightness(115%) contrast(100%);}		/* #ffffff */
-.NOTIF_ICO_DARK		{filter: invert(98%) sepia(44%) saturate(30%) hue-rotate(167deg) brightness(116%) contrast(76%);}		/* #e0e0e0 */
+/* Creating filter from RGB:https://codepen.io/sosuke/pen/Pjoqqp */
+.NOTIF_ICO_WHITE	{filter:invert(45%) sepia(0%) saturate(14%) hue-rotate(159deg) brightness(96%) contrast(89%);}			/* #707070 */
+.NOTIF_ICO_GREY		{filter:invert(98%) sepia(44%) saturate(30%) hue-rotate(167deg) brightness(116%) contrast(76%);}		/* #e0e0e0 */
+.NOTIF_ICO_PURPLE	{filter:invert(98%) sepia(44%) saturate(30%) hue-rotate(167deg) brightness(116%) contrast(76%);}		/* #e0e0e0 */
+.NOTIF_ICO_BLUE		{filter:invert(100%) sepia(19%) saturate(4118%) hue-rotate(214deg) brightness(115%) contrast(100%);}		/* #ffffff */
+.NOTIF_ICO_YELLOW	{filter:invert(89%) sepia(3%) saturate(180%) hue-rotate(251deg) brightness(79%) contrast(92%);}		/* #b3b0b3 */
+.NOTIF_ICO_PINK		{filter:invert(100%) sepia(19%) saturate(4118%) hue-rotate(214deg) brightness(115%) contrast(100%);}		/* #ffffff */
+.NOTIF_ICO_DARK		{filter:invert(98%) sepia(44%) saturate(30%) hue-rotate(167deg) brightness(116%) contrast(76%);}		/* #e0e0e0 */
 
 /******************* Layout (third heading row with tabs) ********************/
 .HEAD_ROW_3_WHITE
@@ -727,7 +727,7 @@ a:hover						/* Default ==> underlined */
 	vertical-align:middle;
 	}
 
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile-phones */
 	#tabs
 		{
@@ -781,7 +781,7 @@ a:hover						/* Default ==> underlined */
 		text-transform:uppercase;
 		}
 	}
-@media only screen and (min-width: 480px) and (max-width: 800px)
+@media only screen and (min-width:480px) and (max-width:800px)
 	{	/* For mobile-phones */
 	#tabs
 		{
@@ -835,7 +835,7 @@ a:hover						/* Default ==> underlined */
 		text-transform:uppercase;
 		}
 	}
-@media only screen and (min-width: 800px)
+@media only screen and (min-width:800px)
 	{	/* For tablets and desktop */
 	#tabs
 		{
@@ -922,7 +922,7 @@ a:hover						/* Default ==> underlined */
 .TAB_ON_TXT_PINK	{color:#63474e;}
 .TAB_ON_TXT_DARK	{color:#e0e0e0;}
 
-/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
+/* Creating filter from RGB:https://codepen.io/sosuke/pen/Pjoqqp */
 .TAB_ICO_WHITE,
 .TAB_ICO_GREY,
 .TAB_ICO_PURPLE,
@@ -939,7 +939,7 @@ a:hover						/* Default ==> underlined */
 	width:100%;
 	}
 
-@media only screen and (max-width: 1280px)
+@media only screen and (max-width:1280px)
 	{	/* For mobile phones and tablets */
 	#main_zone_central_none, #main_zone_central_left, #main_zone_central_right, #main_zone_central_both
 		{
@@ -956,7 +956,7 @@ a:hover						/* Default ==> underlined */
 		display:none;
 		}
 	}
-@media only screen and (min-width: 1280px)
+@media only screen and (min-width:1280px)
 	{	/* For desktop */
 	#main_zone_central_none /* Hide left and right columns */
 		{
@@ -1006,7 +1006,7 @@ a:hover						/* Default ==> underlined */
 		}
 	}
 
-@media only screen and (max-width: 800px)
+@media only screen and (max-width:800px)
 	{	/* For mobile-phones */
 	#main_zone_central_container
 		{
@@ -1019,7 +1019,7 @@ a:hover						/* Default ==> underlined */
 		position:relative;
 		}
 	}
-@media only screen and (min-width: 800px)
+@media only screen and (min-width:800px)
 	{	/* For tablets and desktop */
 	#main_zone_central_container
 		{
@@ -1093,7 +1093,7 @@ a:hover						/* Default ==> underlined */
 	}
 
 /************** Main central zone with vertical menu and canvas **************/
-@media only screen and (max-width: 1024px)
+@media only screen and (max-width:1024px)
 	{	/* For mobile phones */
 	/* Mobile phone will display menu always in horizontal
 	   so the CSS must draw menu really in horizontal */
@@ -1158,7 +1158,7 @@ a:hover						/* Default ==> underlined */
 		}
 	}
 
-@media only screen and (min-width: 1024px)
+@media only screen and (min-width:1024px)
 	{	/* For tablets and desktop */
 	#main_vertical
 		{
@@ -1171,6 +1171,7 @@ a:hover						/* Default ==> underlined */
 		display:table-cell;
 		box-sizing:border-box;
 		width:170px;
+		vertical-align:top;
 		}
 	#main_vertical .MENU_LIST
 		{
@@ -1230,7 +1231,7 @@ a:hover						/* Default ==> underlined */
 		overflow:hidden;
 		}
 	}
-/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
+/* Creating filter from RGB:https://codepen.io/sosuke/pen/Pjoqqp */
 .MENU_ICO_WHITE,
 .MENU_ICO_GREY,
 .MENU_ICO_PURPLE,
@@ -1240,7 +1241,7 @@ a:hover						/* Default ==> underlined */
 .MENU_ICO_DARK		{filter:invert(1);}
 
 /********************************* Menu fonts ********************************/
-@media only screen and (max-width: 800px)
+@media only screen and (max-width:800px)
 	{	/* For mobile-phones */
 	.MENU_TXT
 		{
@@ -1255,7 +1256,7 @@ a:hover						/* Default ==> underlined */
 		padding:2px 0;
 		}
 	}
-@media only screen and (min-width: 800px)
+@media only screen and (min-width:800px)
 	{	/* For tablets and desktop */
 	.MENU_TXT
 		{
@@ -1441,8 +1442,8 @@ a:hover						/* Default ==> underlined */
 
 #chart_div
 	{
-	width: 300px;
-	margin: 12px auto;
+	width:300px;
+	margin:12px auto;
 	}
 			
 .HIE_CFG_LEFT, .HIE_CFG_RIGHT
@@ -1453,7 +1454,7 @@ a:hover						/* Default ==> underlined */
 	width:480px;
 	}
 
-@media only screen and (max-width: 590px)
+@media only screen and (max-width:590px)
 	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
 	.HIE_CFG_WIDTH		{width:260px;}
 	.COUNTRY_MAP_SHOW, .COUNTRY_MAP_PRINT
@@ -1470,7 +1471,7 @@ a:hover						/* Default ==> underlined */
 		width:240px;
 		}
 	}
-@media only screen and (min-width: 590px)
+@media only screen and (min-width:590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
 	.HIE_CFG_WIDTH				{width:480px;}
 	.COUNTRY_MAP_SHOW, .COUNTRY_MAP_PRINT
@@ -2004,7 +2005,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	margin:8px auto;
 	padding:12px;
 	border-radius:2px;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
+	box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	}
 .ALERT_BG_WHITE,
 .ALERT_BG_GREY,
@@ -2097,54 +2098,54 @@ a:hover img.CENTER_PHOTO_SHOW
 	margin-top:-2px;
 	vertical-align:middle;
 	}
-/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
+/* Creating filter from RGB:https://codepen.io/sosuke/pen/Pjoqqp */
 .ICO_BLACK_WHITE,
 .ICO_BLACK_GREY,
 .ICO_BLACK_PURPLE,
 .ICO_BLACK_BLUE,
 .ICO_BLACK_YELLOW,
-.ICO_BLACK_PINK		{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
-.ICO_BLACK_DARK		{filter: invert(92%) sepia(44%) saturate(2%) hue-rotate(176deg) brightness(110%) contrast(88%);}	/* #f0f0f0 */
+.ICO_BLACK_PINK		{filter:invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
+.ICO_BLACK_DARK		{filter:invert(92%) sepia(44%) saturate(2%) hue-rotate(176deg) brightness(110%) contrast(88%);}	/* #f0f0f0 */
 
 .ICO_BLUE_WHITE,
 .ICO_BLUE_GREY,
 .ICO_BLUE_PURPLE,
 .ICO_BLUE_BLUE,
 .ICO_BLUE_YELLOW,
-.ICO_BLUE_PINK		{filter: invert(50%) sepia(27%) saturate(624%) hue-rotate(153deg) brightness(93%) contrast(97%);}		/* #4d88a1 */
-.ICO_BLUE_DARK		{filter: invert(81%) sepia(15%) saturate(249%) hue-rotate(151deg) brightness(91%) contrast(95%);}	/* #afc4cc */
+.ICO_BLUE_PINK		{filter:invert(50%) sepia(27%) saturate(624%) hue-rotate(153deg) brightness(93%) contrast(97%);}		/* #4d88a1 */
+.ICO_BLUE_DARK		{filter:invert(81%) sepia(15%) saturate(249%) hue-rotate(151deg) brightness(91%) contrast(95%);}	/* #afc4cc */
 
 .ICO_GREEN_WHITE,
 .ICO_GREEN_GREY,
 .ICO_GREEN_PURPLE,
 .ICO_GREEN_BLUE,
 .ICO_GREEN_YELLOW,
-.ICO_GREEN_PINK		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
-.ICO_GREEN_DARK		{filter: invert(75%) sepia(13%) saturate(1915%) hue-rotate(46deg) brightness(89%) contrast(89%);}	/* #80c040 */
+.ICO_GREEN_PINK		{filter:invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.ICO_GREEN_DARK		{filter:invert(75%) sepia(13%) saturate(1915%) hue-rotate(46deg) brightness(89%) contrast(89%);}	/* #80c040 */
 
 .ICO_RED_WHITE,
 .ICO_RED_GREY,
 .ICO_RED_PURPLE,
 .ICO_RED_BLUE,
 .ICO_RED_YELLOW,
-.ICO_RED_PINK		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
-.ICO_RED_DARK		{filter: invert(51%) sepia(58%) saturate(1457%) hue-rotate(320deg) brightness(126%) contrast(104%);}	/* #ff8080 */
+.ICO_RED_PINK		{filter:invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.ICO_RED_DARK		{filter:invert(51%) sepia(58%) saturate(1457%) hue-rotate(320deg) brightness(126%) contrast(104%);}	/* #ff8080 */
 
 .ICO_WHITE_WHITE,
 .ICO_WHITE_GREY,
 .ICO_WHITE_PURPLE,
 .ICO_WHITE_BLUE,
 .ICO_WHITE_YELLOW,
-.ICO_WHITE_PINK		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
-.ICO_WHITE_DARK		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.ICO_WHITE_PINK		{filter:invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.ICO_WHITE_DARK		{filter:invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
 
 .ICO_YELLOW_WHITE,
 .ICO_YELLOW_GREY,
 .ICO_YELLOW_PURPLE,
 .ICO_YELLOW_BLUE,
 .ICO_YELLOW_YELLOW,
-.ICO_YELLOW_PINK	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
-.ICO_YELLOW_DARK	{filter: invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
+.ICO_YELLOW_PINK	{filter:invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
+.ICO_YELLOW_DARK	{filter:invert(61%) sepia(96%) saturate(366%) hue-rotate(352deg) brightness(103%) contrast(101%);}	/* #ffb42e */
 
 /********************************** Frame ************************************/
 .FRAME_INLINE
@@ -2160,7 +2161,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	margin:2px 0;
 	padding:10px;
 	border-radius:2px;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
+	box-shadow:0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	text-align:center;
 	overflow:hidden;
 	}
@@ -2254,12 +2255,12 @@ a:hover img.CENTER_PHOTO_SHOW
 .FRAME_TITLE_DARK	{color:#d0d0d0;}
 
 /* Apply only to the first level of th and td */
-table.CELLS_PAD_1	> tbody > tr > th {padding: 1px;}
-table.CELLS_PAD_1	> tbody > tr > td {padding: 1px;}
-table.CELLS_PAD_2	> tbody > tr > th {padding: 2px;}
-table.CELLS_PAD_2	> tbody > tr > td {padding: 2px;}
-table.CELLS_PAD_5	> tbody > tr > th {padding: 5px;}
-table.CELLS_PAD_5	> tbody > tr > td {padding: 5px;}
+table.CELLS_PAD_1	> tbody > tr > th {padding:1px;}
+table.CELLS_PAD_1	> tbody > tr > td {padding:1px;}
+table.CELLS_PAD_2	> tbody > tr > th {padding:2px;}
+table.CELLS_PAD_2	> tbody > tr > td {padding:2px;}
+table.CELLS_PAD_5	> tbody > tr > th {padding:5px;}
+table.CELLS_PAD_5	> tbody > tr > td {padding:5px;}
 table.CELLS_PAD_10	> tbody > tr > th {padding:10px;}
 table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
@@ -2365,48 +2366,48 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /******************************* User's photo ********************************/
-.PHOTOC12x16	{width: 12px; height: 16px; clip-path: circle(40% at center); vertical-align:middle; margin-top:-2px;}
-.PHOTOC15x20	{width: 15px; height: 20px; clip-path: circle(40% at center); vertical-align:middle;}
-.PHOTOC15x20B	{width: 15px; height: 20px; clip-path: circle(40% at center); vertical-align:middle; display:block; margin:0 auto;}
-.PHOTOC18x24	{width: 18px; height: 24px; clip-path: circle(40% at center); vertical-align:middle;}
-.PHOTOC21x28	{width: 21px; height: 28px; clip-path: circle(40% at center); vertical-align:middle;}
-.PHOTOC30x40	{width: 30px; height: 40px; clip-path: circle(40% at center); vertical-align:middle;}
-.PHOTOC45x60	{width: 45px; height: 60px; clip-path: circle(40% at center); vertical-align:middle;}
-.PHOTOC60x80	{width: 60px; height: 80px; clip-path: circle(40% at center); vertical-align:middle;}
-.PHOTOC186x248	{width:186px; height:248px; clip-path: circle(40% at center); margin-top:-24px;}
+.PHOTOC12x16	{width:12px; height:16px; clip-path:circle(40% at center); vertical-align:middle; margin-top:-2px;}
+.PHOTOC15x20	{width:15px; height:20px; clip-path:circle(40% at center); vertical-align:middle;}
+.PHOTOC15x20B	{width:15px; height:20px; clip-path:circle(40% at center); vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOC18x24	{width:18px; height:24px; clip-path:circle(40% at center); vertical-align:middle;}
+.PHOTOC21x28	{width:21px; height:28px; clip-path:circle(40% at center); vertical-align:middle;}
+.PHOTOC30x40	{width:30px; height:40px; clip-path:circle(40% at center); vertical-align:middle;}
+.PHOTOC45x60	{width:45px; height:60px; clip-path:circle(40% at center); vertical-align:middle;}
+.PHOTOC60x80	{width:60px; height:80px; clip-path:circle(40% at center); vertical-align:middle;}
+.PHOTOC186x248	{width:186px; height:248px; clip-path:circle(40% at center); margin-top:-24px;}
 
-.PHOTOE12x16	{width: 12px; height: 16px; clip-path: ellipse(50% 50% at center); vertical-align:middle; margin-top:-2px;}
-.PHOTOE15x20	{width: 15px; height: 20px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
-.PHOTOE15x20B	{width: 15px; height: 20px; clip-path: ellipse(50% 50% at center); vertical-align:middle; display:block; margin:0 auto;}
-.PHOTOE18x24	{width: 18px; height: 24px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
-.PHOTOE21x28	{width: 21px; height: 28px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
-.PHOTOE30x40	{width: 30px; height: 40px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
-.PHOTOE45x60	{width: 45px; height: 60px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
-.PHOTOE60x80	{width: 60px; height: 80px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
-.PHOTOE186x248	{width:186px; height:248px; clip-path: ellipse(50% 50% at center);}
+.PHOTOE12x16	{width:12px; height:16px; clip-path:ellipse(50% 50% at center); vertical-align:middle; margin-top:-2px;}
+.PHOTOE15x20	{width:15px; height:20px; clip-path:ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE15x20B	{width:15px; height:20px; clip-path:ellipse(50% 50% at center); vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOE18x24	{width:18px; height:24px; clip-path:ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE21x28	{width:21px; height:28px; clip-path:ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE30x40	{width:30px; height:40px; clip-path:ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE45x60	{width:45px; height:60px; clip-path:ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE60x80	{width:60px; height:80px; clip-path:ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE186x248	{width:186px; height:248px; clip-path:ellipse(50% 50% at center);}
 
-.PHOTOO12x16	{width: 12px; height: 16px; border-radius: 6px; vertical-align:middle; margin-top:-2px;}
-.PHOTOO15x20	{width: 15px; height: 20px; border-radius: 8px; vertical-align:middle;}
-.PHOTOO15x20B	{width: 15px; height: 20px; border-radius: 8px; vertical-align:middle; display:block; margin:0 auto;}
-.PHOTOO18x24	{width: 18px; height: 24px; border-radius: 9px; vertical-align:middle;}
-.PHOTOO21x28	{width: 21px; height: 28px; border-radius:11px; vertical-align:middle;}
-.PHOTOO30x40	{width: 30px; height: 40px; border-radius:15px; vertical-align:middle;}
-.PHOTOO45x60	{width: 45px; height: 60px; border-radius:23px; vertical-align:middle;}
-.PHOTOO60x80	{width: 60px; height: 80px; border-radius:30px; vertical-align:middle;}
+.PHOTOO12x16	{width:12px; height:16px; border-radius:6px; vertical-align:middle; margin-top:-2px;}
+.PHOTOO15x20	{width:15px; height:20px; border-radius:8px; vertical-align:middle;}
+.PHOTOO15x20B	{width:15px; height:20px; border-radius:8px; vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOO18x24	{width:18px; height:24px; border-radius:9px; vertical-align:middle;}
+.PHOTOO21x28	{width:21px; height:28px; border-radius:11px; vertical-align:middle;}
+.PHOTOO30x40	{width:30px; height:40px; border-radius:15px; vertical-align:middle;}
+.PHOTOO45x60	{width:45px; height:60px; border-radius:23px; vertical-align:middle;}
+.PHOTOO60x80	{width:60px; height:80px; border-radius:30px; vertical-align:middle;}
 .PHOTOO186x248	{width:186px; height:248px; border-radius:92px;}
 
-.PHOTOR12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
-.PHOTOR15x20	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle;}
-.PHOTOR15x20B	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle; display:block; margin:0 auto;}
-.PHOTOR18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
-.PHOTOR21x28	{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
-.PHOTOR30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
-.PHOTOR45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
-.PHOTOR60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
+.PHOTOR12x16	{width:12px; height:16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
+.PHOTOR15x20	{width:15px; height:20px; border-radius:1px; vertical-align:middle;}
+.PHOTOR15x20B	{width:15px; height:20px; border-radius:1px; vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOR18x24	{width:18px; height:24px; border-radius:2px; vertical-align:middle;}
+.PHOTOR21x28	{width:21px; height:28px; border-radius:2px; vertical-align:middle;}
+.PHOTOR30x40	{width:30px; height:40px; border-radius:2px; vertical-align:middle;}
+.PHOTOR45x60	{width:45px; height:60px; border-radius:3px; vertical-align:middle;}
+.PHOTOR60x80	{width:60px; height:80px; border-radius:3px; vertical-align:middle;}
 .PHOTOR186x248	{width:186px; height:248px; border-radius:4px;}
 
 .PHOTO_REC		{width:100%; border-radius:4px;
-			     max-width: 100%; height: auto;}
+			     max-width:100%; height:auto;}
 
 .IMG_USR
 	{
@@ -2618,11 +2619,11 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 /****************************** Date range form ******************************/
 .DATE_FORM_YMD, .DATE_FORM_HMS, .DATE_FORM_TODAY
 	{
-	display: inline-block;
+	display:inline-block;
 	}
 .DATE_FORM_MONTH
 	{
-	width: 60px;
+	width:60px;
 	}
 
 /*********************************** Lists ***********************************/
@@ -2683,9 +2684,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 .BROWSER_ASG_WRK
 	{
-	display: inline-block;
-	text-align: left;
-	vertical-align: top;
+	display:inline-block;
+	text-align:left;
+	vertical-align:top;
 	}
 
 .LST_WHITE,
@@ -2966,7 +2967,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .USR_ID_NC_DARK		{color:#f98a8a}
 
 /******************************* Record card *********************************/
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile-phones */
 	.REC_HEAD
 		{
@@ -3048,7 +3049,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:184px;
 		}
 	}
-@media only screen and (min-width: 480px) and (max-width: 600px)
+@media only screen and (min-width:480px) and (max-width:600px)
 	{	/* For mobile-phones */
 	.REC_HEAD
 		{
@@ -3130,7 +3131,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:276px;
 		}
 	}
-@media only screen and (min-width: 600px)
+@media only screen and (min-width:600px)
 	{	/* For desktop */
 	.REC_HEAD
 		{
@@ -3236,7 +3237,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /**************************** Forms with 2 colums ****************************/
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile-phones */
 	.Frm_C1
 		{
@@ -3258,7 +3259,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:184px;
 		}
 	}
-@media only screen and (min-width: 480px) and (max-width: 600px)
+@media only screen and (min-width:480px) and (max-width:600px)
 	{	/* For mobile-phones */
 	.Frm_C1
 		{
@@ -3280,7 +3281,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:276px;
 		}
 	}
-@media only screen and (min-width: 600px) and (max-width: 1024px)
+@media only screen and (min-width:600px) and (max-width:1024px)
 	{	/* For desktop */
 	.Frm_C1
 		{
@@ -3302,7 +3303,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:382px;
 		}
 	}
-@media only screen and (min-width: 1024px)
+@media only screen and (min-width:1024px)
 	{	/* For desktop */
 	.Frm_C1
 		{
@@ -3563,10 +3564,10 @@ legend {font-size:12pt;}
 .PrjCfg_RUBRIC_SEL	{max-width:400px;}
 
 /******************************** Questions **********************************/
-.Qst_TAG_CELL	{width: 50%;}
-.Qst_TAG_SEL	{box-sizing: border-box; width: 100%;}
-.Qst_TAG_TXT	{box-sizing: border-box; width: 100%;}
-.Qst_STEM_TXT	{box-sizing: border-box; width: 100%;}
+.Qst_TAG_CELL	{width:50%;}
+.Qst_TAG_SEL	{box-sizing:border-box; width:100%;}
+.Qst_TAG_TXT	{box-sizing:border-box; width:100%;}
+.Qst_STEM_TXT	{box-sizing:border-box; width:100%;}
 .Qst_ANS_LEFT_COL
 	{
 	box-sizing:border-box;
@@ -3588,7 +3589,7 @@ legend {font-size:12pt;}
 	text-align:left;
 	vertical-align:top;
 	}
-.Qst_ANS_TXT	{box-sizing: border-box; width: 100%;}
+.Qst_ANS_TXT	{box-sizing:border-box; width:100%;}
 
 .Tst_SUBTITLE
 	{
@@ -4064,7 +4065,7 @@ legend {font-size:12pt;}
 
 .MCH_STD_ANSWER_SELECTED
 	{
-	box-shadow: 0px 0px 18px 12px rgba(0,128,0,1);
+	box-shadow:0px 0px 18px 12px rgba(0,128,0,1);
 	animation:fadeinshadow 1s ease forwards;
 	}
 @keyframes fadeinshadow
@@ -4327,7 +4328,7 @@ legend {font-size:12pt;}
 	font-size:20pt;
 	font-weight:bold;
 	color:white;
-	text-shadow: 0 0 8px black;
+	text-shadow:0 0 8px black;
 	}
 	
 /* For YouTube embedded videos. See https://avexdesigns.com/responsive-youtube-embed/ */
@@ -4374,14 +4375,14 @@ legend {font-size:12pt;}
 
 /********** Author of assignments, attendance, messages, surveys... **********/
 
-@media only screen and (max-width: 600px)
+@media only screen and (max-width:600px)
 	{	/* For mobile-phones */
 	.AUTHOR_1_LINE, .AUTHOR_2_LINES
 		{
 		display:none;
 		}
 	}
-@media only screen and (min-width: 600px)
+@media only screen and (min-width:600px)
 	{	/* For tablets and desktop */
 	.AUTHOR_1_LINE
 		{
@@ -4506,13 +4507,13 @@ legend {font-size:12pt;}
 	vertical-align:middle;
 	}
 
-@media only screen and (max-width: 590px)
+@media only screen and (max-width:590px)
 	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
 	.Tml_WIDTH				{width:276px;}	/* 556-280 */
 	.Tml_RIGHT_WIDTH		{width:220px;}	/* 500-280 */
-	.Tml_RIGHT_AUTHOR_WIDTH	{width: 60px;}	/* 340-280 */
+	.Tml_RIGHT_AUTHOR_WIDTH	{width:60px;}	/* 340-280 */
 	.Tml_COM_WIDTH			{width:180px;}	/* 460-280 */
-	.Tml_COM_AUTHOR_WIDTH	{width: 20px;}	/* 300-280 */
+	.Tml_COM_AUTHOR_WIDTH	{width:20px;}	/* 300-280 */
 	.Tml_MED_INPUT_WIDTH	{width:120px;}	/* 400-280 */
 	.TmlNot_FOOT_WIDTH		{width:220px;}	/* 500-280 */
 	.Tml_COMM_FOOT_WIDTH	{width:180px;}	/* 460-280 */
@@ -4520,7 +4521,7 @@ legend {font-size:12pt;}
 	.Tml_SHA_NOT_WIDTH		{width:100px;}	/* (480-280)/2 */
 	.Tml_FAV_COM_WIDTH		{width:160px;}	/* 440-280 */
 	}
-@media only screen and (min-width: 590px)
+@media only screen and (min-width:590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
 	.Tml_WIDTH				{width:556px;}
 	.Tml_RIGHT_WIDTH		{width:500px;}
@@ -4798,7 +4799,7 @@ legend {font-size:12pt;}
 	}
 
 /********************************* Notifications *****************************/
-@media only screen and (max-width: 600px)
+@media only screen and (max-width:600px)
 	{	/* For mobile-phones */
 	.Ntf_TYPE		{display:none;}
 	.Ntf_LOCATION	{
@@ -4810,7 +4811,7 @@ legend {font-size:12pt;}
 					vertical-align:bottom;
 					}
 	}
-@media only screen and (min-width: 600px)
+@media only screen and (min-width:600px)
 	{	/* For tablets and desktop */
 	.Ntf_TYPE		{display:inline;}
 	.Ntf_LOCATION	{
@@ -5207,107 +5208,107 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color:#707070;}
 	box-sizing:border-box;
 	width:100%;
 	}
-table.TBL_WIDE > tbody > tr > th {padding: 2px;}
+table.TBL_WIDE > tbody > tr > th {padding:2px;}
 
 /************************* Table with horizontal scroll **********************/
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile-phones */
 	.TBL_SCROLL
 		{
-	    display: block;
-	    overflow-x: auto;
-	    width: 260px;
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+	    width:260px;
+	    margin:0 auto;
 		}
 	}
-@media only screen and (min-width: 480px) and (max-width: 800px)
+@media only screen and (min-width:480px) and (max-width:800px)
 	{	/* For mobile-phones */
 	.TBL_SCROLL
 		{
-	    display: block;
-	    overflow-x: auto;
-	    width: 400px;
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+	    width:400px;
+	    margin:0 auto;
 		}
 	}
-@media only screen and (min-width: 800px) and (max-width: 1024px)
+@media only screen and (min-width:800px) and (max-width:1024px)
 	{	/* For tablets */
 	.TBL_SCROLL
 		{
-	    display: block;
-	    overflow-x: auto;
-	    width: 640px;
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+	    width:640px;
+	    margin:0 auto;
 		}
 	}
-@media only screen and (min-width: 1024px) and (max-width: 1800px)
+@media only screen and (min-width:1024px) and (max-width:1800px)
 	{	/* For desktop */
 	.TBL_SCROLL
 		{
-	    display: block;
-	    overflow-x: auto;
-	    width: 900px;
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+	    width:900px;
+	    margin:0 auto;
 		}
 	}
-@media only screen and (min-width: 1800px)
+@media only screen and (min-width:1800px)
 	{	/* For desktop */
 	.TBL_SCROLL
 		{
-	    display: block;
-	    overflow-x: auto;
-	    width: 1440px;
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+	    width:1440px;
+	    margin:0 auto;
 		}
 	}
 
-@media only screen and (max-width: 480px)
+@media only screen and (max-width:480px)
 	{	/* For mobile-phones */
 	.TBL_SCROLL_C2
 		{
-	    display: block;
-	    overflow-x: auto;
-	    width: 186px;	/* Frm_C2 - 2px */
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+	    width:186px;	/* Frm_C2 - 2px */
+	    margin:0 auto;
 		}
 	}
-@media only screen and (min-width: 480px) and (max-width: 600px)
+@media only screen and (min-width:480px) and (max-width:600px)
 	{	/* For mobile-phones */
 	.TBL_SCROLL_C2
 		{
-	    display: block;
-	    overflow-x: auto;
-		width: 278px;	/* Frm_C2 - 2px */
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+		width:278px;	/* Frm_C2 - 2px */
+	    margin:0 auto;
 		}
 	}
-@media only screen and (min-width: 600px) and (max-width: 1024px)
+@media only screen and (min-width:600px) and (max-width:1024px)
 	{	/* For desktop */
 	.TBL_SCROLL_C2
 		{
-	    display: block;
-	    overflow-x: auto;
-		width: 384px;	/* Frm_C2 - 2px */
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+		width:384px;	/* Frm_C2 - 2px */
+	    margin:0 auto;
 		}
 	}
-@media only screen and (min-width: 1024px)
+@media only screen and (min-width:1024px)
 	{	/* For desktop */
 	.TBL_SCROLL_C2
 		{
-	    display: block;
-	    overflow-x: auto;
-		width: 702px;	/* Frm_C2 - 2px */
-	    margin: 0 auto;
+	    display:block;
+	    overflow-x:auto;
+		width:702px;	/* Frm_C2 - 2px */
+	    margin:0 auto;
 		}
 	}
 
 .TBL_SCROLL tbody,.TBL_SCROLL_C2 tbody
 	{
-    display: table;
-    width: 100%;
+    display:table;
+    width:100%;
 	}
-.TBL_SCROLL th,.TBL_SCROLL td {padding: 1px;}
+.TBL_SCROLL th,.TBL_SCROLL td {padding:1px;}
 
 .Ind_TBL td,.Ind_TBL th
 	{
@@ -5393,7 +5394,7 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 .LC_ACT	{text-align:left;  vertical-align:top; min-width:200px; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
 /*********************** Listing my courses as a tree ************************/
-@media only screen and (max-width: 800px)
+@media only screen and (max-width:800px)
 	{	/* For mobile-phones */
 	.MY_CRS_TXT
 		{
@@ -5405,7 +5406,7 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 		text-overflow:ellipsis;
 		}
 	}
-@media only screen and (min-width: 800px)
+@media only screen and (min-width:800px)
 	{	/* For tablets and desktop */
 	.MY_CRS_TXT
 		{
@@ -5426,14 +5427,14 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 .SWADROID:hover	{opacity:1;}
 
 /********************************* Page foot *********************************/
-@media only screen and (max-width: 800px)
+@media only screen and (max-width:800px)
 	{	/* For mobile-phones */
 	#foot_zone, #about_zone
 		{
 		display:none;
 		}
 	}
-@media only screen and (min-width: 800px)
+@media only screen and (min-width:800px)
 	{	/* For tablets and desktop */
 	#foot_zone
 		{

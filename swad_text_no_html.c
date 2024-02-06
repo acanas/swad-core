@@ -16,7 +16,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2023 Antonio Cañas Vargas
+    Copyright (C) 1999-2024 Antonio Cañas Vargas
 
     Català translation:
 	Antonio Cañas Vargas
