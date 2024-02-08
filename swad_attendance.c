@@ -1341,16 +1341,16 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event
 /***************** Remove all attendance events of a course ******************/
 /*****************************************************************************/
 
-void Att_RemoveCrsEvents (long CrsCod)
+void Att_RemoveCrsEvents (long HieCod)
   {
    /***** Remove students *****/
-   Att_DB_RemoveUsrsFromCrsEvents (CrsCod);
+   Att_DB_RemoveUsrsFromCrsEvents (HieCod);
 
    /***** Remove groups *****/
-   Att_DB_RemoveGrpsAssociatedToCrsEvents (CrsCod);
+   Att_DB_RemoveGrpsAssociatedToCrsEvents (HieCod);
 
    /***** Remove attendance events *****/
-   Att_DB_RemoveCrsEvents (CrsCod);
+   Att_DB_RemoveCrsEvents (HieCod);
   }
 
 /*****************************************************************************/

@@ -4368,14 +4368,14 @@ Grp_WhichGroups_t Grp_GetParWhichGroups (void)
 /************************** Remove groups in a course ************************/
 /*****************************************************************************/
 
-void Grp_DB_RemoveCrsGrps (long CrsCod)
+void Grp_DB_RemoveCrsGrps (long HieCod)
   {
    /***** Remove all users in groups in the course *****/
-   Grp_DB_RemoveUsrsFromGrpsOfCrs (CrsCod);
+   Grp_DB_RemoveUsrsFromGrpsOfCrs (HieCod);
 
    /***** Remove all groups in the course *****/
-   Grp_DB_RemoveGrpsInCrs (CrsCod);
+   Grp_DB_RemoveGrpsInCrs (HieCod);
 
    /***** Remove all group types in the course *****/
-   Grp_DB_RemoveGrpTypesInCrs (CrsCod);
+   Grp_DB_RemoveGrpTypesInCrs (HieCod);
   }

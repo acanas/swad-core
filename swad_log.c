@@ -201,23 +201,24 @@ void Log_GetAndShowLastClicks (void)
    const char *ClassRow;
    time_t TimeDiff;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
+   Hie_Level_t Level;
 
    /***** Get last clicks from database *****/
    NumClicks = Log_DB_GetLastClicks (&mysql_res);
 
    /***** Write list of connected users *****/
-   HTM_TABLE_BeginCenterPadding (1);
+   HTM_TABLE_Begin ("TBL_SCROLL");
 
       /* Heading row */
       HTM_TR_Begin (NULL);
-	 HTM_TH_Span (Txt_Click       		,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
-	 HTM_TH_Span (Txt_ELAPSED_TIME		,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
-	 HTM_TH_Span (Txt_Role        		,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
-	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CTY],HTM_HEAD_LEFT ,1,1,"LC_CTY");	// Country
-	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_INS],HTM_HEAD_LEFT ,1,1,"LC_INS");	// Institution
-	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_CTR],HTM_HEAD_LEFT ,1,1,"LC_CTR");	// Center
-	 HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Hie_DEG],HTM_HEAD_LEFT ,1,1,"LC_DEG");	// Degree
-	 HTM_TH_Span (Txt_Action     		,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
+	 HTM_TH_Span (Txt_Click				,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
+	 HTM_TH_Span (Txt_ELAPSED_TIME			,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
+	 HTM_TH_Span (Txt_Role				,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
+	 for (Level  = Hie_CTY;
+	      Level <= Hie_DEG;
+	      Level++)
+	    HTM_TH_Span (Txt_HIERARCHY_SINGUL_Abc[Level],HTM_HEAD_LEFT ,1,1,"LC_HIE");	// Country, Institution, Center, Degree
+	 HTM_TH_Span (Txt_Action			,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
       HTM_TR_End ();
 
       for (NumClick = 0;
@@ -254,8 +255,8 @@ void Log_GetAndShowLastClicks (void)
 	 Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[6]);
 	 Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[7]);
 	 Ins_DB_GetInsShrtName (Hie[Hie_INS].HieCod,Hie[Hie_INS].ShrtName);
-	 Ctr_DB_GetShortNameOfCenterByCod (Hie[Hie_CTR].HieCod,Hie[Hie_CTR].ShrtName);
-	 Deg_DB_GetShortNameOfDegreeByCod (Hie[Hie_DEG].HieCod,Hie[Hie_DEG].ShrtName);
+	 Ctr_DB_GetCtrShrtName (Hie[Hie_CTR].HieCod,Hie[Hie_CTR].ShrtName);
+	 Deg_DB_GetDegShrtName (Hie[Hie_DEG].HieCod,Hie[Hie_DEG].ShrtName);
 
 	 /* Print table row */
 	 HTM_TR_Begin (NULL);
@@ -275,25 +276,20 @@ void Log_GetAndShowLastClicks (void)
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);	// Role
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_CTY %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[Hie_CTY].FullName);			// Country
+	    HTM_TD_Begin ("class=\"LC_HIE %s_%s\"",
+			  ClassRow,The_GetSuffix ());
+	       HTM_Txt (Hie[Hie_CTY].FullName);				// Country
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_INS %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[Hie_INS].ShrtName);			// Institution
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"LC_CTR %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[Hie_CTR].ShrtName);			// Center
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"LC_DEG %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
-	       HTM_Txt (Hie[Hie_DEG].ShrtName);			// Degree
-	    HTM_TD_End ();
+	    for (Level  = Hie_INS;
+		 Level <= Hie_DEG;
+		 Level++)
+	      {
+	       HTM_TD_Begin ("class=\"LC_HIE %s_%s\"",
+			     ClassRow,The_GetSuffix ());
+		  HTM_Txt (Hie[Level].ShrtName);			// Institution, Center, Degree
+	       HTM_TD_End ();
+	      }
 
 	    HTM_TD_Begin ("class=\"LC_ACT %s_%s\"",
 	                  ClassRow,The_GetSuffix ());

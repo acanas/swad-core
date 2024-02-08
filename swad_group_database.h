@@ -113,11 +113,11 @@ void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod);
 void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_DB_RemUsrFromAllGrps (long UsrCod);
 
-void Grp_DB_RemoveUsrsFromGrpsOfCrs (long CrsCod);
+void Grp_DB_RemoveUsrsFromGrpsOfCrs (long HieCod);
 void Grp_DB_RemoveUsrsFromGrpsOfType (long GrpTypCod);
 void Grp_DB_RemoveUsrsFromGrp (long GrpCod);
 
-void Grp_DB_RemoveGrpTypesInCrs (long CrsCod);
+void Grp_DB_RemoveGrpTypesInCrs (long HieCod);
 void Grp_DB_RemoveGrpType (long GrpTypCod);
 
 void Grp_DB_RemoveGrpsInCrs (long CrsCod);

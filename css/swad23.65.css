@@ -5387,11 +5387,8 @@ table.TBL_WIDE > tbody > tr > th {padding:2px;}
 .LC_CLK	{text-align:right; vertical-align:top; min-width:60px;}
 .LC_TIM	{text-align:right; vertical-align:top; min-width:60px;  max-width:60px;  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .LC_ROL	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.LC_CTY	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.LC_INS	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.LC_CTR	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.LC_DEG	{text-align:left;  vertical-align:top; min-width:150px; max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.LC_ACT	{text-align:left;  vertical-align:top; min-width:200px; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.LC_HIE	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.LC_ACT	{text-align:left;  vertical-align:top; min-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
 /*********************** Listing my courses as a tree ************************/
 @media only screen and (max-width:800px)

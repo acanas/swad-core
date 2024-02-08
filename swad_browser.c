@@ -5377,7 +5377,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Prj_AllocMemProject (&Prj);
          Prj.PrjCod = Gbl.FileBrowser.Clipboard.HieCod;
          Prj_GetProjectDataByCod (&Prj);
-         Hie[Hie_CRS].HieCod = Prj.CrsCod;
+         Hie[Hie_CRS].HieCod = Prj.HieCod;
 	 Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",

@@ -250,7 +250,7 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 /*****************************************************************************/
 // Returns user's code or -1 if no user found
 
-long Enr_DB_GetRamdomStdFromCrs (long CrsCod)
+long Enr_DB_GetRamdomStdFromCrs (long HieCod)
   {
    return DB_QuerySELECTCode ("can not get a random student from a course",
 			      "SELECT UsrCod"
@@ -259,7 +259,7 @@ long Enr_DB_GetRamdomStdFromCrs (long CrsCod)
 			        " AND Role=%u"
 			      " ORDER BY RAND()"
 			      " LIMIT 1",
-			      CrsCod,
+			      HieCod,
 			      (unsigned) Rol_STD);
   }
 
@@ -977,13 +977,13 @@ double Enr_DB_GetAverageNumCrssPerUsr (Hie_Level_t Level,long Cod,Rol_Role_t Rol
 /************************** Remove user from course **************************/
 /*****************************************************************************/
 
-void Enr_DB_RemUsrFromCrs (long UsrCod,long CrsCod)
+void Enr_DB_RemUsrFromCrs (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not remove a user from a course",
 		   "DELETE FROM crs_users"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod=%ld",
-		   CrsCod,
+		   HieCod,
 		   UsrCod);
   }
 
@@ -1003,12 +1003,12 @@ void Enr_DB_RemUsrFromAllCrss (long UsrCod)
 /*************** Remove all users from settings in a course ******************/
 /*****************************************************************************/
 
-void Enr_DB_RemAllUsrsFromCrs (long CrsCod)
+void Enr_DB_RemAllUsrsFromCrs (long HieCod)
   {
    DB_QueryDELETE ("can not remove users from a course",
 		   "DELETE FROM crs_users"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -1600,7 +1600,7 @@ unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod)
 /********** Try to get an enrolment request from a user in a course **********/
 /*****************************************************************************/
 
-long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
+long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long HieCod)
   {
    return
    DB_QuerySELECTCode ("can not get enrolment request",
@@ -1608,7 +1608,7 @@ long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
 			" FROM crs_requests"
 		       " WHERE CrsCod=%ld"
 			 " AND UsrCod=%ld",
-		       CrsCod,
+		       HieCod,
 		       UsrCod);
   }
 
@@ -1628,12 +1628,12 @@ void Enr_DB_RemRequest (long ReqCod)
 /*********** Remove all users' requests for inscription in a course **********/
 /*****************************************************************************/
 
-void Enr_DB_RemCrsRequests (long CrsCod)
+void Enr_DB_RemCrsRequests (long HieCod)
   {
    DB_QueryDELETE ("can not remove requests for inscription to a course",
 		   "DELETE FROM crs_requests"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

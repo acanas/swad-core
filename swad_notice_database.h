@@ -49,6 +49,6 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,
                                       Hie_Level_t Level);
 
 void Not_DB_RemoveNotice (long NotCod);
-void Not_DB_RemoveCrsNotices (long CrsCod);
+void Not_DB_RemoveCrsNotices (long HieCod);
 
 #endif

@@ -69,35 +69,35 @@ long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status)
 /****************** Update country in table of institutions ******************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsCty (long InsCod,long CtyCod)
+void Ins_DB_UpdateInsCty (long HieCod,long CtyCod)
   {
    DB_QueryUPDATE ("can not update the country of an institution",
 		   "UPDATE ins_instits"
 		     " SET CtyCod=%ld"
 		   " WHERE InsCod=%ld",
                    CtyCod,
-                   InsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /****************** Update status in table of institutions *******************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsStatus (long InsCod,Hie_Status_t Status)
+void Ins_DB_UpdateInsStatus (long HieCod,Hie_Status_t Status)
   {
    DB_QueryUPDATE ("can not update the status of an institution",
 		   "UPDATE ins_instits"
 		     " SET Status=%u"
 		   " WHERE InsCod=%ld",
                    (unsigned) Status,
-                   InsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /*************************** Update institution name *************************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewName)
+void Ins_DB_UpdateInsName (long HieCod,const char *FldName,const char *NewName)
   {
    /***** Update institution changing old name by new name */
    DB_QueryUPDATE ("can not update the name of an institution",
@@ -105,14 +105,14 @@ void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewName)
 		     " SET %s='%s'"
 		   " WHERE InsCod=%ld",
 	           FldName,NewName,
-	           InsCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of an institution",
@@ -120,14 +120,14 @@ void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
 		     " SET WWW='%s'"
 		   " WHERE InsCod=%ld",
 	           NewWWW,
-	           InsCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod)
+unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of an institution",
@@ -141,17 +141,17 @@ unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod)
                   	  "0 AS NumUsrs"	// row[7] (not used)
 		    " FROM ins_instits"
 		   " WHERE InsCod=%ld",
-		   InsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /*********** Get the short name of an institution from its code **************/
 /*****************************************************************************/
 
-void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1])
+void Ins_DB_GetInsShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: institution code should be > 0 *****/
-   if (InsCod <= 0)
+   if (HieCod <= 0)
      {
       ShrtName[0] = '\0';	// Empty name
       return;
@@ -163,7 +163,7 @@ void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 
 			 "SELECT ShortName"
 			  " FROM ins_instits"
 			 " WHERE InsCod=%ld",
-			 InsCod);
+			 HieCod);
   }
 
 /*****************************************************************************/
@@ -256,7 +256,7 @@ unsigned Ins_DB_GetInsWithPendingCtrsAdminByMe (MYSQL_RES **mysql_res)
 /************* Get institutions in country ordered by short name *************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long CtyCod)
+unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get institutions",
@@ -266,14 +266,14 @@ unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long CtyCod
 		    " FROM ins_instits"
 		   " WHERE CtyCod=%ld"
 		   " ORDER BY ShortName",
-		   CtyCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /******* Get basic list of institutions ordered by name of institution *******/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod)
+unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get institutions",
@@ -288,7 +288,7 @@ unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod
 		    " FROM ins_instits"
 		   " WHERE CtyCod=%ld"
 		   " ORDER BY FullName",
-		   CtyCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -296,7 +296,7 @@ unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
+unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long HieCod)
   {
    static const char *OrderBySubQuery[Hie_NUM_ORDERS] =
      {
@@ -337,8 +337,8 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
 			           "InsCod"
 			     " FROM usr_data))"
 			    " ORDER BY %s",
-		   CtyCod,
-		   CtyCod,
+		   HieCod,
+		   HieCod,
 		   OrderBySubQuery[Gbl.Hierarchy.List[Hie_CTY].SelectedOrder]);
   }
 
@@ -643,7 +643,7 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
 /******************* Get number of institutions in system ********************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long SysCod)
+unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long HieCod)
   {
    return (unsigned) DB_GetNumRowsTable ("ins_instits");
   }
@@ -834,24 +834,24 @@ bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
 /******** Get number of users who claim to belong to an institution **********/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
+unsigned Ins_DB_GetNumUsrsWhoClaimToBelongToIns (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of users",
 		  "SELECT COUNT(UsrCod)"
 		   " FROM usr_data"
 		  " WHERE InsCod=%ld",
-		  InsCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /***************************** Remove institution ****************************/
 /*****************************************************************************/
 
-void Ins_DB_RemoveInstitution (long InsCod)
+void Ins_DB_RemoveInstitution (long HieCod)
   {
    DB_QueryDELETE ("can not remove an institution",
 		   "DELETE FROM ins_instits"
 		   " WHERE InsCod=%ld",
-		   InsCod);
+		   HieCod);
   }

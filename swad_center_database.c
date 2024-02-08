@@ -205,7 +205,7 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod)
+unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a center",
@@ -219,14 +219,14 @@ unsigned Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long CtrCod)
 			  "WWW"			// row[7]
 		    " FROM ctr_centers"
 		   " WHERE CtrCod=%ld",
-		   CtrCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /******************** Get coordinates of center by code **********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long CtrCod)
+unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get coordinares of a center",
@@ -235,17 +235,17 @@ unsigned Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long CtrCod)
 			  "Altitude"		// row[ 2]
 		    " FROM ctr_centers"
 		   " WHERE CtrCod=%ld",
-		   CtrCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /*********** Get the institution code of a center from its code **************/
 /*****************************************************************************/
 
-long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod)
+long Ctr_DB_GetInsCodOfCenterByCod (long HieCod)
   {
    /***** Trivial check: center code should be > 0 *****/
-   if (CtrCod <= 0)
+   if (HieCod <= 0)
       return -1L;
 
    /***** Get the institution code of a center from database *****/
@@ -253,17 +253,17 @@ long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod)
 			      "SELECT InsCod"
 			       " FROM ctr_centers"
 			      " WHERE CtrCod=%ld",
-			      CtrCod);
+			      HieCod);
   }
 
 /*****************************************************************************/
 /*************** Get the short name of a center from its code ****************/
 /*****************************************************************************/
 
-void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1])
+void Ctr_DB_GetCtrShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: center code should be > 0 *****/
-   if (CtrCod <= 0)
+   if (HieCod <= 0)
      {
       ShrtName[0] = '\0';
       return;
@@ -275,7 +275,7 @@ void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Nam_MAX_BYTES_S
 		         "SELECT ShortName"
 			  " FROM ctr_centers"
 		         " WHERE CtrCod=%ld",
-		         CtrCod);
+		         HieCod);
   }
 
 /*****************************************************************************/
@@ -342,7 +342,7 @@ unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
 /********************** Get number of centers in system **********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsInSys (__attribute__((unused)) long SysCod)
+unsigned Ctr_DB_GetNumCtrsInSys (__attribute__((unused)) long HieCod)
   {
    return (unsigned) DB_GetNumRowsTable ("ctr_centers");
   }
@@ -351,7 +351,7 @@ unsigned Ctr_DB_GetNumCtrsInSys (__attribute__((unused)) long SysCod)
 /******************** Get number of centers in a country *********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsInCty (long CtyCod)
+unsigned Ctr_DB_GetNumCtrsInCty (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers in a country",
@@ -360,21 +360,21 @@ unsigned Ctr_DB_GetNumCtrsInCty (long CtyCod)
 		         "ctr_centers"
 		  " WHERE ins_instits.CtyCod=%ld"
 		    " AND ins_instits.InsCod=ctr_centers.InsCod",
-		  CtyCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /****************** Get number of centers in an institution ******************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsInIns (long InsCod)
+unsigned Ctr_DB_GetNumCtrsInIns (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers in an institution",
 		  "SELECT COUNT(*)"
 		   " FROM ctr_centers"
 		  " WHERE InsCod=%ld",
-		  InsCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
@@ -411,7 +411,7 @@ unsigned Ctr_DB_GetNumCtrsWithMap (void)
 /**************** Get number of centers with map in a country ****************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithMapInCty (long CtyCod)
+unsigned Ctr_DB_GetNumCtrsWithMapInCty (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with map",
@@ -422,14 +422,14 @@ unsigned Ctr_DB_GetNumCtrsWithMapInCty (long CtyCod)
 		    " AND ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND (ctr_centers.Latitude<>0"
 		      " OR ctr_centers.Longitude<>0)",
-		  CtyCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /************* Get number of centers with map in an institution **************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod)
+unsigned Ctr_DB_GetNumCtrsWithMapInIns (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with map",
@@ -439,7 +439,7 @@ unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod)
 		    " AND (Latitude<>0"
 		         " OR"
 		         " Longitude<>0)",
-		  InsCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
@@ -520,35 +520,35 @@ unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
 /******************* Update institution in table of centers ******************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrIns (long CtrCod,long NewInsCod)
+void Ctr_DB_UpdateCtrIns (long HieCod,long NewInsCod)
   {
    DB_QueryUPDATE ("can not update the institution of a center",
 		   "UPDATE ctr_centers"
 		     " SET InsCod=%ld"
 		   " WHERE CtrCod=%ld",
                    NewInsCod,
-                   CtrCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /************** Update database changing old place by new place **************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod)
+void Ctr_DB_UpdateCtrPlc (long HieCod,long NewPlcCod)
   {
    DB_QueryUPDATE ("can not update the place of a center",
 		   "UPDATE ctr_centers"
 		     " SET PlcCod=%ld"
 		   " WHERE CtrCod=%ld",
 	           NewPlcCod,
-	           CtrCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /****************** Update center name in table of centers *******************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrName (long CtrCod,
+void Ctr_DB_UpdateCtrName (long HieCod,
 			   const char *FldName,const char *NewCtrName)
   {
    /***** Update center changing old name by new name */
@@ -557,7 +557,7 @@ void Ctr_DB_UpdateCtrName (long CtrCod,
 		     " SET %s='%s'"
 		   " WHERE CtrCod=%ld",
 	           FldName,NewCtrName,
-	           CtrCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
@@ -578,21 +578,21 @@ void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
 /******* Update the table changing old attribution by new attribution ********/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrPhotoAttribution (long CtrCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1])
+void Ctr_DB_UpdateCtrPhotoAttribution (long HieCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1])
   {
    DB_QueryUPDATE ("can not update the photo attribution of a center",
 		   "UPDATE ctr_centers"
 		     " SET PhotoAttribution='%s'"
 		   " WHERE CtrCod=%ld",
 	           NewPhotoAttribution,
-	           CtrCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /******** Update database changing old coordinate by new coordinate **********/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
+void Ctr_DB_UpdateCtrCoordinate (long HieCod,
 				 const char *CoordField,double NewCoord)
   {
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
@@ -602,7 +602,7 @@ void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
 		   " WHERE CtrCod=%ld",
 	           CoordField,
 	           NewCoord,
-	           CtrCod);
+	           HieCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
@@ -610,21 +610,21 @@ void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
 /******************** Update status in table of centers **********************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrStatus (long CtrCod,Hie_Status_t NewStatus)
+void Ctr_DB_UpdateCtrStatus (long HieCod,Hie_Status_t NewStatus)
   {
    DB_QueryUPDATE ("can not update the status of a center",
 		   "UPDATE ctr_centers"
 		     " SET Status=%u"
 		   " WHERE CtrCod=%ld",
 	           (unsigned) NewStatus,
-	           CtrCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /********** Check if any of the centers in an institution has map ************/
 /*****************************************************************************/
 
-bool Ctr_DB_CheckIfMapIsAvailableInIns (long InsCod)
+bool Ctr_DB_CheckIfMapIsAvailableInIns (long HieCod)
   {
    /***** Get if any center in current institution has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
@@ -637,7 +637,7 @@ bool Ctr_DB_CheckIfMapIsAvailableInIns (long InsCod)
 		      " AND (Latitude<>0"
 			   " OR"
 			   " Longitude<>0))",
-		   InsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -791,24 +791,24 @@ bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
 /*********** Get number of users who claim to belong to a center *************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
+unsigned Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of users",
 		  "SELECT COUNT(UsrCod)"
 		   " FROM usr_data"
 		  " WHERE CtrCod=%ld",
-		  CtrCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /****************************** Remove a center ******************************/
 /*****************************************************************************/
 
-void Ctr_DB_RemoveCenter (long CtrCod)
+void Ctr_DB_RemoveCenter (long HieCod)
   {
    DB_QueryDELETE ("can not remove a center",
 		   "DELETE FROM ctr_centers"
 		   " WHERE CtrCod=%ld",
-		   CtrCod);
+		   HieCod);
   }

@@ -240,7 +240,7 @@ unsigned Set_DB_GetMyLanguage (MYSQL_RES **mysql_res)
 /************ Register last prefs in current course in database **************/
 /*****************************************************************************/
 
-void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod)
+void Set_DB_InsertUsrInCrsSettings (long UsrCod,long HieCod)
   {
    DB_QueryINSERT ("can not register user in course",
 		   "INSERT INTO crs_user_settings"
@@ -254,7 +254,7 @@ void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod)
 		     "0,FROM_UNIXTIME(%ld),0,"
 		     "'%s',%u,'%c')",
 	           UsrCod,
-	           CrsCod,
+	           HieCod,
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
 	           Set_DB_StringsUsrListTypes[Set_SHOW_USRS_TYPE_DEFAULT],
 	           Usr_CLASS_PHOTO_COLS_DEF,
@@ -386,14 +386,14 @@ unsigned Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res)
 /****************** Remove a user from a courses setting *********************/
 /*****************************************************************************/
 
-void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod)
+void Set_DB_RemUsrFromCrsSettings (long UsrCod,long HieCod)
   {
    DB_QueryDELETE ("can not remove a user from a course",
 		   "DELETE FROM crs_user_settings"
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
 		   UsrCod,
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
@@ -412,12 +412,12 @@ void Set_DB_RemUsrFromAllCrssSettings (long UsrCod)
 /*************** Remove all users from settings in a course ******************/
 /*****************************************************************************/
 
-void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod)
+void Set_DB_RemAllUsrsFromCrsSettings (long HieCod)
   {
    DB_QueryDELETE ("can not remove users from a course settings",
 		   "DELETE FROM crs_user_settings"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/

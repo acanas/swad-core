@@ -18689,7 +18689,7 @@ const char *Txt_Last_clicks_in_real_time =
 #elif L==9	// pt
 	"&Uacute;ltimos cliques em tempo real";
 #elif L==10	// tr
-	"Last clicks in real time";		// Çeviri lazim!
+	"Ger&ccedil;ek zamanl&inodot; son t&inodot;klamalar";
 #endif
 
 const char *Txt_Latitude =

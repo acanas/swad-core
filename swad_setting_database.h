@@ -44,7 +44,7 @@ void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
 unsigned Set_DB_GetMyLanguage (MYSQL_RES **mysql_res);
 
 //-------------------- User settings in the current course --------------------
-void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
+void Set_DB_InsertUsrInCrsSettings (long UsrCod,long HieCod);
 
 void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod);
 void Set_DB_UpdateMyUsrListType (void);
@@ -55,9 +55,9 @@ unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res);
 unsigned Set_DB_GetMyColsClassPhoto (MYSQL_RES **mysql_res);
 unsigned Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res);
 
-void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
+void Set_DB_RemUsrFromCrsSettings (long UsrCod,long HieCod);
 void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
-void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod);
+void Set_DB_RemAllUsrsFromCrsSettings (long HieCod);
 
 //------------------- IP settings (when no user logged) -----------------------
 void Set_DB_UpdateMyIPSettingsForCurrentIP (void);

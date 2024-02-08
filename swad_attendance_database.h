@@ -82,11 +82,11 @@ void Att_DB_RemoveUsrFromAllEvents (long UsrCod);
 void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long CrsCod);
 void Att_DB_RemoveEventFromCurrentCrs (long AttCod);
 
-void Att_DB_RemoveUsrsFromCrsEvents (long CrsCod);
-void Att_DB_RemoveGrpsAssociatedToCrsEvents (long CrsCod);
-void Att_DB_RemoveCrsEvents (long CrsCod);
+void Att_DB_RemoveUsrsFromCrsEvents (long HieCod);
+void Att_DB_RemoveGrpsAssociatedToCrsEvents (long HieCod);
+void Att_DB_RemoveCrsEvents (long HieCod);
 
-unsigned Att_DB_GetNumEventsInCrs (long CrsCod);
+unsigned Att_DB_GetNumEventsInCrs (long HieCod);
 unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t Level);
 
 unsigned Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t Level);

@@ -54,7 +54,7 @@ typedef enum
 struct Rub_Rubric
   {
    long RubCod;			// Rubric code
-   long CrsCod;			// Course code
+   long HieCod;			// Course code
    long UsrCod;			// Author code
    char Title[Rub_MAX_BYTES_TITLE + 1];	// Title
    char *Txt;			// Text (dynamically allocated)

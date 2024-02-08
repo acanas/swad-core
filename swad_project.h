@@ -153,8 +153,8 @@ typedef enum
 /***** Struct to store a project *****/
 struct Prj_Project
   {
-   long PrjCod;
-   long CrsCod;
+   long PrjCod;	// Project code
+   long HieCod;	// Course code
    Prj_Locked_t Locked;
    HidVis_HiddenOrVisible_t Hidden;
    Prj_AssignedNonassig_t Assigned;

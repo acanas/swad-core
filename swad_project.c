@@ -3372,7 +3372,7 @@ void Prj_GetProjectDataByCod (struct Prj_Project *Prj)
 	        code of the course (row[1])
 	    and code of the department (row[2]) */
 	 Prj->PrjCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Prj->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Prj->HieCod = Str_ConvertStrCodToLongCod (row[1]);
 	 Prj->DptCod = Str_ConvertStrCodToLongCod (row[2]);
 
 	 /* Get whether the project is locked or not (row[3]),
@@ -3445,7 +3445,7 @@ static void Prj_ResetProject (struct Prj_Project *Prj)
   {
    if (Prj->PrjCod <= 0)	// If > 0 ==> keep value
       Prj->PrjCod = -1L;
-   Prj->CrsCod    = -1L;
+   Prj->HieCod    = -1L;
    Prj->Locked	  = Prj_UNLOCKED;
    Prj->Hidden    = Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;
    Prj->Assigned  = Prj_NEW_PRJ_ASSIGNED_NONASSIG_DEFAULT;
@@ -3561,7 +3561,7 @@ void Prj_RemoveProject (void)
 
    /***** Remove directory of the project *****/
    snprintf (PathRelPrj,sizeof (PathRelPrj),"%s/%ld/%s/%02u/%ld",
-	     Cfg_PATH_CRS_PRIVATE,Projects.Prj.CrsCod,Cfg_FOLDER_PRJ,
+	     Cfg_PATH_CRS_PRIVATE,Projects.Prj.HieCod,Cfg_FOLDER_PRJ,
 	     (unsigned) (Projects.Prj.PrjCod % 100),Projects.Prj.PrjCod);
    Fil_RemoveTree (PathRelPrj);
 

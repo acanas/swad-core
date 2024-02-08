@@ -374,7 +374,7 @@ void Not_DB_RemoveNotice (long NotCod)
 /************************* Remove notices in a course ************************/
 /*****************************************************************************/
 
-void Not_DB_RemoveCrsNotices (long CrsCod)
+void Not_DB_RemoveCrsNotices (long HieCod)
   {
    /***** Copy all notices from the course to table of deleted notices *****/
    DB_QueryINSERT ("can not remove notices in a course",
@@ -388,11 +388,11 @@ void Not_DB_RemoveCrsNotices (long CrsCod)
 			   "NumNotif"
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
 
    /***** Remove all notices from the course *****/
    DB_QueryDELETE ("can not remove notices in a course",
 		   "DELETE FROM not_notices"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }

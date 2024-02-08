@@ -44,10 +44,10 @@ unsigned Deg_DB_GetNumDegreeTypes (Hie_Level_t Level);
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
                                 Hie_Level_t Level,DegTyp_Order_t Order);
 void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp);
-unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long DegCod);
-long Deg_DB_GetInsCodOfDegreeByCod (long DegCod);
-long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod);
-void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
+unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod);
+long Deg_DB_GetInsCodOfDegreeByCod (long HieCod);
+long Deg_DB_GetCtrCodOfDegreeByCod (long HieCod);
+void Deg_DB_GetDegShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
 bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 unsigned Deg_DB_GetNumDegsOfType (long DegTypCod);
 unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod);
@@ -68,17 +68,17 @@ unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
                                     Hie_Level_t Level,long Cod);
 
 unsigned Deg_DB_GetNumDegsInSys (__attribute__((unused)) long SysCod);
-unsigned Deg_DB_GetNumDegsInCty (long CtyCod);
-unsigned Deg_DB_GetNumDegsInIns (long InsCod);
-unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);
+unsigned Deg_DB_GetNumDegsInCty (long HieCod);
+unsigned Deg_DB_GetNumDegsInIns (long HieCod);
+unsigned Deg_DB_GetNumDegsInCtr (long HieCod);
 
 void Deg_DB_UpdateDegTypName (long DegTypCod,
                               const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
-void Deg_DB_UpdateDegNameDB (long DegCod,
+void Deg_DB_UpdateDegNameDB (long HieCod,
 			     const char *FldName,const char *NewDegName);
-void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod);
-void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);
-void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Deg_DB_UpdateDegCtr (long HieCod,long NewCtrCod);
+void Deg_DB_UpdateDegTyp (long HieCod,long NewDegTypCod);
+void Deg_DB_UpdateDegWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus);
 
 unsigned Deg_DB_GetMyDegs (MYSQL_RES **mysql_res,long HieCod);

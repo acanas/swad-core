@@ -633,10 +633,11 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.64.1 (2024-02-06)"
-#define CSS_FILE		"swad23.64.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 23.65 (2024-02-09)"
+#define CSS_FILE		"swad23.65.css"
 #define JS_FILE			"swad23.53.6.js"
 /*
+	Version 23.65:    Feb 09, 2024  Responsive design in last clicks. (335502 lines)
 	Version 23.64.1:  Feb 06, 2024  Fixed CSS bug. Reported by Francisco Ocaña Lara. (335505 lines)
 	Version 23.64:    Jan 30, 2024  Responsive design. (335503 lines)
 	Version 23.63.4:  Jan 30, 2024  Code refactoring in users. (335414 lines)

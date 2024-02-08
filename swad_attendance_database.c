@@ -797,7 +797,7 @@ void Att_DB_RemoveEventFromCurrentCrs (long AttCod)
 /************* Remove users in all attendance events of a course *************/
 /*****************************************************************************/
 
-void Att_DB_RemoveUsrsFromCrsEvents (long CrsCod)
+void Att_DB_RemoveUsrsFromCrsEvents (long HieCod)
   {
    DB_QueryDELETE ("can not remove users registered"
 		   " in attendance events of a course",
@@ -806,14 +806,14 @@ void Att_DB_RemoveUsrsFromCrsEvents (long CrsCod)
 		          "att_users"
 		   " WHERE att_events.CrsCod=%ld"
 		     " AND att_events.AttCod=att_users.AttCod",
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /************ Remove groups in all attendance events of a course *************/
 /*****************************************************************************/
 
-void Att_DB_RemoveGrpsAssociatedToCrsEvents (long CrsCod)
+void Att_DB_RemoveGrpsAssociatedToCrsEvents (long HieCod)
   {
    DB_QueryDELETE ("can not remove all groups associated"
 		   " to attendance events of a course",
@@ -822,26 +822,26 @@ void Att_DB_RemoveGrpsAssociatedToCrsEvents (long CrsCod)
 		          "att_groups"
 		   " WHERE att_events.CrsCod=%ld"
 		     " AND att_events.AttCod=att_groups.AttCod",
-                   CrsCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
 /***************** Remove all attendance events of a course ******************/
 /*****************************************************************************/
 
-void Att_DB_RemoveCrsEvents (long CrsCod)
+void Att_DB_RemoveCrsEvents (long HieCod)
   {
    DB_QueryDELETE ("can not remove all attendance events of a course",
 		   "DELETE FROM att_events"
 		   " WHERE CrsCod=%ld",
-		   CrsCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /*************** Get number of attendance events in a course *****************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumEventsInCrs (long CrsCod)
+unsigned Att_DB_GetNumEventsInCrs (long HieCod)
   {
    /***** Get number of attendance events in a course from database *****/
    return (unsigned)
@@ -849,7 +849,7 @@ unsigned Att_DB_GetNumEventsInCrs (long CrsCod)
 		  "SELECT COUNT(*)"
 		   " FROM att_events"
 		  " WHERE CrsCod=%ld",
-		  CrsCod);
+		  HieCod);
   }
 
 /*****************************************************************************/

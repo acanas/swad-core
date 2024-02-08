@@ -64,7 +64,7 @@ void Crs_ReceiveFormNewCrs (void);
 
 void Crs_RemoveCourse (void);
 bool Crs_GetCourseDataByCod (struct Hie_Node *Crs);
-void Crs_RemoveCourseCompletely (long CrsCod);
+void Crs_RemoveCourseCompletely (long HieCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsYear (void);
 

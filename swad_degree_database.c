@@ -280,7 +280,7 @@ void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp)
 /********************* Get data of a degree from its code ********************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long DegCod)
+unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long HieCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get data of a degree",
@@ -294,17 +294,17 @@ unsigned Deg_DB_GetDegreeDataByCod (MYSQL_RES **mysql_res,long DegCod)
 			  "WWW"			// row[7]
 		    " FROM deg_degrees"
 		   " WHERE DegCod=%ld",
-		   DegCod);
+		   HieCod);
   }
 
 /*****************************************************************************/
 /********** Get the institution code of a degree from its code ***************/
 /*****************************************************************************/
 
-long Deg_DB_GetInsCodOfDegreeByCod (long DegCod)
+long Deg_DB_GetInsCodOfDegreeByCod (long HieCod)
   {
    /***** Trivial check: degree code should be > 0 *****/
-   if (DegCod <= 0)
+   if (HieCod <= 0)
       return -1L;
 
    /***** Get the institution code of a degree from database *****/
@@ -314,17 +314,17 @@ long Deg_DB_GetInsCodOfDegreeByCod (long DegCod)
 				    "ctr_centers"
 			     " WHERE deg_degrees.DegCod=%ld"
 			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod",
-			     DegCod);
+			     HieCod);
   }
 
 /*****************************************************************************/
 /************* Get the center code of a degree from its code *****************/
 /*****************************************************************************/
 
-long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod)
+long Deg_DB_GetCtrCodOfDegreeByCod (long HieCod)
   {
    /***** Trivial check: degree code should be > 0 *****/
-   if (DegCod <= 0)
+   if (HieCod <= 0)
       return -1L;
 
    /***** Get the center code of a degree from database *****/
@@ -332,17 +332,17 @@ long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod)
 			      "SELECT CtrCod"
 			       " FROM deg_degrees"
 			      " WHERE DegCod=%ld",
-			      DegCod);
+			      HieCod);
   }
 
 /*****************************************************************************/
 /************* Get the short name of a degree from its code ******************/
 /*****************************************************************************/
 
-void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1])
+void Deg_DB_GetDegShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: degree code should be > 0 *****/
-   if (DegCod <= 0)
+   if (HieCod <= 0)
      {
       ShrtName[0] = '\0';
       return;
@@ -354,7 +354,7 @@ void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Nam_MAX_BYTES_S
 			 "SELECT ShortName"
 			  " FROM deg_degrees"
 			 " WHERE DegCod=%ld",
-			 DegCod);
+			 HieCod);
   }
 
 /*****************************************************************************/
@@ -626,7 +626,7 @@ unsigned Deg_DB_GetNumDegsInSys (__attribute__((unused)) long SysCod)
 /******************** Get number of degrees in a country *********************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsInCty (long CtyCod)
+unsigned Deg_DB_GetNumDegsInCty (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of degrees in a country",
@@ -637,14 +637,14 @@ unsigned Deg_DB_GetNumDegsInCty (long CtyCod)
 		  " WHERE ins_instits.CtyCod=%ld"
 		    " AND ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
-		  CtyCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /***************** Get number of degrees in an institution *******************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsInIns (long InsCod)
+unsigned Deg_DB_GetNumDegsInIns (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of degrees in an institution",
@@ -653,21 +653,21 @@ unsigned Deg_DB_GetNumDegsInIns (long InsCod)
 		         "deg_degrees"
 		  " WHERE ctr_centers.InsCod=%ld"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
-		  InsCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
 /******************** Get number of degrees in a center **********************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsInCtr (long CtrCod)
+unsigned Deg_DB_GetNumDegsInCtr (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of degrees in a center",
 		  "SELECT COUNT(*)"
 		   " FROM deg_degrees"
 		  " WHERE CtrCod=%ld",
-		  CtrCod);
+		  HieCod);
   }
 
 /*****************************************************************************/
@@ -689,7 +689,7 @@ void Deg_DB_UpdateDegTypName (long DegTypCod,
 /***************** Update degree name in table of degrees ********************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegNameDB (long DegCod,
+void Deg_DB_UpdateDegNameDB (long HieCod,
 			     const char *FldName,const char *NewDegName)
   {
    DB_QueryUPDATE ("can not update the name of a degree",
@@ -697,21 +697,21 @@ void Deg_DB_UpdateDegNameDB (long DegCod,
 		     " SET %s='%s'"
 		   " WHERE DegCod=%ld",
 	           FldName,NewDegName,
-	           DegCod);
+	           HieCod);
   }
 
 /*****************************************************************************/
 /*********************** Update the center of a degree ***********************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod)
+void Deg_DB_UpdateDegCtr (long HieCod,long NewCtrCod)
   {
    DB_QueryUPDATE ("can not update the center of a degree",
 		   "UPDATE deg_degrees"
 		     " SET CtrCod=%ld"
 		   " WHERE DegCod=%ld",
                    NewCtrCod,
-                   DegCod);
+                   HieCod);
   }
 
 /*****************************************************************************/
@@ -732,14 +732,14 @@ void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod)
 /************************ Update the WWW of a degree *************************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Deg_DB_UpdateDegWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the web of a degree",
 		   "UPDATE deg_degrees"
 		     " SET WWW='%s'"
 		   " WHERE DegCod=%ld",
 	           NewWWW,
-	           DegCod);
+	           HieCod);
   }
 
 /*****************************************************************************/

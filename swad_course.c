@@ -110,7 +110,7 @@ static void Crs_GetParsNewCourse (struct Hie_Node *Crs);
 static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
 				      struct Hie_Node *Crs);
 
-static void Crs_EmptyCourseCompletely (long CrsCod);
+static void Crs_EmptyCourseCompletely (long HieCod);
 
 static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
@@ -1153,18 +1153,18 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
 /****************************** Remove a course ******************************/
 /*****************************************************************************/
 
-void Crs_RemoveCourseCompletely (long CrsCod)
+void Crs_RemoveCourseCompletely (long HieCod)
   {
-   if (CrsCod > 0)
+   if (HieCod > 0)
      {
       /***** Empty course *****/
-      Crs_EmptyCourseCompletely (CrsCod);
+      Crs_EmptyCourseCompletely (HieCod);
 
       /***** Remove course from table of last accesses to courses in database *****/
-      Crs_DB_RemoveCrsLast (CrsCod);
+      Crs_DB_RemoveCrsLast (HieCod);
 
       /***** Remove course from table of courses in database *****/
-      Crs_DB_RemoveCrs (CrsCod);
+      Crs_DB_RemoveCrs (HieCod);
      }
   }
 
@@ -1174,16 +1174,16 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 // Start removing less important things to more important things;
 // so, in case of failure, important things can been removed in the future
 
-static void Crs_EmptyCourseCompletely (long CrsCod)
+static void Crs_EmptyCourseCompletely (long HieCod)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Crs;
    char PathRelCrs[PATH_MAX + 1];
 
-   if (CrsCod > 0)
+   if (HieCod > 0)
      {
       /***** Get course data *****/
-      Crs.HieCod = CrsCod;
+      Crs.HieCod = HieCod;
       Hie_GetDataByCod[Hie_CRS] (&Crs);
 
       /***** Remove all students in the course *****/
@@ -1191,83 +1191,83 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Set all notifications from the course as removed,
 	     except notifications about new messages *****/
-      Ntf_DB_MarkNotifInCrsAsRemoved (-1L,CrsCod);
+      Ntf_DB_MarkNotifInCrsAsRemoved (-1L,HieCod);
 
       /***** Remove information of the course ****/
       /* Remove information of the course */
-      Crs_DB_RemoveCrsInfo (CrsCod);
+      Crs_DB_RemoveCrsInfo (HieCod);
 
       /* Remove timetable of the course */
-      Crs_DB_RemoveCrsTimetable (CrsCod);
+      Crs_DB_RemoveCrsTimetable (HieCod);
 
       /***** Remove exam announcements in the course *****/
       /* Mark all exam announcements in the course as deleted */
-      Cfe_DB_MarkCallForExamsInCrsAsDeleted (CrsCod);
+      Cfe_DB_MarkCallForExamsInCrsAsDeleted (HieCod);
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
-      Rec_DB_RemoveAllFieldContentsInCrs (CrsCod);
+      Rec_DB_RemoveAllFieldContentsInCrs (HieCod);
 
       /* Remove definition of fields in course cards */
-      Rec_DB_RemoveAllFieldsInCrs (CrsCod);
+      Rec_DB_RemoveAllFieldsInCrs (HieCod);
 
       /***** Remove information related to files in course,
              including groups and projects,
              so this function must be called
              before removing groups and projects *****/
-      Brw_DB_RemoveCrsFiles (CrsCod);
+      Brw_DB_RemoveCrsFiles (HieCod);
 
       /***** Assessment tab *****/
       /* Remove assignments of the course */
-      Asg_RemoveCrsAssignments (CrsCod);
+      Asg_RemoveCrsAssignments (HieCod);
 
       /* Remove projects of the course */
-      Prj_RemoveCrsProjects (CrsCod);
+      Prj_RemoveCrsProjects (HieCod);
 
       /* Remove tests of the course */
-      TstPrn_RemoveCrsPrints (CrsCod);
-      Tst_DB_RemoveTstConfig (CrsCod);
+      TstPrn_RemoveCrsPrints (HieCod);
+      Tst_DB_RemoveTstConfig (HieCod);
 
       /* Remove all exams in the course */
-      Exa_RemoveCrsExams (CrsCod);
+      Exa_RemoveCrsExams (HieCod);
 
       /* Remove all games in the course */
-      Gam_RemoveCrsGames (CrsCod);
+      Gam_RemoveCrsGames (HieCod);
 
       /* Remove all questions in the course */
-      Qst_RemoveCrsQsts (CrsCod);
+      Qst_RemoveCrsQsts (HieCod);
 
       /* Remove all rubrics in the course */
-      Rub_RemoveCrsRubrics (CrsCod);
+      Rub_RemoveCrsRubrics (HieCod);
 
       /***** Remove attendance events of the course *****/
-      Att_RemoveCrsEvents (CrsCod);
+      Att_RemoveCrsEvents (HieCod);
 
       /***** Remove notices in the course *****/
-      Not_DB_RemoveCrsNotices (CrsCod);
+      Not_DB_RemoveCrsNotices (HieCod);
 
       /***** Remove all threads and posts in forums of the course *****/
-      For_DB_RemoveForums (Hie_CRS,CrsCod);
+      For_DB_RemoveForums (Hie_CRS,HieCod);
 
       /***** Remove all surveys in the course *****/
-      Svy_RemoveSurveys (Hie_CRS,CrsCod);
+      Svy_RemoveSurveys (Hie_CRS,HieCod);
 
       /***** Remove groups in the course *****/
-      Grp_DB_RemoveCrsGrps (CrsCod);
+      Grp_DB_RemoveCrsGrps (HieCod);
 
       /***** Remove users' requests for inscription in the course *****/
-      Enr_DB_RemCrsRequests (CrsCod);
+      Enr_DB_RemCrsRequests (HieCod);
 
       /***** Remove possible users remaining in the course (teachers) *****/
-      Set_DB_RemAllUsrsFromCrsSettings (CrsCod);
-      Enr_DB_RemAllUsrsFromCrs (CrsCod);
+      Set_DB_RemAllUsrsFromCrsSettings (HieCod);
+      Enr_DB_RemAllUsrsFromCrs (HieCod);
 
       /***** Remove directories of the course *****/
       snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%ld",
-	        Cfg_PATH_CRS_PRIVATE,CrsCod);
+	        Cfg_PATH_CRS_PRIVATE,HieCod);
       Fil_RemoveTree (PathRelCrs);
       snprintf (PathRelCrs,sizeof (PathRelCrs),"%s/%ld",
-	        Cfg_PATH_CRS_PUBLIC,CrsCod);
+	        Cfg_PATH_CRS_PUBLIC,HieCod);
       Fil_RemoveTree (PathRelCrs);
      }
   }

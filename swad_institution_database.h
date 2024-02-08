@@ -38,13 +38,13 @@
 /*****************************************************************************/
 
 long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status);
-void Ins_DB_UpdateInsCty (long InsCod,long CtyCod);
-void Ins_DB_UpdateInsStatus (long InsCod,Hie_Status_t Status);
-void Ins_DB_UpdateInsName (long InsCod,const char *FldName,const char *NewName);
-void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Ins_DB_UpdateInsCty (long HieCod,long CtyCod);
+void Ins_DB_UpdateInsStatus (long HieCod,Hie_Status_t Status);
+void Ins_DB_UpdateInsName (long HieCod,const char *FldName,const char *NewName);
+void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
-unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long InsCod);
-void Ins_DB_GetInsShrtName (long InsCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
+unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long HieCod);
+void Ins_DB_GetInsShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);
 unsigned Ins_DB_GetInsShrtNameAndCty (MYSQL_RES **mysql_res,long InsCod);
 bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
                                        const char *Name,
@@ -55,9 +55,9 @@ bool Ins_DB_CheckIfInsNameExistsInCty (const char *FldName,
 unsigned Ins_DB_GetAllInsWithPendingCtr (MYSQL_RES **mysql_res);
 unsigned Ins_DB_GetInsWithPendingCtrsAdminByMe (MYSQL_RES **mysql_res);
 
-unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long CtyCod);
-unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod);
-unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod);
+unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long HieCod);
+unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long HieCod);
+unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long HieCod);
 
 unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res);
 unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res);
@@ -69,7 +69,7 @@ unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                             const char *RangeQuery);
 
-unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long SysCod);
+unsigned Ins_DB_GetNumInssInSys (__attribute__((unused)) long HieCod);
 unsigned Ins_DB_GetNumInssInCty (long CtyCod);
 
 unsigned Ins_DB_GetNumInssWithCtrs (Hie_Level_t Level,long HieCod);
@@ -81,8 +81,8 @@ unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
 unsigned Ins_DB_GetMyInss (MYSQL_RES **mysql_res,long HieCod);
 bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
 				    bool CountOnlyAcceptedCourses);
-unsigned Ins_DB_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
+unsigned Ins_DB_GetNumUsrsWhoClaimToBelongToIns (long HieCod);
 
-void Ins_DB_RemoveInstitution (long InsCod);
+void Ins_DB_RemoveInstitution (long HieCod);
 
 #endif

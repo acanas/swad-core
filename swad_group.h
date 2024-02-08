@@ -237,6 +237,6 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
                                  void (*FuncPars) (void *Args),void *Args);
 Grp_WhichGroups_t Grp_GetParWhichGroups (void);
 
-void Grp_DB_RemoveCrsGrps (long CrsCod);
+void Grp_DB_RemoveCrsGrps (long HieCod);
 
 #endif

@@ -102,7 +102,7 @@ void Rub_RubricConstructor (struct Rub_Rubric *Rubric)
   {
    /***** Initialize to empty rubric *****/
    Rubric->RubCod   = -1L;
-   Rubric->CrsCod   = -1L;
+   Rubric->HieCod   = -1L;	// Course code
    Rubric->UsrCod   = -1L;
    Rubric->Title[0] = '\0';
 
@@ -595,7 +595,7 @@ void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric)
 
       /* Get code of the rubric (row[0]), course (row[1] and author (row[2]) */
       Rubric->RubCod = Str_ConvertStrCodToLongCod (row[0]);
-      Rubric->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+      Rubric->HieCod = Str_ConvertStrCodToLongCod (row[1]);
       Rubric->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get the title of the rubric (row[3]) */
@@ -608,7 +608,7 @@ void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric)
      {
       /***** Initialize to empty rubric *****/
       Rubric->RubCod   = -1L;
-      Rubric->CrsCod   = -1L;
+      Rubric->HieCod   = -1L;
       Rubric->UsrCod   = -1L;
       Rubric->Title[0] = '\0';
       Rubric->Txt[0]   = '\0';
