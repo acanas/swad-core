@@ -60,11 +60,6 @@ extern struct Globals Gbl;
 static void DegCfg_Configuration (Vie_ViewType_t ViewType);
 static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void DegCfg_FullName (Frm_PutForm_t PutForm);
-static void DegCfg_ShrtName (Frm_PutForm_t PutForm);
-static void DegCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void DegCfg_Shortcut (Vie_ViewType_t ViewType);
-static void DegCfg_QR (void);
 static void DegCfg_NumCrss (void);
 
 /*****************************************************************************/
@@ -129,23 +124,23 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
       HieCfg_Title (PutLink,Hie_DEG);
 
       /**************************** Left part ***********************************/
-      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_BeginPadding (2);
 
 	    /***** Center *****/
 	    DegCfg_Center (ViewType,PutFormCtr);
 
 	    /***** Degree name *****/
-	    DegCfg_FullName (PutFormName);
-	    DegCfg_ShrtName (PutFormName);
+	    HieCfg_Name (PutFormName,Hie_DEG,Nam_FULL_NAME);
+	    HieCfg_Name (PutFormName,Hie_DEG,Nam_SHRT_NAME);
 
 	    /***** Degree WWW *****/
-	    DegCfg_WWW (ViewType,PutFormWWW);
+	    HieCfg_WWW (ViewType,PutFormWWW,ActChgDegWWWCfg,Gbl.Hierarchy.Node[Hie_DEG].WWW);
 
 	    /***** Shortcut to the degree *****/
-	    DegCfg_Shortcut (ViewType);
+	    HieCfg_Shortcut (ViewType,ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 
 	    switch (ViewType)
 	      {
@@ -161,7 +156,7 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
 		  break;
 	       case Vie_PRINT:
 		  /***** QR code with link to the degree *****/
-		  DegCfg_QR ();
+		  HieCfg_QR (ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -184,8 +179,7 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
 static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
   {
    /***** Link to print info about degree *****/
-   Ico_PutContextualIconToPrint (ActPrnDegInf,
-				 NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnDegInf,NULL,NULL);
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       // Only degree admins, center admins, institution admins and system admins
@@ -214,10 +208,10 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:	// I can not move degree to another center
@@ -246,7 +240,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       Frm_BeginForm (ActChgDegCtrCfg);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthCtrCod\" name=\"OthCtrCod\""
-				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (NumCtr = 0;
 			  NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
@@ -272,51 +266,6 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   }
 
 /*****************************************************************************/
-/************** Show degree full name in degree configuration ****************/
-/*****************************************************************************/
-
-static void DegCfg_FullName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_DEG,Nam_FULL_NAME);
-  }
-
-/*****************************************************************************/
-/************** Show degree short name in degree configuration ***************/
-/*****************************************************************************/
-
-static void DegCfg_ShrtName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_DEG,Nam_SHRT_NAME);
-  }
-
-/*****************************************************************************/
-/***************** Show degree WWW in degree configuration *******************/
-/*****************************************************************************/
-
-static void DegCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
-  {
-   HieCfg_WWW (ViewType,PutForm,ActChgDegWWWCfg,Gbl.Hierarchy.Node[Hie_DEG].WWW);
-  }
-
-/*****************************************************************************/
-/*************** Show degree shortcut in degree configuration ****************/
-/*****************************************************************************/
-
-static void DegCfg_Shortcut (Vie_ViewType_t ViewType)
-  {
-   HieCfg_Shortcut (ViewType,ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
-  }
-
-/*****************************************************************************/
-/****************** Show degree QR in degree configuration *******************/
-/*****************************************************************************/
-
-static void DegCfg_QR (void)
-  {
-   HieCfg_QR (ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
-  }
-
-/*****************************************************************************/
 /************** Show number of courses in degree configuration ***************/
 /*****************************************************************************/
 
@@ -331,10 +280,10 @@ static void DegCfg_NumCrss (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    ParCod_PutPar (ParCod_Deg,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,

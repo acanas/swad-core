@@ -3200,8 +3200,7 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
                                         Prj_PutCurrentPars,Projects);
 
    /***** Icon to print project *****/
-   Ico_PutContextualIconToPrint (ActPrnOnePrj,
-                                 Prj_PutCurrentPars,Projects);
+   Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentPars,Projects);
 
    /***** Locked/unlocked project edition *****/
    if (PrjCfg_CheckIfICanConfig ())

@@ -61,13 +61,9 @@ extern struct Globals Gbl;
 
 static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args);
 static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void CrsCfg_FullName (Frm_PutForm_t PutForm);
-static void CrsCfg_ShrtName (Frm_PutForm_t PutForm);
 static void CrsCfg_Year (Frm_PutForm_t PutForm);
 static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm);
 static void CrsCfg_InternalCode (void);
-static void CrsCfg_Shortcut (Vie_ViewType_t ViewType);
-static void CrsCfg_QR (void);
 static void CrsCfg_Indicators (void);
 
 /*****************************************************************************/
@@ -123,17 +119,17 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
       HieCfg_Title (PutLink,Hie_CRS);
 
       /**************************** Left part ***********************************/
-      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_BeginPadding (2);
 
 	    /***** Degree *****/
 	    CrsCfg_Degree (ViewType,PutFormDeg);
 
 	    /***** Course name *****/
-	    CrsCfg_FullName (PutFormName);
-	    CrsCfg_ShrtName (PutFormName);
+	    HieCfg_Name (PutFormName,Hie_CRS,Nam_FULL_NAME);
+	    HieCfg_Name (PutFormName,Hie_CRS,Nam_SHRT_NAME);
 
 	    /***** Course year *****/
 	    CrsCfg_Year (PutFormYear);
@@ -148,7 +144,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
 	      }
 
 	    /***** Shortcut to the couse *****/
-	    CrsCfg_Shortcut (ViewType);
+	    HieCfg_Shortcut (ViewType,ParCod_Crs,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
 	    switch (ViewType)
 	      {
@@ -164,7 +160,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
 		  break;
 	       case Vie_PRINT:
 		  /***** QR code with link to the course *****/
-		  CrsCfg_QR ();
+		  HieCfg_QR (ParCod_Crs,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -187,8 +183,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
 
 static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToPrint (ActPrnCrsInf,
-				 NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCrsInf,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -220,10 +215,10 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:	// I can not move course to another degree
@@ -252,7 +247,7 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       Frm_BeginForm (ActChgCrsDegCfg);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthDegCod\" name=\"OthDegCod\""
-				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (NumDeg = 0;
 			  NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
@@ -275,24 +270,6 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
       HTM_TD_End ();
 
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Show course full name in course configuration ****************/
-/*****************************************************************************/
-
-static void CrsCfg_FullName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_CRS,Nam_FULL_NAME);
-  }
-
-/*****************************************************************************/
-/************** Show course short name in course configuration ***************/
-/*****************************************************************************/
-
-static void CrsCfg_ShrtName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_CRS,Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -411,24 +388,6 @@ static void CrsCfg_InternalCode (void)
       HTM_TD_End ();
 
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/*************** Show course shortcut in course configuration ****************/
-/*****************************************************************************/
-
-static void CrsCfg_Shortcut (Vie_ViewType_t ViewType)
-  {
-   HieCfg_Shortcut (ViewType,ParCod_Crs,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-  }
-
-/*****************************************************************************/
-/****************** Show course QR in course configuration *******************/
-/*****************************************************************************/
-
-static void CrsCfg_QR (void)
-  {
-   HieCfg_QR (ParCod_Crs,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

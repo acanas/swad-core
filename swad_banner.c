@@ -465,7 +465,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	       Frm_BeginForm (ActChgBanWWW);
 		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				 "class=\"INPUT_WWW INPUT_%s\""
 				 " required=\"required\"",
 				 The_GetSuffix ());
 	       Frm_EndForm ();
@@ -810,7 +810,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	 /* Banner WWW */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   "class=\"INPUT_WWW INPUT_%s\""
 			   " required=\"required\"",
 			   The_GetSuffix ());
 	 HTM_TD_End ();

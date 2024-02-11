@@ -775,8 +775,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
       case Rol_STD:
       case Rol_NET:
 	 /***** Icon to print assignment *****/
-	 Ico_PutContextualIconToPrint (ActPrnOneAsg,
-	                               Asg_PutPars,Assignments);
+	 Ico_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutPars,Assignments);
 	 break;
       default:
          break;

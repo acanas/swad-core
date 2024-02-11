@@ -63,8 +63,6 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType);
 static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
-static void SysCfg_Shortcut (Vie_ViewType_t ViewType);
-static void SysCfg_QR (void);
 static void SysCfg_NumCtys (void);
 static void SysCfg_NumInss (void);
 static void SysCfg_NumDegs (void);
@@ -109,16 +107,16 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
 					NULL,Box_NOT_CLOSABLE);
 
       /**************************** Left part ***********************************/
-      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_BeginPadding (2);
 
 	    /***** Platform *****/
 	    SysCfg_Platform ();
 
-	    /***** Shortcut to the country *****/
-	    SysCfg_Shortcut (ViewType);
+	    /***** Shortcut to the system *****/
+	    HieCfg_Shortcut (ViewType,ParCod_None,-1L);
 
 	    /***** Get number of centers with map *****/
 	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
@@ -138,8 +136,7 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
 			 number of courses *****/
 		  SysCfg_NumCtys ();
 		  SysCfg_NumInss ();
-		  HieCfg_NumCtrs (NumCtrs,
-				  false);	// Don't put form
+		  HieCfg_NumCtrs (NumCtrs,Frm_DONT_PUT_FORM);
 		  HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
 		  SysCfg_NumDegs ();
 		  SysCfg_NumCrss ();
@@ -152,7 +149,7 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
 		  break;
 	       case Vie_PRINT:
 		  /***** QR code with link to the country *****/
-		  SysCfg_QR ();
+		  HieCfg_QR (ParCod_None,-1L);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -168,7 +165,7 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
       /**************************** Right part **********************************/
       if (NumCtrsWithMap)
 	{
-	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
 
 	    /***** Country map *****/
 	    SysCfg_Map ();
@@ -186,8 +183,7 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
 
 static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToPrint (ActPrnSysInf,
-				 NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnSysInf,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -275,32 +271,14 @@ static void SysCfg_Platform (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
       HTM_TD_End ();
 
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Show platform shortcut in system configuration ***************/
-/*****************************************************************************/
-
-static void SysCfg_Shortcut (Vie_ViewType_t ViewType)
-  {
-   HieCfg_Shortcut (ViewType,ParCod_None,-1L);
-  }
-
-/*****************************************************************************/
-/***************** Show country QR in country configuration ******************/
-/*****************************************************************************/
-
-static void SysCfg_QR (void)
-  {
-   HieCfg_QR (ParCod_None,-1L);
   }
 
 /*****************************************************************************/
@@ -315,10 +293,10 @@ static void SysCfg_NumCtys (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTY]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCty);
 	    HTM_BUTTON_Submit_Begin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
 				     "class=\"LB BT_LINK\"");
@@ -344,10 +322,10 @@ static void SysCfg_NumInss (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_INS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_INS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 						      Hie_SYS,	// ...in system
 						      Gbl.Hierarchy.Node[Hie_SYS].HieCod));
@@ -368,10 +346,10 @@ static void SysCfg_NumDegs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_SYS,	// ...in system
 						      Gbl.Hierarchy.Node[Hie_SYS].HieCod));
@@ -392,10 +370,10 @@ static void SysCfg_NumCrss (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_SYS,	// ...in system
 						      Gbl.Hierarchy.Node[Hie_SYS].HieCod));

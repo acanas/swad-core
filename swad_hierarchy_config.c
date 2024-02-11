@@ -117,12 +117,12 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],
 		       ShrtOrFull == Nam_SHRT_NAME ? Txt_Short_name :
 						     Txt_HIERARCHY_SINGUL_Abc[Level]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:	// I can not edit full name
@@ -167,10 +167,10 @@ void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_Web);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_Web);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:	// I can not change web
@@ -188,7 +188,7 @@ void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
 	       /* Form to change web */
 	       Frm_BeginForm (NextAction);
 		  HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
-				 "id=\"WWW\" class=\"INPUT_WWW_WIDE INPUT_%s\""
+				 "id=\"WWW\" class=\"Frm_C2_INPUT INPUT_%s\""
 				 " required=\"required\"",
 				 The_GetSuffix ());
 	       Frm_EndForm ();
@@ -212,10 +212,10 @@ void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Shortcut);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Shortcut);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 if (ViewType == Vie_VIEW)
 	   {
 	    if (ParCode == ParCod_None)
@@ -257,10 +257,10 @@ void HieCfg_NumCtrs (unsigned NumCtrs,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CTR]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 if (PutForm == Frm_PUT_FORM)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
@@ -294,10 +294,10 @@ void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Centers_with_map);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Centers_with_map);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_TxtF ("%u (%.1lf%%)",
 		   NumCtrsWithMap,
 		   NumCtrs ? (double) NumCtrsWithMap * 100.0 /
@@ -343,12 +343,12 @@ void HieCfg_NumUsrsInCrss (Hie_Level_t Level,long Cod,Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,
+      Frm_LabelColumn ("Frm_C1 RT",NULL,
 		       Role == Rol_UNK ? Txt_Users_in_courses :
 					 Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Level,Cod,
 						   Role == Rol_UNK ? (1 << Rol_STD) |
 								     (1 << Rol_NET) |

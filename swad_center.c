@@ -845,7 +845,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  Frm_BeginForm (ActChgCtrWWW);
 		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
 		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				    "class=\"INPUT_WWW INPUT_%s\""
 				    " required=\"required\"",
 				    The_GetSuffix ());
 		  Frm_EndForm ();
@@ -1292,7 +1292,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 /***** Center WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   "class=\"INPUT_WWW INPUT_%s\""
 			   " required=\"required\"",
 			   The_GetSuffix ());
 	 HTM_TD_End ();

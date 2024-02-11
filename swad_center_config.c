@@ -88,12 +88,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
 static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution);
 static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
 static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void CtrCfg_FullName (Frm_PutForm_t PutForm);
-static void CtrCfg_ShrtName (Frm_PutForm_t PutForm);
 static void CtrCfg_Place (Frm_PutForm_t PutForm);
-static void CtrCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void CtrCfg_Shortcut (Vie_ViewType_t ViewType);
-static void CtrCfg_QR (void);
 static void CtrCfg_NumUsrs (void);
 static void CtrCfg_NumDegs (void);
 static void CtrCfg_NumCrss (void);
@@ -173,17 +168,17 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
       HieCfg_Title (PutLink,Hie_CTR);
 
       /**************************** Left part ***********************************/
-      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_BeginPadding (2);
 
 	    /***** Institution *****/
 	    CtrCfg_Institution (ViewType,PutFormIns);
 
 	    /***** Center name *****/
-	    CtrCfg_FullName (PutFormName);
-	    CtrCfg_ShrtName (PutFormName);
+	    HieCfg_Name (PutFormName,Hie_CTR,Nam_FULL_NAME);
+	    HieCfg_Name (PutFormName,Hie_CTR,Nam_SHRT_NAME);
 
 	    /***** Place *****/
 	    CtrCfg_Place (PutFormPlc);
@@ -197,10 +192,10 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 	      }
 
 	    /***** Center WWW *****/
-	    CtrCfg_WWW (ViewType,PutFormWWW);
+	    HieCfg_WWW (ViewType,PutFormWWW,ActChgCtrWWWCfg,Gbl.Hierarchy.Node[Hie_CTR].WWW);
 
 	    /***** Shortcut to the center *****/
-	    CtrCfg_Shortcut (ViewType);
+	    HieCfg_Shortcut (ViewType,ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 
 	    switch (ViewType)
 	      {
@@ -220,7 +215,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 		  break;
 	       case Vie_PRINT:
 		  /***** QR code with link to the center *****/
-		  CtrCfg_QR ();
+		  HieCfg_QR (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -247,7 +242,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 
       if (MapIsAvailable || PhotoExists)
 	{
-	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
 
 	    /***** Center map *****/
 	    if (MapIsAvailable)
@@ -271,8 +266,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
   {
    /***** Put icon to print info about center *****/
-   Ico_PutContextualIconToPrint (ActPrnCtrInf,
-				 NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCtrInf,NULL,NULL);
 
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();
@@ -350,10 +344,10 @@ static void CtrCfg_Latitude (double Latitude)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","Latitude",Txt_Latitude);
+      Frm_LabelColumn ("Frm_C1 RT","Latitude",Txt_Latitude);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 	 Frm_BeginForm (ActChgCtrLatCfg);
 	    HTM_INPUT_FLOAT ("Latitude",
 			     -90.0,	// South Pole
@@ -361,7 +355,7 @@ static void CtrCfg_Latitude (double Latitude)
 			     0.0,	// step="any"
 			     Latitude,
 			     HTM_SUBMIT_ON_CHANGE,false,
-			     "class=\"INPUT_COORD INPUT_%s\""
+			     "class=\"Frm_C2_INPUT INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
 	 Frm_EndForm ();
@@ -378,10 +372,10 @@ static void CtrCfg_Longitude (double Longitude)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","Longitude",Txt_Longitude);
+      Frm_LabelColumn ("Frm_C1 RT","Longitude",Txt_Longitude);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 	 Frm_BeginForm (ActChgCtrLgtCfg);
 	    HTM_INPUT_FLOAT ("Longitude",
 			     -180.0,	// West
@@ -389,7 +383,7 @@ static void CtrCfg_Longitude (double Longitude)
 			     0.0,	// step="any"
 			     Longitude,
 			     HTM_SUBMIT_ON_CHANGE,false,
-			     "class=\"INPUT_COORD INPUT_%s\""
+			     "class=\"Frm_C2_INPUT INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
 	 Frm_EndForm ();
@@ -406,10 +400,10 @@ static void CtrCfg_Altitude (double Altitude)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","Altitude",Txt_Altitude);
+      Frm_LabelColumn ("Frm_C1 RT","Altitude",Txt_Altitude);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LB\"");
 	 Frm_BeginForm (ActChgCtrAltCfg);
 	    HTM_INPUT_FLOAT ("Altitude",
 			     -413.0,	// Dead Sea shore
@@ -417,7 +411,7 @@ static void CtrCfg_Altitude (double Altitude)
 			     0.0,	// step="any"
 			     Altitude,
 			     HTM_SUBMIT_ON_CHANGE,false,
-			     "class=\"INPUT_COORD INPUT_%s\""
+			     "class=\"Frm_C2_INPUT INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
 	 Frm_EndForm ();
@@ -564,10 +558,10 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:
@@ -598,7 +592,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       Frm_BeginForm (ActChgCtrInsCfg);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
-				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
@@ -621,24 +615,6 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
       HTM_TD_End ();
 
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Show center full name in center configuration ****************/
-/*****************************************************************************/
-
-static void CtrCfg_FullName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_CTR,Nam_FULL_NAME);
-  }
-
-/*****************************************************************************/
-/************** Show center short name in center configuration ***************/
-/*****************************************************************************/
-
-static void CtrCfg_ShrtName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_CTR,Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -666,10 +642,10 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_Place);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_Place);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 
          switch (PutForm)
            {
@@ -688,7 +664,7 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
 	       Frm_BeginForm (ActChgCtrPlcCfg);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"PlcCod\""
-				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
 				 Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
@@ -717,33 +693,6 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
   }
 
 /*****************************************************************************/
-/***************** Show center WWW in center configuration *******************/
-/*****************************************************************************/
-
-static void CtrCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
-  {
-   HieCfg_WWW (ViewType,PutForm,ActChgCtrWWWCfg,Gbl.Hierarchy.Node[Hie_CTR].WWW);
-  }
-
-/*****************************************************************************/
-/*************** Show center shortcut in center configuration ****************/
-/*****************************************************************************/
-
-static void CtrCfg_Shortcut (Vie_ViewType_t ViewType)
-  {
-   HieCfg_Shortcut (ViewType,ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
-  }
-
-/*****************************************************************************/
-/****************** Show center QR in center configuration *******************/
-/*****************************************************************************/
-
-static void CtrCfg_QR (void)
-  {
-   HieCfg_QR (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
-  }
-
-/*****************************************************************************/
 /*** Show number of users who claim to belong to center in center config. ****/
 /*****************************************************************************/
 
@@ -755,10 +704,10 @@ static void CtrCfg_NumUsrs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_center);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Users_of_the_center);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTR,
 							       &Gbl.Hierarchy.Node[Hie_CTR]));
       HTM_TD_End ();
@@ -780,10 +729,10 @@ static void CtrCfg_NumDegs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
@@ -813,10 +762,10 @@ static void CtrCfg_NumCrss (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTR,	// ...in center
 						      Gbl.Hierarchy.Node[Hie_CTR].HieCod));

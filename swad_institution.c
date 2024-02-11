@@ -956,7 +956,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		  Frm_BeginForm (ActChgInsWWW);
 		     ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
 		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				    "class=\"INPUT_WWW INPUT_%s\""
 				    " required=\"required\"",
 				    The_GetSuffix ());
 		  Frm_EndForm ();
@@ -1364,7 +1364,7 @@ static void Ins_PutFormToCreateInstitution (void)
 	 /***** Institution WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   "class=\"INPUT_WWW INPUT_%s\""
 			   " required=\"required\"",The_GetSuffix ());
 	 HTM_TD_End ();
 

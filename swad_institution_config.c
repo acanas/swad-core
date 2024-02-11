@@ -66,11 +66,6 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType);
 static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void InsCfg_Map (void);
 static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void InsCfg_FullName (Frm_PutForm_t PutForm);
-static void InsCfg_ShrtName (Frm_PutForm_t PutForm);
-static void InsCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void InsCfg_Shortcut (Vie_ViewType_t ViewType);
-static void InsCfg_QR (void);
 static void InsCfg_NumUsrs (void);
 static void InsCfg_NumDegs (void);
 static void InsCfg_NumCrss (void);
@@ -138,23 +133,23 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
       HieCfg_Title (PutLink,Hie_INS);
 
       /**************************** Left part ***********************************/
-      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
 	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_BeginPadding (2);
 
 	    /***** Country *****/
 	    InsCfg_Country (ViewType,PutFormCty);
 
 	    /***** Institution name *****/
-	    InsCfg_FullName (PutFormName);
-	    InsCfg_ShrtName (PutFormName);
+	    HieCfg_Name (PutFormName,Hie_INS,Nam_FULL_NAME);
+	    HieCfg_Name (PutFormName,Hie_INS,Nam_SHRT_NAME);
 
 	    /***** Institution WWW *****/
-	    InsCfg_WWW (ViewType,PutFormWWW);
+	    HieCfg_WWW (ViewType,PutFormWWW,ActChgInsWWWCfg,Gbl.Hierarchy.Node[Hie_INS].WWW);
 
 	    /***** Shortcut to the institution *****/
-	    InsCfg_Shortcut (ViewType);
+	    HieCfg_Shortcut (ViewType,ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
 	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
@@ -171,8 +166,7 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 			 number of courses,
 			 number of departments *****/
 		  InsCfg_NumUsrs ();
-		  HieCfg_NumCtrs (NumCtrs,
-				  true);	// Put form
+		  HieCfg_NumCtrs (NumCtrs,Frm_PUT_FORM);
 		  HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
 		  InsCfg_NumDegs ();
 		  InsCfg_NumCrss ();
@@ -186,7 +180,7 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 		  break;
 	       case Vie_PRINT:
 		  /***** QR code with link to the institution *****/
-		  InsCfg_QR ();
+		  HieCfg_QR (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -202,7 +196,7 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
       /**************************** Right part **********************************/
       if (NumCtrsWithMap)
 	{
-	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
 
 	    /***** Institution map *****/
 	    InsCfg_Map ();
@@ -221,8 +215,7 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
   {
    /***** Icon to print info about institution *****/
-   Ico_PutContextualIconToPrint (ActPrnInsInf,
-				 NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnInsInf,NULL,NULL);
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       /***** Icon to upload logo of institution *****/
@@ -323,10 +316,10 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:	// I can not move institution to another country
@@ -352,7 +345,7 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       Frm_BeginForm (ActChgInsCtyCfg);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthCtyCod\" name=\"OthCtyCod\""
-				    " class=\"INPUT_SHORT_NAME INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (NumCty = 0;
 			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
@@ -377,51 +370,6 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   }
 
 /*****************************************************************************/
-/********* Show institution full name in institution configuration ***********/
-/*****************************************************************************/
-
-static void InsCfg_FullName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_INS,Nam_FULL_NAME);
-  }
-
-/*****************************************************************************/
-/********* Show institution short name in institution configuration **********/
-/*****************************************************************************/
-
-static void InsCfg_ShrtName (Frm_PutForm_t PutForm)
-  {
-   HieCfg_Name (PutForm,Hie_INS,Nam_SHRT_NAME);
-  }
-
-/*****************************************************************************/
-/************ Show institution WWW in institution configuration **************/
-/*****************************************************************************/
-
-static void InsCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
-  {
-   HieCfg_WWW (ViewType,PutForm,ActChgInsWWWCfg,Gbl.Hierarchy.Node[Hie_INS].WWW);
-  }
-
-/*****************************************************************************/
-/********** Show institution shortcut in institution configuration ***********/
-/*****************************************************************************/
-
-static void InsCfg_Shortcut (Vie_ViewType_t ViewType)
-  {
-   HieCfg_Shortcut (ViewType,ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
-  }
-
-/*****************************************************************************/
-/************* Show institution QR in institution configuration **************/
-/*****************************************************************************/
-
-static void InsCfg_QR (void)
-  {
-   HieCfg_QR (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
-  }
-
-/*****************************************************************************/
 /** Show number of users who claim to belong to instit. in instit. config. ***/
 /*****************************************************************************/
 
@@ -433,10 +381,10 @@ static void InsCfg_NumUsrs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_institution);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Users_of_the_institution);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_INS,
 							       &Gbl.Hierarchy.Node[Hie_INS]));
       HTM_TD_End ();
@@ -456,10 +404,10 @@ static void InsCfg_NumDegs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_INS,	// ...in institution
 						      Gbl.Hierarchy.Node[Hie_INS].HieCod));
@@ -480,10 +428,10 @@ static void InsCfg_NumCrss (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_INS,	// ...in institution
 						      Gbl.Hierarchy.Node[Hie_INS].HieCod));
@@ -504,10 +452,10 @@ static void InsCfg_NumDpts (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Departments);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Departments);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Dpt_GetNumDptsInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod));
       HTM_TD_End ();
 

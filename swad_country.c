@@ -1130,7 +1130,7 @@ static void Cty_ListCountriesForEdition (void)
 		     ParCod_PutPar (ParCod_OthCty,Cty->HieCod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",WWWInSeveralLanguages[Lan],HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				    "class=\"INPUT_WWW INPUT_%s\""
 				    " required=\"required\"",
 				    The_GetSuffix ());
 		  Frm_EndForm ();
@@ -1463,7 +1463,7 @@ static void Cty_PutFormToCreateCountry (void)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       snprintf (StrName,sizeof (StrName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
 	       HTM_INPUT_URL (StrName,"",HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			      "class=\"INPUT_WWW INPUT_%s\""
 			      " required=\"required\"",
 			      The_GetSuffix ());
 	    HTM_TD_End ();

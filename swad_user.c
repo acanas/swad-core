@@ -5855,20 +5855,17 @@ static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
 
 static void Usr_PutIconToPrintGsts (void)
   {
-   Ico_PutContextualIconToPrint (ActPrnGstPho,
-                                 Usr_ShowGstsAllDataPars,NULL);
+   Ico_PutContextualIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataPars,NULL);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
-   Ico_PutContextualIconToPrint (ActPrnStdPho,
-                                 Usr_ShowStdsAllDataPars,NULL);
+   Ico_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataPars,NULL);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
-   Ico_PutContextualIconToPrint (ActPrnTchPho,
-                                 Usr_ShowTchsAllDataPars,NULL);
+   Ico_PutContextualIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataPars,NULL);
   }
 
 /*****************************************************************************/

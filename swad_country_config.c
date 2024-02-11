@@ -65,8 +65,6 @@ static void CtyCfg_Map (void);
 static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink);
 static void CtyCfg_Platform (Vie_ViewType_t ViewType);
 static void CtyCfg_Name (Hie_PutLink_t PutLink);
-static void CtyCfg_Shortcut (Vie_ViewType_t ViewType);
-static void CtyCfg_QR (void);
 static void CtyCfg_NumUsrs (void);
 static void CtyCfg_NumInss (void);
 static void CtyCfg_NumDegs (void);
@@ -128,10 +126,10 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
       CtyCfg_Title (PutLink);
 
       /**************************** Left part ***********************************/
-      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT\"");
 
 	 /* Begin table */
-	 HTM_TABLE_BeginWidePadding (2);
+	 HTM_TABLE_BeginPadding (2);
 
 	    /* Platform */
 	    CtyCfg_Platform (ViewType);
@@ -140,7 +138,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 	    CtyCfg_Name (PutLink);
 
 	    /* Shortcut to the country */
-	    CtyCfg_Shortcut (ViewType);
+	    HieCfg_Shortcut (ViewType,ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
 	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 	    switch (ViewType)
@@ -157,8 +155,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 		     number of courses */
 		  CtyCfg_NumUsrs ();
 		  CtyCfg_NumInss ();
-		  HieCfg_NumCtrs (NumCtrs,
-				  false);	// Don't put form
+		  HieCfg_NumCtrs (NumCtrs,Frm_DONT_PUT_FORM);
 		  HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
 		  CtyCfg_NumDegs ();
 		  CtyCfg_NumCrss ();
@@ -171,7 +168,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 		  break;
 	       case Vie_PRINT:
 		  /* QR code with link to the country */
-		  CtyCfg_QR ();
+		  HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -191,7 +188,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
       if (NumCtrsWithMap || MapImageExists)
 	{
 	 /* Begin container */
-	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
+	 HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT\"");
 
 	    /* Country map */
 	    if (NumCtrsWithMap)
@@ -215,8 +212,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 
 static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToPrint (ActPrnCtyInf,
-				 NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCtyInf,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -381,10 +377,10 @@ static void CtyCfg_Platform (Vie_ViewType_t ViewType)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_SYS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 	 if (ViewType == Vie_VIEW)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
@@ -417,10 +413,10 @@ static void CtyCfg_Name (Hie_PutLink_t PutLink)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (PutLink == Hie_PUT_LINK)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_STRONG_%s\"",
 			 Gbl.Hierarchy.Node[Hie_CTY].WWW,
@@ -431,24 +427,6 @@ static void CtyCfg_Name (Hie_PutLink_t PutLink)
       HTM_TD_End ();
 
    HTM_TR_End ();
-  }
-
-/*****************************************************************************/
-/************** Show country shortcut in country configuration ***************/
-/*****************************************************************************/
-
-static void CtyCfg_Shortcut (Vie_ViewType_t ViewType)
-  {
-   HieCfg_Shortcut (ViewType,ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
-  }
-
-/*****************************************************************************/
-/***************** Show country QR in country configuration ******************/
-/*****************************************************************************/
-
-static void CtyCfg_QR (void)
-  {
-   HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
   }
 
 /*****************************************************************************/
@@ -463,10 +441,10 @@ static void CtyCfg_NumUsrs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_country);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Users_of_the_country);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,
 							       &Gbl.Hierarchy.Node[Hie_CTY]));
       HTM_TD_End ();
@@ -488,10 +466,10 @@ static void CtyCfg_NumInss (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_INS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_INS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeIns);
 	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
@@ -521,10 +499,10 @@ static void CtyCfg_NumDegs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_DEG]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_CTY,	// ...in country
 						      Gbl.Hierarchy.Node[Hie_CTY].HieCod));
@@ -545,10 +523,10 @@ static void CtyCfg_NumCrss (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_HIERARCHY_PLURAL_Abc[Hie_CRS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTY,	// ...in country
 						      Gbl.Hierarchy.Node[Hie_CTY].HieCod));

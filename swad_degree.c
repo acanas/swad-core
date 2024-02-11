@@ -428,7 +428,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		  Frm_BeginForm (ActChgDegWWW);
 		     ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
 		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				    "class=\"INPUT_WWW INPUT_%s\""
 				    " required=\"required\"",
 				    The_GetSuffix ());
 		  Frm_EndForm ();
@@ -561,7 +561,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 	 /***** Degree WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   "class=\"INPUT_WWW INPUT_%s\""
 			   " required=\"required\"",
 			   The_GetSuffix ());
 	 HTM_TD_End ();

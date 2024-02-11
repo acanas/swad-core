@@ -18712,7 +18712,7 @@ const char *Txt_Latitude =
 #elif L==9	// pt
 	"Latitude";
 #elif L==10	// tr
-	"Latitude";	// Çeviri lazim!
+	"Enlem";
 #endif
 
 const char *Txt_LAYOUT_SIDE_COLUMNS[4] =

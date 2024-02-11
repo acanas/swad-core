@@ -1451,12 +1451,11 @@ a:hover						/* Default ==> underlined */
 	display:inline-block;
 	margin:0 6px;
 	vertical-align:top;
-	width:480px;
+	width:520px;
 	}
 
 @media only screen and (max-width:590px)
 	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
-	.HIE_CFG_WIDTH		{width:260px;}
 	.COUNTRY_MAP_SHOW, .COUNTRY_MAP_PRINT
 		{
 		box-sizing:border-box;
@@ -1473,7 +1472,6 @@ a:hover						/* Default ==> underlined */
 	}
 @media only screen and (min-width:590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
-	.HIE_CFG_WIDTH				{width:480px;}
 	.COUNTRY_MAP_SHOW, .COUNTRY_MAP_PRINT
 		{
 		box-sizing:border-box;
@@ -3281,7 +3279,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:276px;
 		}
 	}
-@media only screen and (min-width:600px) and (max-width:1024px)
+@media only screen and (min-width:600px)
 	{	/* For desktop */
 	.Frm_C1
 		{
@@ -3303,8 +3301,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:382px;
 		}
 	}
+/*
 @media only screen and (min-width:1024px)
-	{	/* For desktop */
+	{	* For desktop *
 	.Frm_C1
 		{
 		box-sizing:border-box;
@@ -3325,7 +3324,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:700px;
 		}
 	}
-
+*/
 /******************************** Class photo ********************************/
 .CLASSPHOTO_TITLE
 	{
@@ -5350,15 +5349,10 @@ table.TBL_WIDE > tbody > tr > th {padding:2px;}
 	box-sizing:border-box;
 	width:100px;
 	}
-.INPUT_WWW_NARROW
+.INPUT_WWW
 	{
 	box-sizing:border-box;
 	width:90px;
-	}
-.INPUT_WWW_WIDE
-	{
-	box-sizing:border-box;
-	width:180px;
 	}
 .INPUT_COORD
 	{
@@ -5385,9 +5379,9 @@ table.TBL_WIDE > tbody > tr > th {padding:2px;}
 
 /******************************** Last clicks ********************************/
 .LC_CLK	{text-align:right; vertical-align:top; min-width:60px;}
-.LC_TIM	{text-align:right; vertical-align:top; min-width:60px;  max-width:60px;  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.LC_ROL	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.LC_HIE	{text-align:left;  vertical-align:top; min-width:100px; max-width:100px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.LC_TIM	{text-align:right; vertical-align:top; min-width:60px; max-width:60px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.LC_ROL	{text-align:left;  vertical-align:top; min-width:90px; max-width:90px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.LC_HIE	{text-align:left;  vertical-align:top; min-width:90px; max-width:90px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .LC_ACT	{text-align:left;  vertical-align:top; min-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
 /*********************** Listing my courses as a tree ************************/

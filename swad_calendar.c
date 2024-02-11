@@ -308,8 +308,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
   {
    /***** Print calendar *****/
-   Ico_PutContextualIconToPrint (ActPrnCal,
-				 NULL,NULL);
+   Ico_PutContextualIconToPrint (ActPrnCal,NULL,NULL);
 
    /***** View holidays *****/
    if (Gbl.Hierarchy.Level == Hie_INS)		// Institution selected

@@ -522,7 +522,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	       Frm_BeginForm (ActChgDptWWW);
 		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
 		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW INPUT_%s\""
+				 "class=\"INPUT_WWW INPUT_%s\""
 				 " required=\"required\"",
 				 The_GetSuffix ());
 	       Frm_EndForm ();
@@ -820,7 +820,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 	 /***** Department WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW INPUT_%s\""
+			   "class=\"INPUT_WWW INPUT_%s\""
 			   " required=\"required\"",
 			   The_GetSuffix ());
 	 HTM_TD_End ();
