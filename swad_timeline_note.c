@@ -168,6 +168,7 @@ void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
 
    /* End box */
    Box_BoxEnd ();
+   HTM_BR ();
   }
 
 /*****************************************************************************/
@@ -1024,6 +1025,7 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
 					     -1L);
       HTM_DIV_End ();
    Box_BoxEnd ();
+   HTM_BR ();
 
    /* End alert */
    Timeline->NotCod = Not.NotCod;	// Note to be removed

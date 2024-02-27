@@ -87,45 +87,19 @@ void Set_EditSettings (void)
    /***** Internationalization: language, first day of week, date format *****/
    Box_BoxBegin (Txt_Internationalization,NULL,NULL,
                  Hlp_PROFILE_Settings_internationalization,Box_NOT_CLOSABLE);
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Lan_PutBoxToSelectLanguage ();		// 1. Language
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Dat_PutBoxToSelectDateFormat ();	// 3. Date format
-      HTM_DIV_End ();
-
+       Lan_PutBoxToSelectLanguage ();		// 1. Language
+       Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
+       Dat_PutBoxToSelectDateFormat ();		// 3. Date format
    Box_BoxEnd ();
 
    /***** Design: icon set, menu, theme, side columns *****/
    Box_BoxBegin (Txt_Design,NULL,NULL,
                  Hlp_PROFILE_Settings_design,Box_NOT_CLOSABLE);
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Ico_PutIconsToSelectIconSet ();		// 4. Icon set
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Mnu_PutIconsToSelectMenu ();			// 5. Menu
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 The_PutIconsToSelectTheme ();			// 6. Theme
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Set_PutIconsToSelectSideCols ();		// 7. Side columns
-      HTM_DIV_End ();
-
-      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 PhoSha_PutIconsToSelectPhotoShape ();		// 8. User photos
-      HTM_DIV_End ();
-
+      Ico_PutIconsToSelectIconSet ();		// 4. Icon set
+      Mnu_PutIconsToSelectMenu ();		// 5. Menu
+      The_PutIconsToSelectTheme ();		// 6. Theme
+      Set_PutIconsToSelectSideCols ();		// 7. Side columns
+      PhoSha_PutIconsToSelectPhotoShape ();	// 8. User photos
    Box_BoxEnd ();
 
    if (Gbl.Usrs.Me.Logged)
