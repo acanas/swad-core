@@ -365,6 +365,7 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
+                           Act_Action_t NextAction,
                            void (*FuncPars) (void *Args),void *Args,
                            const char *OnSubmit);
 
@@ -392,7 +393,9 @@ void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);
 
 void Usr_FreeListOtherRecipients (void);
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args);
+void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
+				       void (*FuncPars) (void *Args),void *Args,
+				       const char *OnSubmit);
 unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);

@@ -97,7 +97,8 @@ static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
 
 static void Msg_ResetMessages (struct Msg_Messages *Messages);
 
-static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
+static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
+			        struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages);
@@ -208,14 +209,15 @@ void Msg_FormMsgUsrs (void)
                               Str_TO_TEXT,Str_DONT_REMOVE_SPACES);
 
    /***** Show a form to compose a message to users *****/
-   Msg_PutFormMsgUsrs (&Messages,Content);
+   Msg_PutFormMsgUsrs (ActReqMsgUsr,&Messages,Content);
   }
 
 /*****************************************************************************/
 /***************** Put a form to write a new message to users ****************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
+static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
+			        struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
@@ -280,8 +282,8 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	 if (GetUsrsInCrs)
 	   {
 	    /***** Form to select groups *****/
-	    Grp_ShowFormToSelectSeveralGroups (Msg_PutParsWriteMsg,Messages,
-					       Grp_MY_GROUPS);
+	    Grp_ShowFormToSelectSeveralGroups (NextAction,Msg_PutParsWriteMsg,Messages,
+					       "CopyMessageToHiddenFields();");
 
 	    /***** Begin section with user list *****/
 	    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -289,14 +291,15 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	       if (NumUsrsInCrs)
 		 {
 		  /***** Form to select type of list used for select several users *****/
-		  Usr_ShowFormsToSelectUsrListType (Msg_PutParsWriteMsg,Messages);
+		  Usr_ShowFormsToSelectUsrListType (NextAction,Msg_PutParsWriteMsg,Messages,
+						    "CopyMessageToHiddenFields();");
 
 		  /***** Put link to register students *****/
 		  Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 		  /***** Check if it's a big list *****/
 		  ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
-							Msg_PutParsWriteMsg,Messages,
+							NextAction,Msg_PutParsWriteMsg,Messages,
 							"CopyMessageToHiddenFields();");
 
 		  if (ShowUsrsInCrs)
@@ -361,8 +364,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	 Lay_HelpPlainEditor ();
 
 	 /***** Attached image (optional) *****/
-	 if (asprintf (&ClassInput,"MSG_MED_INPUT INPUT_%s",
-	               The_GetSuffix ()) < 0)
+	 if (asprintf (&ClassInput,"MSG_MED_INPUT INPUT_%s",The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Med_PutMediaUploader (-1,ClassInput);
 	 free (ClassInput);
@@ -408,7 +410,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (struct Msg_Messages *Messa
 				     Msg_PutParsShowMorePotentialRecipients,Messages,
 				     "users.svg",Ico_BLACK,
 				     Txt_Show_more_recipients,
-				     "CopyMessageToHiddenFields();");	// Show more potential recipients
+				     "CopyMessageToHiddenFields();");
    Mnu_ContextMenuEnd ();
   }
 
@@ -788,7 +790,7 @@ void Msg_RecMsgFromUsr (void)
       /* Show the form again, with the subject and the message filled */
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
                         Content,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
-      Msg_PutFormMsgUsrs (&Messages,Content);
+      Msg_PutFormMsgUsrs (ActRcvMsgUsr,&Messages,Content);
       return;
      }
 
@@ -1504,7 +1506,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	    Msg_ShowFormToFilterMsgs (Messages);
 
 	    /***** Put button to refresh *****/
-	    Lay_WriteLinkToUpdate (Txt_Update_messages);
+	    Lay_WriteLinkToUpdate (Txt_Update_messages,"CopyMessageToHiddenFields();");
 
 	 Frm_EndForm ();
 

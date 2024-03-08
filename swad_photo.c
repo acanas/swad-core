@@ -256,6 +256,7 @@ void Pho_ReqMyPhoto (void)
   {
    /***** Show the form for sending the photo *****/
    Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);
+   HTM_BR ();
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -269,6 +270,7 @@ static void Pho_ReqOtherUsrPhoto (void)
   {
    /***** Show the form to send another user's photo *****/
    Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);
+   HTM_BR ();
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -380,7 +382,10 @@ void Pho_RecMyPhotoDetFaces (void)
   {
    /***** Receive my photo and detect faces on it *****/
    if (!Pho_ReceivePhotoAndDetectFaces (Usr_ME,&Gbl.Usrs.Me.UsrDat))
+     {
       Pho_ReqPhoto (&Gbl.Usrs.Me.UsrDat);	// Request my photograph again
+      HTM_BR ();
+     }
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -402,7 +407,10 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
      {
       /***** Receive photo *****/
       if (!Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
+        {
          Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
+         HTM_BR ();
+        }
 
       /***** Show another user's record card *****/
       Rec_ShowPublicSharedRecordOtherUsr ();
@@ -2136,7 +2144,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParsDegPhoto,DegPhotos);
+	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,NULL);
 
       HTM_TABLE_BeginCenter ();
 
@@ -2219,7 +2227,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (Pho_PutParsDegPhoto,DegPhotos);
+	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParsDegPhoto,DegPhotos,NULL);
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);

@@ -1429,6 +1429,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
       Att_ShowOneEventRow (Events,
 			   true);	// Show only this event
    Box_BoxTableEnd ();
+   HTM_BR ();
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1553,7 +1554,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Form to select groups *****/
-      Grp_ShowFormToSelectSeveralGroups (Att_PutParAttCod,Events,Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,Att_PutParAttCod,Events,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -2705,7 +2706,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 
       /***** Put button to refresh *****/
       if (NormalView)
-	 Lay_WriteLinkToUpdate (Txt_Update_attendance);
+	 Lay_WriteLinkToUpdate (Txt_Update_attendance,NULL);
 
       /***** End form *****/
       if (NormalView)

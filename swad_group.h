@@ -166,8 +166,9 @@ struct Grp_Groups
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
 
-void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args,
-                                        Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
+				        void (*FuncPars) (void *Args),void *Args,
+				        const char *OnSubmit);
 void Grp_PutParsCodGrps (void);
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
 void Grp_GetParCodsSeveralGrps (void);

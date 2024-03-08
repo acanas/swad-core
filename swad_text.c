@@ -2862,7 +2862,7 @@ const char *Txt_Attendance =	// Number of times a students has attended to face-
 #elif L==5	// fr
 	"Pr&eacute;sence";
 #elif L==6	// gn
-	"Asistencia";	// Okoteve traducción
+	"Asistencia";
 #elif L==7	// it
 	"Presenza";
 #elif L==8	// pl
@@ -12756,7 +12756,7 @@ const char *Txt_File_with_the_photo =
 #elif L==5	// fr
 	"Fichier avec la photo";
 #elif L==6	// gn
-	"Archivo con la foto";	// Okoteve traducción
+	"Archivo orek&oacute;va ta'anga";
 #elif L==7	// it
 	"File con la foto";
 #elif L==8	// pl
@@ -12764,7 +12764,7 @@ const char *Txt_File_with_the_photo =
 #elif L==9	// pt
 	"Arquivo com a foto";
 #elif L==10	// tr
-	"File with the photo";	// Çeviri lazim!
+	"Foto&gbreve;rafl&inodot; dosya";
 #endif
 
 const char *Txt_File_zone =
@@ -52076,48 +52076,48 @@ const char *Txt_There_have_been_X_errors_in_sending_the_message =	// Warning: it
 
 const char *Txt_There_is_already_a_file_named_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Ya existe un archivo con el nombre <strong>%s</strong>.";	// Necessita traducció
+	"Ja hi ha un arxiu amb el nom <strong>%s</strong>.";
 #elif L==2	// de
-	"There is already a file named <strong>%s</strong>.";		// Übersetzung notwendig
+	"Es gibt bereits eine Datei mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"There is already a file named <strong>%s</strong>.";
 #elif L==4	// es
 	"Ya existe un archivo con el nombre <strong>%s</strong>.";
 #elif L==5	// fr
-	"There is already a file named <strong>%s</strong>.";		// Besoin de traduction
+	"Il existe d&eacute;j&agrave; un fichier nomm&eacute; <strong>%s</strong>.";
 #elif L==6	// gn
-	"Ya existe un archivo con el nombre <strong>%s</strong>.";	// Okoteve traducción
+	"O&itilde;ma pete&itilde; vore h&eacute;rava <strong>%s</strong>.";
 #elif L==7	// it
 	"C'&egrave; gi&agrave; un file chiamato <strong>%s</strong>.";
 #elif L==8	// pl
-	"There is already a file named <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Istnieje ju&zdot; plik o nazwie <strong>%s</strong>.";
 #elif L==9	// pt
 	"J&aacute; existe um arquivo chamado <strong>%s</strong>.";
 #elif L==10	// tr
-	"There is already a file named <strong>%s</strong>.";		// Çeviri lazim!
+	"Zaten <strong>%s</strong> ad&inodot;nda bir dosya var.";
 #endif
 
 const char *Txt_There_is_already_a_non_empty_folder_named_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Ya existe una carpeta no vac&iacute;a con el nombre <strong>%s</strong>.";	// Necessita traducció
+	"Ja hi ha una carpeta no buida amb el nom <strong>%s</strong>.";
 #elif L==2	// de
-	"There is already a non-empty folder named <strong>%s</strong>.";		// Übersetzung notwendig
+	"Es gibt bereits einen nicht leeren Ordner mit dem Namen <strong>%s</strong>.";
 #elif L==3	// en
 	"There is already a non-empty folder named <strong>%s</strong>.";
 #elif L==4	// es
 	"Ya existe una carpeta no vac&iacute;a con el nombre <strong>%s</strong>.";
 #elif L==5	// fr
-	"There is already a non-empty folder named <strong>%s</strong>.";		// Besoin de traduction
+	"Il existe d&eacute;j&agrave; un dossier non vide nomm&eacute; <strong>%s</strong>.";
 #elif L==6	// gn
-	"Ya existe una carpeta no vac&iacute;a con el nombre <strong>%s</strong>.";	// Okoteve traducción
+	"O&itilde;ma pete&itilde; kundaha nandi'&ytilde;va h&eacute;rava <strong>%s</strong>.";
 #elif L==7	// it
 	"C'&egrave; gi&agrave; una cartella non vuota chiamata <strong>%s</strong>.";
 #elif L==8	// pl
-	"There is already a non-empty folder named <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
+	"Istnieje ju&zdot; niepusty folder o nazwie <strong>%s</strong>.";
 #elif L==9	// pt
 	"J&aacute; existe uma pasta n&atilde;o vazia chamada strong>%s</strong>.";
 #elif L==10	// tr
-	"There is already a non-empty folder named <strong>%s</strong>.";		// Çeviri lazim!
+	"<strong>%s</strong> ad&inodot;nda bo&scedil; olmayan bir klas&ouml;r zaten var.";
 #endif
 
 const char *Txt_There_is_no_empty_account_associated_with_your_ID_X =	// Warning: it is very important to include %s in the following sentences
@@ -52698,7 +52698,7 @@ const char *Txt_time =
 #elif L==5	// fr
 	"temps";
 #elif L==6	// gn
-	"tiempo";	// Okoteve traducción
+	"aravo";
 #elif L==7	// it
 	"tempo";
 #elif L==8	// pl
@@ -52706,7 +52706,7 @@ const char *Txt_time =
 #elif L==9	// pt
 	"tempo";
 #elif L==10	// tr
-	"time";		// Çeviri lazim!
+	"zaman";
 #endif
 
 const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics =
@@ -52744,7 +52744,7 @@ const char *Txt_Timeline =
 #elif L==5	// fr
 	"Chronologie";
 #elif L==6	// gn
-	"Timeline";	// Okoteve traducción
+	"Timeline";
 #elif L==7	// it
 	"Timeline";
 #elif L==8	// pl
@@ -52752,7 +52752,7 @@ const char *Txt_Timeline =
 #elif L==9	// pt
 	"Timeline";
 #elif L==10	// tr
-	"Timeline";	// Çeviri lazim!
+	"Zaman &ccedil;izelgesi";
 #endif
 
 const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include %s in the following sentences

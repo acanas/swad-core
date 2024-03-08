@@ -272,8 +272,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    free (Title);
 
       /***** Show form to select the groups *****/
-      Grp_ShowFormToSelectSeveralGroups (NULL,NULL,
-					 Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (ActSeeAccCrs,NULL,NULL,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -281,11 +280,10 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	 if (NumTotalUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (NumTotalUsrs,
-				      NULL,NULL,
-				      NULL))
+				      ActReqAccCrs,NULL,NULL,NULL))
 	      {
 	       /***** Form to select type of list used for select several users *****/
-	       Usr_ShowFormsToSelectUsrListType (NULL,NULL);
+	       Usr_ShowFormsToSelectUsrListType (ActReqAccCrs,NULL,NULL,NULL);
 
 	       /***** Put link to register students *****/
 	       Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();

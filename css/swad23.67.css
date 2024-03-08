@@ -3274,7 +3274,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:276px;
 		}
 	}
-@media only screen and (min-width:600px)
+@media only screen and (min-width:600px) and (max-width:1024px)
 	{	/* For desktop */
 	.Frm_C1
 		{
@@ -3296,7 +3296,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:382px;
 		}
 	}
-/*
 @media only screen and (min-width:1024px)
 	{	* For desktop *
 	.Frm_C1
@@ -3319,7 +3318,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		width:700px;
 		}
 	}
-*/
+
 /******************************** Class photo ********************************/
 .CLASSPHOTO_TITLE
 	{

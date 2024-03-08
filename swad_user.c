@@ -192,6 +192,7 @@ static void Usr_GetGstsLst (Hie_Level_t Level);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
+						     Act_Action_t NextAction,
                                                      void (*FuncPars) (void *Args),void *Args,
                                                      const char *OnSubmit);
 static void Usr_PutParsConfirmIWantToSeeBigList (void *Args);
@@ -204,8 +205,10 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *S
 						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
-static void Set_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
-                                         Set_ShowUsrsType_t ListType);
+static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
+					 void (*FuncPars) (void *Args),void *Args,
+					 const char *OnSubmit,
+					 Set_ShowUsrsType_t ListType);
 static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 					 Rol_Role_t Role);
 static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
@@ -3006,6 +3009,7 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /*****************************************************************************/
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
+                           Act_Action_t NextAction,
                            void (*FuncPars) (void *Args),void *Args,
                            const char *OnSubmit)
   {
@@ -3018,7 +3022,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
              to see a big list of users *****/
       if (!(ShowBigList = Par_GetParBool ("ShowBigList")))
 	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,
-	                                          FuncPars,Args,
+	                                          NextAction,FuncPars,Args,
 	                                          OnSubmit);
 
       return ShowBigList;
@@ -3032,6 +3036,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
 /*****************************************************************************/
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
+						     Act_Action_t NextAction,
                                                      void (*FuncPars) (void *Args),void *Args,
                                                      const char *OnSubmit)
   {
@@ -3040,7 +3045,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
 
    /***** Show alert and button to confirm that I want to see the big list *****/
    Usr_FuncParsBigList = FuncPars;	// Used to pass pointer to function
-   Ale_ShowAlertAndButton (Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
+   Ale_ShowAlertAndButton (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParsConfirmIWantToSeeBigList,Args,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
 			   Ale_WARNING,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
@@ -3600,7 +3605,9 @@ void Usr_FreeListOtherRecipients (void)
 /*************************** Selection of list type **************************/
 /*****************************************************************************/
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args)
+void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
+				       void (*FuncPars) (void *Args),void *Args,
+				       const char *OnSubmit)
   {
    Set_BeginSettingsHead ();
    Set_BeginOneSettingSelector ();
@@ -3608,12 +3615,11 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args)
    /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
    Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO);
 
-      Set_FormToSelectUsrListType (FuncPars,Args,
+      Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
 				   Set_USR_LIST_AS_CLASS_PHOTO);
 
       /* Number of columns in the class photo */
-      Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
-			   Usr_USER_LIST_SECTION_ID);
+      Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
 	 Grp_PutParsCodGrps ();
 	 Set_PutParUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
 	 Set_PutParListWithPhotos ();
@@ -3627,12 +3633,11 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args)
    /***** Select Usr_LIST_AS_LISTING *****/
    Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING);
 
-      Set_FormToSelectUsrListType (FuncPars,Args,
+      Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
 				   Set_USR_LIST_AS_LISTING);
 
       /* See the photos in list? */
-      Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
-			   Usr_USER_LIST_SECTION_ID);
+      Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
 	 Grp_PutParsCodGrps ();
 	 Set_PutParUsrListType (Set_USR_LIST_AS_LISTING);
 	 if (FuncPars)
@@ -3650,14 +3655,15 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args)
 /************* Put a radio element to select a users' list type **************/
 /*****************************************************************************/
 
-static void Set_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
-                                         Set_ShowUsrsType_t ListType)
+static void Set_FormToSelectUsrListType (Act_Action_t NextAction,
+					 void (*FuncPars) (void *Args),void *Args,
+					 const char *OnSubmit,
+					 Set_ShowUsrsType_t ListType)
   {
    extern const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES];
 
    /***** Begin form *****/
-   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
-	                Usr_USER_LIST_SECTION_ID);
+   Frm_BeginFormAnchorOnSubmit (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit);
       Grp_PutParsCodGrps ();
       Set_PutParUsrListType (ListType);
       Set_PutParListWithPhotos ();
@@ -3665,14 +3671,17 @@ static void Set_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Arg
 	 FuncPars (Args);
 
       /***** Link and image *****/
-      HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
-			       "class=\"BT_LINK FORM_IN_%s NOWRAP\"%s",
-			       The_GetSuffix (),
-			       Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
-							        "");
-	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
-	              Txt_USR_LIST_TYPES[ListType],"ICO20x20");
-	 HTM_NBSPTxt (Txt_USR_LIST_TYPES[ListType]);
+      if (OnSubmit)
+	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
+				  "class=\"BT_LINK FORM_IN_%s NOWRAP\" onsubmit=\"%s\"",
+				  The_GetSuffix (),OnSubmit);
+      else
+	 HTM_BUTTON_Submit_Begin (Txt_USR_LIST_TYPES[ListType],
+				  "class=\"BT_LINK FORM_IN_%s NOWRAP\"",
+				  The_GetSuffix ());
+      Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
+		   Txt_USR_LIST_TYPES[ListType],"ICO20x20");
+      HTM_NBSPTxt (Txt_USR_LIST_TYPES[ListType]);
       HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -3719,8 +3728,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
       /***** Show form to select the groups *****/
-      Grp_ShowFormToSelectSeveralGroups (FuncPars,Args,
-					 Grp_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (NextAction,FuncPars,Args,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -3728,11 +3736,11 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	 if (NumTotalUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (NumTotalUsrs,
-				      FuncPars,Args,
+				      NextAction,FuncPars,Args,
 				      NULL))
 	      {
 	       /***** Form to select type of list used for select several users *****/
-	       Usr_ShowFormsToSelectUsrListType (FuncPars,Args);
+	       Usr_ShowFormsToSelectUsrListType (NextAction,FuncPars,Args,NULL);
 
 	       /***** Link to register students *****/
 	       Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
@@ -5080,11 +5088,12 @@ void Usr_SeeGuests (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
-				      Sco_PutParCurrentScope,&Gbl.Scope.Current,
+				      ActLstGst,Sco_PutParCurrentScope,&Gbl.Scope.Current,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&Gbl.Scope.Current);
+	       Usr_ShowFormsToSelectUsrListType (ActLstGst,Sco_PutParCurrentScope,&Gbl.Scope.Current,
+						 NULL);
 
 	       /***** Draw a class photo with guests *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5222,8 +5231,8 @@ void Usr_SeeStudents (void)
 
       /***** Form to select groups *****/
       if (Gbl.Scope.Current == Hie_CRS)
-	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParCurrentScope,&Gbl.Scope.Current,
-					    Grp_MY_GROUPS);
+	 Grp_ShowFormToSelectSeveralGroups (ActLstStd,Sco_PutParCurrentScope,
+					    &Gbl.Scope.Current,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -5231,11 +5240,12 @@ void Usr_SeeStudents (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
-				      Sco_PutParCurrentScope,&Gbl.Scope.Current,
+				      ActLstStd,Sco_PutParCurrentScope,&Gbl.Scope.Current,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&Gbl.Scope.Current);
+	       Usr_ShowFormsToSelectUsrListType (ActLstStd,Sco_PutParCurrentScope,&Gbl.Scope.Current,
+						 NULL);
 
 	       /***** Draw a class photo with students of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
@@ -5389,8 +5399,8 @@ void Usr_SeeTeachers (void)
 
       /***** Form to select groups *****/
       if (Gbl.Scope.Current == Hie_CRS)
-	 Grp_ShowFormToSelectSeveralGroups (Sco_PutParCurrentScope,&Gbl.Scope.Current,
-					    Grp_MY_GROUPS);
+	 Grp_ShowFormToSelectSeveralGroups (ActLstTch,Sco_PutParCurrentScope,
+					    &Gbl.Scope.Current,NULL);
 
       /***** Begin section with user list *****/
       HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -5398,11 +5408,12 @@ void Usr_SeeTeachers (void)
 	 if (NumUsrs)
 	   {
 	    if (Usr_GetIfShowBigList (NumUsrs,
-				      Sco_PutParCurrentScope,&Gbl.Scope.Current,
+				      ActLstTch,Sco_PutParCurrentScope,&Gbl.Scope.Current,
 				      NULL))
 	      {
 	       /***** Form to select type of list of users *****/
-	       Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&Gbl.Scope.Current);
+	       Usr_ShowFormsToSelectUsrListType (ActLstTch,Sco_PutParCurrentScope,&Gbl.Scope.Current,
+						 NULL);
 
 	       /***** Draw a class photo with teachers of the course *****/
 	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)

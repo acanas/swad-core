@@ -331,9 +331,10 @@ static void Asg_ParsWhichGroupsToShow (void *Assignments)
   {
    if (Assignments)
      {
-      Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
+      Par_PutParOrder ((unsigned)
+	               ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       Pag_PutParPagNum (Pag_ASSIGNMENTS,
-                                ((struct Asg_Assignments *) Assignments)->CurrentPage);
+                        ((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
   }
 

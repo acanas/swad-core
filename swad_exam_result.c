@@ -625,7 +625,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 	    HTM_TABLE_End ();
 
 	    /***** Put link to refresh *****/
-	    Lay_WriteLinkToUpdate (Txt_Update_results);
+	    Lay_WriteLinkToUpdate (Txt_Update_results,NULL);
 
       /***** End form *****/
       Frm_EndForm ();

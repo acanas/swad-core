@@ -102,7 +102,7 @@ static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (const struct Roo_Rooms *Rooms);
 static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args);
 
-static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
+static void Grp_PutCheckboxAllGrps (void);
 
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
@@ -122,8 +122,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void);
 static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
                                               unsigned *NumGrpsThisTypeIBelong);
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod);
-static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
-                                              Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
+static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp);
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
 static void Grp_WriteRowGrp (struct Group *Grp,Lay_Highlight_t Highlight);
 static void Grp_PutFormToCreateGroupType (void);
@@ -337,8 +336,9 @@ static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args,
-                                        Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
+				        void (*FuncPars) (void *Args),void *Args,
+				        const char *OnSubmit)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *Txt_Groups;
@@ -361,14 +361,13 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args
 
       /***** Begin form to update the students listed
 	     depending on the groups selected *****/
-      Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
-			   Usr_USER_LIST_SECTION_ID);
+      Frm_BeginFormAnchorOnSubmit (NextAction,Usr_USER_LIST_SECTION_ID,OnSubmit);
 	 Set_PutParsPrefsAboutUsrList ();
 	 if (FuncPars)
 	    FuncPars (Args);
 
 	 /***** Select all groups *****/
-	 Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
+	 Grp_PutCheckboxAllGrps ();
 
 	 /***** Get list of groups types and groups in this course *****/
 	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -379,15 +378,14 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args
 		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		 NumGrpTyp++)
 	       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-		  Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-						    GroupsSelectableByStdsOrNETs);
+		  Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
 	 HTM_TABLE_End ();
 
 	 /***** Free list of groups types and groups in this course *****/
 	 Grp_FreeListGrpTypesAndGrps ();
 
 	 /***** Submit button *****/
-	 Lay_WriteLinkToUpdate (Txt_Update_users);
+	 Lay_WriteLinkToUpdate (Txt_Update_users,NULL);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -400,17 +398,13 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncPars) (void *Args),void *Args
 /******************* Put checkbox to select all groups ***********************/
 /*****************************************************************************/
 
-static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
+static void Grp_PutCheckboxAllGrps (void)
   {
    extern const char *Txt_All_groups;
    bool ICanSelUnselGroup;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
-      case Rol_STD:
-      case Rol_NET:
-	 ICanSelUnselGroup = (GroupsSelectableByStdsOrNETs == Grp_ALL_GROUPS);
-	 break;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -2094,8 +2088,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 /******* Write a list of groups as checkbox form for unique selection ********/
 /*****************************************************************************/
 
-static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
-                                              Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
+static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
   {
    extern const char *Txt_users_with_no_group;
    unsigned NumGrpThisType;
@@ -2133,8 +2126,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	   {
 	    case Rol_STD:
 	    case Rol_NET:
-	       ICanSelUnselGroup = (GroupsSelectableByStdsOrNETs == Grp_ALL_GROUPS) ||
-	                           IBelongToThisGroup;
+	       ICanSelUnselGroup = IBelongToThisGroup;
 	       break;
 	    case Rol_TCH:
 	    case Rol_DEG_ADM:

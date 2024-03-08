@@ -1245,7 +1245,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
       /***** Put icon and text with link *****/
 	 if (OnSubmit)
 	    HTM_BUTTON_Submit_Begin (Text,
-				     "class=\"BT_LINK FORM_OUT_%s BOLD\" onsubmit=\"%s;\"",
+				     "class=\"BT_LINK FORM_OUT_%s BOLD\" onsubmit=\"%s\"",
 				     The_GetSuffix (),OnSubmit);
 	 else
 	    HTM_BUTTON_Submit_Begin (Text,
@@ -1725,15 +1725,18 @@ void Lay_WriteIndex (unsigned Index,const char *Class)
 /*************************** Write a link to update **************************/
 /*****************************************************************************/
 
-void Lay_WriteLinkToUpdate (const char *Txt)
+void Lay_WriteLinkToUpdate (const char *Txt,const char *OnSubmit)
   {
    HTM_DIV_Begin ("class=\"UPD\"");
-      HTM_BUTTON_Submit_Begin (Txt,
-			       "class=\"BT_LINK FORM_IN_%s BOLD\"%s",
-			       The_GetSuffix (),
-			       Gbl.Action.Act == ActReqMsgUsr ? " onsubmit=\"CopyMessageToHiddenFields();\"" :
-								"");
-	 Ico_PutIconTextUpdate (Txt);
+      if (OnSubmit)
+	 HTM_BUTTON_Submit_Begin (Txt,
+				  "class=\"BT_LINK FORM_IN_%s BOLD\" onsubmit=\"%s\"",
+				  The_GetSuffix (),OnSubmit);
+      else
+	 HTM_BUTTON_Submit_Begin (Txt,
+				  "class=\"BT_LINK FORM_IN_%s BOLD\"",
+				  The_GetSuffix ());
+      Ico_PutIconTextUpdate (Txt);
       HTM_BUTTON_End ();
    HTM_DIV_End ();
   }

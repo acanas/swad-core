@@ -1652,7 +1652,7 @@ void Ins_GetAndShowInstitutionsStats (void)
       Set_GetAndUpdatePrefsAboutUsrList ();
       Figures.Level      = Gbl.Scope.Current;
       Figures.FigureType = Fig_INSTITS;
-      Usr_ShowFormsToSelectUsrListType (Fig_PutParsFigures,&Figures);
+      Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl,Fig_PutParsFigures,&Figures,NULL);
 
       /***** Institutions ordered by number of centers *****/
       Ins_GetAndShowInssOrderedByNumCtrs ();

@@ -476,48 +476,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRefNewPubGblTL] =
 #if   L==1	// ca
-	"Refresh global timeline (new publications)"		// Necessita traducció
+	"Actualitzar timeline global (noves publicacions)"
 #elif L==2	// de
-	"Refresh global timeline (new publications)"		// Need Übersetzung
+	"Globale Zeitleiste aktualisieren (Neuver&ouml;ffentlichungen)"
 #elif L==3	// en
 	"Refresh global timeline (new publications)"
 #elif L==4	// es
-	"Refrescar timeline global (nuevas publicaciones)"
+	"Actualizar timeline global (nuevas publicaciones)"
 #elif L==5	// fr
-	"Refresh global timeline (new publications)"		// Besoin de traduction
+	"Actualiser la chronologie globale (nouvelles publications)"
 #elif L==6	// gn
-	"Refrescar timeline global (nuevas publicaciones)"	// Okoteve traducción
+	"Ombopyahu l&iacute;nea de tiempo global (post pyahu)"
 #elif L==7	// it
-	"Refresh global timeline (new publications)"		// Bisogno di traduzione
+	"Aggiorna la sequenza temporale globale (nuove pubblicazioni)"
 #elif L==8	// pl
-	"Refresh global timeline (new publications)"		// Potrzebujesz tlumaczenie
+	"Od&sacute;wie&zdot; globaln&aogon; o&sacute; czasu (nowe publikacje)"
 #elif L==9	// pt
-	"Refresh global timeline (new publications)"		// Precisa de tradução
+	"Atualizar linha do tempo global (novas publica&ccedil;&otilde;es)"
 #elif L==10	// tr
-	"Refresh global timeline (new publications)"		// Çeviri lazim!
+	"K&uuml;resel zaman &ccedil;izelgesini yenile (yeni yay&inodot;nlar)"
 #endif
 	,
 	[ActRefOldPubGblTL] =
 #if   L==1	// ca
-	"Show previous publications in global timeline"		// Necessita traducció
+	"Mostrar publicacions anteriors a timeline global"
 #elif L==2	// de
-	"Show previous publications in global timeline"		// Need Übersetzung
+	"Fr&uuml;here Ver&ouml;ffentlichungen in der globalen Zeitleiste anzeigen"
 #elif L==3	// en
 	"Show previous publications in global timeline"
 #elif L==4	// es
 	"Mostrar publicaciones anteriores en timeline global"
 #elif L==5	// fr
-	"Show previous publications in global timeline"		// Besoin de traduction
+	"Afficher les publications pr&eacute;c&eacute;dentes dans la chronologie globale"
 #elif L==6	// gn
-	"Mostrar publicaciones anteriores en timeline global"	// Okoteve traducción
+	"Ehechauka umi kuatia&ntilde;e'&etilde; yma guare l&iacute;nea de tiempo global-pe"
 #elif L==7	// it
-	"Show previous publications in global timeline"		// Bisogno di traduzione
+	"Mostra le pubblicazioni precedenti nella sequenza temporale globale"
 #elif L==8	// pl
-	"Show previous publications in global timeline"		// Potrzebujesz tlumaczenie
+	"Poka&zdot; poprzednie publikacje na globalnej osi czasu"
 #elif L==9	// pt
-	"Show previous publications in global timeline"		// Precisa de tradução
+	"Mostrar publica&ccedil;&otilde;es anteriores na linha do tempo global"
 #elif L==10	// tr
-	"Show previous publications in global timeline"		// Çeviri lazim!
+	"&Ouml;nceki yay&inodot;nlar&inodot; k&uuml;resel zaman &ccedil;izelgesinde g&ouml;ster"
 #endif
 	,
 	[ActRcvPstGblTL] =
