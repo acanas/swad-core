@@ -292,10 +292,10 @@ static void CrsCfg_Year (Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_Year_OF_A_DEGREE);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_Year_OF_A_DEGREE);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:
@@ -306,14 +306,14 @@ static void CrsCfg_Year (Frm_PutForm_t PutForm)
 	       Frm_BeginForm (ActChgCrsYeaCfg);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthCrsYear\" name=\"OthCrsYear\""
-				    " class=\"INPUT_%s\"",
+				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (Year  = 0;
 			  Year <= Deg_MAX_YEARS_PER_DEGREE;
 			  Year++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 				    Year == Gbl.Hierarchy.Node[Hie_CRS].Specific.Year ? HTM_OPTION_SELECTED :
-											   HTM_OPTION_UNSELECTED,
+											HTM_OPTION_UNSELECTED,
 				    HTM_OPTION_ENABLED,
 				    "%s",Txt_YEAR_OF_DEGREE[Year]);
 		  HTM_SELECT_End ();
@@ -342,10 +342,10 @@ static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",Id[PutForm],Txt_Institutional_code);
+      Frm_LabelColumn ("Frm_C1 RT",Id[PutForm],Txt_Institutional_code);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:
@@ -357,7 +357,7 @@ static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm)
 				  Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "id=\"InsCrsCod\" maxlength=\"%u\""
-				  " class=\"INPUT_INS_CODE INPUT_%s\"",
+				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  Hie_MAX_CHARS_INSTITUTIONAL_COD,
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -380,10 +380,10 @@ static void CrsCfg_InternalCode (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Internal_code);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Internal_code);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Long (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
       HTM_TD_End ();
 
@@ -410,10 +410,10 @@ static void CrsCfg_Indicators (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT",NULL,Txt_Indicators);
+      Frm_LabelColumn ("Frm_C1 RT",NULL,Txt_Indicators);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
+      HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginForm (ActReqStaCrs);
 	    if (asprintf (&Title,"%u %s %u",
 			  IndicatorsCrs.NumIndicators,

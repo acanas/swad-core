@@ -1446,12 +1446,18 @@ a:hover						/* Default ==> underlined */
 	margin:12px auto;
 	}
 			
-.HIE_CFG_LEFT, .HIE_CFG_RIGHT
+.HIE_CFG_LEFT
 	{
 	display:inline-block;
 	margin:0 6px;
 	vertical-align:top;
-	width:520px;
+	}
+.HIE_CFG_RIGHT
+	{
+	display:inline-block;
+	margin:0 6px;
+	vertical-align:top;
+	width:520px;	/* TODO: Make it responsive */
 	}
 
 @media only screen and (max-width:590px)
@@ -3297,7 +3303,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 		}
 	}
 @media only screen and (min-width:1024px)
-	{	* For desktop *
+	{	/* For desktop */
 	.Frm_C1
 		{
 		box-sizing:border-box;
