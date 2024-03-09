@@ -4869,6 +4869,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change number of users of room"		// Çeviri lazim!
 #endif
 	,
+	[ActChgRooMAC] =
+#if   L==1	// ca
+	"Change MAC of room"		// Necessita traducció
+#elif L==2	// de
+	"Change MAC of room"		// Need Übersetzung
+#elif L==3	// en
+	"Change MAC of room"
+#elif L==4	// es
+	"Cambiar MAC de sala"
+#elif L==5	// fr
+	"Change MAC of room"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar MAC de sala"	// Okoteve traducción
+#elif L==7	// it
+	"Change MAC of room"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change MAC of room"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change MAC of room"		// Precisa de tradução
+#elif L==10	// tr
+	"Change MAC of room"		// Çeviri lazim!
+#endif
+	,
 	[ActRenRooSho] =
 #if   L==1	// ca
 	"Change short name of room"	// Necessita traducció
@@ -4936,6 +4959,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change floor of room"		// Precisa de tradução
 #elif L==10	// tr
 	"Change floor of room"		// Çeviri lazim!
+#endif
+	,
+	[ActChgRooTyp] =
+#if   L==1	// ca
+	"Change type of room"		// Necessita traducció
+#elif L==2	// de
+	"Change type of room"		// Need Übersetzung
+#elif L==3	// en
+	"Change type of room"
+#elif L==4	// es
+	"Cambiar tipo de sala"
+#elif L==5	// fr
+	"Change type of room"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar tipo de sala"	// Okoteve traducción
+#elif L==7	// it
+	"Change type of room"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change type of room"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change type of room"		// Precisa de tradução
+#elif L==10	// tr
+	"Change type of room"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeDegInf] =
@@ -9858,6 +9904,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Unlock project edition"			// Precisa de tradução
 #elif L==10	// tr
 	"Unlock project edition"			// Çeviri lazim!
+#endif
+	,
+	[ActChgPrjRev] =
+#if   L==1	// ca
+	"Change review status of a project"			// Necessita traducció
+#elif L==2	// de
+	"Change review status of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Change review status of a project"
+#elif L==4	// es
+	"Cambiar estado de revisi&oacute;n de un proyecto"
+#elif L==5	// fr
+	"Change review status of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar estado de revisi&oacute;n de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Change review status of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change review status of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change review status of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Change review status of a project"			// Çeviri lazim!
 #endif
 	,
 	[ActReqAddStdPrj] =
@@ -33113,6 +33182,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Unhide survey"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkSvy] =
+#if   L==1	// ca
+	"Get link to survey"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to survey"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to survey"
+#elif L==4	// es
+	"Copiar enlace a encuesta"
+#elif L==5	// fr
+	"Copy link to survey"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a encuesta"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to survey"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to survey"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to survey"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to survey"		// Çeviri lazim!
+#endif
+	,
 	[ActEdiOneSvyQst] =
 #if   L==1	// ca
 	"Edit new survey question"		// Necessita traducció
@@ -34606,6 +34698,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change menu"		// Precisa de tradução
 #elif L==10	// tr
 	"Change menu"		// Çeviri lazim!
+#endif
+	,
+	[ActChgUsrPho] =
+#if   L==1	// ca
+	"Change user photo shape"		// Necessita traducció
+#elif L==2	// de
+	"Change user photo shape"		// Need Übersetzung
+#elif L==3	// en
+	"Change user photo shape"
+#elif L==4	// es
+	"Cambiar forma de fotos de usuarios"
+#elif L==5	// fr
+	"Change user photo shape"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar forma de fotos de usuarios"	// Okoteve traducción
+#elif L==7	// it
+	"Change user photo shape"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change user photo shape"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change user photo shape"		// Precisa de tradução
+#elif L==10	// tr
+	"Change user photo shape"		// Çeviri lazim!
 #endif
 	,
 	[ActChgPriPho] =
