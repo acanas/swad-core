@@ -53,9 +53,8 @@ static const char *Tab_GetIcon (Tab_Tab_t Tab);
 void Tab_DrawTabs (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Tab_Tab_t NumTab;
+   const char *TabTxt;
    bool ICanViewTab;
    char URLIconSet[PATH_MAX + 1];
    static const char *ClassIcoTab[Ico_NUM_ICON_SETS] =
@@ -85,6 +84,8 @@ void Tab_DrawTabs (void)
 
 	    if (ICanViewTab)	// Don't show the first hidden tabs
 	      {
+	       TabTxt = Tab_GetTxt (NumTab);
+
 	       /* Form, icon (at top) and text (at bottom) of the tab */
 	       HTM_LI_Begin ("class=\"%s%s\"",
 			     NumTab == Gbl.Action.Tab ? "TAB_ON TAB_ON_" :
@@ -98,22 +99,21 @@ void Tab_DrawTabs (void)
 
 		  Frm_BeginForm (ActMnu);
 		     Par_PutParUnsigned (NULL,"NxtTab",(unsigned) NumTab);
-		     HTM_BUTTON_Submit_Begin (Txt_TABS_TXT[NumTab],
-		                              "class=\"BT_LINK\"");
+		     HTM_BUTTON_Submit_Begin (TabTxt,"class=\"BT_LINK\"");
 			snprintf (URLIconSet,sizeof (URLIconSet),"%s/%s",
 				  Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
 		        if (ClassIcoTab[Gbl.Prefs.IconSet])
-			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
+			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),TabTxt,
 				    "class=\"TAB_ICO %s_%s\"",
 				    ClassIcoTab[Gbl.Prefs.IconSet],The_GetSuffix ());
 		        else
-			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
+			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),TabTxt,
 				    "class=\"TAB_ICO\"");
 			HTM_DIV_Begin ("class=\"TAB_TXT TAB_%s_TXT_%s\"",
 				       NumTab == Gbl.Action.Tab ? "ON" :
 								  "OFF",
 				       The_GetSuffix ());
-			   HTM_Txt (Txt_TABS_TXT[NumTab]);
+			   HTM_Txt (TabTxt);
 			HTM_DIV_End ();
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
@@ -163,7 +163,7 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
   }
 
 /*****************************************************************************/
-/********************** Get icon associated to an action *********************/
+/************************ Get icon associated to a tab ***********************/
 /*****************************************************************************/
 
 static const char *Tab_GetIcon (Tab_Tab_t NumTab)
@@ -191,6 +191,17 @@ static const char *Tab_GetIcon (Tab_Tab_t NumTab)
       return NULL;
 
    return Ico_GetIcon (Tab_TabIcons[NumTab]);
+  }
+
+/*****************************************************************************/
+/************************ Get text associated to a tab ***********************/
+/*****************************************************************************/
+
+const char *Tab_GetTxt (Tab_Tab_t NumTab)
+  {
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
+
+   return Txt_TABS_TXT[NumTab];
   }
 
 /*****************************************************************************/

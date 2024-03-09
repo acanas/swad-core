@@ -33420,11 +33420,11 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==3	// en
 	"Refresh the last clicks in real time"
 #elif L==4	// es
-	"Refrescar los &ucute;ltimos clics en tiempo real"
+	"Refrescar los &uacute;ltimos clics en tiempo real"
 #elif L==5	// fr
 	"Refresh the last clicks in real time"			// Besoin de traduction
 #elif L==6	// gn
-	"Refrescar los &ucute;ltimos clics en tiempo real"	// Okoteve traducción
+	"Refrescar los &uacute;ltimos clics en tiempo real"	// Okoteve traducción
 #elif L==7	// it
 	"Refresh the last clicks in real time"			// Bisogno di traduzione
 #elif L==8	// pl

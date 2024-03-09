@@ -103,8 +103,10 @@ static const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
 static void Sta_PutFormCrsHits (struct Sta_Stats *Stats);
 static void Sta_PutFormGblHits (struct Sta_Stats *Stats);
 
-static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats);
+static void Sta_WriteSelectorRoles (const struct Sta_Stats *Stats);
 static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats);
+static void Sta_WriteSelectorScope (void);
+static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats);
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
 static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
                                           unsigned NumHits,
@@ -471,9 +473,6 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
   {
    extern const char *Hlp_ANALYTICS_Visits_global_visits;
    extern const char *Txt_Statistics_of_all_visits;
-   extern const char *Txt_Users;
-   extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
-   extern const char *Txt_Scope;
    extern const char *Txt_Show;
    extern const char *Txt_distributed_by;
    extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
@@ -483,8 +482,6 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
-   Sta_Role_t RoleStat;
-   unsigned RoleStatUnsigned;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
 
@@ -505,55 +502,13 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	 Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
 	 /***** Users' roles whose accesses we want to see *****/
-	 HTM_TR_Begin (NULL);
-
-	    /* Label */
-	    Frm_LabelColumn ("Frm_C1 RT","Role",Txt_Users);
-
-	    /* Data */
-	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				 "id=\"Role\" name=\"Role\""
-				 " class=\"Frm_C2_INPUT INPUT_%s\"",
-				 The_GetSuffix ());
-		  for (RoleStat  = (Sta_Role_t) 0;
-		       RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
-		       RoleStat++)
-		    {
-		     RoleStatUnsigned = (unsigned) RoleStat;
-		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
-				 RoleStat == Stats->Role ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
-				 "%s",Txt_ROLE_STATS[RoleStat]);
-		    }
-	       HTM_SELECT_End ();
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
+	 Sta_WriteSelectorRoles (Stats);
 
 	 /***** Selection of action *****/
 	 Sta_WriteSelectorAction (Stats);
 
 	 /***** Clicks made from anywhere, current center, current degree or current course *****/
-	 HTM_TR_Begin (NULL);
-
-	    /* Label */
-	    Frm_LabelColumn ("Frm_C1 RT","ScopeSta",Txt_Scope);
-
-	    /* Data */
-	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       Gbl.Scope.Allowed = 1 << Hie_SYS |
-				   1 << Hie_CTY |
-				   1 << Hie_INS |
-				   1 << Hie_CTR |
-				   1 << Hie_DEG |
-				   1 << Hie_CRS;
-	       Sco_GetScope ("ScopeSta",Hie_SYS);
-	       Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
-	    HTM_TD_End ();
-
-	 HTM_TR_End ();
+	 Sta_WriteSelectorScope ();
 
 	 /***** Count type for the statistic *****/
 	 HTM_TR_Begin (NULL);
@@ -648,6 +603,130 @@ void Sta_PutLinkToGlobalHits (void)
   }
 
 /*****************************************************************************/
+/******* Put selectors for users' roles whose accesses we want to see ********/
+/*****************************************************************************/
+
+static void Sta_WriteSelectorRoles (const struct Sta_Stats *Stats)
+  {
+   extern const char *Txt_Users;
+   extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
+   Sta_Role_t RoleStat;
+   unsigned RoleStatUnsigned;
+
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("Frm_C1 RT","Role",Txt_Users);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   "id=\"Role\" name=\"Role\""
+			   " class=\"Frm_C2_INPUT INPUT_%s\"",
+			   The_GetSuffix ());
+	    for (RoleStat  = (Sta_Role_t) 0;
+		 RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
+		 RoleStat++)
+	      {
+	       RoleStatUnsigned = (unsigned) RoleStat;
+	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
+			   RoleStat == Stats->Role ? HTM_OPTION_SELECTED :
+						     HTM_OPTION_UNSELECTED,
+			   HTM_OPTION_ENABLED,
+			   "%s",Txt_ROLE_STATS[RoleStat]);
+	      }
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/******************** Put selector for type of action ************************/
+/*****************************************************************************/
+
+static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
+  {
+   extern const char *Txt_Action;
+   extern const char *Txt_Any_action;
+   Act_Action_t Action;
+   Tab_Tab_t Tab;
+   unsigned ActionUnsigned;
+
+   /***** Action *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("Frm_C1 RT","StatAct",Txt_Action);
+
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   "id=\"StatAct\" name=\"StatAct\""
+			   " class=\"Frm_C2_INPUT INPUT_%s\"",
+			   The_GetSuffix ());
+	    HTM_OPTION (HTM_Type_STRING,"0",
+	                Stats->NumAction == 0 ? HTM_OPTION_SELECTED :
+	                			HTM_OPTION_UNSELECTED,
+	                HTM_OPTION_ENABLED,
+			"%s",Txt_Any_action);
+	    for (Action  = (Act_Action_t) 1;
+		 Action <= (Act_Action_t) (ActLst_NUM_ACTIONS - 1);
+		 Action++)
+	      {
+	       ActionUnsigned = (unsigned) Action;
+	       Tab = Act_GetTab (Action);
+	       if (Tab == TabUnk)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
+			      Action == Stats->NumAction ? HTM_OPTION_SELECTED :
+							   HTM_OPTION_UNSELECTED,
+			      HTM_OPTION_ENABLED,
+			      "%u: %s",
+			      (unsigned) Action,Act_GetActionText (Action));
+	       else
+		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
+			      Action == Stats->NumAction ? HTM_OPTION_SELECTED :
+							   HTM_OPTION_UNSELECTED,
+			      HTM_OPTION_ENABLED,
+			      "%u: %s &gt; %s &gt; %s",
+			      (unsigned) Action,Tab_GetTxt (Tab),
+			      Act_GetTitleAction (Action),
+			      Act_GetActionText (Action));
+	      }
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************************* Put selector for scope ****************************/
+/*****************************************************************************/
+
+static void Sta_WriteSelectorScope (void)
+  {
+   extern const char *Txt_Scope;
+
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("Frm_C1 RT","ScopeSta",Txt_Scope);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	 Gbl.Scope.Allowed = 1 << Hie_SYS |
+			     1 << Hie_CTY |
+			     1 << Hie_INS |
+			     1 << Hie_CTR |
+			     1 << Hie_DEG |
+			     1 << Hie_CRS;
+	 Sco_GetScope ("ScopeSta",Hie_SYS);
+	 Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
 /****** Put selectors for type of access count and for degree or course ******/
 /*****************************************************************************/
 
@@ -674,54 +753,6 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 		     "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
 	}
    HTM_SELECT_End ();
-  }
-
-/*****************************************************************************/
-/******************** Put selector for type of action ************************/
-/*****************************************************************************/
-
-static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
-  {
-   extern const char *Txt_Action;
-   extern const char *Txt_Any_action;
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
-   Act_Action_t Action;
-   unsigned ActionUnsigned;
-   Tab_Tab_t Tab;
-
-   /***** Action *****/
-   HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("Frm_C1 RT","StatAct",Txt_Action);
-
-      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"StatAct\" name=\"StatAct\""
-			   " class=\"Frm_C2_INPUT INPUT_%s\"",
-			   The_GetSuffix ());
-	    HTM_OPTION (HTM_Type_STRING,"0",
-	                Stats->NumAction == 0 ? HTM_OPTION_SELECTED :
-	                			HTM_OPTION_UNSELECTED,
-	                HTM_OPTION_ENABLED,
-			"%s",Txt_Any_action);
-	    for (Action  = (Act_Action_t) 1;
-		 Action <= (Act_Action_t) (ActLst_NUM_ACTIONS - 1);
-		 Action++)
-	      {
-	       Tab = Act_GetTab (Act_GetSuperAction (Action));
-	       ActionUnsigned = (unsigned) Action;
-	       HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			   Action == Stats->NumAction ? HTM_OPTION_SELECTED :
-	                				HTM_OPTION_UNSELECTED,
-			   HTM_OPTION_ENABLED,
-			   "%u: %s &gt; %s",
-			   (unsigned) Action,Txt_TABS_TXT[Tab],Act_GetActionText (Action));
-	      }
-	 HTM_SELECT_End ();
-      HTM_TD_End ();
-
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/

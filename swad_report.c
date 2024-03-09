@@ -711,7 +711,6 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
 static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
   {
    extern const char *Txt_Hits_per_action;
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_Other_actions;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -719,7 +718,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    unsigned NumHit;
    long ActCod;
    Act_Action_t Action;
-   Tab_Tab_t Tab;
+   const char *TabTxt;
    unsigned long NumClicks;
 
    /***** Begin section *****/
@@ -760,9 +759,9 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	{
 	 if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
 	   {
-	    Tab = Act_GetTab (Act_GetSuperAction (Action));
-	    if (Txt_TABS_TXT[Tab])
-	       fprintf (Rep_File,"%s &gt; ",Txt_TABS_TXT[Tab]);
+	    TabTxt = Tab_GetTxt (Act_GetTab (Act_GetSuperAction (Action)));
+	    if (TabTxt)
+	       fprintf (Rep_File,"%s &gt; ",TabTxt);
 	   }
 
 	 fprintf (Rep_File,"%s",Act_GetActionText (Action));

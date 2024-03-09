@@ -57,6 +57,8 @@ typedef enum
 
 void Tab_DrawTabs (void);
 
+const char *Tab_GetTxt (Tab_Tab_t NumTab);
+
 void Tab_SetCurrentTab (void);
 void Tab_DisableIncompatibleTabs (void);
 

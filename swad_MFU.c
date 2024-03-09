@@ -187,7 +187,6 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
    extern const char *Txt_My_frequent_actions;
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;
@@ -214,7 +213,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       if ((Title = Act_GetTitleAction (Action)) != NULL)
 		 {
 		  /* Action string */
-		  Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
+		  Str_Copy (TabStr,Tab_GetTxt (Act_GetTab (Act_GetSuperAction (Action))),
 			    sizeof (TabStr) - 1);
 		  Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
 		  snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
@@ -249,7 +248,6 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Txt_Frequent_ACTIONS;
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
    const char *Title;
@@ -273,7 +271,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	    if ((Title = Act_GetTitleAction (Action)) != NULL)
 	      {
 	       /* Action string */
-	       Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
+	       Str_Copy (TabStr,Tab_GetTxt (Act_GetTab (Act_GetSuperAction (Action))),
 			 sizeof (TabStr) - 1);
 	       Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
 	       snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);

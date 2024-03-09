@@ -347,16 +347,15 @@ static void Mai_GetMailDomain (const char *Email,
 void Mai_WriteWarningEmailNotifications (void)
   {
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    extern const char *Txt_Domains;
-   Tab_Tab_t TabMyAccount   = Act_GetTab (ActFrmMyAcc  );
+   Tab_Tab_t TabMyAccount   = Act_GetTab (ActFrmMyAcc);
    Tab_Tab_t TabMailDomains = Act_GetTab (ActSeeMai);
 
    Ale_ShowAlert (Ale_WARNING,Txt_You_can_only_receive_email_notifications_if_,
-	          Txt_TABS_TXT  [TabMyAccount  ],
+	          Tab_GetTxt (TabMyAccount),
 	          Txt_MENU_TITLE[TabMyAccount  ][Act_GetIndexInMenu (ActFrmMyAcc)],
-                  Txt_TABS_TXT  [TabMailDomains],
+                  Tab_GetTxt (TabMailDomains),
 	          Txt_MENU_TITLE[TabMailDomains][Act_GetIndexInMenu (ActSeeMai  )],
 	          Txt_Domains);
   }
