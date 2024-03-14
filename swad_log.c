@@ -232,7 +232,7 @@ void Log_GetAndShowLastClicks (void)
 	 Action = Act_GetActionFromActCod (ActCod);
 
 	 /* Use a special color for this row depending on the action */
-	 ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
+	 ClassRow = (Act_GetBrowserTab (Action) == Act_DWN_FIL) ? "DAT_SMALL_YELLOW" :
 		    (ActCod == Act_GetActCod (ActLogIn   ) ||
 		     ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
 		    (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :

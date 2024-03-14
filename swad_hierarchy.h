@@ -97,6 +97,6 @@ unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t Level,
 void Hie_PutIconToSelectMyHierarchyInBreadcrumb (void);
 void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) void *Args);
 
-void Hie_ReqSelectOneNodeFromMyHierarchy (void);
+void Hie_SelOneNodeFromMyHierarchy (void);
 
 #endif

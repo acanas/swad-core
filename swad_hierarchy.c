@@ -1509,7 +1509,7 @@ void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) void *Args)
 /****************** Select one node from my hierarchy ************************/
 /*****************************************************************************/
 
-void Hie_ReqSelectOneNodeFromMyHierarchy (void)
+void Hie_SelOneNodeFromMyHierarchy (void)
   {
    /***** Fill the list with the courses I belong to, if not filled *****/
    Hie_GetMyHierarchy (Hie_CRS);

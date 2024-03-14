@@ -127,8 +127,8 @@ int main (void)
 	 /***** Get number of sessions *****/
 	 switch (Act_GetBrowserTab (Gbl.Action.Act))
 	   {
-	    case Act_BRW_1ST_TAB:
-	    case Act_AJAX_RFRESH:
+	    case Act_1ST_TAB:
+	    case Act_AJAX_RF:
 	       Ses_GetNumSessions ();
                break;
 	    default:
@@ -158,7 +158,7 @@ int main (void)
       if (FunctionPriori != NULL)
 	  FunctionPriori ();
 
-      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_204_NO_CONT)
+      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_204_NOC)
 	 /***** Write HTTP Status 204 No Content *****/
 	 Lay_WriteHTTPStatus204NoContent ();
 
@@ -188,9 +188,9 @@ int main (void)
       /* When updating a small zone via AJAX, all output is already done */
       switch (Act_GetBrowserTab (Gbl.Action.Act))
         {
-         case Act_AJAX_NORMAL:
-         case Act_AJAX_RFRESH:
-         case Act_WEB_SERVICE:
+         case Act_AJAX_NR:
+         case Act_AJAX_RF:
+         case Act_WEB_SVC:
 	    /* All the output is made, so don't write anymore */
 	    Gbl.Layout.DivsEndWritten =
             Gbl.Layout.HTMLEndWritten = true;

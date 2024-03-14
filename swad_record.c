@@ -2075,7 +2075,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs];
 
    PutFormLinks = (!Frm_CheckIfInside () &&							// Only if not inside another form
-                   Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB) ? Frm_PUT_FORM :	// Only in main browser tab
+                   Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB) ? Frm_PUT_FORM :	// Only in main browser tab
                 							    Frm_DONT_PUT_FORM;
 
    Ins.HieCod = UsrDat->InsCod;
@@ -2347,7 +2347,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
      };
 
    if (!Frm_CheckIfInside () &&					// Only if not inside another form
-       Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
+       Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB &&	// Only in main browser tab
        Gbl.Usrs.Me.Logged)					// Only if I am logged
      {
       ICanViewUsrProfile = Pri_ShowingIsAllowed (Rec_Record.UsrDat->BaPrfVisibility,

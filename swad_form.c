@@ -135,8 +135,8 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIf
             HTM_TxtF (" onsubmit=\"%s\"",OnSubmit);
       switch (Act_GetBrowserTab (NextAction))
 	{
-	 case Act_BRW_NEW_TAB:
-	 case Act_DOWNLD_FILE:
+	 case Act_NEW_TAB:
+	 case Act_DWN_FIL:
 	    HTM_Txt (" target=\"_blank\"");
 	    break;
 	 default:

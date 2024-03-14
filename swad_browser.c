@@ -6683,7 +6683,7 @@ void Brw_RenFolderFileBrowser (void)
 /****** Receive a new file in a file browser unsigned Dropzone.js ************/
 /*****************************************************************************/
 
-void Brw_RcvFileInFileBrwDropzone (void)
+void Brw_RcvFileInFileBrwDZ (void)
   {
    bool UploadSucessful;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();

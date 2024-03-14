@@ -276,7 +276,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
-      else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
+      else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB)
          Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,
                                  NULL,NULL,
                                  Btn_CONFIRM_BUTTON,Txt_Upload_photo,

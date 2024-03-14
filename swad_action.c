@@ -153,7 +153,7 @@ Act_Content_t Act_GetContentType (Act_Action_t Action)
 Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action)
   {
    if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
-      return Act_BRW_UNK_TAB;
+      return Act_UNK_TAB;
 
    return ActLst_Actions[Action].BrowserTab;
   }
@@ -191,7 +191,7 @@ const char *Act_GetIcon (Act_Action_t Action)
    if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
-   return Ico_GetIcon (ActLst_Actions[Action].Icon);
+   return Ico_GetIcon (Mnu_GetIcon (Action));
   }
 
 /*****************************************************************************/

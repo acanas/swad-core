@@ -158,8 +158,8 @@ void Lay_WriteStartOfPage (void)
    BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
    switch (BrowserTab)
      {
-      case Act_BRW_NEW_TAB:
-      case Act_BRW_2ND_TAB:
+      case Act_NEW_TAB:
+      case Act_2ND_TAB:
 	 Gbl.Prefs.Theme = The_THEME_WHITE;	// In a new tab, use white background
 	 break;
       default:
@@ -281,7 +281,7 @@ void Lay_WriteStartOfPage (void)
    /***** HTML body *****/
    switch (BrowserTab)
      {
-      case Act_BRW_1ST_TAB:
+      case Act_1ST_TAB:
 	       HTM_TxtF ("<body class=\"BODY_%s\" onload=\"init();\">\n",
 	                 The_GetSuffix ());
 	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM ZOOM_%s\"",
@@ -292,8 +292,8 @@ void Lay_WriteStartOfPage (void)
 	    HTM_DIV_End ();
 	 HTM_DIV_End ();
 	 break;
-      case Act_BRW_NEW_TAB:
-      case Act_BRW_2ND_TAB:
+      case Act_NEW_TAB:
+      case Act_2ND_TAB:
 	 HTM_Txt ("<body onload=\"init();\"");
 	 switch (Gbl.Action.Act)
 	   {
@@ -430,7 +430,7 @@ void Lay_WriteEndOfPage (void)
 	       HTM_DIV_End ();		// main_zone_central_container
 
 	       /***** Write page footer *****/
-	       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
+	       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB)
 		  Lay_WriteFootFromHTMLFile ();
 
 	    /***** End of main zone and page *****/
@@ -769,7 +769,7 @@ static void Lay_WriteScriptInit (void)
    bool RefreshMatchStd     = false;
    bool RefreshMatchTch     = false;
 
-   RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&
+   RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB &&
 	              (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN);	// Right column visible
 
    switch (Gbl.Action.Act)
@@ -884,7 +884,7 @@ static void Lay_WriteScriptParsAJAX (void)
 		Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
       /***** Parameter to refresh connected users *****/
-      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
+      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB)
 	 // Refresh parameter
 	 HTM_TxtF ("const refreshParamNxtActCon = \"act=%ld\";\n",
 		   Act_GetActCod (ActRefCon));

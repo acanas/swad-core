@@ -776,11 +776,11 @@ void Par_GetMainPars (void)
    /***** Some preliminary adjusts depending on action *****/
    switch (Act_GetBrowserTab (Gbl.Action.Act))
      {
-      case Act_AJAX_NORMAL:
+      case Act_AJAX_NR:
 	 Gbl.Action.UsesAJAX          = true;
 	 Gbl.Action.IsAJAXAutoRefresh = false;
 	 break;
-      case Act_AJAX_RFRESH:
+      case Act_AJAX_RF:
          Gbl.Action.UsesAJAX          = true;
          Gbl.Action.IsAJAXAutoRefresh = true;
          break;

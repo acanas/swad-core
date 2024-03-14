@@ -258,7 +258,7 @@ void Gbl_Cleanup (void)
 
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
-       Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
+       Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB)
       Ses_DB_RemovePar ();
 
    Hie_FreeMyHierarchy ();

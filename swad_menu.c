@@ -68,6 +68,126 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
 #define MAX_MENU_ID 16
 
 // Actions not initialized are 0 by default
+static const struct Mnu_Menu
+  {
+   Act_Action_t Action;
+   const char *Icon;
+  } Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
+  {
+   [TabUnk] =  {
+	       },
+   [TabStr] =  {
+		[ 0] = {ActFrmLogIn		,"power-off"		},
+		[ 1] = {ActReqSch		,"search"		},
+		[ 2] = {ActSeeGblTL		,"comment-dots"		},
+		[ 3] = {ActSeeSocPrf		,"user-circle"		},
+		[ 4] = {ActSeeCal		,"calendar"		},
+		[ 5] = {ActSeeNtf		,"bell"			},
+	       },
+   [TabSys] =  {
+		[ 0] = {ActSeeSysInf		,"info"			},
+		[ 1] = {ActSeeCty		,"globe-americas"	},
+		[ 2] = {ActSeePen		,"sitemap"		},
+		[ 3] = {ActSeeLnk		,"up-right-from-square"	},
+		[ 4] = {ActSeePlg		,"puzzle-piece"		},
+		[ 5] = {ActMtn			,"tools"		},
+	       },
+   [TabCty] =  {
+		[ 0] = {ActSeeCtyInf		,"info"			},
+		[ 1] = {ActSeeIns		,"university"		},
+	       },
+   [TabIns] =  {
+		[ 0] = {ActSeeInsInf		,"info"			},
+		[ 1] = {ActSeeCtr		,"building"		},
+		[ 2] = {ActSeePlc		,"map-marker-alt"	},
+		[ 3] = {ActSeeDpt		,"users"		},
+		[ 4] = {ActSeeHld		,"calendar-day"		},
+	       },
+   [TabCtr] =  {
+		[ 0] = {ActSeeCtrInf		,"info"			},
+		[ 1] = {ActSeeDeg		,"graduation-cap"	},
+		[ 2] = {ActSeeBld		,"building"		},
+		[ 3] = {ActSeeRoo		,"chalkboard-teacher"	},
+	       },
+   [TabDeg] =  {
+		[ 0] = {ActSeeDegInf		,"info"			},
+		[ 1] = {ActSeeCrs		,"chalkboard-teacher"	},
+	       },
+   [TabCrs] =  {
+		[ 0] = {ActSeeCrsInf		,"info"			},
+		[ 1] = {ActSeePrg		,"clipboard-list"	},
+		[ 2] = {ActSeeTchGui		,"book-open"		},
+		[ 3] = {ActSeeSyl		,"list-ol"		},
+		[ 4] = {ActSeeBib		,"book"			},
+		[ 5] = {ActSeeFAQ		,"question"		},
+		[ 6] = {ActSeeCrsLnk		,"up-right-from-square"	},
+		[ 7] = {ActSeeAss		,"check"		},
+		[ 8] = {ActSeeCrsTT		,"clock"		},
+	       },
+   [TabAss] =  {
+		[ 0] = {ActSeeAllAsg		,"edit"			},
+		[ 1] = {ActSeeAllPrj		,"file-invoice"		},
+		[ 2] = {ActSeeAllCfe		,"bullhorn"		},
+		[ 3] = {ActEdiTstQst		,"clipboard-question"	},
+		[ 4] = {ActReqTst		,"check"		},
+		[ 5] = {ActSeeAllExa		,"file-signature"	},
+		[ 6] = {ActSeeAllGam		,"gamepad"		},
+		[ 7] = {ActSeeAllRub		,"tasks"		},
+	       },
+   [TabFil] =  {
+		[ 0] = {ActSeeAdmDocIns		,"folder-open"		},
+		[ 1] = {ActAdmShaIns		,"folder-open"		},
+		[ 2] = {ActSeeAdmDocCtr		,"folder-open"		},
+		[ 3] = {ActAdmShaCtr		,"folder-open"		},
+		[ 4] = {ActSeeAdmDocDeg		,"folder-open"		},
+		[ 5] = {ActAdmShaDeg		,"folder-open"		},
+		[ 6] = {ActSeeAdmDocCrsGrp	,"folder-open"		},
+		[ 7] = {ActAdmTchCrsGrp		,"folder-open"		},
+		[ 8] = {ActAdmShaCrsGrp		,"folder-open"		},
+		[ 9] = {ActAdmAsgWrkUsr		,"folder-open"		},
+		[10] = {ActReqAsgWrkCrs		,"folder-open"		},
+		[11] = {ActSeeAdmMrk		,"list-alt"		},
+		[12] = {ActAdmBrf		,"briefcase"		},
+	       },
+   [TabUsr] =  {
+		[ 0] = {ActReqSelGrp		,"sitemap"		},
+		[ 1] = {ActLstStd		,"users"		},
+		[ 2] = {ActLstTch		,"user-tie"		},
+		[ 3] = {ActLstOth		,"user-friends"		},
+		[ 4] = {ActSeeAllAtt		,"calendar-check"	},
+		[ 5] = {ActReqSignUp		,"hand-point-up"	},
+		[ 6] = {ActSeeSignUpReq		,"hand-point-up"	},
+		[ 7] = {ActLstCon		,"user-clock"		},
+		},
+   [TabMsg] =  {
+		[ 0] = {ActSeeAnn		,"bullhorn"		},
+		[ 1] = {ActSeeAllNot		,"sticky-note"		},
+		[ 2] = {ActSeeFor		,"comments"		},
+		[ 3] = {ActSeeChtRms		,"comments"		},
+		[ 4] = {ActSeeRcvMsg		,"envelope"		},
+		[ 5] = {ActReqMaiUsr		,"at"			},
+	       },
+   [TabAna] =  {
+		[ 0] = {ActReqUseGbl		,"chart-pie"		},
+		[ 1] = {ActSeePhoDeg		,"graduation-cap"	},
+		[ 2] = {ActReqStaCrs		,"tasks"		},
+		[ 3] = {ActSeeAllSvy		,"poll"			},
+		[ 4] = {ActReqAccGbl		,"chart-line"		},
+		[ 5] = {ActReqMyUsgRep		,"file-alt"		},
+		[ 6] = {ActMFUAct		,"heart"		},
+	       },
+   [TabPrf] =  {
+		[ 0] = {ActFrmRolSes		,"power-off"		},
+		[ 1] = {ActMyCrs		,"sitemap"		},
+		[ 2] = {ActSeeMyTT		,"clock"		},
+		[ 3] = {ActSeeMyAgd		,"calendar"		},
+		[ 4] = {ActFrmMyAcc		,"at"			},
+		[ 5] = {ActReqEdiRecSha		,"address-card"		},
+		[ 6] = {ActReqEdiSet		,"cog"			},
+	       },
+  };
+
+/*
 static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
   {
    [TabUnk] =  {
@@ -182,12 +302,24 @@ static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_
 		[ 6] = ActReqEdiSet,
 	       },
   };
-
+*/
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
 static void Mnu_PutIconsMenu (__attribute__((unused)) void *Args);
+
+/*****************************************************************************/
+/********************** Get icon associated to an action *********************/
+/*****************************************************************************/
+
+const char *Mnu_GetIcon (Act_Action_t Action)
+  {
+   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+      return NULL;
+
+   return Mnu_Menu[Gbl.Action.Tab][Act_GetIndexInMenu (Action)].Icon;
+  }
 
 /*****************************************************************************/
 /******* When I change to another tab, go to the first option allowed ********/
@@ -203,7 +335,7 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
         NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
         NumOptInMenu++)
      {
-      if ((Action = Mnu_MenuActions[Gbl.Action.Tab][NumOptInMenu]) == 0)
+      if ((Action = Mnu_Menu[Gbl.Action.Tab][NumOptInMenu].Action) == 0)
          return ActUnk;
       if (Act_CheckIfIHavePermissionToExecuteAction (Action))
          return Action;
@@ -240,7 +372,7 @@ void Mnu_WriteMenuThisTab (void)
 	      NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
 	      NumOptInMenu++)
 	   {
-	    NumAct = Mnu_MenuActions[Gbl.Action.Tab][NumOptInMenu];
+	    NumAct = Mnu_Menu[Gbl.Action.Tab][NumOptInMenu].Action;
 	    if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
 	       break;
 	    if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))

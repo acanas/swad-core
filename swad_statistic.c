@@ -680,14 +680,14 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 			      Action == Stats->NumAction ? HTM_OPTION_SELECTED :
 							   HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
-			      "%u: %s",
+			      "%04u: %s",
 			      (unsigned) Action,Act_GetActionText (Action));
 	       else
 		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
 			      Action == Stats->NumAction ? HTM_OPTION_SELECTED :
 							   HTM_OPTION_UNSELECTED,
 			      HTM_OPTION_ENABLED,
-			      "%u: %s &gt; %s &gt; %s",
+			      "%04u: %s &gt; %s &gt; %s",
 			      (unsigned) Action,Tab_GetTxt (Tab),
 			      Act_GetTitleAction (Action),
 			      Act_GetActionText (Action));

@@ -1073,9 +1073,9 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    unsigned NumFollowers;
    bool PhotoExists;
    Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
-   bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
-	                      BrowserTab == Act_AJAX_NORMAL ||
-			      BrowserTab == Act_AJAX_RFRESH);
+   bool BrowserTabIs1stTab = (BrowserTab == Act_1ST_TAB ||
+	                      BrowserTab == Act_AJAX_NR ||
+			      BrowserTab == Act_AJAX_RF);
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
                       BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
    char IdCaption[Frm_MAX_BYTES_ID + 1];
@@ -1279,9 +1279,9 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom)
   {
    Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
-   bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
-	                      BrowserTab == Act_AJAX_NORMAL ||
-			      BrowserTab == Act_AJAX_RFRESH);
+   bool BrowserTabIs1stTab = (BrowserTab == Act_1ST_TAB ||
+	                      BrowserTab == Act_AJAX_NR ||
+			      BrowserTab == Act_AJAX_RF);
    Frm_PutForm_t PutFormPublicProfile = (!Frm_CheckIfInside () &&		// Only if not inside another form
                                          BrowserTabIs1stTab) ? Frm_PUT_FORM :	// Only in main browser tab (or AJAX)
 							       Frm_DONT_PUT_FORM;

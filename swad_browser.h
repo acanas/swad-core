@@ -208,7 +208,7 @@ void Brw_RemSubtreeInFileBrowser (void);
 void Brw_ShowFormFileBrowser (void);
 void Brw_RecFolderFileBrowser (void);
 void Brw_RenFolderFileBrowser (void);
-void Brw_RcvFileInFileBrwDropzone (void);
+void Brw_RcvFileInFileBrwDZ (void);
 void Brw_RcvFileInFileBrwClassic (void);
 void Brw_RecLinkFileBrowser (void);
 void Brw_SetDocumentAsVisible (void);

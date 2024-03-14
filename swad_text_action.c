@@ -175,121 +175,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Anasayfa"
 #endif
 	,
-	[ActReqSch] =
-#if   L==1	// ca
-	"Sol·licitar la recerca"
-#elif L==2	// de
-	"Suche anfordern"
-#elif L==3	// en
-	"Request search"
-#elif L==4	// es
-	"Solicitar b&uacute;squeda"
-#elif L==5	// fr
-	"Demander une recherche"
-#elif L==6	// gn
-	"Mba'ejerure jeheka"
-#elif L==7	// it
-	"Richiedere la ricerca"
-#elif L==8	// pl
-	"Popro&sacute; o wyszukiwanie"
-#elif L==9	// pt
-	"Solicitar pesquisa"
-#elif L==10	// tr
-	"Arama iste"
-#endif
-	,
-	[ActSeeGblTL] =
-#if   L==1	// ca
-	"Mostrar timeline global"
-#elif L==2	// de
-	"Globale Timeline anzeigen"
-#elif L==3	// en
-	"Show global timeline"
-#elif L==4	// es
-	"Mostrar timeline global"
-#elif L==5	// fr
-	"Afficher chronologie globale"
-#elif L==6	// gn
-	"Ohechauka l&iacute;nea de tiempo global"
-#elif L==7	// it
-	"Mostra timeline globale"
-#elif L==8	// pl
-	"Poka&zdot; globaln&aogon; timeline"
-#elif L==9	// pt
-	"Mostrar timeline global"
-#elif L==10	// tr
-	"K&uuml;resel zaman &ccedil;izelgesini g&ouml;ster"
-#endif
-	,
-	[ActSeeSocPrf] =
-#if   L==1	// ca
-	"Suggerir llista d'usuaris a seguir"
-#elif L==2	// de
-	"Schlagen Sie eine Liste von Benutzern vor, denen Sie folgen m&ouml;chten"
-#elif L==3	// en
-	"Suggest list of users to follow"
-#elif L==4	// es
-	"Sugerir lista de usuarios a seguir"
-#elif L==5	// fr
-	"Sugg&eacute;rer liste d'utilisateurs &agrave; suivre"
-#elif L==6	// gn
-	"Epropone lista de usuarios ojesegui ha&gtilde;ua"
-#elif L==7	// it
-	"Suggerisci elenco di utenti da seguire"
-#elif L==8	// pl
-	"Zasugeruj list&eogon; u&zdot;ytkownik&oacute;w do obserwowania"
-#elif L==9	// pt
-	"Sugerir lista de usu&aacute;rios a seguir"
-#elif L==10	// tr
-	"Takip edilecek kullan&inodot;c&inodot;lar&inodot;n listesini &ouml;ner"
-#endif
-	,
-	[ActSeeCal] =
-#if   L==1	// ca
-	"Mostrar calendari"
-#elif L==2	// de
-	"Kalender zeigen"
-#elif L==3	// en
-	"Show calendar"
-#elif L==4	// es
-	"Mostrar calendario"
-#elif L==5	// fr
-	"Afficher le calendrier"
-#elif L==6	// gn
-	"Ohechauka calendario"
-#elif L==7	// it
-	"Mostra il calendario"
-#elif L==8	// pl
-	"Poka&zdot; kalendarz"
-#elif L==9	// pt
-	"Mostrar calend&aacute;rio"
-#elif L==10	// tr
-	"Takvimi g&ouml;ster"
-#endif
-	,
-	[ActSeeNtf] =
-#if   L==1	// ca
-	"Mostrar notificacions"
-#elif L==2	// de
-	"Benachrichtigungen zeigen"
-#elif L==3	// en
-	"Show notifications"
-#elif L==4	// es
-	"Mostrar notificaciones"
-#elif L==5	// fr
-	"Afficher les notifications"
-#elif L==6	// gn
-	"Ohechauka marandu"
-#elif L==7	// it
-	"Mostra notifiche"
-#elif L==8	// pl
-	"Poka&zdot; powiadomienia"
-#elif L==9	// pt
-	"Mostrar notifica&ccedil;&otilde;es"
-#elif L==10	// tr
-	"Bildirimleri g&ouml;ster"
-#endif
-	,
 	[ActLogIn] =
 #if   L==1	// ca
 	"Autenticar usuari"
@@ -451,6 +336,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"&Ccedil;&inodot;k&inodot;&scedil; yap"
 #endif
 	,
+	[ActReqSch] =
+#if   L==1	// ca
+	"Sol·licitar la recerca"
+#elif L==2	// de
+	"Suche anfordern"
+#elif L==3	// en
+	"Request search"
+#elif L==4	// es
+	"Solicitar b&uacute;squeda"
+#elif L==5	// fr
+	"Demander une recherche"
+#elif L==6	// gn
+	"Mba'ejerure jeheka"
+#elif L==7	// it
+	"Richiedere la ricerca"
+#elif L==8	// pl
+	"Popro&sacute; o wyszukiwanie"
+#elif L==9	// pt
+	"Solicitar pesquisa"
+#elif L==10	// tr
+	"Arama iste"
+#endif
+	,
 	[ActSch] =
 #if   L==1	// ca
 	"Cercar"
@@ -472,6 +380,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Procurar"
 #elif L==10	// tr
 	"Aramak"
+#endif
+	,
+	[ActSeeGblTL] =
+#if   L==1	// ca
+	"Mostrar timeline global"
+#elif L==2	// de
+	"Globale Timeline anzeigen"
+#elif L==3	// en
+	"Show global timeline"
+#elif L==4	// es
+	"Mostrar timeline global"
+#elif L==5	// fr
+	"Afficher chronologie globale"
+#elif L==6	// gn
+	"Ohechauka l&iacute;nea de tiempo global"
+#elif L==7	// it
+	"Mostra timeline globale"
+#elif L==8	// pl
+	"Poka&zdot; globaln&aogon; timeline"
+#elif L==9	// pt
+	"Mostrar timeline global"
+#elif L==10	// tr
+	"K&uuml;resel zaman &ccedil;izelgesini g&ouml;ster"
 #endif
 	,
 	[ActRefNewPubGblTL] =
@@ -886,6 +817,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Delete a comment in global timeline"		// Precisa de tradução
 #elif L==10	// tr
 	"Delete a comment in global timeline"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeSocPrf] =
+#if   L==1	// ca
+	"Suggerir llista d'usuaris a seguir"
+#elif L==2	// de
+	"Schlagen Sie eine Liste von Benutzern vor, denen Sie folgen m&ouml;chten"
+#elif L==3	// en
+	"Suggest list of users to follow"
+#elif L==4	// es
+	"Sugerir lista de usuarios a seguir"
+#elif L==5	// fr
+	"Sugg&eacute;rer liste d'utilisateurs &agrave; suivre"
+#elif L==6	// gn
+	"Epropone lista de usuarios ojesegui ha&gtilde;ua"
+#elif L==7	// it
+	"Suggerisci elenco di utenti da seguire"
+#elif L==8	// pl
+	"Zasugeruj list&eogon; u&zdot;ytkownik&oacute;w do obserwowania"
+#elif L==9	// pt
+	"Sugerir lista de usu&aacute;rios a seguir"
+#elif L==10	// tr
+	"Takip edilecek kullan&inodot;c&inodot;lar&inodot;n listesini &ouml;ner"
 #endif
 	,
 	[ActReqOthPubPrf] =
@@ -1440,6 +1394,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show followers"	// Çeviri lazim!
 #endif
 	,
+	[ActSeeUsrAgd] =
+#if   L==1	// ca
+	"See a user's public agenda"			// Necessita traducció
+#elif L==2	// de
+	"See a user's public agenda"			// Need Übersetzung
+#elif L==3	// en
+	"See a user's public agenda"
+#elif L==4	// es
+	"Ver la agenda p&uacute;blica de usuario"
+#elif L==5	// fr
+	"See a user's public agenda"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver la agenda p&uacute;blica de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"See a user's public agenda"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See a user's public agenda"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See a user's public agenda"			// Precisa de tradução
+#elif L==10	// tr
+	"See a user's public agenda"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeCal] =
+#if   L==1	// ca
+	"Mostrar calendari"
+#elif L==2	// de
+	"Kalender zeigen"
+#elif L==3	// en
+	"Show calendar"
+#elif L==4	// es
+	"Mostrar calendario"
+#elif L==5	// fr
+	"Afficher le calendrier"
+#elif L==6	// gn
+	"Ohechauka calendario"
+#elif L==7	// it
+	"Mostra il calendario"
+#elif L==8	// pl
+	"Poka&zdot; kalendarz"
+#elif L==9	// pt
+	"Mostrar calend&aacute;rio"
+#elif L==10	// tr
+	"Takvimi g&ouml;ster"
+#endif
+	,
 	[ActPrnCal] =
 #if   L==1	// ca
 	"Print calendar"	// Necessita traducció
@@ -1484,6 +1484,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change first day of the week in calendar"		// Precisa de tradução
 #elif L==10	// tr
 	"Change first day of the week in calendar"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeNtf] =
+#if   L==1	// ca
+	"Mostrar notificacions"
+#elif L==2	// de
+	"Benachrichtigungen zeigen"
+#elif L==3	// en
+	"Show notifications"
+#elif L==4	// es
+	"Mostrar notificaciones"
+#elif L==5	// fr
+	"Afficher les notifications"
+#elif L==6	// gn
+	"Ohechauka marandu"
+#elif L==7	// it
+	"Mostra notifiche"
+#elif L==8	// pl
+	"Poka&zdot; powiadomienia"
+#elif L==9	// pt
+	"Mostrar notifica&ccedil;&otilde;es"
+#elif L==10	// tr
+	"Bildirimleri g&ouml;ster"
 #endif
 	,
 	[ActSeeNewNtf] =
@@ -1693,121 +1716,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show information on the platform"			// Çeviri lazim!
 #endif
 	,
-	[ActSeeCty] =
-#if   L==1	// ca
-	"List countries"	// Necessita traducció
-#elif L==2	// de
-	"List countries"	// Need Übersetzung
-#elif L==3	// en
-	"List countries"
-#elif L==4	// es
-	"Listar pa&iacute;ses"
-#elif L==5	// fr
-	"List countries"	// Besoin de traduction
-#elif L==6	// gn
-	"Listar pa&iacute;ses"	// Okoteve traducción
-#elif L==7	// it
-	"List countries"	// Bisogno di traduzione
-#elif L==8	// pl
-	"List countries"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List countries"	// Precisa de tradução
-#elif L==10	// tr
-	"List countries"	// Çeviri lazim!
-#endif
-	,
-	[ActSeePen] =
-#if   L==1	// ca
-	"Institutions, centers, titulacions i assignatures pendents d'activar"
-#elif L==2	// de
-	"Anh&auml;ngig Hochschulen, Lehrinstitute, Studiengang und Kursen"
-#elif L==3	// en
-	"Pending institutions, centers, degrees and courses"
-#elif L==4	// es
-	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"
-#elif L==5	// fr
-	"&Eacute;tablissements, centers, &eacute;tudes et mati&egrave;res en attente"
-#elif L==6	// gn
-	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"	// Okoteve traducción
-#elif L==7	// it
-	"Istituzioni, centri, lauree e corsi in attesa di essere attivati"
-#elif L==8	// pl
-	"Instytucje, centra, stopnie i kurs&otilde;w oczekuj&aogon;cy"
-#elif L==9	// pt
-	"Institu&ccedil;&otilde;es, centros, graus e disciplinas pendentes"
-#elif L==10	// tr
-	"Pending institutions, centers, degrees and courses"				// Çeviri lazim!
-#endif
-	,
-	[ActSeeLnk] =
-#if   L==1	// ca
-	"See institutional links"	// Necessita traducció
-#elif L==2	// de
-	"See institutional links"	// Need Übersetzung
-#elif L==3	// en
-	"See institutional links"
-#elif L==4	// es
-	"Ver enlaces institucionales"
-#elif L==5	// fr
-	"See institutional links"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver enlaces institucionales"	// Okoteve traducción
-#elif L==7	// it
-	"See institutional links"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See institutional links"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See institutional links"	// Precisa de tradução
-#elif L==10	// tr
-	"See institutional links"	// Çeviri lazim!
-#endif
-	,
-	[ActSeePlg] =
-#if   L==1	// ca
-	"List plugins"		// Necessita traducció
-#elif L==2	// de
-	"List plugins"		// Need Übersetzung
-#elif L==3	// en
-	"List plugins"
-#elif L==4	// es
-	"Listar complementos"
-#elif L==5	// fr
-	"List plugins"		// Besoin de traduction
-#elif L==6	// gn
-	"Listar complementos"	// Okoteve traducción
-#elif L==7	// it
-	"List plugins"		// Bisogno di traduzione
-#elif L==8	// pl
-	"List plugins"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List plugins"		// Precisa de tradução
-#elif L==10	// tr
-	"List plugins"		// Çeviri lazim!
-#endif
-	,
-	[ActMtn] =
-#if   L==1	// ca
-	"Manteniment"
-#elif L==2	// de
-	"Erhaltung"
-#elif L==3	// en
-	"Maintenance"
-#elif L==4	// es
-	"Mantenimiento"
-#elif L==5	// fr
-	"Entretien"
-#elif L==6	// gn
-	"&Ntilde;emyatyr&otilde;"
-#elif L==7	// it
-	"Manutenzione"
-#elif L==8	// pl
-	"Utrzymanie"
-#elif L==9	// pt
-	"Manuten&ccedil;&atilde;o"
-#elif L==10	// tr
-	"Maintenance"	// Çeviri lazim!
-#endif
-	,
 	[ActPrnSysInf] =
 #if   L==1	// ca
 	"Print information on the platform"			// Necessita traducció
@@ -1829,6 +1737,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Print information on the platform"			// Precisa de tradução
 #elif L==10	// tr
 	"Print information on the platform"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeCty] =
+#if   L==1	// ca
+	"List countries"	// Necessita traducció
+#elif L==2	// de
+	"List countries"	// Need Übersetzung
+#elif L==3	// en
+	"List countries"
+#elif L==4	// es
+	"Listar pa&iacute;ses"
+#elif L==5	// fr
+	"List countries"	// Besoin de traduction
+#elif L==6	// gn
+	"Listar pa&iacute;ses"	// Okoteve traducción
+#elif L==7	// it
+	"List countries"	// Bisogno di traduzione
+#elif L==8	// pl
+	"List countries"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List countries"	// Precisa de tradução
+#elif L==10	// tr
+	"List countries"	// Çeviri lazim!
 #endif
 	,
 	[ActEdiCty] =
@@ -1944,6 +1875,190 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change web of country"		// Precisa de tradução
 #elif L==10	// tr
 	"Change web of country"		// Çeviri lazim!
+#endif
+	,
+	[ActSeePen] =
+#if   L==1	// ca
+	"Institutions, centers, titulacions i assignatures pendents d'activar"
+#elif L==2	// de
+	"Anh&auml;ngig Hochschulen, Lehrinstitute, Studiengang und Kursen"
+#elif L==3	// en
+	"Pending institutions, centers, degrees and courses"
+#elif L==4	// es
+	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"
+#elif L==5	// fr
+	"&Eacute;tablissements, centers, &eacute;tudes et mati&egrave;res en attente"
+#elif L==6	// gn
+	"Instituciones, centros, titulaciones y asignaturas pendientes de activar"	// Okoteve traducción
+#elif L==7	// it
+	"Istituzioni, centri, lauree e corsi in attesa di essere attivati"
+#elif L==8	// pl
+	"Instytucje, centra, stopnie i kurs&otilde;w oczekuj&aogon;cy"
+#elif L==9	// pt
+	"Institu&ccedil;&otilde;es, centros, graus e disciplinas pendentes"
+#elif L==10	// tr
+	"Pending institutions, centers, degrees and courses"				// Çeviri lazim!
+#endif
+	,
+	[ActSeeLnk] =
+#if   L==1	// ca
+	"See institutional links"	// Necessita traducció
+#elif L==2	// de
+	"See institutional links"	// Need Übersetzung
+#elif L==3	// en
+	"See institutional links"
+#elif L==4	// es
+	"Ver enlaces institucionales"
+#elif L==5	// fr
+	"See institutional links"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver enlaces institucionales"	// Okoteve traducción
+#elif L==7	// it
+	"See institutional links"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See institutional links"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See institutional links"	// Precisa de tradução
+#elif L==10	// tr
+	"See institutional links"	// Çeviri lazim!
+#endif
+	,
+	[ActEdiLnk] =
+#if   L==1	// ca
+	"Edit institutional links"		// Necessita traducció
+#elif L==2	// de
+	"Edit institutional links"		// Need Übersetzung
+#elif L==3	// en
+	"Edit institutional links"
+#elif L==4	// es
+	"Editar enlaces institucionales"
+#elif L==5	// fr
+	"Edit institutional links"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar enlaces institucionales"	// Okoteve traducción
+#elif L==7	// it
+	"Edit institutional links"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit institutional links"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit institutional links"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit institutional links"		// Çeviri lazim!
+#endif
+	,
+	[ActNewLnk] =
+#if   L==1	// ca
+	"Crear enlla&ccedil;"
+#elif L==2	// de
+	"Link erstellen"
+#elif L==3	// en
+	"Create link"
+#elif L==4	// es
+	"Crear enlace"
+#elif L==5	// fr
+	"Cr&eacute;er lien"
+#elif L==6	// gn
+	"Crear enlace"	// Okoteve traducción
+#elif L==7	// it
+	"Creare link"
+#elif L==8	// pl
+	"Utw&oacute;rz link"
+#elif L==9	// pt
+	"Criar liga&ccedil;&atilde;o"
+#elif L==10	// tr
+	"Create link"	// Çeviri lazim!
+#endif
+	,
+	[ActRemLnk] =
+#if   L==1	// ca
+	"Request removal of institutional link"				// Necessita traducció
+#elif L==2	// de
+	"Request removal of institutional link"				// Need Übersetzung
+#elif L==3	// en
+	"Request removal of institutional link"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de un enlace institucional"
+#elif L==5	// fr
+	"Request removal of institutional link"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de un enlace institucional"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of institutional link"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of institutional link"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of institutional link"				// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of institutional link"				// Çeviri lazim!
+#endif
+	,
+	[ActRenLnkSho] =
+#if   L==1	// ca
+	"Request change of the short name of institutional link"		// Necessita traducció
+#elif L==2	// de
+	"Request change of the short name of institutional link"		// Need Übersetzung
+#elif L==3	// en
+	"Request change of the short name of institutional link"
+#elif L==4	// es
+	"Solicitar el cambio del nombre breve de un enlace institucional"
+#elif L==5	// fr
+	"Request change of the short name of institutional link"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar el cambio del nombre breve de un enlace institucional"	// Okoteve traducción
+#elif L==7	// it
+	"Request change of the short name of institutional link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request change of the short name of institutional link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request change of the short name of institutional link"		// Precisa de tradução
+#elif L==10	// tr
+	"Request change of the short name of institutional link"		// Çeviri lazim!
+#endif
+	,
+	[ActRenLnkFul] =
+#if   L==1	// ca
+	"Request change of the full name of institutional link"			// Necessita traducció
+#elif L==2	// de
+	"Request change of the full name of institutional link"			// Need Übersetzung
+#elif L==3	// en
+	"Request change of the full name of institutional link"
+#elif L==4	// es
+	"Solicitar el cambio del nombre completo de un enlace institucional"
+#elif L==5	// fr
+	"Request change of the full name of institutional link"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar el cambio del nombre completo de un enlace institucional"	// Okoteve traducción
+#elif L==7	// it
+	"Request change of the full name of institutional link"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request change of the full name of institutional link"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request change of the full name of institutional link"			// Precisa de tradução
+#elif L==10	// tr
+	"Request change of the full name of institutional link"			// Çeviri lazim!
+#endif
+	,
+	[ActChgLnkWWW] =
+#if   L==1	// ca
+	"Request change of the web of institutional link"		// Necessita traducció
+#elif L==2	// de
+	"Request change of the web of institutional link"		// Need Übersetzung
+#elif L==3	// en
+	"Request change of the web of institutional link"
+#elif L==4	// es
+	"Solicitar el cambio de la web de un enlace institucional"
+#elif L==5	// fr
+	"Request change of the web of institutional link"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar el cambio de la web de un enlace institucional"	// Okoteve traducción
+#elif L==7	// it
+	"Request change of the web of institutional link"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request change of the web of institutional link"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request change of the web of institutional link"		// Precisa de tradução
+#elif L==10	// tr
+	"Request change of the web of institutional link"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeBan] =
@@ -2199,142 +2314,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Go to a banner when clicked"	// Çeviri lazim!
 #endif
 	,
-	[ActEdiLnk] =
+	[ActSeePlg] =
 #if   L==1	// ca
-	"Edit institutional links"		// Necessita traducció
+	"List plugins"		// Necessita traducció
 #elif L==2	// de
-	"Edit institutional links"		// Need Übersetzung
+	"List plugins"		// Need Übersetzung
 #elif L==3	// en
-	"Edit institutional links"
+	"List plugins"
 #elif L==4	// es
-	"Editar enlaces institucionales"
+	"Listar complementos"
 #elif L==5	// fr
-	"Edit institutional links"		// Besoin de traduction
+	"List plugins"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar enlaces institucionales"	// Okoteve traducción
+	"Listar complementos"	// Okoteve traducción
 #elif L==7	// it
-	"Edit institutional links"		// Bisogno di traduzione
+	"List plugins"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit institutional links"		// Potrzebujesz tlumaczenie
+	"List plugins"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit institutional links"		// Precisa de tradução
+	"List plugins"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit institutional links"		// Çeviri lazim!
-#endif
-	,
-	[ActNewLnk] =
-#if   L==1	// ca
-	"Crear enlla&ccedil;"
-#elif L==2	// de
-	"Link erstellen"
-#elif L==3	// en
-	"Create link"
-#elif L==4	// es
-	"Crear enlace"
-#elif L==5	// fr
-	"Cr&eacute;er lien"
-#elif L==6	// gn
-	"Crear enlace"	// Okoteve traducción
-#elif L==7	// it
-	"Creare link"
-#elif L==8	// pl
-	"Utw&oacute;rz link"
-#elif L==9	// pt
-	"Criar liga&ccedil;&atilde;o"
-#elif L==10	// tr
-	"Create link"	// Çeviri lazim!
-#endif
-	,
-	[ActRemLnk] =
-#if   L==1	// ca
-	"Request removal of institutional link"				// Necessita traducció
-#elif L==2	// de
-	"Request removal of institutional link"				// Need Übersetzung
-#elif L==3	// en
-	"Request removal of institutional link"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de un enlace institucional"
-#elif L==5	// fr
-	"Request removal of institutional link"				// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de un enlace institucional"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of institutional link"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of institutional link"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of institutional link"				// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of institutional link"				// Çeviri lazim!
-#endif
-	,
-	[ActRenLnkSho] =
-#if   L==1	// ca
-	"Request change of the short name of institutional link"		// Necessita traducció
-#elif L==2	// de
-	"Request change of the short name of institutional link"		// Need Übersetzung
-#elif L==3	// en
-	"Request change of the short name of institutional link"
-#elif L==4	// es
-	"Solicitar el cambio del nombre breve de un enlace institucional"
-#elif L==5	// fr
-	"Request change of the short name of institutional link"		// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar el cambio del nombre breve de un enlace institucional"	// Okoteve traducción
-#elif L==7	// it
-	"Request change of the short name of institutional link"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Request change of the short name of institutional link"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request change of the short name of institutional link"		// Precisa de tradução
-#elif L==10	// tr
-	"Request change of the short name of institutional link"		// Çeviri lazim!
-#endif
-	,
-	[ActRenLnkFul] =
-#if   L==1	// ca
-	"Request change of the full name of institutional link"			// Necessita traducció
-#elif L==2	// de
-	"Request change of the full name of institutional link"			// Need Übersetzung
-#elif L==3	// en
-	"Request change of the full name of institutional link"
-#elif L==4	// es
-	"Solicitar el cambio del nombre completo de un enlace institucional"
-#elif L==5	// fr
-	"Request change of the full name of institutional link"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar el cambio del nombre completo de un enlace institucional"	// Okoteve traducción
-#elif L==7	// it
-	"Request change of the full name of institutional link"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request change of the full name of institutional link"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request change of the full name of institutional link"			// Precisa de tradução
-#elif L==10	// tr
-	"Request change of the full name of institutional link"			// Çeviri lazim!
-#endif
-	,
-	[ActChgLnkWWW] =
-#if   L==1	// ca
-	"Request change of the web of institutional link"		// Necessita traducció
-#elif L==2	// de
-	"Request change of the web of institutional link"		// Need Übersetzung
-#elif L==3	// en
-	"Request change of the web of institutional link"
-#elif L==4	// es
-	"Solicitar el cambio de la web de un enlace institucional"
-#elif L==5	// fr
-	"Request change of the web of institutional link"		// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar el cambio de la web de un enlace institucional"	// Okoteve traducción
-#elif L==7	// it
-	"Request change of the web of institutional link"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Request change of the web of institutional link"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request change of the web of institutional link"		// Precisa de tradução
-#elif L==10	// tr
-	"Request change of the web of institutional link"		// Çeviri lazim!
+	"List plugins"		// Çeviri lazim!
 #endif
 	,
 	[ActEdiPlg] =
@@ -2544,6 +2544,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change IP address of a plugin"			// Çeviri lazim!
 #endif
 	,
+	[ActMtn] =
+#if   L==1	// ca
+	"Manteniment"
+#elif L==2	// de
+	"Erhaltung"
+#elif L==3	// en
+	"Maintenance"
+#elif L==4	// es
+	"Mantenimiento"
+#elif L==5	// fr
+	"Entretien"
+#elif L==6	// gn
+	"&Ntilde;emyatyr&otilde;"
+#elif L==7	// it
+	"Manutenzione"
+#elif L==8	// pl
+	"Utrzymanie"
+#elif L==9	// pt
+	"Manuten&ccedil;&atilde;o"
+#elif L==10	// tr
+	"Maintenance"	// Çeviri lazim!
+#endif
+	,
 	[ActSetUp] =
 #if   L==1	// ca
 	"Instal lar"
@@ -2636,29 +2659,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show information on the country"			// Çeviri lazim!
 #endif
 	,
-	[ActSeeIns] =
-#if   L==1	// ca
-	"List institutions"	// Necessita traducció
-#elif L==2	// de
-	"List institutions"	// Need Übersetzung
-#elif L==3	// en
-	"List institutions"
-#elif L==4	// es
-	"Listar instituciones"
-#elif L==5	// fr
-	"List institutions"	// Besoin de traduction
-#elif L==6	// gn
-	"Listar instituciones"	// Okoteve traducción
-#elif L==7	// it
-	"List institutions"	// Bisogno di traduzione
-#elif L==8	// pl
-	"List institutions"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List institutions"	// Precisa de tradução
-#elif L==10	// tr
-	"List institutions"	// Çeviri lazim!
-#endif
-	,
 	[ActPrnCtyInf] =
 #if   L==1	// ca
 	"Print information on the country"			// Necessita traducció
@@ -2703,6 +2703,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change map attribution of a country"			// Precisa de tradução
 #elif L==10	// tr
 	"Change map attribution of a country"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeIns] =
+#if   L==1	// ca
+	"List institutions"	// Necessita traducció
+#elif L==2	// de
+	"List institutions"	// Need Übersetzung
+#elif L==3	// en
+	"List institutions"
+#elif L==4	// es
+	"Listar instituciones"
+#elif L==5	// fr
+	"List institutions"	// Besoin de traduction
+#elif L==6	// gn
+	"Listar instituciones"	// Okoteve traducción
+#elif L==7	// it
+	"List institutions"	// Bisogno di traduzione
+#elif L==8	// pl
+	"List institutions"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List institutions"	// Precisa de tradução
+#elif L==10	// tr
+	"List institutions"	// Çeviri lazim!
 #endif
 	,
 	[ActEdiIns] =
@@ -2912,98 +2935,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show information on the institution"			// Çeviri lazim!
 #endif
 	,
-	[ActSeeCtr] =
-#if   L==1	// ca
-	"List centers"		// Necessita traducció
-#elif L==2	// de
-	"List centers"		// Need Übersetzung
-#elif L==3	// en
-	"List centers"
-#elif L==4	// es
-	"Listar centros"
-#elif L==5	// fr
-	"List centers"		// Besoin de traduction
-#elif L==6	// gn
-	"Listar centros"	// Okoteve traducción
-#elif L==7	// it
-	"List centers"		// Bisogno di traduzione
-#elif L==8	// pl
-	"List centers"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List centers"		// Precisa de tradução
-#elif L==10	// tr
-	"List centers"		// Çeviri lazim!
-#endif
-	,
-	[ActSeePlc] =
-#if   L==1	// ca
-	"List places"		// Necessita traducció
-#elif L==2	// de
-	"List places"		// Need Übersetzung
-#elif L==3	// en
-	"List places"
-#elif L==4	// es
-	"Listar lugares"
-#elif L==5	// fr
-	"List places"		// Besoin de traduction
-#elif L==6	// gn
-	"Listar lugares"	// Okoteve traducción
-#elif L==7	// it
-	"List places"		// Bisogno di traduzione
-#elif L==8	// pl
-	"List places"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List places"		// Precisa de tradução
-#elif L==10	// tr
-	"List places"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeDpt] =
-#if   L==1	// ca
-	"List departments"	// Necessita traducció
-#elif L==2	// de
-	"List departments"	// Need Übersetzung
-#elif L==3	// en
-	"List departments"
-#elif L==4	// es
-	"Listar departamentos"
-#elif L==5	// fr
-	"List departments"	// Besoin de traduction
-#elif L==6	// gn
-	"Listar departamentos"	// Okoteve traducción
-#elif L==7	// it
-	"List departments"	// Bisogno di traduzione
-#elif L==8	// pl
-	"List departments"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List departments"	// Precisa de tradução
-#elif L==10	// tr
-	"List departments"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeHld] =
-#if   L==1	// ca
-	"List holidays"		// Necessita traducció
-#elif L==2	// de
-	"List holidays"		// Need Übersetzung
-#elif L==3	// en
-	"List holidays"
-#elif L==4	// es
-	"Listar festivos"
-#elif L==5	// fr
-	"List holidays"		// Besoin de traduction
-#elif L==6	// gn
-	"Listar festivos"	// Okoteve traducción
-#elif L==7	// it
-	"List holidays"		// Bisogno di traduzione
-#elif L==8	// pl
-	"List holidays"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List holidays"		// Precisa de tradução
-#elif L==10	// tr
-	"List holidays"		// Çeviri lazim!
-#endif
-	,
 	[ActPrnInsInf] =
 #if   L==1	// ca
 	"Print information on the institution"				// Necessita traducció
@@ -3186,6 +3117,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove the logo of the current institution"	// Precisa de tradução
 #elif L==10	// tr
 	"Remove the logo of the current institution"	// Çeviri lazim!
+#endif
+	,
+	[ActSeeCtr] =
+#if   L==1	// ca
+	"List centers"		// Necessita traducció
+#elif L==2	// de
+	"List centers"		// Need Übersetzung
+#elif L==3	// en
+	"List centers"
+#elif L==4	// es
+	"Listar centros"
+#elif L==5	// fr
+	"List centers"		// Besoin de traduction
+#elif L==6	// gn
+	"Listar centros"	// Okoteve traducción
+#elif L==7	// it
+	"List centers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"List centers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List centers"		// Precisa de tradução
+#elif L==10	// tr
+	"List centers"		// Çeviri lazim!
 #endif
 	,
 	[ActEdiCtr] =
@@ -3395,6 +3349,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change status of center"	// Çeviri lazim!
 #endif
 	,
+	[ActSeePlc] =
+#if   L==1	// ca
+	"List places"		// Necessita traducció
+#elif L==2	// de
+	"List places"		// Need Übersetzung
+#elif L==3	// en
+	"List places"
+#elif L==4	// es
+	"Listar lugares"
+#elif L==5	// fr
+	"List places"		// Besoin de traduction
+#elif L==6	// gn
+	"Listar lugares"	// Okoteve traducción
+#elif L==7	// it
+	"List places"		// Bisogno di traduzione
+#elif L==8	// pl
+	"List places"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List places"		// Precisa de tradução
+#elif L==10	// tr
+	"List places"		// Çeviri lazim!
+#endif
+	,
 	[ActEdiPlc] =
 #if   L==1	// ca
 	"Edit places"		// Necessita traducció
@@ -3508,6 +3485,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change full name of a place"		// Precisa de tradução
 #elif L==10	// tr
 	"Change full name of a place"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeDpt] =
+#if   L==1	// ca
+	"List departments"	// Necessita traducció
+#elif L==2	// de
+	"List departments"	// Need Übersetzung
+#elif L==3	// en
+	"List departments"
+#elif L==4	// es
+	"Listar departamentos"
+#elif L==5	// fr
+	"List departments"	// Besoin de traduction
+#elif L==6	// gn
+	"Listar departamentos"	// Okoteve traducción
+#elif L==7	// it
+	"List departments"	// Bisogno di traduzione
+#elif L==8	// pl
+	"List departments"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List departments"	// Precisa de tradução
+#elif L==10	// tr
+	"List departments"	// Çeviri lazim!
 #endif
 	,
 	[ActEdiDpt] =
@@ -3671,6 +3671,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change web of a department"		// Precisa de tradução
 #elif L==10	// tr
 	"Change web of a department"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeHld] =
+#if   L==1	// ca
+	"List holidays"		// Necessita traducció
+#elif L==2	// de
+	"List holidays"		// Need Übersetzung
+#elif L==3	// en
+	"List holidays"
+#elif L==4	// es
+	"Listar festivos"
+#elif L==5	// fr
+	"List holidays"		// Besoin de traduction
+#elif L==6	// gn
+	"Listar festivos"	// Okoteve traducción
+#elif L==7	// it
+	"List holidays"		// Bisogno di traduzione
+#elif L==8	// pl
+	"List holidays"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List holidays"		// Precisa de tradução
+#elif L==10	// tr
+	"List holidays"		// Çeviri lazim!
 #endif
 	,
 	[ActEdiHld] =
@@ -3878,75 +3901,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show information on the center"		// Precisa de tradução
 #elif L==10	// tr
 	"Show information on the center"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeDeg] =
-#if   L==1	// ca
-	"List degrees in a center"	// Necessita traducció
-#elif L==2	// de
-	"List degrees in a center"	// Need Übersetzung
-#elif L==3	// en
-	"List degrees in a center"
-#elif L==4	// es
-	"Listar titulaciones de centro"
-#elif L==5	// fr
-	"List degrees in a center"	// Besoin de traduction
-#elif L==6	// gn
-	"Listar titulaciones de centro"	// Okoteve traducción
-#elif L==7	// it
-	"List degrees in a center"	// Bisogno di traduzione
-#elif L==8	// pl
-	"List degrees in a center"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List degrees in a center"	// Precisa de tradução
-#elif L==10	// tr
-	"List degrees in a center"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeBld] =
-#if   L==1	// ca
-	"List buildings in a center"	// Necessita traducció
-#elif L==2	// de
-	"List buildings in a center"	// Need Übersetzung
-#elif L==3	// en
-	"List buildings in a center"
-#elif L==4	// es
-	"Listar edificios de centro"
-#elif L==5	// fr
-	"List buildings in a center"	// Besoin de traduction
-#elif L==6	// gn
-	"Listar edificios de centro"	// Okoteve traducción
-#elif L==7	// it
-	"List buildings in a center"	// Bisogno di traduzione
-#elif L==8	// pl
-	"List buildings in a center"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List buildings in a center"	// Precisa de tradução
-#elif L==10	// tr
-	"List buildings in a center"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeRoo] =
-#if   L==1	// ca
-	"List rooms in a center"	// Necessita traducció
-#elif L==2	// de
-	"List rooms in a center"	// Need Übersetzung
-#elif L==3	// en
-	"List rooms in a center"
-#elif L==4	// es
-	"Listar salas de centro"
-#elif L==5	// fr
-	"List rooms in a center"	// Besoin de traduction
-#elif L==6	// gn
-	"Listar salas de centro"	// Okoteve traducción
-#elif L==7	// it
-	"List rooms in a center"	// Bisogno di traduzione
-#elif L==8	// pl
-	"List rooms in a center"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List rooms in a center"	// Precisa de tradução
-#elif L==10	// tr
-	"List rooms in a center"	// Çeviri lazim!
 #endif
 	,
 	[ActPrnCtrInf] =
@@ -4294,119 +4248,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change attribution of center photo"		// Çeviri lazim!
 #endif
 	,
-	[ActSeeDegTyp] =
+	[ActSeeDeg] =
 #if   L==1	// ca
-	"List types of degrees"			// Necessita traducció
+	"List degrees in a center"	// Necessita traducció
 #elif L==2	// de
-	"List types of degrees"			// Need Übersetzung
+	"List degrees in a center"	// Need Übersetzung
 #elif L==3	// en
-	"List types of degrees"
+	"List degrees in a center"
 #elif L==4	// es
-	"Listar tipos de titulaci&oacute;n"
+	"Listar titulaciones de centro"
 #elif L==5	// fr
-	"List types of degrees"			// Besoin de traduction
+	"List degrees in a center"	// Besoin de traduction
 #elif L==6	// gn
-	"Listar tipos de titulaci&oacute;n"	// Okoteve traducción
+	"Listar titulaciones de centro"	// Okoteve traducción
 #elif L==7	// it
-	"List types of degrees"			// Bisogno di traduzione
+	"List degrees in a center"	// Bisogno di traduzione
 #elif L==8	// pl
-	"List types of degrees"			// Potrzebujesz tlumaczenie
+	"List degrees in a center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"List types of degrees"			// Precisa de tradução
+	"List degrees in a center"	// Precisa de tradução
 #elif L==10	// tr
-	"List types of degrees"			// Çeviri lazim!
-#endif
-	,
-	[ActEdiDegTyp] =
-#if   L==1	// ca
-	"Request edition of types of degrees"				// Necessita traducció
-#elif L==2	// de
-	"Request edition of types of degrees"				// Need Übersetzung
-#elif L==3	// en
-	"Request edition of types of degrees"
-#elif L==4	// es
-	"Solicitar edici&oacute;n de tipos de titulaci&oacute;n"
-#elif L==5	// fr
-	"Request edition of types of degrees"				// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar edici&oacute;n de tipos de titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Request edition of types of degrees"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Request edition of types of degrees"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request edition of types of degrees"				// Precisa de tradução
-#elif L==10	// tr
-	"Request edition of types of degrees"				// Çeviri lazim!
-#endif
-	,
-	[ActNewDegTyp] =
-#if   L==1	// ca
-	"Crear tipus de titulaci&oacute;"
-#elif L==2	// de
-	"Abschlussart definieren"
-#elif L==3	// en
-	"Create type of degree"
-#elif L==4	// es
-	"Crear tipo de titulaci&oacute;n"
-#elif L==5	// fr
-	"Cr&eacute;er type d'&eacute;tude"
-#elif L==6	// gn
-	"Crear tipo de titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Creare tipo di laurea"
-#elif L==8	// pl
-	"Utw&oacute;rz typu stopnia"
-#elif L==9	// pt
-	"Criar tipo de grau"
-#elif L==10	// tr
-	"Create type of degree"			// Çeviri lazim!
-#endif
-	,
-	[ActRemDegTyp] =
-#if   L==1	// ca
-	"Remove type of degree"			// Necessita traducció
-#elif L==2	// de
-	"Remove type of degree"			// Need Übersetzung
-#elif L==3	// en
-	"Remove type of degree"
-#elif L==4	// es
-	"Eliminar tipo de titulaci&oacute;n"
-#elif L==5	// fr
-	"Remove type of degree"			// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar tipo de titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Remove type of degree"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove type of degree"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove type of degree"			// Precisa de tradução
-#elif L==10	// tr
-	"Remove type of degree"			// Çeviri lazim!
-#endif
-	,
-	[ActRenDegTyp] =
-#if   L==1	// ca
-	"Rename type of degree"			// Necessita traducció
-#elif L==2	// de
-	"Rename type of degree"			// Need Übersetzung
-#elif L==3	// en
-	"Rename type of degree"
-#elif L==4	// es
-	"Renombrar tipo de titulaci&oacute;n"
-#elif L==5	// fr
-	"Rename type of degree"			// Besoin de traduction
-#elif L==6	// gn
-	"Renombrar tipo de titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Rename type of degree"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rename type of degree"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rename type of degree"			// Precisa de tradução
-#elif L==10	// tr
-	"Rename type of degree"			// Çeviri lazim!
+	"List degrees in a center"	// Çeviri lazim!
 #endif
 	,
 	[ActEdiDeg] =
@@ -4616,6 +4478,144 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change status of degree"		// Çeviri lazim!
 #endif
 	,
+	[ActSeeDegTyp] =
+#if   L==1	// ca
+	"List types of degrees"			// Necessita traducció
+#elif L==2	// de
+	"List types of degrees"			// Need Übersetzung
+#elif L==3	// en
+	"List types of degrees"
+#elif L==4	// es
+	"Listar tipos de titulaci&oacute;n"
+#elif L==5	// fr
+	"List types of degrees"			// Besoin de traduction
+#elif L==6	// gn
+	"Listar tipos de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"List types of degrees"			// Bisogno di traduzione
+#elif L==8	// pl
+	"List types of degrees"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List types of degrees"			// Precisa de tradução
+#elif L==10	// tr
+	"List types of degrees"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiDegTyp] =
+#if   L==1	// ca
+	"Request edition of types of degrees"				// Necessita traducció
+#elif L==2	// de
+	"Request edition of types of degrees"				// Need Übersetzung
+#elif L==3	// en
+	"Request edition of types of degrees"
+#elif L==4	// es
+	"Solicitar edici&oacute;n de tipos de titulaci&oacute;n"
+#elif L==5	// fr
+	"Request edition of types of degrees"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar edici&oacute;n de tipos de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Request edition of types of degrees"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request edition of types of degrees"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request edition of types of degrees"				// Precisa de tradução
+#elif L==10	// tr
+	"Request edition of types of degrees"				// Çeviri lazim!
+#endif
+	,
+	[ActNewDegTyp] =
+#if   L==1	// ca
+	"Crear tipus de titulaci&oacute;"
+#elif L==2	// de
+	"Abschlussart definieren"
+#elif L==3	// en
+	"Create type of degree"
+#elif L==4	// es
+	"Crear tipo de titulaci&oacute;n"
+#elif L==5	// fr
+	"Cr&eacute;er type d'&eacute;tude"
+#elif L==6	// gn
+	"Crear tipo de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Creare tipo di laurea"
+#elif L==8	// pl
+	"Utw&oacute;rz typu stopnia"
+#elif L==9	// pt
+	"Criar tipo de grau"
+#elif L==10	// tr
+	"Create type of degree"			// Çeviri lazim!
+#endif
+	,
+	[ActRemDegTyp] =
+#if   L==1	// ca
+	"Remove type of degree"			// Necessita traducció
+#elif L==2	// de
+	"Remove type of degree"			// Need Übersetzung
+#elif L==3	// en
+	"Remove type of degree"
+#elif L==4	// es
+	"Eliminar tipo de titulaci&oacute;n"
+#elif L==5	// fr
+	"Remove type of degree"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar tipo de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Remove type of degree"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove type of degree"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove type of degree"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove type of degree"			// Çeviri lazim!
+#endif
+	,
+	[ActRenDegTyp] =
+#if   L==1	// ca
+	"Rename type of degree"			// Necessita traducció
+#elif L==2	// de
+	"Rename type of degree"			// Need Übersetzung
+#elif L==3	// en
+	"Rename type of degree"
+#elif L==4	// es
+	"Renombrar tipo de titulaci&oacute;n"
+#elif L==5	// fr
+	"Rename type of degree"			// Besoin de traduction
+#elif L==6	// gn
+	"Renombrar tipo de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Rename type of degree"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Rename type of degree"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rename type of degree"			// Precisa de tradução
+#elif L==10	// tr
+	"Rename type of degree"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeBld] =
+#if   L==1	// ca
+	"List buildings in a center"	// Necessita traducció
+#elif L==2	// de
+	"List buildings in a center"	// Need Übersetzung
+#elif L==3	// en
+	"List buildings in a center"
+#elif L==4	// es
+	"Listar edificios de centro"
+#elif L==5	// fr
+	"List buildings in a center"	// Besoin de traduction
+#elif L==6	// gn
+	"Listar edificios de centro"	// Okoteve traducción
+#elif L==7	// it
+	"List buildings in a center"	// Bisogno di traduzione
+#elif L==8	// pl
+	"List buildings in a center"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List buildings in a center"	// Precisa de tradução
+#elif L==10	// tr
+	"List buildings in a center"	// Çeviri lazim!
+#endif
+	,
 	[ActEdiBld] =
 #if   L==1	// ca
 	"Edit buildings"	// Necessita traducció
@@ -4752,6 +4752,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change location of building"		// Precisa de tradução
 #elif L==10	// tr
 	"Change location of building"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeRoo] =
+#if   L==1	// ca
+	"List rooms in a center"	// Necessita traducció
+#elif L==2	// de
+	"List rooms in a center"	// Need Übersetzung
+#elif L==3	// en
+	"List rooms in a center"
+#elif L==4	// es
+	"Listar salas de centro"
+#elif L==5	// fr
+	"List rooms in a center"	// Besoin de traduction
+#elif L==6	// gn
+	"Listar salas de centro"	// Okoteve traducción
+#elif L==7	// it
+	"List rooms in a center"	// Bisogno di traduzione
+#elif L==8	// pl
+	"List rooms in a center"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List rooms in a center"	// Precisa de tradução
+#elif L==10	// tr
+	"List rooms in a center"	// Çeviri lazim!
 #endif
 	,
 	[ActEdiRoo] =
@@ -5007,29 +5030,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show information on the degree"			// Çeviri lazim!
 #endif
 	,
-	[ActSeeCrs] =
-#if   L==1	// ca
-	"List courses of degree"			// Necessita traducció
-#elif L==2	// de
-	"List courses of degree"			// Need Übersetzung
-#elif L==3	// en
-	"List courses of degree"
-#elif L==4	// es
-	"Listar asignaturas de titulaci&oacute;n"
-#elif L==5	// fr
-	"List courses of degree"			// Besoin de traduction
-#elif L==6	// gn
-	"Listar asignaturas de titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"List courses of degree"			// Bisogno di traduzione
-#elif L==8	// pl
-	"List courses of degree"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List courses of degree"			// Precisa de tradução
-#elif L==10	// tr
-	"List courses of degree"			// Çeviri lazim!
-#endif
-	,
 	[ActPrnDegInf] =
 #if   L==1	// ca
 	"Print information on the degree"				// Necessita traducció
@@ -5212,6 +5212,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove the logo of the current degree"		// Precisa de tradução
 #elif L==10	// tr
 	"Remove the logo of the current degree"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeCrs] =
+#if   L==1	// ca
+	"List courses of degree"			// Necessita traducció
+#elif L==2	// de
+	"List courses of degree"			// Need Übersetzung
+#elif L==3	// en
+	"List courses of degree"
+#elif L==4	// es
+	"Listar asignaturas de titulaci&oacute;n"
+#elif L==5	// fr
+	"List courses of degree"			// Besoin de traduction
+#elif L==6	// gn
+	"Listar asignaturas de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"List courses of degree"			// Bisogno di traduzione
+#elif L==8	// pl
+	"List courses of degree"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List courses of degree"			// Precisa de tradução
+#elif L==10	// tr
+	"List courses of degree"			// Çeviri lazim!
 #endif
 	,
 	[ActEdiCrs] =
@@ -5444,190 +5467,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show information on the course"			// Çeviri lazim!
 #endif
 	,
-	[ActSeePrg] =
-#if   L==1	// ca
-	"Veure programaci&oacute; did&agrave;ctica de l'assignatura"
-#elif L==2	// de
-	"Siehe Ausbildungsplan des Kurses"
-#elif L==3	// en
-	"See educational schedule of the course"
-#elif L==4	// es
-	"Ver programaci&oacute;n did&aacute;ctica de la asignatura"
-#elif L==5	// fr
-	"Voir programme didactique de la mati&egrave;re"
-#elif L==6	// gn
-	"Ehecha programa did&aacute;ctico upe materia rehegua"
-#elif L==7	// it
-	"Vedi programma didattico della materia"
-#elif L==8	// pl
-	"Zobacz program edukacyjny kursu"
-#elif L==9	// pt
-	"Ver programa did&aacute;tico da disciplina"
-#elif L==10	// tr
-	"Konunun didaktik program&inodot;na bak&inodot;n"
-#endif
-	,
-	[ActSeeTchGui] =
-#if   L==1	// ca
-	"See the teaching guide of course"		// Necessita traducció
-#elif L==2	// de
-	"See the teaching guide of course"		// Need Übersetzung
-#elif L==3	// en
-	"See the teaching guide of course"
-#elif L==4	// es
-	"Ver la gu&iacute;a docente de la asignatura"
-#elif L==5	// fr
-	"See the teaching guide of course"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver la gu&iacute;a docente de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"See the teaching guide of course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the teaching guide of course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the teaching guide of course"		// Precisa de tradução
-#elif L==10	// tr
-	"See the teaching guide of course"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeSyl] =
-#if   L==1	// ca
-	"See the syllabus (lectures or practicals)"		// Necessita traducció
-#elif L==2	// de
-	"See the syllabus (lectures or practicals)"		// Need Übersetzung
-#elif L==3	// en
-	"See the syllabus (lectures or practicals)"
-#elif L==4	// es
-	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"
-#elif L==5	// fr
-	"See the syllabus (lectures or practicals)"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"	// Okoteve traducción
-#elif L==7	// it
-	"See the syllabus (lectures or practicals)"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the syllabus (lectures or practicals)"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the syllabus (lectures or practicals)"		// Precisa de tradução
-#elif L==10	// tr
-	"See the syllabus (lectures or practicals)"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeBib] =
-#if   L==1	// ca
-	"See the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"See the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"See the bibliography"
-#elif L==4	// es
-	"Ver la bibliograf&iacute;a"
-#elif L==5	// fr
-	"See the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"See the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"See the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeFAQ] =
-#if   L==1	// ca
-	"See the FAQ"	// Necessita traducció
-#elif L==2	// de
-	"See the FAQ"	// Need Übersetzung
-#elif L==3	// en
-	"See the FAQ"
-#elif L==4	// es
-	"Ver la FAQ"
-#elif L==5	// fr
-	"See the FAQ"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"See the FAQ"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See the FAQ"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the FAQ"	// Precisa de tradução
-#elif L==10	// tr
-	"See the FAQ"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeCrsLnk] =
-#if   L==1	// ca
-	"See the links related to the course"			// Necessita traducció
-#elif L==2	// de
-	"See the links related to the course"			// Need Übersetzung
-#elif L==3	// en
-	"See the links related to the course"
-#elif L==4	// es
-	"Ver los enlaces relacionados con la asignatura"
-#elif L==5	// fr
-	"See the links related to the course"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver los enlaces relacionados con la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"See the links related to the course"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See the links related to the course"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the links related to the course"			// Precisa de tradução
-#elif L==10	// tr
-	"See the links related to the course"			// Çeviri lazim!
-#endif
-	,
-	[ActSeeAss] =
-#if   L==1	// ca
-	"See assessment system"			// Necessita traducció
-#elif L==2	// de
-	"See assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"See assessment system"
-#elif L==4	// es
-	"Ver sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"See assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"See assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"See assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActSeeCrsTT] =
-#if   L==1	// ca
-	"See the course timetable"		// Necessita traducció
-#elif L==2	// de
-	"See the course timetable"		// Need Übersetzung
-#elif L==3	// en
-	"See the course timetable"
-#elif L==4	// es
-	"Ver el horario de la asignatura"
-#elif L==5	// fr
-	"See the course timetable"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver el horario de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"See the course timetable"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the course timetable"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the course timetable"		// Precisa de tradução
-#elif L==10	// tr
-	"See the course timetable"		// Çeviri lazim!
-#endif
-	,
 	[ActPrnCrsInf] =
 #if   L==1	// ca
 	"Print information on the course"			// Necessita traducció
@@ -5787,6 +5626,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Edit information about the course"		// Precisa de tradução
 #elif L==10	// tr
 	"Edit information about the course"		// Çeviri lazim!
+#endif
+	,
+	[ActChgFrcReaCrsInf] =
+#if   L==1	// ca
+	"Change whether students are forced to read the course information"			// Necessita traducció
+#elif L==2	// de
+	"Change whether students are forced to read the course information"			// Need Übersetzung
+#elif L==3	// en
+	"Change whether students are forced to read the course information"
+#elif L==4	// es
+	"Cambiar si se obliga a los estudiantes a leer la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Change whether students are forced to read the course information"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si se obliga a los estudiantes a leer la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change whether students are forced to read the course information"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change whether students are forced to read the course information"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change whether students are forced to read the course information"			// Precisa de tradução
+#elif L==10	// tr
+	"Change whether students are forced to read the course information"			// Çeviri lazim!
+#endif
+	,
+	[ActChgHavReaCrsInf] =
+#if   L==1	// ca
+	"Change if I have read the course information"				// Necessita traducció
+#elif L==2	// de
+	"Change if I have read the course information"				// Need Übersetzung
+#elif L==3	// en
+	"Change if I have read the course information"
+#elif L==4	// es
+	"Cambiar si he le&iacute;do la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Change if I have read the course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si he le&iacute;do la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change if I have read the course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Change if I have read the course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change if I have read the course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Change if I have read the course information"				// Çeviri lazim!
+#endif
+	,
+	[ActSelInfSrcCrsInf] =
+#if   L==1	// ca
+	"Select the type of information shown in the course information"				// Necessita traducció
+#elif L==2	// de
+	"Select the type of information shown in the course information"				// Need Übersetzung
+#elif L==3	// en
+	"Select the type of information shown in the course information"
+#elif L==4	// es
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Select the type of information shown in the course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Select the type of information shown in the course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Select the type of information shown in the course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select the type of information shown in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Select the type of information shown in the course information"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLCrsInf] =
+#if   L==1	// ca
+	"Create URL in the course information"				// Necessita traducció
+#elif L==2	// de
+	"Create URL in the course information"				// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the course information"
+#elif L==4	// es
+	"Crear una URL en la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Create URL in the course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the course information"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagCrsInf] =
+#if   L==1	// ca
+	"Create web page in the course information"				// Necessita traducció
+#elif L==2	// de
+	"Create web page in the course information"				// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the course information"
+#elif L==4	// es
+	"Crear una p&aacute;gina web en la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Create web page in the course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear una p&aacute;gina web en la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the course information"				// Çeviri lazim!
+#endif
+	,
+	[ActEditorCrsInf] =
+#if   L==1	// ca
+	"Integrated editor of course information"			// Necessita traducció
+#elif L==2	// de
+	"Integrated editor of course information"			// Need Übersetzung
+#elif L==3	// en
+	"Integrated editor of course information"
+#elif L==4	// es
+	"Editor integrado de la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Integrated editor of course information"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor integrado de la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Integrated editor of course information"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Integrated editor of course information"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Integrated editor of course information"			// Precisa de tradução
+#elif L==10	// tr
+	"Integrated editor of course information"			// Çeviri lazim!
+#endif
+	,
+	[ActPlaTxtEdiCrsInf] =
+#if   L==1	// ca
+	"Plain text editor of course information"				// Necessita traducció
+#elif L==2	// de
+	"Plain text editor of course information"				// Need Übersetzung
+#elif L==3	// en
+	"Plain text editor of course information"
+#elif L==4	// es
+	"Editor de texto plano de la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Plain text editor of course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto plano de la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Plain text editor of course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Plain text editor of course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Plain text editor of course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Plain text editor of course information"				// Çeviri lazim!
+#endif
+	,
+	[ActRchTxtEdiCrsInf] =
+#if   L==1	// ca
+	"Rich text editor of course information"				// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of course information"				// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of course information"
+#elif L==4	// es
+	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Rich text editor of course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of course information"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvPlaTxtCrsInf] =
+#if   L==1	// ca
+	"Change plain text of course information"			// Necessita traducció
+#elif L==2	// de
+	"Change plain text of course information"			// Need Übersetzung
+#elif L==3	// en
+	"Change plain text of course information"
+#elif L==4	// es
+	"Cambiar texto plano de la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Change plain text of course information"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto plano de la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change plain text of course information"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change plain text of course information"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change plain text of course information"			// Precisa de tradução
+#elif L==10	// tr
+	"Change plain text of course information"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvRchTxtCrsInf] =
+#if   L==1	// ca
+	"Change rich text of course information"				// Necessita traducció
+#elif L==2	// de
+	"Change rich text of course information"				// Need Übersetzung
+#elif L==3	// en
+	"Change rich text of course information"
+#elif L==4	// es
+	"Cambiar texto enriquecido de la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Change rich text of course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto enriquecido de la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change rich text of course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Change rich text of course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change rich text of course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Change rich text of course information"				// Çeviri lazim!
+#endif
+	,
+	[ActSeePrg] =
+#if   L==1	// ca
+	"Veure programaci&oacute; did&agrave;ctica de l'assignatura"
+#elif L==2	// de
+	"Siehe Ausbildungsplan des Kurses"
+#elif L==3	// en
+	"See educational schedule of the course"
+#elif L==4	// es
+	"Ver programaci&oacute;n did&aacute;ctica de la asignatura"
+#elif L==5	// fr
+	"Voir programme didactique de la mati&egrave;re"
+#elif L==6	// gn
+	"Ehecha programa did&aacute;ctico upe materia rehegua"
+#elif L==7	// it
+	"Vedi programma didattico della materia"
+#elif L==8	// pl
+	"Zobacz program edukacyjny kursu"
+#elif L==9	// pt
+	"Ver programa did&aacute;tico da disciplina"
+#elif L==10	// tr
+	"Konunun didaktik program&inodot;na bak&inodot;n"
 #endif
 	,
 	[ActEdiPrg] =
@@ -6525,6 +6617,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Programdan kayna&gbreve;a ba&gbreve;lant&inodot;y&inodot; de&gbreve;i&scedil;tir"
 #endif
 	,
+	[ActSeeTchGui] =
+#if   L==1	// ca
+	"See the teaching guide of course"		// Necessita traducció
+#elif L==2	// de
+	"See the teaching guide of course"		// Need Übersetzung
+#elif L==3	// en
+	"See the teaching guide of course"
+#elif L==4	// es
+	"Ver la gu&iacute;a docente de la asignatura"
+#elif L==5	// fr
+	"See the teaching guide of course"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver la gu&iacute;a docente de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See the teaching guide of course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the teaching guide of course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the teaching guide of course"		// Precisa de tradução
+#elif L==10	// tr
+	"See the teaching guide of course"		// Çeviri lazim!
+#endif
+	,
 	[ActEdiTchGui] =
 #if   L==1	// ca
 	"Edit teaching guide of course"				// Necessita traducció
@@ -6546,6 +6661,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Edit teaching guide of course"				// Precisa de tradução
 #elif L==10	// tr
 	"Edit teaching guide of course"				// Çeviri lazim!
+#endif
+	,
+	[ActChgFrcReaTchGui] =
+#if   L==1	// ca
+	"Change whether students are forced to read the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Change whether students are forced to read the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Change whether students are forced to read the teaching guide"
+#elif L==4	// es
+	"Cambiar si se obliga a los estudiantes a leer la gu&iacute;a docente"
+#elif L==5	// fr
+	"Change whether students are forced to read the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si se obliga a los estudiantes a leer la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Change whether students are forced to read the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change whether students are forced to read the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change whether students are forced to read the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Change whether students are forced to read the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActChgHavReaTchGui] =
+#if   L==1	// ca
+	"Change if I have read the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Change if I have read the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Change if I have read the teaching guide"
+#elif L==4	// es
+	"Cambiar si he le&iacute;do la gu&iacute;a docente"
+#elif L==5	// fr
+	"Change if I have read the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si he le&iacute;do la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Change if I have read the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change if I have read the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change if I have read the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Change if I have read the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActSelInfSrcTchGui] =
+#if   L==1	// ca
+	"Select the type of information shown in the teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Select the type of information shown in the teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Select the type of information shown in the teaching guide"
+#elif L==4	// es
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la gu&iacute;a docente"
+#elif L==5	// fr
+	"Select the type of information shown in the teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Select the type of information shown in the teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Select the type of information shown in the teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select the type of information shown in the teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Select the type of information shown in the teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLTchGui] =
+#if   L==1	// ca
+	"Create URL in the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the teaching guide"
+#elif L==4	// es
+	"Crear una URL en la gu&iacute;a docente"
+#elif L==5	// fr
+	"Create URL in the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagTchGui] =
+#if   L==1	// ca
+	"Create web page in the teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Create web page in the teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the teaching guide"
+#elif L==4	// es
+	"Crear una p&aacute;gina web en la gu&iacute;a docente"
+#elif L==5	// fr
+	"Create web page in the teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear una p&aacute;gina web en la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActEditorTchGui] =
+#if   L==1	// ca
+	"Integrated editor of the teaching guide"	// Necessita traducció
+#elif L==2	// de
+	"Integrated editor of the teaching guide"	// Need Übersetzung
+#elif L==3	// en
+	"Integrated editor of the teaching guide"
+#elif L==4	// es
+	"Editor integrado de la gu&iacute;a docente"
+#elif L==5	// fr
+	"Integrated editor of the teaching guide"	// Besoin de traduction
+#elif L==6	// gn
+	"Editor integrado de la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Integrated editor of the teaching guide"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Integrated editor of the teaching guide"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Integrated editor of the teaching guide"	// Precisa de tradução
+#elif L==10	// tr
+	"Integrated editor of the teaching guide"	// Çeviri lazim!
+#endif
+	,
+	[ActPlaTxtEdiTchGui] =
+#if   L==1	// ca
+	"Plain text editor of the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Plain text editor of the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Plain text editor of the teaching guide"
+#elif L==4	// es
+	"Editor de texto plano de la gu&iacute;a docente"
+#elif L==5	// fr
+	"Plain text editor of the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto plano de la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Plain text editor of the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Plain text editor of the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Plain text editor of the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Plain text editor of the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActRchTxtEdiTchGui] =
+#if   L==1	// ca
+	"Rich text editor of the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the teaching guide"
+#elif L==4	// es
+	"Editor de texto enriquecido de la gu&iacute;a docente"
+#elif L==5	// fr
+	"Rich text editor of the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvPlaTxtTchGui] =
+#if   L==1	// ca
+	"Change plain text of the teaching guide"	// Necessita traducció
+#elif L==2	// de
+	"Change plain text of the teaching guide"	// Need Übersetzung
+#elif L==3	// en
+	"Change plain text of the teaching guide"
+#elif L==4	// es
+	"Cambiar texto plano de la gu&iacute;a docente"
+#elif L==5	// fr
+	"Change plain text of the teaching guide"	// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto plano de la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Change plain text of the teaching guide"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Change plain text of the teaching guide"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change plain text of the teaching guide"	// Precisa de tradução
+#elif L==10	// tr
+	"Change plain text of the teaching guide"	// Çeviri lazim!
+#endif
+	,
+	[ActRcvRchTxtTchGui] =
+#if   L==1	// ca
+	"Change rich text of the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Change rich text of the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Change rich text of the teaching guide"
+#elif L==4	// es
+	"Cambiar texto enriquecido de la gu&iacute;a docente"
+#elif L==5	// fr
+	"Change rich text of the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto enriquecido de la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Change rich text of the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change rich text of the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change rich text of the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Change rich text of the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeSyl] =
+#if   L==1	// ca
+	"See the syllabus (lectures or practicals)"		// Necessita traducció
+#elif L==2	// de
+	"See the syllabus (lectures or practicals)"		// Need Übersetzung
+#elif L==3	// en
+	"See the syllabus (lectures or practicals)"
+#elif L==4	// es
+	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"
+#elif L==5	// fr
+	"See the syllabus (lectures or practicals)"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"	// Okoteve traducción
+#elif L==7	// it
+	"See the syllabus (lectures or practicals)"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the syllabus (lectures or practicals)"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the syllabus (lectures or practicals)"		// Precisa de tradução
+#elif L==10	// tr
+	"See the syllabus (lectures or practicals)"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeSylLec] =
@@ -6962,144 +7330,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change item in the practicals syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActEdiBib] =
-#if   L==1	// ca
-	"Edit bibliography"		// Necessita traducció
-#elif L==2	// de
-	"Edit bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"Edit bibliography"
-#elif L==4	// es
-	"Editar la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Edit bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Edit bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActEdiFAQ] =
-#if   L==1	// ca
-	"Edit FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Edit FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Edit FAQ"
-#elif L==4	// es
-	"Editar la FAQ"
-#elif L==5	// fr
-	"Edit FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar la FAQ"		// Okoteve traducción
-#elif L==7	// it
-	"Edit FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActEdiCrsLnk] =
-#if   L==1	// ca
-	"Edit course links"			// Necessita traducció
-#elif L==2	// de
-	"Edit course links"			// Need Übersetzung
-#elif L==3	// en
-	"Edit course links"
-#elif L==4	// es
-	"Editar los enlaces de la asignatura"
-#elif L==5	// fr
-	"Edit course links"			// Besoin de traduction
-#elif L==6	// gn
-	"Editar los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Edit course links"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit course links"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit course links"			// Precisa de tradução
-#elif L==10	// tr
-	"Edit course links"			// Çeviri lazim!
-#endif
-	,
-	[ActEdiAss] =
-#if   L==1	// ca
-	"Edit assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Edit assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Edit assessment system"
-#elif L==4	// es
-	"Editar sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Edit assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Edit assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaCrsInf] =
-#if   L==1	// ca
-	"Change whether students are forced to read the course information"			// Necessita traducció
-#elif L==2	// de
-	"Change whether students are forced to read the course information"			// Need Übersetzung
-#elif L==3	// en
-	"Change whether students are forced to read the course information"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Change whether students are forced to read the course information"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Change whether students are forced to read the course information"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change whether students are forced to read the course information"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change whether students are forced to read the course information"			// Precisa de tradução
-#elif L==10	// tr
-	"Change whether students are forced to read the course information"			// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaTchGui] =
-#if   L==1	// ca
-	"Change whether students are forced to read the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Change whether students are forced to read the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Change whether students are forced to read the teaching guide"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer la gu&iacute;a docente"
-#elif L==5	// fr
-	"Change whether students are forced to read the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Change whether students are forced to read the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change whether students are forced to read the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change whether students are forced to read the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Change whether students are forced to read the teaching guide"		// Çeviri lazim!
-#endif
-	,
 	[ActChgFrcReaSylLec] =
 #if   L==1	// ca
 	"Change whether students are forced to read the lectures syllabus"		// Necessita traducció
@@ -7144,144 +7374,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change whether students are forced to read the practicals syllabus"		// Precisa de tradução
 #elif L==10	// tr
 	"Change whether students are forced to read the practicals syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaBib] =
-#if   L==1	// ca
-	"Change whether students are forced to read the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"Change whether students are forced to read the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"Change whether students are forced to read the bibliography"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Change whether students are forced to read the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Change whether students are forced to read the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change whether students are forced to read the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change whether students are forced to read the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"Change whether students are forced to read the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaFAQ] =
-#if   L==1	// ca
-	"Change force students to read FAQ"			// Necessita traducció
-#elif L==2	// de
-	"Change force students to read FAQ"			// Need Übersetzung
-#elif L==3	// en
-	"Change force students to read FAQ"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer la FAQ"
-#elif L==5	// fr
-	"Change force students to read FAQ"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Change force students to read FAQ"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change force students to read FAQ"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change force students to read FAQ"			// Precisa de tradução
-#elif L==10	// tr
-	"Change force students to read FAQ"			// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaCrsLnk] =
-#if   L==1	// ca
-	"Change whether students are forced to read the links"		// Necessita traducció
-#elif L==2	// de
-	"Change whether students are forced to read the links"		// Need Übersetzung
-#elif L==3	// en
-	"Change whether students are forced to read the links"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer los enlaces"
-#elif L==5	// fr
-	"Change whether students are forced to read the links"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer los enlaces"	// Okoteve traducción
-#elif L==7	// it
-	"Change whether students are forced to read the links"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change whether students are forced to read the links"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change whether students are forced to read the links"		// Precisa de tradução
-#elif L==10	// tr
-	"Change whether students are forced to read the links"		// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaAss] =
-#if   L==1	// ca
-	"Change whether students are forced to read the assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Change whether students are forced to read the assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Change whether students are forced to read the assessment system"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Change whether students are forced to read the assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change whether students are forced to read the assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change whether students are forced to read the assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change whether students are forced to read the assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Change whether students are forced to read the assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaCrsInf] =
-#if   L==1	// ca
-	"Change if I have read the course information"				// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the course information"				// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the course information"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Change if I have read the course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the course information"				// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaTchGui] =
-#if   L==1	// ca
-	"Change if I have read the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the teaching guide"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do la gu&iacute;a docente"
-#elif L==5	// fr
-	"Change if I have read the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the teaching guide"		// Çeviri lazim!
 #endif
 	,
 	[ActChgHavReaSylLec] =
@@ -7330,144 +7422,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change if I have read the practicals syllabus"			// Çeviri lazim!
 #endif
 	,
-	[ActChgHavReaBib] =
-#if   L==1	// ca
-	"Change if I have read the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the bibliography"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Change if I have read the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaFAQ] =
-#if   L==1	// ca
-	"Change if I have read the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the FAQ"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do la FAQ"
-#elif L==5	// fr
-	"Change if I have read the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaCrsLnk] =
-#if   L==1	// ca
-	"Change if I have read the course links"			// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the course links"			// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the course links"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do los enlaces de la asignatura"
-#elif L==5	// fr
-	"Change if I have read the course links"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the course links"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the course links"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the course links"			// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the course links"			// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaAss] =
-#if   L==1	// ca
-	"Change if I have read the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the assessment system"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Change if I have read the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcCrsInf] =
-#if   L==1	// ca
-	"Select the type of information shown in the course information"				// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the course information"				// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the course information"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Select the type of information shown in the course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the course information"				// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcTchGui] =
-#if   L==1	// ca
-	"Select the type of information shown in the teaching guide"			// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the teaching guide"			// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the teaching guide"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la gu&iacute;a docente"
-#elif L==5	// fr
-	"Select the type of information shown in the teaching guide"			// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the teaching guide"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the teaching guide"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the teaching guide"			// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the teaching guide"			// Çeviri lazim!
-#endif
-	,
 	[ActSelInfSrcSylLec] =
 #if   L==1	// ca
 	"Select the type of information shown in the lectures syllabus"				// Necessita traducció
@@ -7512,144 +7466,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the practicals syllabus"			// Precisa de tradução
 #elif L==10	// tr
 	"Select the type of information shown in the practicals syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcBib] =
-#if   L==1	// ca
-	"Select the type of information shown in the bibliography"			// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the bibliography"			// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the bibliography"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Select the type of information shown in the bibliography"			// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the bibliography"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the bibliography"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the bibliography"			// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the bibliography"			// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcFAQ] =
-#if   L==1	// ca
-	"Select the type of information shown in the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the FAQ"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la FAQ"
-#elif L==5	// fr
-	"Select the type of information shown in the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcCrsLnk] =
-#if   L==1	// ca
-	"Select the type of information shown in the course links"				// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the course links"				// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the course links"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en los enlaces de la asignatura"
-#elif L==5	// fr
-	"Select the type of information shown in the course links"				// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the course links"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the course links"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the course links"				// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the course links"				// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcAss] =
-#if   L==1	// ca
-	"Select the type of information shown in the assessment system"				// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the assessment system"				// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the assessment system"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Select the type of information shown in the assessment system"				// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the assessment system"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the assessment system"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the assessment system"				// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the assessment system"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLCrsInf] =
-#if   L==1	// ca
-	"Create URL in the course information"				// Necessita traducció
-#elif L==2	// de
-	"Create URL in the course information"				// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the course information"
-#elif L==4	// es
-	"Crear una URL en la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Create URL in the course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the course information"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLTchGui] =
-#if   L==1	// ca
-	"Create URL in the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the teaching guide"
-#elif L==4	// es
-	"Crear una URL en la gu&iacute;a docente"
-#elif L==5	// fr
-	"Create URL in the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the teaching guide"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvURLSylLec] =
@@ -7698,144 +7514,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create URL in the practicals syllabus"			// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLBib] =
-#if   L==1	// ca
-	"Create URL in the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the bibliography"
-#elif L==4	// es
-	"Crear una URL en la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Create URL in the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLFAQ] =
-#if   L==1	// ca
-	"Create URL in the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the FAQ"
-#elif L==4	// es
-	"Crear una URL en la FAQ"
-#elif L==5	// fr
-	"Create URL in the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLCrsLnk] =
-#if   L==1	// ca
-	"Create URL in the course links"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the course links"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the course links"
-#elif L==4	// es
-	"Crear una URL en los enlaces de la asignatura"
-#elif L==5	// fr
-	"Create URL in the course links"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the course links"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the course links"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the course links"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the course links"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLAss] =
-#if   L==1	// ca
-	"Create URL in the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Create URL in the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the assessment system"
-#elif L==4	// es
-	"Crear una URL en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Create URL in the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagCrsInf] =
-#if   L==1	// ca
-	"Create web page in the course information"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the course information"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the course information"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Create web page in the course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the course information"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagTchGui] =
-#if   L==1	// ca
-	"Create web page in the teaching guide"			// Necessita traducció
-#elif L==2	// de
-	"Create web page in the teaching guide"			// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the teaching guide"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la gu&iacute;a docente"
-#elif L==5	// fr
-	"Create web page in the teaching guide"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the teaching guide"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the teaching guide"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the teaching guide"			// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the teaching guide"			// Çeviri lazim!
-#endif
-	,
 	[ActRcvPagSylLec] =
 #if   L==1	// ca
 	"Create web page in the lectures syllabus"			// Necessita traducció
@@ -7880,144 +7558,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create web page in the practicals syllabus"				// Precisa de tradução
 #elif L==10	// tr
 	"Create web page in the practicals syllabus"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagBib] =
-#if   L==1	// ca
-	"Create web page in the bibliography"			// Necessita traducció
-#elif L==2	// de
-	"Create web page in the bibliography"			// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the bibliography"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Create web page in the bibliography"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the bibliography"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the bibliography"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the bibliography"			// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the bibliography"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagFAQ] =
-#if   L==1	// ca
-	"Create web page in the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Create web page in the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the FAQ"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la FAQ"
-#elif L==5	// fr
-	"Create web page in the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagCrsLnk] =
-#if   L==1	// ca
-	"Create web page in the course links"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the course links"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the course links"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en los enlaces de la asignatura"
-#elif L==5	// fr
-	"Create web page in the course links"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the course links"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the course links"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the course links"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the course links"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagAss] =
-#if   L==1	// ca
-	"Create web page in the assessment system"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the assessment system"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the assessment system"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Create web page in the assessment system"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the assessment system"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the assessment system"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the assessment system"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the assessment system"				// Çeviri lazim!
-#endif
-	,
-	[ActEditorCrsInf] =
-#if   L==1	// ca
-	"Integrated editor of course information"			// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of course information"			// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of course information"
-#elif L==4	// es
-	"Editor integrado de la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Integrated editor of course information"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado de la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of course information"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of course information"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of course information"			// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of course information"			// Çeviri lazim!
-#endif
-	,
-	[ActEditorTchGui] =
-#if   L==1	// ca
-	"Integrated editor of the teaching guide"	// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of the teaching guide"	// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of the teaching guide"
-#elif L==4	// es
-	"Editor integrado de la gu&iacute;a docente"
-#elif L==5	// fr
-	"Integrated editor of the teaching guide"	// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado de la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of the teaching guide"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of the teaching guide"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of the teaching guide"	// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of the teaching guide"	// Çeviri lazim!
 #endif
 	,
 	[ActEditorSylLec] =
@@ -8066,144 +7606,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of the practicals syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActEditorBib] =
-#if   L==1	// ca
-	"Integrated editor of the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of the bibliography"
-#elif L==4	// es
-	"Editor integrado de la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Integrated editor of the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado de la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActEditorFAQ] =
-#if   L==1	// ca
-	"Integrated editor of the FAQ"	// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of the FAQ"	// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of the FAQ"
-#elif L==4	// es
-	"Editor integrado de la FAQ"
-#elif L==5	// fr
-	"Integrated editor of the FAQ"	// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado de la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of the FAQ"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of the FAQ"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of the FAQ"	// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of the FAQ"	// Çeviri lazim!
-#endif
-	,
-	[ActEditorCrsLnk] =
-#if   L==1	// ca
-	"Integrated editor of course links"			// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of course links"			// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of course links"
-#elif L==4	// es
-	"Editor integrado de los enlaces de la asignatura"
-#elif L==5	// fr
-	"Integrated editor of course links"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado de los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of course links"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of course links"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of course links"			// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of course links"			// Çeviri lazim!
-#endif
-	,
-	[ActEditorAss] =
-#if   L==1	// ca
-	"Integrated editor of the assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of the assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of the assessment system"
-#elif L==4	// es
-	"Editor integrado del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Integrated editor of the assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of the assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of the assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of the assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of the assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiCrsInf] =
-#if   L==1	// ca
-	"Plain text editor of course information"				// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of course information"				// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of course information"
-#elif L==4	// es
-	"Editor de texto plano de la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Plain text editor of course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano de la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of course information"				// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiTchGui] =
-#if   L==1	// ca
-	"Plain text editor of the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of the teaching guide"
-#elif L==4	// es
-	"Editor de texto plano de la gu&iacute;a docente"
-#elif L==5	// fr
-	"Plain text editor of the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano de la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of the teaching guide"		// Çeviri lazim!
-#endif
-	,
 	[ActPlaTxtEdiSylLec] =
 #if   L==1	// ca
 	"Plain text editor of the lectures syllabus"		// Necessita traducció
@@ -8248,144 +7650,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of the practicals syllabus"			// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of the practicals syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiBib] =
-#if   L==1	// ca
-	"Plain text editor of the bibliography"			// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of the bibliography"			// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of the bibliography"
-#elif L==4	// es
-	"Editor de texto plano de la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Plain text editor of the bibliography"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano de la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of the bibliography"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of the bibliography"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of the bibliography"			// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of the bibliography"			// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiFAQ] =
-#if   L==1	// ca
-	"Plain text editor of the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of the FAQ"
-#elif L==4	// es
-	"Editor de texto plano de la FAQ"
-#elif L==5	// fr
-	"Plain text editor of the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano de la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiCrsLnk] =
-#if   L==1	// ca
-	"Plain text editor of course links"			// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of course links"			// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of course links"
-#elif L==4	// es
-	"Editor de texto plano de los enlaces de la asignatura"
-#elif L==5	// fr
-	"Plain text editor of course links"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano de los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of course links"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of course links"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of course links"			// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of course links"			// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiAss] =
-#if   L==1	// ca
-	"Plain text editor of the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of the assessment system"
-#elif L==4	// es
-	"Editor de texto plano del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Plain text editor of the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiCrsInf] =
-#if   L==1	// ca
-	"Rich text editor of course information"				// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of course information"				// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of course information"
-#elif L==4	// es
-	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Rich text editor of course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of course information"				// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiTchGui] =
-#if   L==1	// ca
-	"Rich text editor of the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the teaching guide"
-#elif L==4	// es
-	"Editor de texto enriquecido de la gu&iacute;a docente"
-#elif L==5	// fr
-	"Rich text editor of the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the teaching guide"		// Çeviri lazim!
 #endif
 	,
 	[ActRchTxtEdiSylLec] =
@@ -8434,144 +7698,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Rich text editor of the practicals syllabus"			// Çeviri lazim!
 #endif
 	,
-	[ActRchTxtEdiBib] =
-#if   L==1	// ca
-	"Rich text editor of the bibliography"			// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the bibliography"			// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the bibliography"
-#elif L==4	// es
-	"Editor de texto enriquecido de la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Rich text editor of the bibliography"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the bibliography"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the bibliography"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the bibliography"			// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the bibliography"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiFAQ] =
-#if   L==1	// ca
-	"Rich text editor of the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the FAQ"
-#elif L==4	// es
-	"Editor de texto enriquecido de la FAQ"
-#elif L==5	// fr
-	"Rich text editor of the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiCrsLnk] =
-#if   L==1	// ca
-	"Rich text editor of course links"				// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of course links"				// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of course links"
-#elif L==4	// es
-	"Editor de texto enriquecido de los enlaces de la asignatura"
-#elif L==5	// fr
-	"Rich text editor of course links"				// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of course links"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of course links"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of course links"				// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of course links"				// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiAss] =
-#if   L==1	// ca
-	"Rich text editor of the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the assessment system"
-#elif L==4	// es
-	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Rich text editor of the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtCrsInf] =
-#if   L==1	// ca
-	"Change plain text of course information"			// Necessita traducció
-#elif L==2	// de
-	"Change plain text of course information"			// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of course information"
-#elif L==4	// es
-	"Cambiar texto plano de la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Change plain text of course information"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano de la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of course information"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of course information"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of course information"			// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of course information"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtTchGui] =
-#if   L==1	// ca
-	"Change plain text of the teaching guide"	// Necessita traducció
-#elif L==2	// de
-	"Change plain text of the teaching guide"	// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of the teaching guide"
-#elif L==4	// es
-	"Cambiar texto plano de la gu&iacute;a docente"
-#elif L==5	// fr
-	"Change plain text of the teaching guide"	// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano de la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of the teaching guide"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of the teaching guide"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of the teaching guide"	// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of the teaching guide"	// Çeviri lazim!
-#endif
-	,
 	[ActRcvPlaTxtSylLec] =
 #if   L==1	// ca
 	"Change plain text of the lectures syllabus"		// Necessita traducció
@@ -8616,144 +7742,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of the practicals syllabus"		// Precisa de tradução
 #elif L==10	// tr
 	"Change plain text of the practicals syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtBib] =
-#if   L==1	// ca
-	"Change plain text of the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"Change plain text of the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of the bibliography"
-#elif L==4	// es
-	"Cambiar texto plano de la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Change plain text of the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano de la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtFAQ] =
-#if   L==1	// ca
-	"Change plain text of the FAQ"	// Necessita traducció
-#elif L==2	// de
-	"Change plain text of the FAQ"	// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of the FAQ"
-#elif L==4	// es
-	"Cambiar texto plano de la FAQ"
-#elif L==5	// fr
-	"Change plain text of the FAQ"	// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano de la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of the FAQ"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of the FAQ"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of the FAQ"	// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of the FAQ"	// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtCrsLnk] =
-#if   L==1	// ca
-	"Change plain text of course links"			// Necessita traducció
-#elif L==2	// de
-	"Change plain text of course links"			// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of course links"
-#elif L==4	// es
-	"Cambiar texto plano de los enlaces de la asignatura"
-#elif L==5	// fr
-	"Change plain text of course links"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano de los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of course links"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of course links"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of course links"			// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of course links"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtAss] =
-#if   L==1	// ca
-	"Change plain text of the assessment system"		// Necessita traducció
-#elif L==2	// de
-	"Change plain text of the assessment system"		// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of the assessment system"
-#elif L==4	// es
-	"Cambiar texto plano del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Change plain text of the assessment system"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of the assessment system"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of the assessment system"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of the assessment system"		// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of the assessment system"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvRchTxtCrsInf] =
-#if   L==1	// ca
-	"Change rich text of course information"				// Necessita traducció
-#elif L==2	// de
-	"Change rich text of course information"				// Need Übersetzung
-#elif L==3	// en
-	"Change rich text of course information"
-#elif L==4	// es
-	"Cambiar texto enriquecido de la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Change rich text of course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto enriquecido de la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Change rich text of course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Change rich text of course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change rich text of course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Change rich text of course information"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvRchTxtTchGui] =
-#if   L==1	// ca
-	"Change rich text of the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Change rich text of the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Change rich text of the teaching guide"
-#elif L==4	// es
-	"Cambiar texto enriquecido de la gu&iacute;a docente"
-#elif L==5	// fr
-	"Change rich text of the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto enriquecido de la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Change rich text of the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change rich text of the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change rich text of the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Change rich text of the teaching guide"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtSylLec] =
@@ -8802,6 +7790,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the practicals syllabus"			// Çeviri lazim!
 #endif
 	,
+	[ActSeeBib] =
+#if   L==1	// ca
+	"See the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"See the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"See the bibliography"
+#elif L==4	// es
+	"Ver la bibliograf&iacute;a"
+#elif L==5	// fr
+	"See the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"See the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"See the bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiBib] =
+#if   L==1	// ca
+	"Edit bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Edit bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Edit bibliography"
+#elif L==4	// es
+	"Editar la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Edit bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Edit bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActChgFrcReaBib] =
+#if   L==1	// ca
+	"Change whether students are forced to read the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Change whether students are forced to read the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Change whether students are forced to read the bibliography"
+#elif L==4	// es
+	"Cambiar si se obliga a los estudiantes a leer la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Change whether students are forced to read the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si se obliga a los estudiantes a leer la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Change whether students are forced to read the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change whether students are forced to read the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change whether students are forced to read the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Change whether students are forced to read the bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActChgHavReaBib] =
+#if   L==1	// ca
+	"Change if I have read the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Change if I have read the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Change if I have read the bibliography"
+#elif L==4	// es
+	"Cambiar si he le&iacute;do la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Change if I have read the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si he le&iacute;do la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Change if I have read the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change if I have read the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change if I have read the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Change if I have read the bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActSelInfSrcBib] =
+#if   L==1	// ca
+	"Select the type of information shown in the bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Select the type of information shown in the bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Select the type of information shown in the bibliography"
+#elif L==4	// es
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Select the type of information shown in the bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Select the type of information shown in the bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Select the type of information shown in the bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select the type of information shown in the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Select the type of information shown in the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLBib] =
+#if   L==1	// ca
+	"Create URL in the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the bibliography"
+#elif L==4	// es
+	"Crear una URL en la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Create URL in the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagBib] =
+#if   L==1	// ca
+	"Create web page in the bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Create web page in the bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the bibliography"
+#elif L==4	// es
+	"Crear una p&aacute;gina web en la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Create web page in the bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear una p&aacute;gina web en la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActEditorBib] =
+#if   L==1	// ca
+	"Integrated editor of the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Integrated editor of the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Integrated editor of the bibliography"
+#elif L==4	// es
+	"Editor integrado de la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Integrated editor of the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor integrado de la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Integrated editor of the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Integrated editor of the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Integrated editor of the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Integrated editor of the bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActPlaTxtEdiBib] =
+#if   L==1	// ca
+	"Plain text editor of the bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Plain text editor of the bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Plain text editor of the bibliography"
+#elif L==4	// es
+	"Editor de texto plano de la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Plain text editor of the bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto plano de la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Plain text editor of the bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Plain text editor of the bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Plain text editor of the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Plain text editor of the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActRchTxtEdiBib] =
+#if   L==1	// ca
+	"Rich text editor of the bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the bibliography"
+#elif L==4	// es
+	"Editor de texto enriquecido de la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Rich text editor of the bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvPlaTxtBib] =
+#if   L==1	// ca
+	"Change plain text of the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Change plain text of the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Change plain text of the bibliography"
+#elif L==4	// es
+	"Cambiar texto plano de la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Change plain text of the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto plano de la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Change plain text of the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change plain text of the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change plain text of the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Change plain text of the bibliography"		// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtBib] =
 #if   L==1	// ca
 	"Change rich text of the bibliography"			// Necessita traducció
@@ -8823,6 +8064,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the bibliography"			// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeFAQ] =
+#if   L==1	// ca
+	"See the FAQ"	// Necessita traducció
+#elif L==2	// de
+	"See the FAQ"	// Need Übersetzung
+#elif L==3	// en
+	"See the FAQ"
+#elif L==4	// es
+	"Ver la FAQ"
+#elif L==5	// fr
+	"See the FAQ"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"See the FAQ"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See the FAQ"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	"See the FAQ"	// Çeviri lazim!
+#endif
+	,
+	[ActEdiFAQ] =
+#if   L==1	// ca
+	"Edit FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Edit FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Edit FAQ"
+#elif L==4	// es
+	"Editar la FAQ"
+#elif L==5	// fr
+	"Edit FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar la FAQ"		// Okoteve traducción
+#elif L==7	// it
+	"Edit FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActChgFrcReaFAQ] =
+#if   L==1	// ca
+	"Change force students to read FAQ"			// Necessita traducció
+#elif L==2	// de
+	"Change force students to read FAQ"			// Need Übersetzung
+#elif L==3	// en
+	"Change force students to read FAQ"
+#elif L==4	// es
+	"Cambiar si se obliga a los estudiantes a leer la FAQ"
+#elif L==5	// fr
+	"Change force students to read FAQ"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si se obliga a los estudiantes a leer la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Change force students to read FAQ"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change force students to read FAQ"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change force students to read FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	"Change force students to read FAQ"			// Çeviri lazim!
+#endif
+	,
+	[ActChgHavReaFAQ] =
+#if   L==1	// ca
+	"Change if I have read the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Change if I have read the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Change if I have read the FAQ"
+#elif L==4	// es
+	"Cambiar si he le&iacute;do la FAQ"
+#elif L==5	// fr
+	"Change if I have read the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si he le&iacute;do la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Change if I have read the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change if I have read the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change if I have read the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Change if I have read the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActSelInfSrcFAQ] =
+#if   L==1	// ca
+	"Select the type of information shown in the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Select the type of information shown in the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Select the type of information shown in the FAQ"
+#elif L==4	// es
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la FAQ"
+#elif L==5	// fr
+	"Select the type of information shown in the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar el tipo de informaci&oacute;n mostrada en la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Select the type of information shown in the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Select the type of information shown in the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select the type of information shown in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Select the type of information shown in the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLFAQ] =
+#if   L==1	// ca
+	"Create URL in the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the FAQ"
+#elif L==4	// es
+	"Crear una URL en la FAQ"
+#elif L==5	// fr
+	"Create URL in the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagFAQ] =
+#if   L==1	// ca
+	"Create web page in the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Create web page in the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the FAQ"
+#elif L==4	// es
+	"Crear una p&aacute;gina web en la FAQ"
+#elif L==5	// fr
+	"Create web page in the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una p&aacute;gina web en la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActEditorFAQ] =
+#if   L==1	// ca
+	"Integrated editor of the FAQ"	// Necessita traducció
+#elif L==2	// de
+	"Integrated editor of the FAQ"	// Need Übersetzung
+#elif L==3	// en
+	"Integrated editor of the FAQ"
+#elif L==4	// es
+	"Editor integrado de la FAQ"
+#elif L==5	// fr
+	"Integrated editor of the FAQ"	// Besoin de traduction
+#elif L==6	// gn
+	"Editor integrado de la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Integrated editor of the FAQ"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Integrated editor of the FAQ"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Integrated editor of the FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	"Integrated editor of the FAQ"	// Çeviri lazim!
+#endif
+	,
+	[ActPlaTxtEdiFAQ] =
+#if   L==1	// ca
+	"Plain text editor of the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Plain text editor of the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Plain text editor of the FAQ"
+#elif L==4	// es
+	"Editor de texto plano de la FAQ"
+#elif L==5	// fr
+	"Plain text editor of the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto plano de la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Plain text editor of the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Plain text editor of the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Plain text editor of the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Plain text editor of the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActRchTxtEdiFAQ] =
+#if   L==1	// ca
+	"Rich text editor of the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the FAQ"
+#elif L==4	// es
+	"Editor de texto enriquecido de la FAQ"
+#elif L==5	// fr
+	"Rich text editor of the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvPlaTxtFAQ] =
+#if   L==1	// ca
+	"Change plain text of the FAQ"	// Necessita traducció
+#elif L==2	// de
+	"Change plain text of the FAQ"	// Need Übersetzung
+#elif L==3	// en
+	"Change plain text of the FAQ"
+#elif L==4	// es
+	"Cambiar texto plano de la FAQ"
+#elif L==5	// fr
+	"Change plain text of the FAQ"	// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto plano de la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Change plain text of the FAQ"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Change plain text of the FAQ"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change plain text of the FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	"Change plain text of the FAQ"	// Çeviri lazim!
 #endif
 	,
 	[ActRcvRchTxtFAQ] =
@@ -8848,6 +8342,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the FAQ"		// Çeviri lazim!
 #endif
 	,
+	[ActSeeCrsLnk] =
+#if   L==1	// ca
+	"See the links related to the course"			// Necessita traducció
+#elif L==2	// de
+	"See the links related to the course"			// Need Übersetzung
+#elif L==3	// en
+	"See the links related to the course"
+#elif L==4	// es
+	"Ver los enlaces relacionados con la asignatura"
+#elif L==5	// fr
+	"See the links related to the course"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver los enlaces relacionados con la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See the links related to the course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See the links related to the course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the links related to the course"			// Precisa de tradução
+#elif L==10	// tr
+	"See the links related to the course"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiCrsLnk] =
+#if   L==1	// ca
+	"Edit course links"			// Necessita traducció
+#elif L==2	// de
+	"Edit course links"			// Need Übersetzung
+#elif L==3	// en
+	"Edit course links"
+#elif L==4	// es
+	"Editar los enlaces de la asignatura"
+#elif L==5	// fr
+	"Edit course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit course links"			// Çeviri lazim!
+#endif
+	,
+	[ActChgFrcReaCrsLnk] =
+#if   L==1	// ca
+	"Change whether students are forced to read the links"		// Necessita traducció
+#elif L==2	// de
+	"Change whether students are forced to read the links"		// Need Übersetzung
+#elif L==3	// en
+	"Change whether students are forced to read the links"
+#elif L==4	// es
+	"Cambiar si se obliga a los estudiantes a leer los enlaces"
+#elif L==5	// fr
+	"Change whether students are forced to read the links"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si se obliga a los estudiantes a leer los enlaces"	// Okoteve traducción
+#elif L==7	// it
+	"Change whether students are forced to read the links"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change whether students are forced to read the links"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change whether students are forced to read the links"		// Precisa de tradução
+#elif L==10	// tr
+	"Change whether students are forced to read the links"		// Çeviri lazim!
+#endif
+	,
+	[ActChgHavReaCrsLnk] =
+#if   L==1	// ca
+	"Change if I have read the course links"			// Necessita traducció
+#elif L==2	// de
+	"Change if I have read the course links"			// Need Übersetzung
+#elif L==3	// en
+	"Change if I have read the course links"
+#elif L==4	// es
+	"Cambiar si he le&iacute;do los enlaces de la asignatura"
+#elif L==5	// fr
+	"Change if I have read the course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si he le&iacute;do los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change if I have read the course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change if I have read the course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change if I have read the course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Change if I have read the course links"			// Çeviri lazim!
+#endif
+	,
+	[ActSelInfSrcCrsLnk] =
+#if   L==1	// ca
+	"Select the type of information shown in the course links"				// Necessita traducció
+#elif L==2	// de
+	"Select the type of information shown in the course links"				// Need Übersetzung
+#elif L==3	// en
+	"Select the type of information shown in the course links"
+#elif L==4	// es
+	"Seleccionar el tipo de informaci&oacute;n mostrada en los enlaces de la asignatura"
+#elif L==5	// fr
+	"Select the type of information shown in the course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar el tipo de informaci&oacute;n mostrada en los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Select the type of information shown in the course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Select the type of information shown in the course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select the type of information shown in the course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Select the type of information shown in the course links"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLCrsLnk] =
+#if   L==1	// ca
+	"Create URL in the course links"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the course links"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the course links"
+#elif L==4	// es
+	"Crear una URL en los enlaces de la asignatura"
+#elif L==5	// fr
+	"Create URL in the course links"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the course links"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the course links"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the course links"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the course links"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagCrsLnk] =
+#if   L==1	// ca
+	"Create web page in the course links"				// Necessita traducció
+#elif L==2	// de
+	"Create web page in the course links"				// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the course links"
+#elif L==4	// es
+	"Crear una p&aacute;gina web en los enlaces de la asignatura"
+#elif L==5	// fr
+	"Create web page in the course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear una p&aacute;gina web en los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the course links"				// Çeviri lazim!
+#endif
+	,
+	[ActEditorCrsLnk] =
+#if   L==1	// ca
+	"Integrated editor of course links"			// Necessita traducció
+#elif L==2	// de
+	"Integrated editor of course links"			// Need Übersetzung
+#elif L==3	// en
+	"Integrated editor of course links"
+#elif L==4	// es
+	"Editor integrado de los enlaces de la asignatura"
+#elif L==5	// fr
+	"Integrated editor of course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor integrado de los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Integrated editor of course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Integrated editor of course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Integrated editor of course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Integrated editor of course links"			// Çeviri lazim!
+#endif
+	,
+	[ActPlaTxtEdiCrsLnk] =
+#if   L==1	// ca
+	"Plain text editor of course links"			// Necessita traducció
+#elif L==2	// de
+	"Plain text editor of course links"			// Need Übersetzung
+#elif L==3	// en
+	"Plain text editor of course links"
+#elif L==4	// es
+	"Editor de texto plano de los enlaces de la asignatura"
+#elif L==5	// fr
+	"Plain text editor of course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto plano de los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Plain text editor of course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Plain text editor of course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Plain text editor of course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Plain text editor of course links"			// Çeviri lazim!
+#endif
+	,
+	[ActRchTxtEdiCrsLnk] =
+#if   L==1	// ca
+	"Rich text editor of course links"				// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of course links"				// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of course links"
+#elif L==4	// es
+	"Editor de texto enriquecido de los enlaces de la asignatura"
+#elif L==5	// fr
+	"Rich text editor of course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of course links"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvPlaTxtCrsLnk] =
+#if   L==1	// ca
+	"Change plain text of course links"			// Necessita traducció
+#elif L==2	// de
+	"Change plain text of course links"			// Need Übersetzung
+#elif L==3	// en
+	"Change plain text of course links"
+#elif L==4	// es
+	"Cambiar texto plano de los enlaces de la asignatura"
+#elif L==5	// fr
+	"Change plain text of course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto plano de los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change plain text of course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change plain text of course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change plain text of course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Change plain text of course links"			// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtCrsLnk] =
 #if   L==1	// ca
 	"Change rich text of course links"				// Necessita traducció
@@ -8871,6 +8618,259 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of course links"				// Çeviri lazim!
 #endif
 	,
+	[ActSeeAss] =
+#if   L==1	// ca
+	"See assessment system"			// Necessita traducció
+#elif L==2	// de
+	"See assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"See assessment system"
+#elif L==4	// es
+	"Ver sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"See assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"See assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"See assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiAss] =
+#if   L==1	// ca
+	"Edit assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Edit assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Edit assessment system"
+#elif L==4	// es
+	"Editar sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Edit assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Edit assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit assessment system"		// Çeviri lazim!
+#endif
+	,
+	[ActChgFrcReaAss] =
+#if   L==1	// ca
+	"Change whether students are forced to read the assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Change whether students are forced to read the assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Change whether students are forced to read the assessment system"
+#elif L==4	// es
+	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change whether students are forced to read the assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si se obliga a los estudiantes a leer el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change whether students are forced to read the assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change whether students are forced to read the assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change whether students are forced to read the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Change whether students are forced to read the assessment system"		// Çeviri lazim!
+#endif
+	,
+	[ActChgHavReaAss] =
+#if   L==1	// ca
+	"Change if I have read the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Change if I have read the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Change if I have read the assessment system"
+#elif L==4	// es
+	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change if I have read the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar si he le&iacute;do el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change if I have read the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change if I have read the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change if I have read the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Change if I have read the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActSelInfSrcAss] =
+#if   L==1	// ca
+	"Select the type of information shown in the assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Select the type of information shown in the assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Select the type of information shown in the assessment system"
+#elif L==4	// es
+	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Select the type of information shown in the assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar el tipo de informaci&oacute;n mostrada en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Select the type of information shown in the assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Select the type of information shown in the assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select the type of information shown in the assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Select the type of information shown in the assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLAss] =
+#if   L==1	// ca
+	"Create URL in the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Create URL in the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the assessment system"
+#elif L==4	// es
+	"Crear una URL en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Create URL in the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagAss] =
+#if   L==1	// ca
+	"Create web page in the assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Create web page in the assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the assessment system"
+#elif L==4	// es
+	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Create web page in the assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActEditorAss] =
+#if   L==1	// ca
+	"Integrated editor of the assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Integrated editor of the assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Integrated editor of the assessment system"
+#elif L==4	// es
+	"Editor integrado del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Integrated editor of the assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor integrado del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Integrated editor of the assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Integrated editor of the assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Integrated editor of the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Integrated editor of the assessment system"		// Çeviri lazim!
+#endif
+	,
+	[ActPlaTxtEdiAss] =
+#if   L==1	// ca
+	"Plain text editor of the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Plain text editor of the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Plain text editor of the assessment system"
+#elif L==4	// es
+	"Editor de texto plano del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Plain text editor of the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Plain text editor of the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Plain text editor of the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Plain text editor of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Plain text editor of the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActRchTxtEdiAss] =
+#if   L==1	// ca
+	"Rich text editor of the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the assessment system"
+#elif L==4	// es
+	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Rich text editor of the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvPlaTxtAss] =
+#if   L==1	// ca
+	"Change plain text of the assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Change plain text of the assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Change plain text of the assessment system"
+#elif L==4	// es
+	"Cambiar texto plano del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change plain text of the assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar texto plano del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change plain text of the assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change plain text of the assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change plain text of the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Change plain text of the assessment system"		// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtAss] =
 #if   L==1	// ca
 	"Change rich text of the assessment system"			// Necessita traducció
@@ -8892,6 +8892,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the assessment system"			// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeCrsTT] =
+#if   L==1	// ca
+	"See the course timetable"		// Necessita traducció
+#elif L==2	// de
+	"See the course timetable"		// Need Übersetzung
+#elif L==3	// en
+	"See the course timetable"
+#elif L==4	// es
+	"Ver el horario de la asignatura"
+#elif L==5	// fr
+	"See the course timetable"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver el horario de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See the course timetable"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See the course timetable"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the course timetable"		// Precisa de tradução
+#elif L==10	// tr
+	"See the course timetable"		// Çeviri lazim!
 #endif
 	,
 	[ActPrnCrsTT] =
@@ -9007,167 +9030,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See assignments"	// Precisa de tradução
 #elif L==10	// tr
 	"See assignments"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllPrj] =
-#if   L==1	// ca
-	"See projects"	// Necessita traducció
-#elif L==2	// de
-	"See projects"	// Need Übersetzung
-#elif L==3	// en
-	"See projects"
-#elif L==4	// es
-	"Ver proyectos"
-#elif L==5	// fr
-	"See projects"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver proyectos"	// Okoteve traducción
-#elif L==7	// it
-	"See projects"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See projects"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See projects"	// Precisa de tradução
-#elif L==10	// tr
-	"See projects"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllCfe] =
-#if   L==1	// ca
-	"See exam announcements"	// Necessita traducció
-#elif L==2	// de
-	"See exam announcements"	// Need Übersetzung
-#elif L==3	// en
-	"See exam announcements"
-#elif L==4	// es
-	"Ver convocatorias de examen"
-#elif L==5	// fr
-	"See exam announcements"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver convocatorias de examen"	// Okoteve traducción
-#elif L==7	// it
-	"See exam announcements"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See exam announcements"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See exam announcements"	// Precisa de tradução
-#elif L==10	// tr
-	"See exam announcements"	// Çeviri lazim!
-#endif
-	,
-	[ActEdiTstQst] =
-#if   L==1	// ca
-	"Request edition of test questions"		// Necessita traducció
-#elif L==2	// de
-	"Request edition of test questions"		// Need Übersetzung
-#elif L==3	// en
-	"Request edition of test questions"
-#elif L==4	// es
-	"Solicitar edici&oacute;n de preguntas de test"
-#elif L==5	// fr
-	"Request edition of test questions"		// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar edici&oacute;n de preguntas de test"	// Okoteve traducción
-#elif L==7	// it
-	"Request edition of test questions"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Request edition of test questions"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request edition of test questions"		// Precisa de tradução
-#elif L==10	// tr
-	"Request edition of test questions"		// Çeviri lazim!
-#endif
-	,
-	[ActReqTst] =
-#if   L==1	// ca
-	"Request a test"	// Necessita traducció
-#elif L==2	// de
-	"Request a test"	// Need Übersetzung
-#elif L==3	// en
-	"Request a test"
-#elif L==4	// es
-	"Solicitar un test"
-#elif L==5	// fr
-	"Request a test"	// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar un test"	// Okoteve traducción
-#elif L==7	// it
-	"Request a test"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Request a test"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request a test"	// Precisa de tradução
-#elif L==10	// tr
-	"Request a test"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllExa] =
-#if   L==1	// ca
-	"See exams"			// Necessita traducció
-#elif L==2	// de
-	"See exams"			// Need Übersetzung
-#elif L==3	// en
-	"See exams"
-#elif L==4	// es
-	"Ver ex&aacute;menes"
-#elif L==5	// fr
-	"See exams"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver ex&aacute;menes"		// Okoteve traducción
-#elif L==7	// it
-	"See exams"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See exams"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See exams"			// Precisa de tradução
-#elif L==10	// tr
-	"See exams"			// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllGam] =
-#if   L==1	// ca
-	"See games"		// Necessita traducció
-#elif L==2	// de
-	"See games"		// Need Übersetzung
-#elif L==3	// en
-	"See games"
-#elif L==4	// es
-	"Ver juegos"
-#elif L==5	// fr
-	"See games"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver juegos"		// Okoteve traducción
-#elif L==7	// it
-	"See games"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See games"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See games"		// Precisa de tradução
-#elif L==10	// tr
-	"See games"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllRub] =
-#if   L==1	// ca
-	"See rubrics"		// Necessita traducció
-#elif L==2	// de
-	"See rubrics"		// Need Übersetzung
-#elif L==3	// en
-	"See rubrics"
-#elif L==4	// es
-	"Ver r&uacute;bricas"
-#elif L==5	// fr
-	"See rubrics"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver r&uacute;bricas"	// Okoteve traducción
-#elif L==7	// it
-	"See rubrics"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See rubrics"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See rubrics"		// Precisa de tradução
-#elif L==10	// tr
-	"See rubrics"		// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewAsg] =
@@ -9421,6 +9283,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to assignment"	// Precisa de tradução
 #elif L==10	// tr
 	"Copy link to assignment"	// Çeviri lazim!
+#endif
+	,
+	[ActSeeAllPrj] =
+#if   L==1	// ca
+	"See projects"	// Necessita traducció
+#elif L==2	// de
+	"See projects"	// Need Übersetzung
+#elif L==3	// en
+	"See projects"
+#elif L==4	// es
+	"Ver proyectos"
+#elif L==5	// fr
+	"See projects"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver proyectos"	// Okoteve traducción
+#elif L==7	// it
+	"See projects"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See projects"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See projects"	// Precisa de tradução
+#elif L==10	// tr
+	"See projects"	// Çeviri lazim!
 #endif
 	,
 	[ActCfgPrj] =
@@ -11125,6 +11010,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from the assessment zone of a project"		// Çeviri lazim!
 #endif
 	,
+	[ActSeeAllCfe] =
+#if   L==1	// ca
+	"See exam announcements"	// Necessita traducció
+#elif L==2	// de
+	"See exam announcements"	// Need Übersetzung
+#elif L==3	// en
+	"See exam announcements"
+#elif L==4	// es
+	"Ver convocatorias de examen"
+#elif L==5	// fr
+	"See exam announcements"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver convocatorias de examen"	// Okoteve traducción
+#elif L==7	// it
+	"See exam announcements"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See exam announcements"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See exam announcements"	// Precisa de tradução
+#elif L==10	// tr
+	"See exam announcements"	// Çeviri lazim!
+#endif
+	,
 	[ActSeeOneCfe] =
 #if   L==1	// ca
 	"See exam announcement"		// Necessita traducció
@@ -11353,6 +11261,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to exam announcement"		// Precisa de tradução
 #elif L==10	// tr
 	"Copy link to exam announcement"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiTstQst] =
+#if   L==1	// ca
+	"Request edition of test questions"		// Necessita traducció
+#elif L==2	// de
+	"Request edition of test questions"		// Need Übersetzung
+#elif L==3	// en
+	"Request edition of test questions"
+#elif L==4	// es
+	"Solicitar edici&oacute;n de preguntas de test"
+#elif L==5	// fr
+	"Request edition of test questions"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar edici&oacute;n de preguntas de test"	// Okoteve traducción
+#elif L==7	// it
+	"Request edition of test questions"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request edition of test questions"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request edition of test questions"		// Precisa de tradução
+#elif L==10	// tr
+	"Request edition of test questions"		// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneTstQst] =
@@ -11700,6 +11631,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Rename tag in the question bank"		// Çeviri lazim!
 #endif
 	,
+	[ActReqTst] =
+#if   L==1	// ca
+	"Request a test"	// Necessita traducció
+#elif L==2	// de
+	"Request a test"	// Need Übersetzung
+#elif L==3	// en
+	"Request a test"
+#elif L==4	// es
+	"Solicitar un test"
+#elif L==5	// fr
+	"Request a test"	// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar un test"	// Okoteve traducción
+#elif L==7	// it
+	"Request a test"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Request a test"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request a test"	// Precisa de tradução
+#elif L==10	// tr
+	"Request a test"	// Çeviri lazim!
+#endif
+	,
 	[ActSeeTst] =
 #if   L==1	// ca
 	"See a test"	// Necessita traducció
@@ -11951,6 +11905,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See a test result for a user"		// Precisa de tradução
 #elif L==10	// tr
 	"See a test result for a user"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeAllExa] =
+#if   L==1	// ca
+	"See exams"			// Necessita traducció
+#elif L==2	// de
+	"See exams"			// Need Übersetzung
+#elif L==3	// en
+	"See exams"
+#elif L==4	// es
+	"Ver ex&aacute;menes"
+#elif L==5	// fr
+	"See exams"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver ex&aacute;menes"		// Okoteve traducción
+#elif L==7	// it
+	"See exams"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See exams"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See exams"			// Precisa de tradução
+#elif L==10	// tr
+	"See exams"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneExa] =
@@ -12986,6 +12963,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change visibility of exam results"		// Precisa de tradução
 #elif L==10	// tr
 	"Change visibility of exam results"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeAllGam] =
+#if   L==1	// ca
+	"See games"		// Necessita traducció
+#elif L==2	// de
+	"See games"		// Need Übersetzung
+#elif L==3	// en
+	"See games"
+#elif L==4	// es
+	"Ver juegos"
+#elif L==5	// fr
+	"See games"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver juegos"		// Okoteve traducción
+#elif L==7	// it
+	"See games"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See games"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See games"		// Precisa de tradução
+#elif L==10	// tr
+	"See games"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneGam] =
@@ -14069,6 +14069,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to game"	// Çeviri lazim!
 #endif
 	,
+	[ActSeeAllRub] =
+#if   L==1	// ca
+	"See rubrics"		// Necessita traducció
+#elif L==2	// de
+	"See rubrics"		// Need Übersetzung
+#elif L==3	// en
+	"See rubrics"
+#elif L==4	// es
+	"Ver r&uacute;bricas"
+#elif L==5	// fr
+	"See rubrics"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver r&uacute;bricas"	// Okoteve traducción
+#elif L==7	// it
+	"See rubrics"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See rubrics"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See rubrics"		// Precisa de tradução
+#elif L==10	// tr
+	"See rubrics"		// Çeviri lazim!
+#endif
+	,
 	[ActSeeOneRub] =
 #if   L==1	// ca
 	"Veure r&uacute;brica"
@@ -14550,282 +14573,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Documents zone of institution (see or manage)"			// Precisa de tradução
 #elif L==10	// tr
 	"Documents zone of institution (see or manage)"			// Çeviri lazim!
-#endif
-	,
-	[ActAdmShaIns] =
-#if   L==1	// ca
-	"Manage shared files zone of institution"				// Necessita traducció
-#elif L==2	// de
-	"Manage shared files zone of institution"				// Need Übersetzung
-#elif L==3	// en
-	"Manage shared files zone of institution"
-#elif L==4	// es
-	"Administrar zona de archivos compartidos de instituci&oacute;n"
-#elif L==5	// fr
-	"Manage shared files zone of institution"				// Besoin de traduction
-#elif L==6	// gn
-	"Administrar zona de archivos compartidos de instituci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Manage shared files zone of institution"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Manage shared files zone of institution"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Manage shared files zone of institution"				// Precisa de tradução
-#elif L==10	// tr
-	"Manage shared files zone of institution"				// Çeviri lazim!
-#endif
-	,
-	[ActSeeAdmDocCtr] =
-#if   L==1	// ca
-	"Documents zone of center (see or manage)"		// Necessita traducció
-#elif L==2	// de
-	"Documents zone of center (see or manage)"		// Need Übersetzung
-#elif L==3	// en
-	"Documents zone of center (see or manage)"
-#elif L==4	// es
-	"Zona de documentos de centro (ver o administrar)"
-#elif L==5	// fr
-	"Documents zone of center (see or manage)"		// Besoin de traduction
-#elif L==6	// gn
-	"Zona de documentos de centro (ver o administrar)"	// Okoteve traducción
-#elif L==7	// it
-	"Documents zone of center (see or manage)"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Documents zone of center (see or manage)"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Documents zone of center (see or manage)"		// Precisa de tradução
-#elif L==10	// tr
-	"Documents zone of center (see or manage)"		// Çeviri lazim!
-#endif
-	,
-	[ActAdmShaCtr] =
-#if   L==1	// ca
-	"Manage shared files zone of center"			// Necessita traducció
-#elif L==2	// de
-	"Manage shared files zone of center"			// Need Übersetzung
-#elif L==3	// en
-	"Manage shared files zone of center"
-#elif L==4	// es
-	"Administrar zona de archivos compartidos de centro"
-#elif L==5	// fr
-	"Manage shared files zone of center"			// Besoin de traduction
-#elif L==6	// gn
-	"Administrar zona de archivos compartidos de centro"	// Okoteve traducción
-#elif L==7	// it
-	"Manage shared files zone of center"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Manage shared files zone of center"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Manage shared files zone of center"			// Precisa de tradução
-#elif L==10	// tr
-	"Manage shared files zone of center"			// Çeviri lazim!
-#endif
-	,
-	[ActSeeAdmDocDeg] =
-#if   L==1	// ca
-	"Documents zone of degree (see or manage)"				// Necessita traducció
-#elif L==2	// de
-	"Documents zone of degree (see or manage)"				// Need Übersetzung
-#elif L==3	// en
-	"Documents zone of degree (see or manage)"
-#elif L==4	// es
-	"Zona de documentos de la titulaci&oacute;n (ver o administrar)"
-#elif L==5	// fr
-	"Documents zone of degree (see or manage)"				// Besoin de traduction
-#elif L==6	// gn
-	"Zona de documentos de la titulaci&oacute;n (ver o administrar)"	// Okoteve traducción
-#elif L==7	// it
-	"Documents zone of degree (see or manage)"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Documents zone of degree (see or manage)"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Documents zone of degree (see or manage)"				// Precisa de tradução
-#elif L==10	// tr
-	"Documents zone of degree (see or manage)"				// Çeviri lazim!
-#endif
-	,
-	[ActAdmShaDeg] =
-#if   L==1	// ca
-	"Manage shared files zone of degree"				// Necessita traducció
-#elif L==2	// de
-	"Manage shared files zone of degree"				// Need Übersetzung
-#elif L==3	// en
-	"Manage shared files zone of degree"
-#elif L==4	// es
-	"Administrar zona de archivos compartidos de titulaci&oacute;n"
-#elif L==5	// fr
-	"Manage shared files zone of degree"				// Besoin de traduction
-#elif L==6	// gn
-	"Administrar zona de archivos compartidos de titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Manage shared files zone of degree"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Manage shared files zone of degree"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Manage shared files zone of degree"				// Precisa de tradução
-#elif L==10	// tr
-	"Manage shared files zone of degree"				// Çeviri lazim!
-#endif
-	,
-	[ActSeeAdmDocCrsGrp] =
-#if   L==1	// ca
-	"Documents zone of course (see or manage)"		// Necessita traducció
-#elif L==2	// de
-	"Documents zone of course (see or manage)"		// Need Übersetzung
-#elif L==3	// en
-	"Documents zone of course (see or manage)"
-#elif L==4	// es
-	"Zona de documentos de asignatura (ver o administrar)"
-#elif L==5	// fr
-	"Documents zone of course (see or manage)"		// Besoin de traduction
-#elif L==6	// gn
-	"Zona de documentos de asignatura (ver o administrar)"	// Okoteve traducción
-#elif L==7	// it
-	"Documents zone of course (see or manage)"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Documents zone of course (see or manage)"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Documents zone of course (see or manage)"		// Precisa de tradução
-#elif L==10	// tr
-	"Documents zone of course (see or manage)"		// Çeviri lazim!
-#endif
-	,
-	[ActAdmTchCrsGrp] =
-#if   L==1	// ca
-	"Request management of teachers' documents zone of course/group"			// Necessita traducció
-#elif L==2	// de
-	"Request management of teachers' documents zone of course/group"			// Need Übersetzung
-#elif L==3	// en
-	"Request management of teachers' documents zone of course/group"
-#elif L==4	// es
-	"Solicitar administraci&oacute;n de zona de archivos de profesores de asignatura/grupo"
-#elif L==5	// fr
-	"Request management of teachers' documents zone of course/group"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar administraci&oacute;n de zona de archivos de profesores de asignatura/grupo"	// Okoteve traducción
-#elif L==7	// it
-	"Request management of teachers' documents zone of course/group"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request management of teachers' documents zone of course/group"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request management of teachers' documents zone of course/group"			// Precisa de tradução
-#elif L==10	// tr
-	"Request management of teachers' documents zone of course/group"			// Çeviri lazim!
-#endif
-	,
-	[ActAdmShaCrsGrp] =
-#if   L==1	// ca
-	"Request management of shared zone of course/group"					// Necessita traducció
-#elif L==2	// de
-	"Request management of shared zone of course/group"					// Need Übersetzung
-#elif L==3	// en
-	"Request management of shared zone of course/group"
-#elif L==4	// es
-	"Solicitar administraci&oacute;n de zona de archivos compartidos de asignatura/grupo"
-#elif L==5	// fr
-	"Request management of shared zone of course/group"					// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar administraci&oacute;n de zona de archivos compartidos de asignatura/grupo"	// Okoteve traducción
-#elif L==7	// it
-	"Request management of shared zone of course/group"					// Bisogno di traduzione
-#elif L==8	// pl
-	"Request management of shared zone of course/group"					// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request management of shared zone of course/group"					// Precisa de tradução
-#elif L==10	// tr
-	"Request management of shared zone of course/group"					// Çeviri lazim!
-#endif
-	,
-	[ActAdmAsgWrkUsr] =
-#if   L==1	// ca
-	"Manage the assignments/works of user"			// Necessita traducció
-#elif L==2	// de
-	"Manage the assignments/works of user"			// Need Übersetzung
-#elif L==3	// en
-	"Manage the assignments/works of user"
-#elif L==4	// es
-	"Administrar las actividades/trabajos de usuario"
-#elif L==5	// fr
-	"Manage the assignments/works of user"			// Besoin de traduction
-#elif L==6	// gn
-	"Administrar las actividades/trabajos de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Manage the assignments/works of user"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Manage the assignments/works of user"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Manage the assignments/works of user"			// Precisa de tradução
-#elif L==10	// tr
-	"Manage the assignments/works of user"			// Çeviri lazim!
-#endif
-	,
-	[ActReqAsgWrkCrs] =
-#if   L==1	// ca
-	"Manage assignments/works in course"			// Necessita traducció
-#elif L==2	// de
-	"Manage assignments/works in course"			// Need Übersetzung
-#elif L==3	// en
-	"Manage assignments/works in course"
-#elif L==4	// es
-	"Administrar actividades/trabajos en asignatura"
-#elif L==5	// fr
-	"Manage assignments/works in course"			// Besoin de traduction
-#elif L==6	// gn
-	"Administrar actividades/trabajos en asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Manage assignments/works in course"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Manage assignments/works in course"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Manage assignments/works in course"			// Precisa de tradução
-#elif L==10	// tr
-	"Manage assignments/works in course"			// Çeviri lazim!
-#endif
-	,
-	[ActSeeAdmMrk] =
-#if   L==1	// ca
-	"Marks zone (see or manage)"			// Necessita traducció
-#elif L==2	// de
-	"Marks zone (see or manage)"			// Need Übersetzung
-#elif L==3	// en
-	"Marks zone (see or manage)"
-#elif L==4	// es
-	"Zona de calificaciones (ver o administrar)"
-#elif L==5	// fr
-	"Marks zone (see or manage)"			// Besoin de traduction
-#elif L==6	// gn
-	"Zona de calificaciones (ver o administrar)"	// Okoteve traducción
-#elif L==7	// it
-	"Marks zone (see or manage)"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Marks zone (see or manage)"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Marks zone (see or manage)"			// Precisa de tradução
-#elif L==10	// tr
-	"Marks zone (see or manage)"			// Çeviri lazim!
-#endif
-	,
-	[ActAdmBrf] =
-#if   L==1	// ca
-	"Manage briefcase"		// Necessita traducció
-#elif L==2	// de
-	"Manage briefcase"		// Need Übersetzung
-#elif L==3	// en
-	"Manage briefcase"
-#elif L==4	// es
-	"Administrar malet&iacute;n"
-#elif L==5	// fr
-	"Manage briefcase"		// Besoin de traduction
-#elif L==6	// gn
-	"Administrar malet&iacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Manage briefcase"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Manage briefcase"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Manage briefcase"		// Precisa de tradução
-#elif L==10	// tr
-	"Manage briefcase"		// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocIns] =
@@ -15495,6 +15242,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from documents zone of institution"		// Çeviri lazim!
 #endif
 	,
+	[ActAdmShaIns] =
+#if   L==1	// ca
+	"Manage shared files zone of institution"				// Necessita traducció
+#elif L==2	// de
+	"Manage shared files zone of institution"				// Need Übersetzung
+#elif L==3	// en
+	"Manage shared files zone of institution"
+#elif L==4	// es
+	"Administrar zona de archivos compartidos de instituci&oacute;n"
+#elif L==5	// fr
+	"Manage shared files zone of institution"				// Besoin de traduction
+#elif L==6	// gn
+	"Administrar zona de archivos compartidos de instituci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Manage shared files zone of institution"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Manage shared files zone of institution"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Manage shared files zone of institution"				// Precisa de tradução
+#elif L==10	// tr
+	"Manage shared files zone of institution"				// Çeviri lazim!
+#endif
+	,
 	[ActReqRemFilShaIns] =
 #if   L==1	// ca
 	"Request removal of file in shared zone of institution"				// Necessita traducció
@@ -15907,6 +15677,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from shared zone of institution"			// Precisa de tradução
 #elif L==10	// tr
 	"Download file from shared zone of institution"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeAdmDocCtr] =
+#if   L==1	// ca
+	"Documents zone of center (see or manage)"		// Necessita traducció
+#elif L==2	// de
+	"Documents zone of center (see or manage)"		// Need Übersetzung
+#elif L==3	// en
+	"Documents zone of center (see or manage)"
+#elif L==4	// es
+	"Zona de documentos de centro (ver o administrar)"
+#elif L==5	// fr
+	"Documents zone of center (see or manage)"		// Besoin de traduction
+#elif L==6	// gn
+	"Zona de documentos de centro (ver o administrar)"	// Okoteve traducción
+#elif L==7	// it
+	"Documents zone of center (see or manage)"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Documents zone of center (see or manage)"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Documents zone of center (see or manage)"		// Precisa de tradução
+#elif L==10	// tr
+	"Documents zone of center (see or manage)"		// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocCtr] =
@@ -16576,6 +16369,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from documents zone of center"		// Çeviri lazim!
 #endif
 	,
+	[ActAdmShaCtr] =
+#if   L==1	// ca
+	"Manage shared files zone of center"			// Necessita traducció
+#elif L==2	// de
+	"Manage shared files zone of center"			// Need Übersetzung
+#elif L==3	// en
+	"Manage shared files zone of center"
+#elif L==4	// es
+	"Administrar zona de archivos compartidos de centro"
+#elif L==5	// fr
+	"Manage shared files zone of center"			// Besoin de traduction
+#elif L==6	// gn
+	"Administrar zona de archivos compartidos de centro"	// Okoteve traducción
+#elif L==7	// it
+	"Manage shared files zone of center"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Manage shared files zone of center"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Manage shared files zone of center"			// Precisa de tradução
+#elif L==10	// tr
+	"Manage shared files zone of center"			// Çeviri lazim!
+#endif
+	,
 	[ActReqRemFilShaCtr] =
 #if   L==1	// ca
 	"Request removal of shared file of center"			// Necessita traducció
@@ -16988,6 +16804,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from shared zone of center"		// Precisa de tradução
 #elif L==10	// tr
 	"Download file from shared zone of center"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeAdmDocDeg] =
+#if   L==1	// ca
+	"Documents zone of degree (see or manage)"				// Necessita traducció
+#elif L==2	// de
+	"Documents zone of degree (see or manage)"				// Need Übersetzung
+#elif L==3	// en
+	"Documents zone of degree (see or manage)"
+#elif L==4	// es
+	"Zona de documentos de la titulaci&oacute;n (ver o administrar)"
+#elif L==5	// fr
+	"Documents zone of degree (see or manage)"				// Besoin de traduction
+#elif L==6	// gn
+	"Zona de documentos de la titulaci&oacute;n (ver o administrar)"	// Okoteve traducción
+#elif L==7	// it
+	"Documents zone of degree (see or manage)"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Documents zone of degree (see or manage)"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Documents zone of degree (see or manage)"				// Precisa de tradução
+#elif L==10	// tr
+	"Documents zone of degree (see or manage)"				// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocDeg] =
@@ -17657,6 +17496,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from documents zone of degree"			// Çeviri lazim!
 #endif
 	,
+	[ActAdmShaDeg] =
+#if   L==1	// ca
+	"Manage shared files zone of degree"				// Necessita traducció
+#elif L==2	// de
+	"Manage shared files zone of degree"				// Need Übersetzung
+#elif L==3	// en
+	"Manage shared files zone of degree"
+#elif L==4	// es
+	"Administrar zona de archivos compartidos de titulaci&oacute;n"
+#elif L==5	// fr
+	"Manage shared files zone of degree"				// Besoin de traduction
+#elif L==6	// gn
+	"Administrar zona de archivos compartidos de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Manage shared files zone of degree"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Manage shared files zone of degree"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Manage shared files zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	"Manage shared files zone of degree"				// Çeviri lazim!
+#endif
+	,
 	[ActReqRemFilShaDeg] =
 #if   L==1	// ca
 	"Request removal of file from shared zone of degree"				// Necessita traducció
@@ -18069,6 +17931,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from shared zone of degree"			// Precisa de tradução
 #elif L==10	// tr
 	"Download file from shared zone of degree"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeAdmDocCrsGrp] =
+#if   L==1	// ca
+	"Documents zone of course (see or manage)"		// Necessita traducció
+#elif L==2	// de
+	"Documents zone of course (see or manage)"		// Need Übersetzung
+#elif L==3	// en
+	"Documents zone of course (see or manage)"
+#elif L==4	// es
+	"Zona de documentos de asignatura (ver o administrar)"
+#elif L==5	// fr
+	"Documents zone of course (see or manage)"		// Besoin de traduction
+#elif L==6	// gn
+	"Zona de documentos de asignatura (ver o administrar)"	// Okoteve traducción
+#elif L==7	// it
+	"Documents zone of course (see or manage)"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Documents zone of course (see or manage)"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Documents zone of course (see or manage)"		// Precisa de tradução
+#elif L==10	// tr
+	"Documents zone of course (see or manage)"		// Çeviri lazim!
 #endif
 	,
 	[ActChgToSeeDocCrs] =
@@ -19405,6 +19290,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from documents zone of group"		// Çeviri lazim!
 #endif
 	,
+	[ActAdmTchCrsGrp] =
+#if   L==1	// ca
+	"Request management of teachers' documents zone of course/group"			// Necessita traducció
+#elif L==2	// de
+	"Request management of teachers' documents zone of course/group"			// Need Übersetzung
+#elif L==3	// en
+	"Request management of teachers' documents zone of course/group"
+#elif L==4	// es
+	"Solicitar administraci&oacute;n de zona de archivos de profesores de asignatura/grupo"
+#elif L==5	// fr
+	"Request management of teachers' documents zone of course/group"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar administraci&oacute;n de zona de archivos de profesores de asignatura/grupo"	// Okoteve traducción
+#elif L==7	// it
+	"Request management of teachers' documents zone of course/group"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request management of teachers' documents zone of course/group"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request management of teachers' documents zone of course/group"			// Precisa de tradução
+#elif L==10	// tr
+	"Request management of teachers' documents zone of course/group"			// Çeviri lazim!
+#endif
+	,
 	[ActChgToAdmTch] =
 #if   L==1	// ca
 	"Change teachers' documents zone of course/group to management mode"				// Necessita traducció
@@ -20300,6 +20208,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from teachers' documents zone of group"			// Precisa de tradução
 #elif L==10	// tr
 	"Download file from teachers' documents zone of group"			// Çeviri lazim!
+#endif
+	,
+	[ActAdmShaCrsGrp] =
+#if   L==1	// ca
+	"Request management of shared zone of course/group"					// Necessita traducció
+#elif L==2	// de
+	"Request management of shared zone of course/group"					// Need Übersetzung
+#elif L==3	// en
+	"Request management of shared zone of course/group"
+#elif L==4	// es
+	"Solicitar administraci&oacute;n de zona de archivos compartidos de asignatura/grupo"
+#elif L==5	// fr
+	"Request management of shared zone of course/group"					// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar administraci&oacute;n de zona de archivos compartidos de asignatura/grupo"	// Okoteve traducción
+#elif L==7	// it
+	"Request management of shared zone of course/group"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Request management of shared zone of course/group"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request management of shared zone of course/group"					// Precisa de tradução
+#elif L==10	// tr
+	"Request management of shared zone of course/group"					// Çeviri lazim!
 #endif
 	,
 	[ActChgToAdmSha] =
@@ -21199,6 +21130,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from shared files zone of group"			// Çeviri lazim!
 #endif
 	,
+	[ActReqAsgWrkCrs] =
+#if   L==1	// ca
+	"Manage assignments/works in course"			// Necessita traducció
+#elif L==2	// de
+	"Manage assignments/works in course"			// Need Übersetzung
+#elif L==3	// en
+	"Manage assignments/works in course"
+#elif L==4	// es
+	"Administrar actividades/trabajos en asignatura"
+#elif L==5	// fr
+	"Manage assignments/works in course"			// Besoin de traduction
+#elif L==6	// gn
+	"Administrar actividades/trabajos en asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Manage assignments/works in course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Manage assignments/works in course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Manage assignments/works in course"			// Precisa de tradução
+#elif L==10	// tr
+	"Manage assignments/works in course"			// Çeviri lazim!
+#endif
+	,
 	[ActAdmAsgWrkCrs] =
 #if   L==1	// ca
 	"Manage all assignments/works in course"			// Necessita traducció
@@ -21220,6 +21174,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Manage all assignments/works in course"			// Precisa de tradução
 #elif L==10	// tr
 	"Manage all assignments/works in course"			// Çeviri lazim!
+#endif
+	,
+	[ActAdmAsgWrkUsr] =
+#if   L==1	// ca
+	"Manage the assignments/works of user"			// Necessita traducció
+#elif L==2	// de
+	"Manage the assignments/works of user"			// Need Übersetzung
+#elif L==3	// en
+	"Manage the assignments/works of user"
+#elif L==4	// es
+	"Administrar las actividades/trabajos de usuario"
+#elif L==5	// fr
+	"Manage the assignments/works of user"			// Besoin de traduction
+#elif L==6	// gn
+	"Administrar las actividades/trabajos de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Manage the assignments/works of user"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Manage the assignments/works of user"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Manage the assignments/works of user"			// Precisa de tradução
+#elif L==10	// tr
+	"Manage the assignments/works of user"			// Çeviri lazim!
 #endif
 	,
 	[ActReqRemFilAsgUsr] =
@@ -22878,6 +22855,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Download file from works zone of course"		// Çeviri lazim!
 #endif
 	,
+	[ActSeeAdmMrk] =
+#if   L==1	// ca
+	"Marks zone (see or manage)"			// Necessita traducció
+#elif L==2	// de
+	"Marks zone (see or manage)"			// Need Übersetzung
+#elif L==3	// en
+	"Marks zone (see or manage)"
+#elif L==4	// es
+	"Zona de calificaciones (ver o administrar)"
+#elif L==5	// fr
+	"Marks zone (see or manage)"			// Besoin de traduction
+#elif L==6	// gn
+	"Zona de calificaciones (ver o administrar)"	// Okoteve traducción
+#elif L==7	// it
+	"Marks zone (see or manage)"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Marks zone (see or manage)"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Marks zone (see or manage)"			// Precisa de tradução
+#elif L==10	// tr
+	"Marks zone (see or manage)"			// Çeviri lazim!
+#endif
+	,
 	[ActChgToSeeMrk] =
 #if   L==1	// ca
 	"Change marks zone of course/group to view mode"			// Necessita traducció
@@ -24212,6 +24212,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change number of foot rows of a file in marks of group"			// Çeviri lazim!
 #endif
 	,
+	[ActAdmBrf] =
+#if   L==1	// ca
+	"Manage briefcase"		// Necessita traducció
+#elif L==2	// de
+	"Manage briefcase"		// Need Übersetzung
+#elif L==3	// en
+	"Manage briefcase"
+#elif L==4	// es
+	"Administrar malet&iacute;n"
+#elif L==5	// fr
+	"Manage briefcase"		// Besoin de traduction
+#elif L==6	// gn
+	"Administrar malet&iacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Manage briefcase"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Manage briefcase"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Manage briefcase"		// Precisa de tradução
+#elif L==10	// tr
+	"Manage briefcase"		// Çeviri lazim!
+#endif
+	,
 	[ActReqRemFilBrf] =
 #if   L==1	// ca
 	"Request removal of file from briefcase"			// Necessita traducció
@@ -24695,167 +24718,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Request selection of groups of students"		// Çeviri lazim!
 #endif
 	,
-	[ActLstStd] =
-#if   L==1	// ca
-	"Show class photo or list of students"		// Necessita traducció
-#elif L==2	// de
-	"Show class photo or list of students"		// Need Übersetzung
-#elif L==3	// en
-	"Show class photo or list of students"
-#elif L==4	// es
-	"Mostrar foto de clase o lista de estudiantes"
-#elif L==5	// fr
-	"Show class photo or list of students"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar foto de clase o lista de estudiantes"	// Okoteve traducción
-#elif L==7	// it
-	"Show class photo or list of students"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show class photo or list of students"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show class photo or list of students"		// Precisa de tradução
-#elif L==10	// tr
-	"Show class photo or list of students"		// Çeviri lazim!
-#endif
-	,
-	[ActLstTch] =
-#if   L==1	// ca
-	"Show class photo or list of teachers"		// Necessita traducció
-#elif L==2	// de
-	"Show class photo or list of teachers"		// Need Übersetzung
-#elif L==3	// en
-	"Show class photo or list of teachers"
-#elif L==4	// es
-	"Mostrar foto de clase o lista de profesores"
-#elif L==5	// fr
-	"Show class photo or list of teachers"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar foto de clase o lista de profesores"	// Okoteve traducción
-#elif L==7	// it
-	"Show class photo or list of teachers"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show class photo or list of teachers"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show class photo or list of teachers"		// Precisa de tradução
-#elif L==10	// tr
-	"Show class photo or list of teachers"		// Çeviri lazim!
-#endif
-	,
-	[ActLstOth] =
-#if   L==1	// ca
-	"Show class photo or list of guests"		// Necessita traducció
-#elif L==2	// de
-	"Show class photo or list of guests"		// Need Übersetzung
-#elif L==3	// en
-	"Show class photo or list of guests"
-#elif L==4	// es
-	"Mostrar foto de clase o lista de invitados"
-#elif L==5	// fr
-	"Show class photo or list of guests"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar foto de clase o lista de invitados"	// Okoteve traducción
-#elif L==7	// it
-	"Show class photo or list of guests"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show class photo or list of guests"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show class photo or list of guests"		// Precisa de tradução
-#elif L==10	// tr
-	"Show class photo or list of guests"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllAtt] =
-#if   L==1	// ca
-	"Show attendance events"	// Necessita traducció
-#elif L==2	// de
-	"Show attendance events"	// Need Übersetzung
-#elif L==3	// en
-	"Show attendance events"
-#elif L==4	// es
-	"Mostrar eventos de asistencia"
-#elif L==5	// fr
-	"Show attendance events"	// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar eventos de asistencia"	// Okoteve traducción
-#elif L==7	// it
-	"Show attendance events"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Show attendance events"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show attendance events"	// Precisa de tradução
-#elif L==10	// tr
-	"Show attendance events"	// Çeviri lazim!
-#endif
-	,
-	[ActReqSignUp] =
-#if   L==1	// ca
-	"Apply for my enrolment"		// Necessita traducció
-#elif L==2	// de
-	"Apply for my enrolment"		// Need Übersetzung
-#elif L==3	// en
-	"Apply for my enrolment"
-#elif L==4	// es
-	"Solicitar mi inscripci&oacute;n"
-#elif L==5	// fr
-	"Apply for my enrolment"		// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar mi inscripci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Apply for my enrolment"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Apply for my enrolment"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Apply for my enrolment"		// Precisa de tradução
-#elif L==10	// tr
-	"Apply for my enrolment"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeSignUpReq] =
-#if   L==1	// ca
-	"Show pending requests for inscription in the current course"			// Necessita traducció
-#elif L==2	// de
-	"Show pending requests for inscription in the current course"			// Need Übersetzung
-#elif L==3	// en
-	"Show pending requests for inscription in the current course"
-#elif L==4	// es
-	"Mostrar solicitudes de inscripci&oacute;n pendientes en la asignatura actual"
-#elif L==5	// fr
-	"Show pending requests for inscription in the current course"			// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar solicitudes de inscripci&oacute;n pendientes en la asignatura actual"	// Okoteve traducción
-#elif L==7	// it
-	"Show pending requests for inscription in the current course"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Show pending requests for inscription in the current course"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show pending requests for inscription in the current course"			// Precisa de tradução
-#elif L==10	// tr
-	"Show pending requests for inscription in the current course"			// Çeviri lazim!
-#endif
-	,
-	[ActLstCon] =
-#if   L==1	// ca
-	"List connected users"		// Necessita traducció
-#elif L==2	// de
-	"List connected users"		// Need Übersetzung
-#elif L==3	// en
-	"List connected users"
-#elif L==4	// es
-	"Listar usuarios conectados"
-#elif L==5	// fr
-	"List connected users"		// Besoin de traduction
-#elif L==6	// gn
-	"Listar usuarios conectados"	// Okoteve traducción
-#elif L==7	// it
-	"List connected users"		// Bisogno di traduzione
-#elif L==8	// pl
-	"List connected users"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List connected users"		// Precisa de tradução
-#elif L==10	// tr
-	"List connected users"		// Çeviri lazim!
-#endif
-	,
 	[ActChgGrp] =
 #if   L==1	// ca
 	"Change my groups"	// Necessita traducció
@@ -25316,119 +25178,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change maximum number of students in group"			// Çeviri lazim!
 #endif
 	,
-	[ActLstGst] =
+	[ActLstStd] =
 #if   L==1	// ca
-	"List main data of administrators"		// Necessita traducció
+	"Show class photo or list of students"		// Necessita traducció
 #elif L==2	// de
-	"List main data of administrators"		// Need Übersetzung
+	"Show class photo or list of students"		// Need Übersetzung
 #elif L==3	// en
-	"List main data of administrators"
+	"Show class photo or list of students"
 #elif L==4	// es
-	"Listar datos principales de administradores"
+	"Mostrar foto de clase o lista de estudiantes"
 #elif L==5	// fr
-	"List main data of administrators"		// Besoin de traduction
+	"Show class photo or list of students"		// Besoin de traduction
 #elif L==6	// gn
-	"Listar datos principales de administradores"	// Okoteve traducción
+	"Mostrar foto de clase o lista de estudiantes"	// Okoteve traducción
 #elif L==7	// it
-	"List main data of administrators"		// Bisogno di traduzione
+	"Show class photo or list of students"		// Bisogno di traduzione
 #elif L==8	// pl
-	"List main data of administrators"		// Potrzebujesz tlumaczenie
+	"Show class photo or list of students"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"List main data of administrators"		// Precisa de tradução
+	"Show class photo or list of students"		// Precisa de tradução
 #elif L==10	// tr
-	"List main data of administrators"		// Çeviri lazim!
-#endif
-	,
-	[ActPrnGstPho] =
-#if   L==1	// ca
-	"Show class photo of guests ready to be printed"		// Necessita traducció
-#elif L==2	// de
-	"Show class photo of guests ready to be printed"		// Need Übersetzung
-#elif L==3	// en
-	"Show class photo of guests ready to be printed"
-#elif L==4	// es
-	"Mostrar foto de clase de invitados lista para imprimir"
-#elif L==5	// fr
-	"Show class photo of guests ready to be printed"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar foto de clase de invitados lista para imprimir"	// Okoteve traducción
-#elif L==7	// it
-	"Show class photo of guests ready to be printed"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show class photo of guests ready to be printed"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show class photo of guests ready to be printed"		// Precisa de tradução
-#elif L==10	// tr
-	"Show class photo of guests ready to be printed"		// Çeviri lazim!
-#endif
-	,
-	[ActPrnStdPho] =
-#if   L==1	// ca
-	"Show class photo of students ready to be printed"		// Necessita traducció
-#elif L==2	// de
-	"Show class photo of students ready to be printed"		// Need Übersetzung
-#elif L==3	// en
-	"Show class photo of students ready to be printed"
-#elif L==4	// es
-	"Mostrar foto de clase de estudiantes lista para imprimir"
-#elif L==5	// fr
-	"Show class photo of students ready to be printed"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar foto de clase de estudiantes lista para imprimir"	// Okoteve traducción
-#elif L==7	// it
-	"Show class photo of students ready to be printed"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show class photo of students ready to be printed"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show class photo of students ready to be printed"		// Precisa de tradução
-#elif L==10	// tr
-	"Show class photo of students ready to be printed"		// Çeviri lazim!
-#endif
-	,
-	[ActPrnTchPho] =
-#if   L==1	// ca
-	"Show class photo of teachers ready to be printed"		// Necessita traducció
-#elif L==2	// de
-	"Show class photo of teachers ready to be printed"		// Need Übersetzung
-#elif L==3	// en
-	"Show class photo of teachers ready to be printed"
-#elif L==4	// es
-	"Mostrar foto de clase de profesores lista para imprimir"
-#elif L==5	// fr
-	"Show class photo of teachers ready to be printed"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar foto de clase de profesores lista para imprimir"	// Okoteve traducción
-#elif L==7	// it
-	"Show class photo of teachers ready to be printed"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show class photo of teachers ready to be printed"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show class photo of teachers ready to be printed"		// Precisa de tradução
-#elif L==10	// tr
-	"Show class photo of teachers ready to be printed"		// Çeviri lazim!
-#endif
-	,
-	[ActLstGstAll] =
-#if   L==1	// ca
-	"List the full data of the guests"		// Necessita traducció
-#elif L==2	// de
-	"List the full data of the guests"		// Need Übersetzung
-#elif L==3	// en
-	"List the full data of the guests"
-#elif L==4	// es
-	"Listar los datos completos de los invitados"
-#elif L==5	// fr
-	"List the full data of the guests"		// Besoin de traduction
-#elif L==6	// gn
-	"Listar los datos completos de los invitados"	// Okoteve traducción
-#elif L==7	// it
-	"List the full data of the guests"		// Bisogno di traduzione
-#elif L==8	// pl
-	"List the full data of the guests"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List the full data of the guests"		// Precisa de tradução
-#elif L==10	// tr
-	"List the full data of the guests"		// Çeviri lazim!
+	"Show class photo or list of students"		// Çeviri lazim!
 #endif
 	,
 	[ActLstStdAll] =
@@ -25454,96 +25224,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"List the full data of students"		// Çeviri lazim!
 #endif
 	,
-	[ActLstTchAll] =
+	[ActPrnStdPho] =
 #if   L==1	// ca
-	"List the full data of the teachers"		// Necessita traducció
+	"Show class photo of students ready to be printed"		// Necessita traducció
 #elif L==2	// de
-	"List the full data of the teachers"		// Need Übersetzung
+	"Show class photo of students ready to be printed"		// Need Übersetzung
 #elif L==3	// en
-	"List the full data of the teachers"
+	"Show class photo of students ready to be printed"
 #elif L==4	// es
-	"Listar los datos completos de los profesores"
+	"Mostrar foto de clase de estudiantes lista para imprimir"
 #elif L==5	// fr
-	"List the full data of the teachers"		// Besoin de traduction
+	"Show class photo of students ready to be printed"		// Besoin de traduction
 #elif L==6	// gn
-	"Listar los datos completos de los profesores"	// Okoteve traducción
+	"Mostrar foto de clase de estudiantes lista para imprimir"	// Okoteve traducción
 #elif L==7	// it
-	"List the full data of the teachers"		// Bisogno di traduzione
+	"Show class photo of students ready to be printed"		// Bisogno di traduzione
 #elif L==8	// pl
-	"List the full data of the teachers"		// Potrzebujesz tlumaczenie
+	"Show class photo of students ready to be printed"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"List the full data of the teachers"		// Precisa de tradução
+	"Show class photo of students ready to be printed"		// Precisa de tradução
 #elif L==10	// tr
-	"List the full data of the teachers"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeRecOneStd] =
-#if   L==1	// ca
-	"See the record of a student"	// Necessita traducció
-#elif L==2	// de
-	"See the record of a student"	// Need Übersetzung
-#elif L==3	// en
-	"See the record of a student"
-#elif L==4	// es
-	"Ver la ficha de estudiante"
-#elif L==5	// fr
-	"See the record of a student"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver la ficha de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"See the record of a student"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See the record of a student"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the record of a student"	// Precisa de tradução
-#elif L==10	// tr
-	"See the record of a student"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeRecOneTch] =
-#if   L==1	// ca
-	"See the record of a teacher"	// Necessita traducció
-#elif L==2	// de
-	"See the record of a teacher"	// Need Übersetzung
-#elif L==3	// en
-	"See the record of a teacher"
-#elif L==4	// es
-	"Ver la ficha de profesor"
-#elif L==5	// fr
-	"See the record of a teacher"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver la ficha de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"See the record of a teacher"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See the record of a teacher"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the record of a teacher"	// Precisa de tradução
-#elif L==10	// tr
-	"See the record of a teacher"	// Çeviri lazim!
-#endif
-	,
-	[ActDoActOnSevGst] =
-#if   L==1	// ca
-	"Do an action on several selected guests"				// Necessita traducció
-#elif L==2	// de
-	"Do an action on several selected guests"				// Need Übersetzung
-#elif L==3	// en
-	"Do an action on several selected guests"
-#elif L==4	// es
-	"Realizar una acci&oacute;n sobre varios invitados seleccionados"
-#elif L==5	// fr
-	"Do an action on several selected guests"				// Besoin de traduction
-#elif L==6	// gn
-	"Realizar una acci&oacute;n sobre varios invitados seleccionados"	// Okoteve traducción
-#elif L==7	// it
-	"Do an action on several selected guests"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Do an action on several selected guests"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Do an action on several selected guests"				// Precisa de tradução
-#elif L==10	// tr
-	"Do an action on several selected guests"				// Çeviri lazim!
+	"Show class photo of students ready to be printed"		// Çeviri lazim!
 #endif
 	,
 	[ActDoActOnSevStd] =
@@ -25569,52 +25270,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an action on several selected students"				// Çeviri lazim!
 #endif
 	,
-	[ActDoActOnSevTch] =
-#if   L==1	// ca
-	"Do an action on several selected teachers"				// Necessita traducció
-#elif L==2	// de
-	"Do an action on several selected teachers"				// Need Übersetzung
-#elif L==3	// en
-	"Do an action on several selected teachers"
-#elif L==4	// es
-	"Realizar una acci&oacute;n sobre varios profesores seleccionados"
-#elif L==5	// fr
-	"Do an action on several selected teachers"				// Besoin de traduction
-#elif L==6	// gn
-	"Realizar una acci&oacute;n sobre varios profesores seleccionados"	// Okoteve traducción
-#elif L==7	// it
-	"Do an action on several selected teachers"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Do an action on several selected teachers"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Do an action on several selected teachers"				// Precisa de tradução
-#elif L==10	// tr
-	"Do an action on several selected teachers"				// Çeviri lazim!
-#endif
-	,
-	[ActSeeRecSevGst] =
-#if   L==1	// ca
-	"See records of several selected guests"	// Necessita traducció
-#elif L==2	// de
-	"See records of several selected guests"	// Need Übersetzung
-#elif L==3	// en
-	"See records of several selected guests"
-#elif L==4	// es
-	"Ver fichas de varios invitados seleccionados"
-#elif L==5	// fr
-	"See records of several selected guests"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver fichas de varios invitados seleccionados"	// Okoteve traducción
-#elif L==7	// it
-	"See records of several selected guests"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See records of several selected guests"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See records of several selected guests"	// Precisa de tradução
-#elif L==10	// tr
-	"See records of several selected guests"	// Çeviri lazim!
-#endif
-	,
 	[ActSeeRecSevStd] =
 #if   L==1	// ca
 	"See records of several selected students"		// Necessita traducció
@@ -25636,52 +25291,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See records of several selected students"		// Precisa de tradução
 #elif L==10	// tr
 	"See records of several selected students"		// Çeviri lazim!
-#endif
-	,
-	[ActSeeRecSevTch] =
-#if   L==1	// ca
-	"See records of several selected teachers"	// Necessita traducció
-#elif L==2	// de
-	"See records of several selected teachers"	// Need Übersetzung
-#elif L==3	// en
-	"See records of several selected teachers"
-#elif L==4	// es
-	"Ver fichas de varios profesores seleccionados"
-#elif L==5	// fr
-	"See records of several selected teachers"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver fichas de varios profesores seleccionados"	// Okoteve traducción
-#elif L==7	// it
-	"See records of several selected teachers"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See records of several selected teachers"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See records of several selected teachers"	// Precisa de tradução
-#elif L==10	// tr
-	"See records of several selected teachers"	// Çeviri lazim!
-#endif
-	,
-	[ActPrnRecSevGst] =
-#if   L==1	// ca
-	"See records of several selected guests ready to print"			// Necessita traducció
-#elif L==2	// de
-	"See records of several selected guests ready to print"			// Need Übersetzung
-#elif L==3	// en
-	"See records of several selected guests ready to print"
-#elif L==4	// es
-	"Ver fichas de varios invitados seleccionados lista para imprimir"
-#elif L==5	// fr
-	"See records of several selected guests ready to print"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver fichas de varios invitados seleccionados lista para imprimir"	// Okoteve traducción
-#elif L==7	// it
-	"See records of several selected guests ready to print"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See records of several selected guests ready to print"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See records of several selected guests ready to print"			// Precisa de tradução
-#elif L==10	// tr
-	"See records of several selected guests ready to print"			// Çeviri lazim!
 #endif
 	,
 	[ActPrnRecSevStd] =
@@ -25707,27 +25316,717 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See records of several selected students ready to print"		// Çeviri lazim!
 #endif
 	,
-	[ActPrnRecSevTch] =
+	[ActReqMdfOneStd] =
 #if   L==1	// ca
-	"See records of several selected teachers ready to print"		// Necessita traducció
+	"Request a student's ID for enrolment/removal"					// Necessita traducció
 #elif L==2	// de
-	"See records of several selected teachers ready to print"		// Need Übersetzung
+	"Request a student's ID for enrolment/removal"					// Need Übersetzung
 #elif L==3	// en
-	"See records of several selected teachers ready to print"
+	"Request a student's ID for enrolment/removal"
 #elif L==4	// es
-	"Ver fichas de varios profesores seleccionados lista para imprimir"
+	"Solicitar el ID de estudiante para inscripci&oacute;n/eliminaci&oacute;n"
 #elif L==5	// fr
-	"See records of several selected teachers ready to print"		// Besoin de traduction
+	"Request a student's ID for enrolment/removal"					// Besoin de traduction
 #elif L==6	// gn
-	"Ver fichas de varios profesores seleccionados lista para imprimir"	// Okoteve traducción
+	"Solicitar el ID de estudiante para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"See records of several selected teachers ready to print"		// Bisogno di traduzione
+	"Request a student's ID for enrolment/removal"					// Bisogno di traduzione
 #elif L==8	// pl
-	"See records of several selected teachers ready to print"		// Potrzebujesz tlumaczenie
+	"Request a student's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See records of several selected teachers ready to print"		// Precisa de tradução
+	"Request a student's ID for enrolment/removal"					// Precisa de tradução
 #elif L==10	// tr
-	"See records of several selected teachers ready to print"		// Çeviri lazim!
+	"Request a student's ID for enrolment/removal"					// Çeviri lazim!
+#endif
+	,
+	[ActReqMdfStd] =
+#if   L==1	// ca
+	"Request enrolment/removal of a student"			// Necessita traducció
+#elif L==2	// de
+	"Request enrolment/removal of a student"			// Need Übersetzung
+#elif L==3	// en
+	"Request enrolment/removal of a student"
+#elif L==4	// es
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiante"
+#elif L==5	// fr
+	"Request enrolment/removal of a student"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Request enrolment/removal of a student"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request enrolment/removal of a student"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request enrolment/removal of a student"			// Precisa de tradução
+#elif L==10	// tr
+	"Request enrolment/removal of a student"			// Çeviri lazim!
+#endif
+	,
+	[ActReqStdPho] =
+#if   L==1	// ca
+	"Edit a student's photo"	// Necessita traducció
+#elif L==2	// de
+	"Edit a student's photo"	// Need Übersetzung
+#elif L==3	// en
+	"Edit a student's photo"
+#elif L==4	// es
+	"Editar la foto de estudiante"
+#elif L==5	// fr
+	"Edit a student's photo"	// Besoin de traduction
+#elif L==6	// gn
+	"Editar la foto de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Edit a student's photo"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit a student's photo"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit a student's photo"	// Precisa de tradução
+#elif L==10	// tr
+	"Edit a student's photo"	// Çeviri lazim!
+#endif
+	,
+	[ActDetStdPho] =
+#if   L==1	// ca
+	"Send student's photo and detect faces on it"			// Necessita traducció
+#elif L==2	// de
+	"Send student's photo and detect faces on it"			// Need Übersetzung
+#elif L==3	// en
+	"Send student's photo and detect faces on it"
+#elif L==4	// es
+	"Enviar la foto de estudiante y detectar rostros en ella"
+#elif L==5	// fr
+	"Send student's photo and detect faces on it"			// Besoin de traduction
+#elif L==6	// gn
+	"Enviar la foto de estudiante y detectar rostros en ella"	// Okoteve traducción
+#elif L==7	// it
+	"Send student's photo and detect faces on it"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Send student's photo and detect faces on it"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Send student's photo and detect faces on it"			// Precisa de tradução
+#elif L==10	// tr
+	"Send student's photo and detect faces on it"			// Çeviri lazim!
+#endif
+	,
+	[ActChgStdPho] =
+#if   L==1	// ca
+	"Update a student's photo"		// Necessita traducció
+#elif L==2	// de
+	"Update a student's photo"		// Need Übersetzung
+#elif L==3	// en
+	"Update a student's photo"
+#elif L==4	// es
+	"Actualizar la foto de estudiante"
+#elif L==5	// fr
+	"Update a student's photo"		// Besoin de traduction
+#elif L==6	// gn
+	"Actualizar la foto de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Update a student's photo"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Update a student's photo"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Update a student's photo"		// Precisa de tradução
+#elif L==10	// tr
+	"Update a student's photo"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemStdPho] =
+#if   L==1	// ca
+	"Request removal of student's photo"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of student's photo"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of student's photo"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de foto de estudiante"
+#elif L==5	// fr
+	"Request removal of student's photo"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de foto de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of student's photo"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of student's photo"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of student's photo"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of student's photo"			// Çeviri lazim!
+#endif
+	,
+	[ActRemStdPho] =
+#if   L==1	// ca
+	"Remove student's photo"		// Necessita traducció
+#elif L==2	// de
+	"Remove student's photo"		// Need Übersetzung
+#elif L==3	// en
+	"Remove student's photo"
+#elif L==4	// es
+	"Eliminar la foto de estudiante"
+#elif L==5	// fr
+	"Remove student's photo"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar la foto de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Remove student's photo"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove student's photo"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove student's photo"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove student's photo"		// Çeviri lazim!
+#endif
+	,
+	[ActCreStd] =
+#if   L==1	// ca
+	"Create new student"		// Necessita traducció
+#elif L==2	// de
+	"Create new student"		// Need Übersetzung
+#elif L==3	// en
+	"Create new student"
+#elif L==4	// es
+	"Crear nuevo estudiante"
+#elif L==5	// fr
+	"Create new student"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Create new student"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new student"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new student"		// Precisa de tradução
+#elif L==10	// tr
+	"Create new student"		// Çeviri lazim!
+#endif
+	,
+	[ActUpdStd] =
+#if   L==1	// ca
+	"Update a student's data and groups"		// Necessita traducció
+#elif L==2	// de
+	"Update a student's data and groups"		// Need Übersetzung
+#elif L==3	// en
+	"Update a student's data and groups"
+#elif L==4	// es
+	"Actualizar los datos y grupos de estudiante"
+#elif L==5	// fr
+	"Update a student's data and groups"		// Besoin de traduction
+#elif L==6	// gn
+	"Actualizar los datos y grupos de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Update a student's data and groups"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Update a student's data and groups"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Update a student's data and groups"		// Precisa de tradução
+#elif L==10	// tr
+	"Update a student's data and groups"		// Çeviri lazim!
+#endif
+	,
+	[ActCnfID_Std] =
+#if   L==1	// ca
+	"Confirm a student's ID"	// Necessita traducció
+#elif L==2	// de
+	"Confirm a student's ID"	// Need Übersetzung
+#elif L==3	// en
+	"Confirm a student's ID"
+#elif L==4	// es
+	"Confirmar el ID de estudiante"
+#elif L==5	// fr
+	"Confirm a student's ID"	// Besoin de traduction
+#elif L==6	// gn
+	"Confirmar el ID de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Confirm a student's ID"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Confirm a student's ID"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Confirm a student's ID"	// Precisa de tradução
+#elif L==10	// tr
+	"Confirm a student's ID"	// Çeviri lazim!
+#endif
+	,
+	[ActFrmAccStd] =
+#if   L==1	// ca
+	"Forms to the change a student's account"		// Necessita traducció
+#elif L==2	// de
+	"Forms to the change a student's account"		// Need Übersetzung
+#elif L==3	// en
+	"Forms to the change a student's account"
+#elif L==4	// es
+	"Formularios para cambiar la cuenta de estudiante"
+#elif L==5	// fr
+	"Forms to the change a student's account"		// Besoin de traduction
+#elif L==6	// gn
+	"Formularios para cambiar la cuenta de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Forms to the change a student's account"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Forms to the change a student's account"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Forms to the change a student's account"		// Precisa de tradução
+#elif L==10	// tr
+	"Forms to the change a student's account"		// Çeviri lazim!
+#endif
+	,
+	[ActRemNicStd] =
+#if   L==1	// ca
+	"Remove student's nickname"	// Necessita traducció
+#elif L==2	// de
+	"Remove student's nickname"	// Need Übersetzung
+#elif L==3	// en
+	"Remove student's nickname"
+#elif L==4	// es
+	"Eliminar apodo de estudiante"
+#elif L==5	// fr
+	"Remove student's nickname"	// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar apodo de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Remove student's nickname"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove student's nickname"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove student's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	"Remove student's nickname"	// Çeviri lazim!
+#endif
+	,
+	[ActChgNicStd] =
+#if   L==1	// ca
+	"Change student's nickname"	// Necessita traducció
+#elif L==2	// de
+	"Change student's nickname"	// Need Übersetzung
+#elif L==3	// en
+	"Change student's nickname"
+#elif L==4	// es
+	"Cambiar apodo de estudiante"
+#elif L==5	// fr
+	"Change student's nickname"	// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar apodo de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Change student's nickname"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Change student's nickname"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change student's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	"Change student's nickname"	// Çeviri lazim!
+#endif
+	,
+	[ActRemID_Std] =
+#if   L==1	// ca
+	"Remove student's ID"		// Necessita traducció
+#elif L==2	// de
+	"Remove student's ID"		// Need Übersetzung
+#elif L==3	// en
+	"Remove student's ID"
+#elif L==4	// es
+	"Eliminar ID de estudiante"
+#elif L==5	// fr
+	"Remove student's ID"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar ID de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Remove student's ID"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove student's ID"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove student's ID"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove student's ID"		// Çeviri lazim!
+#endif
+	,
+	[ActChgID_Std] =
+#if   L==1	// ca
+	"Create new student's ID"	// Necessita traducció
+#elif L==2	// de
+	"Create new student's ID"	// Need Übersetzung
+#elif L==3	// en
+	"Create new student's ID"
+#elif L==4	// es
+	"Crear nuevo ID de estudiante"
+#elif L==5	// fr
+	"Create new student's ID"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo ID de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Create new student's ID"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new student's ID"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new student's ID"	// Precisa de tradução
+#elif L==10	// tr
+	"Create new student's ID"	// Çeviri lazim!
+#endif
+	,
+	[ActChgPwdStd] =
+#if   L==1	// ca
+	"Change student's password"			// Necessita traducció
+#elif L==2	// de
+	"Change student's password"			// Need Übersetzung
+#elif L==3	// en
+	"Change student's password"
+#elif L==4	// es
+	"Cambiar contrase&ntilde;a de estudiante"
+#elif L==5	// fr
+	"Change student's password"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar contrase&ntilde;a de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Change student's password"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change student's password"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change student's password"			// Precisa de tradução
+#elif L==10	// tr
+	"Change student's password"			// Çeviri lazim!
+#endif
+	,
+	[ActRemMaiStd] =
+#if   L==1	// ca
+	"Remove student's email"				// Necessita traducció
+#elif L==2	// de
+	"Remove student's email"				// Need Übersetzung
+#elif L==3	// en
+	"Remove student's email"
+#elif L==4	// es
+	"Eliminar correo electr&oacute;nico de estudiante"
+#elif L==5	// fr
+	"Remove student's email"				// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar correo electr&oacute;nico de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Remove student's email"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove student's email"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove student's email"				// Precisa de tradução
+#elif L==10	// tr
+	"Remove student's email"				// Çeviri lazim!
+#endif
+	,
+	[ActChgMaiStd] =
+#if   L==1	// ca
+	"Create new student's email"				// Necessita traducció
+#elif L==2	// de
+	"Create new student's email"				// Need Übersetzung
+#elif L==3	// en
+	"Create new student's email"
+#elif L==4	// es
+	"Crear nuevo correo electr&oacute;nico de estudiante"
+#elif L==5	// fr
+	"Create new student's email"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo correo electr&oacute;nico de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Create new student's email"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new student's email"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new student's email"				// Precisa de tradução
+#elif L==10	// tr
+	"Create new student's email"				// Çeviri lazim!
+#endif
+	,
+	[ActRemStdCrs] =
+#if   L==1	// ca
+	"Remove student from a course"		// Necessita traducció
+#elif L==2	// de
+	"Remove student from a course"		// Need Übersetzung
+#elif L==3	// en
+	"Remove student from a course"
+#elif L==4	// es
+	"Eliminar estudiante de asignatura"
+#elif L==5	// fr
+	"Remove student from a course"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar estudiante de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Remove student from a course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove student from a course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove student from a course"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove student from a course"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemAllStdCrs] =
+#if   L==1	// ca
+	"Request removal of all students from a course"				// Necessita traducció
+#elif L==2	// de
+	"Request removal of all students from a course"				// Need Übersetzung
+#elif L==3	// en
+	"Request removal of all students from a course"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de todos los estudiantes de asignatura"
+#elif L==5	// fr
+	"Request removal of all students from a course"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de todos los estudiantes de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of all students from a course"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of all students from a course"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of all students from a course"				// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of all students from a course"				// Çeviri lazim!
+#endif
+	,
+	[ActRemAllStdCrs] =
+#if   L==1	// ca
+	"Remove all students from a course"		// Necessita traducció
+#elif L==2	// de
+	"Remove all students from a course"		// Need Übersetzung
+#elif L==3	// en
+	"Remove all students from a course"
+#elif L==4	// es
+	"Eliminar todos los estudiantes de asignatura"
+#elif L==5	// fr
+	"Remove all students from a course"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar todos los estudiantes de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Remove all students from a course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove all students from a course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove all students from a course"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove all students from a course"		// Çeviri lazim!
+#endif
+	,
+	[ActReqAccEnrStd] =
+#if   L==1	// ca
+	"See whether to accept or reject my enrolment as student"		// Necessita traducció
+#elif L==2	// de
+	"See whether to accept or reject my enrolment as student"		// Need Übersetzung
+#elif L==3	// en
+	"See whether to accept or reject my enrolment as student"
+#elif L==4	// es
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como estudiante"
+#elif L==5	// fr
+	"See whether to accept or reject my enrolment as student"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"See whether to accept or reject my enrolment as student"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See whether to accept or reject my enrolment as student"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See whether to accept or reject my enrolment as student"		// Precisa de tradução
+#elif L==10	// tr
+	"See whether to accept or reject my enrolment as student"		// Çeviri lazim!
+#endif
+	,
+	[ActAccEnrStd] =
+#if   L==1	// ca
+	"Accept my enrolment as student"		// Necessita traducció
+#elif L==2	// de
+	"Accept my enrolment as student"		// Need Übersetzung
+#elif L==3	// en
+	"Accept my enrolment as student"
+#elif L==4	// es
+	"Aceptar mi inscripci&oacute;n como estudiante"
+#elif L==5	// fr
+	"Accept my enrolment as student"		// Besoin de traduction
+#elif L==6	// gn
+	"Aceptar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Accept my enrolment as student"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Accept my enrolment as student"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Accept my enrolment as student"		// Precisa de tradução
+#elif L==10	// tr
+	"Accept my enrolment as student"		// Çeviri lazim!
+#endif
+	,
+	[ActRemMe_Std] =
+#if   L==1	// ca
+	"Reject my enrolment as student"			// Necessita traducció
+#elif L==2	// de
+	"Reject my enrolment as student"			// Need Übersetzung
+#elif L==3	// en
+	"Reject my enrolment as student"
+#elif L==4	// es
+	"Rechazar mi inscripci&oacute;n como estudiante"
+#elif L==5	// fr
+	"Reject my enrolment as student"			// Besoin de traduction
+#elif L==6	// gn
+	"Rechazar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"Reject my enrolment as student"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Reject my enrolment as student"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Reject my enrolment as student"			// Precisa de tradução
+#elif L==10	// tr
+	"Reject my enrolment as student"			// Çeviri lazim!
+#endif
+	,
+	[ActReqFolSevStd] =
+#if   L==1	// ca
+	"Request follow several students"	// Necessita traducció
+#elif L==2	// de
+	"Request follow several students"	// Need Übersetzung
+#elif L==3	// en
+	"Request follow several students"
+#elif L==4	// es
+	"Solicitar seguir a varios estudiantes"
+#elif L==5	// fr
+	"Request follow several students"	// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar seguir a varios estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Request follow several students"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Request follow several students"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request follow several students"	// Precisa de tradução
+#elif L==10	// tr
+	"Request follow several students"	// Çeviri lazim!
+#endif
+	,
+	[ActReqUnfSevStd] =
+#if   L==1	// ca
+	"Request unfollow several students"			// Necessita traducció
+#elif L==2	// de
+	"Request unfollow several students"			// Need Übersetzung
+#elif L==3	// en
+	"Request unfollow several students"
+#elif L==4	// es
+	"Solicitar dejar de seguir a varios estudiantes"
+#elif L==5	// fr
+	"Request unfollow several students"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar dejar de seguir a varios estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Request unfollow several students"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request unfollow several students"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request unfollow several students"			// Precisa de tradução
+#elif L==10	// tr
+	"Request unfollow several students"			// Çeviri lazim!
+#endif
+	,
+	[ActFolSevStd] =
+#if   L==1	// ca
+	"Follow several students"	// Necessita traducció
+#elif L==2	// de
+	"Follow several students"	// Need Übersetzung
+#elif L==3	// en
+	"Follow several students"
+#elif L==4	// es
+	"Seguir a varios estudiantes"
+#elif L==5	// fr
+	"Follow several students"	// Besoin de traduction
+#elif L==6	// gn
+	"Seguir a varios estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Follow several students"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Follow several students"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Follow several students"	// Precisa de tradução
+#elif L==10	// tr
+	"Follow several students"	// Çeviri lazim!
+#endif
+	,
+	[ActUnfSevStd] =
+#if   L==1	// ca
+	"Unfollow several students"		// Necessita traducció
+#elif L==2	// de
+	"Unfollow several students"		// Need Übersetzung
+#elif L==3	// en
+	"Unfollow several students"
+#elif L==4	// es
+	"Dejar de seguir a varios estudiantes"
+#elif L==5	// fr
+	"Unfollow several students"		// Besoin de traduction
+#elif L==6	// gn
+	"Dejar de seguir a varios estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Unfollow several students"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Unfollow several students"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Unfollow several students"		// Precisa de tradução
+#elif L==10	// tr
+	"Unfollow several students"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeRecOneStd] =
+#if   L==1	// ca
+	"See the record of a student"	// Necessita traducció
+#elif L==2	// de
+	"See the record of a student"	// Need Übersetzung
+#elif L==3	// en
+	"See the record of a student"
+#elif L==4	// es
+	"Ver la ficha de estudiante"
+#elif L==5	// fr
+	"See the record of a student"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver la ficha de estudiante"	// Okoteve traducción
+#elif L==7	// it
+	"See the record of a student"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See the record of a student"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the record of a student"	// Precisa de tradução
+#elif L==10	// tr
+	"See the record of a student"	// Çeviri lazim!
+#endif
+	,
+	[ActReqEnrSevStd] =
+#if   L==1	// ca
+	"Request enrolment/removing of several students to/from a course"				// Necessita traducció
+#elif L==2	// de
+	"Request enrolment/removing of several students to/from a course"				// Need Übersetzung
+#elif L==3	// en
+	"Request enrolment/removing of several students to/from a course"
+#elif L==4	// es
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"
+#elif L==5	// fr
+	"Request enrolment/removing of several students to/from a course"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request enrolment/removing of several students to/from a course"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request enrolment/removing of several students to/from a course"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request enrolment/removing of several students to/from a course"				// Precisa de tradução
+#elif L==10	// tr
+	"Request enrolment/removing of several students to/from a course"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvFrmEnrSevStd] =
+#if   L==1	// ca
+	"Register/remove several students in/from a course"		// Necessita traducció
+#elif L==2	// de
+	"Register/remove several students in/from a course"		// Need Übersetzung
+#elif L==3	// en
+	"Register/remove several students in/from a course"
+#elif L==4	// es
+	"Inscribir/eliminar varios estudiantes en/de asignatura"
+#elif L==5	// fr
+	"Register/remove several students in/from a course"		// Besoin de traduction
+#elif L==6	// gn
+	"Inscribir/eliminar varios estudiantes en/de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Register/remove several students in/from a course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Register/remove several students in/from a course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Register/remove several students in/from a course"		// Precisa de tradução
+#elif L==10	// tr
+	"Register/remove several students in/from a course"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvRecOthUsr] =
@@ -25937,6 +26236,1018 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Update fields of my record in a course"		// Çeviri lazim!
 #endif
 	,
+	[ActLstTch] =
+#if   L==1	// ca
+	"Show class photo or list of teachers"		// Necessita traducció
+#elif L==2	// de
+	"Show class photo or list of teachers"		// Need Übersetzung
+#elif L==3	// en
+	"Show class photo or list of teachers"
+#elif L==4	// es
+	"Mostrar foto de clase o lista de profesores"
+#elif L==5	// fr
+	"Show class photo or list of teachers"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar foto de clase o lista de profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Show class photo or list of teachers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show class photo or list of teachers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show class photo or list of teachers"		// Precisa de tradução
+#elif L==10	// tr
+	"Show class photo or list of teachers"		// Çeviri lazim!
+#endif
+	,
+	[ActLstTchAll] =
+#if   L==1	// ca
+	"List the full data of the teachers"		// Necessita traducció
+#elif L==2	// de
+	"List the full data of the teachers"		// Need Übersetzung
+#elif L==3	// en
+	"List the full data of the teachers"
+#elif L==4	// es
+	"Listar los datos completos de los profesores"
+#elif L==5	// fr
+	"List the full data of the teachers"		// Besoin de traduction
+#elif L==6	// gn
+	"Listar los datos completos de los profesores"	// Okoteve traducción
+#elif L==7	// it
+	"List the full data of the teachers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"List the full data of the teachers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List the full data of the teachers"		// Precisa de tradução
+#elif L==10	// tr
+	"List the full data of the teachers"		// Çeviri lazim!
+#endif
+	,
+	[ActPrnTchPho] =
+#if   L==1	// ca
+	"Show class photo of teachers ready to be printed"		// Necessita traducció
+#elif L==2	// de
+	"Show class photo of teachers ready to be printed"		// Need Übersetzung
+#elif L==3	// en
+	"Show class photo of teachers ready to be printed"
+#elif L==4	// es
+	"Mostrar foto de clase de profesores lista para imprimir"
+#elif L==5	// fr
+	"Show class photo of teachers ready to be printed"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar foto de clase de profesores lista para imprimir"	// Okoteve traducción
+#elif L==7	// it
+	"Show class photo of teachers ready to be printed"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show class photo of teachers ready to be printed"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show class photo of teachers ready to be printed"		// Precisa de tradução
+#elif L==10	// tr
+	"Show class photo of teachers ready to be printed"		// Çeviri lazim!
+#endif
+	,
+	[ActDoActOnSevTch] =
+#if   L==1	// ca
+	"Do an action on several selected teachers"				// Necessita traducció
+#elif L==2	// de
+	"Do an action on several selected teachers"				// Need Übersetzung
+#elif L==3	// en
+	"Do an action on several selected teachers"
+#elif L==4	// es
+	"Realizar una acci&oacute;n sobre varios profesores seleccionados"
+#elif L==5	// fr
+	"Do an action on several selected teachers"				// Besoin de traduction
+#elif L==6	// gn
+	"Realizar una acci&oacute;n sobre varios profesores seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"Do an action on several selected teachers"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Do an action on several selected teachers"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Do an action on several selected teachers"				// Precisa de tradução
+#elif L==10	// tr
+	"Do an action on several selected teachers"				// Çeviri lazim!
+#endif
+	,
+	[ActSeeRecSevTch] =
+#if   L==1	// ca
+	"See records of several selected teachers"	// Necessita traducció
+#elif L==2	// de
+	"See records of several selected teachers"	// Need Übersetzung
+#elif L==3	// en
+	"See records of several selected teachers"
+#elif L==4	// es
+	"Ver fichas de varios profesores seleccionados"
+#elif L==5	// fr
+	"See records of several selected teachers"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver fichas de varios profesores seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"See records of several selected teachers"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See records of several selected teachers"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See records of several selected teachers"	// Precisa de tradução
+#elif L==10	// tr
+	"See records of several selected teachers"	// Çeviri lazim!
+#endif
+	,
+	[ActPrnRecSevTch] =
+#if   L==1	// ca
+	"See records of several selected teachers ready to print"		// Necessita traducció
+#elif L==2	// de
+	"See records of several selected teachers ready to print"		// Need Übersetzung
+#elif L==3	// en
+	"See records of several selected teachers ready to print"
+#elif L==4	// es
+	"Ver fichas de varios profesores seleccionados lista para imprimir"
+#elif L==5	// fr
+	"See records of several selected teachers ready to print"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver fichas de varios profesores seleccionados lista para imprimir"	// Okoteve traducción
+#elif L==7	// it
+	"See records of several selected teachers ready to print"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See records of several selected teachers ready to print"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See records of several selected teachers ready to print"		// Precisa de tradução
+#elif L==10	// tr
+	"See records of several selected teachers ready to print"		// Çeviri lazim!
+#endif
+	,
+	[ActReqMdfOneTch] =
+#if   L==1	// ca
+	"Request a teacher's ID for enrolment/removal"					// Necessita traducció
+#elif L==2	// de
+	"Request a teacher's ID for enrolment/removal"					// Need Übersetzung
+#elif L==3	// en
+	"Request a teacher's ID for enrolment/removal"
+#elif L==4	// es
+	"Solicitar el ID de profesor para inscripci&oacute;n/eliminaci&oacute;n"
+#elif L==5	// fr
+	"Request a teacher's ID for enrolment/removal"					// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar el ID de profesor para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Request a teacher's ID for enrolment/removal"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Request a teacher's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request a teacher's ID for enrolment/removal"					// Precisa de tradução
+#elif L==10	// tr
+	"Request a teacher's ID for enrolment/removal"					// Çeviri lazim!
+#endif
+	,
+	[ActReqMdfNET] =
+#if   L==1	// ca
+	"Request enrolment/removal of a non-editing teacher"			// Necessita traducció
+#elif L==2	// de
+	"Request enrolment/removal of a non-editing teacher"			// Need Übersetzung
+#elif L==3	// en
+	"Request enrolment/removal of a non-editing teacher"
+#elif L==4	// es
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor no editor"
+#elif L==5	// fr
+	"Request enrolment/removal of a non-editing teacher"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor no editor"	// Okoteve traducción
+#elif L==7	// it
+	"Request enrolment/removal of a non-editing teacher"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request enrolment/removal of a non-editing teacher"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request enrolment/removal of a non-editing teacher"			// Precisa de tradução
+#elif L==10	// tr
+	"Request enrolment/removal of a non-editing teacher"			// Çeviri lazim!
+#endif
+	,
+	[ActReqMdfTch] =
+#if   L==1	// ca
+	"Request enrolment/removal of a teacher"			// Necessita traducció
+#elif L==2	// de
+	"Request enrolment/removal of a teacher"			// Need Übersetzung
+#elif L==3	// en
+	"Request enrolment/removal of a teacher"
+#elif L==4	// es
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor"
+#elif L==5	// fr
+	"Request enrolment/removal of a teacher"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Request enrolment/removal of a teacher"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request enrolment/removal of a teacher"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request enrolment/removal of a teacher"			// Precisa de tradução
+#elif L==10	// tr
+	"Request enrolment/removal of a teacher"			// Çeviri lazim!
+#endif
+	,
+	[ActReqTchPho] =
+#if   L==1	// ca
+	"Edit a teacher's photo"	// Necessita traducció
+#elif L==2	// de
+	"Edit a teacher's photo"	// Need Übersetzung
+#elif L==3	// en
+	"Edit a teacher's photo"
+#elif L==4	// es
+	"Editar la foto de profesor"
+#elif L==5	// fr
+	"Edit a teacher's photo"	// Besoin de traduction
+#elif L==6	// gn
+	"Editar la foto de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Edit a teacher's photo"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit a teacher's photo"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit a teacher's photo"	// Precisa de tradução
+#elif L==10	// tr
+	"Edit a teacher's photo"	// Çeviri lazim!
+#endif
+	,
+	[ActDetTchPho] =
+#if   L==1	// ca
+	"Send teacher's photo and detect faces on it"		// Necessita traducció
+#elif L==2	// de
+	"Send teacher's photo and detect faces on it"		// Need Übersetzung
+#elif L==3	// en
+	"Send teacher's photo and detect faces on it"
+#elif L==4	// es
+	"Enviar la foto de profesor y detectar rostros en ella"
+#elif L==5	// fr
+	"Send teacher's photo and detect faces on it"		// Besoin de traduction
+#elif L==6	// gn
+	"Enviar la foto de profesor y detectar rostros en ella"	// Okoteve traducción
+#elif L==7	// it
+	"Send teacher's photo and detect faces on it"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Send teacher's photo and detect faces on it"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Send teacher's photo and detect faces on it"		// Precisa de tradução
+#elif L==10	// tr
+	"Send teacher's photo and detect faces on it"		// Çeviri lazim!
+#endif
+	,
+	[ActChgTchPho] =
+#if   L==1	// ca
+	"Update a teacher's photo"		// Necessita traducció
+#elif L==2	// de
+	"Update a teacher's photo"		// Need Übersetzung
+#elif L==3	// en
+	"Update a teacher's photo"
+#elif L==4	// es
+	"Actualizar la foto de profesor"
+#elif L==5	// fr
+	"Update a teacher's photo"		// Besoin de traduction
+#elif L==6	// gn
+	"Actualizar la foto de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Update a teacher's photo"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Update a teacher's photo"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Update a teacher's photo"		// Precisa de tradução
+#elif L==10	// tr
+	"Update a teacher's photo"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemTchPho] =
+#if   L==1	// ca
+	"Request removal of teacher's photo"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of teacher's photo"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of teacher's photo"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de foto de profesor"
+#elif L==5	// fr
+	"Request removal of teacher's photo"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de foto de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of teacher's photo"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of teacher's photo"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of teacher's photo"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of teacher's photo"			// Çeviri lazim!
+#endif
+	,
+	[ActRemTchPho] =
+#if   L==1	// ca
+	"Remove teacher's photo"	// Necessita traducció
+#elif L==2	// de
+	"Remove teacher's photo"	// Need Übersetzung
+#elif L==3	// en
+	"Remove teacher's photo"
+#elif L==4	// es
+	"Eliminar la foto de profesor"
+#elif L==5	// fr
+	"Remove teacher's photo"	// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar la foto de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Remove teacher's photo"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove teacher's photo"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove teacher's photo"	// Precisa de tradução
+#elif L==10	// tr
+	"Remove teacher's photo"	// Çeviri lazim!
+#endif
+	,
+	[ActCreNET] =
+#if   L==1	// ca
+	"Create new non-editing teacher"	// Necessita traducció
+#elif L==2	// de
+	"Create new non-editing teacher"	// Need Übersetzung
+#elif L==3	// en
+	"Create new non-editing teacher"
+#elif L==4	// es
+	"Crear nuevo profesor no editor"
+#elif L==5	// fr
+	"Create new non-editing teacher"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo profesor no editor"	// Okoteve traducción
+#elif L==7	// it
+	"Create new non-editing teacher"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new non-editing teacher"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new non-editing teacher"	// Precisa de tradução
+#elif L==10	// tr
+	"Create new non-editing teacher"	// Çeviri lazim!
+#endif
+	,
+	[ActCreTch] =
+#if   L==1	// ca
+	"Create new teacher"	// Necessita traducció
+#elif L==2	// de
+	"Create new teacher"	// Need Übersetzung
+#elif L==3	// en
+	"Create new teacher"
+#elif L==4	// es
+	"Crear nuevo profesor"
+#elif L==5	// fr
+	"Create new teacher"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Create new teacher"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new teacher"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new teacher"	// Precisa de tradução
+#elif L==10	// tr
+	"Create new teacher"	// Çeviri lazim!
+#endif
+	,
+	[ActUpdNET] =
+#if   L==1	// ca
+	"Update a non-editing teacher's data and groups"	// Necessita traducció
+#elif L==2	// de
+	"Update a non-editing teacher's data and groups"	// Need Übersetzung
+#elif L==3	// en
+	"Update a non-editing teacher's data and groups"
+#elif L==4	// es
+	"Actualizar los datos y grupos de profesor no editor"
+#elif L==5	// fr
+	"Update a non-editing teacher's data and groups"	// Besoin de traduction
+#elif L==6	// gn
+	"Actualizar los datos y grupos de profesor no editor"	// Okoteve traducción
+#elif L==7	// it
+	"Update a non-editing teacher's data and groups"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Update a non-editing teacher's data and groups"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Update a non-editing teacher's data and groups"	// Precisa de tradução
+#elif L==10	// tr
+	"Update a non-editing teacher's data and groups"	// Çeviri lazim!
+#endif
+	,
+	[ActUpdTch] =
+#if   L==1	// ca
+	"Update a teacher's data and groups"		// Necessita traducció
+#elif L==2	// de
+	"Update a teacher's data and groups"		// Need Übersetzung
+#elif L==3	// en
+	"Update a teacher's data and groups"
+#elif L==4	// es
+	"Actualizar los datos y grupos de profesor"
+#elif L==5	// fr
+	"Update a teacher's data and groups"		// Besoin de traduction
+#elif L==6	// gn
+	"Actualizar los datos y grupos de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Update a teacher's data and groups"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Update a teacher's data and groups"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Update a teacher's data and groups"		// Precisa de tradução
+#elif L==10	// tr
+	"Update a teacher's data and groups"		// Çeviri lazim!
+#endif
+	,
+	[ActCnfID_Tch] =
+#if   L==1	// ca
+	"Confirm a teacher's ID"	// Necessita traducció
+#elif L==2	// de
+	"Confirm a teacher's ID"	// Need Übersetzung
+#elif L==3	// en
+	"Confirm a teacher's ID"
+#elif L==4	// es
+	"Confirmar el ID de profesor"
+#elif L==5	// fr
+	"Confirm a teacher's ID"	// Besoin de traduction
+#elif L==6	// gn
+	"Confirmar el ID de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Confirm a teacher's ID"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Confirm a teacher's ID"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Confirm a teacher's ID"	// Precisa de tradução
+#elif L==10	// tr
+	"Confirm a teacher's ID"	// Çeviri lazim!
+#endif
+	,
+	[ActFrmAccTch] =
+#if   L==1	// ca
+	"Forms to the change a teacher's account"		// Necessita traducció
+#elif L==2	// de
+	"Forms to the change a teacher's account"		// Need Übersetzung
+#elif L==3	// en
+	"Forms to the change a teacher's account"
+#elif L==4	// es
+	"Formularios para cambiar la cuenta de profesor"
+#elif L==5	// fr
+	"Forms to the change a teacher's account"		// Besoin de traduction
+#elif L==6	// gn
+	"Formularios para cambiar la cuenta de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Forms to the change a teacher's account"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Forms to the change a teacher's account"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Forms to the change a teacher's account"		// Precisa de tradução
+#elif L==10	// tr
+	"Forms to the change a teacher's account"		// Çeviri lazim!
+#endif
+	,
+	[ActRemNicTch] =
+#if   L==1	// ca
+	"Remove teacher's nickname"	// Necessita traducció
+#elif L==2	// de
+	"Remove teacher's nickname"	// Need Übersetzung
+#elif L==3	// en
+	"Remove teacher's nickname"
+#elif L==4	// es
+	"Eliminar apodo de profesor"
+#elif L==5	// fr
+	"Remove teacher's nickname"	// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar apodo de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Remove teacher's nickname"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove teacher's nickname"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove teacher's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	"Remove teacher's nickname"	// Çeviri lazim!
+#endif
+	,
+	[ActChgNicTch] =
+#if   L==1	// ca
+	"Change teacher's nickname"	// Necessita traducció
+#elif L==2	// de
+	"Change teacher's nickname"	// Need Übersetzung
+#elif L==3	// en
+	"Change teacher's nickname"
+#elif L==4	// es
+	"Cambiar apodo de profesor"
+#elif L==5	// fr
+	"Change teacher's nickname"	// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar apodo de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Change teacher's nickname"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Change teacher's nickname"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change teacher's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	"Change teacher's nickname"	// Çeviri lazim!
+#endif
+	,
+	[ActRemID_Tch] =
+#if   L==1	// ca
+	"Remove teacher's ID"		// Necessita traducció
+#elif L==2	// de
+	"Remove teacher's ID"		// Need Übersetzung
+#elif L==3	// en
+	"Remove teacher's ID"
+#elif L==4	// es
+	"Eliminar ID de profesor"
+#elif L==5	// fr
+	"Remove teacher's ID"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar ID de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Remove teacher's ID"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove teacher's ID"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove teacher's ID"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove teacher's ID"		// Çeviri lazim!
+#endif
+	,
+	[ActChgID_Tch] =
+#if   L==1	// ca
+	"Create new teacher's ID"	// Necessita traducció
+#elif L==2	// de
+	"Create new teacher's ID"	// Need Übersetzung
+#elif L==3	// en
+	"Create new teacher's ID"
+#elif L==4	// es
+	"Crear nuevo ID de profesor"
+#elif L==5	// fr
+	"Create new teacher's ID"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo ID de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Create new teacher's ID"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new teacher's ID"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new teacher's ID"	// Precisa de tradução
+#elif L==10	// tr
+	"Create new teacher's ID"	// Çeviri lazim!
+#endif
+	,
+	[ActChgPwdTch] =
+#if   L==1	// ca
+	"Change teacher's password"		// Necessita traducció
+#elif L==2	// de
+	"Change teacher's password"		// Need Übersetzung
+#elif L==3	// en
+	"Change teacher's password"
+#elif L==4	// es
+	"Cambiar contrase&ntilde;a de profesor"
+#elif L==5	// fr
+	"Change teacher's password"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar contrase&ntilde;a de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Change teacher's password"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change teacher's password"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change teacher's password"		// Precisa de tradução
+#elif L==10	// tr
+	"Change teacher's password"		// Çeviri lazim!
+#endif
+	,
+	[ActRemMaiTch] =
+#if   L==1	// ca
+	"Remove teacher's email"				// Necessita traducció
+#elif L==2	// de
+	"Remove teacher's email"				// Need Übersetzung
+#elif L==3	// en
+	"Remove teacher's email"
+#elif L==4	// es
+	"Eliminar correo electr&oacute;nico de profesor"
+#elif L==5	// fr
+	"Remove teacher's email"				// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar correo electr&oacute;nico de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Remove teacher's email"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove teacher's email"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove teacher's email"				// Precisa de tradução
+#elif L==10	// tr
+	"Remove teacher's email"				// Çeviri lazim!
+#endif
+	,
+	[ActChgMaiTch] =
+#if   L==1	// ca
+	"Create new teacher's email"				// Necessita traducció
+#elif L==2	// de
+	"Create new teacher's email"				// Need Übersetzung
+#elif L==3	// en
+	"Create new teacher's email"
+#elif L==4	// es
+	"Crear nuevo correo electr&oacute;nico de profesor"
+#elif L==5	// fr
+	"Create new teacher's email"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo correo electr&oacute;nico de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Create new teacher's email"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new teacher's email"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new teacher's email"				// Precisa de tradução
+#elif L==10	// tr
+	"Create new teacher's email"				// Çeviri lazim!
+#endif
+	,
+	[ActRemNETCrs] =
+#if   L==1	// ca
+	"Remove non-editing teacher from a course"	// Necessita traducció
+#elif L==2	// de
+	"Remove non-editing teacher from a course"	// Need Übersetzung
+#elif L==3	// en
+	"Remove non-editing teacher from a course"
+#elif L==4	// es
+	"Eliminar profesor no editor de asignatura"
+#elif L==5	// fr
+	"Remove non-editing teacher from a course"	// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar profesor no editor de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Remove non-editing teacher from a course"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove non-editing teacher from a course"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove non-editing teacher from a course"	// Precisa de tradução
+#elif L==10	// tr
+	"Remove non-editing teacher from a course"	// Çeviri lazim!
+#endif
+	,
+	[ActRemTchCrs] =
+#if   L==1	// ca
+	"Remove teacher from a course"		// Necessita traducció
+#elif L==2	// de
+	"Remove teacher from a course"		// Need Übersetzung
+#elif L==3	// en
+	"Remove teacher from a course"
+#elif L==4	// es
+	"Eliminar profesor de asignatura"
+#elif L==5	// fr
+	"Remove teacher from a course"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar profesor de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Remove teacher from a course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove teacher from a course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove teacher from a course"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove teacher from a course"		// Çeviri lazim!
+#endif
+	,
+	[ActReqAccEnrNET] =
+#if   L==1	// ca
+	"See whether to accept or reject my enrolment as non-editing teacher"		// Necessita traducció
+#elif L==2	// de
+	"See whether to accept or reject my enrolment as non-editing teacher"		// Need Übersetzung
+#elif L==3	// en
+	"See whether to accept or reject my enrolment as non-editing teacher"
+#elif L==4	// es
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor no editor"
+#elif L==5	// fr
+	"See whether to accept or reject my enrolment as non-editing teacher"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
+#elif L==7	// it
+	"See whether to accept or reject my enrolment as non-editing teacher"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See whether to accept or reject my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See whether to accept or reject my enrolment as non-editing teacher"		// Precisa de tradução
+#elif L==10	// tr
+	"See whether to accept or reject my enrolment as non-editing teacher"		// Çeviri lazim!
+#endif
+	,
+	[ActReqAccEnrTch] =
+#if   L==1	// ca
+	"See whether to accept or reject my enrolment as teacher"	// Necessita traducció
+#elif L==2	// de
+	"See whether to accept or reject my enrolment as teacher"	// Need Übersetzung
+#elif L==3	// en
+	"See whether to accept or reject my enrolment as teacher"
+#elif L==4	// es
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor"
+#elif L==5	// fr
+	"See whether to accept or reject my enrolment as teacher"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor"	// Okoteve traducción
+#elif L==7	// it
+	"See whether to accept or reject my enrolment as teacher"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See whether to accept or reject my enrolment as teacher"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See whether to accept or reject my enrolment as teacher"	// Precisa de tradução
+#elif L==10	// tr
+	"See whether to accept or reject my enrolment as teacher"	// Çeviri lazim!
+#endif
+	,
+	[ActAccEnrNET] =
+#if   L==1	// ca
+	"Accept my enrolment as non-editing teacher"		// Necessita traducció
+#elif L==2	// de
+	"Accept my enrolment as non-editing teacher"		// Need Übersetzung
+#elif L==3	// en
+	"Accept my enrolment as non-editing teacher"
+#elif L==4	// es
+	"Aceptar mi inscripci&oacute;n como profesor no editor"
+#elif L==5	// fr
+	"Accept my enrolment as non-editing teacher"		// Besoin de traduction
+#elif L==6	// gn
+	"Aceptar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
+#elif L==7	// it
+	"Accept my enrolment as non-editing teacher"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Accept my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Accept my enrolment as non-editing teacher"		// Precisa de tradução
+#elif L==10	// tr
+	"Accept my enrolment as non-editing teacher"		// Çeviri lazim!
+#endif
+	,
+	[ActAccEnrTch] =
+#if   L==1	// ca
+	"Accept my enrolment as teacher"		// Necessita traducció
+#elif L==2	// de
+	"Accept my enrolment as teacher"		// Need Übersetzung
+#elif L==3	// en
+	"Accept my enrolment as teacher"
+#elif L==4	// es
+	"Aceptar mi inscripci&oacute;n como profesor"
+#elif L==5	// fr
+	"Accept my enrolment as teacher"		// Besoin de traduction
+#elif L==6	// gn
+	"Aceptar mi inscripci&oacute;n como profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Accept my enrolment as teacher"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Accept my enrolment as teacher"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Accept my enrolment as teacher"		// Precisa de tradução
+#elif L==10	// tr
+	"Accept my enrolment as teacher"		// Çeviri lazim!
+#endif
+	,
+	[ActRemMe_NET] =
+#if   L==1	// ca
+	"Reject my enrolment as non-editing teacher"			// Necessita traducció
+#elif L==2	// de
+	"Reject my enrolment as non-editing teacher"			// Need Übersetzung
+#elif L==3	// en
+	"Reject my enrolment as non-editing teacher"
+#elif L==4	// es
+	"Rechazar mi inscripci&oacute;n como profesor no editor"
+#elif L==5	// fr
+	"Reject my enrolment as non-editing teacher"			// Besoin de traduction
+#elif L==6	// gn
+	"Rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
+#elif L==7	// it
+	"Reject my enrolment as non-editing teacher"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Reject my enrolment as non-editing teacher"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Reject my enrolment as non-editing teacher"			// Precisa de tradução
+#elif L==10	// tr
+	"Reject my enrolment as non-editing teacher"			// Çeviri lazim!
+#endif
+	,
+	[ActRemMe_Tch] =
+#if   L==1	// ca
+	"Reject my enrolment as teacher"		// Necessita traducció
+#elif L==2	// de
+	"Reject my enrolment as teacher"		// Need Übersetzung
+#elif L==3	// en
+	"Reject my enrolment as teacher"
+#elif L==4	// es
+	"Rechazar mi inscripci&oacute;n como profesor"
+#elif L==5	// fr
+	"Reject my enrolment as teacher"		// Besoin de traduction
+#elif L==6	// gn
+	"Rechazar mi inscripci&oacute;n como profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Reject my enrolment as teacher"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Reject my enrolment as teacher"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Reject my enrolment as teacher"		// Precisa de tradução
+#elif L==10	// tr
+	"Reject my enrolment as teacher"		// Çeviri lazim!
+#endif
+	,
+	[ActReqFolSevTch] =
+#if   L==1	// ca
+	"Request follow several teachers"	// Necessita traducció
+#elif L==2	// de
+	"Request follow several teachers"	// Need Übersetzung
+#elif L==3	// en
+	"Request follow several teachers"
+#elif L==4	// es
+	"Solicitar seguir a varios profesores"
+#elif L==5	// fr
+	"Request follow several teachers"	// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar seguir a varios profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Request follow several teachers"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Request follow several teachers"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request follow several teachers"	// Precisa de tradução
+#elif L==10	// tr
+	"Request follow several teachers"	// Çeviri lazim!
+#endif
+	,
+	[ActReqUnfSevTch] =
+#if   L==1	// ca
+	"Request unfollow several teachers"		// Necessita traducció
+#elif L==2	// de
+	"Request unfollow several teachers"		// Need Übersetzung
+#elif L==3	// en
+	"Request unfollow several teachers"
+#elif L==4	// es
+	"Solicitar dejar de seguir a varios profesores"
+#elif L==5	// fr
+	"Request unfollow several teachers"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar dejar de seguir a varios profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Request unfollow several teachers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request unfollow several teachers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request unfollow several teachers"		// Precisa de tradução
+#elif L==10	// tr
+	"Request unfollow several teachers"		// Çeviri lazim!
+#endif
+	,
+	[ActFolSevTch] =
+#if   L==1	// ca
+	"Follow several teachers"	// Necessita traducció
+#elif L==2	// de
+	"Follow several teachers"	// Need Übersetzung
+#elif L==3	// en
+	"Follow several teachers"
+#elif L==4	// es
+	"Seguir a varios profesores"
+#elif L==5	// fr
+	"Follow several teachers"	// Besoin de traduction
+#elif L==6	// gn
+	"Seguir a varios profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Follow several teachers"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Follow several teachers"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Follow several teachers"	// Precisa de tradução
+#elif L==10	// tr
+	"Follow several teachers"	// Çeviri lazim!
+#endif
+	,
+	[ActUnfSevTch] =
+#if   L==1	// ca
+	"Unfollow several teachers"		// Necessita traducció
+#elif L==2	// de
+	"Unfollow several teachers"		// Need Übersetzung
+#elif L==3	// en
+	"Unfollow several teachers"
+#elif L==4	// es
+	"Dejar de seguir a varios profesores"
+#elif L==5	// fr
+	"Unfollow several teachers"		// Besoin de traduction
+#elif L==6	// gn
+	"Dejar de seguir a varios profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Unfollow several teachers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Unfollow several teachers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Unfollow several teachers"		// Precisa de tradução
+#elif L==10	// tr
+	"Unfollow several teachers"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeRecOneTch] =
+#if   L==1	// ca
+	"See the record of a teacher"	// Necessita traducció
+#elif L==2	// de
+	"See the record of a teacher"	// Need Übersetzung
+#elif L==3	// en
+	"See the record of a teacher"
+#elif L==4	// es
+	"Ver la ficha de profesor"
+#elif L==5	// fr
+	"See the record of a teacher"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver la ficha de profesor"	// Okoteve traducción
+#elif L==7	// it
+	"See the record of a teacher"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See the record of a teacher"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the record of a teacher"	// Precisa de tradução
+#elif L==10	// tr
+	"See the record of a teacher"	// Çeviri lazim!
+#endif
+	,
+	[ActReqEnrSevNET] =
+#if   L==1	// ca
+	"Request enrolment/removing of several non-editing teachers to/from a course"				// Necessita traducció
+#elif L==2	// de
+	"Request enrolment/removing of several non-editing teachers to/from a course"				// Need Übersetzung
+#elif L==3	// en
+	"Request enrolment/removing of several non-editing teachers to/from a course"
+#elif L==4	// es
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores no editores a/de un asignatura"
+#elif L==5	// fr
+	"Request enrolment/removing of several non-editing teachers to/from a course"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores no editores a/de un asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request enrolment/removing of several non-editing teachers to/from a course"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request enrolment/removing of several non-editing teachers to/from a course"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request enrolment/removing of several non-editing teachers to/from a course"				// Precisa de tradução
+#elif L==10	// tr
+	"Request enrolment/removing of several non-editing teachers to/from a course"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvFrmEnrSevNET] =
+#if   L==1	// ca
+	"Register/remove several non-editing teachers in/from a course"		// Necessita traducció
+#elif L==2	// de
+	"Register/remove several non-editing teachers in/from a course"		// Need Übersetzung
+#elif L==3	// en
+	"Register/remove several non-editing teachers in/from a course"
+#elif L==4	// es
+	"Inscribir/eliminar varios profesores no editores en/de asignatura"
+#elif L==5	// fr
+	"Register/remove several non-editing teachers in/from a course"		// Besoin de traduction
+#elif L==6	// gn
+	"Inscribir/eliminar varios profesores no editores en/de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Register/remove several non-editing teachers in/from a course"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Register/remove several non-editing teachers in/from a course"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Register/remove several non-editing teachers in/from a course"		// Precisa de tradução
+#elif L==10	// tr
+	"Register/remove several non-editing teachers in/from a course"		// Çeviri lazim!
+#endif
+	,
+	[ActReqEnrSevTch] =
+#if   L==1	// ca
+	"Request enrolment/removing of several teachers to/from a course"				// Necessita traducció
+#elif L==2	// de
+	"Request enrolment/removing of several teachers to/from a course"				// Need Übersetzung
+#elif L==3	// en
+	"Request enrolment/removing of several teachers to/from a course"
+#elif L==4	// es
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores a/de un asignatura"
+#elif L==5	// fr
+	"Request enrolment/removing of several teachers to/from a course"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores a/de un asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request enrolment/removing of several teachers to/from a course"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request enrolment/removing of several teachers to/from a course"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request enrolment/removing of several teachers to/from a course"				// Precisa de tradução
+#elif L==10	// tr
+	"Request enrolment/removing of several teachers to/from a course"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvFrmEnrSevTch] =
+#if   L==1	// ca
+	"Register/remove several teachers in/from a course"	// Necessita traducció
+#elif L==2	// de
+	"Register/remove several teachers in/from a course"	// Need Übersetzung
+#elif L==3	// en
+	"Register/remove several teachers in/from a course"
+#elif L==4	// es
+	"Inscribir/eliminar varios profesores en/de asignatura"
+#elif L==5	// fr
+	"Register/remove several teachers in/from a course"	// Besoin de traduction
+#elif L==6	// gn
+	"Inscribir/eliminar varios profesores en/de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Register/remove several teachers in/from a course"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Register/remove several teachers in/from a course"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Register/remove several teachers in/from a course"	// Precisa de tradução
+#elif L==10	// tr
+	"Register/remove several teachers in/from a course"	// Çeviri lazim!
+#endif
+	,
 	[ActFrmLogInUsrAgd] =
 #if   L==1	// ca
 	"See form to log in and see a user's public agenda"					// Necessita traducció
@@ -26006,96 +27317,878 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See a user's public agenda after change language"		// Çeviri lazim!
 #endif
 	,
-	[ActSeeUsrAgd] =
+	[ActLstOth] =
 #if   L==1	// ca
-	"See a user's public agenda"			// Necessita traducció
+	"Show class photo or list of guests"		// Necessita traducció
 #elif L==2	// de
-	"See a user's public agenda"			// Need Übersetzung
+	"Show class photo or list of guests"		// Need Übersetzung
 #elif L==3	// en
-	"See a user's public agenda"
+	"Show class photo or list of guests"
 #elif L==4	// es
-	"Ver la agenda p&uacute;blica de usuario"
+	"Mostrar foto de clase o lista de invitados"
 #elif L==5	// fr
-	"See a user's public agenda"			// Besoin de traduction
+	"Show class photo or list of guests"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver la agenda p&uacute;blica de usuario"	// Okoteve traducción
+	"Mostrar foto de clase o lista de invitados"	// Okoteve traducción
 #elif L==7	// it
-	"See a user's public agenda"			// Bisogno di traduzione
+	"Show class photo or list of guests"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See a user's public agenda"			// Potrzebujesz tlumaczenie
+	"Show class photo or list of guests"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See a user's public agenda"			// Precisa de tradução
+	"Show class photo or list of guests"		// Precisa de tradução
 #elif L==10	// tr
-	"See a user's public agenda"			// Çeviri lazim!
+	"Show class photo or list of guests"		// Çeviri lazim!
 #endif
 	,
-	[ActReqEnrSevStd] =
+	[ActNewAdmIns] =
 #if   L==1	// ca
-	"Request enrolment/removing of several students to/from a course"				// Necessita traducció
+	"Register an administrador in an institution"		// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removing of several students to/from a course"				// Need Übersetzung
+	"Register an administrador in an institution"		// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removing of several students to/from a course"
+	"Register an administrador in an institution"
 #elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"
+	"Inscribir un administrador en una instituci&oacute;n"
 #elif L==5	// fr
-	"Request enrolment/removing of several students to/from a course"				// Besoin de traduction
+	"Register an administrador in an institution"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios estudiantes a/de un asignatura"	// Okoteve traducción
+	"Inscribir un administrador en una instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removing of several students to/from a course"				// Bisogno di traduzione
+	"Register an administrador in an institution"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removing of several students to/from a course"				// Potrzebujesz tlumaczenie
+	"Register an administrador in an institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removing of several students to/from a course"				// Precisa de tradução
+	"Register an administrador in an institution"		// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removing of several students to/from a course"				// Çeviri lazim!
+	"Register an administrador in an institution"		// Çeviri lazim!
 #endif
 	,
-	[ActReqEnrSevNET] =
+	[ActRemAdmIns] =
 #if   L==1	// ca
-	"Request enrolment/removing of several non-editing teachers to/from a course"				// Necessita traducció
+	"Remove administrador from an institution"	// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removing of several non-editing teachers to/from a course"				// Need Übersetzung
+	"Remove administrador from an institution"	// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removing of several non-editing teachers to/from a course"
+	"Remove administrador from an institution"
 #elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores no editores a/de un asignatura"
+	"Eliminar administrador de instituci&oacute;n"
 #elif L==5	// fr
-	"Request enrolment/removing of several non-editing teachers to/from a course"				// Besoin de traduction
+	"Remove administrador from an institution"	// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores no editores a/de un asignatura"	// Okoteve traducción
+	"Eliminar administrador de instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removing of several non-editing teachers to/from a course"				// Bisogno di traduzione
+	"Remove administrador from an institution"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removing of several non-editing teachers to/from a course"				// Potrzebujesz tlumaczenie
+	"Remove administrador from an institution"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removing of several non-editing teachers to/from a course"				// Precisa de tradução
+	"Remove administrador from an institution"	// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removing of several non-editing teachers to/from a course"				// Çeviri lazim!
+	"Remove administrador from an institution"	// Çeviri lazim!
 #endif
 	,
-	[ActReqEnrSevTch] =
+	[ActNewAdmCtr] =
 #if   L==1	// ca
-	"Request enrolment/removing of several teachers to/from a course"				// Necessita traducció
+	"Register an administrador in a center"		// Necessita traducció
 #elif L==2	// de
-	"Request enrolment/removing of several teachers to/from a course"				// Need Übersetzung
+	"Register an administrador in a center"		// Need Übersetzung
 #elif L==3	// en
-	"Request enrolment/removing of several teachers to/from a course"
+	"Register an administrador in a center"
 #elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores a/de un asignatura"
+	"Inscribir un administrador en un centro"
 #elif L==5	// fr
-	"Request enrolment/removing of several teachers to/from a course"				// Besoin de traduction
+	"Register an administrador in a center"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de varios profesores a/de un asignatura"	// Okoteve traducción
+	"Inscribir un administrador en un centro"	// Okoteve traducción
 #elif L==7	// it
-	"Request enrolment/removing of several teachers to/from a course"				// Bisogno di traduzione
+	"Register an administrador in a center"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request enrolment/removing of several teachers to/from a course"				// Potrzebujesz tlumaczenie
+	"Register an administrador in a center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request enrolment/removing of several teachers to/from a course"				// Precisa de tradução
+	"Register an administrador in a center"		// Precisa de tradução
 #elif L==10	// tr
-	"Request enrolment/removing of several teachers to/from a course"				// Çeviri lazim!
+	"Register an administrador in a center"		// Çeviri lazim!
+#endif
+	,
+	[ActRemAdmCtr] =
+#if   L==1	// ca
+	"Remove administrador from a center"	// Necessita traducció
+#elif L==2	// de
+	"Remove administrador from a center"	// Need Übersetzung
+#elif L==3	// en
+	"Remove administrador from a center"
+#elif L==4	// es
+	"Eliminar administrador de centro"
+#elif L==5	// fr
+	"Remove administrador from a center"	// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar administrador de centro"	// Okoteve traducción
+#elif L==7	// it
+	"Remove administrador from a center"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove administrador from a center"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove administrador from a center"	// Precisa de tradução
+#elif L==10	// tr
+	"Remove administrador from a center"	// Çeviri lazim!
+#endif
+	,
+	[ActNewAdmDeg] =
+#if   L==1	// ca
+	"Register an administrador in a degree"			// Necessita traducció
+#elif L==2	// de
+	"Register an administrador in a degree"			// Need Übersetzung
+#elif L==3	// en
+	"Register an administrador in a degree"
+#elif L==4	// es
+	"Inscribir un administrador en una titulaci&oacute;n"
+#elif L==5	// fr
+	"Register an administrador in a degree"			// Besoin de traduction
+#elif L==6	// gn
+	"Inscribir un administrador en una titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Register an administrador in a degree"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Register an administrador in a degree"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Register an administrador in a degree"			// Precisa de tradução
+#elif L==10	// tr
+	"Register an administrador in a degree"			// Çeviri lazim!
+#endif
+	,
+	[ActRemAdmDeg] =
+#if   L==1	// ca
+	"Remove administrador from a degree"			// Necessita traducció
+#elif L==2	// de
+	"Remove administrador from a degree"			// Need Übersetzung
+#elif L==3	// en
+	"Remove administrador from a degree"
+#elif L==4	// es
+	"Eliminar administrador en una titulaci&oacute;n"
+#elif L==5	// fr
+	"Remove administrador from a degree"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar administrador en una titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Remove administrador from a degree"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove administrador from a degree"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove administrador from a degree"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove administrador from a degree"			// Çeviri lazim!
+#endif
+	,
+	[ActLstGst] =
+#if   L==1	// ca
+	"List main data of administrators"		// Necessita traducció
+#elif L==2	// de
+	"List main data of administrators"		// Need Übersetzung
+#elif L==3	// en
+	"List main data of administrators"
+#elif L==4	// es
+	"Listar datos principales de administradores"
+#elif L==5	// fr
+	"List main data of administrators"		// Besoin de traduction
+#elif L==6	// gn
+	"Listar datos principales de administradores"	// Okoteve traducción
+#elif L==7	// it
+	"List main data of administrators"		// Bisogno di traduzione
+#elif L==8	// pl
+	"List main data of administrators"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List main data of administrators"		// Precisa de tradução
+#elif L==10	// tr
+	"List main data of administrators"		// Çeviri lazim!
+#endif
+	,
+	[ActLstGstAll] =
+#if   L==1	// ca
+	"List the full data of the guests"		// Necessita traducció
+#elif L==2	// de
+	"List the full data of the guests"		// Need Übersetzung
+#elif L==3	// en
+	"List the full data of the guests"
+#elif L==4	// es
+	"Listar los datos completos de los invitados"
+#elif L==5	// fr
+	"List the full data of the guests"		// Besoin de traduction
+#elif L==6	// gn
+	"Listar los datos completos de los invitados"	// Okoteve traducción
+#elif L==7	// it
+	"List the full data of the guests"		// Bisogno di traduzione
+#elif L==8	// pl
+	"List the full data of the guests"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List the full data of the guests"		// Precisa de tradução
+#elif L==10	// tr
+	"List the full data of the guests"		// Çeviri lazim!
+#endif
+	,
+	[ActPrnGstPho] =
+#if   L==1	// ca
+	"Show class photo of guests ready to be printed"		// Necessita traducció
+#elif L==2	// de
+	"Show class photo of guests ready to be printed"		// Need Übersetzung
+#elif L==3	// en
+	"Show class photo of guests ready to be printed"
+#elif L==4	// es
+	"Mostrar foto de clase de invitados lista para imprimir"
+#elif L==5	// fr
+	"Show class photo of guests ready to be printed"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar foto de clase de invitados lista para imprimir"	// Okoteve traducción
+#elif L==7	// it
+	"Show class photo of guests ready to be printed"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show class photo of guests ready to be printed"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show class photo of guests ready to be printed"		// Precisa de tradução
+#elif L==10	// tr
+	"Show class photo of guests ready to be printed"		// Çeviri lazim!
+#endif
+	,
+	[ActDoActOnSevGst] =
+#if   L==1	// ca
+	"Do an action on several selected guests"				// Necessita traducció
+#elif L==2	// de
+	"Do an action on several selected guests"				// Need Übersetzung
+#elif L==3	// en
+	"Do an action on several selected guests"
+#elif L==4	// es
+	"Realizar una acci&oacute;n sobre varios invitados seleccionados"
+#elif L==5	// fr
+	"Do an action on several selected guests"				// Besoin de traduction
+#elif L==6	// gn
+	"Realizar una acci&oacute;n sobre varios invitados seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"Do an action on several selected guests"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Do an action on several selected guests"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Do an action on several selected guests"				// Precisa de tradução
+#elif L==10	// tr
+	"Do an action on several selected guests"				// Çeviri lazim!
+#endif
+	,
+	[ActSeeRecSevGst] =
+#if   L==1	// ca
+	"See records of several selected guests"	// Necessita traducció
+#elif L==2	// de
+	"See records of several selected guests"	// Need Übersetzung
+#elif L==3	// en
+	"See records of several selected guests"
+#elif L==4	// es
+	"Ver fichas de varios invitados seleccionados"
+#elif L==5	// fr
+	"See records of several selected guests"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver fichas de varios invitados seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"See records of several selected guests"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See records of several selected guests"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See records of several selected guests"	// Precisa de tradução
+#elif L==10	// tr
+	"See records of several selected guests"	// Çeviri lazim!
+#endif
+	,
+	[ActPrnRecSevGst] =
+#if   L==1	// ca
+	"See records of several selected guests ready to print"			// Necessita traducció
+#elif L==2	// de
+	"See records of several selected guests ready to print"			// Need Übersetzung
+#elif L==3	// en
+	"See records of several selected guests ready to print"
+#elif L==4	// es
+	"Ver fichas de varios invitados seleccionados lista para imprimir"
+#elif L==5	// fr
+	"See records of several selected guests ready to print"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver fichas de varios invitados seleccionados lista para imprimir"	// Okoteve traducción
+#elif L==7	// it
+	"See records of several selected guests ready to print"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See records of several selected guests ready to print"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See records of several selected guests ready to print"			// Precisa de tradução
+#elif L==10	// tr
+	"See records of several selected guests ready to print"			// Çeviri lazim!
+#endif
+	,
+	[ActReqMdfOneOth] =
+#if   L==1	// ca
+	"Request a user's ID for enrolment/removal"				// Necessita traducció
+#elif L==2	// de
+	"Request a user's ID for enrolment/removal"				// Need Übersetzung
+#elif L==3	// en
+	"Request a user's ID for enrolment/removal"
+#elif L==4	// es
+	"Solicitar el ID de usuario para inscripci&oacute;n/eliminaci&oacute;n"
+#elif L==5	// fr
+	"Request a user's ID for enrolment/removal"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar el ID de usuario para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Request a user's ID for enrolment/removal"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request a user's ID for enrolment/removal"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request a user's ID for enrolment/removal"				// Precisa de tradução
+#elif L==10	// tr
+	"Request a user's ID for enrolment/removal"				// Çeviri lazim!
+#endif
+	,
+	[ActReqMdfOth] =
+#if   L==1	// ca
+	"Request enrolment/removal of a user"			// Necessita traducció
+#elif L==2	// de
+	"Request enrolment/removal of a user"			// Need Übersetzung
+#elif L==3	// en
+	"Request enrolment/removal of a user"
+#elif L==4	// es
+	"Solicitar inscripcion/eliminaci&oacute;n de usuario"
+#elif L==5	// fr
+	"Request enrolment/removal of a user"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar inscripcion/eliminaci&oacute;n de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Request enrolment/removal of a user"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request enrolment/removal of a user"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request enrolment/removal of a user"			// Precisa de tradução
+#elif L==10	// tr
+	"Request enrolment/removal of a user"			// Çeviri lazim!
+#endif
+	,
+	[ActReqOthPho] =
+#if   L==1	// ca
+	"Edit a user's photo"		// Necessita traducció
+#elif L==2	// de
+	"Edit a user's photo"		// Need Übersetzung
+#elif L==3	// en
+	"Edit a user's photo"
+#elif L==4	// es
+	"Editar la foto de usuario"
+#elif L==5	// fr
+	"Edit a user's photo"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar la foto de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Edit a user's photo"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit a user's photo"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit a user's photo"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit a user's photo"		// Çeviri lazim!
+#endif
+	,
+	[ActDetOthPho] =
+#if   L==1	// ca
+	"Send user's photo and detect faces on it"		// Necessita traducció
+#elif L==2	// de
+	"Send user's photo and detect faces on it"		// Need Übersetzung
+#elif L==3	// en
+	"Send user's photo and detect faces on it"
+#elif L==4	// es
+	"Enviar la foto de usuario y detectar rostros en ella"
+#elif L==5	// fr
+	"Send user's photo and detect faces on it"		// Besoin de traduction
+#elif L==6	// gn
+	"Enviar la foto de usuario y detectar rostros en ella"	// Okoteve traducción
+#elif L==7	// it
+	"Send user's photo and detect faces on it"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Send user's photo and detect faces on it"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Send user's photo and detect faces on it"		// Precisa de tradução
+#elif L==10	// tr
+	"Send user's photo and detect faces on it"		// Çeviri lazim!
+#endif
+	,
+	[ActChgOthPho] =
+#if   L==1	// ca
+	"Update a user's photo"		// Necessita traducció
+#elif L==2	// de
+	"Update a user's photo"		// Need Übersetzung
+#elif L==3	// en
+	"Update a user's photo"
+#elif L==4	// es
+	"Actualizar la foto de usuario"
+#elif L==5	// fr
+	"Update a user's photo"		// Besoin de traduction
+#elif L==6	// gn
+	"Actualizar la foto de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Update a user's photo"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Update a user's photo"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Update a user's photo"		// Precisa de tradução
+#elif L==10	// tr
+	"Update a user's photo"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemOthPho] =
+#if   L==1	// ca
+	"Request removal of user's photo"			// Necessita traducció
+#elif L==2	// de
+	"Request removal of user's photo"			// Need Übersetzung
+#elif L==3	// en
+	"Request removal of user's photo"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de foto de usuario"
+#elif L==5	// fr
+	"Request removal of user's photo"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de foto de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of user's photo"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of user's photo"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of user's photo"			// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of user's photo"			// Çeviri lazim!
+#endif
+	,
+	[ActRemOthPho] =
+#if   L==1	// ca
+	"Remove user's photo"		// Necessita traducció
+#elif L==2	// de
+	"Remove user's photo"		// Need Übersetzung
+#elif L==3	// en
+	"Remove user's photo"
+#elif L==4	// es
+	"Eliminar la foto de usuario"
+#elif L==5	// fr
+	"Remove user's photo"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar la foto de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user's photo"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user's photo"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user's photo"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove user's photo"		// Çeviri lazim!
+#endif
+	,
+	[ActCreOth] =
+#if   L==1	// ca
+	"Create new guest"	// Necessita traducció
+#elif L==2	// de
+	"Create new guest"	// Need Übersetzung
+#elif L==3	// en
+	"Create new guest"
+#elif L==4	// es
+	"Crear nuevo invitado"
+#elif L==5	// fr
+	"Create new guest"	// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo invitado"	// Okoteve traducción
+#elif L==7	// it
+	"Create new guest"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new guest"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new guest"	// Precisa de tradução
+#elif L==10	// tr
+	"Create new guest"	// Çeviri lazim!
+#endif
+	,
+	[ActUpdOth] =
+#if   L==1	// ca
+	"Update a user's data and groups"		// Necessita traducció
+#elif L==2	// de
+	"Update a user's data and groups"		// Need Übersetzung
+#elif L==3	// en
+	"Update a user's data and groups"
+#elif L==4	// es
+	"Actualizar los datos y grupos de usuario"
+#elif L==5	// fr
+	"Update a user's data and groups"		// Besoin de traduction
+#elif L==6	// gn
+	"Actualizar los datos y grupos de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Update a user's data and groups"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Update a user's data and groups"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Update a user's data and groups"		// Precisa de tradução
+#elif L==10	// tr
+	"Update a user's data and groups"		// Çeviri lazim!
+#endif
+	,
+	[ActCnfID_Oth] =
+#if   L==1	// ca
+	"Confirm a user's ID"		// Necessita traducció
+#elif L==2	// de
+	"Confirm a user's ID"		// Need Übersetzung
+#elif L==3	// en
+	"Confirm a user's ID"
+#elif L==4	// es
+	"Confirmar el ID de usuario"
+#elif L==5	// fr
+	"Confirm a user's ID"		// Besoin de traduction
+#elif L==6	// gn
+	"Confirmar el ID de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Confirm a user's ID"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Confirm a user's ID"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Confirm a user's ID"		// Precisa de tradução
+#elif L==10	// tr
+	"Confirm a user's ID"		// Çeviri lazim!
+#endif
+	,
+	[ActFrmAccOth] =
+#if   L==1	// ca
+	"Forms to the change a user's account"		// Necessita traducció
+#elif L==2	// de
+	"Forms to the change a user's account"		// Need Übersetzung
+#elif L==3	// en
+	"Forms to the change a user's account"
+#elif L==4	// es
+	"Formularios para cambiar la cuenta de usuario"
+#elif L==5	// fr
+	"Forms to the change a user's account"		// Besoin de traduction
+#elif L==6	// gn
+	"Formularios para cambiar la cuenta de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Forms to the change a user's account"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Forms to the change a user's account"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Forms to the change a user's account"		// Precisa de tradução
+#elif L==10	// tr
+	"Forms to the change a user's account"		// Çeviri lazim!
+#endif
+	,
+	[ActRemNicOth] =
+#if   L==1	// ca
+	"Remove user's nickname"	// Necessita traducció
+#elif L==2	// de
+	"Remove user's nickname"	// Need Übersetzung
+#elif L==3	// en
+	"Remove user's nickname"
+#elif L==4	// es
+	"Eliminar apodo de usuario"
+#elif L==5	// fr
+	"Remove user's nickname"	// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar apodo de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user's nickname"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user's nickname"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	"Remove user's nickname"	// Çeviri lazim!
+#endif
+	,
+	[ActChgNicOth] =
+#if   L==1	// ca
+	"Change user's nickname"	// Necessita traducció
+#elif L==2	// de
+	"Change user's nickname"	// Need Übersetzung
+#elif L==3	// en
+	"Change user's nickname"
+#elif L==4	// es
+	"Cambiar apodo de usuario"
+#elif L==5	// fr
+	"Change user's nickname"	// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar apodo de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Change user's nickname"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Change user's nickname"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change user's nickname"	// Precisa de tradução
+#elif L==10	// tr
+	"Change user's nickname"	// Çeviri lazim!
+#endif
+	,
+	[ActRemID_Oth] =
+#if   L==1	// ca
+	"Remove user's ID"		// Necessita traducció
+#elif L==2	// de
+	"Remove user's ID"		// Need Übersetzung
+#elif L==3	// en
+	"Remove user's ID"
+#elif L==4	// es
+	"Eliminar ID de usuario"
+#elif L==5	// fr
+	"Remove user's ID"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar ID de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user's ID"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user's ID"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user's ID"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove user's ID"		// Çeviri lazim!
+#endif
+	,
+	[ActChgID_Oth] =
+#if   L==1	// ca
+	"Create new user's ID"		// Necessita traducció
+#elif L==2	// de
+	"Create new user's ID"		// Need Übersetzung
+#elif L==3	// en
+	"Create new user's ID"
+#elif L==4	// es
+	"Crear nuevo ID de usuario"
+#elif L==5	// fr
+	"Create new user's ID"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo ID de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Create new user's ID"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new user's ID"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new user's ID"		// Precisa de tradução
+#elif L==10	// tr
+	"Create new user's ID"		// Çeviri lazim!
+#endif
+	,
+	[ActChgPwdOth] =
+#if   L==1	// ca
+	"Change user's password"		// Necessita traducció
+#elif L==2	// de
+	"Change user's password"		// Need Übersetzung
+#elif L==3	// en
+	"Change user's password"
+#elif L==4	// es
+	"Cambiar contrase&ntilde;a de usuario"
+#elif L==5	// fr
+	"Change user's password"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar contrase&ntilde;a de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Change user's password"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change user's password"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change user's password"		// Precisa de tradução
+#elif L==10	// tr
+	"Change user's password"		// Çeviri lazim!
+#endif
+	,
+	[ActRemMaiOth] =
+#if   L==1	// ca
+	"Remove user's email"				// Necessita traducció
+#elif L==2	// de
+	"Remove user's email"				// Need Übersetzung
+#elif L==3	// en
+	"Remove user's email"
+#elif L==4	// es
+	"Eliminar correo electr&oacute;nico de usuario"
+#elif L==5	// fr
+	"Remove user's email"				// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar correo electr&oacute;nico de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user's email"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user's email"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user's email"				// Precisa de tradução
+#elif L==10	// tr
+	"Remove user's email"				// Çeviri lazim!
+#endif
+	,
+	[ActChgMaiOth] =
+#if   L==1	// ca
+	"Create new user's email"				// Necessita traducció
+#elif L==2	// de
+	"Create new user's email"				// Need Übersetzung
+#elif L==3	// en
+	"Create new user's email"
+#elif L==4	// es
+	"Crear nuevo correo electr&oacute;nico de usuario"
+#elif L==5	// fr
+	"Create new user's email"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear nuevo correo electr&oacute;nico de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Create new user's email"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create new user's email"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create new user's email"				// Precisa de tradução
+#elif L==10	// tr
+	"Create new user's email"				// Çeviri lazim!
+#endif
+	,
+	[ActRemUsrGbl] =
+#if   L==1	// ca
+	"Eliminate completely a user from the platform"		// Necessita traducció
+#elif L==2	// de
+	"Eliminate completely a user from the platform"		// Need Übersetzung
+#elif L==3	// en
+	"Eliminate completely a user from the platform"
+#elif L==4	// es
+	"Eliminar usuario completamente de la plataforma"
+#elif L==5	// fr
+	"Eliminate completely a user from the platform"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar usuario completamente de la plataforma"	// Okoteve traducción
+#elif L==7	// it
+	"Eliminate completely a user from the platform"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Eliminate completely a user from the platform"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Eliminate completely a user from the platform"		// Precisa de tradução
+#elif L==10	// tr
+	"Eliminate completely a user from the platform"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemOldUsr] =
+#if   L==1	// ca
+	"Request complete elimination of old users"			// Necessita traducció
+#elif L==2	// de
+	"Request complete elimination of old users"			// Need Übersetzung
+#elif L==3	// en
+	"Request complete elimination of old users"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n completa de usuarios antiguos"
+#elif L==5	// fr
+	"Request complete elimination of old users"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n completa de usuarios antiguos"	// Okoteve traducción
+#elif L==7	// it
+	"Request complete elimination of old users"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request complete elimination of old users"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request complete elimination of old users"			// Precisa de tradução
+#elif L==10	// tr
+	"Request complete elimination of old users"			// Çeviri lazim!
+#endif
+	,
+	[ActRemOldUsr] =
+#if   L==1	// ca
+	"Eliminate completely old users"		// Necessita traducció
+#elif L==2	// de
+	"Eliminate completely old users"		// Need Übersetzung
+#elif L==3	// en
+	"Eliminate completely old users"
+#elif L==4	// es
+	"Eliminar completamente usuarios antiguos"
+#elif L==5	// fr
+	"Eliminate completely old users"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar completamente usuarios antiguos"	// Okoteve traducción
+#elif L==7	// it
+	"Eliminate completely old users"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Eliminate completely old users"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Eliminate completely old users"		// Precisa de tradução
+#elif L==10	// tr
+	"Eliminate completely old users"		// Çeviri lazim!
+#endif
+	,
+	[ActLstDupUsr] =
+#if   L==1	// ca
+	"List possible duplicate users"		// Necessita traducció
+#elif L==2	// de
+	"List possible duplicate users"		// Need Übersetzung
+#elif L==3	// en
+	"List possible duplicate users"
+#elif L==4	// es
+	"Listar posibles usuarios duplicados"
+#elif L==5	// fr
+	"List possible duplicate users"		// Besoin de traduction
+#elif L==6	// gn
+	"Listar posibles usuarios duplicados"	// Okoteve traducción
+#elif L==7	// it
+	"List possible duplicate users"		// Bisogno di traduzione
+#elif L==8	// pl
+	"List possible duplicate users"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List possible duplicate users"		// Precisa de tradução
+#elif L==10	// tr
+	"List possible duplicate users"		// Çeviri lazim!
+#endif
+	,
+	[ActLstSimUsr] =
+#if   L==1	// ca
+	"List users similar to a given one (possible duplicates)"	// Necessita traducció
+#elif L==2	// de
+	"List users similar to a given one (possible duplicates)"	// Need Übersetzung
+#elif L==3	// en
+	"List users similar to a given one (possible duplicates)"
+#elif L==4	// es
+	"Listar usuarios similares a uno dado (posibles duplicados)"
+#elif L==5	// fr
+	"List users similar to a given one (possible duplicates)"	// Besoin de traduction
+#elif L==6	// gn
+	"Listar usuarios similares a uno dado (posibles duplicados)"	// Okoteve traducción
+#elif L==7	// it
+	"List users similar to a given one (possible duplicates)"	// Bisogno di traduzione
+#elif L==8	// pl
+	"List users similar to a given one (possible duplicates)"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"List users similar to a given one (possible duplicates)"	// Precisa de tradução
+#elif L==10	// tr
+	"List users similar to a given one (possible duplicates)"	// Çeviri lazim!
+#endif
+	,
+	[ActRemDupUsr] =
+#if   L==1	// ca
+	"Remove user from a list of possible duplicate users"			// Necessita traducció
+#elif L==2	// de
+	"Remove user from a list of possible duplicate users"			// Need Übersetzung
+#elif L==3	// en
+	"Remove user from a list of possible duplicate users"
+#elif L==4	// es
+	"Eliminar a un usuario de una lista de posibles usuarios duplicados"
+#elif L==5	// fr
+	"Remove user from a list of possible duplicate users"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar a un usuario de una lista de posibles usuarios duplicados"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user from a list of possible duplicate users"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user from a list of possible duplicate users"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user from a list of possible duplicate users"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove user from a list of possible duplicate users"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeAllAtt] =
+#if   L==1	// ca
+	"Show attendance events"	// Necessita traducció
+#elif L==2	// de
+	"Show attendance events"	// Need Übersetzung
+#elif L==3	// en
+	"Show attendance events"
+#elif L==4	// es
+	"Mostrar eventos de asistencia"
+#elif L==5	// fr
+	"Show attendance events"	// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar eventos de asistencia"	// Okoteve traducción
+#elif L==7	// it
+	"Show attendance events"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Show attendance events"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show attendance events"	// Precisa de tradução
+#elif L==10	// tr
+	"Show attendance events"	// Çeviri lazim!
 #endif
 	,
 	[ActReqLstUsrAtt] =
@@ -26489,6 +28582,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Save my comments as student in an attendance event"			// Çeviri lazim!
 #endif
 	,
+	[ActReqSignUp] =
+#if   L==1	// ca
+	"Request applying for my enrolment"		// Necessita traducció
+#elif L==2	// de
+	"Request applying for my enrolment"		// Need Übersetzung
+#elif L==3	// en
+	"Request applying for my enrolment"
+#elif L==4	// es
+	"Formulario para solicitar mi inscripci&oacute;n"
+#elif L==5	// fr
+	"Request applying for my enrolment"		// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para solicitar mi inscripci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Request applying for my enrolment"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request applying for my enrolment"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request applying for my enrolment"		// Precisa de tradução
+#elif L==10	// tr
+	"Request applying for my enrolment"		// Çeviri lazim!
+#endif
+	,
 	[ActSignUp] =
 #if   L==1	// ca
 	"Apply for my enrolment"		// Necessita traducció
@@ -26510,6 +28626,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Apply for my enrolment"		// Precisa de tradução
 #elif L==10	// tr
 	"Apply for my enrolment"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeSignUpReq] =
+#if   L==1	// ca
+	"Show pending requests for inscription in the current course"			// Necessita traducció
+#elif L==2	// de
+	"Show pending requests for inscription in the current course"			// Need Übersetzung
+#elif L==3	// en
+	"Show pending requests for inscription in the current course"
+#elif L==4	// es
+	"Mostrar solicitudes de inscripci&oacute;n pendientes en la asignatura actual"
+#elif L==5	// fr
+	"Show pending requests for inscription in the current course"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar solicitudes de inscripci&oacute;n pendientes en la asignatura actual"	// Okoteve traducción
+#elif L==7	// it
+	"Show pending requests for inscription in the current course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show pending requests for inscription in the current course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show pending requests for inscription in the current course"			// Precisa de tradução
+#elif L==10	// tr
+	"Show pending requests for inscription in the current course"			// Çeviri lazim!
 #endif
 	,
 	[ActUpdSignUpReq] =
@@ -26581,2166 +28720,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Reject the enrolment"			// Çeviri lazim!
 #endif
 	,
-	[ActReqMdfOneOth] =
+	[ActLstCon] =
 #if   L==1	// ca
-	"Request a user's ID for enrolment/removal"				// Necessita traducció
+	"List connected users"		// Necessita traducció
 #elif L==2	// de
-	"Request a user's ID for enrolment/removal"				// Need Übersetzung
+	"List connected users"		// Need Übersetzung
 #elif L==3	// en
-	"Request a user's ID for enrolment/removal"
+	"List connected users"
 #elif L==4	// es
-	"Solicitar el ID de usuario para inscripci&oacute;n/eliminaci&oacute;n"
+	"Listar usuarios conectados"
 #elif L==5	// fr
-	"Request a user's ID for enrolment/removal"				// Besoin de traduction
+	"List connected users"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar el ID de usuario para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
+	"Listar usuarios conectados"	// Okoteve traducción
 #elif L==7	// it
-	"Request a user's ID for enrolment/removal"				// Bisogno di traduzione
+	"List connected users"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request a user's ID for enrolment/removal"				// Potrzebujesz tlumaczenie
+	"List connected users"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request a user's ID for enrolment/removal"				// Precisa de tradução
+	"List connected users"		// Precisa de tradução
 #elif L==10	// tr
-	"Request a user's ID for enrolment/removal"				// Çeviri lazim!
-#endif
-	,
-	[ActReqMdfOneStd] =
-#if   L==1	// ca
-	"Request a student's ID for enrolment/removal"					// Necessita traducció
-#elif L==2	// de
-	"Request a student's ID for enrolment/removal"					// Need Übersetzung
-#elif L==3	// en
-	"Request a student's ID for enrolment/removal"
-#elif L==4	// es
-	"Solicitar el ID de estudiante para inscripci&oacute;n/eliminaci&oacute;n"
-#elif L==5	// fr
-	"Request a student's ID for enrolment/removal"					// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar el ID de estudiante para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Request a student's ID for enrolment/removal"					// Bisogno di traduzione
-#elif L==8	// pl
-	"Request a student's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request a student's ID for enrolment/removal"					// Precisa de tradução
-#elif L==10	// tr
-	"Request a student's ID for enrolment/removal"					// Çeviri lazim!
-#endif
-	,
-	[ActReqMdfOneTch] =
-#if   L==1	// ca
-	"Request a teacher's ID for enrolment/removal"					// Necessita traducció
-#elif L==2	// de
-	"Request a teacher's ID for enrolment/removal"					// Need Übersetzung
-#elif L==3	// en
-	"Request a teacher's ID for enrolment/removal"
-#elif L==4	// es
-	"Solicitar el ID de profesor para inscripci&oacute;n/eliminaci&oacute;n"
-#elif L==5	// fr
-	"Request a teacher's ID for enrolment/removal"					// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar el ID de profesor para inscripci&oacute;n/eliminaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Request a teacher's ID for enrolment/removal"					// Bisogno di traduzione
-#elif L==8	// pl
-	"Request a teacher's ID for enrolment/removal"					// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request a teacher's ID for enrolment/removal"					// Precisa de tradução
-#elif L==10	// tr
-	"Request a teacher's ID for enrolment/removal"					// Çeviri lazim!
-#endif
-	,
-	[ActReqMdfOth] =
-#if   L==1	// ca
-	"Request enrolment/removal of a user"			// Necessita traducció
-#elif L==2	// de
-	"Request enrolment/removal of a user"			// Need Übersetzung
-#elif L==3	// en
-	"Request enrolment/removal of a user"
-#elif L==4	// es
-	"Solicitar inscripcion/eliminaci&oacute;n de usuario"
-#elif L==5	// fr
-	"Request enrolment/removal of a user"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar inscripcion/eliminaci&oacute;n de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Request enrolment/removal of a user"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request enrolment/removal of a user"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request enrolment/removal of a user"			// Precisa de tradução
-#elif L==10	// tr
-	"Request enrolment/removal of a user"			// Çeviri lazim!
-#endif
-	,
-	[ActReqMdfStd] =
-#if   L==1	// ca
-	"Request enrolment/removal of a student"			// Necessita traducció
-#elif L==2	// de
-	"Request enrolment/removal of a student"			// Need Übersetzung
-#elif L==3	// en
-	"Request enrolment/removal of a student"
-#elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiante"
-#elif L==5	// fr
-	"Request enrolment/removal of a student"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Request enrolment/removal of a student"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request enrolment/removal of a student"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request enrolment/removal of a student"			// Precisa de tradução
-#elif L==10	// tr
-	"Request enrolment/removal of a student"			// Çeviri lazim!
-#endif
-	,
-	[ActReqMdfNET] =
-#if   L==1	// ca
-	"Request enrolment/removal of a non-editing teacher"			// Necessita traducció
-#elif L==2	// de
-	"Request enrolment/removal of a non-editing teacher"			// Need Übersetzung
-#elif L==3	// en
-	"Request enrolment/removal of a non-editing teacher"
-#elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor no editor"
-#elif L==5	// fr
-	"Request enrolment/removal of a non-editing teacher"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"Request enrolment/removal of a non-editing teacher"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request enrolment/removal of a non-editing teacher"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request enrolment/removal of a non-editing teacher"			// Precisa de tradução
-#elif L==10	// tr
-	"Request enrolment/removal of a non-editing teacher"			// Çeviri lazim!
-#endif
-	,
-	[ActReqMdfTch] =
-#if   L==1	// ca
-	"Request enrolment/removal of a teacher"			// Necessita traducció
-#elif L==2	// de
-	"Request enrolment/removal of a teacher"			// Need Übersetzung
-#elif L==3	// en
-	"Request enrolment/removal of a teacher"
-#elif L==4	// es
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor"
-#elif L==5	// fr
-	"Request enrolment/removal of a teacher"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar inscripci&oacute;n/eliminaci&oacute;n de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Request enrolment/removal of a teacher"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request enrolment/removal of a teacher"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request enrolment/removal of a teacher"			// Precisa de tradução
-#elif L==10	// tr
-	"Request enrolment/removal of a teacher"			// Çeviri lazim!
-#endif
-	,
-	[ActReqOthPho] =
-#if   L==1	// ca
-	"Edit a user's photo"		// Necessita traducció
-#elif L==2	// de
-	"Edit a user's photo"		// Need Übersetzung
-#elif L==3	// en
-	"Edit a user's photo"
-#elif L==4	// es
-	"Editar la foto de usuario"
-#elif L==5	// fr
-	"Edit a user's photo"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar la foto de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Edit a user's photo"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit a user's photo"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit a user's photo"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit a user's photo"		// Çeviri lazim!
-#endif
-	,
-	[ActReqStdPho] =
-#if   L==1	// ca
-	"Edit a student's photo"	// Necessita traducció
-#elif L==2	// de
-	"Edit a student's photo"	// Need Übersetzung
-#elif L==3	// en
-	"Edit a student's photo"
-#elif L==4	// es
-	"Editar la foto de estudiante"
-#elif L==5	// fr
-	"Edit a student's photo"	// Besoin de traduction
-#elif L==6	// gn
-	"Editar la foto de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Edit a student's photo"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit a student's photo"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit a student's photo"	// Precisa de tradução
-#elif L==10	// tr
-	"Edit a student's photo"	// Çeviri lazim!
-#endif
-	,
-	[ActReqTchPho] =
-#if   L==1	// ca
-	"Edit a teacher's photo"	// Necessita traducció
-#elif L==2	// de
-	"Edit a teacher's photo"	// Need Übersetzung
-#elif L==3	// en
-	"Edit a teacher's photo"
-#elif L==4	// es
-	"Editar la foto de profesor"
-#elif L==5	// fr
-	"Edit a teacher's photo"	// Besoin de traduction
-#elif L==6	// gn
-	"Editar la foto de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Edit a teacher's photo"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit a teacher's photo"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit a teacher's photo"	// Precisa de tradução
-#elif L==10	// tr
-	"Edit a teacher's photo"	// Çeviri lazim!
-#endif
-	,
-	[ActDetOthPho] =
-#if   L==1	// ca
-	"Send user's photo and detect faces on it"		// Necessita traducció
-#elif L==2	// de
-	"Send user's photo and detect faces on it"		// Need Übersetzung
-#elif L==3	// en
-	"Send user's photo and detect faces on it"
-#elif L==4	// es
-	"Enviar la foto de usuario y detectar rostros en ella"
-#elif L==5	// fr
-	"Send user's photo and detect faces on it"		// Besoin de traduction
-#elif L==6	// gn
-	"Enviar la foto de usuario y detectar rostros en ella"	// Okoteve traducción
-#elif L==7	// it
-	"Send user's photo and detect faces on it"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Send user's photo and detect faces on it"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Send user's photo and detect faces on it"		// Precisa de tradução
-#elif L==10	// tr
-	"Send user's photo and detect faces on it"		// Çeviri lazim!
-#endif
-	,
-	[ActDetStdPho] =
-#if   L==1	// ca
-	"Send student's photo and detect faces on it"			// Necessita traducció
-#elif L==2	// de
-	"Send student's photo and detect faces on it"			// Need Übersetzung
-#elif L==3	// en
-	"Send student's photo and detect faces on it"
-#elif L==4	// es
-	"Enviar la foto de estudiante y detectar rostros en ella"
-#elif L==5	// fr
-	"Send student's photo and detect faces on it"			// Besoin de traduction
-#elif L==6	// gn
-	"Enviar la foto de estudiante y detectar rostros en ella"	// Okoteve traducción
-#elif L==7	// it
-	"Send student's photo and detect faces on it"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Send student's photo and detect faces on it"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Send student's photo and detect faces on it"			// Precisa de tradução
-#elif L==10	// tr
-	"Send student's photo and detect faces on it"			// Çeviri lazim!
-#endif
-	,
-	[ActDetTchPho] =
-#if   L==1	// ca
-	"Send teacher's photo and detect faces on it"		// Necessita traducció
-#elif L==2	// de
-	"Send teacher's photo and detect faces on it"		// Need Übersetzung
-#elif L==3	// en
-	"Send teacher's photo and detect faces on it"
-#elif L==4	// es
-	"Enviar la foto de profesor y detectar rostros en ella"
-#elif L==5	// fr
-	"Send teacher's photo and detect faces on it"		// Besoin de traduction
-#elif L==6	// gn
-	"Enviar la foto de profesor y detectar rostros en ella"	// Okoteve traducción
-#elif L==7	// it
-	"Send teacher's photo and detect faces on it"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Send teacher's photo and detect faces on it"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Send teacher's photo and detect faces on it"		// Precisa de tradução
-#elif L==10	// tr
-	"Send teacher's photo and detect faces on it"		// Çeviri lazim!
-#endif
-	,
-	[ActChgOthPho] =
-#if   L==1	// ca
-	"Update a user's photo"		// Necessita traducció
-#elif L==2	// de
-	"Update a user's photo"		// Need Übersetzung
-#elif L==3	// en
-	"Update a user's photo"
-#elif L==4	// es
-	"Actualizar la foto de usuario"
-#elif L==5	// fr
-	"Update a user's photo"		// Besoin de traduction
-#elif L==6	// gn
-	"Actualizar la foto de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Update a user's photo"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Update a user's photo"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Update a user's photo"		// Precisa de tradução
-#elif L==10	// tr
-	"Update a user's photo"		// Çeviri lazim!
-#endif
-	,
-	[ActChgStdPho] =
-#if   L==1	// ca
-	"Update a student's photo"		// Necessita traducció
-#elif L==2	// de
-	"Update a student's photo"		// Need Übersetzung
-#elif L==3	// en
-	"Update a student's photo"
-#elif L==4	// es
-	"Actualizar la foto de estudiante"
-#elif L==5	// fr
-	"Update a student's photo"		// Besoin de traduction
-#elif L==6	// gn
-	"Actualizar la foto de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Update a student's photo"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Update a student's photo"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Update a student's photo"		// Precisa de tradução
-#elif L==10	// tr
-	"Update a student's photo"		// Çeviri lazim!
-#endif
-	,
-	[ActChgTchPho] =
-#if   L==1	// ca
-	"Update a teacher's photo"		// Necessita traducció
-#elif L==2	// de
-	"Update a teacher's photo"		// Need Übersetzung
-#elif L==3	// en
-	"Update a teacher's photo"
-#elif L==4	// es
-	"Actualizar la foto de profesor"
-#elif L==5	// fr
-	"Update a teacher's photo"		// Besoin de traduction
-#elif L==6	// gn
-	"Actualizar la foto de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Update a teacher's photo"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Update a teacher's photo"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Update a teacher's photo"		// Precisa de tradução
-#elif L==10	// tr
-	"Update a teacher's photo"		// Çeviri lazim!
-#endif
-	,
-	[ActReqRemOthPho] =
-#if   L==1	// ca
-	"Request removal of user's photo"			// Necessita traducció
-#elif L==2	// de
-	"Request removal of user's photo"			// Need Übersetzung
-#elif L==3	// en
-	"Request removal of user's photo"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de foto de usuario"
-#elif L==5	// fr
-	"Request removal of user's photo"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de foto de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of user's photo"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of user's photo"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of user's photo"			// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of user's photo"			// Çeviri lazim!
-#endif
-	,
-	[ActReqRemStdPho] =
-#if   L==1	// ca
-	"Request removal of student's photo"			// Necessita traducció
-#elif L==2	// de
-	"Request removal of student's photo"			// Need Übersetzung
-#elif L==3	// en
-	"Request removal of student's photo"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de foto de estudiante"
-#elif L==5	// fr
-	"Request removal of student's photo"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de foto de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of student's photo"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of student's photo"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of student's photo"			// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of student's photo"			// Çeviri lazim!
-#endif
-	,
-	[ActReqRemTchPho] =
-#if   L==1	// ca
-	"Request removal of teacher's photo"			// Necessita traducció
-#elif L==2	// de
-	"Request removal of teacher's photo"			// Need Übersetzung
-#elif L==3	// en
-	"Request removal of teacher's photo"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de foto de profesor"
-#elif L==5	// fr
-	"Request removal of teacher's photo"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de foto de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of teacher's photo"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of teacher's photo"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of teacher's photo"			// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of teacher's photo"			// Çeviri lazim!
-#endif
-	,
-	[ActRemOthPho] =
-#if   L==1	// ca
-	"Remove user's photo"		// Necessita traducció
-#elif L==2	// de
-	"Remove user's photo"		// Need Übersetzung
-#elif L==3	// en
-	"Remove user's photo"
-#elif L==4	// es
-	"Eliminar la foto de usuario"
-#elif L==5	// fr
-	"Remove user's photo"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar la foto de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Remove user's photo"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove user's photo"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove user's photo"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove user's photo"		// Çeviri lazim!
-#endif
-	,
-	[ActRemStdPho] =
-#if   L==1	// ca
-	"Remove student's photo"		// Necessita traducció
-#elif L==2	// de
-	"Remove student's photo"		// Need Übersetzung
-#elif L==3	// en
-	"Remove student's photo"
-#elif L==4	// es
-	"Eliminar la foto de estudiante"
-#elif L==5	// fr
-	"Remove student's photo"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar la foto de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Remove student's photo"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove student's photo"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove student's photo"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove student's photo"		// Çeviri lazim!
-#endif
-	,
-	[ActRemTchPho] =
-#if   L==1	// ca
-	"Remove teacher's photo"	// Necessita traducció
-#elif L==2	// de
-	"Remove teacher's photo"	// Need Übersetzung
-#elif L==3	// en
-	"Remove teacher's photo"
-#elif L==4	// es
-	"Eliminar la foto de profesor"
-#elif L==5	// fr
-	"Remove teacher's photo"	// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar la foto de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Remove teacher's photo"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove teacher's photo"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove teacher's photo"	// Precisa de tradução
-#elif L==10	// tr
-	"Remove teacher's photo"	// Çeviri lazim!
-#endif
-	,
-	[ActCreOth] =
-#if   L==1	// ca
-	"Create new guest"	// Necessita traducció
-#elif L==2	// de
-	"Create new guest"	// Need Übersetzung
-#elif L==3	// en
-	"Create new guest"
-#elif L==4	// es
-	"Crear nuevo invitado"
-#elif L==5	// fr
-	"Create new guest"	// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo invitado"	// Okoteve traducción
-#elif L==7	// it
-	"Create new guest"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new guest"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new guest"	// Precisa de tradução
-#elif L==10	// tr
-	"Create new guest"	// Çeviri lazim!
-#endif
-	,
-	[ActCreStd] =
-#if   L==1	// ca
-	"Create new student"		// Necessita traducció
-#elif L==2	// de
-	"Create new student"		// Need Übersetzung
-#elif L==3	// en
-	"Create new student"
-#elif L==4	// es
-	"Crear nuevo estudiante"
-#elif L==5	// fr
-	"Create new student"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Create new student"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new student"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new student"		// Precisa de tradução
-#elif L==10	// tr
-	"Create new student"		// Çeviri lazim!
-#endif
-	,
-	[ActCreNET] =
-#if   L==1	// ca
-	"Create new non-editing teacher"	// Necessita traducció
-#elif L==2	// de
-	"Create new non-editing teacher"	// Need Übersetzung
-#elif L==3	// en
-	"Create new non-editing teacher"
-#elif L==4	// es
-	"Crear nuevo profesor no editor"
-#elif L==5	// fr
-	"Create new non-editing teacher"	// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"Create new non-editing teacher"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new non-editing teacher"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new non-editing teacher"	// Precisa de tradução
-#elif L==10	// tr
-	"Create new non-editing teacher"	// Çeviri lazim!
-#endif
-	,
-	[ActCreTch] =
-#if   L==1	// ca
-	"Create new teacher"	// Necessita traducció
-#elif L==2	// de
-	"Create new teacher"	// Need Übersetzung
-#elif L==3	// en
-	"Create new teacher"
-#elif L==4	// es
-	"Crear nuevo profesor"
-#elif L==5	// fr
-	"Create new teacher"	// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Create new teacher"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new teacher"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new teacher"	// Precisa de tradução
-#elif L==10	// tr
-	"Create new teacher"	// Çeviri lazim!
-#endif
-	,
-	[ActUpdOth] =
-#if   L==1	// ca
-	"Update a user's data and groups"		// Necessita traducció
-#elif L==2	// de
-	"Update a user's data and groups"		// Need Übersetzung
-#elif L==3	// en
-	"Update a user's data and groups"
-#elif L==4	// es
-	"Actualizar los datos y grupos de usuario"
-#elif L==5	// fr
-	"Update a user's data and groups"		// Besoin de traduction
-#elif L==6	// gn
-	"Actualizar los datos y grupos de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Update a user's data and groups"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Update a user's data and groups"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Update a user's data and groups"		// Precisa de tradução
-#elif L==10	// tr
-	"Update a user's data and groups"		// Çeviri lazim!
-#endif
-	,
-	[ActUpdStd] =
-#if   L==1	// ca
-	"Update a student's data and groups"		// Necessita traducció
-#elif L==2	// de
-	"Update a student's data and groups"		// Need Übersetzung
-#elif L==3	// en
-	"Update a student's data and groups"
-#elif L==4	// es
-	"Actualizar los datos y grupos de estudiante"
-#elif L==5	// fr
-	"Update a student's data and groups"		// Besoin de traduction
-#elif L==6	// gn
-	"Actualizar los datos y grupos de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Update a student's data and groups"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Update a student's data and groups"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Update a student's data and groups"		// Precisa de tradução
-#elif L==10	// tr
-	"Update a student's data and groups"		// Çeviri lazim!
-#endif
-	,
-	[ActUpdNET] =
-#if   L==1	// ca
-	"Update a non-editing teacher's data and groups"	// Necessita traducció
-#elif L==2	// de
-	"Update a non-editing teacher's data and groups"	// Need Übersetzung
-#elif L==3	// en
-	"Update a non-editing teacher's data and groups"
-#elif L==4	// es
-	"Actualizar los datos y grupos de profesor no editor"
-#elif L==5	// fr
-	"Update a non-editing teacher's data and groups"	// Besoin de traduction
-#elif L==6	// gn
-	"Actualizar los datos y grupos de profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"Update a non-editing teacher's data and groups"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Update a non-editing teacher's data and groups"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Update a non-editing teacher's data and groups"	// Precisa de tradução
-#elif L==10	// tr
-	"Update a non-editing teacher's data and groups"	// Çeviri lazim!
-#endif
-	,
-	[ActUpdTch] =
-#if   L==1	// ca
-	"Update a teacher's data and groups"		// Necessita traducció
-#elif L==2	// de
-	"Update a teacher's data and groups"		// Need Übersetzung
-#elif L==3	// en
-	"Update a teacher's data and groups"
-#elif L==4	// es
-	"Actualizar los datos y grupos de profesor"
-#elif L==5	// fr
-	"Update a teacher's data and groups"		// Besoin de traduction
-#elif L==6	// gn
-	"Actualizar los datos y grupos de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Update a teacher's data and groups"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Update a teacher's data and groups"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Update a teacher's data and groups"		// Precisa de tradução
-#elif L==10	// tr
-	"Update a teacher's data and groups"		// Çeviri lazim!
-#endif
-	,
-	[ActReqAccEnrStd] =
-#if   L==1	// ca
-	"See whether to accept or reject my enrolment as student"		// Necessita traducció
-#elif L==2	// de
-	"See whether to accept or reject my enrolment as student"		// Need Übersetzung
-#elif L==3	// en
-	"See whether to accept or reject my enrolment as student"
-#elif L==4	// es
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como estudiante"
-#elif L==5	// fr
-	"See whether to accept or reject my enrolment as student"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"See whether to accept or reject my enrolment as student"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See whether to accept or reject my enrolment as student"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See whether to accept or reject my enrolment as student"		// Precisa de tradução
-#elif L==10	// tr
-	"See whether to accept or reject my enrolment as student"		// Çeviri lazim!
-#endif
-	,
-	[ActReqAccEnrNET] =
-#if   L==1	// ca
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Necessita traducció
-#elif L==2	// de
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Need Übersetzung
-#elif L==3	// en
-	"See whether to accept or reject my enrolment as non-editing teacher"
-#elif L==4	// es
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor no editor"
-#elif L==5	// fr
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Precisa de tradução
-#elif L==10	// tr
-	"See whether to accept or reject my enrolment as non-editing teacher"		// Çeviri lazim!
-#endif
-	,
-	[ActReqAccEnrTch] =
-#if   L==1	// ca
-	"See whether to accept or reject my enrolment as teacher"	// Necessita traducció
-#elif L==2	// de
-	"See whether to accept or reject my enrolment as teacher"	// Need Übersetzung
-#elif L==3	// en
-	"See whether to accept or reject my enrolment as teacher"
-#elif L==4	// es
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor"
-#elif L==5	// fr
-	"See whether to accept or reject my enrolment as teacher"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver si aceptar o rechazar mi inscripci&oacute;n como profesor"	// Okoteve traducción
-#elif L==7	// it
-	"See whether to accept or reject my enrolment as teacher"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See whether to accept or reject my enrolment as teacher"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See whether to accept or reject my enrolment as teacher"	// Precisa de tradução
-#elif L==10	// tr
-	"See whether to accept or reject my enrolment as teacher"	// Çeviri lazim!
-#endif
-	,
-	[ActAccEnrStd] =
-#if   L==1	// ca
-	"Accept my enrolment as student"		// Necessita traducció
-#elif L==2	// de
-	"Accept my enrolment as student"		// Need Übersetzung
-#elif L==3	// en
-	"Accept my enrolment as student"
-#elif L==4	// es
-	"Aceptar mi inscripci&oacute;n como estudiante"
-#elif L==5	// fr
-	"Accept my enrolment as student"		// Besoin de traduction
-#elif L==6	// gn
-	"Aceptar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Accept my enrolment as student"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Accept my enrolment as student"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Accept my enrolment as student"		// Precisa de tradução
-#elif L==10	// tr
-	"Accept my enrolment as student"		// Çeviri lazim!
-#endif
-	,
-	[ActAccEnrNET] =
-#if   L==1	// ca
-	"Accept my enrolment as non-editing teacher"		// Necessita traducció
-#elif L==2	// de
-	"Accept my enrolment as non-editing teacher"		// Need Übersetzung
-#elif L==3	// en
-	"Accept my enrolment as non-editing teacher"
-#elif L==4	// es
-	"Aceptar mi inscripci&oacute;n como profesor no editor"
-#elif L==5	// fr
-	"Accept my enrolment as non-editing teacher"		// Besoin de traduction
-#elif L==6	// gn
-	"Aceptar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"Accept my enrolment as non-editing teacher"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Accept my enrolment as non-editing teacher"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Accept my enrolment as non-editing teacher"		// Precisa de tradução
-#elif L==10	// tr
-	"Accept my enrolment as non-editing teacher"		// Çeviri lazim!
-#endif
-	,
-	[ActAccEnrTch] =
-#if   L==1	// ca
-	"Accept my enrolment as teacher"		// Necessita traducció
-#elif L==2	// de
-	"Accept my enrolment as teacher"		// Need Übersetzung
-#elif L==3	// en
-	"Accept my enrolment as teacher"
-#elif L==4	// es
-	"Aceptar mi inscripci&oacute;n como profesor"
-#elif L==5	// fr
-	"Accept my enrolment as teacher"		// Besoin de traduction
-#elif L==6	// gn
-	"Aceptar mi inscripci&oacute;n como profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Accept my enrolment as teacher"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Accept my enrolment as teacher"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Accept my enrolment as teacher"		// Precisa de tradução
-#elif L==10	// tr
-	"Accept my enrolment as teacher"		// Çeviri lazim!
-#endif
-	,
-	[ActRemMe_Std] =
-#if   L==1	// ca
-	"Reject my enrolment as student"			// Necessita traducció
-#elif L==2	// de
-	"Reject my enrolment as student"			// Need Übersetzung
-#elif L==3	// en
-	"Reject my enrolment as student"
-#elif L==4	// es
-	"Rechazar mi inscripci&oacute;n como estudiante"
-#elif L==5	// fr
-	"Reject my enrolment as student"			// Besoin de traduction
-#elif L==6	// gn
-	"Rechazar mi inscripci&oacute;n como estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Reject my enrolment as student"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Reject my enrolment as student"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Reject my enrolment as student"			// Precisa de tradução
-#elif L==10	// tr
-	"Reject my enrolment as student"			// Çeviri lazim!
-#endif
-	,
-	[ActRemMe_NET] =
-#if   L==1	// ca
-	"Reject my enrolment as non-editing teacher"			// Necessita traducció
-#elif L==2	// de
-	"Reject my enrolment as non-editing teacher"			// Need Übersetzung
-#elif L==3	// en
-	"Reject my enrolment as non-editing teacher"
-#elif L==4	// es
-	"Rechazar mi inscripci&oacute;n como profesor no editor"
-#elif L==5	// fr
-	"Reject my enrolment as non-editing teacher"			// Besoin de traduction
-#elif L==6	// gn
-	"Rechazar mi inscripci&oacute;n como profesor no editor"	// Okoteve traducción
-#elif L==7	// it
-	"Reject my enrolment as non-editing teacher"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Reject my enrolment as non-editing teacher"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Reject my enrolment as non-editing teacher"			// Precisa de tradução
-#elif L==10	// tr
-	"Reject my enrolment as non-editing teacher"			// Çeviri lazim!
-#endif
-	,
-	[ActRemMe_Tch] =
-#if   L==1	// ca
-	"Reject my enrolment as teacher"		// Necessita traducció
-#elif L==2	// de
-	"Reject my enrolment as teacher"		// Need Übersetzung
-#elif L==3	// en
-	"Reject my enrolment as teacher"
-#elif L==4	// es
-	"Rechazar mi inscripci&oacute;n como profesor"
-#elif L==5	// fr
-	"Reject my enrolment as teacher"		// Besoin de traduction
-#elif L==6	// gn
-	"Rechazar mi inscripci&oacute;n como profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Reject my enrolment as teacher"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Reject my enrolment as teacher"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Reject my enrolment as teacher"		// Precisa de tradução
-#elif L==10	// tr
-	"Reject my enrolment as teacher"		// Çeviri lazim!
-#endif
-	,
-	[ActNewAdmIns] =
-#if   L==1	// ca
-	"Register an administrador in an institution"		// Necessita traducció
-#elif L==2	// de
-	"Register an administrador in an institution"		// Need Übersetzung
-#elif L==3	// en
-	"Register an administrador in an institution"
-#elif L==4	// es
-	"Inscribir un administrador en una instituci&oacute;n"
-#elif L==5	// fr
-	"Register an administrador in an institution"		// Besoin de traduction
-#elif L==6	// gn
-	"Inscribir un administrador en una instituci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Register an administrador in an institution"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Register an administrador in an institution"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Register an administrador in an institution"		// Precisa de tradução
-#elif L==10	// tr
-	"Register an administrador in an institution"		// Çeviri lazim!
-#endif
-	,
-	[ActRemAdmIns] =
-#if   L==1	// ca
-	"Remove administrador from an institution"	// Necessita traducció
-#elif L==2	// de
-	"Remove administrador from an institution"	// Need Übersetzung
-#elif L==3	// en
-	"Remove administrador from an institution"
-#elif L==4	// es
-	"Eliminar administrador de instituci&oacute;n"
-#elif L==5	// fr
-	"Remove administrador from an institution"	// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar administrador de instituci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Remove administrador from an institution"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove administrador from an institution"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove administrador from an institution"	// Precisa de tradução
-#elif L==10	// tr
-	"Remove administrador from an institution"	// Çeviri lazim!
-#endif
-	,
-	[ActNewAdmCtr] =
-#if   L==1	// ca
-	"Register an administrador in a center"		// Necessita traducció
-#elif L==2	// de
-	"Register an administrador in a center"		// Need Übersetzung
-#elif L==3	// en
-	"Register an administrador in a center"
-#elif L==4	// es
-	"Inscribir un administrador en un centro"
-#elif L==5	// fr
-	"Register an administrador in a center"		// Besoin de traduction
-#elif L==6	// gn
-	"Inscribir un administrador en un centro"	// Okoteve traducción
-#elif L==7	// it
-	"Register an administrador in a center"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Register an administrador in a center"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Register an administrador in a center"		// Precisa de tradução
-#elif L==10	// tr
-	"Register an administrador in a center"		// Çeviri lazim!
-#endif
-	,
-	[ActRemAdmCtr] =
-#if   L==1	// ca
-	"Remove administrador from a center"	// Necessita traducció
-#elif L==2	// de
-	"Remove administrador from a center"	// Need Übersetzung
-#elif L==3	// en
-	"Remove administrador from a center"
-#elif L==4	// es
-	"Eliminar administrador de centro"
-#elif L==5	// fr
-	"Remove administrador from a center"	// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar administrador de centro"	// Okoteve traducción
-#elif L==7	// it
-	"Remove administrador from a center"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove administrador from a center"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove administrador from a center"	// Precisa de tradução
-#elif L==10	// tr
-	"Remove administrador from a center"	// Çeviri lazim!
-#endif
-	,
-	[ActNewAdmDeg] =
-#if   L==1	// ca
-	"Register an administrador in a degree"			// Necessita traducció
-#elif L==2	// de
-	"Register an administrador in a degree"			// Need Übersetzung
-#elif L==3	// en
-	"Register an administrador in a degree"
-#elif L==4	// es
-	"Inscribir un administrador en una titulaci&oacute;n"
-#elif L==5	// fr
-	"Register an administrador in a degree"			// Besoin de traduction
-#elif L==6	// gn
-	"Inscribir un administrador en una titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Register an administrador in a degree"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Register an administrador in a degree"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Register an administrador in a degree"			// Precisa de tradução
-#elif L==10	// tr
-	"Register an administrador in a degree"			// Çeviri lazim!
-#endif
-	,
-	[ActRemAdmDeg] =
-#if   L==1	// ca
-	"Remove administrador from a degree"			// Necessita traducció
-#elif L==2	// de
-	"Remove administrador from a degree"			// Need Übersetzung
-#elif L==3	// en
-	"Remove administrador from a degree"
-#elif L==4	// es
-	"Eliminar administrador en una titulaci&oacute;n"
-#elif L==5	// fr
-	"Remove administrador from a degree"			// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar administrador en una titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Remove administrador from a degree"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove administrador from a degree"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove administrador from a degree"			// Precisa de tradução
-#elif L==10	// tr
-	"Remove administrador from a degree"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvFrmEnrSevStd] =
-#if   L==1	// ca
-	"Register/remove several students in/from a course"		// Necessita traducció
-#elif L==2	// de
-	"Register/remove several students in/from a course"		// Need Übersetzung
-#elif L==3	// en
-	"Register/remove several students in/from a course"
-#elif L==4	// es
-	"Inscribir/eliminar varios estudiantes en/de asignatura"
-#elif L==5	// fr
-	"Register/remove several students in/from a course"		// Besoin de traduction
-#elif L==6	// gn
-	"Inscribir/eliminar varios estudiantes en/de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Register/remove several students in/from a course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Register/remove several students in/from a course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Register/remove several students in/from a course"		// Precisa de tradução
-#elif L==10	// tr
-	"Register/remove several students in/from a course"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvFrmEnrSevNET] =
-#if   L==1	// ca
-	"Register/remove several non-editing teachers in/from a course"		// Necessita traducció
-#elif L==2	// de
-	"Register/remove several non-editing teachers in/from a course"		// Need Übersetzung
-#elif L==3	// en
-	"Register/remove several non-editing teachers in/from a course"
-#elif L==4	// es
-	"Inscribir/eliminar varios profesores no editores en/de asignatura"
-#elif L==5	// fr
-	"Register/remove several non-editing teachers in/from a course"		// Besoin de traduction
-#elif L==6	// gn
-	"Inscribir/eliminar varios profesores no editores en/de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Register/remove several non-editing teachers in/from a course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Register/remove several non-editing teachers in/from a course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Register/remove several non-editing teachers in/from a course"		// Precisa de tradução
-#elif L==10	// tr
-	"Register/remove several non-editing teachers in/from a course"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvFrmEnrSevTch] =
-#if   L==1	// ca
-	"Register/remove several teachers in/from a course"	// Necessita traducció
-#elif L==2	// de
-	"Register/remove several teachers in/from a course"	// Need Übersetzung
-#elif L==3	// en
-	"Register/remove several teachers in/from a course"
-#elif L==4	// es
-	"Inscribir/eliminar varios profesores en/de asignatura"
-#elif L==5	// fr
-	"Register/remove several teachers in/from a course"	// Besoin de traduction
-#elif L==6	// gn
-	"Inscribir/eliminar varios profesores en/de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Register/remove several teachers in/from a course"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Register/remove several teachers in/from a course"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Register/remove several teachers in/from a course"	// Precisa de tradução
-#elif L==10	// tr
-	"Register/remove several teachers in/from a course"	// Çeviri lazim!
-#endif
-	,
-	[ActCnfID_Oth] =
-#if   L==1	// ca
-	"Confirm a user's ID"		// Necessita traducció
-#elif L==2	// de
-	"Confirm a user's ID"		// Need Übersetzung
-#elif L==3	// en
-	"Confirm a user's ID"
-#elif L==4	// es
-	"Confirmar el ID de usuario"
-#elif L==5	// fr
-	"Confirm a user's ID"		// Besoin de traduction
-#elif L==6	// gn
-	"Confirmar el ID de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Confirm a user's ID"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Confirm a user's ID"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Confirm a user's ID"		// Precisa de tradução
-#elif L==10	// tr
-	"Confirm a user's ID"		// Çeviri lazim!
-#endif
-	,
-	[ActCnfID_Std] =
-#if   L==1	// ca
-	"Confirm a student's ID"	// Necessita traducció
-#elif L==2	// de
-	"Confirm a student's ID"	// Need Übersetzung
-#elif L==3	// en
-	"Confirm a student's ID"
-#elif L==4	// es
-	"Confirmar el ID de estudiante"
-#elif L==5	// fr
-	"Confirm a student's ID"	// Besoin de traduction
-#elif L==6	// gn
-	"Confirmar el ID de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Confirm a student's ID"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Confirm a student's ID"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Confirm a student's ID"	// Precisa de tradução
-#elif L==10	// tr
-	"Confirm a student's ID"	// Çeviri lazim!
-#endif
-	,
-	[ActCnfID_Tch] =
-#if   L==1	// ca
-	"Confirm a teacher's ID"	// Necessita traducció
-#elif L==2	// de
-	"Confirm a teacher's ID"	// Need Übersetzung
-#elif L==3	// en
-	"Confirm a teacher's ID"
-#elif L==4	// es
-	"Confirmar el ID de profesor"
-#elif L==5	// fr
-	"Confirm a teacher's ID"	// Besoin de traduction
-#elif L==6	// gn
-	"Confirmar el ID de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Confirm a teacher's ID"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Confirm a teacher's ID"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Confirm a teacher's ID"	// Precisa de tradução
-#elif L==10	// tr
-	"Confirm a teacher's ID"	// Çeviri lazim!
-#endif
-	,
-	[ActFrmAccOth] =
-#if   L==1	// ca
-	"Forms to the change a user's account"		// Necessita traducció
-#elif L==2	// de
-	"Forms to the change a user's account"		// Need Übersetzung
-#elif L==3	// en
-	"Forms to the change a user's account"
-#elif L==4	// es
-	"Formularios para cambiar la cuenta de usuario"
-#elif L==5	// fr
-	"Forms to the change a user's account"		// Besoin de traduction
-#elif L==6	// gn
-	"Formularios para cambiar la cuenta de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Forms to the change a user's account"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Forms to the change a user's account"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Forms to the change a user's account"		// Precisa de tradução
-#elif L==10	// tr
-	"Forms to the change a user's account"		// Çeviri lazim!
-#endif
-	,
-	[ActFrmAccStd] =
-#if   L==1	// ca
-	"Forms to the change a student's account"		// Necessita traducció
-#elif L==2	// de
-	"Forms to the change a student's account"		// Need Übersetzung
-#elif L==3	// en
-	"Forms to the change a student's account"
-#elif L==4	// es
-	"Formularios para cambiar la cuenta de estudiante"
-#elif L==5	// fr
-	"Forms to the change a student's account"		// Besoin de traduction
-#elif L==6	// gn
-	"Formularios para cambiar la cuenta de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Forms to the change a student's account"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Forms to the change a student's account"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Forms to the change a student's account"		// Precisa de tradução
-#elif L==10	// tr
-	"Forms to the change a student's account"		// Çeviri lazim!
-#endif
-	,
-	[ActFrmAccTch] =
-#if   L==1	// ca
-	"Forms to the change a teacher's account"		// Necessita traducció
-#elif L==2	// de
-	"Forms to the change a teacher's account"		// Need Übersetzung
-#elif L==3	// en
-	"Forms to the change a teacher's account"
-#elif L==4	// es
-	"Formularios para cambiar la cuenta de profesor"
-#elif L==5	// fr
-	"Forms to the change a teacher's account"		// Besoin de traduction
-#elif L==6	// gn
-	"Formularios para cambiar la cuenta de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Forms to the change a teacher's account"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Forms to the change a teacher's account"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Forms to the change a teacher's account"		// Precisa de tradução
-#elif L==10	// tr
-	"Forms to the change a teacher's account"		// Çeviri lazim!
-#endif
-	,
-	[ActRemNicOth] =
-#if   L==1	// ca
-	"Remove user's nickname"	// Necessita traducció
-#elif L==2	// de
-	"Remove user's nickname"	// Need Übersetzung
-#elif L==3	// en
-	"Remove user's nickname"
-#elif L==4	// es
-	"Eliminar apodo de usuario"
-#elif L==5	// fr
-	"Remove user's nickname"	// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar apodo de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Remove user's nickname"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove user's nickname"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove user's nickname"	// Precisa de tradução
-#elif L==10	// tr
-	"Remove user's nickname"	// Çeviri lazim!
-#endif
-	,
-	[ActRemNicStd] =
-#if   L==1	// ca
-	"Remove student's nickname"	// Necessita traducció
-#elif L==2	// de
-	"Remove student's nickname"	// Need Übersetzung
-#elif L==3	// en
-	"Remove student's nickname"
-#elif L==4	// es
-	"Eliminar apodo de estudiante"
-#elif L==5	// fr
-	"Remove student's nickname"	// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar apodo de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Remove student's nickname"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove student's nickname"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove student's nickname"	// Precisa de tradução
-#elif L==10	// tr
-	"Remove student's nickname"	// Çeviri lazim!
-#endif
-	,
-	[ActRemNicTch] =
-#if   L==1	// ca
-	"Remove teacher's nickname"	// Necessita traducció
-#elif L==2	// de
-	"Remove teacher's nickname"	// Need Übersetzung
-#elif L==3	// en
-	"Remove teacher's nickname"
-#elif L==4	// es
-	"Eliminar apodo de profesor"
-#elif L==5	// fr
-	"Remove teacher's nickname"	// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar apodo de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Remove teacher's nickname"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove teacher's nickname"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove teacher's nickname"	// Precisa de tradução
-#elif L==10	// tr
-	"Remove teacher's nickname"	// Çeviri lazim!
-#endif
-	,
-	[ActChgNicOth] =
-#if   L==1	// ca
-	"Change user's nickname"	// Necessita traducció
-#elif L==2	// de
-	"Change user's nickname"	// Need Übersetzung
-#elif L==3	// en
-	"Change user's nickname"
-#elif L==4	// es
-	"Cambiar apodo de usuario"
-#elif L==5	// fr
-	"Change user's nickname"	// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar apodo de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Change user's nickname"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Change user's nickname"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change user's nickname"	// Precisa de tradução
-#elif L==10	// tr
-	"Change user's nickname"	// Çeviri lazim!
-#endif
-	,
-	[ActChgNicStd] =
-#if   L==1	// ca
-	"Change student's nickname"	// Necessita traducció
-#elif L==2	// de
-	"Change student's nickname"	// Need Übersetzung
-#elif L==3	// en
-	"Change student's nickname"
-#elif L==4	// es
-	"Cambiar apodo de estudiante"
-#elif L==5	// fr
-	"Change student's nickname"	// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar apodo de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Change student's nickname"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Change student's nickname"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change student's nickname"	// Precisa de tradução
-#elif L==10	// tr
-	"Change student's nickname"	// Çeviri lazim!
-#endif
-	,
-	[ActChgNicTch] =
-#if   L==1	// ca
-	"Change teacher's nickname"	// Necessita traducció
-#elif L==2	// de
-	"Change teacher's nickname"	// Need Übersetzung
-#elif L==3	// en
-	"Change teacher's nickname"
-#elif L==4	// es
-	"Cambiar apodo de profesor"
-#elif L==5	// fr
-	"Change teacher's nickname"	// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar apodo de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Change teacher's nickname"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Change teacher's nickname"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change teacher's nickname"	// Precisa de tradução
-#elif L==10	// tr
-	"Change teacher's nickname"	// Çeviri lazim!
-#endif
-	,
-	[ActRemID_Oth] =
-#if   L==1	// ca
-	"Remove user's ID"		// Necessita traducció
-#elif L==2	// de
-	"Remove user's ID"		// Need Übersetzung
-#elif L==3	// en
-	"Remove user's ID"
-#elif L==4	// es
-	"Eliminar ID de usuario"
-#elif L==5	// fr
-	"Remove user's ID"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar ID de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Remove user's ID"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove user's ID"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove user's ID"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove user's ID"		// Çeviri lazim!
-#endif
-	,
-	[ActRemID_Std] =
-#if   L==1	// ca
-	"Remove student's ID"		// Necessita traducció
-#elif L==2	// de
-	"Remove student's ID"		// Need Übersetzung
-#elif L==3	// en
-	"Remove student's ID"
-#elif L==4	// es
-	"Eliminar ID de estudiante"
-#elif L==5	// fr
-	"Remove student's ID"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar ID de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Remove student's ID"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove student's ID"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove student's ID"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove student's ID"		// Çeviri lazim!
-#endif
-	,
-	[ActRemID_Tch] =
-#if   L==1	// ca
-	"Remove teacher's ID"		// Necessita traducció
-#elif L==2	// de
-	"Remove teacher's ID"		// Need Übersetzung
-#elif L==3	// en
-	"Remove teacher's ID"
-#elif L==4	// es
-	"Eliminar ID de profesor"
-#elif L==5	// fr
-	"Remove teacher's ID"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar ID de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Remove teacher's ID"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove teacher's ID"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove teacher's ID"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove teacher's ID"		// Çeviri lazim!
-#endif
-	,
-	[ActChgID_Oth] =
-#if   L==1	// ca
-	"Create new user's ID"		// Necessita traducció
-#elif L==2	// de
-	"Create new user's ID"		// Need Übersetzung
-#elif L==3	// en
-	"Create new user's ID"
-#elif L==4	// es
-	"Crear nuevo ID de usuario"
-#elif L==5	// fr
-	"Create new user's ID"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo ID de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Create new user's ID"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new user's ID"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new user's ID"		// Precisa de tradução
-#elif L==10	// tr
-	"Create new user's ID"		// Çeviri lazim!
-#endif
-	,
-	[ActChgID_Std] =
-#if   L==1	// ca
-	"Create new student's ID"	// Necessita traducció
-#elif L==2	// de
-	"Create new student's ID"	// Need Übersetzung
-#elif L==3	// en
-	"Create new student's ID"
-#elif L==4	// es
-	"Crear nuevo ID de estudiante"
-#elif L==5	// fr
-	"Create new student's ID"	// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo ID de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Create new student's ID"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new student's ID"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new student's ID"	// Precisa de tradução
-#elif L==10	// tr
-	"Create new student's ID"	// Çeviri lazim!
-#endif
-	,
-	[ActChgID_Tch] =
-#if   L==1	// ca
-	"Create new teacher's ID"	// Necessita traducció
-#elif L==2	// de
-	"Create new teacher's ID"	// Need Übersetzung
-#elif L==3	// en
-	"Create new teacher's ID"
-#elif L==4	// es
-	"Crear nuevo ID de profesor"
-#elif L==5	// fr
-	"Create new teacher's ID"	// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo ID de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Create new teacher's ID"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new teacher's ID"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new teacher's ID"	// Precisa de tradução
-#elif L==10	// tr
-	"Create new teacher's ID"	// Çeviri lazim!
-#endif
-	,
-	[ActChgPwdOth] =
-#if   L==1	// ca
-	"Change user's password"		// Necessita traducció
-#elif L==2	// de
-	"Change user's password"		// Need Übersetzung
-#elif L==3	// en
-	"Change user's password"
-#elif L==4	// es
-	"Cambiar contrase&ntilde;a de usuario"
-#elif L==5	// fr
-	"Change user's password"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar contrase&ntilde;a de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Change user's password"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change user's password"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change user's password"		// Precisa de tradução
-#elif L==10	// tr
-	"Change user's password"		// Çeviri lazim!
-#endif
-	,
-	[ActChgPwdStd] =
-#if   L==1	// ca
-	"Change student's password"			// Necessita traducció
-#elif L==2	// de
-	"Change student's password"			// Need Übersetzung
-#elif L==3	// en
-	"Change student's password"
-#elif L==4	// es
-	"Cambiar contrase&ntilde;a de estudiante"
-#elif L==5	// fr
-	"Change student's password"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar contrase&ntilde;a de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Change student's password"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change student's password"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change student's password"			// Precisa de tradução
-#elif L==10	// tr
-	"Change student's password"			// Çeviri lazim!
-#endif
-	,
-	[ActChgPwdTch] =
-#if   L==1	// ca
-	"Change teacher's password"		// Necessita traducció
-#elif L==2	// de
-	"Change teacher's password"		// Need Übersetzung
-#elif L==3	// en
-	"Change teacher's password"
-#elif L==4	// es
-	"Cambiar contrase&ntilde;a de profesor"
-#elif L==5	// fr
-	"Change teacher's password"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar contrase&ntilde;a de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Change teacher's password"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change teacher's password"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change teacher's password"		// Precisa de tradução
-#elif L==10	// tr
-	"Change teacher's password"		// Çeviri lazim!
-#endif
-	,
-	[ActRemMaiOth] =
-#if   L==1	// ca
-	"Remove user's email"				// Necessita traducció
-#elif L==2	// de
-	"Remove user's email"				// Need Übersetzung
-#elif L==3	// en
-	"Remove user's email"
-#elif L==4	// es
-	"Eliminar correo electr&oacute;nico de usuario"
-#elif L==5	// fr
-	"Remove user's email"				// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar correo electr&oacute;nico de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Remove user's email"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove user's email"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove user's email"				// Precisa de tradução
-#elif L==10	// tr
-	"Remove user's email"				// Çeviri lazim!
-#endif
-	,
-	[ActRemMaiStd] =
-#if   L==1	// ca
-	"Remove student's email"				// Necessita traducció
-#elif L==2	// de
-	"Remove student's email"				// Need Übersetzung
-#elif L==3	// en
-	"Remove student's email"
-#elif L==4	// es
-	"Eliminar correo electr&oacute;nico de estudiante"
-#elif L==5	// fr
-	"Remove student's email"				// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar correo electr&oacute;nico de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Remove student's email"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove student's email"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove student's email"				// Precisa de tradução
-#elif L==10	// tr
-	"Remove student's email"				// Çeviri lazim!
-#endif
-	,
-	[ActRemMaiTch] =
-#if   L==1	// ca
-	"Remove teacher's email"				// Necessita traducció
-#elif L==2	// de
-	"Remove teacher's email"				// Need Übersetzung
-#elif L==3	// en
-	"Remove teacher's email"
-#elif L==4	// es
-	"Eliminar correo electr&oacute;nico de profesor"
-#elif L==5	// fr
-	"Remove teacher's email"				// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar correo electr&oacute;nico de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Remove teacher's email"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove teacher's email"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove teacher's email"				// Precisa de tradução
-#elif L==10	// tr
-	"Remove teacher's email"				// Çeviri lazim!
-#endif
-	,
-	[ActChgMaiOth] =
-#if   L==1	// ca
-	"Create new user's email"				// Necessita traducció
-#elif L==2	// de
-	"Create new user's email"				// Need Übersetzung
-#elif L==3	// en
-	"Create new user's email"
-#elif L==4	// es
-	"Crear nuevo correo electr&oacute;nico de usuario"
-#elif L==5	// fr
-	"Create new user's email"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo correo electr&oacute;nico de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Create new user's email"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new user's email"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new user's email"				// Precisa de tradução
-#elif L==10	// tr
-	"Create new user's email"				// Çeviri lazim!
-#endif
-	,
-	[ActChgMaiStd] =
-#if   L==1	// ca
-	"Create new student's email"				// Necessita traducció
-#elif L==2	// de
-	"Create new student's email"				// Need Übersetzung
-#elif L==3	// en
-	"Create new student's email"
-#elif L==4	// es
-	"Crear nuevo correo electr&oacute;nico de estudiante"
-#elif L==5	// fr
-	"Create new student's email"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo correo electr&oacute;nico de estudiante"	// Okoteve traducción
-#elif L==7	// it
-	"Create new student's email"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new student's email"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new student's email"				// Precisa de tradução
-#elif L==10	// tr
-	"Create new student's email"				// Çeviri lazim!
-#endif
-	,
-	[ActChgMaiTch] =
-#if   L==1	// ca
-	"Create new teacher's email"				// Necessita traducció
-#elif L==2	// de
-	"Create new teacher's email"				// Need Übersetzung
-#elif L==3	// en
-	"Create new teacher's email"
-#elif L==4	// es
-	"Crear nuevo correo electr&oacute;nico de profesor"
-#elif L==5	// fr
-	"Create new teacher's email"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear nuevo correo electr&oacute;nico de profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Create new teacher's email"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create new teacher's email"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create new teacher's email"				// Precisa de tradução
-#elif L==10	// tr
-	"Create new teacher's email"				// Çeviri lazim!
-#endif
-	,
-	[ActRemStdCrs] =
-#if   L==1	// ca
-	"Remove student from a course"		// Necessita traducció
-#elif L==2	// de
-	"Remove student from a course"		// Need Übersetzung
-#elif L==3	// en
-	"Remove student from a course"
-#elif L==4	// es
-	"Eliminar estudiante de asignatura"
-#elif L==5	// fr
-	"Remove student from a course"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar estudiante de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Remove student from a course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove student from a course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove student from a course"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove student from a course"		// Çeviri lazim!
-#endif
-	,
-	[ActRemNETCrs] =
-#if   L==1	// ca
-	"Remove non-editing teacher from a course"	// Necessita traducció
-#elif L==2	// de
-	"Remove non-editing teacher from a course"	// Need Übersetzung
-#elif L==3	// en
-	"Remove non-editing teacher from a course"
-#elif L==4	// es
-	"Eliminar profesor no editor de asignatura"
-#elif L==5	// fr
-	"Remove non-editing teacher from a course"	// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar profesor no editor de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Remove non-editing teacher from a course"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove non-editing teacher from a course"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove non-editing teacher from a course"	// Precisa de tradução
-#elif L==10	// tr
-	"Remove non-editing teacher from a course"	// Çeviri lazim!
-#endif
-	,
-	[ActRemTchCrs] =
-#if   L==1	// ca
-	"Remove teacher from a course"		// Necessita traducció
-#elif L==2	// de
-	"Remove teacher from a course"		// Need Übersetzung
-#elif L==3	// en
-	"Remove teacher from a course"
-#elif L==4	// es
-	"Eliminar profesor de asignatura"
-#elif L==5	// fr
-	"Remove teacher from a course"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar profesor de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Remove teacher from a course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove teacher from a course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove teacher from a course"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove teacher from a course"		// Çeviri lazim!
-#endif
-	,
-	[ActRemUsrGbl] =
-#if   L==1	// ca
-	"Eliminate completely a user from the platform"		// Necessita traducció
-#elif L==2	// de
-	"Eliminate completely a user from the platform"		// Need Übersetzung
-#elif L==3	// en
-	"Eliminate completely a user from the platform"
-#elif L==4	// es
-	"Eliminar usuario completamente de la plataforma"
-#elif L==5	// fr
-	"Eliminate completely a user from the platform"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar usuario completamente de la plataforma"	// Okoteve traducción
-#elif L==7	// it
-	"Eliminate completely a user from the platform"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Eliminate completely a user from the platform"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Eliminate completely a user from the platform"		// Precisa de tradução
-#elif L==10	// tr
-	"Eliminate completely a user from the platform"		// Çeviri lazim!
-#endif
-	,
-	[ActReqRemAllStdCrs] =
-#if   L==1	// ca
-	"Request removal of all students from a course"				// Necessita traducció
-#elif L==2	// de
-	"Request removal of all students from a course"				// Need Übersetzung
-#elif L==3	// en
-	"Request removal of all students from a course"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n de todos los estudiantes de asignatura"
-#elif L==5	// fr
-	"Request removal of all students from a course"				// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n de todos los estudiantes de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Request removal of all students from a course"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Request removal of all students from a course"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request removal of all students from a course"				// Precisa de tradução
-#elif L==10	// tr
-	"Request removal of all students from a course"				// Çeviri lazim!
-#endif
-	,
-	[ActRemAllStdCrs] =
-#if   L==1	// ca
-	"Remove all students from a course"		// Necessita traducció
-#elif L==2	// de
-	"Remove all students from a course"		// Need Übersetzung
-#elif L==3	// en
-	"Remove all students from a course"
-#elif L==4	// es
-	"Eliminar todos los estudiantes de asignatura"
-#elif L==5	// fr
-	"Remove all students from a course"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar todos los estudiantes de asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Remove all students from a course"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove all students from a course"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove all students from a course"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove all students from a course"		// Çeviri lazim!
-#endif
-	,
-	[ActReqRemOldUsr] =
-#if   L==1	// ca
-	"Request complete elimination of old users"			// Necessita traducció
-#elif L==2	// de
-	"Request complete elimination of old users"			// Need Übersetzung
-#elif L==3	// en
-	"Request complete elimination of old users"
-#elif L==4	// es
-	"Solicitar eliminaci&oacute;n completa de usuarios antiguos"
-#elif L==5	// fr
-	"Request complete elimination of old users"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar eliminaci&oacute;n completa de usuarios antiguos"	// Okoteve traducción
-#elif L==7	// it
-	"Request complete elimination of old users"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request complete elimination of old users"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request complete elimination of old users"			// Precisa de tradução
-#elif L==10	// tr
-	"Request complete elimination of old users"			// Çeviri lazim!
-#endif
-	,
-	[ActRemOldUsr] =
-#if   L==1	// ca
-	"Eliminate completely old users"		// Necessita traducció
-#elif L==2	// de
-	"Eliminate completely old users"		// Need Übersetzung
-#elif L==3	// en
-	"Eliminate completely old users"
-#elif L==4	// es
-	"Eliminar completamente usuarios antiguos"
-#elif L==5	// fr
-	"Eliminate completely old users"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar completamente usuarios antiguos"	// Okoteve traducción
-#elif L==7	// it
-	"Eliminate completely old users"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Eliminate completely old users"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Eliminate completely old users"		// Precisa de tradução
-#elif L==10	// tr
-	"Eliminate completely old users"		// Çeviri lazim!
-#endif
-	,
-	[ActLstDupUsr] =
-#if   L==1	// ca
-	"List possible duplicate users"		// Necessita traducció
-#elif L==2	// de
-	"List possible duplicate users"		// Need Übersetzung
-#elif L==3	// en
-	"List possible duplicate users"
-#elif L==4	// es
-	"Listar posibles usuarios duplicados"
-#elif L==5	// fr
-	"List possible duplicate users"		// Besoin de traduction
-#elif L==6	// gn
-	"Listar posibles usuarios duplicados"	// Okoteve traducción
-#elif L==7	// it
-	"List possible duplicate users"		// Bisogno di traduzione
-#elif L==8	// pl
-	"List possible duplicate users"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List possible duplicate users"		// Precisa de tradução
-#elif L==10	// tr
-	"List possible duplicate users"		// Çeviri lazim!
-#endif
-	,
-	[ActLstSimUsr] =
-#if   L==1	// ca
-	"List users similar to a given one (possible duplicates)"	// Necessita traducció
-#elif L==2	// de
-	"List users similar to a given one (possible duplicates)"	// Need Übersetzung
-#elif L==3	// en
-	"List users similar to a given one (possible duplicates)"
-#elif L==4	// es
-	"Listar usuarios similares a uno dado (posibles duplicados)"
-#elif L==5	// fr
-	"List users similar to a given one (possible duplicates)"	// Besoin de traduction
-#elif L==6	// gn
-	"Listar usuarios similares a uno dado (posibles duplicados)"	// Okoteve traducción
-#elif L==7	// it
-	"List users similar to a given one (possible duplicates)"	// Bisogno di traduzione
-#elif L==8	// pl
-	"List users similar to a given one (possible duplicates)"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"List users similar to a given one (possible duplicates)"	// Precisa de tradução
-#elif L==10	// tr
-	"List users similar to a given one (possible duplicates)"	// Çeviri lazim!
-#endif
-	,
-	[ActRemDupUsr] =
-#if   L==1	// ca
-	"Remove user from a list of possible duplicate users"			// Necessita traducció
-#elif L==2	// de
-	"Remove user from a list of possible duplicate users"			// Need Übersetzung
-#elif L==3	// en
-	"Remove user from a list of possible duplicate users"
-#elif L==4	// es
-	"Eliminar a un usuario de una lista de posibles usuarios duplicados"
-#elif L==5	// fr
-	"Remove user from a list of possible duplicate users"			// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar a un usuario de una lista de posibles usuarios duplicados"	// Okoteve traducción
-#elif L==7	// it
-	"Remove user from a list of possible duplicate users"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove user from a list of possible duplicate users"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove user from a list of possible duplicate users"			// Precisa de tradução
-#elif L==10	// tr
-	"Remove user from a list of possible duplicate users"			// Çeviri lazim!
-#endif
-	,
-	[ActReqFolSevStd] =
-#if   L==1	// ca
-	"Request follow several students"	// Necessita traducció
-#elif L==2	// de
-	"Request follow several students"	// Need Übersetzung
-#elif L==3	// en
-	"Request follow several students"
-#elif L==4	// es
-	"Solicitar seguir a varios estudiantes"
-#elif L==5	// fr
-	"Request follow several students"	// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar seguir a varios estudiantes"	// Okoteve traducción
-#elif L==7	// it
-	"Request follow several students"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Request follow several students"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request follow several students"	// Precisa de tradução
-#elif L==10	// tr
-	"Request follow several students"	// Çeviri lazim!
-#endif
-	,
-	[ActReqFolSevTch] =
-#if   L==1	// ca
-	"Request follow several teachers"	// Necessita traducció
-#elif L==2	// de
-	"Request follow several teachers"	// Need Übersetzung
-#elif L==3	// en
-	"Request follow several teachers"
-#elif L==4	// es
-	"Solicitar seguir a varios profesores"
-#elif L==5	// fr
-	"Request follow several teachers"	// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar seguir a varios profesores"	// Okoteve traducción
-#elif L==7	// it
-	"Request follow several teachers"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Request follow several teachers"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request follow several teachers"	// Precisa de tradução
-#elif L==10	// tr
-	"Request follow several teachers"	// Çeviri lazim!
-#endif
-	,
-	[ActReqUnfSevStd] =
-#if   L==1	// ca
-	"Request unfollow several students"			// Necessita traducció
-#elif L==2	// de
-	"Request unfollow several students"			// Need Übersetzung
-#elif L==3	// en
-	"Request unfollow several students"
-#elif L==4	// es
-	"Solicitar dejar de seguir a varios estudiantes"
-#elif L==5	// fr
-	"Request unfollow several students"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar dejar de seguir a varios estudiantes"	// Okoteve traducción
-#elif L==7	// it
-	"Request unfollow several students"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request unfollow several students"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request unfollow several students"			// Precisa de tradução
-#elif L==10	// tr
-	"Request unfollow several students"			// Çeviri lazim!
-#endif
-	,
-	[ActReqUnfSevTch] =
-#if   L==1	// ca
-	"Request unfollow several teachers"		// Necessita traducció
-#elif L==2	// de
-	"Request unfollow several teachers"		// Need Übersetzung
-#elif L==3	// en
-	"Request unfollow several teachers"
-#elif L==4	// es
-	"Solicitar dejar de seguir a varios profesores"
-#elif L==5	// fr
-	"Request unfollow several teachers"		// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar dejar de seguir a varios profesores"	// Okoteve traducción
-#elif L==7	// it
-	"Request unfollow several teachers"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Request unfollow several teachers"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request unfollow several teachers"		// Precisa de tradução
-#elif L==10	// tr
-	"Request unfollow several teachers"		// Çeviri lazim!
-#endif
-	,
-	[ActFolSevStd] =
-#if   L==1	// ca
-	"Follow several students"	// Necessita traducció
-#elif L==2	// de
-	"Follow several students"	// Need Übersetzung
-#elif L==3	// en
-	"Follow several students"
-#elif L==4	// es
-	"Seguir a varios estudiantes"
-#elif L==5	// fr
-	"Follow several students"	// Besoin de traduction
-#elif L==6	// gn
-	"Seguir a varios estudiantes"	// Okoteve traducción
-#elif L==7	// it
-	"Follow several students"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Follow several students"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Follow several students"	// Precisa de tradução
-#elif L==10	// tr
-	"Follow several students"	// Çeviri lazim!
-#endif
-	,
-	[ActFolSevTch] =
-#if   L==1	// ca
-	"Follow several teachers"	// Necessita traducció
-#elif L==2	// de
-	"Follow several teachers"	// Need Übersetzung
-#elif L==3	// en
-	"Follow several teachers"
-#elif L==4	// es
-	"Seguir a varios profesores"
-#elif L==5	// fr
-	"Follow several teachers"	// Besoin de traduction
-#elif L==6	// gn
-	"Seguir a varios profesores"	// Okoteve traducción
-#elif L==7	// it
-	"Follow several teachers"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Follow several teachers"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Follow several teachers"	// Precisa de tradução
-#elif L==10	// tr
-	"Follow several teachers"	// Çeviri lazim!
-#endif
-	,
-	[ActUnfSevStd] =
-#if   L==1	// ca
-	"Unfollow several students"		// Necessita traducció
-#elif L==2	// de
-	"Unfollow several students"		// Need Übersetzung
-#elif L==3	// en
-	"Unfollow several students"
-#elif L==4	// es
-	"Dejar de seguir a varios estudiantes"
-#elif L==5	// fr
-	"Unfollow several students"		// Besoin de traduction
-#elif L==6	// gn
-	"Dejar de seguir a varios estudiantes"	// Okoteve traducción
-#elif L==7	// it
-	"Unfollow several students"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Unfollow several students"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Unfollow several students"		// Precisa de tradução
-#elif L==10	// tr
-	"Unfollow several students"		// Çeviri lazim!
-#endif
-	,
-	[ActUnfSevTch] =
-#if   L==1	// ca
-	"Unfollow several teachers"		// Necessita traducció
-#elif L==2	// de
-	"Unfollow several teachers"		// Need Übersetzung
-#elif L==3	// en
-	"Unfollow several teachers"
-#elif L==4	// es
-	"Dejar de seguir a varios profesores"
-#elif L==5	// fr
-	"Unfollow several teachers"		// Besoin de traduction
-#elif L==6	// gn
-	"Dejar de seguir a varios profesores"	// Okoteve traducción
-#elif L==7	// it
-	"Unfollow several teachers"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Unfollow several teachers"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Unfollow several teachers"		// Precisa de tradução
-#elif L==10	// tr
-	"Unfollow several teachers"		// Çeviri lazim!
+	"List connected users"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeAnn] =
@@ -28764,121 +28764,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show global announcements"	// Precisa de tradução
 #elif L==10	// tr
 	"Show global announcements"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllNot] =
-#if   L==1	// ca
-	"See notices"	// Necessita traducció
-#elif L==2	// de
-	"See notices"	// Need Übersetzung
-#elif L==3	// en
-	"See notices"
-#elif L==4	// es
-	"Ver avisos"
-#elif L==5	// fr
-	"See notices"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver avisos"	// Okoteve traducción
-#elif L==7	// it
-	"See notices"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See notices"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See notices"	// Precisa de tradução
-#elif L==10	// tr
-	"See notices"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeFor] =
-#if   L==1	// ca
-	"See the top level of the forums"	// Necessita traducció
-#elif L==2	// de
-	"See the top level of the forums"	// Need Übersetzung
-#elif L==3	// en
-	"See the top level of the forums"
-#elif L==4	// es
-	"Ver el nivel superior de los foros"
-#elif L==5	// fr
-	"See the top level of the forums"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver el nivel superior de los foros"	// Okoteve traducción
-#elif L==7	// it
-	"See the top level of the forums"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See the top level of the forums"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the top level of the forums"	// Precisa de tradução
-#elif L==10	// tr
-	"See the top level of the forums"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeChtRms] =
-#if   L==1	// ca
-	"See the chat rooms"	// Necessita traducció
-#elif L==2	// de
-	"See the chat rooms"	// Need Übersetzung
-#elif L==3	// en
-	"See the chat rooms"
-#elif L==4	// es
-	"Ver las salas de chat"
-#elif L==5	// fr
-	"See the chat rooms"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver las salas de chat"	// Okoteve traducción
-#elif L==7	// it
-	"See the chat rooms"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See the chat rooms"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the chat rooms"	// Precisa de tradução
-#elif L==10	// tr
-	"See the chat rooms"	// Çeviri lazim!
-#endif
-	,
-	[ActSeeRcvMsg] =
-#if   L==1	// ca
-	"Show the messages received"	// Necessita traducció
-#elif L==2	// de
-	"Show the messages received"	// Need Übersetzung
-#elif L==3	// en
-	"Show the messages received"
-#elif L==4	// es
-	"Ver mensajes recibidos"
-#elif L==5	// fr
-	"Show the messages received"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver mensajes recibidos"	// Okoteve traducción
-#elif L==7	// it
-	"Show the messages received"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Show the messages received"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show the messages received"	// Precisa de tradução
-#elif L==10	// tr
-	"Show the messages received"	// Çeviri lazim!
-#endif
-	,
-	[ActReqMaiUsr] =
-#if   L==1	// ca
-	"Select users to send an email to them"		// Necessita traducció
-#elif L==2	// de
-	"Select users to send an email to them"		// Need Übersetzung
-#elif L==3	// en
-	"Select users to send an email to them"
-#elif L==4	// es
-	"Seleccionar usuarios para enviarles un correo"
-#elif L==5	// fr
-	"Select users to send an email to them"		// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar usuarios para enviarles un correo"	// Okoteve traducción
-#elif L==7	// it
-	"Select users to send an email to them"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Select users to send an email to them"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select users to send an email to them"		// Precisa de tradução
-#elif L==10	// tr
-	"Select users to send an email to them"		// Çeviri lazim!
 #endif
 	,
 	[ActWriAnn] =
@@ -28994,6 +28879,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove global announcement"	// Precisa de tradução
 #elif L==10	// tr
 	"Remove global announcement"	// Çeviri lazim!
+#endif
+	,
+	[ActSeeAllNot] =
+#if   L==1	// ca
+	"See notices"	// Necessita traducció
+#elif L==2	// de
+	"See notices"	// Need Übersetzung
+#elif L==3	// en
+	"See notices"
+#elif L==4	// es
+	"Ver avisos"
+#elif L==5	// fr
+	"See notices"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver avisos"	// Okoteve traducción
+#elif L==7	// it
+	"See notices"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See notices"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See notices"	// Precisa de tradução
+#elif L==10	// tr
+	"See notices"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneNot] =
@@ -29155,6 +29063,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove notice"		// Precisa de tradução
 #elif L==10	// tr
 	"Remove notice"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeFor] =
+#if   L==1	// ca
+	"See the top level of the forums"	// Necessita traducció
+#elif L==2	// de
+	"See the top level of the forums"	// Need Übersetzung
+#elif L==3	// en
+	"See the top level of the forums"
+#elif L==4	// es
+	"Ver el nivel superior de los foros"
+#elif L==5	// fr
+	"See the top level of the forums"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver el nivel superior de los foros"	// Okoteve traducción
+#elif L==7	// it
+	"See the top level of the forums"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See the top level of the forums"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the top level of the forums"	// Precisa de tradução
+#elif L==10	// tr
+	"See the top level of the forums"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeForCrsUsr] =
@@ -32216,6 +32147,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to thread of forum of users of course"			// Çeviri lazim!
 #endif
 	,
+	[ActSeeChtRms] =
+#if   L==1	// ca
+	"See the chat rooms"	// Necessita traducció
+#elif L==2	// de
+	"See the chat rooms"	// Need Übersetzung
+#elif L==3	// en
+	"See the chat rooms"
+#elif L==4	// es
+	"Ver las salas de chat"
+#elif L==5	// fr
+	"See the chat rooms"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver las salas de chat"	// Okoteve traducción
+#elif L==7	// it
+	"See the chat rooms"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See the chat rooms"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the chat rooms"	// Precisa de tradução
+#elif L==10	// tr
+	"See the chat rooms"	// Çeviri lazim!
+#endif
+	,
 	[ActCht] =
 #if   L==1	// ca
 	"Enter in a chat room to chat"			// Necessita traducció
@@ -32237,6 +32191,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Enter in a chat room to chat"			// Precisa de tradução
 #elif L==10	// tr
 	"Enter in a chat room to chat"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeRcvMsg] =
+#if   L==1	// ca
+	"Show the messages received"	// Necessita traducció
+#elif L==2	// de
+	"Show the messages received"	// Need Übersetzung
+#elif L==3	// en
+	"Show the messages received"
+#elif L==4	// es
+	"Ver mensajes recibidos"
+#elif L==5	// fr
+	"Show the messages received"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver mensajes recibidos"	// Okoteve traducción
+#elif L==7	// it
+	"Show the messages received"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Show the messages received"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show the messages received"	// Precisa de tradução
+#elif L==10	// tr
+	"Show the messages received"	// Çeviri lazim!
 #endif
 	,
 	[ActReqMsgUsr] =
@@ -32630,6 +32607,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Unban a user when listing banned users"		// Çeviri lazim!
 #endif
 	,
+	[ActReqMaiUsr] =
+#if   L==1	// ca
+	"Select users to send an email to them"		// Necessita traducció
+#elif L==2	// de
+	"Select users to send an email to them"		// Need Übersetzung
+#elif L==3	// en
+	"Select users to send an email to them"
+#elif L==4	// es
+	"Seleccionar usuarios para enviarles un correo"
+#elif L==5	// fr
+	"Select users to send an email to them"		// Besoin de traduction
+#elif L==6	// gn
+	"Seleccionar usuarios para enviarles un correo"	// Okoteve traducción
+#elif L==7	// it
+	"Select users to send an email to them"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Select users to send an email to them"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Select users to send an email to them"		// Precisa de tradução
+#elif L==10	// tr
+	"Select users to send an email to them"		// Çeviri lazim!
+#endif
+	,
 	[ActMaiUsr] =
 #if   L==1	// ca
 	"See email addresses to send an email"	// Necessita traducció
@@ -32676,144 +32676,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Request seeing use of the platform"	// Çeviri lazim!
 #endif
 	,
-	[ActSeePhoDeg] =
-#if   L==1	// ca
-	"See a class photo with average photos of students of each degree"			// Necessita traducció
-#elif L==2	// de
-	"See a class photo with average photos of students of each degree"			// Need Übersetzung
-#elif L==3	// en
-	"See a class photo with average photos of students of each degree"
-#elif L==4	// es
-	"Ver una foto de clase con fotos promedio de estudiantes de cada titulaci&oacute;n"
-#elif L==5	// fr
-	"See a class photo with average photos of students of each degree"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver una foto de clase con fotos promedio de estudiantes de cada titulaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"See a class photo with average photos of students of each degree"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See a class photo with average photos of students of each degree"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See a class photo with average photos of students of each degree"			// Precisa de tradução
-#elif L==10	// tr
-	"See a class photo with average photos of students of each degree"			// Çeviri lazim!
-#endif
-	,
-	[ActReqStaCrs] =
-#if   L==1	// ca
-	"Request statistics of courses"			// Necessita traducció
-#elif L==2	// de
-	"Request statistics of courses"			// Need Übersetzung
-#elif L==3	// en
-	"Request statistics of courses"
-#elif L==4	// es
-	"Solicitar estad&iacute;sticas de asignaturas"
-#elif L==5	// fr
-	"Request statistics of courses"			// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar estad&iacute;sticas de asignaturas"	// Okoteve traducción
-#elif L==7	// it
-	"Request statistics of courses"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Request statistics of courses"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request statistics of courses"			// Precisa de tradução
-#elif L==10	// tr
-	"Request statistics of courses"			// Çeviri lazim!
-#endif
-	,
-	[ActSeeAllSvy] =
-#if   L==1	// ca
-	"See surveys"	// Necessita traducció
-#elif L==2	// de
-	"See surveys"	// Need Übersetzung
-#elif L==3	// en
-	"See surveys"
-#elif L==4	// es
-	"Ver encuestas"
-#elif L==5	// fr
-	"See surveys"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver encuestas"	// Okoteve traducción
-#elif L==7	// it
-	"See surveys"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See surveys"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See surveys"	// Precisa de tradução
-#elif L==10	// tr
-	"See surveys"	// Çeviri lazim!
-#endif
-	,
-	[ActReqAccGbl] =
-#if   L==1	// ca
-	"Request query of clicks to the complete platform"	// Necessita traducció
-#elif L==2	// de
-	"Request query of clicks to the complete platform"	// Need Übersetzung
-#elif L==3	// en
-	"Request query of clicks to the complete platform"
-#elif L==4	// es
-	"Solicitar consulta de clics a la plataforma completa"
-#elif L==5	// fr
-	"Request query of clicks to the complete platform"	// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar consulta de clics a la plataforma completa"	// Okoteve traducción
-#elif L==7	// it
-	"Request query of clicks to the complete platform"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Request query of clicks to the complete platform"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request query of clicks to the complete platform"	// Precisa de tradução
-#elif L==10	// tr
-	"Request query of clicks to the complete platform"	// Çeviri lazim!
-#endif
-	,
-	[ActReqMyUsgRep] =
-#if   L==1	// ca
-	"Request my usage report"	// Necessita traducció
-#elif L==2	// de
-	"Request my usage report"	// Need Übersetzung
-#elif L==3	// en
-	"Request my usage report"
-#elif L==4	// es
-	"Solicitar mi informe de uso"
-#elif L==5	// fr
-	"Request my usage report"	// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar mi informe de uso"	// Okoteve traducción
-#elif L==7	// it
-	"Request my usage report"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Request my usage report"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request my usage report"	// Precisa de tradução
-#elif L==10	// tr
-	"Request my usage report"	// Çeviri lazim!
-#endif
-	,
-	[ActMFUAct] =
-#if   L==1	// ca
-	"See most frequently used actions"		// Necessita traducció
-#elif L==2	// de
-	"See most frequently used actions"		// Need Übersetzung
-#elif L==3	// en
-	"See most frequently used actions"
-#elif L==4	// es
-	"Ver acciones m&aacute;s frecuentemente usadas"
-#elif L==5	// fr
-	"See most frequently used actions"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver acciones m&aacute;s frecuentemente usadas"	// Okoteve traducción
-#elif L==7	// it
-	"See most frequently used actions"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See most frequently used actions"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See most frequently used actions"		// Precisa de tradução
-#elif L==10	// tr
-	"See most frequently used actions"		// Çeviri lazim!
-#endif
-	,
 	[ActSeeUseGbl] =
 #if   L==1	// ca
 	"See platform usage statistics"				// Necessita traducció
@@ -32835,6 +32697,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See platform usage statistics"				// Precisa de tradução
 #elif L==10	// tr
 	"See platform usage statistics"				// Çeviri lazim!
+#endif
+	,
+	[ActSeePhoDeg] =
+#if   L==1	// ca
+	"See a class photo with average photos of students of each degree"			// Necessita traducció
+#elif L==2	// de
+	"See a class photo with average photos of students of each degree"			// Need Übersetzung
+#elif L==3	// en
+	"See a class photo with average photos of students of each degree"
+#elif L==4	// es
+	"Ver una foto de clase con fotos promedio de estudiantes de cada titulaci&oacute;n"
+#elif L==5	// fr
+	"See a class photo with average photos of students of each degree"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver una foto de clase con fotos promedio de estudiantes de cada titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"See a class photo with average photos of students of each degree"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See a class photo with average photos of students of each degree"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See a class photo with average photos of students of each degree"			// Precisa de tradução
+#elif L==10	// tr
+	"See a class photo with average photos of students of each degree"			// Çeviri lazim!
 #endif
 	,
 	[ActPrnPhoDeg] =
@@ -32883,6 +32768,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compute average photos of students of degree"			// Çeviri lazim!
 #endif
 	,
+	[ActReqStaCrs] =
+#if   L==1	// ca
+	"Request statistics of courses"			// Necessita traducció
+#elif L==2	// de
+	"Request statistics of courses"			// Need Übersetzung
+#elif L==3	// en
+	"Request statistics of courses"
+#elif L==4	// es
+	"Solicitar estad&iacute;sticas de asignaturas"
+#elif L==5	// fr
+	"Request statistics of courses"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar estad&iacute;sticas de asignaturas"	// Okoteve traducción
+#elif L==7	// it
+	"Request statistics of courses"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request statistics of courses"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request statistics of courses"			// Precisa de tradução
+#elif L==10	// tr
+	"Request statistics of courses"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeAllStaCrs] =
 #if   L==1	// ca
 	"See statistics of courses"			// Necessita traducció
@@ -32904,6 +32812,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See statistics of courses"			// Precisa de tradução
 #elif L==10	// tr
 	"See statistics of courses"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeAllSvy] =
+#if   L==1	// ca
+	"See surveys"	// Necessita traducció
+#elif L==2	// de
+	"See surveys"	// Need Übersetzung
+#elif L==3	// en
+	"See surveys"
+#elif L==4	// es
+	"Ver encuestas"
+#elif L==5	// fr
+	"See surveys"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver encuestas"	// Okoteve traducción
+#elif L==7	// it
+	"See surveys"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See surveys"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See surveys"	// Precisa de tradução
+#elif L==10	// tr
+	"See surveys"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneSvy] =
@@ -33320,6 +33251,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Confirm removal of survey question"			// Çeviri lazim!
 #endif
 	,
+	[ActReqAccGbl] =
+#if   L==1	// ca
+	"Request query of clicks to the complete platform"	// Necessita traducció
+#elif L==2	// de
+	"Request query of clicks to the complete platform"	// Need Übersetzung
+#elif L==3	// en
+	"Request query of clicks to the complete platform"
+#elif L==4	// es
+	"Solicitar consulta de clics a la plataforma completa"
+#elif L==5	// fr
+	"Request query of clicks to the complete platform"	// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar consulta de clics a la plataforma completa"	// Okoteve traducción
+#elif L==7	// it
+	"Request query of clicks to the complete platform"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Request query of clicks to the complete platform"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request query of clicks to the complete platform"	// Precisa de tradução
+#elif L==10	// tr
+	"Request query of clicks to the complete platform"	// Çeviri lazim!
+#endif
+	,
 	[ActSeeAccGbl] =
 #if   L==1	// ca
 	"Query clicks to the complete platform"		// Necessita traducció
@@ -33435,6 +33389,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Refresh the last clicks in real time"			// Çeviri lazim!
 #endif
 	,
+	[ActReqMyUsgRep] =
+#if   L==1	// ca
+	"Request my usage report"	// Necessita traducció
+#elif L==2	// de
+	"Request my usage report"	// Need Übersetzung
+#elif L==3	// en
+	"Request my usage report"
+#elif L==4	// es
+	"Solicitar mi informe de uso"
+#elif L==5	// fr
+	"Request my usage report"	// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar mi informe de uso"	// Okoteve traducción
+#elif L==7	// it
+	"Request my usage report"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Request my usage report"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request my usage report"	// Precisa de tradução
+#elif L==10	// tr
+	"Request my usage report"	// Çeviri lazim!
+#endif
+	,
 	[ActSeeMyUsgRep] =
 #if   L==1	// ca
 	"See my usage report"	// Necessita traducció
@@ -33458,6 +33435,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See my usage report"	// Çeviri lazim!
 #endif
 	,
+	[ActMFUAct] =
+#if   L==1	// ca
+	"See most frequently used actions"		// Necessita traducció
+#elif L==2	// de
+	"See most frequently used actions"		// Need Übersetzung
+#elif L==3	// en
+	"See most frequently used actions"
+#elif L==4	// es
+	"Ver acciones m&aacute;s frecuentemente usadas"
+#elif L==5	// fr
+	"See most frequently used actions"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver acciones m&aacute;s frecuentemente usadas"	// Okoteve traducción
+#elif L==7	// it
+	"See most frequently used actions"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See most frequently used actions"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See most frequently used actions"		// Precisa de tradução
+#elif L==10	// tr
+	"See most frequently used actions"		// Çeviri lazim!
+#endif
+	,
 	[ActFrmRolSes] =
 #if   L==1	// ca
 	"See form to log out and to change the current role"			// Necessita traducció
@@ -33479,6 +33479,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See form to log out and to change the current role"			// Precisa de tradução
 #elif L==10	// tr
 	"See form to log out and to change the current role"			// Çeviri lazim!
+#endif
+	,
+	[ActChgMyRol] =
+#if   L==1	// ca
+	"Change user's role"		// Necessita traducció
+#elif L==2	// de
+	"Change user's role"		// Need Übersetzung
+#elif L==3	// en
+	"Change user's role"
+#elif L==4	// es
+	"Cambiar rol de usuario"
+#elif L==5	// fr
+	"Change user's role"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar rol de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Change user's role"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change user's role"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change user's role"		// Precisa de tradução
+#elif L==10	// tr
+	"Change user's role"		// Çeviri lazim!
 #endif
 	,
 	[ActMyCrs] =
@@ -33527,6 +33550,98 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the timetable of all my courses"		// Çeviri lazim!
 #endif
 	,
+	[ActPrnMyTT] =
+#if   L==1	// ca
+	"See the print view of the timetable of all my courses"			// Necessita traducció
+#elif L==2	// de
+	"See the print view of the timetable of all my courses"			// Need Übersetzung
+#elif L==3	// en
+	"See the print view of the timetable of all my courses"
+#elif L==4	// es
+	"Ver la vista de impresi&oacute;n del horario de todas mis asignaturas"
+#elif L==5	// fr
+	"See the print view of the timetable of all my courses"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver la vista de impresi&oacute;n del horario de todas mis asignaturas"	// Okoteve traducción
+#elif L==7	// it
+	"See the print view of the timetable of all my courses"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See the print view of the timetable of all my courses"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See the print view of the timetable of all my courses"			// Precisa de tradução
+#elif L==10	// tr
+	"See the print view of the timetable of all my courses"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiTut] =
+#if   L==1	// ca
+	"Edit my office timetable"		// Necessita traducció
+#elif L==2	// de
+	"Edit my office timetable"		// Need Übersetzung
+#elif L==3	// en
+	"Edit my office timetable"
+#elif L==4	// es
+	"Editar mi horario de tutor&iacute;as"
+#elif L==5	// fr
+	"Edit my office timetable"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar mi horario de tutor&iacute;as"	// Okoteve traducción
+#elif L==7	// it
+	"Edit my office timetable"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit my office timetable"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit my office timetable"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit my office timetable"		// Çeviri lazim!
+#endif
+	,
+	[ActChgTut] =
+#if   L==1	// ca
+	"Change my office timetable"		// Necessita traducció
+#elif L==2	// de
+	"Change my office timetable"		// Need Übersetzung
+#elif L==3	// en
+	"Change my office timetable"
+#elif L==4	// es
+	"Cambiar mi horario de tutor&iacute;as"
+#elif L==5	// fr
+	"Change my office timetable"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar mi horario de tutor&iacute;as"	// Okoteve traducción
+#elif L==7	// it
+	"Change my office timetable"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change my office timetable"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change my office timetable"		// Precisa de tradução
+#elif L==10	// tr
+	"Change my office timetable"		// Çeviri lazim!
+#endif
+	,
+	[ActChgMyTT1stDay] =
+#if   L==1	// ca
+	"Change first day of week and show office timetable"					// Necessita traducció
+#elif L==2	// de
+	"Change first day of week and show office timetable"					// Need Übersetzung
+#elif L==3	// en
+	"Change first day of week and show office timetable"
+#elif L==4	// es
+	"Cambiar primer d&iacute;a de la semana y mostrar el horario de tutor&iacute;as"
+#elif L==5	// fr
+	"Change first day of week and show office timetable"					// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar primer d&iacute;a de la semana y mostrar el horario de tutor&iacute;as"	// Okoteve traducción
+#elif L==7	// it
+	"Change first day of week and show office timetable"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Change first day of week and show office timetable"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change first day of week and show office timetable"					// Precisa de tradução
+#elif L==10	// tr
+	"Change first day of week and show office timetable"					// Çeviri lazim!
+#endif
+	,
 	[ActSeeMyAgd] =
 #if   L==1	// ca
 	"See my full agenda (personal organizer)"	// Necessita traducció
@@ -33548,98 +33663,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See my full agenda (personal organizer)"	// Precisa de tradução
 #elif L==10	// tr
 	"See my full agenda (personal organizer)"	// Çeviri lazim!
-#endif
-	,
-	[ActFrmMyAcc] =
-#if   L==1	// ca
-	"See form to create or change my account"	// Necessita traducció
-#elif L==2	// de
-	"See form to create or change my account"	// Need Übersetzung
-#elif L==3	// en
-	"See form to create or change my account"
-#elif L==4	// es
-	"Ver formulario para crear o cambiar mi cuenta"
-#elif L==5	// fr
-	"See form to create or change my account"	// Besoin de traduction
-#elif L==6	// gn
-	"Ver formulario para crear o cambiar mi cuenta"	// Okoteve traducción
-#elif L==7	// it
-	"See form to create or change my account"	// Bisogno di traduzione
-#elif L==8	// pl
-	"See form to create or change my account"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See form to create or change my account"	// Precisa de tradução
-#elif L==10	// tr
-	"See form to create or change my account"	// Çeviri lazim!
-#endif
-	,
-	[ActReqEdiRecSha] =
-#if   L==1	// ca
-	"Request edition of the record with the personal data of the user"		// Necessita traducció
-#elif L==2	// de
-	"Request edition of the record with the personal data of the user"		// Need Übersetzung
-#elif L==3	// en
-	"Request edition of the record with the personal data of the user"
-#elif L==4	// es
-	"Solicitar edici&oacute;n de la ficha con los datos personales del usuario"
-#elif L==5	// fr
-	"Request edition of the record with the personal data of the user"		// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar edici&oacute;n de la ficha con los datos personales del usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Request edition of the record with the personal data of the user"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Request edition of the record with the personal data of the user"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request edition of the record with the personal data of the user"		// Precisa de tradução
-#elif L==10	// tr
-	"Request edition of the record with the personal data of the user"		// Çeviri lazim!
-#endif
-	,
-	[ActReqEdiSet] =
-#if   L==1	// ca
-	"See forms to edit settings"		// Necessita traducció
-#elif L==2	// de
-	"See forms to edit settings"		// Need Übersetzung
-#elif L==3	// en
-	"See forms to edit settings"
-#elif L==4	// es
-	"Ver formularios para editar ajustes"
-#elif L==5	// fr
-	"See forms to edit settings"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver formularios para editar ajustes"	// Okoteve traducción
-#elif L==7	// it
-	"See forms to edit settings"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See forms to edit settings"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See forms to edit settings"		// Precisa de tradução
-#elif L==10	// tr
-	"See forms to edit settings"		// Çeviri lazim!
-#endif
-	,
-	[ActChgMyRol] =
-#if   L==1	// ca
-	"Change user's role"		// Necessita traducció
-#elif L==2	// de
-	"Change user's role"		// Need Übersetzung
-#elif L==3	// en
-	"Change user's role"
-#elif L==4	// es
-	"Cambiar rol de usuario"
-#elif L==5	// fr
-	"Change user's role"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar rol de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Change user's role"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change user's role"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change user's role"		// Precisa de tradução
-#elif L==10	// tr
-	"Change user's role"		// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewEvtMyAgd] =
@@ -33893,6 +33916,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See agenda QR code ready to print"			// Precisa de tradução
 #elif L==10	// tr
 	"See agenda QR code ready to print"			// Çeviri lazim!
+#endif
+	,
+	[ActFrmMyAcc] =
+#if   L==1	// ca
+	"See form to create or change my account"	// Necessita traducció
+#elif L==2	// de
+	"See form to create or change my account"	// Need Übersetzung
+#elif L==3	// en
+	"See form to create or change my account"
+#elif L==4	// es
+	"Ver formulario para crear o cambiar mi cuenta"
+#elif L==5	// fr
+	"See form to create or change my account"	// Besoin de traduction
+#elif L==6	// gn
+	"Ver formulario para crear o cambiar mi cuenta"	// Okoteve traducción
+#elif L==7	// it
+	"See form to create or change my account"	// Bisogno di traduzione
+#elif L==8	// pl
+	"See form to create or change my account"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See form to create or change my account"	// Precisa de tradução
+#elif L==10	// tr
+	"See form to create or change my account"	// Çeviri lazim!
 #endif
 	,
 	[ActChkUsrAcc] =
@@ -34192,6 +34238,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove my account"	// Precisa de tradução
 #elif L==10	// tr
 	"Remove my account"	// Çeviri lazim!
+#endif
+	,
+	[ActPrnUsrQR] =
+#if   L==1	// ca
+	"See my QR code ready to print"			// Necessita traducció
+#elif L==2	// de
+	"See my QR code ready to print"			// Need Übersetzung
+#elif L==3	// en
+	"See my QR code ready to print"
+#elif L==4	// es
+	"Ver mi c&oacute;digo QR listo para imprimir"
+#elif L==5	// fr
+	"See my QR code ready to print"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver mi c&oacute;digo QR listo para imprimir"	// Okoteve traducción
+#elif L==7	// it
+	"See my QR code ready to print"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See my QR code ready to print"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See my QR code ready to print"			// Precisa de tradução
+#elif L==10	// tr
+	"See my QR code ready to print"			// Çeviri lazim!
+#endif
+	,
+	[ActReqEdiRecSha] =
+#if   L==1	// ca
+	"Request edition of the record with the personal data of the user"		// Necessita traducció
+#elif L==2	// de
+	"Request edition of the record with the personal data of the user"		// Need Übersetzung
+#elif L==3	// en
+	"Request edition of the record with the personal data of the user"
+#elif L==4	// es
+	"Solicitar edici&oacute;n de la ficha con los datos personales del usuario"
+#elif L==5	// fr
+	"Request edition of the record with the personal data of the user"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar edici&oacute;n de la ficha con los datos personales del usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Request edition of the record with the personal data of the user"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request edition of the record with the personal data of the user"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request edition of the record with the personal data of the user"		// Precisa de tradução
+#elif L==10	// tr
+	"Request edition of the record with the personal data of the user"		// Çeviri lazim!
 #endif
 	,
 	[ActChgMyData] =
@@ -34516,6 +34608,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change my web and social networks"	// Çeviri lazim!
 #endif
 	,
+	[ActReqEdiSet] =
+#if   L==1	// ca
+	"See forms to edit settings"		// Necessita traducció
+#elif L==2	// de
+	"See forms to edit settings"		// Need Übersetzung
+#elif L==3	// en
+	"See forms to edit settings"
+#elif L==4	// es
+	"Ver formularios para editar ajustes"
+#elif L==5	// fr
+	"See forms to edit settings"		// Besoin de traduction
+#elif L==6	// gn
+	"Ver formularios para editar ajustes"	// Okoteve traducción
+#elif L==7	// it
+	"See forms to edit settings"		// Bisogno di traduzione
+#elif L==8	// pl
+	"See forms to edit settings"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See forms to edit settings"		// Precisa de tradução
+#elif L==10	// tr
+	"See forms to edit settings"		// Çeviri lazim!
+#endif
+	,
 	[ActChgThe] =
 #if   L==1	// ca
 	"Change theme"		// Necessita traducció
@@ -34836,120 +34951,5 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change whether to notify by email"	// Precisa de tradução
 #elif L==10	// tr
 	"Change whether to notify by email"	// Çeviri lazim!
-#endif
-	,
-	[ActPrnUsrQR] =
-#if   L==1	// ca
-	"See my QR code ready to print"			// Necessita traducció
-#elif L==2	// de
-	"See my QR code ready to print"			// Need Übersetzung
-#elif L==3	// en
-	"See my QR code ready to print"
-#elif L==4	// es
-	"Ver mi c&oacute;digo QR listo para imprimir"
-#elif L==5	// fr
-	"See my QR code ready to print"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver mi c&oacute;digo QR listo para imprimir"	// Okoteve traducción
-#elif L==7	// it
-	"See my QR code ready to print"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See my QR code ready to print"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See my QR code ready to print"			// Precisa de tradução
-#elif L==10	// tr
-	"See my QR code ready to print"			// Çeviri lazim!
-#endif
-	,
-	[ActPrnMyTT] =
-#if   L==1	// ca
-	"See the print view of the timetable of all my courses"			// Necessita traducció
-#elif L==2	// de
-	"See the print view of the timetable of all my courses"			// Need Übersetzung
-#elif L==3	// en
-	"See the print view of the timetable of all my courses"
-#elif L==4	// es
-	"Ver la vista de impresi&oacute;n del horario de todas mis asignaturas"
-#elif L==5	// fr
-	"See the print view of the timetable of all my courses"			// Besoin de traduction
-#elif L==6	// gn
-	"Ver la vista de impresi&oacute;n del horario de todas mis asignaturas"	// Okoteve traducción
-#elif L==7	// it
-	"See the print view of the timetable of all my courses"			// Bisogno di traduzione
-#elif L==8	// pl
-	"See the print view of the timetable of all my courses"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the print view of the timetable of all my courses"			// Precisa de tradução
-#elif L==10	// tr
-	"See the print view of the timetable of all my courses"			// Çeviri lazim!
-#endif
-	,
-	[ActEdiTut] =
-#if   L==1	// ca
-	"Edit my office timetable"		// Necessita traducció
-#elif L==2	// de
-	"Edit my office timetable"		// Need Übersetzung
-#elif L==3	// en
-	"Edit my office timetable"
-#elif L==4	// es
-	"Editar mi horario de tutor&iacute;as"
-#elif L==5	// fr
-	"Edit my office timetable"		// Besoin de traduction
-#elif L==6	// gn
-	"Editar mi horario de tutor&iacute;as"	// Okoteve traducción
-#elif L==7	// it
-	"Edit my office timetable"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Edit my office timetable"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Edit my office timetable"		// Precisa de tradução
-#elif L==10	// tr
-	"Edit my office timetable"		// Çeviri lazim!
-#endif
-	,
-	[ActChgTut] =
-#if   L==1	// ca
-	"Change my office timetable"		// Necessita traducció
-#elif L==2	// de
-	"Change my office timetable"		// Need Übersetzung
-#elif L==3	// en
-	"Change my office timetable"
-#elif L==4	// es
-	"Cambiar mi horario de tutor&iacute;as"
-#elif L==5	// fr
-	"Change my office timetable"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar mi horario de tutor&iacute;as"	// Okoteve traducción
-#elif L==7	// it
-	"Change my office timetable"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change my office timetable"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change my office timetable"		// Precisa de tradução
-#elif L==10	// tr
-	"Change my office timetable"		// Çeviri lazim!
-#endif
-	,
-	[ActChgMyTT1stDay] =
-#if   L==1	// ca
-	"Change first day of week and show office timetable"					// Necessita traducció
-#elif L==2	// de
-	"Change first day of week and show office timetable"					// Need Übersetzung
-#elif L==3	// en
-	"Change first day of week and show office timetable"
-#elif L==4	// es
-	"Cambiar primer d&iacute;a de la semana y mostrar el horario de tutor&iacute;as"
-#elif L==5	// fr
-	"Change first day of week and show office timetable"					// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar primer d&iacute;a de la semana y mostrar el horario de tutor&iacute;as"	// Okoteve traducción
-#elif L==7	// it
-	"Change first day of week and show office timetable"					// Bisogno di traduzione
-#elif L==8	// pl
-	"Change first day of week and show office timetable"					// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change first day of week and show office timetable"					// Precisa de tradução
-#elif L==10	// tr
-	"Change first day of week and show office timetable"					// Çeviri lazim!
 #endif
 	};
