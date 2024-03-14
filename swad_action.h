@@ -104,7 +104,8 @@ Act_Content_t Act_GetContentType (Act_Action_t Action);
 Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action);
 void (*Act_GetFunctionPriori (Act_Action_t Action)) (void);
 void (*Act_GetFunctionPosteriori (Act_Action_t Action)) (void);
-const char *Act_GetIcon (Act_Action_t Action);
+
+const char *Act_GetIconFromAction (Act_Action_t Action);
 
 const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetActionText (Act_Action_t Action);

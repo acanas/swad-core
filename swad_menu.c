@@ -187,138 +187,28 @@ static const struct Mnu_Menu
 	       },
   };
 
-/*
-static const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
-  {
-   [TabUnk] =  {
-	       },
-   [TabStr] =  {
-		[ 0] = ActFrmLogIn,
-		[ 1] = ActReqSch,
-		[ 2] = ActSeeGblTL,
-		[ 3] = ActSeeSocPrf,
-		[ 4] = ActSeeCal,
-		[ 5] = ActSeeNtf,
-	       },
-   [TabSys] =  {
-		[ 0] = ActSeeSysInf,
-		[ 1] = ActSeeCty,
-		[ 2] = ActSeePen,
-		[ 3] = ActSeeLnk,
-		[ 4] = ActSeePlg,
-		[ 5] = ActMtn,
-	       },
-   [TabCty] =  {
-		[ 0] = ActSeeCtyInf,
-		[ 1] = ActSeeIns,
-	       },
-   [TabIns] =  {
-		[ 0] = ActSeeInsInf,
-		[ 1] = ActSeeCtr,
-		[ 2] = ActSeePlc,
-		[ 3] = ActSeeDpt,
-		[ 4] = ActSeeHld,
-	       },
-   [TabCtr] =  {
-		[ 0] = ActSeeCtrInf,
-		[ 1] = ActSeeDeg,
-		[ 2] = ActSeeBld,
-		[ 3] = ActSeeRoo,
-	       },
-   [TabDeg] =  {
-		[ 0] = ActSeeDegInf,
-		[ 1] = ActSeeCrs,
-	       },
-   [TabCrs] =  {
-		[ 0] = ActSeeCrsInf,
-		[ 1] = ActSeePrg,
-		[ 2] = ActSeeTchGui,
-		[ 3] = ActSeeSyl,
-		[ 4] = ActSeeBib,
-		[ 5] = ActSeeFAQ,
-		[ 6] = ActSeeCrsLnk,
-		[ 7] = ActSeeAss,
-		[ 8] = ActSeeCrsTT,
-	       },
-   [TabAss] =  {
-		[ 0] = ActSeeAllAsg,
-		[ 1] = ActSeeAllPrj,
-		[ 2] = ActSeeAllCfe,
-		[ 3] = ActEdiTstQst,
-		[ 4] = ActReqTst,
-		[ 5] = ActSeeAllExa,
-		[ 6] = ActSeeAllGam,
-		[ 7] = ActSeeAllRub,
-	       },
-   [TabFil] =  {
-		[ 0] = ActSeeAdmDocIns,
-		[ 1] = ActAdmShaIns,
-		[ 2] = ActSeeAdmDocCtr,
-		[ 3] = ActAdmShaCtr,
-		[ 4] = ActSeeAdmDocDeg,
-		[ 5] = ActAdmShaDeg,
-		[ 6] = ActSeeAdmDocCrsGrp,
-		[ 7] = ActAdmTchCrsGrp,
-		[ 8] = ActAdmShaCrsGrp,
-		[ 9] = ActAdmAsgWrkUsr,
-		[10] = ActReqAsgWrkCrs,
-		[11] = ActSeeAdmMrk,
-		[12] = ActAdmBrf,
-	       },
-   [TabUsr] =  {
-		[ 0] = ActReqSelGrp,
-		[ 1] = ActLstStd,
-		[ 2] = ActLstTch,
-		[ 3] = ActLstOth,
-		[ 4] = ActSeeAllAtt,
-		[ 5] = ActReqSignUp,
-		[ 6] = ActSeeSignUpReq,
-		[ 7] = ActLstCon,
-		},
-   [TabMsg] =  {
-		[ 0] = ActSeeAnn,
-		[ 1] = ActSeeAllNot,
-		[ 2] = ActSeeFor,
-		[ 3] = ActSeeChtRms,
-		[ 4] = ActSeeRcvMsg,
-		[ 5] = ActReqMaiUsr,
-	       },
-   [TabAna] =  {
-		[ 0] = ActReqUseGbl,
-		[ 1] = ActSeePhoDeg,
-		[ 2] = ActReqStaCrs,
-		[ 3] = ActSeeAllSvy,
-		[ 4] = ActReqAccGbl,
-		[ 5] = ActReqMyUsgRep,
-		[ 6] = ActMFUAct,
-	       },
-   [TabPrf] =  {
-		[ 0] = ActFrmRolSes,
-		[ 1] = ActMyCrs,
-		[ 2] = ActSeeMyTT,
-		[ 3] = ActSeeMyAgd,
-		[ 4] = ActFrmMyAcc,
-		[ 5] = ActReqEdiRecSha,
-		[ 6] = ActReqEdiSet,
-	       },
-  };
-*/
-/*****************************************************************************/
+  /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
 static void Mnu_PutIconsMenu (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
+/***** Get icon associated to a number of option in menu of current tab ******/
+/*****************************************************************************/
+
+const char *Mnu_GetIconFromNumOptInMenu (unsigned NumOptInMenu)
+  {
+   return Mnu_Menu[Gbl.Action.Tab][NumOptInMenu].Icon;
+  }
+
+/*****************************************************************************/
 /********************** Get icon associated to an action *********************/
 /*****************************************************************************/
 
-const char *Mnu_GetIcon (Act_Action_t Action)
+const char *Mnu_GetIconFromAction (Act_Action_t Action)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
-      return NULL;
-
-   return Mnu_Menu[Gbl.Action.Tab][Act_GetIndexInMenu (Action)].Icon;
+   return Mnu_Menu[Act_GetTab (Action)][Act_GetIndexInMenu (Action)].Icon;
   }
 
 /*****************************************************************************/
@@ -399,12 +289,12 @@ void Mnu_WriteMenuThisTab (void)
 					     " style=\"background-image:url('%s/%s/%s');\"",
 					     ClassIcoMenu[Gbl.Prefs.IconSet],The_GetSuffix (),
 					     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet],
-					     Act_GetIcon (NumAct));
+					     Ico_GetIcon (Mnu_GetIconFromNumOptInMenu (NumOptInMenu)));
 			   else
 			      HTM_DIV_Begin ("class=\"MENU_ICO\""
 					     " style=\"background-image:url('%s/%s/%s');\"",
 					     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet],
-					     Act_GetIcon (NumAct));
+					     Ico_GetIcon (Mnu_GetIconFromNumOptInMenu (NumOptInMenu)));
 			   HTM_DIV_End ();
 			   HTM_DIV_Begin ("class=\"MENU_TXT MENU_TXT_%s\"",
 			                  The_GetSuffix ());

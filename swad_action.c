@@ -186,12 +186,12 @@ void (*Act_GetFunctionPosteriori (Act_Action_t Action)) (void)
 /********************** Get icon associated to an action *********************/
 /*****************************************************************************/
 
-const char *Act_GetIcon (Act_Action_t Action)
+const char *Act_GetIconFromAction (Act_Action_t Action)
   {
    if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
-   return Ico_GetIcon (Mnu_GetIcon (Action));
+   return Ico_GetIcon (Mnu_GetIconFromAction (Action));
   }
 
 /*****************************************************************************/
