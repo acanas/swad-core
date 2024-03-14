@@ -9720,7 +9720,6 @@ Act_Action_t Brw_GetActionContract (void)
    return Brw_ActContractFolder[Gbl.FileBrowser.Type];
   }
 
-
 /*****************************************************************************/
 /********************* Show stats about exploration trees ********************/
 /*****************************************************************************/

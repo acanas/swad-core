@@ -29,6 +29,7 @@
 
 #include <stdbool.h>		// For boolean type
 
+#include "swad_action_list.h"
 #include "swad_constant.h"
 #include "swad_cryptography.h"
 #include "swad_language.h"
@@ -68,8 +69,6 @@ typedef enum
    Act_204_NOC,	// Do not write HTML content. HTTP will return Status 204 No Content
    Act_WEB_SVC,	// Web service. Send output to client using SOAP.
   } Act_BrowserTab_t;
-
-typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
 struct Act_Actions
   {

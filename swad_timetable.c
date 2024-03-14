@@ -538,6 +538,9 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
       case ActPrnRecSevTch:
 	 Timetable->View = Vie_PRINT;
 	 break;
+      default:
+	 Err_WrongActionExit ();
+	 break;
      }
 
    /***** If editing ==> configure and allocate timetable *****/

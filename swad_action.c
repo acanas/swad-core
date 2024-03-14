@@ -59,7 +59,7 @@ Act_Action_t Act_GetActionFromActCod (long ActCod)
 
 long Act_GetActCod (Act_Action_t Action)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return -1L;
 
    return ActLst_Actions[Action].ActCod;
@@ -89,7 +89,7 @@ Tab_Tab_t Act_GetTab (Act_Action_t Action)
 
 Act_Action_t Act_GetSuperAction (Act_Action_t Action)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return ActUnk;
 
    return ActLst_Actions[Action].SuperAction;
@@ -103,7 +103,7 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
   {
    unsigned Permission;
 
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return false;
 
    switch (Gbl.Hierarchy.Level)
@@ -140,7 +140,7 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 
 Act_Content_t Act_GetContentType (Act_Action_t Action)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return Act_CONT_NORM;
 
    return ActLst_Actions[Action].ContentType;
@@ -152,7 +152,7 @@ Act_Content_t Act_GetContentType (Act_Action_t Action)
 
 Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return Act_UNK_TAB;
 
    return ActLst_Actions[Action].BrowserTab;
@@ -164,7 +164,7 @@ Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action)
 
 void (*Act_GetFunctionPriori (Act_Action_t Action)) (void)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
    return ActLst_Actions[Action].FunctionPriori;
@@ -176,7 +176,7 @@ void (*Act_GetFunctionPriori (Act_Action_t Action)) (void)
 
 void (*Act_GetFunctionPosteriori (Act_Action_t Action)) (void)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
    return ActLst_Actions[Action].FunctionPosteriori;
@@ -188,7 +188,7 @@ void (*Act_GetFunctionPosteriori (Act_Action_t Action)) (void)
 
 const char *Act_GetIconFromAction (Act_Action_t Action)
   {
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
    return Ico_GetIcon (Mnu_GetIconFromAction (Action));
@@ -202,7 +202,7 @@ const char *Act_GetTitleAction (Act_Action_t Action)
   {
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
 
-   if (Action < 0 || Action >= ActLst_NUM_ACTIONS)
+   if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
    return Txt_MENU_TITLE[Act_GetTab (Action)][Act_GetIndexInMenu (Action)];
@@ -216,7 +216,7 @@ const char *Act_GetActionText (Act_Action_t Action)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 
-   if (Action >= 0 && Action < ActLst_NUM_ACTIONS)
+   if ((unsigned) Action < ActLst_NUM_ACTIONS)
       if (Txt_Actions[Action])
 	 if (Txt_Actions[Action][0])
 	    return Txt_Actions[Action];
@@ -242,7 +242,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
      };
 
    if (Gbl.Hierarchy.Level >= Hie_NUM_LEVELS)
-      Gbl.Hierarchy.Level = ActUnk;
+      Gbl.Hierarchy.Level = Hie_UNK;
 
    Gbl.Action.Act = Actions[Gbl.Hierarchy.Level];
    Tab_SetCurrentTab ();

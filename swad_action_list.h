@@ -24,1749 +24,1753 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
-/*****************************************************************************/
-
-#include "swad_tab.h"
-
-/*****************************************************************************/
-/****************************** Public constants *****************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
 /************************* Not asociates with tabs ***************************/
 /*****************************************************************************/
-#define ActAll			 0
 
-#define ActUnk			 1
-#define ActMnu			 2
+typedef enum
+  {
+   ActAll,
 
-#define ActRefCon		 3
+   ActUnk,
+   ActMnu,
 
-#define ActWebSvc		 4
+   ActRefCon,
+
+   ActWebSvc,
 
 /*****************************************************************************/
 /********************************* Start tab *********************************/
 /*****************************************************************************/
 
-// Log in
-#define ActFrmLogIn		(ActWebSvc + 1)
-#define ActLogIn		(ActWebSvc + 2)
-#define ActLogInNew		(ActWebSvc + 3)
-#define ActLogInLan		(ActWebSvc + 4)
-#define ActAnnSee		(ActWebSvc + 5)
-#define ActReqSndNewPwd		(ActWebSvc + 6)
-#define ActSndNewPwd		(ActWebSvc + 7)
-#define ActLogOut		(ActWebSvc + 8)
+   // Log in
+   ActFrmLogIn,
+   ActLogIn,
+   ActLogInNew,
+   ActLogInLan,
+   ActAnnSee,
+   ActReqSndNewPwd,
+   ActSndNewPwd,
+   ActLogOut,
 
-// Search
-#define ActReqSch		(ActLogOut + 1)
-#define ActSch			(ActLogOut + 2)
+   // Search
+   ActReqSch,
+   ActSch,
 
-// Timeline
-#define ActSeeGblTL		(ActSch + 1)
-#define ActRefNewPubGblTL	(ActSch + 2)
-#define ActRefOldPubGblTL	(ActSch + 3)
-#define ActRcvPstGblTL		(ActSch + 4)
-#define ActRcvComGblTL		(ActSch + 5)
-#define ActShoHidComGblTL	(ActSch + 6)
-#define ActAllShaNotGblTL	(ActSch + 7)
-#define ActAllFavNotGblTL	(ActSch + 8)
-#define ActAllFavComGblTL	(ActSch + 9)
-#define ActShaNotGblTL		(ActSch + 10)
-#define ActUnsNotGblTL		(ActSch + 11)
-#define ActFavNotGblTL		(ActSch + 12)
-#define ActUnfNotGblTL		(ActSch + 13)
-#define ActFavComGblTL		(ActSch + 14)
-#define ActUnfComGblTL		(ActSch + 15)
-#define ActReqRemPubGblTL	(ActSch + 16)
-#define ActRemPubGblTL		(ActSch + 17)
-#define ActReqRemComGblTL	(ActSch + 18)
-#define ActRemComGblTL		(ActSch + 19)
+   // Timeline
+   ActSeeGblTL,
+   ActRefNewPubGblTL,
+   ActRefOldPubGblTL,
+   ActRcvPstGblTL,
+   ActRcvComGblTL,
+   ActShoHidComGblTL,
+   ActAllShaNotGblTL,
+   ActAllFavNotGblTL,
+   ActAllFavComGblTL,
+   ActShaNotGblTL,
+   ActUnsNotGblTL,
+   ActFavNotGblTL,
+   ActUnfNotGblTL,
+   ActFavComGblTL,
+   ActUnfComGblTL,
+   ActReqRemPubGblTL,
+   ActRemPubGblTL,
+   ActReqRemComGblTL,
+   ActRemComGblTL,
 
-// Profiles
-#define ActSeeSocPrf		(ActRemComGblTL + 1)
-#define ActReqOthPubPrf		(ActRemComGblTL + 2)
-#define ActRefOldPubUsrTL	(ActRemComGblTL + 3)
-#define ActRcvPstUsrTL		(ActRemComGblTL + 4)
-#define ActRcvComUsrTL		(ActRemComGblTL + 5)
-#define ActShoHidComUsrTL	(ActRemComGblTL + 6)
-#define ActAllShaNotUsrTL	(ActRemComGblTL + 7)
-#define ActAllFavNotUsrTL	(ActRemComGblTL + 8)
-#define ActAllFavComUsrTL	(ActRemComGblTL + 9)
-#define ActShaNotUsrTL		(ActRemComGblTL + 10)
-#define ActUnsNotUsrTL		(ActRemComGblTL + 11)
-#define ActFavNotUsrTL		(ActRemComGblTL + 12)
-#define ActUnfNotUsrTL		(ActRemComGblTL + 13)
-#define ActFavComUsrTL		(ActRemComGblTL + 14)
-#define ActUnfComUsrTL		(ActRemComGblTL + 15)
-#define ActReqRemPubUsrTL	(ActRemComGblTL + 16)
-#define ActRemPubUsrTL		(ActRemComGblTL + 17)
-#define ActReqRemComUsrTL	(ActRemComGblTL + 18)
-#define ActRemComUsrTL		(ActRemComGblTL + 19)
-#define ActSeeOthPubPrf		(ActRemComGblTL + 20)
-#define ActCalFig		(ActRemComGblTL + 21)
-#define ActFolUsr		(ActRemComGblTL + 22)
-#define ActUnfUsr		(ActRemComGblTL + 23)
-#define ActSeeFlg		(ActRemComGblTL + 24)
-#define ActSeeFlr		(ActRemComGblTL + 25)
-#define ActSeeUsrAgd		(ActRemComGblTL + 26)
+   // Profiles
+   ActSeeSocPrf,
+   ActReqOthPubPrf,
+   ActRefOldPubUsrTL,
+   ActRcvPstUsrTL,
+   ActRcvComUsrTL,
+   ActShoHidComUsrTL,
+   ActAllShaNotUsrTL,
+   ActAllFavNotUsrTL,
+   ActAllFavComUsrTL,
+   ActShaNotUsrTL,
+   ActUnsNotUsrTL,
+   ActFavNotUsrTL,
+   ActUnfNotUsrTL,
+   ActFavComUsrTL,
+   ActUnfComUsrTL,
+   ActReqRemPubUsrTL,
+   ActRemPubUsrTL,
+   ActReqRemComUsrTL,
+   ActRemComUsrTL,
+   ActSeeOthPubPrf,
+   ActCalFig,
+   ActFolUsr,
+   ActUnfUsr,
+   ActSeeFlg,
+   ActSeeFlr,
+   ActSeeUsrAgd,
 
-// Calendar
-#define ActSeeCal		(ActSeeUsrAgd + 1)
-#define ActPrnCal		(ActSeeUsrAgd + 2)
-#define ActChgCal1stDay		(ActSeeUsrAgd + 3)
+   // Calendar
+   ActSeeCal,
+   ActPrnCal,
+   ActChgCal1stDay,
 
-// Notifications
-#define ActSeeNtf		(ActChgCal1stDay + 1)
-#define ActSeeNewNtf		(ActChgCal1stDay + 2)
-#define ActMrkNtfSee		(ActChgCal1stDay + 3)
-#define ActSeeMai		(ActChgCal1stDay + 4)
-#define ActEdiMai		(ActChgCal1stDay + 5)
-#define ActNewMai		(ActChgCal1stDay + 6)
-#define ActRemMai		(ActChgCal1stDay + 7)
-#define ActRenMaiSho		(ActChgCal1stDay + 8)
-#define ActRenMaiFul		(ActChgCal1stDay + 9)
+   // Notifications
+   ActSeeNtf,
+   ActSeeNewNtf,
+   ActMrkNtfSee,
+   ActSeeMai,
+   ActEdiMai,
+   ActNewMai,
+   ActRemMai,
+   ActRenMaiSho,
+   ActRenMaiFul,
 
 /*****************************************************************************/
 /******************************** System tab *********************************/
 /*****************************************************************************/
-// System info
-#define ActSeeSysInf		(ActRenMaiFul + 1)
-#define ActPrnSysInf		(ActRenMaiFul + 2)
 
-// Countries
-#define ActSeeCty		(ActPrnSysInf + 1)
-#define ActEdiCty		(ActPrnSysInf + 2)
-#define ActNewCty		(ActPrnSysInf + 3)
-#define ActRemCty		(ActPrnSysInf + 4)
-#define ActRenCty		(ActPrnSysInf + 5)
-#define ActChgCtyWWW		(ActPrnSysInf + 6)
+   // System info
+   ActSeeSysInf,
+   ActPrnSysInf,
 
-// Pending
-#define ActSeePen		(ActChgCtyWWW + 1)
+   // Countries
+   ActSeeCty,
+   ActEdiCty,
+   ActNewCty,
+   ActRemCty,
+   ActRenCty,
+   ActChgCtyWWW,
 
-// Links
-#define ActSeeLnk		(ActSeePen + 1)
-#define ActEdiLnk		(ActSeePen + 2)
-#define ActNewLnk		(ActSeePen + 3)
-#define ActRemLnk		(ActSeePen + 4)
-#define ActRenLnkSho		(ActSeePen + 5)
-#define ActRenLnkFul		(ActSeePen + 6)
-#define ActChgLnkWWW		(ActSeePen + 7)
-#define ActSeeBan		(ActSeePen + 8)
-#define ActEdiBan		(ActSeePen + 9)
-#define ActNewBan		(ActSeePen + 10)
-#define ActRemBan		(ActSeePen + 11)
-#define ActUnhBan		(ActSeePen + 12)
-#define ActHidBan		(ActSeePen + 13)
-#define ActRenBanSho		(ActSeePen + 14)
-#define ActRenBanFul		(ActSeePen + 15)
-#define ActChgBanImg		(ActSeePen + 16)
-#define ActChgBanWWW		(ActSeePen + 17)
-#define ActClkBan		(ActSeePen + 18)
+   // Pending
+   ActSeePen,
 
-// Plugins
-#define ActSeePlg		(ActClkBan + 1)
-#define ActEdiPlg		(ActClkBan + 2)
-#define ActNewPlg		(ActClkBan + 3)
-#define ActRemPlg		(ActClkBan + 4)
-#define ActRenPlg		(ActClkBan + 5)
-#define ActChgPlgDes		(ActClkBan + 6)
-#define ActChgPlgLog		(ActClkBan + 7)
-#define ActChgPlgAppKey		(ActClkBan + 8)
-#define ActChgPlgURL		(ActClkBan + 9)
-#define ActChgPlgIP		(ActClkBan + 10)
+   // Links
+   ActSeeLnk,
+   ActEdiLnk,
+   ActNewLnk,
+   ActRemLnk,
+   ActRenLnkSho,
+   ActRenLnkFul,
+   ActChgLnkWWW,
+   ActSeeBan,
+   ActEdiBan,
+   ActNewBan,
+   ActRemBan,
+   ActUnhBan,
+   ActHidBan,
+   ActRenBanSho,
+   ActRenBanFul,
+   ActChgBanImg,
+   ActChgBanWWW,
+   ActClkBan,
 
-// Maintenance
-#define ActMtn			(ActChgPlgIP + 1)
-#define ActSetUp		(ActChgPlgIP + 2)
-#define ActReqRemOldCrs		(ActChgPlgIP + 3)
-#define ActRemOldCrs		(ActChgPlgIP + 4)
+   // Plugins
+   ActSeePlg,
+   ActEdiPlg,
+   ActNewPlg,
+   ActRemPlg,
+   ActRenPlg,
+   ActChgPlgDes,
+   ActChgPlgLog,
+   ActChgPlgAppKey,
+   ActChgPlgURL,
+   ActChgPlgIP,
+
+   // Maintenance
+   ActMtn,
+   ActSetUp,
+   ActReqRemOldCrs,
+   ActRemOldCrs,
 
 /*****************************************************************************/
 /******************************** Country tab ********************************/
 /*****************************************************************************/
-// Country info
-#define ActSeeCtyInf		(ActRemOldCrs + 1)
-#define ActPrnCtyInf		(ActRemOldCrs + 2)
-#define ActChgCtyMapAtt		(ActRemOldCrs + 3)
 
-// Institutions
-#define ActSeeIns		(ActChgCtyMapAtt + 1)
-#define ActEdiIns		(ActChgCtyMapAtt + 2)
-#define ActReqIns		(ActChgCtyMapAtt + 3)
-#define ActNewIns		(ActChgCtyMapAtt + 4)
-#define ActRemIns		(ActChgCtyMapAtt + 5)
-#define ActRenInsSho		(ActChgCtyMapAtt + 6)
-#define ActRenInsFul		(ActChgCtyMapAtt + 7)
-#define ActChgInsWWW		(ActChgCtyMapAtt + 8)
-#define ActChgInsSta		(ActChgCtyMapAtt + 9)
+   // Country info
+   ActSeeCtyInf,
+   ActPrnCtyInf,
+   ActChgCtyMapAtt,
+
+   // Institutions
+   ActSeeIns,
+   ActEdiIns,
+   ActReqIns,
+   ActNewIns,
+   ActRemIns,
+   ActRenInsSho,
+   ActRenInsFul,
+   ActChgInsWWW,
+   ActChgInsSta,
 
 /*****************************************************************************/
 /****************************** Institution tab ******************************/
 /*****************************************************************************/
-// Institution info
-#define ActSeeInsInf		(ActChgInsSta + 1)
-#define ActPrnInsInf		(ActChgInsSta + 2)
-#define ActChgInsCtyCfg		(ActChgInsSta + 3)
-#define ActRenInsShoCfg		(ActChgInsSta + 4)
-#define ActRenInsFulCfg		(ActChgInsSta + 5)
-#define ActChgInsWWWCfg		(ActChgInsSta + 6)
-#define ActReqInsLog		(ActChgInsSta + 7)
-#define ActRecInsLog		(ActChgInsSta + 8)
-#define ActRemInsLog		(ActChgInsSta + 9)
 
-// Centers
-#define ActSeeCtr		(ActRemInsLog + 1)
-#define ActEdiCtr		(ActRemInsLog + 2)
-#define ActReqCtr		(ActRemInsLog + 3)
-#define ActNewCtr		(ActRemInsLog + 4)
-#define ActRemCtr		(ActRemInsLog + 5)
-#define ActChgCtrPlc		(ActRemInsLog + 6)
-#define ActRenCtrSho		(ActRemInsLog + 7)
-#define ActRenCtrFul		(ActRemInsLog + 8)
-#define ActChgCtrWWW		(ActRemInsLog + 9)
-#define ActChgCtrSta		(ActRemInsLog + 10)
+   // Institution info
+   ActSeeInsInf,
+   ActPrnInsInf,
+   ActChgInsCtyCfg,
+   ActRenInsShoCfg,
+   ActRenInsFulCfg,
+   ActChgInsWWWCfg,
+   ActReqInsLog,
+   ActRecInsLog,
+   ActRemInsLog,
 
-// Places
-#define ActSeePlc		(ActChgCtrSta + 1)
-#define ActEdiPlc		(ActChgCtrSta + 2)
-#define ActNewPlc		(ActChgCtrSta + 3)
-#define ActRemPlc		(ActChgCtrSta + 4)
-#define ActRenPlcSho		(ActChgCtrSta + 5)
-#define ActRenPlcFul		(ActChgCtrSta + 6)
+   // Centers
+   ActSeeCtr,
+   ActEdiCtr,
+   ActReqCtr,
+   ActNewCtr,
+   ActRemCtr,
+   ActChgCtrPlc,
+   ActRenCtrSho,
+   ActRenCtrFul,
+   ActChgCtrWWW,
+   ActChgCtrSta,
 
-// Departments
-#define ActSeeDpt		(ActRenPlcFul + 1)
-#define ActEdiDpt		(ActRenPlcFul + 2)
-#define ActNewDpt		(ActRenPlcFul + 3)
-#define ActRemDpt		(ActRenPlcFul + 4)
-#define ActChgDptIns		(ActRenPlcFul + 5)
-#define ActRenDptSho		(ActRenPlcFul + 6)
-#define ActRenDptFul		(ActRenPlcFul + 7)
-#define ActChgDptWWW		(ActRenPlcFul + 8)
+   // Places
+   ActSeePlc,
+   ActEdiPlc,
+   ActNewPlc,
+   ActRemPlc,
+   ActRenPlcSho,
+   ActRenPlcFul,
 
-// Holidays
-#define ActSeeHld		(ActChgDptWWW + 1)
-#define ActEdiHld		(ActChgDptWWW + 2)
-#define ActNewHld		(ActChgDptWWW + 3)
-#define ActRemHld		(ActChgDptWWW + 4)
-#define ActChgHldPlc		(ActChgDptWWW + 5)
-#define ActChgHldTyp		(ActChgDptWWW + 6)
-#define ActChgHldStrDat		(ActChgDptWWW + 7)
-#define ActChgHldEndDat		(ActChgDptWWW + 8)
-#define ActRenHld		(ActChgDptWWW + 9)
+   // Departments
+   ActSeeDpt,
+   ActEdiDpt,
+   ActNewDpt,
+   ActRemDpt,
+   ActChgDptIns,
+   ActRenDptSho,
+   ActRenDptFul,
+   ActChgDptWWW,
+
+   // Holidays
+   ActSeeHld,
+   ActEdiHld,
+   ActNewHld,
+   ActRemHld,
+   ActChgHldPlc,
+   ActChgHldTyp,
+   ActChgHldStrDat,
+   ActChgHldEndDat,
+   ActRenHld,
 
 /*****************************************************************************/
 /********************************* Center tab ********************************/
 /*****************************************************************************/
-// Center info
-#define ActSeeCtrInf		(ActRenHld + 1)
-#define ActPrnCtrInf		(ActRenHld + 2)
-#define ActChgCtrInsCfg		(ActRenHld + 3)
-#define ActRenCtrShoCfg		(ActRenHld + 4)
-#define ActRenCtrFulCfg		(ActRenHld + 5)
-#define ActChgCtrPlcCfg		(ActRenHld + 6)
-#define ActChgCtrLatCfg		(ActRenHld + 7)
-#define ActChgCtrLgtCfg		(ActRenHld + 8)
-#define ActChgCtrAltCfg		(ActRenHld + 9)
-#define ActChgCtrWWWCfg		(ActRenHld + 10)
-#define ActReqCtrLog		(ActRenHld + 11)
-#define ActRecCtrLog		(ActRenHld + 12)
-#define ActRemCtrLog		(ActRenHld + 13)
-#define ActReqCtrPho		(ActRenHld + 14)
-#define ActRecCtrPho		(ActRenHld + 15)
-#define ActChgCtrPhoAtt		(ActRenHld + 16)
 
-// Degrees
-#define ActSeeDeg		(ActChgCtrPhoAtt + 1)
-#define ActEdiDeg		(ActChgCtrPhoAtt + 2)
-#define ActReqDeg		(ActChgCtrPhoAtt + 3)
-#define ActNewDeg		(ActChgCtrPhoAtt + 4)
-#define ActRemDeg		(ActChgCtrPhoAtt + 5)
-#define ActRenDegSho		(ActChgCtrPhoAtt + 6)
-#define ActRenDegFul		(ActChgCtrPhoAtt + 7)
-#define ActChgDegTyp		(ActChgCtrPhoAtt + 8)
-#define ActChgDegWWW		(ActChgCtrPhoAtt + 9)
-#define ActChgDegSta		(ActChgCtrPhoAtt + 10)
-#define ActSeeDegTyp		(ActChgCtrPhoAtt + 11)
-#define ActEdiDegTyp		(ActChgCtrPhoAtt + 12)
-#define ActNewDegTyp		(ActChgCtrPhoAtt + 13)
-#define ActRemDegTyp		(ActChgCtrPhoAtt + 14)
-#define ActRenDegTyp		(ActChgCtrPhoAtt + 15)
+   // Center info
+   ActSeeCtrInf,
+   ActPrnCtrInf,
+   ActChgCtrInsCfg,
+   ActRenCtrShoCfg,
+   ActRenCtrFulCfg,
+   ActChgCtrPlcCfg,
+   ActChgCtrLatCfg,
+   ActChgCtrLgtCfg,
+   ActChgCtrAltCfg,
+   ActChgCtrWWWCfg,
+   ActReqCtrLog,
+   ActRecCtrLog,
+   ActRemCtrLog,
+   ActReqCtrPho,
+   ActRecCtrPho,
+   ActChgCtrPhoAtt,
 
-// Buildings
-#define ActSeeBld		(ActRenDegTyp + 1)
-#define ActEdiBld		(ActRenDegTyp + 2)
-#define ActNewBld		(ActRenDegTyp + 3)
-#define ActRemBld		(ActRenDegTyp + 4)
-#define ActRenBldSho		(ActRenDegTyp + 5)
-#define ActRenBldFul		(ActRenDegTyp + 6)
-#define ActRenBldLoc		(ActRenDegTyp + 7)
+   // Degrees
+   ActSeeDeg,
+   ActEdiDeg,
+   ActReqDeg,
+   ActNewDeg,
+   ActRemDeg,
+   ActRenDegSho,
+   ActRenDegFul,
+   ActChgDegTyp,
+   ActChgDegWWW,
+   ActChgDegSta,
+   ActSeeDegTyp,
+   ActEdiDegTyp,
+   ActNewDegTyp,
+   ActRemDegTyp,
+   ActRenDegTyp,
 
-// Rooms
-#define ActSeeRoo		(ActRenBldLoc + 1)
-#define ActEdiRoo		(ActRenBldLoc + 2)
-#define ActNewRoo		(ActRenBldLoc + 3)
-#define ActRemRoo		(ActRenBldLoc + 4)
-#define ActChgRooBld		(ActRenBldLoc + 5)
-#define ActChgRooFlo		(ActRenBldLoc + 6)
-#define ActChgRooTyp		(ActRenBldLoc + 7)
-#define ActRenRooSho		(ActRenBldLoc + 8)
-#define ActRenRooFul		(ActRenBldLoc + 9)
-#define ActChgRooMaxUsr		(ActRenBldLoc + 10)
-#define ActChgRooMAC		(ActRenBldLoc + 11)
+   // Buildings
+   ActSeeBld,
+   ActEdiBld,
+   ActNewBld,
+   ActRemBld,
+   ActRenBldSho,
+   ActRenBldFul,
+   ActRenBldLoc,
+
+   // Rooms
+   ActSeeRoo,
+   ActEdiRoo,
+   ActNewRoo,
+   ActRemRoo,
+   ActChgRooBld,
+   ActChgRooFlo,
+   ActChgRooTyp,
+   ActRenRooSho,
+   ActRenRooFul,
+   ActChgRooMaxUsr,
+   ActChgRooMAC,
 
 /*****************************************************************************/
 /********************************* Degree tab ********************************/
 /*****************************************************************************/
-// Degree info
-#define ActSeeDegInf		(ActChgRooMAC + 1)
-#define ActPrnDegInf		(ActChgRooMAC + 2)
-#define ActChgDegCtrCfg		(ActChgRooMAC + 3)
-#define ActRenDegShoCfg		(ActChgRooMAC + 4)
-#define ActRenDegFulCfg		(ActChgRooMAC + 5)
-#define ActChgDegWWWCfg		(ActChgRooMAC + 6)
-#define ActReqDegLog		(ActChgRooMAC + 7)
-#define ActRecDegLog		(ActChgRooMAC + 8)
-#define ActRemDegLog		(ActChgRooMAC + 9)
+   // Degree info
+   ActSeeDegInf,
+   ActPrnDegInf,
+   ActChgDegCtrCfg,
+   ActRenDegShoCfg,
+   ActRenDegFulCfg,
+   ActChgDegWWWCfg,
+   ActReqDegLog,
+   ActRecDegLog,
+   ActRemDegLog,
 
-// Courses
-#define ActSeeCrs		(ActRemDegLog + 1)
-#define ActEdiCrs		(ActRemDegLog + 2)
-#define ActReqCrs		(ActRemDegLog + 3)
-#define ActNewCrs		(ActRemDegLog + 4)
-#define ActRemCrs		(ActRemDegLog + 5)
-#define ActChgInsCrsCod		(ActRemDegLog + 6)
-#define ActChgCrsYea		(ActRemDegLog + 7)
-#define ActRenCrsSho		(ActRemDegLog + 8)
-#define ActRenCrsFul		(ActRemDegLog + 9)
-#define ActChgCrsSta		(ActRemDegLog + 10)
+   // Courses
+   ActSeeCrs,
+   ActEdiCrs,
+   ActReqCrs,
+   ActNewCrs,
+   ActRemCrs,
+   ActChgInsCrsCod,
+   ActChgCrsYea,
+   ActRenCrsSho,
+   ActRenCrsFul,
+   ActChgCrsSta,
 
 /*****************************************************************************/
 /******************************** Course tab *********************************/
 /*****************************************************************************/
-// Course info
-#define ActSeeCrsInf		(ActChgCrsSta + 1)
-#define ActPrnCrsInf		(ActChgCrsSta + 2)
-#define ActChgCrsDegCfg		(ActChgCrsSta + 3)
-#define ActRenCrsShoCfg		(ActChgCrsSta + 4)
-#define ActRenCrsFulCfg		(ActChgCrsSta + 5)
-#define ActChgInsCrsCodCfg	(ActChgCrsSta + 6)
-#define ActChgCrsYeaCfg		(ActChgCrsSta + 7)
-#define ActEdiCrsInf		(ActChgCrsSta + 8)
-#define ActChgFrcReaCrsInf	(ActChgCrsSta + 9)
-#define ActChgHavReaCrsInf	(ActChgCrsSta + 10)
-#define ActSelInfSrcCrsInf	(ActChgCrsSta + 11)
-#define ActRcvURLCrsInf		(ActChgCrsSta + 12)
-#define ActRcvPagCrsInf		(ActChgCrsSta + 13)
-#define ActEditorCrsInf		(ActChgCrsSta + 14)
-#define ActPlaTxtEdiCrsInf	(ActChgCrsSta + 15)
-#define ActRchTxtEdiCrsInf	(ActChgCrsSta + 16)
-#define ActRcvPlaTxtCrsInf	(ActChgCrsSta + 17)
-#define ActRcvRchTxtCrsInf	(ActChgCrsSta + 18)
 
-// Program
-#define ActSeePrg		(ActRcvRchTxtCrsInf + 1)
-#define ActEdiPrg		(ActRcvRchTxtCrsInf + 2)
-#define ActSeePrgItm		(ActRcvRchTxtCrsInf + 3)
-#define ActFrmChgPrgItm		(ActRcvRchTxtCrsInf + 4)
-#define ActFrmNewPrgItm		(ActRcvRchTxtCrsInf + 5)
-#define ActChgPrgItm		(ActRcvRchTxtCrsInf + 6)
-#define ActNewPrgItm		(ActRcvRchTxtCrsInf + 7)
-#define ActReqRemPrgItm		(ActRcvRchTxtCrsInf + 8)
-#define ActRemPrgItm		(ActRcvRchTxtCrsInf + 9)
-#define ActHidPrgItm		(ActRcvRchTxtCrsInf + 10)
-#define ActUnhPrgItm		(ActRcvRchTxtCrsInf + 11)
-#define ActUp_PrgItm		(ActRcvRchTxtCrsInf + 12)
-#define ActDwnPrgItm		(ActRcvRchTxtCrsInf + 13)
-#define ActLftPrgItm		(ActRcvRchTxtCrsInf + 14)
-#define ActRgtPrgItm		(ActRcvRchTxtCrsInf + 15)
-#define ActExpSeePrgItm		(ActRcvRchTxtCrsInf + 16)
-#define ActConSeePrgItm		(ActRcvRchTxtCrsInf + 17)
-#define ActExpEdiPrgItm		(ActRcvRchTxtCrsInf + 18)
-#define ActConEdiPrgItm		(ActRcvRchTxtCrsInf + 19)
-#define ActSeeRscCli_InPrg	(ActRcvRchTxtCrsInf + 20)
-#define ActRemRscCli_InPrg	(ActRcvRchTxtCrsInf + 21)
-#define ActFrmSeePrgRsc		(ActRcvRchTxtCrsInf + 22)
-#define ActFrmEdiPrgRsc		(ActRcvRchTxtCrsInf + 23)
-#define ActNewPrgRsc		(ActRcvRchTxtCrsInf + 24)
-#define ActRenPrgRsc		(ActRcvRchTxtCrsInf + 25)
-#define ActReqRemPrgRsc		(ActRcvRchTxtCrsInf + 26)
-#define ActRemPrgRsc		(ActRcvRchTxtCrsInf + 27)
-#define ActHidPrgRsc		(ActRcvRchTxtCrsInf + 28)
-#define ActUnhPrgRsc		(ActRcvRchTxtCrsInf + 29)
-#define ActUp_PrgRsc		(ActRcvRchTxtCrsInf + 30)
-#define ActDwnPrgRsc		(ActRcvRchTxtCrsInf + 31)
-#define ActFrmChgLnkPrgRsc	(ActRcvRchTxtCrsInf + 32)
-#define ActChgLnkPrgRsc		(ActRcvRchTxtCrsInf + 33)
+   // Course info
+   ActSeeCrsInf,
+   ActPrnCrsInf,
+   ActChgCrsDegCfg,
+   ActRenCrsShoCfg,
+   ActRenCrsFulCfg,
+   ActChgInsCrsCodCfg,
+   ActChgCrsYeaCfg,
+   ActEdiCrsInf,
+   ActChgFrcReaCrsInf,
+   ActChgHavReaCrsInf,
+   ActSelInfSrcCrsInf,
+   ActRcvURLCrsInf,
+   ActRcvPagCrsInf,
+   ActEditorCrsInf,
+   ActPlaTxtEdiCrsInf,
+   ActRchTxtEdiCrsInf,
+   ActRcvPlaTxtCrsInf,
+   ActRcvRchTxtCrsInf,
 
-// Teaching guide
-#define ActSeeTchGui		(ActChgLnkPrgRsc + 1)
-#define ActEdiTchGui		(ActChgLnkPrgRsc + 2)
-#define ActChgFrcReaTchGui	(ActChgLnkPrgRsc + 3)
-#define ActChgHavReaTchGui	(ActChgLnkPrgRsc + 4)
-#define ActSelInfSrcTchGui	(ActChgLnkPrgRsc + 5)
-#define ActRcvURLTchGui		(ActChgLnkPrgRsc + 6)
-#define ActRcvPagTchGui		(ActChgLnkPrgRsc + 7)
-#define ActEditorTchGui		(ActChgLnkPrgRsc + 8)
-#define ActPlaTxtEdiTchGui	(ActChgLnkPrgRsc + 9)
-#define ActRchTxtEdiTchGui	(ActChgLnkPrgRsc + 10)
-#define ActRcvPlaTxtTchGui	(ActChgLnkPrgRsc + 11)
-#define ActRcvRchTxtTchGui	(ActChgLnkPrgRsc + 12)
+   // Program
+   ActSeePrg,
+   ActEdiPrg,
+   ActSeePrgItm,
+   ActFrmChgPrgItm,
+   ActFrmNewPrgItm,
+   ActChgPrgItm,
+   ActNewPrgItm,
+   ActReqRemPrgItm,
+   ActRemPrgItm,
+   ActHidPrgItm,
+   ActUnhPrgItm,
+   ActUp_PrgItm,
+   ActDwnPrgItm,
+   ActLftPrgItm,
+   ActRgtPrgItm,
+   ActExpSeePrgItm,
+   ActConSeePrgItm,
+   ActExpEdiPrgItm,
+   ActConEdiPrgItm,
+   ActSeeRscCli_InPrg,
+   ActRemRscCli_InPrg,
+   ActFrmSeePrgRsc,
+   ActFrmEdiPrgRsc,
+   ActNewPrgRsc,
+   ActRenPrgRsc,
+   ActReqRemPrgRsc,
+   ActRemPrgRsc,
+   ActHidPrgRsc,
+   ActUnhPrgRsc,
+   ActUp_PrgRsc,
+   ActDwnPrgRsc,
+   ActFrmChgLnkPrgRsc,
+   ActChgLnkPrgRsc,
 
-// Syllabus
-#define ActSeeSyl		(ActRcvRchTxtTchGui + 1)
-#define ActSeeSylLec		(ActRcvRchTxtTchGui + 2)
-#define ActSeeSylPra		(ActRcvRchTxtTchGui + 3)
-#define ActEdiSylLec		(ActRcvRchTxtTchGui + 4)
-#define ActEdiSylPra		(ActRcvRchTxtTchGui + 5)
-#define ActDelItmSylLec		(ActRcvRchTxtTchGui + 6)
-#define ActDelItmSylPra		(ActRcvRchTxtTchGui + 7)
-#define ActUp_IteSylLec		(ActRcvRchTxtTchGui + 8)
-#define ActUp_IteSylPra		(ActRcvRchTxtTchGui + 9)
-#define ActDwnIteSylLec		(ActRcvRchTxtTchGui + 10)
-#define ActDwnIteSylPra		(ActRcvRchTxtTchGui + 11)
-#define ActRgtIteSylLec		(ActRcvRchTxtTchGui + 12)
-#define ActRgtIteSylPra		(ActRcvRchTxtTchGui + 13)
-#define ActLftIteSylLec		(ActRcvRchTxtTchGui + 14)
-#define ActLftIteSylPra		(ActRcvRchTxtTchGui + 15)
-#define ActInsIteSylLec		(ActRcvRchTxtTchGui + 16)
-#define ActInsIteSylPra		(ActRcvRchTxtTchGui + 17)
-#define ActModIteSylLec		(ActRcvRchTxtTchGui + 18)
-#define ActModIteSylPra		(ActRcvRchTxtTchGui + 19)
-#define ActChgFrcReaSylLec	(ActRcvRchTxtTchGui + 20)
-#define ActChgFrcReaSylPra	(ActRcvRchTxtTchGui + 21)
-#define ActChgHavReaSylLec	(ActRcvRchTxtTchGui + 22)
-#define ActChgHavReaSylPra	(ActRcvRchTxtTchGui + 23)
-#define ActSelInfSrcSylLec	(ActRcvRchTxtTchGui + 24)
-#define ActSelInfSrcSylPra	(ActRcvRchTxtTchGui + 25)
-#define ActRcvURLSylLec		(ActRcvRchTxtTchGui + 26)
-#define ActRcvURLSylPra		(ActRcvRchTxtTchGui + 27)
-#define ActRcvPagSylLec		(ActRcvRchTxtTchGui + 28)
-#define ActRcvPagSylPra		(ActRcvRchTxtTchGui + 29)
-#define ActEditorSylLec		(ActRcvRchTxtTchGui + 30)
-#define ActEditorSylPra		(ActRcvRchTxtTchGui + 31)
-#define ActPlaTxtEdiSylLec	(ActRcvRchTxtTchGui + 32)
-#define ActPlaTxtEdiSylPra	(ActRcvRchTxtTchGui + 33)
-#define ActRchTxtEdiSylLec	(ActRcvRchTxtTchGui + 34)
-#define ActRchTxtEdiSylPra	(ActRcvRchTxtTchGui + 35)
-#define ActRcvPlaTxtSylLec	(ActRcvRchTxtTchGui + 36)
-#define ActRcvPlaTxtSylPra	(ActRcvRchTxtTchGui + 37)
-#define ActRcvRchTxtSylLec	(ActRcvRchTxtTchGui + 38)
-#define ActRcvRchTxtSylPra	(ActRcvRchTxtTchGui + 39)
+   // Teaching guide
+   ActSeeTchGui,
+   ActEdiTchGui,
+   ActChgFrcReaTchGui,
+   ActChgHavReaTchGui,
+   ActSelInfSrcTchGui,
+   ActRcvURLTchGui,
+   ActRcvPagTchGui,
+   ActEditorTchGui,
+   ActPlaTxtEdiTchGui,
+   ActRchTxtEdiTchGui,
+   ActRcvPlaTxtTchGui,
+   ActRcvRchTxtTchGui,
 
-// Bibliography
-#define ActSeeBib		(ActRcvRchTxtSylPra + 1)
-#define ActEdiBib		(ActRcvRchTxtSylPra + 2)
-#define ActChgFrcReaBib		(ActRcvRchTxtSylPra + 3)
-#define ActChgHavReaBib		(ActRcvRchTxtSylPra + 4)
-#define ActSelInfSrcBib		(ActRcvRchTxtSylPra + 5)
-#define ActRcvURLBib		(ActRcvRchTxtSylPra + 6)
-#define ActRcvPagBib		(ActRcvRchTxtSylPra + 7)
-#define ActEditorBib		(ActRcvRchTxtSylPra + 8)
-#define ActPlaTxtEdiBib		(ActRcvRchTxtSylPra + 9)
-#define ActRchTxtEdiBib		(ActRcvRchTxtSylPra + 10)
-#define ActRcvPlaTxtBib		(ActRcvRchTxtSylPra + 11)
-#define ActRcvRchTxtBib		(ActRcvRchTxtSylPra + 12)
+   // Syllabus
+   ActSeeSyl,
+   ActSeeSylLec,
+   ActSeeSylPra,
+   ActEdiSylLec,
+   ActEdiSylPra,
+   ActDelItmSylLec,
+   ActDelItmSylPra,
+   ActUp_IteSylLec,
+   ActUp_IteSylPra,
+   ActDwnIteSylLec,
+   ActDwnIteSylPra,
+   ActRgtIteSylLec,
+   ActRgtIteSylPra,
+   ActLftIteSylLec,
+   ActLftIteSylPra,
+   ActInsIteSylLec,
+   ActInsIteSylPra,
+   ActModIteSylLec,
+   ActModIteSylPra,
+   ActChgFrcReaSylLec,
+   ActChgFrcReaSylPra,
+   ActChgHavReaSylLec,
+   ActChgHavReaSylPra,
+   ActSelInfSrcSylLec,
+   ActSelInfSrcSylPra,
+   ActRcvURLSylLec,
+   ActRcvURLSylPra,
+   ActRcvPagSylLec,
+   ActRcvPagSylPra,
+   ActEditorSylLec,
+   ActEditorSylPra,
+   ActPlaTxtEdiSylLec,
+   ActPlaTxtEdiSylPra,
+   ActRchTxtEdiSylLec,
+   ActRchTxtEdiSylPra,
+   ActRcvPlaTxtSylLec,
+   ActRcvPlaTxtSylPra,
+   ActRcvRchTxtSylLec,
+   ActRcvRchTxtSylPra,
 
-// FAQ
-#define ActSeeFAQ		(ActRcvRchTxtBib + 1)
-#define ActEdiFAQ		(ActRcvRchTxtBib + 2)
-#define ActChgFrcReaFAQ		(ActRcvRchTxtBib + 3)
-#define ActChgHavReaFAQ		(ActRcvRchTxtBib + 4)
-#define ActSelInfSrcFAQ		(ActRcvRchTxtBib + 5)
-#define ActRcvURLFAQ		(ActRcvRchTxtBib + 6)
-#define ActRcvPagFAQ		(ActRcvRchTxtBib + 7)
-#define ActEditorFAQ		(ActRcvRchTxtBib + 8)
-#define ActPlaTxtEdiFAQ		(ActRcvRchTxtBib + 9)
-#define ActRchTxtEdiFAQ		(ActRcvRchTxtBib + 10)
-#define ActRcvPlaTxtFAQ		(ActRcvRchTxtBib + 11)
-#define ActRcvRchTxtFAQ		(ActRcvRchTxtBib + 12)
+   // Bibliography
+   ActSeeBib,
+   ActEdiBib,
+   ActChgFrcReaBib,
+   ActChgHavReaBib,
+   ActSelInfSrcBib,
+   ActRcvURLBib,
+   ActRcvPagBib,
+   ActEditorBib,
+   ActPlaTxtEdiBib,
+   ActRchTxtEdiBib,
+   ActRcvPlaTxtBib,
+   ActRcvRchTxtBib,
 
-// Links
-#define ActSeeCrsLnk		(ActRcvRchTxtFAQ + 1)
-#define ActEdiCrsLnk		(ActRcvRchTxtFAQ + 2)
-#define ActChgFrcReaCrsLnk	(ActRcvRchTxtFAQ + 3)
-#define ActChgHavReaCrsLnk	(ActRcvRchTxtFAQ + 4)
-#define ActSelInfSrcCrsLnk	(ActRcvRchTxtFAQ + 5)
-#define ActRcvURLCrsLnk		(ActRcvRchTxtFAQ + 6)
-#define ActRcvPagCrsLnk		(ActRcvRchTxtFAQ + 7)
-#define ActEditorCrsLnk		(ActRcvRchTxtFAQ + 8)
-#define ActPlaTxtEdiCrsLnk	(ActRcvRchTxtFAQ + 9)
-#define ActRchTxtEdiCrsLnk	(ActRcvRchTxtFAQ + 10)
-#define ActRcvPlaTxtCrsLnk	(ActRcvRchTxtFAQ + 11)
-#define ActRcvRchTxtCrsLnk	(ActRcvRchTxtFAQ + 12)
+   // FAQ
+   ActSeeFAQ,
+   ActEdiFAQ,
+   ActChgFrcReaFAQ,
+   ActChgHavReaFAQ,
+   ActSelInfSrcFAQ,
+   ActRcvURLFAQ,
+   ActRcvPagFAQ,
+   ActEditorFAQ,
+   ActPlaTxtEdiFAQ,
+   ActRchTxtEdiFAQ,
+   ActRcvPlaTxtFAQ,
+   ActRcvRchTxtFAQ,
 
-// Assessment
-#define ActSeeAss		(ActRcvRchTxtCrsLnk + 1)
-#define ActEdiAss		(ActRcvRchTxtCrsLnk + 2)
-#define ActChgFrcReaAss		(ActRcvRchTxtCrsLnk + 3)
-#define ActChgHavReaAss		(ActRcvRchTxtCrsLnk + 4)
-#define ActSelInfSrcAss		(ActRcvRchTxtCrsLnk + 5)
-#define ActRcvURLAss		(ActRcvRchTxtCrsLnk + 6)
-#define ActRcvPagAss		(ActRcvRchTxtCrsLnk + 7)
-#define ActEditorAss		(ActRcvRchTxtCrsLnk + 8)
-#define ActPlaTxtEdiAss		(ActRcvRchTxtCrsLnk + 9)
-#define ActRchTxtEdiAss		(ActRcvRchTxtCrsLnk + 10)
-#define ActRcvPlaTxtAss		(ActRcvRchTxtCrsLnk + 11)
-#define ActRcvRchTxtAss		(ActRcvRchTxtCrsLnk + 12)
+   // Links
+   ActSeeCrsLnk,
+   ActEdiCrsLnk,
+   ActChgFrcReaCrsLnk,
+   ActChgHavReaCrsLnk,
+   ActSelInfSrcCrsLnk,
+   ActRcvURLCrsLnk,
+   ActRcvPagCrsLnk,
+   ActEditorCrsLnk,
+   ActPlaTxtEdiCrsLnk,
+   ActRchTxtEdiCrsLnk,
+   ActRcvPlaTxtCrsLnk,
+   ActRcvRchTxtCrsLnk,
 
-// Timetable
-#define ActSeeCrsTT		(ActRcvRchTxtAss + 1)
-#define ActPrnCrsTT		(ActRcvRchTxtAss + 2)
-#define ActEdiCrsTT		(ActRcvRchTxtAss + 3)
-#define ActChgCrsTT		(ActRcvRchTxtAss + 4)
-#define ActChgCrsTT1stDay	(ActRcvRchTxtAss + 5)
+   // Assessment
+   ActSeeAss,
+   ActEdiAss,
+   ActChgFrcReaAss,
+   ActChgHavReaAss,
+   ActSelInfSrcAss,
+   ActRcvURLAss,
+   ActRcvPagAss,
+   ActEditorAss,
+   ActPlaTxtEdiAss,
+   ActRchTxtEdiAss,
+   ActRcvPlaTxtAss,
+   ActRcvRchTxtAss,
+
+   // Timetable
+   ActSeeCrsTT,
+   ActPrnCrsTT,
+   ActEdiCrsTT,
+   ActChgCrsTT,
+   ActChgCrsTT1stDay,
 
 /*****************************************************************************/
 /***************************** Assessment tab ********************************/
 /*****************************************************************************/
-// Assignments
-#define ActSeeAllAsg		(ActChgCrsTT1stDay + 1)
-#define ActFrmNewAsg		(ActChgCrsTT1stDay + 2)
-#define ActEdiOneAsg		(ActChgCrsTT1stDay + 3)
-#define ActSeeOneAsg		(ActChgCrsTT1stDay + 4)
-#define ActPrnOneAsg		(ActChgCrsTT1stDay + 5)
-#define ActNewAsg		(ActChgCrsTT1stDay + 6)
-#define ActChgAsg		(ActChgCrsTT1stDay + 7)
-#define ActReqRemAsg		(ActChgCrsTT1stDay + 8)
-#define ActRemAsg		(ActChgCrsTT1stDay + 9)
-#define ActHidAsg		(ActChgCrsTT1stDay + 10)
-#define ActUnhAsg		(ActChgCrsTT1stDay + 11)
-#define ActReqLnkAsg		(ActChgCrsTT1stDay + 12)
 
-// Projects
-#define ActSeeAllPrj		(ActReqLnkAsg + 1)
-#define ActCfgPrj		(ActReqLnkAsg + 2)
-#define ActChgNETCanCrePrj	(ActReqLnkAsg + 3)
-#define ActChgRubPrj		(ActReqLnkAsg + 4)
-#define ActReqUsrPrj		(ActReqLnkAsg + 5)
-#define ActSeeTblAllPrj		(ActReqLnkAsg + 6)
-#define ActReqLckAllPrj		(ActReqLnkAsg + 7)
-#define ActReqUnlAllPrj		(ActReqLnkAsg + 8)
-#define ActLckAllPrj		(ActReqLnkAsg + 9)
-#define ActUnlAllPrj		(ActReqLnkAsg + 10)
-#define ActFrmNewPrj		(ActReqLnkAsg + 11)
-#define ActEdiOnePrj		(ActReqLnkAsg + 12)
-#define ActSeeOnePrj		(ActReqLnkAsg + 13)
-#define ActPrnOnePrj		(ActReqLnkAsg + 14)
-#define ActNewPrj		(ActReqLnkAsg + 15)
-#define ActChgPrj		(ActReqLnkAsg + 16)
-#define ActReqRemPrj		(ActReqLnkAsg + 17)
-#define ActRemPrj		(ActReqLnkAsg + 18)
-#define ActHidPrj		(ActReqLnkAsg + 19)
-#define ActUnhPrj		(ActReqLnkAsg + 20)
-#define ActLckPrj		(ActReqLnkAsg + 21)
-#define ActUnlPrj		(ActReqLnkAsg + 22)
-#define ActChgPrjRev		(ActReqLnkAsg + 23)
-#define ActReqAddStdPrj		(ActReqLnkAsg + 24)
-#define ActReqAddTutPrj		(ActReqLnkAsg + 25)
-#define ActReqAddEvlPrj		(ActReqLnkAsg + 26)
-#define ActAddStdPrj		(ActReqLnkAsg + 27)
-#define ActAddTutPrj		(ActReqLnkAsg + 28)
-#define ActAddEvlPrj		(ActReqLnkAsg + 29)
-#define ActReqRemStdPrj		(ActReqLnkAsg + 30)
-#define ActReqRemTutPrj		(ActReqLnkAsg + 31)
-#define ActReqRemEvlPrj		(ActReqLnkAsg + 32)
-#define ActRemStdPrj		(ActReqLnkAsg + 33)
-#define ActRemTutPrj		(ActReqLnkAsg + 34)
-#define ActRemEvlPrj		(ActReqLnkAsg + 35)
-#define ActChgPrjSco		(ActReqLnkAsg + 36)
-#define ActReqLnkPrj		(ActReqLnkAsg + 37)
-#define ActAdmDocPrj		(ActReqLnkAsg + 38)
-#define ActReqRemFilDocPrj	(ActReqLnkAsg + 39)
-#define ActRemFilDocPrj		(ActReqLnkAsg + 40)
-#define ActRemFolDocPrj		(ActReqLnkAsg + 41)
-#define ActCopDocPrj		(ActReqLnkAsg + 42)
-#define ActPasDocPrj		(ActReqLnkAsg + 43)
-#define ActRemTreDocPrj		(ActReqLnkAsg + 44)
-#define ActFrmCreDocPrj		(ActReqLnkAsg + 45)
-#define ActCreFolDocPrj		(ActReqLnkAsg + 46)
-#define ActCreLnkDocPrj		(ActReqLnkAsg + 47)
-#define ActRenFolDocPrj		(ActReqLnkAsg + 48)
-#define ActRcvFilDocPrjDZ	(ActReqLnkAsg + 49)
-#define ActRcvFilDocPrjCla	(ActReqLnkAsg + 50)
-#define ActExpDocPrj		(ActReqLnkAsg + 51)
-#define ActConDocPrj		(ActReqLnkAsg + 52)
-#define ActZIPDocPrj		(ActReqLnkAsg + 53)
-#define ActReqDatDocPrj		(ActReqLnkAsg + 54)
-#define ActChgDatDocPrj		(ActReqLnkAsg + 55)
-#define ActDowDocPrj		(ActReqLnkAsg + 56)
-#define ActAdmAssPrj		(ActReqLnkAsg + 57)
-#define ActReqRemFilAssPrj	(ActReqLnkAsg + 58)
-#define ActRemFilAssPrj		(ActReqLnkAsg + 59)
-#define ActRemFolAssPrj		(ActReqLnkAsg + 60)
-#define ActCopAssPrj		(ActReqLnkAsg + 61)
-#define ActPasAssPrj		(ActReqLnkAsg + 62)
-#define ActRemTreAssPrj		(ActReqLnkAsg + 63)
-#define ActFrmCreAssPrj		(ActReqLnkAsg + 64)
-#define ActCreFolAssPrj		(ActReqLnkAsg + 65)
-#define ActCreLnkAssPrj		(ActReqLnkAsg + 66)
-#define ActRenFolAssPrj		(ActReqLnkAsg + 67)
-#define ActRcvFilAssPrjDZ	(ActReqLnkAsg + 68)
-#define ActRcvFilAssPrjCla	(ActReqLnkAsg + 69)
-#define ActExpAssPrj		(ActReqLnkAsg + 70)
-#define ActConAssPrj		(ActReqLnkAsg + 71)
-#define ActZIPAssPrj		(ActReqLnkAsg + 72)
-#define ActReqDatAssPrj		(ActReqLnkAsg + 73)
-#define ActChgDatAssPrj		(ActReqLnkAsg + 74)
-#define ActDowAssPrj		(ActReqLnkAsg + 75)
+   // Assignments
+   ActSeeAllAsg,
+   ActFrmNewAsg,
+   ActEdiOneAsg,
+   ActSeeOneAsg,
+   ActPrnOneAsg,
+   ActNewAsg,
+   ActChgAsg,
+   ActReqRemAsg,
+   ActRemAsg,
+   ActHidAsg,
+   ActUnhAsg,
+   ActReqLnkAsg,
 
-// Calls for exams
-#define ActSeeAllCfe		(ActDowAssPrj + 1)
-#define ActSeeOneCfe		(ActDowAssPrj + 2)
-#define ActSeeDatCfe		(ActDowAssPrj + 3)
-#define ActEdiCfe		(ActDowAssPrj + 4)
-#define ActRcvCfe		(ActDowAssPrj + 5)
-#define ActPrnCfe		(ActDowAssPrj + 6)
-#define ActReqRemCfe		(ActDowAssPrj + 7)
-#define ActRemCfe		(ActDowAssPrj + 8)
-#define ActHidCfe		(ActDowAssPrj + 9)
-#define ActUnhCfe		(ActDowAssPrj + 10)
-#define ActReqLnkCfe		(ActDowAssPrj + 11)
+   // Projects
+   ActSeeAllPrj,
+   ActCfgPrj,
+   ActChgNETCanCrePrj,
+   ActChgRubPrj,
+   ActReqUsrPrj,
+   ActSeeTblAllPrj,
+   ActReqLckAllPrj,
+   ActReqUnlAllPrj,
+   ActLckAllPrj,
+   ActUnlAllPrj,
+   ActFrmNewPrj,
+   ActEdiOnePrj,
+   ActSeeOnePrj,
+   ActPrnOnePrj,
+   ActNewPrj,
+   ActChgPrj,
+   ActReqRemPrj,
+   ActRemPrj,
+   ActHidPrj,
+   ActUnhPrj,
+   ActLckPrj,
+   ActUnlPrj,
+   ActChgPrjRev,
+   ActReqAddStdPrj,
+   ActReqAddTutPrj,
+   ActReqAddEvlPrj,
+   ActAddStdPrj,
+   ActAddTutPrj,
+   ActAddEvlPrj,
+   ActReqRemStdPrj,
+   ActReqRemTutPrj,
+   ActReqRemEvlPrj,
+   ActRemStdPrj,
+   ActRemTutPrj,
+   ActRemEvlPrj,
+   ActChgPrjSco,
+   ActReqLnkPrj,
+   ActAdmDocPrj,
+   ActReqRemFilDocPrj,
+   ActRemFilDocPrj,
+   ActRemFolDocPrj,
+   ActCopDocPrj,
+   ActPasDocPrj,
+   ActRemTreDocPrj,
+   ActFrmCreDocPrj,
+   ActCreFolDocPrj,
+   ActCreLnkDocPrj,
+   ActRenFolDocPrj,
+   ActRcvFilDocPrjDZ,
+   ActRcvFilDocPrjCla,
+   ActExpDocPrj,
+   ActConDocPrj,
+   ActZIPDocPrj,
+   ActReqDatDocPrj,
+   ActChgDatDocPrj,
+   ActDowDocPrj,
+   ActAdmAssPrj,
+   ActReqRemFilAssPrj,
+   ActRemFilAssPrj,
+   ActRemFolAssPrj,
+   ActCopAssPrj,
+   ActPasAssPrj,
+   ActRemTreAssPrj,
+   ActFrmCreAssPrj,
+   ActCreFolAssPrj,
+   ActCreLnkAssPrj,
+   ActRenFolAssPrj,
+   ActRcvFilAssPrjDZ,
+   ActRcvFilAssPrjCla,
+   ActExpAssPrj,
+   ActConAssPrj,
+   ActZIPAssPrj,
+   ActReqDatAssPrj,
+   ActChgDatAssPrj,
+   ActDowAssPrj,
 
-// Questions
-#define ActEdiTstQst		(ActReqLnkCfe + 1)
-#define ActEdiOneTstQst		(ActReqLnkCfe + 2)
-#define ActReqImpTstQst		(ActReqLnkCfe + 3)
-#define ActImpTstQst		(ActReqLnkCfe + 4)
-#define ActLstTstQst		(ActReqLnkCfe + 5)
-#define ActNewTstQst		(ActReqLnkCfe + 6)
-#define ActChgTstQst		(ActReqLnkCfe + 7)
-#define ActReqRemSevTstQst	(ActReqLnkCfe + 8)
-#define ActRemSevTstQst		(ActReqLnkCfe + 9)
-#define ActReqRemOneTstQst	(ActReqLnkCfe + 10)
-#define ActRemOneTstQst		(ActReqLnkCfe + 11)
-#define ActChgShfTstQst		(ActReqLnkCfe + 12)
-#define ActEdiTag		(ActReqLnkCfe + 13)
-#define ActEnaTag		(ActReqLnkCfe + 14)
-#define ActDisTag		(ActReqLnkCfe + 15)
-#define ActRenTag		(ActReqLnkCfe + 16)
+   // Calls for exams
+   ActSeeAllCfe,
+   ActSeeOneCfe,
+   ActSeeDatCfe,
+   ActEdiCfe,
+   ActRcvCfe,
+   ActPrnCfe,
+   ActReqRemCfe,
+   ActRemCfe,
+   ActHidCfe,
+   ActUnhCfe,
+   ActReqLnkCfe,
 
-// Test
-#define ActReqTst		(ActRenTag + 1)
-#define ActSeeTst		(ActRenTag + 2)
-#define ActReqAssTst		(ActRenTag + 3)
-#define ActAssTst		(ActRenTag + 4)
-#define ActCfgTst		(ActRenTag + 5)
-#define ActRcvCfgTst		(ActRenTag + 6)
-#define ActReqSeeMyTstRes	(ActRenTag + 7)
-#define ActSeeMyTstResCrs	(ActRenTag + 8)
-#define ActSeeOneTstResMe	(ActRenTag + 9)
-#define ActReqSeeUsrTstRes	(ActRenTag + 10)
-#define ActSeeUsrTstResCrs	(ActRenTag + 11)
-#define ActSeeOneTstResOth	(ActRenTag + 12)
+   // Questions
+   ActEdiTstQst,
+   ActEdiOneTstQst,
+   ActReqImpTstQst,
+   ActImpTstQst,
+   ActLstTstQst,
+   ActNewTstQst,
+   ActChgTstQst,
+   ActReqRemSevTstQst,
+   ActRemSevTstQst,
+   ActReqRemOneTstQst,
+   ActRemOneTstQst,
+   ActChgShfTstQst,
+   ActEdiTag,
+   ActEnaTag,
+   ActDisTag,
+   ActRenTag,
 
-// Exams
-#define ActSeeAllExa		(ActSeeOneTstResOth + 1)
-#define ActSeeOneExa		(ActSeeOneTstResOth + 2)
-#define ActFrmNewExa		(ActSeeOneTstResOth + 3)
-#define ActEdiOneExa		(ActSeeOneTstResOth + 4)
-#define ActNewExa		(ActSeeOneTstResOth + 5)
-#define ActChgExa		(ActSeeOneTstResOth + 6)
-#define ActReqRemExa		(ActSeeOneTstResOth + 7)
-#define ActRemExa		(ActSeeOneTstResOth + 8)
-#define ActHidExa		(ActSeeOneTstResOth + 9)
-#define ActUnhExa		(ActSeeOneTstResOth + 10)
-#define ActReqLnkExa		(ActSeeOneTstResOth + 11)
-#define ActNewExaSet		(ActSeeOneTstResOth + 12)
-#define ActReqRemExaSet		(ActSeeOneTstResOth + 13)
-#define ActRemExaSet		(ActSeeOneTstResOth + 14)
-#define ActUp_ExaSet		(ActSeeOneTstResOth + 15)
-#define ActDwnExaSet		(ActSeeOneTstResOth + 16)
-#define ActChgTitExaSet		(ActSeeOneTstResOth + 17)
-#define ActChgNumQstExaSet	(ActSeeOneTstResOth + 18)
-#define ActReqAddQstExaSet	(ActSeeOneTstResOth + 19)
-#define ActLstTstQstForSet	(ActSeeOneTstResOth + 20)
-#define ActAddQstToExa		(ActSeeOneTstResOth + 21)
-#define ActReqRemSetQst		(ActSeeOneTstResOth + 22)
-#define ActRemExaQst		(ActSeeOneTstResOth + 23)
-#define ActValSetQst		(ActSeeOneTstResOth + 24)
-#define ActInvSetQst		(ActSeeOneTstResOth + 25)
-#define ActReqNewExaSes		(ActSeeOneTstResOth + 26)
-#define ActReqChgExaSes		(ActSeeOneTstResOth + 27)
-#define ActNewExaSes		(ActSeeOneTstResOth + 28)
-#define ActChgExaSes		(ActSeeOneTstResOth + 29)
-#define ActReqRemExaSes		(ActSeeOneTstResOth + 30)
-#define ActRemExaSes		(ActSeeOneTstResOth + 31)
-#define ActHidExaSes		(ActSeeOneTstResOth + 32)
-#define ActUnhExaSes		(ActSeeOneTstResOth + 33)
-#define ActSeeExaPrn		(ActSeeOneTstResOth + 34)
-#define ActAnsExaPrn		(ActSeeOneTstResOth + 35)
-#define ActEndExaPrn		(ActSeeOneTstResOth + 36)
-#define ActSeeMyExaResCrs	(ActSeeOneTstResOth + 37)
-#define ActSeeMyExaResExa	(ActSeeOneTstResOth + 38)
-#define ActSeeMyExaResSes	(ActSeeOneTstResOth + 39)
-#define ActSeeOneExaResMe	(ActSeeOneTstResOth + 40)
-#define ActReqSeeUsrExaRes	(ActSeeOneTstResOth + 41)
-#define ActSeeUsrExaResCrs	(ActSeeOneTstResOth + 42)
-#define ActSeeUsrExaResExa	(ActSeeOneTstResOth + 43)
-#define ActSeeUsrExaResSes	(ActSeeOneTstResOth + 44)
-#define ActSeeOneExaResOth	(ActSeeOneTstResOth + 45)
-#define ActChgVisExaRes		(ActSeeOneTstResOth + 46)
+   // Test
+   ActReqTst,
+   ActSeeTst,
+   ActReqAssTst,
+   ActAssTst,
+   ActCfgTst,
+   ActRcvCfgTst,
+   ActReqSeeMyTstRes,
+   ActSeeMyTstResCrs,
+   ActSeeOneTstResMe,
+   ActReqSeeUsrTstRes,
+   ActSeeUsrTstResCrs,
+   ActSeeOneTstResOth,
 
-// Games
-#define ActSeeAllGam		(ActChgVisExaRes + 1)
-#define ActSeeOneGam		(ActChgVisExaRes + 2)
-#define ActReqNewMch		(ActChgVisExaRes + 3)
-#define ActReqChgMch		(ActChgVisExaRes + 4)
-#define ActNewMch		(ActChgVisExaRes + 5)
-#define ActChgMch		(ActChgVisExaRes + 6)
-#define ActReqRemMch		(ActChgVisExaRes + 7)
-#define ActRemMch		(ActChgVisExaRes + 8)
-#define ActResMch		(ActChgVisExaRes + 9)
-#define ActBckMch		(ActChgVisExaRes + 10)
-#define ActPlyPauMch		(ActChgVisExaRes + 11)
-#define ActFwdMch		(ActChgVisExaRes + 12)
-#define ActChgNumColMch		(ActChgVisExaRes + 13)
-#define ActChgVisResMchQst	(ActChgVisExaRes + 14)
-#define ActMchCntDwn		(ActChgVisExaRes + 15)
-#define ActRefMchTch		(ActChgVisExaRes + 16)
-#define ActJoiMch		(ActChgVisExaRes + 17)
-#define ActSeeMchAnsQstStd	(ActChgVisExaRes + 18)
-#define ActRemMchAnsQstStd	(ActChgVisExaRes + 19)
-#define ActAnsMchQstStd		(ActChgVisExaRes + 20)
-#define ActRefMchStd		(ActChgVisExaRes + 21)
-#define ActSeeMyMchResCrs	(ActChgVisExaRes + 22)
-#define ActSeeMyMchResGam	(ActChgVisExaRes + 23)
-#define ActSeeMyMchResMch	(ActChgVisExaRes + 24)
-#define ActSeeOneMchResMe	(ActChgVisExaRes + 25)
-#define ActReqSeeUsrMchRes	(ActChgVisExaRes + 26)
-#define ActSeeUsrMchResCrs	(ActChgVisExaRes + 27)
-#define ActSeeUsrMchResGam	(ActChgVisExaRes + 28)
-#define ActSeeUsrMchResMch	(ActChgVisExaRes + 29)
-#define ActSeeOneMchResOth	(ActChgVisExaRes + 30)
-#define ActChgVisResMchUsr	(ActChgVisExaRes + 31)
-#define ActLstOneGam		(ActChgVisExaRes + 32)
-#define ActFrmNewGam		(ActChgVisExaRes + 33)
-#define ActEdiOneGam		(ActChgVisExaRes + 34)
-#define ActNewGam		(ActChgVisExaRes + 35)
-#define ActChgGam		(ActChgVisExaRes + 36)
-#define ActReqRemGam		(ActChgVisExaRes + 37)
-#define ActRemGam		(ActChgVisExaRes + 38)
-#define ActHidGam		(ActChgVisExaRes + 39)
-#define ActUnhGam		(ActChgVisExaRes + 40)
-#define ActAddOneGamQst		(ActChgVisExaRes + 41)
-#define ActGamLstTstQst		(ActChgVisExaRes + 42)
-#define ActAddTstQstToGam	(ActChgVisExaRes + 43)
-#define ActReqRemGamQst		(ActChgVisExaRes + 44)
-#define ActRemGamQst		(ActChgVisExaRes + 45)
-#define ActUp_GamQst		(ActChgVisExaRes + 46)
-#define ActDwnGamQst		(ActChgVisExaRes + 47)
-#define ActReqLnkGam		(ActChgVisExaRes + 48)
+   // Exams
+   ActSeeAllExa,
+   ActSeeOneExa,
+   ActFrmNewExa,
+   ActEdiOneExa,
+   ActNewExa,
+   ActChgExa,
+   ActReqRemExa,
+   ActRemExa,
+   ActHidExa,
+   ActUnhExa,
+   ActReqLnkExa,
+   ActNewExaSet,
+   ActReqRemExaSet,
+   ActRemExaSet,
+   ActUp_ExaSet,
+   ActDwnExaSet,
+   ActChgTitExaSet,
+   ActChgNumQstExaSet,
+   ActReqAddQstExaSet,
+   ActLstTstQstForSet,
+   ActAddQstToExa,
+   ActReqRemSetQst,
+   ActRemExaQst,
+   ActValSetQst,
+   ActInvSetQst,
+   ActReqNewExaSes,
+   ActReqChgExaSes,
+   ActNewExaSes,
+   ActChgExaSes,
+   ActReqRemExaSes,
+   ActRemExaSes,
+   ActHidExaSes,
+   ActUnhExaSes,
+   ActSeeExaPrn,
+   ActAnsExaPrn,
+   ActEndExaPrn,
+   ActSeeMyExaResCrs,
+   ActSeeMyExaResExa,
+   ActSeeMyExaResSes,
+   ActSeeOneExaResMe,
+   ActReqSeeUsrExaRes,
+   ActSeeUsrExaResCrs,
+   ActSeeUsrExaResExa,
+   ActSeeUsrExaResSes,
+   ActSeeOneExaResOth,
+   ActChgVisExaRes,
 
-// Rubrics
-#define ActSeeAllRub		(ActReqLnkGam + 1)
-#define ActSeeOneRub		(ActReqLnkGam + 2)
-#define ActFrmNewRub		(ActReqLnkGam + 3)
-#define ActEdiOneRub		(ActReqLnkGam + 4)
-#define ActNewRub		(ActReqLnkGam + 5)
-#define ActChgRub		(ActReqLnkGam + 6)
-#define ActReqRemRub		(ActReqLnkGam + 7)
-#define ActRemRub		(ActReqLnkGam + 8)
-#define ActReqLnkRub		(ActReqLnkGam + 9)
-#define ActSeeRscCli_InRub	(ActReqLnkGam + 10)
-#define ActRemRscCli_InRub	(ActReqLnkGam + 11)
-#define ActNewRubCri		(ActReqLnkGam + 12)
-#define ActReqRemRubCri		(ActReqLnkGam + 13)
-#define ActRemRubCri		(ActReqLnkGam + 14)
-#define ActUp_RubCri		(ActReqLnkGam + 15)
-#define ActDwnRubCri		(ActReqLnkGam + 16)
-#define ActChgTitRubCri		(ActReqLnkGam + 17)
-#define ActChgLnkRubCri		(ActReqLnkGam + 18)
-#define ActChgMinRubCri		(ActReqLnkGam + 19)
-#define ActChgMaxRubCri		(ActReqLnkGam + 20)
-#define ActChgWeiRubCri		(ActReqLnkGam + 21)
+   // Games
+   ActSeeAllGam,
+   ActSeeOneGam,
+   ActReqNewMch,
+   ActReqChgMch,
+   ActNewMch,
+   ActChgMch,
+   ActReqRemMch,
+   ActRemMch,
+   ActResMch,
+   ActBckMch,
+   ActPlyPauMch,
+   ActFwdMch,
+   ActChgNumColMch,
+   ActChgVisResMchQst,
+   ActMchCntDwn,
+   ActRefMchTch,
+   ActJoiMch,
+   ActSeeMchAnsQstStd,
+   ActRemMchAnsQstStd,
+   ActAnsMchQstStd,
+   ActRefMchStd,
+   ActSeeMyMchResCrs,
+   ActSeeMyMchResGam,
+   ActSeeMyMchResMch,
+   ActSeeOneMchResMe,
+   ActReqSeeUsrMchRes,
+   ActSeeUsrMchResCrs,
+   ActSeeUsrMchResGam,
+   ActSeeUsrMchResMch,
+   ActSeeOneMchResOth,
+   ActChgVisResMchUsr,
+   ActLstOneGam,
+   ActFrmNewGam,
+   ActEdiOneGam,
+   ActNewGam,
+   ActChgGam,
+   ActReqRemGam,
+   ActRemGam,
+   ActHidGam,
+   ActUnhGam,
+   ActAddOneGamQst,
+   ActGamLstTstQst,
+   ActAddTstQstToGam,
+   ActReqRemGamQst,
+   ActRemGamQst,
+   ActUp_GamQst,
+   ActDwnGamQst,
+   ActReqLnkGam,
+
+   // Rubrics
+   ActSeeAllRub,
+   ActSeeOneRub,
+   ActFrmNewRub,
+   ActEdiOneRub,
+   ActNewRub,
+   ActChgRub,
+   ActReqRemRub,
+   ActRemRub,
+   ActReqLnkRub,
+   ActSeeRscCli_InRub,
+   ActRemRscCli_InRub,
+   ActNewRubCri,
+   ActReqRemRubCri,
+   ActRemRubCri,
+   ActUp_RubCri,
+   ActDwnRubCri,
+   ActChgTitRubCri,
+   ActChgLnkRubCri,
+   ActChgMinRubCri,
+   ActChgMaxRubCri,
+   ActChgWeiRubCri,
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/
 /*****************************************************************************/
-// Documents of institution
-#define ActSeeAdmDocIns		(ActChgWeiRubCri + 1)
-#define ActChgToSeeDocIns	(ActChgWeiRubCri + 2)
-#define ActSeeDocIns		(ActChgWeiRubCri + 3)
-#define ActExpSeeDocIns		(ActChgWeiRubCri + 4)
-#define ActConSeeDocIns		(ActChgWeiRubCri + 5)
-#define ActZIPSeeDocIns		(ActChgWeiRubCri + 6)
-#define ActReqDatSeeDocIns	(ActChgWeiRubCri + 7)
-#define ActDowSeeDocIns		(ActChgWeiRubCri + 8)
-#define ActChgToAdmDocIns	(ActChgWeiRubCri + 9)
-#define ActAdmDocIns		(ActChgWeiRubCri + 10)
-#define ActReqRemFilDocIns	(ActChgWeiRubCri + 11)
-#define ActRemFilDocIns		(ActChgWeiRubCri + 12)
-#define ActRemFolDocIns		(ActChgWeiRubCri + 13)
-#define ActCopDocIns		(ActChgWeiRubCri + 14)
-#define ActPasDocIns		(ActChgWeiRubCri + 15)
-#define ActRemTreDocIns		(ActChgWeiRubCri + 16)
-#define ActFrmCreDocIns		(ActChgWeiRubCri + 17)
-#define ActCreFolDocIns		(ActChgWeiRubCri + 18)
-#define ActCreLnkDocIns		(ActChgWeiRubCri + 19)
-#define ActRenFolDocIns		(ActChgWeiRubCri + 20)
-#define ActRcvFilDocInsDZ	(ActChgWeiRubCri + 21)
-#define ActRcvFilDocInsCla	(ActChgWeiRubCri + 22)
-#define ActExpAdmDocIns		(ActChgWeiRubCri + 23)
-#define ActConAdmDocIns		(ActChgWeiRubCri + 24)
-#define ActZIPAdmDocIns		(ActChgWeiRubCri + 25)
-#define ActUnhDocIns		(ActChgWeiRubCri + 26)
-#define ActHidDocIns		(ActChgWeiRubCri + 27)
-#define ActReqDatAdmDocIns	(ActChgWeiRubCri + 28)
-#define ActChgDatAdmDocIns	(ActChgWeiRubCri + 29)
-#define ActDowAdmDocIns		(ActChgWeiRubCri + 30)
 
-// Shared files of institution
-#define ActAdmShaIns		(ActDowAdmDocIns + 1)
-#define ActReqRemFilShaIns	(ActDowAdmDocIns + 2)
-#define ActRemFilShaIns		(ActDowAdmDocIns + 3)
-#define ActRemFolShaIns		(ActDowAdmDocIns + 4)
-#define ActCopShaIns		(ActDowAdmDocIns + 5)
-#define ActPasShaIns		(ActDowAdmDocIns + 6)
-#define ActRemTreShaIns		(ActDowAdmDocIns + 7)
-#define ActFrmCreShaIns		(ActDowAdmDocIns + 8)
-#define ActCreFolShaIns		(ActDowAdmDocIns + 9)
-#define ActCreLnkShaIns		(ActDowAdmDocIns + 10)
-#define ActRenFolShaIns		(ActDowAdmDocIns + 11)
-#define ActRcvFilShaInsDZ	(ActDowAdmDocIns + 12)
-#define ActRcvFilShaInsCla	(ActDowAdmDocIns + 13)
-#define ActExpShaIns		(ActDowAdmDocIns + 14)
-#define ActConShaIns		(ActDowAdmDocIns + 15)
-#define ActZIPShaIns		(ActDowAdmDocIns + 16)
-#define ActReqDatShaIns		(ActDowAdmDocIns + 17)
-#define ActChgDatShaIns		(ActDowAdmDocIns + 18)
-#define ActDowShaIns		(ActDowAdmDocIns + 19)
+   // Documents of institution
+   ActSeeAdmDocIns,
+   ActChgToSeeDocIns,
+   ActSeeDocIns,
+   ActExpSeeDocIns,
+   ActConSeeDocIns,
+   ActZIPSeeDocIns,
+   ActReqDatSeeDocIns,
+   ActDowSeeDocIns,
+   ActChgToAdmDocIns,
+   ActAdmDocIns,
+   ActReqRemFilDocIns,
+   ActRemFilDocIns,
+   ActRemFolDocIns,
+   ActCopDocIns,
+   ActPasDocIns,
+   ActRemTreDocIns,
+   ActFrmCreDocIns,
+   ActCreFolDocIns,
+   ActCreLnkDocIns,
+   ActRenFolDocIns,
+   ActRcvFilDocInsDZ,
+   ActRcvFilDocInsCla,
+   ActExpAdmDocIns,
+   ActConAdmDocIns,
+   ActZIPAdmDocIns,
+   ActUnhDocIns,
+   ActHidDocIns,
+   ActReqDatAdmDocIns,
+   ActChgDatAdmDocIns,
+   ActDowAdmDocIns,
 
-// Documents of center
-#define ActSeeAdmDocCtr		(ActDowShaIns + 1)
-#define ActChgToSeeDocCtr	(ActDowShaIns + 2)
-#define ActSeeDocCtr		(ActDowShaIns + 3)
-#define ActExpSeeDocCtr		(ActDowShaIns + 4)
-#define ActConSeeDocCtr		(ActDowShaIns + 5)
-#define ActZIPSeeDocCtr		(ActDowShaIns + 6)
-#define ActReqDatSeeDocCtr	(ActDowShaIns + 7)
-#define ActDowSeeDocCtr		(ActDowShaIns + 8)
-#define ActChgToAdmDocCtr	(ActDowShaIns + 9)
-#define ActAdmDocCtr		(ActDowShaIns + 10)
-#define ActReqRemFilDocCtr	(ActDowShaIns + 11)
-#define ActRemFilDocCtr		(ActDowShaIns + 12)
-#define ActRemFolDocCtr		(ActDowShaIns + 13)
-#define ActCopDocCtr		(ActDowShaIns + 14)
-#define ActPasDocCtr		(ActDowShaIns + 15)
-#define ActRemTreDocCtr		(ActDowShaIns + 16)
-#define ActFrmCreDocCtr		(ActDowShaIns + 17)
-#define ActCreFolDocCtr		(ActDowShaIns + 18)
-#define ActCreLnkDocCtr		(ActDowShaIns + 19)
-#define ActRenFolDocCtr		(ActDowShaIns + 20)
-#define ActRcvFilDocCtrDZ	(ActDowShaIns + 21)
-#define ActRcvFilDocCtrCla	(ActDowShaIns + 22)
-#define ActExpAdmDocCtr		(ActDowShaIns + 23)
-#define ActConAdmDocCtr		(ActDowShaIns + 24)
-#define ActZIPAdmDocCtr		(ActDowShaIns + 25)
-#define ActUnhDocCtr		(ActDowShaIns + 26)
-#define ActHidDocCtr		(ActDowShaIns + 27)
-#define ActReqDatAdmDocCtr	(ActDowShaIns + 28)
-#define ActChgDatAdmDocCtr	(ActDowShaIns + 29)
-#define ActDowAdmDocCtr		(ActDowShaIns + 30)
+   // Shared files of institution
+   ActAdmShaIns,
+   ActReqRemFilShaIns,
+   ActRemFilShaIns,
+   ActRemFolShaIns,
+   ActCopShaIns,
+   ActPasShaIns,
+   ActRemTreShaIns,
+   ActFrmCreShaIns,
+   ActCreFolShaIns,
+   ActCreLnkShaIns,
+   ActRenFolShaIns,
+   ActRcvFilShaInsDZ,
+   ActRcvFilShaInsCla,
+   ActExpShaIns,
+   ActConShaIns,
+   ActZIPShaIns,
+   ActReqDatShaIns,
+   ActChgDatShaIns,
+   ActDowShaIns,
 
-// Shared files of center
-#define ActAdmShaCtr		(ActDowAdmDocCtr + 1)
-#define ActReqRemFilShaCtr	(ActDowAdmDocCtr + 2)
-#define ActRemFilShaCtr		(ActDowAdmDocCtr + 3)
-#define ActRemFolShaCtr		(ActDowAdmDocCtr + 4)
-#define ActCopShaCtr		(ActDowAdmDocCtr + 5)
-#define ActPasShaCtr		(ActDowAdmDocCtr + 6)
-#define ActRemTreShaCtr		(ActDowAdmDocCtr + 7)
-#define ActFrmCreShaCtr		(ActDowAdmDocCtr + 8)
-#define ActCreFolShaCtr		(ActDowAdmDocCtr + 9)
-#define ActCreLnkShaCtr		(ActDowAdmDocCtr + 10)
-#define ActRenFolShaCtr		(ActDowAdmDocCtr + 11)
-#define ActRcvFilShaCtrDZ	(ActDowAdmDocCtr + 12)
-#define ActRcvFilShaCtrCla	(ActDowAdmDocCtr + 13)
-#define ActExpShaCtr		(ActDowAdmDocCtr + 14)
-#define ActConShaCtr		(ActDowAdmDocCtr + 15)
-#define ActZIPShaCtr		(ActDowAdmDocCtr + 16)
-#define ActReqDatShaCtr		(ActDowAdmDocCtr + 17)
-#define ActChgDatShaCtr		(ActDowAdmDocCtr + 18)
-#define ActDowShaCtr		(ActDowAdmDocCtr + 19)
+   // Documents of center
+   ActSeeAdmDocCtr,
+   ActChgToSeeDocCtr,
+   ActSeeDocCtr,
+   ActExpSeeDocCtr,
+   ActConSeeDocCtr,
+   ActZIPSeeDocCtr,
+   ActReqDatSeeDocCtr,
+   ActDowSeeDocCtr,
+   ActChgToAdmDocCtr,
+   ActAdmDocCtr,
+   ActReqRemFilDocCtr,
+   ActRemFilDocCtr,
+   ActRemFolDocCtr,
+   ActCopDocCtr,
+   ActPasDocCtr,
+   ActRemTreDocCtr,
+   ActFrmCreDocCtr,
+   ActCreFolDocCtr,
+   ActCreLnkDocCtr,
+   ActRenFolDocCtr,
+   ActRcvFilDocCtrDZ,
+   ActRcvFilDocCtrCla,
+   ActExpAdmDocCtr,
+   ActConAdmDocCtr,
+   ActZIPAdmDocCtr,
+   ActUnhDocCtr,
+   ActHidDocCtr,
+   ActReqDatAdmDocCtr,
+   ActChgDatAdmDocCtr,
+   ActDowAdmDocCtr,
 
-// Deocuments of degree
-#define ActSeeAdmDocDeg		(ActDowShaCtr + 1)
-#define ActChgToSeeDocDeg	(ActDowShaCtr + 2)
-#define ActSeeDocDeg		(ActDowShaCtr + 3)
-#define ActExpSeeDocDeg		(ActDowShaCtr + 4)
-#define ActConSeeDocDeg		(ActDowShaCtr + 5)
-#define ActZIPSeeDocDeg		(ActDowShaCtr + 6)
-#define ActReqDatSeeDocDeg	(ActDowShaCtr + 7)
-#define ActDowSeeDocDeg		(ActDowShaCtr + 8)
-#define ActChgToAdmDocDeg	(ActDowShaCtr + 9)
-#define ActAdmDocDeg		(ActDowShaCtr + 10)
-#define ActReqRemFilDocDeg	(ActDowShaCtr + 11)
-#define ActRemFilDocDeg		(ActDowShaCtr + 12)
-#define ActRemFolDocDeg		(ActDowShaCtr + 13)
-#define ActCopDocDeg		(ActDowShaCtr + 14)
-#define ActPasDocDeg		(ActDowShaCtr + 15)
-#define ActRemTreDocDeg		(ActDowShaCtr + 16)
-#define ActFrmCreDocDeg		(ActDowShaCtr + 17)
-#define ActCreFolDocDeg		(ActDowShaCtr + 18)
-#define ActCreLnkDocDeg		(ActDowShaCtr + 19)
-#define ActRenFolDocDeg		(ActDowShaCtr + 20)
-#define ActRcvFilDocDegDZ	(ActDowShaCtr + 21)
-#define ActRcvFilDocDegCla	(ActDowShaCtr + 22)
-#define ActExpAdmDocDeg		(ActDowShaCtr + 23)
-#define ActConAdmDocDeg		(ActDowShaCtr + 24)
-#define ActZIPAdmDocDeg		(ActDowShaCtr + 25)
-#define ActUnhDocDeg		(ActDowShaCtr + 26)
-#define ActHidDocDeg		(ActDowShaCtr + 27)
-#define ActReqDatAdmDocDeg	(ActDowShaCtr + 28)
-#define ActChgDatAdmDocDeg	(ActDowShaCtr + 29)
-#define ActDowAdmDocDeg		(ActDowShaCtr + 30)
+   // Shared files of center
+   ActAdmShaCtr,
+   ActReqRemFilShaCtr,
+   ActRemFilShaCtr,
+   ActRemFolShaCtr,
+   ActCopShaCtr,
+   ActPasShaCtr,
+   ActRemTreShaCtr,
+   ActFrmCreShaCtr,
+   ActCreFolShaCtr,
+   ActCreLnkShaCtr,
+   ActRenFolShaCtr,
+   ActRcvFilShaCtrDZ,
+   ActRcvFilShaCtrCla,
+   ActExpShaCtr,
+   ActConShaCtr,
+   ActZIPShaCtr,
+   ActReqDatShaCtr,
+   ActChgDatShaCtr,
+   ActDowShaCtr,
 
-// Shared files of degree
-#define ActAdmShaDeg		(ActDowAdmDocDeg + 1)
-#define ActReqRemFilShaDeg	(ActDowAdmDocDeg + 2)
-#define ActRemFilShaDeg		(ActDowAdmDocDeg + 3)
-#define ActRemFolShaDeg		(ActDowAdmDocDeg + 4)
-#define ActCopShaDeg		(ActDowAdmDocDeg + 5)
-#define ActPasShaDeg		(ActDowAdmDocDeg + 6)
-#define ActRemTreShaDeg		(ActDowAdmDocDeg + 7)
-#define ActFrmCreShaDeg		(ActDowAdmDocDeg + 8)
-#define ActCreFolShaDeg		(ActDowAdmDocDeg + 9)
-#define ActCreLnkShaDeg		(ActDowAdmDocDeg + 10)
-#define ActRenFolShaDeg		(ActDowAdmDocDeg + 11)
-#define ActRcvFilShaDegDZ	(ActDowAdmDocDeg + 12)
-#define ActRcvFilShaDegCla	(ActDowAdmDocDeg + 13)
-#define ActExpShaDeg		(ActDowAdmDocDeg + 14)
-#define ActConShaDeg		(ActDowAdmDocDeg + 15)
-#define ActZIPShaDeg		(ActDowAdmDocDeg + 16)
-#define ActReqDatShaDeg		(ActDowAdmDocDeg + 17)
-#define ActChgDatShaDeg		(ActDowAdmDocDeg + 18)
-#define ActDowShaDeg		(ActDowAdmDocDeg + 19)
+   // Deocuments of degree
+   ActSeeAdmDocDeg,
+   ActChgToSeeDocDeg,
+   ActSeeDocDeg,
+   ActExpSeeDocDeg,
+   ActConSeeDocDeg,
+   ActZIPSeeDocDeg,
+   ActReqDatSeeDocDeg,
+   ActDowSeeDocDeg,
+   ActChgToAdmDocDeg,
+   ActAdmDocDeg,
+   ActReqRemFilDocDeg,
+   ActRemFilDocDeg,
+   ActRemFolDocDeg,
+   ActCopDocDeg,
+   ActPasDocDeg,
+   ActRemTreDocDeg,
+   ActFrmCreDocDeg,
+   ActCreFolDocDeg,
+   ActCreLnkDocDeg,
+   ActRenFolDocDeg,
+   ActRcvFilDocDegDZ,
+   ActRcvFilDocDegCla,
+   ActExpAdmDocDeg,
+   ActConAdmDocDeg,
+   ActZIPAdmDocDeg,
+   ActUnhDocDeg,
+   ActHidDocDeg,
+   ActReqDatAdmDocDeg,
+   ActChgDatAdmDocDeg,
+   ActDowAdmDocDeg,
 
-// Documents of course
-#define ActSeeAdmDocCrsGrp	(ActDowShaDeg + 1)
-#define ActChgToSeeDocCrs	(ActDowShaDeg + 2)
-#define ActSeeDocCrs		(ActDowShaDeg + 3)
-#define ActExpSeeDocCrs		(ActDowShaDeg + 4)
-#define ActConSeeDocCrs		(ActDowShaDeg + 5)
-#define ActZIPSeeDocCrs		(ActDowShaDeg + 6)
-#define ActReqDatSeeDocCrs	(ActDowShaDeg + 7)
-#define ActReqLnkSeeDocCrs	(ActDowShaDeg + 8)
-#define ActDowSeeDocCrs		(ActDowShaDeg + 9)
-#define ActSeeDocGrp		(ActDowShaDeg + 10)
-#define ActExpSeeDocGrp		(ActDowShaDeg + 11)
-#define ActConSeeDocGrp		(ActDowShaDeg + 12)
-#define ActZIPSeeDocGrp		(ActDowShaDeg + 13)
-#define ActReqDatSeeDocGrp	(ActDowShaDeg + 14)
-#define ActDowSeeDocGrp		(ActDowShaDeg + 15)
-#define ActChgToAdmDocCrs	(ActDowShaDeg + 16)
-#define ActAdmDocCrs		(ActDowShaDeg + 17)
-#define ActReqRemFilDocCrs	(ActDowShaDeg + 18)
-#define ActRemFilDocCrs		(ActDowShaDeg + 19)
-#define ActRemFolDocCrs		(ActDowShaDeg + 20)
-#define ActCopDocCrs		(ActDowShaDeg + 21)
-#define ActPasDocCrs		(ActDowShaDeg + 22)
-#define ActRemTreDocCrs		(ActDowShaDeg + 23)
-#define ActFrmCreDocCrs		(ActDowShaDeg + 24)
-#define ActCreFolDocCrs		(ActDowShaDeg + 25)
-#define ActCreLnkDocCrs		(ActDowShaDeg + 26)
-#define ActRenFolDocCrs		(ActDowShaDeg + 27)
-#define ActRcvFilDocCrsDZ	(ActDowShaDeg + 28)
-#define ActRcvFilDocCrsCla	(ActDowShaDeg + 29)
-#define ActExpAdmDocCrs		(ActDowShaDeg + 30)
-#define ActConAdmDocCrs		(ActDowShaDeg + 31)
-#define ActZIPAdmDocCrs		(ActDowShaDeg + 32)
-#define ActUnhDocCrs		(ActDowShaDeg + 33)
-#define ActHidDocCrs		(ActDowShaDeg + 34)
-#define ActReqDatAdmDocCrs	(ActDowShaDeg + 35)
-#define ActChgDatAdmDocCrs	(ActDowShaDeg + 36)
-#define ActReqLnkAdmDocCrs	(ActDowShaDeg + 37)
-#define ActDowAdmDocCrs		(ActDowShaDeg + 38)
-#define ActAdmDocGrp		(ActDowShaDeg + 39)
-#define ActReqRemFilDocGrp	(ActDowShaDeg + 40)
-#define ActRemFilDocGrp		(ActDowShaDeg + 41)
-#define ActRemFolDocGrp		(ActDowShaDeg + 42)
-#define ActCopDocGrp		(ActDowShaDeg + 43)
-#define ActPasDocGrp		(ActDowShaDeg + 44)
-#define ActRemTreDocGrp		(ActDowShaDeg + 45)
-#define ActFrmCreDocGrp		(ActDowShaDeg + 46)
-#define ActCreFolDocGrp		(ActDowShaDeg + 47)
-#define ActCreLnkDocGrp		(ActDowShaDeg + 48)
-#define ActRenFolDocGrp		(ActDowShaDeg + 49)
-#define ActRcvFilDocGrpDZ	(ActDowShaDeg + 50)
-#define ActRcvFilDocGrpCla	(ActDowShaDeg + 51)
-#define ActExpAdmDocGrp		(ActDowShaDeg + 52)
-#define ActConAdmDocGrp		(ActDowShaDeg + 53)
-#define ActZIPAdmDocGrp		(ActDowShaDeg + 54)
-#define ActUnhDocGrp		(ActDowShaDeg + 55)
-#define ActHidDocGrp		(ActDowShaDeg + 56)
-#define ActReqDatAdmDocGrp	(ActDowShaDeg + 57)
-#define ActChgDatAdmDocGrp	(ActDowShaDeg + 58)
-#define ActDowAdmDocGrp		(ActDowShaDeg + 59)
+   // Shared files of degree
+   ActAdmShaDeg,
+   ActReqRemFilShaDeg,
+   ActRemFilShaDeg,
+   ActRemFolShaDeg,
+   ActCopShaDeg,
+   ActPasShaDeg,
+   ActRemTreShaDeg,
+   ActFrmCreShaDeg,
+   ActCreFolShaDeg,
+   ActCreLnkShaDeg,
+   ActRenFolShaDeg,
+   ActRcvFilShaDegDZ,
+   ActRcvFilShaDegCla,
+   ActExpShaDeg,
+   ActConShaDeg,
+   ActZIPShaDeg,
+   ActReqDatShaDeg,
+   ActChgDatShaDeg,
+   ActDowShaDeg,
 
-// Private documents for course teachers
-#define ActAdmTchCrsGrp		(ActDowAdmDocGrp + 1)
-#define ActChgToAdmTch		(ActDowAdmDocGrp + 2)
-#define ActAdmTchCrs		(ActDowAdmDocGrp + 3)
-#define ActReqRemFilTchCrs	(ActDowAdmDocGrp + 4)
-#define ActRemFilTchCrs		(ActDowAdmDocGrp + 5)
-#define ActRemFolTchCrs		(ActDowAdmDocGrp + 6)
-#define ActCopTchCrs		(ActDowAdmDocGrp + 7)
-#define ActPasTchCrs		(ActDowAdmDocGrp + 8)
-#define ActRemTreTchCrs		(ActDowAdmDocGrp + 9)
-#define ActFrmCreTchCrs		(ActDowAdmDocGrp + 10)
-#define ActCreFolTchCrs		(ActDowAdmDocGrp + 11)
-#define ActCreLnkTchCrs		(ActDowAdmDocGrp + 12)
-#define ActRenFolTchCrs		(ActDowAdmDocGrp + 13)
-#define ActRcvFilTchCrsDZ	(ActDowAdmDocGrp + 14)
-#define ActRcvFilTchCrsCla	(ActDowAdmDocGrp + 15)
-#define ActExpTchCrs		(ActDowAdmDocGrp + 16)
-#define ActConTchCrs		(ActDowAdmDocGrp + 17)
-#define ActZIPTchCrs		(ActDowAdmDocGrp + 18)
-#define ActReqDatTchCrs		(ActDowAdmDocGrp + 19)
-#define ActChgDatTchCrs		(ActDowAdmDocGrp + 20)
-#define ActDowTchCrs		(ActDowAdmDocGrp + 21)
-#define ActAdmTchGrp		(ActDowAdmDocGrp + 22)
-#define ActReqRemFilTchGrp	(ActDowAdmDocGrp + 23)
-#define ActRemFilTchGrp		(ActDowAdmDocGrp + 24)
-#define ActRemFolTchGrp		(ActDowAdmDocGrp + 25)
-#define ActCopTchGrp		(ActDowAdmDocGrp + 26)
-#define ActPasTchGrp		(ActDowAdmDocGrp + 27)
-#define ActRemTreTchGrp		(ActDowAdmDocGrp + 28)
-#define ActFrmCreTchGrp		(ActDowAdmDocGrp + 29)
-#define ActCreFolTchGrp		(ActDowAdmDocGrp + 30)
-#define ActCreLnkTchGrp		(ActDowAdmDocGrp + 31)
-#define ActRenFolTchGrp		(ActDowAdmDocGrp + 32)
-#define ActRcvFilTchGrpDZ	(ActDowAdmDocGrp + 33)
-#define ActRcvFilTchGrpCla	(ActDowAdmDocGrp + 34)
-#define ActExpTchGrp		(ActDowAdmDocGrp + 35)
-#define ActConTchGrp		(ActDowAdmDocGrp + 36)
-#define ActZIPTchGrp		(ActDowAdmDocGrp + 37)
-#define ActReqDatTchGrp		(ActDowAdmDocGrp + 38)
-#define ActChgDatTchGrp		(ActDowAdmDocGrp + 39)
-#define ActDowTchGrp		(ActDowAdmDocGrp + 40)
+   // Documents of course
+   ActSeeAdmDocCrsGrp,
+   ActChgToSeeDocCrs,
+   ActSeeDocCrs,
+   ActExpSeeDocCrs,
+   ActConSeeDocCrs,
+   ActZIPSeeDocCrs,
+   ActReqDatSeeDocCrs,
+   ActReqLnkSeeDocCrs,
+   ActDowSeeDocCrs,
+   ActSeeDocGrp,
+   ActExpSeeDocGrp,
+   ActConSeeDocGrp,
+   ActZIPSeeDocGrp,
+   ActReqDatSeeDocGrp,
+   ActDowSeeDocGrp,
+   ActChgToAdmDocCrs,
+   ActAdmDocCrs,
+   ActReqRemFilDocCrs,
+   ActRemFilDocCrs,
+   ActRemFolDocCrs,
+   ActCopDocCrs,
+   ActPasDocCrs,
+   ActRemTreDocCrs,
+   ActFrmCreDocCrs,
+   ActCreFolDocCrs,
+   ActCreLnkDocCrs,
+   ActRenFolDocCrs,
+   ActRcvFilDocCrsDZ,
+   ActRcvFilDocCrsCla,
+   ActExpAdmDocCrs,
+   ActConAdmDocCrs,
+   ActZIPAdmDocCrs,
+   ActUnhDocCrs,
+   ActHidDocCrs,
+   ActReqDatAdmDocCrs,
+   ActChgDatAdmDocCrs,
+   ActReqLnkAdmDocCrs,
+   ActDowAdmDocCrs,
+   ActAdmDocGrp,
+   ActReqRemFilDocGrp,
+   ActRemFilDocGrp,
+   ActRemFolDocGrp,
+   ActCopDocGrp,
+   ActPasDocGrp,
+   ActRemTreDocGrp,
+   ActFrmCreDocGrp,
+   ActCreFolDocGrp,
+   ActCreLnkDocGrp,
+   ActRenFolDocGrp,
+   ActRcvFilDocGrpDZ,
+   ActRcvFilDocGrpCla,
+   ActExpAdmDocGrp,
+   ActConAdmDocGrp,
+   ActZIPAdmDocGrp,
+   ActUnhDocGrp,
+   ActHidDocGrp,
+   ActReqDatAdmDocGrp,
+   ActChgDatAdmDocGrp,
+   ActDowAdmDocGrp,
 
-// Shared files of course
-#define ActAdmShaCrsGrp		(ActDowTchGrp + 1)
-#define ActChgToAdmSha		(ActDowTchGrp + 2)
-#define ActAdmShaCrs		(ActDowTchGrp + 3)
-#define ActReqRemFilShaCrs	(ActDowTchGrp + 4)
-#define ActRemFilShaCrs		(ActDowTchGrp + 5)
-#define ActRemFolShaCrs		(ActDowTchGrp + 6)
-#define ActCopShaCrs		(ActDowTchGrp + 7)
-#define ActPasShaCrs		(ActDowTchGrp + 8)
-#define ActRemTreShaCrs		(ActDowTchGrp + 9)
-#define ActFrmCreShaCrs		(ActDowTchGrp + 10)
-#define ActCreFolShaCrs		(ActDowTchGrp + 11)
-#define ActCreLnkShaCrs		(ActDowTchGrp + 12)
-#define ActRenFolShaCrs		(ActDowTchGrp + 13)
-#define ActRcvFilShaCrsDZ	(ActDowTchGrp + 14)
-#define ActRcvFilShaCrsCla	(ActDowTchGrp + 15)
-#define ActExpShaCrs		(ActDowTchGrp + 16)
-#define ActConShaCrs		(ActDowTchGrp + 17)
-#define ActZIPShaCrs		(ActDowTchGrp + 18)
-#define ActReqDatShaCrs		(ActDowTchGrp + 19)
-#define ActChgDatShaCrs		(ActDowTchGrp + 20)
-#define ActDowShaCrs		(ActDowTchGrp + 21)
-#define ActAdmShaGrp		(ActDowTchGrp + 22)
-#define ActReqRemFilShaGrp	(ActDowTchGrp + 23)
-#define ActRemFilShaGrp		(ActDowTchGrp + 24)
-#define ActRemFolShaGrp		(ActDowTchGrp + 25)
-#define ActCopShaGrp		(ActDowTchGrp + 26)
-#define ActPasShaGrp		(ActDowTchGrp + 27)
-#define ActRemTreShaGrp		(ActDowTchGrp + 28)
-#define ActFrmCreShaGrp		(ActDowTchGrp + 29)
-#define ActCreFolShaGrp		(ActDowTchGrp + 30)
-#define ActCreLnkShaGrp		(ActDowTchGrp + 31)
-#define ActRenFolShaGrp		(ActDowTchGrp + 32)
-#define ActRcvFilShaGrpDZ	(ActDowTchGrp + 33)
-#define ActRcvFilShaGrpCla	(ActDowTchGrp + 34)
-#define ActExpShaGrp		(ActDowTchGrp + 35)
-#define ActConShaGrp		(ActDowTchGrp + 36)
-#define ActZIPShaGrp		(ActDowTchGrp + 37)
-#define ActReqDatShaGrp		(ActDowTchGrp + 38)
-#define ActChgDatShaGrp		(ActDowTchGrp + 39)
-#define ActDowShaGrp		(ActDowTchGrp + 40)
+   // Private documents for course teachers
+   ActAdmTchCrsGrp,
+   ActChgToAdmTch,
+   ActAdmTchCrs,
+   ActReqRemFilTchCrs,
+   ActRemFilTchCrs,
+   ActRemFolTchCrs,
+   ActCopTchCrs,
+   ActPasTchCrs,
+   ActRemTreTchCrs,
+   ActFrmCreTchCrs,
+   ActCreFolTchCrs,
+   ActCreLnkTchCrs,
+   ActRenFolTchCrs,
+   ActRcvFilTchCrsDZ,
+   ActRcvFilTchCrsCla,
+   ActExpTchCrs,
+   ActConTchCrs,
+   ActZIPTchCrs,
+   ActReqDatTchCrs,
+   ActChgDatTchCrs,
+   ActDowTchCrs,
+   ActAdmTchGrp,
+   ActReqRemFilTchGrp,
+   ActRemFilTchGrp,
+   ActRemFolTchGrp,
+   ActCopTchGrp,
+   ActPasTchGrp,
+   ActRemTreTchGrp,
+   ActFrmCreTchGrp,
+   ActCreFolTchGrp,
+   ActCreLnkTchGrp,
+   ActRenFolTchGrp,
+   ActRcvFilTchGrpDZ,
+   ActRcvFilTchGrpCla,
+   ActExpTchGrp,
+   ActConTchGrp,
+   ActZIPTchGrp,
+   ActReqDatTchGrp,
+   ActChgDatTchGrp,
+   ActDowTchGrp,
 
-// Assignments and works of user
-#define ActAdmAsgWrkUsr		(ActDowShaGrp + 1)
-#define ActReqRemFilAsgUsr	(ActDowShaGrp + 2)
-#define ActRemFilAsgUsr		(ActDowShaGrp + 3)
-#define ActRemFolAsgUsr		(ActDowShaGrp + 4)
-#define ActCopAsgUsr		(ActDowShaGrp + 5)
-#define ActPasAsgUsr		(ActDowShaGrp + 6)
-#define ActRemTreAsgUsr		(ActDowShaGrp + 7)
-#define ActFrmCreAsgUsr		(ActDowShaGrp + 8)
-#define ActCreFolAsgUsr		(ActDowShaGrp + 9)
-#define ActCreLnkAsgUsr		(ActDowShaGrp + 10)
-#define ActRenFolAsgUsr		(ActDowShaGrp + 11)
-#define ActRcvFilAsgUsrDZ	(ActDowShaGrp + 12)
-#define ActRcvFilAsgUsrCla	(ActDowShaGrp + 13)
-#define ActExpAsgUsr		(ActDowShaGrp + 14)
-#define ActConAsgUsr		(ActDowShaGrp + 15)
-#define ActZIPAsgUsr		(ActDowShaGrp + 16)
-#define ActReqDatAsgUsr		(ActDowShaGrp + 17)
-#define ActChgDatAsgUsr		(ActDowShaGrp + 18)
-#define ActDowAsgUsr		(ActDowShaGrp + 19)
-#define ActReqRemFilWrkUsr	(ActDowShaGrp + 20)
-#define ActRemFilWrkUsr		(ActDowShaGrp + 21)
-#define ActRemFolWrkUsr		(ActDowShaGrp + 22)
-#define ActCopWrkUsr		(ActDowShaGrp + 23)
-#define ActPasWrkUsr		(ActDowShaGrp + 24)
-#define ActRemTreWrkUsr		(ActDowShaGrp + 25)
-#define ActFrmCreWrkUsr		(ActDowShaGrp + 26)
-#define ActCreFolWrkUsr		(ActDowShaGrp + 27)
-#define ActCreLnkWrkUsr		(ActDowShaGrp + 28)
-#define ActRenFolWrkUsr		(ActDowShaGrp + 29)
-#define ActRcvFilWrkUsrDZ	(ActDowShaGrp + 30)
-#define ActRcvFilWrkUsrCla	(ActDowShaGrp + 31)
-#define ActExpWrkUsr		(ActDowShaGrp + 32)
-#define ActConWrkUsr		(ActDowShaGrp + 33)
-#define ActZIPWrkUsr		(ActDowShaGrp + 34)
-#define ActReqDatWrkUsr		(ActDowShaGrp + 35)
-#define ActChgDatWrkUsr		(ActDowShaGrp + 36)
-#define ActDowWrkUsr		(ActDowShaGrp + 37)
+   // Shared files of course
+   ActAdmShaCrsGrp,
+   ActChgToAdmSha,
+   ActAdmShaCrs,
+   ActReqRemFilShaCrs,
+   ActRemFilShaCrs,
+   ActRemFolShaCrs,
+   ActCopShaCrs,
+   ActPasShaCrs,
+   ActRemTreShaCrs,
+   ActFrmCreShaCrs,
+   ActCreFolShaCrs,
+   ActCreLnkShaCrs,
+   ActRenFolShaCrs,
+   ActRcvFilShaCrsDZ,
+   ActRcvFilShaCrsCla,
+   ActExpShaCrs,
+   ActConShaCrs,
+   ActZIPShaCrs,
+   ActReqDatShaCrs,
+   ActChgDatShaCrs,
+   ActDowShaCrs,
+   ActAdmShaGrp,
+   ActReqRemFilShaGrp,
+   ActRemFilShaGrp,
+   ActRemFolShaGrp,
+   ActCopShaGrp,
+   ActPasShaGrp,
+   ActRemTreShaGrp,
+   ActFrmCreShaGrp,
+   ActCreFolShaGrp,
+   ActCreLnkShaGrp,
+   ActRenFolShaGrp,
+   ActRcvFilShaGrpDZ,
+   ActRcvFilShaGrpCla,
+   ActExpShaGrp,
+   ActConShaGrp,
+   ActZIPShaGrp,
+   ActReqDatShaGrp,
+   ActChgDatShaGrp,
+   ActDowShaGrp,
 
-// Assignments and works of course
-#define ActReqAsgWrkCrs		(ActDowWrkUsr + 1)
-#define ActAdmAsgWrkCrs		(ActDowWrkUsr + 2)
-#define ActReqRemFilAsgCrs	(ActDowWrkUsr + 3)
-#define ActRemFilAsgCrs		(ActDowWrkUsr + 4)
-#define ActRemFolAsgCrs		(ActDowWrkUsr + 5)
-#define ActCopAsgCrs		(ActDowWrkUsr + 6)
-#define ActPasAsgCrs		(ActDowWrkUsr + 7)
-#define ActRemTreAsgCrs		(ActDowWrkUsr + 8)
-#define ActFrmCreAsgCrs		(ActDowWrkUsr + 9)
-#define ActCreFolAsgCrs		(ActDowWrkUsr + 10)
-#define ActCreLnkAsgCrs		(ActDowWrkUsr + 11)
-#define ActRenFolAsgCrs		(ActDowWrkUsr + 12)
-#define ActRcvFilAsgCrsDZ	(ActDowWrkUsr + 13)
-#define ActRcvFilAsgCrsCla	(ActDowWrkUsr + 14)
-#define ActExpAsgCrs		(ActDowWrkUsr + 15)
-#define ActConAsgCrs		(ActDowWrkUsr + 16)
-#define ActZIPAsgCrs		(ActDowWrkUsr + 17)
-#define ActReqDatAsgCrs		(ActDowWrkUsr + 18)
-#define ActChgDatAsgCrs		(ActDowWrkUsr + 19)
-#define ActDowAsgCrs		(ActDowWrkUsr + 20)
-#define ActReqRemFilWrkCrs	(ActDowWrkUsr + 21)
-#define ActRemFilWrkCrs		(ActDowWrkUsr + 22)
-#define ActRemFolWrkCrs		(ActDowWrkUsr + 23)
-#define ActCopWrkCrs		(ActDowWrkUsr + 24)
-#define ActPasWrkCrs		(ActDowWrkUsr + 25)
-#define ActRemTreWrkCrs		(ActDowWrkUsr + 26)
-#define ActFrmCreWrkCrs		(ActDowWrkUsr + 27)
-#define ActCreFolWrkCrs		(ActDowWrkUsr + 28)
-#define ActCreLnkWrkCrs		(ActDowWrkUsr + 29)
-#define ActRenFolWrkCrs		(ActDowWrkUsr + 30)
-#define ActRcvFilWrkCrsDZ	(ActDowWrkUsr + 31)
-#define ActRcvFilWrkCrsCla	(ActDowWrkUsr + 32)
-#define ActExpWrkCrs		(ActDowWrkUsr + 33)
-#define ActConWrkCrs		(ActDowWrkUsr + 34)
-#define ActZIPWrkCrs		(ActDowWrkUsr + 35)
-#define ActReqDatWrkCrs		(ActDowWrkUsr + 36)
-#define ActChgDatWrkCrs		(ActDowWrkUsr + 37)
-#define ActDowWrkCrs		(ActDowWrkUsr + 38)
+   // Assignments and works of user
+   ActAdmAsgWrkUsr,
+   ActReqRemFilAsgUsr,
+   ActRemFilAsgUsr,
+   ActRemFolAsgUsr,
+   ActCopAsgUsr,
+   ActPasAsgUsr,
+   ActRemTreAsgUsr,
+   ActFrmCreAsgUsr,
+   ActCreFolAsgUsr,
+   ActCreLnkAsgUsr,
+   ActRenFolAsgUsr,
+   ActRcvFilAsgUsrDZ,
+   ActRcvFilAsgUsrCla,
+   ActExpAsgUsr,
+   ActConAsgUsr,
+   ActZIPAsgUsr,
+   ActReqDatAsgUsr,
+   ActChgDatAsgUsr,
+   ActDowAsgUsr,
+   ActReqRemFilWrkUsr,
+   ActRemFilWrkUsr,
+   ActRemFolWrkUsr,
+   ActCopWrkUsr,
+   ActPasWrkUsr,
+   ActRemTreWrkUsr,
+   ActFrmCreWrkUsr,
+   ActCreFolWrkUsr,
+   ActCreLnkWrkUsr,
+   ActRenFolWrkUsr,
+   ActRcvFilWrkUsrDZ,
+   ActRcvFilWrkUsrCla,
+   ActExpWrkUsr,
+   ActConWrkUsr,
+   ActZIPWrkUsr,
+   ActReqDatWrkUsr,
+   ActChgDatWrkUsr,
+   ActDowWrkUsr,
 
-// Marks
-#define ActSeeAdmMrk		(ActDowWrkCrs + 1)
-#define ActChgToSeeMrk		(ActDowWrkCrs + 2)
-#define ActSeeMrkCrs		(ActDowWrkCrs + 3)
-#define ActExpSeeMrkCrs		(ActDowWrkCrs + 4)
-#define ActConSeeMrkCrs		(ActDowWrkCrs + 5)
-#define ActReqDatSeeMrkCrs	(ActDowWrkCrs + 6)
-#define ActReqLnkSeeMrkCrs	(ActDowWrkCrs + 7)
-#define ActSeeMyMrkCrs		(ActDowWrkCrs + 8)
-#define ActSeeMrkGrp		(ActDowWrkCrs + 9)
-#define ActExpSeeMrkGrp		(ActDowWrkCrs + 10)
-#define ActConSeeMrkGrp		(ActDowWrkCrs + 11)
-#define ActReqDatSeeMrkGrp	(ActDowWrkCrs + 12)
-#define ActSeeMyMrkGrp		(ActDowWrkCrs + 13)
-#define ActChgToAdmMrk		(ActDowWrkCrs + 14)
-#define ActAdmMrkCrs		(ActDowWrkCrs + 15)
-#define ActReqRemFilMrkCrs	(ActDowWrkCrs + 16)
-#define ActRemFilMrkCrs		(ActDowWrkCrs + 17)
-#define ActRemFolMrkCrs		(ActDowWrkCrs + 18)
-#define ActCopMrkCrs		(ActDowWrkCrs + 19)
-#define ActPasMrkCrs		(ActDowWrkCrs + 20)
-#define ActRemTreMrkCrs		(ActDowWrkCrs + 21)
-#define ActFrmCreMrkCrs		(ActDowWrkCrs + 22)
-#define ActCreFolMrkCrs		(ActDowWrkCrs + 23)
-#define ActRenFolMrkCrs		(ActDowWrkCrs + 24)
-#define ActRcvFilMrkCrsDZ	(ActDowWrkCrs + 25)
-#define ActRcvFilMrkCrsCla	(ActDowWrkCrs + 26)
-#define ActExpAdmMrkCrs		(ActDowWrkCrs + 27)
-#define ActConAdmMrkCrs		(ActDowWrkCrs + 28)
-#define ActZIPAdmMrkCrs		(ActDowWrkCrs + 29)
-#define ActUnhMrkCrs		(ActDowWrkCrs + 30)
-#define ActHidMrkCrs		(ActDowWrkCrs + 31)
-#define ActReqDatAdmMrkCrs	(ActDowWrkCrs + 32)
-#define ActChgDatAdmMrkCrs	(ActDowWrkCrs + 33)
-#define ActReqLnkAdmMrkCrs	(ActDowWrkCrs + 34)
-#define ActDowAdmMrkCrs		(ActDowWrkCrs + 35)
-#define ActChgNumRowHeaCrs	(ActDowWrkCrs + 36)
-#define ActChgNumRowFooCrs	(ActDowWrkCrs + 37)
-#define ActAdmMrkGrp		(ActDowWrkCrs + 38)
-#define ActReqRemFilMrkGrp	(ActDowWrkCrs + 39)
-#define ActRemFilMrkGrp		(ActDowWrkCrs + 40)
-#define ActRemFolMrkGrp		(ActDowWrkCrs + 41)
-#define ActCopMrkGrp		(ActDowWrkCrs + 42)
-#define ActPasMrkGrp		(ActDowWrkCrs + 43)
-#define ActRemTreMrkGrp		(ActDowWrkCrs + 44)
-#define ActFrmCreMrkGrp		(ActDowWrkCrs + 45)
-#define ActCreFolMrkGrp		(ActDowWrkCrs + 46)
-#define ActRenFolMrkGrp		(ActDowWrkCrs + 47)
-#define ActRcvFilMrkGrpDZ	(ActDowWrkCrs + 48)
-#define ActRcvFilMrkGrpCla	(ActDowWrkCrs + 49)
-#define ActExpAdmMrkGrp		(ActDowWrkCrs + 50)
-#define ActConAdmMrkGrp		(ActDowWrkCrs + 51)
-#define ActZIPAdmMrkGrp		(ActDowWrkCrs + 52)
-#define ActUnhMrkGrp		(ActDowWrkCrs + 53)
-#define ActHidMrkGrp		(ActDowWrkCrs + 54)
-#define ActReqDatAdmMrkGrp	(ActDowWrkCrs + 55)
-#define ActChgDatAdmMrkGrp	(ActDowWrkCrs + 56)
-#define ActDowAdmMrkGrp		(ActDowWrkCrs + 57)
-#define ActChgNumRowHeaGrp	(ActDowWrkCrs + 58)
-#define ActChgNumRowFooGrp	(ActDowWrkCrs + 59)
+   // Assignments and works of course
+   ActReqAsgWrkCrs,
+   ActAdmAsgWrkCrs,
+   ActReqRemFilAsgCrs,
+   ActRemFilAsgCrs,
+   ActRemFolAsgCrs,
+   ActCopAsgCrs,
+   ActPasAsgCrs,
+   ActRemTreAsgCrs,
+   ActFrmCreAsgCrs,
+   ActCreFolAsgCrs,
+   ActCreLnkAsgCrs,
+   ActRenFolAsgCrs,
+   ActRcvFilAsgCrsDZ,
+   ActRcvFilAsgCrsCla,
+   ActExpAsgCrs,
+   ActConAsgCrs,
+   ActZIPAsgCrs,
+   ActReqDatAsgCrs,
+   ActChgDatAsgCrs,
+   ActDowAsgCrs,
+   ActReqRemFilWrkCrs,
+   ActRemFilWrkCrs,
+   ActRemFolWrkCrs,
+   ActCopWrkCrs,
+   ActPasWrkCrs,
+   ActRemTreWrkCrs,
+   ActFrmCreWrkCrs,
+   ActCreFolWrkCrs,
+   ActCreLnkWrkCrs,
+   ActRenFolWrkCrs,
+   ActRcvFilWrkCrsDZ,
+   ActRcvFilWrkCrsCla,
+   ActExpWrkCrs,
+   ActConWrkCrs,
+   ActZIPWrkCrs,
+   ActReqDatWrkCrs,
+   ActChgDatWrkCrs,
+   ActDowWrkCrs,
 
-// Briefcase
-#define ActAdmBrf		(ActChgNumRowFooGrp + 1)
-#define ActReqRemFilBrf		(ActChgNumRowFooGrp + 2)
-#define ActRemFilBrf		(ActChgNumRowFooGrp + 3)
-#define ActRemFolBrf		(ActChgNumRowFooGrp + 4)
-#define ActCopBrf		(ActChgNumRowFooGrp + 5)
-#define ActPasBrf		(ActChgNumRowFooGrp + 6)
-#define ActRemTreBrf		(ActChgNumRowFooGrp + 7)
-#define ActFrmCreBrf		(ActChgNumRowFooGrp + 8)
-#define ActCreFolBrf		(ActChgNumRowFooGrp + 9)
-#define ActCreLnkBrf		(ActChgNumRowFooGrp + 10)
-#define ActRenFolBrf		(ActChgNumRowFooGrp + 11)
-#define ActRcvFilBrfDZ		(ActChgNumRowFooGrp + 12)
-#define ActRcvFilBrfCla		(ActChgNumRowFooGrp + 13)
-#define ActExpBrf		(ActChgNumRowFooGrp + 14)
-#define ActConBrf		(ActChgNumRowFooGrp + 15)
-#define ActZIPBrf		(ActChgNumRowFooGrp + 16)
-#define ActReqDatBrf		(ActChgNumRowFooGrp + 17)
-#define ActChgDatBrf		(ActChgNumRowFooGrp + 18)
-#define ActDowBrf		(ActChgNumRowFooGrp + 19)
-#define ActReqRemOldBrf		(ActChgNumRowFooGrp + 20)
-#define ActRemOldBrf		(ActChgNumRowFooGrp + 21)
+   // Marks
+   ActSeeAdmMrk,
+   ActChgToSeeMrk,
+   ActSeeMrkCrs,
+   ActExpSeeMrkCrs,
+   ActConSeeMrkCrs,
+   ActReqDatSeeMrkCrs,
+   ActReqLnkSeeMrkCrs,
+   ActSeeMyMrkCrs,
+   ActSeeMrkGrp,
+   ActExpSeeMrkGrp,
+   ActConSeeMrkGrp,
+   ActReqDatSeeMrkGrp,
+   ActSeeMyMrkGrp,
+   ActChgToAdmMrk,
+   ActAdmMrkCrs,
+   ActReqRemFilMrkCrs,
+   ActRemFilMrkCrs,
+   ActRemFolMrkCrs,
+   ActCopMrkCrs,
+   ActPasMrkCrs,
+   ActRemTreMrkCrs,
+   ActFrmCreMrkCrs,
+   ActCreFolMrkCrs,
+   ActRenFolMrkCrs,
+   ActRcvFilMrkCrsDZ,
+   ActRcvFilMrkCrsCla,
+   ActExpAdmMrkCrs,
+   ActConAdmMrkCrs,
+   ActZIPAdmMrkCrs,
+   ActUnhMrkCrs,
+   ActHidMrkCrs,
+   ActReqDatAdmMrkCrs,
+   ActChgDatAdmMrkCrs,
+   ActReqLnkAdmMrkCrs,
+   ActDowAdmMrkCrs,
+   ActChgNumRowHeaCrs,
+   ActChgNumRowFooCrs,
+   ActAdmMrkGrp,
+   ActReqRemFilMrkGrp,
+   ActRemFilMrkGrp,
+   ActRemFolMrkGrp,
+   ActCopMrkGrp,
+   ActPasMrkGrp,
+   ActRemTreMrkGrp,
+   ActFrmCreMrkGrp,
+   ActCreFolMrkGrp,
+   ActRenFolMrkGrp,
+   ActRcvFilMrkGrpDZ,
+   ActRcvFilMrkGrpCla,
+   ActExpAdmMrkGrp,
+   ActConAdmMrkGrp,
+   ActZIPAdmMrkGrp,
+   ActUnhMrkGrp,
+   ActHidMrkGrp,
+   ActReqDatAdmMrkGrp,
+   ActChgDatAdmMrkGrp,
+   ActDowAdmMrkGrp,
+   ActChgNumRowHeaGrp,
+   ActChgNumRowFooGrp,
+
+   // Briefcase
+   ActAdmBrf,
+   ActReqRemFilBrf,
+   ActRemFilBrf,
+   ActRemFolBrf,
+   ActCopBrf,
+   ActPasBrf,
+   ActRemTreBrf,
+   ActFrmCreBrf,
+   ActCreFolBrf,
+   ActCreLnkBrf,
+   ActRenFolBrf,
+   ActRcvFilBrfDZ,
+   ActRcvFilBrfCla,
+   ActExpBrf,
+   ActConBrf,
+   ActZIPBrf,
+   ActReqDatBrf,
+   ActChgDatBrf,
+   ActDowBrf,
+   ActReqRemOldBrf,
+   ActRemOldBrf,
 
 /*****************************************************************************/
 /******************************* Users tab ***********************************/
 /*****************************************************************************/
-// Groups
-#define ActReqSelGrp		(ActRemOldBrf + 1)
-#define ActChgGrp		(ActRemOldBrf + 2)
-#define ActReqEdiGrp		(ActRemOldBrf + 3)
-#define ActNewGrpTyp		(ActRemOldBrf + 4)
-#define ActReqRemGrpTyp		(ActRemOldBrf + 5)
-#define ActRemGrpTyp		(ActRemOldBrf + 6)
-#define ActRenGrpTyp		(ActRemOldBrf + 7)
-#define ActChgMdtGrpTyp		(ActRemOldBrf + 8)
-#define ActChgMulGrpTyp		(ActRemOldBrf + 9)
-#define ActChgTimGrpTyp		(ActRemOldBrf + 10)
-#define ActNewGrp		(ActRemOldBrf + 11)
-#define ActReqRemGrp		(ActRemOldBrf + 12)
-#define ActRemGrp		(ActRemOldBrf + 13)
-#define ActOpeGrp		(ActRemOldBrf + 14)
-#define ActCloGrp		(ActRemOldBrf + 15)
-#define ActEnaFilZonGrp		(ActRemOldBrf + 16)
-#define ActDisFilZonGrp		(ActRemOldBrf + 17)
-#define ActChgGrpTyp		(ActRemOldBrf + 18)
-#define ActRenGrp		(ActRemOldBrf + 19)
-#define ActChgGrpRoo		(ActRemOldBrf + 20)
-#define ActChgMaxStdGrp		(ActRemOldBrf + 21)
 
-// Students
-#define ActLstStd		(ActChgMaxStdGrp + 1)
-#define ActLstStdAll		(ActChgMaxStdGrp + 2)
-#define ActPrnStdPho		(ActChgMaxStdGrp + 3)
-#define ActDoActOnSevStd	(ActChgMaxStdGrp + 4)
-#define ActSeeRecSevStd		(ActChgMaxStdGrp + 5)
-#define ActPrnRecSevStd		(ActChgMaxStdGrp + 6)
-#define ActReqMdfOneStd		(ActChgMaxStdGrp + 7)
-#define ActReqMdfStd		(ActChgMaxStdGrp + 8)
-#define ActReqStdPho		(ActChgMaxStdGrp + 9)
-#define ActDetStdPho		(ActChgMaxStdGrp + 10)
-#define ActChgStdPho		(ActChgMaxStdGrp + 11)
-#define ActReqRemStdPho		(ActChgMaxStdGrp + 12)
-#define ActRemStdPho		(ActChgMaxStdGrp + 13)
-#define ActCreStd		(ActChgMaxStdGrp + 14)
-#define ActUpdStd		(ActChgMaxStdGrp + 15)
-#define ActCnfID_Std		(ActChgMaxStdGrp + 16)
-#define ActFrmAccStd		(ActChgMaxStdGrp + 17)
-#define ActRemNicStd		(ActChgMaxStdGrp + 18)
-#define ActChgNicStd		(ActChgMaxStdGrp + 19)
-#define ActRemID_Std		(ActChgMaxStdGrp + 20)
-#define ActChgID_Std		(ActChgMaxStdGrp + 21)
-#define ActChgPwdStd		(ActChgMaxStdGrp + 22)
-#define ActRemMaiStd		(ActChgMaxStdGrp + 23)
-#define ActChgMaiStd		(ActChgMaxStdGrp + 24)
-#define ActRemStdCrs		(ActChgMaxStdGrp + 25)
-#define ActReqRemAllStdCrs	(ActChgMaxStdGrp + 26)
-#define ActRemAllStdCrs		(ActChgMaxStdGrp + 27)
-#define ActReqAccEnrStd		(ActChgMaxStdGrp + 28)
-#define ActAccEnrStd		(ActChgMaxStdGrp + 29)
-#define ActRemMe_Std		(ActChgMaxStdGrp + 30)
-#define ActReqFolSevStd		(ActChgMaxStdGrp + 31)
-#define ActReqUnfSevStd		(ActChgMaxStdGrp + 32)
-#define ActFolSevStd		(ActChgMaxStdGrp + 33)
-#define ActUnfSevStd		(ActChgMaxStdGrp + 34)
-#define ActSeeRecOneStd		(ActChgMaxStdGrp + 35)
-#define ActReqEnrSevStd		(ActChgMaxStdGrp + 36)
-#define ActRcvFrmEnrSevStd	(ActChgMaxStdGrp + 37)
-#define ActRcvRecOthUsr		(ActChgMaxStdGrp + 38)
-#define ActEdiRecFie		(ActChgMaxStdGrp + 39)
-#define ActNewFie		(ActChgMaxStdGrp + 40)
-#define ActReqRemFie		(ActChgMaxStdGrp + 41)
-#define ActRemFie		(ActChgMaxStdGrp + 42)
-#define ActRenFie		(ActChgMaxStdGrp + 43)
-#define ActChgRowFie		(ActChgMaxStdGrp + 44)
-#define ActChgVisFie		(ActChgMaxStdGrp + 45)
-#define ActRcvRecCrs		(ActChgMaxStdGrp + 46)
+   // Groups
+   ActReqSelGrp,
+   ActChgGrp,
+   ActReqEdiGrp,
+   ActNewGrpTyp,
+   ActReqRemGrpTyp,
+   ActRemGrpTyp,
+   ActRenGrpTyp,
+   ActChgMdtGrpTyp,
+   ActChgMulGrpTyp,
+   ActChgTimGrpTyp,
+   ActNewGrp,
+   ActReqRemGrp,
+   ActRemGrp,
+   ActOpeGrp,
+   ActCloGrp,
+   ActEnaFilZonGrp,
+   ActDisFilZonGrp,
+   ActChgGrpTyp,
+   ActRenGrp,
+   ActChgGrpRoo,
+   ActChgMaxStdGrp,
 
-// Teachers
-#define ActLstTch		(ActRcvRecCrs + 1)
-#define ActLstTchAll		(ActRcvRecCrs + 2)
-#define ActPrnTchPho		(ActRcvRecCrs + 3)
-#define ActDoActOnSevTch	(ActRcvRecCrs + 4)
-#define ActSeeRecSevTch		(ActRcvRecCrs + 5)
-#define ActPrnRecSevTch		(ActRcvRecCrs + 6)
-#define ActReqMdfOneTch		(ActRcvRecCrs + 7)
-#define ActReqMdfNET		(ActRcvRecCrs + 8)
-#define ActReqMdfTch		(ActRcvRecCrs + 9)
-#define ActReqTchPho		(ActRcvRecCrs + 10)
-#define ActDetTchPho		(ActRcvRecCrs + 11)
-#define ActChgTchPho		(ActRcvRecCrs + 12)
-#define ActReqRemTchPho		(ActRcvRecCrs + 13)
-#define ActRemTchPho		(ActRcvRecCrs + 14)
-#define ActCreNET		(ActRcvRecCrs + 15)
-#define ActCreTch		(ActRcvRecCrs + 16)
-#define ActUpdNET		(ActRcvRecCrs + 17)
-#define ActUpdTch		(ActRcvRecCrs + 18)
-#define ActCnfID_Tch		(ActRcvRecCrs + 19)
-#define ActFrmAccTch		(ActRcvRecCrs + 20)
-#define ActRemNicTch		(ActRcvRecCrs + 21)
-#define ActChgNicTch		(ActRcvRecCrs + 22)
-#define ActRemID_Tch		(ActRcvRecCrs + 23)
-#define ActChgID_Tch		(ActRcvRecCrs + 24)
-#define ActChgPwdTch		(ActRcvRecCrs + 25)
-#define ActRemMaiTch		(ActRcvRecCrs + 26)
-#define ActChgMaiTch		(ActRcvRecCrs + 27)
-#define ActRemNETCrs		(ActRcvRecCrs + 28)
-#define ActRemTchCrs		(ActRcvRecCrs + 29)
-#define ActReqAccEnrNET		(ActRcvRecCrs + 30)
-#define ActReqAccEnrTch		(ActRcvRecCrs + 31)
-#define ActAccEnrNET		(ActRcvRecCrs + 32)
-#define ActAccEnrTch		(ActRcvRecCrs + 33)
-#define ActRemMe_NET		(ActRcvRecCrs + 34)
-#define ActRemMe_Tch		(ActRcvRecCrs + 35)
-#define ActReqFolSevTch		(ActRcvRecCrs + 36)
-#define ActReqUnfSevTch		(ActRcvRecCrs + 37)
-#define ActFolSevTch		(ActRcvRecCrs + 38)
-#define ActUnfSevTch		(ActRcvRecCrs + 39)
-#define ActSeeRecOneTch		(ActRcvRecCrs + 40)
-#define ActReqEnrSevNET		(ActRcvRecCrs + 41)
-#define ActRcvFrmEnrSevNET	(ActRcvRecCrs + 42)
-#define ActReqEnrSevTch		(ActRcvRecCrs + 43)
-#define ActRcvFrmEnrSevTch	(ActRcvRecCrs + 44)
-#define ActFrmLogInUsrAgd	(ActRcvRecCrs + 45)
-#define ActLogInUsrAgd		(ActRcvRecCrs + 46)
-#define ActLogInUsrAgdLan	(ActRcvRecCrs + 47)
+   // Students
+   ActLstStd,
+   ActLstStdAll,
+   ActPrnStdPho,
+   ActDoActOnSevStd,
+   ActSeeRecSevStd,
+   ActPrnRecSevStd,
+   ActReqMdfOneStd,
+   ActReqMdfStd,
+   ActReqStdPho,
+   ActDetStdPho,
+   ActChgStdPho,
+   ActReqRemStdPho,
+   ActRemStdPho,
+   ActCreStd,
+   ActUpdStd,
+   ActCnfID_Std,
+   ActFrmAccStd,
+   ActRemNicStd,
+   ActChgNicStd,
+   ActRemID_Std,
+   ActChgID_Std,
+   ActChgPwdStd,
+   ActRemMaiStd,
+   ActChgMaiStd,
+   ActRemStdCrs,
+   ActReqRemAllStdCrs,
+   ActRemAllStdCrs,
+   ActReqAccEnrStd,
+   ActAccEnrStd,
+   ActRemMe_Std,
+   ActReqFolSevStd,
+   ActReqUnfSevStd,
+   ActFolSevStd,
+   ActUnfSevStd,
+   ActSeeRecOneStd,
+   ActReqEnrSevStd,
+   ActRcvFrmEnrSevStd,
+   ActRcvRecOthUsr,
+   ActEdiRecFie,
+   ActNewFie,
+   ActReqRemFie,
+   ActRemFie,
+   ActRenFie,
+   ActChgRowFie,
+   ActChgVisFie,
+   ActRcvRecCrs,
 
-// Others
-#define ActLstOth		(ActLogInUsrAgdLan + 1)
-#define ActNewAdmIns		(ActLogInUsrAgdLan + 2)
-#define ActRemAdmIns		(ActLogInUsrAgdLan + 3)
-#define ActNewAdmCtr		(ActLogInUsrAgdLan + 4)
-#define ActRemAdmCtr		(ActLogInUsrAgdLan + 5)
-#define ActNewAdmDeg		(ActLogInUsrAgdLan + 6)
-#define ActRemAdmDeg		(ActLogInUsrAgdLan + 7)
-#define ActLstGst		(ActLogInUsrAgdLan + 8)
-#define ActLstGstAll		(ActLogInUsrAgdLan + 9)
-#define ActPrnGstPho		(ActLogInUsrAgdLan + 10)
-#define ActDoActOnSevGst	(ActLogInUsrAgdLan + 11)
-#define ActSeeRecSevGst		(ActLogInUsrAgdLan + 12)
-#define ActPrnRecSevGst		(ActLogInUsrAgdLan + 13)
-#define ActReqMdfOneOth		(ActLogInUsrAgdLan + 14)
-#define ActReqMdfOth		(ActLogInUsrAgdLan + 15)
-#define ActReqOthPho		(ActLogInUsrAgdLan + 16)
-#define ActDetOthPho		(ActLogInUsrAgdLan + 17)
-#define ActChgOthPho		(ActLogInUsrAgdLan + 18)
-#define ActReqRemOthPho		(ActLogInUsrAgdLan + 19)
-#define ActRemOthPho		(ActLogInUsrAgdLan + 20)
-#define ActCreOth		(ActLogInUsrAgdLan + 21)
-#define ActUpdOth		(ActLogInUsrAgdLan + 22)
-#define ActCnfID_Oth		(ActLogInUsrAgdLan + 23)
-#define ActFrmAccOth		(ActLogInUsrAgdLan + 24)
-#define ActRemNicOth		(ActLogInUsrAgdLan + 25)
-#define ActChgNicOth		(ActLogInUsrAgdLan + 26)
-#define ActRemID_Oth		(ActLogInUsrAgdLan + 27)
-#define ActChgID_Oth		(ActLogInUsrAgdLan + 28)
-#define ActChgPwdOth		(ActLogInUsrAgdLan + 29)
-#define ActRemMaiOth		(ActLogInUsrAgdLan + 30)
-#define ActChgMaiOth		(ActLogInUsrAgdLan + 31)
-#define ActRemUsrGbl		(ActLogInUsrAgdLan + 32)
-#define ActReqRemOldUsr		(ActLogInUsrAgdLan + 33)
-#define ActRemOldUsr		(ActLogInUsrAgdLan + 34)
-#define ActLstDupUsr		(ActLogInUsrAgdLan + 35)
-#define ActLstSimUsr		(ActLogInUsrAgdLan + 36)
-#define ActRemDupUsr		(ActLogInUsrAgdLan + 37)
+   // Teachers
+   ActLstTch,
+   ActLstTchAll,
+   ActPrnTchPho,
+   ActDoActOnSevTch,
+   ActSeeRecSevTch,
+   ActPrnRecSevTch,
+   ActReqMdfOneTch,
+   ActReqMdfNET,
+   ActReqMdfTch,
+   ActReqTchPho,
+   ActDetTchPho,
+   ActChgTchPho,
+   ActReqRemTchPho,
+   ActRemTchPho,
+   ActCreNET,
+   ActCreTch,
+   ActUpdNET,
+   ActUpdTch,
+   ActCnfID_Tch,
+   ActFrmAccTch,
+   ActRemNicTch,
+   ActChgNicTch,
+   ActRemID_Tch,
+   ActChgID_Tch,
+   ActChgPwdTch,
+   ActRemMaiTch,
+   ActChgMaiTch,
+   ActRemNETCrs,
+   ActRemTchCrs,
+   ActReqAccEnrNET,
+   ActReqAccEnrTch,
+   ActAccEnrNET,
+   ActAccEnrTch,
+   ActRemMe_NET,
+   ActRemMe_Tch,
+   ActReqFolSevTch,
+   ActReqUnfSevTch,
+   ActFolSevTch,
+   ActUnfSevTch,
+   ActSeeRecOneTch,
+   ActReqEnrSevNET,
+   ActRcvFrmEnrSevNET,
+   ActReqEnrSevTch,
+   ActRcvFrmEnrSevTch,
+   ActFrmLogInUsrAgd,
+   ActLogInUsrAgd,
+   ActLogInUsrAgdLan,
 
-// Attendance
-#define ActSeeAllAtt		(ActRemDupUsr + 1)
-#define ActReqLstUsrAtt		(ActRemDupUsr + 2)
-#define ActSeeLstMyAtt		(ActRemDupUsr + 3)
-#define ActPrnLstMyAtt		(ActRemDupUsr + 4)
-#define ActSeeLstUsrAtt		(ActRemDupUsr + 5)
-#define ActPrnLstUsrAtt		(ActRemDupUsr + 6)
-#define ActFrmNewAtt		(ActRemDupUsr + 7)
-#define ActEdiOneAtt		(ActRemDupUsr + 8)
-#define ActNewAtt		(ActRemDupUsr + 9)
-#define ActChgAtt		(ActRemDupUsr + 10)
-#define ActReqRemAtt		(ActRemDupUsr + 11)
-#define ActRemAtt		(ActRemDupUsr + 12)
-#define ActHidAtt		(ActRemDupUsr + 13)
-#define ActUnhAtt		(ActRemDupUsr + 14)
-#define ActSeeOneAtt		(ActRemDupUsr + 15)
-#define ActReqLnkAtt		(ActRemDupUsr + 16)
-#define ActRecAttStd		(ActRemDupUsr + 17)
-#define ActRecAttMe		(ActRemDupUsr + 18)
+   // Others
+   ActLstOth,
+   ActNewAdmIns,
+   ActRemAdmIns,
+   ActNewAdmCtr,
+   ActRemAdmCtr,
+   ActNewAdmDeg,
+   ActRemAdmDeg,
+   ActLstGst,
+   ActLstGstAll,
+   ActPrnGstPho,
+   ActDoActOnSevGst,
+   ActSeeRecSevGst,
+   ActPrnRecSevGst,
+   ActReqMdfOneOth,
+   ActReqMdfOth,
+   ActReqOthPho,
+   ActDetOthPho,
+   ActChgOthPho,
+   ActReqRemOthPho,
+   ActRemOthPho,
+   ActCreOth,
+   ActUpdOth,
+   ActCnfID_Oth,
+   ActFrmAccOth,
+   ActRemNicOth,
+   ActChgNicOth,
+   ActRemID_Oth,
+   ActChgID_Oth,
+   ActChgPwdOth,
+   ActRemMaiOth,
+   ActChgMaiOth,
+   ActRemUsrGbl,
+   ActReqRemOldUsr,
+   ActRemOldUsr,
+   ActLstDupUsr,
+   ActLstSimUsr,
+   ActRemDupUsr,
 
-// Sign up
-#define ActReqSignUp		(ActRecAttMe + 1)
-#define ActSignUp		(ActRecAttMe + 2)
+   // Attendance
+   ActSeeAllAtt,
+   ActReqLstUsrAtt,
+   ActSeeLstMyAtt,
+   ActPrnLstMyAtt,
+   ActSeeLstUsrAtt,
+   ActPrnLstUsrAtt,
+   ActFrmNewAtt,
+   ActEdiOneAtt,
+   ActNewAtt,
+   ActChgAtt,
+   ActReqRemAtt,
+   ActRemAtt,
+   ActHidAtt,
+   ActUnhAtt,
+   ActSeeOneAtt,
+   ActReqLnkAtt,
+   ActRecAttStd,
+   ActRecAttMe,
 
-// Requests
-#define ActSeeSignUpReq		(ActSignUp + 1)
-#define ActUpdSignUpReq		(ActSignUp + 2)
-#define ActReqRejSignUp		(ActSignUp + 3)
-#define ActRejSignUp		(ActSignUp + 4)
+   // Sign up
+   ActReqSignUp,
+   ActSignUp,
 
-// Connected
-#define ActLstCon		(ActRejSignUp + 1)
+   // Requests
+   ActSeeSignUpReq,
+   ActUpdSignUpReq,
+   ActReqRejSignUp,
+   ActRejSignUp,
+
+   // Connected
+   ActLstCon,
 
 /*****************************************************************************/
 /******************************* Messages tab ********************************/
 /*****************************************************************************/
-// Announcements
-#define ActSeeAnn		(ActLstCon + 1)
-#define ActWriAnn		(ActLstCon + 2)
-#define ActNewAnn		(ActLstCon + 3)
-#define ActHidAnn		(ActLstCon + 4)
-#define ActUnhAnn		(ActLstCon + 5)
-#define ActRemAnn		(ActLstCon + 6)
+   // Announcements
+   ActSeeAnn,
+   ActWriAnn,
+   ActNewAnn,
+   ActHidAnn,
+   ActUnhAnn,
+   ActRemAnn,
 
-// Notices
-#define ActSeeAllNot		(ActRemAnn + 1)
-#define ActSeeOneNot		(ActRemAnn + 2)
-#define ActWriNot		(ActRemAnn + 3)
-#define ActNewNot		(ActRemAnn + 4)
-#define ActHidNot		(ActRemAnn + 5)
-#define ActUnhNot		(ActRemAnn + 6)
-#define ActReqRemNot		(ActRemAnn + 7)
-#define ActRemNot		(ActRemAnn + 8)
+   // Notices
+   ActSeeAllNot,
+   ActSeeOneNot,
+   ActWriNot,
+   ActNewNot,
+   ActHidNot,
+   ActUnhNot,
+   ActReqRemNot,
+   ActRemNot,
 
-// Forums
-#define ActSeeFor		(ActRemNot + 1)
-#define ActSeeForCrsUsr		(ActRemNot + 2)
-#define ActSeeForCrsTch		(ActRemNot + 3)
-#define ActSeeForDegUsr		(ActRemNot + 4)
-#define ActSeeForDegTch		(ActRemNot + 5)
-#define ActSeeForCtrUsr		(ActRemNot + 6)
-#define ActSeeForCtrTch		(ActRemNot + 7)
-#define ActSeeForInsUsr		(ActRemNot + 8)
-#define ActSeeForInsTch		(ActRemNot + 9)
-#define ActSeeForGenUsr		(ActRemNot + 10)
-#define ActSeeForGenTch		(ActRemNot + 11)
-#define ActSeeForSWAUsr		(ActRemNot + 12)
-#define ActSeeForSWATch		(ActRemNot + 13)
-#define ActSeePstForCrsUsr	(ActRemNot + 14)
-#define ActSeePstForCrsTch	(ActRemNot + 15)
-#define ActSeePstForDegUsr	(ActRemNot + 16)
-#define ActSeePstForDegTch	(ActRemNot + 17)
-#define ActSeePstForCtrUsr	(ActRemNot + 18)
-#define ActSeePstForCtrTch	(ActRemNot + 19)
-#define ActSeePstForInsUsr	(ActRemNot + 20)
-#define ActSeePstForInsTch	(ActRemNot + 21)
-#define ActSeePstForGenUsr	(ActRemNot + 22)
-#define ActSeePstForGenTch	(ActRemNot + 23)
-#define ActSeePstForSWAUsr	(ActRemNot + 24)
-#define ActSeePstForSWATch	(ActRemNot + 25)
-#define ActRcvThrForCrsUsr	(ActRemNot + 26)
-#define ActRcvThrForCrsTch	(ActRemNot + 27)
-#define ActRcvThrForDegUsr	(ActRemNot + 28)
-#define ActRcvThrForDegTch	(ActRemNot + 29)
-#define ActRcvThrForCtrUsr	(ActRemNot + 30)
-#define ActRcvThrForCtrTch	(ActRemNot + 31)
-#define ActRcvThrForInsUsr	(ActRemNot + 32)
-#define ActRcvThrForInsTch	(ActRemNot + 33)
-#define ActRcvThrForGenUsr	(ActRemNot + 34)
-#define ActRcvThrForGenTch	(ActRemNot + 35)
-#define ActRcvThrForSWAUsr	(ActRemNot + 36)
-#define ActRcvThrForSWATch	(ActRemNot + 37)
-#define ActRcvRepForCrsUsr	(ActRemNot + 38)
-#define ActRcvRepForCrsTch	(ActRemNot + 39)
-#define ActRcvRepForDegUsr	(ActRemNot + 40)
-#define ActRcvRepForDegTch	(ActRemNot + 41)
-#define ActRcvRepForCtrUsr	(ActRemNot + 42)
-#define ActRcvRepForCtrTch	(ActRemNot + 43)
-#define ActRcvRepForInsUsr	(ActRemNot + 44)
-#define ActRcvRepForInsTch	(ActRemNot + 45)
-#define ActRcvRepForGenUsr	(ActRemNot + 46)
-#define ActRcvRepForGenTch	(ActRemNot + 47)
-#define ActRcvRepForSWAUsr	(ActRemNot + 48)
-#define ActRcvRepForSWATch	(ActRemNot + 49)
-#define ActReqDelThrCrsUsr	(ActRemNot + 50)
-#define ActReqDelThrCrsTch	(ActRemNot + 51)
-#define ActReqDelThrDegUsr	(ActRemNot + 52)
-#define ActReqDelThrDegTch	(ActRemNot + 53)
-#define ActReqDelThrCtrUsr	(ActRemNot + 54)
-#define ActReqDelThrCtrTch	(ActRemNot + 55)
-#define ActReqDelThrInsUsr	(ActRemNot + 56)
-#define ActReqDelThrInsTch	(ActRemNot + 57)
-#define ActReqDelThrGenUsr	(ActRemNot + 58)
-#define ActReqDelThrGenTch	(ActRemNot + 59)
-#define ActReqDelThrSWAUsr	(ActRemNot + 60)
-#define ActReqDelThrSWATch	(ActRemNot + 61)
-#define ActDelThrForCrsUsr	(ActRemNot + 62)
-#define ActDelThrForCrsTch	(ActRemNot + 63)
-#define ActDelThrForDegUsr	(ActRemNot + 64)
-#define ActDelThrForDegTch	(ActRemNot + 65)
-#define ActDelThrForCtrUsr	(ActRemNot + 66)
-#define ActDelThrForCtrTch	(ActRemNot + 67)
-#define ActDelThrForInsUsr	(ActRemNot + 68)
-#define ActDelThrForInsTch	(ActRemNot + 69)
-#define ActDelThrForGenUsr	(ActRemNot + 70)
-#define ActDelThrForGenTch	(ActRemNot + 71)
-#define ActDelThrForSWAUsr	(ActRemNot + 72)
-#define ActDelThrForSWATch	(ActRemNot + 73)
-#define ActCutThrForCrsUsr	(ActRemNot + 74)
-#define ActCutThrForCrsTch	(ActRemNot + 75)
-#define ActCutThrForDegUsr	(ActRemNot + 76)
-#define ActCutThrForDegTch	(ActRemNot + 77)
-#define ActCutThrForCtrUsr	(ActRemNot + 78)
-#define ActCutThrForCtrTch	(ActRemNot + 79)
-#define ActCutThrForInsUsr	(ActRemNot + 80)
-#define ActCutThrForInsTch	(ActRemNot + 81)
-#define ActCutThrForGenUsr	(ActRemNot + 82)
-#define ActCutThrForGenTch	(ActRemNot + 83)
-#define ActCutThrForSWAUsr	(ActRemNot + 84)
-#define ActCutThrForSWATch	(ActRemNot + 85)
-#define ActPasThrForCrsUsr	(ActRemNot + 86)
-#define ActPasThrForCrsTch	(ActRemNot + 87)
-#define ActPasThrForDegUsr	(ActRemNot + 88)
-#define ActPasThrForDegTch	(ActRemNot + 89)
-#define ActPasThrForCtrUsr	(ActRemNot + 90)
-#define ActPasThrForCtrTch	(ActRemNot + 91)
-#define ActPasThrForInsUsr	(ActRemNot + 92)
-#define ActPasThrForInsTch	(ActRemNot + 93)
-#define ActPasThrForGenUsr	(ActRemNot + 94)
-#define ActPasThrForGenTch	(ActRemNot + 95)
-#define ActPasThrForSWAUsr	(ActRemNot + 96)
-#define ActPasThrForSWATch	(ActRemNot + 97)
-#define ActDelPstForCrsUsr	(ActRemNot + 98)
-#define ActDelPstForCrsTch	(ActRemNot + 99)
-#define ActDelPstForDegUsr	(ActRemNot + 100)
-#define ActDelPstForDegTch	(ActRemNot + 101)
-#define ActDelPstForCtrUsr	(ActRemNot + 102)
-#define ActDelPstForCtrTch	(ActRemNot + 103)
-#define ActDelPstForInsUsr	(ActRemNot + 104)
-#define ActDelPstForInsTch	(ActRemNot + 105)
-#define ActDelPstForGenUsr	(ActRemNot + 106)
-#define ActDelPstForGenTch	(ActRemNot + 107)
-#define ActDelPstForSWAUsr	(ActRemNot + 108)
-#define ActDelPstForSWATch	(ActRemNot + 109)
-#define ActEnbPstForCrsUsr	(ActRemNot + 110)
-#define ActEnbPstForCrsTch	(ActRemNot + 111)
-#define ActEnbPstForDegUsr	(ActRemNot + 112)
-#define ActEnbPstForDegTch	(ActRemNot + 113)
-#define ActEnbPstForCtrUsr	(ActRemNot + 114)
-#define ActEnbPstForCtrTch	(ActRemNot + 115)
-#define ActEnbPstForInsUsr	(ActRemNot + 116)
-#define ActEnbPstForInsTch	(ActRemNot + 117)
-#define ActEnbPstForGenUsr	(ActRemNot + 118)
-#define ActEnbPstForGenTch	(ActRemNot + 119)
-#define ActEnbPstForSWAUsr	(ActRemNot + 120)
-#define ActEnbPstForSWATch	(ActRemNot + 121)
-#define ActDisPstForCrsUsr	(ActRemNot + 122)
-#define ActDisPstForCrsTch	(ActRemNot + 123)
-#define ActDisPstForDegUsr	(ActRemNot + 124)
-#define ActDisPstForDegTch	(ActRemNot + 125)
-#define ActDisPstForCtrUsr	(ActRemNot + 126)
-#define ActDisPstForCtrTch	(ActRemNot + 127)
-#define ActDisPstForInsUsr	(ActRemNot + 128)
-#define ActDisPstForInsTch	(ActRemNot + 129)
-#define ActDisPstForGenUsr	(ActRemNot + 130)
-#define ActDisPstForGenTch	(ActRemNot + 131)
-#define ActDisPstForSWAUsr	(ActRemNot + 132)
-#define ActDisPstForSWATch	(ActRemNot + 133)
-#define ActReqLnkForCrsUsr	(ActRemNot + 134)
+   // Forums
+   ActSeeFor,
+   ActSeeForCrsUsr,
+   ActSeeForCrsTch,
+   ActSeeForDegUsr,
+   ActSeeForDegTch,
+   ActSeeForCtrUsr,
+   ActSeeForCtrTch,
+   ActSeeForInsUsr,
+   ActSeeForInsTch,
+   ActSeeForGenUsr,
+   ActSeeForGenTch,
+   ActSeeForSWAUsr,
+   ActSeeForSWATch,
+   ActSeePstForCrsUsr,
+   ActSeePstForCrsTch,
+   ActSeePstForDegUsr,
+   ActSeePstForDegTch,
+   ActSeePstForCtrUsr,
+   ActSeePstForCtrTch,
+   ActSeePstForInsUsr,
+   ActSeePstForInsTch,
+   ActSeePstForGenUsr,
+   ActSeePstForGenTch,
+   ActSeePstForSWAUsr,
+   ActSeePstForSWATch,
+   ActRcvThrForCrsUsr,
+   ActRcvThrForCrsTch,
+   ActRcvThrForDegUsr,
+   ActRcvThrForDegTch,
+   ActRcvThrForCtrUsr,
+   ActRcvThrForCtrTch,
+   ActRcvThrForInsUsr,
+   ActRcvThrForInsTch,
+   ActRcvThrForGenUsr,
+   ActRcvThrForGenTch,
+   ActRcvThrForSWAUsr,
+   ActRcvThrForSWATch,
+   ActRcvRepForCrsUsr,
+   ActRcvRepForCrsTch,
+   ActRcvRepForDegUsr,
+   ActRcvRepForDegTch,
+   ActRcvRepForCtrUsr,
+   ActRcvRepForCtrTch,
+   ActRcvRepForInsUsr,
+   ActRcvRepForInsTch,
+   ActRcvRepForGenUsr,
+   ActRcvRepForGenTch,
+   ActRcvRepForSWAUsr,
+   ActRcvRepForSWATch,
+   ActReqDelThrCrsUsr,
+   ActReqDelThrCrsTch,
+   ActReqDelThrDegUsr,
+   ActReqDelThrDegTch,
+   ActReqDelThrCtrUsr,
+   ActReqDelThrCtrTch,
+   ActReqDelThrInsUsr,
+   ActReqDelThrInsTch,
+   ActReqDelThrGenUsr,
+   ActReqDelThrGenTch,
+   ActReqDelThrSWAUsr,
+   ActReqDelThrSWATch,
+   ActDelThrForCrsUsr,
+   ActDelThrForCrsTch,
+   ActDelThrForDegUsr,
+   ActDelThrForDegTch,
+   ActDelThrForCtrUsr,
+   ActDelThrForCtrTch,
+   ActDelThrForInsUsr,
+   ActDelThrForInsTch,
+   ActDelThrForGenUsr,
+   ActDelThrForGenTch,
+   ActDelThrForSWAUsr,
+   ActDelThrForSWATch,
+   ActCutThrForCrsUsr,
+   ActCutThrForCrsTch,
+   ActCutThrForDegUsr,
+   ActCutThrForDegTch,
+   ActCutThrForCtrUsr,
+   ActCutThrForCtrTch,
+   ActCutThrForInsUsr,
+   ActCutThrForInsTch,
+   ActCutThrForGenUsr,
+   ActCutThrForGenTch,
+   ActCutThrForSWAUsr,
+   ActCutThrForSWATch,
+   ActPasThrForCrsUsr,
+   ActPasThrForCrsTch,
+   ActPasThrForDegUsr,
+   ActPasThrForDegTch,
+   ActPasThrForCtrUsr,
+   ActPasThrForCtrTch,
+   ActPasThrForInsUsr,
+   ActPasThrForInsTch,
+   ActPasThrForGenUsr,
+   ActPasThrForGenTch,
+   ActPasThrForSWAUsr,
+   ActPasThrForSWATch,
+   ActDelPstForCrsUsr,
+   ActDelPstForCrsTch,
+   ActDelPstForDegUsr,
+   ActDelPstForDegTch,
+   ActDelPstForCtrUsr,
+   ActDelPstForCtrTch,
+   ActDelPstForInsUsr,
+   ActDelPstForInsTch,
+   ActDelPstForGenUsr,
+   ActDelPstForGenTch,
+   ActDelPstForSWAUsr,
+   ActDelPstForSWATch,
+   ActEnbPstForCrsUsr,
+   ActEnbPstForCrsTch,
+   ActEnbPstForDegUsr,
+   ActEnbPstForDegTch,
+   ActEnbPstForCtrUsr,
+   ActEnbPstForCtrTch,
+   ActEnbPstForInsUsr,
+   ActEnbPstForInsTch,
+   ActEnbPstForGenUsr,
+   ActEnbPstForGenTch,
+   ActEnbPstForSWAUsr,
+   ActEnbPstForSWATch,
+   ActDisPstForCrsUsr,
+   ActDisPstForCrsTch,
+   ActDisPstForDegUsr,
+   ActDisPstForDegTch,
+   ActDisPstForCtrUsr,
+   ActDisPstForCtrTch,
+   ActDisPstForInsUsr,
+   ActDisPstForInsTch,
+   ActDisPstForGenUsr,
+   ActDisPstForGenTch,
+   ActDisPstForSWAUsr,
+   ActDisPstForSWATch,
+   ActReqLnkForCrsUsr,
 
-// Chat
-#define ActSeeChtRms		(ActReqLnkForCrsUsr + 1)
-#define ActCht			(ActReqLnkForCrsUsr + 2)
+   // Chat
+   ActSeeChtRms,
+   ActCht,
 
-// Messages
-#define ActSeeRcvMsg		(ActCht + 1)
-#define ActReqMsgUsr		(ActCht + 2)
-#define ActSeeSntMsg		(ActCht + 3)
-#define ActRcvMsgUsr		(ActCht + 4)
-#define ActReqDelAllSntMsg	(ActCht + 5)
-#define ActReqDelAllRcvMsg	(ActCht + 6)
-#define ActDelAllSntMsg		(ActCht + 7)
-#define ActDelAllRcvMsg		(ActCht + 8)
-#define ActDelSntMsg		(ActCht + 9)
-#define ActDelRcvMsg		(ActCht + 10)
-#define ActExpSntMsg		(ActCht + 11)
-#define ActExpRcvMsg		(ActCht + 12)
-#define ActConSntMsg		(ActCht + 13)
-#define ActConRcvMsg		(ActCht + 14)
-#define ActLstBanUsr		(ActCht + 15)
-#define ActBanUsrMsg		(ActCht + 16)
-#define ActUnbUsrMsg		(ActCht + 17)
-#define ActUnbUsrLst		(ActCht + 18)
+   // Messages
+   ActSeeRcvMsg,
+   ActReqMsgUsr,
+   ActSeeSntMsg,
+   ActRcvMsgUsr,
+   ActReqDelAllSntMsg,
+   ActReqDelAllRcvMsg,
+   ActDelAllSntMsg,
+   ActDelAllRcvMsg,
+   ActDelSntMsg,
+   ActDelRcvMsg,
+   ActExpSntMsg,
+   ActExpRcvMsg,
+   ActConSntMsg,
+   ActConRcvMsg,
+   ActLstBanUsr,
+   ActBanUsrMsg,
+   ActUnbUsrMsg,
+   ActUnbUsrLst,
 
-// Mail
-#define ActReqMaiUsr		(ActUnbUsrLst + 1)
-#define ActMaiUsr		(ActUnbUsrLst + 2)
+   // Mail
+   ActReqMaiUsr,
+   ActMaiUsr,
 
 /*****************************************************************************/
 /****************************** Analytics tab ********************************/
 /*****************************************************************************/
-// Figures
-#define ActReqUseGbl		(ActMaiUsr +  1)
-#define ActSeeUseGbl		(ActMaiUsr +  2)
 
-// Degrees
-#define ActSeePhoDeg		(ActSeeUseGbl + 1)
-#define ActPrnPhoDeg		(ActSeeUseGbl + 2)
-#define ActCalPhoDeg		(ActSeeUseGbl + 3)
+   // Figures
+   ActReqUseGbl,
+   ActSeeUseGbl,
 
-// Indicators
-#define ActReqStaCrs		(ActCalPhoDeg + 1)
-#define ActSeeAllStaCrs		(ActCalPhoDeg + 2)
+   // Degrees
+   ActSeePhoDeg,
+   ActPrnPhoDeg,
+   ActCalPhoDeg,
 
-// Surveys
-#define ActSeeAllSvy		(ActSeeAllStaCrs + 1)
-#define ActSeeOneSvy		(ActSeeAllStaCrs + 2)
-#define ActAnsSvy		(ActSeeAllStaCrs + 3)
-#define ActFrmNewSvy		(ActSeeAllStaCrs + 4)
-#define ActEdiOneSvy		(ActSeeAllStaCrs + 5)
-#define ActNewSvy		(ActSeeAllStaCrs + 6)
-#define ActChgSvy		(ActSeeAllStaCrs + 7)
-#define ActReqRemSvy		(ActSeeAllStaCrs + 8)
-#define ActRemSvy		(ActSeeAllStaCrs + 9)
-#define ActReqRstSvy		(ActSeeAllStaCrs + 10)
-#define ActRstSvy		(ActSeeAllStaCrs + 11)
-#define ActHidSvy		(ActSeeAllStaCrs + 12)
-#define ActUnhSvy		(ActSeeAllStaCrs + 13)
-#define ActReqLnkSvy		(ActSeeAllStaCrs + 14)
-#define ActEdiOneSvyQst		(ActSeeAllStaCrs + 15)
-#define ActNewSvyQst		(ActSeeAllStaCrs + 16)
-#define ActChgSvyQst		(ActSeeAllStaCrs + 17)
-#define ActReqRemSvyQst		(ActSeeAllStaCrs + 18)
-#define ActRemSvyQst		(ActSeeAllStaCrs + 19)
+   // Indicators
+   ActReqStaCrs,
+   ActSeeAllStaCrs,
 
-// Visits
-#define ActReqAccGbl		(ActRemSvyQst + 1)
-#define ActSeeAccGbl		(ActRemSvyQst + 2)
-#define ActReqAccCrs		(ActRemSvyQst + 3)
-#define ActSeeAccCrs		(ActRemSvyQst + 4)
-#define ActLstClk		(ActRemSvyQst + 5)
-#define ActRefLstClk		(ActRemSvyQst + 6)
+   // Surveys
+   ActSeeAllSvy,
+   ActSeeOneSvy,
+   ActAnsSvy,
+   ActFrmNewSvy,
+   ActEdiOneSvy,
+   ActNewSvy,
+   ActChgSvy,
+   ActReqRemSvy,
+   ActRemSvy,
+   ActReqRstSvy,
+   ActRstSvy,
+   ActHidSvy,
+   ActUnhSvy,
+   ActReqLnkSvy,
+   ActEdiOneSvyQst,
+   ActNewSvyQst,
+   ActChgSvyQst,
+   ActReqRemSvyQst,
+   ActRemSvyQst,
 
-// Report
-#define ActReqMyUsgRep		(ActRefLstClk + 1)
-#define ActSeeMyUsgRep		(ActRefLstClk + 2)
+   // Visits
+   ActReqAccGbl,
+   ActSeeAccGbl,
+   ActReqAccCrs,
+   ActSeeAccCrs,
+   ActLstClk,
+   ActRefLstClk,
 
-// Frequent
-#define ActMFUAct		(ActSeeMyUsgRep + 1)
+   // Report
+   ActReqMyUsgRep,
+   ActSeeMyUsgRep,
+
+   // Frequent
+   ActMFUAct,
 
 /*****************************************************************************/
 /******************************** Profile tab ********************************/
 /*****************************************************************************/
-// Session
-#define ActFrmRolSes		(ActMFUAct + 1)
-#define ActChgMyRol		(ActMFUAct + 2)
 
-// Courses
-#define ActMyCrs		(ActChgMyRol + 1)
+   // Session
+   ActFrmRolSes,
+   ActChgMyRol,
 
-// Timetable
-#define ActSeeMyTT		(ActMyCrs + 1)
-#define ActPrnMyTT		(ActMyCrs + 2)
-#define ActEdiTut		(ActMyCrs + 3)
-#define ActChgTut		(ActMyCrs + 4)
-#define ActChgMyTT1stDay	(ActMyCrs + 5)
+   // Courses
+   ActMyCrs,
 
-// Agenda
-#define ActSeeMyAgd		(ActChgMyTT1stDay + 1)
-#define ActFrmNewEvtMyAgd	(ActChgMyTT1stDay + 2)
-#define ActEdiOneEvtMyAgd	(ActChgMyTT1stDay + 3)
-#define ActNewEvtMyAgd		(ActChgMyTT1stDay + 4)
-#define ActChgEvtMyAgd		(ActChgMyTT1stDay + 5)
-#define ActReqRemEvtMyAgd	(ActChgMyTT1stDay + 6)
-#define ActRemEvtMyAgd		(ActChgMyTT1stDay + 7)
-#define ActHidEvtMyAgd		(ActChgMyTT1stDay + 8)
-#define ActUnhEvtMyAgd		(ActChgMyTT1stDay + 9)
-#define ActPrvEvtMyAgd		(ActChgMyTT1stDay + 10)
-#define ActPubEvtMyAgd		(ActChgMyTT1stDay + 11)
-#define ActPrnAgdQR		(ActChgMyTT1stDay + 12)
+   // Timetable
+   ActSeeMyTT,
+   ActPrnMyTT,
+   ActEdiTut,
+   ActChgTut,
+   ActChgMyTT1stDay,
 
-// Account
-#define ActFrmMyAcc		(ActPrnAgdQR + 1)
-#define ActChkUsrAcc		(ActPrnAgdQR + 2)
-#define ActCreMyAcc		(ActPrnAgdQR + 3)
-#define ActCreUsrAcc		(ActPrnAgdQR + 4)
-#define ActRemMyID		(ActPrnAgdQR + 5)
-#define ActChgMyID		(ActPrnAgdQR + 6)
-#define ActRemMyNck		(ActPrnAgdQR + 7)
-#define ActChgMyNck		(ActPrnAgdQR + 8)
-#define ActRemMyMai		(ActPrnAgdQR + 9)
-#define ActChgMyMai		(ActPrnAgdQR + 10)
-#define ActCnfMai		(ActPrnAgdQR + 11)
-#define ActChgMyPwd		(ActPrnAgdQR + 12)
-#define ActReqRemMyAcc		(ActPrnAgdQR + 13)
-#define ActRemMyAcc		(ActPrnAgdQR + 14)
-#define ActPrnUsrQR		(ActPrnAgdQR + 15)
+   // Agenda
+   ActSeeMyAgd,
+   ActFrmNewEvtMyAgd,
+   ActEdiOneEvtMyAgd,
+   ActNewEvtMyAgd,
+   ActChgEvtMyAgd,
+   ActReqRemEvtMyAgd,
+   ActRemEvtMyAgd,
+   ActHidEvtMyAgd,
+   ActUnhEvtMyAgd,
+   ActPrvEvtMyAgd,
+   ActPubEvtMyAgd,
+   ActPrnAgdQR,
 
-// Record
-#define ActReqEdiRecSha		(ActPrnUsrQR + 1)
-#define ActChgMyData		(ActPrnUsrQR + 2)
-#define ActReqMyPho		(ActPrnUsrQR + 3)
-#define ActDetMyPho		(ActPrnUsrQR + 4)
-#define ActUpdMyPho		(ActPrnUsrQR + 5)
-#define ActReqRemMyPho		(ActPrnUsrQR + 6)
-#define ActRemMyPho		(ActPrnUsrQR + 7)
-#define ActChgCtyMyIns		(ActPrnUsrQR + 8)
-#define ActChgMyIns		(ActPrnUsrQR + 9)
-#define ActChgMyCtr		(ActPrnUsrQR + 10)
-#define ActChgMyDpt		(ActPrnUsrQR + 11)
-#define ActChgMyOff		(ActPrnUsrQR + 12)
-#define ActChgMyOffPho		(ActPrnUsrQR + 13)
-#define ActReqEdiMyNet		(ActPrnUsrQR + 14)
-#define ActChgMyNet		(ActPrnUsrQR + 15)
+   // Account
+   ActFrmMyAcc,
+   ActChkUsrAcc,
+   ActCreMyAcc,
+   ActCreUsrAcc,
+   ActRemMyID,
+   ActChgMyID,
+   ActRemMyNck,
+   ActChgMyNck,
+   ActRemMyMai,
+   ActChgMyMai,
+   ActCnfMai,
+   ActChgMyPwd,
+   ActReqRemMyAcc,
+   ActRemMyAcc,
+   ActPrnUsrQR,
 
-// Settings
-#define ActReqEdiSet		(ActChgMyNet + 1)
-#define ActChgThe		(ActChgMyNet + 2)
-#define ActReqChgLan		(ActChgMyNet + 3)
-#define ActChgLan		(ActChgMyNet + 4)
-#define ActChg1stDay		(ActChgMyNet + 5)
-#define ActChgDatFmt		(ActChgMyNet + 6)
-#define ActChgCol		(ActChgMyNet + 7)
-#define ActChgIco		(ActChgMyNet + 8)
-#define ActChgMnu		(ActChgMyNet + 9)
-#define ActChgUsrPho		(ActChgMyNet + 10)
-#define ActChgPriPho		(ActChgMyNet + 11)
-#define ActChgBasPriPrf		(ActChgMyNet + 12)
-#define ActChgExtPriPrf		(ActChgMyNet + 13)
-#define ActChgCooPrf		(ActChgMyNet + 14)
-#define ActChgNtfPrf		(ActChgMyNet + 15)
+   // Record
+   ActReqEdiRecSha,
+   ActChgMyData,
+   ActReqMyPho,
+   ActDetMyPho,
+   ActUpdMyPho,
+   ActReqRemMyPho,
+   ActRemMyPho,
+   ActChgCtyMyIns,
+   ActChgMyIns,
+   ActChgMyCtr,
+   ActChgMyDpt,
+   ActChgMyOff,
+   ActChgMyOffPho,
+   ActReqEdiMyNet,
+   ActChgMyNet,
+
+   // Settings
+   ActReqEdiSet,
+   ActChgThe,
+   ActReqChgLan,
+   ActChgLan,
+   ActChg1stDay,
+   ActChgDatFmt,
+   ActChgCol,
+   ActChgIco,
+   ActChgMnu,
+   ActChgUsrPho,
+   ActChgPriPho,
+   ActChgBasPriPrf,
+   ActChgExtPriPrf,
+   ActChgCooPrf,
+   ActChgNtfPrf,
+  } Act_Action_t;
 
 //-----------------------------------------------------------------------------
 
-#define ActLst_NUM_ACTIONS		(ActChgNtfPrf + 1)
+#define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
 #define ActLst_MAX_ACTION_COD		1977
 

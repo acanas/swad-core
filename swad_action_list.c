@@ -1832,108 +1832,108 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not reuse unique action codes!
   {
 	ActSeeAdmDocCrsGrp,	//  #0
-	-1,			//  #1 (obsolete action)
+	ActUnk,			//  #1 (obsolete action)
 	ActMnu,			//  #2
 	ActSeeRcvMsg,		//  #3
-	-1,			//  #4 (obsolete action)
-	-1,			//  #5 (obsolete action)
+	ActUnk,			//  #4 (obsolete action)
+	ActUnk,			//  #5 (obsolete action)
 	ActLogIn,		//  #6
-	-1,			//  #7 (obsolete action)
-	-1,			//  #8 (obsolete action)
+	ActUnk,			//  #7 (obsolete action)
+	ActUnk,			//  #8 (obsolete action)
 	ActSeeCrsLnk,		//  #9
 	ActLogOut,		// #10
-	-1,			// #11 (obsolete action)
+	ActUnk,			// #11 (obsolete action)
 	ActAdmDocCrs,		// #12
-	-1,			// #13 (obsolete action)
-	-1,			// #14 (obsolete action)
+	ActUnk,			// #13 (obsolete action)
+	ActUnk,			// #14 (obsolete action)
 	ActSeeAss,		// #15
-	-1,			// #16 (obsolete action)
+	ActUnk,			// #16 (obsolete action)
 	ActSeeAdmMrk,		// #17
-	-1,			// #18 (obsolete action)
-	-1,			// #19 (obsolete action)
+	ActUnk,			// #18 (obsolete action)
+	ActUnk,			// #19 (obsolete action)
 	ActSeeSylPra,		// #20
-	-1,			// #21 (obsolete action)
+	ActUnk,			// #21 (obsolete action)
 	ActSeeRecSevTch,	// #22
 	ActAdmBrf,		// #23
-	-1,			// #24 (obsolete action)
+	ActUnk,			// #24 (obsolete action)
 	ActSeeCrsTT,		// #25
 	ActReqMsgUsr,		// #26
 	ActRcvMsgUsr,		// #27
 	ActSeeSylLec,		// #28
 	ActSeeTst,		// #29
 	ActReqMyPho,		// #30
-	-1,			// #31 (obsolete action)
+	ActUnk,			// #31 (obsolete action)
 	ActSeeBib,		// #32
-	-1,			// #33 (obsolete action)
-	-1,			// #34 (obsolete action)
+	ActUnk,			// #33 (obsolete action)
+	ActUnk,			// #34 (obsolete action)
 	ActChgMyPwd,		// #35
 	ActFrmMyAcc,		// #36
 	ActChgMyNck,		// #37
-	-1,			// #38 (obsolete action)
-	-1,			// #39 (obsolete action)
-	-1,			// #40 (obsolete action)
-	-1,			// #41 (obsolete action)
+	ActUnk,			// #38 (obsolete action)
+	ActUnk,			// #39 (obsolete action)
+	ActUnk,			// #40 (obsolete action)
+	ActUnk,			// #41 (obsolete action)
 	ActLstStdAll,		// #42
-	-1,			// #43 (obsolete action)
+	ActUnk,			// #43 (obsolete action)
 	ActEdiSylLec,		// #44
 	ActEdiCrsTT,		// #45
-	-1,			// #46 (obsolete action)
-	-1,			// #47 (obsolete action)
+	ActUnk,			// #46 (obsolete action)
+	ActUnk,			// #47 (obsolete action)
 	ActChgTut,		// #48
-	-1,			// #49 (obsolete action)
-	-1,			// #50 (obsolete action)
+	ActUnk,			// #49 (obsolete action)
+	ActUnk,			// #50 (obsolete action)
 	ActSeeChtRms,		// #51
 	ActCht,			// #52
 	ActChgCrsTT,		// #53
 	ActSeeFAQ,		// #54
-	-1,			// #55 (obsolete action)
-	-1,			// #56 (obsolete action)
-	-1,			// #57 (obsolete action)
-	-1,			// #58 (obsolete action)
+	ActUnk,			// #55 (obsolete action)
+	ActUnk,			// #56 (obsolete action)
+	ActUnk,			// #57 (obsolete action)
+	ActUnk,			// #58 (obsolete action)
 	ActWriNot,		// #59
 	ActNewNot,		// #60
-	-1,			// #61 (obsolete action)
+	ActUnk,			// #61 (obsolete action)
 	ActRemUsrGbl,		// #62
-	-1,			// #63 (obsolete action)
+	ActUnk,			// #63 (obsolete action)
 	ActDelRcvMsg,		// #64
 	ActEdiTut,		// #65
-	-1,			// #66 (obsolete action)
-	-1,			// #67 (obsolete action)
-	-1,			// #68 (obsolete action)
+	ActUnk,			// #66 (obsolete action)
+	ActUnk,			// #67 (obsolete action)
+	ActUnk,			// #68 (obsolete action)
 	ActEdiAss,		// #69
 	ActSeeSntMsg,		// #70
-	-1,			// #71 (obsolete action)
-	-1,			// #72 (obsolete action)
+	ActUnk,			// #71 (obsolete action)
+	ActUnk,			// #72 (obsolete action)
 	ActRemNot,		// #73
 	ActEdiSylPra,		// #74
-	-1,			// #75 (obsolete action)
+	ActUnk,			// #75 (obsolete action)
 	ActEdiBib,		// #76
-	-1,			// #77 (obsolete action)
-	-1,			// #78 (obsolete action)
+	ActUnk,			// #77 (obsolete action)
+	ActUnk,			// #78 (obsolete action)
 	ActSeeAccGbl,		// #79
-	-1,			// #80 (obsolete action)
-	-1,			// #81 (obsolete action)
-	-1,			// #82 (obsolete action)
-	-1,			// #83 (obsolete action)
+	ActUnk,			// #80 (obsolete action)
+	ActUnk,			// #81 (obsolete action)
+	ActUnk,			// #82 (obsolete action)
+	ActUnk,			// #83 (obsolete action)
 	ActSeeUseGbl,		// #84
 	ActSeeAllCfe,		// #85
-	-1,			// #86 (obsolete action)
+	ActUnk,			// #86 (obsolete action)
 	ActRemAllStdCrs,	// #87
 	ActReqRemAllStdCrs,	// #88
 	ActSeeRecSevStd,	// #89
 	ActDelSntMsg,		// #90
 	ActEdiCfe,		// #91
-	-1,			// #92 (obsolete action)
-	-1,			// #93 (obsolete action)
-	-1,			// #94 (obsolete action)
+	ActUnk,			// #92 (obsolete action)
+	ActUnk,			// #93 (obsolete action)
+	ActUnk,			// #94 (obsolete action)
 	ActSeeFor,		// #95
 	ActEdiCrsLnk,		// #96
-	-1,			// #97 (obsolete action)
+	ActUnk,			// #97 (obsolete action)
 	ActAssTst,		// #98
-	-1,			// #99 (obsolete action)
+	ActUnk,			// #99 (obsolete action)
 	ActMaiUsr,		// #100
-	-1,			// #101 (obsolete action)
-	-1,			// #102 (obsolete action)
+	ActUnk,			// #101 (obsolete action)
+	ActUnk,			// #102 (obsolete action)
 	ActReqTst,		// #103
 	ActEdiTstQst,		// #104
 	ActEdiOneTstQst,	// #105
@@ -1943,98 +1943,98 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActEdiFAQ,		// #109
 	ActRcvCfe,		// #110
 	ActPrnRecSevStd,	// #111
-	-1,			// #112 (obsolete action)
-	-1,			// #113 (obsolete action)
-	-1,			// #114 (obsolete action)
-	-1,			// #115 (obsolete action)
+	ActUnk,			// #112 (obsolete action)
+	ActUnk,			// #113 (obsolete action)
+	ActUnk,			// #114 (obsolete action)
+	ActUnk,			// #115 (obsolete action)
 	ActReqSelGrp,		// #116
-	-1,			// #117 (obsolete action)
+	ActUnk,			// #117 (obsolete action)
 	ActChgGrp,		// #118
 	ActSeeAccCrs,		// #119
 	ActPrnStdPho,		// #120
 	ActRenGrp,		// #121
 	ActNewGrp,		// #122
-	-1,			// #123 (obsolete action)
-	-1,			// #124 (obsolete action)
-	-1,			// #125 (obsolete action)
+	ActUnk,			// #123 (obsolete action)
+	ActUnk,			// #124 (obsolete action)
+	ActUnk,			// #125 (obsolete action)
 	ActNewTstQst,		// #126
 	ActPrnRecSevTch,	// #127
-	-1,			// #128 (obsolete action)
-	-1,			// #129 (obsolete action)
-	-1,			// #130 (obsolete action)
-	-1,			// #131 (obsolete action)
+	ActUnk,			// #128 (obsolete action)
+	ActUnk,			// #129 (obsolete action)
+	ActUnk,			// #130 (obsolete action)
+	ActUnk,			// #131 (obsolete action)
 	ActLstTstQst,		// #132
 	ActRemOneTstQst,	// #133
-	-1,			// #134 (obsolete action)
-	-1,			// #135 (obsolete action)
-	-1,			// #136 (obsolete action)
-	-1,			// #137 (obsolete action)
-	-1,			// #138 (obsolete action)
+	ActUnk,			// #134 (obsolete action)
+	ActUnk,			// #135 (obsolete action)
+	ActUnk,			// #136 (obsolete action)
+	ActUnk,			// #137 (obsolete action)
+	ActUnk,			// #138 (obsolete action)
 	ActAdmAsgWrkCrs,	// #139
-	-1,			// #140 (obsolete action)
-	-1,			// #141 (obsolete action)
-	-1,			// #142 (obsolete action)
+	ActUnk,			// #140 (obsolete action)
+	ActUnk,			// #141 (obsolete action)
+	ActUnk,			// #142 (obsolete action)
 	ActRenTag,		// #143
-	-1,			// #144 (obsolete action)
-	-1,			// #145 (obsolete action)
-	-1,			// #146 (obsolete action)
-	-1,			// #147 (obsolete action)
+	ActUnk,			// #144 (obsolete action)
+	ActUnk,			// #145 (obsolete action)
+	ActUnk,			// #146 (obsolete action)
+	ActUnk,			// #147 (obsolete action)
 	ActRcvFilWrkUsrCla,	// #148
-	-1,			// #149 (obsolete action)
+	ActUnk,			// #149 (obsolete action)
 	ActFrmCreWrkUsr,	// #150
-	-1,			// #151 (obsolete action)
+	ActUnk,			// #151 (obsolete action)
 	ActPrnCrsTT,		// #152
 	ActRcvFilBrfCla,	// #153
-	-1,			// #154 (obsolete action)
+	ActUnk,			// #154 (obsolete action)
 	ActRemFilBrf,		// #155
-	-1,			// #156 (obsolete action)
-	-1,			// #157 (obsolete action)
-	-1,			// #158 (obsolete action)
-	-1,			// #159 (obsolete action)
-	-1,			// #160 (obsolete action)
-	-1,			// #161 (obsolete action)
-	-1,			// #162 (obsolete action)
-	-1,			// #163 (obsolete action)
+	ActUnk,			// #156 (obsolete action)
+	ActUnk,			// #157 (obsolete action)
+	ActUnk,			// #158 (obsolete action)
+	ActUnk,			// #159 (obsolete action)
+	ActUnk,			// #160 (obsolete action)
+	ActUnk,			// #161 (obsolete action)
+	ActUnk,			// #162 (obsolete action)
+	ActUnk,			// #163 (obsolete action)
 	ActRcvPagCrsLnk,	// #164
-	-1,			// #165 (obsolete action)
-	-1,			// #166 (obsolete action)
+	ActUnk,			// #165 (obsolete action)
+	ActUnk,			// #166 (obsolete action)
 	ActChgGrpTyp,		// #167
-	-1,			// #168 (obsolete action)
+	ActUnk,			// #168 (obsolete action)
 	ActRemFilWrkUsr,	// #169
 	ActCreFolBrf,		// #170
-	-1,			// #171 (obsolete action)
+	ActUnk,			// #171 (obsolete action)
 	ActCreFolWrkUsr,	// #172
-	-1,			// #173 (obsolete action)
+	ActUnk,			// #173 (obsolete action)
 	ActNewGrpTyp,		// #174
 	ActRemGrp,		// #175
-	-1,			// #176 (obsolete action)
-	-1,			// #177 (obsolete action)
-	-1,			// #178 (obsolete action)
+	ActUnk,			// #176 (obsolete action)
+	ActUnk,			// #177 (obsolete action)
+	ActUnk,			// #178 (obsolete action)
 	ActPrnCfe,		// #179
-	-1,			// #180 (obsolete action)
+	ActUnk,			// #180 (obsolete action)
 	ActInsIteSylPra,	// #181
 	ActRcvURLCrsLnk,	// #182
 	ActDelItmSylPra,	// #183
 	ActRcvPagAss,		// #184
 	ActRcvPagBib,		// #185
-	-1,			// #186 (obsolete action)
+	ActUnk,			// #186 (obsolete action)
 	ActRemCfe,		// #187
-	-1,			// #188 (obsolete action)
-	-1,			// #189 (obsolete action)
-	-1,			// #190 (obsolete action)
-	-1,			// #191 (obsolete action)
-	-1,			// #192 (obsolete action)
-	-1,			// #193 (obsolete action)
+	ActUnk,			// #188 (obsolete action)
+	ActUnk,			// #189 (obsolete action)
+	ActUnk,			// #190 (obsolete action)
+	ActUnk,			// #191 (obsolete action)
+	ActUnk,			// #192 (obsolete action)
+	ActUnk,			// #193 (obsolete action)
 	ActUnk,			// #194
-	-1,			// #195 (obsolete action)
+	ActUnk,			// #195 (obsolete action)
 	ActRemFolBrf,		// #196
 	ActRenFolBrf,		// #197
-	-1,			// #198 (obsolete action)
-	-1,			// #199 (obsolete action)
-	-1,			// #200 (obsolete action)
-	-1,			// #201 (obsolete action)
-	-1,			// #202 (obsolete action)
-	-1,			// #203 (obsolete action)
+	ActUnk,			// #198 (obsolete action)
+	ActUnk,			// #199 (obsolete action)
+	ActUnk,			// #200 (obsolete action)
+	ActUnk,			// #201 (obsolete action)
+	ActUnk,			// #202 (obsolete action)
+	ActUnk,			// #203 (obsolete action)
 	ActRenFolWrkUsr,	// #204
 	ActFrmCreWrkCrs,	// #205
 	ActCreFolWrkCrs,	// #206
@@ -2056,22 +2056,22 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActLftIteSylLec,	// #222
 	ActRgtIteSylLec,	// #223
 	ActRcvURLBib,		// #224
-	-1,			// #225 (obsolete action)
-	-1,			// #226 (obsolete action)
-	-1,			// #227 (obsolete action)
+	ActUnk,			// #225 (obsolete action)
+	ActUnk,			// #226 (obsolete action)
+	ActUnk,			// #227 (obsolete action)
 	ActRemFolWrkUsr,	// #228
-	-1,			// #229 (obsolete action)
-	-1,			// #230 (obsolete action)
-	-1,			// #231 (obsolete action)
-	-1,			// #232 (obsolete action)
-	-1,			// #233 (obsolete action)
+	ActUnk,			// #229 (obsolete action)
+	ActUnk,			// #230 (obsolete action)
+	ActUnk,			// #231 (obsolete action)
+	ActUnk,			// #232 (obsolete action)
+	ActUnk,			// #233 (obsolete action)
 	ActRcvURLFAQ,		// #234
 	ActRcvURLAss,		// #235
 	ActReqRemGrpTyp,	// #236
 	ActRemGrpTyp,		// #237
-	-1,			// #238 (obsolete action)
-	-1,			// #239 (obsolete action)
-	-1,			// #240 (obsolete action)
+	ActUnk,			// #238 (obsolete action)
+	ActUnk,			// #239 (obsolete action)
+	ActUnk,			// #240 (obsolete action)
 	ActSeeForDegUsr,	// #241
 	ActSeeForSWAUsr,	// #242
 	ActSeeForDegTch,	// #243
@@ -2079,49 +2079,49 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeForSWATch,	// #245
 	ActSeePstForSWATch,	// #246
 	ActRcvThrForDegTch,	// #247
-	-1,			// #248 (obsolete action)
-	-1,			// #249 (obsolete action)
-	-1,			// #250 (obsolete action)
-	-1,			// #251 (obsolete action)
+	ActUnk,			// #248 (obsolete action)
+	ActUnk,			// #249 (obsolete action)
+	ActUnk,			// #250 (obsolete action)
+	ActUnk,			// #251 (obsolete action)
 	ActRcvThrForDegUsr,	// #252
-	-1,			// #253 (obsolete action)
-	-1,			// #254 (obsolete action)
+	ActUnk,			// #253 (obsolete action)
+	ActUnk,			// #254 (obsolete action)
 	ActSeePstForDegUsr,	// #255
-	-1,			// #256 (obsolete action)
-	-1,			// #257 (obsolete action)
+	ActUnk,			// #256 (obsolete action)
+	ActUnk,			// #257 (obsolete action)
 	ActRcvThrForSWAUsr,	// #258
 	ActRcvThrForSWATch,	// #259
-	-1,			// #260 (obsolete action)
-	-1,			// #261 (obsolete action)
-	-1,			// #262 (obsolete action)
-	-1,			// #263 (obsolete action)
-	-1,			// #264 (obsolete action)
-	-1,			// #265 (obsolete action)
-	-1,			// #266 (obsolete action)
-	-1,			// #267 (obsolete action)
-	-1,			// #268 (obsolete action)
-	-1,			// #269 (obsolete action)
-	-1,			// #270 (obsolete action)
-	-1,			// #271 (obsolete action)
-	-1,			// #272 (obsolete action)
-	-1,			// #273 (obsolete action)
-	-1,			// #274 (obsolete action)
-	-1,			// #275 (obsolete action)
+	ActUnk,			// #260 (obsolete action)
+	ActUnk,			// #261 (obsolete action)
+	ActUnk,			// #262 (obsolete action)
+	ActUnk,			// #263 (obsolete action)
+	ActUnk,			// #264 (obsolete action)
+	ActUnk,			// #265 (obsolete action)
+	ActUnk,			// #266 (obsolete action)
+	ActUnk,			// #267 (obsolete action)
+	ActUnk,			// #268 (obsolete action)
+	ActUnk,			// #269 (obsolete action)
+	ActUnk,			// #270 (obsolete action)
+	ActUnk,			// #271 (obsolete action)
+	ActUnk,			// #272 (obsolete action)
+	ActUnk,			// #273 (obsolete action)
+	ActUnk,			// #274 (obsolete action)
+	ActUnk,			// #275 (obsolete action)
 	ActRemTreBrf,		// #276
-	-1,			// #277 (obsolete action)
+	ActUnk,			// #277 (obsolete action)
 	ActRemTreWrkUsr,	// #278
 	ActRemTreWrkCrs,	// #279
-	-1,			// #280 (obsolete action)
-	-1,			// #281 (obsolete action)
-	-1,			// #282 (obsolete action)
-	-1,			// #283 (obsolete action)
+	ActUnk,			// #280 (obsolete action)
+	ActUnk,			// #281 (obsolete action)
+	ActUnk,			// #282 (obsolete action)
+	ActUnk,			// #283 (obsolete action)
 	ActAdmMrkCrs,		// #284
 	ActReqEdiRecSha,	// #285
 	ActReqRemFilBrf,	// #286
-	-1,			// #287 (obsolete action)
+	ActUnk,			// #287 (obsolete action)
 	ActReqRemFilWrkUsr,	// #288
 	ActReqRemFilWrkCrs,	// #289
-	-1,			// #290 (obsolete action)
+	ActUnk,			// #290 (obsolete action)
 	ActSeePstForDegTch,	// #291
 	ActEdiRecFie,		// #292
 	ActNewFie,		// #293
@@ -2130,28 +2130,28 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenFie,		// #296
 	ActChgVisFie,		// #297
 	ActChgMyData,		// #298
-	-1,			// #299 (obsolete action)
+	ActUnk,			// #299 (obsolete action)
 	ActRcvRecOthUsr,	// #300
 	ActRcvRecCrs,		// #301
 	ActChgMulGrpTyp,	// #302
 	ActChgMdtGrpTyp,	// #303
 	ActRenGrpTyp,		// #304
 	ActChgRowFie,		// #305
-	-1,			// #306 (obsolete action)
-	-1,			// #307 (obsolete action)
-	-1,			// #308 (obsolete action)
-	-1,			// #309 (obsolete action)
-	-1,			// #310 (obsolete action)
+	ActUnk,			// #306 (obsolete action)
+	ActUnk,			// #307 (obsolete action)
+	ActUnk,			// #308 (obsolete action)
+	ActUnk,			// #309 (obsolete action)
+	ActUnk,			// #310 (obsolete action)
 	ActCopBrf,		// #311
 	ActCopWrkCrs,		// #312
-	-1,			// #313 (obsolete action)
+	ActUnk,			// #313 (obsolete action)
 	ActCopWrkUsr,		// #314
 	ActPasBrf,		// #315
-	-1,			// #316 (obsolete action)
-	-1,			// #317 (obsolete action)
+	ActUnk,			// #316 (obsolete action)
+	ActUnk,			// #317 (obsolete action)
 	ActPasWrkUsr,		// #318
 	ActPasWrkCrs,		// #319
-	-1,			// #320 (obsolete action)
+	ActUnk,			// #320 (obsolete action)
 	ActCloGrp,		// #321
 	ActOpeGrp,		// #322
 	ActFrmCreShaCrs,	// #323
@@ -2174,39 +2174,39 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenFolShaGrp,	// #340
 	ActReqRemFilShaGrp,	// #341
 	ActRemFilShaGrp,	// #342
-	-1,			// #343 (obsolete action)
-	-1,			// #344 (obsolete action)
+	ActUnk,			// #343 (obsolete action)
+	ActUnk,			// #344 (obsolete action)
 	ActSeeForCrsUsr,	// #345
 	ActSeePstForCrsUsr,	// #346
 	ActSeePstForCrsTch,	// #347
 	ActSeePstForCtrUsr,	// #348
-	-1,			// #349 (obsolete action)
+	ActUnk,			// #349 (obsolete action)
 	ActRcvThrForCrsUsr,	// #350
-	-1,			// #351 (obsolete action)
-	-1,			// #352 (obsolete action)
-	-1,			// #353 (obsolete action)
-	-1,			// #354 (obsolete action)
-	-1,			// #355 (obsolete action)
-	-1,			// #356 (obsolete action)
-	-1,			// #357 (obsolete action)
-	-1,			// #358 (obsolete action)
-	-1,			// #359 (obsolete action)
-	-1,			// #360 (obsolete action)
-	-1,			// #361 (obsolete action)
-	-1,			// #362 (obsolete action)
-	-1,			// #363 (obsolete action)
-	-1,			// #364 (obsolete action)
-	-1,			// #365 (obsolete action)
-	-1,			// #366 (obsolete action)
-	-1,			// #367 (obsolete action)
-	-1,			// #368 (obsolete action)
-	-1,			// #369 (obsolete action)
+	ActUnk,			// #351 (obsolete action)
+	ActUnk,			// #352 (obsolete action)
+	ActUnk,			// #353 (obsolete action)
+	ActUnk,			// #354 (obsolete action)
+	ActUnk,			// #355 (obsolete action)
+	ActUnk,			// #356 (obsolete action)
+	ActUnk,			// #357 (obsolete action)
+	ActUnk,			// #358 (obsolete action)
+	ActUnk,			// #359 (obsolete action)
+	ActUnk,			// #360 (obsolete action)
+	ActUnk,			// #361 (obsolete action)
+	ActUnk,			// #362 (obsolete action)
+	ActUnk,			// #363 (obsolete action)
+	ActUnk,			// #364 (obsolete action)
+	ActUnk,			// #365 (obsolete action)
+	ActUnk,			// #366 (obsolete action)
+	ActUnk,			// #367 (obsolete action)
+	ActUnk,			// #368 (obsolete action)
+	ActUnk,			// #369 (obsolete action)
 	ActSelInfSrcBib,	// #370
 	ActEditorSylPra,	// #371
 	ActEditorSylLec,	// #372
-	-1,			// #373 (obsolete action)
-	-1,			// #374 (obsolete action)
-	-1,			// #375 (obsolete action)
+	ActUnk,			// #373 (obsolete action)
+	ActUnk,			// #374 (obsolete action)
+	ActUnk,			// #375 (obsolete action)
 	ActEditorBib,		// #376
 	ActPlaTxtEdiBib,	// #377
 	ActSelInfSrcSylLec,	// #378
@@ -2221,16 +2221,16 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActPlaTxtEdiAss,	// #387
 	ActEditorCrsLnk,	// #388
 	ActPlaTxtEdiSylPra,	// #389
-	-1,			// #390 (obsolete action)
-	-1,			// #391 (obsolete action)
-	-1,			// #392 (obsolete action)
-	-1,			// #393 (obsolete action)
+	ActUnk,			// #390 (obsolete action)
+	ActUnk,			// #391 (obsolete action)
+	ActUnk,			// #392 (obsolete action)
+	ActUnk,			// #393 (obsolete action)
 	ActRcvPlaTxtSylLec,	// #394
-	-1,			// #395 (obsolete action)
+	ActUnk,			// #395 (obsolete action)
 	ActRcvPlaTxtSylPra,	// #396
 	ActRcvPlaTxtAss,	// #397
 	ActRcvPlaTxtBib,	// #398
-	-1,			// #399 (obsolete action)
+	ActUnk,			// #399 (obsolete action)
 	ActPlaTxtEdiCrsLnk,	// #400
 	ActRcvPlaTxtCrsLnk,	// #401
 	ActRcvURLSylPra,	// #402
@@ -2238,20 +2238,20 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActEditorFAQ,		// #404
 	ActPlaTxtEdiFAQ,	// #405
 	ActRcvPlaTxtFAQ,	// #406
-	-1,			// #407 (obsolete action)
+	ActUnk,			// #407 (obsolete action)
 	ActSeeMyTT,		// #408
 	ActPrnMyTT,		// #409
 	ActExpBrf,		// #410
 	ActConBrf,		// #411
-	-1,			// #412 (obsolete action)
-	-1,			// #413 (obsolete action)
-	-1,			// #414 (obsolete action)
-	-1,			// #415 (obsolete action)
+	ActUnk,			// #412 (obsolete action)
+	ActUnk,			// #413 (obsolete action)
+	ActUnk,			// #414 (obsolete action)
+	ActUnk,			// #415 (obsolete action)
 	ActExpWrkCrs,		// #416
-	-1,			// #417 (obsolete action)
-	-1,			// #418 (obsolete action)
-	-1,			// #419 (obsolete action)
-	-1,			// #420 (obsolete action)
+	ActUnk,			// #417 (obsolete action)
+	ActUnk,			// #418 (obsolete action)
+	ActUnk,			// #419 (obsolete action)
+	ActUnk,			// #420 (obsolete action)
 	ActExpShaCrs,		// #421
 	ActConShaCrs,		// #422
 	ActExpWrkUsr,		// #423
@@ -2260,45 +2260,45 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActConShaGrp,		// #426
 	ActExpShaGrp,		// #427
 	ActRemMyPho,		// #428
-	-1,			// #429 (obsolete action)
+	ActUnk,			// #429 (obsolete action)
 	ActSeeForCtrTch,	// #430
 	ActSeeForCrsTch,	// #431
-	-1,			// #432 (obsolete action)
-	-1,			// #433 (obsolete action)
+	ActUnk,			// #432 (obsolete action)
+	ActUnk,			// #433 (obsolete action)
 	ActDelAllSntMsg,	// #434
-	-1,			// #435 (obsolete action)
+	ActUnk,			// #435 (obsolete action)
 	ActDelAllRcvMsg,	// #436
-	-1,			// #437 (obsolete action)
-	-1,			// #438 (obsolete action)
-	-1,			// #439 (obsolete action)
-	-1,			// #440 (obsolete action)
-	-1,			// #441 (obsolete action)
-	-1,			// #442 (obsolete action)
+	ActUnk,			// #437 (obsolete action)
+	ActUnk,			// #438 (obsolete action)
+	ActUnk,			// #439 (obsolete action)
+	ActUnk,			// #440 (obsolete action)
+	ActUnk,			// #441 (obsolete action)
+	ActUnk,			// #442 (obsolete action)
 	ActPrnTchPho,		// #443
 	ActCalPhoDeg,		// #444
-	-1,			// #445 (obsolete action)
-	-1,			// #446 (obsolete action)
+	ActUnk,			// #445 (obsolete action)
+	ActUnk,			// #446 (obsolete action)
 	ActSeePhoDeg,		// #447
 	ActPrnPhoDeg,		// #448
-	-1,			// #449 (obsolete action)
-	-1,			// #450 (obsolete action)
+	ActUnk,			// #449 (obsolete action)
+	ActUnk,			// #450 (obsolete action)
 	ActCfgTst,		// #451
 	ActDisTag,		// #452
 	ActEnaTag,		// #453
 	ActRcvCfgTst,		// #454
 	ActChgShfTstQst,	// #455
-	-1,			// #456 (obsolete action)
-	-1,			// #457 (obsolete action)
-	-1,			// #458 (obsolete action)
-	-1,			// #459 (obsolete action)
-	-1,			// #460 (obsolete action)
+	ActUnk,			// #456 (obsolete action)
+	ActUnk,			// #457 (obsolete action)
+	ActUnk,			// #458 (obsolete action)
+	ActUnk,			// #459 (obsolete action)
+	ActUnk,			// #460 (obsolete action)
 	ActAdmShaCrsGrp,	// #461
 	ActExpSeeDocCrs,	// #462
-	-1,			// #463 (obsolete action)
+	ActUnk,			// #463 (obsolete action)
 	ActUnhDocCrs,		// #464
 	ActHidDocCrs,		// #465
-	-1,			// #466 (obsolete action)
-	-1,			// #467 (obsolete action)
+	ActUnk,			// #466 (obsolete action)
+	ActUnk,			// #467 (obsolete action)
 	ActFrmCreDocGrp,	// #468
 	ActCreFolDocGrp,	// #469
 	ActCopDocCrs,		// #470
@@ -2306,7 +2306,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActCopDocGrp,		// #472
 	ActReqRemFilDocGrp,	// #473
 	ActRemFilDocGrp,	// #474
-	-1,			// #475 (obsolete action)
+	ActUnk,			// #475 (obsolete action)
 	ActConSeeDocCrs,	// #476
 	ActExpAdmDocCrs,	// #477
 	ActPasDocCrs,		// #478
@@ -2330,106 +2330,106 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDisFilZonGrp,	// #496
 	ActRemFolDocCrs,	// #497
 	ActRemTreDocCrs,	// #498
-	-1,			// #499 (obsolete action)
-	-1,			// #500 (obsolete action)
+	ActUnk,			// #499 (obsolete action)
+	ActUnk,			// #500 (obsolete action)
 	ActCopMrkCrs,		// #501
 	ActPasMrkGrp,		// #502
 	ActChgNumRowHeaCrs,	// #503
 	ActChgNumRowFooCrs,	// #504
-	-1,			// #505 (obsolete action)
+	ActUnk,			// #505 (obsolete action)
 	ActCreFolMrkCrs,	// #506
 	ActPasMrkCrs,		// #507
-	-1,			// #508 (obsolete action)
+	ActUnk,			// #508 (obsolete action)
 	ActRemFilMrkGrp,	// #509
 	ActChgNumRowHeaGrp,	// #510
 	ActChgNumRowFooGrp,	// #511
-	-1,			// #512 (obsolete action)
+	ActUnk,			// #512 (obsolete action)
 	ActCreFolMrkGrp,	// #513
 	ActRcvFilMrkGrpCla,	// #514
-	-1,			// #515 (obsolete action)
+	ActUnk,			// #515 (obsolete action)
 	ActRcvFilMrkCrsCla,	// #516
-	-1,			// #517 (obsolete action)
-	-1,			// #518 (obsolete action)
+	ActUnk,			// #517 (obsolete action)
+	ActUnk,			// #518 (obsolete action)
 	ActCopMrkGrp,		// #519
 	ActRemFolMrkGrp,	// #520
 	ActRemTreMrkGrp,	// #521
-	-1,			// #522 (obsolete action)
+	ActUnk,			// #522 (obsolete action)
 	ActSeeMyMrkCrs,		// #523
 	ActSeeMyMrkGrp,		// #524
-	-1,			// #525 (obsolete action)
-	-1,			// #526 (obsolete action)
+	ActUnk,			// #525 (obsolete action)
+	ActUnk,			// #526 (obsolete action)
 	ActConSeeMrkCrs,	// #527
 	ActExpSeeMrkCrs,	// #528
 	ActRenFolMrkGrp,	// #529
 	ActRemFolMrkCrs,	// #530
-	-1,			// #531 (obsolete action)
-	-1,			// #532 (obsolete action)
+	ActUnk,			// #531 (obsolete action)
+	ActUnk,			// #532 (obsolete action)
 	ActRemFilMrkCrs,	// #533
 	ActRemTreMrkCrs,	// #534
 	ActRenFolDocCrs,	// #535
 	ActEdiDeg,		// #536
 	ActNewDegTyp,		// #537
 	ActRenDegTyp,		// #538
-	-1,			// #539 (obsolete action)
+	ActUnk,			// #539 (obsolete action)
 	ActNewDeg,		// #540
-	-1,			// #541 (obsolete action)
+	ActUnk,			// #541 (obsolete action)
 	ActRemDeg,		// #542
-	-1,			// #543 (obsolete action)
+	ActUnk,			// #543 (obsolete action)
 	ActChgDegTyp,		// #544
 	ActRemDegTyp,		// #545
 	ActRenDegSho,		// #546
 	ActRenDegFul,		// #547
-	-1,			// #548 (obsolete action)
-	-1,			// #549 (obsolete action)
-	-1,			// #550 (obsolete action)
-	-1,			// #551 (obsolete action)
-	-1,			// #552
+	ActUnk,			// #548 (obsolete action)
+	ActUnk,			// #549 (obsolete action)
+	ActUnk,			// #550 (obsolete action)
+	ActUnk,			// #551 (obsolete action)
+	ActUnk,			// #552
 	ActRecDegLog,		// #553
 	ActChgDegWWW,		// #554
 	ActEdiCrs,		// #555
 	ActNewCrs,		// #556
-	-1,			// #557 (obsolete action)
-	-1,			// #558 (obsolete action)
-	-1,			// #559 (obsolete action)
+	ActUnk,			// #557 (obsolete action)
+	ActUnk,			// #558 (obsolete action)
+	ActUnk,			// #559 (obsolete action)
 	ActRemCrs,		// #560
 	ActChgCrsYea,		// #561
-	-1,			// #562
+	ActUnk,			// #562
 	ActRenCrsSho,		// #563
 	ActRenCrsFul,		// #564
-	-1,			// #565 (obsolete action)
-	-1,			// #566 (obsolete action)
-	-1,			// #567 (obsolete action)
-	-1,			// #568 (obsolete action)
-	-1,			// #569 (obsolete action)
-	-1,			// #570 (obsolete action)
-	-1,			// #571 (obsolete action)
-	-1,			// #572 (obsolete action)
+	ActUnk,			// #565 (obsolete action)
+	ActUnk,			// #566 (obsolete action)
+	ActUnk,			// #567 (obsolete action)
+	ActUnk,			// #568 (obsolete action)
+	ActUnk,			// #569 (obsolete action)
+	ActUnk,			// #570 (obsolete action)
+	ActUnk,			// #571 (obsolete action)
+	ActUnk,			// #572 (obsolete action)
 	ActEdiDegTyp,		// #573
 	ActRenFolMrkCrs,	// #574
-	-1,			// #575 (obsolete action)
-	-1,			// #576 (obsolete action)
-	-1,			// #577 (obsolete action)
+	ActUnk,			// #575 (obsolete action)
+	ActUnk,			// #576 (obsolete action)
+	ActUnk,			// #577 (obsolete action)
 	ActLstTchAll,		// #578
-	-1,			// #579 (obsolete action)
-	-1,			// #580 (obsolete action)
-	-1,			// #581 (obsolete action)
-	-1,			// #582 (obsolete action)
-	-1,			// #583 (obsolete action)
+	ActUnk,			// #579 (obsolete action)
+	ActUnk,			// #580 (obsolete action)
+	ActUnk,			// #581 (obsolete action)
+	ActUnk,			// #582 (obsolete action)
+	ActUnk,			// #583 (obsolete action)
 	ActRemAdmDeg,		// #584
-	-1,			// #585 (obsolete action)
+	ActUnk,			// #585 (obsolete action)
 	ActNewAdmDeg,		// #586
 	ActLstGst,		// #587
-	-1,			// #588 (obsolete action)
+	ActUnk,			// #588 (obsolete action)
 	ActChgMyRol,		// #589
 	ActReqRemOldUsr,	// #590
 	ActReqAccGbl,		// #591
-	-1,			// #592 (obsolete action)
+	ActUnk,			// #592 (obsolete action)
 	ActReqDelAllRcvMsg,	// #593
 	ActReqAccCrs,		// #594
 	ActReqRemFilMrkCrs,	// #595
 	ActFrmCreMrkCrs,	// #596
 	ActFrmCreBrf,		// #597
-	-1,			// #598 (obsolete action)
+	ActUnk,			// #598 (obsolete action)
 	ActRcvRepForCrsUsr,	// #599
 	ActReqRemFilMrkGrp,	// #600
 	ActFrmCreMrkGrp,	// #601
@@ -2442,68 +2442,68 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDelPstForDegUsr,	// #608
 	ActConSeeMrkGrp,	// #609
 	ActDisPstForCrsUsr,	// #610
-	-1,			// #611 (obsolete action)
-	-1,			// #612 (obsolete action)
+	ActUnk,			// #611 (obsolete action)
+	ActUnk,			// #612 (obsolete action)
 	ActDelPstForSWAUsr,	// #613
-	-1,			// #614 (obsolete action)
+	ActUnk,			// #614 (obsolete action)
 	ActDisPstForDegUsr,	// #615
 	ActEnbPstForDegUsr,	// #616
 	ActRcvRepForDegTch,	// #617
 	ActDisPstForDegTch,	// #618
 	ActEnbPstForDegTch,	// #619
-	-1,			// #620 (obsolete action)
+	ActUnk,			// #620 (obsolete action)
 	ActConAdmMrkCrs,	// #621
 	ActRcvRepForSWATch,	// #622
 	ActDelPstForSWATch,	// #623
 	ActEnbPstForCrsUsr,	// #624
 	ActDisPstForSWAUsr,	// #625
-	-1,			// #626 (obsolete action)
+	ActUnk,			// #626 (obsolete action)
 	ActReqSch,		// #627
 	ActSch,			// #628
-	-1,			// #629 (obsolete action)
-	-1,			// #630 (obsolete action)
+	ActUnk,			// #629 (obsolete action)
+	ActUnk,			// #630 (obsolete action)
 	ActExpAdmMrkGrp,	// #631
 	ActEnbPstForSWAUsr,	// #632
 	ActSndNewPwd,		// #633
 	ActEnbPstForSWATch,	// #634
 	ActDisPstForSWATch,	// #635
-	-1,			// #636 (obsolete action)
-	-1,			// #637 (obsolete action)
-	-1,			// #638 (obsolete action)
-	-1,			// #639 (obsolete action)
-	-1,			// #640 (obsolete action)
-	-1,			// #641 (obsolete action)
-	-1,			// #642 (obsolete action)
-	-1,			// #643 (obsolete action)
-	-1,			// #644 (obsolete action)
+	ActUnk,			// #636 (obsolete action)
+	ActUnk,			// #637 (obsolete action)
+	ActUnk,			// #638 (obsolete action)
+	ActUnk,			// #639 (obsolete action)
+	ActUnk,			// #640 (obsolete action)
+	ActUnk,			// #641 (obsolete action)
+	ActUnk,			// #642 (obsolete action)
+	ActUnk,			// #643 (obsolete action)
+	ActUnk,			// #644 (obsolete action)
 	ActAll,			// #645
-	-1,			// #646 (obsolete action)
-	-1,			// #647 (obsolete action)
-	-1,			// #648 (obsolete action)
-	-1,			// #649 (obsolete action)
-	-1,			// #650 (obsolete action)
-	-1,			// #651 (obsolete action)
-	-1,			// #652 (obsolete action)
-	-1,			// #653 (obsolete action)
+	ActUnk,			// #646 (obsolete action)
+	ActUnk,			// #647 (obsolete action)
+	ActUnk,			// #648 (obsolete action)
+	ActUnk,			// #649 (obsolete action)
+	ActUnk,			// #650 (obsolete action)
+	ActUnk,			// #651 (obsolete action)
+	ActUnk,			// #652 (obsolete action)
+	ActUnk,			// #653 (obsolete action)
 	ActChgLan,		// #654
-	-1,			// #655 (obsolete action)
-	-1,			// #656 (obsolete action)
-	-1,			// #657 (obsolete action)
-	-1,			// #658 (obsolete action)
-	-1,			// #659 (obsolete action)
-	-1,			// #660 (obsolete action)
-	-1,			// #661 (obsolete action)
-	-1,			// #662 (obsolete action)
+	ActUnk,			// #655 (obsolete action)
+	ActUnk,			// #656 (obsolete action)
+	ActUnk,			// #657 (obsolete action)
+	ActUnk,			// #658 (obsolete action)
+	ActUnk,			// #659 (obsolete action)
+	ActUnk,			// #660 (obsolete action)
+	ActUnk,			// #661 (obsolete action)
+	ActUnk,			// #662 (obsolete action)
 	ActExpRcvMsg,		// #663
 	ActExpSntMsg,		// #664
 	ActReqSndNewPwd,	// #665
-	-1,			// #666 (obsolete action)
-	-1,			// #667 (obsolete action)
-	-1,			// #668 (obsolete action)
-	-1,			// #669 (obsolete action)
-	-1,			// #670 (obsolete action)
-	-1,			// #671 (obsolete action)
-	-1,			// #672 (obsolete action)
+	ActUnk,			// #666 (obsolete action)
+	ActUnk,			// #667 (obsolete action)
+	ActUnk,			// #668 (obsolete action)
+	ActUnk,			// #669 (obsolete action)
+	ActUnk,			// #670 (obsolete action)
+	ActUnk,			// #671 (obsolete action)
+	ActUnk,			// #672 (obsolete action)
 	ActReqEdiSet,		// #673
 	ActChgCol,		// #674
 	ActSeeDpt,		// #675
@@ -2523,10 +2523,10 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenDptFul,		// #689
 	ActRemDpt,		// #690
 	ActChgDptWWW,		// #691
-	-1,			// #692 (obsolete action)
+	ActUnk,			// #692 (obsolete action)
 	ActDetMyPho,		// #693
 	ActUpdMyPho,		// #694
-	-1,			// #695 (obsolete action)
+	ActUnk,			// #695 (obsolete action)
 	ActSeeIns,		// #696
 	ActEdiIns,		// #697
 	ActNewIns,		// #698
@@ -2539,44 +2539,44 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActNewPlc,		// #705
 	ActChgCtrPlc,		// #706
 	ActSeeHld,		// #707
-	-1,			// #708 (obsolete action)
-	-1,			// #709 (obsolete action)
-	-1,			// #710 (obsolete action)
-	-1,			// #711 (obsolete action)
-	-1,			// #712 (obsolete action)
+	ActUnk,			// #708 (obsolete action)
+	ActUnk,			// #709 (obsolete action)
+	ActUnk,			// #710 (obsolete action)
+	ActUnk,			// #711 (obsolete action)
+	ActUnk,			// #712 (obsolete action)
 	ActEdiHld,		// #713
 	ActNewHld,		// #714
 	ActChgHldTyp,		// #715
 	ActRemHld,		// #716
 	ActChgHldStrDat,	// #717
 	ActChgHldEndDat,	// #718
-	-1,			// #719 (obsolete action)
-	-1,			// #720 (obsolete action)
+	ActUnk,			// #719 (obsolete action)
+	ActUnk,			// #720 (obsolete action)
 	ActChgDptIns,		// #721
-	-1,			// #722 (obsolete action)
+	ActUnk,			// #722 (obsolete action)
 	ActSeeForGenTch,	// #723
 	ActSeeForInsTch,	// #724
 	ActSeeForInsUsr,	// #725
 	ActSeeForGenUsr,	// #726
 	ActSeePstForGenUsr,	// #727
-	-1,			// #728 (obsolete action)
-	-1,			// #729 (obsolete action)
+	ActUnk,			// #728 (obsolete action)
+	ActUnk,			// #729 (obsolete action)
 	ActSeePstForInsUsr,	// #730
 	ActSeePstForGenTch,	// #731
-	-1,			// #732 (obsolete action)
-	-1,			// #733 (obsolete action)
-	-1,			// #734 (obsolete action)
+	ActUnk,			// #732 (obsolete action)
+	ActUnk,			// #733 (obsolete action)
+	ActUnk,			// #734 (obsolete action)
 	ActDelPstForGenUsr,	// #735
 	ActRcvThrForGenUsr,	// #736
 	ActRcvThrForInsUsr,	// #737
-	-1,			// #738 (obsolete action)
-	-1,			// #739 (obsolete action)
+	ActUnk,			// #738 (obsolete action)
+	ActUnk,			// #739 (obsolete action)
 	ActRcvRepForInsUsr,	// #740
-	-1,			// #741 (obsolete action)
-	-1,			// #742 (obsolete action)
+	ActUnk,			// #741 (obsolete action)
+	ActUnk,			// #742 (obsolete action)
 	ActDelPstForInsUsr,	// #743
-	-1,			// #744 (obsolete action)
-	-1,			// #745 (obsolete action)
+	ActUnk,			// #744 (obsolete action)
+	ActUnk,			// #745 (obsolete action)
 	ActSeePstForInsTch,	// #746
 	ActRcvRepForGenUsr,	// #747
 	ActSeeLnk,		// #748
@@ -2588,10 +2588,10 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRcvThrForCrsTch,	// #754
 	ActRcvRepForCrsTch,	// #755
 	ActDelPstForCrsTch,	// #756
-	-1,			// #757 (obsolete action)
-	-1,			// #758 (obsolete action)
+	ActUnk,			// #757 (obsolete action)
+	ActUnk,			// #758 (obsolete action)
 	ActRemIns,		// #759
-	-1,			// #760 (obsolete action)
+	ActUnk,			// #760 (obsolete action)
 	ActReqUseGbl,		// #761
 	ActSeeAllNot,		// #762
 	ActHidNot,		// #763
@@ -2602,7 +2602,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeAllStaCrs,	// #768
 	ActRcvThrForInsTch,	// #769
 	ActRcvRepForInsTch,	// #770
-	-1,			// #771 (obsolete action)
+	ActUnk,			// #771 (obsolete action)
 	ActDelPstForInsTch,	// #772
 	ActRemOldUsr,		// #773
 	ActChgPriPho,		// #774
@@ -2624,25 +2624,25 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRcvPlaTxtTchGui,	// #790
 	ActRcvURLTchGui,	// #791
 	ActAdmAsgWrkUsr,	// #792
-	-1,			// #793 (obsolete action)
-	-1,			// #794 (obsolete action)
-	-1,			// #795 (obsolete action)
-	-1,			// #796 (obsolete action)
-	-1,			// #797 (obsolete action)
-	-1,			// #798 (obsolete action)
-	-1,			// #799 (obsolete action)
-	-1,			// #800 (obsolete action)
+	ActUnk,			// #793 (obsolete action)
+	ActUnk,			// #794 (obsolete action)
+	ActUnk,			// #795 (obsolete action)
+	ActUnk,			// #796 (obsolete action)
+	ActUnk,			// #797 (obsolete action)
+	ActUnk,			// #798 (obsolete action)
+	ActUnk,			// #799 (obsolete action)
+	ActUnk,			// #800 (obsolete action)
 	ActSeeAllAsg,		// #801
-	-1,			// #802 (obsolete action)
+	ActUnk,			// #802 (obsolete action)
 	ActNewAsg,		// #803
-	-1,			// #804 (obsolete action)
-	-1,			// #805 (obsolete action)
+	ActUnk,			// #804 (obsolete action)
+	ActUnk,			// #805 (obsolete action)
 	ActRemAsg,		// #806
-	-1,			// #807 (obsolete action)
-	-1,			// #808 (obsolete action)
-	-1,			// #809 (obsolete action)
-	-1,			// #810 (obsolete action)
-	-1,			// #811 (obsolete action)
+	ActUnk,			// #807 (obsolete action)
+	ActUnk,			// #808 (obsolete action)
+	ActUnk,			// #809 (obsolete action)
+	ActUnk,			// #810 (obsolete action)
+	ActUnk,			// #811 (obsolete action)
 	ActFrmNewAsg,		// #812
 	ActReqRemAsg,		// #813
 	ActEdiOneAsg,		// #814
@@ -2673,9 +2673,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenFolAsgUsr,	// #839
 	ActSetUp,		// #840
 	ActChgThe,		// #841
-	-1,			// #842 (obsolete action)
+	ActUnk,			// #842 (obsolete action)
 	ActFrmRolSes,		// #843
-	-1,			// #844 (obsolete action)
+	ActUnk,			// #844 (obsolete action)
 	ActRefCon,		// #845
 	ActRcvFilAsgCrsCla,	// #846
 	ActSeeCrsInf,		// #847
@@ -2696,7 +2696,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeCty,		// #862
 	ActEdiCty,		// #863
 	ActNewCty,		// #864
-	-1,			// #865 (obsolete action)
+	ActUnk,			// #865 (obsolete action)
 	ActRenCty,		// #866
 	ActReqDelThrCrsUsr,	// #867
 	ActDelThrForCrsUsr,	// #868
@@ -2798,12 +2798,12 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActHidAsg,		// #964
 	ActUnhAsg,		// #965
 	ActSeeAllSvy,		// #966
-	-1,			// #967 (obsolete action)
+	ActUnk,			// #967 (obsolete action)
 	ActNewSvy,		// #968
 	ActRemSvy,		// #969
-	-1,			// #970 (obsolete action)
-	-1,			// #971 (obsolete action)
-	-1,			// #972 (obsolete action)
+	ActUnk,			// #970 (obsolete action)
+	ActUnk,			// #971 (obsolete action)
+	ActUnk,			// #972 (obsolete action)
 	ActFrmNewSvy,		// #973
 	ActEdiOneSvy,		// #974
 	ActChgSvy,		// #975
@@ -2819,7 +2819,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRstSvy,		// #985
 	ActChgPlgAppKey,	// #986
 	ActMyCrs,		// #987
-	-1,			// #988 (obsolete action)
+	ActUnk,			// #988 (obsolete action)
 	ActLstClk,		// #989
 	ActSeeNtf,		// #990
 	ActSeeNewNtf,		// #991
@@ -2828,37 +2828,37 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRefLstClk,		// #994
 	ActLstCon,		// #995
 	ActChgDatAdmDocCrs,	// #996
-	-1,			// #997 (obsolete action)
+	ActUnk,			// #997 (obsolete action)
 	ActChgDatAdmDocGrp,	// #998
-	-1,			// #999 (obsolete action)
+	ActUnk,			// #999 (obsolete action)
 	ActChgDatShaCrs,	// #1000
-	-1,			// #1001 (obsolete action)
+	ActUnk,			// #1001 (obsolete action)
 	ActChgDatShaGrp,	// #1002
-	-1,			// #1003 (obsolete action)
-	-1,			// #1004 (obsolete action)
-	-1,			// #1005 (obsolete action)
-	-1,			// #1006 (obsolete action)
+	ActUnk,			// #1003 (obsolete action)
+	ActUnk,			// #1004 (obsolete action)
+	ActUnk,			// #1005 (obsolete action)
+	ActUnk,			// #1006 (obsolete action)
 	ActReqImpTstQst,	// #1007
 	ActImpTstQst,		// #1008
 	ActSeeCrs,		// #1009
-	-1,			// #1010 (obsolete action)
+	ActUnk,			// #1010 (obsolete action)
 	ActSeeDeg,		// #1011
-	-1,			// #1012 (obsolete action)
+	ActUnk,			// #1012 (obsolete action)
 	ActSeeDegTyp,		// #1013
-	-1,			// #1014 (obsolete action)
+	ActUnk,			// #1014 (obsolete action)
 	ActBanUsrMsg,		// #1015
 	ActUnbUsrMsg,		// #1016
 	ActLstBanUsr,		// #1017
 	ActUnbUsrLst,		// #1018
 	ActConRcvMsg,		// #1019
 	ActConSntMsg,		// #1020
-	-1,			// #1021 (obsolete action)
+	ActUnk,			// #1021 (obsolete action)
 	ActPrnUsrQR,		// #1022
-	-1,			// #1023 (obsolete action)
+	ActUnk,			// #1023 (obsolete action)
 	ActChgInsCrsCodCfg,	// #1024
 	ActChgInsCrsCod,	// #1025
-	-1,			// #1026 (obsolete action)
-	-1,			// #1027 (obsolete action)
+	ActUnk,			// #1026 (obsolete action)
+	ActUnk,			// #1027 (obsolete action)
 	ActPrnCrsInf,		// #1028
 	ActReqDatAdmDocCrs,	// #1029
 	ActReqDatAdmDocGrp,	// #1030
@@ -2880,10 +2880,10 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
         ActChgDatWrkCrs,	// #1046
         ActReqDatBrf,		// #1047
         ActChgDatBrf,		// #1048
-	-1,			// #1049 (obsolete action)
-	-1,			// #1050 (obsolete action)
+	ActUnk,			// #1049 (obsolete action)
+	ActUnk,			// #1050 (obsolete action)
 	ActRecCtrLog,		// #1051
-	-1,			// #1052 (obsolete action)
+	ActUnk,			// #1052 (obsolete action)
 	ActReqCrs,		// #1053
 	ActReqSignUp,		// #1054
 	ActChgCrsSta,		// #1055
@@ -2893,7 +2893,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRejSignUp,		// #1059
 	ActSeePen,		// #1060
 	ActChgTimGrpTyp,	// #1061
-	-1,			// #1062 (obsolete action)
+	ActUnk,			// #1062 (obsolete action)
 	ActFrmNewAtt,		// #1063
 	ActEdiOneAtt,		// #1064
 	ActNewAtt,		// #1065
@@ -2993,10 +2993,10 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgCtrPhoAtt,	// #1159
 	ActReqCtrPho,		// #1160
 	ActRecCtrPho,		// #1161
-	-1,			// #1162 (obsolete action)
+	ActUnk,			// #1162 (obsolete action)
 	ActCreUsrAcc,		// #1163
 	ActSeeOneNot,		// #1164
-	-1,			// #1165 (obsolete action)
+	ActUnk,			// #1165 (obsolete action)
 	ActChgCtyMyIns,		// #1166
 	ActChgMyIns,		// #1167
 	ActChgMyCtr,		// #1168
@@ -3007,16 +3007,16 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgMyNet,		// #1173
 	ActSeeRecOneStd,	// #1174
 	ActSeeRecOneTch,	// #1175
-	-1,			// #1176 (obsolete action)
-	-1,			// #1177 (obsolete action)
-	-1,			// #1178 (obsolete action)
-	-1,			// #1179 (obsolete action)
-	-1,			// #1180 (obsolete action)
-	-1,			// #1181 (obsolete action)
-	-1,			// #1182 (obsolete action)
-	-1,			// #1183 (obsolete action)
-	-1,			// #1184 (obsolete action)
-	-1,			// #1185 (obsolete action)
+	ActUnk,			// #1176 (obsolete action)
+	ActUnk,			// #1177 (obsolete action)
+	ActUnk,			// #1178 (obsolete action)
+	ActUnk,			// #1179 (obsolete action)
+	ActUnk,			// #1180 (obsolete action)
+	ActUnk,			// #1181 (obsolete action)
+	ActUnk,			// #1182 (obsolete action)
+	ActUnk,			// #1183 (obsolete action)
+	ActUnk,			// #1184 (obsolete action)
+	ActUnk,			// #1185 (obsolete action)
 	ActLstOth,		// #1186
 	ActSeeRecSevGst,	// #1187
 	ActPrnRecSevGst,	// #1188
@@ -3070,9 +3070,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemAnn,		// #1236
 	ActWriAnn,		// #1237
 	ActNewAnn,		// #1238
-	-1,			// #1239 (obsolete action)
-	-1,			// #1240 (obsolete action)
-	-1,			// #1241 (obsolete action)
+	ActUnk,			// #1239 (obsolete action)
+	ActUnk,			// #1240 (obsolete action)
+	ActUnk,			// #1241 (obsolete action)
 	ActSeeSyl,		// #1242
 	ActChgMnu,		// #1243
 	ActReqCtrLog,		// #1244
@@ -3234,13 +3234,13 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDowShaIns,		// #1400
 	ActReqOthPubPrf,	// #1401
 	ActSeeOthPubPrf,	// #1402
-	-1,			// #1403 (obsolete action)
+	ActUnk,			// #1403 (obsolete action)
 	ActChgBasPriPrf,	// #1404
 	ActCalFig,		// #1405
-	-1,			// #1406 (obsolete action)
-	-1,			// #1407 (obsolete action)
-	-1,			// #1408 (obsolete action)
-	-1,			// #1409 (obsolete action)
+	ActUnk,			// #1406 (obsolete action)
+	ActUnk,			// #1407 (obsolete action)
+	ActUnk,			// #1408 (obsolete action)
+	ActUnk,			// #1409 (obsolete action)
 	ActFolUsr,		// #1410
 	ActUnfUsr,		// #1411
 	ActSeeFlg,		// #1412
@@ -3248,15 +3248,15 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqMdfOneOth,	// #1414
 	ActReqMdfOneStd,	// #1415
 	ActReqMdfOneTch,	// #1416
-	-1,			// #1417 (obsolete action)
+	ActUnk,			// #1417 (obsolete action)
 	ActReqMdfOth,		// #1418
 	ActReqMdfStd,		// #1419
 	ActReqMdfTch,		// #1420
-	-1,			// #1421 (obsolete action)
+	ActUnk,			// #1421 (obsolete action)
 	ActUpdOth,		// #1422
 	ActUpdStd,		// #1423
 	ActUpdTch,		// #1424
-	-1,			// #1425 (obsolete action)
+	ActUnk,			// #1425 (obsolete action)
 	ActReqEnrSevStd,	// #1426
 	ActReqEnrSevTch,	// #1427
 	ActRcvFrmEnrSevStd,	// #1428
@@ -3278,9 +3278,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActCreOth,		// #1444
 	ActCreStd,		// #1445
 	ActCreTch,		// #1446
-	-1,			// #1447 (obsolete action)
-	-1,			// #1448 (obsolete action)
-	-1,			// #1449 (obsolete action)
+	ActUnk,			// #1447 (obsolete action)
+	ActUnk,			// #1448 (obsolete action)
+	ActUnk,			// #1449 (obsolete action)
 	ActRemID_Oth,		// #1450
 	ActRemID_Std,		// #1451
 	ActRemID_Tch,		// #1452
@@ -3295,9 +3295,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemMe_Tch,		// #1461
 	ActRemStdCrs,		// #1462
 	ActRemTchCrs,		// #1463
-	-1,			// #1464 (obsolete action)
-	-1,			// #1465 (obsolete action)
-	-1,			// #1466 (obsolete action)
+	ActUnk,			// #1464 (obsolete action)
+	ActUnk,			// #1465 (obsolete action)
+	ActUnk,			// #1466 (obsolete action)
 	ActChgPwdOth,		// #1467
 	ActChgPwdStd,		// #1468
 	ActChgPwdTch,		// #1469
@@ -3306,9 +3306,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqRemNot,		// #1472
 	ActSeeLstMyAtt,		// #1473
 	ActPrnLstMyAtt,		// #1474
-	-1,			// #1475 (obsolete action)
-	-1,			// #1476 (obsolete action)
-	-1,			// #1477 (obsolete action)
+	ActUnk,			// #1475 (obsolete action)
+	ActUnk,			// #1476 (obsolete action)
+	ActUnk,			// #1477 (obsolete action)
 	ActRemMaiOth,		// #1478
 	ActRemMaiStd,		// #1479
 	ActRemMaiTch,		// #1480
@@ -3316,19 +3316,19 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgMaiStd,		// #1482
 	ActChgMaiTch,		// #1483
 	ActChg1stDay,		// #1484
-	-1,			// #1485 (obsolete action)
+	ActUnk,			// #1485 (obsolete action)
 	ActChgCrsTT1stDay,	// #1486
 	ActChgMyTT1stDay,	// #1487
 	ActReqRemOldBrf,	// #1488
 	ActRemOldBrf,		// #1489
 	ActSeeGblTL,		// #1490
-	-1,			// #1491 (obsolete action)
+	ActUnk,			// #1491 (obsolete action)
 	ActRcvPstGblTL,		// #1492
 	ActRemPubGblTL,		// #1493
 	ActReqRemPubGblTL,	// #1494
 	ActShaNotGblTL,		// #1495
 	ActUnsNotGblTL,		// #1496
-	-1,			// #1497 (obsolete action)
+	ActUnk,			// #1497 (obsolete action)
 	ActRcvPstUsrTL,		// #1498
 	ActShaNotUsrTL,		// #1499
 	ActUnsNotUsrTL,		// #1500
@@ -3396,9 +3396,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqDatTchGrp,	// #1562
 	ActChgDatTchGrp,	// #1563
 	ActDowTchGrp,		// #1564
-	-1,			// #1565 (obsolete action)
-	-1,			// #1566 (obsolete action)
-	-1,			// #1567 (obsolete action)
+	ActUnk,			// #1565 (obsolete action)
+	ActUnk,			// #1566 (obsolete action)
+	ActUnk,			// #1567 (obsolete action)
 	ActCnfID_Oth,		// #1568
 	ActCnfID_Std,		// #1569
 	ActCnfID_Tch,		// #1570
@@ -3412,9 +3412,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActLstDupUsr,		// #1578
 	ActLstSimUsr,		// #1579
 	ActRemDupUsr,		// #1580
-	-1,			// #1581 (obsolete action)
+	ActUnk,			// #1581 (obsolete action)
 	ActSeeMyUsgRep,		// #1582
-	-1,			// #1583 (obsolete action)
+	ActUnk,			// #1583 (obsolete action)
 	ActChkUsrAcc,		// #1584
 	ActLogInNew,		// #1585
 	ActReqMyUsgRep,		// #1586
@@ -3448,7 +3448,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActFrmLogInUsrAgd,	// #1614
 	ActLogInUsrAgd,		// #1615
 	ActLogInUsrAgdLan,	// #1616
-	-1,			// #1617 (obsolete action)
+	ActUnk,			// #1617 (obsolete action)
 	ActPrnAgdQR,		// #1618
 	ActReqRemCfe,		// #1619
 	ActHidCfe,		// #1620
@@ -3456,18 +3456,18 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeCal,		// #1622
 	ActPrnCal,		// #1623
 	ActChgCal1stDay,	// #1624
-	-1,			// #1625 (obsolete action)
-	-1,			// #1626 (obsolete action)
-	-1,			// #1627 (obsolete action)
-	-1,			// #1628 (obsolete action)
-	-1,			// #1629 (obsolete action)
-	-1,			// #1630 (obsolete action)
-	-1,			// #1631 (obsolete action)
-	-1,			// #1632 (obsolete action)
-	-1,			// #1633 (obsolete action)
-	-1,			// #1634 (obsolete action)
-	-1,			// #1635 (obsolete action)
-	-1,			// #1636 (obsolete action)
+	ActUnk,			// #1625 (obsolete action)
+	ActUnk,			// #1626 (obsolete action)
+	ActUnk,			// #1627 (obsolete action)
+	ActUnk,			// #1628 (obsolete action)
+	ActUnk,			// #1629 (obsolete action)
+	ActUnk,			// #1630 (obsolete action)
+	ActUnk,			// #1631 (obsolete action)
+	ActUnk,			// #1632 (obsolete action)
+	ActUnk,			// #1633 (obsolete action)
+	ActUnk,			// #1634 (obsolete action)
+	ActUnk,			// #1635 (obsolete action)
+	ActUnk,			// #1636 (obsolete action)
 	ActPrnOneAsg,		// #1637
 	ActChgDatFmt,		// #1638
 	ActReqAccEnrNET,	// #1639
@@ -3489,12 +3489,12 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgGam,		// #1655
 	ActReqRemGam,		// #1656
 	ActRemGam,		// #1657
-	-1,			// #1658 (obsolete action)
-	-1,			// #1659 (obsolete action)
+	ActUnk,			// #1658 (obsolete action)
+	ActUnk,			// #1659 (obsolete action)
 	ActHidGam,		// #1660
 	ActUnhGam,		// #1661
 	ActAddOneGamQst,	// #1662
-	-1,			// #1663 (obsolete action)
+	ActUnk,			// #1663 (obsolete action)
 	ActReqRemGamQst,	// #1664
 	ActRemGamQst,		// #1665
 	ActGamLstTstQst,	// #1666
@@ -3504,7 +3504,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqNewMch,		// #1670
 	ActNewMch,		// #1671
 	ActFwdMch,		// #1672
-	-1,			// #1673 (obsolete action)
+	ActUnk,			// #1673 (obsolete action)
 	ActSeeAllPrj,		// #1674
 	ActFrmNewPrj,		// #1675
 	ActEdiOnePrj,		// #1676
@@ -3582,7 +3582,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenRooSho,		// #1748
 	ActRenRooFul,		// #1749
 	ActChgRooMaxUsr,	// #1750
-	-1,			// #1751 (obsolete action)
+	ActUnk,			// #1751 (obsolete action)
 	ActChgGrpRoo,		// #1752
 	ActDoActOnSevGst,	// #1753
 	ActDoActOnSevStd,	// #1754
@@ -3610,23 +3610,23 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqUnlAllPrj,	// #1776
 	ActLckAllPrj,		// #1777
 	ActUnlAllPrj,		// #1778
-	-1,			// #1779 (obsolete action)
+	ActUnk,			// #1779 (obsolete action)
 	ActJoiMch,		// #1780
-	-1,			// #1781 (obsolete action)
+	ActUnk,			// #1781 (obsolete action)
 	ActRefMchStd,		// #1782
         ActReqRemMch,		// #1783
         ActRemMch,		// #1784
 	ActResMch,		// #1785
-	-1,			// #1786 (obsolete action)
+	ActUnk,			// #1786 (obsolete action)
 	ActCreMyAcc,		// #1787
 	ActRefMchTch,		// #1788
 	ActPlyPauMch,		// #1789
 	ActBckMch,		// #1790
-	-1,			// #1791 (obsolete action)
-	-1,			// #1792 (obsolete action)
-	-1,			// #1793 (obsolete action)
+	ActUnk,			// #1791 (obsolete action)
+	ActUnk,			// #1792 (obsolete action)
+	ActUnk,			// #1793 (obsolete action)
 	ActChgVisResMchQst,	// #1794
-	-1,			// #1795
+	ActUnk,			// #1795
 	ActSeeMyMchResCrs,	// #1796
 	ActSeeOneMchResMe,	// #1797
 	ActReqSeeUsrMchRes,	// #1798
@@ -3655,7 +3655,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeePrg,		// #1821
 	ActFrmNewPrgItm,	// #1822
 	ActFrmChgPrgItm,	// #1823
-	-1,			// #1824
+	ActUnk,			// #1824
 	ActNewPrgItm,		// #1825
 	ActChgPrgItm,		// #1826
 	ActReqRemPrgItm,	// #1827
@@ -3685,19 +3685,19 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemExaSes,		// #1851
 	ActReqNewExaSes,	// #1852
 	ActNewExaSes,		// #1853
-	-1,			// #1854 (obsolete action)
-	-1,			// #1855 (obsolete action)
-	-1,			// #1856 (obsolete action)
-	-1,			// #1857 (obsolete action)
-	-1,			// #1858 (obsolete action)
-	-1,			// #1859 (obsolete action)
-	-1,			// #1860 (obsolete action)
-	-1,			// #1861 (obsolete action)
-	-1,			// #1862 (obsolete action)
-	-1,			// #1863 (obsolete action)
-	-1,			// #1864 (obsolete action)
-	-1,			// #1865 (obsolete action)
-	-1,			// #1866 (obsolete action)
+	ActUnk,			// #1854 (obsolete action)
+	ActUnk,			// #1855 (obsolete action)
+	ActUnk,			// #1856 (obsolete action)
+	ActUnk,			// #1857 (obsolete action)
+	ActUnk,			// #1858 (obsolete action)
+	ActUnk,			// #1859 (obsolete action)
+	ActUnk,			// #1860 (obsolete action)
+	ActUnk,			// #1861 (obsolete action)
+	ActUnk,			// #1862 (obsolete action)
+	ActUnk,			// #1863 (obsolete action)
+	ActUnk,			// #1864 (obsolete action)
+	ActUnk,			// #1865 (obsolete action)
+	ActUnk,			// #1866 (obsolete action)
 	ActSeeMyExaResCrs,	// #1867
 	ActSeeMyExaResExa,	// #1868
 	ActSeeMyExaResSes,	// #1869
@@ -3721,9 +3721,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActAddQstToExa,		// #1887
 	ActReqRemSetQst,	// #1888
 	ActRemExaQst,		// #1889
-	-1,			// #1890 (obsolete action)
-	-1,			// #1891 (obsolete action)
-	-1,			// #1892 (obsolete action)
+	ActUnk,			// #1890 (obsolete action)
+	ActUnk,			// #1891 (obsolete action)
+	ActUnk,			// #1892 (obsolete action)
 	ActReqRemExaSet,	// #1893
 	ActRemExaSet,		// #1894
 	ActUp_ExaSet,		// #1895
@@ -3736,7 +3736,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqChgExaSes,	// #1902
 	ActChgExaSes,		// #1903
 	ActSeeExaPrn,		// #1904
-	-1,			// #1905 (obsolete action)
+	ActUnk,			// #1905 (obsolete action)
 	ActAnsExaPrn,		// #1906
 	ActEdiTag,		// #1907
 	ActEndExaPrn,		// #1908
@@ -3746,8 +3746,8 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActLstOneGam,		// #1912
 	ActReqChgMch,		// #1913
 	ActChgMch,		// #1914
-	-1,			// #1915 (obsolete action)
-	-1,			// #1916 (obsolete action)
+	ActUnk,			// #1915 (obsolete action)
+	ActUnk,			// #1916 (obsolete action)
 	ActChgUsrPho,		// #1917
 	ActFrmEdiPrgRsc,	// #1918
 	ActReqRemPrgRsc,	// #1919
