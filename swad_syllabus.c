@@ -51,6 +51,17 @@
 #include "swad_xml.h"
 
 /*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS] =
+  {
+   [Syl_NONE      ] = Syl_NONE,
+   [Syl_LECTURES  ] = Syl_LECTURES,
+   [Syl_PRACTICALS] = Syl_PRACTICALS
+  };
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -106,17 +117,14 @@ struct LstItemsSyllabus Syl_LstItemsSyllabus;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected);
-
 static unsigned Syl_GetParItemNumber (void);
 
-static void Syl_SetSyllabusTypeFromAction (struct Syl_Syllabus *Syllabus);
 static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus);
 static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
                                      bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text);
-static void Syl_PutParNumItem (void *ParNumItem);
+static void Syl_PutParsSyllabus (void *Syllabus);
 
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
 
@@ -155,21 +163,43 @@ Syl_WhichSyllabus_t Syl_GetParWhichSyllabus (void)
   }
 
 /*****************************************************************************/
+/****************** Put parameter with type of syllabus **********************/
+/*****************************************************************************/
+
+void Syl_PutParWhichSyllabus (void *SyllabusSelected)
+  {
+   if (SyllabusSelected)
+      if (*((Syl_WhichSyllabus_t *) SyllabusSelected) != Syl_NONE)
+         Par_PutParUnsigned (NULL,"WhichSyllabus",
+                             (unsigned) *((Syl_WhichSyllabus_t *) SyllabusSelected));
+  }
+
+/*****************************************************************************/
 /************************ Write form to select syllabus **********************/
 /*****************************************************************************/
 
-static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
+void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
   {
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyl;
+
+   /***** If no syllabus ==> nothing to do *****/
+   switch (Gbl.Crs.Info.Type)
+     {
+      case Inf_LECTURES:
+      case Inf_PRACTICALS:
+	 break;
+      default:	// Nothing to do
+	 return;
+     }
 
    /***** Form to select which syllabus I want to see (lectures/practicals) *****/
    Frm_BeginForm (ActSeeSyl);
       HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
 	 HTM_UL_Begin (NULL);
 
-	 for (WhichSyl  = (Syl_WhichSyllabus_t) 0;
-	      WhichSyl <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
+	 for (WhichSyl  = (Syl_WhichSyllabus_t) 1;
+	      WhichSyl <= (Syl_WhichSyllabus_t) (Syl_NUM_WHICH_SYLLABUS - 1);
 	      WhichSyl++)
 	   {
 	    HTM_LI_Begin (NULL);
@@ -177,8 +207,8 @@ static void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 		  HTM_INPUT_RADIO ("WhichSyllabus",HTM_SUBMIT_ON_CLICK,
 				   "value=\"%u\"%s",
 				   (unsigned) WhichSyl,
-				   WhichSyl == SyllabusSelected ? " checked=\"checked\"" :
-								  "");
+				   WhichSyl == WhichSyllabus ? " checked=\"checked\"" :
+							       "");
 		  HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);
 	       HTM_LABEL_End ();
 	    HTM_LI_End ();
@@ -226,10 +256,12 @@ bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod)
 /*****************************************************************************/
 // Return true if info available
 
-bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
+bool Syl_CheckAndShowSyllabus (struct Syl_Syllabus *Syllabus)
   {
-   /***** Set syllabus type depending on current action *****/
-   Syl_SetSyllabusTypeFromAction (Syllabus);
+   /***** Get syllabus type *****/
+   Syllabus->WhichSyllabus = Syl_GetParWhichSyllabus ();
+   Gbl.Crs.Info.Type = (Syllabus->WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+							          Inf_PRACTICALS);
 
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -275,72 +307,7 @@ void Syl_EditSyllabus (void)
    Syl_ResetSyllabus (&Syllabus);
 
    /***** Edit syllabus *****/
-   Syl_CheckAndEditSyllabus (&Syllabus);
-  }
-
-/*****************************************************************************/
-/************* Set syllabus type depending on the current action *************/
-/*****************************************************************************/
-
-static void Syl_SetSyllabusTypeFromAction (struct Syl_Syllabus *Syllabus)
-  {
-   Gbl.Crs.Info.Type = Inf_LECTURES;
-
-   /***** Set the type of syllabus (lectures or practicals) *****/
-   switch (Gbl.Action.Act)
-     {
-      case ActSeeSyl:
-	 Gbl.Crs.Info.Type = (Syllabus->WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
-	                                                                Inf_PRACTICALS);
-	 break;
-      case ActSeeSylLec:
-      case ActEdiSylLec:
-      case ActDelItmSylLec:
-      case ActUp_IteSylLec:
-      case ActDwnIteSylLec:
-      case ActRgtIteSylLec:
-      case ActLftIteSylLec:
-      case ActInsIteSylLec:
-      case ActModIteSylLec:
-      case ActChgFrcReaSylLec:
-      case ActChgHavReaSylLec:
-      case ActSelInfSrcSylLec:
-      case ActRcvURLSylLec:
-      case ActRcvPagSylLec:
-      case ActEditorSylLec:
-      case ActPlaTxtEdiSylLec:
-      case ActRchTxtEdiSylLec:
-      case ActRcvPlaTxtSylLec:
-      case ActRcvRchTxtSylLec:
-	 Syllabus->WhichSyllabus = Syl_LECTURES;
-	 Gbl.Crs.Info.Type = Inf_LECTURES;
-	 break;
-      case ActSeeSylPra:
-      case ActEdiSylPra:
-      case ActDelItmSylPra:
-      case ActUp_IteSylPra:
-      case ActDwnIteSylPra:
-      case ActRgtIteSylPra:
-      case ActLftIteSylPra:
-      case ActInsIteSylPra:
-      case ActModIteSylPra:
-      case ActChgFrcReaSylPra:
-      case ActChgHavReaSylPra:
-      case ActSelInfSrcSylPra:
-      case ActRcvURLSylPra:
-      case ActRcvPagSylPra:
-      case ActEditorSylPra:
-      case ActPlaTxtEdiSylPra:
-      case ActRchTxtEdiSylPra:
-      case ActRcvPlaTxtSylPra:
-      case ActRcvRchTxtSylPra:
-	 Syllabus->WhichSyllabus = Syl_PRACTICALS;
-	 Gbl.Crs.Info.Type = Inf_PRACTICALS;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
+   Syl_CheckAndShowSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -516,7 +483,6 @@ int Syl_ReadLevelItemSyllabus (FILE *XML)
 
 static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
   {
-   extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_TYPES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Hlp_COURSE_Syllabus_edit;
    extern const char *Hlp_COURSE_Syllabus;
@@ -533,6 +499,17 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
       [Vie_VIEW] = 0,
       [Vie_EDIT] = 5,
      };
+   static const Act_Action_t Inf_Actions[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = ActSeeCrsInf,
+      [Inf_TEACHING_GUIDE] = ActSeeTchGui,
+      [Inf_LECTURES      ] = ActSeeSylLec,
+      [Inf_PRACTICALS    ] = ActSeeSylPra,
+      [Inf_BIBLIOGRAPHY  ] = ActSeeBib,
+      [Inf_FAQ           ] = ActSeeFAQ,
+      [Inf_LINKS         ] = ActSeeCrsLnk,
+      [Inf_ASSESSMENT    ] = ActSeeAss,
+     };
    bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSylLec || Gbl.Action.Act == ActInsIteSylPra ||
                                 Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
 				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
@@ -548,9 +525,6 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
 		 PutIconToEdit ? &Gbl.Crs.Info.Type :
 				 NULL,
 		 *HelpLink[Syllabus->ViewType],Box_NOT_CLOSABLE);
-
-      /****** Form to select syllabus *****/
-      Syl_PutFormWhichSyllabus (Syllabus->WhichSyllabus);
 
       /***** Begin table *****/
       HTM_TABLE_BeginWide ();
@@ -596,7 +570,8 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
       /***** Button to view *****/
       if (Syllabus->ViewType == Vie_EDIT)
 	{
-	 Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
+	 Frm_BeginForm (Inf_Actions[Gbl.Crs.Info.Type]);
+            Syl_PutParWhichSyllabus (&Syllabus->WhichSyllabus);
 	    Btn_PutConfirmButton (Txt_Done);
 	 Frm_EndForm ();
 	}
@@ -674,7 +649,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		  else
 		     Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 											ActDelItmSylPra,NULL,
-						    Syl_PutParNumItem,&Syllabus->ParNumItem);
+						    Syl_PutParsSyllabus,Syllabus);
 	       HTM_TD_End ();
 
 	       /***** Icon to get up an item *****/
@@ -684,7 +659,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 											ActUp_IteSylPra,
 						    NULL,
-						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-up.svg",Ico_BLACK);
 		  else
 		     Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
@@ -698,7 +673,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 											ActDwnIteSylPra,
 						    NULL,
-						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-down.svg",Ico_BLACK);
 		  else
 		     Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
@@ -711,7 +686,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
 											ActRgtIteSylPra,
 						    NULL,
-						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-left.svg",Ico_BLACK);
 		  else
 		     Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
@@ -725,7 +700,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
 											ActLftIteSylPra,
 						    NULL,
-						    Syl_PutParNumItem,&Syllabus->ParNumItem,
+						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-right.svg",Ico_BLACK);
 		  else
 		     Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,
@@ -863,7 +838,7 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 			       (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
 								    ActModIteSylPra));
 	 Syllabus->ParNumItem = NumItem;
-	 Syl_PutParNumItem (&Syllabus->ParNumItem);
+	 Syl_PutParsSyllabus (Syllabus);
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
 			 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"60\" class=\"INPUT_%s\" placeholder=\"%s\"%s",
@@ -876,13 +851,18 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
   }
 
 /*****************************************************************************/
-/***** Write parameter with the number of an item in a syllabus form *********/
+/******************* Write parameters related to syllabus ********************/
 /*****************************************************************************/
 
-static void Syl_PutParNumItem (void *ParNumItem)
+static void Syl_PutParsSyllabus (void *Syllabus)
   {
-   if (ParNumItem)
-      Par_PutParUnsigned (NULL,"NumI",*((unsigned *) ParNumItem));
+   if (Syllabus)
+     {
+      if (((struct Syl_Syllabus *) Syllabus)->WhichSyllabus != Syl_NONE)
+         Par_PutParUnsigned (NULL,"WhichSyllabus",
+                             (unsigned) ((struct Syl_Syllabus *) Syllabus)->WhichSyllabus);
+      Par_PutParUnsigned (NULL,"NumI",((struct Syl_Syllabus *) Syllabus)->ParNumItem);
+     }
   }
 
 /*****************************************************************************/
@@ -932,8 +912,10 @@ void Syl_RemoveItemSyllabus (void)
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
 
-   /***** Set syllabus type depending on current action *****/
-   Syl_SetSyllabusTypeFromAction (&Syllabus);
+   /***** Get syllabus type *****/
+   Syllabus.WhichSyllabus = Syl_GetParWhichSyllabus ();
+   Gbl.Crs.Info.Type = (Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+							         Inf_PRACTICALS);
 
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -966,7 +948,7 @@ void Syl_RemoveItemSyllabus (void)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   (void) Syl_CheckAndEditSyllabus (&Syllabus);
+   (void) Syl_CheckAndShowSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1009,8 +991,10 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
 
-   /***** Set syllabus type depending on current action *****/
-   Syl_SetSyllabusTypeFromAction (&Syllabus);
+   /***** Get syllabus type *****/
+   Syllabus.WhichSyllabus = Syl_GetParWhichSyllabus ();
+   Gbl.Crs.Info.Type = (Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+							         Inf_PRACTICALS);
 
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -1069,7 +1053,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   (void) Syl_CheckAndEditSyllabus (&Syllabus);
+   (void) Syl_CheckAndShowSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1195,8 +1179,10 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
 
-   /***** Set syllabus type depending on current action *****/
-   Syl_SetSyllabusTypeFromAction (&Syllabus);
+   /***** Get syllabus type *****/
+   Syllabus.WhichSyllabus = Syl_GetParWhichSyllabus ();
+   Gbl.Crs.Info.Type = (Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+							         Inf_PRACTICALS);
 
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -1238,7 +1224,7 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   (void) Syl_CheckAndEditSyllabus (&Syllabus);
+   (void) Syl_CheckAndShowSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1258,8 +1244,10 @@ void Syl_InsertItemSyllabus (void)
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
 
-   /***** Set syllabus type depending on current action *****/
-   Syl_SetSyllabusTypeFromAction (&Syllabus);
+   /***** Get syllabus type *****/
+   Syllabus.WhichSyllabus = Syl_GetParWhichSyllabus ();
+   Gbl.Crs.Info.Type = (Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+							         Inf_PRACTICALS);
 
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -1309,7 +1297,7 @@ void Syl_InsertItemSyllabus (void)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   (void) Syl_CheckAndEditSyllabus (&Syllabus);
+   (void) Syl_CheckAndShowSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/
@@ -1327,8 +1315,10 @@ void Syl_ModifyItemSyllabus (void)
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
 
-   /***** Set syllabus type depending on current action *****/
-   Syl_SetSyllabusTypeFromAction (&Syllabus);
+   /***** Get syllabus type *****/
+   Syllabus.WhichSyllabus = Syl_GetParWhichSyllabus ();
+   Gbl.Crs.Info.Type = (Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+							         Inf_PRACTICALS);
 
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
@@ -1361,7 +1351,7 @@ void Syl_ModifyItemSyllabus (void)
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
-   (void) Syl_CheckAndEditSyllabus (&Syllabus);
+   (void) Syl_CheckAndShowSyllabus (&Syllabus);
   }
 
 /*****************************************************************************/

@@ -20200,22 +20200,6 @@ const char *Txt_MENU_NAMES[Mnu_NUM_MENUS] =
 
 const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {
-[TabUnk] =
-	{
-	NULL,	//  0
-	NULL,	//  1
-	NULL,	//  2
-	NULL,	//  3
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
-	},
 [TabStr] =
 	{
 	//  0: ActFrmLogIn
@@ -20355,14 +20339,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Bildirimler"
 #endif
-	,
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabSys] =
 	{
@@ -20503,14 +20479,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Bak&inodot;m onar&inodot;m"
 #endif
-	,
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabCty] =
 	{
@@ -20559,18 +20527,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Kurumlar"
 #endif
-	,
-	NULL,	//  2
-	NULL,	//  3
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabIns] =
 	{
@@ -20688,15 +20644,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Bayram"
 #endif
-	,
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabCtr] =
 	{
@@ -20791,16 +20738,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Odalar"
 #endif
-	,
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabDeg] =
 	{
@@ -20849,18 +20786,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Dersler"
 #endif
-	,
-	NULL,	//  2
-	NULL,	//  3
-	NULL,	//  4
-	NULL,	//  5
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabCrs] =
 	{
@@ -21070,11 +20995,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Program&inodot;"
 #endif
-	,
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabAss] =
 	{
@@ -21261,12 +21181,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"De&gbreve;erlendirme"
 #endif
-	,
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabFil] =
 	{
@@ -21754,12 +21668,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Ba&gbreve;l&inodot;"
 #endif
-	,
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabMsg] =
 	{
@@ -21900,14 +21808,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"E-posta"
 #endif
-	,
-	NULL,	//  6
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabAna] =
 	{
@@ -22071,13 +21971,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"S&inodot;k"
 #endif
-	,
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	},
 [TabPrf] =
 	{
@@ -22241,13 +22134,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==10	// tr
 	"Ayarlar"
 #endif
-	,
-	NULL,	//  7
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
-	NULL,	// 11
-	NULL,	// 12
 	}
 };
 
@@ -45641,6 +45527,9 @@ const char *Txt_Syllabus_of_the_course =
 
 const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
 	{
+	[Syl_NONE] =
+	""
+	,
 	[Syl_LECTURES] =
 #if   L==1	// ca
 	"Teoria"

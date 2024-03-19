@@ -228,7 +228,7 @@ void Tab_SetCurrentTab (void)
 	   {
 	    if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)		// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
-	    else					// No country selected
+	    else						// No country selected
 	       Gbl.Action.Act = ActSeeCty;
             Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 	  }
@@ -240,7 +240,7 @@ void Tab_SetCurrentTab (void)
 	       Gbl.Action.Act = ActSeeCtr;
 	    else if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)	// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
-	    else					// No country selected
+	    else						// No country selected
 	       Gbl.Action.Act = ActSeeCty;
             Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 	   }
@@ -254,7 +254,7 @@ void Tab_SetCurrentTab (void)
 	       Gbl.Action.Act = ActSeeCtr;
 	    else if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)	// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
-	    else					// No country selected
+	    else						// No country selected
 	       Gbl.Action.Act = ActSeeCty;
             Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 	   }

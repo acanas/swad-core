@@ -240,14 +240,13 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 void Mnu_WriteMenuThisTab (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    static const char *ClassIcoMenu[Ico_NUM_ICON_SETS] =
      {
       [Ico_ICON_SET_AWESOME] = "MENU_ICO",
       [Ico_ICON_SET_NUVOLA ] = NULL,
      };
    unsigned NumOptInMenu;
-   Act_Action_t NumAct;
+   Act_Action_t Action;
    const char *Title;
    bool IsTheSelectedAction;
 
@@ -262,14 +261,14 @@ void Mnu_WriteMenuThisTab (void)
 	      NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
 	      NumOptInMenu++)
 	   {
-	    NumAct = Mnu_Menu[Gbl.Action.Tab][NumOptInMenu].Action;
-	    if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
+	    Action = Mnu_Menu[Gbl.Action.Tab][NumOptInMenu].Action;
+	    if (Action == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
 	       break;
-	    if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
+	    if (Act_CheckIfIHavePermissionToExecuteAction (Action))
 	      {
-	       IsTheSelectedAction = (NumAct == Act_GetSuperAction (Gbl.Action.Act));
+	       IsTheSelectedAction = (Action == Act_GetSuperAction (Gbl.Action.Act));
 
-	       Title = Act_GetActionText (NumAct);
+	       Title = Act_GetActionText (Action);
 
 	       /***** Begin option *****/
 	       HTM_LI_Begin ("class=\"MENU_LIST_ITEM %s\"",
@@ -277,7 +276,7 @@ void Mnu_WriteMenuThisTab (void)
 						   "MENU_OPT_OFF");
 
 		  /***** Begin form *****/
-		  Frm_BeginForm (NumAct);
+		  Frm_BeginForm (Action);
 
 		     /***** Begin link *****/
 		     HTM_BUTTON_Submit_Begin (Title,"class=\"BT_LINK\"");
@@ -298,7 +297,7 @@ void Mnu_WriteMenuThisTab (void)
 			   HTM_DIV_End ();
 			   HTM_DIV_Begin ("class=\"MENU_TXT MENU_TXT_%s\"",
 			                  The_GetSuffix ());
-			      HTM_Txt (Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
+			      HTM_Txt (Act_GetTitleAction (Action));
 			   HTM_DIV_End ();
 			HTM_DIV_End ();
 

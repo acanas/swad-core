@@ -33,11 +33,12 @@
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
-#define Syl_NUM_WHICH_SYLLABUS 2
+#define Syl_NUM_WHICH_SYLLABUS 3
 typedef enum
   {
-   Syl_LECTURES		= 0,
-   Syl_PRACTICALS	= 1,
+   Syl_NONE		= 0,
+   Syl_LECTURES		= 1,
+   Syl_PRACTICALS	= 2,
   } Syl_WhichSyllabus_t;	// Which syllabus I want to see
 #define Syl_DEFAULT_WHICH_SYLLABUS Syl_LECTURES
 
@@ -88,9 +89,11 @@ struct Syl_Syllabus
 void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 
 Syl_WhichSyllabus_t Syl_GetParWhichSyllabus (void);
+void Syl_PutParWhichSyllabus (void *SyllabusSelected);
+void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus);
 
 bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod);
-bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus);
+bool Syl_CheckAndShowSyllabus (struct Syl_Syllabus *Syllabus);
 void Syl_EditSyllabus (void);
 
 void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,

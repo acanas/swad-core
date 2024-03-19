@@ -110,11 +110,10 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
      {
       /* Get action code */
       ActCod = DB_GetNextCode (mysql_res);
-      if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
-         if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
-            if (Act_GetIndexInMenu (Action) >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
-               if (Act_CheckIfIHavePermissionToExecuteAction (Action))
-                  ListMFUActions->Actions[ListMFUActions->NumActions++] = Action;
+      if ((Action = Act_GetActionFromActCod (ActCod)) != ActUnk)
+	 if (Act_GetIndexInMenu (Action) >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
+	    if (Act_CheckIfIHavePermissionToExecuteAction (Action))
+	       ListMFUActions->Actions[ListMFUActions->NumActions++] = Action;
      }
 
    /***** Free structure that stores the query result *****/
@@ -148,7 +147,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
          ActCod = DB_GetNextCode (mysql_res);
          if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
             if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
-               if (Act_GetTab (Act_GetSuperAction (Action)) == Gbl.Action.Tab)
+               if (Act_GetTab (Action) == Gbl.Action.Tab)
                   if (Act_CheckIfIHavePermissionToExecuteAction (Action))
                     {
                      MoreRecentActionInCurrentTab = Action;
@@ -213,7 +212,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       if ((Title = Act_GetTitleAction (Action)) != NULL)
 		 {
 		  /* Action string */
-		  Str_Copy (TabStr,Tab_GetTxt (Act_GetTab (Act_GetSuperAction (Action))),
+		  Str_Copy (TabStr,Tab_GetTxt (Act_GetTab (Action)),
 			    sizeof (TabStr) - 1);
 		  Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
 		  snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
@@ -271,7 +270,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	    if ((Title = Act_GetTitleAction (Action)) != NULL)
 	      {
 	       /* Action string */
-	       Str_Copy (TabStr,Tab_GetTxt (Act_GetTab (Act_GetSuperAction (Action))),
+	       Str_Copy (TabStr,Tab_GetTxt (Act_GetTab (Action)),
 			 sizeof (TabStr) - 1);
 	       Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
 	       snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);

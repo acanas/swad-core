@@ -88,11 +88,11 @@ void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
 void Inf_FormsToSelSendInfo (void);
-void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc);
-void Inf_FormToEnterPlainTextEditor (Inf_Src_t InfoSrc);
-void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc);
-void Inf_FormToSendPage (Inf_Src_t InfoSrc);
-void Inf_FormToSendURL (Inf_Src_t InfoSrc);
+void Inf_FormToEnterIntegratedEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
+void Inf_FormToEnterPlainTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
+void Inf_FormToEnterRichTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
+void Inf_FormToSendPage (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
+void Inf_FormToSendURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
 Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,

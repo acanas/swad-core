@@ -83,22 +83,22 @@ void Frm_BeginFormGoTo (Act_Action_t NextAction)
 
 void Frm_BeginForm (Act_Action_t NextAction)
   {
-   Frm_BeginFormAnchorOnSubmit (NextAction,NULL,NULL);
+   Frm_BeginFormInternal (NextAction,true,NULL,NULL,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor)
   {
-   Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,NULL);
+   Frm_BeginFormInternal (NextAction,true,NULL,Anchor,NULL);	// Do put now parameter location (if no open session)
   }
 
 void Frm_BeginFormOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
   {
-   Frm_BeginFormAnchorOnSubmit (NextAction,NULL,OnSubmit);
+   Frm_BeginFormInternal (NextAction,true,NULL,NULL,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
 void Frm_BeginFormAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
   {
-   Frm_BeginFormInternal (NextAction,true,NULL,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
+   Frm_BeginFormInternal (NextAction,true,NULL,Anchor,OnSubmit);// Do put now parameter location (if no open session)
   }
 
 void Frm_BeginFormId (Act_Action_t NextAction,const char *Id)

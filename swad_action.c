@@ -47,10 +47,10 @@ Act_Action_t Act_GetActionFromActCod (long ActCod)
   {
    extern Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD];
 
-   if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
-      return ActLst_FromActCodToAction[ActCod];
+   if (ActCod < 0 || ActCod > ActLst_MAX_ACTION_COD)
+      return ActUnk;
 
-   return ActUnk;
+   return ActLst_FromActCodToAction[ActCod];
   }
 
 /*****************************************************************************/
@@ -201,11 +201,21 @@ const char *Act_GetIconFromAction (Act_Action_t Action)
 const char *Act_GetTitleAction (Act_Action_t Action)
   {
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   Tab_Tab_t Tab;
+   signed int IndexInMenu;
 
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
-   return Txt_MENU_TITLE[Act_GetTab (Action)][Act_GetIndexInMenu (Action)];
+   Tab = Act_GetTab (Action);
+   if (Tab == TabUnk)
+      return NULL;
+
+   IndexInMenu = Act_GetIndexInMenu (Action);
+   if (IndexInMenu < 0)
+      return NULL;
+
+   return Txt_MENU_TITLE[Tab][IndexInMenu];
   }
 
 /*****************************************************************************/

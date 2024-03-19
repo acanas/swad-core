@@ -759,7 +759,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	{
 	 if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
 	   {
-	    TabTxt = Tab_GetTxt (Act_GetTab (Act_GetSuperAction (Action)));
+	    TabTxt = Tab_GetTxt (Act_GetTab (Action));
 	    if (TabTxt)
 	       fprintf (Rep_File,"%s &gt; ",TabTxt);
 	   }
