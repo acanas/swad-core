@@ -358,21 +358,28 @@ void Inf_PutIconToEditInfo (void *Type)
 
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
   {
+   extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Force_students_to_read_this_information;
-   static const Act_Action_t Inf_ActionsChangeForceReadInfo[Inf_NUM_TYPES] =
+   static struct
      {
-      [Inf_INTRODUCTION  ] = ActChgFrcReaCrsInf,
-      [Inf_TEACHING_GUIDE] = ActChgFrcReaTchGui,
-      [Inf_LECTURES      ] = ActChgFrcReaSylLec,
-      [Inf_PRACTICALS    ] = ActChgFrcReaSylPra,
-      [Inf_BIBLIOGRAPHY  ] = ActChgFrcReaBib,
-      [Inf_FAQ           ] = ActChgFrcReaFAQ,
-      [Inf_LINKS         ] = ActChgFrcReaCrsLnk,
-      [Inf_ASSESSMENT    ] = ActChgFrcReaAss,
+      const Act_Action_t NextAction;
+      void (*FuncPars) (void *Args);
+      void *Args;
+     } Inf_Actions[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = {ActChgFrcReaCrsInf,NULL,NULL},
+      [Inf_TEACHING_GUIDE] = {ActChgFrcReaTchGui,NULL,NULL},
+      [Inf_LECTURES      ] = {ActChgFrcReaSylLec,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS    ] = {ActChgFrcReaSylPra,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY  ] = {ActChgFrcReaBib   ,NULL,NULL},
+      [Inf_FAQ           ] = {ActChgFrcReaFAQ   ,NULL,NULL},
+      [Inf_LINKS         ] = {ActChgFrcReaCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT    ] = {ActChgFrcReaAss   ,NULL,NULL},
      };
 
-   Lay_PutContextualCheckbox (Inf_ActionsChangeForceReadInfo[Gbl.Crs.Info.Type],
-                              NULL,
+   Lay_PutContextualCheckbox (Inf_Actions[Gbl.Crs.Info.Type].NextAction,
+                              Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
+                              Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "MustBeRead",
                               MustBeRead,Disabled,
                               Txt_Force_students_to_read_this_information,
@@ -385,22 +392,29 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
 
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
   {
+   extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_I_have_read_this_information;
-   static const Act_Action_t Inf_ActionsIHaveReadInfo[Inf_NUM_TYPES] =
+   static struct
      {
-      [Inf_INTRODUCTION  ] = ActChgHavReaCrsInf,
-      [Inf_TEACHING_GUIDE] = ActChgHavReaTchGui,
-      [Inf_LECTURES      ] = ActChgHavReaSylLec,
-      [Inf_PRACTICALS    ] = ActChgHavReaSylPra,
-      [Inf_BIBLIOGRAPHY  ] = ActChgHavReaBib,
-      [Inf_FAQ           ] = ActChgHavReaFAQ,
-      [Inf_LINKS         ] = ActChgHavReaCrsLnk,
-      [Inf_ASSESSMENT    ] = ActChgHavReaAss,
+      const Act_Action_t NextAction;
+      void (*FuncPars) (void *Args);
+      void *Args;
+     } Inf_Actions[Inf_NUM_TYPES] =
+     {
+      [Inf_INTRODUCTION  ] = {ActChgHavReaCrsInf,NULL,NULL},
+      [Inf_TEACHING_GUIDE] = {ActChgHavReaTchGui,NULL,NULL},
+      [Inf_LECTURES      ] = {ActChgHavReaSylLec,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS    ] = {ActChgHavReaSylPra,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY  ] = {ActChgHavReaBib   ,NULL,NULL},
+      [Inf_FAQ           ] = {ActChgHavReaFAQ   ,NULL,NULL},
+      [Inf_LINKS         ] = {ActChgHavReaCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT    ] = {ActChgHavReaAss   ,NULL,NULL},
      };
    bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo ();
 
-   Lay_PutContextualCheckbox (Inf_ActionsIHaveReadInfo[Gbl.Crs.Info.Type],
-                              NULL,
+   Lay_PutContextualCheckbox (Inf_Actions[Gbl.Crs.Info.Type].NextAction,
+                              Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
+                              Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "IHaveRead",
                               IHaveRead,false,
                               Txt_I_have_read_this_information,

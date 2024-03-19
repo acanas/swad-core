@@ -1127,7 +1127,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void);
 static void Brw_InitHiddenLevels (void);
 
 static void Brw_PutCheckboxFullTree (void);
-static void Brw_PutParsFullTree (void);
+static void Brw_PutParsFullTree (__attribute__((unused)) void *Args);
 static bool Brw_GetFullTreeFromForm (void);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
@@ -3587,13 +3587,13 @@ static void Brw_PutCheckboxFullTree (void)
    extern const char *Txt_Show_all_files;
 
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
-                              Brw_PutParsFullTree,
+                              Brw_PutParsFullTree,NULL,
                               "FullTree",
                               Gbl.FileBrowser.FullTree,false,
                               Txt_Show_all_files,Txt_Show_all_files);
   }
 
-static void Brw_PutParsFullTree (void)
+static void Brw_PutParsFullTree (__attribute__((unused)) void *Args)
   {
    if (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type])
       ParCod_PutPar (ParCod_Grp,Gbl.Crs.Grps.GrpCod);

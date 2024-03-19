@@ -1267,7 +1267,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 /*****************************************************************************/
 
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
-                                void (*FuncPars) (void),
+				void (*FuncPars) (void *Args),void *Args,
                                 const char *CheckboxName,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text)
@@ -1280,7 +1280,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    /***** Begin form *****/
    Frm_BeginForm (NextAction);
       if (FuncPars)
-	 FuncPars ();
+	 FuncPars (Args);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"CONTEXT_OPT %s FORM_OUT_%s BOLD\" title=\"%s\"",

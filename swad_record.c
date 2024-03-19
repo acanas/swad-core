@@ -122,8 +122,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void);
 static void Rec_GetParRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours);
 static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours);
-static void Rec_PutParsShowOfficeHoursOneTch (void);
-static void Rec_PutParsShowOfficeHoursSeveralTchs (void);
+static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) void *Args);
+static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void *Args);
 static bool Rec_GetParShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct Usr_Data *UsrDat,const char *Anchor);
@@ -1437,7 +1437,7 @@ static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
    extern const char *Txt_Show_tutoring_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecOneTch,
-                              Rec_PutParsShowOfficeHoursOneTch,
+                              Rec_PutParsShowOfficeHoursOneTch,NULL,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_tutoring_hours,
@@ -1449,20 +1449,20 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
    extern const char *Txt_Show_tutoring_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecSevTch,
-                              Rec_PutParsShowOfficeHoursSeveralTchs,
+                              Rec_PutParsShowOfficeHoursSeveralTchs,NULL,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
 
-static void Rec_PutParsShowOfficeHoursOneTch (void)
+static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) void *Args)
   {
    Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
    Par_PutParChar ("ParamOfficeHours",'Y');
   }
 
-static void Rec_PutParsShowOfficeHoursSeveralTchs (void)
+static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void *Args)
   {
    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Par_PutParChar ("ParamOfficeHours",'Y');

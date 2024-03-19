@@ -413,7 +413,8 @@ static void Ntf_PutContextualLinks (bool AllNotifications,
    Mnu_ContextMenuBegin ();
 
       /***** Show all notifications *****/
-      Lay_PutContextualCheckbox (ActSeeNtf,NULL,
+      Lay_PutContextualCheckbox (ActSeeNtf,
+				 NULL,NULL,
 				 "All",
 				 AllNotifications,false,
 				 Txt_Show_all_notifications,
