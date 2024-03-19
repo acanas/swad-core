@@ -242,58 +242,60 @@ void Inf_ShowInfo (void)
          break;
      }
 
-   /****** Form to select syllabus *****/
-   Syl_PutFormWhichSyllabus (Syllabus.WhichSyllabus);
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+		 ICanEdit ? Inf_PutIconToEditInfo :
+			    NULL,
+		 ICanEdit ? &Gbl.Crs.Info.Type :
+			    NULL,
+		 Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-   switch (FromDB.Src)
-     {
-      case Inf_NONE:
-	 ShowWarningNoInfo = true;
-         break;
-      case Inf_EDITOR:
-         switch (Gbl.Crs.Info.Type)
-           {
-            case Inf_LECTURES:
-            case Inf_PRACTICALS:
-               ShowWarningNoInfo = !Syl_CheckAndShowSyllabus (&Syllabus);
-               break;
-            case Inf_INTRODUCTION:
-            case Inf_TEACHING_GUIDE:
-            case Inf_BIBLIOGRAPHY:
-            case Inf_FAQ:
-            case Inf_LINKS:
-            case Inf_ASSESSMENT:
-               ShowWarningNoInfo = true;
-	       break;
-           }
-         break;
-      case Inf_PLAIN_TEXT:
-         ShowWarningNoInfo = !Inf_CheckAndShowPlainTxt ();
-         break;
-      case Inf_RICH_TEXT:
-         ShowWarningNoInfo = !Inf_CheckAndShowRichTxt ();
-         break;
-      case Inf_PAGE:
-         /***** Open file with web page *****/
-	 ShowWarningNoInfo = !Inf_CheckAndShowPage ();
-         break;
-      case Inf_URL:
-         /***** Check if file with URL exists *****/
-	 ShowWarningNoInfo = !Inf_CheckAndShowURL ();
-         break;
-     }
+      /****** Form to select syllabus *****/
+      Syl_PutFormWhichSyllabus (Syllabus.WhichSyllabus);
 
-   if (ShowWarningNoInfo)
-     {
-      Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		    ICanEdit ? Inf_PutIconToEditInfo :
-			       NULL,
-		    ICanEdit ? &Gbl.Crs.Info.Type :
-			       NULL,
-		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+      switch (FromDB.Src)
+	{
+	 case Inf_NONE:
+	    ShowWarningNoInfo = true;
+	    break;
+	 case Inf_EDITOR:
+	    switch (Gbl.Crs.Info.Type)
+	      {
+	       case Inf_LECTURES:
+	       case Inf_PRACTICALS:
+		  ShowWarningNoInfo = !Syl_CheckAndShowSyllabus (&Syllabus);
+		  break;
+	       case Inf_INTRODUCTION:
+	       case Inf_TEACHING_GUIDE:
+	       case Inf_BIBLIOGRAPHY:
+	       case Inf_FAQ:
+	       case Inf_LINKS:
+	       case Inf_ASSESSMENT:
+		  ShowWarningNoInfo = true;
+		  break;
+	      }
+	    break;
+	 case Inf_PLAIN_TEXT:
+	    ShowWarningNoInfo = !Inf_CheckAndShowPlainTxt ();
+	    break;
+	 case Inf_RICH_TEXT:
+	    ShowWarningNoInfo = !Inf_CheckAndShowRichTxt ();
+	    break;
+	 case Inf_PAGE:
+	    /***** Open file with web page *****/
+	    ShowWarningNoInfo = !Inf_CheckAndShowPage ();
+	    break;
+	 case Inf_URL:
+	    /***** Check if file with URL exists *****/
+	    ShowWarningNoInfo = !Inf_CheckAndShowURL ();
+	    break;
+	}
+
+      if (ShowWarningNoInfo)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_information);
-      Box_BoxEnd ();
-     }
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -794,38 +796,13 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
 static void Inf_ShowPage (const char *URL)
   {
    extern const char *Txt_View_in_a_new_window;
-   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   const char *Help[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
-      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
-      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
-      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
-      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
-      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
-      [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
-     };
 
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 ICanEdit ? Inf_PutIconToEditInfo :
-			    NULL,
-		 ICanEdit ? &Gbl.Crs.Info.Type :
-			    NULL,
-		 Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
-
-      /***** Link to view in a new window *****/
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FORM_OUT_%s BOLD\"",
-		   URL,The_GetSuffix ());
-	 Ico_PutIconTextLink ("expand-arrows-alt.svg",Ico_BLACK,
-			      Txt_View_in_a_new_window);
-      HTM_A_End ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** Link to view in a new window *****/
+   HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FORM_OUT_%s BOLD\"",
+		URL,The_GetSuffix ());
+      Ico_PutIconTextLink ("expand-arrows-alt.svg",Ico_BLACK,
+			   Txt_View_in_a_new_window);
+   HTM_A_End ();
   }
 
 /*****************************************************************************/
@@ -1364,19 +1341,6 @@ static bool Inf_CheckAndShowPlainTxt (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   const char *Help[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
-      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
-      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
-      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
-      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
-      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
-      [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
-     };
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
@@ -1384,33 +1348,22 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
    if (TxtHTML[0])
      {
-      /***** Begin box *****/
-      Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		    ICanEdit ? Inf_PutIconToEditInfo :
-			       NULL,
-		    ICanEdit ? &Gbl.Crs.Info.Type :
-			       NULL,
-		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+      if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
+	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
+	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
-	 if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-	     Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 
-	 HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	 /***** Convert to respectful HTML and insert links *****/
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   TxtHTML,Cns_MAX_BYTES_LONG_TEXT,
+			   Str_DONT_REMOVE_SPACES);
+	 ALn_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
-	    /***** Convert to respectful HTML and insert links *****/
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      TxtHTML,Cns_MAX_BYTES_LONG_TEXT,
-			      Str_DONT_REMOVE_SPACES);
-	    ALn_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
+	 /***** Write text *****/
+	 HTM_Txt (TxtHTML);
 
-	    /***** Write text *****/
-	    HTM_Txt (TxtHTML);
-
-	 HTM_DIV_End ();
-
-      /***** End box *****/
-      Box_BoxEnd ();
+      HTM_DIV_End ();
 
       return true;
      }
@@ -1453,19 +1406,6 @@ static bool Inf_CheckAndShowRichTxt (void)
    char MathJaxURL[PATH_MAX + 1];
    char Command[512 + PATH_MAX * 3]; // Command to call the program of preprocessing of photos
    int ReturnCode;
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   const char *Help[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
-      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
-      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
-      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
-      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
-      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
-      [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
-     };
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
@@ -1473,96 +1413,85 @@ static bool Inf_CheckAndShowRichTxt (void)
 
    if (TxtMD[0])
      {
-      /***** Begin box *****/
-      Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		    ICanEdit ? Inf_PutIconToEditInfo :
-			       NULL,
-		    ICanEdit ? &Gbl.Crs.Info.Type :
-			       NULL,
-		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+      if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
+	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
+	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
-	 if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-	     Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",
+		     The_GetSuffix ());
 
-	 HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",
-			The_GetSuffix ());
+	 /***** Store text into a temporary .md file in HTML output directory *****/
+	 // TODO: change to another directory?
+	 /* Create a unique name for the .md file */
+	 UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
+	 snprintf (PathFileMD,sizeof (PathFileMD),"%s/%s.md",
+		   Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
+	 snprintf (PathFileHTML,sizeof (PathFileHTML),"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
+		   Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
 
-	    /***** Store text into a temporary .md file in HTML output directory *****/
-	    // TODO: change to another directory?
-	    /* Create a unique name for the .md file */
-	    UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
-	    snprintf (PathFileMD,sizeof (PathFileMD),"%s/%s.md",
-		      Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
-	    snprintf (PathFileHTML,sizeof (PathFileHTML),"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
-		      Cfg_PATH_OUT_PRIVATE,UniqueNameEncrypted);
+	 /* Open Markdown file for writing */
+	 if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
+	    Err_ShowErrorAndExit ("Can not create temporary Markdown file.");
 
-	    /* Open Markdown file for writing */
-	    if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
-	       Err_ShowErrorAndExit ("Can not create temporary Markdown file.");
+	 /* Write text into Markdown file */
+	 fprintf (FileMD,"%s",TxtMD);
 
-	    /* Write text into Markdown file */
-	    fprintf (FileMD,"%s",TxtMD);
+	 /* Close Markdown file */
+	 fclose (FileMD);
 
-	    /* Close Markdown file */
-	    fclose (FileMD);
+	 /***** Convert from Markdown to HTML *****/
+	 /* MathJax 2.5.1
+#ifdef Cfg_MATHJAX_LOCAL
+	 // Use the local copy of MathJax
+	 snprintf (MathJaxURL,sizeof (MathJaxURL),
+		   "=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
+		   Cfg_URL_SWAD_PUBLIC);
+#else
+	 // Use the MathJax Content Delivery Network (CDN)
+	 MathJaxURL[0] = '\0';
+#endif
+	 */
+	 /* MathJax 3.0.1 */
+#ifdef Cfg_MATHJAX_LOCAL
+	 // Use the local copy of MathJax
+	 snprintf (MathJaxURL,sizeof (MathJaxURL),"=%s/mathjax/tex-chtml.js",
+		   Cfg_URL_SWAD_PUBLIC);
+#else
+	 // Use the MathJax Content Delivery Network (CDN)
+	 MathJaxURL[0] = '\0';
+#endif
+	 // --ascii uses only ascii characters in output
+	 //         (uses numerical entities instead of UTF-8)
+	 //         is mandatory in order to convert (with iconv) the UTF-8 output of pandoc to WINDOWS-1252
+	 snprintf (Command,sizeof (Command),
+		   "iconv -f WINDOWS-1252 -t UTF-8 %s"
+		   " | "
+		   "pandoc --ascii --mathjax%s -f markdown_github+tex_math_dollars -t html5"
+		   " | "
+		   "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
+		   PathFileMD,
+		   MathJaxURL,
+		   PathFileHTML);
+	 ReturnCode = system (Command);
+	 if (ReturnCode == -1)
+	    Err_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
 
-	    /***** Convert from Markdown to HTML *****/
-	    /* MathJax 2.5.1
-   #ifdef Cfg_MATHJAX_LOCAL
-	    // Use the local copy of MathJax
-	    snprintf (MathJaxURL,sizeof (MathJaxURL),
-		      "=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
-		      Cfg_URL_SWAD_PUBLIC);
-   #else
-	    // Use the MathJax Content Delivery Network (CDN)
-	    MathJaxURL[0] = '\0';
-   #endif
-	    */
-	    /* MathJax 3.0.1 */
-   #ifdef Cfg_MATHJAX_LOCAL
-	    // Use the local copy of MathJax
-	    snprintf (MathJaxURL,sizeof (MathJaxURL),"=%s/mathjax/tex-chtml.js",
-		      Cfg_URL_SWAD_PUBLIC);
-   #else
-	    // Use the MathJax Content Delivery Network (CDN)
-	    MathJaxURL[0] = '\0';
-   #endif
-	    // --ascii uses only ascii characters in output
-	    //         (uses numerical entities instead of UTF-8)
-	    //         is mandatory in order to convert (with iconv) the UTF-8 output of pandoc to WINDOWS-1252
-	    snprintf (Command,sizeof (Command),
-		      "iconv -f WINDOWS-1252 -t UTF-8 %s"
-		      " | "
-		      "pandoc --ascii --mathjax%s -f markdown_github+tex_math_dollars -t html5"
-		      " | "
-		      "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
-		      PathFileMD,
-		      MathJaxURL,
-		      PathFileHTML);
-	    ReturnCode = system (Command);
-	    if (ReturnCode == -1)
-	       Err_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
+	 /***** Remove Markdown file *****/
+	 unlink (PathFileMD);
 
-	    /***** Remove Markdown file *****/
-	    unlink (PathFileMD);
+	 /***** Copy HTML file just created to HTML output *****/
+	 /* Open temporary HTML file for reading */
+	 if ((FileHTML = fopen (PathFileHTML,"rb")) == NULL)
+	    Err_ShowErrorAndExit ("Can not open temporary HTML file.");
 
-	    /***** Copy HTML file just created to HTML output *****/
-	    /* Open temporary HTML file for reading */
-	    if ((FileHTML = fopen (PathFileHTML,"rb")) == NULL)
-	       Err_ShowErrorAndExit ("Can not open temporary HTML file.");
+	 /* Copy from temporary HTML file to output file */
+	 Fil_FastCopyOfOpenFiles (FileHTML,Fil_GetOutputFile ());
 
-	    /* Copy from temporary HTML file to output file */
-	    Fil_FastCopyOfOpenFiles (FileHTML,Fil_GetOutputFile ());
+	 /* Close and remove temporary HTML file */
+	 fclose (FileHTML);
+	 unlink (PathFileHTML);
 
-	    /* Close and remove temporary HTML file */
-	    fclose (FileHTML);
-	    unlink (PathFileHTML);
-
-	 HTM_DIV_End ();
-
-      /***** End box *****/
-      Box_BoxEnd ();
+      HTM_DIV_End ();
 
       return true;
      }

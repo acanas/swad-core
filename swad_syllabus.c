@@ -258,11 +258,6 @@ bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod)
 
 bool Syl_CheckAndShowSyllabus (struct Syl_Syllabus *Syllabus)
   {
-   /***** Get syllabus type *****/
-   Syllabus->WhichSyllabus = Syl_GetParWhichSyllabus ();
-   Gbl.Crs.Info.Type = (Syllabus->WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
-							          Inf_PRACTICALS);
-
    /***** Load syllabus from XML file to memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
@@ -301,13 +296,28 @@ bool Syl_CheckAndShowSyllabus (struct Syl_Syllabus *Syllabus)
 
 void Syl_EditSyllabus (void)
   {
+   extern const char *Hlp_COURSE_Syllabus_edit;
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    struct Syl_Syllabus Syllabus;
 
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
 
-   /***** Edit syllabus *****/
-   Syl_CheckAndShowSyllabus (&Syllabus);
+   /***** Get syllabus type *****/
+   Syllabus.WhichSyllabus = Syl_GetParWhichSyllabus ();
+   Gbl.Crs.Info.Type = (Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+							         Inf_PRACTICALS);
+
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+		 NULL,NULL,
+		 Hlp_COURSE_Syllabus_edit,Box_NOT_CLOSABLE);
+
+      /***** Edit syllabus *****/
+      Syl_CheckAndShowSyllabus (&Syllabus);
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -483,17 +493,11 @@ int Syl_ReadLevelItemSyllabus (FILE *XML)
 
 static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
   {
-   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Hlp_COURSE_Syllabus_edit;
-   extern const char *Hlp_COURSE_Syllabus;
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Done;
    unsigned NumItem;
    int Col;
-   static const char **HelpLink[Vie_NUM_VIEW_TYPES] =
-     {
-      [Vie_VIEW] = &Hlp_COURSE_Syllabus,
-      [Vie_EDIT] = &Hlp_COURSE_Syllabus_edit,
-     };
    static int NumButtons[Vie_NUM_VIEW_TYPES] =
      {
       [Vie_VIEW] = 0,
@@ -514,70 +518,56 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
                                 Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
 				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
-   bool ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   bool PutIconToEdit = Syllabus->ViewType == Vie_VIEW && ICanEdit;
 
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 PutIconToEdit ? Inf_PutIconToEditInfo :
-				 NULL,
-		 PutIconToEdit ? &Gbl.Crs.Info.Type :
-				 NULL,
-		 *HelpLink[Syllabus->ViewType],Box_NOT_CLOSABLE);
+   /***** Begin table *****/
+   HTM_TABLE_BeginWide ();
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWide ();
+      /***** Set width of columns of the table *****/
+      HTM_Txt ("<colgroup>");
+	 for (Col = 0;
+	      Col < NumButtons[Syllabus->ViewType];
+	      Col++)
+	    HTM_Txt ("<col width=\"12\" />");
+	 for (Col  = 1;
+	      Col <= Syl_LstItemsSyllabus.NumLevels;
+	      Col++)
+	    HTM_TxtF ("<col width=\"%d\" />",Col * Syl_WIDTH_NUM_SYLLABUS);
+	 HTM_Txt ("<col width=\"*\" />");
+      HTM_Txt ("</colgroup>");
 
-	 /***** Set width of columns of the table *****/
-	 HTM_Txt ("<colgroup>");
-	    for (Col = 0;
-		 Col < NumButtons[Syllabus->ViewType];
-		 Col++)
-	       HTM_Txt ("<col width=\"12\" />");
-	    for (Col  = 1;
-		 Col <= Syl_LstItemsSyllabus.NumLevels;
-		 Col++)
-	       HTM_TxtF ("<col width=\"%d\" />",Col * Syl_WIDTH_NUM_SYLLABUS);
-	    HTM_Txt ("<col width=\"*\" />");
-	 HTM_Txt ("</colgroup>");
+      if (Syl_LstItemsSyllabus.NumItems)
+	 /***** Loop writing all items of the syllabus *****/
+	 for (NumItem = 0;
+	      NumItem < Syl_LstItemsSyllabus.NumItems;
+	      NumItem++)
+	   {
+	    Syl_ShowRowSyllabus (Syllabus,NumItem,
+				 Syl_LstItemsSyllabus.Lst[NumItem].Level,
+				 Syl_LstItemsSyllabus.Lst[NumItem].CodItem,
+				 Syl_LstItemsSyllabus.Lst[NumItem].Text,false);
+	    if (ShowRowInsertNewItem && NumItem == Syllabus->NumItem)
+	       // Mostrar a new row where se puede insert a new item
+	       Syl_ShowRowSyllabus (Syllabus,NumItem + 1,
+				    Syl_LstItemsSyllabus.Lst[NumItem].Level,NULL,
+				    "",true);
+	   }
+      else if (Syllabus->ViewType == Vie_EDIT)
+	 /***** If the syllabus is empty ==>
+		show form to add a iten to the end *****/
+	 Syl_ShowRowSyllabus (Syllabus,0,
+			      1,Syl_LstItemsSyllabus.Lst[0].CodItem,"",true);
 
-	 if (Syl_LstItemsSyllabus.NumItems)
-	    /***** Loop writing all items of the syllabus *****/
-	    for (NumItem = 0;
-		 NumItem < Syl_LstItemsSyllabus.NumItems;
-		 NumItem++)
-	      {
-	       Syl_ShowRowSyllabus (Syllabus,NumItem,
-				    Syl_LstItemsSyllabus.Lst[NumItem].Level,
-				    Syl_LstItemsSyllabus.Lst[NumItem].CodItem,
-				    Syl_LstItemsSyllabus.Lst[NumItem].Text,false);
-	       if (ShowRowInsertNewItem && NumItem == Syllabus->NumItem)
-		  // Mostrar a new row where se puede insert a new item
-		  Syl_ShowRowSyllabus (Syllabus,NumItem + 1,
-				       Syl_LstItemsSyllabus.Lst[NumItem].Level,NULL,
-				       "",true);
-	      }
-	 else if (Syllabus->ViewType == Vie_EDIT)
-	    /***** If the syllabus is empty ==>
-		   show form to add a iten to the end *****/
-	    Syl_ShowRowSyllabus (Syllabus,0,
-				 1,Syl_LstItemsSyllabus.Lst[0].CodItem,"",true);
+   /***** End table *****/
+   HTM_TABLE_End ();
 
-      /***** End table *****/
-      HTM_TABLE_End ();
-
-      /***** Button to view *****/
-      if (Syllabus->ViewType == Vie_EDIT)
-	{
-	 Frm_BeginForm (Inf_Actions[Gbl.Crs.Info.Type]);
-            Syl_PutParWhichSyllabus (&Syllabus->WhichSyllabus);
-	    Btn_PutConfirmButton (Txt_Done);
-	 Frm_EndForm ();
-	}
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   /***** Button to view *****/
+   if (Syllabus->ViewType == Vie_EDIT)
+     {
+      Frm_BeginForm (Inf_Actions[Gbl.Crs.Info.Type]);
+	 Syl_PutParWhichSyllabus (&Syllabus->WhichSyllabus);
+	 Btn_PutConfirmButton (Txt_Done);
+      Frm_EndForm ();
+     }
   }
 
 /*****************************************************************************/
