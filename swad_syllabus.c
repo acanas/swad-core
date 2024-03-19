@@ -263,14 +263,14 @@ bool Syl_CheckAndShowSyllabus (struct Syl_Syllabus *Syllabus)
 
    switch (Gbl.Action.Act)
      {
-      case ActEditorSylLec:	case ActEditorSylPra:
-      case ActDelItmSylLec:	case ActDelItmSylPra:
-      case ActUp_IteSylLec:	case ActUp_IteSylPra:
-      case ActDwnIteSylLec:	case ActDwnIteSylPra:
-      case ActRgtIteSylLec:	case ActRgtIteSylPra:
-      case ActLftIteSylLec:	case ActLftIteSylPra:
-      case ActInsIteSylLec:	case ActInsIteSylPra:
-      case ActModIteSylLec:	case ActModIteSylPra:
+      case ActEditorSyl:
+      case ActDelItmSyl:
+      case ActUp_IteSyl:
+      case ActDwnIteSyl:
+      case ActRgtIteSyl:
+      case ActLftIteSyl:
+      case ActInsIteSyl:
+      case ActModIteSyl:
          Syllabus->ViewType = Vie_EDIT;
          break;
       default:
@@ -507,17 +507,17 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
      {
       [Inf_INTRODUCTION  ] = ActSeeCrsInf,
       [Inf_TEACHING_GUIDE] = ActSeeTchGui,
-      [Inf_LECTURES      ] = ActSeeSylLec,
-      [Inf_PRACTICALS    ] = ActSeeSylPra,
+      [Inf_LECTURES      ] = ActSeeSyl,
+      [Inf_PRACTICALS    ] = ActSeeSyl,
       [Inf_BIBLIOGRAPHY  ] = ActSeeBib,
       [Inf_FAQ           ] = ActSeeFAQ,
       [Inf_LINKS         ] = ActSeeCrsLnk,
       [Inf_ASSESSMENT    ] = ActSeeAss,
      };
-   bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSylLec || Gbl.Action.Act == ActInsIteSylPra ||
-                                Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
-				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
-                                Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
+   bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSyl ||
+                                Gbl.Action.Act == ActModIteSyl ||
+				Gbl.Action.Act == ActRgtIteSyl ||
+                                Gbl.Action.Act == ActLftIteSyl);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWide ();
@@ -637,8 +637,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 		  if (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren)
 		     Ico_PutIconRemovalNotAllowed ();
 		  else
-		     Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
-											ActDelItmSylPra,NULL,
+		     Ico_PutContextualIconToRemove (ActDelItmSyl,NULL,
 						    Syl_PutParsSyllabus,Syllabus);
 	       HTM_TD_End ();
 
@@ -646,9 +645,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	       Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
 	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 		  if (Subtree.MovAllowed)
-		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
-											ActUp_IteSylPra,
-						    NULL,
+		     Lay_PutContextualLinkOnlyIcon (ActUp_IteSyl,NULL,
 						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-up.svg",Ico_BLACK);
 		  else
@@ -660,9 +657,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	       Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
 	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 		  if (Subtree.MovAllowed)
-		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
-											ActDwnIteSylPra,
-						    NULL,
+		     Lay_PutContextualLinkOnlyIcon (ActDwnIteSyl,NULL,
 						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-down.svg",Ico_BLACK);
 		  else
@@ -673,9 +668,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	       /***** Icon to increase the level of an item *****/
 	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 		  if (Level > 1)
-		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
-											ActRgtIteSylPra,
-						    NULL,
+		     Lay_PutContextualLinkOnlyIcon (ActRgtIteSyl,NULL,
 						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-left.svg",Ico_BLACK);
 		  else
@@ -687,9 +680,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	       HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 		  if (Level < LastLevel + 1 &&
 		      Level < Syl_MAX_LEVELS_SYLLABUS)
-		     Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
-											ActLftIteSylPra,
-						    NULL,
+		     Lay_PutContextualLinkOnlyIcon (ActLftIteSyl,NULL,
 						    Syl_PutParsSyllabus,Syllabus,
 						    "arrow-right.svg",Ico_BLACK);
 		  else
@@ -823,10 +814,8 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
    HTM_TD_Begin ("colspan=\"%d\" class=\"LM %s\"",
 		 Syl_LstItemsSyllabus.NumLevels - Level + 1,
 		 The_GetColorRows ());
-      Frm_BeginForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
-								    ActInsIteSylPra) :
-			       (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
-								    ActModIteSylPra));
+      Frm_BeginForm (NewItem ? ActInsIteSyl :
+			       ActModIteSyl);
 	 Syllabus->ParNumItem = NumItem;
 	 Syl_PutParsSyllabus (Syllabus);
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,

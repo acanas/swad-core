@@ -6893,6 +6893,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the teaching guide"		// Çeviri lazim!
 #endif
 	,
+/*
 	[ActSeeSyl] =
 #if   L==1	// ca
 	"See the syllabus (lectures or practicals)"		// Necessita traducció
@@ -6916,878 +6917,442 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the syllabus (lectures or practicals)"		// Çeviri lazim!
 #endif
 	,
-	[ActSeeSylLec] =
+*/
+	[ActSeeSyl] =
 #if   L==1	// ca
-	"See the lectures syllabus"		// Necessita traducció
+	"See the syllabus"	// Necessita traducció
 #elif L==2	// de
-	"See the lectures syllabus"		// Need Übersetzung
+	"See the syllabus"	// Need Übersetzung
 #elif L==3	// en
-	"See the lectures syllabus"
+	"See the syllabus"
 #elif L==4	// es
-	"Ver el temario de teor&iacute;a"
+	"Ver el temario"
 #elif L==5	// fr
-	"See the lectures syllabus"		// Besoin de traduction
+	"See the syllabus"	// Besoin de traduction
 #elif L==6	// gn
-	"Ver el temario de teor&iacute;a"	// Okoteve traducción
+	"Ver el temario"	// Okoteve traducción
 #elif L==7	// it
-	"See the lectures syllabus"		// Bisogno di traduzione
+	"See the syllabus"	// Bisogno di traduzione
 #elif L==8	// pl
-	"See the lectures syllabus"		// Potrzebujesz tlumaczenie
+	"See the syllabus"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See the lectures syllabus"		// Precisa de tradução
+	"See the syllabus"	// Precisa de tradução
 #elif L==10	// tr
-	"See the lectures syllabus"		// Çeviri lazim!
+	"See the syllabus"	// Çeviri lazim!
 #endif
 	,
-	[ActSeeSylPra] =
+	[ActEdiSyl] =
 #if   L==1	// ca
-	"Show the practicals syllabus"		// Necessita traducció
+	"Edit syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Show the practicals syllabus"		// Need Übersetzung
+	"Edit syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Show the practicals syllabus"
+	"Edit syllabus"
 #elif L==4	// es
-	"Ver el temario de pr&aacute;cticas"
+	"Editar temario"
 #elif L==5	// fr
-	"Show the practicals syllabus"		// Besoin de traduction
+	"Edit syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver el temario de pr&aacute;cticas"	// Okoteve traducción
+	"Editar temario"	// Okoteve traducción
 #elif L==7	// it
-	"Show the practicals syllabus"		// Bisogno di traduzione
+	"Edit syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Show the practicals syllabus"		// Potrzebujesz tlumaczenie
+	"Edit syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show the practicals syllabus"		// Precisa de tradução
+	"Edit syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Show the practicals syllabus"		// Çeviri lazim!
+	"Edit syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActEdiSylLec] =
+	[ActDelItmSyl] =
 #if   L==1	// ca
-	"Edit syllabus of lectures"		// Necessita traducció
+	"Remove item from syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Edit syllabus of lectures"		// Need Übersetzung
+	"Remove item from syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Edit syllabus of lectures"
+	"Remove item from syllabus"
 #elif L==4	// es
-	"Editar temario de teor&iacute;a"
+	"Eliminar &iacute;tem del temario"
 #elif L==5	// fr
-	"Edit syllabus of lectures"		// Besoin de traduction
+	"Remove item from syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar temario de teor&iacute;a"	// Okoteve traducción
+	"Eliminar &iacute;tem del temario"	// Okoteve traducción
 #elif L==7	// it
-	"Edit syllabus of lectures"		// Bisogno di traduzione
+	"Remove item from syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit syllabus of lectures"		// Potrzebujesz tlumaczenie
+	"Remove item from syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit syllabus of lectures"		// Precisa de tradução
+	"Remove item from syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit syllabus of lectures"		// Çeviri lazim!
+	"Remove item from syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActEdiSylPra] =
+	[ActUp_IteSyl] =
 #if   L==1	// ca
-	"Edit practicals syllabus"		// Necessita traducció
+	"Raise the position of a subtree of the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Edit practicals syllabus"		// Need Übersetzung
+	"Raise the position of a subtree of the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Edit practicals syllabus"
+	"Raise the position of a subtree of the syllabus"
 #elif L==4	// es
-	"Editar temario de pr&aacute;cticas"
+	"Subir la posici&oacute;n de un sub&aacute;rbol del temario"
 #elif L==5	// fr
-	"Edit practicals syllabus"		// Besoin de traduction
+	"Raise the position of a subtree of the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar temario de pr&aacute;cticas"	// Okoteve traducción
+	"Subir la posici&oacute;n de un sub&aacute;rbol del temario"	// Okoteve traducción
 #elif L==7	// it
-	"Edit practicals syllabus"		// Bisogno di traduzione
+	"Raise the position of a subtree of the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit practicals syllabus"		// Potrzebujesz tlumaczenie
+	"Raise the position of a subtree of the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit practicals syllabus"		// Precisa de tradução
+	"Raise the position of a subtree of the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit practicals syllabus"		// Çeviri lazim!
+	"Raise the position of a subtree of the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActDelItmSylLec] =
+	[ActDwnIteSyl] =
 #if   L==1	// ca
-	"Remove item from syllabus of lectures"			// Necessita traducció
+	"Lower the position of a subtree of the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Remove item from syllabus of lectures"			// Need Übersetzung
+	"Lower the position of a subtree of the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Remove item from syllabus of lectures"
+	"Lower the position of a subtree of the syllabus"
 #elif L==4	// es
-	"Eliminar &iacute;tem del temario de teor&iacute;a"
+	"Bajar la posici&oacute;n de un sub&aacute;rbol del temario"
 #elif L==5	// fr
-	"Remove item from syllabus of lectures"			// Besoin de traduction
+	"Lower the position of a subtree of the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar &iacute;tem del temario de teor&iacute;a"	// Okoteve traducción
+	"Bajar la posici&oacute;n de un sub&aacute;rbol del temario"	// Okoteve traducción
 #elif L==7	// it
-	"Remove item from syllabus of lectures"			// Bisogno di traduzione
+	"Lower the position of a subtree of the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove item from syllabus of lectures"			// Potrzebujesz tlumaczenie
+	"Lower the position of a subtree of the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove item from syllabus of lectures"			// Precisa de tradução
+	"Lower the position of a subtree of the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove item from syllabus of lectures"			// Çeviri lazim!
+	"Lower the position of a subtree of the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActDelItmSylPra] =
+	[ActRgtIteSyl] =
 #if   L==1	// ca
-	"Remove item from practicals syllabus"			// Necessita traducció
+	"Increase the level of an item on the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Remove item from practicals syllabus"			// Need Übersetzung
+	"Increase the level of an item on the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Remove item from practicals syllabus"
+	"Increase the level of an item on the syllabus"
 #elif L==4	// es
-	"Eliminar &iacute;tem del temario de pr&aacute;cticas"
+	"Aumentar el nivel de un &iacute;tem del temario"
 #elif L==5	// fr
-	"Remove item from practicals syllabus"			// Besoin de traduction
+	"Increase the level of an item on the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar &iacute;tem del temario de pr&aacute;cticas"	// Okoteve traducción
+	"Aumentar el nivel de un &iacute;tem del temario"	// Okoteve traducción
 #elif L==7	// it
-	"Remove item from practicals syllabus"			// Bisogno di traduzione
+	"Increase the level of an item on the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove item from practicals syllabus"			// Potrzebujesz tlumaczenie
+	"Increase the level of an item on the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove item from practicals syllabus"			// Precisa de tradução
+	"Increase the level of an item on the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove item from practicals syllabus"			// Çeviri lazim!
+	"Increase the level of an item on the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActUp_IteSylLec] =
+	[ActLftIteSyl] =
 #if   L==1	// ca
-	"Raise the position of a subtree of the lectures syllabus"			// Necessita traducció
+	"Decrease the level of an item on the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Raise the position of a subtree of the lectures syllabus"			// Need Übersetzung
+	"Decrease the level of an item on the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Raise the position of a subtree of the lectures syllabus"
+	"Decrease the level of an item on the syllabus"
 #elif L==4	// es
-	"Subir la posici&oacute;n de un sub&aacute;rbol del temario de teor&iacute;a"
+	"Disminuir el nivel de un &iacute;tem del temario"
 #elif L==5	// fr
-	"Raise the position of a subtree of the lectures syllabus"			// Besoin de traduction
+	"Decrease the level of an item on the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Subir la posici&oacute;n de un sub&aacute;rbol del temario de teor&iacute;a"	// Okoteve traducción
+	"Disminuir el nivel de un &iacute;tem del temario"	// Okoteve traducción
 #elif L==7	// it
-	"Raise the position of a subtree of the lectures syllabus"			// Bisogno di traduzione
+	"Decrease the level of an item on the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Raise the position of a subtree of the lectures syllabus"			// Potrzebujesz tlumaczenie
+	"Decrease the level of an item on the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Raise the position of a subtree of the lectures syllabus"			// Precisa de tradução
+	"Decrease the level of an item on the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Raise the position of a subtree of the lectures syllabus"			// Çeviri lazim!
+	"Decrease the level of an item on the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActUp_IteSylPra] =
+	[ActInsIteSyl] =
 #if   L==1	// ca
-	"Raise the position of a subtree of the practicals syllabus"				// Necessita traducció
+	"Insert a new item in the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Raise the position of a subtree of the practicals syllabus"				// Need Übersetzung
+	"Insert a new item in the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Raise the position of a subtree of the practicals syllabus"
+	"Insert a new item in the syllabus"
 #elif L==4	// es
-	"Subir la posici&oacute;n de un sub&aacute;rbol del temario de pr&aacute;cticas"
+	"Insertar un nuevo &iacute;tem en el temario"
 #elif L==5	// fr
-	"Raise the position of a subtree of the practicals syllabus"				// Besoin de traduction
+	"Insert a new item in the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Subir la posici&oacute;n de un sub&aacute;rbol del temario de pr&aacute;cticas"	// Okoteve traducción
+	"Insertar un nuevo &iacute;tem en el temario"	// Okoteve traducción
 #elif L==7	// it
-	"Raise the position of a subtree of the practicals syllabus"				// Bisogno di traduzione
+	"Insert a new item in the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Raise the position of a subtree of the practicals syllabus"				// Potrzebujesz tlumaczenie
+	"Insert a new item in the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Raise the position of a subtree of the practicals syllabus"				// Precisa de tradução
+	"Insert a new item in the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Raise the position of a subtree of the practicals syllabus"				// Çeviri lazim!
+	"Insert a new item in the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActDwnIteSylLec] =
+	[ActModIteSyl] =
 #if   L==1	// ca
-	"Lower the position of a subtree of the lectures syllabus"			// Necessita traducció
+	"Change item in the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Lower the position of a subtree of the lectures syllabus"			// Need Übersetzung
+	"Change item in the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Lower the position of a subtree of the lectures syllabus"
+	"Change item in the syllabus"
 #elif L==4	// es
-	"Bajar la posici&oacute;n de un sub&aacute;rbol del temario de teor&iacute;a"
+	"Modificar un &iacute;tem del temario"
 #elif L==5	// fr
-	"Lower the position of a subtree of the lectures syllabus"			// Besoin de traduction
+	"Change item in the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Bajar la posici&oacute;n de un sub&aacute;rbol del temario de teor&iacute;a"	// Okoteve traducción
+	"Modificar un &iacute;tem del temario"	// Okoteve traducción
 #elif L==7	// it
-	"Lower the position of a subtree of the lectures syllabus"			// Bisogno di traduzione
+	"Change item in the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Lower the position of a subtree of the lectures syllabus"			// Potrzebujesz tlumaczenie
+	"Change item in the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Lower the position of a subtree of the lectures syllabus"			// Precisa de tradução
+	"Change item in the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Lower the position of a subtree of the lectures syllabus"			// Çeviri lazim!
+	"Change item in the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActDwnIteSylPra] =
+	[ActChgFrcReaSyl] =
 #if   L==1	// ca
-	"Lower the position of a subtree of the practicals syllabus"				// Necessita traducció
+	"Change whether students are forced to read the syllabus"	// Necessita traducció
 #elif L==2	// de
-	"Lower the position of a subtree of the practicals syllabus"				// Need Übersetzung
+	"Change whether students are forced to read the syllabus"	// Need Übersetzung
 #elif L==3	// en
-	"Lower the position of a subtree of the practicals syllabus"
+	"Change whether students are forced to read the syllabus"
 #elif L==4	// es
-	"Bajar la posici&oacute;n de un sub&aacute;rbol del temario de pr&aacute;cticas"
+	"Cambiar si se obliga a los estudiantes a leer el temario"
 #elif L==5	// fr
-	"Lower the position of a subtree of the practicals syllabus"				// Besoin de traduction
+	"Change whether students are forced to read the syllabus"	// Besoin de traduction
 #elif L==6	// gn
-	"Bajar la posici&oacute;n de un sub&aacute;rbol del temario de pr&aacute;cticas"	// Okoteve traducción
+	"Cambiar si se obliga a los estudiantes a leer el temario"	// Okoteve traducción
 #elif L==7	// it
-	"Lower the position of a subtree of the practicals syllabus"				// Bisogno di traduzione
+	"Change whether students are forced to read the syllabus"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Lower the position of a subtree of the practicals syllabus"				// Potrzebujesz tlumaczenie
+	"Change whether students are forced to read the syllabus"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Lower the position of a subtree of the practicals syllabus"				// Precisa de tradução
+	"Change whether students are forced to read the syllabus"	// Precisa de tradução
 #elif L==10	// tr
-	"Lower the position of a subtree of the practicals syllabus"				// Çeviri lazim!
+	"Change whether students are forced to read the syllabus"	// Çeviri lazim!
 #endif
 	,
-	[ActRgtIteSylLec] =
+	[ActChgHavReaSyl] =
 #if   L==1	// ca
-	"Increase the level of an item on the lectures syllabus"		// Necessita traducció
+	"Change if I have read the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Increase the level of an item on the lectures syllabus"		// Need Übersetzung
+	"Change if I have read the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Increase the level of an item on the lectures syllabus"
+	"Change if I have read the syllabus"
 #elif L==4	// es
-	"Aumentar el nivel de un &iacute;tem del temario de teor&iacute;a"
+	"Cambiar si he le&iacute;do el programa"
 #elif L==5	// fr
-	"Increase the level of an item on the lectures syllabus"		// Besoin de traduction
+	"Change if I have read the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Aumentar el nivel de un &iacute;tem del temario de teor&iacute;a"	// Okoteve traducción
+	"Cambiar si he le&iacute;do el programa"	// Okoteve traducción
 #elif L==7	// it
-	"Increase the level of an item on the lectures syllabus"		// Bisogno di traduzione
+	"Change if I have read the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Increase the level of an item on the lectures syllabus"		// Potrzebujesz tlumaczenie
+	"Change if I have read the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Increase the level of an item on the lectures syllabus"		// Precisa de tradução
+	"Change if I have read the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Increase the level of an item on the lectures syllabus"		// Çeviri lazim!
+	"Change if I have read the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActRgtIteSylPra] =
+	[ActSelInfSrcSyl] =
 #if   L==1	// ca
-	"Increase the level of an item on the practicals syllabus"		// Necessita traducció
+	"Select the type of information shown in the syllabus"			// Necessita traducció
 #elif L==2	// de
-	"Increase the level of an item on the practicals syllabus"		// Need Übersetzung
+	"Select the type of information shown in the syllabus"			// Need Übersetzung
 #elif L==3	// en
-	"Increase the level of an item on the practicals syllabus"
+	"Select the type of information shown in the syllabus"
 #elif L==4	// es
-	"Aumentar el nivel de un &iacute;tem del temario de pr&aacute;cticas"
+	"Seleccionar el tipo de informaci&oacute;n mostrada en el programa"
 #elif L==5	// fr
-	"Increase the level of an item on the practicals syllabus"		// Besoin de traduction
+	"Select the type of information shown in the syllabus"			// Besoin de traduction
 #elif L==6	// gn
-	"Aumentar el nivel de un &iacute;tem del temario de pr&aacute;cticas"	// Okoteve traducción
+	"Seleccionar el tipo de informaci&oacute;n mostrada en el programa"	// Okoteve traducción
 #elif L==7	// it
-	"Increase the level of an item on the practicals syllabus"		// Bisogno di traduzione
+	"Select the type of information shown in the syllabus"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Increase the level of an item on the practicals syllabus"		// Potrzebujesz tlumaczenie
+	"Select the type of information shown in the syllabus"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Increase the level of an item on the practicals syllabus"		// Precisa de tradução
+	"Select the type of information shown in the syllabus"			// Precisa de tradução
 #elif L==10	// tr
-	"Increase the level of an item on the practicals syllabus"		// Çeviri lazim!
+	"Select the type of information shown in the syllabus"			// Çeviri lazim!
 #endif
 	,
-	[ActLftIteSylLec] =
+	[ActRcvURLSyl] =
 #if   L==1	// ca
-	"Decrease the level of an item on the lectures syllabus"		// Necessita traducció
+	"Create URL in the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Decrease the level of an item on the lectures syllabus"		// Need Übersetzung
+	"Create URL in the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Decrease the level of an item on the lectures syllabus"
+	"Create URL in the syllabus"
 #elif L==4	// es
-	"Disminuir el nivel de un &iacute;tem del temario de teor&iacute;a"
+	"Crear una URL en el programa"
 #elif L==5	// fr
-	"Decrease the level of an item on the lectures syllabus"		// Besoin de traduction
+	"Create URL in the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Disminuir el nivel de un &iacute;tem del temario de teor&iacute;a"	// Okoteve traducción
+	"Crear una URL en el programa"		// Okoteve traducción
 #elif L==7	// it
-	"Decrease the level of an item on the lectures syllabus"		// Bisogno di traduzione
+	"Create URL in the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Decrease the level of an item on the lectures syllabus"		// Potrzebujesz tlumaczenie
+	"Create URL in the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Decrease the level of an item on the lectures syllabus"		// Precisa de tradução
+	"Create URL in the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Decrease the level of an item on the lectures syllabus"		// Çeviri lazim!
+	"Create URL in the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActLftIteSylPra] =
+	[ActRcvPagSyl] =
 #if   L==1	// ca
-	"Decrease the level of an item on the practicals syllabus"		// Necessita traducció
+	"Create web page in the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Decrease the level of an item on the practicals syllabus"		// Need Übersetzung
+	"Create web page in the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Decrease the level of an item on the practicals syllabus"
+	"Create web page in the syllabus"
 #elif L==4	// es
-	"Disminuir el nivel de un &iacute;tem del temario de pr&aacute;cticas"
+	"Crear una p&aacute;gina web en el programa"
 #elif L==5	// fr
-	"Decrease the level of an item on the practicals syllabus"		// Besoin de traduction
+	"Create web page in the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Disminuir el nivel de un &iacute;tem del temario de pr&aacute;cticas"	// Okoteve traducción
+	"Crear una p&aacute;gina web en el programa"	// Okoteve traducción
 #elif L==7	// it
-	"Decrease the level of an item on the practicals syllabus"		// Bisogno di traduzione
+	"Create web page in the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Decrease the level of an item on the practicals syllabus"		// Potrzebujesz tlumaczenie
+	"Create web page in the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Decrease the level of an item on the practicals syllabus"		// Precisa de tradução
+	"Create web page in the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Decrease the level of an item on the practicals syllabus"		// Çeviri lazim!
+	"Create web page in the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActInsIteSylLec] =
+	[ActEditorSyl] =
 #if   L==1	// ca
-	"Insert a new item in the lectures syllabus"			// Necessita traducció
+	"Integrated editor of the syllabus"	// Necessita traducció
 #elif L==2	// de
-	"Insert a new item in the lectures syllabus"			// Need Übersetzung
+	"Integrated editor of the syllabus"	// Need Übersetzung
 #elif L==3	// en
-	"Insert a new item in the lectures syllabus"
+	"Integrated editor of the syllabus"
 #elif L==4	// es
-	"Insertar un nuevo &iacute;tem en el temario de teor&iacute;a"
+	"Editor integrado del programa"
 #elif L==5	// fr
-	"Insert a new item in the lectures syllabus"			// Besoin de traduction
+	"Integrated editor of the syllabus"	// Besoin de traduction
 #elif L==6	// gn
-	"Insertar un nuevo &iacute;tem en el temario de teor&iacute;a"	// Okoteve traducción
+	"Editor integrado del programa"		// Okoteve traducción
 #elif L==7	// it
-	"Insert a new item in the lectures syllabus"			// Bisogno di traduzione
+	"Integrated editor of the syllabus"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Insert a new item in the lectures syllabus"			// Potrzebujesz tlumaczenie
+	"Integrated editor of the syllabus"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Insert a new item in the lectures syllabus"			// Precisa de tradução
+	"Integrated editor of the syllabus"	// Precisa de tradução
 #elif L==10	// tr
-	"Insert a new item in the lectures syllabus"			// Çeviri lazim!
+	"Integrated editor of the syllabus"	// Çeviri lazim!
 #endif
 	,
-	[ActInsIteSylPra] =
+	[ActPlaTxtEdiSyl] =
 #if   L==1	// ca
-	"Insert a new item in the practicals syllabus"				// Necessita traducció
+	"Plain text editor of the syllabus"	// Necessita traducció
 #elif L==2	// de
-	"Insert a new item in the practicals syllabus"				// Need Übersetzung
+	"Plain text editor of the syllabus"	// Need Übersetzung
 #elif L==3	// en
-	"Insert a new item in the practicals syllabus"
+	"Plain text editor of the syllabus"
 #elif L==4	// es
-	"Insertar un nuevo &iacute;tem en el temario de pr&aacute;cticas"
+	"Editor de texto plano del programa"
 #elif L==5	// fr
-	"Insert a new item in the practicals syllabus"				// Besoin de traduction
+	"Plain text editor of the syllabus"	// Besoin de traduction
 #elif L==6	// gn
-	"Insertar un nuevo &iacute;tem en el temario de pr&aacute;cticas"	// Okoteve traducción
+	"Editor de texto plano del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Insert a new item in the practicals syllabus"				// Bisogno di traduzione
+	"Plain text editor of the syllabus"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Insert a new item in the practicals syllabus"				// Potrzebujesz tlumaczenie
+	"Plain text editor of the syllabus"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Insert a new item in the practicals syllabus"				// Precisa de tradução
+	"Plain text editor of the syllabus"	// Precisa de tradução
 #elif L==10	// tr
-	"Insert a new item in the practicals syllabus"				// Çeviri lazim!
+	"Plain text editor of the syllabus"	// Çeviri lazim!
 #endif
 	,
-	[ActModIteSylLec] =
+	[ActRchTxtEdiSyl] =
 #if   L==1	// ca
-	"Change item in the lectures syllabus"			// Necessita traducció
+	"Rich text editor of the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Change item in the lectures syllabus"			// Need Übersetzung
+	"Rich text editor of the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Change item in the lectures syllabus"
+	"Rich text editor of the syllabus"
 #elif L==4	// es
-	"Modificar un &iacute;tem del temario de teor&iacute;a"
+	"Editor de texto enriquecido del programa"
 #elif L==5	// fr
-	"Change item in the lectures syllabus"			// Besoin de traduction
+	"Rich text editor of the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Modificar un &iacute;tem del temario de teor&iacute;a"	// Okoteve traducción
+	"Editor de texto enriquecido del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Change item in the lectures syllabus"			// Bisogno di traduzione
+	"Rich text editor of the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Change item in the lectures syllabus"			// Potrzebujesz tlumaczenie
+	"Rich text editor of the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Change item in the lectures syllabus"			// Precisa de tradução
+	"Rich text editor of the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Change item in the lectures syllabus"			// Çeviri lazim!
+	"Rich text editor of the syllabus"		// Çeviri lazim!
 #endif
 	,
-	[ActModIteSylPra] =
+	[ActRcvPlaTxtSyl] =
 #if   L==1	// ca
-	"Change item in the practicals syllabus"		// Necessita traducció
+	"Change plain text of the syllabus"	// Necessita traducció
 #elif L==2	// de
-	"Change item in the practicals syllabus"		// Need Übersetzung
+	"Change plain text of the syllabus"	// Need Übersetzung
 #elif L==3	// en
-	"Change item in the practicals syllabus"
+	"Change plain text of the syllabus"
 #elif L==4	// es
-	"Cambiar &iacute;tem del temario de pr&aacute;cticas"
+	"Cambiar texto plano del programa"
 #elif L==5	// fr
-	"Change item in the practicals syllabus"		// Besoin de traduction
+	"Change plain text of the syllabus"	// Besoin de traduction
 #elif L==6	// gn
-	"Cambiar &iacute;tem del temario de pr&aacute;cticas"	// Okoteve traducción
+	"Cambiar texto plano del programaa"	// Okoteve traducción
 #elif L==7	// it
-	"Change item in the practicals syllabus"		// Bisogno di traduzione
+	"Change plain text of the syllabus"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Change item in the practicals syllabus"		// Potrzebujesz tlumaczenie
+	"Change plain text of the syllabus"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Change item in the practicals syllabus"		// Precisa de tradução
+	"Change plain text of the syllabus"	// Precisa de tradução
 #elif L==10	// tr
-	"Change item in the practicals syllabus"		// Çeviri lazim!
+	"Change plain text of the syllabus"	// Çeviri lazim!
 #endif
 	,
-	[ActChgFrcReaSylLec] =
+	[ActRcvRchTxtSyl] =
 #if   L==1	// ca
-	"Change whether students are forced to read the lectures syllabus"		// Necessita traducció
+	"Change rich text of the syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Change whether students are forced to read the lectures syllabus"		// Need Übersetzung
+	"Change rich text of the syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Change whether students are forced to read the lectures syllabus"
+	"Change rich text of the syllabus"
 #elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer el temario de teor&iacute;a"
+	"Cambiar texto enriquecido del programa"
 #elif L==5	// fr
-	"Change whether students are forced to read the lectures syllabus"		// Besoin de traduction
+	"Change rich text of the syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer el temario de teor&iacute;a"	// Okoteve traducción
+	"Cambiar texto enriquecido del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Change whether students are forced to read the lectures syllabus"		// Bisogno di traduzione
+	"Change rich text of the syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Change whether students are forced to read the lectures syllabus"		// Potrzebujesz tlumaczenie
+	"Change rich text of the syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Change whether students are forced to read the lectures syllabus"		// Precisa de tradução
+	"Change rich text of the syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Change whether students are forced to read the lectures syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActChgFrcReaSylPra] =
-#if   L==1	// ca
-	"Change whether students are forced to read the practicals syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Change whether students are forced to read the practicals syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Change whether students are forced to read the practicals syllabus"
-#elif L==4	// es
-	"Cambiar si se obliga a los estudiantes a leer el temario de pr&aacute;cticas"
-#elif L==5	// fr
-	"Change whether students are forced to read the practicals syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si se obliga a los estudiantes a leer el temario de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Change whether students are forced to read the practicals syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change whether students are forced to read the practicals syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change whether students are forced to read the practicals syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Change whether students are forced to read the practicals syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaSylLec] =
-#if   L==1	// ca
-	"Change if I have read the lectures syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the lectures syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the lectures syllabus"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do el programa de teor&iacute;a"
-#elif L==5	// fr
-	"Change if I have read the lectures syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do el programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the lectures syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the lectures syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the lectures syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the lectures syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActChgHavReaSylPra] =
-#if   L==1	// ca
-	"Change if I have read the practicals syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Change if I have read the practicals syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Change if I have read the practicals syllabus"
-#elif L==4	// es
-	"Cambiar si he le&iacute;do el programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Change if I have read the practicals syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar si he le&iacute;do el programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Change if I have read the practicals syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change if I have read the practicals syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change if I have read the practicals syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Change if I have read the practicals syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcSylLec] =
-#if   L==1	// ca
-	"Select the type of information shown in the lectures syllabus"				// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the lectures syllabus"				// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the lectures syllabus"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el programa de teor&iacute;a"
-#elif L==5	// fr
-	"Select the type of information shown in the lectures syllabus"				// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the lectures syllabus"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the lectures syllabus"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the lectures syllabus"				// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the lectures syllabus"				// Çeviri lazim!
-#endif
-	,
-	[ActSelInfSrcSylPra] =
-#if   L==1	// ca
-	"Select the type of information shown in the practicals syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Select the type of information shown in the practicals syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Select the type of information shown in the practicals syllabus"
-#elif L==4	// es
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Select the type of information shown in the practicals syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Seleccionar el tipo de informaci&oacute;n mostrada en el programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Select the type of information shown in the practicals syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Select the type of information shown in the practicals syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Select the type of information shown in the practicals syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Select the type of information shown in the practicals syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLSylLec] =
-#if   L==1	// ca
-	"Create URL in the lectures syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Create URL in the lectures syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the lectures syllabus"
-#elif L==4	// es
-	"Crear una URL en el programa de teor&iacute;a"
-#elif L==5	// fr
-	"Create URL in the lectures syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en el programa de teor&iacute;a"		// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the lectures syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the lectures syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the lectures syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the lectures syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvURLSylPra] =
-#if   L==1	// ca
-	"Create URL in the practicals syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Create URL in the practicals syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the practicals syllabus"
-#elif L==4	// es
-	"Crear una URL en el programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Create URL in the practicals syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en el programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the practicals syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the practicals syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the practicals syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the practicals syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagSylLec] =
-#if   L==1	// ca
-	"Create web page in the lectures syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Create web page in the lectures syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the lectures syllabus"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en el programa de teor&iacute;a"
-#elif L==5	// fr
-	"Create web page in the lectures syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en el programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the lectures syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the lectures syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the lectures syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the lectures syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagSylPra] =
-#if   L==1	// ca
-	"Create web page in the practicals syllabus"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the practicals syllabus"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the practicals syllabus"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en el programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Create web page in the practicals syllabus"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en el programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the practicals syllabus"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the practicals syllabus"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the practicals syllabus"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the practicals syllabus"				// Çeviri lazim!
-#endif
-	,
-	[ActEditorSylLec] =
-#if   L==1	// ca
-	"Integrated editor of the lectures syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of the lectures syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of the lectures syllabus"
-#elif L==4	// es
-	"Editor integrado del programa de teor&iacute;a"
-#elif L==5	// fr
-	"Integrated editor of the lectures syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado del programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of the lectures syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of the lectures syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of the lectures syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of the lectures syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActEditorSylPra] =
-#if   L==1	// ca
-	"Integrated editor of the practicals syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Integrated editor of the practicals syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Integrated editor of the practicals syllabus"
-#elif L==4	// es
-	"Editor integrado del programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Integrated editor of the practicals syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor integrado del programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Integrated editor of the practicals syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Integrated editor of the practicals syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Integrated editor of the practicals syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Integrated editor of the practicals syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiSylLec] =
-#if   L==1	// ca
-	"Plain text editor of the lectures syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of the lectures syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of the lectures syllabus"
-#elif L==4	// es
-	"Editor de texto plano del programa de teor&iacute;a"
-#elif L==5	// fr
-	"Plain text editor of the lectures syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano del programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of the lectures syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of the lectures syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of the lectures syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of the lectures syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiSylPra] =
-#if   L==1	// ca
-	"Plain text editor of the practicals syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Plain text editor of the practicals syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Plain text editor of the practicals syllabus"
-#elif L==4	// es
-	"Editor de texto plano del programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Plain text editor of the practicals syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto plano del programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Plain text editor of the practicals syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Plain text editor of the practicals syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Plain text editor of the practicals syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Plain text editor of the practicals syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiSylLec] =
-#if   L==1	// ca
-	"Rich text editor of the lectures syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the lectures syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the lectures syllabus"
-#elif L==4	// es
-	"Editor de texto enriquecido del programa de teor&iacute;a"
-#elif L==5	// fr
-	"Rich text editor of the lectures syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido del programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the lectures syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the lectures syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the lectures syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the lectures syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiSylPra] =
-#if   L==1	// ca
-	"Rich text editor of the practicals syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the practicals syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the practicals syllabus"
-#elif L==4	// es
-	"Editor de texto enriquecido del programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Rich text editor of the practicals syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido del programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the practicals syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the practicals syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the practicals syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the practicals syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtSylLec] =
-#if   L==1	// ca
-	"Change plain text of the lectures syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Change plain text of the lectures syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of the lectures syllabus"
-#elif L==4	// es
-	"Cambiar texto plano del programa de teor&iacute;a"
-#elif L==5	// fr
-	"Change plain text of the lectures syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano del programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of the lectures syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of the lectures syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of the lectures syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of the lectures syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPlaTxtSylPra] =
-#if   L==1	// ca
-	"Change plain text of the practicals syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Change plain text of the practicals syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Change plain text of the practicals syllabus"
-#elif L==4	// es
-	"Cambiar texto plano del programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Change plain text of the practicals syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto plano del programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Change plain text of the practicals syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Change plain text of the practicals syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change plain text of the practicals syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Change plain text of the practicals syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvRchTxtSylLec] =
-#if   L==1	// ca
-	"Change rich text of the lectures syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Change rich text of the lectures syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Change rich text of the lectures syllabus"
-#elif L==4	// es
-	"Cambiar texto enriquecido del programa de teor&iacute;a"
-#elif L==5	// fr
-	"Change rich text of the lectures syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto enriquecido del programa de teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Change rich text of the lectures syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change rich text of the lectures syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change rich text of the lectures syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Change rich text of the lectures syllabus"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvRchTxtSylPra] =
-#if   L==1	// ca
-	"Change rich text of the practicals syllabus"			// Necessita traducció
-#elif L==2	// de
-	"Change rich text of the practicals syllabus"			// Need Übersetzung
-#elif L==3	// en
-	"Change rich text of the practicals syllabus"
-#elif L==4	// es
-	"Cambiar texto enriquecido del programa de pr&aacute;cticas"
-#elif L==5	// fr
-	"Change rich text of the practicals syllabus"			// Besoin de traduction
-#elif L==6	// gn
-	"Cambiar texto enriquecido del programa de pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Change rich text of the practicals syllabus"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Change rich text of the practicals syllabus"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Change rich text of the practicals syllabus"			// Precisa de tradução
-#elif L==10	// tr
-	"Change rich text of the practicals syllabus"			// Çeviri lazim!
+	"Change rich text of the syllabus"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeBib] =

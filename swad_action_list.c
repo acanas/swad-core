@@ -491,44 +491,24 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Syllabus
    [ActSeeSyl		] = {1242, 3,TabCrs,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ShowInfo			},
-   [ActSeeSylLec	] = {  28,-1,TabUnk,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ShowInfo			},
-   [ActSeeSylPra	] = {  20,-1,TabUnk,ActSeeSyl		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ShowInfo			},
-   [ActEdiSylLec	] = {  44,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_FormsToSelSendInfo		},
-   [ActEdiSylPra	] = {  74,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_FormsToSelSendInfo		},
-   [ActDelItmSylLec	] = { 218,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_RemoveItemSyllabus		},
-   [ActDelItmSylPra	] = { 183,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_RemoveItemSyllabus		},
-   [ActUp_IteSylLec	] = { 221,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_UpItemSyllabus		},
-   [ActUp_IteSylPra	] = { 213,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_UpItemSyllabus		},
-   [ActDwnIteSylLec	] = { 220,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_DownItemSyllabus		},
-   [ActDwnIteSylPra	] = { 212,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_DownItemSyllabus		},
-   [ActRgtIteSylLec	] = { 223,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_RightItemSyllabus		},
-   [ActRgtIteSylPra	] = { 215,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_RightItemSyllabus		},
-   [ActLftIteSylLec	] = { 222,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_LeftItemSyllabus		},
-   [ActLftIteSylPra	] = { 214,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_LeftItemSyllabus		},
-   [ActInsIteSylLec	] = { 217,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_InsertItemSyllabus		},
-   [ActInsIteSylPra	] = { 181,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_InsertItemSyllabus		},
-   [ActModIteSylLec	] = { 211,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_ModifyItemSyllabus		},
-   [ActModIteSylPra	] = { 216,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_ModifyItemSyllabus		},
-   [ActChgFrcReaSylLec	] = { 871,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ChangeForceReadInfo	},
-   [ActChgFrcReaSylPra	] = { 872,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ChangeForceReadInfo	},
-   [ActChgHavReaSylLec	] = { 880,-1,TabUnk,ActSeeSyl		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ChangeIHaveReadInfo	},
-   [ActChgHavReaSylPra	] = { 887,-1,TabUnk,ActSeeSyl		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ChangeIHaveReadInfo	},
-   [ActSelInfSrcSylLec	] = { 378,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_SetInfoSrc			},
-   [ActSelInfSrcSylPra	] = { 382,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_SetInfoSrc			},
-   [ActRcvURLSylLec	] = { 403,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ReceiveURLInfo		},
-   [ActRcvURLSylPra	] = { 402,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ReceiveURLInfo		},
-   [ActRcvPagSylLec	] = { 381,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_1ST_TAB,NULL			,Inf_ReceivePagInfo		},
-   [ActRcvPagSylPra	] = { 383,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_1ST_TAB,NULL			,Inf_ReceivePagInfo		},
-   [ActEditorSylLec	] = { 372,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_EditSyllabus		},
-   [ActEditorSylPra	] = { 371,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_EditSyllabus		},
-   [ActPlaTxtEdiSylLec	] = { 379,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_EditPlainTxtInfo		},
-   [ActPlaTxtEdiSylPra	] = { 389,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_EditPlainTxtInfo		},
-   [ActRchTxtEdiSylLec	] = {1095,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_EditRichTxtInfo		},
-   [ActRchTxtEdiSylPra	] = {1096,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_EditRichTxtInfo		},
-   [ActRcvPlaTxtSylLec	] = { 394,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_RecAndChangePlainTxtInfo	},
-   [ActRcvPlaTxtSylPra	] = { 396,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_RecAndChangePlainTxtInfo	},
-   [ActRcvRchTxtSylLec	] = {1103,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_RecAndChangeRichTxtInfo	},
-   [ActRcvRchTxtSylPra	] = {1104,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_RecAndChangeRichTxtInfo	},
+   [ActEdiSyl		] = {  44,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_FormsToSelSendInfo		},
+   [ActDelItmSyl	] = { 218,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_RemoveItemSyllabus		},
+   [ActUp_IteSyl	] = { 221,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_UpItemSyllabus		},
+   [ActDwnIteSyl	] = { 220,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_DownItemSyllabus		},
+   [ActRgtIteSyl	] = { 223,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_RightItemSyllabus		},
+   [ActLftIteSyl	] = { 222,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_LeftItemSyllabus		},
+   [ActInsIteSyl	] = { 217,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_InsertItemSyllabus		},
+   [ActModIteSyl	] = { 211,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_ModifyItemSyllabus		},
+   [ActChgFrcReaSyl	] = { 871,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ChangeForceReadInfo	},
+   [ActChgHavReaSyl	] = { 880,-1,TabUnk,ActSeeSyl		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ChangeIHaveReadInfo	},
+   [ActSelInfSrcSyl	] = { 378,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_SetInfoSrc			},
+   [ActRcvURLSyl	] = { 403,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ReceiveURLInfo		},
+   [ActRcvPagSyl	] = { 381,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_1ST_TAB,NULL			,Inf_ReceivePagInfo		},
+   [ActEditorSyl	] = { 372,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Syl_EditSyllabus		},
+   [ActPlaTxtEdiSyl	] = { 379,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_EditPlainTxtInfo		},
+   [ActRchTxtEdiSyl	] = {1095,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_EditRichTxtInfo		},
+   [ActRcvPlaTxtSyl	] = { 394,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_RecAndChangePlainTxtInfo	},
+   [ActRcvRchTxtSyl	] = {1103,-1,TabUnk,ActSeeSyl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_RecAndChangeRichTxtInfo	},
 
    // Bibliography
    [ActSeeBib		] = {  32, 4,TabCrs,ActSeeBib		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Inf_ShowInfo			},
@@ -1851,7 +1831,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeAdmMrk,		// #17
 	ActUnk,			// #18 (obsolete action)
 	ActUnk,			// #19 (obsolete action)
-	ActSeeSylPra,		// #20
+	ActUnk,			// #20 (obsolete action)
 	ActUnk,			// #21 (obsolete action)
 	ActSeeRecSevTch,	// #22
 	ActAdmBrf,		// #23
@@ -1859,7 +1839,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeCrsTT,		// #25
 	ActReqMsgUsr,		// #26
 	ActRcvMsgUsr,		// #27
-	ActSeeSylLec,		// #28
+	ActUnk,			// #28 (obsolete action)
 	ActSeeTst,		// #29
 	ActReqMyPho,		// #30
 	ActUnk,			// #31 (obsolete action)
@@ -1875,7 +1855,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #41 (obsolete action)
 	ActLstStdAll,		// #42
 	ActUnk,			// #43 (obsolete action)
-	ActEdiSylLec,		// #44
+	ActEdiSyl,		// #44
 	ActEdiCrsTT,		// #45
 	ActUnk,			// #46 (obsolete action)
 	ActUnk,			// #47 (obsolete action)
@@ -1905,7 +1885,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #71 (obsolete action)
 	ActUnk,			// #72 (obsolete action)
 	ActRemNot,		// #73
-	ActEdiSylPra,		// #74
+	ActUnk,			// #74 (obsolete action)
 	ActUnk,			// #75 (obsolete action)
 	ActEdiBib,		// #76
 	ActUnk,			// #77 (obsolete action)
@@ -2012,9 +1992,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #178 (obsolete action)
 	ActPrnCfe,		// #179
 	ActUnk,			// #180 (obsolete action)
-	ActInsIteSylPra,	// #181
+	ActUnk,			// #181 (obsolete action)
 	ActRcvURLCrsLnk,	// #182
-	ActDelItmSylPra,	// #183
+	ActUnk,			// #183 (obsolete action)
 	ActRcvPagAss,		// #184
 	ActRcvPagBib,		// #185
 	ActUnk,			// #186 (obsolete action)
@@ -2042,19 +2022,19 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenFolWrkCrs,	// #208
 	ActRemFilWrkCrs,	// #209
 	ActRemFolWrkCrs,	// #210
-	ActModIteSylLec,	// #211
-	ActDwnIteSylPra,	// #212
-	ActUp_IteSylPra,	// #213
-	ActLftIteSylPra,	// #214
-	ActRgtIteSylPra,	// #215
-	ActModIteSylPra,	// #216
-	ActInsIteSylLec,	// #217
-	ActDelItmSylLec,	// #218
+	ActModIteSyl,	// #211
+	ActUnk,			// #212 (obsolete action)
+	ActUnk,			// #213 (obsolete action)
+	ActUnk,			// #214 (obsolete action)
+	ActUnk,			// #215 (obsolete action)
+	ActUnk,			// #216 (obsolete action)
+	ActInsIteSyl,		// #217
+	ActDelItmSyl,		// #218
 	ActRcvPagFAQ,		// #219
-	ActDwnIteSylLec,	// #220
-	ActUp_IteSylLec,	// #221
-	ActLftIteSylLec,	// #222
-	ActRgtIteSylLec,	// #223
+	ActDwnIteSyl,		// #220
+	ActUp_IteSyl,		// #221
+	ActLftIteSyl,		// #222
+	ActRgtIteSyl,		// #223
 	ActRcvURLBib,		// #224
 	ActUnk,			// #225 (obsolete action)
 	ActUnk,			// #226 (obsolete action)
@@ -2202,39 +2182,39 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #368 (obsolete action)
 	ActUnk,			// #369 (obsolete action)
 	ActSelInfSrcBib,	// #370
-	ActEditorSylPra,	// #371
-	ActEditorSylLec,	// #372
+	ActUnk,			// #371 (obsolete action)
+	ActEditorSyl,		// #372
 	ActUnk,			// #373 (obsolete action)
 	ActUnk,			// #374 (obsolete action)
 	ActUnk,			// #375 (obsolete action)
 	ActEditorBib,		// #376
 	ActPlaTxtEdiBib,	// #377
-	ActSelInfSrcSylLec,	// #378
-	ActPlaTxtEdiSylLec,	// #379
+	ActSelInfSrcSyl,	// #378
+	ActPlaTxtEdiSyl,	// #379
 	ActSelInfSrcFAQ,	// #380
-	ActRcvPagSylLec,	// #381
-	ActSelInfSrcSylPra,	// #382
-	ActRcvPagSylPra,	// #383
+	ActRcvPagSyl,		// #381
+	ActUnk,			// #382 (obsolete action)
+	ActUnk,			// #383 (obsolete action)
 	ActSelInfSrcAss,	// #384
 	ActSelInfSrcCrsLnk,	// #385
 	ActEditorAss,		// #386
 	ActPlaTxtEdiAss,	// #387
 	ActEditorCrsLnk,	// #388
-	ActPlaTxtEdiSylPra,	// #389
+	ActUnk,			// #389 (obsolete action)
 	ActUnk,			// #390 (obsolete action)
 	ActUnk,			// #391 (obsolete action)
 	ActUnk,			// #392 (obsolete action)
 	ActUnk,			// #393 (obsolete action)
-	ActRcvPlaTxtSylLec,	// #394
+	ActRcvPlaTxtSyl,	// #394
 	ActUnk,			// #395 (obsolete action)
-	ActRcvPlaTxtSylPra,	// #396
+	ActUnk,			// #396 (obsolete action)
 	ActRcvPlaTxtAss,	// #397
 	ActRcvPlaTxtBib,	// #398
 	ActUnk,			// #399 (obsolete action)
 	ActPlaTxtEdiCrsLnk,	// #400
 	ActRcvPlaTxtCrsLnk,	// #401
-	ActRcvURLSylPra,	// #402
-	ActRcvURLSylLec,	// #403
+	ActUnk,			// #402 (obsolete action)
+	ActRcvURLSyl,		// #403
 	ActEditorFAQ,		// #404
 	ActPlaTxtEdiFAQ,	// #405
 	ActRcvPlaTxtFAQ,	// #406
@@ -2702,8 +2682,8 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDelThrForCrsUsr,	// #868
 	ActReqDelThrCrsTch,	// #869
 	ActChgFrcReaTchGui,	// #870
-	ActChgFrcReaSylLec,	// #871
-	ActChgFrcReaSylPra,	// #872
+	ActChgFrcReaSyl,	// #871
+	ActUnk,			// #872 (obsolete action)
 	ActChgFrcReaBib,	// #873
 	ActChgFrcReaFAQ,	// #874
 	ActChgFrcReaCrsLnk,	// #875
@@ -2711,14 +2691,14 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgFrcReaCrsInf,	// #877
 	ActChgHavReaCrsInf,	// #878
 	ActChgHavReaFAQ,	// #879
-	ActChgHavReaSylLec,	// #880
+	ActChgHavReaSyl,	// #880
 	ActReqDelThrSWAUsr,	// #881
 	ActDelThrForSWAUsr,	// #882
 	ActChgFrcReaAss,	// #883
 	ActChgHavReaBib,	// #884
 	ActChgHavReaCrsLnk,	// #885
 	ActChgHavReaTchGui,	// #886
-	ActChgHavReaSylPra,	// #887
+	ActUnk,			// #887 (obsolete action)
 	ActChgPlgDes,		// #888
 	ActRemPlg,		// #889
 	ActCutThrForSWAUsr,	// #890
@@ -2926,16 +2906,16 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgIco,		// #1092
 	ActRchTxtEdiCrsInf,	// #1093
 	ActRchTxtEdiTchGui,	// #1094
-	ActRchTxtEdiSylLec,	// #1095
-	ActRchTxtEdiSylPra,	// #1096
+	ActRchTxtEdiSyl,	// #1095
+	ActUnk,			// #1096 (obsolete action)
 	ActRchTxtEdiBib,	// #1097
 	ActRchTxtEdiFAQ,	// #1098
 	ActRchTxtEdiCrsLnk,	// #1099
 	ActRchTxtEdiAss,	// #1100
 	ActRcvRchTxtCrsInf,	// #1101
 	ActRcvRchTxtTchGui,	// #1102
-	ActRcvRchTxtSylLec,	// #1103
-	ActRcvRchTxtSylPra,	// #1104
+	ActRcvRchTxtSyl,	// #1103
+	ActUnk,			// #1104 (obsolete action)
 	ActRcvRchTxtBib,	// #1105
 	ActRcvRchTxtFAQ,	// #1106
 	ActRcvRchTxtCrsLnk,	// #1107
@@ -3569,9 +3549,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActFrmAccOth,		// #1735
 	ActFrmAccStd,		// #1736
 	ActFrmAccTch,		// #1737
-	ActRemNicOth,	// #1738
-	ActRemNicStd,	// #1739
-	ActRemNicTch,	// #1740
+	ActRemNicOth,		// #1738
+	ActRemNicStd,		// #1739
+	ActRemNicTch,		// #1740
 	ActChgNicOth,		// #1741
 	ActChgNicStd,		// #1742
 	ActChgNicTch,		// #1743
