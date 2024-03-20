@@ -208,7 +208,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
    extern const char *Txt_Send;
    unsigned QstInd;
    struct Qst_Question Question;
-   static const Act_Action_t Action[Tst_NUM_REQUEST_OR_CONFIRM] =
+   static Act_Action_t Action[Tst_NUM_REQUEST_OR_CONFIRM] =
      {
       [TstPrn_REQUEST] = ActReqAssTst,
       [TstPrn_CONFIRM] = ActAssTst,

@@ -58,8 +58,8 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void);
 
 void Ann_ShowFormAnnouncement (void);
 void Ann_ReceiveAnnouncement (void);
-void Ann_HideActiveAnnouncement (void);
-void Ann_RevealHiddenAnnouncement (void);
+void Ann_HideAnnouncement (void);
+void Ann_UnhideAnnouncement (void);
 void Ann_RemoveAnnouncement (void);
 void Ann_MarkAnnouncementAsSeen (void);
 

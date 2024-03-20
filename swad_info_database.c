@@ -42,14 +42,14 @@ extern struct Globals Gbl;
 
 static const char *Inf_DB_NamesForInfoType[Inf_NUM_TYPES] =
   {
-   [Inf_INTRODUCTION  ] = "intro",		// TODO: Change this to "introduction"!
-   [Inf_TEACHING_GUIDE] = "description",	// TODO: Change this to "guide"!
-   [Inf_LECTURES      ] = "theory",		// TODO: Change this to "lectures"!
-   [Inf_PRACTICALS    ] = "practices",		// TODO: Change this to "practicals"!
-   [Inf_BIBLIOGRAPHY  ] = "bibliography",
-   [Inf_FAQ           ] = "FAQ",
-   [Inf_LINKS         ] = "links",
-   [Inf_ASSESSMENT    ] = "assessment",
+   [Inf_INFORMATION   ] = "intro",		// TODO: Change this to "inf"
+   [Inf_TEACHING_GUIDE] = "description",	// TODO: Change this to "gui"
+   [Inf_LECTURES      ] = "theory",		// TODO: Change this to "lec"
+   [Inf_PRACTICALS    ] = "practices",		// TODO: Change this to "pra"
+   [Inf_BIBLIOGRAPHY  ] = "bibliography",	// TODO: Change this to "bib"
+   [Inf_FAQ           ] = "FAQ",		// TODO: Change this to "faq"
+   [Inf_LINKS         ] = "links",		// TODO: Change this to "lnk"
+   [Inf_ASSESSMENT    ] = "assessment",		// TODO: Change this to "ass"
   };
 
 static const char *Inf_DB_NamesForInfoSrc[Inf_NUM_SOURCES] =

@@ -301,7 +301,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 
-static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActSeeDocCrs,
@@ -334,7 +334,7 @@ static const Act_Action_t Brw_ActSeeAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActAdmAssPrj,
   };
 
-static const Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActAdmDocCrs,
@@ -367,7 +367,7 @@ static const Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
-static const Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -400,7 +400,7 @@ static const Act_Action_t Brw_ActFromAdmToSee[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
-static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActChgToSeeDocCrs,
@@ -433,7 +433,7 @@ static const Act_Action_t Brw_ActChgZone[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
-static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActReqDatSeeDocCrs,
@@ -466,7 +466,7 @@ static const Act_Action_t Brw_ActReqDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActReqDatAssPrj,
   };
 
-static const Act_Action_t Brw_ActReqLnk[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActReqLnk[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActReqLnkSeeDocCrs,
@@ -499,7 +499,7 @@ static const Act_Action_t Brw_ActReqLnk[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
-static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActDowSeeDocCrs,
@@ -532,7 +532,7 @@ static const Act_Action_t Brw_ActDowFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActDowAssPrj,
   };
 
-static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -565,7 +565,7 @@ static const Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActReqRemFilAssPrj,
   };
 
-static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -598,7 +598,7 @@ static const Act_Action_t Brw_ActRemoveFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActRemFilAssPrj,
   };
 
-static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -631,7 +631,7 @@ static const Act_Action_t Brw_ActRemoveFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActRemFolAssPrj,
   };
 
-static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -664,7 +664,7 @@ static const Act_Action_t Brw_ActRemoveFolderNotEmpty[Brw_NUM_TYPES_FILE_BROWSER
    [Brw_ADMI_ASS_PRJ] = ActRemTreAssPrj,
   };
 
-static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -697,7 +697,7 @@ static const Act_Action_t Brw_ActCopy[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActCopAssPrj,
   };
 
-static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -730,7 +730,7 @@ static const Act_Action_t Brw_ActPaste[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActPasAssPrj,
   };
 
-static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -763,7 +763,7 @@ static const Act_Action_t Brw_ActFormCreate[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActFrmCreAssPrj,
   };
 
-static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -796,7 +796,7 @@ static const Act_Action_t Brw_ActCreateFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActCreFolAssPrj,
   };
 
-static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -829,7 +829,7 @@ static const Act_Action_t Brw_ActCreateLink[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActCreLnkAssPrj,
   };
 
-static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -862,7 +862,7 @@ static const Act_Action_t Brw_ActRenameFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActRenFolAssPrj,
   };
 
-static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -895,7 +895,7 @@ static const Act_Action_t Brw_ActUploadFileDropzone[Brw_NUM_TYPES_FILE_BROWSER] 
    [Brw_ADMI_ASS_PRJ] = ActRcvFilAssPrjDZ,
   };
 
-static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -928,7 +928,7 @@ static const Act_Action_t Brw_ActUploadFileClassic[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActRcvFilAssPrjCla,
   };
 
-static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -961,7 +961,7 @@ static const Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_TYPES_FILE_BROW
    [Brw_ADMI_ASS_PRJ] = ActAdmAssPrj,
   };
 
-static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActExpSeeDocCrs,
@@ -994,7 +994,7 @@ static const Act_Action_t Brw_ActExpandFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActExpAssPrj,
   };
 
-static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActConSeeDocCrs,
@@ -1027,7 +1027,7 @@ static const Act_Action_t Brw_ActContractFolder[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActConAssPrj,
   };
 
-static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -1060,7 +1060,7 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    [Brw_ADMI_ASS_PRJ] = ActChgDatAssPrj,
   };
 
-static const Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+static Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActZIPSeeDocCrs,
@@ -2983,7 +2983,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
   {
    extern const char *Txt_View_record_for_this_course;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActSeeRecOneStd,
       [Rol_NET] = ActSeeRecOneTch,
@@ -4394,7 +4394,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 static void Brw_PutIconHideUnhide (const char *Anchor,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   static const Act_Action_t Brw_ActHideUnhide[Brw_NUM_TYPES_FILE_BROWSER][HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t Brw_ActHideUnhide[Brw_NUM_TYPES_FILE_BROWSER][HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [Brw_UNKNOWN     ] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
       [Brw_SHOW_DOC_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
@@ -4632,7 +4632,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 void Brw_PutIconFile (const char *FileName,
 		      const char *Class,Frm_PutForm_t PutFormToGo)
   {
-   extern const unsigned Ext_NUM_FILE_EXT_ALLOWED;
+   extern unsigned Ext_NUM_FILE_EXT_ALLOWED;
    extern const char *Ext_FileExtensionsAllowed[];
    extern const char *Txt_X_file;
    char *URL;

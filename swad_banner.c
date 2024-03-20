@@ -382,12 +382,12 @@ void Ban_PutIconToViewBanners (void)
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhBan,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidBan,	// Visible ==> action to hide
      };
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenBanSho,
       [Nam_FULL_NAME] = ActRenBanFul,
@@ -854,7 +854,7 @@ static void Ban_PutHeadBanners (void)
 /******************* Receive form to create a new banner *********************/
 /*****************************************************************************/
 
-void Ban_ReceiveFormNewBanner (void)
+void Ban_ReceiveNewBanner (void)
   {
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;

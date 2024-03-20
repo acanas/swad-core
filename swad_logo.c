@@ -196,15 +196,15 @@ void Lgo_DrawLogo (Hie_Level_t Level,const struct Hie_Node *Node,
 
 void Lgo_PutIconToChangeLogo (Hie_Level_t Level)
   {
-   static const Act_Action_t Action[Hie_NUM_LEVELS] =
+   static Act_Action_t Action[Hie_NUM_LEVELS] =
      {
-      [Hie_UNK] = ActUnk,		// Unknown
-      [Hie_SYS] = ActUnk,		// System
-      [Hie_CTY] = ActUnk,		// Country
-      [Hie_INS] = ActReqInsLog,	// Institution
-      [Hie_CTR] = ActReqCtrLog,	// Center
-      [Hie_DEG] = ActReqDegLog,	// Degree
-      [Hie_CRS] = ActUnk,		// Course
+      [Hie_UNK] = ActUnk,
+      [Hie_SYS] = ActUnk,
+      [Hie_CTY] = ActUnk,
+      [Hie_INS] = ActReqInsLog,
+      [Hie_CTR] = ActReqCtrLog,
+      [Hie_DEG] = ActReqDegLog,
+      [Hie_CRS] = ActUnk,
      };
 
    Lay_PutContextualLinkOnlyIcon (Action[Level],NULL,
@@ -221,7 +221,7 @@ void Lgo_RequestLogo (Hie_Level_t Level)
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
-   static const Act_Action_t ActionRec[Hie_NUM_LEVELS] =
+   static Act_Action_t ActionRec[Hie_NUM_LEVELS] =
      {
       [Hie_INS] = ActRecInsLog,
       [Hie_CTR] = ActRecCtrLog,

@@ -78,7 +78,7 @@ void Cty_RemoveCountry (void);
 void Cty_RenameCountry (void);
 void Cty_ChangeCtyWWW (void);
 void Cty_ContEditAfterChgCty (void);
-void Cty_ReceiveFormNewCountry (void);
+void Cty_ReceiveNewCountry (void);
 
 unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role);
 

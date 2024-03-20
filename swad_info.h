@@ -39,7 +39,7 @@
 #define Inf_NUM_TYPES 8
 typedef enum
   {
-   Inf_INTRODUCTION   = 0,
+   Inf_INFORMATION    = 0,
    Inf_TEACHING_GUIDE = 1,
    Inf_LECTURES       = 2,
    Inf_PRACTICALS     = 3,

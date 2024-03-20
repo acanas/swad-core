@@ -86,8 +86,8 @@ static const Prj_RoleInProject_t Prj_RolesToShow[] =
    Prj_ROLE_STD,	// Student
    Prj_ROLE_EVL,	// Evaluator
   };
-static const unsigned Prj_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
-                                              sizeof (Prj_RolesToShow[0]);
+static unsigned Prj_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
+                                        sizeof (Prj_RolesToShow[0]);
 
 /***** Assigned/non-assigned project *****/
 static const char *AssignedNonassigIcon[Prj_NUM_ASSIGNED_NONASSIG] =
@@ -2007,14 +2007,14 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
    extern const char *HidVis_MsgClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
-   static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       [Prj_ROLE_UNK] = ActUnk,		// Unknown
       [Prj_ROLE_STD] = ActReqRemStdPrj,	// Student
       [Prj_ROLE_TUT] = ActReqRemTutPrj,	// Tutor
       [Prj_ROLE_EVL] = ActReqRemEvlPrj,	// Evaluator
      };
-   static const Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static Act_Action_t ActionReqAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       [Prj_ROLE_UNK] = ActUnk,		// Unknown
       [Prj_ROLE_STD] = ActReqAddStdPrj,	// Student
@@ -2855,7 +2855,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
    extern const char *Hlp_ASSESSMENT_Projects_add_user;
    extern const char *Txt_Add_USERS;
    extern const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT];
-   static const Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       [Prj_ROLE_UNK] = ActUnk,		// Unknown
       [Prj_ROLE_STD] = ActAddStdPrj,	// Student
@@ -3019,7 +3019,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
    extern const char *Txt_Remove_USER_from_this_project;
-   static const Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
+   static Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       [Prj_ROLE_UNK] = ActUnk,		// Unknown
       [Prj_ROLE_STD] = ActRemStdPrj,	// Student
@@ -3172,7 +3172,7 @@ static Prj_Order_t Prj_GetParPrjOrder (void)
 static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
                                          const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhPrj,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidPrj,	// Visible ==> action to hide
@@ -3991,7 +3991,7 @@ void Prj_FreeMemProject (struct Prj_Project *Prj)
 /******************** Receive form to create a new project *******************/
 /*****************************************************************************/
 
-void Prj_ReceiveFormProject (void)
+void Prj_ReceiveProject (void)
   {
    extern const char *Txt_Created_new_project_X;
    extern const char *Txt_The_project_has_been_modified;

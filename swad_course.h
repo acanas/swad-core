@@ -59,8 +59,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void);
 
 void Crs_EditCourses (void);
 
-void Crs_ReceiveFormReqCrs (void);
-void Crs_ReceiveFormNewCrs (void);
+void Crs_ReceiveReqCrs (void);
+void Crs_ReceiveNewCrs (void);
 
 void Crs_RemoveCourse (void);
 bool Crs_GetCourseDataByCod (struct Hie_Node *Crs);

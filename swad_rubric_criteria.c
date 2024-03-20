@@ -242,7 +242,7 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 /**************** Receive form to create a new rubric criterion **************/
 /*****************************************************************************/
 
-void RubCri_ReceiveFormCriterion (void)
+void RubCri_ReceiveCriterion (void)
   {
    struct Rub_Rubrics Rubrics;
 
@@ -655,7 +655,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_Criteria;
    extern const char *Txt_Movement_not_allowed;
    // Actions to change minimum/maximum criterion values
-   static const Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
+   static Act_Action_t RubCri_ActionsValues[RubCri_NUM_VALUES] =
      {
       [RubCri_MIN] = ActChgMinRubCri,
       [RubCri_MAX] = ActChgMaxRubCri,

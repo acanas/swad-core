@@ -103,7 +103,7 @@ void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES])
      }
   }
 
-void Nam_ExistingShortAndFullNames (const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
+void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES],
 			            ParCod_Param_t ParCod,long Cod,
 			            const char *Names[Nam_NUM_SHRT_FULL_NAMES],
 			            Frm_PutForm_t PutForm)

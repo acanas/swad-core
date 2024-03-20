@@ -573,7 +573,7 @@ static Dat_StartEndTime_t Att_GetParAttOrder (void)
 static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
                                            const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhAtt,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidAtt,	// Visible ==> action to hide
@@ -1132,7 +1132,7 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 /*************** Receive form to create a new attendance event ***************/
 /*****************************************************************************/
 
-void Att_ReceiveFormEvent (void)
+void Att_ReceiveEvent (void)
   {
    extern const char *Txt_Already_existed_an_event_with_the_title_X;
    extern const char *Txt_Created_new_event_X;

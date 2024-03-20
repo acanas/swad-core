@@ -234,7 +234,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
       [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_BOX NOTICE_BOX_WIDE",
       [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
      };
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhAnn,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidAnn,	// Visible ==> action to hide
@@ -429,7 +429,7 @@ void Ann_ReceiveAnnouncement (void)
 /*********** Mark as hidden a global announcement that was active ************/
 /*****************************************************************************/
 
-void Ann_HideActiveAnnouncement (void)
+void Ann_HideAnnouncement (void)
   {
    long AnnCod;
 
@@ -444,7 +444,7 @@ void Ann_HideActiveAnnouncement (void)
 /*********** Mark as active a global announcement that was hidden ************/
 /*****************************************************************************/
 
-void Ann_RevealHiddenAnnouncement (void)
+void Ann_UnhideAnnouncement (void)
   {
    long AnnCod;
 

@@ -111,7 +111,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
 
-static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role);
+static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
 
 static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
                                        bool UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther);
@@ -873,22 +873,22 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 /******* Receive the list of users of the course to register/remove **********/
 /*****************************************************************************/
 
-void Enr_ReceiveFormAdminStds (void)
+void Enr_ReceiveAdminStds (void)
   {
-   Enr_ReceiveFormUsrsCrs (Rol_STD);
+   Enr_ReceiveUsrsCrs (Rol_STD);
   }
 
-void Enr_ReceiveFormAdminNonEditTchs (void)
+void Enr_ReceiveAdminNonEditTchs (void)
   {
-   Enr_ReceiveFormUsrsCrs (Rol_NET);
+   Enr_ReceiveUsrsCrs (Rol_NET);
   }
 
-void Enr_ReceiveFormAdminTchs (void)
+void Enr_ReceiveAdminTchs (void)
   {
-   Enr_ReceiveFormUsrsCrs (Rol_TCH);
+   Enr_ReceiveUsrsCrs (Rol_TCH);
   }
 
-static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
+static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
   {
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
    extern const char *Txt_No_user_has_been_eliminated;
@@ -2121,7 +2121,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    bool UsrExists;
    bool UsrBelongsToCrs;
    Rol_Role_t DesiredRole;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActReqMdfStd,
       [Rol_NET] = ActReqMdfNET,
@@ -2461,7 +2461,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Administration_administer_one_user;
    extern const char *Txt_Administer_one_user;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_GST] = ActReqMdfOth,
       [Rol_STD] = ActReqMdfStd,
@@ -2775,7 +2775,7 @@ void Enr_CreateNewUsr1 (void)
    extern const char *Txt_The_ID_X_is_not_valid;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
-   static const Act_Action_t Action[Rol_NUM_ROLES] =
+   static Act_Action_t Action[Rol_NUM_ROLES] =
      {
       [Rol_GST] = ActCreOth,
       [Rol_STD] = ActCreStd,
@@ -2877,7 +2877,7 @@ void Enr_ModifyUsr1 (void)
    Usr_MeOrOther_t MeOrOther;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
-   static const Act_Action_t Action[Rol_NUM_ROLES] =
+   static Act_Action_t Action[Rol_NUM_ROLES] =
      {
       [Rol_GST] = ActUpdOth,
       [Rol_STD] = ActUpdStd,
@@ -3083,7 +3083,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
    extern const char *Txt_Remove_me_from_this_course;
    extern const char *Txt_Remove_user_from_this_course;
    Usr_MeOrOther_t MeOrOther;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActRemStdCrs,
       [Rol_NET] = ActRemNETCrs,

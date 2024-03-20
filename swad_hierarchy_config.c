@@ -91,7 +91,7 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
    extern const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Short_name;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
-   static const Act_Action_t Action[Hie_NUM_LEVELS][Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t Action[Hie_NUM_LEVELS][Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Hie_INS][Nam_SHRT_NAME] = ActRenInsShoCfg,
       [Hie_INS][Nam_FULL_NAME] = ActRenInsFulCfg,

@@ -79,7 +79,7 @@ void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
                                 Hie_Level_t Level,DegTyp_Order_t Order);
 void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes);
 
-void DegTyp_ReceiveFormNewDegreeType (void);
+void DegTyp_ReceiveNewDegreeType (void);
 
 void DegTyp_RemoveDegreeType (void);
 

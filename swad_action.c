@@ -240,7 +240,7 @@ const char *Act_GetActionText (Act_Action_t Action)
 
 void Act_AdjustActionWhenNoUsrLogged (void)
   {
-   static const Act_Action_t Actions[Hie_NUM_LEVELS] =
+   static Act_Action_t Actions[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = ActUnk, 		// Unknown
       [Hie_SYS] = ActFrmLogIn,	// System

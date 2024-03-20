@@ -388,7 +388,7 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings)
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
   {
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenBldSho,
       [Nam_FULL_NAME] = ActRenBldFul,
@@ -714,7 +714,7 @@ static void Bld_PutHeadBuildings (void)
 /***************** Receive form to create a new building *********************/
 /*****************************************************************************/
 
-void Bld_ReceiveFormNewBuilding (void)
+void Bld_ReceiveNewBuilding (void)
   {
    extern const char *Txt_Created_new_building_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];

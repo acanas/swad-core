@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 
 static const char *Inf_FileNamesForInfoType[Inf_NUM_TYPES] =
   {
-   [Inf_INTRODUCTION  ] = Cfg_CRS_INFO_INTRODUCTION,
+   [Inf_INFORMATION   ] = Cfg_CRS_INFO_INFORMATION,
    [Inf_TEACHING_GUIDE] = Cfg_CRS_INFO_TEACHING_GUIDE,
    [Inf_LECTURES      ] = Cfg_CRS_INFO_LECTURES,
    [Inf_PRACTICALS    ] = Cfg_CRS_INFO_PRACTICALS,
@@ -70,9 +70,9 @@ static const char *Inf_FileNamesForInfoType[Inf_NUM_TYPES] =
    [Inf_ASSESSMENT    ] = Cfg_CRS_INFO_ASSESSMENT,
   };
 
-static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
+static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
   {
-   [Inf_NONE      ][Inf_INTRODUCTION  ] = ActUnk,
+   [Inf_NONE      ][Inf_INFORMATION   ] = ActUnk,
    [Inf_NONE      ][Inf_TEACHING_GUIDE] = ActUnk,
    [Inf_NONE      ][Inf_LECTURES      ] = ActUnk,
    [Inf_NONE      ][Inf_PRACTICALS    ] = ActUnk,
@@ -81,7 +81,7 @@ static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_NONE      ][Inf_LINKS         ] = ActUnk,
    [Inf_NONE      ][Inf_ASSESSMENT    ] = ActUnk,
 
-   [Inf_EDITOR    ][Inf_INTRODUCTION  ] = ActEditorCrsInf,
+   [Inf_EDITOR    ][Inf_INFORMATION   ] = ActEditorCrsInf,
    [Inf_EDITOR    ][Inf_TEACHING_GUIDE] = ActEditorTchGui,
    [Inf_EDITOR    ][Inf_LECTURES      ] = ActEditorSyl,
    [Inf_EDITOR    ][Inf_PRACTICALS    ] = ActEditorSyl,
@@ -90,7 +90,7 @@ static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_EDITOR    ][Inf_LINKS         ] = ActEditorCrsLnk,
    [Inf_EDITOR    ][Inf_ASSESSMENT    ] = ActEditorAss,
 
-   [Inf_PLAIN_TEXT][Inf_INTRODUCTION  ] = ActPlaTxtEdiCrsInf,
+   [Inf_PLAIN_TEXT][Inf_INFORMATION   ] = ActPlaTxtEdiCrsInf,
    [Inf_PLAIN_TEXT][Inf_TEACHING_GUIDE] = ActPlaTxtEdiTchGui,
    [Inf_PLAIN_TEXT][Inf_LECTURES      ] = ActPlaTxtEdiSyl,
    [Inf_PLAIN_TEXT][Inf_PRACTICALS    ] = ActPlaTxtEdiSyl,
@@ -99,7 +99,7 @@ static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_PLAIN_TEXT][Inf_LINKS         ] = ActPlaTxtEdiCrsLnk,
    [Inf_PLAIN_TEXT][Inf_ASSESSMENT    ] = ActPlaTxtEdiAss,
 
-   [Inf_RICH_TEXT ][Inf_INTRODUCTION  ] = ActRchTxtEdiCrsInf,
+   [Inf_RICH_TEXT ][Inf_INFORMATION   ] = ActRchTxtEdiCrsInf,
    [Inf_RICH_TEXT ][Inf_TEACHING_GUIDE] = ActRchTxtEdiTchGui,
    [Inf_RICH_TEXT ][Inf_LECTURES      ] = ActRchTxtEdiSyl,
    [Inf_RICH_TEXT ][Inf_PRACTICALS    ] = ActRchTxtEdiSyl,
@@ -108,7 +108,7 @@ static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_RICH_TEXT ][Inf_LINKS         ] = ActRchTxtEdiCrsLnk,
    [Inf_RICH_TEXT ][Inf_ASSESSMENT    ] = ActRchTxtEdiAss,
 
-   [Inf_PAGE      ][Inf_INTRODUCTION  ] = ActRcvPagCrsInf,
+   [Inf_PAGE      ][Inf_INFORMATION   ] = ActRcvPagCrsInf,
    [Inf_PAGE      ][Inf_TEACHING_GUIDE] = ActRcvPagTchGui,
    [Inf_PAGE      ][Inf_LECTURES      ] = ActRcvPagSyl,
    [Inf_PAGE      ][Inf_PRACTICALS    ] = ActRcvPagSyl,
@@ -117,7 +117,7 @@ static const Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_PAGE      ][Inf_LINKS         ] = ActRcvPagCrsLnk,
    [Inf_PAGE      ][Inf_ASSESSMENT    ] = ActRcvPagAss,
 
-   [Inf_URL       ][Inf_INTRODUCTION  ] = ActRcvURLCrsInf,
+   [Inf_URL       ][Inf_INFORMATION   ] = ActRcvURLCrsInf,
    [Inf_URL       ][Inf_TEACHING_GUIDE] = ActRcvURLTchGui,
    [Inf_URL       ][Inf_LECTURES      ] = ActRcvURLSyl,
    [Inf_URL       ][Inf_PRACTICALS    ] = ActRcvURLSyl,
@@ -191,7 +191,7 @@ void Inf_ShowInfo (void)
    bool ShowWarningNoInfo = false;
    const char *Help[Inf_NUM_TYPES] =
      {
-      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_textual_information,
+      [Inf_INFORMATION   ] = Hlp_COURSE_Information_textual_information,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
       [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
       [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
@@ -265,7 +265,7 @@ void Inf_ShowInfo (void)
 	       case Inf_PRACTICALS:
 		  ShowWarningNoInfo = !Syl_CheckAndShowSyllabus (&Syllabus);
 		  break;
-	       case Inf_INTRODUCTION:
+	       case Inf_INFORMATION:
 	       case Inf_TEACHING_GUIDE:
 	       case Inf_BIBLIOGRAPHY:
 	       case Inf_FAQ:
@@ -305,14 +305,9 @@ void Inf_ShowInfo (void)
 static void Inf_PutIconToViewInfo (void *Type)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
-   static struct
+   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      const Act_Action_t NextAction;
-      void (*FuncPars) (void *Args);
-      void *Args;
-     } Inf_Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = {ActSeeCrsInf,NULL,NULL},
+      [Inf_INFORMATION   ] = {ActSeeCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActSeeTchGui,NULL,NULL},
       [Inf_LECTURES      ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
       [Inf_PRACTICALS    ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
@@ -331,14 +326,9 @@ static void Inf_PutIconToViewInfo (void *Type)
 void Inf_PutIconToEditInfo (void *Type)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
-   static struct
+   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      const Act_Action_t NextAction;
-      void (*FuncPars) (void *Args);
-      void *Args;
-     } Inf_Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = {ActEdiCrsInf,NULL,NULL},
+      [Inf_INFORMATION   ] = {ActEdiCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActEdiTchGui,NULL,NULL},
       [Inf_LECTURES      ] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
       [Inf_PRACTICALS    ] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
@@ -362,14 +352,9 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Force_students_to_read_this_information;
-   static struct
+   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      const Act_Action_t NextAction;
-      void (*FuncPars) (void *Args);
-      void *Args;
-     } Inf_Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = {ActChgFrcReaCrsInf,NULL,NULL},
+      [Inf_INFORMATION   ] = {ActChgFrcReaCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActChgFrcReaTchGui,NULL,NULL},
       [Inf_LECTURES      ] = {ActChgFrcReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
       [Inf_PRACTICALS    ] = {ActChgFrcReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
@@ -396,14 +381,9 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_I_have_read_this_information;
-   static struct
+   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      const Act_Action_t NextAction;
-      void (*FuncPars) (void *Args);
-      void *Args;
-     } Inf_Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = {ActChgHavReaCrsInf,NULL,NULL},
+      [Inf_INFORMATION   ] = {ActChgHavReaCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActChgHavReaTchGui,NULL,NULL},
       [Inf_LECTURES      ] = {ActChgHavReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
       [Inf_PRACTICALS    ] = {ActChgHavReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
@@ -472,14 +452,9 @@ void Inf_WriteMsgYouMustReadInfo (void)
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Required_reading;
    extern const char *Txt_You_should_read_the_following_information;
-   static struct
+   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      const Act_Action_t NextAction;
-      void (*FuncPars) (void *Args);
-      void *Args;
-     } Inf_Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = {ActSeeCrsInf,NULL,NULL},
+      [Inf_INFORMATION   ] = {ActSeeCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActSeeTchGui,NULL,NULL},
       [Inf_LECTURES      ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
       [Inf_PRACTICALS    ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
@@ -840,9 +815,9 @@ void Inf_FormsToSelSendInfo (void)
    struct Inf_FromDB FromDB;
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
-   static const Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
+   static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
      {
-      [Inf_INTRODUCTION  ] = ActSelInfSrcCrsInf,
+      [Inf_INFORMATION   ] = ActSelInfSrcCrsInf,
       [Inf_TEACHING_GUIDE] = ActSelInfSrcTchGui,
       [Inf_LECTURES      ] = ActSelInfSrcSyl,
       [Inf_PRACTICALS    ] = ActSelInfSrcSyl,
@@ -863,7 +838,7 @@ void Inf_FormsToSelSendInfo (void)
      };
    const char *HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
+      [Inf_INFORMATION   ] = Hlp_COURSE_Information_edit,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
       [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
       [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
@@ -1128,7 +1103,7 @@ static void Inf_AsignInfoType (struct Inf_Info *Info,
    switch (Act_GetSuperAction (Gbl.Action.Act))
      {
       case ActSeeCrsInf:
-         Info->Type = Inf_INTRODUCTION;
+         Info->Type = Inf_INFORMATION;
          break;
       case ActSeeTchGui:
          Info->Type = Inf_TEACHING_GUIDE;
@@ -1247,7 +1222,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
                if (!Syl_CheckSyllabus (Syllabus,CrsCod))
                   FromDB->Src = Inf_NONE;
                break;
-            case Inf_INTRODUCTION:
+            case Inf_INFORMATION:
             case Inf_TEACHING_GUIDE:
             case Inf_BIBLIOGRAPHY:
             case Inf_FAQ:
@@ -1348,9 +1323,15 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
    if (TxtHTML[0])
      {
-      if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      switch (Gbl.Crs.Info.Type)
+	{
+	 case Inf_INFORMATION:
+	 case Inf_TEACHING_GUIDE:
+	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	    break;
+	 default:
+	    break;
+	}
 
       HTM_DIV_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 
@@ -1413,9 +1394,15 @@ static bool Inf_CheckAndShowRichTxt (void)
 
    if (TxtMD[0])
      {
-      if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      switch (Gbl.Crs.Info.Type)
+	{
+	 case Inf_INFORMATION:
+	 case Inf_TEACHING_GUIDE:
+	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	    break;
+	 default:
+	    break;
+	}
 
       HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",
 		     The_GetSuffix ());
@@ -1510,14 +1497,9 @@ void Inf_EditPlainTxtInfo (void)
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   static struct
+   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      const Act_Action_t NextAction;
-      void (*FuncPars) (void *Args);
-      void *Args;
-     } Inf_Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = {ActRcvPlaTxtCrsInf,NULL,NULL},
+      [Inf_INFORMATION   ] = {ActRcvPlaTxtCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActRcvPlaTxtTchGui,NULL,NULL},
       [Inf_LECTURES      ] = {ActRcvPlaTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
       [Inf_PRACTICALS    ] = {ActRcvPlaTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
@@ -1528,7 +1510,7 @@ void Inf_EditPlainTxtInfo (void)
      };
    const char *HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
+      [Inf_INFORMATION   ] = Hlp_COURSE_Information_edit,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
       [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
       [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
@@ -1551,9 +1533,15 @@ void Inf_EditPlainTxtInfo (void)
       Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
 		    HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-	 if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-	     Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	 switch (Gbl.Crs.Info.Type)
+	   {
+	    case Inf_INFORMATION:
+	    case Inf_TEACHING_GUIDE:
+	       Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	       break;
+	    default:
+	       break;
+	   }
 
 	 /***** Get info text from database *****/
 	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
@@ -1585,14 +1573,9 @@ void Inf_EditRichTxtInfo (void)
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   static struct
+   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      const Act_Action_t NextAction;
-      void (*FuncPars) (void *Args);
-      void *Args;
-     } Inf_Actions[Inf_NUM_TYPES] =
-     {
-      [Inf_INTRODUCTION  ] = {ActRcvRchTxtCrsInf,NULL,NULL},
+      [Inf_INFORMATION   ] = {ActRcvRchTxtCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActRcvRchTxtTchGui,NULL,NULL},
       [Inf_LECTURES      ] = {ActRcvRchTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
       [Inf_PRACTICALS    ] = {ActRcvRchTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
@@ -1603,7 +1586,7 @@ void Inf_EditRichTxtInfo (void)
      };
    const char *HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INTRODUCTION  ] = Hlp_COURSE_Information_edit,
+      [Inf_INFORMATION   ] = Hlp_COURSE_Information_edit,
       [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
       [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
       [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
@@ -1626,9 +1609,15 @@ void Inf_EditRichTxtInfo (void)
       Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
 		    HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-      if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
+      switch (Gbl.Crs.Info.Type)
+	{
+	 case Inf_INFORMATION:
+	 case Inf_TEACHING_GUIDE:
+	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
+	    break;
+	 default:
+	    break;
+	}
 
       /***** Get info text from database *****/
       Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,

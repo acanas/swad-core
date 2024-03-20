@@ -332,7 +332,7 @@ bool Exa_CheckIfICanEditExams (void)
 
 static void Exa_PutIconsListExams (void *Exams)
   {
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD    ] = ActSeeMyExaResCrs,
       [Rol_NET    ] = ActReqSeeUsrExaRes,
@@ -658,12 +658,12 @@ static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder)
 static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhExa,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidExa,	// Visible ==> action to hide
      };
-   static const Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
+   static Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
       [Rol_STD    ] = ActSeeMyExaResExa,
       [Rol_NET    ] = ActSeeUsrExaResExa,
@@ -1317,7 +1317,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static const Act_Action_t NextAction[] =
+   static Act_Action_t NextAction[] =
      {
       [Exa_EXISTING_EXAM] = ActChgExa,
       [Exa_NEW_EXAM     ] = ActNewExa,
@@ -1420,7 +1420,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 /********************** Receive form to create a new exam ********************/
 /*****************************************************************************/
 
-void Exa_ReceiveFormExam (void)
+void Exa_ReceiveExam (void)
   {
    struct Exa_Exams Exams;
    Exa_ExistingNewExam_t ExistingNewExam;

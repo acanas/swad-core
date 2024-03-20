@@ -1076,7 +1076,7 @@ static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat)
 
 void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
   {
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActFrmAccOth,
       [Rol_GST	  ] = ActFrmAccOth,

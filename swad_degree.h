@@ -66,8 +66,8 @@ void Deg_GetListAllDegsWithStds (struct Hie_List *Degs);
 void Deg_GetListDegsInCurrentCtr (void);
 void Deg_FreeListAllDegsWithStds (struct Hie_List *Degs);
 
-void Deg_ReceiveFormReqDeg (void);
-void Deg_ReceiveFormNewDeg (void);
+void Deg_ReceiveReqDeg (void);
+void Deg_ReceiveNewDeg (void);
 void Deg_RemoveDegree (void);
 
 bool Deg_GetDegreeDataByCod (struct Hie_Node *Node);

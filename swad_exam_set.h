@@ -39,7 +39,7 @@ void ExaSet_PutParsOneSet (void *Exams);
 
 void ExaSet_GetSetDataByCod (struct ExaSet_Set *Set);
 
-void ExaSet_ReceiveFormSet (void);
+void ExaSet_ReceiveSet (void);
 void ExaSet_ChangeSetTitle (void);
 void ExaSet_ChangeNumQstsToExam (void);
 

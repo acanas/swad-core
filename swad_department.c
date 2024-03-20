@@ -441,7 +441,7 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
    extern const char *Txt_Another_institution;
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenDptSho,
       [Nam_FULL_NAME] = ActRenDptFul,
@@ -862,7 +862,7 @@ static void Dpt_PutHeadDepartments (void)
 /***************** Receive form to create a new department *******************/
 /*****************************************************************************/
 
-void Dpt_ReceiveFormNewDpt (void)
+void Dpt_ReceiveNewDpt (void)
   {
    extern const char *Txt_Created_new_department_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];

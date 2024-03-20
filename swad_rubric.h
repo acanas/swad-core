@@ -77,7 +77,7 @@ void Rub_ReqCreatOrEditRubric (void);
 void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
 			    Rub_ExistingNewRubric_t ExistingNewRubric);
 
-void Rub_ReceiveFormRubric (void);
+void Rub_ReceiveRubric (void);
 
 //-------------------------------- Figures ------------------------------------
 void Rub_GetAndShowRubricsStats (void);

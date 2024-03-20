@@ -281,7 +281,7 @@ static void TmlPub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
 
 static unsigned TmlPub_GetMaxPubsToGet (const struct Tml_Timeline *Timeline)
   {
-   static const unsigned MaxPubsToGet[Tml_NUM_WHAT_TO_GET] =
+   static unsigned MaxPubsToGet[Tml_NUM_WHAT_TO_GET] =
      {
       [Tml_GET_NEW_PUBS] = TmlPub_MAX_NEW_PUBS_TO_GET_AND_SHOW,
       [Tml_GET_REC_PUBS] = TmlPub_MAX_REC_PUBS_TO_GET_AND_SHOW,

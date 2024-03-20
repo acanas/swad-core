@@ -97,7 +97,7 @@ void Att_RemoveEventFromDB (long AttCod);
 
 void Att_HideEvent (void);
 void Att_UnhideEvent (void);
-void Att_ReceiveFormEvent (void);
+void Att_ReceiveEvent (void);
 void Att_CreateEvent (struct Att_Event *Event,const char *Description);
 void Att_UpdateEvent (struct Att_Event *Event,const char *Description);
 

@@ -523,7 +523,7 @@ static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Rol
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
   {
    extern const char *Txt_View_record_for_this_course;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActSeeRecOneStd,
       [Rol_NET] = ActSeeRecOneTch,
@@ -624,7 +624,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
 static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t Role)
   {
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActSeeRecOneStd,
       [Rol_NET] = ActSeeRecOneTch,

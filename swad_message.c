@@ -1430,13 +1430,13 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    unsigned NumUnreadMsgs;
    struct Pag_Pagination Pagination;
    long MsgCod;
-   static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
+   static Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = ActUnk,
       [Msg_RECEIVED] = ActSeeRcvMsg,
       [Msg_SENT    ] = ActSeeSntMsg,
      };
-   static const Pag_WhatPaginate_t WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
+   static Pag_WhatPaginate_t WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = Pag_NONE,
       [Msg_RECEIVED] = Pag_MESSAGES_RECEIVED,
@@ -1674,7 +1674,7 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 
 static void Msg_PutIconsListMsgs (void *Messages)
   {
-   static const Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
+   static Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = ActUnk,
       [Msg_RECEIVED] = ActReqDelAllRcvMsg,
@@ -2000,7 +2000,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
-   static const Act_Action_t ActionDelMsg[Msg_NUM_TYPES_OF_MSGS] =
+   static Act_Action_t ActionDelMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = ActUnk,
       [Msg_RECEIVED] = ActDelRcvMsg,
@@ -2452,7 +2452,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    extern const char *Txt_and_X_other_recipients;
    extern const char *Txt_unknown_recipient;
    extern const char *Txt_unknown_recipients;
-   static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
+   static Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = ActUnk,
       [Msg_RECEIVED] = ActSeeRcvMsg,

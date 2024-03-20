@@ -76,6 +76,6 @@ void Plg_ChangePlgURL (void);
 void Plg_ChangePlgIP (void);
 void Plg_ContEditAfterChgPlg (void);
 
-void Plg_ReceiveFormNewPlg (void);
+void Plg_ReceiveNewPlg (void);
 
 #endif

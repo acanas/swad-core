@@ -833,6 +833,8 @@ void Par_GetMainPars (void)
       case ActSndNewPwd:
          Usr_GetParUsrIdLogin ();
 	 break;
+      default:
+	 break;
      }
 
    /***** Try to get settings changed from current IP *****/

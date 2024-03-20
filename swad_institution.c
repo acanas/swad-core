@@ -97,7 +97,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void);
 
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
-static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status);
+static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status);
 
 static void Ins_EditingInstitutionConstructor ();
 static void Ins_EditingInstitutionDestructor ();
@@ -875,7 +875,7 @@ void Ins_WriteSelectorOfInstitution (void)
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenInsSho,
       [Nam_FULL_NAME] = ActRenInsFul,
@@ -1431,33 +1431,33 @@ static void Ins_PutHeadInstitutionsForEdition (void)
 /*************** Receive form to request a new institution *******************/
 /*****************************************************************************/
 
-void Ins_ReceiveFormReqIns (void)
+void Ins_ReceiveReqIns (void)
   {
    /***** Institution constructor *****/
    Ins_EditingInstitutionConstructor ();
 
    /***** Receive form to request a new institution *****/
-   Ins_ReceiveFormRequestOrCreateIns ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
+   Ins_ReceiveRequestOrCreateIns ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /***************** Receive form to create a new institution ******************/
 /*****************************************************************************/
 
-void Ins_ReceiveFormNewIns (void)
+void Ins_ReceiveNewIns (void)
   {
    /***** Institution constructor *****/
    Ins_EditingInstitutionConstructor ();
 
    /***** Receive form to create a new institution *****/
-   Ins_ReceiveFormRequestOrCreateIns ((Hie_Status_t) 0);
+   Ins_ReceiveRequestOrCreateIns ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /*********** Receive form to request or create a new institution *************/
 /*****************************************************************************/
 
-static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
+static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status)
   {
    extern const char *Txt_Created_new_institution_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];

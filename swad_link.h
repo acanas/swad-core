@@ -52,6 +52,6 @@ void Lnk_RenameLinkShort (void);
 void Lnk_RenameLinkFull (void);
 void Lnk_ChangeLinkWWW (void);
 void Lnk_ContEditAfterChgLnk (void);
-void Lnk_ReceiveFormNewLink (void);
+void Lnk_ReceiveNewLink (void);
 
 #endif

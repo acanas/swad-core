@@ -94,7 +94,7 @@ struct Tmt_Cell *Tmt_TimeTable[Tmt_DAYS_PER_WEEK];
 
 /* Possible resolutions of the timetable in minutes */
 #define Tmt_NUM_RESOLUTIONS 3
-static const unsigned Tmt_MinutesPerInterval[Tmt_NUM_RESOLUTIONS] =
+static unsigned Tmt_MinutesPerInterval[Tmt_NUM_RESOLUTIONS] =
   {
     5,	//  5 minutes
    15,	// 15 minutes	// Use 10 or 15 minutes (15 looks better), never both together
@@ -316,7 +316,7 @@ void Tmt_ShowClassTimeTable (void)
       [Tmt_MY_TIMETABLE      ] = Hlp_PROFILE_Timetable,
       [Tmt_TUTORING_TIMETABLE] = NULL,
      };
-   static const Act_Action_t ActChgTT1stDay[Tmt_NUM_TIMETABLE_TYPES] =
+   static  Act_Action_t ActChgTT1stDay[Tmt_NUM_TIMETABLE_TYPES] =
      {
       [Tmt_COURSE_TIMETABLE  ] = ActChgCrsTT1stDay,
       [Tmt_MY_TIMETABLE      ] = ActChgMyTT1stDay,
@@ -442,7 +442,7 @@ static void Tmt_PutContextualIcons (void *Timetable)
 
 static void Tmt_PutFormToSelectWhichGroupsToShow (const struct Tmt_Timetable *Timetable)
   {
-   static const Act_Action_t ActSeeTT[Tmt_NUM_TIMETABLE_TYPES] =
+   static Act_Action_t ActSeeTT[Tmt_NUM_TIMETABLE_TYPES] =
      {
       [Tmt_COURSE_TIMETABLE  ] = ActSeeCrsTT,
       [Tmt_MY_TIMETABLE      ] = ActSeeMyTT,
@@ -1495,7 +1495,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    extern const char *Txt_Group;
    extern const char *Txt_All_groups;
    extern const char *Txt_Info;
-   static const Act_Action_t NextAction[Tmt_NUM_TIMETABLE_TYPES] =
+   static Act_Action_t NextAction[Tmt_NUM_TIMETABLE_TYPES] =
      {
       [Tmt_COURSE_TIMETABLE  ] = ActChgCrsTT,
       [Tmt_MY_TIMETABLE      ] = ActChgTut,

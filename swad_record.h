@@ -117,7 +117,7 @@ struct LstRecordFields
 void Rec_ReqEditRecordFields (void);
 void Rec_GetListRecordFieldsInCurrentCrs (void);
 void Rec_ShowFormCreateRecordField (void);
-void Rec_ReceiveFormField (void);
+void Rec_ReceiveField (void);
 unsigned Rec_ConvertToNumLinesField (const char *StrNumLines);
 bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName);
 void Rec_CreateRecordField (void);

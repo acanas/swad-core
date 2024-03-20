@@ -123,7 +123,7 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    /* Profile tab */
   };
 
-static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
+static Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
   {
    [Ntf_EVENT_UNKNOWN          ] = ActUnk,
    /* Start tab */
@@ -777,7 +777,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                              long CrsCod,const struct Usr_Data *UsrDat,long Cod,
                                              const struct For_Forums *Forums)
   {
-   extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
+   extern Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    struct Brw_FileMetadata FileMetadata;
    long InsCod = -1L;
    long CtrCod = -1L;

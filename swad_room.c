@@ -626,7 +626,7 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms)
   {
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenRooSho,
       [Nam_FULL_NAME] = ActRenRooFul,
@@ -1293,7 +1293,7 @@ static void Roo_PutHeadRooms (void)
 /******************* Receive form to create a new room ***********************/
 /*****************************************************************************/
 
-void Roo_ReceiveFormNewRoom (void)
+void Roo_ReceiveNewRoom (void)
   {
    extern const char *Txt_Created_new_room_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];

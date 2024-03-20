@@ -238,8 +238,8 @@ const char *MIM_MIMETypesAllowed[] =
    "zz-application/zz-winassoc-mpp"	// Microsoft Project mpp
   };
 
-const unsigned MIM_NUM_MIME_TYPES_ALLOWED = sizeof (MIM_MIMETypesAllowed) /
-					    sizeof (MIM_MIMETypesAllowed[0]);
+unsigned MIM_NUM_MIME_TYPES_ALLOWED = sizeof (MIM_MIMETypesAllowed) /
+				      sizeof (MIM_MIMETypesAllowed[0]);
 
 /*****************************************************************************/
 /******** Check if MIME type is allowed **********/

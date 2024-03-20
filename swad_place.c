@@ -423,7 +423,7 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
   {
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenPlcSho,
       [Nam_FULL_NAME] = ActRenPlcFul,
@@ -692,7 +692,7 @@ static void Plc_PutHeadPlaces (void)
 /******************* Receive form to create a new place **********************/
 /*****************************************************************************/
 
-void Plc_ReceiveFormNewPlace (void)
+void Plc_ReceiveNewPlace (void)
   {
    extern const char *Txt_Created_new_place_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];

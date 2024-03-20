@@ -837,7 +837,7 @@ void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder)
 static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
                                          const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhSvy,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidSvy,	// Visible ==> action to hide
@@ -1873,7 +1873,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 /********************* Receive form to create a new survey *******************/
 /*****************************************************************************/
 
-void Svy_ReceiveFormSurvey (void)
+void Svy_ReceiveSurvey (void)
   {
    extern const char *Txt_Already_existed_a_survey_with_the_title_X;
    struct Svy_Surveys Surveys;

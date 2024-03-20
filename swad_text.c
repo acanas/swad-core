@@ -111,7 +111,7 @@
 #define L 3	// English
 #endif
 
-const unsigned Txt_Current_CGI_SWAD_Language = ((unsigned) L);
+unsigned Txt_Current_CGI_SWAD_Language = ((unsigned) L);
 
 const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n the file does not look good in some Windows text editors
 
@@ -11256,7 +11256,7 @@ const char *Txt_EMAIL_DOMAIN_ORDER[Mai_NUM_ORDERS] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl
@@ -17313,7 +17313,7 @@ const char *Txt_Info =
 
 const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	{
-	[Inf_INTRODUCTION] =
+	[Inf_INFORMATION] =
 #if   L==1	// ca
 	"Informaci&oacute;"
 #elif L==2	// de
@@ -17325,7 +17325,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl
@@ -20354,7 +20354,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl
@@ -20494,7 +20494,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl
@@ -20542,7 +20542,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl
@@ -20659,7 +20659,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl
@@ -20753,7 +20753,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl
@@ -20801,7 +20801,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Information"
 #elif L==6	// gn
-	"Informaci&oacute;n"	// Okoteve traducción
+	"Marandu"
 #elif L==7	// it
 	"Informazione"
 #elif L==8	// pl

@@ -1007,7 +1007,7 @@ static void Hld_PutHeadHolidays (void)
 /******************* Receive form to create a new holiday ********************/
 /*****************************************************************************/
 
-void Hld_ReceiveFormNewHoliday (void)
+void Hld_ReceiveNewHoliday (void)
   {
    extern const char *Txt_Created_new_holiday_X;
    extern const char *Txt_You_must_specify_the_name;

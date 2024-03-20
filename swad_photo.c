@@ -174,7 +174,7 @@ bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
 
 void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
   {
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActReqOthPho,
       [Rol_GST	  ] = ActReqOthPho,
@@ -226,7 +226,7 @@ static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args
   {
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    bool PhotoExists;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActReqRemOthPho,
       [Rol_GST	  ] = ActReqRemOthPho,
@@ -286,7 +286,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
    extern const char *Txt_File_with_the_photo;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActDetOthPho,
       [Rol_GST	  ] = ActDetOthPho,
@@ -491,7 +491,7 @@ void Pho_ReqRemUsrPhoto (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_photo_of_X;
    extern const char *Txt_Remove;
    extern const char *Txt_The_photo_no_longer_exists;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActRemOthPho,
       [Rol_GST	  ] = ActRemOthPho,
@@ -620,7 +620,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    unsigned Radius;
    unsigned BackgroundCode;
    char StrFileName[NAME_MAX + 1];
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActChgOthPho,
       [Rol_GST	  ] = ActChgOthPho,

@@ -104,7 +104,7 @@ static bool Crs_CheckIfICanEdit (struct Hie_Node *Crs);
 static void Crs_PutFormToCreateCourse (void);
 static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
-static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status);
+static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status);
 static void Crs_GetParsNewCourse (struct Hie_Node *Crs);
 
 static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
@@ -653,7 +653,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenCrsSho,
       [Nam_FULL_NAME] = ActRenCrsFul,
@@ -942,33 +942,33 @@ static void Crs_PutHeadCoursesForEdition (void)
 /****************** Receive form to request a new course *********************/
 /*****************************************************************************/
 
-void Crs_ReceiveFormReqCrs (void)
+void Crs_ReceiveReqCrs (void)
   {
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
 
    /***** Receive form to request a new course *****/
-   Crs_ReceiveFormRequestOrCreateCrs ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
+   Crs_ReceiveRequestOrCreateCrs ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new course *********************/
 /*****************************************************************************/
 
-void Crs_ReceiveFormNewCrs (void)
+void Crs_ReceiveNewCrs (void)
   {
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
 
    /***** Receive form to create a new course *****/
-   Crs_ReceiveFormRequestOrCreateCrs ((Hie_Status_t) 0);
+   Crs_ReceiveRequestOrCreateCrs ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /************* Receive form to request or create a new course ****************/
 /*****************************************************************************/
 
-static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
+static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status)
   {
    extern const char *Txt_Created_new_course_X;
    extern const char *Txt_The_year_X_is_not_allowed;

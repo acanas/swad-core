@@ -536,7 +536,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Prg_Item *Item,
                                                  unsigned NumRsc,
                                                  unsigned NumResources)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidPrgRsc,	// Visible ==> action to hide

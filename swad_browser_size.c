@@ -117,7 +117,7 @@
 #define BrwSiz_MAX_FILES_MARKS_GRP	200
 #define BrwSiz_MAX_FOLDS_MARKS_GRP	20
 
-static const unsigned long long BrwSiz_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
+static unsigned long long BrwSiz_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
   {
    [Rol_STD] =	32ULL*BrwSiz_GiB,
    [Rol_NET] =	32ULL*BrwSiz_GiB,

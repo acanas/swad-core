@@ -621,14 +621,14 @@ static void Prg_PutIconToContractOrExpandItem (struct Prg_Item *Item,
                                                ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                                                Vie_ViewType_t ViewType)
   {
-   static const Act_Action_t NextAction[ConExp_NUM_CONTRACTED_EXPANDED][Vie_NUM_VIEW_TYPES] =
+   static Act_Action_t NextAction[ConExp_NUM_CONTRACTED_EXPANDED][Vie_NUM_VIEW_TYPES] =
      {
       [ConExp_CONTRACTED][Vie_VIEW] = ActExpSeePrgItm,	// Contracted, Not editing ==> action to expand
       [ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiPrgItm,	// Contracted,     Editing ==> action to expand
       [ConExp_EXPANDED  ][Vie_VIEW] = ActConSeePrgItm,	// Expanded  , Not editing ==> action to contract
       [ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiPrgItm,	// Expanded  ,     Editing ==> action to contract
      };
-   static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (const Act_Action_t NextAction,const char *Anchor,
+   static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (Act_Action_t NextAction,const char *Anchor,
 								     void (*FuncPars) (void *Args),void *Args) =
      {
       [ConExp_CONTRACTED] = Ico_PutContextualIconToExpand,	// Contracted ==> function to expand
@@ -934,7 +934,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
                                           bool HighlightItem)
   {
    extern const char *Txt_Movement_not_allowed;
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhPrgItm,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidPrgItm,	// Visible ==> action to hide
@@ -2002,7 +2002,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 /************* Receive form to change an existing program item ***************/
 /*****************************************************************************/
 
-void Prg_ReceiveFormChgItem (void)
+void Prg_ReceiveChgItem (void)
   {
    struct Prg_Item Item;
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -2045,7 +2045,7 @@ void Prg_ReceiveFormChgItem (void)
 /***************** Receive form to create a new program item *****************/
 /*****************************************************************************/
 
-void Prg_ReceiveFormNewItem (void)
+void Prg_ReceiveNewItem (void)
   {
    struct Prg_Item Item;		// Parent item
    struct Prg_Item NewItem;		// Item data received from form

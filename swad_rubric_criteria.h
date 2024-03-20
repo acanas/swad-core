@@ -36,7 +36,7 @@
 
 void RubCri_GetCriterionDataByCod (struct RubCri_Criterion *Criterion);
 
-void RubCri_ReceiveFormCriterion (void);
+void RubCri_ReceiveCriterion (void);
 void RubCri_ChangeTitle (void);
 void RubCri_ChangeMinValue (void);
 void RubCri_ChangeMaxValue (void);

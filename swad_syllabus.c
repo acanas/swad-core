@@ -503,9 +503,9 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
       [Vie_VIEW] = 0,
       [Vie_EDIT] = 5,
      };
-   static const Act_Action_t Inf_Actions[Inf_NUM_TYPES] =
+   static Act_Action_t Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INTRODUCTION  ] = ActSeeCrsInf,
+      [Inf_INFORMATION   ] = ActSeeCrsInf,
       [Inf_TEACHING_GUIDE] = ActSeeTchGui,
       [Inf_LECTURES      ] = ActSeeSyl,
       [Inf_PRACTICALS    ] = ActSeeSyl,

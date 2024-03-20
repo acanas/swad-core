@@ -43,7 +43,7 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS] =
+Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS] =
   {
    [TmlFrm_RECEIVE_POST] = ActRcvPstGblTL,
    [TmlFrm_RECEIVE_COMM] = ActRcvComGblTL,
@@ -62,7 +62,7 @@ const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS] =
    [TmlFrm_ALL_FAV_COMM] = ActAllFavComGblTL,
    [TmlFrm_SHO_HID_COMM] = ActShoHidComGblTL,
   };
-const Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS] =
+Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS] =
   {
    [TmlFrm_RECEIVE_POST] = ActRcvPstUsrTL,
    [TmlFrm_RECEIVE_COMM] = ActRcvComUsrTL,

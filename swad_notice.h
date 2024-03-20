@@ -67,8 +67,8 @@ void Not_ListNoticesAfterRemoval (void);
 void Not_ListFullNotices (void);
 void Not_GetHighLightedNotCod (void);
 
-void Not_HideActiveNotice (void);
-void Not_RevealHiddenNotice (void);
+void Not_HideNotice (void);
+void Not_UnhideNotice (void);
 
 void Not_ReqRemNotice (void);
 void Not_RemoveNotice (void);

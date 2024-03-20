@@ -96,7 +96,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentersForEdition (void);
-static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status);
+static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status);
 
 static void Ctr_EditingCenterConstructor (void);
 static void Ctr_EditingCenterDestructor (void);
@@ -726,7 +726,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenCtrSho,
       [Nam_FULL_NAME] = ActRenCtrFul,
@@ -1422,33 +1422,33 @@ static void Ctr_PutHeadCentersForEdition (void)
 /****************** Receive form to request a new center *********************/
 /*****************************************************************************/
 
-void Ctr_ReceiveFormReqCtr (void)
+void Ctr_ReceiveReqCtr (void)
   {
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
 
    /***** Receive form to request a new center *****/
-   Ctr_ReceiveFormRequestOrCreateCtr ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
+   Ctr_ReceiveRequestOrCreateCtr ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new center *********************/
 /*****************************************************************************/
 
-void Ctr_ReceiveFormNewCtr (void)
+void Ctr_ReceiveNewCtr (void)
   {
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
 
    /***** Receive form to create a new center *****/
-   Ctr_ReceiveFormRequestOrCreateCtr ((Hie_Status_t) 0);
+   Ctr_ReceiveRequestOrCreateCtr ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /************* Receive form to request or create a new center ****************/
 /*****************************************************************************/
 
-static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
+static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
   {
    extern const char *Txt_Created_new_center_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];

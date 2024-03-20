@@ -127,7 +127,7 @@ void Agd_UnhideEvent (void);
 void Agd_MakeEventPrivate (void);
 void Agd_MakeEventPublic (void);
 
-void Agd_ReceiveFormEvent (void);
+void Agd_ReceiveEvent (void);
 
 void Agd_PrintAgdQRCode (void);
 

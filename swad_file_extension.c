@@ -151,8 +151,8 @@ const char *Ext_FileExtensionsAllowed[] =
    "zip"  ,
   };
 
-const unsigned Ext_NUM_FILE_EXT_ALLOWED = sizeof (Ext_FileExtensionsAllowed) /
-					  sizeof (Ext_FileExtensionsAllowed[0]);
+unsigned Ext_NUM_FILE_EXT_ALLOWED = sizeof (Ext_FileExtensionsAllowed) /
+				    sizeof (Ext_FileExtensionsAllowed[0]);
 
 /*****************************************************************************/
 /******************* Check if file extension is allowed **********************/

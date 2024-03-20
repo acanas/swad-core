@@ -379,7 +379,7 @@ static bool Gam_CheckIfICanListGameQuestions (void)
 
 static void Gam_PutIconsListingGames (void *Games)
   {
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD    ] = ActSeeMyMchResCrs,
       [Rol_NET    ] = ActReqSeeUsrMchRes,
@@ -716,12 +716,12 @@ static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder)
 static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhGam,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidGam,	// Visible ==> action to hide
      };
-   static const Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
+   static Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
       [Rol_STD    ] = ActSeeMyMchResGam,
       [Rol_NET    ] = ActSeeUsrMchResGam,
@@ -1324,7 +1324,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static const Act_Action_t NextAction[] =
+   static Act_Action_t NextAction[] =
      {
       [Gam_EXISTING_GAME] = ActChgGam,
       [Gam_NEW_GAME     ] = ActNewGam,
@@ -1426,7 +1426,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 /********************** Receive form to create a new game ********************/
 /*****************************************************************************/
 
-void Gam_ReceiveFormGame (void)
+void Gam_ReceiveGame (void)
   {
    struct Gam_Games Games;
    Gam_ExistingNewGame_t ExistingNewGame;

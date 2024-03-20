@@ -75,7 +75,7 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X;
    extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
-   static const Act_Action_t Enr_ActNewAdm[Hie_NUM_LEVELS] =
+   static Act_Action_t Enr_ActNewAdm[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = ActUnk,
       [Hie_SYS] = ActUnk,
@@ -344,7 +344,7 @@ static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level)
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X;
    extern const char *Txt_Remove_me_as_an_administrator;
    extern const char *Txt_Remove_USER_as_an_administrator;
-   static const Act_Action_t ActRemAdm[Hie_NUM_LEVELS] =
+   static Act_Action_t ActRemAdm[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = ActUnk,
       [Hie_SYS] = ActUnk,

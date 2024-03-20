@@ -74,7 +74,7 @@ extern struct Globals Gbl;
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
-const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActSeeForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActSeeForCrsTch,
@@ -91,7 +91,7 @@ const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActSeePstForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActSeePstForCrsTch,
@@ -108,7 +108,7 @@ const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActRcvThrForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActRcvThrForCrsTch,
@@ -125,7 +125,7 @@ const Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActRcvRepForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActRcvRepForCrsTch,
@@ -142,7 +142,7 @@ const Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActReqDelThrCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActReqDelThrCrsTch,
@@ -159,7 +159,7 @@ const Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActDelThrForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActDelThrForCrsTch,
@@ -176,7 +176,7 @@ const Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActCutThrForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActCutThrForCrsTch,
@@ -193,7 +193,7 @@ const Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActPasThrForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActPasThrForCrsTch,
@@ -210,7 +210,7 @@ const Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActDelPstForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActDelPstForCrsTch,
@@ -227,7 +227,7 @@ const Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActEnbPstForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActEnbPstForCrsTch,
@@ -244,7 +244,7 @@ const Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
    [For_FORUM_UNKNOWN    ] = ActSeeFor,
   };
 
-const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
+Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = ActDisPstForCrsUsr,
    [For_FORUM_COURSE_TCHS] = ActDisPstForCrsTch,
@@ -267,7 +267,7 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
 
 #define For_FORUM_MAX_LEVELS 5
 
-static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
+static unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
   {
    [For_FORUM_COURSE_USRS] = 0x3F0,
    [For_FORUM_COURSE_TCHS] = 0x3F0,

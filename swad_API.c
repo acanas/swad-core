@@ -1195,7 +1195,7 @@ int swad__getCourseInfo (struct soap *soap,
    int Result = SOAP_OK;
    const char *NamesInWSForInfoType[Inf_NUM_TYPES] =
      {
-      [Inf_INTRODUCTION  ] = "introduction",
+      [Inf_INFORMATION   ] = "introduction",
       [Inf_TEACHING_GUIDE] = "guide",
       [Inf_LECTURES      ] = "lectures",
       [Inf_PRACTICALS    ] = "practicals",

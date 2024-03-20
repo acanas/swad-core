@@ -697,8 +697,8 @@ static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
 static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 	                                long PubCod)
   {
-   extern const Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS];
-   extern const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS];
+   extern Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS];
+   extern Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS];
 
    /***** Form to remove publication *****/
    /* Begin form */

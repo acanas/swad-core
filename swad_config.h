@@ -433,14 +433,14 @@
 #define Cfg_SYLLABUS_FILENAME			"syllabus.xml"
 
 /* Main folders in file browsers */
-#define Cfg_CRS_INFO_INTRODUCTION		"intro"
-#define Cfg_CRS_INFO_TEACHING_GUIDE		"description"
-#define Cfg_CRS_INFO_LECTURES			"teoria"
-#define Cfg_CRS_INFO_PRACTICALS			"practicas"
-#define Cfg_CRS_INFO_BIBLIOGRAPHY		"bibliografia"
-#define Cfg_CRS_INFO_FAQ			"FAQ"
-#define Cfg_CRS_INFO_LINKS			"enlaces"
-#define Cfg_CRS_INFO_ASSESSMENT			"evaluacion"
+#define Cfg_CRS_INFO_INFORMATION		"intro"		// TODO: Change to inf
+#define Cfg_CRS_INFO_TEACHING_GUIDE		"description"	// TODO: Change to gui
+#define Cfg_CRS_INFO_LECTURES			"teoria"	// TODO: Change to lec
+#define Cfg_CRS_INFO_PRACTICALS			"practicas"	// TODO: Change to pra
+#define Cfg_CRS_INFO_BIBLIOGRAPHY		"bibliografia"	// TODO: Change to bib
+#define Cfg_CRS_INFO_FAQ			"FAQ"		// TODO: Change to faq
+#define Cfg_CRS_INFO_LINKS			"enlaces"	// TODO: Change to lnk
+#define Cfg_CRS_INFO_ASSESSMENT			"evaluacion"	// TODO: Change to ass
 
 /* RSS folders and files */
 #define Cfg_RSS_FOLDER				"rss"

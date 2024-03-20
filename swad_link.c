@@ -395,7 +395,7 @@ static void Lnk_FreeListLinks (struct Lnk_Links *Links)
 
 static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
   {
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenLnkSho,
       [Nam_FULL_NAME] = ActRenLnkFul,
@@ -707,7 +707,7 @@ static void Lnk_PutHeadLinks (void)
 /******************* Receive form to create a new link ***********************/
 /*****************************************************************************/
 
-void Lnk_ReceiveFormNewLink (void)
+void Lnk_ReceiveNewLink (void)
   {
    extern const char *Txt_You_must_specify_the_web_address;
    extern const char *Txt_Created_new_link_X;

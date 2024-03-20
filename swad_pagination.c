@@ -55,8 +55,8 @@
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-extern const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM];
+extern Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
+extern Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/

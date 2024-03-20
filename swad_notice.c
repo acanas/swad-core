@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 
 #define Not_MAX_CHARS_ON_NOTICE	40	// Maximum number of characters in notices (when not expanded)
 
-static const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
+static unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
   {
    [Not_LIST_BRIEF_NOTICES] = 15,
    [Not_LIST_FULL_NOTICES ] = 50,
@@ -206,7 +206,7 @@ void Not_GetHighLightedNotCod (void)
 /***************** Mark as hidden a notice that was active *******************/
 /*****************************************************************************/
 
-void Not_HideActiveNotice (void)
+void Not_HideNotice (void)
   {
    long NotCod;
 
@@ -227,7 +227,7 @@ void Not_HideActiveNotice (void)
 /****************** Mark as active a notice that was hidden ******************/
 /*****************************************************************************/
 
-void Not_RevealHiddenNotice (void)
+void Not_UnhideNotice (void)
   {
    long NotCod;
 
@@ -508,7 +508,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              Lay_Highlight_t Highlight)
   {
    extern const char *Txt_See_full_notice;
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhNot,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidNot,	// Visible ==> action to hide

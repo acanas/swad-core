@@ -74,6 +74,6 @@ void Plc_RenamePlaceShort (void);
 void Plc_RenamePlaceFull (void);
 void Plc_ContEditAfterChgPlc (void);
 
-void Plc_ReceiveFormNewPlace (void);
+void Plc_ReceiveNewPlace (void);
 
 #endif

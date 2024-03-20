@@ -412,7 +412,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
 					       const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhExaSes,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidExaSes,	// Visible ==> action to hide
@@ -1083,7 +1083,7 @@ void ExaSes_ReqCreatOrEditSes (void)
 /****************** Create a new exam session (by a teacher) *****************/
 /*****************************************************************************/
 
-void ExaSes_ReceiveFormSession (void)
+void ExaSes_ReceiveSession (void)
   {
    extern const char *Txt_Created_new_session_X;
    extern const char *Txt_The_session_has_been_modified;

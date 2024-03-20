@@ -102,7 +102,7 @@ void Asg_ReqRemAssignment (void);
 void Asg_RemoveAssignment (void);
 void Asg_HideAssignment (void);
 void Asg_UnhideAssignment (void);
-void Asg_ReceiveFormAssignment (void);
+void Asg_ReceiveAssignment (void);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
 void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg);

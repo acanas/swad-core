@@ -67,7 +67,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
                              struct ExaSes_Session *Session);
 
 void ExaSes_ReqCreatOrEditSes (void);
-void ExaSes_ReceiveFormSession (void);
+void ExaSes_ReceiveSession (void);
 
 bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
                                           const struct ExaSes_Session *Session);

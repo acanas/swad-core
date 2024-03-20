@@ -89,6 +89,13 @@ struct Act_Actions
    void (*FunctionPosteriori) ();
   };
 
+struct Act_ActionFunc
+  {
+   Act_Action_t NextAction;
+   void (*FuncPars) (void *Args);
+   void *Args;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

@@ -86,7 +86,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Log_in;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   static const Act_Action_t ActionsRemoveMe[Rol_NUM_ROLES] =
+   static Act_Action_t ActionsRemoveMe[Rol_NUM_ROLES] =
      {
       [Rol_UNK    ] = ActUnk,
       [Rol_GST    ] = ActUnk,

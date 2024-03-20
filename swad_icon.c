@@ -311,7 +311,7 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,const char *Ancho
 				  "cog.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE],
+void Ico_PutContextualIconToHideUnhide (Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE],
                                         const char *Anchor,
                                         void (*FuncPars) (void *Args),void *Args,
                                         HidVis_HiddenOrVisible_t HiddenOrVisible)
@@ -322,7 +322,7 @@ void Ico_PutContextualIconToHideUnhide (const Act_Action_t NextAction[HidVis_NUM
 				  Ico_HiddenVisible[HiddenOrVisible].Color);
   }
 
-void Ico_PutContextualIconToExpand (const Act_Action_t NextAction,const char *Anchor,
+void Ico_PutContextualIconToExpand (Act_Action_t NextAction,const char *Anchor,
                                     void (*FuncPars) (void *Args),void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
@@ -330,7 +330,7 @@ void Ico_PutContextualIconToExpand (const Act_Action_t NextAction,const char *An
 				  "caret-right.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToContract (const Act_Action_t NextAction,const char *Anchor,
+void Ico_PutContextualIconToContract (Act_Action_t NextAction,const char *Anchor,
                                       void (*FuncPars) (void *Args),void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,

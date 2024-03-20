@@ -441,7 +441,7 @@ static void Rec_WriteHeadingRecordFields (void)
 /*************** Receive data from a form of record fields *******************/
 /*****************************************************************************/
 
-void Rec_ReceiveFormField (void)
+void Rec_ReceiveField (void)
   {
    extern const char *Txt_The_record_field_X_already_exists;
 
@@ -2282,7 +2282,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    bool RecipientHasBannedMe;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActReqMdfOth,
       [Rol_GST	  ] = ActReqMdfOth,
@@ -2295,32 +2295,32 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       [Rol_INS_ADM] = ActReqMdfOth,
       [Rol_SYS_ADM] = ActReqMdfOth,
      };
-   static const Act_Action_t ActSeeAgd[Usr_NUM_ME_OR_OTHER] =
+   static Act_Action_t ActSeeAgd[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyAgd,
       [Usr_OTHER] = ActSeeUsrAgd,
      };
-   static const Act_Action_t ActSeeTstResCrs[Usr_NUM_ME_OR_OTHER] =
+   static Act_Action_t ActSeeTstResCrs[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyTstResCrs,
       [Usr_OTHER] = ActSeeUsrTstResCrs,
      };
-   static const Act_Action_t ActSeeExaResCrs[Usr_NUM_ME_OR_OTHER] =
+   static Act_Action_t ActSeeExaResCrs[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyExaResCrs,
       [Usr_OTHER] = ActSeeUsrExaResCrs,
      };
-   static const Act_Action_t ActSeeMchResCrs[Usr_NUM_ME_OR_OTHER] =
+   static Act_Action_t ActSeeMchResCrs[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeMyMchResCrs,
       [Usr_OTHER] = ActSeeUsrMchResCrs,
      };
-   static const Act_Action_t ActAdmAsgWrk[Usr_NUM_ME_OR_OTHER] =
+   static Act_Action_t ActAdmAsgWrk[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActAdmAsgWrkUsr,
       [Usr_OTHER] = ActAdmAsgWrkCrs,	// Not me, I am not a student in current course
      };
-   static const Act_Action_t ActSeeLstAtt[Usr_NUM_ME_OR_OTHER] =
+   static Act_Action_t ActSeeLstAtt[Usr_NUM_ME_OR_OTHER] =
      {
       [Usr_ME   ] = ActSeeLstMyAtt,
       [Usr_OTHER] = ActSeeLstUsrAtt,
@@ -2477,14 +2477,14 @@ void Rec_PutParUsrCodEncrypted (__attribute__((unused)) void *Args)
 
 static void Rec_PutParsMyResults (__attribute__((unused)) void *Args)
   {
-   Dat_SetIniEndDatesToPastAndNow ();
+   Dat_SetDatesToPastAndNow ();
    Dat_WriteParsIniEndDates ();
   }
 
 static void Rec_PutParsStdResults (__attribute__((unused)) void *Args)
   {
    Rec_PutParsStudent (NULL);
-   Dat_SetIniEndDatesToPastAndNow ();
+   Dat_SetDatesToPastAndNow ();
    Dat_WriteParsIniEndDates ();
   }
 

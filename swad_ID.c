@@ -393,7 +393,7 @@ static void ID_PutLinkToConfirmID (struct Usr_Data *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
    extern const char *Txt_Confirm_ID;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActCnfID_Oth,
       [Rol_GST	  ] = ActCnfID_Oth,

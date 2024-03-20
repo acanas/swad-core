@@ -99,9 +99,9 @@ void Enr_PutLinkToRemOldUsrs (void);
 void Enr_AskRemoveOldUsrs (void);
 void Enr_RemoveOldUsrs (void);
 
-void Enr_ReceiveFormAdminStds (void);
-void Enr_ReceiveFormAdminNonEditTchs (void);
-void Enr_ReceiveFormAdminTchs (void);
+void Enr_ReceiveAdminStds (void);
+void Enr_ReceiveAdminNonEditTchs (void);
+void Enr_ReceiveAdminTchs (void);
 
 bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther);
 

@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
+static unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
   {
    [Sta_CLICKS_CRS_DETAILED_LIST   ] = 2,
 

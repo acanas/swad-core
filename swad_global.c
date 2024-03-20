@@ -72,7 +72,7 @@ struct Globals Gbl;	// All the global parameters and variables must be in this s
 
 void Gbl_InitializeGlobals (void)
   {
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_Current_CGI_SWAD_Language;
    Rol_Role_t Role;
 
    Gbl.Layout.WritingHTMLStart =

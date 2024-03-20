@@ -255,7 +255,7 @@ void Prj_RemoveProject (void);
 void Prj_HideProject (void);
 void Prj_UnhideProject (void);
 
-void Prj_ReceiveFormProject (void);
+void Prj_ReceiveProject (void);
 
 void Prj_ReqLockSelectedPrjsEdition (void);
 void Prj_ReqUnloSelectedPrjsEdition (void);

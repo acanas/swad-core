@@ -117,7 +117,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 void Lay_WriteStartOfPage (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_Current_CGI_SWAD_Language;
    static const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
       [Mnu_MENU_HORIZONTAL] = "main_horizontal",

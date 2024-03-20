@@ -97,7 +97,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg);
 static void Deg_EditDegreesInternal (void);
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 
-static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status);
+static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status);
 
 static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
                                       struct Hie_Node *Deg);
@@ -314,7 +314,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
-   static const Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
+   static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
       [Nam_SHRT_NAME] = ActRenDegSho,
       [Nam_FULL_NAME] = ActRenDegFul,
@@ -999,33 +999,33 @@ void Deg_FreeListAllDegsWithStds (struct Hie_List *Degs)
 /****************** Receive form to request a new degree *********************/
 /*****************************************************************************/
 
-void Deg_ReceiveFormReqDeg (void)
+void Deg_ReceiveReqDeg (void)
   {
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
    /***** Receive form to request a new degree *****/
-   Deg_ReceiveFormRequestOrCreateDeg ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
+   Deg_ReceiveRequestOrCreateDeg ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new degree *********************/
 /*****************************************************************************/
 
-void Deg_ReceiveFormNewDeg (void)
+void Deg_ReceiveNewDeg (void)
   {
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
    /***** Receive form to create a new degree *****/
-   Deg_ReceiveFormRequestOrCreateDeg ((Hie_Status_t) 0);
+   Deg_ReceiveRequestOrCreateDeg ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new degree *********************/
 /*****************************************************************************/
 
-static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
+static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status)
   {
    extern const char *Txt_Created_new_degree_X;
    char *Names[Nam_NUM_SHRT_FULL_NAMES];

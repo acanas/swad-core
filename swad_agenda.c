@@ -423,7 +423,7 @@ void Agd_ShowUsrAgenda (void)
 void Agd_ShowOtherAgendaAfterLogIn (void)
   {
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    struct Agd_Agenda Agenda;
@@ -855,7 +855,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
                                            struct Agd_Event *AgdEvent,
                                            const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhEvtMyAgd,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidEvtMyAgd,	// Visible ==> action to hide
@@ -1449,7 +1449,7 @@ void Agd_ReqCreatOrEditEvent (void)
 /********************* Receive form to create a new event ********************/
 /*****************************************************************************/
 
-void Agd_ReceiveFormEvent (void)
+void Agd_ReceiveEvent (void)
   {
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;

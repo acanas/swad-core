@@ -140,7 +140,7 @@ void Gam_ListGame (void);
 void Gam_ReqCreatOrEditGame (void);
 void Gam_PutFormsOneGame (struct Gam_Games *Games,
 			  Gam_ExistingNewGame_t ExistingNewGame);
-void Gam_ReceiveFormGame (void);
+void Gam_ReceiveGame (void);
 
 void Gam_ReqSelectQstsToAddToGame (void);
 void Gam_ListQstsToAddToGame (void);

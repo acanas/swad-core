@@ -68,7 +68,7 @@ void Exa_ReqCreatOrEditExam (void);
 void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
 			  Exa_ExistingNewExam_t ExistingNewExam);
 
-void Exa_ReceiveFormExam (void);
+void Exa_ReceiveExam (void);
 
 bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 

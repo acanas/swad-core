@@ -206,8 +206,8 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
 
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsUsrBelongsTo (long UsrCod,long GrpTypCod,char *GroupNames);
-void Grp_ReceiveFormNewGrpTyp (void);
-void Grp_ReceiveFormNewGrp (void);
+void Grp_ReceiveNewGrpTyp (void);
+void Grp_ReceiveNewGrp (void);
 void Grp_ReqRemGroupType (void);
 void Grp_ReqRemGroup (void);
 void Grp_RemoveGroupType (void);

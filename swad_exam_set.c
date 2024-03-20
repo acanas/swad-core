@@ -233,7 +233,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 /**************** Receive form to create a new set of questions **************/
 /*****************************************************************************/
 
-void ExaSet_ReceiveFormSet (void)
+void ExaSet_ReceiveSet (void)
   {
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;

@@ -64,8 +64,8 @@ void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
 
-void Ins_ReceiveFormReqIns (void);
-void Ins_ReceiveFormNewIns (void);
+void Ins_ReceiveReqIns (void);
+void Ins_ReceiveNewIns (void);
 
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role);
 

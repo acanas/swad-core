@@ -74,7 +74,7 @@ const char *Dat_TimeStatusClass[Dat_NUM_TIME_STATUS][HidVis_NUM_HIDDEN_VISIBLE] 
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-static const unsigned Dat_NumDaysMonth[1 + 12] =
+static unsigned Dat_NumDaysMonth[1 + 12] =
   {
    [ 0] =  0,
    [ 1] = 31,	// January
@@ -1098,7 +1098,7 @@ void Dat_GetDateFromForm (const char *ParNameDay,const char *ParNameMonth,const 
 /******* Set initial date to distant past and end date to current date *******/
 /*****************************************************************************/
 
-void Dat_SetIniEndDatesToPastAndNow (void)
+void Dat_SetDatesToPastAndNow (void)
   {
    Dat_Time.Range.TimeUTC[Dat_STR_TIME] = (time_t) 0;
    Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
@@ -1109,7 +1109,7 @@ void Dat_SetIniEndDatesToPastAndNow (void)
 /************ and set initial date to end date minus several days ************/
 /*****************************************************************************/
 
-void Dat_SetIniEndDatesToRecentWeeks (void)
+void Dat_SetDatesToRecentWeeks (void)
   {
    Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
    Dat_Time.Range.TimeUTC[Dat_STR_TIME] = Dat_Time.Range.TimeUTC[Dat_END_TIME] -

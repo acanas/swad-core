@@ -744,7 +744,7 @@ Dat_StartEndTime_t Asg_GetParAsgOrder (void)
 static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
                                          const char *Anchor)
   {
-   static const Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
       [HidVis_HIDDEN ] = ActUnhAsg,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidAsg,	// Visible ==> action to hide
@@ -1357,7 +1357,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 /****************** Receive form to create a new assignment ******************/
 /*****************************************************************************/
 
-void Asg_ReceiveFormAssignment (void)
+void Asg_ReceiveAssignment (void)
   {
    extern const char *Txt_Already_existed_an_assignment_with_the_title_X;
    extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;

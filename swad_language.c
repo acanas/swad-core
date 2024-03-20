@@ -220,7 +220,7 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void)
 
 Lan_Language_t Lan_GetParLanguage (void)
   {
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_Current_CGI_SWAD_Language;
 
    return (Lan_Language_t)
 	  Par_GetParUnsignedLong ("Lan",

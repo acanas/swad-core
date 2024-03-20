@@ -63,8 +63,8 @@ void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);
 
-void Ctr_ReceiveFormReqCtr (void);
-void Ctr_ReceiveFormNewCtr (void);
+void Ctr_ReceiveReqCtr (void);
+void Ctr_ReceiveNewCtr (void);
 
 unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
 unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod);

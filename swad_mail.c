@@ -733,7 +733,7 @@ static void Mai_PutHeadMailDomains (void)
 /******************* Receive form to create a new mail ***********************/
 /*****************************************************************************/
 
-void Mai_ReceiveFormNewMailDomain (void)
+void Mai_ReceiveNewMailDomain (void)
   {
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_Created_new_email_domain_X;

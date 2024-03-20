@@ -539,11 +539,11 @@ static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
 static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
                                       const struct For_Forums *Forums)
   {
-   extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
+   extern Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char *Anchor = NULL;
-   static const Act_Action_t Tml_DefaultActions[Tml_NOT_NUM_NOTE_TYPES] =
+   static Act_Action_t Tml_DefaultActions[Tml_NOT_NUM_NOTE_TYPES] =
      {
       [TmlNot_UNKNOWN          ] = ActUnk,
       /* Start tab */
@@ -862,8 +862,8 @@ static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
                                         long NotCod)
   {
-   extern const Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS];
-   extern const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS];
+   extern Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS];
+   extern Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS];
 
    /***** Form to remove publication *****/
    /* Begin form */

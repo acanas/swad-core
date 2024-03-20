@@ -726,7 +726,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
   {
    extern const char *Txt_Password;
    extern const char *Txt_Change_password;
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActChgPwdOth,
       [Rol_GST	  ] = ActChgPwdOth,

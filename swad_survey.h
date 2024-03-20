@@ -120,7 +120,7 @@ void Svy_AskResetSurvey (void);
 void Svy_ResetSurvey (void);
 void Svy_HideSurvey (void);
 void Svy_UnhideSurvey (void);
-void Svy_ReceiveFormSurvey (void);
+void Svy_ReceiveSurvey (void);
 void Svy_RemoveSurveys (Hie_Level_t Level,long Cod);
 
 void Svy_ReqEditQuestion (void);

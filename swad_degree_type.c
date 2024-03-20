@@ -637,7 +637,7 @@ void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes)
 /***************** Receive form to create a new degree type ******************/
 /*****************************************************************************/
 
-void DegTyp_ReceiveFormNewDegreeType (void)
+void DegTyp_ReceiveNewDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_Created_new_type_of_degree_X;

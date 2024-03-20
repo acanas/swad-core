@@ -1218,7 +1218,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 void Usr_WelcomeUsr (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_check_your_email_address;
@@ -6421,7 +6421,7 @@ void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
 
 void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
   {
-   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+   static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_STD] = ActSeeRecOneStd,
       [Rol_NET] = ActSeeRecOneTch,
@@ -6441,8 +6441,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
 	            NumRows + 1,The_GetColorRows ());
    else
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
-   Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+   Pho_ShowUsrPhotoIfAllowed (UsrDat,ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
    HTM_TD_End ();
 
    /***** User's IDs and name *****/
