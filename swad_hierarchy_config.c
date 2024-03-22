@@ -205,7 +205,7 @@ void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
 
 void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Shortcut;
 
    /***** Short cut *****/

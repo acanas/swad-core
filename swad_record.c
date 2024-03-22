@@ -3178,7 +3178,7 @@ static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 
 static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Another_country;
    char *Label;
@@ -3846,7 +3846,7 @@ static void Rec_ShowAlertsIfNotFilled (bool IAmATeacher)
 static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Another_institution;

@@ -94,7 +94,7 @@ void Lay_WriteHeaderClassPhoto (Vie_ViewType_t ViewType);
 void Lay_AdvertisementMobile (void);
 
 void Lay_IndentDependingOnLevel (unsigned Level,
-				 Lay_LastItem_t IsLastItemInLevel[],
+				 const Lay_LastItem_t *IsLastItemInLevel,
 				 Lay_HorizontalLineAtRight_t HorizontalLineAtRight);
 
 void Lay_HelpPlainEditor (void);

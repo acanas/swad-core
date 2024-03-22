@@ -40,6 +40,6 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
                          const char *LogTable,
                          const char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1],
                          unsigned NumUsrsInList,
-			 const long LstSelectedUsrCods[]);
+			 const long *LstSelectedUsrCods);
 
 #endif

@@ -81,8 +81,6 @@
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
 
-#define Cfg_GOOGLE_ANALYTICS			""
-
 #elif defined OPENSWAD_ORG			// openswad.org ************************
 
 #define Cfg_PLATFORM_SHORT_NAME			"OpenSWAD"
@@ -117,29 +115,6 @@
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
-
-/* Google Analytics without cookies.
- * This code comes from http://stackoverflow.com/a/19995629
- */
-#define Cfg_GOOGLE_ANALYTICS			""
-
-/*
-"<script type=\"text/javascript\">" \
-"  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" \
-"  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," \
-"  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" \
-"  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');" \
-"  ga('create', 'UA-40768375-1', 'openswad.org', {" \
-"    'anonymizeIp': true," \
-"    'storage': 'none'," \
-"    'clientId': window.localStorage.getItem('ga_clientId')" \
-"  });" \
-"  ga(function(tracker) {" \
-"    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));" \
-"  });" \
-"  ga('send', 'pageview');" \
-"</script>"
-*/
 
 #elif defined SWAD_UGR_ES			// swad.ugr.es *************************
 
@@ -176,26 +151,6 @@
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
 
-#define Cfg_GOOGLE_ANALYTICS			""
-
-/*
-"<script type=\"text/javascript\">" \
-"  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" \
-"  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," \
-"  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" \
-"  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');" \
-"  ga('create', 'UA-42150741-1', 'ugr.es', {" \
-"    'anonymizeIp': true," \
-"    'storage': 'none'," \
-"    'clientId': window.localStorage.getItem('ga_clientId')" \
-"  });" \
-"  ga(function(tracker) {" \
-"    window.localStorage.setItem('ga_clientID', tracker.get('clientId'));" \
-"  });" \
-"  ga('send', 'pageview');" \
-"</script>"
-*/
-
 #elif defined SWADBERRY_UGR_ES			// swadberry.ugr.es ******************
 
 #define Cfg_PLATFORM_SHORT_NAME			"SWADberry"
@@ -230,8 +185,6 @@
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
-
-#define Cfg_GOOGLE_ANALYTICS			""
 
 #endif
 

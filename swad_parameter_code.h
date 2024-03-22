@@ -80,6 +80,7 @@ typedef enum
    ParCod_Tag,		// Tag code in assessment question
    ParCod_Thr,		// Thread code in forum
   } ParCod_Param_t;
+#define Par_NUM_PAR_COD ((unsigned) ParCod_Thr + 1)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

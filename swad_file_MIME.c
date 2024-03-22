@@ -34,7 +34,8 @@
 /*****************************************************************************/
 
 /* MIME types allowed for uploades files */
-const char *MIM_MIMETypesAllowed[] =
+#define MIM_NUM_MIME_TYPES_ALLOWED 200
+const char *MIM_MIMETypesAllowed[MIM_NUM_MIME_TYPES_ALLOWED] =
   {
    "application/",			//
    "application/acrobat",		// PDF
@@ -238,11 +239,8 @@ const char *MIM_MIMETypesAllowed[] =
    "zz-application/zz-winassoc-mpp"	// Microsoft Project mpp
   };
 
-unsigned MIM_NUM_MIME_TYPES_ALLOWED = sizeof (MIM_MIMETypesAllowed) /
-				      sizeof (MIM_MIMETypesAllowed[0]);
-
 /*****************************************************************************/
-/******** Check if MIME type is allowed **********/
+/*********************** Check if MIME type is allowed ***********************/
 /*****************************************************************************/
 
 bool MIM_CheckIfMIMETypeIsAllowed (const char *MIMEType)

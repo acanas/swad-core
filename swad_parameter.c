@@ -684,7 +684,8 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 
 static bool Par_CheckIsParCanBeUsedInGETMethod (const char *ParName)
   {
-   static const char *ValidParsInGETMethod[] =
+#define NUM_VALID_PARAMS 10
+   static const char *ValidParsInGETMethod[NUM_VALID_PARAMS] =
      {
       "cty",	// To enter directly to a country
       "ins",	// To enter directly to an institution
@@ -697,7 +698,6 @@ static bool Par_CheckIsParCanBeUsedInGETMethod (const char *ParName)
       "ses",	// To use an open session when redirecting from one language to another
       "key",	// To verify an email address
      };
-#define NUM_VALID_PARAMS (sizeof (ValidParsInGETMethod) / sizeof (ValidParsInGETMethod[0]))
    unsigned i;
 
    for (i = 0;
@@ -714,7 +714,7 @@ static bool Par_CheckIsParCanBeUsedInGETMethod (const char *ParName)
 
 void Par_GetMainPars (void)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    long ActCod;
    char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -1112,7 +1112,7 @@ void Par_PutParUnsignedDisabled (const char *Id,const char *ParName,unsigned Par
 
 void ParCod_PutPar (ParCod_Param_t ParCod,long Cod)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
 
    if (ParCod != ParCod_None && Cod >= 0)
       // <0 => not specified => don't write parameter

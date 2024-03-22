@@ -80,14 +80,13 @@ extern struct Globals Gbl;
 #define Prj_PAR_FILTER_DPT_COD_NAME	"FilDptCod"
 
 /***** User roles are shown in this order *****/
-static const Prj_RoleInProject_t Prj_RolesToShow[] =
+#define Prj_NUM_ROLES_TO_SHOW 3
+static const Prj_RoleInProject_t Prj_RolesToShow[Prj_NUM_ROLES_TO_SHOW] =
   {
    Prj_ROLE_TUT,	// Tutor
    Prj_ROLE_STD,	// Student
    Prj_ROLE_EVL,	// Evaluator
   };
-static unsigned Prj_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
-                                        sizeof (Prj_RolesToShow[0]);
 
 /***** Assigned/non-assigned project *****/
 static const char *AssignedNonassigIcon[Prj_NUM_ASSIGNED_NONASSIG] =
@@ -3693,7 +3692,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
                                 bool ItsANewProject)
   {
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Project;
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_Title;

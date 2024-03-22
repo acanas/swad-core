@@ -780,12 +780,12 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
    extern const char *Txt_Rubric;
-   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Rub_NUM_EXISTING_NEW_RUBRIC]) (void *Args) =
      {
       [Rub_EXISTING_RUBRIC] = Rub_PutIconsEditingOneRubric,
       [Rub_NEW_RUBRIC     ] = NULL,
      };
-   static const char **HelpLink[] =
+   static const char **HelpLink[Rub_NUM_EXISTING_NEW_RUBRIC] =
      {
       [Rub_EXISTING_RUBRIC] = &Hlp_ASSESSMENT_Rubrics_edit_rubric,
       [Rub_NEW_RUBRIC     ] = &Hlp_ASSESSMENT_Rubrics_new_rubric,
@@ -831,17 +831,17 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Txt_Description;
    extern const char *Txt_Create;
    extern const char *Txt_Save_changes;
-   static Act_Action_t NextAction[] =
+   static Act_Action_t NextAction[Rub_NUM_EXISTING_NEW_RUBRIC] =
      {
       [Rub_EXISTING_RUBRIC] = ActChgRub,
       [Rub_NEW_RUBRIC     ] = ActNewRub,
      };
-   static Btn_Button_t Button[] =
+   static Btn_Button_t Button[Rub_NUM_EXISTING_NEW_RUBRIC] =
      {
       [Rub_EXISTING_RUBRIC] = Btn_CONFIRM_BUTTON,
       [Rub_NEW_RUBRIC     ] = Btn_CREATE_BUTTON,
      };
-   const char *TxtButton[] =
+   const char *TxtButton[Rub_NUM_EXISTING_NEW_RUBRIC] =
      {
       [Rub_EXISTING_RUBRIC] = Txt_Save_changes,
       [Rub_NEW_RUBRIC     ] = Txt_Create,

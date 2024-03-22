@@ -299,7 +299,7 @@ static void InsCfg_Map (void)
 
 static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumCty;
    const struct Hie_Node *Cty;

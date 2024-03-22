@@ -1489,7 +1489,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
                                        Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,const char *Info)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_Group;

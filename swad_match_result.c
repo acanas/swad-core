@@ -518,7 +518,7 @@ static void MchRes_ShowResultsEnd (void)
 
 static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Games;
    extern const char *Txt_Game;
    extern const char *Txt_Update_results;

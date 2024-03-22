@@ -220,7 +220,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    extern const char *Txt_results_per_page;
    extern const char *Txt_Show_hits;
    extern const char *Txt_No_teachers_or_students_found;
-   static unsigned RowsPerPage[] =
+#define NUM_OPTIONS_ROWS_PER_PAGE 12
+   static unsigned RowsPerPage[NUM_OPTIONS_ROWS_PER_PAGE] =
      {
       Sta_MIN_ROWS_PER_PAGE * 1,
       Sta_MIN_ROWS_PER_PAGE * 2,
@@ -235,7 +236,6 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
       Sta_MIN_ROWS_PER_PAGE * 5000,
       Sta_MAX_ROWS_PER_PAGE,
      };
-#define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
    unsigned NumTotalUsrs;
    char *Title;
    Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];

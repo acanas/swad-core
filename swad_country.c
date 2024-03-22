@@ -1383,7 +1383,7 @@ static void Cty_PutParGoToCty (void *CtyCod)
 static void Cty_PutFormToCreateCountry (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t Lan;
    char StrCtyCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];

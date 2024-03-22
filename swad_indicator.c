@@ -100,7 +100,7 @@ static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
 void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *Hlp_ANALYTICS_Indicators;
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;

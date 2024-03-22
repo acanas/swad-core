@@ -35,9 +35,9 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *Par_CodeStr[] =
+const char *Par_CodeStr[Par_NUM_PAR_COD] =
   {
-   [ParCod_None        ] = NULL,
+   [ParCod_None     ] = NULL,
    [ParCod_Agd      ] = "AgdCod",	// Agenda event code
    [ParCod_Ann      ] = "AnnCod",	// Announcement code
    [ParCod_Asg      ] = "AsgCod",	// Assignment code

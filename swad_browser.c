@@ -1213,7 +1213,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *FileType);
 static void Brw_PutIconToGetLinkToFile (void *FileMetadata);
 static void Brw_PutParsToGetLinkToFile (void *FileMetadata);
 
-static bool Brw_CheckIfICanEditFileMetadata (long IAmTheOwner);
+static bool Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner);
 static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod);
 static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                             struct Brw_FileMetadata *FileMetadata,
@@ -2876,7 +2876,7 @@ void Brw_PutLegalNotice (void)
 
 static void Brw_FormToChangeCrsGrpZone (void)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
@@ -4632,8 +4632,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata
 void Brw_PutIconFile (const char *FileName,
 		      const char *Class,Frm_PutForm_t PutFormToGo)
   {
-   extern unsigned Ext_NUM_FILE_EXT_ALLOWED;
-   extern const char *Ext_FileExtensionsAllowed[];
+   extern const char *Ext_FileExtensionsAllowed[Ext_NUM_FILE_EXT_ALLOWED];
    extern const char *Txt_X_file;
    char *URL;
    char *Icon;
@@ -7890,7 +7889,7 @@ void Brw_DownloadFile (void)
 /*********** Check if I have permission to change file metadata **************/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanEditFileMetadata (long IAmTheOwner)
+static bool Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner)
   {
    switch (Gbl.Action.Act)	// Only in actions where edition is allowed
      {

@@ -554,7 +554,7 @@ static void ExaRes_ShowResultsEnd (void)
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Exams;
    extern const char *Txt_Exam;
    extern const char *Txt_Update_results;

@@ -62,6 +62,7 @@ typedef enum
    Exa_CHECK_EXA_COD,
   } Exa_CheckExaCod_t;
 
+#define Exa_NUM_EXISTING_NEW_EXAM 2
 typedef enum
   {
    Exa_EXISTING_EXAM,

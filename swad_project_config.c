@@ -167,7 +167,7 @@ static void PrjCfg_ShowFormsRubrics (void)
 static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
                                            PrjCfg_RubricType_t RubricType)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Prj_DB_RubricType[PrjCfg_NUM_RUBRIC_TYPES];
    extern const char *Txt_PROJECT_RUBRIC[PrjCfg_NUM_RUBRIC_TYPES];
    extern const char *Txt_no_rubric;
@@ -385,7 +385,7 @@ void PrjCfg_ChangeRubricsOfType (void)
 static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
                                    struct PrgCfg_ListRubCods *ListRubCods)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    char *ParLstRubCods;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];

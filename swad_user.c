@@ -3540,7 +3540,7 @@ void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods)
 /******** from list of users' codes                                    *******/
 /*****************************************************************************/
 
-void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
+void Usr_CreateSubqueryUsrCods (long *LstSelectedUsrCods,
 				unsigned NumUsrsInList,
 				char **UsrsSubQuery)
   {
@@ -5105,7 +5105,7 @@ void Usr_SeeGuests (void)
 
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
-		  Frm_BeginForm (ActDoActOnSevGst);
+		  Frm_BeginForm (Act_DoAct_OnSevGst);
 
 	       /* Begin table */
 	       HTM_TABLE_Begin ("TBL_SCROLL");
@@ -5258,7 +5258,7 @@ void Usr_SeeStudents (void)
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
 		 {
-		  Frm_BeginForm (ActDoActOnSevStd);
+		  Frm_BeginForm (Act_DoAct_OnSevStd);
 		     Grp_PutParsCodGrps ();
 		 }
 
@@ -5426,7 +5426,7 @@ void Usr_SeeTeachers (void)
 	       /* Begin form */
 	       if (PutForm == Frm_PUT_FORM)
 		 {
-		  Frm_BeginForm (ActDoActOnSevTch);
+		  Frm_BeginForm (Act_DoAct_OnSevTch);
 		     Grp_PutParsCodGrps ();
 		 }
 
@@ -5651,13 +5651,13 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 case Usr_OPTION_RECORDS:
 	    switch (Gbl.Action.Act)
 	      {
-	       case ActDoActOnSevGst:
+	       case Act_DoAct_OnSevGst:
 		  Gbl.Action.Act = ActSeeRecSevGst;
 		  break;
-	       case ActDoActOnSevStd:
+	       case Act_DoAct_OnSevStd:
 		  Gbl.Action.Act = ActSeeRecSevStd;
 		  break;
-	       case ActDoActOnSevTch:
+	       case Act_DoAct_OnSevTch:
 		  Gbl.Action.Act = ActSeeRecSevTch;
 		  break;
 	       default:
@@ -5667,8 +5667,8 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 case Usr_OPTION_HOMEWORK:
 	    switch (Gbl.Action.Act)
 	      {
-	       case ActDoActOnSevStd:
-	       case ActDoActOnSevTch:
+	       case Act_DoAct_OnSevStd:
+	       case Act_DoAct_OnSevTch:
 		  Gbl.Action.Act = ActAdmAsgWrkCrs;
 		  break;
 	       default:
@@ -5678,7 +5678,7 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 case Usr_OPTION_ATTENDANCE:
 	    switch (Gbl.Action.Act)
 	      {
-	       case ActDoActOnSevStd:
+	       case Act_DoAct_OnSevStd:
 		  Gbl.Action.Act = ActSeeLstUsrAtt;
 		  break;
 	       default:
@@ -5688,8 +5688,8 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 case Usr_OPTION_MESSAGE:
 	    switch (Gbl.Action.Act)
 	      {
-	       case ActDoActOnSevStd:
-	       case ActDoActOnSevTch:
+	       case Act_DoAct_OnSevStd:
+	       case Act_DoAct_OnSevTch:
 		  Gbl.Action.Act = ActReqMsgUsr;
 		  break;
 	       default:
@@ -5699,7 +5699,7 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 case Usr_OPTION_EMAIL:
 	    switch (Gbl.Action.Act)
 	      {
-	       case ActDoActOnSevStd:
+	       case Act_DoAct_OnSevStd:
 		  Gbl.Action.Act = ActMaiUsr;
 		  break;
 	       default:
@@ -5709,10 +5709,10 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 case Usr_OPTION_FOLLOW:
 	    switch (Gbl.Action.Act)
 	      {
-	       case ActDoActOnSevStd:
+	       case Act_DoAct_OnSevStd:
 		  Gbl.Action.Act = ActReqFolSevStd;
 		  break;
-	       case ActDoActOnSevTch:
+	       case Act_DoAct_OnSevTch:
 		  Gbl.Action.Act = ActReqFolSevTch;
 		  break;
 	       default:
@@ -5722,10 +5722,10 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 case Usr_OPTION_UNFOLLOW:
 	    switch (Gbl.Action.Act)
 	      {
-	       case ActDoActOnSevStd:
+	       case Act_DoAct_OnSevStd:
 		  Gbl.Action.Act = ActReqUnfSevStd;
 		  break;
-	       case ActDoActOnSevTch:
+	       case Act_DoAct_OnSevTch:
 		  Gbl.Action.Act = ActReqUnfSevTch;
 		  break;
 	       default:
@@ -5756,13 +5756,13 @@ void Usr_DoActionOnSeveralUsrs2 (void)
           so show again the form to selected users *****/
    switch (Gbl.Action.Act)
      {
-      case ActDoActOnSevGst:
+      case Act_DoAct_OnSevGst:
 	 Usr_SeeGuests ();
 	 break;
-      case ActDoActOnSevStd:
+      case Act_DoAct_OnSevStd:
 	 Usr_SeeStudents ();
 	 break;
-      case ActDoActOnSevTch:
+      case Act_DoAct_OnSevTch:
 	 Usr_SeeTeachers ();
 	 break;
       default:

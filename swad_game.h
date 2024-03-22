@@ -56,6 +56,7 @@ typedef enum
   } Gam_AnswerType_t;
 #define Gam_ANSWER_TYPE_DEFAULT Gam_ANS_UNIQUE_CHOICE
 
+#define Gam_NUM_EXISTING_NEW_GAME 2
 typedef enum
   {
    Gam_EXISTING_GAME,

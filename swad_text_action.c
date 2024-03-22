@@ -24812,7 +24812,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show class photo of students ready to be printed"		// Çeviri lazim!
 #endif
 	,
-	[ActDoActOnSevStd] =
+	[Act_DoAct_OnSevStd] =
 #if   L==1	// ca
 	"Do an action on several selected students"				// Necessita traducció
 #elif L==2	// de
@@ -25870,7 +25870,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show class photo of teachers ready to be printed"		// Çeviri lazim!
 #endif
 	,
-	[ActDoActOnSevTch] =
+	[Act_DoAct_OnSevTch] =
 #if   L==1	// ca
 	"Do an action on several selected teachers"				// Necessita traducció
 #elif L==2	// de
@@ -27112,7 +27112,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Show class photo of guests ready to be printed"		// Çeviri lazim!
 #endif
 	,
-	[ActDoActOnSevGst] =
+	[Act_DoAct_OnSevGst] =
 #if   L==1	// ca
 	"Do an action on several selected guests"				// Necessita traducció
 #elif L==2	// de

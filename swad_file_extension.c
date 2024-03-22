@@ -33,7 +33,7 @@
 /*****************************************************************************/
 
 /* Extensions allowed for uploaded files */
-const char *Ext_FileExtensionsAllowed[] =
+const char *Ext_FileExtensionsAllowed[Ext_NUM_FILE_EXT_ALLOWED] =
   {
    "3gp"  ,	// Video Android mobile
    "7z"   ,
@@ -150,9 +150,6 @@ const char *Ext_FileExtensionsAllowed[] =
    "xlsx" ,
    "zip"  ,
   };
-
-unsigned Ext_NUM_FILE_EXT_ALLOWED = sizeof (Ext_FileExtensionsAllowed) /
-				    sizeof (Ext_FileExtensionsAllowed[0]);
 
 /*****************************************************************************/
 /******************* Check if file extension is allowed **********************/

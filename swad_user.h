@@ -386,7 +386,7 @@ void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 				 long **LstSelectedUsrCods);
 void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods);
 
-void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
+void Usr_CreateSubqueryUsrCods (long *LstSelectedUsrCods,
 				unsigned NumUsrsInList,
 				char **SubQueryUsrs);
 void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);

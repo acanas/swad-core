@@ -82,6 +82,7 @@ struct Rub_Rubrics
    struct RubCri_Criterion Criterion;	// Selected/current criterion
   };
 
+#define Rub_NUM_EXISTING_NEW_RUBRIC 2
 typedef enum
   {
    Rub_EXISTING_RUBRIC,

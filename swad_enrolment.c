@@ -173,7 +173,7 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
 /*****************************************************************************/
 
 void Enr_PutButtonInlineToRegisterStds (long CrsCod,
-				        unsigned Level,Lay_LastItem_t IsLastItemInLevel[],
+				        unsigned Level,const Lay_LastItem_t *IsLastItemInLevel,
 					Lay_Highlight_t Highlight)
   {
    extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];

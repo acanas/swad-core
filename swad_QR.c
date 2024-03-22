@@ -146,7 +146,7 @@ void QR_ImageQRCode (const char *QRString)
 
 void QR_LinkTo (unsigned Size,ParCod_Param_t ParCode,long Cod)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Shortcut;
    char *URL;
 

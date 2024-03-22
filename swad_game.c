@@ -875,7 +875,7 @@ void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
 
 void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    unsigned MaxSizeListGamCodsSelected;
    unsigned NumGame;
    const char *Ptr;
@@ -1258,12 +1258,12 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Txt_Game;
-   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Gam_NUM_EXISTING_NEW_GAME]) (void *Args) =
      {
       [Gam_EXISTING_GAME] = Gam_PutIconsEditingOneGame,
       [Gam_NEW_GAME     ] = NULL,
      };
-   static const char **HelpLink[] =
+   static const char **HelpLink[Gam_NUM_EXISTING_NEW_GAME] =
      {
       [Gam_EXISTING_GAME] = &Hlp_ASSESSMENT_Games_edit_game,
       [Gam_NEW_GAME     ] = &Hlp_ASSESSMENT_Games_new_game,
@@ -1324,17 +1324,17 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static Act_Action_t NextAction[] =
+   static Act_Action_t NextAction[Gam_NUM_EXISTING_NEW_GAME] =
      {
       [Gam_EXISTING_GAME] = ActChgGam,
       [Gam_NEW_GAME     ] = ActNewGam,
      };
-   static Btn_Button_t Button[] =
+   static Btn_Button_t Button[Gam_NUM_EXISTING_NEW_GAME] =
      {
       [Gam_EXISTING_GAME] = Btn_CONFIRM_BUTTON,
       [Gam_NEW_GAME     ] = Btn_CREATE_BUTTON,
      };
-   const char *TxtButton[] =
+   const char *TxtButton[Gam_NUM_EXISTING_NEW_GAME] =
      {
       [Gam_EXISTING_GAME] = Txt_Save_changes,
       [Gam_NEW_GAME     ] = Txt_Create,

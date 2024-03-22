@@ -804,7 +804,7 @@ void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
 
 void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    unsigned MaxSizeListExaCodsSelected;
    unsigned NumExam;
    const char *Ptr;
@@ -1253,12 +1253,12 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
    extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Txt_Exam;
-   static void (*FunctionToDrawContextualIcons[]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Exa_NUM_EXISTING_NEW_EXAM]) (void *Args) =
      {
       [Exa_EXISTING_EXAM] = Exa_PutIconsEditingOneExam,
       [Exa_NEW_EXAM     ] = NULL,
      };
-   static const char **HelpLink[] =
+   static const char **HelpLink[Exa_NUM_EXISTING_NEW_EXAM] =
      {
       [Exa_EXISTING_EXAM] = &Hlp_ASSESSMENT_Exams_edit_exam,
       [Exa_NEW_EXAM     ] = &Hlp_ASSESSMENT_Exams_new_exam,
@@ -1317,17 +1317,17 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Txt_Description;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Create;
-   static Act_Action_t NextAction[] =
+   static Act_Action_t NextAction[Exa_NUM_EXISTING_NEW_EXAM] =
      {
       [Exa_EXISTING_EXAM] = ActChgExa,
       [Exa_NEW_EXAM     ] = ActNewExa,
      };
-   static Btn_Button_t Button[] =
+   static Btn_Button_t Button[Exa_NUM_EXISTING_NEW_EXAM] =
      {
       [Exa_EXISTING_EXAM] = Btn_CONFIRM_BUTTON,
       [Exa_NEW_EXAM     ] = Btn_CREATE_BUTTON,
      };
-   const char *TxtButton[] =
+   const char *TxtButton[Exa_NUM_EXISTING_NEW_EXAM] =
      {
       [Exa_EXISTING_EXAM] = Txt_Save_changes,
       [Exa_NEW_EXAM     ] = Txt_Create,

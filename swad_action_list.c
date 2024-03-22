@@ -230,7 +230,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSeePen		] = {1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x3C0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Hie_SeePending			},
 
    // Links
-   [ActSeeLnk		] = { 748, 3,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_1ST_TAB,NULL			,Lnk_SeeLinks			},
+   [ActSeeLnk 		] = { 748, 3,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_1ST_TAB,NULL			,Lnk_SeeLinks			},
    [ActEdiLnk		] = { 749,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_1ST_TAB,NULL			,Lnk_EditLinks			},
    [ActNewLnk		] = { 750,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_1ST_TAB,Lnk_ReceiveNewLink		,Lnk_ContEditAfterChgLnk	},
    [ActRemLnk		] = { 897,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_1ST_TAB,Lnk_RemoveLink		,Lnk_ContEditAfterChgLnk	},
@@ -457,8 +457,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLftPrgItm	] = {1834,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Prg_MoveLeftItem		},
    [ActRgtPrgItm	] = {1833,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Prg_MoveRightItem		},
    [ActExpSeePrgItm	] = {1944,-1,TabUnk,ActSeePrg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Prg_ExpandItem			},
-   [ActExpEdiPrgItm	] = {1946,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Prg_ExpandItem			},
    [ActConSeePrgItm	] = {1945,-1,TabUnk,ActSeePrg		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Prg_ContractItem		},
+   [ActExpEdiPrgItm	] = {1946,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Prg_ExpandItem			},
    [ActConEdiPrgItm	] = {1947,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Prg_ContractItem		},
    [ActSeeRscCli_InPrg	] = {1970,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,PrgRsc_ViewResourceClipboard	},
    [ActRemRscCli_InPrg	] = {1971,-1,TabUnk,ActSeePrg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,PrgRsc_RemoveResourceClipboard	},
@@ -1327,7 +1327,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstStd		] = { 678, 1,TabUsr,ActLstStd		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Usr_SeeStudents		},
    [ActLstStdAll	] = {  42,-1,TabUnk,ActLstStd		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_NEW_TAB,NULL			,Usr_ListAllDataStds		},
    [ActPrnStdPho	] = { 120,-1,TabUnk,ActLstStd		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_NEW_TAB,NULL			,Usr_SeeStdClassPhotoPrn	},
-   [ActDoActOnSevStd	] = {1754,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,Usr_DoActionOnSeveralUsrs1	,Usr_DoActionOnSeveralUsrs2	},
+   [Act_DoAct_OnSevStd	] = {1754,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,Usr_DoActionOnSeveralUsrs1	,Usr_DoActionOnSeveralUsrs2	},
    [ActSeeRecSevStd	] = {  89,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Rec_ListRecordsStdsShow	},
    [ActPrnRecSevStd	] = { 111,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_NEW_TAB,NULL			,Rec_ListRecordsStdsPrint	},
    [ActReqMdfOneStd	] = {1415,-1,TabUnk,ActLstStd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_1ST_TAB,NULL			,Enr_ReqRegRemStd		},
@@ -1375,7 +1375,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstTch		] = { 679, 2,TabUsr,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_1ST_TAB,NULL			,Usr_SeeTeachers		},
    [ActLstTchAll	] = { 578,-1,TabUnk,ActLstTch		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_NEW_TAB,NULL			,Usr_ListAllDataTchs 		},
    [ActPrnTchPho	] = { 443,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_NEW_TAB,NULL			,Usr_SeeTchClassPhotoPrn	},
-   [ActDoActOnSevTch	] = {1755,-1,TabUnk,ActLstTch		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,Usr_DoActionOnSeveralUsrs1	,Usr_DoActionOnSeveralUsrs2	},
+   [Act_DoAct_OnSevTch	] = {1755,-1,TabUnk,ActLstTch		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,Usr_DoActionOnSeveralUsrs1	,Usr_DoActionOnSeveralUsrs2	},
    [ActSeeRecSevTch	] = {  22,-1,TabUnk,ActLstTch		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Rec_ListRecordsTchsShow	},
    [ActPrnRecSevTch	] = { 127,-1,TabUnk,ActLstTch		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_NEW_TAB,NULL			,Rec_ListRecordsTchsPrint	},
    [ActReqMdfOneTch	] = {1416,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_1ST_TAB,NULL			,Enr_ReqRegRemTch		},
@@ -1411,7 +1411,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqUnfSevTch	] = {1759,-1,TabUnk,ActLstTch		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Fol_ReqUnfollowTchs		},
    [ActFolSevTch	] = {1761,-1,TabUnk,ActLstTch		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Fol_FollowUsrs			},
    [ActUnfSevTch	] = {1763,-1,TabUnk,ActLstTch		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Fol_UnfollowUsrs		},
-
    [ActSeeRecOneTch	] = {1175,-1,TabUnk,ActLstTch		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Rec_GetUsrAndShowRecOneTchCrs	},
    [ActReqEnrSevNET	] = {1642,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Enr_ReqAdminNonEditingTchs	},
    [ActRcvFrmEnrSevNET	] = {1643,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_1ST_TAB,NULL			,Enr_ReceiveAdminNonEditTchs	},
@@ -1432,7 +1431,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstGst		] = { 587,-1,TabUnk,ActLstOth		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_1ST_TAB,NULL			,Usr_SeeGuests			},
    [ActLstGstAll	] = {1189,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_NEW_TAB,NULL			,Usr_ListAllDataGsts		},
    [ActPrnGstPho	] = {1190,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_NEW_TAB,NULL			,Usr_SeeGstClassPhotoPrn	},
-   [ActDoActOnSevGst	] = {1753,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_1ST_TAB,Usr_DoActionOnSeveralUsrs1	,Usr_DoActionOnSeveralUsrs2	},
+   [Act_DoAct_OnSevGst	] = {1753,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_1ST_TAB,Usr_DoActionOnSeveralUsrs1	,Usr_DoActionOnSeveralUsrs2	},
    [ActSeeRecSevGst	] = {1187,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_1ST_TAB,NULL			,Rec_ListRecordsGstsShow	},
    [ActPrnRecSevGst	] = {1188,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_NEW_TAB,NULL			,Rec_ListRecordsGstsPrint	},
    [ActReqMdfOneOth	] = {1414,-1,TabUnk,ActLstOth		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_1ST_TAB,NULL			,Enr_ReqRegRemOth		},
@@ -3564,9 +3563,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgRooMaxUsr,	// #1750
 	ActUnk,			// #1751 (obsolete action)
 	ActChgGrpRoo,		// #1752
-	ActDoActOnSevGst,	// #1753
-	ActDoActOnSevStd,	// #1754
-	ActDoActOnSevTch,	// #1755
+	Act_DoAct_OnSevGst,	// #1753
+	Act_DoAct_OnSevStd,	// #1754
+	Act_DoAct_OnSevTch,	// #1755
 	ActReqFolSevStd,	// #1756
 	ActReqFolSevTch,	// #1757
 	ActReqUnfSevStd,	// #1758

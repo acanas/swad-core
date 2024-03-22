@@ -167,7 +167,7 @@ void Hie_SeePending (void)
 
 void Hie_WriteMenuHierarchy (void)
   {
-   extern const char *Par_CodeStr[];
+   extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    static void (*FunctionWriteSelector[Hie_NUM_LEVELS]) (void) =
      {

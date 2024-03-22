@@ -128,7 +128,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 static void Att_PutLinkEvent (struct Att_Event *Event,
 			      const char *Title,const char *Txt);
 static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
-						      long LstSelectedUsrCods[],
+						      long *LstSelectedUsrCods,
 						      unsigned NumUsrsInList);
 static bool Att_CheckIfUsrIsPresentInEvent (long AttCod,long UsrCod);
 static bool Att_CheckIfUsrIsPresentInEventAndGetComments (long AttCod,long UsrCod,
@@ -2077,7 +2077,7 @@ void Att_RegisterStudentsInEvent (void)
 /*****************************************************************************/
 
 static unsigned Att_GetNumUsrsFromAListWhoAreInEvent (long AttCod,
-						      long LstSelectedUsrCods[],
+						      long *LstSelectedUsrCods,
 						      unsigned NumUsrsInList)
   {
    char *SubQueryUsrs;
@@ -2231,7 +2231,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	    /* Get number of students in this event */
 	    Events.Lst[NumAttEvent].NumStdsFromList =
 	    Att_GetNumUsrsFromAListWhoAreInEvent (Events.Lst[NumAttEvent].AttCod,
-						     &Gbl.Usrs.Me.UsrDat.UsrCod,1);
+						  &Gbl.Usrs.Me.UsrDat.UsrCod,1);
 
 	 /***** Get list of attendance events selected *****/
 	 Att_GetListSelectedAttCods (&Events);
@@ -2344,7 +2344,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	       /* Get number of students in this event */
 	       Events.Lst[NumAttEvent].NumStdsFromList =
 	       Att_GetNumUsrsFromAListWhoAreInEvent (Events.Lst[NumAttEvent].AttCod,
-							LstSelectedUsrCods,NumUsrsInList);
+						     LstSelectedUsrCods,NumUsrsInList);
 
 	    /***** Get list of attendance events selected *****/
 	    Att_GetListSelectedAttCods (&Events);

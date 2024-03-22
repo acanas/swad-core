@@ -655,9 +655,6 @@ static void Lay_WriteScripts (void)
       default:
 	 break;
      }
-
-   /***** Script for Google Analytics *****/
-   HTM_Txt (Cfg_GOOGLE_ANALYTICS);
   }
 
 // Change page title
@@ -1619,10 +1616,10 @@ void Lay_AdvertisementMobile (void)
 /*****************************************************************************/
 /****************** Indent forum, chat or course tree title ******************/
 /*****************************************************************************/
-// IsLastItemInLevel[] is a vector with at least 1 + Level elements
+// IsLastItemInLevel is a vector with at least 1 + Level elements
 
 void Lay_IndentDependingOnLevel (unsigned Level,
-				 Lay_LastItem_t IsLastItemInLevel[],
+				 const Lay_LastItem_t *IsLastItemInLevel,
 				 Lay_HorizontalLineAtRight_t HorizontalLineAtRight)
   {
    static const char *Icons[Lay_NUM_HORIZONTAL_LINE_AT_RIGHT][Lay_NUM_LAST_ITEM] =
