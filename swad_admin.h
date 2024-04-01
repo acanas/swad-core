@@ -35,6 +35,8 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+Usr_ICan_t Adm_CheckIfICanAdminOtherUsrs (void);
+
 void Adm_ReqAddAdm (Hie_Level_t Level);
 
 void Adm_AddAdmToIns (void);

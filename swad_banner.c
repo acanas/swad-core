@@ -205,8 +205,7 @@ static void Ban_PutIconsListingBanners (__attribute__((unused)) void *Args)
 
 static void Ban_PutIconToEditBanners (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiBan,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiBan,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -357,8 +356,7 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
 static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view banners *****/
-   Ico_PutContextualIconToView (ActSeeBan,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeBan,NULL,NULL,NULL);
 
    /***** Put icon to view links *****/
    Lnk_PutIconToViewLinks ();
@@ -370,9 +368,7 @@ static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args)
 
 void Ban_PutIconToViewBanners (void)
   {
-   Lay_PutContextualLinkOnlyIcon (ActSeeBan,NULL,
-                                  NULL,NULL,
-                                  "flag.svg",Ico_BLACK);
+   Lay_PutContextualLinkOnlyIcon (ActSeeBan,NULL,NULL,NULL,"flag.svg",Ico_BLACK);
   }
 
 /*****************************************************************************/
@@ -447,7 +443,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Ban,Banners->BanCodToEdit,
 				           Names,
-				           true);	// Put form
+				           Frm_PUT_FORM);
 
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"LM\"");

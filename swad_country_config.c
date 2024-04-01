@@ -341,7 +341,7 @@ static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink)
    HTM_DIV_End ();
 
    /***** Map attribution *****/
-   if (ViewType == Vie_VIEW && Cty_CheckIfICanEditCountries ())
+   if (ViewType == Vie_VIEW && Cty_CheckIfICanEditCountries () == Usr_I_CAN)
      {
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActChgCtyMapAtt);

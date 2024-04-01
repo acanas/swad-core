@@ -396,7 +396,7 @@ long Roo_DB_CheckIn (long RooCod)
 /********************** Check if I can see user's location *******************/
 /*****************************************************************************/
 
-bool Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
+Usr_ICan_t Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
   {
    /*
    I can only consult the location of another user
@@ -426,7 +426,8 @@ bool Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
 			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
 			    " WHERE C1.CtrCod=C2.CtrCod)",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   UsrCod);
+		   UsrCod) ? Usr_I_CAN :
+			     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

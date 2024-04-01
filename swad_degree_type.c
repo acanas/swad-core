@@ -287,8 +287,7 @@ static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTyp
 static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view degree types *****/
-   Ico_PutContextualIconToView (ActSeeDegTyp,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeDegTyp,NULL,NULL,NULL);
 
    /***** Put icon to view degrees *****/
    Deg_PutIconToViewDegrees ();
@@ -303,8 +302,7 @@ static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Arg
 
 void DegTyp_PutIconToViewDegreeTypes (void)
   {
-   Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,
-                                  NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,NULL,NULL,
 				  "sitemap.svg",Ico_BLACK);
   }
 
@@ -375,9 +373,8 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
    if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if center tab is visible
-       DegTyp_CheckIfICanCreateDegreeTypes ())
-      Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,
-				   NULL,NULL);
+       DegTyp_CheckIfICanCreateDegreeTypes () == Usr_I_CAN)
+      Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -445,9 +442,10 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 /******************** Check if I can create degree types *********************/
 /*****************************************************************************/
 
-bool DegTyp_CheckIfICanCreateDegreeTypes (void)
+Usr_ICan_t DegTyp_CheckIfICanCreateDegreeTypes (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+						     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

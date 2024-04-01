@@ -177,7 +177,7 @@ void Pwd_UpdateOtherUsrPwd (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
          /***** Check and update password *****/
 	 Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
       else

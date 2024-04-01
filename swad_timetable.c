@@ -426,8 +426,7 @@ static void Tmt_PutContextualIcons (void *Timetable)
 				      Grp_PutParWhichGroups,&WhichGroups);
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditOfficeHours)
-	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,
-				      NULL,NULL);
+	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,NULL,NULL);
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconPrint)
 	 Ico_PutContextualIconToPrint (((struct Tmt_Timetable *) Timetable)->Type == Tmt_COURSE_TIMETABLE ? ActPrnCrsTT :
@@ -497,8 +496,7 @@ void Tmt_EditMyTutTimeTable (void)
 
 static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeCrsTT,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeCrsTT,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -507,8 +505,7 @@ static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args)
 
 static void Tmt_PutIconToViewMyTT (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeMyTT,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeMyTT,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

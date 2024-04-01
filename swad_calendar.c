@@ -56,7 +56,7 @@ extern struct Globals Gbl;
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const bool Cal_DayIsValidAsFirstDayOfWeek[7] =
+bool Cal_DayIsValidAsFirstDayOfWeek[7] =
   {
    [0] = true,	// monday
    [1] = false,	// tuesday
@@ -332,7 +332,7 @@ void Cal_PutIconToSeeCalendar (void)
 
 void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
   {
-   extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
+   extern bool Cal_DayIsValidAsFirstDayOfWeek[7];
    extern const char *Hlp_ANALYTICS_Figures_calendar;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Calendar;

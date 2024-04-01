@@ -379,7 +379,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 
 static void For_PutParsRemThread (void *Forums);
 
-static bool For_CheckIfICanMoveThreads (void);
+static Usr_ICan_t For_CheckIfICanMoveThreads (void);
 static void For_InsertThrInClipboard (long ThrCod);
 
 static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
@@ -720,7 +720,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
    For_GetThreadData (&Thread);
 
    /***** Get if there is a thread ready to be moved *****/
-   if (For_CheckIfICanMoveThreads ())
+   if (For_CheckIfICanMoveThreads () == Usr_I_CAN)
       Forums->Thread.ToMove = For_DB_GetThrInMyClipboard ();
 
    /***** Get thread read time for the current user *****/
@@ -871,7 +871,7 @@ static void For_PutIconsOneThread (void *Forums)
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
-          Rsc_CheckIfICanGetLink ())
+          Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
 					 For_PutParsNewPost,Forums);
      }
@@ -1233,7 +1233,7 @@ void For_ShowForumList (struct For_Forums *Forums)
    bool ICanSeeDegForum;
 
    /***** Get if there is a thread ready to be moved *****/
-   if (For_CheckIfICanMoveThreads ())
+   if (For_CheckIfICanMoveThreads () == Usr_I_CAN)
       Forums->Thread.ToMove = For_DB_GetThrInMyClipboard ();
 
    /***** Fill the list with the institutions I belong to *****/
@@ -2182,7 +2182,7 @@ static void For_PutIconsThreads (void *Forums)
 
       /***** Put icon to get resource link *****/
       if (((struct For_Forums *) Forums)->Forum.Type == For_FORUM_COURSE_USRS &&
-          Rsc_CheckIfICanGetLink ())
+          Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkForCrsUsr,NULL,
 					 For_PutParsNewPost,Forums);
      }
@@ -2232,10 +2232,10 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    long ThreadInMyClipboard = -1L;
    unsigned Column;
    const char *BgColor;
-   bool ICanMoveThreads;
+   Usr_ICan_t ICanMoveThreads = For_CheckIfICanMoveThreads ();
 
    /***** Get if there is a thread ready to be moved *****/
-   if ((ICanMoveThreads = For_CheckIfICanMoveThreads ()))
+   if (ICanMoveThreads == Usr_I_CAN)
       ThreadInMyClipboard = For_DB_GetThrInMyClipboard ();
 
    /***** Initialize structure with user's data *****/
@@ -2288,7 +2288,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	      }
 
 	    /***** Put button to cut the thread for moving it to another forum *****/
-	    if (ICanMoveThreads)
+	    if (ICanMoveThreads == Usr_I_CAN)
 	      {
 	       HTM_BR ();
 	       Frm_BeginFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
@@ -3238,9 +3238,10 @@ void For_PasteThread (void)
 /*********************** Check if I can move threads *************************/
 /*****************************************************************************/
 
-static bool For_CheckIfICanMoveThreads (void)
+static Usr_ICan_t For_CheckIfICanMoveThreads (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);	// If I have permission to move threads...
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :	// If I have permission to move threads...
+						     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

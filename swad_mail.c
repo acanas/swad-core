@@ -217,8 +217,7 @@ static Mai_DomainsOrder_t Mai_GetParMaiOrder (void)
 
 static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToEdit (ActEdiMai,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiMai,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -793,7 +792,7 @@ static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *A
 				     Txt_Email,
 				     Hlp_COMMUNICATION_Email,
 				     Txt_View_email_addresses,
-				     false);	// Do not put form with date range
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -1298,7 +1297,7 @@ void Mai_RemoveOtherUsrEmail (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Remove user's email *****/
 	 Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
@@ -1322,7 +1321,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
    extern const char *Txt_Email_X_removed;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
-   if (Usr_ICanEditOtherUsr (UsrDat))
+   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
      {
       /***** Get new email from form *****/
       Par_GetParText ("Email",Email,Cns_MAX_BYTES_EMAIL_ADDRESS);
@@ -1364,7 +1363,7 @@ void Mai_ChangeOtherUsrEmail (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Change user's ID *****/
 	 Mai_ChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
@@ -1392,7 +1391,7 @@ static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOthe
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
-   if (Usr_ICanEditOtherUsr (UsrDat))
+   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
      {
       /***** Get new email from form *****/
       Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);

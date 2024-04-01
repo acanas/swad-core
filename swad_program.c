@@ -323,10 +323,11 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 /******************* Check if I can create program items *********************/
 /*****************************************************************************/
 
-bool Prg_CheckIfICanEditProgram (void)
+Usr_ICan_t Prg_CheckIfICanEditProgram (void)
   {
-   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+        					     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -336,7 +337,7 @@ bool Prg_CheckIfICanEditProgram (void)
 static void Prg_PutIconsListItems (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit program *****/
-   if (Prg_CheckIfICanEditProgram ())
+   if (Prg_CheckIfICanEditProgram () == Usr_I_CAN)
       Prg_PutIconToEditProgram ();
 
    /***** Put icon to show a figure *****/
@@ -352,7 +353,7 @@ static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args)
    /***** Put icon to view program *****/
    Prg_PutIconToViewProgram ();
 
-   if (Prg_CheckIfICanEditProgram ())
+   if (Prg_CheckIfICanEditProgram () == Usr_I_CAN)
      {
       /***** Put icon to create a new program item *****/
       Prg_PutIconToCreateNewItem ();
@@ -371,8 +372,7 @@ static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args)
 
 static void Prg_PutIconToEditProgram (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiPrg,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPrg,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -381,8 +381,7 @@ static void Prg_PutIconToEditProgram (void)
 
 static void Prg_PutIconToViewProgram (void)
   {
-   Ico_PutContextualIconToView (ActSeePrg,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToView (ActSeePrg,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -403,8 +402,7 @@ static void Prg_PutIconToCreateNewItem (void)
 
 static void Prg_PutIconToViewResourceClipboard (void)
   {
-   Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InPrg,NULL,
-                                         NULL,NULL);
+   Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InPrg,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

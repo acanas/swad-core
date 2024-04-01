@@ -246,40 +246,43 @@ Pri_Visibility_t Pri_GetParVisibility (const char *ParName,
   }
 
 /*****************************************************************************/
-/*********** Check if user's photo of public profile can be shown ************/
+/*********** Check if user's photo or public profile can be shown ************/
 /*****************************************************************************/
-// Returns true if it can be shown and false if not.
 
-bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct Usr_Data *UsrDat)
+Usr_ICan_t Pri_CheckIfICanView (Pri_Visibility_t Visibility,
+				struct Usr_Data *UsrDat)
   {
    /***** I always can see my things *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** System admins always can see others' profiles *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
+      return Usr_I_CAN;
 
    /***** Check if I can see the other's photo *****/
    switch (Visibility)
      {
       case Pri_VISIBILITY_UNKNOWN:
-	 return false;			// It's not me
+	 return Usr_I_CAN_NOT;		// It's not me
       case Pri_VISIBILITY_USER:		// Only visible
 					// by me and my teachers if I am a student
 					// or me and my students if I am a teacher
          // Do both users share the same course but whit different role?
-	 return Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);
+	 return Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod) ? Usr_I_CAN :
+										      Usr_I_CAN_NOT;
       case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
 	 // Do both users share the same course?
-         return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
+         return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat) ? Usr_I_CAN :
+							  Usr_I_CAN_NOT;
       case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
-         return Gbl.Usrs.Me.Logged;
+         return Gbl.Usrs.Me.Logged ? Usr_I_CAN :
+				     Usr_I_CAN_NOT;
       case Pri_VISIBILITY_WORLD:	// Public, visible by everyone, even unlogged visitors
-         return true;
+         return Usr_I_CAN;
      }
 
-   return false;	// Never reached. To avoid warning
+   return Usr_I_CAN_NOT;	// Never reached. To avoid warning
   }
 
 /*****************************************************************************/

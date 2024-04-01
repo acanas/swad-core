@@ -85,7 +85,7 @@ struct Att_Events
 
 void Att_SeeEvents (void);
 
-bool Att_CheckIfICanEditEvents (void);
+Usr_ICan_t Att_CheckIfICanEditEvents (void);
 
 void Att_ReqCreatOrEditEvent (void);
 bool Att_GetEventDataByCod (struct Att_Event *Event);

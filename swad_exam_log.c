@@ -54,7 +54,7 @@ static struct
    long PrnCod;			// Exam print code
    int  QstInd;			// Exam print question index
    ExaLog_Action_t Action;	// Action performed by user
-   bool ICanAnswer;		// Exam print is open and accesible to answer by the user
+   Usr_ICan_t ICanAnswer;		// Exam print is open and accesible to answer by the user
   } ExaLog_Log =
   {
    .PrnCod     = -1L,	// -1 means no print code set
@@ -116,12 +116,12 @@ int ExaLog_GetQstInd (void)
 /************* Set and get if exam print is open and accessible **************/
 /*****************************************************************************/
 
-void ExaLog_SetIfCanAnswer (bool ICanAnswer)
+void ExaLog_SetIfCanAnswer (Usr_ICan_t ICanAnswer)
   {
    ExaLog_Log.ICanAnswer = ICanAnswer;
   }
 
-bool ExaLog_GetIfCanAnswer (void)
+Usr_ICan_t ExaLog_GetIfCanAnswer (void)
   {
    return ExaLog_Log.ICanAnswer;
   }

@@ -1010,7 +1010,7 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
    TmlNot_GetNoteDataByCod (&Not);
 
    /***** Do some checks *****/
-   if (!TmlUsr_CheckIfICanRemove (Not.NotCod,Not.UsrCod))
+   if (TmlUsr_CheckIfICanRemove (Not.NotCod,Not.UsrCod) == Usr_I_CAN_NOT)
       return;
 
    /***** Show question and button to remove note *****/

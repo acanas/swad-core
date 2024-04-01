@@ -37,6 +37,7 @@
 #include "swad_action.h"
 #include "swad_action_list.h"
 #include "swad_alert.h"
+#include "swad_agenda.h"
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
@@ -128,7 +129,7 @@ static bool Rec_GetParShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct Usr_Data *UsrDat,const char *Anchor);
 static void Rec_ShowMyCrsRecordUpdated (void);
-static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
+static Usr_ICan_t Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args);
 static void Rec_PutParsMyResults (__attribute__((unused)) void *Args);
@@ -961,7 +962,7 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get student's data from database
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_GET_ROLE_IN_CRS))
-      if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	 Rec_ShowRecordOneStdCrs ();
   }
 
@@ -1184,7 +1185,7 @@ void Rec_GetUsrAndShowRecOneTchCrs (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_GET_ROLE_IN_CRS))
-      if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	 Rec_ShowRecordOneTchCrs ();
   }
 
@@ -1789,7 +1790,7 @@ void Rec_GetFieldsCrsRecordFromForm (void)
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility) == Usr_I_CAN)
         {
          /* Get text from the form */
          snprintf (FieldParName,sizeof (FieldParName),"Field%ld",
@@ -1811,7 +1812,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility) == Usr_I_CAN)
         {
          /***** Check if already exists this field for this user in database *****/
          FieldAlreadyExists = (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
@@ -1867,7 +1868,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility) == Usr_I_CAN)
          /* Allocate memory for the texts of the fields */
          if ((Gbl.Crs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
@@ -1884,7 +1885,7 @@ void Rec_FreeMemFieldsRecordsCrs (void)
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility) == Usr_I_CAN)
          /* Free memory of the text of the field */
          if (Gbl.Crs.Records.LstFields.Lst[NumField].Text)
            {
@@ -1897,13 +1898,14 @@ void Rec_FreeMemFieldsRecordsCrs (void)
 /* Check if I can edit a field depending on my role and the field visibility */
 /*****************************************************************************/
 
-static bool Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility)
+static Usr_ICan_t Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility)
   {
    // Non-editing teachers can not edit fields
-   return  Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
-	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-	  (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
-	   Visibility == Rec_EDITABLE_FIELD);
+   return ( Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
+	    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+	   (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
+	    Visibility == Rec_EDITABLE_FIELD)) ? Usr_I_CAN :
+						 Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -2064,8 +2066,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 ViewType = Vie_EDIT;
 	 break;
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	 ViewType = Usr_ICanChangeOtherUsrData (UsrDat) ? Vie_EDIT :
-							  Vie_VIEW;
+	 ViewType = (Usr_ICanChangeOtherUsrData (UsrDat) == Usr_I_CAN) ? Vie_EDIT :
+							                 Vie_VIEW;
 	 break;
       default:	// In other options, I can not edit user's data
 	 ViewType = Vie_VIEW;
@@ -2280,7 +2282,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
   {
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
-   bool ICanViewUsrProfile;
+   Usr_ICan_t ICanViewUsrProfile;
    bool RecipientHasBannedMe;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -2350,8 +2352,8 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
        Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB &&	// Only in main browser tab
        Gbl.Usrs.Me.Logged)					// Only if I am logged
      {
-      ICanViewUsrProfile = Pri_ShowingIsAllowed (Rec_Record.UsrDat->BaPrfVisibility,
-						 Rec_Record.UsrDat);
+      ICanViewUsrProfile = Pri_CheckIfICanView (Rec_Record.UsrDat->BaPrfVisibility,
+						Rec_Record.UsrDat);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"FRAME_ICO\"");
@@ -2363,25 +2365,25 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   "pen.svg",Ico_BLACK);
 
 	 /***** Button to view user's profile *****/
-	 if (ICanViewUsrProfile)
+	 if (ICanViewUsrProfile == Usr_I_CAN)
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user.svg",Ico_BLACK);
 
 	 /***** Button to view user's record card *****/
-	 if (Usr_CheckIfICanViewRecordStd (Rec_Record.UsrDat))
+	 if (Usr_CheckIfICanViewRecordStd (Rec_Record.UsrDat) == Usr_I_CAN)
 	    /* View student's records: common record card and course record card */
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
-	 else if (Usr_CheckIfICanViewRecordTch (Rec_Record.UsrDat))
+	 else if (Usr_CheckIfICanViewRecordTch (Rec_Record.UsrDat) == Usr_I_CAN)
 	    /* View teacher's record card and timetable */
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
 
 	 /***** Button to view user's agenda *****/
-	 if (Usr_CheckIfICanViewUsrAgenda (Rec_Record.UsrDat))
+	 if (Agd_CheckIfICanViewUsrAgenda (Rec_Record.UsrDat) == Usr_I_CAN)
 	    Lay_PutContextualLinkOnlyIcon (ActSeeAgd[MeOrOther],NULL,
 					   FuncPutParsAgd[MeOrOther],NULL,
 					   "calendar.svg",Ico_BLACK);
@@ -2402,7 +2404,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	    if (Rec_Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
 	      {
 	       /***** Buttons to view student's test, exam and match results *****/
-	       if (Usr_CheckIfICanViewTstExaMchResult (Rec_Record.UsrDat))
+	       if (Usr_CheckIfICanViewTstExaMchResult (Rec_Record.UsrDat) == Usr_I_CAN)
 		 {
 		  /* Test results in course */
 		  Lay_PutContextualLinkOnlyIcon (ActSeeTstResCrs[MeOrOther],NULL,
@@ -2419,13 +2421,13 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 		 }
 
 	       /***** Button to view student's assignments and works *****/
-	       if (Usr_CheckIfICanViewAsgWrk (Rec_Record.UsrDat))
+	       if (Usr_CheckIfICanViewAsgWrk (Rec_Record.UsrDat) == Usr_I_CAN)
 		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrk[MeOrOther],NULL,
 						 FuncPutParsAdmAsgWrk[MeOrOther],NULL,
 						 "folder-open.svg",Ico_BLACK);
 
 	       /***** Button to view student's attendance *****/
-	       if (Usr_CheckIfICanViewAtt (Rec_Record.UsrDat))
+	       if (Usr_CheckIfICanViewAtt (Rec_Record.UsrDat) == Usr_I_CAN)
 		  Lay_PutContextualLinkOnlyIcon (ActSeeLstAtt[MeOrOther],NULL,
 						 FuncPutParsSeeLstAtt[MeOrOther],NULL,
 						 "calendar-check.svg",Ico_BLACK);
@@ -2453,7 +2455,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	       Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
 					      Rec_PutParUsrCodEncrypted,NULL,
 					      "user-check.svg",Ico_BLACK);	// Put button to unfollow, even if I can not view user's profile
-	    else if (ICanViewUsrProfile)
+	    else if (ICanViewUsrProfile == Usr_I_CAN)
 	       Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
 					      Rec_PutParUsrCodEncrypted,NULL,
 					      "user-plus.svg",Ico_BLACK);	// Put button to follow

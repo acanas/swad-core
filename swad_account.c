@@ -488,7 +488,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
    /***** Get user whose account must be changed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Get user's nickname and email address
 		It's necessary because nickname or email could be just updated *****/
@@ -530,7 +530,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
   {
-   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod) == Usr_I_CAN)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
 				     Acc_PutParsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED);
@@ -771,7 +771,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
 
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_I_CAN)
          Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
       else
          Error = true;
@@ -814,7 +814,7 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 /******** Check if I can eliminate completely another user's account *********/
 /*****************************************************************************/
 
-bool Acc_CheckIfICanEliminateAccount (long UsrCod)
+Usr_ICan_t Acc_CheckIfICanEliminateAccount (long UsrCod)
   {
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrCod);
 
@@ -823,10 +823,14 @@ bool Acc_CheckIfICanEliminateAccount (long UsrCod)
    switch (MeOrOther)
      {
       case Usr_ME:
-	 return (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0;	// I can not be system admin
+	 // A system admin can not eliminate him/herself
+	 return (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0 ? Usr_I_CAN :
+									 Usr_I_CAN_NOT;
       case Usr_OTHER:
       default:
-	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;			// I am logged as system admin
+	 // Only a system admin can eliminate other's account
+	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_I_CAN :
+							 Usr_I_CAN_NOT;
      }
   }
 
@@ -1100,7 +1104,7 @@ void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
          break;
       case Usr_OTHER:
       default:
-	 if (Usr_ICanEditOtherUsr (UsrDat))
+	 if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "at.svg",Ico_BLACK);

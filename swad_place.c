@@ -46,17 +46,6 @@
 #include "swad_place_database.h"
 
 /*****************************************************************************/
-/****************************** Private constants ****************************/
-/*****************************************************************************/
-
-static const bool Plc_ICanEditPlaces[Rol_NUM_ROLES] =
-  {
-   /* Users who can edit */
-   [Rol_INS_ADM] = true,
-   [Rol_SYS_ADM] = true,
-  };
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -71,6 +60,8 @@ static struct Plc_Place *Plc_EditingPlc = NULL;	// Static variable to keep the p
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static bool Plc_CheckIfICanEditPlaces (void);
 
 static Plc_Order_t Plc_GetParPlcOrder (void);
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args);
@@ -90,6 +81,22 @@ static void Plc_PutHeadPlaces (void);
 
 static void Plc_EditingPlaceConstructor (void);
 static void Plc_EditingPlaceDestructor (void);
+
+/*****************************************************************************/
+/************************* Check if I can edit places ************************/
+/*****************************************************************************/
+
+static bool Plc_CheckIfICanEditPlaces (void)
+  {
+   static bool Plc_ICanEditPlaces[Rol_NUM_ROLES] =
+     {
+      /* Users who can edit */
+      [Rol_INS_ADM] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return Plc_ICanEditPlaces[Gbl.Usrs.Me.Role.Logged];
+  }
 
 /*****************************************************************************/
 /**************************** Reset places context ***************************/
@@ -231,7 +238,7 @@ static Plc_Order_t Plc_GetParPlcOrder (void)
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit places *****/
-   if (Plc_ICanEditPlaces[Gbl.Usrs.Me.Role.Logged])
+   if (Plc_CheckIfICanEditPlaces ())
       Plc_PutIconToEditPlaces ();
   }
 
@@ -241,8 +248,7 @@ static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
 
 static void Plc_PutIconToEditPlaces (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiPlc,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlc,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -298,8 +304,7 @@ static void Plc_EditPlacesInternal (void)
 static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view places *****/
-   Ico_PutContextualIconToView (ActSeePlc,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeePlc,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -467,7 +472,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 					   ParCod_Plc,Plc->PlcCod,
 					   Names,
-					   true);	// Put form
+					   Frm_PUT_FORM);
 
 	    /* Number of centers */
 	    HTM_TD_Unsigned (Plc->NumCtrs);

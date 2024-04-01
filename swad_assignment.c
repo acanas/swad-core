@@ -57,6 +57,16 @@
 #include "swad_string.h"
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Asg_ONE_ASSIGMENT,
+   Asg_MULTIPLE_ASSIGMENTS
+  } Asg_OneOrMultiple_t;
+
+/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -67,14 +77,15 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Asg_PutHead (struct Asg_Assignments *Assignments,
-                         bool OnlyOneAssignment,Vie_ViewType_t ViewType);
-static bool Asg_CheckIfICanCreateAssignments (void);
+                         Asg_OneOrMultiple_t OneOrMultiple,
+                         Vie_ViewType_t ViewType);
+static Usr_ICan_t Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_ParsWhichGroupsToShow (void *Assignments);
 static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
-                                   bool OnlyOneAssignment,
+                                   Asg_OneOrMultiple_t OneOrMultiple,
                                    Vie_ViewType_t ViewType);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
@@ -176,9 +187,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Table head *****/
-	    Asg_PutHead (Assignments,
-	                 false,		// Not only this assignment in table
-	                 Vie_VIEW);	// Not print view
+	    Asg_PutHead (Assignments,Asg_MULTIPLE_ASSIGMENTS,Vie_VIEW);
 
 	    /***** Write all assignments *****/
 	    for (NumAsg  = Pagination.FirstItemVisible, The_ResetRowColor ();
@@ -187,9 +196,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	      {
 	       Assignments->Asg.AsgCod = Assignments->LstAsgCods[NumAsg - 1];
 	       Asg_GetAssignmentDataByCod (&Assignments->Asg);
-	       Asg_ShowAssignmentRow (Assignments,
-	                              false,		// Not only this assignment in table
-				      Vie_VIEW);	// Not print view
+	       Asg_ShowAssignmentRow (Assignments,Asg_MULTIPLE_ASSIGMENTS,Vie_VIEW);
 	      }
 
 	 /***** End table *****/
@@ -214,7 +221,8 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 /*****************************************************************************/
 
 static void Asg_PutHead (struct Asg_Assignments *Assignments,
-                         bool OnlyOneAssignment,Vie_ViewType_t ViewType)
+                         Asg_OneOrMultiple_t OneOrMultiple,
+                         Vie_ViewType_t ViewType)
   {
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -225,7 +233,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 
    HTM_TR_Begin (NULL);
 
-      if (!OnlyOneAssignment)
+      if (OneOrMultiple == Asg_MULTIPLE_ASSIGMENTS)
          HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
       for (Order  = (Dat_StartEndTime_t) 0;
@@ -279,10 +287,11 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 /******************** Check if I can create assignments **********************/
 /*****************************************************************************/
 
-static bool Asg_CheckIfICanCreateAssignments (void)
+static Usr_ICan_t Asg_CheckIfICanCreateAssignments (void)
   {
-   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+        					     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -294,11 +303,11 @@ static void Asg_PutIconsListAssignments (void *Assignments)
    /***** Put icon to create a new assignment *****/
    if (Assignments)
      {
-      if (Asg_CheckIfICanCreateAssignments ())
+      if (Asg_CheckIfICanCreateAssignments () == Usr_I_CAN)
 	 Asg_PutIconToCreateNewAsg (Assignments);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	{
          ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
 	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
@@ -393,14 +402,10 @@ void Asg_PrintOneAssignment (void)
    HTM_TABLE_BeginWideMarginPadding (2);
 
       /***** Table head *****/
-      Asg_PutHead (&Assignments,
-	           true,	// Only this assignment in table
-		   Vie_PRINT);	// Print view
+      Asg_PutHead (&Assignments,Asg_ONE_ASSIGMENT,Vie_PRINT);
 
       /***** Write assignment *****/
-      Asg_ShowAssignmentRow (&Assignments,
-                             true,		// Only this assignment in table
-			     Vie_PRINT);	// Print view
+      Asg_ShowAssignmentRow (&Assignments,Asg_ONE_ASSIGMENT,Vie_PRINT);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -425,14 +430,10 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
       HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Table head *****/
-	 Asg_PutHead (Assignments,
-		      true,	// Only this assignment in table
-		      Vie_VIEW);		// Not print view
+	 Asg_PutHead (Assignments,Asg_ONE_ASSIGMENT,Vie_VIEW);
 
 	 /***** Write assignment *****/
-	 Asg_ShowAssignmentRow (Assignments,
-				true,		// Only this assignment in table
-				Vie_VIEW);	// Not print view
+	 Asg_ShowAssignmentRow (Assignments,Asg_ONE_ASSIGMENT,Vie_VIEW);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -467,7 +468,7 @@ static void Asg_PutIconsOneAsg (void *Assignments)
 /*****************************************************************************/
 
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
-                                   bool OnlyOneAssignment,
+                                   Asg_OneOrMultiple_t OneOrMultiple,
                                    Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
@@ -488,7 +489,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    HTM_TR_Begin (NULL);
 
       /* Forms to remove/edit this assignment */
-      if (!OnlyOneAssignment)
+      if (OneOrMultiple == Asg_MULTIPLE_ASSIGMENTS)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 	               The_GetColorRows ());
@@ -768,7 +769,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 	                              Asg_PutPars,Assignments);
 
 	 /***** Link to get resource link *****/
-	 if (Rsc_CheckIfICanGetLink ())
+	 if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	    Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
 					    Asg_PutPars,Assignments);
 	 /* falls through */
@@ -1640,7 +1641,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
       case Rol_TCH:
 	 // Students and teachers can do assignments depending on groups
 	 /***** Get if I can do an assignment from database *****/
-	 return Asg_DB_CheckIfICanDoAssignment (AsgCod);
+	 return (Asg_DB_CheckIfICanDoAssignment (AsgCod) == Usr_I_CAN);
       case Rol_SYS_ADM:
          return true;
       default:
@@ -1703,31 +1704,32 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
 /* Check if I have permission to create a file or folder into an assignment **/
 /*****************************************************************************/
 
-bool Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
+Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
   {
    /***** Trivial check 1: assignment is valid *****/
    if (Asg->AsgCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** Check 2: Do not create anything in hidden assigments *****/
    if (Asg->HiddenOrVisible == HidVis_HIDDEN)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** Check 3: If I do not belong to course / groups of this assignment,
 		   I can not create anything inside this assignment *****/
    if (!Asg->IBelongToCrsOrGrps)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** Check 4: Depending on my role in this course... *****/
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
      {
-      case Rol_STD:		// Students...
-      case Rol_NET:		// ...and non-editing teachers...
-	 return Asg->Open;	// ...can create inside open assignments
-      case Rol_TCH:		// Teachers...
-	 return true;		// ...can create inside open or closed assignments
+      case Rol_STD:			// Students...
+      case Rol_NET:			// ...and non-editing teachers...
+	 return Asg->Open ? Usr_I_CAN :	// ...can create inside open assignments
+			    Usr_I_CAN_NOT;
+      case Rol_TCH:			// Teachers...
+	 return Usr_I_CAN;		// ...can create inside open or closed assignments
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 

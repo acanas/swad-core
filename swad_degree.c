@@ -84,7 +84,7 @@ static struct Hie_Node *Deg_EditingDeg = NULL;	// Static variable to keep the de
 /*****************************************************************************/
 
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes);
-static bool Deg_CheckIfICanEditADegree (struct Hie_Node *Deg);
+static Usr_ICan_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg);
 static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes);
 static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
@@ -325,7 +325,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    struct DegTyp_DegreeType *DegTyp;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
-   bool ICanEdit;
+   Usr_ICan_t ICanEdit;
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
@@ -359,7 +359,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Put icon to remove degree */
 	    HTM_TD_Begin ("class=\"BT\"");
-	       if (!ICanEdit ||
+	       if (ICanEdit == Usr_I_CAN_NOT ||
 		   NumCrss ||	// Degree has courses ==> deletion forbidden
 		   NumUsrsInCrssOfDeg)
 		  Ico_PutIconRemovalNotAllowed ();
@@ -384,11 +384,12 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Deg->HieCod,
 				           Names,
-				           ICanEdit);	// Put form?
+				           ICanEdit == Usr_I_CAN ? Frm_PUT_FORM :
+				        			   Frm_DONT_PUT_FORM);
 
 	    /* Degree type */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
+	       if (ICanEdit == Usr_I_CAN)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
 		     ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
@@ -423,7 +424,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
+	       if (ICanEdit == Usr_I_CAN)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
 		     ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
@@ -483,11 +484,12 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 /************** Check if I can edit, remove, etc. a degree *******************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
+static Usr_ICan_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
   {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
-          ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
-          Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod);	// I am the requester
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
+           ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
+           Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod)) ? Usr_I_CAN :	// I am the requester
+        							 Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -719,7 +721,7 @@ static void Deg_ListDegrees (void)
 static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit degrees *****/
-   if (Hie_CheckIfICanEdit ())
+   if (Hie_CheckIfICanEdit () == Usr_I_CAN)
       Deg_PutIconToEditDegrees ();
 
    /***** Put icon to view degree types *****/
@@ -735,8 +737,7 @@ static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
 
 static void Deg_PutIconToEditDegrees (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiDeg,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiDeg,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -882,7 +883,7 @@ static void Deg_EditDegreesInternal (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_No_types_of_degree);
 
 	 /***** Form to create the first degree type *****/
-	 if (DegTyp_CheckIfICanCreateDegreeTypes ())
+	 if (DegTyp_CheckIfICanCreateDegreeTypes () == Usr_I_CAN)
 	    DegTyp_EditDegreeTypes (&DegTypes);
 	}
 
@@ -900,8 +901,7 @@ static void Deg_EditDegreesInternal (void)
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view degrees *****/
-   Ico_PutContextualIconToView (ActSeeDeg,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeDeg,NULL,NULL,NULL);
 
    /***** Put icon to view types of degree *****/
    DegTyp_PutIconToViewDegreeTypes ();
@@ -916,8 +916,7 @@ static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
 
 void Deg_PutIconToViewDegrees (void)
   {
-   Lay_PutContextualLinkOnlyIcon (ActSeeDeg,NULL,
-                                  NULL,NULL,
+   Lay_PutContextualLinkOnlyIcon (ActSeeDeg,NULL,NULL,NULL,
 				  "graduation-cap.svg",Ico_BLACK);
   }
 

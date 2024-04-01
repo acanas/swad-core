@@ -178,7 +178,7 @@ void ExaPrn_ShowExamPrint (void)
    ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Check if I can access to this session *****/
-   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
+   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session) == Usr_I_CAN)
      {
       /***** Set basic data of exam print *****/
       Print.SesCod = Session.SesCod;
@@ -996,7 +996,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaLog_SetQstInd (QstInd);
 
    /***** Check if session if visible and open *****/
-   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
+   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session) == Usr_I_CAN)
      {
       /***** Set log open to true ****/
       ExaLog_SetIfCanAnswer (true);

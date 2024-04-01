@@ -141,11 +141,11 @@ static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
 /************** Check if I can change the photo of another user **************/
 /*****************************************************************************/
 
-bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
+Usr_ICan_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
   {
    /***** I can change my photo *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** Check if I have permission to change user's photo *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -153,18 +153,19 @@ bool Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
       case Rol_TCH:
 	 /* A teacher can change the photo of confirmed students */
 	 if (UsrDat->Roles.InCurrentCrs != Rol_STD)	// Not a student
-            return false;
+            return Usr_I_CAN_NOT;
 
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
-         return (UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat));
+         return (UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat)) ? Usr_I_CAN :
+										      Usr_I_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_ICanEditOtherUsr (UsrDat);
+         return Usr_CheckIfICanEditOtherUsr (UsrDat);
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -198,7 +199,7 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
 	 break;
       case Usr_OTHER:
       default:
-	 if (Pho_ICanChangeOtherUsrPhoto (UsrDat))
+	 if (Pho_ICanChangeOtherUsrPhoto (UsrDat) == Usr_I_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "camera.svg",Ico_BLACK);
@@ -354,7 +355,7 @@ void Pho_SendPhotoUsr (void)
      }
 
    /***** Check if I have permission to change user's photo *****/
-   if (!Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+   if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN_NOT)
      {
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
       return;
@@ -521,7 +522,7 @@ void Pho_ReqRemUsrPhoto (void)
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_DONT_GET_ROLE_IN_CRS))
      {
-      if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+      if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Show current photo and help message *****/
 	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
@@ -991,14 +992,9 @@ void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
 bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
                                    char PhotoURL[Cns_MAX_BYTES_WWW + 1])
   {
-   bool ICanSeePhoto;
-
-   /***** Check if I can see the other's photo *****/
-   ICanSeePhoto = Pri_ShowingIsAllowed (UsrDat->PhotoVisibility,UsrDat);
-
    /***** Photo is shown if I can see it, and it exists *****/
-   return ICanSeePhoto ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :
-	                 false;
+   return (Pri_CheckIfICanView (UsrDat->PhotoVisibility,UsrDat) == Usr_I_CAN) ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :
+									        false;
   }
 
 /*****************************************************************************/

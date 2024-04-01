@@ -315,12 +315,12 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 /************************ Check if I can edit exams **************************/
 /*****************************************************************************/
 
-bool Exa_CheckIfICanEditExams (void)
+Usr_ICan_t Exa_CheckIfICanEditExams (void)
   {
-   static const bool ICanEditExams[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanEditExams[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanEditExams[Gbl.Usrs.Me.Role.Logged];
@@ -343,7 +343,7 @@ static void Exa_PutIconsListExams (void *Exams)
    if (Exams)
      {
       /***** Put icon to create a new exam *****/
-      if (Exa_CheckIfICanEditExams ())
+      if (Exa_CheckIfICanEditExams () == Usr_I_CAN)
 	 Exa_PutIconToCreateNewExam ((struct Exa_Exams *) Exams);
 
       /***** Put icon to view sessions results *****/
@@ -352,9 +352,8 @@ static void Exa_PutIconsListExams (void *Exams)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
-	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
-					 Exa_PutPars,Exams);
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_EXAMS);
@@ -629,8 +628,7 @@ static void Exa_PutIconsEditingOneExam (void *Exams)
   {
    if (Exams)
       /***** Icon to view exam *****/
-      Ico_PutContextualIconToView (ActSeeOneExa,NULL,
-				   Exa_PutPars,Exams);
+      Ico_PutContextualIconToView (ActSeeOneExa,NULL,Exa_PutPars,Exams);
   }
 
 /*****************************************************************************/
@@ -671,7 +669,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
       [Rol_SYS_ADM] = ActSeeUsrExaResExa,
      };
 
-   if (Exa_CheckIfICanEditExams ())
+   if (Exa_CheckIfICanEditExams () == Usr_I_CAN)
      {
       /***** Icon to remove exam *****/
       Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
@@ -683,8 +681,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					 Exams->Exam.HiddenOrVisible);
 
       /***** Icon to edit exam *****/
-      Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,
-				   Exa_PutPars,Exams);
+      Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,Exa_PutPars,Exams);
      }
 
    /***** Put icon to view results of sessions in exam *****/
@@ -693,9 +690,8 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  Exa_PutPars,Exams);
 
    /***** Link to get resource link *****/
-   if (Rsc_CheckIfICanGetLink ())
-      Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,
-				      Exa_PutPars,Exams);
+   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
   }
 
 /*****************************************************************************/
@@ -973,7 +969,7 @@ void Exa_AskRemExam (void)
    struct Exa_Exams Exams;
 
    /***** Check if I can edit exams *****/
-   if (!Exa_CheckIfICanEditExams ())
+   if (Exa_CheckIfICanEditExams () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
@@ -1006,7 +1002,7 @@ void Exa_RemoveExam (void)
    struct Exa_Exams Exams;
 
    /***** Check if I can edit exams *****/
-   if (!Exa_CheckIfICanEditExams ())
+   if (Exa_CheckIfICanEditExams () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
@@ -1186,7 +1182,7 @@ static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible)
    struct Exa_Exams Exams;
 
    /***** Check if I can edit exams *****/
-   if (!Exa_CheckIfICanEditExams ())
+   if (Exa_CheckIfICanEditExams () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
@@ -1216,7 +1212,7 @@ void Exa_ReqCreatOrEditExam (void)
    Exa_ExistingNewExam_t ExistingNewExam;
 
    /***** Check if I can edit exams *****/
-   if (!Exa_CheckIfICanEditExams ())
+   if (Exa_CheckIfICanEditExams () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
@@ -1427,7 +1423,7 @@ void Exa_ReceiveExam (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Check if I can edit exams *****/
-   if (!Exa_CheckIfICanEditExams ())
+   if (Exa_CheckIfICanEditExams () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
@@ -1551,20 +1547,6 @@ static void Exa_UpdateExam (struct Exa_Exam *Exam,const char *Txt)
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_exam_has_been_modified);
-  }
-
-/*****************************************************************************/
-/********** Get number of sessions and check is edition is possible **********/
-/*****************************************************************************/
-// Before calling this function, number of sessions must be calculated
-
-bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
-  {
-   if (Exa_CheckIfICanEditExams ())
-      /***** Questions are editable only if exam has no sessions *****/
-      return Exam->NumSess == 0;	// Exams with sessions should not be edited
-   else
-      return false;	// Questions are not editable
   }
 
 /*****************************************************************************/

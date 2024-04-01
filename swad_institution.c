@@ -89,7 +89,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
                                       bool GetNumUsrsWhoClaimToBelongToIns);
 
 static void Ins_ListInstitutionsForEdition (void);
-static bool Ins_CheckIfICanEdit (struct Hie_Node *Ins);
+static Usr_ICan_t Ins_CheckIfICanEdit (struct Hie_Node *Ins);
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *NewName);
 
@@ -331,7 +331,7 @@ static void Ins_ListInstitutions (void)
 static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit institutions *****/
-   if (Hie_CheckIfICanEdit ())
+   if (Hie_CheckIfICanEdit () == Usr_I_CAN)
       Ins_PutIconToEditInstitutions ();
 
    /***** Put icon to show a figure *****/
@@ -344,8 +344,7 @@ static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
 
 static void Ins_PutIconToEditInstitutions (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiIns,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiIns,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -556,8 +555,7 @@ static void Ins_EditInstitutionsInternal (void)
 static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view institutions *****/
-   Ico_PutContextualIconToView (ActSeeIns,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeIns,NULL,NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_INSTITS);
@@ -884,7 +882,7 @@ static void Ins_ListInstitutionsForEdition (void)
    struct Hie_Node *Ins;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
-   bool ICanEdit;
+   Usr_ICan_t ICanEdit;
    unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
@@ -920,7 +918,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Put icon to remove institution */
 	    HTM_TD_Begin ("class=\"BT\"");
-	       if (!ICanEdit ||
+	       if (ICanEdit == Usr_I_CAN_NOT ||
 		   NumCtrs ||		// Institution has centers
 		   NumUsrsIns ||		// Institution has users
 		   NumUsrsInCrssOfIns)	// Institution has users
@@ -947,11 +945,12 @@ static void Ins_ListInstitutionsForEdition (void)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ins->HieCod,
 				           Names,
-				           ICanEdit);	// Put form?
+				           ICanEdit == Usr_I_CAN ? Frm_PUT_FORM :
+				        			   Frm_DONT_PUT_FORM);
 
 	    /* Institution WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
+	       if (ICanEdit == Usr_I_CAN)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);
 		     ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
@@ -1014,11 +1013,12 @@ static void Ins_ListInstitutionsForEdition (void)
 /************ Check if I can edit, remove, etc. an institution ***************/
 /*****************************************************************************/
 
-static bool Ins_CheckIfICanEdit (struct Hie_Node *Ins)
+static Usr_ICan_t Ins_CheckIfICanEdit (struct Hie_Node *Ins)
   {
-   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
-          ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
-          Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod);	// I am the requester
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
+           ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
+           Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod)) ? Usr_I_CAN :	// I am the requester
+        							 Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1041,12 +1041,14 @@ void Ins_RemoveInstitution (void)
    /***** Get data of the institution from database *****/
    Hie_GetDataByCod[Hie_INS] (Ins_EditingIns);
 
-   /***** Check if this institution has users *****/
-   if (!Ins_CheckIfICanEdit (Ins_EditingIns))
+   /***** Check if I can edit this institution *****/
+   if (Ins_CheckIfICanEdit (Ins_EditingIns) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
-   else if (Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-				     Hie_INS,	// ...in institution
-				     Ins_EditingIns->HieCod))
+
+   /***** Check if this institution has centers or users *****/
+   if (Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
+				Hie_INS,	// ...in institution
+				Ins_EditingIns->HieCod))
       // Institution has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);

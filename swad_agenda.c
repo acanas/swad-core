@@ -122,6 +122,29 @@ static void Agd_FreeListEvents (struct Agd_Agenda *Agenda);
 static void Agd_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 /*****************************************************************************/
+/******************* Check if I can view a user's agenda *********************/
+/*****************************************************************************/
+
+Usr_ICan_t Agd_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat)
+  {
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return Usr_I_CAN_NOT;
+
+   /***** 2. Fast check: It's me? *****/
+   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
+      return Usr_I_CAN;
+
+   /***** 3. Fast check: Am I logged as system admin? *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      return Usr_I_CAN;
+
+   /***** 4. Slow check: Get if user shares any course with me from database *****/
+   return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat) ? Usr_I_CAN :
+						    Usr_I_CAN_NOT;
+  }
+
+/*****************************************************************************/
 /*************************** Reset agenda context ****************************/
 /*****************************************************************************/
 
@@ -386,7 +409,7 @@ void Agd_ShowUsrAgenda (void)
 
    /***** Get user *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-      if (Usr_CheckIfICanViewUsrAgenda (&Gbl.Usrs.Other.UsrDat))
+      if (Agd_CheckIfICanViewUsrAgenda (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 Error = false;
 
@@ -695,8 +718,7 @@ static void Agd_PutIconToCreateNewEvent (void *Agenda)
 
 static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod)
   {
-   Ico_PutContextualIconToEdit (ActSeeMyAgd,NULL,
-                                NULL,EncryptedUsrCod);
+   Ico_PutContextualIconToEdit (ActSeeMyAgd,NULL,NULL,EncryptedUsrCod);
   }
 
 static void Agd_PutIconToShowQR (void)
@@ -714,19 +736,19 @@ static void Agd_PutIconToShowQR (void)
 static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
   {
    /***** Button to view user's public profile *****/
-   if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.BaPrfVisibility,
-		             &Gbl.Usrs.Other.UsrDat))
+   if (Pri_CheckIfICanView (Gbl.Usrs.Other.UsrDat.BaPrfVisibility,
+		            &Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
       Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
                                      Usr_PutParOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "user.svg",Ico_BLACK);
 
    /***** Button to view user's record card *****/
-   if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
       /* View student's records: common record card and course record card */
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
                                      Usr_PutParOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "address-card.svg",Ico_BLACK);
-   else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
+   else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 			             Usr_PutParOtherUsrCodEncrypted,EncryptedUsrCod,
 			             "address-card.svg",Ico_BLACK);

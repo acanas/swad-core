@@ -75,7 +75,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool Svy_CheckIfICanCreateSvy (void);
+static Usr_ICan_t Svy_CheckIfICanCreateSvy (void);
 static void Svy_PutIconsListSurveys (void *Surveys);
 static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Surveys);
 static void Svy_PutParsToCreateNewSvy (void *Surveys);
@@ -224,7 +224,7 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 	    HTM_TR_Begin (NULL);
 
 	       if (Surveys->Svy.Status.ICanEdit ||
-		   Rsc_CheckIfICanGetLink ())
+		   Rsc_CheckIfICanGetLink () == Usr_I_CAN)
                   HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Dat_StartEndTime_t) 0;
@@ -287,15 +287,15 @@ void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 /******************* Check if I can create a new survey **********************/
 /*****************************************************************************/
 
-static bool Svy_CheckIfICanCreateSvy (void)
+static Usr_ICan_t Svy_CheckIfICanCreateSvy (void)
   {
-   static const bool ICanCreateSvy[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanCreateSvy[Rol_NUM_ROLES] =
      {
-      [Rol_TCH	  ] = true,
-      [Rol_DEG_ADM] = true,
-      [Rol_CTR_ADM] = true,
-      [Rol_INS_ADM] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH	  ] = Usr_I_CAN,
+      [Rol_DEG_ADM] = Usr_I_CAN,
+      [Rol_CTR_ADM] = Usr_I_CAN,
+      [Rol_INS_ADM] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanCreateSvy[Gbl.Usrs.Me.Role.Logged];
@@ -308,13 +308,12 @@ static bool Svy_CheckIfICanCreateSvy (void)
 static void Svy_PutIconsListSurveys (void *Surveys)
   {
    /***** Put icon to create a new survey *****/
-   if (Svy_CheckIfICanCreateSvy ())
+   if (Svy_CheckIfICanCreateSvy () == Usr_I_CAN)
       Svy_PutIconToCreateNewSvy ((struct Svy_Surveys *) Surveys);
 
    /***** Put icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink ())
-      Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
-				      Svy_PutPars,Surveys);
+   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,Svy_PutPars,Surveys);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_SURVEYS);
@@ -439,7 +438,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
 	               The_GetColorRows ());
 	    if (Surveys->Svy.Status.ICanEdit ||
-		Rsc_CheckIfICanGetLink ())
+		Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	       Svy_PutFormsToRemEditOneSvy (Surveys,Anchor);
 	 HTM_TD_End ();
 	}
@@ -846,12 +845,10 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
    if (Surveys->Svy.Status.ICanEdit)
      {
       /***** Icon to remove survey *****/
-      Ico_PutContextualIconToRemove (ActReqRemSvy,NULL,
-				     Svy_PutPars,Surveys);
+      Ico_PutContextualIconToRemove (ActReqRemSvy,NULL,Svy_PutPars,Surveys);
 
       /***** Icon to reset survey *****/
-      Ico_PutContextualIconToReset (ActReqRstSvy,NULL,
-				    Svy_PutPars,Surveys);
+      Ico_PutContextualIconToReset (ActReqRstSvy,NULL,Svy_PutPars,Surveys);
 
       /***** Icon to hide/unhide survey *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
@@ -859,14 +856,12 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
 					 Surveys->Svy.Status.HiddenOrVisible);
 
       /***** Icon to edit survey *****/
-      Ico_PutContextualIconToEdit (ActEdiOneSvy,NULL,
-				   Svy_PutPars,Surveys);
+      Ico_PutContextualIconToEdit (ActEdiOneSvy,NULL,Svy_PutPars,Surveys);
      }
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink ())
-      Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,
-				      Svy_PutPars,Surveys);
+   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,Svy_PutPars,Surveys);
   }
 
 /*****************************************************************************/
@@ -1165,7 +1160,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
 	    break;
 	 case Hie_CRS:	// Course
 	    Svy->Status.IBelongToScope = Hie_CheckIfIBelongTo (Svy->Level,Svy->HieCod) &&
-					 Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
+					 Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod) == Usr_I_CAN;
 	    break;
 	 default:	// Unknown
             Err_WrongHierarchyLevelExit ();
@@ -1596,7 +1591,7 @@ void Svy_ReqCreatOrEditSvy (void)
    if (ItsANewSurvey)
      {
       /***** Put link (form) to create new survey *****/
-      if (!Svy_CheckIfICanCreateSvy ())
+      if (Svy_CheckIfICanCreateSvy () == Usr_I_CAN_NOT)
          Err_NoPermissionExit ();
 
       /* Initialize to empty survey */

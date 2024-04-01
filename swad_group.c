@@ -66,20 +66,6 @@
 #define Grp_GROUPS_SECTION_ID		"grps"
 #define Grp_NEW_GROUP_SECTION_ID	"new_grp"
 
-static const bool Grp_ICanChangeGrps[Rol_NUM_ROLES] =
-  {
-   [Rol_UNK    ] = false,
-   [Rol_GST    ] = false,
-   [Rol_USR    ] = false,
-   [Rol_STD    ] = true,
-   [Rol_NET    ] = false,
-   [Rol_TCH    ] = true,
-   [Rol_DEG_ADM] = false,
-   [Rol_CTR_ADM] = false,
-   [Rol_INS_ADM] = false,
-   [Rol_SYS_ADM] = true,
-  };
-
 /*****************************************************************************/
 /************* External global variables from others modules *****************/
 /*****************************************************************************/
@@ -89,6 +75,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static Usr_ICan_t Grp_CheckIfICanChangeGrps (void);
 
 static void Grp_ReqEditGroupsInternal (Ale_AlertType_t AlertTypeGroupTypes,const char *AlertTextGroupTypes,
                                        Ale_AlertType_t AlertTypeGroups,const char *AlertTextGroups);
@@ -142,6 +130,22 @@ static void Grp_RemoveGroupCompletely (void);
 static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents);
 static void Grp_PutParGrpTypCod (void *GrpTypCod);
 static void Grp_PutParGrpCod (void *GrpCod);
+
+/*****************************************************************************/
+/************************ Check if I can change groups ***********************/
+/*****************************************************************************/
+
+static Usr_ICan_t Grp_CheckIfICanChangeGrps (void)
+  {
+   static Usr_ICan_t Grp_ICanChangeGrps[Rol_NUM_ROLES] =
+     {
+      [Rol_STD    ] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
+     };
+
+   return Grp_ICanChangeGrps[Gbl.Usrs.Me.Role.Logged];
+  }
 
 /*****************************************************************************/
 /******************* Write the names of the selected groups ******************/
@@ -624,7 +628,7 @@ void Grp_ChangeMyGrps (Cns_QuietOrVerbose_t QuietOrVerbose)
    bool ChangesMade;
 
    /***** Can I change my groups? *****/
-   if (Grp_ICanChangeGrps[Gbl.Usrs.Me.Role.Logged])
+   if (Grp_CheckIfICanChangeGrps () == Usr_I_CAN)
      {
       /***** Get list of groups types and groups in this course *****/
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -683,7 +687,7 @@ void Grp_ChangeOtherUsrGrps (void)
    bool SelectionIsValid;
 
    /***** Can I change another user's groups? *****/
-   if (Grp_ICanChangeGrps[Gbl.Usrs.Me.Role.Logged])
+   if (Grp_CheckIfICanChangeGrps () == Usr_I_CAN)
      {
       /***** Get list of groups types and groups in current course *****/
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1340,8 +1344,7 @@ static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args)
 
 static void Grp_PutIconToViewGroups (void)
   {
-   Ico_PutContextualIconToView (ActReqSelGrp,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToView (ActReqSelGrp,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1773,8 +1776,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
 static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

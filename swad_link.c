@@ -46,16 +46,6 @@
 #include "swad_parameter_code.h"
 
 /*****************************************************************************/
-/****************************** Private constants ****************************/
-/*****************************************************************************/
-
-static const bool Lnk_ICanEditLinks[Rol_NUM_ROLES] =
-  {
-   /* Users who can edit */
-   [Rol_SYS_ADM] = true,
-  };
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -81,6 +71,8 @@ static struct Lnk_Link *Lnk_EditingLnk = NULL;	// Static variable to keep the li
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static Usr_ICan_t Lnk_CheckIfICanEditLinks (void);
+
 static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args);
 static void Lnk_PutIconToEditLinks (void);
 static void Lnk_WriteListOfLinks (const struct Lnk_Links *Links,const char *Class);
@@ -103,6 +95,21 @@ static void Lnk_PutHeadLinks (void);
 
 static void Lnk_EditingLinkConstructor (void);
 static void Lnk_EditingLinkDestructor (void);
+
+/*****************************************************************************/
+/************************* Check if I can edit links *************************/
+/*****************************************************************************/
+
+static Usr_ICan_t Lnk_CheckIfICanEditLinks (void)
+  {
+   static bool Lnk_ICanEditLinks[Rol_NUM_ROLES] =
+     {
+      /* Users who can edit */
+      [Rol_SYS_ADM] = Usr_I_CAN,
+     };
+
+   return Lnk_ICanEditLinks[Gbl.Usrs.Me.Role.Logged];
+  }
 
 /*****************************************************************************/
 /****************************** List all links *******************************/
@@ -142,7 +149,7 @@ void Lnk_SeeLinks (void)
 static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit links *****/
-   if (Lnk_ICanEditLinks[Gbl.Usrs.Me.Role.Logged])
+   if (Lnk_CheckIfICanEditLinks () == Usr_I_CAN)
       Lnk_PutIconToEditLinks ();
 
    /***** Put icon to view banners *****/
@@ -155,8 +162,7 @@ static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args)
 
 static void Lnk_PutIconToEditLinks (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiLnk,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiLnk,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -269,8 +275,7 @@ static void Lnk_EditLinksInternal (void)
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view links *****/
-   Ico_PutContextualIconToView (ActSeeLnk,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeLnk,NULL,NULL,NULL);
 
    /***** Put icon to view banners *****/
    Ban_PutIconToViewBanners ();
@@ -436,7 +441,7 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Lnk,Lnk->LnkCod,
 				           Names,
-				           true);	// Put form
+				           Frm_PUT_FORM);
 
 	    /* Link WWW */
 	    HTM_TD_Begin ("class=\"LM\"");

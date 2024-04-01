@@ -308,7 +308,7 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
   {
    unsigned NumID;
-   bool ICanSeeUsrID     = ID_ICanSeeOtherUsrIDs (UsrDat);
+   bool ICanSeeUsrID     = (ID_ICanSeeOtherUsrIDs (UsrDat) == Usr_I_CAN);
    bool ICanConfirmUsrID = ICanSeeUsrID &&
 			   Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
 			   !Frm_CheckIfInside () &&					// Not inside another form
@@ -343,11 +343,11 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
 /***************** Check if I can see another user's IDs *********************/
 /*****************************************************************************/
 
-bool ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
+Usr_ICan_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
   {
    /***** Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -356,12 +356,12 @@ bool ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
       case Rol_TCH:
 	 /* Check 1: I can see the IDs of users who do not exist in database */
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
-            return true;
+            return Usr_I_CAN;
 
 	 /* Check 2: I can see the IDs of confirmed students */
          if (UsrDat->Roles.InCurrentCrs == Rol_STD &&	// A student
 	     UsrDat->Accepted)				// who accepted registration
-            return true;
+            return Usr_I_CAN;
 
          /* Check 3: I can see the IDs of users with user's data empty */
          // This check is made to not view simultaneously:
@@ -372,16 +372,16 @@ bool ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
 	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
 	     !UsrDat->FrstName[0] &&	// and who has no first name (nobody filled user's first name)
              !UsrDat->Email[0])		// and who has no email (nobody filled user's email)
-            return true;
+            return Usr_I_CAN;
 
-         return false;
+         return Usr_I_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_ICanEditOtherUsr (UsrDat);
+         return Usr_CheckIfICanEditOtherUsr (UsrDat);
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -691,7 +691,7 @@ void ID_RemoveOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Remove user's ID *****/
 	 ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
@@ -721,7 +721,7 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanRemove;
 
-   if (Usr_ICanEditOtherUsr (UsrDat))
+   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
      {
       /***** Get user's ID from form *****/
       Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
@@ -787,7 +787,7 @@ void ID_ChangeOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Change user's ID *****/
 	 ID_ChangeUsrID (&Gbl.Usrs.Other.UsrDat,
@@ -822,7 +822,7 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    bool AlreadyExists;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
-   if (Usr_ICanEditOtherUsr (UsrDat))
+   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
      {
       /***** Get new user's ID from form *****/
       Par_GetParText ("NewID",NewID,ID_MAX_BYTES_USR_ID);
@@ -911,7 +911,7 @@ void ID_ConfirmOtherUsrID (void)
 	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
-	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
+	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	    ICanConfirm = true;
         }
 

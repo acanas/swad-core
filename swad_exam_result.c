@@ -69,8 +69,8 @@ extern struct Globals Gbl;
 
 struct ExaRes_ICanView
   {
-   bool Result;
-   bool Score;
+   Usr_ICan_t Result;
+   Usr_ICan_t Score;
   };
 
 /*****************************************************************************/
@@ -292,7 +292,7 @@ static void ExaRes_PutFormToSelUsrsToViewResults (__attribute__((unused)) void *
 				     Txt_Results,
 				     Hlp_ASSESSMENT_Exams_results,
 				     Txt_View_results,
-				     false);	// Do not put form with date range
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -358,7 +358,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_DONT_GET_ROLE_IN_CRS))
-	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	   {
 	    /***** Show sessions results *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -424,7 +424,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_DONT_GET_ROLE_IN_CRS))
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	      {
 	       /***** Show sessions results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -495,7 +495,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_DONT_GET_ROLE_IN_CRS))
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	      {
 	       /***** Show sessions results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -831,7 +831,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Get and accumulate questions and score */
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	      {
 	       /* Get questions and user's answers of exam print from database */
 	       ExaPrn_GetPrintQuestionsFromDB (&Print);
@@ -852,7 +852,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		  HTM_Unsigned (Print.NumQsts.All);
 	       else
 		  Ico_PutIconNotVisible ();
@@ -862,7 +862,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_GREEN_%s %s\"",
 			  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  if (Print.NumQsts.Valid.Total)
 		     HTM_Unsigned (Print.NumQsts.Valid.Total);
@@ -877,7 +877,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_RED_%s %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  NumQstsInvalid = Print.NumQsts.All - Print.NumQsts.Valid.Total;
 		  if (NumQstsInvalid)
@@ -893,7 +893,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  if (Print.NumQsts.Valid.Correct)
 		     HTM_Unsigned (Print.NumQsts.Valid.Correct);
@@ -908,7 +908,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  if (Print.NumQsts.Valid.Wrong.Negative)
 		     HTM_Unsigned (Print.NumQsts.Valid.Wrong.Negative);
@@ -922,7 +922,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  if (Print.NumQsts.Valid.Wrong.Zero)
 		     HTM_Unsigned (Print.NumQsts.Valid.Wrong.Zero);
@@ -936,7 +936,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  if (Print.NumQsts.Valid.Wrong.Positive)
 		     HTM_Unsigned (Print.NumQsts.Valid.Wrong.Positive);
@@ -951,7 +951,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  if (Print.NumQsts.Valid.Blank)
 		     HTM_Unsigned (Print.NumQsts.Valid.Blank);
@@ -966,7 +966,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  HTM_Double2Decimals (Print.Score.Valid);
 		  HTM_Txt ("/");
@@ -980,7 +980,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		  HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
 								   (double) Print.NumQsts.Valid.Total :
 								   0.0);
@@ -992,7 +992,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	                  The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,Print.Score.Valid,Exam.MaxGrade);
 		  TstPrn_ShowGrade (Grade,Exam.MaxGrade);
@@ -1005,7 +1005,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    /* Link to show this result */
 	    HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",
 	                  The_GetColorRows ());
-	       if (ICanView.Result)
+	       if (ICanView.Result == Usr_I_CAN)
 		 {
 		  Exams->Exam.ExaCod = Session.ExaCod;
 		  Exams->SesCod      = Session.SesCod;
@@ -1218,8 +1218,8 @@ void ExaRes_ShowExaResultAfterFinish (void)
    struct ExaPrn_Print Print;
    struct ExaRes_ICanView ICanView =
      {
-      .Result = true,	// I have just finish answering, so show result...
-      .Score  = false,	// ...but not score
+      .Result = Usr_I_CAN,	// I have just finish answering, so show result...
+      .Score  = Usr_I_CAN_NOT,	// ...but not score
      };
    unsigned Visibility = 1 << TstVis_VISIBLE_QST_ANS_TXT;	// Show only questions and answers text
 
@@ -1346,7 +1346,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 						    Usr_DONT_GET_PREFS,
 						    Usr_DONT_GET_ROLE_IN_CRS))
 	 Err_WrongUserExit ();
-      if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
+      if (Usr_CheckIfICanViewTstExaMchResult (UsrDat) == Usr_I_CAN_NOT)
 	 Err_NoPermissionExit ();
 
       /***** Begin table *****/
@@ -1371,7 +1371,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	 ExaRes_ShowExamResultGrade (Exam,Print,ICanView);
 
 	 /* Answers and solutions */
-	 if (ICanView->Result)
+	 if (ICanView->Result == Usr_I_CAN)
 	    ExaRes_ShowExamAnswers (UsrDat,Print,Visibility);
 
       /***** End table *****/
@@ -1398,15 +1398,17 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
 	 ICanView->Result = (Usr_ItsMe (UsrCod) == Usr_ME &&		// The result is mine
 			     Exam->HiddenOrVisible == HidVis_VISIBLE &&	// The exam is visible
 			     Session->HiddenOrVisible == HidVis_VISIBLE &&	// The session is visible
-			     Session->ShowUsrResults);			// The results of the session are visible to users
+			     Session->ShowUsrResults) ? Usr_I_CAN :		// The results of the session are visible to users
+							Usr_I_CAN_NOT;
 	 // Whether I belong or not to groups of session is not checked here...
 	 // ...because I should be able to see old exams made in old groups to which I belonged
 
-	 if (ICanView->Result)
+	 if (ICanView->Result == Usr_I_CAN)
 	    // Depends on 5 visibility icons associated to exam
-	    ICanView->Score = TstVis_IsVisibleTotalScore (Exam->Visibility);
+	    ICanView->Score = TstVis_IsVisibleTotalScore (Exam->Visibility) ? Usr_I_CAN :
+									      Usr_I_CAN_NOT;
 	 else
-	    ICanView->Score = false;
+	    ICanView->Score = Usr_I_CAN_NOT;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1415,11 +1417,11 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 ICanView->Result =
-	 ICanView->Score  = true;
+	 ICanView->Score  = Usr_I_CAN;
 	 break;
       default:
 	 ICanView->Result =
-	 ICanView->Score  = false;
+	 ICanView->Score  = Usr_I_CAN_NOT;
 	 break;
      }
   }
@@ -1600,7 +1602,7 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 
       /***** Number of questions *****/
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (ICanView->Result)
+	 if (ICanView->Result == Usr_I_CAN)
 	   {
 	    HTM_TxtF ("%u",Print->NumQsts.All);
 	    if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
@@ -1654,7 +1656,7 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
 
       /***** Number of answers *****/
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (ICanView->Score)
+	 if (ICanView->Score == Usr_I_CAN)
 	    HTM_TxtF ("%s(<em>p<sub>i</sub></em>=1):&nbsp;%u; "
 		      "%s(-1&le;<em>p<sub>i</sub></em>&lt;0):&nbsp;%u; "
 		      "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u; "
@@ -1693,7 +1695,7 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
 
       /***** Score *****/
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (ICanView->Score)
+	 if (ICanView->Score == Usr_I_CAN)
 	   {
 	    /* Score counting all questions */
 	    if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
@@ -1745,7 +1747,7 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 
       /***** Grade *****/
       HTM_TD_Begin ("class=\"LB DAT_%s\"",The_GetSuffix ());
-	 if (ICanView->Score)
+	 if (ICanView->Score == Usr_I_CAN)
 	   {
 	    /* Grade counting all questions */
 	    if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
@@ -1814,7 +1816,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
   {
    extern const char *Txt_Score;
    extern const char *Txt_Invalid_question;
-   bool ICanView[TstVis_NUM_ITEMS_VISIBILITY];
+   Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY];
    static const char *ClassNumQst[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "BIG_INDEX_RED",
@@ -1840,10 +1842,14 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility);
-	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility);
-	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility);
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility);
+	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility) ? Usr_I_CAN:
+											       Usr_I_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility) ? Usr_I_CAN:
+											       Usr_I_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility) ? Usr_I_CAN:
+											       Usr_I_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility) ? Usr_I_CAN:
+											       Usr_I_CAN_NOT;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1854,13 +1860,13 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] =
 	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] =
 	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] =
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = true;
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = Usr_I_CAN;
 	 break;
       default:
 	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] =
 	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] =
 	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] =
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = false;
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = Usr_I_CAN_NOT;
 	 break;
      }
 
@@ -1879,10 +1885,10 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
 	 /* Stem */
 	 Qst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
-			   ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
+			   ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_I_CAN);
 
 	 /* Media */
-	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
+	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_I_CAN)
 	    Med_ShowMedia (&Question->Media,
 			   "Tst_MED_SHOW_CONT",
 			   "Tst_MED_SHOW");
@@ -1895,7 +1901,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 				  ClassFeedback[Question->Validity]);
 
 	 /* Write score retrieved from database */
-	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
+	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_I_CAN)
 	   {
 	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
 	                   The_GetSuffix ());
@@ -1914,7 +1920,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	   }
 
 	 /* Question feedback */
-	 if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
+	 if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_I_CAN)
 	    Qst_WriteQstFeedback (Question->Feedback,
 	                          ClassFeedback[Question->Validity]);
 

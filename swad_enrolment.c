@@ -145,7 +145,7 @@ static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
-static bool Enr_CheckIfICanRemUsrFromCrs (void);
+static Usr_ICan_t Enr_CheckIfICanRemUsrFromCrs (void);
 
 static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
@@ -1428,7 +1428,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	}
 
       /***** Eliminate user completely from platform *****/
-      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_I_CAN)
 	{
 	 Enr_PutActionRemUsrAcc (&OptionChecked,MeOrOther);
 	 OptionsShown = true;
@@ -2369,16 +2369,18 @@ static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
 
 void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
-   extern const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES];
    extern const char *Txt_Administer_me;
    extern const char *Txt_Administer_one_user;
-   const char *TitleText = Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged] ? Txt_Administer_one_user :
-                        	                                             Txt_Administer_me;
+   static const char **TitleText[] =
+     {
+      [Usr_I_CAN_NOT] = &Txt_Administer_me,
+      [Usr_I_CAN    ] = &Txt_Administer_one_user,
+     };
 
    Lay_PutContextualLinkIconText (NextAction,NULL,
                                   NULL,NULL,
 				  "user-cog.svg",Ico_BLACK,
-				  TitleText,NULL);
+				  *TitleText[Adm_CheckIfICanAdminOtherUsrs ()],NULL);
   }
 
 /*****************************************************************************/
@@ -2421,10 +2423,8 @@ void Enr_ReqRegRemOth (void)
 
 void Enr_ReqRegRemStd (void)
   {
-   extern const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES];
-
    /***** Contextual menu *****/
-   if (Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
+   if (Adm_CheckIfICanAdminOtherUsrs () == Usr_I_CAN)
      {
       Mnu_ContextMenuBegin ();
 	 Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
@@ -2443,9 +2443,7 @@ void Enr_ReqRegRemTch (void)
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
-   extern const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES];
-
-   if (Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
+   if (Adm_CheckIfICanAdminOtherUsrs () == Usr_I_CAN)
       /***** Form to request the user's ID of another user *****/
       Enr_ReqAnotherUsrIDToRegisterRemove (Role);
    else
@@ -2675,7 +2673,7 @@ void Enr_ReqRemUsrFromCrs (void)
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Enr_CheckIfICanRemUsrFromCrs ())
+      if (Enr_CheckIfICanRemUsrFromCrs () == Usr_I_CAN)
 	 Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
       else
          Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -2695,7 +2693,7 @@ void Enr_RemUsrFromCrs1 (void)
       /***** Get user to be removed *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
 	{
-	 if (Enr_CheckIfICanRemUsrFromCrs ())
+	 if (Enr_CheckIfICanRemUsrFromCrs () == Usr_I_CAN)
 	    Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
 					  Enr_DO_NOT_REMOVE_USR_PRODUCTION,
 					  Cns_VERBOSE);
@@ -2720,23 +2718,24 @@ void Enr_RemUsrFromCrs2 (void)
 /*********** Check if I can remove another user in current course ************/
 /*****************************************************************************/
 
-static bool Enr_CheckIfICanRemUsrFromCrs (void)
+static Usr_ICan_t Enr_CheckIfICanRemUsrFromCrs (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
 	 // A student or non-editing teacher can remove herself/himself
-	 return Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME;
+	 return (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME) ? Usr_I_CAN :
+								       Usr_I_CAN_NOT;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 // A teacher or administrator can remove anyone
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -2902,7 +2901,7 @@ void Enr_ModifyUsr1 (void)
 	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	      {
 	       /***** Get user's name from record form *****/
-	       if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
+	       if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 		  Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Update user's data in database *****/
@@ -3008,7 +3007,7 @@ void Enr_ModifyUsr1 (void)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
-	    if (!Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+	    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_I_CAN_NOT)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 default:

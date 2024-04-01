@@ -45,17 +45,6 @@
 #include "swad_parameter_code.h"
 
 /*****************************************************************************/
-/****************************** Private constants ****************************/
-/*****************************************************************************/
-
-static const bool Hld_ICanEditHlds[Rol_NUM_ROLES] =
-  {
-   /* Users who can edit */
-   [Rol_INS_ADM] = true,
-   [Rol_SYS_ADM] = true,
-  };
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -70,6 +59,8 @@ static struct Hld_Holiday *Hld_EditingHld = NULL;	// Static variable to keep the
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static Usr_ICan_t Hld_CheckIfICanEditHlds (void);
 
 static Hld_Order_t Hld_GetParHldOrder (void);
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
@@ -92,6 +83,22 @@ static void Hld_PutHeadHolidays (void);
 
 static void Hld_EditingHolidayConstructor (void);
 static void Hld_EditingHolidayDestructor (void);
+
+/*****************************************************************************/
+/************************ Check if I can edit holidays ***********************/
+/*****************************************************************************/
+
+static Usr_ICan_t Hld_CheckIfICanEditHlds (void)
+  {
+   static Usr_ICan_t Hld_ICanEditHlds[Rol_NUM_ROLES] =
+     {
+      /* Users who can edit */
+      [Rol_INS_ADM] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
+     };
+
+   return Hld_ICanEditHlds[Gbl.Usrs.Me.Role.Logged];
+  }
 
 /*****************************************************************************/
 /************************* Reset departments context *************************/
@@ -234,9 +241,8 @@ static Hld_Order_t Hld_GetParHldOrder (void)
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
   {
    /***** Edit holidays *****/
-   if (Hld_ICanEditHlds[Gbl.Usrs.Me.Role.Logged])
-      Ico_PutContextualIconToEdit (ActEdiHld,NULL,
-				   NULL,NULL);
+   if (Hld_CheckIfICanEditHlds () == Usr_I_CAN)
+      Ico_PutContextualIconToEdit (ActEdiHld,NULL,NULL,NULL);
 
    /***** View calendar *****/
    Cal_PutIconToSeeCalendar ();
@@ -245,8 +251,7 @@ static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
 static void Hld_PutIconsEditHolidays (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view holidays *****/
-   Ico_PutContextualIconToView (ActSeeHld,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeHld,NULL,NULL,NULL);
 
    /***** View calendar *****/
    Cal_PutIconToSeeCalendar ();

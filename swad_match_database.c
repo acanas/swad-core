@@ -569,7 +569,7 @@ unsigned Mch_DB_GetGrpNamesAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
 /************ Check if I belong to any of the groups of a match **************/
 /*****************************************************************************/
 
-bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
+Usr_ICan_t Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
   {
    return
    DB_QueryEXISTS ("can not check if I can play a match",
@@ -588,7 +588,8 @@ bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND grp_users.GrpCod=mch_groups.GrpCod)))",
 		   MchCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :
+						Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

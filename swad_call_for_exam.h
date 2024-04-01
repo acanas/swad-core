@@ -129,7 +129,7 @@ void Cfe_ListCallsForExamsDay (void);
 
 void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams);
 
-bool Cfe_CheckIfICanEditCallsForExams (void);
+Usr_ICan_t Cfe_CheckIfICanEditCallsForExams (void);
 
 void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                           char **ContentStr,

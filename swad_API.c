@@ -1772,7 +1772,7 @@ static void API_CopyListUsers (struct soap *soap,
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
-         ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (&UsrDat);
+         ICanSeeUsrID = (ID_ICanSeeOtherUsrIDs (&UsrDat) == Usr_I_CAN);
 
 	 /* Get nickname */
          Nck_DB_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);
@@ -4326,7 +4326,6 @@ int swad__getMatchStatus (struct soap *soap,
    int ReturnCode;
    struct Gam_Game Game;
    struct Mch_Match Match;
-   bool ICanPlayThisMatchBasedOnGrps;
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Reset game and match *****/
@@ -4395,8 +4394,7 @@ int swad__getMatchStatus (struct soap *soap,
 				  "Requester must be a student in the course");
 
    /***** Can I play this match? *****/
-   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match);
-   if (!ICanPlayThisMatchBasedOnGrps)
+   if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_I_CAN_NOT)
       return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester can not join this match");
@@ -5263,7 +5261,7 @@ int swad__getLastLocation (struct soap *soap,
    The other user does not have to share any course with me,
    but at least some course of each one has to share center.
    */
-   if (Roo_DB_CheckIfICanSeeUsrLocation ((long) userCode))
+   if (Roo_DB_CheckIfICanSeeUsrLocation ((long) userCode) == Usr_I_CAN)
      {
       /***** Get list of locations *****/
       NumLocs = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);

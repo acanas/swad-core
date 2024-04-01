@@ -100,7 +100,7 @@ static void Crs_EditCoursesInternal (void);
 static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
-static bool Crs_CheckIfICanEdit (struct Hie_Node *Crs);
+static Usr_ICan_t Crs_CheckIfICanEdit (struct Hie_Node *Crs);
 static void Crs_PutFormToCreateCourse (void);
 static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
@@ -423,7 +423,7 @@ static void Crs_ListCourses (void)
 static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit courses *****/
-   if (Hie_CheckIfICanEdit ())
+   if (Hie_CheckIfICanEdit () == Usr_I_CAN)
       Crs_PutIconToEditCourses ();
 
    /***** Put icon to show a figure *****/
@@ -436,8 +436,7 @@ static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args)
 
 static void Crs_PutIconToEditCourses (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCrs,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCrs,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -613,8 +612,7 @@ static void Crs_EditCoursesInternal (void)
 static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view courses *****/
-   Ico_PutContextualIconToView (ActSeeCrs,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeCrs,NULL,NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
@@ -662,7 +660,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
    unsigned YearAux;
    unsigned NumCrs;
    struct Usr_Data UsrDat;
-   bool ICanEdit;
+   Usr_ICan_t ICanEdit;
    unsigned NumUsrs[Rol_NUM_ROLES];
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
@@ -693,9 +691,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    /* Put icon to remove course */
 	    HTM_TD_Begin ("class=\"BT\"");
 	       if (NumUsrs[Rol_UNK] ||	// Course has users ==> deletion forbidden
-		   !ICanEdit)
+		   ICanEdit == Usr_I_CAN_NOT)
 		  Ico_PutIconRemovalNotAllowed ();
-	       else	// Crs->NumUsrs == 0 && ICanEdit
+	       else	// Crs->NumUsrs == 0 && ICanEdit == Usr_I_CAN
 		  Ico_PutContextualIconToRemove (ActRemCrs,NULL,
 						 Hie_PutParOtherHieCod,&Crs->HieCod);
 	    HTM_TD_End ();
@@ -707,7 +705,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	    /* Course year */
 	    HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
-	    if (ICanEdit)
+	    if (ICanEdit == Usr_I_CAN)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
 		  ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
@@ -734,7 +732,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	    /* Institutional code of the course */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
+	       if (ICanEdit == Usr_I_CAN)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
 		     ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
@@ -754,7 +752,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Crs->HieCod,
 				           Names,
-				           ICanEdit);	// Put form?
+				           ICanEdit == Usr_I_CAN ? Frm_PUT_FORM :
+				        			   Frm_DONT_PUT_FORM);
 
 	    /* Current number of teachers in this course */
 	    HTM_TD_Unsigned (NumUsrs[Rol_TCH] +
@@ -790,11 +789,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 /************** Check if I can edit, remove, etc. a course *******************/
 /*****************************************************************************/
 
-static bool Crs_CheckIfICanEdit (struct Hie_Node *Crs)
+static Usr_ICan_t Crs_CheckIfICanEdit (struct Hie_Node *Crs)
   {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
-          ((Crs->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
-          Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod);	// I am the requester
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
+           ((Crs->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
+           Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod)) ? Usr_I_CAN :	// I am the requester
+        						         Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1052,7 +1052,7 @@ void Crs_RemoveCourse (void)
 
    /***** Get data of the course from database *****/
    Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
-   if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
+   if (Crs_CheckIfICanEdit (Crs_EditingCrs) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Check if this course has users *****/
@@ -1295,7 +1295,7 @@ void Crs_ChangeInsCrsCod (void)
 
    /* Get data of the course */
    Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
-   if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
+   if (Crs_CheckIfICanEdit (Crs_EditingCrs) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Change the institutional course code *****/
@@ -1340,7 +1340,7 @@ void Crs_ChangeCrsYear (void)
 
    /* Get data of the course */
    Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
-   if (!Crs_CheckIfICanEdit (Crs_EditingCrs))
+   if (Crs_CheckIfICanEdit (Crs_EditingCrs) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
@@ -1445,7 +1445,7 @@ void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
 
    /***** Get from the database the data of the degree *****/
    Hie_GetDataByCod[Hie_CRS] (Crs);
-   if (!Crs_CheckIfICanEdit (Crs))
+   if (Crs_CheckIfICanEdit (Crs) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Check if new name is empty *****/

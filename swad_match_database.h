@@ -66,7 +66,7 @@ void Mch_DB_AssociateGroupToMatch (long MchCod,long GrpCod);
 
 unsigned Mch_DB_GetGrpCodsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod);
 unsigned Mch_DB_GetGrpNamesAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod);
-bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
+Usr_ICan_t Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
 
 void Mch_DB_RemoveGroup (long GrpCod);
 void Mch_DB_RemoveGroupsOfType (long GrpTypCod);

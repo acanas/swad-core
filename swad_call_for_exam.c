@@ -675,13 +675,12 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
   {
    /***** Icon to create a new call for exam *****/
-   if (Cfe_CheckIfICanEditCallsForExams ())
+   if (Cfe_CheckIfICanEditCallsForExams () == Usr_I_CAN)
       Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink ())
-      Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
-				      NULL,NULL);
+   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1465,7 +1464,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 
    if (CallsForExams)
      {
-      if (Cfe_CheckIfICanEditCallsForExams ())
+      if (Cfe_CheckIfICanEditCallsForExams () == Usr_I_CAN)
 	{
 	 /***** Icon to remove call for exam *****/
 	 Ico_PutContextualIconToRemove (ActReqRemCfe,NULL,
@@ -1499,7 +1498,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 				    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
 					 Cfe_PutParExaCod,
 					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
@@ -1510,12 +1509,12 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 /******************* Check if I can edit calls for exams *********************/
 /*****************************************************************************/
 
-bool Cfe_CheckIfICanEditCallsForExams (void)
+Usr_ICan_t Cfe_CheckIfICanEditCallsForExams (void)
   {
-   static const bool ICanEditCallsForExams[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanEditCallsForExams[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanEditCallsForExams[Gbl.Usrs.Me.Role.Logged];

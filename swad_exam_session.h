@@ -69,8 +69,8 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 void ExaSes_ReqCreatOrEditSes (void);
 void ExaSes_ReceiveSession (void);
 
-bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
-                                          const struct ExaSes_Session *Session);
-bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
+Usr_ICan_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
+                                                const struct ExaSes_Session *Session);
+Usr_ICan_t ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
 
 #endif

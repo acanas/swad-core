@@ -34,6 +34,7 @@
 
 #include "swad_action_list.h"
 #include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -398,15 +399,15 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
   {
    extern const char *Txt_Close;
    char IdAlert[Frm_MAX_BYTES_ID + 1];
-   static const bool AlertClosable[Ale_NUM_ALERT_TYPES] =
+   static Box_Closable_t AlertClosable[Ale_NUM_ALERT_TYPES] =
      {
-      [Ale_NONE     ] = false,
-      [Ale_CLIPBOARD] = true,
-      [Ale_INFO     ] = true,
-      [Ale_SUCCESS  ] = true,
-      [Ale_QUESTION ] = true,
-      [Ale_WARNING  ] = true,
-      [Ale_ERROR    ] = true,
+      [Ale_NONE     ] = Box_NOT_CLOSABLE,
+      [Ale_CLIPBOARD] = Box_CLOSABLE,
+      [Ale_INFO     ] = Box_CLOSABLE,
+      [Ale_SUCCESS  ] = Box_CLOSABLE,
+      [Ale_QUESTION ] = Box_CLOSABLE,
+      [Ale_WARNING  ] = Box_CLOSABLE,
+      [Ale_ERROR    ] = Box_CLOSABLE,
     };
    static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
      {
@@ -424,38 +425,49 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
       Lay_WriteStartOfPage ();
 
    /***** Begin container *****/
-   if (AlertClosable[AlertType])
+   switch (AlertClosable[AlertType])
      {
-      /* Create unique id for alert */
-      Frm_SetUniqueId (IdAlert);
-      HTM_DIV_Begin ("id=\"%s\" class=\"CM\"",IdAlert);
+      case Box_NOT_CLOSABLE:
+         HTM_DIV_Begin ("class=\"CM\"");
+	 break;
+      case Box_CLOSABLE:
+	 /* Create unique id for alert */
+	 Frm_SetUniqueId (IdAlert);
+	 HTM_DIV_Begin ("id=\"%s\" class=\"CM\"",IdAlert);
+	 break;
      }
-   else
-      HTM_DIV_Begin ("class=\"CM\"");
 
    /***** Begin box *****/
    HTM_DIV_Begin ("class=\"ALERT ALERT_BG_%s\"",The_GetSuffix ());
 
       /***** Icon to close the alert *****/
-      if (AlertClosable[AlertType])
+      switch (AlertClosable[AlertType])
 	{
-	 HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
-	    HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
-			 IdAlert);
-	       Ico_PutIcon ("times.svg",Ico_BLACK,Txt_Close,"ICO16x16");
-	    HTM_A_End ();
-	 HTM_DIV_End ();
+	 case Box_NOT_CLOSABLE:
+	    break;
+	 case Box_CLOSABLE:
+	    HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
+	       HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
+			    IdAlert);
+		  Ico_PutIcon ("times.svg",Ico_BLACK,Txt_Close,"ICO16x16");
+	       HTM_A_End ();
+	    HTM_DIV_End ();
+	    break;
 	}
 
       /***** Write message *****/
-      if (AlertType == Ale_NONE)
-	 HTM_DIV_Begin ("class=\"ALERT_TXT ALERT_TXT_%s\"",
-	                The_GetSuffix ());
-      else
-	 HTM_DIV_Begin ("class=\"ALERT_TXT ALERT_TXT_%s\""
-		        " style=\"background-image:url('%s/%s');\"",
-	                The_GetSuffix (),
-			Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
+      switch (AlertType)
+        {
+         case Ale_NONE:
+	    HTM_DIV_Begin ("class=\"ALERT_TXT ALERT_TXT_%s\"",The_GetSuffix ());
+	    break;
+         default:
+	    HTM_DIV_Begin ("class=\"ALERT_TXT ALERT_TXT_%s\""
+			   " style=\"background-image:url('%s/%s');\"",
+			   The_GetSuffix (),
+			   Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
+	    break;
+        }
       HTM_Txt (Txt);
       HTM_DIV_End ();
   }

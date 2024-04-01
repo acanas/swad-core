@@ -113,8 +113,8 @@ extern struct Globals Gbl;
 
 static void Gam_ListAllGamesHeading (const struct Gam_Games *Games);
 
-static bool Gam_CheckIfICanEditGames (void);
-static bool Gam_CheckIfICanListGameQuestions (void);
+static Usr_ICan_t Gam_CheckIfICanEditGames (void);
+static Usr_ICan_t Gam_CheckIfICanListGameQuestions (void);
 static void Gam_PutIconsListingGames (void *Games);
 static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games);
 static void Gam_PutParsToCreateNewGame (void *Games);
@@ -153,7 +153,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games);
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
-						  bool ICanEditQuestions);
+						  Usr_ICan_t ICanEditQuestions);
 
 static void Gam_PutIconToAddNewQuestions (void *Games);
 
@@ -163,7 +163,7 @@ static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games);
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
-static bool Gam_CheckIfEditable (const struct Gam_Game *Game);
+static Usr_ICan_t Gam_CheckIfICanEditGame (const struct Gam_Game *Game);
 
 /*****************************************************************************/
 /*************************** Reset games context *****************************/
@@ -346,9 +346,9 @@ static void Gam_ListAllGamesHeading (const struct Gam_Games *Games)
 /************************ Check if I can edit games **************************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfICanEditGames (void)
+static Usr_ICan_t Gam_CheckIfICanEditGames (void)
   {
-   static const bool ICanEditGames[Rol_NUM_ROLES] =
+   static bool ICanEditGames[Rol_NUM_ROLES] =
      {
       [Rol_TCH    ] = true,
       [Rol_SYS_ADM] = true,
@@ -361,13 +361,13 @@ static bool Gam_CheckIfICanEditGames (void)
 /**************** Check if I can list questions in games *********************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfICanListGameQuestions (void)
+static Usr_ICan_t Gam_CheckIfICanListGameQuestions (void)
   {
-   static const bool ICanListGameQuestions[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanListGameQuestions[Rol_NUM_ROLES] =
      {
-      [Rol_NET    ] = true,
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_NET    ] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanListGameQuestions[Gbl.Usrs.Me.Role.Logged];
@@ -390,7 +390,7 @@ static void Gam_PutIconsListingGames (void *Games)
    if (Games)
      {
       /***** Put icon to create a new game *****/
-      if (Gam_CheckIfICanEditGames ())
+      if (Gam_CheckIfICanEditGames () == Usr_I_CAN)
 	 Gam_PutIconToCreateNewGame ((struct Gam_Games *) Games);
 
       /***** Put icon to view matches results *****/
@@ -399,9 +399,8 @@ static void Gam_PutIconsListingGames (void *Games)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
-	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
-					 Gam_PutPars,Games);
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_GAMES);
@@ -687,8 +686,7 @@ static void Gam_PutIconsEditingOneGame (void *Games)
   {
    if (Games)
       /***** Icon to view game *****/
-      Ico_PutContextualIconToView (ActLstOneGam,NULL,
-				   Gam_PutPars,Games);
+      Ico_PutContextualIconToView (ActLstOneGam,NULL,Gam_PutPars,Games);
   }
 
 /*****************************************************************************/
@@ -729,7 +727,7 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
       [Rol_SYS_ADM] = ActSeeUsrMchResGam,
      };
 
-   if (Gam_CheckIfICanEditGames ())
+   if (Gam_CheckIfICanEditGames () == Usr_I_CAN)
      {
       /***** Icon to remove game *****/
       Ico_PutContextualIconToRemove (ActReqRemGam,NULL,
@@ -741,14 +739,12 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					 Games->Game.HiddenOrVisible);
 
       /***** Icon to edit game *****/
-      Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,
-				   Gam_PutPars,Games);
+      Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,Gam_PutPars,Games);
      }
 
-   if (Gam_CheckIfICanListGameQuestions ())
+   if (Gam_CheckIfICanListGameQuestions () == Usr_I_CAN)
       /***** Icon to view game listing its questions *****/
-      Ico_PutContextualIconToView (ActLstOneGam,NULL,
-				   Gam_PutPars,Games);
+      Ico_PutContextualIconToView (ActLstOneGam,NULL,Gam_PutPars,Games);
 
    /***** Put icon to view matches results *****/
    if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
@@ -756,9 +752,8 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  Gam_PutPars,Games);
 
    /***** Link to get resource link *****/
-   if (Rsc_CheckIfICanGetLink ())
-      Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,
-				      Gam_PutPars,Games);
+   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
 
   }
 
@@ -1054,7 +1049,7 @@ void Gam_AskRemGame (void)
 
    /***** Get data of the game from database *****/
    Gam_GetGameDataByCod (&Games.Game);
-   if (!Gam_CheckIfICanEditGames ())
+   if (Gam_CheckIfICanEditGames () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove game *****/
@@ -1087,7 +1082,7 @@ void Gam_RemoveGame (void)
 
    /***** Get data of the game from database *****/
    Gam_GetGameDataByCod (&Games.Game);
-   if (!Gam_CheckIfICanEditGames ())
+   if (Gam_CheckIfICanEditGames () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove game from all tables *****/
@@ -1163,7 +1158,7 @@ static void Gam_HideUnhideGame (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get data of the game from database *****/
    Gam_GetGameDataByCod (&Games.Game);
-   if (!Gam_CheckIfICanEditGames ())
+   if (Gam_CheckIfICanEditGames () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Unhide game *****/
@@ -1189,7 +1184,7 @@ void Gam_ListGame (void)
    Gam_ResetGame (&Games.Game);
 
    /***** Check if I can list game questions *****/
-   if (!Gam_CheckIfICanListGameQuestions ())
+   if (Gam_CheckIfICanListGameQuestions () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -1223,7 +1218,7 @@ void Gam_ReqCreatOrEditGame (void)
    Gam_ResetGame (&Games.Game);
 
    /***** Check if I can edit games *****/
-   if (!Gam_CheckIfICanEditGames ())
+   if (Gam_CheckIfICanEditGames () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -1439,7 +1434,7 @@ void Gam_ReceiveGame (void)
    Gam_ResetGame (&Games.Game);
 
    /***** Check if I can edit games *****/
-   if (!Gam_CheckIfICanEditGames ())
+   if (Gam_CheckIfICanEditGames () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -1568,7 +1563,7 @@ void Gam_ReqSelectQstsToAddToGame (void)
    Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Games.Game))
+   if (Gam_CheckIfICanEditGame (&Games.Game) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show form to create a new question in this game *****/
@@ -1600,7 +1595,7 @@ void Gam_ListQstsToAddToGame (void)
    Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Games.Game))
+   if (Gam_CheckIfICanEditGame (&Games.Game) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** List several test questions for selection *****/
@@ -1640,17 +1635,17 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
    extern const char *Txt_Questions;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
-   bool ICanEditQuestions = Gam_CheckIfEditable (&Games->Game);
+   Usr_ICan_t ICanEditQuestions = Gam_CheckIfICanEditGame (&Games->Game);
 
    /***** Get data of questions from database *****/
    NumQsts = Gam_DB_GetGameQuestionsBasic (&mysql_res,Games->Game.GamCod);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Questions,
-		 ICanEditQuestions ? Gam_PutIconToAddNewQuestions :
-				     NULL,
-		 ICanEditQuestions ? Games :
-				     NULL,
+		 ICanEditQuestions == Usr_I_CAN ? Gam_PutIconToAddNewQuestions :
+						  NULL,
+		 ICanEditQuestions == Usr_I_CAN ? Games :
+						  NULL,
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
       /***** Show table with questions *****/
@@ -1672,7 +1667,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  unsigned NumQsts,
                                                   MYSQL_RES *mysql_res,
-						  bool ICanEditQuestions)
+						  Usr_ICan_t ICanEditQuestions)
   {
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
@@ -1741,14 +1736,14 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
 	       /* Put icon to remove the question */
-	       if (ICanEditQuestions)
+	       if (ICanEditQuestions == Usr_I_CAN)
 		  Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
 						 Gam_PutParsOneQst,Games);
 	       else
 		  Ico_PutIconRemovalNotAllowed ();
 
 	       /* Put icon to move up the question */
-	       if (ICanEditQuestions && QstInd > 1)
+	       if (ICanEditQuestions == Usr_I_CAN && QstInd > 1)
 		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 						 Gam_PutParsOneQst,Games,
 						 "arrow-up.svg",Ico_BLACK);
@@ -1757,7 +1752,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to move down the question */
-	       if (ICanEditQuestions && QstInd < MaxQstInd)
+	       if (ICanEditQuestions == Usr_I_CAN && QstInd < MaxQstInd)
 		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 						 Gam_PutParsOneQst,Games,
 						 "arrow-down.svg",Ico_BLACK);
@@ -1766,7 +1761,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to edit the question */
-	       if (ICanEditQuestions)
+	       if (ICanEditQuestions == Usr_I_CAN)
 		  Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
 					       Qst_PutParQstCod,&Question.QstCod);
 
@@ -1827,7 +1822,7 @@ void Gam_AddQstsToGame (void)
    Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Games.Game))
+   if (Gam_CheckIfICanEditGame (&Games.Game) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get selected questions *****/
@@ -1935,7 +1930,7 @@ void Gam_ReqRemQstFromGame (void)
    Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Games.Game))
+   if (Gam_CheckIfICanEditGame (&Games.Game) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
@@ -1977,7 +1972,7 @@ void Gam_RemoveQstFromGame (void)
    Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Games.Game))
+   if (Gam_CheckIfICanEditGame (&Games.Game) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
@@ -2026,7 +2021,7 @@ void Gam_MoveUpQst (void)
    Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Games.Game))
+   if (Gam_CheckIfICanEditGame (&Games.Game) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
@@ -2076,7 +2071,7 @@ void Gam_MoveDownQst (void)
    Gam_GetGameDataByCod (&Games.Game);
 
    /***** Check if game has matches *****/
-   if (!Gam_CheckIfEditable (&Games.Game))
+   if (Gam_CheckIfICanEditGame (&Games.Game) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
@@ -2155,13 +2150,14 @@ static void Gam_ExchangeQuestions (long GamCod,
 /*****************************************************************************/
 // Before calling this function, number of matches must be calculated
 
-static bool Gam_CheckIfEditable (const struct Gam_Game *Game)
+static Usr_ICan_t Gam_CheckIfICanEditGame (const struct Gam_Game *Game)
   {
-   if (Gam_CheckIfICanEditGames ())
+   if (Gam_CheckIfICanEditGames () == Usr_I_CAN)
       /***** Questions are editable only if game has no matches *****/
-      return Game->NumMchs == 0;	// Games with matches should not be edited
+      return Game->NumMchs == 0 ? Usr_I_CAN :	// Games with matches should not be edited
+				  Usr_I_CAN_NOT;
    else
-      return false;			// Questions are not editable
+      return Usr_I_CAN_NOT;			// Questions are not editable
   }
 
 /*****************************************************************************/

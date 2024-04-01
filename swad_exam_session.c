@@ -72,10 +72,10 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
       					  Frm_PutForm_t PutFormSession,
 				          unsigned NumSessions,
                                           MYSQL_RES *mysql_res);
-static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions);
-static bool ExaSes_CheckIfICanEditSessions (void);
-static bool ExaSes_CheckIfICanEditThisSession (long UsrCod);
-static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_Session *Session);
+static void ExaSes_ListOneOrMoreSessionsHeading (Usr_ICan_t ICanEditSessions);
+static Usr_ICan_t ExaSes_CheckIfICanEditSessions (void);
+static Usr_ICan_t ExaSes_CheckIfICanEditThisSession (long UsrCod);
+static Usr_ICan_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
 					       const char *Anchor);
@@ -151,7 +151,8 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
                  Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
-      if (Gbl.Crs.Grps.NumGrps && ExaSes_CheckIfICanEditSessions ())
+      if (Gbl.Crs.Grps.NumGrps &&
+	  ExaSes_CheckIfICanEditSessions () == Usr_I_CAN)
 	{
 	 Set_BeginSettingsHead ();
 	    Grp_ShowFormToSelWhichGrps (ActSeeOneExa,Exa_PutPars,Exams);
@@ -203,15 +204,10 @@ void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session)
 
 static void ExaSes_PutIconsInListOfSessions (void *Exams)
   {
-   bool ICanEditSessions;
-
    if (Exams)
-     {
-      /***** Put icon to create a new exam session in current exam *****/
-      ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
-      if (ICanEditSessions)
+      if (ExaSes_CheckIfICanEditSessions () == Usr_I_CAN)
+         /***** Put icon to create a new exam session in current exam *****/
 	 ExaSes_PutIconToCreateNewSession ((struct Exa_Exams *) Exams);
-     }
   }
 
 /*****************************************************************************/
@@ -237,7 +233,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    unsigned UniqueId;
    struct ExaSes_Session Session;
    char *Anchor;
-   bool ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
+   Usr_ICan_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
    long SesCodToBeEdited = PutFormSession == Frm_PUT_FORM &&
 			   Exams->SesCod > 0 ? Exams->SesCod :
 					       -1L;
@@ -260,7 +256,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	 /***** Get exam session data from row *****/
 	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
 
-	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod))
+	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_I_CAN)
 	   {
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"evt_%ld_%ld",Exams->Exam.ExaCod,Session.SesCod) < 0)
@@ -333,7 +329,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 /************* Put a column for exam session start and end times *************/
 /*****************************************************************************/
 
-static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
+static void ExaSes_ListOneOrMoreSessionsHeading (Usr_ICan_t ICanEditSessions)
   {
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Session;
@@ -343,14 +339,14 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
    HTM_TR_Begin (NULL);
 
       /***** Column for icons *****/
-      if (ICanEditSessions)
+      if (ICanEditSessions == Usr_I_CAN)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]   ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]   ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Session                                   ,HTM_HEAD_LEFT  );
-      HTM_TH (Txt_Results                                   ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_START_DATE],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Session                                ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Results                                ,HTM_HEAD_CENTER);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -360,13 +356,13 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
 /********************** Check if I can edit sessions *************************/
 /*****************************************************************************/
 
-static bool ExaSes_CheckIfICanEditSessions (void)
+static Usr_ICan_t ExaSes_CheckIfICanEditSessions (void)
   {
-   static const bool ICanEditSessions[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanEditSessions[Rol_NUM_ROLES] =
      {
-      [Rol_NET    ] = true,
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_NET    ] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanEditSessions[Gbl.Usrs.Me.Role.Logged];
@@ -376,17 +372,18 @@ static bool ExaSes_CheckIfICanEditSessions (void)
 /************ Check if I can edit (remove/resume) an exam session ************/
 /*****************************************************************************/
 
-static bool ExaSes_CheckIfICanEditThisSession (long UsrCod)
+static Usr_ICan_t ExaSes_CheckIfICanEditThisSession (long UsrCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// Only if I am the creator
+	 return (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :	// Only if I am the creator
+						        Usr_I_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -394,14 +391,13 @@ static bool ExaSes_CheckIfICanEditThisSession (long UsrCod)
 /********** Check if visibility of session results can be changed ************/
 /*****************************************************************************/
 
-static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_Session *Session)
+static Usr_ICan_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSes_Session *Session)
   {
    if (Session->ShowUsrResults ||						// Results are currently visible
        Session->TimeUTC[Dat_END_TIME] < Dat_GetStartExecutionTimeUTC ())	// End of time is in the past
-      if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
-	 return true;
+      return ExaSes_CheckIfICanEditThisSession (Session->UsrCod);
 
-   return false;
+   return Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -424,7 +420,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
    /***** Begin cell *****/
    HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",The_GetColorRows ());
 
-      if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
+      if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_I_CAN)
 	{
 	 /***** Icon to remove the exam session *****/
 	 Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
@@ -504,7 +500,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
-	 if (ExaSes_CheckIfICanAnswerThisSession (&Exams->Exam,Session))
+	 if (ExaSes_CheckIfICanAnswerThisSession (&Exams->Exam,Session) == Usr_I_CAN)
 	   {
 	    Frm_BeginForm (ActSeeExaPrn);
 	       Exa_PutPars (Exams);
@@ -648,13 +644,13 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    Exams->SesCod      = Session->SesCod;
 
    /***** Show exam session results *****/
-   if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
+   if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_I_CAN)
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParsEdit,Exams,
 				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
-   if (ExaSes_CheckIfVisibilityOfResultsCanBeChanged (Session))
+   if (ExaSes_CheckIfICanChangeVisibilityOfResults (Session) == Usr_I_CAN)
      {
       /***** Put form to change visibility of session results *****/
       if (Session->ShowUsrResults)
@@ -694,7 +690,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
    ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Check if visibility of session results can be changed *****/
-   if (!ExaSes_CheckIfVisibilityOfResultsCanBeChanged (&Session))
+   if (ExaSes_CheckIfICanChangeVisibilityOfResults (&Session) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of exam session results *****/
@@ -812,7 +808,7 @@ void ExaSes_RemoveSession (void)
    ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Check if I can remove this exam session *****/
-   if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
+   if (ExaSes_CheckIfICanEditThisSession (Session.UsrCod) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove questions of exams prints, and exam prints, in this session *****/
@@ -866,7 +862,7 @@ static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible)
    ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Check if I can remove this exam session *****/
-   if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
+   if (ExaSes_CheckIfICanEditThisSession (Session.UsrCod) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Hide session *****/
@@ -1211,22 +1207,22 @@ static void ExaSes_CreateGrpsAssociatedToExamSession (long SesCod,
 /******** Check if I belong to any of the groups of an exam session **********/
 /*****************************************************************************/
 
-bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
-                                          const struct ExaSes_Session *Session)
+Usr_ICan_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
+                                                const struct ExaSes_Session *Session)
   {
    /***** 1. Sessions in hidden exams are not accesible
           2. Hidden or closed sessions are not accesible *****/
    if (Exam->HiddenOrVisible == HidVis_HIDDEN ||
        Session->HiddenOrVisible == HidVis_HIDDEN ||
        !Session->Open)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** Exam is visible, session is visible and open ==>
           ==> I can answer this session if I can list it based on groups *****/
    return ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session->SesCod);
   }
 
-bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
+Usr_ICan_t ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1237,8 +1233,8 @@ bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }

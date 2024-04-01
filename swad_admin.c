@@ -35,20 +35,6 @@
 #include "swad_user_database.h"
 
 /*****************************************************************************/
-/****************************** Public constants *****************************/
-/*****************************************************************************/
-
-const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
-  {
-   /* Users who can admin */
-   [Rol_TCH    ] = true,
-   [Rol_DEG_ADM] = true,
-   [Rol_CTR_ADM] = true,
-   [Rol_INS_ADM] = true,
-   [Rol_SYS_ADM] = true,
-  };
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -65,6 +51,25 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
                                 Hie_Level_t Level);
 static void Adm_AskIfRemAdm (Usr_MeOrOther_t MeOrOther,Hie_Level_t Level);
 static void Adm_EffectivelyRemAdm (struct Usr_Data *UsrDat,Hie_Level_t Level);
+
+/*****************************************************************************/
+/**************** Check if I can admin another user's account ****************/
+/*****************************************************************************/
+
+Usr_ICan_t Adm_CheckIfICanAdminOtherUsrs (void)
+  {
+   static Usr_ICan_t Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
+     {
+      /* Users who can admin */
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_DEG_ADM] = Usr_I_CAN,
+      [Rol_CTR_ADM] = Usr_I_CAN,
+      [Rol_INS_ADM] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
+     };
+
+   return Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged];
+  }
 
 /*****************************************************************************/
 /**** Ask if really wanted to add an administrator to current institution ****/

@@ -35,6 +35,7 @@
 #include "swad_institution.h"
 #include "swad_language.h"
 #include "swad_role_type.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -53,7 +54,7 @@ void Cty_ListCountries (void);
 void Cty_ListCountries1 (void);
 void Cty_ListCountries2 (void);
 
-bool Cty_CheckIfICanEditCountries (void);
+Usr_ICan_t Cty_CheckIfICanEditCountries (void);
 
 void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
                                         const char *ClassContainer,

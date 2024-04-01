@@ -53,7 +53,7 @@
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
-static const bool Dpt_ICanEditDpts[Rol_NUM_ROLES] =
+static bool Dpt_ICanEditDpts[Rol_NUM_ROLES] =
   {
    /* Users who can edit */
    [Rol_INS_ADM] = true,
@@ -244,8 +244,7 @@ static Dpt_Order_t Dpt_GetParDptOrder (void)
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
   {
    if (Dpt_ICanEditDpts[Gbl.Usrs.Me.Role.Logged])
-      Ico_PutContextualIconToEdit (ActEdiDpt,NULL,
-				   NULL,NULL);
+      Ico_PutContextualIconToEdit (ActEdiDpt,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -254,8 +253,7 @@ static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
 
 static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeDpt,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeDpt,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -515,7 +513,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Dpt,Dpt->DptCod,
 				           Names,
-				           true);	// Put form
+				           Frm_PUT_FORM);
 
 	    /* Department WWW */
 	    HTM_TD_Begin ("class=\"LM\"");

@@ -424,7 +424,7 @@ void Nck_RemoveOtherUsrNick (void)
    /***** Get user whose nick must be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Get nickname from form *****/
 	 Par_GetParText ("Nick",NickWithoutArr,
@@ -470,7 +470,7 @@ void Nck_ChangeOtherUsrNick (void)
    /***** Get user whose nick must be changed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	{
 	 /***** Update user's nickname *****/
 	 Nck_ChangeUsrNick (&Gbl.Usrs.Other.UsrDat);

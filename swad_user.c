@@ -774,11 +774,11 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
 /**************** Check if I can change another user's data ******************/
 /*****************************************************************************/
 
-bool Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
+Usr_ICan_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
   {
    /***** I can change my data *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -786,20 +786,20 @@ bool Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
       case Rol_TCH:
 	 /* Check 1: I can change data of users who do not exist in database */
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
-            return true;
+            return Usr_I_CAN;
 
          /* Check 2: I change data of users without password */
          if (!UsrDat->Password[0])	// User has no password (never logged)
-            return true;
+            return Usr_I_CAN;
 
-         return false;
+         return Usr_I_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_ICanEditOtherUsr (UsrDat);
+         return Usr_CheckIfICanEditOtherUsr (UsrDat);
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -807,11 +807,11 @@ bool Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
 /***************** Check if I can edit another user's data *******************/
 /*****************************************************************************/
 
-bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
+Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
   {
    /***** I can edit me *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -823,8 +823,8 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      true))	// count only accepted courses
 	    // Degree admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
-	       return true;
-	 return false;
+	       return Usr_I_CAN;
+	 return Usr_I_CAN_NOT;
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can edit from current center who have accepted */
@@ -833,8 +833,8 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      true))	// count only accepted courses
 	    // Center admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
-	       return true;
-	 return false;
+	       return Usr_I_CAN;
+	 return Usr_I_CAN_NOT;
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can edit from current institution who have accepted */
@@ -843,12 +843,12 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      true))	// count only accepted courses
 	    // Institution admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
-	       return true;
-	 return false;
+	       return Usr_I_CAN;
+	 return Usr_I_CAN_NOT;
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -856,50 +856,51 @@ bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat)
 /************ Check if I can view the record card of a student ***************/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
+Usr_ICan_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a student? *****/
    if (UsrDat->Roles.InCurrentCrs != Rol_STD)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 5. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
+      return Usr_I_CAN;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
    if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 7. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** 8. Fast / slow check: Does he/she belong to the current course? *****/
    if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 9. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
+								       Usr_I_CAN_NOT;
       case Rol_TCH:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -910,68 +911,70 @@ bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
 // - a non-editing teacher
 // - or a teacher
 
-bool Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
+Usr_ICan_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
    return (UsrDat->Roles.InCurrentCrs == Rol_NET ||
-           UsrDat->Roles.InCurrentCrs == Rol_TCH);
+           UsrDat->Roles.InCurrentCrs == Rol_TCH) ? Usr_I_CAN :
+						    Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
 /********* Check if I can view test/exam/match result of another user ********/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
+Usr_ICan_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 4. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
+      return Usr_I_CAN;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
    if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 6. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** 7. Fast check: Does he/she belong to the current course? *****/
    if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 8. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
+								       Usr_I_CAN_NOT;
       case Rol_TCH:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -979,46 +982,47 @@ bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
 /********** Check if I can view assigments / works of another user ***********/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
+Usr_ICan_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
    // Only users beloging to course can have files in assignments/works
    if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 5. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
+      return Usr_I_CAN;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
    if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 7. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** 8. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
+								       Usr_I_CAN_NOT;
       case Rol_TCH:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -1026,64 +1030,43 @@ bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
 /************** Check if I can view attendance of another user ***************/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
+Usr_ICan_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 4. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
+      return Usr_I_CAN;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
    if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** 6. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** 7. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
+								       Usr_I_CAN_NOT;
       case Rol_TCH:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
-  }
-
-/*****************************************************************************/
-/******************* Check if I can view a user's agenda *********************/
-/*****************************************************************************/
-
-bool Usr_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat)
-  {
-   /***** 1. Fast check: Am I logged? *****/
-   if (!Gbl.Usrs.Me.Logged)
-      return false;
-
-   /***** 2. Fast check: It's me? *****/
-   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
-
-   /***** 3. Fast check: Am I logged as system admin? *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
-
-   /***** 4. Slow check: Get if user shares any course with me from database *****/
-   return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
   }
 
 /*****************************************************************************/

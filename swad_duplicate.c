@@ -311,7 +311,7 @@ static void Dup_ListSimilarUsrs (void)
 				Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 				The_GetColorRows ());
 		     /* Button to remove this user */
-		     if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod))
+		     if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod) == Usr_I_CAN)
 			Dup_PutButtonToEliminateUsrAccount (&UsrDat);
 		     /* Button to remove from list of possible duplicate users */
 		     if (Dup_DB_CheckIfUsrIsDup (UsrDat.UsrCod))

@@ -63,8 +63,8 @@ extern struct Globals Gbl;
 
 struct MchRes_ICanView
   {
-   bool Result;
-   bool Score;
+   Usr_ICan_t Result;
+   Usr_ICan_t Score;
   };
 
 /*****************************************************************************/
@@ -304,7 +304,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CRS))
-	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	   {
 	    /***** Show matches results *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -335,7 +335,7 @@ static void MchRes_PutFormToSelUsrsToViewMchResults (__attribute__((unused)) voi
 				     Txt_Results,
 				     Hlp_ASSESSMENT_Games_results,
 				     Txt_View_results,
-				     false);	// Do not put form with date range
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -395,7 +395,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_GET_ROLE_IN_CRS))
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	      {
 	       /***** Show matches results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -467,7 +467,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_GET_ROLE_IN_CRS))
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	      {
 	       /***** Show matches results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -778,7 +778,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Accumulate questions and score */
-	 if (ICanView.Score)
+	 if (ICanView.Score == Usr_I_CAN)
 	   {
 	    NumTotalQsts.All      += Print.NumQsts.All;
 	    NumTotalQsts.NotBlank += Print.NumQsts.NotBlank;
@@ -789,7 +789,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	               The_GetSuffix (),
 	               The_GetColorRows ());
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	       HTM_Unsigned (Print.NumQsts.All);
 	    else
 	       Ico_PutIconNotVisible ();
@@ -799,7 +799,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	               The_GetSuffix (),
 	               The_GetColorRows ());
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	      {
 	       if (Print.NumQsts.NotBlank)
 		  HTM_Unsigned (Print.NumQsts.NotBlank);
@@ -815,7 +815,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	               The_GetSuffix (),
 	               The_GetColorRows ());
 	    NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	      {
 	       if (NumQstsBlank)
 		  HTM_Unsigned (NumQstsBlank);
@@ -830,7 +830,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	               The_GetSuffix (),
 	               The_GetColorRows ());
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	      {
 	       HTM_Double2Decimals (Print.Score);
 	       HTM_Txt ("/");
@@ -844,7 +844,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
 	               The_GetSuffix (),
 	               The_GetColorRows ());
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	       HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
 							(double) Print.NumQsts.All :
 							0.0);
@@ -856,7 +856,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
 	               The_GetSuffix (),
 	               The_GetColorRows ());
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	      {
 	       Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,Games->Game.MaxGrade);
 	       TstPrn_ShowGrade (Grade,Games->Game.MaxGrade);
@@ -869,7 +869,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 /* Link to show this result */
 	 HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",
 	               The_GetColorRows ());
-	    if (ICanView.Result)
+	    if (ICanView.Result == Usr_I_CAN)
 	      {
 	       Games->Game.GamCod = Match.GamCod;
 	       Games->MchCod      = Match.MchCod;
@@ -1084,7 +1084,7 @@ void MchRes_ShowOneMchResult (void)
 
    /***** Check if I can view this match result and score *****/
    MchRes_CheckIfICanViewMatchResult (&Games.Game,&Match,UsrDat->UsrCod,&ICanView);
-   if (!ICanView.Result)
+   if (ICanView.Result == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get questions and user's answers of the match result from database *****/
@@ -1104,7 +1104,7 @@ void MchRes_ShowOneMchResult (void)
 						       Usr_DONT_GET_PREFS,
 						       Usr_GET_ROLE_IN_CRS))
 	    Err_WrongUserExit ();
-	 if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
+	 if (Usr_CheckIfICanViewTstExaMchResult (UsrDat) == Usr_I_CAN_NOT)
 	    Err_NoPermissionExit ();
 
 	 /* Get if user has accepted enrolment */
@@ -1201,7 +1201,7 @@ void MchRes_ShowOneMchResult (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  HTM_STRONG_Begin ();
 		     HTM_Double2Decimals (Print.Score);
@@ -1225,7 +1225,7 @@ void MchRes_ShowOneMchResult (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  HTM_STRONG_Begin ();
 		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Games.Game.MaxGrade);
@@ -1282,15 +1282,17 @@ static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
 	 // Depends on visibility of game and result (eye icons)
 	 ICanView->Result = (Game->HiddenOrVisible == HidVis_VISIBLE &&	// The game is visible
 			     Match->Status.ShowUsrResults &&		// The results of the match are visible to users
-			     Usr_ItsMe (UsrCod) == Usr_ME);		// The result is mine
+			     Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_I_CAN :	// The result is mine
+							     Usr_I_CAN_NOT;
 	 // Whether I belong or not to groups of match is not checked here...
 	 // ...because I should be able to see old matches made in old groups to which I belonged
 
-	 if (ICanView->Result)
+	 if (ICanView->Result == Usr_I_CAN)
 	    // Depends on 5 visibility icons associated to game
-	    ICanView->Score = TstVis_IsVisibleTotalScore (Game->Visibility);
+	    ICanView->Score = TstVis_IsVisibleTotalScore (Game->Visibility) ? Usr_I_CAN :
+									      Usr_I_CAN_NOT;
 	 else
-	    ICanView->Score = false;
+	    ICanView->Score = Usr_I_CAN_NOT;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -1299,11 +1301,11 @@ static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 ICanView->Result =
-	 ICanView->Score  = true;
+	 ICanView->Score  = Usr_I_CAN;
 	 break;
       default:
 	 ICanView->Result =
-	 ICanView->Score  = false;
+	 ICanView->Score  = Usr_I_CAN_NOT;
 	 break;
      }
   }

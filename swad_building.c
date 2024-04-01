@@ -60,7 +60,7 @@ static struct Bld_Building *Bld_EditingBuilding = NULL;	// Static variable to ke
 /*****************************************************************************/
 
 static Bld_Order_t Bld_GetParBuildingOrder (void);
-static bool Bld_CheckIfICanCreateBuildings (void);
+static Usr_ICan_t Bld_CheckIfICanCreateBuildings (void);
 static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args);
 static void Bld_PutIconToEditBuildings (void);
 static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args);
@@ -196,9 +196,10 @@ static Bld_Order_t Bld_GetParBuildingOrder (void)
 /********************* Check if I can create buildings ***********************/
 /*****************************************************************************/
 
-static bool Bld_CheckIfICanCreateBuildings (void)
+static Usr_ICan_t Bld_CheckIfICanCreateBuildings (void)
   {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_I_CAN :
+						     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -208,7 +209,7 @@ static bool Bld_CheckIfICanCreateBuildings (void)
 static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit buildings *****/
-   if (Bld_CheckIfICanCreateBuildings ())
+   if (Bld_CheckIfICanCreateBuildings () == Usr_I_CAN)
       Bld_PutIconToEditBuildings ();
   }
 
@@ -218,8 +219,7 @@ static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args)
 
 static void Bld_PutIconToEditBuildings (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiBld,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiBld,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -275,8 +275,7 @@ static void Bld_EditBuildingsInternal (void)
 static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view buildings *****/
-   Ico_PutContextualIconToView (ActSeeBld,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeBld,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -435,7 +434,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_Bld,Building->BldCod,
 				           Names,
-				           true);	// Put form
+				           Frm_PUT_FORM);
 
 	    /* Building location */
 	    HTM_TD_Begin ("class=\"LM\"");

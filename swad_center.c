@@ -89,7 +89,7 @@ static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 				 struct Map_Coordinates *Coord);
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
-static bool Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr);
+static Usr_ICan_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 
@@ -289,7 +289,7 @@ static void Ctr_ListCenters (void)
 static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit centers *****/
-   if (Hie_CheckIfICanEdit ())
+   if (Hie_CheckIfICanEdit () == Usr_I_CAN)
       Ctr_PutIconToEditCenters ();
 
    /***** Put icon to show a figure *****/
@@ -302,8 +302,7 @@ static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args)
 
 static void Ctr_PutIconToEditCenters (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCtr,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCtr,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -460,8 +459,7 @@ static void Ctr_EditCentersInternal (void)
 static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view centers *****/
-   Ico_PutContextualIconToView (ActSeeCtr,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeCtr,NULL,NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
@@ -737,7 +735,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    const struct Plc_Place *Plc;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
-   bool ICanEdit;
+   Usr_ICan_t ICanEdit;
    unsigned NumDegs;
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
@@ -773,7 +771,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Put icon to remove center */
 	    HTM_TD_Begin ("class=\"BT\"");
-	       if (!ICanEdit ||				// I cannot edit
+	       if (ICanEdit == Usr_I_CAN_NOT ||		// I cannot edit
 		   NumDegs ||				// Center has degrees
 		   NumUsrsCtr ||			// Center has users who claim to belong to it
 		   NumUsrsInCrssOfCtr)			// Center has users
@@ -795,7 +793,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Place */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
+	       if (ICanEdit == Usr_I_CAN)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
 		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
@@ -836,11 +834,12 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ctr->HieCod,
 				           Names,
-				           ICanEdit);	// Put form?
+				           ICanEdit == Usr_I_CAN ? Frm_PUT_FORM :
+				        			   Frm_DONT_PUT_FORM);
 
 	    /* Center WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit)
+	       if (ICanEdit == Usr_I_CAN)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);
 		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
@@ -903,11 +902,12 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 /************** Check if I can edit, remove, etc. a center *******************/
 /*****************************************************************************/
 
-static bool Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
+static Usr_ICan_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
   {
-   return  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
            ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod);	// I am the requester
+            Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod)) ? Usr_I_CAN :	// I am the requester
+        							  Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

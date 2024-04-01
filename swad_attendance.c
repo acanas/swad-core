@@ -371,7 +371,7 @@ static void Att_PutIconsInListOfEvents (void *Events)
 			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
 
       /***** Put icon to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
 					 Att_PutPars,Events);
      }
@@ -579,7 +579,7 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
       [HidVis_VISIBLE] = ActHidAtt,	// Visible ==> action to hide
      };
 
-   if (Att_CheckIfICanEditEvents ())
+   if (Att_CheckIfICanEditEvents () == Usr_I_CAN)
      {
       /***** Icon to remove attendance event *****/
       Ico_PutContextualIconToRemove (ActReqRemAtt,NULL,
@@ -591,27 +591,24 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
 					 Events->Event.HiddenOrVisible);
 
       /***** Icon to edit attendance event *****/
-      Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,
-				   Att_PutPars,Events);
+      Ico_PutContextualIconToEdit (ActEdiOneAtt,NULL,Att_PutPars,Events);
      }
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink ())
-      Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
-                                      Att_PutPars,Events);
+   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,Att_PutPars,Events);
   }
-
 
 /*****************************************************************************/
 /******************* Check if I can edit calls for exams *********************/
 /*****************************************************************************/
 
-bool Att_CheckIfICanEditEvents (void)
+Usr_ICan_t Att_CheckIfICanEditEvents (void)
   {
-   static const bool ICanEditAttEvents[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanEditAttEvents[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanEditAttEvents[Gbl.Usrs.Me.Role.Logged];
@@ -2181,7 +2178,7 @@ static void Att_ReqListOrPrintUsrsAttendanceCrs (__attribute__((unused)) void *A
 				     Txt_Attendance_list,
 				     Hlp_USERS_Attendance_attendance_list,
 				     Txt_View_attendance,
-				     false);	// Do not put form with date range
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
 
    /***** Free list of attendance events *****/
    Att_FreeListEvents (&Events);
@@ -2722,8 +2719,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 
 static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeeAllAtt,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeAllAtt,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -2732,8 +2728,7 @@ static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
 
 static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToEdit (ActSeeAllAtt,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToEdit (ActSeeAllAtt,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -2775,7 +2770,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CRS))
-	       if (Usr_CheckIfICanViewAtt (&UsrDat))
+	       if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_I_CAN)
 		 {
 		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat);
@@ -3010,7 +3005,7 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
 							    Usr_DONT_GET_PREFS,
 							    Usr_DONT_GET_ROLE_IN_CRS))
-		  if (Usr_CheckIfICanViewAtt (&UsrDat))
+		  if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_I_CAN)
 		    {
 		     UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 		     Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);

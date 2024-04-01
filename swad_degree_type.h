@@ -73,7 +73,7 @@ void DegTyp_EditDegreeTypes (const struct DegTyp_DegTypes *DegTypes);
 
 void DegTyp_PutIconToViewDegreeTypes (void);
 
-bool DegTyp_CheckIfICanCreateDegreeTypes (void);
+Usr_ICan_t DegTyp_CheckIfICanCreateDegreeTypes (void);
 
 void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
                                 Hie_Level_t Level,DegTyp_Order_t Order);

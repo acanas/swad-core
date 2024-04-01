@@ -59,7 +59,7 @@ void Asg_DB_HideOrUnhideAssignment (long AsgCod,
 
 void Asg_DB_RemoveAssignment (long AsgCod);
 
-bool Asg_DB_CheckIfICanDoAssignment (long AsgCod);
+Usr_ICan_t Asg_DB_CheckIfICanDoAssignment (long AsgCod);
 
 unsigned Asg_DB_GetGrps (MYSQL_RES **mysql_res,long AsgCod);
 void Asg_DB_CreateGroup (long AsgCod,long GrpCod);

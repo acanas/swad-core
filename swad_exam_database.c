@@ -1668,7 +1668,7 @@ unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod)
 /*** Check if I belong to any of the groups associated to the exam session ***/
 /*****************************************************************************/
 
-bool Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
+Usr_ICan_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
   {
    return
    DB_QueryEXISTS ("can not check if I can play an exam session",
@@ -1686,7 +1686,8 @@ bool Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND grp_users.GrpCod=exa_groups.GrpCod)))",
 		   SesCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :
+						Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -2150,6 +2151,12 @@ bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgen
 
 void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
   {
+   static char YN[Usr_NUM_I_CAN] =
+     {
+      [Usr_I_CAN_NOT] = 'N',
+      [Usr_I_CAN    ] = 'Y',
+     };
+
    /* Log access in exam log.
       Redundant data (also present in log table) are stored for speed */
    DB_QueryINSERT ("can not log exam access",
@@ -2161,8 +2168,7 @@ void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
 		   PrnCod,
 		   (unsigned) Action,
 		   ExaLog_GetQstInd (),
-		   ExaLog_GetIfCanAnswer () ? 'Y' :
-					      'N',
+		   YN[ExaLog_GetIfCanAnswer ()],
 		   // NOW()   	  	   Redundant, for speed
 		   Par_GetIP ());	// Redundant, for speed
   }

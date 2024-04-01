@@ -43,7 +43,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab);
+static Usr_ICan_t Tab_CheckIfICanViewTab (Tab_Tab_t Tab);
 static const char *Tab_GetIcon (Tab_Tab_t Tab);
 
 /*****************************************************************************/
@@ -55,7 +55,6 @@ void Tab_DrawTabs (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    Tab_Tab_t NumTab;
    const char *TabTxt;
-   bool ICanViewTab;
    char URLIconSet[PATH_MAX + 1];
    static const char *ClassIcoTab[Ico_NUM_ICON_SETS] =
      {
@@ -73,8 +72,6 @@ void Tab_DrawTabs (void)
 	      NumTab <= (Tab_Tab_t) (Tab_NUM_TABS - 1);
 	      NumTab++)
 	   {
-	    ICanViewTab = Tab_CheckIfICanViewTab (NumTab);
-
 	    /* If current tab is unknown, then activate the first one with access allowed */
 	    if (Gbl.Action.Tab == TabUnk)
 	      {
@@ -82,7 +79,7 @@ void Tab_DrawTabs (void)
 	       Tab_DisableIncompatibleTabs ();
 	      }
 
-	    if (ICanViewTab)	// Don't show the first hidden tabs
+	    if (Tab_CheckIfICanViewTab (NumTab) == Usr_I_CAN)	// Don't show the first hidden tabs
 	      {
 	       TabTxt = Tab_GetTxt (NumTab);
 
@@ -133,32 +130,40 @@ void Tab_DrawTabs (void)
 /************************* Check if I can view a tab *************************/
 /*****************************************************************************/
 
-static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
+static Usr_ICan_t Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
   {
    switch (Tab)
      {
       case TabUnk:
-	 return false;
+	 return Usr_I_CAN_NOT;
       case TabSys:
-	 return (Gbl.Hierarchy.Level == Hie_SYS);	// Institution selected
+	 return (Gbl.Hierarchy.Level == Hie_SYS) ? Usr_I_CAN :	// Institution selected
+						   Usr_I_CAN_NOT;
       case TabCty:
-	 return (Gbl.Hierarchy.Level == Hie_CTY);	// Institution selected
+	 return (Gbl.Hierarchy.Level == Hie_CTY) ? Usr_I_CAN :	// Institution selected
+						   Usr_I_CAN_NOT;
       case TabIns:
-	 return (Gbl.Hierarchy.Level == Hie_INS);	// Institution selected
+	 return (Gbl.Hierarchy.Level == Hie_INS) ? Usr_I_CAN :	// Institution selected
+						   Usr_I_CAN_NOT;
       case TabCtr:
-	 return (Gbl.Hierarchy.Level == Hie_CTR);	// Center selected
+	 return (Gbl.Hierarchy.Level == Hie_CTR) ? Usr_I_CAN :	// Center selected
+						   Usr_I_CAN_NOT;
       case TabDeg:
-	 return (Gbl.Hierarchy.Level == Hie_DEG);	// Degree selected
+	 return (Gbl.Hierarchy.Level == Hie_DEG) ? Usr_I_CAN :	// Degree selected
+						   Usr_I_CAN_NOT;
       case TabCrs:
-	 return (Gbl.Hierarchy.Level == Hie_CRS);	// Course selected
+	 return (Gbl.Hierarchy.Level == Hie_CRS) ? Usr_I_CAN :	// Course selected
+						   Usr_I_CAN_NOT;
       case TabAss:
-	 return (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
-	         Gbl.Usrs.Me.Role.Logged >= Rol_STD);	// I belong to course or I am an admin
+	 return (Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
+	         Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_I_CAN :	// I belong to course or I am an admin
+						       Usr_I_CAN_NOT;
       case TabFil:
       	 return (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 ||	// Institution selected
-	         Gbl.Usrs.Me.Logged);				// I'm logged
+	         Gbl.Usrs.Me.Logged) ? Usr_I_CAN :		// I'm logged
+				       Usr_I_CAN_NOT;
       default:
-	 return true;
+	 return Usr_I_CAN;
      }
   }
 

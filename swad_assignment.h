@@ -106,7 +106,7 @@ void Asg_ReceiveAssignment (void);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
 void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg);
-bool Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg);
+Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg);
 void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level);
 
 unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif);

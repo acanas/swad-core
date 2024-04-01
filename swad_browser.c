@@ -1097,7 +1097,7 @@ static Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-bool Brw_ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
+Usr_ICan_t Brw_ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -1213,7 +1213,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *FileType);
 static void Brw_PutIconToGetLinkToFile (void *FileMetadata);
 static void Brw_PutParsToGetLinkToFile (void *FileMetadata);
 
-static bool Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner);
+static Usr_ICan_t Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner);
 static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod);
 static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                             struct Brw_FileMetadata *FileMetadata,
@@ -1233,15 +1233,15 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod);
 static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1]);
 static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1]);
 
-static void Brw_SetIfICanEditFileOrFolder (bool Value);
-static bool Brw_GetIfICanEditFileOrFolder (void);
-static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
+static void Brw_SetIfICanEditFileOrFolder (Usr_ICan_t Value);
+static Usr_ICan_t Brw_GetIfICanEditFileOrFolder (void);
+static Usr_ICan_t Brw_CheckIfICanEditFileOrFolder (unsigned Level);
 
-static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
-static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
-static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void);
-static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
-static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
+static Usr_ICan_t Brw_CheckIfICanCreateIntoFolder (unsigned Level);
+static Usr_ICan_t Brw_CheckIfICanModifySharedFileOrFolder (void);
+static Usr_ICan_t Brw_CheckIfICanModifyPrivateFileOrFolder (void);
+static Usr_ICan_t Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
+static Usr_ICan_t Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
@@ -2711,7 +2711,7 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
 				     Txt_Assignments_and_other_works,
 				     Hlp_FILES_Homework_for_teachers,
 				     Txt_View_homework,
-				     false);	// Do not put form with date range
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -2744,7 +2744,7 @@ void Brw_ShowFileBrowserProject (long PrjCod)
 
       Brw_WriteTopBeforeShowingFileBrowser ();
 
-      if (Prj_CheckIfICanViewProjectDocuments (PrjCod))
+      if (Prj_CheckIfICanViewProjectDocuments (PrjCod) == Usr_I_CAN)
 	{
 	 /***** Show the tree with the project documents *****/
 	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
@@ -2752,7 +2752,7 @@ void Brw_ShowFileBrowserProject (long PrjCod)
 	 Brw_ShowFileBrowser ();
 	}
 
-      if (Prj_CheckIfICanViewProjectAssessment (PrjCod))
+      if (Prj_CheckIfICanViewProjectAssessment (PrjCod) == Usr_I_CAN)
 	{
 	 /***** Show the tree with the project assessment *****/
 	 Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
@@ -2798,7 +2798,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS))
-	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
+	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted =
 	       Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -3333,7 +3333,7 @@ static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
 
    /***** Put icon to get resource link *****/
    if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
-       Rsc_CheckIfICanGetLink ())
+       Rsc_CheckIfICanGetLink () == Usr_I_CAN)
       Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],NULL,
 				      NULL,NULL);
 
@@ -3997,7 +3997,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      }
 
    /****** If current action allows file administration... ******/
-   Brw_SetIfICanEditFileOrFolder (false);
+   Brw_SetIfICanEditFileOrFolder (Usr_I_CAN_NOT);
    if (Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) &&
        !Gbl.FileBrowser.ShowOnlyPublicFiles)
      {
@@ -4155,7 +4155,7 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
       return false;
 
    /**** If I can not create elements into this folder... *****/
-   if (!Brw_CheckIfICanCreateIntoFolder (Level))
+   if (Brw_CheckIfICanCreateIntoFolder (Level) == Usr_I_CAN_NOT)
       return false;	// Pasting into top level of assignments is forbidden
 
    /**** If we are in the same tree of the clipboard... *****/
@@ -4182,7 +4182,7 @@ static void Brw_PutIconRemove (void)
   {
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
-      if (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
+      if (Brw_GetIfICanEditFileOrFolder () == Usr_I_CAN)	// Can I remove this?
 	 switch (Gbl.FileBrowser.FilFolLnk.Type)
 	   {
 	    case Brw_IS_FILE:
@@ -4459,13 +4459,11 @@ static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
                                Brw_IconTree_t IconSubtree)
   {
-   bool ICanCreate;
-
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
       /***** Put icon to create a new file or folder *****/
-      if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
+      if (Brw_CheckIfICanCreateIntoFolder (Level) == Usr_I_CAN)	// I can create a new file or folder
 	{
 	 if (IconSubtree == Brw_ICON_TREE_EXPAND)
 	   {
@@ -4721,7 +4719,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 
 	       HTM_NBSP ();
 
-	       if (Brw_GetIfICanEditFileOrFolder ())	// Can I rename this folder?
+	       if (Brw_GetIfICanEditFileOrFolder () == Usr_I_CAN)	// Can I rename this folder?
 		 {
 	          /***** Form to rename folder *****/
 		  Frm_BeginForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
@@ -4935,7 +4933,7 @@ void Brw_AskRemFileFromTree (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Button of confirmation of removing *****/
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
+   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I remove this file?
      {
       /***** Show question and button to remove file/link *****/
       Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
@@ -4970,7 +4968,7 @@ void Brw_RemFileFromTree (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
+   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I remove this file?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
 	        Gbl.FileBrowser.Path.AboveRootFolder,
@@ -5023,7 +5021,7 @@ void Brw_RemFolderFromTree (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this folder?
+   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I remove this folder?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
 	        Gbl.FileBrowser.Path.AboveRootFolder,
@@ -5089,7 +5087,7 @@ void Brw_RemSubtreeInFileBrowser (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this subtree?
+   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I remove this subtree?
      {
       snprintf (Path,sizeof (Path),"%s/%s",
 	        Gbl.FileBrowser.Path.AboveRootFolder,
@@ -6191,7 +6189,7 @@ void Brw_ShowFormFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new folder or file is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
      {
       /***** Name of the folder to be shown ****/
       Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
@@ -6487,7 +6485,7 @@ void Brw_RecFolderFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new folder is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
      {
       if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
         {
@@ -6587,7 +6585,7 @@ void Brw_RenFolderFileBrowser (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I rename this folder?
+   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I rename this folder?
      {
       if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
         {
@@ -6758,7 +6756,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new file is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
      {
       /***** First, we save in disk the file received *****/
       Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -6938,7 +6936,7 @@ void Brw_RecLinkFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new link is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
+   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
      {
       /***** Create a new file to store URL ****/
       Par_GetParText ("NewLinkURL",URL,PATH_MAX);
@@ -7259,9 +7257,9 @@ void Brw_ShowFileMetadata (void)
    char URL[PATH_MAX + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    bool Found;
-   bool ICanView = false;
+   Usr_ICan_t ICanView = Usr_I_CAN_NOT;
    bool IAmTheOwner;
-   bool ICanEdit;
+   Usr_ICan_t ICanEdit;
    bool ICanChangePublic = false;
    bool FileHasPublisher;
    Brw_License_t License;
@@ -7285,32 +7283,36 @@ void Brw_ShowFileMetadata (void)
 
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
-      ICanView = true;
+      ICanView = Usr_I_CAN;
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+               ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
 	    break;
 	 default:
 	    break;
 	}
      }
 
-   if (ICanView)
+   if (ICanView == Usr_I_CAN)
      {
       if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
 	  FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
@@ -7354,7 +7356,7 @@ void Brw_ShowFileMetadata (void)
 	 if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
 	     (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
 	      FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
-	     Rsc_CheckIfICanGetLink ())
+	     Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	    Box_BoxShadowBegin (NULL,Brw_PutIconToGetLinkToFile,&FileMetadata,
 				NULL);
 	 else
@@ -7363,7 +7365,7 @@ void Brw_ShowFileMetadata (void)
 
 
 	 /***** Begin form to update the metadata of a file *****/
-	 if (ICanEdit)	// I can edit file properties
+	 if (ICanEdit == Usr_I_CAN)	// I can edit file properties
 	   {
 	    /* Can the file be public? */
 	    switch (Gbl.FileBrowser.Type)
@@ -7507,14 +7509,14 @@ void Brw_ShowFileMetadata (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",ICanEdit ? "License" :
-						NULL,
+	       Frm_LabelColumn ("RT",ICanEdit == Usr_I_CAN ? "License" :
+							     NULL,
 				Txt_License);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
 			     The_GetSuffix ());
-		  if (ICanEdit)	// I can edit file properties
+		  if (ICanEdit == Usr_I_CAN)	// I can edit file properties
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "id=\"License\" name=\"License\" class=\"LICENSE\"");
@@ -7584,7 +7586,7 @@ void Brw_ShowFileMetadata (void)
          HTM_TABLE_End ();
 
 	 /***** End form *****/
-	 if (ICanEdit)	// I can edit file properties
+	 if (ICanEdit == Usr_I_CAN)	// I can edit file properties
 	   {
 	       Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
 	    Frm_EndForm ();
@@ -7628,7 +7630,7 @@ void Brw_ShowFileMetadata (void)
       /***** Add paths until file to table of expanded folders *****/
       Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Path);
      }
-   else	// !ICanView
+   else	// ICanView == Usr_I_CAN_NOT
      {
       /***** Mark possible notifications about non visible file as removed *****/
       switch (Gbl.FileBrowser.Type)
@@ -7741,7 +7743,7 @@ void Brw_DownloadFile (void)
    struct Brw_FileMetadata FileMetadata;
    char URL[PATH_MAX + 1];
    bool Found;
-   bool ICanView = false;
+   Usr_ICan_t ICanView = Usr_I_CAN_NOT;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -7760,32 +7762,36 @@ void Brw_DownloadFile (void)
 
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
-      ICanView = true;
+      ICanView = Usr_I_CAN;
       switch (Gbl.FileBrowser.Type)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+	       ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
+               ICanView = Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata) ? Usr_I_CAN_NOT :
+												 Usr_I_CAN;
 	    break;
 	 default:
 	    break;
 	}
      }
 
-   if (ICanView)
+   if (ICanView == Usr_I_CAN)
      {
       if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
 	  FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
@@ -7845,7 +7851,7 @@ void Brw_DownloadFile (void)
       Gbl.Layout.DivsEndWritten   =
       Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all
      }
-   else	// !ICanView
+   else	// ICanView == Usr_I_CAN_NOT
      {
       /***** Mark possible notifications about non visible file as removed *****/
       switch (Gbl.FileBrowser.Type)
@@ -7889,7 +7895,7 @@ void Brw_DownloadFile (void)
 /*********** Check if I have permission to change file metadata **************/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner)
+static Usr_ICan_t Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner)
   {
    switch (Gbl.Action.Act)	// Only in actions where edition is allowed
      {
@@ -7918,9 +7924,10 @@ static bool Brw_CheckIfICanEditFileMetadata (bool IAmTheOwner)
       case ActReqDatWrkUsr:		case ActChgDatWrkUsr:
 
       case ActReqDatBrf:		case ActChgDatBrf:
-	 return IAmTheOwner;
+	 return IAmTheOwner ? Usr_I_CAN :
+			      Usr_I_CAN_NOT;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
   }
 
@@ -8089,7 +8096,7 @@ void Brw_ChgFileMetadata (void)
      {
       /***** Check if I can change file metadata *****/
       IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
-      if (!Brw_CheckIfICanEditFileMetadata (IAmTheOwner))
+      if (Brw_CheckIfICanEditFileMetadata (IAmTheOwner) == Usr_I_CAN_NOT)
 	 Err_NoPermissionExit ();
 
       /***** Check if the file was public before the edition *****/
@@ -8658,37 +8665,40 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
 /********** Check if I have permission to modify a file or folder ************/
 /*****************************************************************************/
 
-static void Brw_SetIfICanEditFileOrFolder (bool Value)
+static void Brw_SetIfICanEditFileOrFolder (Usr_ICan_t Value)
   {
    Brw_ICanEditFileOrFolder = Value;
   }
 
-static bool Brw_GetIfICanEditFileOrFolder (void)
+static Usr_ICan_t Brw_GetIfICanEditFileOrFolder (void)
   {
    return Brw_ICanEditFileOrFolder;
   }
 
-static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
+static Usr_ICan_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
   {
    /***** Level 0 (root folder) can not be removed/renamed *****/
    if (Level == 0)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** I must be student or a superior role to edit *****/
    if (Gbl.Usrs.Me.Role.Max < Rol_STD)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** Set depending on browser, level, logged role... *****/
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOC_CRS:
-         return Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
+         return (Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Usr_I_CAN :
+						       Usr_I_CAN_NOT;
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher...
 							// ...can edit only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_I_CAN :
+								 Usr_I_CAN_NOT;
 	 // An administrator can edit
-         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH);
+         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_I_CAN :
+						      Usr_I_CAN_NOT;
       case Brw_ADMI_TCH_CRS:
       case Brw_ADMI_TCH_GRP:
          // Check if I am the publisher of the file/folder
@@ -8701,7 +8711,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_ASG_CRS:
 	 if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER && // The main folder of an assignment
              Level == 1)
-	    return false;			// Do not remove / rename main folder of assigment
+	    return Usr_I_CAN_NOT;	// Do not remove / rename main folder of assigment
 
 	 return Asg_CheckIfICanCreateIntoAssigment (&Gbl.FileBrowser.Asg);
       case Brw_ADMI_DOC_PRJ:
@@ -8709,7 +8719,8 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_ASS_PRJ:
          return Brw_CheckIfICanModifyPrjAssFileOrFolder ();
       default:
-         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type);
+         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) ? Usr_I_CAN :
+									  Usr_I_CAN_NOT;
      }
    return false;
   }
@@ -8718,59 +8729,68 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 /**** Check if I have permission to create a file or folder into a folder ****/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
+static Usr_ICan_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
   {
    /***** If not in a folder... *****/
    if (Gbl.FileBrowser.FilFolLnk.Type != Brw_IS_FOLDER)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** I must be student, teacher, admin or superuser to edit *****/
    if (Gbl.Usrs.Me.Role.Max < Rol_STD)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** If maximum level is reached, I can not create/paste *****/
    if (Level >= BrwSiz_MAX_DIR_LEVELS)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** Have I permission to create/paste a new file or folder into the folder? *****/
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOC_CRS:
-         return Gbl.Usrs.Me.Role.Logged >= Rol_TCH;
+         return (Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Usr_I_CAN :
+						       Usr_I_CAN_NOT;
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// A teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_I_CAN :
+								 Usr_I_CAN_NOT;
 	 // An administrator can create/paste
-         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH);
+         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_I_CAN :
+						      Usr_I_CAN_NOT;
       case Brw_ADMI_TCH_CRS:
-         return Gbl.Usrs.Me.Role.Logged >= Rol_NET;
+         return (Gbl.Usrs.Me.Role.Logged >= Rol_NET) ? Usr_I_CAN :
+						       Usr_I_CAN_NOT;
       case Brw_ADMI_TCH_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_NET ||	// A non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_I_CAN :
+								 Usr_I_CAN_NOT;
 	 // An administrator can create/paste
-         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH);
+         return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_I_CAN :
+						      Usr_I_CAN_NOT;
       case Brw_ADMI_SHR_CRS:
-         return Gbl.Usrs.Me.Role.Logged >= Rol_STD;
+         return (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_I_CAN :
+						       Usr_I_CAN_NOT;
       case Brw_ADMI_SHR_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// A student, non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged <= Rol_TCH)		// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_I_CAN :
+								 Usr_I_CAN_NOT;
 	 // An administrator can create/paste
-         return Gbl.Usrs.Me.Role.Logged >= Rol_STD;
+         return (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_I_CAN :
+						       Usr_I_CAN_NOT;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_ASG_CRS:
-	 if (Level == 0)	// If root folder
-	    return false;	// Folders of assigments (level 1)
-				// can only be created automatically
+	 if (Level == 0)		// If root folder
+	    return Usr_I_CAN_NOT;	// Folders of assigments (level 1)
+					// can only be created automatically
 	 return Asg_CheckIfICanCreateIntoAssigment (&Gbl.FileBrowser.Asg);
       default:
-         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type);
+         return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) ? Usr_I_CAN :
+									  Usr_I_CAN_NOT;
      }
-   return false;
   }
 
 /*****************************************************************************/
@@ -8779,7 +8799,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 
 bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser)
   {
-   static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
+   static bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
      {
       [Brw_UNKNOWN     ] = false,
       [Brw_SHOW_DOC_CRS] = false,
@@ -8823,42 +8843,42 @@ bool Brw_CheckIfFileBrowserIsEditable (Brw_FileBrowser_t FileBrowser)
 // I can remove or rename a file if I am the publisher
 // I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
-static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
+static Usr_ICan_t Brw_CheckIfICanModifySharedFileOrFolder (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// If I am a student or a non-editing teacher...
       case Rol_NET:	// ...I can modify the file/folder if I am the publisher
-         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
+         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_I_CAN :
+													      Usr_I_CAN_NOT);	// Am I the publisher of subtree?
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return true;
+         return Usr_I_CAN;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
-   return false;
   }
 
-static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
+static Usr_ICan_t Brw_CheckIfICanModifyPrivateFileOrFolder (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:	// If I am a student or a non-editing teacher...
 			// ...I can modify the file/folder if I am the publisher
-         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
+         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_I_CAN :
+													      Usr_I_CAN_NOT);	// Am I the publisher of subtree?
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return true;
+         return Usr_I_CAN;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
-   return false;
   }
 
 /*****************************************************************************/
@@ -8869,22 +8889,22 @@ static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
 // I can remove or rename a file if I am the publisher
 // I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
-static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
+static Usr_ICan_t Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
 	 if (Prj_GetMyRolesInProject (Prj_GetPrjCod ()))	// I am a member
-            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
-	 return false;
+            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_I_CAN :
+        													 Usr_I_CAN_NOT);	// Am I the publisher of subtree?
+	 return Usr_I_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
-         return true;
+         return Usr_I_CAN;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
-   return false;
   }
 
 /*****************************************************************************/
@@ -8895,7 +8915,7 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
 // I can remove or rename a file if I am the publisher
 // I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
-static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
+static Usr_ICan_t Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -8903,15 +8923,15 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
       case Rol_NET:
 	 if ((Prj_GetMyRolesInProject (Prj_GetPrjCod ()) & (1 << Prj_ROLE_TUT |		// Tutor...
 	                                                    1 << Prj_ROLE_EVL)))	// ...or evaluator
-            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
-	 return false;
+            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full) ? Usr_I_CAN :
+        													 Usr_I_CAN_NOT);	// Am I the publisher of subtree?
+	 return Usr_I_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
-         return true;
+         return Usr_I_CAN;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
-   return false;
   }
 
 /*****************************************************************************/

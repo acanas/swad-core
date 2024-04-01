@@ -205,8 +205,8 @@ void Prj_SeeAllProjects (void);
 void Prj_ShowProjects (struct Prj_Projects *Projects);
 void Prj_ShowTableSelectedPrjs (void);
 
-bool Prj_CheckIfICanViewProjectDocuments (long PrjCod);
-bool Prj_CheckIfICanViewProjectAssessment (long PrjCod);
+Usr_ICan_t Prj_CheckIfICanViewProjectDocuments (long PrjCod);
+Usr_ICan_t Prj_CheckIfICanViewProjectAssessment (long PrjCod);
 
 void Prj_PutCurrentPars (void *Projects);
 void Prj_PutPars (struct Prj_Filter *Filter,

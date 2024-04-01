@@ -45,7 +45,7 @@ void RubCri_ChangeWeight (void);
 void RubCri_ListCriteriaForSeeing (const struct Rub_Rubrics *Rubrics);
 void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics);
 void RubCri_ListCriteriaInProject (struct Prj_Projects *Projects,long RubCod,
-				   bool ICanFill);
+				   Usr_ICan_t ICanFill);
 
 void Rub_PushRubCod (struct Rub_Node **TOS,long RubCod);
 void Rub_PopRubCod (struct Rub_Node **TOS);

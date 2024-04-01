@@ -305,7 +305,7 @@ static void PrgRsc_PutIconsViewResources (void *ItmCod)
    /***** Put icon to create a new item resource *****/
    if (ItmCod)
       if (*(long *) ItmCod > 0)
-	 if (Prg_CheckIfICanEditProgram ())
+	 if (Prg_CheckIfICanEditProgram () == Usr_I_CAN)
 	    Ico_PutContextualIconToView (ActFrmSeePrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 					 Prg_PutParItmCod,ItmCod);
   }
@@ -315,7 +315,7 @@ static void PrgRsc_PutIconsEditResources (void *ItmCod)
    /***** Put icon to create a new item resource *****/
    if (ItmCod)
       if (*(long *) ItmCod > 0)
-	 if (Prg_CheckIfICanEditProgram ())
+	 if (Prg_CheckIfICanEditProgram () == Usr_I_CAN)
 	    Ico_PutContextualIconToEdit (ActFrmEdiPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 					 Prg_PutParItmCod,ItmCod);
   }
@@ -895,7 +895,7 @@ static void PrgRsc_ShowClipboard (void)
 static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
   {
    /***** Put icon to remove resource clipboard in program *****/
-   if (Prg_CheckIfICanEditProgram ())
+   if (Prg_CheckIfICanEditProgram () == Usr_I_CAN)
       if (Rsc_DB_GetNumResourcesInClipboard ())	// Only if there are resources
 	 Ico_PutContextualIconToRemove (ActRemRscCli_InPrg,NULL,
 					NULL,NULL);

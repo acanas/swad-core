@@ -463,7 +463,7 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
 static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit countries *****/
-   if (Cty_CheckIfICanEditCountries ())
+   if (Cty_CheckIfICanEditCountries () == Usr_I_CAN)
       Cty_PutIconToEditCountries ();
 
    /***** Put icon to show a figure *****/
@@ -474,9 +474,10 @@ static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
 /********************** Check if I can edit countries ************************/
 /*****************************************************************************/
 
-bool Cty_CheckIfICanEditCountries (void)
+Usr_ICan_t Cty_CheckIfICanEditCountries (void)
   {
-   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+						     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -485,8 +486,7 @@ bool Cty_CheckIfICanEditCountries (void)
 
 static void Cty_PutIconToEditCountries (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiCty,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiCty,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -692,8 +692,7 @@ static void Cty_EditCountriesInternal (void)
 static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view countries *****/
-   Ico_PutContextualIconToView (ActSeeCty,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeCty,NULL,NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);

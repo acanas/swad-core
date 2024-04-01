@@ -32,7 +32,6 @@
 #include "swad_action.h"
 #include "swad_constant.h"
 #include "swad_cookie.h"
-#include "swad_country.h"
 #include "swad_cryptography.h"
 #include "swad_date.h"
 #include "swad_degree.h"
@@ -137,6 +136,13 @@ typedef enum
    Usr_OPTION_UNFOLLOW		= 7,
   } Usr_ListUsrsOption_t;
 #define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
+
+#define Usr_NUM_I_CAN 2
+typedef enum
+  {
+   Usr_I_CAN_NOT,
+   Usr_I_CAN,
+  } Usr_ICan_t;
 
 #define Usr_NUM_ME_OR_OTHER 2
 typedef enum
@@ -304,15 +310,14 @@ void Usr_FlushCachesUsr (void);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
-bool Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat);
-bool Usr_ICanEditOtherUsr (const struct Usr_Data *UsrDat);
+Usr_ICan_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat);
+Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat);
 
-bool Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat);
-bool Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat);
-bool Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat);
-bool Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat);
-bool Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat);
-bool Usr_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat);
+Usr_ICan_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat);
+Usr_ICan_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat);
+Usr_ICan_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat);
+Usr_ICan_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat);
+Usr_ICan_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);

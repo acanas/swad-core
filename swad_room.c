@@ -97,7 +97,7 @@ static void Roo_GetAndListMACAddresses (long RooCod);
 static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
 
 static Roo_Order_t Roo_GetParRoomOrder (void);
-static bool Roo_CheckIfICanCreateRooms (void);
+static Usr_ICan_t Roo_CheckIfICanCreateRooms (void);
 static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args);
 static void Roo_PutIconToEditRooms (void);
 static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args);
@@ -377,9 +377,10 @@ static Roo_Order_t Roo_GetParRoomOrder (void)
 /*********************** Check if I can create rooms *************************/
 /*****************************************************************************/
 
-static bool Roo_CheckIfICanCreateRooms (void)
+static Usr_ICan_t Roo_CheckIfICanCreateRooms (void)
   {
-   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_I_CAN :
+						     Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -389,7 +390,7 @@ static bool Roo_CheckIfICanCreateRooms (void)
 static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit rooms *****/
-   if (Roo_CheckIfICanCreateRooms ())
+   if (Roo_CheckIfICanCreateRooms () == Usr_I_CAN)
       Roo_PutIconToEditRooms ();
   }
 
@@ -399,8 +400,7 @@ static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args)
 
 static void Roo_PutIconToEditRooms (void)
   {
-   Ico_PutContextualIconToEdit (ActEdiRoo,NULL,
-                                NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiRoo,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -460,8 +460,7 @@ static void Roo_EditRoomsInternal (void)
 static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view rooms *****/
-   Ico_PutContextualIconToView (ActSeeRoo,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeeRoo,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -702,7 +701,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    Nam_ExistingShortAndFullNames (ActionRename,
 					   ParCod_Roo,Room->RooCod,
 					   Names,
-					   true);	// Put form
+					   Frm_PUT_FORM);
 
 	    /* Seating capacity */
 	    HTM_TD_Begin ("class=\"LT\"");

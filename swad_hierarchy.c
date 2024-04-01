@@ -707,23 +707,23 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 /****************** Check if I can edit hierarchy elements *******************/
 /*****************************************************************************/
 
-bool Hie_CheckIfICanEdit (void)
+Usr_ICan_t Hie_CheckIfICanEdit (void)
   {
    // Some admins can edit all hierarchy elements.
    // Any user can edit the elements he/she has created...
    // ...as long as they are in pending status.
-   static const bool ICanEdit[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanEdit[Rol_NUM_ROLES] =
      {
       /* Users who can edit */
-      [Rol_GST    ] = true,
-      [Rol_USR    ] = true,
-      [Rol_STD    ] = true,
-      [Rol_NET    ] = true,
-      [Rol_TCH    ] = true,
-      [Rol_DEG_ADM] = true,
-      [Rol_CTR_ADM] = true,
-      [Rol_INS_ADM] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_GST    ] = Usr_I_CAN,
+      [Rol_USR    ] = Usr_I_CAN,
+      [Rol_STD    ] = Usr_I_CAN,
+      [Rol_NET    ] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_DEG_ADM] = Usr_I_CAN,
+      [Rol_CTR_ADM] = Usr_I_CAN,
+      [Rol_INS_ADM] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanEdit[Gbl.Usrs.Me.Role.Logged];

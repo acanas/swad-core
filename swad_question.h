@@ -141,7 +141,6 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
                                            struct Qst_Questions *Questions);
 
-bool Qst_CheckIfICanEditQsts (void);
 void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
 void Qst_PutIconsEditBankQsts (void *Questions);
 

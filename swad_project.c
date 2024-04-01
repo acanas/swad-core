@@ -189,7 +189,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects);
 
-static bool Prj_CheckIfICanViewProjectFiles (long PrjCod);
+static Usr_ICan_t Prj_CheckIfICanViewProjectFiles (long PrjCod);
 
 static void Prj_PutParAssign (unsigned Assign);
 static void Prj_PutParHidden (unsigned Hidden);
@@ -205,7 +205,7 @@ static Usr_Who_t Prj_GetParWho (void);
 
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects);
 static void Prj_ShowTableAllProjectsHead (void);
-static bool Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects);
+static Usr_ICan_t Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects);
 static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Projects);
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects);
 
@@ -226,7 +226,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
                                   const struct Prj_Faults *Faults,
                                   const char *Anchor);
 static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects);
-static bool Prj_CheckIfICanReviewProjects (void);
+static Usr_ICan_t Prj_CheckIfICanReviewProjects (void);
 static void Prj_ShowAssigned (const struct Prj_Projects *Projects,
                               const char *ClassLabel,
                               const char *ClassData,
@@ -288,7 +288,7 @@ static Prj_Order_t Prj_GetParPrjOrder (void);
 static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
                                          const char *Anchor);
 
-static bool Prj_CheckIfICanEditProject (const struct Prj_Project *Prj);
+static Usr_ICan_t Prj_CheckIfICanEditProject (const struct Prj_Project *Prj);
 
 static void Prj_GetListProjects (struct Prj_Projects *Projects);
 
@@ -317,8 +317,8 @@ static Prj_ReviewStatus_t Prj_GetParReviewStatus (void);
 static void Prj_ShowRubrics (struct Prj_Projects *Projects);
 static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
                                    PrjCfg_RubricType_t RubricType);
-static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric);
-static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric);
+static Usr_ICan_t Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric);
+static Usr_ICan_t Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric);
 
 /*****************************************************************************/
 /******* Set/get project code (used to pass parameter to file browser) *******/
@@ -396,7 +396,7 @@ static void Prj_ReqUsrsToSelect (void *Projects)
 				     Txt_Projects,
 				     Hlp_ASSESSMENT_Projects,
 				     Txt_View_projects,
-				     false);	// Do not put form with date range
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
   }
 
 /*****************************************************************************/
@@ -864,18 +864,19 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 /******************** Can I view files of a given project? *******************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanViewProjectFiles (long PrjCod)
+static Usr_ICan_t Prj_CheckIfICanViewProjectFiles (long PrjCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
+	 return (Prj_GetMyRolesInProject (PrjCod) != 0) ? Usr_I_CAN :	// Am I a member?
+							  Usr_I_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -883,41 +884,41 @@ static bool Prj_CheckIfICanViewProjectFiles (long PrjCod)
 /******** Check if I have permission to view project documents zone **********/
 /*****************************************************************************/
 
-bool Prj_CheckIfICanViewProjectDocuments (long PrjCod)
+Usr_ICan_t Prj_CheckIfICanViewProjectDocuments (long PrjCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
+	 return (Prj_GetMyRolesInProject (PrjCod) != 0) ? Usr_I_CAN :	// Am I a member?
+							  Usr_I_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
-         return true;
+         return Usr_I_CAN;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
-   return false;
   }
 
 /*****************************************************************************/
 /******** Check if I have permission to view project assessment zone *********/
 /*****************************************************************************/
 
-bool Prj_CheckIfICanViewProjectAssessment (long PrjCod)
+Usr_ICan_t Prj_CheckIfICanViewProjectAssessment (long PrjCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// Tutor...
-	                                              1 << Prj_ROLE_EVL)) != 0);	// ...or evaluator
+	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |			// Tutor...
+	                                              1 << Prj_ROLE_EVL)) != 0) ? Usr_I_CAN :	// ...or evaluator
+	                                        				  Usr_I_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
-         return true;
+         return Usr_I_CAN;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
-   return false;
   }
 
 /*****************************************************************************/
@@ -1228,17 +1229,18 @@ static void Prj_ShowTableAllProjectsHead (void)
 /********************** Check if I can create projects ***********************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects)
+static Usr_ICan_t Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-         return Projects->Config.NETCanCreate;
+         return Projects->Config.NETCanCreate ? Usr_I_CAN :
+						Usr_I_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -1248,14 +1250,14 @@ static bool Prj_CheckIfICanCreateProjects (const struct Prj_Projects *Projects)
 
 void Prj_PutIconsListProjects (void *Projects)
   {
-   bool ICanConfigAllProjects;
+   Usr_ICan_t ICanConfigAllProjects;
 
    if (Projects)
      {
       ICanConfigAllProjects = PrjCfg_CheckIfICanConfig ();
 
       /***** Put icon to create a new project *****/
-      if (Prj_CheckIfICanCreateProjects ((struct Prj_Projects *) Projects))
+      if (Prj_CheckIfICanCreateProjects ((struct Prj_Projects *) Projects) == Usr_I_CAN)
 	 Prj_PutIconToCreateNewPrj ((struct Prj_Projects *) Projects);
 
       if (((struct Prj_Projects *) Projects)->Num)
@@ -1263,19 +1265,19 @@ void Prj_PutIconsListProjects (void *Projects)
 	 /***** Put icon to show all data in a table *****/
 	 Prj_PutIconToShowAllData ((struct Prj_Projects *) Projects);
 
-	 if (ICanConfigAllProjects)
+	 if (ICanConfigAllProjects == Usr_I_CAN)
 	    /****** Put icons to request locking/unlocking edition
 		    of all selected projects *******/
 	    Prj_PutIconsToLockUnlockAllProjects ((struct Prj_Projects *) Projects);
 	}
 
       /***** Put form to go to configuration of projects *****/
-      if (ICanConfigAllProjects)
+      if (ICanConfigAllProjects == Usr_I_CAN)
 	 Ico_PutContextualIconToConfigure (ActCfgPrj,NULL,
 	                                   NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
 					 Prj_PutCurrentPars,Projects);
 
@@ -1360,7 +1362,7 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects)
       HTM_FIELDSET_End ();
 
       /***** Show project file browsers *****/
-      if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod))
+      if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod) == Usr_I_CAN)
 	 Brw_ShowFileBrowserProject (Projects->Prj.PrjCod);
 
       /***** Show project rubrics *****/
@@ -1516,8 +1518,13 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
    extern const char *HidVis_DateBlueClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   char *Id;
+   static Act_Action_t NextActions[Usr_NUM_I_CAN] =
+     {
+      [Usr_I_CAN_NOT] = ActSeeOnePrj,
+      [Usr_I_CAN    ] = ActAdmDocPrj,
+     };
    Act_Action_t NextAction;
+   char *Id;
 
    /***** Write first row of data of this project *****/
    HTM_TR_Begin (NULL);
@@ -1614,8 +1621,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 	 HTM_ARTICLE_Begin (Anchor);
 	    if (Projects->Prj.Title[0])
 	      {
-	       NextAction = Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod) ? ActAdmDocPrj :
-										     ActSeeOnePrj;
+	       NextAction = NextActions[Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod)];
 	       Frm_BeginForm (NextAction);
 		  Prj_PutCurrentPars (Projects);
 		  HTM_BUTTON_Submit_Begin (Txt_Actions[NextAction],
@@ -1703,8 +1709,8 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 PutForm = Frm_DONT_PUT_FORM;
 	 break;
       default:
-	 PutForm = Prj_CheckIfICanReviewProjects () ? Frm_PUT_FORM :
-						      Frm_DONT_PUT_FORM;
+	 PutForm = (Prj_CheckIfICanReviewProjects () == Usr_I_CAN) ? Frm_PUT_FORM :
+								     Frm_DONT_PUT_FORM;
 	 break;
      }
 
@@ -1869,12 +1875,12 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
 /**************************** Can I review projects? *************************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanReviewProjects (void)
+static Usr_ICan_t Prj_CheckIfICanReviewProjects (void)
   {
-   static bool ICanReviewProjects[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanReviewProjects[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanReviewProjects[Gbl.Usrs.Me.Role.Logged];
@@ -2877,7 +2883,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
                                      TxtButton,
-				     false);	// Do not put form with date range
+				     Frm_DONT_PUT_FORM);	// Do not put form with date range
    free (TxtButton);
 
    /***** Put a form to create/edit project *****/
@@ -3045,7 +3051,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Prj_CheckIfICanEditProject (&Projects->Prj))
+      if (Prj_CheckIfICanEditProject (&Projects->Prj) == Usr_I_CAN)
 	{
 	 /***** Show question and button to remove user as a role from project *****/
 	 /* Begin alert */
@@ -3123,7 +3129,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Prj_CheckIfICanEditProject (&Projects.Prj))
+      if (Prj_CheckIfICanEditProject (&Projects.Prj) == Usr_I_CAN)
 	{
 	 /***** Remove user from the table of project-users *****/
 	 Prj_DB_RemoveUsrFromPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -3177,7 +3183,7 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
       [HidVis_VISIBLE] = ActHidPrj,	// Visible ==> action to hide
      };
 
-   if (Prj_CheckIfICanEditProject (&Projects->Prj))
+   if (Prj_CheckIfICanEditProject (&Projects->Prj) == Usr_I_CAN)
      {
       /***** Icon to remove project *****/
       Ico_PutContextualIconToRemove (ActReqRemPrj,NULL,
@@ -3190,11 +3196,11 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
 
       /***** Icon to edit project *****/
       Ico_PutContextualIconToEdit (ActEdiOnePrj,NULL,
-                                   Prj_PutCurrentPars,Projects);
+				   Prj_PutCurrentPars,Projects);
      }
 
    /***** Icon to admin project documents *****/
-   if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod))
+   if (Prj_CheckIfICanViewProjectFiles (Projects->Prj.PrjCod) == Usr_I_CAN)
       Ico_PutContextualIconToViewFiles (ActAdmDocPrj,
                                         Prj_PutCurrentPars,Projects);
 
@@ -3202,7 +3208,7 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentPars,Projects);
 
    /***** Locked/unlocked project edition *****/
-   if (PrjCfg_CheckIfICanConfig ())
+   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN)
      {
       /* Icon to lock/unlock project edition */
       HTM_DIV_Begin ("id=\"prj_lck_%ld\" class=\"PRJ_LOCK\"",
@@ -3215,7 +3221,7 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
       Prj_PutIconOffLockedUnlocked (&Projects->Prj);
 
    /***** Link to get resource link *****/
-   if (Rsc_CheckIfICanGetLink ())
+   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
       Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
 				      Prj_PutCurrentPars,Projects);
   }
@@ -3224,20 +3230,21 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
 /************************ Can I edit a given project? ************************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanEditProject (const struct Prj_Project *Prj)
+static Usr_ICan_t Prj_CheckIfICanEditProject (const struct Prj_Project *Prj)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 if (Prj->Locked == Prj_LOCKED)			// Locked edition
-	    return false;
-	 return (Prj_GetMyRolesInProject (Prj->PrjCod) &
-	         (1 << Prj_ROLE_TUT)) != 0;		// Am I a tutor?
+	 if (Prj->Locked == Prj_LOCKED)				// Locked edition
+	    return Usr_I_CAN_NOT;
+	 return ((Prj_GetMyRolesInProject (Prj->PrjCod) &
+	          (1 << Prj_ROLE_TUT)) != 0) ? Usr_I_CAN :	// Am I a tutor?
+	        			       Usr_I_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -3502,7 +3509,7 @@ void Prj_ReqRemProject (void)
    Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Check if I can edit this project *****/
-   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
+   if (Prj_CheckIfICanEditProject (&Projects.Prj) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove the project *****/
@@ -3542,7 +3549,7 @@ void Prj_RemoveProject (void)
    Prj_GetProjectDataByCod (&Projects.Prj);	// Inside this function, the course is checked to be the current one
 
    /***** Check if I can edit this project *****/
-   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
+   if (Prj_CheckIfICanEditProject (&Projects.Prj) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove users in project *****/
@@ -3606,7 +3613,7 @@ static void Prj_HideUnhideProject (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Prj_GetProjectDataByCod (&Projects.Prj);
 
    /***** Check if I can edit this project *****/
-   if (!Prj_CheckIfICanEditProject (&Projects.Prj))
+   if (Prj_CheckIfICanEditProject (&Projects.Prj) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Hide/unhide project *****/
@@ -3631,7 +3638,7 @@ void Prj_ReqCreatePrj (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can create new projects *****/
-   if (!Prj_CheckIfICanCreateProjects (&Projects))
+   if (Prj_CheckIfICanCreateProjects (&Projects) == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -3996,7 +4003,7 @@ void Prj_ReceiveProject (void)
    extern const char *Txt_The_project_has_been_modified;
    struct Prj_Projects Projects;
    bool ItsANewProject;
-   bool ICanEditProject;
+   Usr_ICan_t ICanEditProject;
    bool NewProjectIsCorrect = true;
 
    /***** Reset projects *****/
@@ -4025,7 +4032,7 @@ void Prj_ReceiveProject (void)
      }
 
    /* Check if I can create/edit project */
-   if (!ICanEditProject)
+   if (ICanEditProject == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /* Get project title */
@@ -4163,7 +4170,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can configure projects *****/
-   if (!PrjCfg_CheckIfICanConfig ())
+   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -4201,7 +4208,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can configure projects *****/
-   if (!PrjCfg_CheckIfICanConfig ())
+   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -4242,7 +4249,7 @@ void Prj_LockSelectedPrjsEdition (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can configure projects *****/
-   if (!PrjCfg_CheckIfICanConfig ())
+   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -4278,7 +4285,7 @@ void Prj_UnloSelectedPrjsEdition (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can configure projects *****/
-   if (!PrjCfg_CheckIfICanConfig ())
+   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
@@ -4368,7 +4375,7 @@ void Prj_LockProjectEdition (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can configure projects *****/
-   if (!PrjCfg_CheckIfICanConfig ())
+   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Allocate memory for the project *****/
@@ -4404,7 +4411,7 @@ void Prj_UnloProjectEdition (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can configure projects *****/
-   if (!PrjCfg_CheckIfICanConfig ())
+   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Allocate memory for the project *****/
@@ -4440,7 +4447,7 @@ void Prj_ChangeReviewStatus (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Check if I can review projects *****/
-   if (!Prj_CheckIfICanReviewProjects ())
+   if (Prj_CheckIfICanReviewProjects () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Allocate memory for the project *****/
@@ -4499,7 +4506,7 @@ static void Prj_ShowRubrics (struct Prj_Projects *Projects)
 	 for (RubricType  = (PrjCfg_RubricType_t) 1;
 	      RubricType <= (PrjCfg_RubricType_t) (PrjCfg_NUM_RUBRIC_TYPES - 1);
 	      RubricType++)
-	    if (Prj_CheckIfICanViewRubric (Projects->Prj.PrjCod,RubricType))
+	    if (Prj_CheckIfICanViewRubric (Projects->Prj.PrjCod,RubricType) == Usr_I_CAN)
 	       Prj_ShowRubricsOfType (Projects,RubricType);
 
       /***** End table *****/
@@ -4521,7 +4528,7 @@ static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
    unsigned NumRubricsThisType;
    unsigned NumRubThisType;
    struct Rub_Rubric Rubric;
-   bool ICanFill = Prj_CheckIfICanFillRubric (Projects->Prj.PrjCod,RubricType);
+   Usr_ICan_t ICanFill = Prj_CheckIfICanFillRubric (Projects->Prj.PrjCod,RubricType);
 
    /***** Get project rubrics for current course from database *****/
    NumRubricsThisType = Prj_DB_GetRubricsOfType (&mysql_res,RubricType);
@@ -4587,7 +4594,7 @@ static void Prj_ShowRubricsOfType (struct Prj_Projects *Projects,
 /************************* Who can view/fill rubrics *************************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric)
+static Usr_ICan_t Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -4596,25 +4603,26 @@ static bool Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t WhichRubr
 	 switch (WhichRubric)
 	   {
 	    case PrjCfg_RUBRIC_ERR:
-	       return false;
+	       return Usr_I_CAN_NOT;
 	    case PrjCfg_RUBRIC_TUT:
 	    case PrjCfg_RUBRIC_EVL:
-	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// I am a tutor
-		                                            1 << Prj_ROLE_EVL)) != 0);	// or an evaluator
+	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |				// I am a tutor...
+		                                            1 << Prj_ROLE_EVL)) != 0) ? Usr_I_CAN :	// ...or an evaluator
+		                                        			        Usr_I_CAN_NOT;
 	    case PrjCfg_RUBRIC_GBL:
-	       return (Prj_GetMyRolesInProject (PrjCod) != 0);	// I am a member
+	       return (Prj_GetMyRolesInProject (PrjCod) != 0) ? Usr_I_CAN :	// I am a member
+								Usr_I_CAN_NOT;
 	   }
-         return false;
+         return Usr_I_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can view all rubrics
       case Rol_SYS_ADM:
-         return true;
+         return Usr_I_CAN;
       default:
-         return false;
+         return Usr_I_CAN_NOT;
      }
-   return false;
   }
 
-static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric)
+static Usr_ICan_t Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t WhichRubric)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -4623,20 +4631,22 @@ static bool Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t WhichRubr
 	 switch (WhichRubric)
 	   {
 	    case PrjCfg_RUBRIC_ERR:
-	       return false;
+	       return Usr_I_CAN_NOT;
 	    case PrjCfg_RUBRIC_TUT:
-	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0);	// I am a tutor
+	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0) ? Usr_I_CAN :	// I am a tutor
+											Usr_I_CAN_NOT;
 	    case PrjCfg_RUBRIC_EVL:
-	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_EVL)) != 0);	// Am I an evaluator
+	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_EVL)) != 0) ? Usr_I_CAN :	// Am I an evaluator
+											Usr_I_CAN_NOT;
 	    case PrjCfg_RUBRIC_GBL:
-	       return false;
+	       return Usr_I_CAN_NOT;
 	   }
-         return false;
+         return Usr_I_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can fill all rubrics
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 
@@ -4670,7 +4680,7 @@ void Prj_ChangeCriterionScore (void)
       Err_WrongRubricExit ();
 
    /***** Update review *****/
-   if (Prj_CheckIfICanFillRubric (Prj.PrjCod,WhichRubric))
+   if (Prj_CheckIfICanFillRubric (Prj.PrjCod,WhichRubric) == Usr_I_CAN)
       Rub_DB_UpdateScore (Rsc_PROJECT,Prj.PrjCod,-1L,CriCod,Score);
    else
       Err_NoPermission ();

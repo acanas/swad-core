@@ -75,7 +75,7 @@ void TmlUsr_PutIconFavSha (TmlUsr_FavSha_t FavSha,
                            long Cod,long UsrCod,unsigned NumUsrs,
                            TmlUsr_HowManyUsrs_t HowManyUsrs);
 
-bool TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod);
-bool TmlUsr_CheckIfICanRemove (long Cod,long UsrCod);
+Usr_ICan_t TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod);
+Usr_ICan_t TmlUsr_CheckIfICanRemove (long Cod,long UsrCod);
 
 #endif

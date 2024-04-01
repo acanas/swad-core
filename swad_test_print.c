@@ -126,31 +126,31 @@ static void TstPrn_GetCorrectAndComputeTxtAnsScore (struct TstPrn_PrintedQuestio
 static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback);
 static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback);
 static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback);
 static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     const char *ClassTxt,
 				     const char *ClassFeedback);
 static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback);
 //-----------------------------------------------------------------------------
@@ -605,16 +605,20 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
    extern const char *Txt_Question_removed;
    extern const char *Txt_Question_modified;
    bool QuestionUneditedAfterExam = false;
-   bool ICanView[TstVis_NUM_ITEMS_VISIBILITY];
+   Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY];
 
    /***** Check if I can view each part of the question *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility);
-	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility);
-	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility);
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility);
+	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] = TstVis_IsVisibleQstAndAnsTxt (Visibility) ? Usr_I_CAN :
+											       Usr_I_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] = TstVis_IsVisibleFeedbackTxt  (Visibility) ? Usr_I_CAN :
+											       Usr_I_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] = TstVis_IsVisibleCorrectAns   (Visibility) ? Usr_I_CAN :
+											       Usr_I_CAN_NOT;
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = TstVis_IsVisibleEachQstScore (Visibility) ? Usr_I_CAN :
+											       Usr_I_CAN_NOT;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -625,13 +629,13 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] =
 	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] =
 	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] =
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = true;
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = Usr_I_CAN;
 	 break;
       default:
 	 ICanView[TstVis_VISIBLE_QST_ANS_TXT   ] =
 	 ICanView[TstVis_VISIBLE_FEEDBACK_TXT  ] =
 	 ICanView[TstVis_VISIBLE_CORRECT_ANSWER] =
-	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = false;
+	 ICanView[TstVis_VISIBLE_EACH_QST_SCORE] = Usr_I_CAN_NOT;
 	 break;
      }
 
@@ -663,7 +667,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	                         ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
 
 	       /* Media */
-	       if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
+	       if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_I_CAN)
 		  Med_ShowMedia (&Question->Media,
 				 "Tst_MED_SHOW_CONT",
 				 "Tst_MED_SHOW");
@@ -674,7 +678,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 					ICanView,"Qst_TXT","Qst_TXT_LIGHT");
 
 	       /* Write score retrieved from database */
-	       if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
+	       if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_I_CAN)
 		 {
 		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
 				 The_GetSuffix ());
@@ -698,7 +702,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
 	 /* Question feedback */
 	 if (QuestionUneditedAfterExam)
-	    if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
+	    if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_I_CAN)
 	       Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
 
       HTM_TD_End ();
@@ -1169,14 +1173,14 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade)
 void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      struct Qst_Question *Question,
-			      bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			      Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			      const char *ClassTxt,
 			      const char *ClassFeedback)
   {
    void (*TstPrn_WriteAnsExam[Qst_NUM_ANS_TYPES]) (struct Usr_Data *UsrDat,
                                                    const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                   struct Qst_Question *Question,
-				                   bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				                   Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				                   const char *ClassTxt,
 				                   const char *ClassFeedback) =
     {
@@ -1200,7 +1204,7 @@ void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
 static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
@@ -1225,7 +1229,7 @@ static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
 	    if (sscanf (PrintedQuestion->StrAnswers,"%ld",&IntAnswerUsr) == 1)
 	      {
 	       HTM_TD_Begin ("class=\"CM %s_%s\"",
-			     ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ?
+			     ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN ?
 				(IntAnswerUsr == Question->Answer.Integer ? "Qst_ANS_OK" :	// Correct
 									    "Qst_ANS_BAD") :	// Wrong
 									    "Qst_ANS_0",	// Blank answer
@@ -1246,7 +1250,7 @@ static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
 
 	 /***** Write the correct answer *****/
 	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
 	       HTM_Long (Question->Answer.Integer);
 	    else
 	       Ico_PutIconNotVisible ();
@@ -1264,7 +1268,7 @@ static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
 static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
@@ -1290,7 +1294,7 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 	    FloatAnsUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
 	    // A bad formatted floating point answer will interpreted as 0.0
 	    HTM_TD_Begin ("class=\"CM %s_%s\"",
-			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ?
+			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN ?
 			     ((FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
 			       FloatAnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
 										   "Qst_ANS_BAD") :	// Wrong
@@ -1304,7 +1308,7 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 
 	 /***** Write the correct answer *****/
 	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
 	      {
 	       HTM_Txt ("[");
 	       HTM_Double (Question->Answer.FloatingPoint[0]);
@@ -1328,7 +1332,7 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
@@ -1352,7 +1356,7 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 
 	 /***** Write the user answer *****/
 	 HTM_TD_Begin ("class=\"CM %s_%s\"",
-		       ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ?
+		       ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN ?
 			  (AnsTFUsr == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
 							     "Qst_ANS_BAD") :	// Wrong
 							     "Qst_ANS_0",	// Blank answer
@@ -1362,7 +1366,7 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 
 	 /***** Write the correct answer *****/
 	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
 	       Qst_WriteAnsTF (Question->Answer.TF);
 	    else
 	       Ico_PutIconNotVisible ();
@@ -1380,7 +1384,7 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     const char *ClassTxt,
 				     const char *ClassFeedback)
   {
@@ -1399,7 +1403,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
    Qst_ChangeFormatAnswersText (Question);
 
    /***** Change format of answers feedback *****/
-   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
+   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_I_CAN)
       Qst_ChangeFormatAnswersFeedback (Question);
 
    /***** Get indexes for this question from string *****/
@@ -1426,7 +1430,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	    /* Draw icon depending on user's answer */
 	    if (UsrAnswers[Indexes[NumOpt]])	// This answer has been selected by the user
 	      {
-	       if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	       if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
 		 {
 		  if (Question->Answer.Options[Indexes[NumOpt]].Correct)
 		    {
@@ -1455,7 +1459,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	       HTM_TD_Empty (1);
 
 	    /* Draw icon that indicates whether the answer is correct */
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
 	      {
 	       if (Question->Answer.Options[Indexes[NumOpt]].Correct)
 		 {
@@ -1487,7 +1491,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 
 	       HTM_DIV_Begin ("class=\"%s_%s\"",
 	                      ClassTxt,The_GetSuffix ());
-		  if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
+		  if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_I_CAN)
 		    {
 		     HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 		     Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
@@ -1498,7 +1502,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 		     Ico_PutIconNotVisible ();
 	       HTM_DIV_End ();
 
-	       if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	       if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
 		  if (Question->Answer.Options[Indexes[NumOpt]].Feedback)
 		     if (Question->Answer.Options[Indexes[NumOpt]].Feedback[0])
 		       {
@@ -1524,7 +1528,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
                                      const struct TstPrn_PrintedQuestion *PrintedQuestion,
 				     struct Qst_Question *Question,
-				     bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+				     Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
@@ -1537,7 +1541,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
    Qst_ChangeFormatAnswersText (Question);
 
    /***** Change format of answers feedback *****/
-   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
+   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_I_CAN)
       Qst_ChangeFormatAnswersFeedback (Question);
 
    /***** Begin table *****/
@@ -1578,9 +1582,9 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 		 }
 	      }
 	    HTM_TD_Begin ("class=\"CT %s_%s\"",
-			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ? (Correct ? "Qst_ANS_OK" :	// Correct
-							                       "Qst_ANS_BAD") :	// Wrong
-									       "Qst_ANS_0",	// Blank answer
+			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN ? (Correct ? "Qst_ANS_OK" :	// Correct
+											    "Qst_ANS_BAD") :	// Wrong
+											    "Qst_ANS_0",	// Blank answer
 			  The_GetSuffix ());
 	       HTM_Txt (PrintedQuestion->StrAnswers);
 	    HTM_TD_End ();
@@ -1589,7 +1593,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
             HTM_TD_Empty (1);
 
 	 /***** Write the correct answers *****/
-	 if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	 if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
 	   {
 	    HTM_TD_Begin ("class=\"CT\"");
 	       HTM_TABLE_BeginPadding (2);
@@ -1614,7 +1618,7 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
 			      HTM_Txt (Question->Answer.Options[NumOpt].Text);
 			   HTM_DIV_End ();
 
-			   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
+			   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_I_CAN)
 			      if (Question->Answer.Options[NumOpt].Feedback)
 				 if (Question->Answer.Options[NumOpt].Feedback[0])
 				   {
@@ -1682,7 +1686,7 @@ static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) 
 				     Act_GetActionText (ActSeeUsrTstResCrs),
 				     Hlp_ASSESSMENT_Tests_results,
 				     Txt_View_results,
-				     true);	// Put form with date range
+				     Frm_PUT_FORM);	// Put form with date range
   }
 
 /*****************************************************************************/
@@ -1784,7 +1788,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
 						      Usr_DONT_GET_ROLE_IN_CRS))
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
 	      {
 	       /***** Show tests *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
@@ -1920,7 +1924,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	      }
 
 	    /* Accumulate questions and score */
-	    if (ICanView.Score)
+	    if (ICanView.Score == Usr_I_CAN)
 	      {
 	       NumTotalQsts.All      += Print.NumQsts.All;
 	       NumTotalQsts.NotBlank += Print.NumQsts.NotBlank;
@@ -1931,7 +1935,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
 	                  ClassDat,The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Result)
+	       if (ICanView.Result == Usr_I_CAN)
 		  HTM_Unsigned (Print.NumQsts.All);
 	       else
 		  Ico_PutIconNotVisible ();
@@ -1941,7 +1945,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
 	                  ClassDat,The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Result)
+	       if (ICanView.Result == Usr_I_CAN)
 		 {
 		  if (Print.NumQsts.NotBlank)
 		     HTM_Unsigned (Print.NumQsts.NotBlank);
@@ -1956,7 +1960,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 	                  ClassDat,The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Result)
+	       if (ICanView.Result == Usr_I_CAN)
 		 {
 		  NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
 		  if (NumQstsBlank)
@@ -1972,7 +1976,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
 	                  ClassDat,The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  HTM_Double2Decimals (Print.Score);
 		  HTM_Txt ("/");
@@ -1986,7 +1990,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 	                  ClassDat,The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		  HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
 							   (double) Print.NumQsts.All :
 							   0.0);
@@ -1998,7 +2002,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
 	                  ClassDat,The_GetSuffix (),
 	                  The_GetColorRows ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		  TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
 	       else
 		  Ico_PutIconNotVisible ();
@@ -2007,7 +2011,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    /* Link to show this test */
 	    HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",
 	                  The_GetColorRows ());
-	       if (ICanView.Result)
+	       if (ICanView.Result == Usr_I_CAN)
 		 {
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								       ActSeeOneTstResOth);
@@ -2220,7 +2224,7 @@ void TstPrn_ShowOnePrint (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
       TstCfg_GetConfig ();	// To get visibility
    TstRes_CheckIfICanSeePrintResult (&Print,Gbl.Usrs.Other.UsrDat.UsrCod,&ICanView);
-   if (!ICanView.Result)	// I am not allowed to view this test
+   if (ICanView.Result == Usr_I_CAN_NOT)	// I am not allowed to view this test
       Err_NoPermissionExit ();
 
    /***** Get questions and user's answers of the test from database *****/
@@ -2241,7 +2245,7 @@ void TstPrn_ShowOnePrint (void)
 						       Usr_DONT_GET_PREFS,
 						       Usr_DONT_GET_ROLE_IN_CRS))
 	    Err_WrongUserExit ();
-	 if (!Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN_NOT)
 	    Err_NoPermissionExit ();
 
 	 /* User */
@@ -2333,7 +2337,7 @@ void TstPrn_ShowOnePrint (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  HTM_STRONG_Begin ();
 		     HTM_Double2Decimals (Print.Score);
@@ -2357,7 +2361,7 @@ void TstPrn_ShowOnePrint (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score)
+	       if (ICanView.Score == Usr_I_CAN)
 		 {
 		  HTM_STRONG_Begin ();
 		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
@@ -2412,13 +2416,14 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
       case Rol_STD:
 	 // Depends on whether the print is sent or not
 	 // if the print is not sent ==> I can not view results
-	 ICanView->Result = Print->Sent && Usr_ItsMe (UsrCod) == Usr_ME;
-
-	 if (ICanView->Result)
+	 ICanView->Result = (Print->Sent && Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_I_CAN :
+									    Usr_I_CAN_NOT;
+	 if (ICanView->Result == Usr_I_CAN)
 	    // Depends on 5 visibility icons associated to tests
-	    ICanView->Score = TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
+	    ICanView->Score = TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()) ? Usr_I_CAN :
+											   Usr_I_CAN_NOT;
 	 else
-	    ICanView->Score = false;
+	    ICanView->Score = Usr_I_CAN_NOT;
 	 break;
       case Rol_NET:
       case Rol_TCH:
@@ -2430,15 +2435,16 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
 	 // if teachers are not allowed ==> I can not view results (except if the print is mine)
 	 ICanView->Result =
 	 ICanView->Score  = Print->Sent &&
-	                    (Print->AllowTeachers || Usr_ItsMe (UsrCod) == Usr_ME);
+	                    (Print->AllowTeachers || Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_I_CAN :
+										     Usr_I_CAN_NOT;
 	 break;
       case Rol_SYS_ADM:
 	 ICanView->Result =
-	 ICanView->Score  = true;
+	 ICanView->Score  = Usr_I_CAN;
 	 break;
       default:
 	 ICanView->Result =
-	 ICanView->Score  = false;
+	 ICanView->Score  = Usr_I_CAN_NOT;
 	 break;
      }
   }

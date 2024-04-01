@@ -184,8 +184,7 @@ void Plg_ListPlugins (void)
 
 static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToEdit (ActEdiPlg,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToEdit (ActEdiPlg,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -194,8 +193,7 @@ static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args)
 
 static void Plg_PutIconToViewPlugins (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToView (ActSeePlg,NULL,
-				NULL,NULL);
+   Ico_PutContextualIconToView (ActSeePlg,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

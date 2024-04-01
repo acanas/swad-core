@@ -49,7 +49,7 @@ void Hie_ResetHierarchy (void);
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 
-bool Hie_CheckIfICanEdit (void);
+Usr_ICan_t Hie_CheckIfICanEdit (void);
 
 void Hie_WriteStatusCell (Hie_Status_t Status,
 			  const char *Class,const char *BgColor,

@@ -289,7 +289,7 @@ bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if I can see the public profile *****/
-   if (Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat))
+   if (Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat) == Usr_I_CAN)
      {
       if (Gbl.Usrs.Me.Logged)
 	{
@@ -314,7 +314,7 @@ bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
 
       /***** Extended profile *****/
-      if (Pri_ShowingIsAllowed (UsrDat->ExPrfVisibility,UsrDat))
+      if (Pri_CheckIfICanView (UsrDat->ExPrfVisibility,UsrDat) == Usr_I_CAN)
         {
          /***** Show details of user's profile *****/
          Prf_ShowDetailsUserProfile (UsrDat);
@@ -1337,7 +1337,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
-   bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
+   bool Visible = (Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat) == Usr_I_CAN);
 
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		 Class[MeOrOther],

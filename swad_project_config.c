@@ -82,12 +82,12 @@ void PrjCfg_GetConfig (struct PrjCfg_Config *Config)
 /************************ Can I configure all projects? **********************/
 /*****************************************************************************/
 
-bool PrjCfg_CheckIfICanConfig (void)
+Usr_ICan_t PrjCfg_CheckIfICanConfig (void)
   {
-   static const bool ICanConfigAllProjects[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanConfigAllProjects[Rol_NUM_ROLES] =
      {
-      [Rol_TCH	  ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH	  ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanConfigAllProjects[Gbl.Usrs.Me.Role.Logged];

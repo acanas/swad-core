@@ -877,7 +877,7 @@ static void TmlCom_ReqRemComm (struct Tml_Timeline *Timeline)
    TmlCom_GetCommDataByCod (&Com);
 
    /***** Do some checks *****/
-   if (!TmlUsr_CheckIfICanRemove (Com.PubCod,Com.UsrCod))
+   if (TmlUsr_CheckIfICanRemove (Com.PubCod,Com.UsrCod) == Usr_I_CAN_NOT)
      {
       Med_MediaDestructor (&Com.Content.Media);
       return;

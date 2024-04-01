@@ -228,12 +228,12 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 /************************ Check if I can edit rubrics ************************/
 /*****************************************************************************/
 
-bool Rub_CheckIfICanEditRubrics (void)
+Usr_ICan_t Rub_CheckIfICanEditRubrics (void)
   {
-   static const bool ICanEditRubrics[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanEditRubrics[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanEditRubrics[Gbl.Usrs.Me.Role.Logged];
@@ -245,7 +245,7 @@ bool Rub_CheckIfICanEditRubrics (void)
 
 bool Rub_CheckIfEditable (void)
   {
-   if (Rub_CheckIfICanEditRubrics ())
+   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN)
       /***** Rubric is editable only if ... *****/
       // TODO: Change to control that a rubric is not edited in some circunstances?
       /*
@@ -265,7 +265,7 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
   {
    if (Rubrics)
      {
-      if (Rub_CheckIfICanEditRubrics ())
+      if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN)
 	{
          /***** Put icon to create a new rubric *****/
 	 Rub_PutIconToCreateNewRubric ((struct Rub_Rubrics *) Rubrics);
@@ -275,9 +275,8 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
 	}
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
-	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,
-					 Rub_PutPars,Rubrics);
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_RUBRICS);
@@ -300,8 +299,7 @@ static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics)
 
 static void Prg_PutIconToViewResourceClipboard (void)
   {
-   Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InRub,NULL,
-                                         NULL,NULL);
+   Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InRub,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -472,26 +470,22 @@ static void Rub_PutIconsEditingOneRubric (void *Rubrics)
   {
    if (Rubrics)
       /***** Icon to view rubric *****/
-      Ico_PutContextualIconToView (ActSeeOneRub,NULL,
-				   Rub_PutPars,Rubrics);
+      Ico_PutContextualIconToView (ActSeeOneRub,NULL,Rub_PutPars,Rubrics);
   }
 
 static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
   {
-   if (Rub_CheckIfICanEditRubrics ())
+   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN)
      {
       /***** Icon to remove rubric *****/
-      Ico_PutContextualIconToRemove (ActReqRemRub,NULL,
-				     Rub_PutPars,Rubrics);
+      Ico_PutContextualIconToRemove (ActReqRemRub,NULL,Rub_PutPars,Rubrics);
 
       /***** Icon to edit rubric *****/
-      Ico_PutContextualIconToEdit (ActEdiOneRub,NULL,
-				   Rub_PutPars,Rubrics);
+      Ico_PutContextualIconToEdit (ActEdiOneRub,NULL,Rub_PutPars,Rubrics);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink ())
-	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,
-					 Rub_PutPars,Rubrics);
+      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
      }
   }
 
@@ -652,7 +646,7 @@ void Rub_AskRemRubric (void)
 
    /***** Get data of the rubric from database *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
-   if (!Rub_CheckIfICanEditRubrics ())
+   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show criterion and button to remove rubric *****/
@@ -686,7 +680,7 @@ void Rub_RemoveRubric (void)
 
    /***** Get data of the rubric from database *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
-   if (!Rub_CheckIfICanEditRubrics ())
+   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove rubric from all tables *****/
@@ -738,7 +732,7 @@ void Rub_ReqCreatOrEditRubric (void)
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
    /***** Check if I can edit rubrics *****/
-   if (!Rub_CheckIfICanEditRubrics ())
+   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset rubrics context *****/
@@ -910,7 +904,7 @@ void Rub_ReceiveRubric (void)
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
    /***** Check if I can edit rubrics *****/
-   if (!Rub_CheckIfICanEditRubrics ())
+   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset rubrics context *****/
