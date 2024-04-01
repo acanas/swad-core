@@ -1140,7 +1140,7 @@ static void Brw_ListDir (unsigned Level,const char *RowId,
 static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                      bool TreeContracted,
                                      Brw_IconTree_t IconThisRow);
-static bool Brw_CheckIfCanPasteIn (unsigned Level);
+static Usr_ICan_t Brw_CheckIfCanPasteIn (unsigned Level);
 static void Brw_PutIconRemove (void);
 static void Brw_PutIconCopy (void);
 static void Brw_PutIconPaste (unsigned Level);
@@ -4137,26 +4137,26 @@ void Brw_SetFullPathInTree (void)
 /*****************************************************************************/
 // Return true if Gbl.FileBrowser.Clipboard.FilFolLnk.Full can be pasted into Gbl.FileBrowser.FilFolLnk.Full
 
-static bool Brw_CheckIfCanPasteIn (unsigned Level)
+static Usr_ICan_t Brw_CheckIfCanPasteIn (unsigned Level)
   {
    char PathDstWithFile[PATH_MAX + 1 + NAME_MAX + 1];
 
    /***** If not in a folder... *****/
    if (Gbl.FileBrowser.FilFolLnk.Type != Brw_IS_FOLDER)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** If there is nothing in clipboard... *****/
    if (Gbl.FileBrowser.Clipboard.FileBrowser == Brw_UNKNOWN)
-      return false;
+      return Usr_I_CAN_NOT;
 
    /***** Do not paste a link in marks... *****/
    if (Gbl.FileBrowser.Clipboard.FilFolLnk.Type == Brw_IS_LINK &&
        Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-      return false;
+      return Usr_I_CAN_NOT;
 
    /**** If I can not create elements into this folder... *****/
    if (Brw_CheckIfICanCreateIntoFolder (Level) == Usr_I_CAN_NOT)
-      return false;	// Pasting into top level of assignments is forbidden
+      return Usr_I_CAN_NOT;	// Pasting into top level of assignments is forbidden
 
    /**** If we are in the same tree of the clipboard... *****/
    if (Gbl.FileBrowser.Clipboard.IsThisTree)	// We are in the same tree of the clipboard ==>
@@ -4167,11 +4167,12 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
 	        Gbl.FileBrowser.FilFolLnk.Full,
 	        Gbl.FileBrowser.Clipboard.FilFolLnk.Name);
 
-      return !Str_Path1BeginsByPath2 (PathDstWithFile,
-		                      Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+      return Str_Path1BeginsByPath2 (PathDstWithFile,
+		                     Gbl.FileBrowser.Clipboard.FilFolLnk.Full) ? Usr_I_CAN_NOT :
+		                						 Usr_I_CAN;
      }
 
-   return true;	// I can paste
+   return Usr_I_CAN;	// I can paste
   }
 
 /*****************************************************************************/
@@ -4233,7 +4234,7 @@ static void Brw_PutIconPaste (unsigned Level)
       if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)	// Can't paste in a file or link
 	{
 	 /* Icon to paste */
-	 if (Brw_CheckIfCanPasteIn (Level))
+	 if (Brw_CheckIfCanPasteIn (Level) == Usr_I_CAN)
 	   {
 	    /***** Form to paste the content of the clipboard *****/
 	    Ico_PutContextualIconToPaste (Brw_ActPaste[Gbl.FileBrowser.Type],
@@ -5768,7 +5769,7 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
    Pasted.NumFolds = 0;
 
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
-   if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level))
+   if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level) == Usr_I_CAN)
      {
       /***** Construct the relative path of the origin file or folder *****/
       switch (Gbl.FileBrowser.Clipboard.FileBrowser)
@@ -6212,7 +6213,7 @@ void Brw_ShowFormFileBrowser (void)
         {
          /***** Check if we can paste in this folder *****/
          Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
-         if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level))
+         if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level) == Usr_I_CAN)
             Brw_PutFormToPasteAFileOrFolder (FileNameToShow);
         }
 

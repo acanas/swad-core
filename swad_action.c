@@ -99,12 +99,12 @@ Act_Action_t Act_GetSuperAction (Act_Action_t Action)
 /************* Check if I have permission to execute an action ***************/
 /*****************************************************************************/
 
-bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
+Usr_ICan_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
   {
    unsigned Permission;
 
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
-      return false;
+      return Usr_I_CAN_NOT;
 
    switch (Gbl.Hierarchy.Level)
      {
@@ -128,10 +128,11 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 							      ActLst_Actions[Action].PermissionCrsIfIDontBelong;
 	 break;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
 
-   return ((Permission & (1 << Gbl.Usrs.Me.Role.Logged)) != 0);
+   return ((Permission & (1 << Gbl.Usrs.Me.Role.Logged)) != 0) ? Usr_I_CAN :
+								 Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

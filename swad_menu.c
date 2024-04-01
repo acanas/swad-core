@@ -227,7 +227,7 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
      {
       if ((Action = Mnu_Menu[Gbl.Action.Tab][NumOptInMenu].Action) == 0)
          return ActUnk;
-      if (Act_CheckIfIHavePermissionToExecuteAction (Action))
+      if (Act_CheckIfICanExecuteAction (Action) == Usr_I_CAN)
          return Action;
      }
    return ActUnk;
@@ -264,7 +264,7 @@ void Mnu_WriteMenuThisTab (void)
 	    Action = Mnu_Menu[Gbl.Action.Tab][NumOptInMenu].Action;
 	    if (Action == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
 	       break;
-	    if (Act_CheckIfIHavePermissionToExecuteAction (Action))
+	    if (Act_CheckIfICanExecuteAction (Action) == Usr_I_CAN)
 	      {
 	       IsTheSelectedAction = (Action == Act_GetSuperAction (Gbl.Action.Act));
 

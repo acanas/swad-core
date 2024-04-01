@@ -338,14 +338,15 @@ static void Att_ParsWhichGroupsToShow (void *Events)
 
 static void Att_PutIconsInListOfEvents (void *Events)
   {
-   bool ICanEdit;
+   Usr_ICan_t ICanEdit;
 
    if (Events)
      {
       /***** Put icon to create a new attendance event *****/
       ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-      if (ICanEdit)
+		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+							    Usr_I_CAN_NOT;
+      if (ICanEdit == Usr_I_CAN)
 	 Att_PutIconToCreateNewEvent ((struct Att_Events *) Events);
 
       /***** Put icon to show attendance list *****/
@@ -1655,9 +1656,9 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
-   bool ICanChangeStdAttendance;
-   bool ICanEditStdComment;
-   bool ICanEditTchComment;
+   Usr_ICan_t ICanChangeStdAttendance;
+   Usr_ICan_t ICanEditStdComment;
+   Usr_ICan_t ICanEditTchComment;
 
    /***** Set who can edit *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1666,24 +1667,25 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 // A student can see only her/his attendance
 	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)
 	    Err_ShowErrorAndExit ("Wrong call.");
-	 ICanChangeStdAttendance = false;
-	 ICanEditStdComment = Event->Open;	// Attendance event is open
-	 ICanEditTchComment = false;
+	 ICanChangeStdAttendance = Usr_I_CAN_NOT;
+	 ICanEditStdComment = Event->Open ? Usr_I_CAN :	// Attendance event is open
+					    Usr_I_CAN_NOT;
+	 ICanEditTchComment = Usr_I_CAN_NOT;
 	 break;
       case Rol_TCH:
-	 ICanChangeStdAttendance = true;
-	 ICanEditStdComment = false;
-	 ICanEditTchComment = true;
+	 ICanChangeStdAttendance = Usr_I_CAN;
+	 ICanEditStdComment = Usr_I_CAN_NOT;
+	 ICanEditTchComment = Usr_I_CAN;
 	 break;
       case Rol_SYS_ADM:
-	 ICanChangeStdAttendance = true;
-	 ICanEditStdComment = false;
-	 ICanEditTchComment = false;
+	 ICanChangeStdAttendance = Usr_I_CAN;
+	 ICanEditStdComment = Usr_I_CAN_NOT;
+	 ICanEditTchComment = Usr_I_CAN_NOT;
 	 break;
       default:
-	 ICanChangeStdAttendance = false;
-	 ICanEditStdComment = false;
-	 ICanEditTchComment = false;
+	 ICanChangeStdAttendance = Usr_I_CAN_NOT;
+	 ICanEditStdComment = Usr_I_CAN_NOT;
+	 ICanEditTchComment = Usr_I_CAN_NOT;
 	 break;
      }
 
@@ -1706,8 +1708,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 			     "id=\"Std%u\" value=\"%s\"%s%s",
 			     NumUsr,UsrDat->EnUsrCod,
 			     Present ? " checked=\"checked\"" : "",
-			     ICanChangeStdAttendance ? "" :
-				                       " disabled=\"disabled\"");
+			     (ICanChangeStdAttendance == Usr_I_CAN) ? "" :
+								      " disabled=\"disabled\"");
       HTM_TD_End ();
 
       /***** Write number of student in the list *****/
@@ -1755,7 +1757,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 				       "DAT_SMALL",
 		    The_GetSuffix (),
 		    The_GetColorRows ());
-	 if (ICanEditStdComment)	// Show with form
+	 if (ICanEditStdComment == Usr_I_CAN)	// Show with form
 	   {
 	    HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
 				" class=\"INPUT_%s\"",
@@ -1778,7 +1780,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 				       "DAT_SMALL",
 		    The_GetSuffix (),
 		    The_GetColorRows ());
-	 if (ICanEditTchComment)		// Show with form
+	 if (ICanEditTchComment == Usr_I_CAN)		// Show with form
 	   {
 	    HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
 				" class=\"INPUT_%s\"",
@@ -1787,7 +1789,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	       HTM_Txt (CommentTch);
 	    HTM_TEXTAREA_End ();
 	   }
-	 else	if (Event->CommentTchVisible)	// Show without form
+	 else if (Event->CommentTchVisible)	// Show without form
 	   {
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			      CommentTch,Cns_MAX_BYTES_TEXT,

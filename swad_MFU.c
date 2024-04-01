@@ -112,7 +112,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
       ActCod = DB_GetNextCode (mysql_res);
       if ((Action = Act_GetActionFromActCod (ActCod)) != ActUnk)
 	 if (Act_GetIndexInMenu (Action) >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
-	    if (Act_CheckIfIHavePermissionToExecuteAction (Action))
+	    if (Act_CheckIfICanExecuteAction (Action) == Usr_I_CAN)
 	       ListMFUActions->Actions[ListMFUActions->NumActions++] = Action;
      }
 
@@ -148,7 +148,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
          if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
             if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
                if (Act_GetTab (Action) == Gbl.Action.Tab)
-                  if (Act_CheckIfIHavePermissionToExecuteAction (Action))
+                  if (Act_CheckIfICanExecuteAction (Action) == Usr_I_CAN)
                     {
                      MoreRecentActionInCurrentTab = Action;
                      break;

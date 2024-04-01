@@ -264,7 +264,7 @@ static void API_CopyListUsers (struct soap *soap,
 			       struct swad__getUsersOutput *getUsersOut);
 static void API_CopyUsrData (struct soap *soap,
 			     struct swad__user *Usr,struct Usr_Data *UsrDat,
-			     bool UsrIDIsVisible);
+			     Usr_ICan_t ICanSeeUsrID);
 
 static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
 						    long AttCod,char **ListGroups);
@@ -1743,7 +1743,7 @@ static void API_CopyListUsers (struct soap *soap,
    unsigned NumUsrs;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
-   bool ICanSeeUsrID;
+   Usr_ICan_t ICanSeeUsrID;
 
    /***** Initialize result *****/
    getUsersOut->numUsers = 0;
@@ -1772,7 +1772,7 @@ static void API_CopyListUsers (struct soap *soap,
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
-         ICanSeeUsrID = (ID_ICanSeeOtherUsrIDs (&UsrDat) == Usr_I_CAN);
+         ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (&UsrDat);
 
 	 /* Get nickname */
          Nck_DB_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);
@@ -2191,7 +2191,7 @@ int swad__sendMyGroups (struct soap *soap,
 
 static void API_CopyUsrData (struct soap *soap,
 			     struct swad__user *Usr,struct Usr_Data *UsrDat,
-			     bool UsrIDIsVisible)
+			     Usr_ICan_t ICanSeeUsrID)
   {
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    const char *FirstID;
@@ -2206,7 +2206,7 @@ static void API_CopyUsrData (struct soap *soap,
    Str_Copy (Usr->userNickname,UsrDat->Nickname,Length);
 
    /* Copy user's first ID */
-   if (UsrIDIsVisible && UsrDat->IDs.List)
+   if (ICanSeeUsrID == Usr_I_CAN && UsrDat->IDs.List)
       FirstID = UsrDat->IDs.List[0].ID;
    else	// Hide user's ID
       FirstID = "********";
@@ -3262,7 +3262,7 @@ int swad__sendMessage (struct soap *soap,
 	       API_CopyUsrData (soap,
 				&(sendMessageOut->usersArray.__ptr[NumUsr]),
 				&Gbl.Usrs.Other.UsrDat,
-				false);
+				Usr_I_CAN_NOT);
 	      }
 	}
      }
