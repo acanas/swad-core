@@ -7261,7 +7261,7 @@ void Brw_ShowFileMetadata (void)
    Usr_ICan_t ICanView = Usr_I_CAN_NOT;
    bool IAmTheOwner;
    Usr_ICan_t ICanEdit;
-   bool ICanChangePublic = false;
+   Usr_ICan_t ICanChangePublic = Usr_I_CAN_NOT;
    bool FileHasPublisher;
    Brw_License_t License;
    unsigned LicenseUnsigned;
@@ -7379,10 +7379,10 @@ void Brw_ShowFileMetadata (void)
 	       case Brw_ADMI_SHR_DEG:
 	       case Brw_ADMI_DOC_CRS:
 	       case Brw_ADMI_SHR_CRS:
-		  ICanChangePublic = true;
+		  ICanChangePublic = Usr_I_CAN;
 		  break;
 	       default:
-		  ICanChangePublic = false;
+		  ICanChangePublic = Usr_I_CAN_NOT;
 		  break;
 	      }
 
@@ -7476,14 +7476,14 @@ void Brw_ShowFileMetadata (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT",ICanChangePublic ? "PublicFile" :
-							NULL,
+	       Frm_LabelColumn ("RT",ICanChangePublic == Usr_I_CAN ? "PublicFile" :
+							             NULL,
 				Txt_Availability);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
 			     The_GetSuffix ());
-		  if (ICanChangePublic)	// I can change file to public
+		  if (ICanChangePublic == Usr_I_CAN)	// I can change file to public
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");

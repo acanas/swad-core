@@ -527,7 +527,8 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
    MYSQL_RES *mysql_res;
    unsigned MaxCriInd;
    unsigned NumCriteria;
-   bool ICanEditCriteria = Rub_CheckIfEditable ();
+   Usr_ICan_t ICanEditCriteria = Rub_CheckIfEditable () ? Usr_I_CAN :
+							  Usr_I_CAN_NOT;
 
    /***** Get maximum criterion index *****/
    MaxCriInd = Rub_DB_GetMaxCriterionIndexInRubric (Rubrics->Rubric.RubCod);
@@ -546,7 +547,7 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
 						 NumCriteria,mysql_res);
 
       /***** Put forms to create/edit a criterion *****/
-      if (ICanEditCriteria)
+      if (ICanEditCriteria == Usr_I_CAN)
 	 RubCri_PutFormNewCriterion (Rubrics,MaxCriInd);
 
    /***** End box *****/

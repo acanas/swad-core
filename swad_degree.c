@@ -466,7 +466,8 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Degree status */
-	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM,
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Usr_I_CAN :
+										  Usr_I_CAN_NOT,
 	                                 Deg->Status,ActChgDegSta,Deg->HieCod,
 	                                 Txt_DEGREE_STATUS);
 

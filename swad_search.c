@@ -74,7 +74,7 @@ static struct Sch_Search Sch_Search =
 /*****************************************************************************/
 
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScope);
-static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch);
+static Usr_ICan_t Sch_CheckIfICanSearch (Sch_WhatToSearch_t WhatToSearch);
 static void Sch_GetParSearchStr (void);
 static void Sch_SearchInDB (void);
 
@@ -190,7 +190,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 		  for (WhatToSearch  = (Sch_WhatToSearch_t) 0;
 		       WhatToSearch <= (Sch_WhatToSearch_t) (Sch_NUM_WHAT_TO_SEARCH - 1);
 		       WhatToSearch++)
-		     if (Sch_CheckIfIHavePermissionToSearch (WhatToSearch))
+		     if (Sch_CheckIfICanSearch (WhatToSearch) == Usr_I_CAN)
 		       {
 			WTS = (unsigned) WhatToSearch;
 			HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
@@ -222,7 +222,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 /************* Check if I have permission to execute an action ***************/
 /*****************************************************************************/
 
-static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
+static Usr_ICan_t Sch_CheckIfICanSearch (Sch_WhatToSearch_t WhatToSearch)
   {
    static unsigned Permissions[Sch_NUM_WHAT_TO_SEARCH] =
      {
@@ -242,7 +242,8 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
       [Sch_SEARCH_MY_DOCUMENTS       ] = 0x3FE,	// Only if I am logged
      };
 
-   return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.Role.Logged));
+   return (Permissions[WhatToSearch] & (1 << Gbl.Usrs.Me.Role.Logged)) ? Usr_I_CAN :
+									 Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -488,7 +489,7 @@ static unsigned Sch_SearchCountrsInDB (const char *RangeQuery)
        Gbl.Scope.Current != Hie_DEG &&
        Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
-      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COUNTRIES))
+      if (Sch_CheckIfICanSearch (Sch_SEARCH_COUNTRIES) == Usr_I_CAN)
 	{
 	 /***** Split countries string into words *****/
 	 snprintf (FldName,sizeof (FldName),"Name_%s",
@@ -523,7 +524,7 @@ static unsigned Sch_SearchInstitsInDB (const char *RangeQuery)
        Gbl.Scope.Current != Hie_DEG &&
        Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
-      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_INSTITS))
+      if (Sch_CheckIfICanSearch (Sch_SEARCH_INSTITS) == Usr_I_CAN)
 	 /***** Split institutions string into words *****/
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
 	                           "ins_instits.FullName",NULL,NULL))
@@ -552,7 +553,7 @@ static unsigned Sch_SearchCentersInDB (const char *RangeQuery)
    if (Gbl.Scope.Current != Hie_DEG &&
        Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
-      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_CENTERS))
+      if (Sch_CheckIfICanSearch (Sch_SEARCH_CENTERS) == Usr_I_CAN)
 	 /***** Split center string into words *****/
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
 	                           "ctr_centers.FullName",NULL,NULL))
@@ -580,7 +581,7 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
    /***** Check scope *****/
    if (Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
-      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DEGREES))
+      if (Sch_CheckIfICanSearch (Sch_SEARCH_DEGREES) == Usr_I_CAN)
 	 /***** Split degree string into words *****/
 	 if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
 	                           "deg_degrees.FullName",NULL,NULL))
@@ -606,7 +607,7 @@ static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
    unsigned NumCrss;
 
    /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COURSES))
+   if (Sch_CheckIfICanSearch (Sch_SEARCH_COURSES) == Usr_I_CAN)
       /***** Split course string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
                                 "crs_courses.FullName",NULL,NULL))
@@ -662,7 +663,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
    unsigned NumDocs;
 
    /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_OPEN_DOCUMENTS))
+   if (Sch_CheckIfICanSearch (Sch_SEARCH_OPEN_DOCUMENTS) == Usr_I_CAN)
       /***** Split document string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
                                 "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
@@ -695,7 +696,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
    unsigned NumDocs;
 
    /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DOCUM_IN_MY_COURSES))
+   if (Sch_CheckIfICanSearch (Sch_SEARCH_DOCUM_IN_MY_COURSES) == Usr_I_CAN)
       /***** Split document string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
                                 "SUBSTRING_INDEX(brw_files.Path,'/',-1)",
@@ -728,7 +729,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
    unsigned NumDocs;
 
    /***** Check user's permission *****/
-   if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_MY_DOCUMENTS))
+   if (Sch_CheckIfICanSearch (Sch_SEARCH_MY_DOCUMENTS) == Usr_I_CAN)
       /***** Split document string into words *****/
       if (Sch_BuildSearchQuery (SearchQuery,Sch_GetSearch (),
                                 "SUBSTRING_INDEX(brw_files.Path,'/',-1)",

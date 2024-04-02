@@ -102,7 +102,7 @@ static void Lnk_EditingLinkDestructor (void);
 
 static Usr_ICan_t Lnk_CheckIfICanEditLinks (void)
   {
-   static bool Lnk_ICanEditLinks[Rol_NUM_ROLES] =
+   static Usr_ICan_t Lnk_ICanEditLinks[Rol_NUM_ROLES] =
      {
       /* Users who can edit */
       [Rol_SYS_ADM] = Usr_I_CAN,

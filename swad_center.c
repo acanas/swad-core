@@ -884,7 +884,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center status */
-	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM,
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Usr_I_CAN :
+										  Usr_I_CAN_NOT,
 	                                 Ctr->Status,ActChgCtrSta,Ctr->HieCod,
                                          Txt_CENTER_STATUS);
 

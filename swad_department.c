@@ -53,11 +53,11 @@
 /****************************** Private constants ****************************/
 /*****************************************************************************/
 
-static bool Dpt_ICanEditDpts[Rol_NUM_ROLES] =
+static Usr_ICan_t Dpt_ICanEditDpts[Rol_NUM_ROLES] =
   {
    /* Users who can edit */
-   [Rol_INS_ADM] = true,
-   [Rol_SYS_ADM] = true,
+   [Rol_INS_ADM] = Usr_I_CAN,
+   [Rol_SYS_ADM] = Usr_I_CAN,
   };
 
 /*****************************************************************************/
@@ -243,7 +243,7 @@ static Dpt_Order_t Dpt_GetParDptOrder (void)
 
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
   {
-   if (Dpt_ICanEditDpts[Gbl.Usrs.Me.Role.Logged])
+   if (Dpt_ICanEditDpts[Gbl.Usrs.Me.Role.Logged] == Usr_I_CAN)
       Ico_PutContextualIconToEdit (ActEdiDpt,NULL,NULL,NULL);
   }
 

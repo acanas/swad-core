@@ -746,7 +746,7 @@ void Hie_WriteStatusCell (Hie_Status_t Status,
    HTM_TD_End ();
   }
 
-void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
+void Hie_WriteStatusCellEditable (Usr_ICan_t ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT])
   {
@@ -755,7 +755,7 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-      if (ICanEdit && StatusTxt == Hie_STATUS_PENDING)
+      if (ICanEdit == Usr_I_CAN && StatusTxt == Hie_STATUS_PENDING)
 	{
 	 /* Begin form */
 	 Frm_BeginForm (NextAction);

@@ -70,11 +70,11 @@ extern struct Globals Gbl;
 
 void Rol_SetMyRoles (void)
   {
-   bool ICanBeAdm[Hie_NUM_LEVELS] =
+   Usr_ICan_t ICanBeAdm[Hie_NUM_LEVELS] =
      {
-      [Hie_INS] = false,
-      [Hie_CTR] = false,
-      [Hie_DEG] = false,
+      [Hie_INS] = Usr_I_CAN_NOT,
+      [Hie_CTR] = Usr_I_CAN_NOT,
+      [Hie_DEG] = Usr_I_CAN_NOT,
      };
 
    /***** Get my role in current course if not yet filled *****/
@@ -109,16 +109,19 @@ void Rol_SetMyRoles (void)
      {
       /* Check if I am and administrator of current institution */
       ICanBeAdm[Hie_INS] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Hie_INS);
+						   Hie_INS) ? Usr_I_CAN :
+							      Usr_I_CAN_NOT;
       if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
 	 /* Check if I am and administrator of current center */
 	 ICanBeAdm[Hie_CTR] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Hie_CTR);
+						      Hie_CTR) ? Usr_I_CAN :
+							         Usr_I_CAN_NOT;
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	    /* Check if I am and administrator of current degree */
 	    ICanBeAdm[Hie_DEG] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							 Hie_DEG);
+							 Hie_DEG) ? Usr_I_CAN :
+							            Usr_I_CAN_NOT;
 	}
      }
 
@@ -185,11 +188,11 @@ void Rol_SetMyRoles (void)
    else
       Gbl.Usrs.Me.Role.Available = (1 << Rol_GST);
 
-   if (ICanBeAdm[Hie_INS])
+   if (ICanBeAdm[Hie_INS] == Usr_I_CAN)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_INS_ADM);
-   if (ICanBeAdm[Hie_CTR])
+   if (ICanBeAdm[Hie_CTR] == Usr_I_CAN)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_CTR_ADM);
-   if (ICanBeAdm[Hie_DEG])
+   if (ICanBeAdm[Hie_DEG] == Usr_I_CAN)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_DEG_ADM);
    if (Usr_CheckIfUsrIsSuperuser (Gbl.Usrs.Me.UsrDat.UsrCod))
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_SYS_ADM);

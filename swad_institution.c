@@ -995,7 +995,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution status */
-	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM,
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_I_CAN :
+										  Usr_I_CAN_NOT,
 	                                 Ins->Status,ActChgInsSta,Ins->HieCod,
 	                                 Txt_INSTITUTION_STATUS);
 

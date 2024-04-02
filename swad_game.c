@@ -348,10 +348,10 @@ static void Gam_ListAllGamesHeading (const struct Gam_Games *Games)
 
 static Usr_ICan_t Gam_CheckIfICanEditGames (void)
   {
-   static bool ICanEditGames[Rol_NUM_ROLES] =
+   static Usr_ICan_t ICanEditGames[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_TCH    ] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return ICanEditGames[Gbl.Usrs.Me.Role.Logged];

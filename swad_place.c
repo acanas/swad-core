@@ -61,7 +61,7 @@ static struct Plc_Place *Plc_EditingPlc = NULL;	// Static variable to keep the p
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static bool Plc_CheckIfICanEditPlaces (void);
+static Usr_ICan_t Plc_CheckIfICanEditPlaces (void);
 
 static Plc_Order_t Plc_GetParPlcOrder (void);
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args);
@@ -86,13 +86,13 @@ static void Plc_EditingPlaceDestructor (void);
 /************************* Check if I can edit places ************************/
 /*****************************************************************************/
 
-static bool Plc_CheckIfICanEditPlaces (void)
+static Usr_ICan_t Plc_CheckIfICanEditPlaces (void)
   {
-   static bool Plc_ICanEditPlaces[Rol_NUM_ROLES] =
+   static Usr_ICan_t Plc_ICanEditPlaces[Rol_NUM_ROLES] =
      {
       /* Users who can edit */
-      [Rol_INS_ADM] = true,
-      [Rol_SYS_ADM] = true,
+      [Rol_INS_ADM] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_I_CAN,
      };
 
    return Plc_ICanEditPlaces[Gbl.Usrs.Me.Role.Logged];
@@ -238,7 +238,7 @@ static Plc_Order_t Plc_GetParPlcOrder (void)
 static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit places *****/
-   if (Plc_CheckIfICanEditPlaces ())
+   if (Plc_CheckIfICanEditPlaces () == Usr_I_CAN)
       Plc_PutIconToEditPlaces ();
   }
 

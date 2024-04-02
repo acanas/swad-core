@@ -1666,11 +1666,11 @@ void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language)
 /**************** Check if I can see another user's email ********************/
 /*****************************************************************************/
 
-bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
+Usr_ICan_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
   {
    /***** I can see my email *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return true;
+      return Usr_I_CAN;
 
    /***** Check if I have permission to see another user's email *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1678,37 +1678,42 @@ bool Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
       case Rol_STD:
 	 /* If I am a student in the current course,
 	    I can see the email of confirmed teachers */
-	 return (UsrDat->Roles.InCurrentCrs == Rol_NET ||	// A non-editing teacher
-	         UsrDat->Roles.InCurrentCrs == Rol_TCH) &&	// or a teacher
-	         UsrDat->Accepted;				// who accepted registration
+	 return ((UsrDat->Roles.InCurrentCrs == Rol_NET ||	// A non-editing teacher
+	          UsrDat->Roles.InCurrentCrs == Rol_TCH) &&	// or a teacher
+	          UsrDat->Accepted) ? Usr_I_CAN :		// who accepted registration
+	        		      Usr_I_CAN_NOT;
       case Rol_NET:
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
-         return Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
-	        UsrDat->Accepted;				// who accepted registration
+         return (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
+	         UsrDat->Accepted) ? Usr_I_CAN :		// who accepted registration
+				     Usr_I_CAN_NOT;
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
 	 return Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
 	                                 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-	                                 true);	// count only accepted courses
+	                                 true) ? Usr_I_CAN :	// count only accepted courses
+	                                	 Usr_I_CAN_NOT;
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can see the user's email of users from current center */
 	 return Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
 	                                 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-	                                 true);	// count only accepted courses
+	                                 true) ? Usr_I_CAN :	// count only accepted courses
+	                                	 Usr_I_CAN_NOT;
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
 	 return Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
 	                                 Gbl.Hierarchy.Node[Hie_INS].HieCod,
-	                                 true);	// count only accepted courses
+	                                 true) ? Usr_I_CAN :	// count only accepted courses
+	                                	 Usr_I_CAN_NOT;
       case Rol_SYS_ADM:
-	 return true;
+	 return Usr_I_CAN;
       default:
-	 return false;
+	 return Usr_I_CAN_NOT;
      }
   }
 

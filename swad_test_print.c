@@ -2087,27 +2087,29 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
                                          double TotalScore)
   {
    extern const char *Txt_Visible_tests;
-   bool ICanViewTotalScore;
+   Usr_ICan_t ICanViewTotalScore;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanViewTotalScore = MeOrOther == Usr_ME &&
-		              TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ());
+	 ICanViewTotalScore = (MeOrOther == Usr_ME &&
+		               TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ())) ? Usr_I_CAN :
+		        								     Usr_I_CAN_NOT;
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
-	 ICanViewTotalScore = MeOrOther == Usr_ME ||
-			      NumPrints;
+	 ICanViewTotalScore = (MeOrOther == Usr_ME ||
+			       NumPrints) ? Usr_I_CAN :
+		        		    Usr_I_CAN_NOT;
 	 break;
       case Rol_SYS_ADM:
-	 ICanViewTotalScore = true;
+	 ICanViewTotalScore = Usr_I_CAN;
 	 break;
       default:
-	 ICanViewTotalScore = false;
+	 ICanViewTotalScore = Usr_I_CAN_NOT;
 	 break;
      }
 
@@ -2151,7 +2153,7 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_GetSuffix (),
                     The_GetColorRows ());
-	 if (ICanViewTotalScore)
+	 if (ICanViewTotalScore == Usr_I_CAN)
 	   {
 	    HTM_Double2Decimals (TotalScore);
 	    HTM_Txt ("/");
@@ -2163,7 +2165,7 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
                     The_GetSuffix (),
                     The_GetColorRows ());
-	 if (ICanViewTotalScore)
+	 if (ICanViewTotalScore == Usr_I_CAN)
 	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore / (double) NumTotalQsts->All :
 						     0.0);
       HTM_TD_End ();
@@ -2172,7 +2174,7 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
       HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_GetSuffix (),
                     The_GetColorRows ());
-	 if (ICanViewTotalScore)
+	 if (ICanViewTotalScore == Usr_I_CAN)
 	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
       HTM_TD_End ();
 

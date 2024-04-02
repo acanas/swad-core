@@ -186,8 +186,9 @@ void Inf_ShowInfo (void)
    struct Syl_Syllabus Syllabus;
    struct Inf_FromDB FromDB;
    bool Disabled;
-   bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   Usr_ICan_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+                        					    Usr_I_CAN_NOT;
    bool ShowWarningNoInfo = false;
    const char *Help[Inf_NUM_TYPES] =
      {
@@ -244,10 +245,10 @@ void Inf_ShowInfo (void)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 ICanEdit ? Inf_PutIconToEditInfo :
-			    NULL,
-		 ICanEdit ? &Gbl.Crs.Info.Type :
-			    NULL,
+		 (ICanEdit == Usr_I_CAN) ? Inf_PutIconToEditInfo :
+					   NULL,
+		 (ICanEdit == Usr_I_CAN) ? &Gbl.Crs.Info.Type :
+					   NULL,
 		 Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
       /****** Form to select syllabus *****/

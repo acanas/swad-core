@@ -1337,7 +1337,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
-   bool Visible = (Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat) == Usr_I_CAN);
+   Usr_ICan_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
 
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		 Class[MeOrOther],
@@ -1348,7 +1348,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 
    /***** Check if I can see the public profile *****/
    HTM_TD_Begin ("class=\"RANK_PHOTO %s\"",The_GetColorRows ());
-      if (Visible)
+      if (ICanView == Usr_I_CAN)
 	 /***** User's photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
@@ -1359,7 +1359,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
                  Class[MeOrOther],
 	         The_GetSuffix (),
                  The_GetColorRows ());
-      if (Visible)
+      if (ICanView == Usr_I_CAN)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);

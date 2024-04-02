@@ -54,7 +54,7 @@ Usr_ICan_t Hie_CheckIfICanEdit (void);
 void Hie_WriteStatusCell (Hie_Status_t Status,
 			  const char *Class,const char *BgColor,
 			  const char *Txt[Hie_NUM_STATUS_TXT]);
-void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
+void Hie_WriteStatusCellEditable (Usr_ICan_t ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT]);
 Hie_Status_t Hie_GetParStatus (void);

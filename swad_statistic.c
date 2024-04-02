@@ -791,7 +791,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1];
    unsigned NumDays;
-   bool ICanQueryWholeRange;
+   Usr_ICan_t ICanQueryWholeRange;
    unsigned NumUsrsInList = 0;
    long *LstSelectedUsrCods = NULL;
 
@@ -932,19 +932,21 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
                                          Dat_GetRangeDate (Dat_END_TIME));
-   ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == Hie_CRS)  ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Hie_DEG   ||
-			                                             Gbl.Scope.Current == Hie_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Hie_CTR   ||
-			                                             Gbl.Scope.Current == Hie_DEG   ||
-			                                             Gbl.Scope.Current == Hie_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Hie_INS   ||
-			                                             Gbl.Scope.Current == Hie_CTR   ||
-			                                             Gbl.Scope.Current == Hie_DEG   ||
-			                                             Gbl.Scope.Current == Hie_CRS)) ||
-			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-   if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
+   ICanQueryWholeRange = ((Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == Hie_CRS)  ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Hie_DEG   ||
+			                                              Gbl.Scope.Current == Hie_CRS)) ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Hie_CTR   ||
+			                                              Gbl.Scope.Current == Hie_DEG   ||
+			                                              Gbl.Scope.Current == Hie_CRS)) ||
+			  (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Hie_INS   ||
+			                                              Gbl.Scope.Current == Hie_CTR   ||
+			                                              Gbl.Scope.Current == Hie_DEG   ||
+			                                              Gbl.Scope.Current == Hie_CRS)) ||
+			   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+								     Usr_I_CAN_NOT;
+   if (ICanQueryWholeRange == Usr_I_CAN_NOT &&
+       NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
       /* ...write warning message and show the form again */
       Ale_ShowAlert (Ale_WARNING,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,

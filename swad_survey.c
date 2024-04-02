@@ -1738,7 +1738,7 @@ void Svy_ReqCreatOrEditSvy (void)
 
 static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
   {
-   bool ICanEdit = false;
+   Usr_ICan_t ICanEdit = Usr_I_CAN_NOT;
 
    /***** Set allowed scopes *****/
    Gbl.Scope.Allowed = 0;
@@ -1753,7 +1753,7 @@ static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 	    if (Svy->Level == Hie_CRS)
 	      {
 	       Gbl.Scope.Allowed = 1 << Hie_CRS;
-	       ICanEdit = true;
+	       ICanEdit = Usr_I_CAN;
 	      }
 	   }
          break;
@@ -1763,7 +1763,7 @@ static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 	 if (Svy->Level == Hie_DEG)
 	   {
 	    Gbl.Scope.Allowed = 1 << Hie_DEG;
-	    ICanEdit = true;
+	    ICanEdit = Usr_I_CAN;
 	   }
          break;
       case Rol_CTR_ADM:	// Center admins only can edit center surveys
@@ -1772,7 +1772,7 @@ static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 	 if (Svy->Level == Hie_CTR)
 	   {
 	    Gbl.Scope.Allowed = 1 << Hie_CTR;
-	    ICanEdit = true;
+	    ICanEdit = Usr_I_CAN;
 	   }
          break;
       case Rol_INS_ADM:	// Institution admins only can edit institution surveys
@@ -1781,7 +1781,7 @@ static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 	 if (Svy->Level == Hie_INS)
 	   {
 	    Gbl.Scope.Allowed = 1 << Hie_INS;
-	    ICanEdit = true;
+	    ICanEdit = Usr_I_CAN;
 	   }
          break;
       case Rol_SYS_ADM:// System admins can edit any survey
@@ -1795,13 +1795,13 @@ static void Svy_SetAllowedScopes (struct Svy_Survey *Svy)
 	                     1 << Hie_CTR |
                              1 << Hie_DEG |
                              1 << Hie_CRS;
-	 ICanEdit = true;
+	 ICanEdit = Usr_I_CAN;
 	 break;
       default:
 	 break;
      }
 
-   if (!ICanEdit)
+   if (ICanEdit == Usr_I_CAN_NOT)
       Err_NoPermissionExit ();
   }
 

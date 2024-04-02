@@ -1575,13 +1575,13 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       [Rec_CRS_PRINT_ONE_RECORD          ] = NULL,
       [Rec_CRS_PRINT_SEVERAL_RECORDS     ] = NULL,
      };
-   bool ICanEdit = false;
+   Usr_ICan_t ICanEdit = Usr_I_CAN_NOT;
    unsigned NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row = NULL; // Initialized to avoid warning
    bool ShowField;
    bool ThisFieldHasText;
-   bool ICanEditThisField;
+   Usr_ICan_t ICanEditThisField;
    char Text[Cns_MAX_BYTES_TEXT + 1];
 
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1614,7 +1614,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		 NumField++)
 	       if (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
 		 {
-		  ICanEdit = true;
+		  ICanEdit = Usr_I_CAN;
 		  Frm_BeginForm (ActRcvRecCrs);
 		  break;
 		 }
@@ -1626,7 +1626,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	 if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 	     TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 	   {
-	    ICanEdit = true;
+	    ICanEdit = Usr_I_CAN;
 	    Frm_BeginFormAnchor (ActRcvRecOthUsr,Anchor);
 	       ParCod_PutPar (ParCod_OrgAct,Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -1682,15 +1682,17 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	      {
 	       case Rol_STD:
 		  ICanEditThisField = (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
-				       Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
+				       Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD) ? Usr_I_CAN :
+														   Usr_I_CAN_NOT;
 		  break;
 	       case Rol_TCH:
 	       case Rol_SYS_ADM:
 		  ICanEditThisField = (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
-				       TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS);
+				       TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS) ? Usr_I_CAN :
+										     Usr_I_CAN_NOT;
 		  break;
 	       default:
-		  ICanEditThisField = false;
+		  ICanEditThisField = Usr_I_CAN_NOT;
 		  break;
 	      }
 
@@ -1698,8 +1700,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"REC_C1_BOT %s_%s RT %s\"",
-			     ICanEditThisField ? "FORM_IN" :
-						 "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			     ICanEditThisField == Usr_I_CAN ? "FORM_IN" :
+							      "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			     The_GetSuffix (),
 			     The_GetColorRows ());
 		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
@@ -1731,7 +1733,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s %s\"",
 	                     The_GetSuffix (),
 	                     The_GetColorRows ());
-		  if (ICanEditThisField)	// Show with form
+		  if (ICanEditThisField == Usr_I_CAN)	// Show with form
 		    {
 		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
 					 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
@@ -1765,7 +1767,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	}
 
    /***** End box *****/
-   if (ICanEdit)
+   if (ICanEdit == Usr_I_CAN)
      {
       /* End table, send button and end box */
       Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
@@ -2681,7 +2683,7 @@ static void Rec_ShowEmail (struct Usr_Data *UsrDat)
                     The_GetSuffix ());
 	 if (UsrDat->Email[0])
 	   {
-	    if (Mai_ICanSeeOtherUsrEmail (UsrDat))
+	    if (Mai_ICanSeeOtherUsrEmail (UsrDat) == Usr_I_CAN)
 	      {
 	       HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_STRONG_%s\"",
 			    UsrDat->Email,The_GetSuffix ());

@@ -308,11 +308,12 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
   {
    unsigned NumID;
-   bool ICanSeeUsrID     = (ID_ICanSeeOtherUsrIDs (UsrDat) == Usr_I_CAN);
-   bool ICanConfirmUsrID = ICanSeeUsrID &&
-			   Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
-			   !Frm_CheckIfInside () &&					// Not inside another form
-			   Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB;	// Only in main browser tab
+   Usr_ICan_t ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (UsrDat);
+   Usr_ICan_t ICanConfirmUsrID = (ICanSeeUsrID == Usr_I_CAN &&
+				  Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
+				  !Frm_CheckIfInside () &&					// Not inside another form
+				  Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB) ? Usr_I_CAN :	// Only in main browser tab
+										       Usr_I_CAN_NOT;
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;
@@ -327,14 +328,14 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
 	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
 						          "USR_ID_NC",
 		      The_GetSuffix ());
-	 if (ICanSeeUsrID)
+	 if (ICanSeeUsrID == Usr_I_CAN)
 	    HTM_Txt (UsrDat->IDs.List[NumID].ID);
 	 else
 	    HTM_Txt ("********");
       HTM_SPAN_End ();
 
       /* Put link to confirm ID? */
-      if (ICanConfirmUsrID && !UsrDat->IDs.List[NumID].Confirmed)
+      if (ICanConfirmUsrID == Usr_I_CAN && !UsrDat->IDs.List[NumID].Confirmed)
 	 ID_PutLinkToConfirmID (UsrDat,NumID,Anchor);
      }
   }
@@ -719,7 +720,7 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
-   bool ICanRemove;
+   Usr_ICan_t ICanRemove;
 
    if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
      {
@@ -730,21 +731,22 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
       Str_ConvertToUpperText (UsrID);
 
       if (UsrDat->IDs.Num < 2)	// One unique ID
-	 ICanRemove = false;
+	 ICanRemove = Usr_I_CAN_NOT;
       else
 	 switch (MeOrOther)
 	   {
 	    case Usr_ME:
 	       // I can remove my ID only if it is not confirmed
-	       ICanRemove = !ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID);
+	       ICanRemove = ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID) ? Usr_I_CAN_NOT :
+									    Usr_I_CAN;
 	       break;
 	    case Usr_OTHER:
 	    default:
-	       ICanRemove = true;
+	       ICanRemove = Usr_I_CAN;
 	       break;
 	   }
 
-      if (ICanRemove)
+      if (ICanRemove == Usr_I_CAN)
 	{
 	 /***** Remove one of the user's IDs *****/
 	 ID_DB_RemoveUsrID (UsrDat->UsrCod,UsrID);
@@ -892,7 +894,7 @@ void ID_ConfirmOtherUsrID (void)
    extern const char *Txt_ID_X_had_already_been_confirmed;
    extern const char *Txt_The_ID_X_has_been_confirmed;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
-   bool ICanConfirm;
+   Usr_ICan_t ICanConfirm;
    bool Found;
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
@@ -901,7 +903,7 @@ void ID_ConfirmOtherUsrID (void)
    Gbl.Action.Original = Act_GetActionFromActCod (ParCod_GetPar (ParCod_OrgAct));
 
    /***** Get other user's code from form and get user's data *****/
-   ICanConfirm = false;
+   ICanConfirm = Usr_I_CAN_NOT;
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)	// Not me
         {
@@ -912,10 +914,10 @@ void ID_ConfirmOtherUsrID (void)
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
-	    ICanConfirm = true;
+	    ICanConfirm = Usr_I_CAN;
         }
 
-   if (ICanConfirm)
+   if (ICanConfirm == Usr_I_CAN)
      {
       /***** Get user's ID from form *****/
       Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);

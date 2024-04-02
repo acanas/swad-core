@@ -234,8 +234,8 @@ static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
 static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
-                                                    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
-static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+                                                    Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+static void Usr_PutOptionsListUsrs (const Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
@@ -2622,23 +2622,23 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct Usr_Data *UsrDat,
 
 static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
   {
-   bool ShowEmail;
+   Usr_ICan_t ShowEmail;
    char MailLink[7 + Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// mailto:mail_address
 
    if (UsrDat->Email[0])
      {
       ShowEmail = Mai_ICanSeeOtherUsrEmail (UsrDat);
-      if (ShowEmail)
+      if (ShowEmail == Usr_I_CAN)
          snprintf (MailLink,sizeof (MailLink),"mailto:%s",UsrDat->Email);
      }
    else
-      ShowEmail = false;
+      ShowEmail = Usr_I_CAN_NOT;
    Usr_WriteUsrData (BgColor,
-                     UsrDat->Email[0] ? (ShowEmail ? UsrDat->Email :
-                	                             "********") :
+                     UsrDat->Email[0] ? (ShowEmail == Usr_I_CAN ? UsrDat->Email :
+                						  "********") :
                 	                "&nbsp;",
-                     ShowEmail ? MailLink :
-                	         NULL,
+                     ShowEmail == Usr_I_CAN ? MailLink :
+                			      NULL,
                      true,UsrDat->Accepted);
   }
 
@@ -5022,7 +5022,7 @@ void Usr_SeeGuests (void)
    extern const char *Hlp_USERS_Guests;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
    /***** Contextual menu *****/
@@ -5142,7 +5142,7 @@ void Usr_SeeStudents (void)
    extern const char *Hlp_USERS_Students;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
    /***** Put contextual links *****/
@@ -5301,7 +5301,7 @@ void Usr_SeeTeachers (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    unsigned NumUsrs;
-   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
    /***** Put contextual links *****/
@@ -5477,7 +5477,7 @@ void Usr_SeeTeachers (void)
 // Returns true if any option is allowed
 
 static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
-                                                    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+                                                    Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    Usr_ListUsrsOption_t Opt;
 
@@ -5486,13 +5486,14 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
-      ICanChooseOption[Opt] = false;
+      ICanChooseOption[Opt] = Usr_I_CAN_NOT;
 
    /* Activate some options depending on users' role, on my role, etc. */
    switch (UsrsRole)
      {
       case Rol_GST:
-	 ICanChooseOption[Usr_OPTION_RECORDS]    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanChooseOption[Usr_OPTION_RECORDS]    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
+											      Usr_I_CAN_NOT;
 	 break;
       case Rol_STD:
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
@@ -5502,14 +5503,16 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
+											        Usr_I_CAN_NOT;
 
          ICanChooseOption[Usr_OPTION_HOMEWORK]   =
          ICanChooseOption[Usr_OPTION_ATTENDANCE] =
          ICanChooseOption[Usr_OPTION_EMAIL]      = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
+											        Usr_I_CAN_NOT;
 	 break;
       case Rol_TCH:
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
@@ -5520,11 +5523,13 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
+											        Usr_I_CAN_NOT;
          ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
+											        Usr_I_CAN_NOT;
 	 break;
       default:
 	 return Frm_DONT_PUT_FORM;
@@ -5534,7 +5539,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
-      if (ICanChooseOption[Opt])
+      if (ICanChooseOption[Opt] == Usr_I_CAN)
 	 return Frm_PUT_FORM;
 
    return Frm_DONT_PUT_FORM;
@@ -5545,7 +5550,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 /*****************************************************************************/
 // Returns true if at least one action can be shown
 
-static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+static void Usr_PutOptionsListUsrs (const Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    extern const char *Txt_View_records;
    extern const char *Txt_View_homework;
@@ -5579,7 +5584,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
       for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	   Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	   Opt++)
-	 if (ICanChooseOption[Opt])
+	 if (ICanChooseOption[Opt] == Usr_I_CAN)
 	    Usr_ShowOneListUsrsOption (Opt,*Label[Opt]);
 
    /* End list of options */

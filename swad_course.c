@@ -773,7 +773,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course status */
-	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM,
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ? Usr_I_CAN :
+										  Usr_I_CAN_NOT,
 	                                 Crs->Status,ActChgCrsSta,Crs->HieCod,
 	                                 Txt_COURSE_STATUS);
 
