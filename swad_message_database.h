@@ -70,7 +70,7 @@ unsigned Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod);
 unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted);
 bool Msg_DB_GetStatusOfSntMsg (long MsgCod);
 void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
-                               bool *Open,bool *Replied,bool *Expanded);
+                               CloOpe_ClosedOrOpen_t *Open,bool *Replied,bool *Expanded);
 bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod);
 bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod);
 long Msg_DB_GetSender (long MsgCod);

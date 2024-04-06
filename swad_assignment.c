@@ -511,16 +511,16 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	    case Vie_VIEW:
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			     Id,
-			     Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-						     HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			     Assignments->Asg.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
+								    HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
 			     The_GetSuffix (),
 			     The_GetColorRows ());
 	       break;
 	    case Vie_PRINT:
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			     Id,
-			     Assignments->Asg.Open ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-						     HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			     Assignments->Asg.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
+								    HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
 			     The_GetSuffix ());
 	       break;
 	    default:
@@ -659,7 +659,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
    extern const char *Txt_Folder;
    Act_Action_t NextAction;
    bool ICanSendFiles = Asg->HiddenOrVisible == HidVis_VISIBLE &&	// It's visible (not hidden)
-                        Asg->Open &&					// It's open (inside dates)
+                        Asg->Open == CloOpe_OPEN &&			// It's open (inside dates)
                         Asg->IBelongToCrsOrGrps;			// I belong to course or groups
 
    /***** Folder icon *****/
@@ -933,7 +933,8 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
       Asg->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
-      Asg->Open = (row[5][0] == '1');
+      Asg->Open = (row[5][0] == '1') ? CloOpe_OPEN :
+				       CloOpe_CLOSED;
 
       /* Get the title (row[6]) and the folder (row[7]) of the assignment  */
       Str_Copy (Asg->Title ,row[6],sizeof (Asg->Title ) - 1);
@@ -961,7 +962,7 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
    Asg->UsrCod = -1L;
    Asg->TimeUTC[Dat_STR_TIME] =
    Asg->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Asg->Open = false;
+   Asg->Open = CloOpe_CLOSED;
    Asg->Title[0] = '\0';
    Asg->SendWork = Asg_DO_NOT_SEND_WORK;
    Asg->Folder[0] = '\0';
@@ -1184,7 +1185,7 @@ void Asg_ReqCreatOrEditAsg (void)
       Assignments.Asg.AsgCod = -1L;
       Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
       Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-      Assignments.Asg.Open = true;
+      Assignments.Asg.Open = CloOpe_OPEN;
       Assignments.Asg.Title[0] = '\0';
       Assignments.Asg.SendWork = Asg_DO_NOT_SEND_WORK;
       Assignments.Asg.Folder[0] = '\0';
@@ -1661,8 +1662,8 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
 
    /***** Begin table cell *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"RM %s_%s %s\"",
-		 Asg->Open ? "ASG_LST_DATE_GREEN" :
-			     "ASG_LST_DATE_RED",
+		 Asg->Open == CloOpe_OPEN ? "ASG_LST_DATE_GREEN" :
+					    "ASG_LST_DATE_RED",
 		 The_GetSuffix (),
 		 The_GetColorRows ());
 
@@ -1724,8 +1725,9 @@ Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
      {
       case Rol_STD:			// Students...
       case Rol_NET:			// ...and non-editing teachers...
-	 return Asg->Open ? Usr_I_CAN :	// ...can create inside open assignments
-			    Usr_I_CAN_NOT;
+					// ...can create inside open assignments
+	 return (Asg->Open == CloOpe_OPEN) ? Usr_I_CAN :
+					     Usr_I_CAN_NOT;
       case Rol_TCH:			// Teachers...
 	 return Usr_I_CAN;		// ...can create inside open or closed assignments
       default:

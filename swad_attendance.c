@@ -467,14 +467,14 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 if (ShowOnlyThisAttEventComplete)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			  Id,
-			  Events->Event.Open ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
-					       HidVis_DateRedClass[Events->Event.HiddenOrVisible],
+			  Events->Event.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
+							      HidVis_DateRedClass[Events->Event.HiddenOrVisible],
 			  The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			  Id,
-			  Events->Event.Open ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
-					       HidVis_DateRedClass[Events->Event.HiddenOrVisible],
+			  Events->Event.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Events->Event.HiddenOrVisible] :
+							      HidVis_DateRedClass[Events->Event.HiddenOrVisible],
 			  The_GetSuffix (),
 			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Events->Event.TimeUTC[StartEndTime],
@@ -746,7 +746,7 @@ static void Att_ResetEvent (struct Att_Event *Event)
    Event->UsrCod = -1L;
    Event->TimeUTC[Dat_STR_TIME] =
    Event->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Event->Open = false;
+   Event->Open = CloOpe_CLOSED;
    Event->CommentTchVisible = false;
    Event->Title[0] = '\0';
   }
@@ -772,7 +772,8 @@ void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event)
    Event->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get whether the attendance event is open or closed (row(6)) *****/
-   Event->Open = (row[6][0] == '1');
+   Event->Open = (row[6][0] == '1') ? CloOpe_OPEN :
+				      CloOpe_CLOSED;
 
    /***** Get whether the attendance event is visible or not (row[7]) *****/
    Event->CommentTchVisible = (row[7][0] == 'Y');
@@ -952,7 +953,7 @@ void Att_ReqCreatOrEditEvent (void)
       Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Events.Event.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
       Events.Event.TimeUTC[Dat_END_TIME] = Events.Event.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-      Events.Event.Open = true;
+      Events.Event.Open = CloOpe_OPEN;
      }
    else
      {
@@ -1486,7 +1487,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
-      if (Event->Open)
+      if (Event->Open == CloOpe_OPEN)
 	{
 	 Frm_BeginForm (ActRecAttMe);
 	    ParCod_PutPar (ParCod_Att,Event->AttCod);
@@ -1515,7 +1516,7 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
 	 HTM_TABLE_End ();
 
       /* Send button */
-      if (Event->Open)
+      if (Event->Open == CloOpe_OPEN)
 	{
 	 Btn_PutConfirmButton (Txt_Save_changes);
 	 Frm_EndForm ();
@@ -1668,8 +1669,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)
 	    Err_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = Usr_I_CAN_NOT;
-	 ICanEditStdComment = Event->Open ? Usr_I_CAN :	// Attendance event is open
-					    Usr_I_CAN_NOT;
+	 ICanEditStdComment = (Event->Open == CloOpe_OPEN) ? Usr_I_CAN :	// Attendance event is open
+							     Usr_I_CAN_NOT;
 	 ICanEditTchComment = Usr_I_CAN_NOT;
 	 break;
       case Rol_TCH:
@@ -1911,7 +1912,7 @@ void Att_RegisterMeAsStdInEvent (void)
    Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
    Att_GetEventDataByCodAndCheckCrs (&Events.Event);	// This checks that event belong to current course
 
-   if (Events.Event.Open)
+   if (Events.Event.Open == CloOpe_OPEN)
      {
       /***** Get comments for this student *****/
       Present = Att_CheckIfUsrIsPresentInEventAndGetComments (Events.Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,

@@ -54,7 +54,7 @@ struct Svy_Survey
    struct
      {
       HidVis_HiddenOrVisible_t HiddenOrVisible;	// Survey is hidden or visible?
-      bool Open;		// Start date <= now <= end date
+      CloOpe_ClosedOrOpen_t Open;		// Start date <= now <= end date
       bool IAmLoggedWithAValidRoleToAnswer;	// I am logged with a valid role to answer this survey
       bool IBelongToScope;	// I belong to the scope of this survey
       bool IHaveAnswered;	// I have already answered this survey

@@ -1,9 +1,9 @@
-// swad_map.h: OpenStreetMap maps
+// swad_closed_open.h: types and constants related to closed/open
 
-#ifndef _SWAD_MAP
-#define _SWAD_MAP
+#ifndef _SWAD_CLO_OPE
+#define _SWAD_CLO_OPE
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -23,42 +23,27 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*****************************************************************************/
-/********************************* Headers ***********************************/
-/*****************************************************************************/
-
-#include <stdbool.h>		// For boolean type
-
-#include "swad_closed_open.h"
 
 /*****************************************************************************/
-/************************** Public types and constants ***********************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
-struct Map_Coordinates
+#define CloOpe_NUM_CLOSED_OPEN 2
+
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
+
+typedef enum
   {
-   double Latitude;
-   double Longitude;
-   double Altitude;
-  };
+   CloOpe_CLOSED = 0,
+   CloOpe_OPEN   = 1,
+  } CloOpe_ClosedOrOpen_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Map_LeafletCSS (void);
-void Map_LeafletScript (void);
-void Map_CreateMap (const char *ContainerId,
-		    const struct Map_Coordinates *Coord,unsigned Zoom);
-void Map_AddTileLayer (void);
-void Map_AddMarker (const struct Map_Coordinates *Coord);
-void Map_AddPopup (const char *Title,const char *Subtitle,CloOpe_ClosedOrOpen_t Open);
-void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
-			  const char *Query);
-double Map_GetLatitudeFromStr (char *Str);
-double Map_GetLongitudeFromStr (char *Str);
-double Map_GetAltitudeFromStr (char *Str);
-
-bool Map_CheckIfCoordAreAvailable (const struct Map_Coordinates *Coord);
+CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpen (char c);
 
 #endif

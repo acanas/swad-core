@@ -450,14 +450,14 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
-		       Surveys->Svy.Status.Open ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
-						  HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
+		       Surveys->Svy.Status.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+								 HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix ());
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
-		       Surveys->Svy.Status.Open ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
-						  HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
+		       Surveys->Svy.Status.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+								 HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix (),
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_STR_TIME],
@@ -472,14 +472,14 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
-		       Surveys->Svy.Status.Open ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
-						  HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
+		       Surveys->Svy.Status.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+								 HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix ());
       else
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		       Id,
-		       Surveys->Svy.Status.Open ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
-						  HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
+		       Surveys->Svy.Status.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Surveys->Svy.Status.HiddenOrVisible] :
+								 HidVis_DateRedClass[Surveys->Svy.Status.HiddenOrVisible],
 		       The_GetSuffix (),
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_END_TIME],
@@ -736,19 +736,21 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
       HTM_LI_End ();
 
       /* Write whether survey is open or closed */
-      if (Svy->Status.Open)
+      switch (Svy->Status.Open)
 	{
-	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       HidVis_DateGreenClass[Svy->Status.HiddenOrVisible],
-		       The_GetSuffix ());
-	    HTM_Txt (Txt_Open_survey);
-	}
-      else
-	{
-	 HTM_LI_Begin ("class=\"%s_%s\"",
-		       HidVis_DateRedClass[Svy->Status.HiddenOrVisible],
-		       The_GetSuffix ());
-	    HTM_Txt (Txt_Closed_survey);
+	 case CloOpe_OPEN:
+	    HTM_LI_Begin ("class=\"%s_%s\"",
+			  HidVis_DateGreenClass[Svy->Status.HiddenOrVisible],
+			  The_GetSuffix ());
+	       HTM_Txt (Txt_Open_survey);
+	    break;
+	 case CloOpe_CLOSED:
+	 default:
+	    HTM_LI_Begin ("class=\"%s_%s\"",
+			  HidVis_DateRedClass[Svy->Status.HiddenOrVisible],
+			  The_GetSuffix ());
+	       HTM_Txt (Txt_Closed_survey);
+	    break;
 	}
       HTM_LI_End ();
 
@@ -1134,7 +1136,8 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[7]);
 
       /* Get whether the survey is open or closed (row(8)) */
-      Svy->Status.Open = (row[8][0] == '1');
+      Svy->Status.Open = (row[8][0] == '1') ? CloOpe_OPEN :
+					      CloOpe_CLOSED;
 
       /* Get the title of the survey (row[9]) */
       Str_Copy (Svy->Title,row[9],sizeof (Svy->Title) - 1);
@@ -1173,7 +1176,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       /* Can I answer survey? */
       Svy->Status.ICanAnswer = ( Svy->NumQsts != 0) &&
                                  Svy->Status.HiddenOrVisible == HidVis_VISIBLE &&
-                                 Svy->Status.Open &&
+                                 Svy->Status.Open == CloOpe_OPEN &&
                                  Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
                                  Svy->Status.IBelongToScope &&
                                 !Svy->Status.IHaveAnswered;
@@ -1191,7 +1194,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
         	                            Svy->Level == Hie_SYS) &&
         	                           (Svy->NumQsts != 0) &&
                                             Svy->Status.HiddenOrVisible == HidVis_VISIBLE &&
-                                            Svy->Status.Open &&
+                                            Svy->Status.Open == CloOpe_OPEN &&
                                             Svy->Status.IAmLoggedWithAValidRoleToAnswer &&
                                             Svy->Status.IBelongToScope &&
                                             Svy->Status.IHaveAnswered;
@@ -1280,7 +1283,7 @@ void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy)
       Svy->NumQsts               = 0;
       Svy->NumUsrs               = 0;
       Svy->Status.HiddenOrVisible                 = HidVis_VISIBLE;
-      Svy->Status.Open                            = false;
+      Svy->Status.Open                            = CloOpe_CLOSED;
       Svy->Status.IAmLoggedWithAValidRoleToAnswer = false;
       Svy->Status.IBelongToScope                  = false;
       Svy->Status.IHaveAnswered                   = false;
@@ -1605,7 +1608,7 @@ void Svy_ReqCreatOrEditSvy (void)
       Surveys.Svy.NumQsts = 0;
       Surveys.Svy.NumUsrs = 0;
       Surveys.Svy.Status.HiddenOrVisible  = HidVis_VISIBLE;
-      Surveys.Svy.Status.Open		  = true;
+      Surveys.Svy.Status.Open		  = CloOpe_OPEN;
       Surveys.Svy.Status.IAmLoggedWithAValidRoleToAnswer = false;
       Surveys.Svy.Status.IBelongToScope   = false;
       Surveys.Svy.Status.IHaveAnswered    = false;

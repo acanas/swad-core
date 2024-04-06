@@ -557,8 +557,8 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	       Err_NotEnoughMemoryExit ();
 	    HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
 			   Id,
-			   Item->Open ? "DATE_GREEN" :
-					"DATE_RED",
+			   Item->Open == CloOpe_OPEN ? "DATE_GREEN" :
+						       "DATE_RED",
 			   The_GetSuffix (),
 			   HidVis_PrgClass[HiddenOrVisible]);
 	       Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
@@ -1223,7 +1223,8 @@ static void Prg_GetItemDataFromRow (MYSQL_RES **mysql_res,
       Item->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
 
       /* Get whether the program item is open or closed (row(7)) */
-      Item->Open = (row[7][0] == '1');
+      Item->Open = (row[7][0] == '1') ? CloOpe_OPEN :
+					CloOpe_CLOSED;
 
       /* Get the title of the program item (row[8]) */
       Str_Copy (Item->Title,row[8],sizeof (Item->Title) - 1);
@@ -1265,7 +1266,7 @@ void Prg_ResetItem (struct Prg_Item *Item)
    Item->UsrCod = -1L;
    Item->TimeUTC[Dat_STR_TIME] =
    Item->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Item->Open = false;
+   Item->Open = CloOpe_CLOSED;
    Item->Title[0] = '\0';
    Prg_ResetResource (Item);
   }
@@ -1894,7 +1895,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    Prg_ResetItem (&Item);
    Item.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    Item.TimeUTC[Dat_END_TIME] = Item.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-   Item.Open = true;
+   Item.Open = CloOpe_OPEN;
 
    /***** Show pending alerts */
    Ale_ShowAlerts (NULL);

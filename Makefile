@@ -37,11 +37,12 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_building.o swad_building_database.o swad_button.o \
        swad_calendar.o swad_call_for_exam.o swad_call_for_exam_resource.o \
        swad_call_for_exam_database.o swad_center.o swad_center_config.o \
-       swad_center_database.o swad_chat.o swad_chat_database.o swad_config.o \
-       swad_connected.o swad_connected_database.o swad_constant.o \
-       swad_cookie.o swad_cookie_database.o swad_country.o \
-       swad_country_config.o swad_country_database.o swad_course.o \
-       swad_course_config.o swad_course_database.o swad_cryptography.o \
+       swad_center_database.o swad_chat.o swad_chat_database.o \
+       swad_closed_open.o swad_config.o swad_connected.o \
+       swad_connected_database.o swad_constant.o swad_cookie.o \
+       swad_cookie_database.o swad_country.o swad_country_config.o \
+       swad_country_database.o swad_course.o swad_course_config.o \
+       swad_course_database.o swad_cryptography.o \
        swad_database.o swad_date.o swad_degree.o swad_degree_config.o \
        swad_degree_database.o swad_degree_type.o swad_department.o \
        swad_department_database.o swad_duplicate.o swad_duplicate_database.o \

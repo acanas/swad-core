@@ -52,7 +52,7 @@ struct Asg_Assignment
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Open;
+   CloOpe_ClosedOrOpen_t Open;
    char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
    Asg_SendWork_t SendWork;
    char Folder[Brw_MAX_BYTES_FOLDER + 1];

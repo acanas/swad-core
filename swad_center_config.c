@@ -327,7 +327,7 @@ static void CtrCfg_Map (const struct Map_Coordinates *Coord)
       /* Add popup */
       Map_AddPopup (Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
 		    Gbl.Hierarchy.Node[Hie_INS].ShrtName,
-		    true);	// Open
+		    CloOpe_OPEN);	// Open
 
    HTM_SCRIPT_End ();
   }

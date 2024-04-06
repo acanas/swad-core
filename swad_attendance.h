@@ -54,7 +54,7 @@ struct Att_Event
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Open;
+   CloOpe_ClosedOrOpen_t Open;
    bool CommentTchVisible;
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
 

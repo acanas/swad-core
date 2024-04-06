@@ -380,12 +380,12 @@ void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
 
 void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
                                             void (*FuncPars) (void *Args),void *Args,
-                                            bool Open)
+                                            CloOpe_ClosedOrOpen_t Open)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncPars,Args,
-				  Open ? "folder-open-yellow-plus.png" :
-				  	 "folder-yellow-plus.png",
+				  Open == CloOpe_OPEN ? "folder-open-yellow-plus.png" :
+							"folder-yellow-plus.png",
 				  Ico_UNCHANGED);
   }
 

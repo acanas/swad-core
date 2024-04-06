@@ -127,7 +127,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
    Session->Title[0]                 = '\0';
    Session->HiddenOrVisible	     = HidVis_VISIBLE;
-   Session->Open	             = false;
+   Session->Open	             = CloOpe_CLOSED;
    Session->ShowUsrResults           = false;
   };
 
@@ -469,8 +469,8 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      DateClass = Session->Open ? HidVis_DateGreenClass[Session->HiddenOrVisible] :
-			          HidVis_DateRedClass[Session->HiddenOrVisible];
+      DateClass = Session->Open == CloOpe_OPEN ? HidVis_DateGreenClass[Session->HiddenOrVisible] :
+						 HidVis_DateRedClass[Session->HiddenOrVisible];
 
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -751,7 +751,8 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Session->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[4 + StartEndTime]);
 
    /* Get whether the session is open or closed (row(6)) */
-   Session->Open = (row[6][0] == '1');
+   Session->Open = (row[6][0] == '1') ? CloOpe_OPEN :
+					CloOpe_CLOSED;
 
    /* Get the title of the session (row[7]) */
    if (row[7])
@@ -1218,7 +1219,7 @@ Usr_ICan_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
           2. Hidden or closed sessions are not accesible *****/
    if (Exam->HiddenOrVisible == HidVis_HIDDEN ||
        Session->HiddenOrVisible == HidVis_HIDDEN ||
-       !Session->Open)
+       Session->Open == CloOpe_CLOSED)
       return Usr_I_CAN_NOT;
 
    /***** Exam is visible, session is visible and open ==>

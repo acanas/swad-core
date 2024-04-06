@@ -1161,9 +1161,9 @@ static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
                                Brw_IconTree_t IconSubtree);
 static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *RowId,
-			                  bool Open,HidVis_HiddenOrVisible_t HiddenOrVisible);
+			                  CloOpe_ClosedOrOpen_t Open,HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
-				       bool Open,HidVis_HiddenOrVisible_t HiddenOrVisible);
+				       CloOpe_ClosedOrOpen_t Open,HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileMetadata *FileMetadata);
@@ -3816,8 +3816,9 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 			IconSubtree = Brw_ICON_TREE_NOTHING;
 		     else
 			/***** Check if the tree starting at this subdirectory must be expanded *****/
-			IconSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full) == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
-												                       Brw_ICON_TREE_EXPAND;
+			IconSubtree = Brw_DB_GetIfContractedOrExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full)
+			              == ConExp_EXPANDED ? Brw_ICON_TREE_CONTRACT :
+							   Brw_ICON_TREE_EXPAND;
 		     for (NumFileInSubdir = 0;
 			  NumFileInSubdir < NumFilesInSubdir;
 			  NumFileInSubdir++)
@@ -3835,7 +3836,8 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 		  if (Level < BrwSiz_MAX_DIR_LEVELS)
 		     /* List subtree starting at this this directory */
 		     Brw_ListDir (Level + 1,RowId,
-		                  TreeContracted || IconSubtree == Brw_ICON_TREE_EXPAND,
+		                  TreeContracted ||
+		                  IconSubtree == Brw_ICON_TREE_EXPAND,
 				  PathFileRel,PathFileInExplTree);
 	      }
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
@@ -4480,56 +4482,64 @@ static void Brw_PutIconFolder (unsigned Level,
       switch (Brw_CheckIfICanCreateIntoFolder (Level))	// I can create a new file or folder
 	{
 	 case Usr_I_CAN:
-	    if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	    switch (IconSubtree)
 	      {
-	       /* Visible icon with folder closed */
-	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-					  false,		// Closed
-					  HidVis_VISIBLE);	// Visible
+	       case Brw_ICON_TREE_EXPAND:
+		  /* Visible icon with folder closed */
+		  Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					     CloOpe_CLOSED,	// Closed
+					     HidVis_VISIBLE);	// Visible
 
-	       /* Hidden icon with folder open */
-	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-					  true,		// Open
-					  HidVis_HIDDEN);	// Hidden
-	      }
-	    else
-	      {
-	       /* Hidden icon with folder closed */
-	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-					  false,		// Closed
-					  HidVis_HIDDEN);	// Hidden
+		  /* Hidden icon with folder open */
+		  Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					     CloOpe_OPEN,	// Open
+					     HidVis_HIDDEN);	// Hidden
+		  break;
+	       case Brw_ICON_TREE_CONTRACT:
+		  /* Hidden icon with folder closed */
+		  Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					     CloOpe_CLOSED,	// Closed
+					     HidVis_HIDDEN);	// Hidden
 
-	       /* Visible icon with folder open */
-	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-					  true,		// Open
-					  HidVis_VISIBLE);	// Visible
+		  /* Visible icon with folder open */
+		  Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					     CloOpe_OPEN,	// Open
+					     HidVis_VISIBLE);	// Visible
+		  break;
+	       case Brw_ICON_TREE_NOTHING:
+	       default:
+		  break;
 	      }
 	    break;
 	 case Usr_I_CAN_NOT:
 	 default:
-	    if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	    switch (IconSubtree)
 	      {
-	       /* Visible icon with folder closed */
-	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					     false,	// Closed
-					     HidVis_VISIBLE);
+	       case Brw_ICON_TREE_EXPAND:
+		  /* Visible icon with folder closed */
+		  Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+						CloOpe_CLOSED,	// Closed
+						HidVis_VISIBLE);
 
-	       /* Hidden icon with folder open */
-	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					     true,	// Open
-					     HidVis_HIDDEN);
-	      }
-	    else
-	      {
-	       /* Hidden icon with folder closed */
-	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					     false,	// Closed
-					     HidVis_HIDDEN);
+		  /* Hidden icon with folder open */
+		  Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+						CloOpe_OPEN,	// Open
+						HidVis_HIDDEN);
+		  break;
+	       case Brw_ICON_TREE_CONTRACT:
+		  /* Hidden icon with folder closed */
+		  Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+						CloOpe_CLOSED,	// Closed
+						HidVis_HIDDEN);
 
-	       /* Visible icon with folder open */
-	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					     true,	// Open
-					     HidVis_VISIBLE);
+		  /* Visible icon with folder open */
+		  Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+						CloOpe_OPEN,	// Open
+						HidVis_VISIBLE);
+		  break;
+	       case Brw_ICON_TREE_NOTHING:
+	       default:
+		  break;
 	      }
 	    break;
 	}
@@ -4543,22 +4553,22 @@ static void Brw_PutIconFolder (unsigned Level,
 /*****************************************************************************/
 
 static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *RowId,
-			                  bool Open,HidVis_HiddenOrVisible_t HiddenOrVisible)
+			                  CloOpe_ClosedOrOpen_t Open,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *Txt_Folder;
    extern const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Begin container *****/
    HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\"%s",
-		  Open ? "open" :
-			 "closed",
+		  Open == CloOpe_OPEN ? "open" :
+				        "closed",
 		  FileBrowserId,RowId,
                   The_GetColorRows (),
 		  HidVis_ShownStyle[HiddenOrVisible]);
 
       /***** Icon *****/
-      Ico_PutIcon (Open ? "folder-open-yellow.png" :
-			  "folder-yellow.png",
+      Ico_PutIcon (Open == CloOpe_OPEN ? "folder-open-yellow.png" :
+					 "folder-yellow.png",
 		   Ico_UNCHANGED,
 		   Txt_Folder,"CONTEXT_OPT CONTEXT_ICO16x16");
 
@@ -4571,14 +4581,14 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
 /*****************************************************************************/
 
 static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
-				       bool Open,HidVis_HiddenOrVisible_t HiddenOrVisible)
+				       CloOpe_ClosedOrOpen_t Open,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Begin container *****/
    HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\"%s",
-		  Open ? "open" :
-			 "closed",
+		  Open == CloOpe_OPEN ? "open" :
+				        "closed",
 		  FileBrowserId,RowId,
 		  The_GetColorRows (),
 		  HidVis_ShownStyle[HiddenOrVisible]);

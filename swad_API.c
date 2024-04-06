@@ -2351,8 +2351,8 @@ int swad__getAttendanceEvents (struct soap *soap,
 
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].startTime = (int) Event.TimeUTC[Dat_STR_TIME];
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].endTime   = (int) Event.TimeUTC[Dat_END_TIME];
-         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = Event.Open ? 1 :
-                                                                                                       0;
+         getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].commentsTeachersVisible = Event.Open == CloOpe_OPEN ? 1 :
+                                                                                                                      0;
          Length = strlen (Event.Title);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title =
             soap_malloc (soap,Length + 1);
