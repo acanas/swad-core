@@ -1733,29 +1733,31 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s %s\"",
 	                     The_GetSuffix (),
 	                     The_GetColorRows ());
-		  if (ICanEditThisField == Usr_I_CAN)	// Show with form
+		  switch (ICanEditThisField)
 		    {
-		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
-					 " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-					 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-					 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines,
-					 The_GetSuffix ());
+		     case Usr_I_CAN:		// Show with form
+			HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
+					    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
+					    Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+					    Gbl.Crs.Records.LstFields.Lst[NumField].NumLines,
+					    The_GetSuffix ());
+			   if (ThisFieldHasText)
+			      HTM_Txt (row[0]);
+			HTM_TEXTAREA_End ();
+			break;
+		     case Usr_I_CAN_NOT:	// Show without form
+		     default:
 			if (ThisFieldHasText)
-			   HTM_Txt (row[0]);
-		     HTM_TEXTAREA_End ();
-		    }
-		  else			// Show without form
-		    {
-		     if (ThisFieldHasText)
-		       {
-			Str_Copy (Text,row[0],sizeof (Text));
-			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-					  Text,Cns_MAX_BYTES_TEXT,
-					  Str_DONT_REMOVE_SPACES);
-			HTM_Txt (Text);
-		       }
-		     else
-			HTM_Hyphen ();
+			  {
+			   Str_Copy (Text,row[0],sizeof (Text));
+			   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+					     Text,Cns_MAX_BYTES_TEXT,
+					     Str_DONT_REMOVE_SPACES);
+			   HTM_Txt (Text);
+			  }
+			else
+			   HTM_Hyphen ();
+			break;
 		    }
 	       HTM_TD_End ();
 
@@ -1767,17 +1769,21 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	}
 
    /***** End box *****/
-   if (ICanEdit == Usr_I_CAN)
+   switch (ICanEdit)
      {
-      /* End table, send button and end box */
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      case Usr_I_CAN:
+	 /* End table, send button and end box */
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
-      /* End form */
-      Frm_EndForm ();
+	 /* End form */
+	 Frm_EndForm ();
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 /* End table and box */
+	 Box_BoxTableEnd ();
+	 break;
      }
-   else
-      /* End table and box */
-      Box_BoxTableEnd ();
   }
 
 /*****************************************************************************/
@@ -2254,7 +2260,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 				 Grp_ShowLstGrpsToChgMyGrps ();
 			      break;
 			   case Usr_OTHER:
-			   default:
 			      Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 			      break;
 			  }
@@ -2679,20 +2684,21 @@ static void Rec_ShowEmail (struct Usr_Data *UsrDat)
       Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Email);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (UsrDat->Email[0])
-	   {
-	    if (Mai_ICanSeeOtherUsrEmail (UsrDat) == Usr_I_CAN)
+	    switch (Mai_ICanSeeOtherUsrEmail (UsrDat))
 	      {
-	       HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_STRONG_%s\"",
-			    UsrDat->Email,The_GetSuffix ());
-		  HTM_Txt (UsrDat->Email);
-	       HTM_A_End ();
+	       case Usr_I_CAN:
+		  HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_STRONG_%s\"",
+			       UsrDat->Email,The_GetSuffix ());
+		     HTM_Txt (UsrDat->Email);
+		  HTM_A_End ();
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  HTM_Txt ("********");
+		  break;
 	      }
-	    else
-	       HTM_Txt ("********");
-	   }
       HTM_TD_End ();
 
    HTM_TR_End ();

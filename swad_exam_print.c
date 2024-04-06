@@ -178,55 +178,59 @@ void ExaPrn_ShowExamPrint (void)
    ExaSes_GetAndCheckPars (&Exams,&Session);
 
    /***** Check if I can access to this session *****/
-   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session) == Usr_I_CAN)
+   switch (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
      {
-      /***** Set basic data of exam print *****/
-      Print.SesCod = Session.SesCod;
-      Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-
-      /***** Get exam print data from database *****/
-      ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
-
-      if (Print.PrnCod <= 0)	// Exam print does not exists ==> create it
-	{
-	 /***** Set again basic data of exam print *****/
+      case Usr_I_CAN:
+	 /***** Set basic data of exam print *****/
 	 Print.SesCod = Session.SesCod;
 	 Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
-	 /***** Get questions from database *****/
-	 ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exams.Exam.ExaCod);
+	 /***** Get exam print data from database *****/
+	 ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
-	 if (Print.NumQsts.All)
+	 if (Print.PrnCod <= 0)	// Exam print does not exists ==> create it
 	   {
-	    /***** Create new exam print in database *****/
-	    ExaPrn_CreatePrint (&Print);
+	    /***** Set again basic data of exam print *****/
+	    Print.SesCod = Session.SesCod;
+	    Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+
+	    /***** Get questions from database *****/
+	    ExaPrn_GetQuestionsForNewPrintFromDB (&Print,Exams.Exam.ExaCod);
+
+	    if (Print.NumQsts.All)
+	      {
+	       /***** Create new exam print in database *****/
+	       ExaPrn_CreatePrint (&Print);
+
+	       /***** Set log print code and action *****/
+	       ExaLog_SetPrnCod (Print.PrnCod);
+	       ExaLog_SetAction (ExaLog_START_EXAM);
+	       ExaLog_SetIfCanAnswer (true);
+	      }
+	   }
+	 else			// Exam print exists
+	   {
+	    /***** Get exam print data from database *****/
+	    ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
+
+	    /***** Get questions and current user's answers from database *****/
+	    ExaPrn_GetPrintQuestionsFromDB (&Print);
 
 	    /***** Set log print code and action *****/
 	    ExaLog_SetPrnCod (Print.PrnCod);
-	    ExaLog_SetAction (ExaLog_START_EXAM);
+	    ExaLog_SetAction (ExaLog_RESUME_EXAM);
 	    ExaLog_SetIfCanAnswer (true);
 	   }
-	}
-      else			// Exam print exists
-        {
-         /***** Get exam print data from database *****/
-	 ExaPrn_GetPrintDataBySesCodAndUsrCod (&Print);
 
-         /***** Get questions and current user's answers from database *****/
-	 ExaPrn_GetPrintQuestionsFromDB (&Print);
-
-         /***** Set log print code and action *****/
-         ExaLog_SetPrnCod (Print.PrnCod);
-	 ExaLog_SetAction (ExaLog_RESUME_EXAM);
-	 ExaLog_SetIfCanAnswer (true);
-	}
-
-      /***** Show test to be answered *****/
-      ExaPrn_ShowExamPrintToFillIt (&Exams,&Print);
+	 /***** Show test to be answered *****/
+	 ExaPrn_ShowExamPrintToFillIt (&Exams,&Print);
+	 break;
+      case Usr_I_CAN_NOT:	// Session not open or accessible
+      default:
+	 /***** Show warning *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
+	 break;
      }
-   else	// Session not open or accessible
-      /***** Show warning *****/
-      Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
   }
 
 /*****************************************************************************/
@@ -996,42 +1000,44 @@ void ExaPrn_ReceivePrintAnswer (void)
    ExaLog_SetQstInd (QstInd);
 
    /***** Check if session if visible and open *****/
-   if (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session) == Usr_I_CAN)
+   switch (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
      {
-      /***** Set log open to true ****/
-      ExaLog_SetIfCanAnswer (true);
+      case Usr_I_CAN:
+	 /***** Set log open to true ****/
+	 ExaLog_SetIfCanAnswer (true);
 
-      /***** Get questions and current user's answers of exam print from database *****/
-      ExaPrn_GetPrintQuestionsFromDB (&Print);
+	 /***** Get questions and current user's answers of exam print from database *****/
+	 ExaPrn_GetPrintQuestionsFromDB (&Print);
 
-      /***** Get answers from form to assess a test *****/
-      ExaPrn_GetAnswerFromForm (&Print,QstInd);
+	 /***** Get answers from form to assess a test *****/
+	 ExaPrn_GetAnswerFromForm (&Print,QstInd);
 
-      /***** Update answer in database *****/
-      /* Compute question score and store in database */
-      ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,QstInd);
+	 /***** Update answer in database *****/
+	 /* Compute question score and store in database */
+	 ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,QstInd);
 
-      /* Update exam print in database */
-      Print.NumQsts.NotBlank = Exa_DB_GetNumQstsNotBlankInPrint (Print.PrnCod);
-      Print.Score.All = Exa_DB_ComputeTotalScoreOfPrint (Print.PrnCod);
-      Exa_DB_UpdatePrint (&Print);
+	 /* Update exam print in database */
+	 Print.NumQsts.NotBlank = Exa_DB_GetNumQstsNotBlankInPrint (Print.PrnCod);
+	 Print.Score.All = Exa_DB_ComputeTotalScoreOfPrint (Print.PrnCod);
+	 Exa_DB_UpdatePrint (&Print);
 
-      /***** Show table with questions to answer *****/
-      ExaPrn_ShowTableWithQstsToFill (&Exams,&Print);
-     }
-   else	// Not accessible to answer
-     {
-      /***** Set log open to false ****/
-      ExaLog_SetIfCanAnswer (false);
+	 /***** Show table with questions to answer *****/
+	 ExaPrn_ShowTableWithQstsToFill (&Exams,&Print);
+	 break;
+      case Usr_I_CAN_NOT:	// Not accessible to answer
+      default:
+	 /***** Set log open to false ****/
+	 ExaLog_SetIfCanAnswer (false);
 
-      /***** Show warning *****/
-      Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
+	 /***** Show warning *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
 
-      /***** Form to end/close this exam print *****/
-      Frm_BeginForm (ActEndExaPrn);
-	 ExaSes_PutParsEdit (&Exams);
-	 Btn_PutCreateButton (Txt_Continue);
-      Frm_EndForm ();
+	 /***** Form to end/close this exam print *****/
+	 Frm_BeginForm (ActEndExaPrn);
+	    ExaSes_PutParsEdit (&Exams);
+	    Btn_PutCreateButton (Txt_Continue);
+	 Frm_EndForm ();
+	 break;
      }
   }
 

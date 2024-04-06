@@ -246,6 +246,7 @@ Usr_ICan_t Rub_CheckIfICanEditRubrics (void)
 bool Rub_CheckIfEditable (void)
   {
    if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN)
+     {
       /***** Rubric is editable only if ... *****/
       // TODO: Change to control that a rubric is not edited in some circunstances?
       /*
@@ -253,8 +254,9 @@ bool Rub_CheckIfEditable (void)
 	     Rubric->NumCriteria != 0;
       */
       return true;
-   else
-      return false;	// Questions are not editable
+     }
+
+   return false;	// Questions are not editable
   }
 
 /*****************************************************************************/

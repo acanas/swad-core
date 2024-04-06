@@ -950,28 +950,30 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Institution WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit == Usr_I_CAN)
+	       switch (ICanEdit)
 		 {
-		  Frm_BeginForm (ActChgInsWWW);
-		     ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
-		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW INPUT_%s\""
-				    " required=\"required\"",
-				    The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		 {
-		  Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
-		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
-		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
-			          " class=\"DAT_%s\"",
-				  Ins->WWW,
-				  The_GetSuffix (),
-				  Ins->WWW);
-			HTM_Txt (WWW);
-		     HTM_A_End ();
-		  HTM_DIV_End ();
+		  case Usr_I_CAN:
+		     Frm_BeginForm (ActChgInsWWW);
+			ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
+			HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
+				       "class=\"INPUT_WWW INPUT_%s\""
+				       " required=\"required\"",
+				       The_GetSuffix ());
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
+		     HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
+			HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
+				     " class=\"DAT_%s\"",
+				     Ins->WWW,
+				     The_GetSuffix (),
+				     Ins->WWW);
+			   HTM_Txt (WWW);
+			HTM_A_End ();
+		     HTM_DIV_End ();
+		     break;
 		 }
 	    HTM_TD_End ();
 

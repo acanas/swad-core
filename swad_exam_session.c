@@ -500,27 +500,29 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
-	 if (ExaSes_CheckIfICanAnswerThisSession (&Exams->Exam,Session) == Usr_I_CAN)
+	 switch (ExaSes_CheckIfICanAnswerThisSession (&Exams->Exam,Session))
 	   {
-	    Frm_BeginForm (ActSeeExaPrn);
-	       Exa_PutPars (Exams);
-	       ParCod_PutPar (ParCod_Ses,Session->SesCod);
-	       HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-									     Txt_Resume,
-					"class=\"LT BT_LINK %s_%s\"",
-					HidVis_TitleClass[Session->HiddenOrVisible],
-					The_GetSuffix ());
+	    case Usr_I_CAN:
+	       Frm_BeginForm (ActSeeExaPrn);
+		  Exa_PutPars (Exams);
+		  ParCod_PutPar (ParCod_Ses,Session->SesCod);
+		  HTM_BUTTON_Submit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+										Txt_Resume,
+					   "class=\"LT BT_LINK %s_%s\"",
+					   HidVis_TitleClass[Session->HiddenOrVisible],
+					   The_GetSuffix ());
+		     HTM_Txt (Session->Title);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       HTM_SPAN_Begin ("class=\"%s_%s\"",
+			       HidVis_TitleClass[Session->HiddenOrVisible],
+			       The_GetSuffix ());
 		  HTM_Txt (Session->Title);
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	   }
-	 else
-	   {
-	    HTM_SPAN_Begin ("class=\"%s_%s\"",
-			    HidVis_TitleClass[Session->HiddenOrVisible],
-			    The_GetSuffix ());
-	       HTM_Txt (Session->Title);
-	    HTM_SPAN_End ();
+	       HTM_SPAN_End ();
+	       break;
 	   }
       HTM_ARTICLE_End ();
 
@@ -650,25 +652,27 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
-   if (ExaSes_CheckIfICanChangeVisibilityOfResults (Session) == Usr_I_CAN)
+   switch (ExaSes_CheckIfICanChangeVisibilityOfResults (Session))
      {
-      /***** Put form to change visibility of session results *****/
-      if (Session->ShowUsrResults)
-	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
-					ExaSes_PutParsEdit,Exams,
-					"eye.svg",Ico_GREEN);
-      else
-	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
-					ExaSes_PutParsEdit,Exams,
-					"eye-slash.svg",Ico_RED);
-     }
-   else	// Don't put form
-     {
-      /***** Put icon showing the current visibility of session results *****/
-      if (Session->ShowUsrResults)
-	 Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Visible_results);
-      else
-	 Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Hidden_results);
+      case Usr_I_CAN:
+	 /***** Put form to change visibility of session results *****/
+	 if (Session->ShowUsrResults)
+	    Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
+					   ExaSes_PutParsEdit,Exams,
+					   "eye.svg",Ico_GREEN);
+	 else
+	    Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
+					   ExaSes_PutParsEdit,Exams,
+					   "eye-slash.svg",Ico_RED);
+	 break;
+      case Usr_I_CAN_NOT:	// Don't put form
+      default:
+	 /***** Put icon showing the current visibility of session results *****/
+	 if (Session->ShowUsrResults)
+	    Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Visible_results);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Hidden_results);
+	 break;
      }
   }
 

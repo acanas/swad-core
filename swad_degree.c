@@ -389,63 +389,69 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Degree type */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit == Usr_I_CAN)
+	       switch (ICanEdit)
 		 {
-		  Frm_BeginForm (ActChgDegTyp);
-		     ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				       "name=\"OthDegTypCod\""
-				       " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				       The_GetSuffix ());
-			for (NumDegTyp = 0;
-			     NumDegTyp < DegTypes->Num;
-			     NumDegTyp++)
-			  {
-			   DegTyp = &DegTypes->Lst[NumDegTyp];
-			   HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-				       DegTyp->DegTypCod == Deg->Specific.TypCod ? HTM_OPTION_SELECTED :
-										   HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
-				       "%s",DegTyp->DegTypName);
-			  }
-		     HTM_SELECT_End ();
-		  Frm_EndForm ();
+		  case Usr_I_CAN:
+		     Frm_BeginForm (ActChgDegTyp);
+			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
+			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+					  "name=\"OthDegTypCod\""
+					  " class=\"HIE_SEL_NARROW INPUT_%s\"",
+					  The_GetSuffix ());
+			   for (NumDegTyp = 0;
+				NumDegTyp < DegTypes->Num;
+				NumDegTyp++)
+			     {
+			      DegTyp = &DegTypes->Lst[NumDegTyp];
+			      HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
+					  DegTyp->DegTypCod == Deg->Specific.TypCod ? HTM_OPTION_SELECTED :
+										      HTM_OPTION_UNSELECTED,
+					  HTM_OPTION_ENABLED,
+					  "%s",DegTyp->DegTypName);
+			     }
+			HTM_SELECT_End ();
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     for (NumDegTyp = 0;
+			  NumDegTyp < DegTypes->Num;
+			  NumDegTyp++)
+		       {
+			DegTyp = &DegTypes->Lst[NumDegTyp];
+			if (DegTyp->DegTypCod == Deg->Specific.TypCod)
+			   HTM_Txt (DegTyp->DegTypName);
+		       }
+		     break;
 		 }
-	       else
-		  for (NumDegTyp = 0;
-		       NumDegTyp < DegTypes->Num;
-		       NumDegTyp++)
-		    {
-		     DegTyp = &DegTypes->Lst[NumDegTyp];
-		     if (DegTyp->DegTypCod == Deg->Specific.TypCod)
-			HTM_Txt (DegTyp->DegTypName);
-		    }
 	    HTM_TD_End ();
 
 	    /* Degree WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit == Usr_I_CAN)
+	       switch (ICanEdit)
 		 {
-		  Frm_BeginForm (ActChgDegWWW);
-		     ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
-		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW INPUT_%s\""
-				    " required=\"required\"",
-				    The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		 {
-		  Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
-		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
-		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
-			          " class=\"DAT_%s\"",
-				  Deg->WWW,
-				  Deg->WWW,
-				  The_GetSuffix ());
-			HTM_Txt (WWW);
-		     HTM_A_End ();
-		  HTM_DIV_End ();
+		  case Usr_I_CAN:
+		     Frm_BeginForm (ActChgDegWWW);
+			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
+			HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
+				       "class=\"INPUT_WWW INPUT_%s\""
+				       " required=\"required\"",
+				       The_GetSuffix ());
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
+		     HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
+			HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
+				     " class=\"DAT_%s\"",
+				     Deg->WWW,
+				     Deg->WWW,
+				     The_GetSuffix ());
+			   HTM_Txt (WWW);
+			HTM_A_End ();
+		     HTM_DIV_End ();
+		     break;
 		 }
 	    HTM_TD_End ();
 

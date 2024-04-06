@@ -198,7 +198,6 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
 					"camera.svg",Ico_BLACK);
 	 break;
       case Usr_OTHER:
-      default:
 	 if (Pho_ICanChangeOtherUsrPhoto (UsrDat) == Usr_I_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
@@ -318,7 +317,6 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 	    Frm_BeginForm (ActDetMyPho);
 	    break;
 	 case Usr_OTHER:
-	 default:
 	    Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    break;
@@ -368,7 +366,6 @@ void Pho_SendPhotoUsr (void)
 	 Pho_ReqMyPhoto ();
 	 break;
       case Usr_OTHER:
-      default:
 	 /***** Form to send another user's photo *****/
 	 Pho_ReqOtherUsrPhoto ();
 	 break;
@@ -521,32 +518,34 @@ void Pho_ReqRemUsrPhoto (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_DONT_GET_ROLE_IN_CRS))
-     {
-      if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
+      switch (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Show current photo and help message *****/
-	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
-	   {
-	    /***** Show question and button to remove user's photo *****/
-	    /* Begin alert */
-	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_photo_of_X,
-	                             Gbl.Usrs.Other.UsrDat.FullName);
+	 case Usr_I_CAN:
+	    /***** Show current photo and help message *****/
+	    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
+	      {
+	       /***** Show question and button to remove user's photo *****/
+	       /* Begin alert */
+	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_photo_of_X,
+					Gbl.Usrs.Other.UsrDat.FullName);
 
-	    /* Show current photo */
-	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
-			      ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
+	       /* Show current photo */
+	       Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
+				 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
-	    /* End alert */
-	    Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
-	                             Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-				     Btn_REMOVE_BUTTON,Txt_Remove);
-	   }
-	 else
-	    Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+	       /* End alert */
+	       Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
+					Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					Btn_REMOVE_BUTTON,Txt_Remove);
+	      }
+	    else
+	       Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 

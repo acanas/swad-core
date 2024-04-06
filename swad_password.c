@@ -176,13 +176,17 @@ void Pwd_UpdateOtherUsrPwd (void)
   {
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
-         /***** Check and update password *****/
-	 Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
+      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+	{
+	 case Usr_I_CAN:
+	    /***** Check and update password *****/
+	    Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
    else		// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }

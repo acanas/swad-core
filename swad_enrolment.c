@@ -2443,12 +2443,18 @@ void Enr_ReqRegRemTch (void)
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
-   if (Adm_CheckIfICanAdminOtherUsrs () == Usr_I_CAN)
-      /***** Form to request the user's ID of another user *****/
-      Enr_ReqAnotherUsrIDToRegisterRemove (Role);
-   else
-      /***** Form to request if register/remove me *****/
-      Enr_AskIfRegRemMe (Role);
+   switch (Adm_CheckIfICanAdminOtherUsrs ())
+     {
+      case Usr_I_CAN:
+	 /***** Form to request the user's ID of another user *****/
+	 Enr_ReqAnotherUsrIDToRegisterRemove (Role);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 /***** Form to request if register/remove me *****/
+	 Enr_AskIfRegRemMe (Role);
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -2672,12 +2678,16 @@ void Enr_ReqRemUsrFromCrs (void)
   {
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Enr_CheckIfICanRemUsrFromCrs () == Usr_I_CAN)
-	 Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
+      switch (Enr_CheckIfICanRemUsrFromCrs ())
+	{
+	 case Usr_I_CAN:
+	    Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
+	}
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
@@ -2692,14 +2702,19 @@ void Enr_RemUsrFromCrs1 (void)
      {
       /***** Get user to be removed *****/
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-	{
-	 if (Enr_CheckIfICanRemUsrFromCrs () == Usr_I_CAN)
-	    Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
-					  Enr_DO_NOT_REMOVE_USR_PRODUCTION,
-					  Cns_VERBOSE);
-	 else
-	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-	}
+	 switch (Enr_CheckIfICanRemUsrFromCrs ())
+	   {
+	    case Usr_I_CAN:
+	       Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,
+					     &Gbl.Hierarchy.Node[Hie_CRS],
+					     Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+					     Cns_VERBOSE);
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	       break;
+	   }
       else
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
      }
@@ -2951,7 +2966,6 @@ void Enr_ModifyUsr1 (void)
 			   Grp_ChangeMyGrps (Cns_QUIET);
 			   break;
 			case Usr_OTHER:
-			default:
 			   Grp_ChangeOtherUsrGrps ();
 			   break;
 		       }
@@ -3206,7 +3220,6 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	    Rol_SetMyRoles ();
 	    break;
 	 case Usr_OTHER:
-	 default:
 	    /* Now he/she does not belong to current course */
 	    UsrDat->Accepted           = false;
 	    UsrDat->Roles.InCurrentCrs = Rol_USR;

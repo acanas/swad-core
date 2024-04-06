@@ -793,39 +793,43 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Place */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit == Usr_I_CAN)
+	       switch (ICanEdit)
 		 {
-		  Frm_BeginForm (ActChgCtrPlc);
-		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				       "name=\"PlcCod\""
-				       " class=\"PLC_SEL INPUT_%s\"",
-				       The_GetSuffix ());
-			HTM_OPTION (HTM_Type_STRING,"0",
-				    Ctr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
-						                HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
-				    "%s",Txt_Another_place);
-			for (NumPlc = 0;
-			     NumPlc < Places->Num;
-			     NumPlc++)
-			  {
-			   Plc = &Places->Lst[NumPlc];
-			   HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
-				       Plc->PlcCod == Ctr->Specific.PlcCod ? HTM_OPTION_SELECTED :
-									     HTM_OPTION_UNSELECTED,
+		  case Usr_I_CAN:
+		     Frm_BeginForm (ActChgCtrPlc);
+			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
+			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+					  "name=\"PlcCod\""
+					  " class=\"PLC_SEL INPUT_%s\"",
+					  The_GetSuffix ());
+			   HTM_OPTION (HTM_Type_STRING,"0",
+				       Ctr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
+								   HTM_OPTION_UNSELECTED,
 				       HTM_OPTION_ENABLED,
-				       "%s",Plc->ShrtName);
-			  }
-		     HTM_SELECT_End ();
-		  Frm_EndForm ();
+				       "%s",Txt_Another_place);
+			   for (NumPlc = 0;
+				NumPlc < Places->Num;
+				NumPlc++)
+			     {
+			      Plc = &Places->Lst[NumPlc];
+			      HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
+					  Plc->PlcCod == Ctr->Specific.PlcCod ? HTM_OPTION_SELECTED :
+										HTM_OPTION_UNSELECTED,
+					  HTM_OPTION_ENABLED,
+					  "%s",Plc->ShrtName);
+			     }
+			HTM_SELECT_End ();
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     for (NumPlc = 0;
+			  NumPlc < Places->Num;
+			  NumPlc++)
+			if (Places->Lst[NumPlc].PlcCod == Ctr->Specific.PlcCod)
+			   HTM_Txt (Places->Lst[NumPlc].ShrtName);
+		     break;
 		 }
-	       else
-		  for (NumPlc = 0;
-		       NumPlc < Places->Num;
-		       NumPlc++)
-		     if (Places->Lst[NumPlc].PlcCod == Ctr->Specific.PlcCod)
-			HTM_Txt (Places->Lst[NumPlc].ShrtName);
 	    HTM_TD_End ();
 
 	    /* Center short name and full name */
@@ -839,28 +843,30 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Center WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit == Usr_I_CAN)
+	       switch (ICanEdit)
 		 {
-		  Frm_BeginForm (ActChgCtrWWW);
-		     ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW INPUT_%s\""
-				    " required=\"required\"",
-				    The_GetSuffix ());
-		  Frm_EndForm ();
-		 }
-	       else
-		 {
-		  Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
-		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
-		     HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-				  " class=\"DAT_%s\" title=\"%s\"",
-				  Ctr->WWW,
-				  The_GetSuffix (),
-				  Ctr->WWW);
-			HTM_Txt (WWW);
-		     HTM_A_End ();
-		  HTM_DIV_End ();
+		  case Usr_I_CAN:
+		     Frm_BeginForm (ActChgCtrWWW);
+			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
+			HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
+				       "class=\"INPUT_WWW INPUT_%s\""
+				       " required=\"required\"",
+				       The_GetSuffix ());
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
+		     HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
+			HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+				     " class=\"DAT_%s\" title=\"%s\"",
+				     Ctr->WWW,
+				     The_GetSuffix (),
+				     Ctr->WWW);
+			   HTM_Txt (WWW);
+			HTM_A_End ();
+		     HTM_DIV_End ();
+		     break;
 		 }
 	    HTM_TD_End ();
 

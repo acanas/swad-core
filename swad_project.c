@@ -3050,34 +3050,36 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Prj_CheckIfICanEditProject (&Projects->Prj) == Usr_I_CAN)
+      switch (Prj_CheckIfICanEditProject (&Projects->Prj))
 	{
-	 /***** Show question and button to remove user as a role from project *****/
-	 /* Begin alert */
-	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
-				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
-				  Projects->Prj.Title);
+	 case Usr_I_CAN:
+	    /***** Show question and button to remove user as a role from project *****/
+	    /* Begin alert */
+	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod)],
+				         Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
+				         Projects->Prj.Title);
 
-	    /* Show user's record */
-	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+	       /* Show user's record */
+	       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-	    /* Show form to request confirmation */
-	    Frm_BeginForm (ActionRemUsr[RoleInPrj]);
-	       Prj_PutCurrentPars (Projects);
-	       if (asprintf (&TxtButton,Txt_Remove_USER_from_this_project,
-	                     Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       Btn_PutRemoveButton (TxtButton);
-	       free (TxtButton);
-	    Frm_EndForm ();
+	       /* Show form to request confirmation */
+	       Frm_BeginForm (ActionRemUsr[RoleInPrj]);
+		  Prj_PutCurrentPars (Projects);
+		  if (asprintf (&TxtButton,Txt_Remove_USER_from_this_project,
+				Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Btn_PutRemoveButton (TxtButton);
+		  free (TxtButton);
+	       Frm_EndForm ();
 
-	 /* End alert */
-	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+	    /* End alert */
+	    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
@@ -3128,25 +3130,27 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 
    /***** Get user to be removed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Prj_CheckIfICanEditProject (&Projects.Prj) == Usr_I_CAN)
+      switch (Prj_CheckIfICanEditProject (&Projects.Prj))
 	{
-	 /***** Remove user from the table of project-users *****/
-	 Prj_DB_RemoveUsrFromPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
+	 case Usr_I_CAN:
+	    /***** Remove user from the table of project-users *****/
+	    Prj_DB_RemoveUsrFromPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	 /***** Flush cache *****/
-	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
-	    Prj_FlushCacheMyRolesInProject ();
+	    /***** Flush cache *****/
+	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
+	       Prj_FlushCacheMyRolesInProject ();
 
-	 /***** Show success alert *****/
-         Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
-		        Gbl.Usrs.Other.UsrDat.FullName,
-		        Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
-		        Projects.Prj.Title);
+	    /***** Show success alert *****/
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
+			   Gbl.Usrs.Other.UsrDat.FullName,
+			   Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
+			   Projects.Prj.Title);
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
@@ -3208,17 +3212,21 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentPars,Projects);
 
    /***** Locked/unlocked project edition *****/
-   if (PrjCfg_CheckIfICanConfig () == Usr_I_CAN)
+   switch (PrjCfg_CheckIfICanConfig ())
      {
-      /* Icon to lock/unlock project edition */
-      HTM_DIV_Begin ("id=\"prj_lck_%ld\" class=\"PRJ_LOCK\"",
-                     Projects->Prj.PrjCod);
-	 Prj_FormLockUnlock (&Projects->Prj);
-      HTM_DIV_End ();
+      case Usr_I_CAN:
+	 /* Icon to lock/unlock project edition */
+	 HTM_DIV_Begin ("id=\"prj_lck_%ld\" class=\"PRJ_LOCK\"",
+			Projects->Prj.PrjCod);
+	    Prj_FormLockUnlock (&Projects->Prj);
+	 HTM_DIV_End ();
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 /* Icon to inform about locked/unlocked project edition */
+	 Prj_PutIconOffLockedUnlocked (&Projects->Prj);
+	 break;
      }
-   else
-      /* Icon to inform about locked/unlocked project edition */
-      Prj_PutIconOffLockedUnlocked (&Projects->Prj);
 
    /***** Link to get resource link *****/
    if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
@@ -4680,10 +4688,16 @@ void Prj_ChangeCriterionScore (void)
       Err_WrongRubricExit ();
 
    /***** Update review *****/
-   if (Prj_CheckIfICanFillRubric (Prj.PrjCod,WhichRubric) == Usr_I_CAN)
-      Rub_DB_UpdateScore (Rsc_PROJECT,Prj.PrjCod,-1L,CriCod,Score);
-   else
-      Err_NoPermission ();
+   switch (Prj_CheckIfICanFillRubric (Prj.PrjCod,WhichRubric))
+     {
+      case Usr_I_CAN:
+	 Rub_DB_UpdateScore (Rsc_PROJECT,Prj.PrjCod,-1L,CriCod,Score);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Err_NoPermission ();
+	 break;
+     }
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

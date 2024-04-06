@@ -4183,25 +4183,35 @@ static void Brw_PutIconRemove (void)
   {
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
-      if (Brw_GetIfICanEditFileOrFolder () == Usr_I_CAN)	// Can I remove this?
-	 switch (Gbl.FileBrowser.FilFolLnk.Type)
-	   {
-	    case Brw_IS_FILE:
-	    case Brw_IS_LINK:
-	       /***** Form to remove a file or link *****/
-	       Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],NULL,
-					      Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
-	       break;
-	    case Brw_IS_FOLDER:
-	       /***** Form to remove a folder *****/
-	       Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],NULL,
-					      Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
-	       break;
-	    default:
-	       break;
-	   }
-      else
-	 Ico_PutIconRemovalNotAllowed ();
+      switch (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
+	{
+	 case Usr_I_CAN:
+	    switch (Gbl.FileBrowser.FilFolLnk.Type)
+	      {
+	       case Brw_IS_FILE:
+	       case Brw_IS_LINK:
+		  /***** Form to remove a file or link *****/
+		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],
+						 NULL,
+						 Brw_PutImplicitParsFileBrowser,
+						 &Gbl.FileBrowser.FilFolLnk);
+		  break;
+	       case Brw_IS_FOLDER:
+		  /***** Form to remove a folder *****/
+		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],
+						 NULL,
+						 Brw_PutImplicitParsFileBrowser,
+						 &Gbl.FileBrowser.FilFolLnk);
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ico_PutIconRemovalNotAllowed ();
+	    break;
+	}
 
    HTM_TD_End ();
   }
@@ -4232,18 +4242,21 @@ static void Brw_PutIconPaste (unsigned Level)
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
       if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)	// Can't paste in a file or link
-	{
-	 /* Icon to paste */
-	 if (Brw_CheckIfCanPasteIn (Level) == Usr_I_CAN)
+	 /***** Icon to paste *****/
+	 switch (Brw_CheckIfCanPasteIn (Level))
 	   {
-	    /***** Form to paste the content of the clipboard *****/
-	    Ico_PutContextualIconToPaste (Brw_ActPaste[Gbl.FileBrowser.Type],
-					  Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+	    case Usr_I_CAN:
+	       /* Form to paste the content of the clipboard */
+	       Ico_PutContextualIconToPaste (Brw_ActPaste[Gbl.FileBrowser.Type],
+					     Brw_PutImplicitParsFileBrowser,
+					     &Gbl.FileBrowser.FilFolLnk);
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       /* Icon to paste inactive */
+	       Ico_PutIconOff ("paste.svg",Ico_BLACK,Txt_Copy_not_allowed);
+	       break;
 	   }
-	 else
-	    /* Icon to paste inactive */
-	    Ico_PutIconOff ("paste.svg",Ico_BLACK,Txt_Copy_not_allowed);
-	}
 
    HTM_TD_End ();
   }
@@ -4464,59 +4477,61 @@ static void Brw_PutIconFolder (unsigned Level,
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
       /***** Put icon to create a new file or folder *****/
-      if (Brw_CheckIfICanCreateIntoFolder (Level) == Usr_I_CAN)	// I can create a new file or folder
+      switch (Brw_CheckIfICanCreateIntoFolder (Level))	// I can create a new file or folder
 	{
-	 if (IconSubtree == Brw_ICON_TREE_EXPAND)
-	   {
-	    /***** Visible icon with folder closed *****/
-	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       false,		// Closed
-				       HidVis_VISIBLE);	// Visible
+	 case Usr_I_CAN:
+	    if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	      {
+	       /* Visible icon with folder closed */
+	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					  false,		// Closed
+					  HidVis_VISIBLE);	// Visible
 
-	    /***** Hidden icon with folder open *****/
-	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       true,		// Open
-				       HidVis_HIDDEN);	// Hidden
-	   }
-	 else
-	   {
-	    /***** Hidden icon with folder closed *****/
-	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       false,		// Closed
-				       HidVis_HIDDEN);	// Hidden
+	       /* Hidden icon with folder open */
+	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					  true,		// Open
+					  HidVis_HIDDEN);	// Hidden
+	      }
+	    else
+	      {
+	       /* Hidden icon with folder closed */
+	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					  false,		// Closed
+					  HidVis_HIDDEN);	// Hidden
 
-	    /***** Visible icon with folder open *****/
-	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				       true,		// Open
-				       HidVis_VISIBLE);	// Visible
-	   }
-	}
-      else	// I can't create a new file or folder
-	{
-	 if (IconSubtree == Brw_ICON_TREE_EXPAND)
-	   {
-	    /***** Visible icon with folder closed *****/
-	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					  false,	// Closed
-					  HidVis_VISIBLE);
+	       /* Visible icon with folder open */
+	       Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+					  true,		// Open
+					  HidVis_VISIBLE);	// Visible
+	      }
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	      {
+	       /* Visible icon with folder closed */
+	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					     false,	// Closed
+					     HidVis_VISIBLE);
 
-	    /***** Hidden icon with folder open *****/
-	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					  true,	// Open
-					  HidVis_HIDDEN);
-	   }
-	 else
-	   {
-	    /***** Hidden icon with folder closed *****/
-	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					  false,	// Closed
-					  HidVis_HIDDEN);
+	       /* Hidden icon with folder open */
+	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					     true,	// Open
+					     HidVis_HIDDEN);
+	      }
+	    else
+	      {
+	       /* Hidden icon with folder closed */
+	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					     false,	// Closed
+					     HidVis_HIDDEN);
 
-	    /***** Visible icon with folder open *****/
-	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-					  true,	// Open
-					  HidVis_VISIBLE);
-	   }
+	       /* Visible icon with folder open */
+	       Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					     true,	// Open
+					     HidVis_VISIBLE);
+	      }
+	    break;
 	}
 
    /***** End cell *****/
@@ -4720,33 +4735,36 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 
 	       HTM_NBSP ();
 
-	       if (Brw_GetIfICanEditFileOrFolder () == Usr_I_CAN)	// Can I rename this folder?
+	       switch (Brw_GetIfICanEditFileOrFolder ())	// Can I rename this folder?
 		 {
-	          /***** Form to rename folder *****/
-		  Frm_BeginForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
-		     Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-		     HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
-				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"LST_EDIT %s_%s %s\"",
-				     InputStyle,
-				     The_GetSuffix (),
-				     Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
-									    The_GetColorRows ());
-		  Frm_EndForm ();
-		 }
-	       else
-		 {
-	          /***** Write name of the folder *****/
-		  if (Level == 1 && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
-		     HTM_SPAN_Begin ("title=\"%s\"",Gbl.FileBrowser.Asg.Title);
+		  case Usr_I_CAN:
+		     /***** Form to rename folder *****/
+		     Frm_BeginForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
+			Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+			HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,
+				        Gbl.FileBrowser.FilFolLnk.Name,
+					HTM_SUBMIT_ON_CHANGE,
+					"class=\"LST_EDIT %s_%s %s\"",
+					InputStyle,
+					The_GetSuffix (),
+					Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
+									       The_GetColorRows ());
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     /***** Write name of the folder *****/
+		     if (Level == 1 && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
+			HTM_SPAN_Begin ("title=\"%s\"",Gbl.FileBrowser.Asg.Title);
 
-		  HTM_STRONG_Begin ();
-		     HTM_Txt (FileNameToShow);
-		  HTM_STRONG_End ();
-		  HTM_NBSP ();
+		     HTM_STRONG_Begin ();
+			HTM_Txt (FileNameToShow);
+		     HTM_STRONG_End ();
+		     HTM_NBSP ();
 
-		  if (Level == 1 && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
-		     HTM_SPAN_End ();
+		     if (Level == 1 && Brw_TypeIsAdmAsg[Gbl.FileBrowser.Type])
+			HTM_SPAN_End ();
+		     break;
 		 }
 
 	    /***** End cell *****/
@@ -4934,21 +4952,25 @@ void Brw_AskRemFileFromTree (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Button of confirmation of removing *****/
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I remove this file?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
-      /***** Show question and button to remove file/link *****/
-      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-                                             Gbl.FileBrowser.Level,
-                                             Gbl.FileBrowser.FilFolLnk.Type,
-                                             Gbl.FileBrowser.FilFolLnk.Name,
-                                             FileNameToShow);
-      Ale_ShowAlertRemove (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,
-			   Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
-			   Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
-                           FileNameToShow);
+      case Usr_I_CAN:
+	 /***** Show question and button to remove file/link *****/
+	 Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+						Gbl.FileBrowser.Level,
+						Gbl.FileBrowser.FilFolLnk.Type,
+						Gbl.FileBrowser.FilFolLnk.Name,
+						FileNameToShow);
+	 Ale_ShowAlertRemove (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,
+			      Brw_PutImplicitParsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
+			      Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
+			      FileNameToShow);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -4969,40 +4991,44 @@ void Brw_RemFileFromTree (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I remove this file?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
-      snprintf (Path,sizeof (Path),"%s/%s",
-	        Gbl.FileBrowser.Path.AboveRootFolder,
-	        Gbl.FileBrowser.FilFolLnk.Full);
+      case Usr_I_CAN:
+	 snprintf (Path,sizeof (Path),"%s/%s",
+		   Gbl.FileBrowser.Path.AboveRootFolder,
+		   Gbl.FileBrowser.FilFolLnk.Full);
 
-      /***** Check if is a file/link or a folder *****/
-      if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
-      else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
-        {
-	 /* Name of the file/link to be shown */
-	 Brw_GetFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,"url") ? Brw_IS_LINK :
-										    Brw_IS_FILE,
-				Gbl.FileBrowser.FilFolLnk.Name,FileNameToShow);
+	 /***** Check if is a file/link or a folder *****/
+	 if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+	    Err_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
+	   {
+	    /* Name of the file/link to be shown */
+	    Brw_GetFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,"url") ? Brw_IS_LINK :
+										       Brw_IS_FILE,
+				   Gbl.FileBrowser.FilFolLnk.Name,FileNameToShow);
 
-	 /* Remove file/link from disk and database */
-	 Brw_RemoveFileFromDiskAndDB (Path,
-	                              Gbl.FileBrowser.FilFolLnk.Full);
+	    /* Remove file/link from disk and database */
+	    Brw_RemoveFileFromDiskAndDB (Path,
+					 Gbl.FileBrowser.FilFolLnk.Full);
 
-	 /* Remove affected clipboards */
-	 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				          Gbl.Usrs.Me.UsrDat.UsrCod,
-				          Gbl.Usrs.Other.UsrDat.UsrCod);
+	    /* Remove affected clipboards */
+	    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+					     Gbl.Usrs.Me.UsrDat.UsrCod,
+					     Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	 /* Message of confirmation of removing */
-         Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_X_removed,
-		        FileNameToShow);
-        }
-      else		// File / link not found
-         Err_FileFolderNotFoundExit ();
+	    /* Message of confirmation of removing */
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_X_removed,
+			   FileNameToShow);
+	   }
+	 else		// File / link not found
+	    Err_FileFolderNotFoundExit ();
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -5022,40 +5048,44 @@ void Brw_RemFolderFromTree (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I remove this folder?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this folder?
      {
-      snprintf (Path,sizeof (Path),"%s/%s",
-	        Gbl.FileBrowser.Path.AboveRootFolder,
-	        Gbl.FileBrowser.FilFolLnk.Full);
+      case Usr_I_CAN:
+	 snprintf (Path,sizeof (Path),"%s/%s",
+		   Gbl.FileBrowser.Path.AboveRootFolder,
+		   Gbl.FileBrowser.FilFolLnk.Full);
 
-      /***** Check if it's a file or a folder *****/
-      if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
-      else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	 if (Brw_RemoveFolderFromDiskAndDB (Path,
-                                            Gbl.FileBrowser.FilFolLnk.Full))
-           {
-	    if (errno == ENOTEMPTY)	// The directory is not empty
-	       Brw_AskConfirmRemoveFolderNotEmpty ();
-	    else	// The directory is empty
-               Err_ShowErrorAndExit ("Can not remove folder.");
-           }
-         else
-           {
-            /* Remove affected clipboards */
-            Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-                                             Gbl.Usrs.Me.UsrDat.UsrCod,
-                                             Gbl.Usrs.Other.UsrDat.UsrCod);
+	 /***** Check if it's a file or a folder *****/
+	 if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+	    Err_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	    if (Brw_RemoveFolderFromDiskAndDB (Path,
+					       Gbl.FileBrowser.FilFolLnk.Full))
+	      {
+	       if (errno == ENOTEMPTY)	// The directory is not empty
+		  Brw_AskConfirmRemoveFolderNotEmpty ();
+	       else	// The directory is empty
+		  Err_ShowErrorAndExit ("Can not remove folder.");
+	      }
+	    else
+	      {
+	       /* Remove affected clipboards */
+	       Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+						Gbl.Usrs.Me.UsrDat.UsrCod,
+						Gbl.Usrs.Other.UsrDat.UsrCod);
 
-            /* Message of confirmation of successfull removing */
-            Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,
-                           Gbl.FileBrowser.FilFolLnk.Name);
-           }
-      else		// Folder not found
-         Err_FileFolderNotFoundExit ();
+	       /* Message of confirmation of successfull removing */
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,
+			      Gbl.FileBrowser.FilFolLnk.Name);
+	      }
+	 else		// Folder not found
+	    Err_FileFolderNotFoundExit ();
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Err_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -5769,189 +5799,194 @@ static void Brw_PasteClipboard (struct BrwSiz_BrowserSize *Size)
    Pasted.NumFolds = 0;
 
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
-   if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level) == Usr_I_CAN)
+   switch (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level))
      {
-      /***** Construct the relative path of the origin file or folder *****/
-      switch (Gbl.FileBrowser.Clipboard.FileBrowser)
-        {
-         case Brw_ADMI_DOC_INS:
-         case Brw_ADMI_SHR_INS:
-            Hie[Hie_INS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-            if (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
-		         Cfg_PATH_INS_PRIVATE,
-		         (unsigned) (Hie[Hie_INS].HieCod % 100),
-		         (unsigned) Hie[Hie_INS].HieCod,
-			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-            else
-               Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_DOC_CTR:
-         case Brw_ADMI_SHR_CTR:
-            Hie[Hie_CTR].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-            if (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
-		         Cfg_PATH_CTR_PRIVATE,
-		         (unsigned) (Hie[Hie_CTR].HieCod % 100),
-		         (unsigned) Hie[Hie_CTR].HieCod,
-			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-            else
-               Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_DOC_DEG:
-         case Brw_ADMI_SHR_DEG:
-            Hie[Hie_DEG].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-            if (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
-		         Cfg_PATH_DEG_PRIVATE,
-		         (unsigned) (Hie[Hie_DEG].HieCod % 100),
-		         (unsigned) Hie[Hie_DEG].HieCod,
-			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-            else
-               Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_DOC_CRS:
-         case Brw_ADMI_TCH_CRS:
-         case Brw_ADMI_SHR_CRS:
-         case Brw_ADMI_MRK_CRS:
-            Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-            if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,
-			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-            else
-               Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_DOC_GRP:
-         case Brw_ADMI_TCH_GRP:
-         case Brw_ADMI_SHR_GRP:
-         case Brw_ADMI_MRK_GRP:
-	    GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
-	    Grp_GetGroupDataByCod (&GrpDat);
-	    Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
-            if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_GRP,
-			 GrpDat.GrpCod,
-			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-            else
-               Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_ASG_CRS:
-         case Brw_ADMI_WRK_CRS:
-            Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-            if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-              {
-               Usr_UsrDataConstructor (&UsrDat);
-               if (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
-
-	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,
-	                                    Usr_DONT_GET_PREFS,
-	                                    Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
-			 (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
-			 Gbl.FileBrowser.Clipboard.WorksUsrCod,
-			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	       Usr_UsrDataDestructor (&UsrDat);
-              }
-            else
-               Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_ASG_USR:
-         case Brw_ADMI_WRK_USR:
-            Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
-            if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-                         Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
-			 (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-            else
-               Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_DOC_PRJ:
-         case Brw_ADMI_ASS_PRJ:
-            PrjCod = Gbl.FileBrowser.Clipboard.HieCod;
-            Hie[Hie_CRS].HieCod = Prj_DB_GetCrsOfPrj (PrjCod);
-	    if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
-	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
-			Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_PRJ,
-			(unsigned) (PrjCod % 100),
-			PrjCod,
-			Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-	    else
-	       Err_WrongCopySrcExit ();
-            break;
-         case Brw_ADMI_BRF_USR:
-            snprintf (PathOrg,sizeof (PathOrg),"%s/%s",
-        	      Gbl.Usrs.Me.PathDir,
-        	      Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
-            break;
-         default:
-            Err_WrongFileBrowserExit ();
-            break;
-        }
-
-      /***** Paste tree (path in clipboard) into folder *****/
-      BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-      BrwSiz_SetMaxQuota (Size);
-      if (Brw_PasteTreeIntoFolder (Size,
-	                           Gbl.FileBrowser.Clipboard.Level,
-	                           PathOrg,
-                                   Gbl.FileBrowser.FilFolLnk.Full,
-	                           &Pasted,
-	                           &FirstFilCod))
-        {
-         /***** Write message of success *****/
-         Ale_ShowAlert (Ale_SUCCESS,"%s<br />"
-                                    "%s: %u<br />"
-                                    "%s: %u<br />"
-                                    "%s: %u",
-                        Txt_The_copy_has_been_successful,
-                        Txt_Files_copied  ,Pasted.NumFiles,
-                        Txt_Links_copied  ,Pasted.NumLinks,
-                        Txt_Folders_copied,Pasted.NumFolds);
-
-         /***** Notify new files *****/
-	 if (Pasted.NumFiles ||
-	     Pasted.NumLinks)
+      case Usr_I_CAN:
+	 /***** Construct the relative path of the origin file or folder *****/
+	 switch (Gbl.FileBrowser.Clipboard.FileBrowser)
 	   {
-	    FileMetadata.FilCod = FirstFilCod;
-            Brw_GetFileMetadataByCod (&FileMetadata);
-
-	    /* Notify only is destination folder is visible */
-	    if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
-	       switch (Gbl.FileBrowser.Type)
+	    case Brw_ADMI_DOC_INS:
+	    case Brw_ADMI_SHR_INS:
+	       Hie[Hie_INS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       if (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+			    Cfg_PATH_INS_PRIVATE,
+			    (unsigned) (Hie[Hie_INS].HieCod % 100),
+			    (unsigned) Hie[Hie_INS].HieCod,
+			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_DOC_CTR:
+	    case Brw_ADMI_SHR_CTR:
+	       Hie[Hie_CTR].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       if (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+			    Cfg_PATH_CTR_PRIVATE,
+			    (unsigned) (Hie[Hie_CTR].HieCod % 100),
+			    (unsigned) Hie[Hie_CTR].HieCod,
+			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_DOC_DEG:
+	    case Brw_ADMI_SHR_DEG:
+	       Hie[Hie_DEG].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       if (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%02u/%u/%s",
+			    Cfg_PATH_DEG_PRIVATE,
+			    (unsigned) (Hie[Hie_DEG].HieCod % 100),
+			    (unsigned) Hie[Hie_DEG].HieCod,
+			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_MRK_CRS:
+	       Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s",
+			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,
+			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_DOC_GRP:
+	    case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:
+	    case Brw_ADMI_MRK_GRP:
+	       GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       Grp_GetGroupDataByCod (&GrpDat);
+	       Hie[Hie_CRS].HieCod = GrpDat.CrsCod;
+	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%ld/%s",
+			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_GRP,
+			    GrpDat.GrpCod,
+			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_ASG_CRS:
+	    case Brw_ADMI_WRK_CRS:
+	       Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
 		 {
-		  case Brw_ADMI_DOC_CRS:
-		  case Brw_ADMI_DOC_GRP:
-		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FirstFilCod);
-		     break;
-		  case Brw_ADMI_TCH_CRS:
-		  case Brw_ADMI_TCH_GRP:
-		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FirstFilCod);
-		     break;
-		  case Brw_ADMI_SHR_CRS:
-		  case Brw_ADMI_SHR_GRP:
-		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FirstFilCod);
-		     break;
-		  case Brw_ADMI_MRK_CRS:
-		  case Brw_ADMI_MRK_GRP:
-		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FirstFilCod);
-		     break;
-		  default:
-		     break;
-		 }
-	   }
-        }
+		  Usr_UsrDataConstructor (&UsrDat);
+		  if (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
 
-      /***** Add path where new tree is pasted to table of expanded folders *****/
-      Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+		  UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
+		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+					       Usr_DONT_GET_PREFS,
+					       Usr_DONT_GET_ROLE_IN_CRS);	// Check that user exists
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
+			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
+			    (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
+			    Gbl.FileBrowser.Clipboard.WorksUsrCod,
+			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+		  Usr_UsrDataDestructor (&UsrDat);
+		 }
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_ASG_USR:
+	    case Brw_ADMI_WRK_USR:
+	       Hie[Hie_CRS].HieCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
+			    Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_USR,
+			    (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+			    Gbl.Usrs.Me.UsrDat.UsrCod,
+			    Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_DOC_PRJ:
+	    case Brw_ADMI_ASS_PRJ:
+	       PrjCod = Gbl.FileBrowser.Clipboard.HieCod;
+	       Hie[Hie_CRS].HieCod = Prj_DB_GetCrsOfPrj (PrjCod);
+	       if (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
+		  snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
+			   Cfg_PATH_CRS_PRIVATE,Hie[Hie_CRS].HieCod,Cfg_FOLDER_PRJ,
+			   (unsigned) (PrjCod % 100),
+			   PrjCod,
+			   Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       else
+		  Err_WrongCopySrcExit ();
+	       break;
+	    case Brw_ADMI_BRF_USR:
+	       snprintf (PathOrg,sizeof (PathOrg),"%s/%s",
+			 Gbl.Usrs.Me.PathDir,
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
+	       break;
+	    default:
+	       Err_WrongFileBrowserExit ();
+	       break;
+	   }
+
+	 /***** Paste tree (path in clipboard) into folder *****/
+	 BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+	 BrwSiz_SetMaxQuota (Size);
+	 if (Brw_PasteTreeIntoFolder (Size,
+				      Gbl.FileBrowser.Clipboard.Level,
+				      PathOrg,
+				      Gbl.FileBrowser.FilFolLnk.Full,
+				      &Pasted,
+				      &FirstFilCod))
+	   {
+	    /***** Write message of success *****/
+	    Ale_ShowAlert (Ale_SUCCESS,"%s<br />"
+				       "%s: %u<br />"
+				       "%s: %u<br />"
+				       "%s: %u",
+			   Txt_The_copy_has_been_successful,
+			   Txt_Files_copied  ,Pasted.NumFiles,
+			   Txt_Links_copied  ,Pasted.NumLinks,
+			   Txt_Folders_copied,Pasted.NumFolds);
+
+	    /***** Notify new files *****/
+	    if (Pasted.NumFiles ||
+		Pasted.NumLinks)
+	      {
+	       FileMetadata.FilCod = FirstFilCod;
+	       Brw_GetFileMetadataByCod (&FileMetadata);
+
+	       /* Notify only is destination folder is visible */
+	       if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
+		  switch (Gbl.FileBrowser.Type)
+		    {
+		     case Brw_ADMI_DOC_CRS:
+		     case Brw_ADMI_DOC_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FirstFilCod);
+			break;
+		     case Brw_ADMI_TCH_CRS:
+		     case Brw_ADMI_TCH_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FirstFilCod);
+			break;
+		     case Brw_ADMI_SHR_CRS:
+		     case Brw_ADMI_SHR_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FirstFilCod);
+			break;
+		     case Brw_ADMI_MRK_CRS:
+		     case Brw_ADMI_MRK_GRP:
+			Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FirstFilCod);
+			break;
+		     default:
+			break;
+		    }
+	      }
+	   }
+
+	 /***** Add path where new tree is pasted to table of expanded folders *****/
+	 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 // It's difficult, but not impossible that a user sees this message
+         Err_ShowErrorAndExit (Txt_You_can_not_paste_file_or_folder_here);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit (Txt_You_can_not_paste_file_or_folder_here);	// It's difficult, but not impossible that a user sees this message
   }
 
 /*****************************************************************************/
@@ -6190,44 +6225,46 @@ void Brw_ShowFormFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new folder or file is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
-      /***** Name of the folder to be shown ****/
-      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-                                             Gbl.FileBrowser.Level,
-                                             Gbl.FileBrowser.FilFolLnk.Type,
-                                             Gbl.FileBrowser.FilFolLnk.Name,
-                                             FileNameToShow);
+      case Usr_I_CAN:
+	 /***** Name of the folder to be shown ****/
+	 Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+						Gbl.FileBrowser.Level,
+						Gbl.FileBrowser.FilFolLnk.Type,
+						Gbl.FileBrowser.FilFolLnk.Name,
+						FileNameToShow);
 
-      /***** 1. Form to create a new folder *****/
-      Brw_PutFormToCreateAFolder (FileNameToShow);
+	 /***** 1. Form to create a new folder *****/
+	 Brw_PutFormToCreateAFolder (FileNameToShow);
 
-      /***** 2. Form to send a file *****/
-      Brw_PutFormToUploadFilesUsingDropzone (FileNameToShow);
+	 /***** 2. Form to send a file *****/
+	 Brw_PutFormToUploadFilesUsingDropzone (FileNameToShow);
 
-      /***** 3. Form to send a file *****/
-      Brw_PutFormToUploadOneFileClassic (FileNameToShow);
+	 /***** 3. Form to send a file *****/
+	 Brw_PutFormToUploadOneFileClassic (FileNameToShow);
 
-      /***** 4. Form to paste the content of the clipboard *****/
-      if (Brw_GetMyClipboard ())
-        {
-         /***** Check if we can paste in this folder *****/
-         Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
-         if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level) == Usr_I_CAN)
-            Brw_PutFormToPasteAFileOrFolder (FileNameToShow);
-        }
+	 /***** 4. Form to paste the content of the clipboard *****/
+	 if (Brw_GetMyClipboard ())
+	   {
+	    /***** Check if we can paste in this folder *****/
+	    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
+	    if (Brw_CheckIfCanPasteIn (Gbl.FileBrowser.Level) == Usr_I_CAN)
+	       Brw_PutFormToPasteAFileOrFolder (FileNameToShow);
+	   }
 
-      /***** 5. Form to create a link *****/
-      if (Gbl.FileBrowser.Type != Brw_ADMI_MRK_CRS &&
-	  Gbl.FileBrowser.Type != Brw_ADMI_MRK_GRP)	// Do not create links in marks
-         Brw_PutFormToCreateALink (FileNameToShow);
-     }
-   else
-     {
-      Err_ShowErrorAndExit (Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
+	 /***** 5. Form to create a link *****/
+	 if (Gbl.FileBrowser.Type != Brw_ADMI_MRK_CRS &&
+	     Gbl.FileBrowser.Type != Brw_ADMI_MRK_GRP)	// Do not create links in marks
+	    Brw_PutFormToCreateALink (FileNameToShow);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Err_ShowErrorAndExit (Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
 
-      /***** Show again file browser *****/
-      Brw_ShowAgainFileBrowserOrWorks ();
+	 /***** Show again file browser *****/
+	 Brw_ShowAgainFileBrowserOrWorks ();
+	 break;
      }
   }
 
@@ -6486,83 +6523,88 @@ void Brw_RecFolderFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new folder is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
-      if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
-        {
-         /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
-         snprintf (Path,sizeof (Path),"%s/%s",
-        	   Gbl.FileBrowser.Path.AboveRootFolder,
-		   Gbl.FileBrowser.FilFolLnk.Full);
-
-         if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
-	    Err_ShowErrorAndExit ("Path is too long.");
-         Str_Concat (Path,"/",sizeof (Path) - 1);
-         Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
-
-         /* Create the new directory */
-         if (mkdir (Path,(mode_t) 0xFFF) == 0)
+      case Usr_I_CAN:
+	 if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    /* Check if quota has been exceeded */
-	    BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-	    BrwSiz_SetMaxQuota (Size);
-            if (BrwSiz_CheckIfQuotaExceded (Size))
+	    /* In Gbl.FileBrowser.NewFilFolLnkName is the name of the new folder */
+	    snprintf (Path,sizeof (Path),"%s/%s",
+		      Gbl.FileBrowser.Path.AboveRootFolder,
+		      Gbl.FileBrowser.FilFolLnk.Full);
+
+	    if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
+	       Err_ShowErrorAndExit ("Path is too long.");
+	    Str_Concat (Path,"/",sizeof (Path) - 1);
+	    Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
+
+	    /* Create the new directory */
+	    if (mkdir (Path,(mode_t) 0xFFF) == 0)
 	      {
-	       Fil_RemoveTree (Path);
-               Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
-                              Gbl.FileBrowser.NewFilFolLnkName);
+	       /* Check if quota has been exceeded */
+	       BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+	       BrwSiz_SetMaxQuota (Size);
+	       if (BrwSiz_CheckIfQuotaExceded (Size))
+		 {
+		  Fil_RemoveTree (Path);
+		  Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
+				 Gbl.FileBrowser.NewFilFolLnkName);
+		 }
+	       else
+		 {
+		  /* Remove affected clipboards */
+		  Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+						   Gbl.Usrs.Me.UsrDat.UsrCod,
+						   Gbl.Usrs.Other.UsrDat.UsrCod);
+
+		  /* Add path where new file is created to table of expanded folders */
+		  Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+
+		  /* Add entry to the table of files/folders */
+		  snprintf (PathCompleteInTreeIncludingFolder,
+			    sizeof (PathCompleteInTreeIncludingFolder),
+			    "%s/%s",
+			    Gbl.FileBrowser.FilFolLnk.Full,
+			    Gbl.FileBrowser.NewFilFolLnkName);
+		  Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FOLDER,
+				   PathCompleteInTreeIncludingFolder,false,Brw_LICENSE_DEFAULT);
+
+		  /* The folder has been created sucessfully */
+		  Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+							 Gbl.FileBrowser.Level,
+							 Brw_IS_FOLDER,
+							 Gbl.FileBrowser.FilFolLnk.Name,
+							 FileNameToShow);
+		  Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
+				 Gbl.FileBrowser.NewFilFolLnkName,FileNameToShow);
+		 }
 	      }
 	    else
-              {
-               /* Remove affected clipboards */
-               Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-        				        Gbl.Usrs.Me.UsrDat.UsrCod,
-					        Gbl.Usrs.Other.UsrDat.UsrCod);
-
-               /* Add path where new file is created to table of expanded folders */
-               Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
-
-               /* Add entry to the table of files/folders */
-               snprintf (PathCompleteInTreeIncludingFolder,
-                         sizeof (PathCompleteInTreeIncludingFolder),
-			 "%s/%s",
-			 Gbl.FileBrowser.FilFolLnk.Full,
-			 Gbl.FileBrowser.NewFilFolLnkName);
-               Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FOLDER,
-                                PathCompleteInTreeIncludingFolder,false,Brw_LICENSE_DEFAULT);
-
-	       /* The folder has been created sucessfully */
-               Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-                                                      Gbl.FileBrowser.Level,
-                                                      Brw_IS_FOLDER,
-                                                      Gbl.FileBrowser.FilFolLnk.Name,
-                                                      FileNameToShow);
-               Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
-		              Gbl.FileBrowser.NewFilFolLnkName,FileNameToShow);
-              }
-	   }
-         else
-	   {
-	    switch (errno)
 	      {
-	       case EEXIST:
-                  Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
-		   	         Gbl.FileBrowser.NewFilFolLnkName);
-	          break;
-	       case EACCES:
-	          Err_ShowErrorAndExit ("Write forbidden.");
-	          break;
-	       default:
-	          Err_ShowErrorAndExit ("Can not create folder.");
-	          break;
+	       switch (errno)
+		 {
+		  case EEXIST:
+		     Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
+				    Gbl.FileBrowser.NewFilFolLnkName);
+		     break;
+		  case EACCES:
+		     Err_ShowErrorAndExit ("Write forbidden.");
+		     break;
+		  default:
+		     Err_ShowErrorAndExit ("Can not create folder.");
+		     break;
+		 }
 	      }
 	   }
-        }
-      else	// Folder name not valid
-         Ale_ShowAlerts (NULL);
+	 else	// Folder name not valid
+	    Ale_ShowAlerts (NULL);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 // It's difficult, but not impossible that a user sees this message
+	 Err_ShowErrorAndExit (Txt_You_can_not_create_folders_here);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit (Txt_You_can_not_create_folders_here);	// It's difficult, but not impossible that a user sees this message
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -6586,92 +6628,99 @@ void Brw_RenFolderFileBrowser (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)	// Can I rename this folder?
+   switch (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I rename this folder?
      {
-      if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
-        {
-         if (strcmp (Gbl.FileBrowser.FilFolLnk.Name,Gbl.FileBrowser.NewFilFolLnkName))	// The name has changed
-           {
-            /* Gbl.FileBrowser.FilFolLnk.Name holds the new name of the folder */
-            snprintf (OldPathInTree,sizeof (OldPathInTree),"%s/%s",
-        	      Gbl.FileBrowser.FilFolLnk.Path,
-		      Gbl.FileBrowser.FilFolLnk.Name);
-            snprintf (OldPath,sizeof (OldPath),"%s/%s",
-        	      Gbl.FileBrowser.Path.AboveRootFolder,OldPathInTree);
-
-            /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
-            if (strlen (Gbl.FileBrowser.Path.AboveRootFolder) + 1 +
-                strlen (Gbl.FileBrowser.FilFolLnk.Path) + 1 +
-                strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
-	       Err_ShowErrorAndExit ("Path is too long.");
-            snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
-        	      Gbl.FileBrowser.FilFolLnk.Path,
-		      Gbl.FileBrowser.NewFilFolLnkName);
-            snprintf (NewPath,sizeof (NewPath),"%s/%s",
-        	      Gbl.FileBrowser.Path.AboveRootFolder,NewPathInTree);
-
-            /* We should check here that a folder with the same name does not exist.
-	       but we leave this work to the system */
-
-            /* Rename the directory. If a empty folder existed with the name new, overwrite it! */
-            if (rename (OldPath,NewPath))	// Fail
+      case Usr_I_CAN:
+	 if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
+	   {
+	    if (strcmp (Gbl.FileBrowser.FilFolLnk.Name,
+			Gbl.FileBrowser.NewFilFolLnkName))	// The name has changed
 	      {
-	       switch (errno)
-	         {
-	          case ENOTEMPTY:
-	          case EEXIST:
-	          case ENOTDIR:
-                     Ale_ShowAlert (Ale_WARNING,Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
-			            Gbl.FileBrowser.FilFolLnk.Name,Gbl.FileBrowser.NewFilFolLnkName);
-	             break;
-	          case EACCES:
-	             Err_ShowErrorAndExit ("Write forbidden.");
-	             break;
-	          default:
-	             Err_ShowErrorAndExit ("Can not rename folder.");
-	             break;
-	         }
+	       /* Gbl.FileBrowser.FilFolLnk.Name holds the new name of the folder */
+	       snprintf (OldPathInTree,sizeof (OldPathInTree),"%s/%s",
+			 Gbl.FileBrowser.FilFolLnk.Path,
+			 Gbl.FileBrowser.FilFolLnk.Name);
+	       snprintf (OldPath,sizeof (OldPath),"%s/%s",
+			 Gbl.FileBrowser.Path.AboveRootFolder,OldPathInTree);
+
+	       /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
+	       if (strlen (Gbl.FileBrowser.Path.AboveRootFolder) + 1 +
+		   strlen (Gbl.FileBrowser.FilFolLnk.Path) + 1 +
+		   strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
+		  Err_ShowErrorAndExit ("Path is too long.");
+	       snprintf (NewPathInTree,sizeof (NewPathInTree),"%s/%s",
+			 Gbl.FileBrowser.FilFolLnk.Path,
+			 Gbl.FileBrowser.NewFilFolLnkName);
+	       snprintf (NewPath,sizeof (NewPath),"%s/%s",
+			 Gbl.FileBrowser.Path.AboveRootFolder,NewPathInTree);
+
+	       /* We should check here that a folder with the same name does not exist.
+		  but we leave this work to the system */
+
+	       /* Rename the directory. If a empty folder existed with the name new, overwrite it! */
+	       if (rename (OldPath,NewPath))	// Fail
+		 {
+		  switch (errno)
+		    {
+		     case ENOTEMPTY:
+		     case EEXIST:
+		     case ENOTDIR:
+			Ale_ShowAlert (Ale_WARNING,
+				       Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
+				       Gbl.FileBrowser.FilFolLnk.Name,
+				       Gbl.FileBrowser.NewFilFolLnkName);
+			break;
+		     case EACCES:
+			Err_ShowErrorAndExit ("Write forbidden.");
+			break;
+		     default:
+			Err_ShowErrorAndExit ("Can not rename folder.");
+			break;
+		    }
+		 }
+	       else				// Success
+		 {
+		  /* If a folder is renamed,
+		     it is necessary to rename all entries in the tables of files
+		     that belong to the subtree starting at that folder */
+		  Brw_DB_RenameOneFolder (OldPathInTree,
+					  NewPathInTree);
+		  Brw_DB_RenameChildrenFilesOrFolders (OldPathInTree,
+						       NewPathInTree);
+
+		  /* Remove affected clipboards */
+		  Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+						   Gbl.Usrs.Me.UsrDat.UsrCod,
+						   Gbl.Usrs.Other.UsrDat.UsrCod);
+
+		  /* Remove affected expanded folders */
+		  Brw_DB_RenameAffectedExpandedFolders (Gbl.FileBrowser.Type,
+							Gbl.Usrs.Me.UsrDat.UsrCod,
+							Gbl.Usrs.Other.UsrDat.UsrCod,
+							OldPathInTree,
+							NewPathInTree);
+
+		  /* Write message of confirmation */
+		  Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_renamed_as_Y,
+				 Gbl.FileBrowser.FilFolLnk.Name,
+				 Gbl.FileBrowser.NewFilFolLnkName);
+		 }
+
 	      }
-            else				// Success
-              {
-	       /* If a folder is renamed,
-                  it is necessary to rename all entries in the tables of files
-                  that belong to the subtree starting at that folder */
-               Brw_DB_RenameOneFolder (OldPathInTree,
-        	                       NewPathInTree);
-               Brw_DB_RenameChildrenFilesOrFolders (OldPathInTree,
-        	                                    NewPathInTree);
-
-               /* Remove affected clipboards */
-               Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-        	                                Gbl.Usrs.Me.UsrDat.UsrCod,
-        	                                Gbl.Usrs.Other.UsrDat.UsrCod);
-
-               /* Remove affected expanded folders */
-               Brw_DB_RenameAffectedExpandedFolders (Gbl.FileBrowser.Type,
-        	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
-        	                                     Gbl.Usrs.Other.UsrDat.UsrCod,
-        	                                     OldPathInTree,
-        	                                     NewPathInTree);
-
-               /* Write message of confirmation */
-               Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_renamed_as_Y,
-                              Gbl.FileBrowser.FilFolLnk.Name,
-                              Gbl.FileBrowser.NewFilFolLnkName);
-              }
-
-           }
-         else	// Names are equal.
-	        // This may happens if we have press...
-		// ...INTRO without changing the name
-            Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,
-                           Gbl.FileBrowser.FilFolLnk.Name);
-        }
-      else	// Folder name not valid
-         Ale_ShowAlerts (NULL);
+	    else	// Names are equal.
+		   // This may happens if we have press...
+		   // ...INTRO without changing the name
+	       Ale_ShowAlert (Ale_INFO,Txt_The_name_X_has_not_changed,
+			      Gbl.FileBrowser.FilFolLnk.Name);
+	   }
+	 else	// Folder name not valid
+	    Ale_ShowAlerts (NULL);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+         Err_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -6757,154 +6806,159 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new file is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
-      /***** First, we save in disk the file received *****/
-      Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
-                                      SrcFileName,MIMEType);
+      case Usr_I_CAN:
+	 /***** First, we save in disk the file received *****/
+	 Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
+					 SrcFileName,MIMEType);
 
-      /***** Get filename from path *****/
-      // Spaces at start or end are allowed
-      Str_SplitFullPathIntoPathAndFileName (SrcFileName,
-	                                    PathUntilFileName,
-	                                    Gbl.FileBrowser.NewFilFolLnkName);
-      if (Gbl.FileBrowser.NewFilFolLnkName[0])
-        {
-         /***** Check if uploading this kind of file is allowed *****/
-	 if (Brw_CheckIfUploadIsAllowed (MIMEType))
-           {
-            if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
-              {
-               /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
-               snprintf (Path,sizeof (Path),"%s/%s",
-                         Gbl.FileBrowser.Path.AboveRootFolder,
-                         Gbl.FileBrowser.FilFolLnk.Full);
-               if (strlen (Path) + 1 +
-        	   strlen (Gbl.FileBrowser.NewFilFolLnkName) +
-		   strlen (".tmp") > PATH_MAX)
-	          Err_ShowErrorAndExit ("Path is too long.");
-               Str_Concat (Path,"/",sizeof (Path) - 1);
-               Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
+	 /***** Get filename from path *****/
+	 // Spaces at start or end are allowed
+	 Str_SplitFullPathIntoPathAndFileName (SrcFileName,
+					       PathUntilFileName,
+					       Gbl.FileBrowser.NewFilFolLnkName);
+	 if (Gbl.FileBrowser.NewFilFolLnkName[0])
+	   {
+	    /***** Check if uploading this kind of file is allowed *****/
+	    if (Brw_CheckIfUploadIsAllowed (MIMEType))
+	      {
+	       if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
+		 {
+		  /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
+		  snprintf (Path,sizeof (Path),"%s/%s",
+			    Gbl.FileBrowser.Path.AboveRootFolder,
+			    Gbl.FileBrowser.FilFolLnk.Full);
+		  if (strlen (Path) + 1 +
+		      strlen (Gbl.FileBrowser.NewFilFolLnkName) +
+		      strlen (".tmp") > PATH_MAX)
+		     Err_ShowErrorAndExit ("Path is too long.");
+		  Str_Concat (Path,"/",sizeof (Path) - 1);
+		  Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,sizeof (Path) - 1);
 
-               /* Check if the destination file exists */
-               if (Fil_CheckIfPathExists (Path))
-        	  Ale_CreateAlert (Ale_WARNING,NULL,
-        		           Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
-                                   Gbl.FileBrowser.NewFilFolLnkName);
-               else	// Destination file does not exist
-                 {
-                  /* End receiving the file */
-                  snprintf (PathTmp,sizeof (PathTmp),"%s.tmp",Path);
-                  FileIsValid = Fil_EndReceptionOfFile (PathTmp,Par);
+		  /* Check if the destination file exists */
+		  if (Fil_CheckIfPathExists (Path))
+		     Ale_CreateAlert (Ale_WARNING,NULL,
+				      Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
+				      Gbl.FileBrowser.NewFilFolLnkName);
+		  else	// Destination file does not exist
+		    {
+		     /* End receiving the file */
+		     snprintf (PathTmp,sizeof (PathTmp),"%s.tmp",Path);
+		     FileIsValid = Fil_EndReceptionOfFile (PathTmp,Par);
 
-                  /* Check if the content of the file of marks is valid */
-                  if (FileIsValid)
-                     if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-                        if (!Mrk_CheckFileOfMarks (PathTmp,&Marks))
-                           FileIsValid = false;
+		     /* Check if the content of the file of marks is valid */
+		     if (FileIsValid)
+			if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
+			   if (!Mrk_CheckFileOfMarks (PathTmp,&Marks))
+			      FileIsValid = false;
 
-                  if (FileIsValid)
-                    {
-                     /* Rename the temporary */
-                     if (rename (PathTmp,Path))	// Fail
-	               {
-	                Fil_RemoveTree (PathTmp);
-        	        Ale_CreateAlert (Ale_WARNING,NULL,
-        	                         Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
-                                         Gbl.FileBrowser.NewFilFolLnkName);
-	               }
-                     else			// Success
-	               {
-	                /* Check if quota has been exceeded */
-	                BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-	                BrwSiz_SetMaxQuota (Size);
-                        if (BrwSiz_CheckIfQuotaExceded (Size))
-	                  {
-	                   Fil_RemoveTree (Path);
-        	           Ale_CreateAlert (Ale_WARNING,NULL,
-        	        	            Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
-		                            Gbl.FileBrowser.NewFilFolLnkName);
-	                  }
-	                else
-                          {
-                           /* Remove affected clipboards */
-                           Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-                        			            Gbl.Usrs.Me.UsrDat.UsrCod,
-							    Gbl.Usrs.Other.UsrDat.UsrCod);
+		     if (FileIsValid)
+		       {
+			/* Rename the temporary */
+			if (rename (PathTmp,Path))	// Fail
+			  {
+			   Fil_RemoveTree (PathTmp);
+			   Ale_CreateAlert (Ale_WARNING,NULL,
+					    Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
+					    Gbl.FileBrowser.NewFilFolLnkName);
+			  }
+			else			// Success
+			  {
+			   /* Check if quota has been exceeded */
+			   BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+			   BrwSiz_SetMaxQuota (Size);
+			   if (BrwSiz_CheckIfQuotaExceded (Size))
+			     {
+			      Fil_RemoveTree (Path);
+			      Ale_CreateAlert (Ale_WARNING,NULL,
+					       Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
+					       Gbl.FileBrowser.NewFilFolLnkName);
+			     }
+			   else
+			     {
+			      /* Remove affected clipboards */
+			      Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+							       Gbl.Usrs.Me.UsrDat.UsrCod,
+							       Gbl.Usrs.Other.UsrDat.UsrCod);
 
-                           /* Add path where new file is created to table of expanded folders */
-                           Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+			      /* Add path where new file is created to table of expanded folders */
+			      Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
 
-                           /* Add entry to the table of files/folders */
-                           snprintf (PathCompleteInTreeIncludingFile,
-                        	     sizeof (PathCompleteInTreeIncludingFile),
-                        	     "%s/%s",
-                        	     Gbl.FileBrowser.FilFolLnk.Full,
-				     Gbl.FileBrowser.NewFilFolLnkName);
-                           FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
-                                                     PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
+			      /* Add entry to the table of files/folders */
+			      snprintf (PathCompleteInTreeIncludingFile,
+					sizeof (PathCompleteInTreeIncludingFile),
+					"%s/%s",
+					Gbl.FileBrowser.FilFolLnk.Full,
+					Gbl.FileBrowser.NewFilFolLnkName);
+			      FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_FILE,
+							PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
 
-                           /* Show message of confirmation */
-                           if (UploadType == Brw_CLASSIC_UPLOAD)
-                             {
-			      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-			                                             Gbl.FileBrowser.Level,
-			                                             Brw_IS_FOLDER,
-			                                             Gbl.FileBrowser.FilFolLnk.Name,
-			                                             FileNameToShow);	// Folder name
-        	              Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	        	               Txt_The_file_X_has_been_placed_inside_the_folder_Y,
-			                       Gbl.FileBrowser.NewFilFolLnkName,
-			                       FileNameToShow);
-                             }
-			   UploadSucessful = true;
-
-                           FileMetadata.FilCod = FilCod;
-                           Brw_GetFileMetadataByCod (&FileMetadata);
-
-                           /* Add a new entry of marks into database */
-			   if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
-                              Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
-
-                           /* Notify new file */
-			   if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
-			      switch (Gbl.FileBrowser.Type)
+			      /* Show message of confirmation */
+			      if (UploadType == Brw_CLASSIC_UPLOAD)
 				{
-				 case Brw_ADMI_DOC_CRS:
-				 case Brw_ADMI_DOC_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
-				    break;
-				 case Brw_ADMI_TCH_CRS:
-				 case Brw_ADMI_TCH_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
-				    break;
-				 case Brw_ADMI_SHR_CRS:
-				 case Brw_ADMI_SHR_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
-				    break;
-				 case Brw_ADMI_MRK_CRS:
-				 case Brw_ADMI_MRK_GRP:
-				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
-				    break;
-				 default:
-				    break;
+				 Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+									Gbl.FileBrowser.Level,
+									Brw_IS_FOLDER,
+									Gbl.FileBrowser.FilFolLnk.Name,
+									FileNameToShow);	// Folder name
+				 Ale_CreateAlert (Ale_SUCCESS,NULL,
+						  Txt_The_file_X_has_been_placed_inside_the_folder_Y,
+						  Gbl.FileBrowser.NewFilFolLnkName,
+						  FileNameToShow);
 				}
-                          }
-                       }
-	            }
-                  else	// Error in file reception. File probably too big
-	             Fil_RemoveTree (PathTmp);
-                 }
-              }
-           }
-        }
-      else	// Empty filename
+			      UploadSucessful = true;
+
+			      FileMetadata.FilCod = FilCod;
+			      Brw_GetFileMetadataByCod (&FileMetadata);
+
+			      /* Add a new entry of marks into database */
+			      if (Brw_TypeIsAdmMrk[Gbl.FileBrowser.Type])
+				 Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
+
+			      /* Notify new file */
+			      if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
+				 switch (Gbl.FileBrowser.Type)
+				   {
+				    case Brw_ADMI_DOC_CRS:
+				    case Brw_ADMI_DOC_GRP:
+				       Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
+				       break;
+				    case Brw_ADMI_TCH_CRS:
+				    case Brw_ADMI_TCH_GRP:
+				       Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
+				       break;
+				    case Brw_ADMI_SHR_CRS:
+				    case Brw_ADMI_SHR_GRP:
+				       Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
+				       break;
+				    case Brw_ADMI_MRK_CRS:
+				    case Brw_ADMI_MRK_GRP:
+				       Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
+				       break;
+				    default:
+				       break;
+				   }
+			     }
+			  }
+		       }
+		     else	// Error in file reception. File probably too big
+			Fil_RemoveTree (PathTmp);
+		    }
+		 }
+	      }
+	   }
+	 else	// Empty filename
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 // I do not have permission to create files here
 	 Ale_CreateAlert (Ale_WARNING,NULL,
-	                  Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML);
+			  Txt_UPLOAD_FILE_Forbidden_NO_HTML);
+	 break;
      }
-   else		// I do not have permission to create files here
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_UPLOAD_FILE_Forbidden_NO_HTML);
 
    return UploadSucessful;
   }
@@ -6937,143 +6991,148 @@ void Brw_RecLinkFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Check if creating a new link is allowed *****/
-   if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level) == Usr_I_CAN)
+   switch (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
-      /***** Create a new file to store URL ****/
-      Par_GetParText ("NewLinkURL",URL,PATH_MAX);
-      if ((LengthURL = strlen (URL)))
-	{
-	 if (Gbl.FileBrowser.NewFilFolLnkName[0])
-	    /*
-	    Gbl.FileBrowser.NewFilFolLnkName holds the name given by me in the form
-	    Example:
-	    Name given by me: intel-architectures.pdf
-	    File in swad: intel-architectures.pdf.url
-	    */
-	    Str_Copy (URLWithoutEndingSlash,Gbl.FileBrowser.NewFilFolLnkName,
-	              sizeof (URLWithoutEndingSlash) - 1);
-	 else
-	    /*
-	    Gbl.FileBrowser.NewFilFolLnkName is empty
-	    URL holds the URL given by me in the form
-	    Example:
-	    URL: http://www.intel.es/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf
-	    File in swad: 64-ia-32-architectures-software-developer-manual-325462.pdf.url
-	    */
-	    Str_Copy (URLWithoutEndingSlash,URL,
-	              sizeof (URLWithoutEndingSlash) - 1);
-
-	 /* Remove possible final '/' from URL */
-	 if (URLWithoutEndingSlash[LengthURL - 1] == '/')
-	    URLWithoutEndingSlash[LengthURL - 1] = '\0';
-
-	 /* Get the last name in URL-without-ending-slash */
-	 Str_SplitFullPathIntoPathAndFileName (URLWithoutEndingSlash,
-					       URLUntilLastFilename,
-					       FileName);
-
-	 /* Convert the last name in URL to a valid filename */
-	 if (Str_ConvertFilFolLnkNameToValid (FileName))
+      case Usr_I_CAN:
+	 /***** Create a new file to store URL ****/
+	 Par_GetParText ("NewLinkURL",URL,PATH_MAX);
+	 if ((LengthURL = strlen (URL)))
 	   {
-	    /* The name of the file with the link will be the FileName.url */
-	    snprintf (Path,sizeof (Path),"%s/%s",
-		      Gbl.FileBrowser.Path.AboveRootFolder,
-		      Gbl.FileBrowser.FilFolLnk.Full);
-	    if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
-	       Err_ShowErrorAndExit ("Path is too long.");
-	    Str_Concat (Path,"/",sizeof (Path) - 1);
-	    Str_Concat (Path,FileName,sizeof (Path) - 1);
-	    Str_Concat (Path,".url",sizeof (Path) - 1);
+	    if (Gbl.FileBrowser.NewFilFolLnkName[0])
+	       /*
+	       Gbl.FileBrowser.NewFilFolLnkName holds the name given by me in the form
+	       Example:
+	       Name given by me: intel-architectures.pdf
+	       File in swad: intel-architectures.pdf.url
+	       */
+	       Str_Copy (URLWithoutEndingSlash,Gbl.FileBrowser.NewFilFolLnkName,
+			 sizeof (URLWithoutEndingSlash) - 1);
+	    else
+	       /*
+	       Gbl.FileBrowser.NewFilFolLnkName is empty
+	       URL holds the URL given by me in the form
+	       Example:
+	       URL: http://www.intel.es/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf
+	       File in swad: 64-ia-32-architectures-software-developer-manual-325462.pdf.url
+	       */
+	       Str_Copy (URLWithoutEndingSlash,URL,
+			 sizeof (URLWithoutEndingSlash) - 1);
 
-	    /* Check if the URL file exists */
-	    if (Fil_CheckIfPathExists (Path))
-	       Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
-			      FileName);
-	    else	// URL file does not exist
+	    /* Remove possible final '/' from URL */
+	    if (URLWithoutEndingSlash[LengthURL - 1] == '/')
+	       URLWithoutEndingSlash[LengthURL - 1] = '\0';
+
+	    /* Get the last name in URL-without-ending-slash */
+	    Str_SplitFullPathIntoPathAndFileName (URLWithoutEndingSlash,
+						  URLUntilLastFilename,
+						  FileName);
+
+	    /* Convert the last name in URL to a valid filename */
+	    if (Str_ConvertFilFolLnkNameToValid (FileName))
 	      {
-	       /***** Create the new file with the URL *****/
-	       if ((FileURL = fopen (Path,"wb")) != NULL)
+	       /* The name of the file with the link will be the FileName.url */
+	       snprintf (Path,sizeof (Path),"%s/%s",
+			 Gbl.FileBrowser.Path.AboveRootFolder,
+			 Gbl.FileBrowser.FilFolLnk.Full);
+	       if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
+		  Err_ShowErrorAndExit ("Path is too long.");
+	       Str_Concat (Path,"/",sizeof (Path) - 1);
+	       Str_Concat (Path,FileName,sizeof (Path) - 1);
+	       Str_Concat (Path,".url",sizeof (Path) - 1);
+
+	       /* Check if the URL file exists */
+	       if (Fil_CheckIfPathExists (Path))
+		  Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
+				 FileName);
+	       else	// URL file does not exist
 		 {
-		  /* Write URL */
-		  fprintf (FileURL,"%s",URL);
-
-		  /* Close file */
-		  fclose (FileURL);
-
-		  /* Check if quota has been exceeded */
-		  BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
-		  BrwSiz_SetMaxQuota (Size);
-		  if (BrwSiz_CheckIfQuotaExceded (Size))
+		  /***** Create the new file with the URL *****/
+		  if ((FileURL = fopen (Path,"wb")) != NULL)
 		    {
-		     Fil_RemoveTree (Path);
-		     Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
-			            FileName);
-		    }
-		  else
-		    {
-		     /* Remove affected clipboards */
-		     Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-						      Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Gbl.Usrs.Other.UsrDat.UsrCod);
+		     /* Write URL */
+		     fprintf (FileURL,"%s",URL);
 
-		     /* Add path where new file is created to table of expanded folders */
-		     Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+		     /* Close file */
+		     fclose (FileURL);
 
-		     /* Add entry to the table of files/folders */
-		     snprintf (PathCompleteInTreeIncludingFile,
-			       sizeof (PathCompleteInTreeIncludingFile),
-			       "%s/%s.url",
-			       Gbl.FileBrowser.FilFolLnk.Full,FileName);
-		     FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_LINK,
-					       PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
+		     /* Check if quota has been exceeded */
+		     BrwSiz_CalcSizeOfDir (Size,Gbl.FileBrowser.Path.RootFolder);
+		     BrwSiz_SetMaxQuota (Size);
+		     if (BrwSiz_CheckIfQuotaExceded (Size))
+		       {
+			Fil_RemoveTree (Path);
+			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
+				       FileName);
+		       }
+		     else
+		       {
+			/* Remove affected clipboards */
+			Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+							 Gbl.Usrs.Me.UsrDat.UsrCod,
+							 Gbl.Usrs.Other.UsrDat.UsrCod);
 
-		     /* Show message of confirmation */
-		     Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-		                                            Gbl.FileBrowser.Level,
-		                                            Brw_IS_FOLDER,
-					                    Gbl.FileBrowser.FilFolLnk.Name,
-					                    FileNameToShow);	// Folder name
-		     Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
-			            FileName,FileNameToShow);
+			/* Add path where new file is created to table of expanded folders */
+			Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
 
-		     FileMetadata.FilCod = FilCod;
-		     Brw_GetFileMetadataByCod (&FileMetadata);
+			/* Add entry to the table of files/folders */
+			snprintf (PathCompleteInTreeIncludingFile,
+				  sizeof (PathCompleteInTreeIncludingFile),
+				  "%s/%s.url",
+				  Gbl.FileBrowser.FilFolLnk.Full,FileName);
+			FilCod = Brw_DB_AddPath (Gbl.Usrs.Me.UsrDat.UsrCod,Brw_IS_LINK,
+						  PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
 
-		     /* Notify new file */
-		     if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
-			switch (Gbl.FileBrowser.Type)
-			  {
-			   case Brw_ADMI_DOC_CRS:
-			   case Brw_ADMI_DOC_GRP:
-			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
-			      break;
-			   case Brw_ADMI_TCH_CRS:
-			   case Brw_ADMI_TCH_GRP:
-			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
-			      break;
-			   case Brw_ADMI_SHR_CRS:
-			   case Brw_ADMI_SHR_GRP:
-			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
-			      break;
-			   case Brw_ADMI_MRK_CRS:
-			   case Brw_ADMI_MRK_GRP:
-			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
-			      break;
-			   default:
-			      break;
-			  }
+			/* Show message of confirmation */
+			Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+							       Gbl.FileBrowser.Level,
+							       Brw_IS_FOLDER,
+							       Gbl.FileBrowser.FilFolLnk.Name,
+							       FileNameToShow);	// Folder name
+			Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
+				       FileName,FileNameToShow);
+
+			FileMetadata.FilCod = FilCod;
+			Brw_GetFileMetadataByCod (&FileMetadata);
+
+			/* Notify new file */
+			if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
+			   switch (Gbl.FileBrowser.Type)
+			     {
+			      case Brw_ADMI_DOC_CRS:
+			      case Brw_ADMI_DOC_GRP:
+				 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
+				 break;
+			      case Brw_ADMI_TCH_CRS:
+			      case Brw_ADMI_TCH_GRP:
+				 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
+				 break;
+			      case Brw_ADMI_SHR_CRS:
+			      case Brw_ADMI_SHR_GRP:
+				 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
+				 break;
+			      case Brw_ADMI_MRK_CRS:
+			      case Brw_ADMI_MRK_GRP:
+				 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
+				 break;
+			      default:
+				 break;
+			     }
+		       }
 		    }
 		 }
 	      }
+	    else	// Link URL not valid
+	       Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
 	   }
 	 else	// Link URL not valid
 	    Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
-	}
-      else	// Link URL not valid
-	 Ale_ShowAlert (Ale_WARNING,Txt_UPLOAD_FILE_Invalid_link);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 // It's difficult, but not impossible that a user sees this message
+	 Err_ShowErrorAndExit (Txt_You_can_not_create_links_here);
+	 break;
      }
-   else
-      Err_ShowErrorAndExit (Txt_You_can_not_create_links_here);	// It's difficult, but not impossible that a user sees this message
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -7313,358 +7372,350 @@ void Brw_ShowFileMetadata (void)
 	}
      }
 
-   if (ICanView == Usr_I_CAN)
+   switch (ICanView)
      {
-      if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
-	  FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
-	{
-	 /***** Update number of views *****/
-	 Brw_GetAndUpdateFileViews (&FileMetadata);
-
-	 /***** Get data of file/folder publisher *****/
-	 if (FileMetadata.PublisherUsrCod > 0)
+      case Usr_I_CAN:
+	 if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
+	     FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
 	   {
-	    /***** Initialize structure with publisher's data *****/
-	    Usr_UsrDataConstructor (&PublisherUsrDat);
+	    /***** Update number of views *****/
+	    Brw_GetAndUpdateFileViews (&FileMetadata);
 
-	    PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
-	                                                                Usr_DONT_GET_PREFS,
-	                                                                Usr_DONT_GET_ROLE_IN_CRS);
-	   }
-	 else
-	    FileHasPublisher = false;	// Get user's data from database
-
-	 /***** Get link to download the file *****/
-	 if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
-	    URL[0] = '\0';
-	 else
-	    Brw_GetLinkToDownloadFile (FileMetadata.FilFolLnk.Path,
-				       FileMetadata.FilFolLnk.Name,
-				       URL);
-
-	 /***** Can I edit the properties of the file? *****/
-	 IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
-	 ICanEdit = Brw_CheckIfICanEditFileMetadata (IAmTheOwner);
-
-	 /***** Name of the file/link to be shown *****/
-	 Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
-	                        FileMetadata.FilFolLnk.Name,
-	                        FileNameToShow);
-
-         /***** Begin box *****/
-	 // Put icon to get link?
-	 if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
-	     (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
-	      FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
-	     Rsc_CheckIfICanGetLink () == Usr_I_CAN)
-	    Box_BoxShadowBegin (NULL,Brw_PutIconToGetLinkToFile,&FileMetadata,
-				NULL);
-	 else
-	    Box_BoxShadowBegin (NULL,NULL,NULL,
-			        NULL);
-
-
-	 /***** Begin form to update the metadata of a file *****/
-	 if (ICanEdit == Usr_I_CAN)	// I can edit file properties
-	   {
-	    /* Can the file be public? */
-	    switch (Gbl.FileBrowser.Type)
+	    /***** Get data of file/folder publisher *****/
+	    if (FileMetadata.PublisherUsrCod > 0)
 	      {
-	       case Brw_ADMI_DOC_INS:
-	       case Brw_ADMI_SHR_INS:
-	       case Brw_ADMI_DOC_CTR:
-	       case Brw_ADMI_SHR_CTR:
-	       case Brw_ADMI_DOC_DEG:
-	       case Brw_ADMI_SHR_DEG:
-	       case Brw_ADMI_DOC_CRS:
-	       case Brw_ADMI_SHR_CRS:
-		  ICanChangePublic = Usr_I_CAN;
-		  break;
-	       default:
-		  ICanChangePublic = Usr_I_CAN_NOT;
-		  break;
+	       /***** Initialize structure with publisher's data *****/
+	       Usr_UsrDataConstructor (&PublisherUsrDat);
+
+	       PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
+	       FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
+									   Usr_DONT_GET_PREFS,
+									   Usr_DONT_GET_ROLE_IN_CRS);
+	      }
+	    else
+	       FileHasPublisher = false;	// Get user's data from database
+
+	    /***** Get link to download the file *****/
+	    if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
+	       URL[0] = '\0';
+	    else
+	       Brw_GetLinkToDownloadFile (FileMetadata.FilFolLnk.Path,
+					  FileMetadata.FilFolLnk.Name,
+					  URL);
+
+	    /***** Can I edit the properties of the file? *****/
+	    IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
+	    ICanEdit = Brw_CheckIfICanEditFileMetadata (IAmTheOwner);
+
+	    /***** Name of the file/link to be shown *****/
+	    Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
+				   FileMetadata.FilFolLnk.Name,
+				   FileNameToShow);
+
+	    /***** Begin box *****/
+	    // Put icon to get link?
+	    if ((Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
+		 (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||	// Only files or links
+		  FileMetadata.FilFolLnk.Type == Brw_IS_LINK) &&
+		 Rsc_CheckIfICanGetLink ()) == Usr_I_CAN)
+	       Box_BoxShadowBegin (NULL,Brw_PutIconToGetLinkToFile,
+				   &FileMetadata,NULL);
+	    else
+	       Box_BoxShadowBegin (NULL,NULL,NULL,NULL);
+
+
+	    /***** Begin form to update the metadata of a file *****/
+	    if (ICanEdit == Usr_I_CAN)	// I can edit file properties
+	      {
+	       /* Can the file be public? */
+	       switch (Gbl.FileBrowser.Type)
+		 {
+		  case Brw_ADMI_DOC_INS:  case Brw_ADMI_SHR_INS:
+		  case Brw_ADMI_DOC_CTR:  case Brw_ADMI_SHR_CTR:
+		  case Brw_ADMI_DOC_DEG:  case Brw_ADMI_SHR_DEG:
+		  case Brw_ADMI_DOC_CRS:  case Brw_ADMI_SHR_CRS:
+		     ICanChangePublic = Usr_I_CAN;
+		     break;
+		  default:
+		     ICanChangePublic = Usr_I_CAN_NOT;
+		     break;
+		 }
+
+	       Frm_BeginForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
+		  Brw_PutParsFileBrowser (NULL,		// Not used
+					  NULL,		// Not used
+					  Brw_IS_UNKNOWN,	// Not used
+					  FileMetadata.FilCod);
 	      }
 
-	    Frm_BeginForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
-	       Brw_PutParsFileBrowser (NULL,		// Not used
-				       NULL,		// Not used
-				       Brw_IS_UNKNOWN,	// Not used
-				       FileMetadata.FilCod);
-	   }
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-         /***** Begin table *****/
-         HTM_TABLE_BeginWidePadding (2);
-
-	    /***** Link to download the file *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
-		  Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Filename *****/
-	    HTM_TR_Begin (NULL);
-
-	       Frm_LabelColumn ("RT",NULL,Txt_Filename);
-
-	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Publisher's data *****/
-	    HTM_TR_Begin (NULL);
-
-	       Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
-
-	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  if (FileHasPublisher)
-		    {
-		     /* Show photo */
-		     Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
-						ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-
-		     /* Write name */
-		     HTM_NBSP ();
-		     HTM_Txt (PublisherUsrDat.FullName);
-		    }
-		  else
-		     /* Unknown publisher */
-		     HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Free memory used for publisher's data *****/
-	    if (FileMetadata.PublisherUsrCod > 0)
-	       Usr_UsrDataDestructor (&PublisherUsrDat);
-
-	    /***** Write the file size *****/
-	    Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
-	    HTM_TR_Begin (NULL);
-
-	       Frm_LabelColumn ("RT",NULL,Txt_File_size);
-
-	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  HTM_Txt (FileSizeStr);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Write the date *****/
-	    HTM_TR_Begin (NULL);
-
-	       Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
-
-	       HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
-						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-						true,true,true,0x7);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Private or public? *****/
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("RT",ICanChangePublic == Usr_I_CAN ? "PublicFile" :
-							             NULL,
-				Txt_Availability);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  if (ICanChangePublic == Usr_I_CAN)	// I can change file to public
-		    {
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				       "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
-			HTM_OPTION (HTM_Type_STRING,"N",
-				    FileMetadata.IsPublic ? HTM_OPTION_UNSELECTED :
-							    HTM_OPTION_SELECTED,
-				    HTM_OPTION_ENABLED,
-				    "%s",Txt_Private_available_to_certain_users_identified);
-			HTM_OPTION (HTM_Type_STRING,"Y",
-				    FileMetadata.IsPublic ? HTM_OPTION_SELECTED :
-							    HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
-				    "%s",Txt_Public_open_educational_resource_OER_for_everyone);
-		     HTM_SELECT_End ();
-		    }
-		  else		// I can not edit file properties
-		     HTM_Txt (FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
-						      Txt_Private_available_to_certain_users_identified);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** License *****/
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("RT",ICanEdit == Usr_I_CAN ? "License" :
-							     NULL,
-				Txt_License);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  if (ICanEdit == Usr_I_CAN)	// I can edit file properties
-		    {
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-				       "id=\"License\" name=\"License\" class=\"LICENSE\"");
-			for (License  = (Brw_License_t) 0;
-			     License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
-			     License++)
-			  {
-			   LicenseUnsigned = (unsigned) License;
-			   HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
-				       License == FileMetadata.License ? HTM_OPTION_SELECTED :
-									 HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
-				       "%s",Txt_LICENSES[License]);
-			  }
-		     HTM_SELECT_End ();
-		    }
-		  else		// I can not edit file properties
-		     HTM_Txt (Txt_LICENSES[FileMetadata.License]);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Write my number of views *****/
-	    if (Gbl.Usrs.Me.Logged)
-	      {
+	       /***** Link to download the file *****/
 	       HTM_TR_Begin (NULL);
 
-		  Frm_LabelColumn ("RT",NULL,Txt_My_views);
-
-		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-				The_GetSuffix ());
-		     HTM_Unsigned (FileMetadata.NumMyViews);
+		  HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
+		     Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
+
+	       /***** Filename *****/
+	       HTM_TR_Begin (NULL);
+
+		  Frm_LabelColumn ("RT",NULL,Txt_Filename);
+
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** Publisher's data *****/
+	       HTM_TR_Begin (NULL);
+
+		  Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
+
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     if (FileHasPublisher)
+		       {
+			/* Show photo */
+			Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
+						   ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+
+			/* Write name */
+			HTM_NBSP ();
+			HTM_Txt (PublisherUsrDat.FullName);
+		       }
+		     else
+			/* Unknown publisher */
+			HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** Free memory used for publisher's data *****/
+	       if (FileMetadata.PublisherUsrCod > 0)
+		  Usr_UsrDataDestructor (&PublisherUsrDat);
+
+	       /***** Write the file size *****/
+	       Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
+	       HTM_TR_Begin (NULL);
+
+		  Frm_LabelColumn ("RT",NULL,Txt_File_size);
+
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     HTM_Txt (FileSizeStr);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** Write the date *****/
+	       HTM_TR_Begin (NULL);
+
+		  Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
+
+		  HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
+						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						   true,true,true,0x7);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** Private or public? *****/
+	       HTM_TR_Begin (NULL);
+
+		  /* Label */
+		  Frm_LabelColumn ("RT",ICanChangePublic == Usr_I_CAN ? "PublicFile" :
+									NULL,
+				   Txt_Availability);
+
+		  /* Data */
+		  HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     if (ICanChangePublic == Usr_I_CAN)	// I can change file to public
+		       {
+			HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+					  "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
+			   HTM_OPTION (HTM_Type_STRING,"N",
+				       FileMetadata.IsPublic ? HTM_OPTION_UNSELECTED :
+							       HTM_OPTION_SELECTED,
+				       HTM_OPTION_ENABLED,
+				       "%s",Txt_Private_available_to_certain_users_identified);
+			   HTM_OPTION (HTM_Type_STRING,"Y",
+				       FileMetadata.IsPublic ? HTM_OPTION_SELECTED :
+							       HTM_OPTION_UNSELECTED,
+				       HTM_OPTION_ENABLED,
+				       "%s",Txt_Public_open_educational_resource_OER_for_everyone);
+			HTM_SELECT_End ();
+		       }
+		     else		// I can not edit file properties
+			HTM_Txt (FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
+							 Txt_Private_available_to_certain_users_identified);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** License *****/
+	       HTM_TR_Begin (NULL);
+
+		  /* Label */
+		  Frm_LabelColumn ("RT",ICanEdit == Usr_I_CAN ? "License" :
+								NULL,
+				   Txt_License);
+
+		  /* Data */
+		  HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     if (ICanEdit == Usr_I_CAN)	// I can edit file properties
+		       {
+			HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+					  "id=\"License\" name=\"License\" class=\"LICENSE\"");
+			   for (License  = (Brw_License_t) 0;
+				License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
+				License++)
+			     {
+			      LicenseUnsigned = (unsigned) License;
+			      HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
+					  License == FileMetadata.License ? HTM_OPTION_SELECTED :
+									    HTM_OPTION_UNSELECTED,
+					  HTM_OPTION_ENABLED,
+					  "%s",Txt_LICENSES[License]);
+			     }
+			HTM_SELECT_End ();
+		       }
+		     else		// I can not edit file properties
+			HTM_Txt (Txt_LICENSES[FileMetadata.License]);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** Write my number of views *****/
+	       if (Gbl.Usrs.Me.Logged)
+		 {
+		  HTM_TR_Begin (NULL);
+
+		     Frm_LabelColumn ("RT",NULL,Txt_My_views);
+
+		     HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+				   The_GetSuffix ());
+			HTM_Unsigned (FileMetadata.NumMyViews);
+		     HTM_TD_End ();
+
+		  HTM_TR_End ();
+		 }
+
+	       /***** Write number of identificated views *****/
+	       HTM_TR_Begin (NULL);
+
+		  Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
+
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
+		     HTM_TxtF ("(%u %s)",
+			       FileMetadata.NumLoggedUsrs,
+			       FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
+								 Txt_users[Usr_SEX_UNKNOWN]);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       /***** Write number of public views *****/
+	       HTM_TR_Begin (NULL);
+
+		  Frm_LabelColumn ("RT",NULL,Txt_Public_views);
+
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
+				The_GetSuffix ());
+		     HTM_Unsigned (FileMetadata.NumPublicViews);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	    /***** End table *****/
+	    HTM_TABLE_End ();
+
+	    /***** End form *****/
+	    if (ICanEdit == Usr_I_CAN)	// I can edit file properties
+	      {
+		  Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
+	       Frm_EndForm ();
 	      }
 
-	    /***** Write number of identificated views *****/
-	    HTM_TR_Begin (NULL);
+	    /***** End box *****/
+	    Box_BoxEnd ();
 
-	       Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
-
-	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
-		  HTM_TxtF ("(%u %s)",
-			    FileMetadata.NumLoggedUsrs,
-			    FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
-							      Txt_users[Usr_SEX_UNKNOWN]);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Write number of public views *****/
-	    HTM_TR_Begin (NULL);
-
-	       Frm_LabelColumn ("RT",NULL,Txt_Public_views);
-
-	       HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-			     The_GetSuffix ());
-		  HTM_Unsigned (FileMetadata.NumPublicViews);
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 /***** End table *****/
-         HTM_TABLE_End ();
-
-	 /***** End form *****/
-	 if (ICanEdit == Usr_I_CAN)	// I can edit file properties
-	   {
-	       Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
-	    Frm_EndForm ();
+	    /***** Mark possible notifications as seen *****/
+	    switch (Gbl.FileBrowser.Type)
+	      {
+	       case Brw_SHOW_DOC_CRS:
+	       case Brw_SHOW_DOC_GRP:
+	       case Brw_ADMI_DOC_CRS:
+	       case Brw_ADMI_DOC_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       case Brw_ADMI_TCH_CRS:
+	       case Brw_ADMI_TCH_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       case Brw_ADMI_SHR_CRS:
+	       case Brw_ADMI_SHR_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       case Brw_SHOW_MRK_CRS:
+	       case Brw_SHOW_MRK_GRP:
+	       case Brw_ADMI_MRK_CRS:
+	       case Brw_ADMI_MRK_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       default:
+		  break;
+	      }
 	   }
 
-	 /***** End box *****/
-	 Box_BoxEnd ();
-
-	 /***** Mark possible notifications as seen *****/
+	 /***** Add paths until file to table of expanded folders *****/
+	 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Path);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 /***** Mark possible notifications about non visible file as removed *****/
 	 switch (Gbl.FileBrowser.Type)
 	   {
-	    case Brw_SHOW_DOC_CRS:
-	    case Brw_SHOW_DOC_GRP:
-	    case Brw_ADMI_DOC_CRS:
-	    case Brw_ADMI_DOC_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
+	    case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
+					  FileMetadata.FilCod);
 	       break;
-	    case Brw_ADMI_TCH_CRS:
-	    case Brw_ADMI_TCH_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
+					  FileMetadata.FilCod);
 	       break;
-	    case Brw_ADMI_SHR_CRS:
-	    case Brw_ADMI_SHR_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
+					  FileMetadata.FilCod);
 	       break;
-	    case Brw_SHOW_MRK_CRS:
-	    case Brw_SHOW_MRK_GRP:
-	    case Brw_ADMI_MRK_CRS:
-	    case Brw_ADMI_MRK_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
+	    case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
+					  FileMetadata.FilCod);
 	       break;
 	    default:
 	       break;
 	   }
-	}
 
-      /***** Add paths until file to table of expanded folders *****/
-      Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Path);
-     }
-   else	// ICanView == Usr_I_CAN_NOT
-     {
-      /***** Mark possible notifications about non visible file as removed *****/
-      switch (Gbl.FileBrowser.Type)
-	{
-	 case Brw_SHOW_DOC_CRS:
-	 case Brw_SHOW_DOC_GRP:
-	 case Brw_ADMI_DOC_CRS:
-	 case Brw_ADMI_DOC_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 case Brw_ADMI_TCH_CRS:
-	 case Brw_ADMI_TCH_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 case Brw_ADMI_SHR_CRS:
-	 case Brw_ADMI_SHR_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 case Brw_SHOW_MRK_CRS:
-	 case Brw_SHOW_MRK_GRP:
-	 case Brw_ADMI_MRK_CRS:
-	 case Brw_ADMI_MRK_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 default:
-	    break;
-	}
-
-      Ale_ShowAlert (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 break;
      }
 
    /***** Show again the file browser *****/
@@ -7792,103 +7843,99 @@ void Brw_DownloadFile (void)
 	}
      }
 
-   if (ICanView == Usr_I_CAN)
+   switch (ICanView)
      {
-      if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
-	  FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
-	{
-	 /***** Update number of views *****/
-	 Brw_GetAndUpdateFileViews (&FileMetadata);
+      case Usr_I_CAN:
+	 if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
+	     FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
+	   {
+	    /***** Update number of views *****/
+	    Brw_GetAndUpdateFileViews (&FileMetadata);
 
-	 /***** Get link to download the file *****/
-	 if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
-	    URL[0] = '\0';
-	 else
-	    Brw_GetLinkToDownloadFile (Gbl.FileBrowser.FilFolLnk.Path,
-				       Gbl.FileBrowser.FilFolLnk.Name,
-				       URL);
+	    /***** Get link to download the file *****/
+	    if (Brw_TypeIsSeeMrk[Gbl.FileBrowser.Type])
+	       URL[0] = '\0';
+	    else
+	       Brw_GetLinkToDownloadFile (Gbl.FileBrowser.FilFolLnk.Path,
+					  Gbl.FileBrowser.FilFolLnk.Name,
+					  URL);
 
-	 /***** Mark possible notifications as seen *****/
+	    /***** Mark possible notifications as seen *****/
+	    switch (Gbl.FileBrowser.Type)
+	      {
+	       case Brw_SHOW_DOC_CRS:
+	       case Brw_SHOW_DOC_GRP:
+	       case Brw_ADMI_DOC_CRS:
+	       case Brw_ADMI_DOC_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       case Brw_ADMI_TCH_CRS:
+	       case Brw_ADMI_TCH_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       case Brw_ADMI_SHR_CRS:
+	       case Brw_ADMI_SHR_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       case Brw_SHOW_MRK_CRS:
+	       case Brw_SHOW_MRK_GRP:
+	       case Brw_ADMI_MRK_CRS:
+	       case Brw_ADMI_MRK_GRP:
+		  Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,
+						  FileMetadata.FilCod);
+		  break;
+	       default:
+		  break;
+	      }
+	   }
+
+	 /***** Add paths until file to table of expanded folders *****/
+	 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Path);
+
+	 /***** Download the file *****/
+	 fprintf (stdout,"Location: %s\n\n",URL);
+	 // TODO: Put headers Content-type and Content-disposition:
+	 // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
+	 // http://elouai.com/force-download.php
+	 Gbl.Layout.HTMLStartWritten =
+	 Gbl.Layout.DivsEndWritten   =
+	 Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 /***** Mark possible notifications about non visible file as removed *****/
 	 switch (Gbl.FileBrowser.Type)
 	   {
-	    case Brw_SHOW_DOC_CRS:
-	    case Brw_SHOW_DOC_GRP:
-	    case Brw_ADMI_DOC_CRS:
-	    case Brw_ADMI_DOC_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
+	    case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
+					  FileMetadata.FilCod);
 	       break;
-	    case Brw_ADMI_TCH_CRS:
-	    case Brw_ADMI_TCH_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
+					  FileMetadata.FilCod);
 	       break;
-	    case Brw_ADMI_SHR_CRS:
-	    case Brw_ADMI_SHR_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
+					  FileMetadata.FilCod);
 	       break;
-	    case Brw_SHOW_MRK_CRS:
-	    case Brw_SHOW_MRK_GRP:
-	    case Brw_ADMI_MRK_CRS:
-	    case Brw_ADMI_MRK_GRP:
-	       Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,
-	                                       FileMetadata.FilCod);
+	    case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
+	    case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
+					  FileMetadata.FilCod);
 	       break;
 	    default:
 	       break;
 	   }
-	}
 
-      /***** Add paths until file to table of expanded folders *****/
-      Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Path);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
 
-      /***** Download the file *****/
-      fprintf (stdout,"Location: %s\n\n",URL);
-      // TODO: Put headers Content-type and Content-disposition:
-      // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
-      // http://elouai.com/force-download.php
-      Gbl.Layout.HTMLStartWritten =
-      Gbl.Layout.DivsEndWritten   =
-      Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all
-     }
-   else	// ICanView == Usr_I_CAN_NOT
-     {
-      /***** Mark possible notifications about non visible file as removed *****/
-      switch (Gbl.FileBrowser.Type)
-	{
-	 case Brw_SHOW_DOC_CRS:
-	 case Brw_SHOW_DOC_GRP:
-	 case Brw_ADMI_DOC_CRS:
-	 case Brw_ADMI_DOC_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 case Brw_ADMI_TCH_CRS:
-	 case Brw_ADMI_TCH_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 case Brw_ADMI_SHR_CRS:
-	 case Brw_ADMI_SHR_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 case Brw_SHOW_MRK_CRS:
-	 case Brw_SHOW_MRK_GRP:
-	 case Brw_ADMI_MRK_CRS:
-	 case Brw_ADMI_MRK_GRP:
-	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
-				       FileMetadata.FilCod);
-	    break;
-	 default:
-	    break;
-	}
-
-      Ale_ShowAlert (Ale_WARNING,Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
-
-      /***** Show again the file browser *****/
-      Brw_ShowAgainFileBrowserOrWorks ();
+	 /***** Show again the file browser *****/
+	 Brw_ShowAgainFileBrowserOrWorks ();
+	 break;
      }
   }
 

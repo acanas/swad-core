@@ -588,11 +588,17 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	                  The_GetColorRows ());
 
 	       /* Put icon to remove the set */
-	       if (ICanEditSets == Usr_I_CAN)
-		  Ico_PutContextualIconToRemove (ActReqRemExaSet,NULL,
-						 ExaSet_PutParsOneSet,Exams);
-	       else
-		  Ico_PutIconRemovalNotAllowed ();
+	       switch (ICanEditSets)
+		 {
+		  case Usr_I_CAN:
+		     Ico_PutContextualIconToRemove (ActReqRemExaSet,NULL,
+						    ExaSet_PutParsOneSet,Exams);
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconRemovalNotAllowed ();
+		     break;
+		 }
 
 	       /* Put icon to move up the question */
 	       if (ICanEditSets == Usr_I_CAN && Set.SetInd > 1)
@@ -841,11 +847,17 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
 	       /* Put icon to remove the question */
-	       if (ICanEditQuestions == Usr_I_CAN)
-		  Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
-						 ExaSet_PutParsOneQst,Exams);
-	       else
-		  Ico_PutIconRemovalNotAllowed ();
+	       switch (ICanEditQuestions)
+		 {
+		  case Usr_I_CAN:
+		     Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
+						    ExaSet_PutParsOneQst,Exams);
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconRemovalNotAllowed ();
+		     break;
+		 }
 
 	       /* Put icon to validate/invalidate the question */
 	       Lay_PutContextualLinkOnlyIcon (ValInv[Question.Validity].NextAction,Anchor,
@@ -1405,12 +1417,20 @@ void ExaSet_MoveDownSet (void)
 
 static Usr_ICan_t ExaSet_CheckIfICanEditExamSets (const struct Exa_Exam *Exam)
   {
-   if (Exa_CheckIfICanEditExams () == Usr_I_CAN)
-      /***** Questions are editable only if exam has no sessions *****/
-      return (Exam->NumSess == 0) ? Usr_I_CAN :	// Exams with sessions should not be edited
-				    Usr_I_CAN_NOT;
-   else
-      return Usr_I_CAN_NOT;	// Sets of questions are not editable
+   switch (Exa_CheckIfICanEditExams ())
+     {
+      case Usr_I_CAN:
+	 /***** Questions are editable only if exam has no sessions *****/
+	 return (Exam->NumSess == 0) ? Usr_I_CAN :	// Exams with sessions should not be edited
+				       Usr_I_CAN_NOT;
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 return Usr_I_CAN_NOT;	// Sets of questions are not editable
+	 break;
+     }
+
+   return Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

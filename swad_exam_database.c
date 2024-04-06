@@ -2325,7 +2325,6 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case Usr_OTHER:	// A teacher/admin watching the results of other users
-      default:
 	 if (asprintf (&HidSesSubQuery,"%s","") < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
@@ -2368,7 +2367,6 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 	    Err_NotEnoughMemoryExit ();
 	 break;
       case Usr_OTHER:	// A teacher/admin watching the results of other users
-      default:
 	 if (asprintf (&HidExaSubQuery,"%s","") < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;

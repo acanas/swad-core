@@ -1296,18 +1296,20 @@ void Mai_RemoveOtherUsrEmail (void)
   {
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
+      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Remove user's email *****/
-	 Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
+	 case Usr_I_CAN:
+	    /***** Remove user's email *****/
+	    Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
-	 /***** Show form again *****/
-	 Acc_ShowFormChgOtherUsrAccount ();
+	    /***** Show form again *****/
+	    Acc_ShowFormChgOtherUsrAccount ();
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else		// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
@@ -1321,24 +1323,28 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
    extern const char *Txt_Email_X_removed;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
-   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
+   switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      /***** Get new email from form *****/
-      Par_GetParText ("Email",Email,Cns_MAX_BYTES_EMAIL_ADDRESS);
+      case Usr_I_CAN:
+	 /***** Get new email from form *****/
+	 Par_GetParText ("Email",Email,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
-      /***** Remove one of user's old email addresses *****/
-      Mai_DB_RemoveEmail (UsrDat->UsrCod,Email);
+	 /***** Remove one of user's old email addresses *****/
+	 Mai_DB_RemoveEmail (UsrDat->UsrCod,Email);
 
-      /***** Create alert *****/
-      Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
-	               Txt_Email_X_removed,
-		       Email);
+	 /***** Create alert *****/
+	 Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+			  Txt_Email_X_removed,
+			  Email);
 
-      /***** Update list of emails *****/
-      Mai_GetEmailFromUsrCod (UsrDat);
+	 /***** Update list of emails *****/
+	 Mai_GetEmailFromUsrCod (UsrDat);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1362,19 +1368,21 @@ void Mai_ChangeOtherUsrEmail (void)
   {
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
+      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Change user's ID *****/
-	 Mai_ChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
-	                     Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+	 case Usr_I_CAN:
+	    /***** Change user's ID *****/
+	    Mai_ChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
+				Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
-	 /***** Show form again *****/
-	 Acc_ShowFormChgOtherUsrAccount ();
+	    /***** Show form again *****/
+	    Acc_ShowFormChgOtherUsrAccount ();
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else		// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
@@ -1391,49 +1399,53 @@ static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOthe
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
-   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
+   switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      /***** Get new email from form *****/
-      Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
+      case Usr_I_CAN:
+	 /***** Get new email from form *****/
+	 Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
-      if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
-	{
-	 /***** Check if new email exists in database *****/
-	 if (UsrDat->EmailConfirmed &&
-	     !strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
-	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
-		             Txt_The_email_address_X_matches_one_previously_registered,
-			     NewEmail);
-	 else
+	 if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
 	   {
-	    if (Mai_UpdateEmailInDB (UsrDat,NewEmail))
-	      {
-	       /***** Email updated sucessfully *****/
-	       Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
-		                Txt_The_email_address_X_has_been_registered_successfully,
-			        NewEmail);
-
-	       /***** Update list of emails *****/
-	       Mai_GetEmailFromUsrCod (UsrDat);
-
-	       /***** Send message via email
-		      to confirm the new email address *****/
-	       if (MeOrOther == Usr_ME)
-		  Mai_SendMailMsgToConfirmEmail ();
-	      }
-	    else
+	    /***** Check if new email exists in database *****/
+	    if (UsrDat->EmailConfirmed &&
+		!strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
 	       Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
-		                Txt_The_email_address_X_had_been_registered_by_another_user,
+				Txt_The_email_address_X_matches_one_previously_registered,
 				NewEmail);
+	    else
+	      {
+	       if (Mai_UpdateEmailInDB (UsrDat,NewEmail))
+		 {
+		  /***** Email updated sucessfully *****/
+		  Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+				   Txt_The_email_address_X_has_been_registered_successfully,
+				   NewEmail);
+
+		  /***** Update list of emails *****/
+		  Mai_GetEmailFromUsrCod (UsrDat);
+
+		  /***** Send message via email
+			 to confirm the new email address *****/
+		  if (MeOrOther == Usr_ME)
+		     Mai_SendMailMsgToConfirmEmail ();
+		 }
+	       else
+		  Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+				   Txt_The_email_address_X_had_been_registered_by_another_user,
+				   NewEmail);
+	      }
 	   }
-	}
-      else	// New email is not valid
-         Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
-                          Txt_The_email_address_entered_X_is_not_valid,
-		          NewEmail);
+	 else	// New email is not valid
+	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+			     Txt_The_email_address_entered_X_is_not_valid,
+			     NewEmail);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

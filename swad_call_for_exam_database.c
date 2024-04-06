@@ -85,12 +85,16 @@ unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
    char SubQueryStatus[64];
 
    /***** Build subquery about status depending on my role *****/
-   if (Cfe_CheckIfICanEditCallsForExams () == Usr_I_CAN)
-      sprintf (SubQueryStatus,"Status<>%u",
-	       (unsigned) Cfe_DELETED_CALL_FOR_EXAM);
-   else
-      sprintf (SubQueryStatus,"Status=%u",
-	       (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+   switch (Cfe_CheckIfICanEditCallsForExams ())
+     {
+      case Usr_I_CAN:
+	 sprintf (SubQueryStatus,"Status<>%u",(unsigned) Cfe_DELETED_CALL_FOR_EXAM);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 sprintf (SubQueryStatus,"Status=%u",(unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+	 break;
+     }
 
    /***** Get calls for exams (the most recent first)
           in current course from database *****/

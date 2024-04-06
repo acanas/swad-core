@@ -60,8 +60,8 @@
 
 struct TstRes_ICanView
   {
-   bool Result;
-   bool Score;
+   Usr_ICan_t Result;
+   Usr_ICan_t Score;
   };
 
 /*****************************************************************************/
@@ -680,8 +680,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	       /* Write score retrieved from database */
 	       if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_I_CAN)
 		 {
-		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
-				 The_GetSuffix ());
+		  HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 		     HTM_TxtColonNBSP (Txt_Score);
 		     HTM_SPAN_Begin ("class=\"%s_%s\"",
 				     PrintedQuestions[QstInd].StrAnswers[0] ?
@@ -1239,8 +1238,7 @@ static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
 	      }
 	    else
 	      {
-	       HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",
-	                     The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
 		  HTM_Txt ("?");
 	       HTM_TD_End ();
 	      }
@@ -1250,10 +1248,16 @@ static void TstPrn_WriteIntAnsPrint (struct Usr_Data *UsrDat,
 
 	 /***** Write the correct answer *****/
 	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
-	       HTM_Long (Question->Answer.Integer);
-	    else
-	       Ico_PutIconNotVisible ();
+	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	      {
+	       case Usr_I_CAN:
+		  HTM_Long (Question->Answer.Integer);
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
+	      }
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1308,16 +1312,20 @@ static void TstPrn_WriteFltAnsPrint (struct Usr_Data *UsrDat,
 
 	 /***** Write the correct answer *****/
 	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
+	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	      {
-	       HTM_Txt ("[");
-	       HTM_Double (Question->Answer.FloatingPoint[0]);
-	       HTM_Txt ("; ");
-	       HTM_Double (Question->Answer.FloatingPoint[1]);
-	       HTM_Txt ("]");
+	       case Usr_I_CAN:
+		  HTM_Txt ("[");
+		  HTM_Double (Question->Answer.FloatingPoint[0]);
+		  HTM_Txt ("; ");
+		  HTM_Double (Question->Answer.FloatingPoint[1]);
+		  HTM_Txt ("]");
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
 	      }
-	    else
-	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1366,10 +1374,16 @@ static void TstPrn_WriteTF_AnsPrint (struct Usr_Data *UsrDat,
 
 	 /***** Write the correct answer *****/
 	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_GetSuffix ());
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
-	       Qst_WriteAnsTF (Question->Answer.TF);
-	    else
-	       Ico_PutIconNotVisible ();
+	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+	      {
+	       case Usr_I_CAN:
+		  Qst_WriteAnsTF (Question->Answer.TF);
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
+	      }
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1430,25 +1444,26 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	    /* Draw icon depending on user's answer */
 	    if (UsrAnswers[Indexes[NumOpt]])	// This answer has been selected by the user
 	      {
-	       if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
+	       switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 		 {
-		  if (Question->Answer.Options[Indexes[NumOpt]].Correct)
-		    {
-		     Ans.Class = "Qst_ANS_OK";	// Correct
-		     Ans.Str   = "&check;";
-		    }
-		  else
-		    {
-		     Ans.Class = "Qst_ANS_BAD";	// Wrong
-		     Ans.Str   = "&cross;";
-		    }
+		  case Usr_I_CAN:
+		     if (Question->Answer.Options[Indexes[NumOpt]].Correct)
+		       {
+			Ans.Class = "Qst_ANS_OK";	// Correct
+			Ans.Str   = "&check;";
+		       }
+		     else
+		       {
+			Ans.Class = "Qst_ANS_BAD";	// Wrong
+			Ans.Str   = "&cross;";
+		       }
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ans.Class = "Qst_ANS_0";		// Blank answer
+		     Ans.Str   = "&bull;";
+		     break;
 		 }
-	       else
-		 {
-		  Ans.Class = "Qst_ANS_0";		// Blank answer
-		  Ans.Str   = "&bull;";
-		 }
-
 	       HTM_TD_Begin ("class=\"CT %s_%s\" title=\"%s\"",
 			     Ans.Class,The_GetSuffix (),
 			     Txt_TST_Answer_given_by_the_user);
@@ -1459,47 +1474,50 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	       HTM_TD_Empty (1);
 
 	    /* Draw icon that indicates whether the answer is correct */
-	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
+	    switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	      {
-	       if (Question->Answer.Options[Indexes[NumOpt]].Correct)
-		 {
-		  HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\" title=\"%s\"",
-		                The_GetSuffix (),
-				Txt_TST_Answer_given_by_the_teachers);
-		     HTM_Txt ("&bull;");
+	       case Usr_I_CAN:
+		  if (Question->Answer.Options[Indexes[NumOpt]].Correct)
+		    {
+		     HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\" title=\"%s\"",
+				   The_GetSuffix (),
+				   Txt_TST_Answer_given_by_the_teachers);
+			HTM_Txt ("&bull;");
+		     HTM_TD_End ();
+		    }
+		  else
+		     HTM_TD_Empty (1);
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\"",The_GetSuffix ());
+		     Ico_PutIconNotVisible ();
 		  HTM_TD_End ();
-		 }
-	       else
-		  HTM_TD_Empty (1);
-	      }
-	    else
-	      {
-	       HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\"",
-	                     The_GetSuffix ());
-		  Ico_PutIconNotVisible ();
-	       HTM_TD_End ();
+		  break;
 	      }
 
 	    /* Answer letter (a, b, c,...) */
-	    HTM_TD_Begin ("class=\"LT %s_%s\"",
-	                  ClassTxt,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
 	       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 	    HTM_TD_End ();
 
 	    /* Answer text and feedback */
 	    HTM_TD_Begin ("class=\"LT\"");
 
-	       HTM_DIV_Begin ("class=\"%s_%s\"",
-	                      ClassTxt,The_GetSuffix ());
-		  if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_I_CAN)
+	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
+		  switch (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
 		    {
-		     HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
-		     Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-				    "Tst_MED_SHOW_CONT",
-				    "Tst_MED_SHOW");
+		     case Usr_I_CAN:
+			HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
+			Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
+				       "Tst_MED_SHOW_CONT",
+				       "Tst_MED_SHOW");
+			break;
+		     case Usr_I_CAN_NOT:
+		     default:
+			Ico_PutIconNotVisible ();
+			break;
 		    }
-		  else
-		     Ico_PutIconNotVisible ();
 	       HTM_DIV_End ();
 
 	       if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
@@ -1593,55 +1611,57 @@ static void TstPrn_WriteTxtAnsPrint (struct Usr_Data *UsrDat,
             HTM_TD_Empty (1);
 
 	 /***** Write the correct answers *****/
-	 if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER] == Usr_I_CAN)
+	 switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	   {
-	    HTM_TD_Begin ("class=\"CT\"");
-	       HTM_TABLE_BeginPadding (2);
+	    case Usr_I_CAN:
+	       HTM_TD_Begin ("class=\"CT\"");
+		  HTM_TABLE_BeginPadding (2);
 
-		  for (NumOpt = 0;
-		       NumOpt < Question->Answer.NumOptions;
-		       NumOpt++)
-		    {
-		     HTM_TR_Begin (NULL);
+		     for (NumOpt = 0;
+			  NumOpt < Question->Answer.NumOptions;
+			  NumOpt++)
+		       {
+			HTM_TR_Begin (NULL);
 
-			/* Answer letter (a, b, c,...) */
-			HTM_TD_Begin ("class=\"LT Qst_ANS_0_%s\"",
-			              The_GetSuffix ());
-			   HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
-			HTM_TD_End ();
+			   /* Answer letter (a, b, c,...) */
+			   HTM_TD_Begin ("class=\"LT Qst_ANS_0_%s\"",
+					 The_GetSuffix ());
+			      HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+			   HTM_TD_End ();
 
-			/* Answer text and feedback */
-			HTM_TD_Begin ("class=\"LT\"");
+			   /* Answer text and feedback */
+			   HTM_TD_Begin ("class=\"LT\"");
 
-			   HTM_DIV_Begin ("class=\"Qst_ANS_0_%s\"",
-			                  The_GetSuffix ());
-			      HTM_Txt (Question->Answer.Options[NumOpt].Text);
-			   HTM_DIV_End ();
+			      HTM_DIV_Begin ("class=\"Qst_ANS_0_%s\"",
+					     The_GetSuffix ());
+				 HTM_Txt (Question->Answer.Options[NumOpt].Text);
+			      HTM_DIV_End ();
 
-			   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_I_CAN)
-			      if (Question->Answer.Options[NumOpt].Feedback)
-				 if (Question->Answer.Options[NumOpt].Feedback[0])
-				   {
-				    HTM_DIV_Begin ("class=\"Qst_TXT_LIGHT\"");
-				       HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
-				    HTM_DIV_End ();
-				   }
+			      if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT] == Usr_I_CAN)
+				 if (Question->Answer.Options[NumOpt].Feedback)
+				    if (Question->Answer.Options[NumOpt].Feedback[0])
+				      {
+				       HTM_DIV_Begin ("class=\"Qst_TXT_LIGHT\"");
+					  HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
+				       HTM_DIV_End ();
+				      }
 
-			HTM_TD_End ();
+			   HTM_TD_End ();
 
-		     HTM_TR_End ();
-		    }
+			HTM_TR_End ();
+		       }
 
-	       HTM_TABLE_End ();
-	    HTM_TD_End ();
+		  HTM_TABLE_End ();
+	       HTM_TD_End ();
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\"",The_GetSuffix ());
+		  Ico_PutIconNotVisible ();
+	       HTM_TD_End ();
+	       break;
 	   }
-	 else
-	   {
-	    HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\"",
-	                  The_GetSuffix ());
-	       Ico_PutIconNotVisible ();
-	    HTM_TD_End ();
-	   }
+
       HTM_TR_End ();
 
    HTM_TABLE_End ();
@@ -1914,8 +1934,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	       if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			     Id,ClassDat,The_GetSuffix (),
-			     The_GetColorRows ());
+			     Id,ClassDat,The_GetSuffix (),The_GetColorRows ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						true,true,false,0x7);
@@ -1933,96 +1952,124 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 
 	    /* Write number of questions */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),
-	                  The_GetColorRows ());
-	       if (ICanView.Result == Usr_I_CAN)
-		  HTM_Unsigned (Print.NumQsts.All);
-	       else
-		  Ico_PutIconNotVisible ();
+	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Result)
+		 {
+		  case Usr_I_CAN:
+		     HTM_Unsigned (Print.NumQsts.All);
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
 	    HTM_TD_End ();
 
 	    /* Write number of non-blank answers */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),
-	                  The_GetColorRows ());
-	       if (ICanView.Result == Usr_I_CAN)
+	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Result)
 		 {
-		  if (Print.NumQsts.NotBlank)
-		     HTM_Unsigned (Print.NumQsts.NotBlank);
-		  else
-		     HTM_Light0 ();
+		  case Usr_I_CAN:
+		     if (Print.NumQsts.NotBlank)
+			HTM_Unsigned (Print.NumQsts.NotBlank);
+		     else
+			HTM_Light0 ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	    /* Write number of blank answers */
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat,The_GetSuffix (),
-	                  The_GetColorRows ());
-	       if (ICanView.Result == Usr_I_CAN)
+	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Result)
 		 {
-		  NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
-		  if (NumQstsBlank)
-		     HTM_Unsigned (NumQstsBlank);
-		  else
-		     HTM_Light0 ();
+		  case Usr_I_CAN:
+		     NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
+		     if (NumQstsBlank)
+			HTM_Unsigned (NumQstsBlank);
+		     else
+			HTM_Light0 ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	    /* Write score */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),
-	                  The_GetColorRows ());
-	       if (ICanView.Score == Usr_I_CAN)
+	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Score)
 		 {
-		  HTM_Double2Decimals (Print.Score);
-		  HTM_Txt ("/");
-		  HTM_Unsigned (Print.NumQsts.All);
+		  case Usr_I_CAN:
+		     HTM_Double2Decimals (Print.Score);
+		     HTM_Txt ("/");
+		     HTM_Unsigned (Print.NumQsts.All);
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	    /* Write average score per question */
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat,The_GetSuffix (),
-	                  The_GetColorRows ());
-	       if (ICanView.Score == Usr_I_CAN)
-		  HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
-							   (double) Print.NumQsts.All :
-							   0.0);
-	       else
-		  Ico_PutIconNotVisible ();
+	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_I_CAN:
+		     HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
+							      (double) Print.NumQsts.All :
+							      0.0);
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
 	    HTM_TD_End ();
 
 	    /* Write grade */
 	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat,The_GetSuffix (),
-	                  The_GetColorRows ());
-	       if (ICanView.Score == Usr_I_CAN)
-		  TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
-	       else
-		  Ico_PutIconNotVisible ();
+	                  ClassDat,The_GetSuffix (),The_GetColorRows ());
+	       switch (ICanView.Score)
+		 {
+		  case Usr_I_CAN:
+		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
+						 Tst_SCORE_MAX);
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
+		 }
 	    HTM_TD_End ();
 
 	    /* Link to show this test */
-	    HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",
-	                  The_GetColorRows ());
-	       if (ICanView.Result == Usr_I_CAN)
+	    HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",The_GetColorRows ());
+	       switch (ICanView.Result)
 		 {
-		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
-								       ActSeeOneTstResOth);
-		     ParCod_PutPar (ParCod_Prn,Print.PrnCod);
-		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,
-		                      Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
-								            ActSeeOneTstResOth);
-		  Frm_EndForm ();
+		  case Usr_I_CAN:
+		     Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
+									  ActSeeOneTstResOth);
+			ParCod_PutPar (ParCod_Prn,Print.PrnCod);
+			Ico_PutIconLink ("tasks.svg",Ico_BLACK,
+					 Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
+									       ActSeeOneTstResOth);
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -2339,16 +2386,20 @@ void TstPrn_ShowOnePrint (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score == Usr_I_CAN)
+	       switch (ICanView.Score)
 		 {
-		  HTM_STRONG_Begin ();
-		     HTM_Double2Decimals (Print.Score);
-		     HTM_Txt ("/");
-		     HTM_Unsigned (Print.NumQsts.All);
-		  HTM_STRONG_End ();
+		  case Usr_I_CAN:
+		     HTM_STRONG_Begin ();
+			HTM_Double2Decimals (Print.Score);
+			HTM_Txt ("/");
+			HTM_Unsigned (Print.NumQsts.All);
+		     HTM_STRONG_End ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -2363,14 +2414,19 @@ void TstPrn_ShowOnePrint (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score == Usr_I_CAN)
+	       switch (ICanView.Score)
 		 {
-		  HTM_STRONG_Begin ();
-		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
-		  HTM_STRONG_End ();
+		  case Usr_I_CAN:
+		     HTM_STRONG_Begin ();
+			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
+						    Tst_SCORE_MAX);
+		     HTM_STRONG_End ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -2420,12 +2476,18 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
 	 // if the print is not sent ==> I can not view results
 	 ICanView->Result = (Print->Sent && Usr_ItsMe (UsrCod) == Usr_ME) ? Usr_I_CAN :
 									    Usr_I_CAN_NOT;
-	 if (ICanView->Result == Usr_I_CAN)
-	    // Depends on 5 visibility icons associated to tests
-	    ICanView->Score = TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()) ? Usr_I_CAN :
-											   Usr_I_CAN_NOT;
-	 else
-	    ICanView->Score = Usr_I_CAN_NOT;
+	 switch (ICanView->Result)
+	   {
+	    case Usr_I_CAN:
+	       // Depends on 5 visibility icons associated to tests
+	       ICanView->Score = TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()) ? Usr_I_CAN :
+											      Usr_I_CAN_NOT;
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       ICanView->Score = Usr_I_CAN_NOT;
+	       break;
+	   }
 	 break;
       case Rol_NET:
       case Rol_TCH:

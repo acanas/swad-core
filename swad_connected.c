@@ -539,7 +539,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    const char *ClassTxt;
    long UsrCod;
    Usr_MeOrOther_t MeOrOther;
-   struct Usr_Data *UsrDat;
+   struct Usr_Data *UsrDat = NULL;	// To avoid warning
    struct Usr_Data OtherUsrDat;
 
    /***** Get user's code from list *****/
@@ -552,7 +552,6 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
          UsrDat = &Gbl.Usrs.Me.UsrDat;
 	 break;
       case Usr_OTHER:
-      default:
 	 /***** Initialize structure with user's data *****/
 	 OtherUsrDat.UsrCod = UsrCod;
 	 Usr_UsrDataConstructor (&OtherUsrDat);
@@ -609,7 +608,6 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       case Usr_ME:
 	 break;
       case Usr_OTHER:
-      default:
 	 /***** Free memory used for user's data *****/
          Usr_UsrDataDestructor (&OtherUsrDat);
          break;

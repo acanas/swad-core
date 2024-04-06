@@ -5261,21 +5261,23 @@ int swad__getLastLocation (struct soap *soap,
    The other user does not have to share any course with me,
    but at least some course of each one has to share center.
    */
-   if (Roo_DB_CheckIfICanSeeUsrLocation ((long) userCode) == Usr_I_CAN)
+   switch (Roo_DB_CheckIfICanSeeUsrLocation ((long) userCode))
      {
-      /***** Get list of locations *****/
-      NumLocs = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);
-      API_GetLocationData (soap,
-			     &(getLastLocationOut->location),
-			     &(getLastLocationOut->checkinTime),	// Get check in time
-			     &mysql_res,NumLocs);
-     }
-   else
-     {
-      /* I can not see user's location ==> reset output */
-      API_ResetLocation (soap, &(getLastLocationOut->location));
-      getLastLocationOut->checkinTime = 0L;
-     }
+      case Usr_I_CAN:
+	 /***** Get list of locations *****/
+	 NumLocs = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);
+	 API_GetLocationData (soap,
+				&(getLastLocationOut->location),
+				&(getLastLocationOut->checkinTime),	// Get check in time
+				&mysql_res,NumLocs);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 /* I can not see user's location ==> reset output */
+	 API_ResetLocation (soap, &(getLastLocationOut->location));
+	 getLastLocationOut->checkinTime = 0L;
+	 break;
+    }
 
    return SOAP_OK;
   }

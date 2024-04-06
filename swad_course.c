@@ -705,45 +705,53 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	    /* Course year */
 	    HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
-	    if (ICanEdit == Usr_I_CAN)
-	      {
-	       Frm_BeginForm (ActChgCrsYea);
-		  ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-				    "name=\"OthCrsYear\""
-				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
-				    The_GetSuffix ());
-		     for (YearAux  = 0;
-			  YearAux <= Deg_MAX_YEARS_PER_DEGREE;
-			  YearAux++)	// All the years are permitted
-					// because it's possible to move this course
-					// to another degree (with other active years)
-			HTM_OPTION (HTM_Type_UNSIGNED,&YearAux,
-				    YearAux == Crs->Specific.Year ? HTM_OPTION_SELECTED :
-								    HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
-				    "%s",Txt_YEAR_OF_DEGREE[YearAux]);
-		  HTM_SELECT_End ();
-	       Frm_EndForm ();
-	      }
-	    else
-	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Specific.Year]);
+	       switch (ICanEdit)
+		 {
+		  case Usr_I_CAN:
+		     Frm_BeginForm (ActChgCrsYea);
+			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
+			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+					  "name=\"OthCrsYear\""
+					  " class=\"HIE_SEL_NARROW INPUT_%s\"",
+					  The_GetSuffix ());
+			   for (YearAux  = 0;
+				YearAux <= Deg_MAX_YEARS_PER_DEGREE;
+				YearAux++)	// All the years are permitted
+					      // because it's possible to move this course
+					      // to another degree (with other active years)
+			      HTM_OPTION (HTM_Type_UNSIGNED,&YearAux,
+					  YearAux == Crs->Specific.Year ? HTM_OPTION_SELECTED :
+									  HTM_OPTION_UNSELECTED,
+					  HTM_OPTION_ENABLED,
+					  "%s",Txt_YEAR_OF_DEGREE[YearAux]);
+			HTM_SELECT_End ();
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Specific.Year]);
+		     break;
+		 }
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	       if (ICanEdit == Usr_I_CAN)
+	       switch (ICanEdit)
 		 {
-		  Frm_BeginForm (ActChgInsCrsCod);
-		     ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-		     HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
-				     Crs->InstitutionalCod,HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_INS_CODE INPUT_%s\"",
-				     The_GetSuffix ());
-		  Frm_EndForm ();
+		  case Usr_I_CAN:
+		     Frm_BeginForm (ActChgInsCrsCod);
+			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
+			HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
+					Crs->InstitutionalCod,HTM_SUBMIT_ON_CHANGE,
+					"class=\"INPUT_INS_CODE INPUT_%s\"",
+					The_GetSuffix ());
+		     Frm_EndForm ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     HTM_Txt (Crs->InstitutionalCod);
+		     break;
 		 }
-	       else
-		  HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
 	    /* Course short name and full name */

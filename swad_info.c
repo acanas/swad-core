@@ -127,23 +127,6 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_URL       ][Inf_ASSESSMENT    ] = ActRcvURLAss,
   };
 
-/***** Help *****/
-extern const char *Hlp_COURSE_Information_textual_information;
-extern const char *Hlp_COURSE_Guide;
-extern const char *Hlp_COURSE_Syllabus;
-extern const char *Hlp_COURSE_Bibliography;
-extern const char *Hlp_COURSE_FAQ;
-extern const char *Hlp_COURSE_Links;
-extern const char *Hlp_COURSE_Assessment;
-
-extern const char *Hlp_COURSE_Information_edit;
-extern const char *Hlp_COURSE_Guide_edit;
-extern const char *Hlp_COURSE_Syllabus_edit;
-extern const char *Hlp_COURSE_Bibliography_edit;
-extern const char *Hlp_COURSE_FAQ_edit;
-extern const char *Hlp_COURSE_Links_edit;
-extern const char *Hlp_COURSE_Assessment_edit;
-
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
@@ -181,6 +164,13 @@ static bool Inf_CheckAndShowRichTxt (void);
 
 void Inf_ShowInfo (void)
   {
+   extern const char *Hlp_COURSE_Information_textual_information;
+   extern const char *Hlp_COURSE_Guide;
+   extern const char *Hlp_COURSE_Syllabus;
+   extern const char *Hlp_COURSE_Bibliography;
+   extern const char *Hlp_COURSE_FAQ;
+   extern const char *Hlp_COURSE_Links;
+   extern const char *Hlp_COURSE_Assessment;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_No_information;
    struct Syl_Syllabus Syllabus;
@@ -190,16 +180,26 @@ void Inf_ShowInfo (void)
                           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
                         					    Usr_I_CAN_NOT;
    bool ShowWarningNoInfo = false;
-   const char *Help[Inf_NUM_TYPES] =
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_I_CAN]) (void *Args) =
      {
-      [Inf_INFORMATION   ] = Hlp_COURSE_Information_textual_information,
-      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide,
-      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus,
-      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus,
-      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography,
-      [Inf_FAQ           ] = Hlp_COURSE_FAQ,
-      [Inf_LINKS         ] = Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment,
+      [Usr_I_CAN_NOT] = NULL,
+      [Usr_I_CAN    ] = Inf_PutIconToEditInfo,
+     };
+   static void *Args[Usr_NUM_I_CAN] =
+     {
+      [Usr_I_CAN_NOT] = NULL,
+      [Usr_I_CAN    ] = &Gbl.Crs.Info.Type,
+     };
+   static const char **Help[Inf_NUM_TYPES] =
+     {
+      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_textual_information,
+      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide,
+      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus,
+      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus,
+      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography,
+      [Inf_FAQ           ] = &Hlp_COURSE_FAQ,
+      [Inf_LINKS         ] = &Hlp_COURSE_Links,
+      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment,
      };
 
    /***** Reset syllabus context *****/
@@ -245,11 +245,8 @@ void Inf_ShowInfo (void)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 (ICanEdit == Usr_I_CAN) ? Inf_PutIconToEditInfo :
-					   NULL,
-		 (ICanEdit == Usr_I_CAN) ? &Gbl.Crs.Info.Type :
-					   NULL,
-		 Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+		 FunctionToDrawContextualIcons[ICanEdit],Args[ICanEdit],
+		 *Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
       /****** Form to select syllabus *****/
       Syl_PutFormWhichSyllabus (Syllabus.WhichSyllabus);
@@ -809,6 +806,13 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
+   extern const char *Hlp_COURSE_Information_edit;
+   extern const char *Hlp_COURSE_Guide_edit;
+   extern const char *Hlp_COURSE_Syllabus_edit;
+   extern const char *Hlp_COURSE_Bibliography_edit;
+   extern const char *Hlp_COURSE_FAQ_edit;
+   extern const char *Hlp_COURSE_Links_edit;
+   extern const char *Hlp_COURSE_Assessment_edit;
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -837,16 +841,16 @@ void Inf_FormsToSelSendInfo (void)
       [Inf_PAGE      ] = Inf_FormToSendPage,
       [Inf_URL       ] = Inf_FormToSendURL,
      };
-   const char *HelpEdit[Inf_NUM_TYPES] =
+   static const char **HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = Hlp_COURSE_Information_edit,
-      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
-      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
-      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
-      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
-      [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
-      [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment_edit,
+      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_edit,
+      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ           ] = &Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS         ] = &Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
@@ -880,7 +884,7 @@ void Inf_FormsToSelSendInfo (void)
    /* Begin box and table */
    Box_BoxTableBegin (Txt_Source_of_information,
                       Inf_PutIconToViewInfo,&Gbl.Crs.Info.Type,
-                      HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
+                      *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
       /* Options */
       for (InfoSrc  = (Inf_Src_t) 0;
@@ -1493,6 +1497,13 @@ static bool Inf_CheckAndShowRichTxt (void)
 
 void Inf_EditPlainTxtInfo (void)
   {
+   extern const char *Hlp_COURSE_Information_edit;
+   extern const char *Hlp_COURSE_Guide_edit;
+   extern const char *Hlp_COURSE_Syllabus_edit;
+   extern const char *Hlp_COURSE_Bibliography_edit;
+   extern const char *Hlp_COURSE_FAQ_edit;
+   extern const char *Hlp_COURSE_Links_edit;
+   extern const char *Hlp_COURSE_Assessment_edit;
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
@@ -1509,16 +1520,16 @@ void Inf_EditPlainTxtInfo (void)
       [Inf_LINKS         ] = {ActRcvPlaTxtCrsLnk,NULL,NULL},
       [Inf_ASSESSMENT    ] = {ActRcvPlaTxtAss   ,NULL,NULL},
      };
-   const char *HelpEdit[Inf_NUM_TYPES] =
+   static const char **HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = Hlp_COURSE_Information_edit,
-      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
-      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
-      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
-      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
-      [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
-      [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment_edit,
+      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_edit,
+      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ           ] = &Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS         ] = &Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
@@ -1532,7 +1543,7 @@ void Inf_EditPlainTxtInfo (void)
       if (Inf_Actions[Gbl.Crs.Info.Type].FuncPars)
 	 Inf_Actions[Gbl.Crs.Info.Type].FuncPars (Inf_Actions[Gbl.Crs.Info.Type].Args);
       Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
-		    HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+		    *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
 	 switch (Gbl.Crs.Info.Type)
 	   {
@@ -1569,6 +1580,13 @@ void Inf_EditPlainTxtInfo (void)
 
 void Inf_EditRichTxtInfo (void)
   {
+   extern const char *Hlp_COURSE_Information_edit;
+   extern const char *Hlp_COURSE_Guide_edit;
+   extern const char *Hlp_COURSE_Syllabus_edit;
+   extern const char *Hlp_COURSE_Bibliography_edit;
+   extern const char *Hlp_COURSE_FAQ_edit;
+   extern const char *Hlp_COURSE_Links_edit;
+   extern const char *Hlp_COURSE_Assessment_edit;
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
@@ -1585,16 +1603,16 @@ void Inf_EditRichTxtInfo (void)
       [Inf_LINKS         ] = {ActRcvRchTxtCrsLnk,NULL,NULL},
       [Inf_ASSESSMENT    ] = {ActRcvRchTxtAss   ,NULL,NULL},
      };
-   const char *HelpEdit[Inf_NUM_TYPES] =
+   static const char **HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = Hlp_COURSE_Information_edit,
-      [Inf_TEACHING_GUIDE] = Hlp_COURSE_Guide_edit,
-      [Inf_LECTURES      ] = Hlp_COURSE_Syllabus_edit,
-      [Inf_PRACTICALS    ] = Hlp_COURSE_Syllabus_edit,
-      [Inf_BIBLIOGRAPHY  ] = Hlp_COURSE_Bibliography_edit,
-      [Inf_FAQ           ] = Hlp_COURSE_FAQ_edit,
-      [Inf_LINKS         ] = Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = Hlp_COURSE_Assessment_edit,
+      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_edit,
+      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ           ] = &Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS         ] = &Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
@@ -1608,7 +1626,7 @@ void Inf_EditRichTxtInfo (void)
       if (Inf_Actions[Gbl.Crs.Info.Type].FuncPars)
 	 Inf_Actions[Gbl.Crs.Info.Type].FuncPars (Inf_Actions[Gbl.Crs.Info.Type].Args);
       Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
-		    HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+		    *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
       switch (Gbl.Crs.Info.Type)
 	{

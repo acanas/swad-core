@@ -1004,22 +1004,24 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       /***** Form to ban/unban post *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL\"");
 
-	 if (ICanModerateForum == Usr_I_CAN)
+	 switch (ICanModerateForum)
 	   {
-	    NextAction = DisabledOrEnabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
-					                    For_ActionsEnbPstFor[Forums->Forum.Type];
-	    Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
-	       For_PutParsForum (Forums);
-	       Ico_PutIconLink (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],NextAction);
-	    Frm_EndForm ();
-	   }
-	 else
-	   {
-	    if (asprintf (&Title,*TxtAllowedBanned[DisabledOrEnabled],PstNum) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Ico_PutIcon (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],Title,
-			 "ICO_HIDDEN ICO16x16");
-	    free (Title);
+	    case Usr_I_CAN:
+	       NextAction = DisabledOrEnabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
+							       For_ActionsEnbPstFor[Forums->Forum.Type];
+	       Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
+		  For_PutParsForum (Forums);
+		  Ico_PutIconLink (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],NextAction);
+	       Frm_EndForm ();
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       if (asprintf (&Title,*TxtAllowedBanned[DisabledOrEnabled],PstNum) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Ico_PutIcon (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],Title,
+			    "ICO_HIDDEN ICO16x16");
+	       free (Title);
+	       break;
 	   }
 
 	 /***** Form to remove post *****/
@@ -1518,8 +1520,9 @@ static void For_WriteLinksToPlatformForums (const struct For_Forums *Forums,
    Forum.HieCod = -1L;
    Highlight = (Forums->Forum.Type == For_FORUM__SWAD__USRS) ? Lay_HIGHLIGHT :
 							       Lay_NO_HIGHLIGHT;
-   IsLastItemInLevel[1] = (IsLastForum && ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
-										  Lay_NO_LAST_ITEM;
+   IsLastItemInLevel[1] = (IsLastForum &&
+			   ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
+								   Lay_NO_LAST_ITEM;
    For_WriteLinkToForum (Forums,&Forum,Highlight,1,IsLastItemInLevel);
 
    /***** Link to forum of teachers about the platform *****/
@@ -1563,8 +1566,9 @@ static long For_WriteLinksToInsForums (const struct For_Forums *Forums,
       Highlight = (Forums->Forum.Type == For_FORUM_INSTIT_USRS &&
 	           Forums->Forum.HieCod == InsCod) ? Lay_HIGHLIGHT :
 						     Lay_NO_HIGHLIGHT;
-      IsLastItemInLevel[2] = (IsLastIns && ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
-										   Lay_NO_LAST_ITEM;
+      IsLastItemInLevel[2] = (IsLastIns &&
+			      ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
+								      Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,2,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this institution *****/
@@ -1611,8 +1615,9 @@ static long For_WriteLinksToCtrForums (const struct For_Forums *Forums,
       Highlight = (Forums->Forum.Type == For_FORUM_CENTER_USRS &&
 	           Forums->Forum.HieCod == CtrCod) ? Lay_HIGHLIGHT :
 						     Lay_NO_HIGHLIGHT;
-      IsLastItemInLevel[3] = (IsLastCtr && ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
-										   Lay_NO_LAST_ITEM;
+      IsLastItemInLevel[3] = (IsLastCtr &&
+			      ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
+								      Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,3,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this center *****/
@@ -1659,8 +1664,9 @@ static long For_WriteLinksToDegForums (const struct For_Forums *Forums,
       Highlight = (Forums->Forum.Type == For_FORUM_DEGREE_USRS &&
 	           Forums->Forum.HieCod == DegCod) ? Lay_HIGHLIGHT :
 						     Lay_NO_HIGHLIGHT;
-      IsLastItemInLevel[4] = (IsLastDeg && ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
-										   Lay_NO_LAST_ITEM;
+      IsLastItemInLevel[4] = (IsLastDeg &&
+			      ICanSeeTeacherForum == Usr_I_CAN_NOT) ? Lay_LAST_ITEM :
+								      Lay_NO_LAST_ITEM;
       For_WriteLinkToForum (Forums,&Forum,Highlight,4,IsLastItemInLevel);
 
       /***** Link to forum of teachers from this degree *****/

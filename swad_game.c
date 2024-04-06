@@ -1636,16 +1636,24 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    Usr_ICan_t ICanEditQuestions = Gam_CheckIfICanEditGame (&Games->Game);
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_I_CAN]) (void *Args) =
+     {
+      [Usr_I_CAN_NOT] = NULL,
+      [Usr_I_CAN    ] = Gam_PutIconToAddNewQuestions,
+     };
+   void *Args[Usr_NUM_I_CAN] =
+     {
+      [Usr_I_CAN_NOT] = NULL,
+      [Usr_I_CAN    ] = Games,
+     };
 
    /***** Get data of questions from database *****/
    NumQsts = Gam_DB_GetGameQuestionsBasic (&mysql_res,Games->Game.GamCod);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Questions,
-		 ICanEditQuestions == Usr_I_CAN ? Gam_PutIconToAddNewQuestions :
-						  NULL,
-		 ICanEditQuestions == Usr_I_CAN ? Games :
-						  NULL,
+		 FunctionToDrawContextualIcons[ICanEditQuestions],
+		 Args[ICanEditQuestions],
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
       /***** Show table with questions *****/
@@ -1736,11 +1744,17 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
 	       /* Put icon to remove the question */
-	       if (ICanEditQuestions == Usr_I_CAN)
-		  Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
-						 Gam_PutParsOneQst,Games);
-	       else
-		  Ico_PutIconRemovalNotAllowed ();
+	       switch (ICanEditQuestions)
+		 {
+		  case Usr_I_CAN:
+		     Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
+						    Gam_PutParsOneQst,Games);
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconRemovalNotAllowed ();
+		     break;
+		 }
 
 	       /* Put icon to move up the question */
 	       if (ICanEditQuestions == Usr_I_CAN && QstInd > 1)
@@ -2154,10 +2168,10 @@ static Usr_ICan_t Gam_CheckIfICanEditGame (const struct Gam_Game *Game)
   {
    if (Gam_CheckIfICanEditGames () == Usr_I_CAN)
       /***** Questions are editable only if game has no matches *****/
-      return Game->NumMchs == 0 ? Usr_I_CAN :	// Games with matches should not be edited
-				  Usr_I_CAN_NOT;
-   else
-      return Usr_I_CAN_NOT;			// Questions are not editable
+      if (Game->NumMchs == 0)
+	 return Usr_I_CAN;
+
+   return Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/

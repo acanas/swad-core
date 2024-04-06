@@ -298,7 +298,6 @@ void TmlUsr_PutIconFavSha (TmlUsr_FavSha_t FavSha,
 	    TmlUsr_PutDisabledIconFavSha (FavSha,NumUsrs);
 	    break;
 	 case Usr_OTHER:	// I am not the author
-	 default:
 	    TmlFrm_PutFormToFavUnfShaUns (FavSha,Cod);
 	    break;
         }

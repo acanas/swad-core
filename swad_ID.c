@@ -328,14 +328,21 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
 	              UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
 						          "USR_ID_NC",
 		      The_GetSuffix ());
-	 if (ICanSeeUsrID == Usr_I_CAN)
-	    HTM_Txt (UsrDat->IDs.List[NumID].ID);
-	 else
-	    HTM_Txt ("********");
+	 switch (ICanSeeUsrID)
+	   {
+	    case Usr_I_CAN:
+	       HTM_Txt (UsrDat->IDs.List[NumID].ID);
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       HTM_Txt ("********");
+	       break;
+	   }
       HTM_SPAN_End ();
 
       /* Put link to confirm ID? */
-      if (ICanConfirmUsrID == Usr_I_CAN && !UsrDat->IDs.List[NumID].Confirmed)
+      if (ICanConfirmUsrID == Usr_I_CAN &&
+	  !UsrDat->IDs.List[NumID].Confirmed)
 	 ID_PutLinkToConfirmID (UsrDat,NumID,Anchor);
      }
   }
@@ -691,22 +698,24 @@ void ID_RemoveOtherUsrID (void)
   {
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
+      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Remove user's ID *****/
-	 ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
-	                 Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+	 case Usr_I_CAN:
+	    /***** Remove user's ID *****/
+	    ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
+			    Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
-	 /***** Update list of IDs *****/
-	 ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+	    /***** Update list of IDs *****/
+	    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	 /***** Show form again *****/
-	 Acc_ShowFormChgOtherUsrAccount ();
+	    /***** Show form again *****/
+	    Acc_ShowFormChgOtherUsrAccount ();
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else		// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
@@ -720,48 +729,52 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
-   Usr_ICan_t ICanRemove;
+   Usr_ICan_t ICanRemove = Usr_I_CAN_NOT;
 
-   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
+   switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      /***** Get user's ID from form *****/
-      Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (UsrID);
-      Str_ConvertToUpperText (UsrID);
+      case Usr_I_CAN:
+	 /***** Get user's ID from form *****/
+	 Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
+	 // Users' IDs are always stored internally in capitals and without leading zeros
+	 Str_RemoveLeadingZeros (UsrID);
+	 Str_ConvertToUpperText (UsrID);
 
-      if (UsrDat->IDs.Num < 2)	// One unique ID
-	 ICanRemove = Usr_I_CAN_NOT;
-      else
-	 switch (MeOrOther)
+	 if (UsrDat->IDs.Num >= 2)
+	    switch (MeOrOther)
+	      {
+	       case Usr_ME:
+		  // I can remove my ID only if it is not confirmed
+		  ICanRemove = ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID) ? Usr_I_CAN_NOT :
+									       Usr_I_CAN;
+		  break;
+	       case Usr_OTHER:
+		  ICanRemove = Usr_I_CAN;
+		  break;
+	      }
+
+	 switch (ICanRemove)
 	   {
-	    case Usr_ME:
-	       // I can remove my ID only if it is not confirmed
-	       ICanRemove = ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID) ? Usr_I_CAN_NOT :
-									    Usr_I_CAN;
+	    case Usr_I_CAN:
+	       /***** Remove one of the user's IDs *****/
+	       ID_DB_RemoveUsrID (UsrDat->UsrCod,UsrID);
+
+	       /***** Show message *****/
+	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+				Txt_ID_X_removed,UsrID);
 	       break;
-	    case Usr_OTHER:
+	    case Usr_I_CAN_NOT:
 	    default:
-	       ICanRemove = Usr_I_CAN;
+	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+				Txt_You_can_not_delete_this_ID);
 	       break;
 	   }
-
-      if (ICanRemove == Usr_I_CAN)
-	{
-	 /***** Remove one of the user's IDs *****/
-	 ID_DB_RemoveUsrID (UsrDat->UsrCod,UsrID);
-
-	 /***** Show message *****/
-	 Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-	                  Txt_ID_X_removed,
-		          UsrID);
-	}
-      else
-	 Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-	                  Txt_You_can_not_delete_this_ID);
-     }
-   else
-      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+       case Usr_I_CAN_NOT:
+       default:
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+    }
   }
 
 /*****************************************************************************/
@@ -788,22 +801,24 @@ void ID_ChangeOtherUsrID (void)
   {
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
+      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 /***** Change user's ID *****/
-	 ID_ChangeUsrID (&Gbl.Usrs.Other.UsrDat,
-	                 Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
+	 case Usr_I_CAN:
+	    /***** Change user's ID *****/
+	    ID_ChangeUsrID (&Gbl.Usrs.Other.UsrDat,
+			    Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
-	 /***** Update list of IDs *****/
-	 ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+	    /***** Update list of IDs *****/
+	    ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	 /***** Show form again *****/
-	 Acc_ShowFormChgOtherUsrAccount ();
+	    /***** Show form again *****/
+	    Acc_ShowFormChgOtherUsrAccount ();
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else		// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
@@ -824,65 +839,69 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    bool AlreadyExists;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
-   if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
+   switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      /***** Get new user's ID from form *****/
-      Par_GetParText ("NewID",NewID,ID_MAX_BYTES_USR_ID);
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (NewID);
-      Str_ConvertToUpperText (NewID);
+      case Usr_I_CAN:
+	 /***** Get new user's ID from form *****/
+	 Par_GetParText ("NewID",NewID,ID_MAX_BYTES_USR_ID);
+	 // Users' IDs are always stored internally in capitals and without leading zeros
+	 Str_RemoveLeadingZeros (NewID);
+	 Str_ConvertToUpperText (NewID);
 
-      if (ID_CheckIfUsrIDIsValid (NewID))        // If new ID is valid
-	{
-	 /***** Check if the new ID matches any of the old IDs *****/
-	 for (NumID = 0, AlreadyExists = false;
-	      NumID < UsrDat->IDs.Num && !AlreadyExists;
-	      NumID++)
-	    if (!strcasecmp (UsrDat->IDs.List[NumID].ID,NewID))
-	      {
-	       AlreadyExists = true;
-	       NumIDFound = NumID;
-	      }
-
-	 if (AlreadyExists)	// This new ID was already associated to this user
+	 if (ID_CheckIfUsrIDIsValid (NewID))        // If new ID is valid
 	   {
-	    if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed)
-	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-		                Txt_The_ID_X_matches_one_of_the_existing,
-			        NewID);
-	    else	// It's not me && !Confirmed
+	    /***** Check if the new ID matches any of the old IDs *****/
+	    for (NumID = 0, AlreadyExists = false;
+		 NumID < UsrDat->IDs.Num && !AlreadyExists;
+		 NumID++)
+	       if (!strcasecmp (UsrDat->IDs.List[NumID].ID,NewID))
+		 {
+		  AlreadyExists = true;
+		  NumIDFound = NumID;
+		 }
+
+	    if (AlreadyExists)	// This new ID was already associated to this user
 	      {
-	       /***** Mark this ID as confirmed *****/
-	       ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
+	       if (MeOrOther == Usr_ME || UsrDat->IDs.List[NumIDFound].Confirmed)
+		  Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+				   Txt_The_ID_X_matches_one_of_the_existing,
+				   NewID);
+	       else	// It's not me && !Confirmed
+		 {
+		  /***** Mark this ID as confirmed *****/
+		  ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
+
+		  Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+				   Txt_The_ID_X_has_been_confirmed,
+				   NewID);
+		 }
+	      }
+	    else if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
+	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+				Txt_A_user_can_not_have_more_than_X_IDs,
+				ID_MAX_IDS_PER_USER);
+	    else	// OK ==> add this new ID to my list of IDs
+	      {
+	       /***** Save this new ID *****/
+	       // It's me ==> ID not confirmed
+	       // Not me  ==> ID confirmed
+	       ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,MeOrOther == Usr_OTHER);
 
 	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-		                Txt_The_ID_X_has_been_confirmed,
-			        NewID);
+				Txt_The_ID_X_has_been_registered_successfully,
+				NewID);
 	      }
 	   }
-	 else if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
+	 else        // New ID is not valid
 	    Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-		             Txt_A_user_can_not_have_more_than_X_IDs,
-		             ID_MAX_IDS_PER_USER);
-	 else	// OK ==> add this new ID to my list of IDs
-	   {
-	    /***** Save this new ID *****/
-	    // It's me ==> ID not confirmed
-	    // Not me  ==> ID confirmed
-	    ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,MeOrOther == Usr_OTHER);
-
-	    Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-		             Txt_The_ID_X_has_been_registered_successfully,
-		             NewID);
-	   }
-	}
-      else        // New ID is not valid
-	 Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
-	                  Txt_The_ID_X_is_not_valid,
-		          NewID);
+			     Txt_The_ID_X_is_not_valid,
+			     NewID);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else
-      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -917,48 +936,52 @@ void ID_ConfirmOtherUsrID (void)
 	    ICanConfirm = Usr_I_CAN;
         }
 
-   if (ICanConfirm == Usr_I_CAN)
+   switch (ICanConfirm)
      {
-      /***** Get user's ID from form *****/
-      Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
-      // Users' IDs are always stored internally in capitals and without leading zeros
-      Str_RemoveLeadingZeros (UsrID);
-      Str_ConvertToUpperText (UsrID);
+      case Usr_I_CAN:
+	 /***** Get user's ID from form *****/
+	 Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
+	 // Users' IDs are always stored internally in capitals and without leading zeros
+	 Str_RemoveLeadingZeros (UsrID);
+	 Str_ConvertToUpperText (UsrID);
 
-      for (NumID = 0, Found = false;
-	   NumID < Gbl.Usrs.Other.UsrDat.IDs.Num && !Found;
-	   NumID++)
-	 if (!strcasecmp (UsrID,Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID))
+	 for (NumID = 0, Found = false;
+	      NumID < Gbl.Usrs.Other.UsrDat.IDs.Num && !Found;
+	      NumID++)
+	    if (!strcasecmp (UsrID,Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID))
+	      {
+	       Found = true;
+	       NumIDFound = NumID;
+	      }
+
+	 if (Found)	// Found
 	   {
-	    Found = true;
-	    NumIDFound = NumID;
-	   }
+	    if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
+	       /***** ID found and already confirmed *****/
+	       Ale_CreateAlert (Ale_INFO,ID_ID_SECTION_ID,
+				Txt_ID_X_had_already_been_confirmed,
+				Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    else
+	      {
+	       /***** Mark this ID as confirmed *****/
+	       ID_DB_ConfirmUsrID (Gbl.Usrs.Other.UsrDat.UsrCod,
+				   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	       Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
 
-      if (Found)	// Found
-	{
-	 if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
-	    /***** ID found and already confirmed *****/
-            Ale_CreateAlert (Ale_INFO,ID_ID_SECTION_ID,
-        	             Txt_ID_X_had_already_been_confirmed,
-		             Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	 else
-	   {
-	    /***** Mark this ID as confirmed *****/
-	    ID_DB_ConfirmUsrID (Gbl.Usrs.Other.UsrDat.UsrCod,
-			        Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	    Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
-
-	    /***** Write success message *****/
-	    Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
-		             Txt_The_ID_X_has_been_confirmed,
-		             Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	       /***** Write success message *****/
+	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+				Txt_The_ID_X_has_been_confirmed,
+				Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	      }
 	   }
-	}
-      else	// User's ID not found
+	 else	// User's ID not found
+	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else	// I can not confirm
-      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)

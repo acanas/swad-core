@@ -761,8 +761,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	                  (unsigned) StartEndTime,UniqueId) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s %s\"",
-			  Id,The_GetSuffix (),
-			  The_GetColorRows ());
+			  Id,The_GetSuffix (),The_GetColorRows ());
 	       Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					     true,true,false,0x7);
@@ -772,8 +771,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Write match title */
 	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
@@ -787,110 +785,137 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
 	 /* Write number of questions */
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
-	    if (ICanView.Score == Usr_I_CAN)
-	       HTM_Unsigned (Print.NumQsts.All);
-	    else
-	       Ico_PutIconNotVisible ();
+	               The_GetSuffix (),The_GetColorRows ());
+	    switch (ICanView.Score)
+	      {
+	       case Usr_I_CAN:
+		  HTM_Unsigned (Print.NumQsts.All);
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
+	      }
 	 HTM_TD_End ();
 
 	 /* Write number of non-blank answers */
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
-	    if (ICanView.Score == Usr_I_CAN)
+	               The_GetSuffix (),The_GetColorRows ());
+	    switch (ICanView.Score)
 	      {
-	       if (Print.NumQsts.NotBlank)
-		  HTM_Unsigned (Print.NumQsts.NotBlank);
-	       else
-		  HTM_Light0 ();
+	       case Usr_I_CAN:
+		  if (Print.NumQsts.NotBlank)
+		     HTM_Unsigned (Print.NumQsts.NotBlank);
+		  else
+		     HTM_Light0 ();
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
 	      }
-	    else
-	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write number of blank answers */
 	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
-	    if (ICanView.Score == Usr_I_CAN)
+	    switch (ICanView.Score)
 	      {
-	       if (NumQstsBlank)
-		  HTM_Unsigned (NumQstsBlank);
-	       else
-		  HTM_Light0 ();
+	       case Usr_I_CAN:
+		  if (NumQstsBlank)
+		     HTM_Unsigned (NumQstsBlank);
+		  else
+		     HTM_Light0 ();
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
 	      }
-	    else
-	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write score */
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
-	    if (ICanView.Score == Usr_I_CAN)
+	               The_GetSuffix (),The_GetColorRows ());
+	    switch (ICanView.Score)
 	      {
-	       HTM_Double2Decimals (Print.Score);
-	       HTM_Txt ("/");
-	       HTM_Unsigned (Print.NumQsts.All);
+	       case Usr_I_CAN:
+		  HTM_Double2Decimals (Print.Score);
+		  HTM_Txt ("/");
+		  HTM_Unsigned (Print.NumQsts.All);
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
 	      }
-	    else
-	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write average score per question */
 	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
-	    if (ICanView.Score == Usr_I_CAN)
-	       HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
-							(double) Print.NumQsts.All :
-							0.0);
-	    else
-	       Ico_PutIconNotVisible ();
+	               The_GetSuffix (),The_GetColorRows ());
+	    switch (ICanView.Score)
+	      {
+	       case Usr_I_CAN:
+		  HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
+							   (double) Print.NumQsts.All :
+							   0.0);
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
+	      }
 	 HTM_TD_End ();
 
 	 /* Write grade over maximum grade */
 	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
-	    if (ICanView.Score == Usr_I_CAN)
+	               The_GetSuffix (),The_GetColorRows ());
+	    switch (ICanView.Score)
 	      {
-	       Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,Games->Game.MaxGrade);
-	       TstPrn_ShowGrade (Grade,Games->Game.MaxGrade);
-	       TotalGrade += Grade;
+	       case Usr_I_CAN:
+		  Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,
+					       Games->Game.MaxGrade);
+		  TstPrn_ShowGrade (Grade,Games->Game.MaxGrade);
+		  TotalGrade += Grade;
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
 	      }
-	    else
-	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
 	 HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",
 	               The_GetColorRows ());
-	    if (ICanView.Result == Usr_I_CAN)
+	    switch (ICanView.Result)
 	      {
-	       Games->Game.GamCod = Match.GamCod;
-	       Games->MchCod      = Match.MchCod;
-	       switch (MeOrOther)
-		 {
-		  case Usr_ME:
-		     Frm_BeginForm (ActSeeOneMchResMe);
-			Mch_PutParsEdit (Games);
-		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResMe);
-		     break;
-		  case Usr_OTHER:
-		     Frm_BeginForm (ActSeeOneMchResOth);
-			Mch_PutParsEdit (Games);
-			Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		        Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResOth);
-		     break;
-		 }
-	       Frm_EndForm ();
+	       case Usr_I_CAN:
+		  Games->Game.GamCod = Match.GamCod;
+		  Games->MchCod      = Match.MchCod;
+		  switch (MeOrOther)
+		    {
+		     case Usr_ME:
+			Frm_BeginForm (ActSeeOneMchResMe);
+			   Mch_PutParsEdit (Games);
+			   Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResMe);
+			break;
+		     case Usr_OTHER:
+			Frm_BeginForm (ActSeeOneMchResOth);
+			   Mch_PutParsEdit (Games);
+			   Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			   Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneMchResOth);
+			break;
+		    }
+		  Frm_EndForm ();
+		  break;
+	       case Usr_I_CAN_NOT:
+	       default:
+		  Ico_PutIconNotVisible ();
+		  break;
 	      }
-	    else
-	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1071,7 +1096,6 @@ void MchRes_ShowOneMchResult (void)
 	 UsrDat = &Gbl.Usrs.Me.UsrDat;
 	 break;
       case Usr_OTHER:
-      default:
 	 UsrDat = &Gbl.Usrs.Other.UsrDat;
          Usr_GetParOtherUsrCodEncrypted (UsrDat);
 	 break;
@@ -1201,16 +1225,20 @@ void MchRes_ShowOneMchResult (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score == Usr_I_CAN)
+	       switch (ICanView.Score)
 		 {
-		  HTM_STRONG_Begin ();
-		     HTM_Double2Decimals (Print.Score);
-		     HTM_Txt ("/");
-		     HTM_Unsigned (Print.NumQsts.All);
-		  HTM_STRONG_End ();
+		  case Usr_I_CAN:
+		     HTM_STRONG_Begin ();
+			HTM_Double2Decimals (Print.Score);
+			HTM_Txt ("/");
+			HTM_Unsigned (Print.NumQsts.All);
+		     HTM_STRONG_End ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1225,14 +1253,19 @@ void MchRes_ShowOneMchResult (void)
 
 	    HTM_TD_Begin ("class=\"LB DAT_%s\"",
 			  The_GetSuffix ());
-	       if (ICanView.Score == Usr_I_CAN)
+	       switch (ICanView.Score)
 		 {
-		  HTM_STRONG_Begin ();
-		     TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Games.Game.MaxGrade);
-		  HTM_STRONG_End ();
+		  case Usr_I_CAN:
+		     HTM_STRONG_Begin ();
+			TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,
+						    Games.Game.MaxGrade);
+		     HTM_STRONG_End ();
+		     break;
+		  case Usr_I_CAN_NOT:
+		  default:
+		     Ico_PutIconNotVisible ();
+		     break;
 		 }
-	       else
-		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1287,12 +1320,18 @@ static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
 	 // Whether I belong or not to groups of match is not checked here...
 	 // ...because I should be able to see old matches made in old groups to which I belonged
 
-	 if (ICanView->Result == Usr_I_CAN)
-	    // Depends on 5 visibility icons associated to game
-	    ICanView->Score = TstVis_IsVisibleTotalScore (Game->Visibility) ? Usr_I_CAN :
-									      Usr_I_CAN_NOT;
-	 else
-	    ICanView->Score = Usr_I_CAN_NOT;
+	 switch (ICanView->Result)
+	   {
+	    case Usr_I_CAN:
+	       // Depends on 5 visibility icons associated to game
+	       ICanView->Score = TstVis_IsVisibleTotalScore (Game->Visibility) ? Usr_I_CAN :
+										 Usr_I_CAN_NOT;
+	       break;
+	    case Usr_I_CAN_NOT:
+	    default:
+	       ICanView->Score = Usr_I_CAN_NOT;
+	       break;
+	   }
 	 break;
       case Rol_NET:
       case Rol_TCH:

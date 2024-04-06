@@ -1757,20 +1757,22 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 				       "DAT_SMALL",
 		    The_GetSuffix (),
 		    The_GetColorRows ());
-	 if (ICanEditStdComment == Usr_I_CAN)	// Show with form
+	 switch (ICanEditStdComment)
 	   {
-	    HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
-				" class=\"INPUT_%s\"",
-				UsrDat->EnUsrCod,
-				The_GetSuffix ());
+	    case Usr_I_CAN:	// Show with form
+	       HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
+				   " class=\"INPUT_%s\"",
+				   UsrDat->EnUsrCod,
+				   The_GetSuffix ());
+		  HTM_Txt (CommentStd);
+	       HTM_TEXTAREA_End ();
+	       break;
+	    case Usr_I_CAN_NOT:	// Show without form
+	    default:
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 CommentStd,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 	       HTM_Txt (CommentStd);
-	    HTM_TEXTAREA_End ();
-	   }
-	 else				// Show without form
-	   {
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      CommentStd,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-	    HTM_Txt (CommentStd);
+	       break;
 	   }
       HTM_TD_End ();
 
@@ -1780,22 +1782,27 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 				       "DAT_SMALL",
 		    The_GetSuffix (),
 		    The_GetColorRows ());
-	 if (ICanEditTchComment == Usr_I_CAN)		// Show with form
+	 switch (ICanEditTchComment)
 	   {
-	    HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
-				" class=\"INPUT_%s\"",
-				UsrDat->EnUsrCod,
-				The_GetSuffix ());
-	       HTM_Txt (CommentTch);
-	    HTM_TEXTAREA_End ();
-	   }
-	 else if (Event->CommentTchVisible)	// Show without form
-	   {
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      CommentTch,Cns_MAX_BYTES_TEXT,
-			      Str_DONT_REMOVE_SPACES);
-	    HTM_Txt (CommentTch);
-	   }
+	    case Usr_I_CAN:			// Show with form
+	       HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
+				   " class=\"INPUT_%s\"",
+				   UsrDat->EnUsrCod,
+				   The_GetSuffix ());
+		  HTM_Txt (CommentTch);
+	       HTM_TEXTAREA_End ();
+	       break;
+	    case Usr_I_CAN_NOT:			// Show without form
+	    default:
+	       if (Event->CommentTchVisible)
+		 {
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    CommentTch,Cns_MAX_BYTES_TEXT,
+				    Str_DONT_REMOVE_SPACES);
+		  HTM_Txt (CommentTch);
+		 }
+	       break;
+	  }
       HTM_TD_End ();
 
    /***** End table row *****/

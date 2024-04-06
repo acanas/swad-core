@@ -551,18 +551,22 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
   {
    HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",The_GetColorRows ());
 
-      if (Mch_CheckIfICanEditThisMatch (Match) == Usr_I_CAN)
+      switch (Mch_CheckIfICanEditThisMatch (Match))
 	{
-	 Games->MchCod = Match->MchCod;
+	 case Usr_I_CAN:
+	    Games->MchCod = Match->MchCod;
 
-	 /***** Put icon to remove the match *****/
-	 Ico_PutContextualIconToRemove (ActReqRemMch,NULL,Mch_PutParsEdit,Games);
+	    /***** Put icon to remove the match *****/
+	    Ico_PutContextualIconToRemove (ActReqRemMch,NULL,Mch_PutParsEdit,Games);
 
-	 /***** Put icon to edit the match *****/
-	 Ico_PutContextualIconToEdit (ActReqChgMch,Anchor,Mch_PutParsEdit,Games);
+	    /***** Put icon to edit the match *****/
+	    Ico_PutContextualIconToEdit (ActReqChgMch,Anchor,Mch_PutParsEdit,Games);
+	    break;
+	 case Usr_I_CAN_NOT:
+	 default:
+	    Ico_PutIconRemovalNotAllowed ();
+	    break;
 	}
-      else
-	 Ico_PutIconRemovalNotAllowed ();
 
    HTM_TD_End ();
   }
@@ -835,25 +839,27 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
-   if (Mch_CheckIfICanChangeVisibilityOfResults (Match) == Usr_I_CAN)
+   switch (Mch_CheckIfICanChangeVisibilityOfResults (Match))
      {
-      /* I can edit visibility */
-      if (Match->Status.ShowUsrResults)
-	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					Mch_PutParsEdit,Games,
-					"eye.svg",Ico_GREEN);
-      else
-	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					Mch_PutParsEdit,Games,
-					"eye-slash.svg",Ico_RED);
-     }
-   else
-     {
-      /* I can not edit visibility */
-      if (Match->Status.ShowUsrResults)
-	 Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Visible_results);
-      else
-	 Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Hidden_results );
+      case Usr_I_CAN:
+	 /* I can edit visibility */
+	 if (Match->Status.ShowUsrResults)
+	    Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
+					   Mch_PutParsEdit,Games,
+					   "eye.svg",Ico_GREEN);
+	 else
+	    Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
+					   Mch_PutParsEdit,Games,
+					   "eye-slash.svg",Ico_RED);
+	 break;
+      case Usr_I_CAN_NOT:
+      default:
+	 /* I can not edit visibility */
+	 if (Match->Status.ShowUsrResults)
+	    Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Visible_results);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Hidden_results );
+	 break;
      }
   }
 

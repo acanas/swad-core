@@ -487,39 +487,41 @@ void Acc_ShowFormChgOtherUsrAccount (void)
   {
    /***** Get user whose account must be changed *****/
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
-	{
-	 /***** Get user's nickname and email address
-		It's necessary because nickname or email could be just updated *****/
-	 Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
-	 Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+      switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+        {
+         case Usr_I_CAN:
+	    /***** Get user's nickname and email address
+		   It's necessary because nickname or email could be just updated *****/
+	    Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
+	    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
-				  &Gbl.Usrs.Other.UsrDat,NULL);
+	    /***** Show user's record *****/
+	    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+				     &Gbl.Usrs.Other.UsrDat,NULL);
 
-	 /***** Begin container for this user *****/
-	 HTM_DIV_Begin ("class=\"REC_USR\"");
+	    /***** Begin container for this user *****/
+	    HTM_DIV_Begin ("class=\"REC_USR\"");
 
-	    /***** Show form to change password and nickname *****/
-	    HTM_DIV_Begin ("class=\"REC_LEFT\"");
-	       Pwd_ShowFormChgOtherUsrPwd ();
-	       Nck_ShowFormChangeOtherUsrNickname ();
+	       /***** Show form to change password and nickname *****/
+	       HTM_DIV_Begin ("class=\"REC_LEFT\"");
+		  Pwd_ShowFormChgOtherUsrPwd ();
+		  Nck_ShowFormChangeOtherUsrNickname ();
+	       HTM_DIV_End ();
+
+	       /***** Show form to change email and ID *****/
+	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+		  Mai_ShowFormChangeOtherUsrEmail ();
+		  ID_ShowFormChangeOtherUsrID ();
+	       HTM_DIV_End ();
+
+	    /***** End container for this user *****/
 	    HTM_DIV_End ();
-
-	    /***** Show form to change email and ID *****/
-	    HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-	       Mai_ShowFormChangeOtherUsrEmail ();
-	       ID_ShowFormChangeOtherUsrID ();
-	    HTM_DIV_End ();
-
-	 /***** Begin container for this user *****/
-	 HTM_DIV_End ();
+	    break;
+         case Usr_I_CAN_NOT:
+         default:
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	}
-      else
-	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
    else		// User not found
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
@@ -770,13 +772,17 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
    bool Error = false;
 
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_I_CAN)
-         Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
-      else
-         Error = true;
-     }
-   else
+      switch (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+        {
+         case Usr_I_CAN:
+            Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
+            break;
+         case Usr_I_CAN_NOT:
+         default:
+            Error = true;
+            break;
+        }
+   else	// User not found
       Error = true;
 
    if (Error)
@@ -827,11 +833,12 @@ Usr_ICan_t Acc_CheckIfICanEliminateAccount (long UsrCod)
 	 return (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0 ? Usr_I_CAN :
 									 Usr_I_CAN_NOT;
       case Usr_OTHER:
-      default:
 	 // Only a system admin can eliminate other's account
 	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_I_CAN :
 							 Usr_I_CAN_NOT;
      }
+
+   return Usr_I_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1103,7 +1110,6 @@ void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
 					"at.svg",Ico_BLACK);
          break;
       case Usr_OTHER:
-      default:
 	 if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
