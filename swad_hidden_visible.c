@@ -38,16 +38,6 @@ const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE] =
    [HidVis_VISIBLE] = 'N',
   };
 
-const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE] =
-  {
-   [HidVis_HIDDEN ] = "DATE_GREEN_LIGHT",
-   [HidVis_VISIBLE] = "DATE_GREEN",
-  };
-const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE] =
-  {
-   [HidVis_HIDDEN ] = "DATE_RED_LIGHT",
-   [HidVis_VISIBLE] = "DATE_RED",
-  };
 const char *HidVis_DateBlueClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
    [HidVis_HIDDEN ] = "DATE_BLUE_LIGHT",
@@ -98,4 +88,3 @@ HidVis_HiddenOrVisible_t HidVid_GetHiddenOrVisible (char Ch)
    return (Ch == 'Y') ? HidVis_HIDDEN :
 		        HidVis_VISIBLE;
   }
-

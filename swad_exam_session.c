@@ -127,7 +127,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
    Session->Title[0]                 = '\0';
    Session->HiddenOrVisible	     = HidVis_VISIBLE;
-   Session->Open	             = CloOpe_CLOSED;
+   Session->ClosedOrOpen             = CloOpe_CLOSED;
    Session->ShowUsrResults           = false;
   };
 
@@ -459,23 +459,20 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
                                                unsigned UniqueId)
   {
-   extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    Dat_StartEndTime_t StartEndTime;
-   const char *DateClass;
    char *Id;
 
    for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      DateClass = Session->Open == CloOpe_OPEN ? HidVis_DateGreenClass[Session->HiddenOrVisible] :
-						 HidVis_DateRedClass[Session->HiddenOrVisible];
-
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-		    Id,DateClass,The_GetSuffix (),The_GetColorRows ());
+		    Id,
+		    CloOpe_Class[Session->ClosedOrOpen][Session->HiddenOrVisible],
+		    The_GetSuffix (),The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x6);
@@ -751,8 +748,7 @@ static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
       Session->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[4 + StartEndTime]);
 
    /* Get whether the session is open or closed (row(6)) */
-   Session->Open = (row[6][0] == '1') ? CloOpe_OPEN :
-					CloOpe_CLOSED;
+   Session->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[6][0]);
 
    /* Get the title of the session (row[7]) */
    if (row[7])
@@ -1219,7 +1215,7 @@ Usr_ICan_t ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
           2. Hidden or closed sessions are not accesible *****/
    if (Exam->HiddenOrVisible == HidVis_HIDDEN ||
        Session->HiddenOrVisible == HidVis_HIDDEN ||
-       Session->Open == CloOpe_CLOSED)
+       Session->ClosedOrOpen == CloOpe_CLOSED)
       return Usr_I_CAN_NOT;
 
    /***** Exam is visible, session is visible and open ==>

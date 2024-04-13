@@ -726,8 +726,8 @@ bool Msg_DB_GetStatusOfSntMsg (long MsgCod)
 /********* Get if a received message has been open/replied/expanded **********/
 /*****************************************************************************/
 
-void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
-                               CloOpe_ClosedOrOpen_t *Open,bool *Replied,bool *Expanded)
+void Msg_DB_GetStatusOfRcvMsg (long MsgCod,CloOpe_ClosedOrOpen_t *ClosedOrOpen,
+			       bool *Replied,bool *Expanded)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -751,10 +751,9 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
    /***** Get if message has been read by me (row[0]),
               if message has been replied (row[1]), and
               if message is expanded (row[2]) *****/
-   *Open     = (row[0][0] == 'Y') ? CloOpe_OPEN :
-				    CloOpe_CLOSED;
-   *Replied  = (row[1][0] == 'Y');
-   *Expanded = (row[2][0] == 'Y');
+   *ClosedOrOpen = CloOpe_GetClosedOrOpenFromYN (row[0][0]);
+   *Replied      = (row[1][0] == 'Y');
+   *Expanded     = (row[2][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

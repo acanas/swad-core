@@ -778,7 +778,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 		    NumGrpThisType < GrpTyp->NumGrps && !ITryToLeaveAClosedGroup;
 		    NumGrpThisType++)
 		  if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIBelong.GrpCods[NumGrpIBelong])
-		     if ((GrpTyp->LstGrps[NumGrpThisType]).Open == CloOpe_CLOSED)
+		     if ((GrpTyp->LstGrps[NumGrpThisType]).ClosedOrOpen == CloOpe_CLOSED)
 			ITryToLeaveAClosedGroup = true;
 	      }
 	}
@@ -814,7 +814,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 		     if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIWant->GrpCods[NumGrpIWant])
 		       {
 			/* Check if the group is closed */
-			if ((GrpTyp->LstGrps[NumGrpThisType]).Open == CloOpe_CLOSED)
+			if ((GrpTyp->LstGrps[NumGrpThisType]).ClosedOrOpen == CloOpe_CLOSED)
 			   ITryToRegisterInAClosedGroup = true;
 			/* Check if the group is full */
 			else if ((GrpTyp->LstGrps[NumGrpThisType]).NumUsrs[Rol_STD] >=
@@ -1389,6 +1389,21 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
   {
    extern const char *Txt_No_assigned_room;
    extern const char *Txt_Another_room;
+   static Act_Action_t NextAction[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = ActOpeGrp,
+      [CloOpe_OPEN  ] = ActCloGrp,
+     };
+   static const char *Icon[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "lock.svg",
+      [CloOpe_OPEN  ] = "unlock.svg",
+     };
+   static Ico_Color_t Color[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = Ico_RED,
+      [CloOpe_OPEN  ] = Ico_GREEN,
+     };
    unsigned NumGrpTyp1;
    const struct GroupType *GrpTyp1;
    unsigned NumGrpTyp2;
@@ -1428,16 +1443,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 	       /***** Icon to open/close group *****/
 	       HTM_TD_Begin ("class=\"BM\"");
-		  Frm_BeginFormAnchor (Grp->Open == CloOpe_OPEN ? ActCloGrp :
-								  ActOpeGrp,
+		  Frm_BeginFormAnchor (NextAction[Grp->ClosedOrOpen],
 				       Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
-		     Ico_PutIconLink (Grp->Open == CloOpe_OPEN ? "unlock.svg" :
-			    					 "lock.svg",
-			              Grp->Open == CloOpe_OPEN ? Ico_GREEN :
-			        				 Ico_RED,
-			              Grp->Open == CloOpe_OPEN ? ActCloGrp :
-			        				 ActOpeGrp);
+		     Ico_PutIconLink (Icon[Grp->ClosedOrOpen],
+			              Color[Grp->ClosedOrOpen],
+			              NextAction[Grp->ClosedOrOpen]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1863,7 +1874,7 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 		 NumGrpThisType++)
 	      {
 	       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	       if (Grp->Open == CloOpe_OPEN)		// If group is open
+	       if (Grp->ClosedOrOpen == CloOpe_OPEN)	// If group is open
 		 {
 	          IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 	          if (IBelongToThisGroup)		// I belong to this group
@@ -1882,7 +1893,7 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 		 NumGrpThisType++)
 	      {
 	       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-	       if (Grp->Open == CloOpe_CLOSED)		// If group is closed
+	       if (Grp->ClosedOrOpen == CloOpe_CLOSED)	// If group is closed
 		 {
 	          IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 	          if (IBelongToThisGroup)		// I belong to this group
@@ -1900,7 +1911,7 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 		    NumGrpThisType++)
 		 {
 		  Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-		  if (Grp->Open == CloOpe_OPEN &&			// If group is open...
+		  if (Grp->ClosedOrOpen == CloOpe_OPEN &&		// If group is open...
 		      Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)		// ...and not full
 		    {
 		     IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
@@ -1933,7 +1944,7 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	 case Usr_I_CAN:
 	    ICanChangeMySelectionForThisGrp = Usr_I_CAN;
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	       switch (Grp->Open)
+	       switch (Grp->ClosedOrOpen)
 	         {
 	          case CloOpe_OPEN:		// If group is open
 		     if (!IBelongToThisGroup &&			// I don't belong to group
@@ -2336,18 +2347,28 @@ static void Grp_WriteRowGrp (struct Group *Grp,Lay_Highlight_t Highlight)
       [Lay_NO_HIGHLIGHT] = "",
       [Lay_HIGHLIGHT   ] = " BG_HIGHLIGHT",
      };
+   static const char **TitleFormat[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = &Txt_Group_X_closed,
+      [CloOpe_OPEN  ] = &Txt_Group_X_open,
+     };
+   static const char *Icon[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "lock.svg",
+      [CloOpe_OPEN  ] = "unlock.svg",
+     };
+   static Ico_Color_t Color[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = Ico_RED,
+      [CloOpe_OPEN  ] = Ico_GREEN,
+     };
+
 
    /***** Write icon to show if group is open or closed *****/
    HTM_TD_Begin ("class=\"BM%s\"",HighlightClass[Highlight]);
-      if (asprintf (&Title,Grp->Open == CloOpe_OPEN ? Txt_Group_X_open :
-						      Txt_Group_X_closed,
-		    Grp->GrpName) < 0)
+      if (asprintf (&Title,*TitleFormat[Grp->ClosedOrOpen],Grp->GrpName) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Ico_PutIconOff (Grp->Open == CloOpe_OPEN ? "unlock.svg" :
-						 "lock.svg",
-	              Grp->Open == CloOpe_OPEN ? Ico_GREEN :
-	        				 Ico_RED,
-	              Title);
+      Ico_PutIconOff (Icon[Grp->ClosedOrOpen],Color[Grp->ClosedOrOpen],Title);
       free (Title);
    HTM_TD_End ();
 
@@ -2848,8 +2869,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
                /* Get whether group is open ('Y') or closed ('N') (row[5]),
                   and whether group have file zones ('Y') or not ('N') (row[6]) */
-               Grp->Open      = (row[5][0] == 'Y') ? CloOpe_OPEN :
-        					     CloOpe_CLOSED;
+               Grp->ClosedOrOpen = CloOpe_GetClosedOrOpenFromYN (row[5][0]);
                Grp->FileZones = (row[6][0] == 'Y');
               }
            }
@@ -2962,7 +2982,7 @@ void Grp_GetGroupDataByCod (struct GroupData *GrpDat)
    GrpDat->Room.ShrtName[0]  = '\0';
    GrpDat->MaxStudents       = 0;
    GrpDat->Vacant            = 0;
-   GrpDat->Open              = CloOpe_CLOSED;
+   GrpDat->ClosedOrOpen      = CloOpe_CLOSED;
    GrpDat->FileZones         = false;
    GrpDat->MultipleEnrolment = false;
 
@@ -3006,8 +3026,7 @@ void Grp_GetGroupDataByCod (struct GroupData *GrpDat)
 
 	 /* Get whether group is open or closed (row[8]),
 	    and whether group has file zones (row[9]) */
-	 GrpDat->Open      = (row[8][0] == 'Y') ? CloOpe_OPEN :
-						  CloOpe_CLOSED;
+	 GrpDat->ClosedOrOpen = CloOpe_GetClosedOrOpenFromYN (row[8][0]);
 	 GrpDat->FileZones = (row[9][0] == 'Y');
 	}
 
@@ -3602,7 +3621,7 @@ void Grp_OpenGroup (void)
 	     GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Crs.Grps.Open = CloOpe_OPEN;
+   Gbl.Crs.Grps.ClosedOrOpen = CloOpe_OPEN;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               Ale_SUCCESS,AlertTxt);
   }
@@ -3632,7 +3651,7 @@ void Grp_CloseGroup (void)
 	     GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Crs.Grps.Open = CloOpe_CLOSED;
+   Gbl.Crs.Grps.ClosedOrOpen = CloOpe_CLOSED;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               Ale_SUCCESS,AlertTxt);
   }

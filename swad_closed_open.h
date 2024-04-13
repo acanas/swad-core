@@ -44,6 +44,7 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpen (char c);
+CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFrom01 (char Ch);
+CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFromYN (char Ch);
 
 #endif

@@ -62,7 +62,7 @@ struct Prg_Item
    unsigned NumItem;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   CloOpe_ClosedOrOpen_t Open;
+   CloOpe_ClosedOrOpen_t ClosedOrOpen;
    char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
    struct
      {

@@ -44,6 +44,6 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t HidVid_GetHiddenOrVisible (char c);
+HidVis_HiddenOrVisible_t HidVid_GetHiddenOrVisible (char Ch);
 
 #endif

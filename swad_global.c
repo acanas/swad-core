@@ -174,7 +174,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.GrpName[0] = '\0';
    Gbl.Crs.Grps.RooCod = -1L; // -1L stands for no room assigned
    Gbl.Crs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
-   Gbl.Crs.Grps.Open = CloOpe_CLOSED;
+   Gbl.Crs.Grps.ClosedOrOpen = CloOpe_CLOSED;
    Gbl.Crs.Grps.LstGrpsSel.GrpCods  = NULL;
    Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
    Gbl.Crs.Grps.LstGrpsSel.NestedCalls = 0;

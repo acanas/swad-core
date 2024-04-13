@@ -505,13 +505,12 @@ void Gam_ShowOnlyOneGameEnd (void)
 static void Gam_ShowGameMainData (struct Gam_Games *Games,
                                   bool ShowOnlyThisGame)
   {
+   extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_View_game;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Maximum_grade;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Matches;
-   extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
@@ -519,7 +518,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    static unsigned UniqueId = 0;
    char *Id;
    Dat_StartEndTime_t StartEndTime;
-   const char *DateClass;
+   CloOpe_ClosedOrOpen_t ClosedOrOpen = (Games->Game.NumUnfinishedMchs) ? CloOpe_OPEN :
+									  CloOpe_CLOSED;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Set anchor string *****/
@@ -549,14 +549,17 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	{
 	 if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 DateClass = Games->Game.NumUnfinishedMchs ? HidVis_DateGreenClass[Games->Game.HiddenOrVisible] :
-						     HidVis_DateRedClass[Games->Game.HiddenOrVisible];
+
 	 if (ShowOnlyThisGame)
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,DateClass,The_GetSuffix ());
+			  Id,
+			  CloOpe_Class[ClosedOrOpen][Games->Game.HiddenOrVisible],
+			  The_GetSuffix ());
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,DateClass,The_GetSuffix (),The_GetColorRows ());
+			  Id,
+			  CloOpe_Class[ClosedOrOpen][Games->Game.HiddenOrVisible],
+			  The_GetSuffix (),The_GetColorRows ());
 	 if (Games->Game.TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Games->Game.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,

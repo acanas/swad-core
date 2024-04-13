@@ -154,7 +154,8 @@ static void Msg_GetMsgContent (long MsgCod,
 
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
-                                               CloOpe_ClosedOrOpen_t Open,bool Expanded);
+                                               CloOpe_ClosedOrOpen_t ClosedOrOpen,
+                                               bool Expanded);
 
 static bool Msg_WriteCrsOrgMsg (long CrsCod);
 
@@ -2006,8 +2007,44 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       [Msg_RECEIVED] = ActDelRcvMsg,
       [Msg_SENT    ] = ActDelSntMsg,
      };
+   static const char *Class[Msg_NUM_TYPES_OF_MSGS][CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [Msg_RECEIVED][CloOpe_CLOSED] = "MSG_BG_NEW",
+      [Msg_RECEIVED][CloOpe_OPEN  ] = "MSG_BG",
+      [Msg_SENT    ][CloOpe_CLOSED] = "MSG_BG",
+      [Msg_SENT    ][CloOpe_OPEN  ] = "MSG_BG",
+     };
+   static struct
+     {
+      const char *Icon;
+      const char **Title;
+     } Icons[Msg_NUM_TYPES_OF_MSGS][CloOpe_NUM_CLOSED_OPEN][2] =
+     {
+      [Msg_RECEIVED][CloOpe_CLOSED][false] = {"envelope.svg"	      ,&Txt_MSG_Unopened   },
+      [Msg_RECEIVED][CloOpe_CLOSED][true ] = {"envelope.svg"	      ,&Txt_MSG_Unopened   },
+      [Msg_RECEIVED][CloOpe_OPEN  ][false] = {"envelope-open-text.svg",&Txt_MSG_Not_replied},
+      [Msg_RECEIVED][CloOpe_OPEN  ][true ] = {"reply.svg"	      ,&Txt_MSG_Replied    },
+      [Msg_SENT    ][CloOpe_CLOSED][false] = {"share.svg"	      ,&Txt_MSG_Sent       },
+      [Msg_SENT    ][CloOpe_CLOSED][true ] = {"share.svg"	      ,&Txt_MSG_Sent       },
+      [Msg_SENT    ][CloOpe_OPEN  ][false] = {"share.svg"	      ,&Txt_MSG_Sent       },
+      [Msg_SENT    ][CloOpe_OPEN  ][true ] = {"share.svg"	      ,&Txt_MSG_Sent       },
+     };
+   static const char *ClassAuthor[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "MSG_AUT_NEW",
+      [CloOpe_OPEN  ] = "MSG_AUT",
+     };
+   static const char *ClassDateTime[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "MSG_TIT_NEW",
+      [CloOpe_OPEN  ] = "MSG_TIT",
+     };
+   static const char *ClassBg[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "MSG_BG_NEW",
+      [CloOpe_OPEN  ] = "MSG_BG",
+     };
    struct Usr_Data UsrDat;
-   const char *Title = NULL;	// Initialized to avoid warning
    bool FromThisCrs = false;	// Initialized to avoid warning
    time_t CreatTimeUTC;		// Creation time of a message
    long CrsCod;
@@ -2015,7 +2052,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
    bool Deleted;
-   CloOpe_ClosedOrOpen_t Open = CloOpe_OPEN;
+   CloOpe_ClosedOrOpen_t ClosedOrOpen = CloOpe_OPEN;
    bool Replied = false;	// Initialized to avoid warning
    bool Expanded = false;
 
@@ -2027,45 +2064,29 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
-         Msg_DB_GetStatusOfRcvMsg (MsgCod,&Open,&Replied,&Expanded);
+         Msg_DB_GetStatusOfRcvMsg (MsgCod,&ClosedOrOpen,&Replied,&Expanded);
          break;
       case Msg_SENT:
          Expanded = Msg_DB_GetStatusOfSntMsg (MsgCod);
          break;
       default:
+	 Err_WrongMessageExit ();
 	 break;
      }
 
    /***** Put an icon with message status *****/
-   switch (Messages->TypeOfMessages)
-     {
-      case Msg_RECEIVED:
-         Title = (Open == CloOpe_OPEN ? (Replied ? Txt_MSG_Replied :
-						   Txt_MSG_Not_replied) :
-					Txt_MSG_Unopened);
-	 break;
-      case Msg_SENT:
-	 Title = Txt_MSG_Sent;
-	 break;
-      default:
-	 break;
-     }
-
    HTM_TR_Begin (NULL);
 
       /***** Icons *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
-		    Messages->TypeOfMessages == Msg_RECEIVED ? (Open == CloOpe_OPEN ? "MSG_BG" :
-										      "MSG_BG_NEW") :
-							       "MSG_BG",
+		    Class[Messages->TypeOfMessages][ClosedOrOpen],
 		    The_GetSuffix ());
 
          /* Type of message icon (envelope, reply...) */
-	 Ico_PutIcon (Messages->TypeOfMessages == Msg_RECEIVED ? (Open == CloOpe_OPEN ? (Replied ? "reply.svg" :
-												   "envelope-open-text.svg") :
-											"envelope.svg") :
-								 "share.svg",
-		      Ico_BLACK,Title,"ICO16x16");
+	 Ico_PutIcon (Icons[Messages->TypeOfMessages][ClosedOrOpen][Replied].Icon,
+		      Ico_BLACK,
+		      *Icons[Messages->TypeOfMessages][ClosedOrOpen][Replied].Title,
+		      "ICO16x16");
 
 	 HTM_BR ();
 
@@ -2076,14 +2097,12 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TD_End ();
 
       /***** Number *****/
-      Msg_WriteMsgNumber (MsgNum,Open == CloOpe_CLOSED);
+      Msg_WriteMsgNumber (MsgNum,ClosedOrOpen == CloOpe_CLOSED);
 
       /***** Author *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-                    Open == CloOpe_OPEN ? "MSG_AUT" :
-					  "MSG_AUT_NEW",The_GetSuffix (),
-                    Open == CloOpe_OPEN ? "MSG_BG" :
-					  "MSG_BG_NEW",The_GetSuffix ());
+                    ClassAuthor[ClosedOrOpen],The_GetSuffix (),
+                    ClassBg[ClosedOrOpen],The_GetSuffix ());
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CRS);
@@ -2091,14 +2110,12 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       HTM_TD_End ();
 
       /***** Subject *****/
-      Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,Open,Expanded);
+      Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,ClosedOrOpen,Expanded);
 
       /***** Date-time *****/
       Msg_WriteMsgDate (CreatTimeUTC,
-                        Open == CloOpe_OPEN ? "MSG_TIT" :
-					      "MSG_TIT_NEW",
-                        Open == CloOpe_OPEN ? "MSG_BG" :
-					      "MSG_BG_NEW");
+                        ClassDateTime[ClosedOrOpen],
+                        ClassBg[ClosedOrOpen]);
 
    HTM_TR_End ();
 
@@ -2249,30 +2266,48 @@ void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
 
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 					       long MsgCod,const char *Subject,
-                                               CloOpe_ClosedOrOpen_t Open,bool Expanded)
+                                               CloOpe_ClosedOrOpen_t ClosedOrOpen,
+                                               bool Expanded)
   {
-   extern const char *Txt_Hide_message;
    extern const char *Txt_See_message;
+   extern const char *Txt_Hide_message;
    extern const char *Txt_no_subject;
+   static const char *ClassSubject[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "MSG_TIT_NEW",
+      [CloOpe_OPEN  ] = "MSG_TIT",
+     };
+   static const char *ClassBg[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "MSG_BG_NEW",
+      [CloOpe_OPEN  ] = "MSG_BG",
+     };
+   static Act_Action_t Action[Msg_NUM_TYPES_OF_MSGS][2] =
+     {
+      [Msg_WRITING ][false] = ActUnk,
+      [Msg_WRITING ][true ] = ActUnk,
+      [Msg_RECEIVED][false] = ActExpRcvMsg,
+      [Msg_RECEIVED][true ] = ActConRcvMsg,
+      [Msg_SENT    ][false] = ActExpSntMsg,
+      [Msg_SENT    ][true ] = ActConSntMsg,
+     };
+   static const char **Title[2] =
+     {
+      [false] = &Txt_See_message,
+      [true ] = &Txt_Hide_message,
+     };
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-                 Open == CloOpe_OPEN ? "MSG_TIT" :
-        			       "MSG_TIT_NEW",The_GetSuffix (),
-                 Open == CloOpe_OPEN ? "MSG_BG" :
-        			       "MSG_BG_NEW" ,The_GetSuffix ());
+                 ClassSubject[ClosedOrOpen],The_GetSuffix (),
+                 ClassBg[ClosedOrOpen],The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
-      Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
-									    ActExpRcvMsg) :
-							        (Expanded ? ActConSntMsg :
-									    ActExpSntMsg));
+      Frm_BeginForm (Action[Messages->TypeOfMessages][Expanded]);
 	 Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
 	 Msg_PutParsOneMsg (Messages);
 
-	 HTM_BUTTON_Submit_Begin (Expanded ? Txt_Hide_message :
-					     Txt_See_message,
-				  "class=\"LT BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (*Title[Expanded],"class=\"LT BT_LINK\"");
 
 	    /***** Write subject *****/
 	    if (Subject[0])

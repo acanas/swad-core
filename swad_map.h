@@ -52,7 +52,8 @@ void Map_CreateMap (const char *ContainerId,
 		    const struct Map_Coordinates *Coord,unsigned Zoom);
 void Map_AddTileLayer (void);
 void Map_AddMarker (const struct Map_Coordinates *Coord);
-void Map_AddPopup (const char *Title,const char *Subtitle,CloOpe_ClosedOrOpen_t Open);
+void Map_AddPopup (const char *Title,const char *Subtitle,
+		   CloOpe_ClosedOrOpen_t ClosedOrOpen);
 void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
 			  const char *Query);
 double Map_GetLatitudeFromStr (char *Str);

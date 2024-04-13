@@ -471,11 +471,10 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    Asg_OneOrMultiple_t OneOrMultiple,
                                    Vie_ViewType_t ViewType)
   {
-   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
-   extern const char *HidVis_DateGreenClass[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *HidVis_DateRedClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -511,16 +510,14 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	    case Vie_VIEW:
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 			     Id,
-			     Assignments->Asg.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-								    HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.HiddenOrVisible],
 			     The_GetSuffix (),
 			     The_GetColorRows ());
 	       break;
 	    case Vie_PRINT:
 	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			     Id,
-			     Assignments->Asg.Open == CloOpe_OPEN ? HidVis_DateGreenClass[Assignments->Asg.HiddenOrVisible] :
-								    HidVis_DateRedClass[Assignments->Asg.HiddenOrVisible],
+			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.HiddenOrVisible],
 			     The_GetSuffix ());
 	       break;
 	    default:
@@ -659,7 +656,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
    extern const char *Txt_Folder;
    Act_Action_t NextAction;
    bool ICanSendFiles = Asg->HiddenOrVisible == HidVis_VISIBLE &&	// It's visible (not hidden)
-                        Asg->Open == CloOpe_OPEN &&			// It's open (inside dates)
+                        Asg->ClosedOrOpen == CloOpe_OPEN &&		// It's open (inside dates)
                         Asg->IBelongToCrsOrGrps;			// I belong to course or groups
 
    /***** Folder icon *****/
@@ -933,8 +930,7 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
       Asg->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
-      Asg->Open = (row[5][0] == '1') ? CloOpe_OPEN :
-				       CloOpe_CLOSED;
+      Asg->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[5][0]);
 
       /* Get the title (row[6]) and the folder (row[7]) of the assignment  */
       Str_Copy (Asg->Title ,row[6],sizeof (Asg->Title ) - 1);
@@ -962,7 +958,7 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
    Asg->UsrCod = -1L;
    Asg->TimeUTC[Dat_STR_TIME] =
    Asg->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Asg->Open = CloOpe_CLOSED;
+   Asg->ClosedOrOpen = CloOpe_CLOSED;
    Asg->Title[0] = '\0';
    Asg->SendWork = Asg_DO_NOT_SEND_WORK;
    Asg->Folder[0] = '\0';
@@ -1185,7 +1181,7 @@ void Asg_ReqCreatOrEditAsg (void)
       Assignments.Asg.AsgCod = -1L;
       Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
       Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-      Assignments.Asg.Open = CloOpe_OPEN;
+      Assignments.Asg.ClosedOrOpen = CloOpe_OPEN;
       Assignments.Asg.Title[0] = '\0';
       Assignments.Asg.SendWork = Asg_DO_NOT_SEND_WORK;
       Assignments.Asg.Folder[0] = '\0';
@@ -1657,15 +1653,18 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
   {
    extern const char *Txt_unknown_assignment;
+   static const char *DateClass[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = "ASG_LST_DATE_RED",
+      [CloOpe_OPEN  ] = "ASG_LST_DATE_GREEN",
+     };
    static unsigned UniqueId = 0;
    char *Id;
 
    /***** Begin table cell *****/
    HTM_TD_Begin ("colspan=\"2\" class=\"RM %s_%s %s\"",
-		 Asg->Open == CloOpe_OPEN ? "ASG_LST_DATE_GREEN" :
-					    "ASG_LST_DATE_RED",
-		 The_GetSuffix (),
-		 The_GetColorRows ());
+	         DateClass[Asg->ClosedOrOpen],The_GetSuffix (),
+	         The_GetColorRows ());
 
       if (Asg->AsgCod > 0)
 	{
@@ -1707,6 +1706,12 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
 
 Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
   {
+   static Usr_ICan_t CloOpe_ICanCreate[CloOpe_NUM_CLOSED_OPEN] =
+     {
+      [CloOpe_CLOSED] = Usr_I_CAN_NOT,
+      [CloOpe_OPEN  ] = Usr_I_CAN,
+     };
+
    /***** Trivial check 1: assignment is valid *****/
    if (Asg->AsgCod <= 0)
       return Usr_I_CAN_NOT;
@@ -1723,13 +1728,12 @@ Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
    /***** Check 4: Depending on my role in this course... *****/
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
      {
-      case Rol_STD:			// Students...
-      case Rol_NET:			// ...and non-editing teachers...
-					// ...can create inside open assignments
-	 return (Asg->Open == CloOpe_OPEN) ? Usr_I_CAN :
-					     Usr_I_CAN_NOT;
-      case Rol_TCH:			// Teachers...
-	 return Usr_I_CAN;		// ...can create inside open or closed assignments
+      case Rol_STD:		// Students...
+      case Rol_NET:		// ...and non-editing teachers...
+				// ...can create only inside open assignments
+	 return CloOpe_ICanCreate[Asg->ClosedOrOpen];
+      case Rol_TCH:		// Teachers...
+	 return Usr_I_CAN;	// ...can create inside any assignment
       default:
 	 return Usr_I_CAN_NOT;
      }

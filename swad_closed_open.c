@@ -26,76 +26,41 @@
 /*****************************************************************************/
 
 #include "swad_closed_open.h"
+#include "swad_hidden_visible.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-/* Open in database fields */
-const char CloOpe_YN[CloOpe_NUM_CLOSED_OPEN] =
+const char *CloOpe_Txt[CloOpe_NUM_CLOSED_OPEN] =
   {
-   [CloOpe_CLOSED] = 'Y',
-   [CloOpe_OPEN  ] = 'N',
+   [CloOpe_CLOSED] = "closed",
+   [CloOpe_OPEN  ] = "open",
   };
-/*
-const char *CloOpe_DateGreenClass[CloOpe_NUM_CLOSED_OPEN] =
+
+const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [CloOpe_CLOSED] = "DATE_GREEN_LIGHT",
-   [CloOpe_OPEN  ] = "DATE_GREEN",
+   [CloOpe_CLOSED][HidVis_HIDDEN ] = "DATE_RED_LIGHT",
+   [CloOpe_CLOSED][HidVis_VISIBLE] = "DATE_RED",
+   [CloOpe_OPEN  ][HidVis_HIDDEN ] = "DATE_GREEN_LIGHT",
+   [CloOpe_OPEN  ][HidVis_VISIBLE] = "DATE_GREEN",
   };
-const char *CloOpe_DateRedClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = "DATE_RED_LIGHT",
-   [CloOpe_OPEN  ] = "DATE_RED",
-  };
-const char *CloOpe_DateBlueClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED ] = "DATE_BLUE_LIGHT",
-   [CloOpe_OPEN] = "DATE_BLUE",
-  };
-const char *CloOpe_TitleClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = "ASG_TITLE_LIGHT",
-   [CloOpe_OPEN  ] = "ASG_TITLE",
-  };
-const char *CloOpe_GroupClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = "ASG_GRP_LIGHT",
-   [CloOpe_OPEN  ] = "ASG_GRP",
-  };
-const char *CloOpe_LabelClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = "ASG_LABEL_LIGHT",
-   [CloOpe_OPEN  ] = "ASG_LABEL",
-  };
-const char *CloOpe_DataClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = "DAT_LIGHT",
-   [CloOpe_OPEN  ] = "DAT",
-  };
-const char *CloOpe_MsgClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = "MSG_AUT_LIGHT",
-   [CloOpe_OPEN  ] = "MSG_AUT",
-  };
-const char *CloOpe_PrgClass[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = " PRG_HIDDEN",
-   [CloOpe_OPEN  ] = "",
-  };
-const char *CloOpe_ShownStyle[CloOpe_NUM_CLOSED_OPEN] =
-  {
-   [CloOpe_CLOSED] = " style=\"display:none;\"",
-   [CloOpe_OPEN  ] = "",
-  };
-*/
+
 /*****************************************************************************/
-/****************** Get if closed or open from a character *******************/
+/************** Get if closed or open from a '0'/'1' character ***************/
 /*****************************************************************************/
 
-CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpen (char Ch)
+CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFrom01 (char Ch)
+  {
+   return (Ch == '1') ? CloOpe_OPEN :
+		        CloOpe_CLOSED;
+  }
+/*****************************************************************************/
+/************** Get if closed or open from a 'Y'/'N' character ***************/
+/*****************************************************************************/
+
+CloOpe_ClosedOrOpen_t CloOpe_GetClosedOrOpenFromYN (char Ch)
   {
    return (Ch == 'Y') ? CloOpe_OPEN :
 		        CloOpe_CLOSED;
   }
-

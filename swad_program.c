@@ -415,6 +415,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
                               long SelectedItmCod,
                               long SelectedRscCod)
   {
+   extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
    static unsigned UniqueId = 0;
    static Vie_ViewType_t ViewingOrEditingProgram[Prg_NUM_LISTING_TYPES] =
@@ -557,9 +558,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 	       Err_NotEnoughMemoryExit ();
 	    HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
 			   Id,
-			   Item->Open == CloOpe_OPEN ? "DATE_GREEN" :
-						       "DATE_RED",
-			   The_GetSuffix (),
+			   CloOpe_Class[Item->ClosedOrOpen][HidVis_VISIBLE],The_GetSuffix (),
 			   HidVis_PrgClass[HiddenOrVisible]);
 	       Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -1223,8 +1222,7 @@ static void Prg_GetItemDataFromRow (MYSQL_RES **mysql_res,
       Item->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
 
       /* Get whether the program item is open or closed (row(7)) */
-      Item->Open = (row[7][0] == '1') ? CloOpe_OPEN :
-					CloOpe_CLOSED;
+      Item->ClosedOrOpen = CloOpe_GetClosedOrOpenFrom01 (row[7][0]);
 
       /* Get the title of the program item (row[8]) */
       Str_Copy (Item->Title,row[8],sizeof (Item->Title) - 1);
@@ -1266,7 +1264,7 @@ void Prg_ResetItem (struct Prg_Item *Item)
    Item->UsrCod = -1L;
    Item->TimeUTC[Dat_STR_TIME] =
    Item->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Item->Open = CloOpe_CLOSED;
+   Item->ClosedOrOpen = CloOpe_CLOSED;
    Item->Title[0] = '\0';
    Prg_ResetResource (Item);
   }
@@ -1895,7 +1893,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    Prg_ResetItem (&Item);
    Item.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    Item.TimeUTC[Dat_END_TIME] = Item.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-   Item.Open = CloOpe_OPEN;
+   Item.ClosedOrOpen = CloOpe_OPEN;
 
    /***** Show pending alerts */
    Ale_ShowAlerts (NULL);

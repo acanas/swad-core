@@ -148,8 +148,8 @@ struct ExaSes_Session
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[ExaSes_MAX_BYTES_TITLE + 1];
    HidVis_HiddenOrVisible_t HiddenOrVisible;
-   CloOpe_ClosedOrOpen_t Open;	// If now is between start and end dates
-   bool ShowUsrResults;		// Show exam with results of all questions for the student
+   CloOpe_ClosedOrOpen_t ClosedOrOpen;	// If now is between start and end dates
+   bool ShowUsrResults;			// Show exam with results of all questions for the student
   };
 
 #endif

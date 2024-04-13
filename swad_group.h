@@ -71,7 +71,7 @@ struct GroupData
      } Room;
    unsigned MaxStudents;
    int  Vacant;
-   CloOpe_ClosedOrOpen_t Open;			// Group is open?
+   CloOpe_ClosedOrOpen_t ClosedOrOpen;		// Group is closed or open?
    bool FileZones;				// Group has file zones?
    bool MultipleEnrolment;
   };
@@ -87,7 +87,7 @@ struct Group
      } Room;
    unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
    unsigned MaxStudents;			// Maximum number of students in the group
-   CloOpe_ClosedOrOpen_t Open;			// Group is open?
+   CloOpe_ClosedOrOpen_t ClosedOrOpen;		// Group is closed or open?
    bool FileZones;				// Group has file zones?
    bool ShowFileZone;				// Show file zone of this group?
   };
@@ -152,7 +152,7 @@ struct Grp_Groups
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
    long RooCod;
    unsigned MaxStudents;
-   CloOpe_ClosedOrOpen_t Open;
+   CloOpe_ClosedOrOpen_t ClosedOrOpen;
    bool FileZones;
    bool AllGrps;	// All groups selected?
    struct ListCodGrps LstGrpsSel;
