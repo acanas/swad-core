@@ -1401,8 +1401,8 @@ void Asg_ReceiveAssignment (void)
 
    /***** Get folder name where to send works of the assignment *****/
    Par_GetParText ("Folder",Assignments.Asg.Folder,Brw_MAX_BYTES_FOLDER);
-   Assignments.Asg.SendWork = (Assignments.Asg.Folder[0]) ? Asg_SEND_WORK :
-							    Asg_DONT_SEND_WORK;
+   Assignments.Asg.SendWork = Assignments.Asg.Folder[0] ? Asg_SEND_WORK :
+							  Asg_DONT_SEND_WORK;
 
    /***** Get assignment text *****/
    Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)

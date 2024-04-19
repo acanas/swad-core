@@ -1113,7 +1113,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CRS))
-         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
            {
             /* Check if this user has accepted
                his/her inscription in the current course */
@@ -1326,7 +1326,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CRS))
-         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
            {
             /* Check if this user has accepted
                his/her inscription in the current course */

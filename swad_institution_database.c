@@ -807,27 +807,28 @@ unsigned Ins_DB_GetMyInss (MYSQL_RES **mysql_res,long PrtCod)
 /**************** Check if a user belongs to an institution ******************/
 /*****************************************************************************/
 
-bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
-				    bool CountOnlyAcceptedCourses)
+Usr_Belong_t Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long HieCod,
+					    bool CountOnlyAcceptedCourses)
   {
    const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
                                                       "");
 
-   return (DB_QueryCOUNT ("can not check if a user belongs to an institution",
-			  "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
-			   " FROM crs_users,"
-				 "crs_courses,"
-				 "deg_degrees,"
-				 "ctr_centers"
-			  " WHERE crs_users.UsrCod=%ld"
-			      "%s"
-			    " AND crs_users.CrsCod=crs_courses.CrsCod"
-			    " AND crs_courses.DegCod=deg_degrees.DegCod"
-			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			    " AND ctr_centers.InsCod=%ld",
-			  UsrCod,
-			  SubQuery,
-			  HieCod) != 0);
+   return DB_QueryCOUNT ("can not check if a user belongs to an institution",
+			 "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
+			  " FROM crs_users,"
+				"crs_courses,"
+				"deg_degrees,"
+				"ctr_centers"
+			 " WHERE crs_users.UsrCod=%ld"
+			     "%s"
+			   " AND crs_users.CrsCod=crs_courses.CrsCod"
+			   " AND crs_courses.DegCod=deg_degrees.DegCod"
+			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=%ld",
+			 UsrCod,
+			 SubQuery,
+			 HieCod) ? Usr_BELONG :
+				   Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

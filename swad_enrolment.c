@@ -114,7 +114,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void);
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
 
 static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
-                                       bool UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther);
+                                       Usr_Belong_t UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther);
 static void Enr_PutActionRegOneDegAdm (bool *OptionChecked);
 static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked);
 static void Enr_PutActionRegOneInsAdm (bool *OptionChecked);
@@ -1315,7 +1315,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
   {
    bool OptionsShown = false;
-   bool UsrBelongsToCrs = false;
+   Usr_Belong_t UsrBelongsToCrs = Usr_DONT_BELONG;
    bool UsrIsDegAdmin = false;
    bool UsrIsCtrAdmin = false;
    bool UsrIsInsAdmin = false;
@@ -1390,7 +1390,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	}
 
       /***** Remove user from the course *****/
-      if (UsrBelongsToCrs)
+      if (UsrBelongsToCrs == Usr_BELONG)
 	{
 	 Enr_PutActionRemUsrFromCrs (&OptionChecked,MeOrOther);
 	 OptionsShown = true;
@@ -1445,18 +1445,18 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 /*****************************************************************************/
 
 static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
-                                       bool UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther)
+                                       Usr_Belong_t UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Register_me_in_X;
    extern const char *Txt_Register_USER_in_the_course_X;
    extern const char *Txt_Modify_me_in_the_course_X;
    extern const char *Txt_Modify_user_in_the_course_X;
-   const char *Txt[2][Usr_NUM_ME_OR_OTHER] =
+   const char *Txt[Usr_NUM_BELONG][Usr_NUM_ME_OR_OTHER] =
      {
-      [false][Usr_ME   ] = Txt_Register_me_in_X,
-      [false][Usr_OTHER] = Txt_Register_USER_in_the_course_X,
-      [true ][Usr_ME   ] = Txt_Modify_me_in_the_course_X,
-      [true ][Usr_OTHER] = Txt_Modify_user_in_the_course_X,
+      [Usr_DONT_BELONG][Usr_ME   ] = Txt_Register_me_in_X,
+      [Usr_DONT_BELONG][Usr_OTHER] = Txt_Register_USER_in_the_course_X,
+      [Usr_BELONG     ][Usr_ME   ] = Txt_Modify_me_in_the_course_X,
+      [Usr_BELONG     ][Usr_OTHER] = Txt_Modify_user_in_the_course_X,
      };
 
    Enr_RegRemOneUsrActionBegin (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,OptionChecked);
@@ -1671,16 +1671,20 @@ static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
    /***** Register user in current course in database *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
-      if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+      switch (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
 	{
-	 if (RegRemRole != UsrDat->Roles.InCurrentCrs)	// The role must be updated
-	    /* Modify role */
-	    Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole);
+         case Usr_BELONG:
+	    if (RegRemRole != UsrDat->Roles.InCurrentCrs)	// The role must be updated
+	       /* Modify role */
+	       Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole);
+	    break;
+         case Usr_DONT_BELONG:	// User does not belong to this course
+         default:
+	    /* Register user */
+	    Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,
+					 Enr_SET_ACCEPTED_TO_FALSE);
+	    break;
 	}
-      else        // User does not belong to this course
-	 /* Register user */
-	 Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,
-	                              Enr_SET_ACCEPTED_TO_FALSE);
 
       /***** Register user in the selected groups *****/
       if (Gbl.Crs.Grps.NumGrps)	// If there are groups in the course
@@ -1955,47 +1959,47 @@ void Enr_AskIfRejectSignUp (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_DONT_GET_ROLE_IN_CRS))
-     {
       // User's data exist...
-      if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
-        {
-         /* User already belongs to this course */
-         Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-                        Gbl.Usrs.Other.UsrDat.FullName,
-                        Gbl.Hierarchy.Node[Hie_CRS].FullName);
-         Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+      switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	{
+	 case Usr_BELONG:
+	    /* User already belongs to this course */
+	    Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+			   Gbl.Usrs.Other.UsrDat.FullName,
+			   Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-         /* Remove inscription request because it has not sense */
-         Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-					  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	    /* Remove inscription request because it has not sense */
+	    Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+					     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	    break;
+	 case Usr_DONT_BELONG:        // User does not belong to this course
+	 default:
+	    Role = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+					    Gbl.Usrs.Other.UsrDat.UsrCod);
+	    if (Role == Rol_STD ||
+		Role == Rol_NET ||
+		Role == Rol_TCH)
+	      {
+	       /***** Show question and button to reject user's enrolment request *****/
+	       /* Begin alert */
+	       Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
+					Gbl.Usrs.Other.UsrDat.FullName,
+					Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
+					Gbl.Hierarchy.Node[Hie_CRS].FullName);
+
+	       /* Show user's record */
+	       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+
+	       /* End alert */
+	       Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
+					Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					Btn_REMOVE_BUTTON,Txt_Reject);
+	      }
+	    else
+	       Err_WrongRoleExit ();
+	    break;
         }
-      else        // User does not belong to this course
-        {
-         Role = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                         Gbl.Usrs.Other.UsrDat.UsrCod);
-         if (Role == Rol_STD ||
-             Role == Rol_NET ||
-             Role == Rol_TCH)
-           {
-	    /***** Show question and button to reject user's enrolment request *****/
-	    /* Begin alert */
-	    Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
-				     Gbl.Usrs.Other.UsrDat.FullName,
-				     Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
-				     Gbl.Hierarchy.Node[Hie_CRS].FullName);
-
-	    /* Show user's record */
-            Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-
-	    /* End alert */
-	    Ale_ShowAlertAndButtonEnd (ActRejSignUp,NULL,NULL,
-	                             Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-				     Btn_REMOVE_BUTTON,Txt_Reject);
-           }
-         else
-            Err_WrongRoleExit ();
-        }
-     }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
@@ -2017,7 +2021,7 @@ void Enr_RejectSignUp (void)
                                                 Usr_DONT_GET_ROLE_IN_CRS))
      {
       // User's data exist...
-      if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+      if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat) == Usr_BELONG)
         {
          /* User already belongs to this course */
          Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
@@ -2119,7 +2123,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    struct Hie_Node Crs;
    struct Usr_Data UsrDat;
    bool UsrExists;
-   bool UsrBelongsToCrs;
+   Usr_Belong_t UsrBelongsToCrs;
    Rol_Role_t DesiredRole;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -2230,10 +2234,10 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 							     Crs.HieCod,
 							     false);
 	       else
-		  UsrBelongsToCrs = false;
+		  UsrBelongsToCrs = Usr_DONT_BELONG;
 
 	       if (UsrExists &&
-		   !UsrBelongsToCrs &&
+		   UsrBelongsToCrs == Usr_DONT_BELONG &&
 		   (DesiredRole == Rol_STD ||
 		    DesiredRole == Rol_NET ||
 		    DesiredRole == Rol_TCH))
@@ -2623,32 +2627,32 @@ static void Enr_ShowFormToEditOtherUsr (void)
      {
       /***** Show form to edit user *****/
       if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
-	{
 	 /* Check if this user belongs to the current course */
-	 if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 	   {
-	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	    if (Gbl.Usrs.Other.UsrDat.Accepted)
-	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+	    case Usr_BELONG:
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       if (Gbl.Usrs.Other.UsrDat.Accepted)
+		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+				 Gbl.Usrs.Other.UsrDat.FullName,
+				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	       else        // Enrolment not yet accepted
+		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
+				 Gbl.Usrs.Other.UsrDat.FullName,
+				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
+
+	       Rec_ShowOtherSharedRecordEditable ();
+	       break;
+	    case Usr_DONT_BELONG:	// User does not belong to the current course
+	    default:
+	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z,
 			      Gbl.Usrs.Other.UsrDat.FullName,
-			      Gbl.Hierarchy.Node[Hie_CRS].FullName);
-	    else        // Enrolment not yet accepted
-	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
-			      Gbl.Usrs.Other.UsrDat.FullName,
+			      Cfg_PLATFORM_SHORT_NAME,
 			      Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
-	    Rec_ShowOtherSharedRecordEditable ();
+	       Rec_ShowOtherSharedRecordEditable ();
+	       break;
 	   }
-	 else        // User does not belong to the current course
-	   {
-	    Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z,
-			   Gbl.Usrs.Other.UsrDat.FullName,
-			   Cfg_PLATFORM_SHORT_NAME,
-			   Gbl.Hierarchy.Node[Hie_CRS].FullName);
-
-	    Rec_ShowOtherSharedRecordEditable ();
-	   }
-	}
       else	// No course selected
 	{
 	 Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y,
@@ -2817,34 +2821,36 @@ void Enr_CreateNewUsr1 (void)
       /***** Register user in current course in database *****/
       if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	{
-	 if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 	   {
-	    OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
-	    if (NewRole != OldRole)	// The role must be updated
-	      {
-	       /* Modify role */
-	       Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+	    case Usr_BELONG:
+	       OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
+	       if (NewRole != OldRole)	// The role must be updated
+		 {
+		  /* Modify role */
+		  Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+
+		  /* Success message */
+		  Ale_CreateAlert (Ale_SUCCESS,NULL,
+				   Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+				   Gbl.Usrs.Other.UsrDat.FullName,
+				   Gbl.Hierarchy.Node[Hie_CRS].FullName,
+				   Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+				   Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+		 }
+	       break;
+	    case Usr_DONT_BELONG:	// User does not belong to current course
+	    default:
+	       /* Register user */
+	       Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
+					    Enr_SET_ACCEPTED_TO_FALSE);
 
 	       /* Success message */
-               Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	                Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+	       Ale_CreateAlert (Ale_SUCCESS,NULL,
+				Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 				Gbl.Usrs.Other.UsrDat.FullName,
-				Gbl.Hierarchy.Node[Hie_CRS].FullName,
-				Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-				Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
-	      }
-	   }
-	 else      // User does not belong to current course
-	   {
-	    /* Register user */
-	    Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-	                                 Enr_SET_ACCEPTED_TO_FALSE);
-
-	    /* Success message */
-            Ale_CreateAlert (Ale_SUCCESS,NULL,
-        	             Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-		             Gbl.Usrs.Other.UsrDat.FullName,
-		             Gbl.Hierarchy.Node[Hie_CRS].FullName);
+				Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	       break;
 	   }
 
 	 /***** Change user's groups *****/
@@ -2928,34 +2934,36 @@ void Enr_ModifyUsr1 (void)
 		  NewRole = Rec_GetRoleFromRecordForm ();
 
 		  /***** Register user in current course in database *****/
-		  if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+		  switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 		    {
-		     OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
-		     if (NewRole != OldRole)	// The role must be updated
-		       {
-			/* Modify role */
-			Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+		     case Usr_BELONG:
+			OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
+			if (NewRole != OldRole)	// The role must be updated
+			  {
+			   /* Modify role */
+			   Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+
+			   /* Set success message */
+			   Ale_CreateAlert (Ale_SUCCESS,NULL,
+					    Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+					    Gbl.Usrs.Other.UsrDat.FullName,
+					    Gbl.Hierarchy.Node[Hie_CRS].FullName,
+					    Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+					    Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+			  }
+			break;
+		     case Usr_DONT_BELONG:	// User does not belong to current course
+		     default:
+			/* Register user */
+			Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
+						     Enr_SET_ACCEPTED_TO_FALSE);
 
 			/* Set success message */
 			Ale_CreateAlert (Ale_SUCCESS,NULL,
-			                 Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+					 Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 					 Gbl.Usrs.Other.UsrDat.FullName,
-					 Gbl.Hierarchy.Node[Hie_CRS].FullName,
-					 Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-					 Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
-		       }
-		    }
-		  else	      // User does not belong to current course
-		    {
-		     /* Register user */
-		     Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-						  Enr_SET_ACCEPTED_TO_FALSE);
-
-		     /* Set success message */
-	             Ale_CreateAlert (Ale_SUCCESS,NULL,
-	        	              Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-			              Gbl.Usrs.Other.UsrDat.FullName,
-				      Gbl.Hierarchy.Node[Hie_CRS].FullName);
+					 Gbl.Hierarchy.Node[Hie_CRS].FullName);
+			break;
 		    }
 
 		  /***** Change user's groups *****/
@@ -3113,34 +3121,38 @@ static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat)
       [Usr_OTHER] = Txt_Remove_user_from_this_course
      };
 
-   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   switch (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
-      MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+      case Usr_BELONG:
+	 MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-      /***** Show question and button to remove user as administrator *****/
-      /* Begin alert */
-      Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
-			       Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	 /***** Show question and button to remove user as administrator *****/
+	 /* Begin alert */
+	 Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Question[MeOrOther],
+				  Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
-      /* Show user's record */
-      Rec_ShowSharedRecordUnmodifiable (UsrDat);
+	 /* Show user's record */
+	 Rec_ShowSharedRecordUnmodifiable (UsrDat);
 
-      /* Show form to request confirmation */
-      if (!NextAction[UsrDat->Roles.InCurrentCrs])
-	 Err_WrongRoleExit ();
-      Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
-	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	 Pwd_AskForConfirmationOnDangerousAction ();
-	 Btn_PutRemoveButton (TxtButton[MeOrOther]);
-      Frm_EndForm ();
+	 /* Show form to request confirmation */
+	 if (!NextAction[UsrDat->Roles.InCurrentCrs])
+	    Err_WrongRoleExit ();
+	 Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
+	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Pwd_AskForConfirmationOnDangerousAction ();
+	    Btn_PutRemoveButton (TxtButton[MeOrOther]);
+	 Frm_EndForm ();
 
-      /* End alert */
-      Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-                               NULL,NULL,
-                               Btn_NO_BUTTON,NULL);
+	 /* End alert */
+	 Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
+				    NULL,NULL,
+				    Btn_NO_BUTTON,NULL);
+	 break;
+      case Usr_DONT_BELONG:	// User does not belong to current course
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else	      // User does not belong to current course
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -3154,86 +3166,90 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
 
-   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   switch (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
-      /***** Remove user from all attendance events in course *****/
-      Att_DB_RemoveUsrFromCrsEvents (UsrDat->UsrCod,Crs->HieCod);
+      case Usr_BELONG:
+	 /***** Remove user from all attendance events in course *****/
+	 Att_DB_RemoveUsrFromCrsEvents (UsrDat->UsrCod,Crs->HieCod);
 
-      /***** Remove user from all groups in course *****/
-      Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->HieCod);
+	 /***** Remove user from all groups in course *****/
+	 Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->HieCod);
 
-      /***** Remove user's status about reading of course information *****/
-      Inf_DB_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->HieCod);
+	 /***** Remove user's status about reading of course information *****/
+	 Inf_DB_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->HieCod);
 
-      /***** Remove important production of this user in course *****/
-      if (RemoveUsrWorks == Enr_REMOVE_USR_PRODUCTION)
-	{
-	 /* Remove works zone in course */
-         Brw_RemoveUsrWorksInCrs (UsrDat,Crs);
+	 /***** Remove important production of this user in course *****/
+	 if (RemoveUsrWorks == Enr_REMOVE_USR_PRODUCTION)
+	   {
+	    /* Remove works zone in course */
+	    Brw_RemoveUsrWorksInCrs (UsrDat,Crs);
 
-	 /* Remove tests, exams and matches results made by user in course */
-	 TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
-	 Exa_DB_RemovePrintQstsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
-	 Exa_DB_RemoveAllPrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
-         Mch_RemoveMatchesMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
-	}
+	    /* Remove tests, exams and matches results made by user in course */
+	    TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
+	    Exa_DB_RemovePrintQstsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
+	    Exa_DB_RemoveAllPrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
+	    Mch_RemoveMatchesMadeByUsrInCrs (UsrDat->UsrCod,Crs->HieCod);
+	   }
 
-      /***** Remove fields of this user in its course record *****/
-      Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (UsrDat->UsrCod,Crs->HieCod);
+	 /***** Remove fields of this user in its course record *****/
+	 Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (UsrDat->UsrCod,Crs->HieCod);
 
-      /***** Remove some information about files in course and groups *****/
-      Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (UsrDat->UsrCod,Crs->HieCod);
+	 /***** Remove some information about files in course and groups *****/
+	 Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (UsrDat->UsrCod,Crs->HieCod);
 
-      /***** Set all notifications for this user in this course as removed,
-             except notifications about new messages *****/
-      Ntf_DB_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->HieCod);
+	 /***** Set all notifications for this user in this course as removed,
+		except notifications about new messages *****/
+	 Ntf_DB_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->HieCod);
 
-      /***** Remove user from the tables of courses-users *****/
-      Set_DB_RemUsrFromCrsSettings (UsrDat->UsrCod,Crs->HieCod);
-      Enr_DB_RemUsrFromCrs (UsrDat->UsrCod,Crs->HieCod);
+	 /***** Remove user from the tables of courses-users *****/
+	 Set_DB_RemUsrFromCrsSettings (UsrDat->UsrCod,Crs->HieCod);
+	 Enr_DB_RemUsrFromCrs (UsrDat->UsrCod,Crs->HieCod);
 
-      /***** Flush caches *****/
-      Usr_FlushCachesUsr ();
+	 /***** Flush caches *****/
+	 Usr_FlushCachesUsr ();
 
-      /***** If it's me, change my roles *****/
-      switch (Usr_ItsMe (UsrDat->UsrCod))
-	{
-	 case Usr_ME:
-	    /* Now I don't belong to current course */
-	    Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Usr_DONT_BELONG;
-	    Gbl.Usrs.Me.UsrDat.Accepted           = false;
+	 /***** If it's me, change my roles *****/
+	 switch (Usr_ItsMe (UsrDat->UsrCod))
+	   {
+	    case Usr_ME:
+	       /* Now I don't belong to current course */
+	       Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Usr_DONT_BELONG;
+	       Gbl.Usrs.Me.UsrDat.Accepted           = false;
 
-	    /* Fill the list with the courses I belong to */
-	    Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
-	    Hie_GetMyHierarchy (Hie_CRS);
+	       /* Fill the list with the courses I belong to */
+	       Gbl.Usrs.Me.Hierarchy[Hie_CRS].Filled = false;
+	       Hie_GetMyHierarchy (Hie_CRS);
 
-	    /* Set my roles */
-	    Gbl.Usrs.Me.Role.FromSession              =
-	    Gbl.Usrs.Me.Role.Logged                   =
-	    Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs     =
-	    UsrDat->Roles.InCurrentCrs                = Rol_UNK;
+	       /* Set my roles */
+	       Gbl.Usrs.Me.Role.FromSession              =
+	       Gbl.Usrs.Me.Role.Logged                   =
+	       Gbl.Usrs.Me.Role.LoggedBeforeCloseSession =
+	       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs     =
+	       UsrDat->Roles.InCurrentCrs                = Rol_UNK;
 
-	    Gbl.Usrs.Me.UsrDat.Roles.InCrss =
-	    UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated
+	       Gbl.Usrs.Me.UsrDat.Roles.InCrss =
+	       UsrDat->Roles.InCrss            = -1;	// not yet filled/calculated
 
-	    Rol_SetMyRoles ();
-	    break;
-	 case Usr_OTHER:
-	    /* Now he/she does not belong to current course */
-	    UsrDat->Accepted           = false;
-	    UsrDat->Roles.InCurrentCrs = Rol_USR;
-	    break;
-        }
+	       Rol_SetMyRoles ();
+	       break;
+	    case Usr_OTHER:
+	       /* Now he/she does not belong to current course */
+	       UsrDat->Accepted           = false;
+	       UsrDat->Roles.InCurrentCrs = Rol_USR;
+	       break;
+	   }
 
-      if (QuietOrVerbose == Cns_VERBOSE)
-	 Ale_CreateAlert (Ale_SUCCESS,NULL,
-	                  Txt_THE_USER_X_has_been_removed_from_the_course_Y,
-                          UsrDat->FullName,Crs->FullName);
+	 if (QuietOrVerbose == Cns_VERBOSE)
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_THE_USER_X_has_been_removed_from_the_course_Y,
+			     UsrDat->FullName,Crs->FullName);
+	 break;
+      case Usr_DONT_BELONG:	// User does not belong to course
+      default:
+	 if (QuietOrVerbose == Cns_VERBOSE)
+	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
      }
-   else        // User does not belong to course
-      if (QuietOrVerbose == Cns_VERBOSE)
-	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -3246,12 +3262,12 @@ void Enr_FlushCacheUsrBelongsToCurrentCrs (void)
    Gbl.Cache.UsrBelongsToCurrentCrs.Valid = false;
   }
 
-bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
+Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
        Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return false;
+      return Usr_DONT_BELONG;
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.UsrBelongsToCurrentCrs.Valid &&
@@ -3262,9 +3278,10 @@ bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat)
    if (UsrDat->Roles.InCurrentCrs != Rol_UNK)
      {
       Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
-      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs == Rol_STD ||
-	                                         UsrDat->Roles.InCurrentCrs == Rol_NET ||
-	                                         UsrDat->Roles.InCurrentCrs == Rol_TCH;
+      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = (UsrDat->Roles.InCurrentCrs == Rol_STD ||
+	                                          UsrDat->Roles.InCurrentCrs == Rol_NET ||
+	                                          UsrDat->Roles.InCurrentCrs == Rol_TCH) ? Usr_BELONG :
+	                                        					   Usr_DONT_BELONG;
       Gbl.Cache.UsrBelongsToCurrentCrs.Valid = true;
       return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
      }
@@ -3303,9 +3320,9 @@ bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat)
    /***** 3. Fast / slow check: Get if user belongs to current course
                                 and has accepted *****/
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
-						                            Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-						                            true);
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = (Hie_CheckIfUsrBelongsTo (Hie_CRS,UsrDat->UsrCod,
+						                             Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+						                             true) == Usr_BELONG);
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Valid = true;
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }
@@ -3340,7 +3357,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
    if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
-      if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))	// Course selected and we both belong to it
+      if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_BELONG)	// Course selected and we both belong to it
         {
          Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
          Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = true;

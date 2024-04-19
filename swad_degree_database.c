@@ -828,8 +828,8 @@ unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
 /******************* Check if a user belongs to a degree *********************/
 /*****************************************************************************/
 
-bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
-				    bool CountOnlyAcceptedCourses)
+Usr_Belong_t Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
+					    bool CountOnlyAcceptedCourses)
   {
    const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
                                                       "");
@@ -846,7 +846,8 @@ bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long HieCod,
 		      " AND crs_courses.DegCod=%ld)",
 		   UsrCod,
 		   SubQuery,
-		   HieCod);
+		   HieCod) ? Usr_BELONG :
+			     Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

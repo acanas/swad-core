@@ -1550,19 +1550,19 @@ void Crs_ContEditAfterChgCrs (void)
 	    PutButtonToRequestRegistration = true;
 	    break;
 	 case Rol_USR:
-	    PutButtonToRequestRegistration = !Hie_CheckIfUsrBelongsTo (Hie_CRS,
+	    PutButtonToRequestRegistration = (Hie_CheckIfUsrBelongsTo (Hie_CRS,
 								       Gbl.Usrs.Me.UsrDat.UsrCod,
 					                               Crs_EditingCrs->HieCod,
-					                               false);
+					                               false) == Usr_DONT_BELONG);
             break;
 	 case Rol_STD:
 	 case Rol_NET:
 	 case Rol_TCH:
 	    if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
-	       PutButtonToRequestRegistration = !Hie_CheckIfUsrBelongsTo (Hie_CRS,
+	       PutButtonToRequestRegistration = (Hie_CheckIfUsrBelongsTo (Hie_CRS,
 									  Gbl.Usrs.Me.UsrDat.UsrCod,
 									  Crs_EditingCrs->HieCod,
-									  false);
+									  false) == Usr_DONT_BELONG);
 	    break;
 	 default:
 	    break;

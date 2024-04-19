@@ -927,7 +927,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_DONT_GET_ROLE_IN_CRS))	// Get from the database the data of the student
-	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	      {
 	       /* Check if I follow this user, and update number of users */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -975,7 +975,7 @@ void Fol_FollowUsrs ()
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_DONT_GET_ROLE_IN_CRS))
-	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I don't follow this user ==> follow him/her */
 	       if (!Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					         UsrDat.UsrCod))
@@ -1024,7 +1024,7 @@ void Fol_UnfollowUsrs (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_DONT_GET_ROLE_IN_CRS))
-	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	       /* If I follow this user ==> unfollow him/her */
 	       if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					        UsrDat.UsrCod))

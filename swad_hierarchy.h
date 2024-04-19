@@ -70,8 +70,8 @@ void Hie_GetMyHierarchy (Hie_Level_t Level);
 Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod);
 
 void Hie_FlushCacheUsrBelongsTo (Hie_Level_t Level);
-bool Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
-                              bool CountOnlyAcceptedCourses);
+Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
+				      bool CountOnlyAcceptedCourses);
 
 //-------------------------------- Figures ------------------------------------
 void Hie_GetAndShowHierarchyStats (void);

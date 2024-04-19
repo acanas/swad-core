@@ -291,13 +291,13 @@ struct Globals
 	 long UsrCod;
 	 long HieCod;
 	 bool CountOnlyAcceptedCourses;
-	 bool Belongs;
+	 Usr_Belong_t Belongs;
 	 bool Valid;
 	} UsrBelongsTo[Hie_NUM_LEVELS];
       struct
 	{
 	 long UsrCod;
-	 bool Belongs;
+	 Usr_Belong_t Belongs;
 	 bool Valid;
 	} UsrBelongsToCurrentCrs;
       struct

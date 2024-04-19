@@ -88,8 +88,8 @@ unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
 
 unsigned Ctr_DB_GetMyCtrs (MYSQL_RES **mysql_res,long PrtCod);
-bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
-				    bool CountOnlyAcceptedCourses);
+Usr_Belong_t Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
+					    bool CountOnlyAcceptedCourses);
 unsigned Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (long HieCod);
 
 void Ctr_DB_RemoveCenter (long HieCod);

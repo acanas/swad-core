@@ -659,7 +659,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
 	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod))
 	    // The user must belong to course,
 	    // but it's not necessary he/she belongs to groups associated to the event
-	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
 	      {
 	       /* Mark user as present */
 	       if (Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrDat.UsrCod,&Present))	// User is in table att_users

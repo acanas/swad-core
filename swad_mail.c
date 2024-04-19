@@ -1698,30 +1698,30 @@ Usr_Can_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
-         return (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
-	         UsrDat->Accepted) ? Usr_CAN :		// who accepted registration
+         return (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_BELONG &&	// A user belonging to the current course
+	         UsrDat->Accepted) ? Usr_CAN :					// who accepted registration
 				     Usr_CAN_NOT;
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
-	 return Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-	                                 true) ? Usr_CAN :	// count only accepted courses
-	                                	 Usr_CAN_NOT;
+	 return (Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
+	                                  Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+	                                  true) == Usr_BELONG) ? Usr_CAN :	// count only accepted courses
+	                                			 Usr_CAN_NOT;
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can see the user's email of users from current center */
-	 return Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-	                                 true) ? Usr_CAN :	// count only accepted courses
-	                                	 Usr_CAN_NOT;
+	 return (Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
+	                                  Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+	                                  true) == Usr_BELONG) ? Usr_CAN :	// count only accepted courses
+	                                			 Usr_CAN_NOT;
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
-	 return Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
-	                                 Gbl.Hierarchy.Node[Hie_INS].HieCod,
-	                                 true) ? Usr_CAN :	// count only accepted courses
-	                                	 Usr_CAN_NOT;
+	 return (Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
+	                                  Gbl.Hierarchy.Node[Hie_INS].HieCod,
+	                                  true) == Usr_BELONG) ? Usr_CAN :	// count only accepted courses
+								 Usr_CAN_NOT;
       case Rol_SYS_ADM:
 	 return Usr_CAN;
       default:

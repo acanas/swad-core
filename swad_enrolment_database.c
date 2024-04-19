@@ -158,8 +158,8 @@ unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res)
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
-                                    bool CountOnlyAcceptedCourses)
+Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
+					    bool CountOnlyAcceptedCourses)
   {
    const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
 	                                              "");
@@ -174,7 +174,8 @@ bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 			"%s)",
 		   HieCod,
 		   UsrCod,
-		   SubQuery);
+		   SubQuery) ? Usr_BELONG :
+			       Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

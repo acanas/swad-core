@@ -1036,11 +1036,11 @@ void Hie_FlushCacheUsrBelongsTo (Hie_Level_t Level)
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-bool Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
-                              bool CountOnlyAcceptedCourses)
+Usr_Belong_t Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
+				      bool CountOnlyAcceptedCourses)
   {
-   static bool (*FunctionToGetIfUsrBelongsToFromDB[Hie_NUM_LEVELS]) (long UsrCod,long HieCod,
-								        bool CountOnlyAcceptedCourses) =
+   static Usr_Belong_t (*FunctionToGetIfUsrBelongsToFromDB[Hie_NUM_LEVELS]) (long UsrCod,long HieCod,
+									     bool CountOnlyAcceptedCourses) =
      {
       [Hie_INS] = Ins_DB_CheckIfUsrBelongsToIns,
       [Hie_CTR] = Ctr_DB_CheckIfUsrBelongsToCtr,
@@ -1055,7 +1055,7 @@ bool Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,
    /***** 1. Fast check: Trivial cases *****/
    if (UsrCod <= 0 ||
        HieCod <= 0)
-      return false;
+      return Usr_DONT_BELONG;
 
    /***** 2. Fast check: If cached... *****/
    if (Gbl.Cache.UsrBelongsTo[Level].Valid &&

@@ -766,25 +766,26 @@ unsigned Ctr_DB_GetMyCtrs (MYSQL_RES **mysql_res,long PrtCod)
 /******************* Check if a user belongs to a center *********************/
 /*****************************************************************************/
 
-bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
-				    bool CountOnlyAcceptedCourses)
+Usr_Belong_t Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,
+					    bool CountOnlyAcceptedCourses)
   {
    const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
                                                       "");
 
-   return (DB_QueryCOUNT ("can not check if a user belongs to a center",
-			  "SELECT COUNT(DISTINCT deg_degrees.CtrCod)"
-			   " FROM crs_users,"
-				 "crs_courses,"
-				 "deg_degrees"
-			  " WHERE crs_users.UsrCod=%ld"
-			      "%s"
-			    " AND crs_users.CrsCod=crs_courses.CrsCod"
-			    " AND crs_courses.DegCod=deg_degrees.DegCod"
-			    " AND deg_degrees.CtrCod=%ld",
-			  UsrCod,
-			  SubQuery,
-			  HieCod) != 0);
+   return DB_QueryCOUNT ("can not check if a user belongs to a center",
+			 "SELECT COUNT(DISTINCT deg_degrees.CtrCod)"
+			  " FROM crs_users,"
+				"crs_courses,"
+				"deg_degrees"
+			 " WHERE crs_users.UsrCod=%ld"
+			     "%s"
+			   " AND crs_users.CrsCod=crs_courses.CrsCod"
+			   " AND crs_courses.DegCod=deg_degrees.DegCod"
+			   " AND deg_degrees.CtrCod=%ld",
+			 UsrCod,
+			 SubQuery,
+			 HieCod) ? Usr_BELONG :
+				   Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

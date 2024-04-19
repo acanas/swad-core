@@ -3101,7 +3101,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
       return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
 
    /***** 7. Fast / slow check: Does he/she belong to the current course? *****/
-   if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_DONT_BELONG)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;

@@ -44,8 +44,8 @@ unsigned Enr_DB_GetMyCrss (MYSQL_RES **mysql_res,long PrtCod);
 void Enr_DB_DropTmpTableMyCourses (void);
 unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res);
 
-bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
-                                    bool CountOnlyAcceptedCourses);
+Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
+					    bool CountOnlyAcceptedCourses);
 bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
 bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 long Enr_DB_GetRamdomStdFromCrs (long HieCod);

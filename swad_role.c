@@ -128,9 +128,7 @@ void Rol_SetMyRoles (void)
    /***** Check if I belong to current course *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
-      Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] =
-      Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat) ? Usr_BELONG :
-								Usr_DONT_BELONG;
+      Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
 	{
 	 case Usr_BELONG:

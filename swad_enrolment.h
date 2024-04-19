@@ -140,7 +140,7 @@ void Enr_ModifyUsr1 (void);
 void Enr_ModifyUsr2 (void);
 
 void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
-bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
+Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
 bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
