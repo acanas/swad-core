@@ -675,11 +675,11 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
   {
    /***** Icon to create a new call for exam *****/
-   if (Cfe_CheckIfICanEditCallsForExams () == Usr_I_CAN)
+   if (Cfe_CheckIfICanEditCallsForExams () == Usr_CAN)
       Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
       Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,NULL,NULL);
   }
 
@@ -1464,7 +1464,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 
    if (CallsForExams)
      {
-      if (Cfe_CheckIfICanEditCallsForExams () == Usr_I_CAN)
+      if (Cfe_CheckIfICanEditCallsForExams () == Usr_CAN)
 	{
 	 /***** Icon to remove call for exam *****/
 	 Ico_PutContextualIconToRemove (ActReqRemCfe,NULL,
@@ -1498,7 +1498,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 				    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
 					 Cfe_PutParExaCod,
 					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
@@ -1509,12 +1509,12 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 /******************* Check if I can edit calls for exams *********************/
 /*****************************************************************************/
 
-Usr_ICan_t Cfe_CheckIfICanEditCallsForExams (void)
+Usr_Can_t Cfe_CheckIfICanEditCallsForExams (void)
   {
-   static Usr_ICan_t ICanEditCallsForExams[Rol_NUM_ROLES] =
+   static Usr_Can_t ICanEditCallsForExams[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return ICanEditCallsForExams[Gbl.Usrs.Me.Role.Logged];

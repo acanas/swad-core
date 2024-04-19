@@ -84,7 +84,7 @@ static struct Hie_Node *Deg_EditingDeg = NULL;	// Static variable to keep the de
 /*****************************************************************************/
 
 static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes);
-static Usr_ICan_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg);
+static Usr_Can_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg);
 static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes);
 static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
@@ -325,7 +325,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    struct DegTyp_DegreeType *DegTyp;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
-   Usr_ICan_t ICanEdit;
+   Usr_Can_t ICanEdit;
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
@@ -359,7 +359,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 
 	    /* Put icon to remove degree */
 	    HTM_TD_Begin ("class=\"BT\"");
-	       if (ICanEdit == Usr_I_CAN_NOT ||
+	       if (ICanEdit == Usr_CAN_NOT ||
 		   NumCrss ||	// Degree has courses ==> deletion forbidden
 		   NumUsrsInCrssOfDeg)
 		  Ico_PutIconRemovalNotAllowed ();
@@ -384,14 +384,14 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Deg->HieCod,
 				           Names,
-				           ICanEdit == Usr_I_CAN ? Frm_PUT_FORM :
+				           ICanEdit == Usr_CAN ? Frm_PUT_FORM :
 				        			   Frm_DONT_PUT_FORM);
 
 	    /* Degree type */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       switch (ICanEdit)
 		 {
-		  case Usr_I_CAN:
+		  case Usr_CAN:
 		     Frm_BeginForm (ActChgDegTyp);
 			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
 			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
@@ -412,7 +412,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			HTM_SELECT_End ();
 		     Frm_EndForm ();
 		     break;
-		  case Usr_I_CAN_NOT:
+		  case Usr_CAN_NOT:
 		  default:
 		     for (NumDegTyp = 0;
 			  NumDegTyp < DegTypes->Num;
@@ -430,7 +430,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       switch (ICanEdit)
 		 {
-		  case Usr_I_CAN:
+		  case Usr_CAN:
 		     Frm_BeginForm (ActChgDegWWW);
 			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
 			HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
@@ -439,7 +439,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 				       The_GetSuffix ());
 		     Frm_EndForm ();
 		     break;
-		  case Usr_I_CAN_NOT:
+		  case Usr_CAN_NOT:
 		  default:
 		     Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
 		     HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
@@ -472,8 +472,8 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	    HTM_TD_End ();
 
 	    /* Degree status */
-	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Usr_I_CAN :
-										  Usr_I_CAN_NOT,
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ? Usr_CAN :
+										  Usr_CAN_NOT,
 	                                 Deg->Status,ActChgDegSta,Deg->HieCod,
 	                                 Txt_DEGREE_STATUS);
 
@@ -491,12 +491,12 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 /************** Check if I can edit, remove, etc. a degree *******************/
 /*****************************************************************************/
 
-static Usr_ICan_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
+static Usr_Can_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
   {
    return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
            ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod)) ? Usr_I_CAN :	// I am the requester
-        							 Usr_I_CAN_NOT;
+           Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
+        							 Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -728,7 +728,7 @@ static void Deg_ListDegrees (void)
 static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit degrees *****/
-   if (Hie_CheckIfICanEdit () == Usr_I_CAN)
+   if (Hie_CheckIfICanEdit () == Usr_CAN)
       Deg_PutIconToEditDegrees ();
 
    /***** Put icon to view degree types *****/
@@ -890,7 +890,7 @@ static void Deg_EditDegreesInternal (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_No_types_of_degree);
 
 	 /***** Form to create the first degree type *****/
-	 if (DegTyp_CheckIfICanCreateDegreeTypes () == Usr_I_CAN)
+	 if (DegTyp_CheckIfICanCreateDegreeTypes () == Usr_CAN)
 	    DegTyp_EditDegreeTypes (&DegTypes);
 	}
 

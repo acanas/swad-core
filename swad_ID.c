@@ -308,12 +308,12 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
   {
    unsigned NumID;
-   Usr_ICan_t ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (UsrDat);
-   Usr_ICan_t ICanConfirmUsrID = (ICanSeeUsrID == Usr_I_CAN &&
+   Usr_Can_t ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (UsrDat);
+   Usr_Can_t ICanConfirmUsrID = (ICanSeeUsrID == Usr_CAN &&
 				  Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER &&			// Not me
 				  !Frm_CheckIfInside () &&					// Not inside another form
-				  Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB) ? Usr_I_CAN :	// Only in main browser tab
-										       Usr_I_CAN_NOT;
+				  Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB) ? Usr_CAN :	// Only in main browser tab
+										       Usr_CAN_NOT;
 
    for (NumID = 0;
 	NumID < UsrDat->IDs.Num;
@@ -330,10 +330,10 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
 		      The_GetSuffix ());
 	 switch (ICanSeeUsrID)
 	   {
-	    case Usr_I_CAN:
+	    case Usr_CAN:
 	       HTM_Txt (UsrDat->IDs.List[NumID].ID);
 	       break;
-	    case Usr_I_CAN_NOT:
+	    case Usr_CAN_NOT:
 	    default:
 	       HTM_Txt ("********");
 	       break;
@@ -341,7 +341,7 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
       HTM_SPAN_End ();
 
       /* Put link to confirm ID? */
-      if (ICanConfirmUsrID == Usr_I_CAN &&
+      if (ICanConfirmUsrID == Usr_CAN &&
 	  !UsrDat->IDs.List[NumID].Confirmed)
 	 ID_PutLinkToConfirmID (UsrDat,NumID,Anchor);
      }
@@ -351,11 +351,11 @@ void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
 /***************** Check if I can see another user's IDs *********************/
 /*****************************************************************************/
 
-Usr_ICan_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
+Usr_Can_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
   {
    /***** Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -364,12 +364,12 @@ Usr_ICan_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
       case Rol_TCH:
 	 /* Check 1: I can see the IDs of users who do not exist in database */
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
-            return Usr_I_CAN;
+            return Usr_CAN;
 
 	 /* Check 2: I can see the IDs of confirmed students */
          if (UsrDat->Roles.InCurrentCrs == Rol_STD &&	// A student
 	     UsrDat->Accepted)				// who accepted registration
-            return Usr_I_CAN;
+            return Usr_CAN;
 
          /* Check 3: I can see the IDs of users with user's data empty */
          // This check is made to not view simultaneously:
@@ -380,16 +380,16 @@ Usr_ICan_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
 	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
 	     !UsrDat->FrstName[0] &&	// and who has no first name (nobody filled user's first name)
              !UsrDat->Email[0])		// and who has no email (nobody filled user's email)
-            return Usr_I_CAN;
+            return Usr_CAN;
 
-         return Usr_I_CAN_NOT;
+         return Usr_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
          return Usr_CheckIfICanEditOtherUsr (UsrDat);
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -700,7 +700,7 @@ void ID_RemoveOtherUsrID (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    /***** Remove user's ID *****/
 	    ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
 			    Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
@@ -711,7 +711,7 @@ void ID_RemoveOtherUsrID (void)
 	    /***** Show form again *****/
 	    Acc_ShowFormChgOtherUsrAccount ();
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -729,11 +729,11 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
-   Usr_ICan_t ICanRemove = Usr_I_CAN_NOT;
+   Usr_Can_t ICanRemove = Usr_CAN_NOT;
 
    switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Get user's ID from form *****/
 	 Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
 	 // Users' IDs are always stored internally in capitals and without leading zeros
@@ -745,17 +745,17 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 	      {
 	       case Usr_ME:
 		  // I can remove my ID only if it is not confirmed
-		  ICanRemove = ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID) ? Usr_I_CAN_NOT :
-									       Usr_I_CAN;
+		  ICanRemove = ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID) ? Usr_CAN_NOT :
+									       Usr_CAN;
 		  break;
 	       case Usr_OTHER:
-		  ICanRemove = Usr_I_CAN;
+		  ICanRemove = Usr_CAN;
 		  break;
 	      }
 
 	 switch (ICanRemove)
 	   {
-	    case Usr_I_CAN:
+	    case Usr_CAN:
 	       /***** Remove one of the user's IDs *****/
 	       ID_DB_RemoveUsrID (UsrDat->UsrCod,UsrID);
 
@@ -763,14 +763,14 @@ static void ID_RemoveUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
 				Txt_ID_X_removed,UsrID);
 	       break;
-	    case Usr_I_CAN_NOT:
+	    case Usr_CAN_NOT:
 	    default:
 	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
 				Txt_You_can_not_delete_this_ID);
 	       break;
 	   }
 	 break;
-       case Usr_I_CAN_NOT:
+       case Usr_CAN_NOT:
        default:
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	 break;
@@ -803,7 +803,7 @@ void ID_ChangeOtherUsrID (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    /***** Change user's ID *****/
 	    ID_ChangeUsrID (&Gbl.Usrs.Other.UsrDat,
 			    Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
@@ -814,7 +814,7 @@ void ID_ChangeOtherUsrID (void)
 	    /***** Show form again *****/
 	    Acc_ShowFormChgOtherUsrAccount ();
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -841,7 +841,7 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 
    switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Get new user's ID from form *****/
 	 Par_GetParText ("NewID",NewID,ID_MAX_BYTES_USR_ID);
 	 // Users' IDs are always stored internally in capitals and without leading zeros
@@ -897,7 +897,7 @@ static void ID_ChangeUsrID (const struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOt
 			     Txt_The_ID_X_is_not_valid,
 			     NewID);
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	 break;
@@ -913,7 +913,7 @@ void ID_ConfirmOtherUsrID (void)
    extern const char *Txt_ID_X_had_already_been_confirmed;
    extern const char *Txt_The_ID_X_has_been_confirmed;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
-   Usr_ICan_t ICanConfirm;
+   Usr_Can_t ICanConfirm;
    bool Found;
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
@@ -922,7 +922,7 @@ void ID_ConfirmOtherUsrID (void)
    Gbl.Action.Original = Act_GetActionFromActCod (ParCod_GetPar (ParCod_OrgAct));
 
    /***** Get other user's code from form and get user's data *****/
-   ICanConfirm = Usr_I_CAN_NOT;
+   ICanConfirm = Usr_CAN_NOT;
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)	// Not me
         {
@@ -932,13 +932,13 @@ void ID_ConfirmOtherUsrID (void)
 	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
-	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
-	    ICanConfirm = Usr_I_CAN;
+	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
+	    ICanConfirm = Usr_CAN;
         }
 
    switch (ICanConfirm)
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Get user's ID from form *****/
 	 Par_GetParText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
 	 // Users' IDs are always stored internally in capitals and without leading zeros
@@ -977,7 +977,7 @@ void ID_ConfirmOtherUsrID (void)
 	 else	// User's ID not found
 	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	 break;

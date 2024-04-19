@@ -228,12 +228,12 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 /************************ Check if I can edit rubrics ************************/
 /*****************************************************************************/
 
-Usr_ICan_t Rub_CheckIfICanEditRubrics (void)
+Usr_Can_t Rub_CheckIfICanEditRubrics (void)
   {
-   static Usr_ICan_t ICanEditRubrics[Rol_NUM_ROLES] =
+   static Usr_Can_t ICanEditRubrics[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return ICanEditRubrics[Gbl.Usrs.Me.Role.Logged];
@@ -245,7 +245,7 @@ Usr_ICan_t Rub_CheckIfICanEditRubrics (void)
 
 bool Rub_CheckIfEditable (void)
   {
-   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN)
+   if (Rub_CheckIfICanEditRubrics () == Usr_CAN)
      {
       /***** Rubric is editable only if ... *****/
       // TODO: Change to control that a rubric is not edited in some circunstances?
@@ -267,7 +267,7 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
   {
    if (Rubrics)
      {
-      if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN)
+      if (Rub_CheckIfICanEditRubrics () == Usr_CAN)
 	{
          /***** Put icon to create a new rubric *****/
 	 Rub_PutIconToCreateNewRubric ((struct Rub_Rubrics *) Rubrics);
@@ -277,7 +277,7 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
 	}
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
 
       /***** Put icon to show a figure *****/
@@ -477,7 +477,7 @@ static void Rub_PutIconsEditingOneRubric (void *Rubrics)
 
 static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
   {
-   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN)
+   if (Rub_CheckIfICanEditRubrics () == Usr_CAN)
      {
       /***** Icon to remove rubric *****/
       Ico_PutContextualIconToRemove (ActReqRemRub,NULL,Rub_PutPars,Rubrics);
@@ -486,7 +486,7 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
       Ico_PutContextualIconToEdit (ActEdiOneRub,NULL,Rub_PutPars,Rubrics);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
      }
   }
@@ -648,7 +648,7 @@ void Rub_AskRemRubric (void)
 
    /***** Get data of the rubric from database *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
-   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
+   if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show criterion and button to remove rubric *****/
@@ -682,7 +682,7 @@ void Rub_RemoveRubric (void)
 
    /***** Get data of the rubric from database *****/
    Rub_GetRubricDataByCod (&Rubrics.Rubric);
-   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
+   if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove rubric from all tables *****/
@@ -734,7 +734,7 @@ void Rub_ReqCreatOrEditRubric (void)
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
    /***** Check if I can edit rubrics *****/
-   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
+   if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset rubrics context *****/
@@ -906,7 +906,7 @@ void Rub_ReceiveRubric (void)
    Rub_ExistingNewRubric_t ExistingNewRubric;
 
    /***** Check if I can edit rubrics *****/
-   if (Rub_CheckIfICanEditRubrics () == Usr_I_CAN_NOT)
+   if (Rub_CheckIfICanEditRubrics () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset rubrics context *****/

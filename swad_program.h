@@ -121,7 +121,7 @@ void Prg_EditCourseProgram (void);
 void Prg_ShowAllItems (Prg_ListingType_t ListingType,
                        long SelectedItmCod,long SelectedRscCod);
 
-Usr_ICan_t Prg_CheckIfICanEditProgram (void);
+Usr_Can_t Prg_CheckIfICanEditProgram (void);
 
 void Prg_PutParItmCod (void *ItmCod);
 void Prg_GetPars (struct Prg_Item *Item);

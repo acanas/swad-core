@@ -71,7 +71,7 @@ static struct Lnk_Link *Lnk_EditingLnk = NULL;	// Static variable to keep the li
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Usr_ICan_t Lnk_CheckIfICanEditLinks (void);
+static Usr_Can_t Lnk_CheckIfICanEditLinks (void);
 
 static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args);
 static void Lnk_PutIconToEditLinks (void);
@@ -100,12 +100,12 @@ static void Lnk_EditingLinkDestructor (void);
 /************************* Check if I can edit links *************************/
 /*****************************************************************************/
 
-static Usr_ICan_t Lnk_CheckIfICanEditLinks (void)
+static Usr_Can_t Lnk_CheckIfICanEditLinks (void)
   {
-   static Usr_ICan_t Lnk_ICanEditLinks[Rol_NUM_ROLES] =
+   static Usr_Can_t Lnk_ICanEditLinks[Rol_NUM_ROLES] =
      {
       /* Users who can edit */
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return Lnk_ICanEditLinks[Gbl.Usrs.Me.Role.Logged];
@@ -149,7 +149,7 @@ void Lnk_SeeLinks (void)
 static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit links *****/
-   if (Lnk_CheckIfICanEditLinks () == Usr_I_CAN)
+   if (Lnk_CheckIfICanEditLinks () == Usr_CAN)
       Lnk_PutIconToEditLinks ();
 
    /***** Put icon to view banners *****/

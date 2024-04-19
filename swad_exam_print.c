@@ -180,7 +180,7 @@ void ExaPrn_ShowExamPrint (void)
    /***** Check if I can access to this session *****/
    switch (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Set basic data of exam print *****/
 	 Print.SesCod = Session.SesCod;
 	 Print.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -225,7 +225,7 @@ void ExaPrn_ShowExamPrint (void)
 	 /***** Show test to be answered *****/
 	 ExaPrn_ShowExamPrintToFillIt (&Exams,&Print);
 	 break;
-      case Usr_I_CAN_NOT:	// Session not open or accessible
+      case Usr_CAN_NOT:	// Session not open or accessible
       default:
 	 /***** Show warning *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_You_dont_have_access_to_the_exam);
@@ -1002,7 +1002,7 @@ void ExaPrn_ReceivePrintAnswer (void)
    /***** Check if session if visible and open *****/
    switch (ExaSes_CheckIfICanAnswerThisSession (&Exams.Exam,&Session))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Set log open to true ****/
 	 ExaLog_SetIfCanAnswer (true);
 
@@ -1024,7 +1024,7 @@ void ExaPrn_ReceivePrintAnswer (void)
 	 /***** Show table with questions to answer *****/
 	 ExaPrn_ShowTableWithQstsToFill (&Exams,&Print);
 	 break;
-      case Usr_I_CAN_NOT:	// Not accessible to answer
+      case Usr_CAN_NOT:	// Not accessible to answer
       default:
 	 /***** Set log open to false ****/
 	 ExaLog_SetIfCanAnswer (false);

@@ -130,34 +130,36 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	      {
-	       if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])	// I belong to this course
-		 {
-		  if (Gbl.Action.Act != ActLogIn &&
-		      Gbl.Action.Act != ActLogInNew &&
-		      Gbl.Action.Act != ActLogInLan)	// I am not just logged
-		     if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
-		       {
-			/***** Request my removing from this course *****/
-			if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
-				      Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
-			   Err_NotEnoughMemoryExit ();
-			Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-							     ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
-							     Btn_REMOVE_BUTTON,Txt_Remove_me);
-			free (Description);
-		       }
-		 }
-	       else					// I do not belong to this course
-		 {
-		  /***** Request my registration in this course *****/
-		  if (asprintf (&Description,Txt_Register_me_in_X,
-				Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
-		     Err_NotEnoughMemoryExit ();
-		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						       ActReqSignUp,
-						       Btn_CREATE_BUTTON,Txt_Sign_up);
-		  free (Description);
-		 }
+	       switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+	         {
+	          case Usr_BELONG:		// I belong to this course
+		     if (Gbl.Action.Act != ActLogIn &&
+			 Gbl.Action.Act != ActLogInNew &&
+			 Gbl.Action.Act != ActLogInLan)	// I am not just logged
+			if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
+			  {
+			   /***** Request my removing from this course *****/
+			   if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
+					 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
+			      Err_NotEnoughMemoryExit ();
+			   Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+								ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
+								Btn_REMOVE_BUTTON,Txt_Remove_me);
+			   free (Description);
+			  }
+	             break;
+	          case Usr_DONT_BELONG:	// I do not belong to this course
+	          default:
+		     /***** Request my registration in this course *****/
+		     if (asprintf (&Description,Txt_Register_me_in_X,
+				   Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
+			Err_NotEnoughMemoryExit ();
+		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
+							  ActReqSignUp,
+							  Btn_CREATE_BUTTON,Txt_Sign_up);
+		     free (Description);
+		     break;
+	         }
 	      }
 
 	    if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I am enroled in some courses

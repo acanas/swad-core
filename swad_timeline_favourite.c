@@ -135,7 +135,7 @@ static void TmlFav_FavNote (struct TmlNot_Note *Not)
    TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
-   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_I_CAN_NOT)
+   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_CAN_NOT)
       return;
 
    /***** Trivial check: Have I faved this note? *****/
@@ -165,7 +165,7 @@ static void TmlFav_UnfNote (struct TmlNot_Note *Not)
    TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
-   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_I_CAN_NOT)
+   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_CAN_NOT)
       return;
 
    /***** Trivial check: Have I faved this note? *****/
@@ -272,7 +272,7 @@ static void TmlFav_FavComm (struct TmlCom_Comment *Com)
    TmlCom_GetCommDataByCod (Com);
 
    /***** Do some checks *****/
-   if (TmlUsr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod) == Usr_I_CAN_NOT)
+   if (TmlUsr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod) == Usr_CAN_NOT)
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;
@@ -311,7 +311,7 @@ static void TmlFav_UnfComm (struct TmlCom_Comment *Com)
    TmlCom_GetCommDataByCod (Com);
 
    /***** Do some checks *****/
-   if (TmlUsr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod) == Usr_I_CAN_NOT)
+   if (TmlUsr_CheckIfICanFavSha (Com->PubCod,Com->UsrCod) == Usr_CAN_NOT)
      {
       Med_MediaDestructor (&Com->Content.Media);
       return;

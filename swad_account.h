@@ -62,7 +62,7 @@ void Acc_AfterCreationNewAccount (void);
 void Acc_GetUsrCodAndRemUsrGbl (void);
 void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove);
 
-Usr_ICan_t Acc_CheckIfICanEliminateAccount (long UsrCod);
+Usr_Can_t Acc_CheckIfICanEliminateAccount (long UsrCod);
 void Acc_AskIfRemoveMyAccount (void);
 void Acc_RemoveMyAccount (void);
 void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,

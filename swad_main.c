@@ -147,7 +147,7 @@ int main (void)
       Fir_CheckFirewallAndExitIfTooManyRequests ();
 
       /***** Check if the user have permission to execute the action *****/
-      if (Act_CheckIfICanExecuteAction (Gbl.Action.Act) == Usr_I_CAN_NOT)
+      if (Act_CheckIfICanExecuteAction (Gbl.Action.Act) == Usr_CAN_NOT)
 	 Err_NoPermissionExit ();
 
       /***** Update most frequently used actions *****/

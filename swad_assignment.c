@@ -79,7 +79,7 @@ extern struct Globals Gbl;
 static void Asg_PutHead (struct Asg_Assignments *Assignments,
                          Asg_OneOrMultiple_t OneOrMultiple,
                          Vie_ViewType_t ViewType);
-static Usr_ICan_t Asg_CheckIfICanCreateAssignments (void);
+static Usr_Can_t Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
 static void Asg_ParsWhichGroupsToShow (void *Assignments);
@@ -106,7 +106,7 @@ static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_CreateGroups (long AsgCod);
 static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg);
-static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod);
+static Usr_Can_t Asg_CheckIfICanDoAsgBasedOnGroups (long AsgCod);
 
 /*****************************************************************************/
 /*************************** Reset assignments *******************************/
@@ -118,8 +118,8 @@ void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
    Assignments->Num           = 0;
    Assignments->LstAsgCods    = NULL;
    Assignments->SelectedOrder = Asg_ORDER_DEFAULT;
-   // Assignments->AsgCod  = -1L;	// Used as parameter in contextual links
    Assignments->CurrentPage   = 0;
+   Assignments->Asg.AsgCod    = -1L;	// Used as parameter in contextual links
    Asg_ResetAssignment (&Assignments->Asg);
   }
 
@@ -287,11 +287,11 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 /******************** Check if I can create assignments **********************/
 /*****************************************************************************/
 
-static Usr_ICan_t Asg_CheckIfICanCreateAssignments (void)
+static Usr_Can_t Asg_CheckIfICanCreateAssignments (void)
   {
    return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-        					     Usr_I_CAN_NOT;
+           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+        					     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -303,11 +303,11 @@ static void Asg_PutIconsListAssignments (void *Assignments)
    /***** Put icon to create a new assignment *****/
    if (Assignments)
      {
-      if (Asg_CheckIfICanCreateAssignments () == Usr_I_CAN)
+      if (Asg_CheckIfICanCreateAssignments () == Usr_CAN)
 	 Asg_PutIconToCreateNewAsg (Assignments);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
 	{
          ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
 	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
@@ -657,7 +657,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
    Act_Action_t NextAction;
    bool ICanSendFiles = Asg->HiddenOrVisible == HidVis_VISIBLE &&	// It's visible (not hidden)
                         Asg->ClosedOrOpen == CloOpe_OPEN &&		// It's open (inside dates)
-                        Asg->IBelongToCrsOrGrps;			// I belong to course or groups
+                        Asg->ICanDo == Usr_CAN;			// I can do (I belong to course/group)
 
    /***** Folder icon *****/
    if (ViewType == Vie_VIEW &&	// Not print view
@@ -766,7 +766,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 	                              Asg_PutPars,Assignments);
 
 	 /***** Link to get resource link *****/
-	 if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+	 if (Rsc_CheckIfICanGetLink () == Usr_CAN)
 	    Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
 					    Asg_PutPars,Assignments);
 	 /* falls through */
@@ -938,7 +938,7 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
       Asg->SendWork = (Asg->Folder[0] != '\0');
 
       /* Can I do this assignment? */
-      Asg->IBelongToCrsOrGrps = Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (Asg->AsgCod);
+      Asg->ICanDo = Asg_CheckIfICanDoAsgBasedOnGroups (Asg->AsgCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -953,16 +953,15 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
   {
    if (Asg->AsgCod <= 0)	// If > 0 ==> keep value
       Asg->AsgCod = -1L;
-   Asg->AsgCod = -1L;
-   Asg->HiddenOrVisible = HidVis_VISIBLE;
-   Asg->UsrCod = -1L;
+   Asg->HiddenOrVisible	      = HidVis_VISIBLE;
+   Asg->UsrCod		      = -1L;
    Asg->TimeUTC[Dat_STR_TIME] =
    Asg->TimeUTC[Dat_END_TIME] = (time_t) 0;
-   Asg->ClosedOrOpen = CloOpe_CLOSED;
-   Asg->Title[0] = '\0';
-   Asg->SendWork = Asg_DO_NOT_SEND_WORK;
-   Asg->Folder[0] = '\0';
-   Asg->IBelongToCrsOrGrps = false;
+   Asg->ClosedOrOpen	      = CloOpe_CLOSED;
+   Asg->Title[0]	      = '\0';
+   Asg->SendWork	      = Asg_DONT_SEND_WORK;
+   Asg->Folder[0]	      = '\0';
+   Asg->ICanDo		      = Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1178,14 +1177,14 @@ void Asg_ReqCreatOrEditAsg (void)
    if (ItsANewAssignment)
      {
       /* Initialize to empty assignment */
-      Assignments.Asg.AsgCod = -1L;
+      Assignments.Asg.AsgCod		    = -1L;
       Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
       Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-      Assignments.Asg.ClosedOrOpen = CloOpe_OPEN;
-      Assignments.Asg.Title[0] = '\0';
-      Assignments.Asg.SendWork = Asg_DO_NOT_SEND_WORK;
-      Assignments.Asg.Folder[0] = '\0';
-      Assignments.Asg.IBelongToCrsOrGrps = false;
+      Assignments.Asg.ClosedOrOpen	    = CloOpe_OPEN;
+      Assignments.Asg.Title[0]		    = '\0';
+      Assignments.Asg.SendWork		    = Asg_DONT_SEND_WORK;
+      Assignments.Asg.Folder[0]		    = '\0';
+      Assignments.Asg.ICanDo		    = Usr_CAN_NOT;
      }
    else
      {
@@ -1403,7 +1402,7 @@ void Asg_ReceiveAssignment (void)
    /***** Get folder name where to send works of the assignment *****/
    Par_GetParText ("Folder",Assignments.Asg.Folder,Brw_MAX_BYTES_FOLDER);
    Assignments.Asg.SendWork = (Assignments.Asg.Folder[0]) ? Asg_SEND_WORK :
-							    Asg_DO_NOT_SEND_WORK;
+							    Asg_DONT_SEND_WORK;
 
    /***** Get assignment text *****/
    Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -1626,10 +1625,10 @@ void Asg_RemoveCrsAssignments (long CrsCod)
   }
 
 /*****************************************************************************/
-/********* Check if I belong to any of the groups of an assignment ***********/
+/*********************** Check if I can do an assignment *********************/
 /*****************************************************************************/
 
-static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
+static Usr_Can_t Asg_CheckIfICanDoAsgBasedOnGroups (long AsgCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1638,11 +1637,11 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
       case Rol_TCH:
 	 // Students and teachers can do assignments depending on groups
 	 /***** Get if I can do an assignment from database *****/
-	 return (Asg_DB_CheckIfICanDoAssignment (AsgCod) == Usr_I_CAN);
+	 return Asg_DB_CheckIfICanDoAsgBasedOnGroups (AsgCod);
       case Rol_SYS_ADM:
-         return true;
+         return Usr_CAN;
       default:
-         return false;
+         return Usr_CAN_NOT;
      }
   }
 
@@ -1704,26 +1703,26 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
 /* Check if I have permission to create a file or folder into an assignment **/
 /*****************************************************************************/
 
-Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
+Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
   {
-   static Usr_ICan_t CloOpe_ICanCreate[CloOpe_NUM_CLOSED_OPEN] =
+   static Usr_Can_t CloOpe_ICanCreate[CloOpe_NUM_CLOSED_OPEN] =
      {
-      [CloOpe_CLOSED] = Usr_I_CAN_NOT,
-      [CloOpe_OPEN  ] = Usr_I_CAN,
+      [CloOpe_CLOSED] = Usr_CAN_NOT,
+      [CloOpe_OPEN  ] = Usr_CAN,
      };
 
    /***** Trivial check 1: assignment is valid *****/
    if (Asg->AsgCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** Check 2: Do not create anything in hidden assigments *****/
    if (Asg->HiddenOrVisible == HidVis_HIDDEN)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** Check 3: If I do not belong to course / groups of this assignment,
 		   I can not create anything inside this assignment *****/
-   if (!Asg->IBelongToCrsOrGrps)
-      return Usr_I_CAN_NOT;
+   if (Asg->ICanDo == Usr_CAN_NOT)
+      return Usr_CAN_NOT;
 
    /***** Check 4: Depending on my role in this course... *****/
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
@@ -1733,9 +1732,9 @@ Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg)
 				// ...can create only inside open assignments
 	 return CloOpe_ICanCreate[Asg->ClosedOrOpen];
       case Rol_TCH:		// Teachers...
-	 return Usr_I_CAN;	// ...can create inside any assignment
+	 return Usr_CAN;	// ...can create inside any assignment
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 

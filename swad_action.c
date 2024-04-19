@@ -99,12 +99,12 @@ Act_Action_t Act_GetSuperAction (Act_Action_t Action)
 /************* Check if I have permission to execute an action ***************/
 /*****************************************************************************/
 
-Usr_ICan_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
+Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
   {
    unsigned Permission;
 
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    switch (Gbl.Hierarchy.Level)
      {
@@ -124,15 +124,15 @@ Usr_ICan_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
          Permission = ActLst_Actions[Action].PermissionDeg;
 	 break;
       case Hie_CRS:	// Course selected
-	 Permission = Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ? ActLst_Actions[Action].PermissionCrsIfIBelong :
-							      ActLst_Actions[Action].PermissionCrsIfIDontBelong;
+	 Permission = (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG) ? ActLst_Actions[Action].PermissionCrsIfIBelong :
+									      ActLst_Actions[Action].PermissionCrsIfIDontBelong;
 	 break;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
 
-   return ((Permission & (1 << Gbl.Usrs.Me.Role.Logged)) != 0) ? Usr_I_CAN :
-								 Usr_I_CAN_NOT;
+   return ((Permission & (1 << Gbl.Usrs.Me.Role.Logged)) != 0) ? Usr_CAN :
+								 Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -369,7 +369,7 @@ void Act_AdjustCurrentAction (void)
      }
 
    /***** If I belong to current course *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
      {
       /***** Adjustment 6:
              -------------

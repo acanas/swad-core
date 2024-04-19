@@ -605,8 +605,7 @@ void Hie_ResetHierarchy (void)
       Gbl.Hierarchy.Node[Level].ShrtName[0] =
       Gbl.Hierarchy.Node[Level].FullName[0] = '\0';
       Gbl.Hierarchy.Node[Level].WWW[0]      = '\0';
-
-      Gbl.Usrs.Me.IBelongToCurrent[Level] = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Level] = Usr_DONT_BELONG;
      }
    Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod = -1L;
    Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod = -1L;
@@ -707,23 +706,23 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 /****************** Check if I can edit hierarchy elements *******************/
 /*****************************************************************************/
 
-Usr_ICan_t Hie_CheckIfICanEdit (void)
+Usr_Can_t Hie_CheckIfICanEdit (void)
   {
    // Some admins can edit all hierarchy elements.
    // Any user can edit the elements he/she has created...
    // ...as long as they are in pending status.
-   static Usr_ICan_t ICanEdit[Rol_NUM_ROLES] =
+   static Usr_Can_t ICanEdit[Rol_NUM_ROLES] =
      {
       /* Users who can edit */
-      [Rol_GST    ] = Usr_I_CAN,
-      [Rol_USR    ] = Usr_I_CAN,
-      [Rol_STD    ] = Usr_I_CAN,
-      [Rol_NET    ] = Usr_I_CAN,
-      [Rol_TCH    ] = Usr_I_CAN,
-      [Rol_DEG_ADM] = Usr_I_CAN,
-      [Rol_CTR_ADM] = Usr_I_CAN,
-      [Rol_INS_ADM] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_GST    ] = Usr_CAN,
+      [Rol_USR    ] = Usr_CAN,
+      [Rol_STD    ] = Usr_CAN,
+      [Rol_NET    ] = Usr_CAN,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_DEG_ADM] = Usr_CAN,
+      [Rol_CTR_ADM] = Usr_CAN,
+      [Rol_INS_ADM] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return ICanEdit[Gbl.Usrs.Me.Role.Logged];
@@ -746,7 +745,7 @@ void Hie_WriteStatusCell (Hie_Status_t Status,
    HTM_TD_End ();
   }
 
-void Hie_WriteStatusCellEditable (Usr_ICan_t ICanEdit,Hie_Status_t Status,
+void Hie_WriteStatusCellEditable (Usr_Can_t ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT])
   {
@@ -755,7 +754,7 @@ void Hie_WriteStatusCellEditable (Usr_ICan_t ICanEdit,Hie_Status_t Status,
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-      if (ICanEdit == Usr_I_CAN && StatusTxt == Hie_STATUS_PENDING)
+      if (ICanEdit == Usr_CAN && StatusTxt == Hie_STATUS_PENDING)
 	{
 	 /* Begin form */
 	 Frm_BeginForm (NextAction);
@@ -906,7 +905,7 @@ void Hie_ResetMyHierarchy (void)
       Gbl.Usrs.Me.Hierarchy[Level].Nodes = NULL;
       Gbl.Usrs.Me.Hierarchy[Level].Num = 0;
       Gbl.Usrs.Me.Hierarchy[Level].Filled = false;
-      Gbl.Usrs.Me.IBelongToCurrent[Level] = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Level] = Usr_DONT_BELONG;
      }
   }
 
@@ -1008,7 +1007,7 @@ void Hie_GetMyHierarchy (Hie_Level_t Level)
 /****** Check if I belong to a course/degree/center/institution/country ******/
 /*****************************************************************************/
 
-bool Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod)
+Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod)
   {
    unsigned NumMyNode;
 
@@ -1020,8 +1019,8 @@ bool Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod)
         NumMyNode < Gbl.Usrs.Me.Hierarchy[Level].Num;
         NumMyNode++)
       if (Gbl.Usrs.Me.Hierarchy[Level].Nodes[NumMyNode].HieCod == HieCod)
-         return true;
-   return false;
+         return Usr_BELONG;
+   return Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

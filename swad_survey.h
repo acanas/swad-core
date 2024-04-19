@@ -56,12 +56,12 @@ struct Svy_Survey
       HidVis_HiddenOrVisible_t HiddenOrVisible;	// Survey is hidden or visible?
       CloOpe_ClosedOrOpen_t ClosedOrOpen;	// Start date <= now <= end date
       bool IAmLoggedWithAValidRoleToAnswer;	// I am logged with a valid role to answer this survey
-      bool IBelongToScope;	// I belong to the scope of this survey
-      bool IHaveAnswered;	// I have already answered this survey
-      bool ICanAnswer;
-      bool ICanViewResults;
-      bool ICanViewComments;
-      bool ICanEdit;
+      Usr_Belong_t IBelongToScope;		// I belong to the scope of this survey
+      bool IHaveAnswered;			// I have already answered this survey
+      Usr_Can_t ICanAnswer;
+      Usr_Can_t ICanViewResults;
+      Usr_Can_t ICanViewComments;
+      Usr_Can_t ICanEdit;
      } Status;
   };
 

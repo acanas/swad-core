@@ -249,7 +249,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
       Messages->ShowOnlyOneRecipient = false;
 
    GetUsrsInCrs = !Messages->ShowOnlyOneRecipient &&	// Show list of potential recipients
-	          (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ||	// If there is a course selected and I belong to it
+	          (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// If there is a course selected and I belong to it
 	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    if (GetUsrsInCrs)
      {
@@ -524,7 +524,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    unsigned ColSpan;
    bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
-                             (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ||	// I belong to it
+                             (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// I belong to it
                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
    /***** How many columns? *****/

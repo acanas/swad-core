@@ -373,7 +373,7 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
    if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if center tab is visible
-       DegTyp_CheckIfICanCreateDegreeTypes () == Usr_I_CAN)
+       DegTyp_CheckIfICanCreateDegreeTypes () == Usr_CAN)
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,NULL,NULL);
   }
 
@@ -442,10 +442,10 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 /******************** Check if I can create degree types *********************/
 /*****************************************************************************/
 
-Usr_ICan_t DegTyp_CheckIfICanCreateDegreeTypes (void)
+Usr_Can_t DegTyp_CheckIfICanCreateDegreeTypes (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-						     Usr_I_CAN_NOT;
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+						     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

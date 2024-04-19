@@ -100,7 +100,7 @@ void Mai_WriteWelcomeNoteEMail (FILE *FileMail,const struct Usr_Data *UsrDat,
                                 Lan_Language_t ToUsrLanguage);
 void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language);
 
-Usr_ICan_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat);
+Usr_Can_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat);
 
 int Mai_SendMailMsg (const char FileNameMail[PATH_MAX + 1],
                      const char *Subject,

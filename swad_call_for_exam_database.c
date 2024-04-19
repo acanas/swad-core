@@ -87,10 +87,10 @@ unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
    /***** Build subquery about status depending on my role *****/
    switch (Cfe_CheckIfICanEditCallsForExams ())
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 sprintf (SubQueryStatus,"Status<>%u",(unsigned) Cfe_DELETED_CALL_FOR_EXAM);
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 sprintf (SubQueryStatus,"Status=%u",(unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
 	 break;

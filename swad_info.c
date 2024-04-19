@@ -176,19 +176,19 @@ void Inf_ShowInfo (void)
    struct Syl_Syllabus Syllabus;
    struct Inf_FromDB FromDB;
    bool Disabled;
-   Usr_ICan_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-                        					    Usr_I_CAN_NOT;
+   Usr_Can_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+                        					    Usr_CAN_NOT;
    bool ShowWarningNoInfo = false;
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_I_CAN]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
      {
-      [Usr_I_CAN_NOT] = NULL,
-      [Usr_I_CAN    ] = Inf_PutIconToEditInfo,
+      [Usr_CAN_NOT] = NULL,
+      [Usr_CAN    ] = Inf_PutIconToEditInfo,
      };
-   static void *Args[Usr_NUM_I_CAN] =
+   static void *Args[Usr_NUM_CAN] =
      {
-      [Usr_I_CAN_NOT] = NULL,
-      [Usr_I_CAN    ] = &Gbl.Crs.Info.Type,
+      [Usr_CAN_NOT] = NULL,
+      [Usr_CAN    ] = &Gbl.Crs.Info.Type,
      };
    static const char **Help[Inf_NUM_TYPES] =
      {

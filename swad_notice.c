@@ -78,7 +78,7 @@ static unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 
 static void Not_PutLinkToRSSFile (void);
 
-static Usr_ICan_t Not_CheckIfICanEditNotices (void);
+static Usr_Can_t Not_CheckIfICanEditNotices (void);
 static void Not_PutIconsListNotices (__attribute__((unused)) void *Args);
 static void Not_PutIconToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod);
@@ -401,11 +401,11 @@ static void Not_PutLinkToRSSFile (void)
 /*********************** Check if I can edit notices *************************/
 /*****************************************************************************/
 
-static Usr_ICan_t Not_CheckIfICanEditNotices (void)
+static Usr_Can_t Not_CheckIfICanEditNotices (void)
   {
    return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-						     Usr_I_CAN_NOT;
+	   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+						     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -415,7 +415,7 @@ static Usr_ICan_t Not_CheckIfICanEditNotices (void)
 static void Not_PutIconsListNotices (__attribute__((unused)) void *Args)
   {
    /***** Put icon to add a new notice *****/
-   if (Not_CheckIfICanEditNotices () == Usr_I_CAN)
+   if (Not_CheckIfICanEditNotices () == Usr_CAN)
       Not_PutIconToAddNewNotice ();
 
    /***** Put icon to show a figure *****/
@@ -552,7 +552,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /***** Write the date in the top part of the yellow note *****/
       /* Write symbol to indicate if notice is obsolete or active */
       if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
-	 if (Not_CheckIfICanEditNotices () == Usr_I_CAN)
+	 if (Not_CheckIfICanEditNotices () == Usr_CAN)
 	   {
 	    /***** Icon to remove announcement *****/
 	    Ico_PutContextualIconToRemove (ActReqRemNot,NULL,

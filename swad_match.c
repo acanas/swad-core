@@ -103,10 +103,10 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
       				      Frm_PutForm_t PutFormMatch,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
-static void Mch_ListOneOrMoreMatchesHeading (Usr_ICan_t ICanEditMatches);
-static Usr_ICan_t Mch_CheckIfICanEditMatches (void);
-static Usr_ICan_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match);
-static Usr_ICan_t Mch_CheckIfICanChangeVisibilityOfResults (const struct Mch_Match *Match);
+static void Mch_ListOneOrMoreMatchesHeading (Usr_Can_t ICanEditMatches);
+static Usr_Can_t Mch_CheckIfICanEditMatches (void);
+static Usr_Can_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match);
+static Usr_Can_t Mch_CheckIfICanChangeVisibilityOfResults (const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match,
                                            const char *Anchor);
@@ -284,7 +284,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
-      if (Gbl.Crs.Grps.NumGrps && Mch_CheckIfICanEditMatches () == Usr_I_CAN)
+      if (Gbl.Crs.Grps.NumGrps && Mch_CheckIfICanEditMatches () == Usr_CAN)
 	{
 	 Set_BeginSettingsHead ();
 	    Grp_ShowFormToSelWhichGrps (ActSeeOneGam,Gam_PutPars,Games);
@@ -329,7 +329,7 @@ void Mch_GetMatchDataByCod (struct Mch_Match *Match)
 static void Mch_PutIconsInListOfMatches (void *Games)
   {
    if (Games)
-      if (Mch_CheckIfICanEditMatches () == Usr_I_CAN)
+      if (Mch_CheckIfICanEditMatches () == Usr_CAN)
          /***** Put icon to create a new match in current game *****/
 	 Mch_PutIconToCreateNewMatch ((struct Gam_Games *) Games);
   }
@@ -357,7 +357,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    unsigned UniqueId;
    struct Mch_Match Match;
    char *Anchor;
-   Usr_ICan_t ICanEditMatches = Mch_CheckIfICanEditMatches ();
+   Usr_Can_t ICanEditMatches = Mch_CheckIfICanEditMatches ();
    long MchCodToBeEdited = PutFormMatch == Frm_PUT_FORM &&
 			   Games->MchCod > 0 ? Games->MchCod :
 					       -1L;
@@ -380,7 +380,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	 /***** Get match data from row *****/
 	 Mch_GetMatchDataFromRow (mysql_res,&Match);
 
-	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_I_CAN)
+	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN)
 	   {
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
@@ -390,7 +390,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	    HTM_TR_Begin (NULL);
 
 	       /* Icons */
-	       if (ICanEditMatches == Usr_I_CAN)
+	       if (ICanEditMatches == Usr_CAN)
 		  Mch_ListOneOrMoreMatchesIcons (Games,&Match,Anchor);
 
 	       /* Start/end date/time */
@@ -416,11 +416,11 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	    HTM_TR_End ();
 
 	    /***** Third row for this match used for edition ****/
-	    if (ICanEditMatches == Usr_I_CAN &&
+	    if (ICanEditMatches == Usr_CAN &&
 		PutFormMatch == Frm_PUT_FORM &&		// Editing...
 		Match.MchCod == MchCodToBeEdited)	// ...this match
 	       /***** Check if I can edit this match *****/
-	       if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_I_CAN)
+	       if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN)
 		 {
 		  HTM_TR_Begin (NULL);
 		     HTM_TD_Begin ("colspan=\"7\" class=\"LT %s\"",
@@ -436,7 +436,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	}
 
       /***** Put button to play a new match in this game *****/
-      if (ICanEditMatches == Usr_I_CAN &&
+      if (ICanEditMatches == Usr_CAN &&
 	  PutFormMatch == Frm_PUT_FORM &&
 	  MchCodToBeEdited <= 0)
 	{
@@ -461,7 +461,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 /***************** Put a column for match start and end times ****************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesHeading (Usr_ICan_t ICanEditMatches)
+static void Mch_ListOneOrMoreMatchesHeading (Usr_Can_t ICanEditMatches)
   {
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Match;
@@ -473,7 +473,7 @@ static void Mch_ListOneOrMoreMatchesHeading (Usr_ICan_t ICanEditMatches)
    HTM_TR_Begin (NULL);
 
       /***** Column for icons *****/
-      if (ICanEditMatches == Usr_I_CAN)
+      if (ICanEditMatches == Usr_CAN)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
@@ -494,13 +494,13 @@ static void Mch_ListOneOrMoreMatchesHeading (Usr_ICan_t ICanEditMatches)
 /*********************** Check if I can edit matches *************************/
 /*****************************************************************************/
 
-static Usr_ICan_t Mch_CheckIfICanEditMatches (void)
+static Usr_Can_t Mch_CheckIfICanEditMatches (void)
   {
-   static Usr_ICan_t ICanEditMatches[Rol_NUM_ROLES] =
+   static Usr_Can_t ICanEditMatches[Rol_NUM_ROLES] =
      {
-      [Rol_NET    ] = Usr_I_CAN,
-      [Rol_TCH    ] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_NET    ] = Usr_CAN,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return ICanEditMatches[Gbl.Usrs.Me.Role.Logged];
@@ -510,21 +510,21 @@ static Usr_ICan_t Mch_CheckIfICanEditMatches (void)
 /***************** Check if I can edit (remove/resume) a match ***************/
 /*****************************************************************************/
 
-static Usr_ICan_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match)
+static Usr_Can_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match)
   {
    if (Match->MchCod <= 0)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :	// Only if I am the creator
-							       Usr_I_CAN_NOT;
+	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :	// Only if I am the creator
+							       Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -532,13 +532,13 @@ static Usr_ICan_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match)
 /*********** Check if visibility of match results can be changed *************/
 /*****************************************************************************/
 
-static Usr_ICan_t Mch_CheckIfICanChangeVisibilityOfResults (const struct Mch_Match *Match)
+static Usr_Can_t Mch_CheckIfICanChangeVisibilityOfResults (const struct Mch_Match *Match)
   {
    if (Match->Status.ShowUsrResults ||		// Results are currently visible
        Match->Status.Showing == Mch_END)	// Match has finished
       return Mch_CheckIfICanEditThisMatch (Match);
 
-   return Usr_I_CAN_NOT;
+   return Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -553,7 +553,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 
       switch (Mch_CheckIfICanEditThisMatch (Match))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    Games->MchCod = Match->MchCod;
 
 	    /***** Put icon to remove the match *****/
@@ -562,7 +562,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 	    /***** Put icon to edit the match *****/
 	    Ico_PutContextualIconToEdit (ActReqChgMch,Anchor,Mch_PutParsEdit,Games);
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ico_PutIconRemovalNotAllowed ();
 	    break;
@@ -833,7 +833,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    Games->MchCod = Match->MchCod;
 
    /***** Show match results *****/
-   if (Mch_CheckIfICanEditThisMatch (Match) == Usr_I_CAN)
+   if (Mch_CheckIfICanEditThisMatch (Match) == Usr_CAN)
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParsEdit,Games,
 				     "trophy.svg",Ico_BLACK);
@@ -841,7 +841,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    /***** Check if visibility of session results can be changed *****/
    switch (Mch_CheckIfICanChangeVisibilityOfResults (Match))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /* I can edit visibility */
 	 if (Match->Status.ShowUsrResults)
 	    Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
@@ -852,7 +852,7 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 					   Mch_PutParsEdit,Games,
 					   "eye-slash.svg",Ico_RED);
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 /* I can not edit visibility */
 	 if (Match->Status.ShowUsrResults)
@@ -881,7 +881,7 @@ void Mch_ToggleVisResultsMchUsr (void)
    Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if visibility of match results can be changed *****/
-   if (Mch_CheckIfICanChangeVisibilityOfResults (&Match) == Usr_I_CAN_NOT)
+   if (Mch_CheckIfICanChangeVisibilityOfResults (&Match) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
@@ -1029,7 +1029,7 @@ void Mch_RemoveMatch (void)
    Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if I can remove this match *****/
-   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_I_CAN_NOT)
+   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove the match from all database tables *****/
@@ -1125,7 +1125,7 @@ void Mch_ReqCreatOrEditMatch (void)
    Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if I can edit this match *****/
-   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_I_CAN_NOT)
+   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show game *****/
@@ -1333,7 +1333,7 @@ void Mch_ChangeMatch (void)
    Mch_GetAndCheckPars (&Games,&Match);
 
    /***** Check if I can update this match *****/
-   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_I_CAN_NOT)
+   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get match title and groups *****/
@@ -1391,7 +1391,7 @@ void Mch_ResumeMatch (void)
    Mch_GetMatchDataByCod (&Match);
 
    /***** Check if I have permission to resume match *****/
-   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_I_CAN_NOT)
+   if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Update match status in database *****/
@@ -1988,7 +1988,7 @@ static void Mch_ShowMatchStatusForStd (struct Mch_Match *Match,Mch_Update_t Upda
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Can I play this match? *****/
-   if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match) == Usr_I_CAN_NOT)
+   if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get student's answer to this question
@@ -2009,7 +2009,7 @@ static void Mch_ShowMatchStatusForStd (struct Mch_Match *Match,Mch_Update_t Upda
 /************ Check if I belong to any of the groups of a match **************/
 /*****************************************************************************/
 
-Usr_ICan_t Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match)
+Usr_Can_t Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -2019,13 +2019,13 @@ Usr_ICan_t Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Matc
 	 return Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
       case Rol_NET:
 	 /***** Only if I am the creator *****/
-	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :
-							       Usr_I_CAN_NOT;
+	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
+							       Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 

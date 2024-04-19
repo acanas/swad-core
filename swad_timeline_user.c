@@ -377,7 +377,7 @@ static void TmlUsr_PutDisabledIconFavSha (TmlUsr_FavSha_t FavSha,
 /***************** Check if I can fav/share a note/comment *******************/
 /*****************************************************************************/
 
-Usr_ICan_t TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
+Usr_Can_t TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
   {
    extern const char *Txt_The_post_no_longer_exists;
 
@@ -385,7 +385,7 @@ Usr_ICan_t TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
    if (Cod <= 0)
      {
       Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
      }
 
    /***** Trivial check 2: I must be logged
@@ -393,17 +393,17 @@ Usr_ICan_t TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
    if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod) == Usr_ME)
      {
       Err_NoPermission ();
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
      }
 
-   return Usr_I_CAN;
+   return Usr_CAN;
   }
 
 /*****************************************************************************/
 /***************** Check if I can fav/share a note/comment *******************/
 /*****************************************************************************/
 
-Usr_ICan_t TmlUsr_CheckIfICanRemove (long Cod,long UsrCod)
+Usr_Can_t TmlUsr_CheckIfICanRemove (long Cod,long UsrCod)
   {
    extern const char *Txt_The_post_no_longer_exists;
 
@@ -411,7 +411,7 @@ Usr_ICan_t TmlUsr_CheckIfICanRemove (long Cod,long UsrCod)
    if (Cod <= 0)
      {
       Ale_ShowAlert (Ale_WARNING,Txt_The_post_no_longer_exists);
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
      }
 
    /***** Trivial check 2: I must be logged
@@ -419,8 +419,8 @@ Usr_ICan_t TmlUsr_CheckIfICanRemove (long Cod,long UsrCod)
    if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod) == Usr_OTHER)
      {
       Err_NoPermission ();
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
      }
 
-   return Usr_I_CAN;
+   return Usr_CAN;
   }

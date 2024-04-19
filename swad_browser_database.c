@@ -2299,13 +2299,13 @@ void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],
 /************** Check if a file / folder from is set as hidden ***************/
 /*****************************************************************************/
 
-unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res,
-                                                           const char *Path)
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenUsingPath (MYSQL_RES **mysql_res,
+								      const char *Path)
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
-   return (unsigned)
+   return
    DB_QuerySELECT (mysql_res,"can not check if a file is hidden",
 		   "SELECT Hidden"		// row[0]
 		    " FROM brw_files"
@@ -2318,14 +2318,15 @@ unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res
 		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,
 		   ZoneUsrCod,
-		   Path);
+		   Path) ? HidVis_HIDDEN :
+			   HidVis_VISIBLE;
   }
 
 /*****************************************************************************/
 /******** Check if a file / folder from the documents zone is hidden *********/
 /*****************************************************************************/
 
-bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct Brw_FileMetadata *FileMetadata)
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (const struct Brw_FileMetadata *FileMetadata)
   {
    /***** Get if a file or folder is under a hidden folder from database *****/
    /*
@@ -2350,7 +2351,8 @@ bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct Brw_File
 		   FileMetadata->Cod,
 		   FileMetadata->ZoneUsrCod,
 		   FileMetadata->FilFolLnk.Full,
-		   FileMetadata->FilFolLnk.Full);
+		   FileMetadata->FilFolLnk.Full) ? HidVis_HIDDEN :
+						   HidVis_VISIBLE;
   }
 
 /*****************************************************************************/

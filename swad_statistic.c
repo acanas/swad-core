@@ -791,7 +791,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
    char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1];
    unsigned NumDays;
-   Usr_ICan_t ICanQueryWholeRange;
+   Usr_Can_t ICanQueryWholeRange;
    unsigned NumUsrsInList = 0;
    long *LstSelectedUsrCods = NULL;
 
@@ -943,9 +943,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 			                                              Gbl.Scope.Current == Hie_CTR   ||
 			                                              Gbl.Scope.Current == Hie_DEG   ||
 			                                              Gbl.Scope.Current == Hie_CRS)) ||
-			   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-								     Usr_I_CAN_NOT;
-   if (ICanQueryWholeRange == Usr_I_CAN_NOT &&
+			   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+								     Usr_CAN_NOT;
+   if (ICanQueryWholeRange == Usr_CAN_NOT &&
        NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
       /* ...write warning message and show the form again */

@@ -338,15 +338,15 @@ static void Att_ParsWhichGroupsToShow (void *Events)
 
 static void Att_PutIconsInListOfEvents (void *Events)
   {
-   Usr_ICan_t ICanEdit;
+   Usr_Can_t ICanEdit;
 
    if (Events)
      {
       /***** Put icon to create a new attendance event *****/
       ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-							    Usr_I_CAN_NOT;
-      if (ICanEdit == Usr_I_CAN)
+		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+							    Usr_CAN_NOT;
+      if (ICanEdit == Usr_CAN)
 	 Att_PutIconToCreateNewEvent ((struct Att_Events *) Events);
 
       /***** Put icon to show attendance list *****/
@@ -372,7 +372,7 @@ static void Att_PutIconsInListOfEvents (void *Events)
 			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
 
       /***** Put icon to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
 	 Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
 					 Att_PutPars,Events);
      }
@@ -576,7 +576,7 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
       [HidVis_VISIBLE] = ActHidAtt,	// Visible ==> action to hide
      };
 
-   if (Att_CheckIfICanEditEvents () == Usr_I_CAN)
+   if (Att_CheckIfICanEditEvents () == Usr_CAN)
      {
       /***** Icon to remove attendance event *****/
       Ico_PutContextualIconToRemove (ActReqRemAtt,NULL,
@@ -592,7 +592,7 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
      }
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_I_CAN)
+   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
       Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,Att_PutPars,Events);
   }
 
@@ -600,12 +600,12 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
 /******************* Check if I can edit calls for exams *********************/
 /*****************************************************************************/
 
-Usr_ICan_t Att_CheckIfICanEditEvents (void)
+Usr_Can_t Att_CheckIfICanEditEvents (void)
   {
-   static Usr_ICan_t ICanEditAttEvents[Rol_NUM_ROLES] =
+   static Usr_Can_t ICanEditAttEvents[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return ICanEditAttEvents[Gbl.Usrs.Me.Role.Logged];
@@ -1652,9 +1652,9 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
-   Usr_ICan_t ICanChangeStdAttendance;
-   Usr_ICan_t ICanEditStdComment;
-   Usr_ICan_t ICanEditTchComment;
+   Usr_Can_t ICanChangeStdAttendance;
+   Usr_Can_t ICanEditStdComment;
+   Usr_Can_t ICanEditTchComment;
 
    /***** Set who can edit *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1663,25 +1663,25 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 // A student can see only her/his attendance
 	 if (Usr_ItsMe (UsrDat->UsrCod) == Usr_OTHER)
 	    Err_ShowErrorAndExit ("Wrong call.");
-	 ICanChangeStdAttendance = Usr_I_CAN_NOT;
-	 ICanEditStdComment = (Event->ClosedOrOpen == CloOpe_OPEN) ? Usr_I_CAN :	// Attendance event is open
-								     Usr_I_CAN_NOT;
-	 ICanEditTchComment = Usr_I_CAN_NOT;
+	 ICanChangeStdAttendance = Usr_CAN_NOT;
+	 ICanEditStdComment	 = (Event->ClosedOrOpen == CloOpe_OPEN) ? Usr_CAN :	// Attendance event is open
+									  Usr_CAN_NOT;
+	 ICanEditTchComment	 = Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
-	 ICanChangeStdAttendance = Usr_I_CAN;
-	 ICanEditStdComment = Usr_I_CAN_NOT;
-	 ICanEditTchComment = Usr_I_CAN;
+	 ICanChangeStdAttendance = Usr_CAN;
+	 ICanEditStdComment	 = Usr_CAN_NOT;
+	 ICanEditTchComment	 = Usr_CAN;
 	 break;
       case Rol_SYS_ADM:
-	 ICanChangeStdAttendance = Usr_I_CAN;
-	 ICanEditStdComment = Usr_I_CAN_NOT;
-	 ICanEditTchComment = Usr_I_CAN_NOT;
+	 ICanChangeStdAttendance = Usr_CAN;
+	 ICanEditStdComment	 = Usr_CAN_NOT;
+	 ICanEditTchComment	 = Usr_CAN_NOT;
 	 break;
       default:
-	 ICanChangeStdAttendance = Usr_I_CAN_NOT;
-	 ICanEditStdComment = Usr_I_CAN_NOT;
-	 ICanEditTchComment = Usr_I_CAN_NOT;
+	 ICanChangeStdAttendance = Usr_CAN_NOT;
+	 ICanEditStdComment	 = Usr_CAN_NOT;
+	 ICanEditTchComment	 = Usr_CAN_NOT;
 	 break;
      }
 
@@ -1704,7 +1704,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 			     "id=\"Std%u\" value=\"%s\"%s%s",
 			     NumUsr,UsrDat->EnUsrCod,
 			     Present ? " checked=\"checked\"" : "",
-			     (ICanChangeStdAttendance == Usr_I_CAN) ? "" :
+			     (ICanChangeStdAttendance == Usr_CAN) ? "" :
 								      " disabled=\"disabled\"");
       HTM_TD_End ();
 
@@ -1755,7 +1755,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		    The_GetColorRows ());
 	 switch (ICanEditStdComment)
 	   {
-	    case Usr_I_CAN:	// Show with form
+	    case Usr_CAN:	// Show with form
 	       HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,
@@ -1763,7 +1763,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		  HTM_Txt (CommentStd);
 	       HTM_TEXTAREA_End ();
 	       break;
-	    case Usr_I_CAN_NOT:	// Show without form
+	    case Usr_CAN_NOT:	// Show without form
 	    default:
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				 CommentStd,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
@@ -1780,7 +1780,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		    The_GetColorRows ());
 	 switch (ICanEditTchComment)
 	   {
-	    case Usr_I_CAN:			// Show with form
+	    case Usr_CAN:			// Show with form
 	       HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,
@@ -1788,7 +1788,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 		  HTM_Txt (CommentTch);
 	       HTM_TEXTAREA_End ();
 	       break;
-	    case Usr_I_CAN_NOT:			// Show without form
+	    case Usr_CAN_NOT:			// Show without form
 	    default:
 	       if (Event->CommentTchVisible)
 		 {
@@ -2775,7 +2775,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CRS))
-	       if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_I_CAN)
+	       if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
 		 {
 		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat);
@@ -3010,7 +3010,7 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
 							    Usr_DONT_GET_PREFS,
 							    Usr_DONT_GET_ROLE_IN_CRS))
-		  if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_I_CAN)
+		  if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
 		    {
 		     UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 		     Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);

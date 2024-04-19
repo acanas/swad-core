@@ -743,7 +743,7 @@ unsigned Svy_DB_GetGrpNamesAssociatedToSvy (MYSQL_RES **mysql_res,long SvyCod)
 /************ Check if I belong to any of the groups of a survey *************/
 /*****************************************************************************/
 
-Usr_ICan_t Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
+Usr_Can_t Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
   {
    return
    DB_QueryEXISTS ("can not check if I can do a survey",
@@ -762,8 +762,8 @@ Usr_ICan_t Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND grp_users.GrpCod=svy_groups.GrpCod)))",
 		   SvyCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :
-						Usr_I_CAN_NOT;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
+						Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

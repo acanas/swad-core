@@ -66,7 +66,7 @@ void Svy_DB_RemoveSvysIn (Hie_Level_t Level,long HieCod);
 void Svy_DB_CreateGrp (long SvyCod,long GrpCod);
 
 unsigned Svy_DB_GetGrpNamesAssociatedToSvy (MYSQL_RES **mysql_res,long SvyCod);
-Usr_ICan_t Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
+Usr_Can_t Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
 
 void Svy_DB_RemoveGroupsOfType (long GrpTypCod);
 void Svy_DB_RemoveGroup (long GrpCod);

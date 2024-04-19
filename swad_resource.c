@@ -472,12 +472,12 @@ bool Rsc_GetParLink (struct Rsc_Link *Link)
 /************************** Check if I can get link **************************/
 /*****************************************************************************/
 
-Usr_ICan_t Rsc_CheckIfICanGetLink (void)
+Usr_Can_t Rsc_CheckIfICanGetLink (void)
   {
-   static Usr_ICan_t ICanGetLink[Rol_NUM_ROLES] =
+   static Usr_Can_t ICanGetLink[Rol_NUM_ROLES] =
      {
-      [Rol_TCH    ] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return ICanGetLink[Gbl.Usrs.Me.Role.Logged];

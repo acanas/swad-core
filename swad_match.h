@@ -126,7 +126,7 @@ void Mch_ToggleVisResultsMchQst (void);
 void Mch_BackMatch (void);
 void Mch_ForwardMatch (void);
 
-Usr_ICan_t Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match);
+Usr_Can_t Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match);
 
 bool Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match);
 

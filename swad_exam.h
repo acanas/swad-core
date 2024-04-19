@@ -40,7 +40,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam);
 void Exa_SeeAllExams (void);
 void Exa_ListAllExams (struct Exa_Exams *Exams);
 
-Usr_ICan_t Exa_CheckIfICanEditExams (void);
+Usr_Can_t Exa_CheckIfICanEditExams (void);
 
 void Exa_SeeOneExam (void);
 void Exa_ShowOnlyOneExam (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession);

@@ -49,12 +49,12 @@ void Hie_ResetHierarchy (void);
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 
-Usr_ICan_t Hie_CheckIfICanEdit (void);
+Usr_Can_t Hie_CheckIfICanEdit (void);
 
 void Hie_WriteStatusCell (Hie_Status_t Status,
 			  const char *Class,const char *BgColor,
 			  const char *Txt[Hie_NUM_STATUS_TXT]);
-void Hie_WriteStatusCellEditable (Usr_ICan_t ICanEdit,Hie_Status_t Status,
+void Hie_WriteStatusCellEditable (Usr_Can_t ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT]);
 Hie_Status_t Hie_GetParStatus (void);
@@ -67,7 +67,7 @@ void Hie_FreeList (Hie_Level_t Level);
 void Hie_ResetMyHierarchy (void);
 void Hie_FreeMyHierarchy (void);
 void Hie_GetMyHierarchy (Hie_Level_t Level);
-bool Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod);
+Usr_Belong_t Hie_CheckIfIBelongTo (Hie_Level_t Level,long HieCod);
 
 void Hie_FlushCacheUsrBelongsTo (Hie_Level_t Level);
 bool Hie_CheckIfUsrBelongsTo (Hie_Level_t Level,long UsrCod,long HieCod,

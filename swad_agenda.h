@@ -101,7 +101,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-Usr_ICan_t Agd_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat);
+Usr_Can_t Agd_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat);
 
 void Agd_PutFormLogInToShowUsrAgenda (void);
 void Agd_PutParAgd (void);

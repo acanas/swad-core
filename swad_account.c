@@ -489,7 +489,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
         {
-         case Usr_I_CAN:
+         case Usr_CAN:
 	    /***** Get user's nickname and email address
 		   It's necessary because nickname or email could be just updated *****/
 	    Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
@@ -517,7 +517,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	    /***** End container for this user *****/
 	    HTM_DIV_End ();
 	    break;
-         case Usr_I_CAN_NOT:
+         case Usr_CAN_NOT:
          default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -532,7 +532,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 
 void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
   {
-   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod) == Usr_I_CAN)
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod) == Usr_CAN)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
 				     Acc_PutParsToRemoveMyAccount,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED);
@@ -774,10 +774,10 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
         {
-         case Usr_I_CAN:
+         case Usr_CAN:
             Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
             break;
-         case Usr_I_CAN_NOT:
+         case Usr_CAN_NOT:
          default:
             Error = true;
             break;
@@ -820,7 +820,7 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 /******** Check if I can eliminate completely another user's account *********/
 /*****************************************************************************/
 
-Usr_ICan_t Acc_CheckIfICanEliminateAccount (long UsrCod)
+Usr_Can_t Acc_CheckIfICanEliminateAccount (long UsrCod)
   {
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrCod);
 
@@ -830,15 +830,15 @@ Usr_ICan_t Acc_CheckIfICanEliminateAccount (long UsrCod)
      {
       case Usr_ME:
 	 // A system admin can not eliminate him/herself
-	 return (Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0 ? Usr_I_CAN :
-									 Usr_I_CAN_NOT;
+	 return ((Gbl.Usrs.Me.Role.Available & (1 << Rol_SYS_ADM)) == 0) ? Usr_CAN :
+									   Usr_CAN_NOT;
       case Usr_OTHER:
 	 // Only a system admin can eliminate other's account
-	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_I_CAN :
-							 Usr_I_CAN_NOT;
+	 return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+							 Usr_CAN_NOT;
      }
 
-   return Usr_I_CAN_NOT;
+   return Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1110,7 +1110,7 @@ void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat)
 					"at.svg",Ico_BLACK);
          break;
       case Usr_OTHER:
-	 if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_I_CAN)
+	 if (Usr_CheckIfICanEditOtherUsr (UsrDat) == Usr_CAN)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "at.svg",Ico_BLACK);

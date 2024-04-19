@@ -363,7 +363,7 @@ void Tst_AssessTest (void)
 	 Lay_WriteHeaderClassPhoto (Vie_VIEW);
 
 	 /***** Header *****/
-	 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+	 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
 	   {
 	    HTM_DIV_Begin ("class=\"Tst_SUBTITLE DAT_%s\"",
 	                   The_GetSuffix ());

@@ -201,14 +201,14 @@ void Usr_FlushCachesUsr (void);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
-Usr_ICan_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat);
-Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat);
+Usr_Can_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat);
+Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat);
 
-Usr_ICan_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat);
-Usr_ICan_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat);
-Usr_ICan_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat);
-Usr_ICan_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat);
-Usr_ICan_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat);
+Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat);
+Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat);
+Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat);
+Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat);
+Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);

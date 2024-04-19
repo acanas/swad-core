@@ -145,7 +145,7 @@ static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
-static Usr_ICan_t Enr_CheckIfICanRemUsrFromCrs (void);
+static Usr_Can_t Enr_CheckIfICanRemUsrFromCrs (void);
 
 static void Enr_AskIfRemoveUsrFromCrs (struct Usr_Data *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
@@ -1428,7 +1428,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	}
 
       /***** Eliminate user completely from platform *****/
-      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_I_CAN)
+      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN)
 	{
 	 Enr_PutActionRemUsrAcc (&OptionChecked,MeOrOther);
 	 OptionsShown = true;
@@ -2373,8 +2373,8 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    extern const char *Txt_Administer_one_user;
    static const char **TitleText[] =
      {
-      [Usr_I_CAN_NOT] = &Txt_Administer_me,
-      [Usr_I_CAN    ] = &Txt_Administer_one_user,
+      [Usr_CAN_NOT] = &Txt_Administer_me,
+      [Usr_CAN    ] = &Txt_Administer_one_user,
      };
 
    Lay_PutContextualLinkIconText (NextAction,NULL,
@@ -2424,7 +2424,7 @@ void Enr_ReqRegRemOth (void)
 void Enr_ReqRegRemStd (void)
   {
    /***** Contextual menu *****/
-   if (Adm_CheckIfICanAdminOtherUsrs () == Usr_I_CAN)
+   if (Adm_CheckIfICanAdminOtherUsrs () == Usr_CAN)
      {
       Mnu_ContextMenuBegin ();
 	 Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
@@ -2445,11 +2445,11 @@ static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
    switch (Adm_CheckIfICanAdminOtherUsrs ())
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Form to request the user's ID of another user *****/
 	 Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 /***** Form to request if register/remove me *****/
 	 Enr_AskIfRegRemMe (Role);
@@ -2680,10 +2680,10 @@ void Enr_ReqRemUsrFromCrs (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Enr_CheckIfICanRemUsrFromCrs ())
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -2704,13 +2704,13 @@ void Enr_RemUsrFromCrs1 (void)
       if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
 	 switch (Enr_CheckIfICanRemUsrFromCrs ())
 	   {
-	    case Usr_I_CAN:
+	    case Usr_CAN:
 	       Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,
 					     &Gbl.Hierarchy.Node[Hie_CRS],
 					     Enr_DO_NOT_REMOVE_USR_PRODUCTION,
 					     Cns_VERBOSE);
 	       break;
-	    case Usr_I_CAN_NOT:
+	    case Usr_CAN_NOT:
 	    default:
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	       break;
@@ -2733,24 +2733,24 @@ void Enr_RemUsrFromCrs2 (void)
 /*********** Check if I can remove another user in current course ************/
 /*****************************************************************************/
 
-static Usr_ICan_t Enr_CheckIfICanRemUsrFromCrs (void)
+static Usr_Can_t Enr_CheckIfICanRemUsrFromCrs (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
 	 // A student or non-editing teacher can remove herself/himself
-	 return (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME) ? Usr_I_CAN :
-								       Usr_I_CAN_NOT;
+	 return (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME) ? Usr_CAN :
+								       Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 // A teacher or administrator can remove anyone
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -2916,7 +2916,7 @@ void Enr_ModifyUsr1 (void)
 	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	      {
 	       /***** Get user's name from record form *****/
-	       if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat) == Usr_I_CAN)
+	       if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 		  Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Update user's data in database *****/
@@ -3021,7 +3021,7 @@ void Enr_ModifyUsr1 (void)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
-	    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_I_CAN_NOT)
+	    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN_NOT)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 default:
@@ -3200,7 +3200,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct Usr_Data *UsrDat,
 	{
 	 case Usr_ME:
 	    /* Now I don't belong to current course */
-	    Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] =
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Usr_DONT_BELONG;
 	    Gbl.Usrs.Me.UsrDat.Accepted           = false;
 
 	    /* Fill the list with the courses I belong to */
@@ -3339,7 +3339,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat)
       return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
       if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))	// Course selected and we both belong to it
         {
          Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;

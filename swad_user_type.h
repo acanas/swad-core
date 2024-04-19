@@ -110,12 +110,19 @@ typedef enum
   } Usr_ListUsrsOption_t;
 #define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
 
-#define Usr_NUM_I_CAN 2
+#define Usr_NUM_CAN 2
 typedef enum
   {
-   Usr_I_CAN_NOT,
-   Usr_I_CAN,
-  } Usr_ICan_t;
+   Usr_CAN_NOT,
+   Usr_CAN,
+  } Usr_Can_t;
+
+#define Usr_NUM_BELONG 2
+typedef enum
+  {
+   Usr_DONT_BELONG,
+   Usr_BELONG,
+  } Usr_Belong_t;
 
 #define Usr_NUM_ME_OR_OTHER 2
 typedef enum

@@ -1298,14 +1298,14 @@ void Mai_RemoveOtherUsrEmail (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    /***** Remove user's email *****/
 	    Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
 	    /***** Show form again *****/
 	    Acc_ShowFormChgOtherUsrAccount ();
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -1325,7 +1325,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
 
    switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Get new email from form *****/
 	 Par_GetParText ("Email",Email,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
@@ -1340,7 +1340,7 @@ static void Mai_RemoveEmail (struct Usr_Data *UsrDat)
 	 /***** Update list of emails *****/
 	 Mai_GetEmailFromUsrCod (UsrDat);
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	 break;
@@ -1370,7 +1370,7 @@ void Mai_ChangeOtherUsrEmail (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    /***** Change user's ID *****/
 	    Mai_ChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
 				Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
@@ -1378,7 +1378,7 @@ void Mai_ChangeOtherUsrEmail (void)
 	    /***** Show form again *****/
 	    Acc_ShowFormChgOtherUsrAccount ();
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -1401,7 +1401,7 @@ static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOthe
 
    switch (Usr_CheckIfICanEditOtherUsr (UsrDat))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Get new email from form *****/
 	 Par_GetParText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
@@ -1441,7 +1441,7 @@ static void Mai_ChangeUsrEmail (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOthe
 			     Txt_The_email_address_entered_X_is_not_valid,
 			     NewEmail);
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	 break;
@@ -1678,11 +1678,11 @@ void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language)
 /**************** Check if I can see another user's email ********************/
 /*****************************************************************************/
 
-Usr_ICan_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
+Usr_Can_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
   {
    /***** I can see my email *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** Check if I have permission to see another user's email *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1692,40 +1692,40 @@ Usr_ICan_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
 	    I can see the email of confirmed teachers */
 	 return ((UsrDat->Roles.InCurrentCrs == Rol_NET ||	// A non-editing teacher
 	          UsrDat->Roles.InCurrentCrs == Rol_TCH) &&	// or a teacher
-	          UsrDat->Accepted) ? Usr_I_CAN :		// who accepted registration
-	        		      Usr_I_CAN_NOT;
+	          UsrDat->Accepted) ? Usr_CAN :		// who accepted registration
+	        		      Usr_CAN_NOT;
       case Rol_NET:
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
          return (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
-	         UsrDat->Accepted) ? Usr_I_CAN :		// who accepted registration
-				     Usr_I_CAN_NOT;
+	         UsrDat->Accepted) ? Usr_CAN :		// who accepted registration
+				     Usr_CAN_NOT;
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
 	 return Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
 	                                 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-	                                 true) ? Usr_I_CAN :	// count only accepted courses
-	                                	 Usr_I_CAN_NOT;
+	                                 true) ? Usr_CAN :	// count only accepted courses
+	                                	 Usr_CAN_NOT;
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can see the user's email of users from current center */
 	 return Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
 	                                 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-	                                 true) ? Usr_I_CAN :	// count only accepted courses
-	                                	 Usr_I_CAN_NOT;
+	                                 true) ? Usr_CAN :	// count only accepted courses
+	                                	 Usr_CAN_NOT;
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
 	 return Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
 	                                 Gbl.Hierarchy.Node[Hie_INS].HieCod,
-	                                 true) ? Usr_I_CAN :	// count only accepted courses
-	                                	 Usr_I_CAN_NOT;
+	                                 true) ? Usr_CAN :	// count only accepted courses
+	                                	 Usr_CAN_NOT;
       case Rol_SYS_ADM:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 

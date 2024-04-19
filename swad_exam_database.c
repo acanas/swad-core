@@ -1668,7 +1668,7 @@ unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod)
 /*** Check if I belong to any of the groups associated to the exam session ***/
 /*****************************************************************************/
 
-Usr_ICan_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
+Usr_Can_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
   {
    return
    DB_QueryEXISTS ("can not check if I can play an exam session",
@@ -1686,8 +1686,8 @@ Usr_ICan_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
 			     " WHERE grp_users.UsrCod=%ld"
 			       " AND grp_users.GrpCod=exa_groups.GrpCod)))",
 		   SesCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :
-						Usr_I_CAN_NOT;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
+						Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -2151,10 +2151,10 @@ bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgen
 
 void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
   {
-   static char YN[Usr_NUM_I_CAN] =
+   static char YN[Usr_NUM_CAN] =
      {
-      [Usr_I_CAN_NOT] = 'N',
-      [Usr_I_CAN    ] = 'Y',
+      [Usr_CAN_NOT] = 'N',
+      [Usr_CAN    ] = 'Y',
      };
 
    /* Log access in exam log.

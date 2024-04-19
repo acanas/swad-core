@@ -463,7 +463,7 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
 static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit countries *****/
-   if (Cty_CheckIfICanEditCountries () == Usr_I_CAN)
+   if (Cty_CheckIfICanEditCountries () == Usr_CAN)
       Cty_PutIconToEditCountries ();
 
    /***** Put icon to show a figure *****/
@@ -474,10 +474,10 @@ static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
 /********************** Check if I can edit countries ************************/
 /*****************************************************************************/
 
-Usr_ICan_t Cty_CheckIfICanEditCountries (void)
+Usr_Can_t Cty_CheckIfICanEditCountries (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-						     Usr_I_CAN_NOT;
+   return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+						     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

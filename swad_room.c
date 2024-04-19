@@ -97,7 +97,7 @@ static void Roo_GetAndListMACAddresses (long RooCod);
 static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
 
 static Roo_Order_t Roo_GetParRoomOrder (void);
-static Usr_ICan_t Roo_CheckIfICanCreateRooms (void);
+static Usr_Can_t Roo_CheckIfICanCreateRooms (void);
 static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args);
 static void Roo_PutIconToEditRooms (void);
 static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args);
@@ -377,10 +377,10 @@ static Roo_Order_t Roo_GetParRoomOrder (void)
 /*********************** Check if I can create rooms *************************/
 /*****************************************************************************/
 
-static Usr_ICan_t Roo_CheckIfICanCreateRooms (void)
+static Usr_Can_t Roo_CheckIfICanCreateRooms (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_I_CAN :
-						     Usr_I_CAN_NOT;
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_CAN :
+						     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -390,7 +390,7 @@ static Usr_ICan_t Roo_CheckIfICanCreateRooms (void)
 static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit rooms *****/
-   if (Roo_CheckIfICanCreateRooms () == Usr_I_CAN)
+   if (Roo_CheckIfICanCreateRooms () == Usr_CAN)
       Roo_PutIconToEditRooms ();
   }
 

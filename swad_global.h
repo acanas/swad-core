@@ -135,7 +135,7 @@ struct Globals
             unsigned Num;		// Number of courses/degrees/centers/institutions/countries
             bool Filled;		// List is already filled?
            } Hierarchy[Hie_NUM_LEVELS];	// My hierarchy
-         bool IBelongToCurrent[Hie_NUM_LEVELS];
+         Usr_Belong_t IBelongToCurrent[Hie_NUM_LEVELS];
 	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow

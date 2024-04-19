@@ -289,7 +289,7 @@ bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if I can see the public profile *****/
-   if (Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat) == Usr_I_CAN)
+   if (Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat) == Usr_CAN)
      {
       if (Gbl.Usrs.Me.Logged)
 	{
@@ -314,7 +314,7 @@ bool Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
 
       /***** Extended profile *****/
-      if (Pri_CheckIfICanView (UsrDat->ExPrfVisibility,UsrDat) == Usr_I_CAN)
+      if (Pri_CheckIfICanView (UsrDat->ExPrfVisibility,UsrDat) == Usr_CAN)
         {
          /***** Show details of user's profile *****/
          Prf_ShowDetailsUserProfile (UsrDat);
@@ -1337,7 +1337,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
-   Usr_ICan_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
+   Usr_Can_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
 
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		 Class[MeOrOther],
@@ -1348,7 +1348,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 
    /***** Check if I can see the public profile *****/
    HTM_TD_Begin ("class=\"RANK_PHOTO %s\"",The_GetColorRows ());
-      if (ICanView == Usr_I_CAN)
+      if (ICanView == Usr_CAN)
 	 /***** User's photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
@@ -1359,7 +1359,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
                  Class[MeOrOther],
 	         The_GetSuffix (),
                  The_GetColorRows ());
-      if (ICanView == Usr_I_CAN)
+      if (ICanView == Usr_CAN)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);

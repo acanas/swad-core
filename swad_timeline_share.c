@@ -111,7 +111,7 @@ static void TmlSha_ShaNote (struct TmlNot_Note *Not)
    TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
-   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_I_CAN_NOT)
+   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_CAN_NOT)
       return;
 
    /***** Trivial check: Is note already shared by me? *****/
@@ -169,7 +169,7 @@ static void TmlSha_UnsNote (struct TmlNot_Note *Not)
    TmlNot_GetNoteDataByCod (Not);
 
    /***** Do some checks *****/
-   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_I_CAN_NOT)
+   if (TmlUsr_CheckIfICanFavSha (Not->NotCod,Not->UsrCod) == Usr_CAN_NOT)
       return;
 
    /***** Delete publication from database *****/

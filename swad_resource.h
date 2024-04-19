@@ -89,6 +89,6 @@ Rsc_Type_t Rsc_GetTypeFromString (const char *Str);
 
 bool Rsc_GetParLink (struct Rsc_Link *Link);
 
-Usr_ICan_t Rsc_CheckIfICanGetLink (void);
+Usr_Can_t Rsc_CheckIfICanGetLink (void);
 
 #endif

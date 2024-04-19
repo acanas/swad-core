@@ -76,7 +76,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Usr_ICan_t Grp_CheckIfICanChangeGrps (void);
+static Usr_Can_t Grp_CheckIfICanChangeGrps (void);
 
 static void Grp_ReqEditGroupsInternal (Ale_AlertType_t AlertTypeGroupTypes,const char *AlertTextGroupTypes,
                                        Ale_AlertType_t AlertTypeGroups,const char *AlertTextGroups);
@@ -107,7 +107,7 @@ static void Grp_WriteHeadingGroups (void);
 static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
-static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
+static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
                                                     unsigned *NumGrpsThisTypeIBelong);
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod);
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp);
@@ -135,13 +135,13 @@ static void Grp_PutParGrpCod (void *GrpCod);
 /************************ Check if I can change groups ***********************/
 /*****************************************************************************/
 
-static Usr_ICan_t Grp_CheckIfICanChangeGrps (void)
+static Usr_Can_t Grp_CheckIfICanChangeGrps (void)
   {
-   static Usr_ICan_t Grp_ICanChangeGrps[Rol_NUM_ROLES] =
+   static Usr_Can_t Grp_ICanChangeGrps[Rol_NUM_ROLES] =
      {
-      [Rol_STD    ] = Usr_I_CAN,
-      [Rol_TCH    ] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_STD    ] = Usr_CAN,
+      [Rol_TCH    ] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return Grp_ICanChangeGrps[Gbl.Usrs.Me.Role.Logged];
@@ -348,11 +348,11 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
    extern const char *Txt_Groups;
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
-   Usr_ICan_t ICanEdit;
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_I_CAN]) (void *Args) =
+   Usr_Can_t ICanEdit;
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
      {
-      [Usr_I_CAN_NOT] = NULL,
-      [Usr_I_CAN    ] = Grp_PutIconToEditGroups,
+      [Usr_CAN_NOT] = NULL,
+      [Usr_CAN    ] = Grp_PutIconToEditGroups,
      };
 
    /***** Trivial check: if no groups ==> nothing to do *****/
@@ -362,8 +362,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
    /***** Begin box *****/
    ICanEdit = (!Frm_CheckIfInside () &&
 	       (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
-							   Usr_I_CAN_NOT;
+	        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+							   Usr_CAN_NOT;
    Box_BoxBegin (Txt_Groups,
 		 FunctionToDrawContextualIcons[ICanEdit],NULL,
 		 Hlp_USERS_Groups,Box_CLOSABLE);
@@ -410,7 +410,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 static void Grp_PutCheckboxAllGrps (void)
   {
    extern const char *Txt_All_groups;
-   Usr_ICan_t ICanSelUnselGroup;
+   Usr_Can_t ICanSelUnselGroup;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -419,10 +419,10 @@ static void Grp_PutCheckboxAllGrps (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 ICanSelUnselGroup = Usr_I_CAN;
+	 ICanSelUnselGroup = Usr_CAN;
 	 break;
       default:
-	 ICanSelUnselGroup = Usr_I_CAN_NOT;
+	 ICanSelUnselGroup = Usr_CAN_NOT;
 	 break;
      }
 
@@ -430,7 +430,7 @@ static void Grp_PutCheckboxAllGrps (void)
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_INPUT_CHECKBOX ("AllGroups",HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
-			     ICanSelUnselGroup == Usr_I_CAN ? (Gbl.Crs.Grps.AllGrps ? " checked=\"checked\""
+			     ICanSelUnselGroup == Usr_CAN ? (Gbl.Crs.Grps.AllGrps ? " checked=\"checked\""
 										      " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 										      " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
 							      " disabled=\"disabled\"");
@@ -633,7 +633,7 @@ void Grp_ChangeMyGrps (Cns_QuietOrVerbose_t QuietOrVerbose)
    bool ChangesMade;
 
    /***** Can I change my groups? *****/
-   if (Grp_CheckIfICanChangeGrps () == Usr_I_CAN_NOT)
+   if (Grp_CheckIfICanChangeGrps () == Usr_CAN_NOT)
       return;
 
    /***** Get list of groups types and groups in this course *****/
@@ -692,7 +692,7 @@ void Grp_ChangeOtherUsrGrps (void)
    bool SelectionIsValid;
 
    /***** Can I change another user's groups? *****/
-   if (Grp_CheckIfICanChangeGrps () == Usr_I_CAN_NOT)
+   if (Grp_CheckIfICanChangeGrps () == Usr_CAN_NOT)
       return;
 
    /***** Get list of groups types and groups in current course *****/
@@ -1723,15 +1723,15 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    unsigned NumGrpsIBelong = 0;
    Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
 							      Frm_PUT_FORM;
-   Usr_ICan_t ICanEdit = (!Frm_CheckIfInside () &&
+   Usr_Can_t ICanEdit = (!Frm_CheckIfInside () &&
 	                  (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
-                        					      Usr_I_CAN_NOT;
-   Usr_ICan_t ICanChangeMyGrps = Usr_I_CAN_NOT;
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_I_CAN]) (void *Args) =
+                           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+                        					      Usr_CAN_NOT;
+   Usr_Can_t ICanChangeMyGrps = Usr_CAN_NOT;
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
      {
-      [Usr_I_CAN_NOT] = NULL,
-      [Usr_I_CAN    ] = Grp_PutIconToEditGroups,
+      [Usr_CAN_NOT] = NULL,
+      [Usr_CAN    ] = Grp_PutIconToEditGroups,
      };
 
    if (Gbl.Crs.Grps.NumGrps) // This course has groups
@@ -1764,8 +1764,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
 		 {
 		  if (Grp_ListGrpsForChangeMySelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-							&NumGrpsThisTypeIBelong) == Usr_I_CAN)
-		     ICanChangeMyGrps = Usr_I_CAN;
+							&NumGrpsThisTypeIBelong) == Usr_CAN)
+		     ICanChangeMyGrps = Usr_CAN;
 		  NumGrpsIBelong += NumGrpsThisTypeIBelong;
 		 }
 	 HTM_TABLE_End ();
@@ -1773,7 +1773,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 /***** End form *****/
 	 if (PutFormToChangeGrps)
 	   {
-	       if (ICanChangeMyGrps == Usr_I_CAN)
+	       if (ICanChangeMyGrps == Usr_CAN)
 		  Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
 							 Txt_Enrol_in_groups);
 	    Frm_EndForm ();
@@ -1842,7 +1842,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 /*****************************************************************************/
 // Returns true if I can change my selection
 
-static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
+static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
                                                     unsigned *NumGrpsThisTypeIBelong)
   {
    struct ListCodGrps LstGrpsIBelong;
@@ -1850,8 +1850,8 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    struct Group *Grp;
    bool IBelongToThisGroup;
    bool IBelongToAClosedGroup;
-   Usr_ICan_t ICanChangeMySelectionForThisGrpTyp;
-   Usr_ICan_t ICanChangeMySelectionForThisGrp;
+   Usr_Can_t ICanChangeMySelectionForThisGrpTyp;
+   Usr_Can_t ICanChangeMySelectionForThisGrp;
    char StrGrpCod[32];
 
    /***** Write heading *****/
@@ -1868,9 +1868,9 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       case Rol_STD:
 	 if (GrpTyp->MultipleEnrolment)	// Enrolment is multiple
 	   {
-	    for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN_NOT;
+	    for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
 		 NumGrpThisType < GrpTyp->NumGrps &&
-		 ICanChangeMySelectionForThisGrpTyp == Usr_I_CAN_NOT;
+		 ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
 		 NumGrpThisType++)
 	      {
 	       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
@@ -1878,10 +1878,10 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 		 {
 	          IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 	          if (IBelongToThisGroup)		// I belong to this group
-	             ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN;	// I can unregister from group
+	             ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can unregister from group
 	          else					// I don't belong
 	             if (Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)	// Group is not full
-	                ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN;	// I can register into group
+	                ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can register into group
 		 }
 	      }
 	   }
@@ -1902,12 +1902,12 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	      }
 
 	    if (IBelongToAClosedGroup)			// I belong to a closed group
-	       ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN_NOT;		// I can not unregister
+	       ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not unregister
 	    else					// I don't belong to a closed group
 	       /* Step 2: Check if I can register in at least one group to which I don't belong */
-	       for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN_NOT;
+	       for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
 		    NumGrpThisType < GrpTyp->NumGrps &&
-		    ICanChangeMySelectionForThisGrpTyp == Usr_I_CAN_NOT;
+		    ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
 		    NumGrpThisType++)
 		 {
 		  Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
@@ -1916,17 +1916,17 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 		    {
 		     IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 		     if (!IBelongToThisGroup)		// I don't belong to this group
-			ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN;	// I can register into this group
+			ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can register into this group
 		    }
 		 }
 	   }
 	 break;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN;		// I can not register/unregister
+	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;		// I can not register/unregister
 	 break;
       default:
-	 ICanChangeMySelectionForThisGrpTyp = Usr_I_CAN_NOT;		// I can not register/unregister
+	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not register/unregister
 	 break;
      }
 
@@ -1941,25 +1941,25 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       /* Selection disabled? */
       switch (ICanChangeMySelectionForThisGrpTyp)	// I can change my selection for this group type
 	{
-	 case Usr_I_CAN:
-	    ICanChangeMySelectionForThisGrp = Usr_I_CAN;
+	 case Usr_CAN:
+	    ICanChangeMySelectionForThisGrp = Usr_CAN;
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
 	       switch (Grp->ClosedOrOpen)
 	         {
 	          case CloOpe_OPEN:		// If group is open
 		     if (!IBelongToThisGroup &&			// I don't belong to group
 			 Grp->NumUsrs[Rol_STD] >= Grp->MaxStudents)	// Group is full
-			ICanChangeMySelectionForThisGrp = Usr_I_CAN_NOT;
+			ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
 		     break;
 		  case CloOpe_CLOSED:		// If group is closed
 		  default:
-		     ICanChangeMySelectionForThisGrp = Usr_I_CAN_NOT;
+		     ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
 		     break;
 	         }
 	    break;
-	 case Usr_I_CAN_NOT:	// I can not change my selection for this group type
+	 case Usr_CAN_NOT:	// I can not change my selection for this group type
 	 default:
-	    ICanChangeMySelectionForThisGrp = Usr_I_CAN_NOT;
+	    ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
 	    break;
 	}
 
@@ -1980,7 +1980,7 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
 				   Grp->GrpCod,Grp->GrpCod,
 				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
-				   ICanChangeMySelectionForThisGrp == Usr_I_CAN ? "" :
+				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
 								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
 											               " disabled=\"disabled\"");	// I can not register
 	       else	// If the enrolment is not mandatory, I can select no groups
@@ -1989,7 +1989,7 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
 				   Grp->GrpCod,Grp->GrpCod,
 				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
-				   ICanChangeMySelectionForThisGrp == Usr_I_CAN ? "" :
+				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
 								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
 											               " disabled=\"disabled\"",	// I can not register
 				   GrpTyp->GrpTypCod,GrpTyp->NumGrps);
@@ -2000,7 +2000,7 @@ static Usr_ICan_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
 				   Grp->GrpCod,Grp->GrpCod,
 				   IBelongToThisGroup ? " checked=\"checked\"" : "",
-				   ICanChangeMySelectionForThisGrp == Usr_I_CAN ? "" :
+				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
 								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
 											               " disabled=\"disabled\"");	// I can not register
 
@@ -2126,7 +2126,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    unsigned NumGrpSel;
    struct ListCodGrps LstGrpsIBelong;
    bool IBelongToThisGroup;
-   Usr_ICan_t ICanSelUnselGroup;
+   Usr_Can_t ICanSelUnselGroup;
    bool Checked;
    struct Group *Grp;
    Rol_Role_t Role;
@@ -2151,24 +2151,24 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
       /* Check if I can select / unselect this group */
       if (IBelongToThisGroup)
-	 ICanSelUnselGroup = Usr_I_CAN;
+	 ICanSelUnselGroup = Usr_CAN;
       else
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
 	    case Rol_NET:
-	       ICanSelUnselGroup = IBelongToThisGroup ? Usr_I_CAN :
-							Usr_I_CAN_NOT;
+	       ICanSelUnselGroup = IBelongToThisGroup ? Usr_CAN :
+							Usr_CAN_NOT;
 	       break;
 	    case Rol_TCH:
 	    case Rol_DEG_ADM:
 	    case Rol_CTR_ADM:
 	    case Rol_INS_ADM:
 	    case Rol_SYS_ADM:
-	       ICanSelUnselGroup = Usr_I_CAN;
+	       ICanSelUnselGroup = Usr_CAN;
 	       break;
 	    default:
-	       ICanSelUnselGroup = Usr_I_CAN_NOT;
+	       ICanSelUnselGroup = Usr_CAN_NOT;
 	       break;
 	   }
 
@@ -2195,7 +2195,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 				Grp->GrpCod,Grp->GrpCod,
 				Checked ? " checked=\"checked\"" :
 					  "",
-				ICanSelUnselGroup == Usr_I_CAN ? " onclick=\"checkParent(this,'AllGroups')\"" :
+				ICanSelUnselGroup == Usr_CAN ? " onclick=\"checkParent(this,'AllGroups')\"" :
 								 " disabled=\"disabled\"");
 	 HTM_TD_End ();
 
@@ -2211,11 +2211,11 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    /***** Write rows to select the students who don't belong to any group *****/
    /* To get the students who don't belong to a type of group, use group code -(GrpTyp->GrpTypCod) */
    /* Write checkbox to select the group */
-   ICanSelUnselGroup = (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_I_CAN :
-							      Usr_I_CAN_NOT;
+   ICanSelUnselGroup = (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_CAN :
+							      Usr_CAN_NOT;
    switch (ICanSelUnselGroup)
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 if (Gbl.Crs.Grps.AllGrps)
 	    Checked = true;
 	 else
@@ -2228,7 +2228,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 		  break;
 		 }
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 Checked = false;
 	 break;
@@ -2241,7 +2241,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 			     "id=\"Grp%ld\" value=\"%ld\"%s"
 			     " onclick=\"checkParent(this,'AllGroups')\"",
 			     -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod,
-			     ICanSelUnselGroup == Usr_I_CAN ? (Checked ? " checked=\"checked\"" :
+			     ICanSelUnselGroup == Usr_CAN ? (Checked ? " checked=\"checked\"" :
 				                                         "") :
 				                              " disabled=\"disabled\"");
       HTM_TD_End ();
@@ -3087,7 +3087,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
       return false;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
       return false;
 
    /***** 5. Fast check: It's me? *****/
@@ -4376,8 +4376,8 @@ Grp_WhichGroups_t Grp_GetParWhichGroups (void)
 	    If I belong       to this course ==> see only my groups
 	    If I don't belong to this course ==> see all groups
 	    */
-	    WhichGroupsDefault = Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] ? Grp_MY_GROUPS :
-									 Grp_ALL_GROUPS;
+	    WhichGroupsDefault = (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG) ? Grp_MY_GROUPS :
+											   Grp_ALL_GROUPS;
 	    break;
 	 case ActSeeMyTT:	// Show my timetable
 	 case ActPrnMyTT:	// Print my timetable

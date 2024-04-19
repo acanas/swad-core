@@ -70,11 +70,11 @@ extern struct Globals Gbl;
 
 void Rol_SetMyRoles (void)
   {
-   Usr_ICan_t ICanBeAdm[Hie_NUM_LEVELS] =
+   Usr_Can_t ICanBeAdm[Hie_NUM_LEVELS] =
      {
-      [Hie_INS] = Usr_I_CAN_NOT,
-      [Hie_CTR] = Usr_I_CAN_NOT,
-      [Hie_DEG] = Usr_I_CAN_NOT,
+      [Hie_INS] = Usr_CAN_NOT,
+      [Hie_CTR] = Usr_CAN_NOT,
+      [Hie_DEG] = Usr_CAN_NOT,
      };
 
    /***** Get my role in current course if not yet filled *****/
@@ -109,90 +109,116 @@ void Rol_SetMyRoles (void)
      {
       /* Check if I am and administrator of current institution */
       ICanBeAdm[Hie_INS] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Hie_INS) ? Usr_I_CAN :
-							      Usr_I_CAN_NOT;
+						   Hie_INS) ? Usr_CAN :
+							      Usr_CAN_NOT;
       if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	{
 	 /* Check if I am and administrator of current center */
 	 ICanBeAdm[Hie_CTR] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Hie_CTR) ? Usr_I_CAN :
-							         Usr_I_CAN_NOT;
+						      Hie_CTR) ? Usr_CAN :
+							         Usr_CAN_NOT;
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	    /* Check if I am and administrator of current degree */
 	    ICanBeAdm[Hie_DEG] = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-							 Hie_DEG) ? Usr_I_CAN :
-							            Usr_I_CAN_NOT;
+							 Hie_DEG) ? Usr_CAN :
+							            Usr_CAN_NOT;
 	}
      }
 
    /***** Check if I belong to current course *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
-      Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
-      if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-         Gbl.Usrs.Me.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Me.UsrDat);
-      else
-         Gbl.Usrs.Me.UsrDat.Accepted = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] =
+      Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat) ? Usr_BELONG :
+								Usr_DONT_BELONG;
+      switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+	{
+	 case Usr_BELONG:
+	    Gbl.Usrs.Me.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Me.UsrDat);
+	    break;
+	 case Usr_DONT_BELONG:
+	 default:
+	    Gbl.Usrs.Me.UsrDat.Accepted = false;
+	    break;
+	}
      }
    else					// No course selected
      {
-      Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] = Usr_DONT_BELONG;
       Gbl.Usrs.Me.UsrDat.Accepted = false;
      }
 
    /***** Check if I belong to current degree *****/
    if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
-     {
-      if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-	 Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] = true;
-      else
-	 Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] = Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
-     }
+      switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+	{
+	 case Usr_BELONG:
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] = Usr_BELONG;
+	    break;
+	 case Usr_DONT_BELONG:
+	 default:
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] = Hie_CheckIfIBelongTo (Hie_DEG,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+	    break;
+	}
    else
-      Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG] = Usr_DONT_BELONG;
 
    /***** Check if I belong to current center *****/
    if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
-     {
-      if (Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG])
-         Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] = true;
-      else
-         Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] = Hie_CheckIfIBelongTo (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
-     }
+      switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_DEG])
+	{
+	 case Usr_BELONG:
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] = Usr_BELONG;
+	    break;
+	 case Usr_DONT_BELONG:
+	 default:
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] = Hie_CheckIfIBelongTo (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+	    break;
+	}
    else
-      Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR] = Usr_DONT_BELONG;
 
    /***** Check if I belong to current institution *****/
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
-     {
-      if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR])
-	 Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] = true;
-      else
-	 Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] = Hie_CheckIfIBelongTo (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod);
-     }
+      switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CTR])
+	{
+	 case Usr_BELONG:
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] = Usr_BELONG;
+	    break;
+	 case Usr_DONT_BELONG:
+	 default:
+	    Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] = Hie_CheckIfIBelongTo (Hie_INS,
+									  Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	    break;
+	}
    else
-      Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] = false;
+      Gbl.Usrs.Me.IBelongToCurrent[Hie_INS] = Usr_DONT_BELONG;
 
    /***** Build my list of available roles for current course *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)
-     {
-      if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-         Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs);
-      else if (Gbl.Usrs.Me.Role.Max >= Rol_STD)
-         Gbl.Usrs.Me.Role.Available = (1 << Rol_USR);
-      else
-         Gbl.Usrs.Me.Role.Available = (1 << Rol_GST);
-     }
+      switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+	{
+	 case Usr_BELONG:
+	    Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs);
+	    break;
+	 case Usr_DONT_BELONG:
+	 default:
+	    if (Gbl.Usrs.Me.Role.Max >= Rol_STD)
+	       Gbl.Usrs.Me.Role.Available = (1 << Rol_USR);
+	    else
+	       Gbl.Usrs.Me.Role.Available = (1 << Rol_GST);
+	    break;
+	}
    else if (Gbl.Usrs.Me.Role.Max >= Rol_STD)
       Gbl.Usrs.Me.Role.Available = (1 << Rol_USR);
    else
       Gbl.Usrs.Me.Role.Available = (1 << Rol_GST);
 
-   if (ICanBeAdm[Hie_INS] == Usr_I_CAN)
+   if (ICanBeAdm[Hie_INS] == Usr_CAN)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_INS_ADM);
-   if (ICanBeAdm[Hie_CTR] == Usr_I_CAN)
+   if (ICanBeAdm[Hie_CTR] == Usr_CAN)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_CTR_ADM);
-   if (ICanBeAdm[Hie_DEG] == Usr_I_CAN)
+   if (ICanBeAdm[Hie_DEG] == Usr_CAN)
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_DEG_ADM);
    if (Usr_CheckIfUsrIsSuperuser (Gbl.Usrs.Me.UsrDat.UsrCod))
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_SYS_ADM);

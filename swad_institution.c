@@ -89,7 +89,7 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
                                       bool GetNumUsrsWhoClaimToBelongToIns);
 
 static void Ins_ListInstitutionsForEdition (void);
-static Usr_ICan_t Ins_CheckIfICanEdit (struct Hie_Node *Ins);
+static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins);
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FldName,const char *NewName);
 
@@ -331,7 +331,7 @@ static void Ins_ListInstitutions (void)
 static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit institutions *****/
-   if (Hie_CheckIfICanEdit () == Usr_I_CAN)
+   if (Hie_CheckIfICanEdit () == Usr_CAN)
       Ins_PutIconToEditInstitutions ();
 
    /***** Put icon to show a figure *****/
@@ -882,7 +882,7 @@ static void Ins_ListInstitutionsForEdition (void)
    struct Hie_Node *Ins;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
-   Usr_ICan_t ICanEdit;
+   Usr_Can_t ICanEdit;
    unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
@@ -918,7 +918,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Put icon to remove institution */
 	    HTM_TD_Begin ("class=\"BT\"");
-	       if (ICanEdit == Usr_I_CAN_NOT ||
+	       if (ICanEdit == Usr_CAN_NOT ||
 		   NumCtrs ||		// Institution has centers
 		   NumUsrsIns ||		// Institution has users
 		   NumUsrsInCrssOfIns)	// Institution has users
@@ -945,14 +945,14 @@ static void Ins_ListInstitutionsForEdition (void)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ins->HieCod,
 				           Names,
-				           ICanEdit == Usr_I_CAN ? Frm_PUT_FORM :
+				           ICanEdit == Usr_CAN ? Frm_PUT_FORM :
 				        			   Frm_DONT_PUT_FORM);
 
 	    /* Institution WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       switch (ICanEdit)
 		 {
-		  case Usr_I_CAN:
+		  case Usr_CAN:
 		     Frm_BeginForm (ActChgInsWWW);
 			ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
 			HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
@@ -961,7 +961,7 @@ static void Ins_ListInstitutionsForEdition (void)
 				       The_GetSuffix ());
 		     Frm_EndForm ();
 		     break;
-		  case Usr_I_CAN_NOT:
+		  case Usr_CAN_NOT:
 		  default:
 		     Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
 		     HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
@@ -997,8 +997,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution status */
-	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_I_CAN :
-										  Usr_I_CAN_NOT,
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+										  Usr_CAN_NOT,
 	                                 Ins->Status,ActChgInsSta,Ins->HieCod,
 	                                 Txt_INSTITUTION_STATUS);
 
@@ -1016,12 +1016,12 @@ static void Ins_ListInstitutionsForEdition (void)
 /************ Check if I can edit, remove, etc. an institution ***************/
 /*****************************************************************************/
 
-static Usr_ICan_t Ins_CheckIfICanEdit (struct Hie_Node *Ins)
+static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins)
   {
    return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
            ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod)) ? Usr_I_CAN :	// I am the requester
-        							 Usr_I_CAN_NOT;
+           Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
+        							 Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -1045,7 +1045,7 @@ void Ins_RemoveInstitution (void)
    Hie_GetDataByCod[Hie_INS] (Ins_EditingIns);
 
    /***** Check if I can edit this institution *****/
-   if (Ins_CheckIfICanEdit (Ins_EditingIns) == Usr_I_CAN_NOT)
+   if (Ins_CheckIfICanEdit (Ins_EditingIns) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Check if this institution has centers or users *****/

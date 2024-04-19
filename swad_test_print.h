@@ -131,7 +131,7 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade);
 void TstPrn_WriteAnswersExam (struct Usr_Data *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
 			      struct Qst_Question *Question,
-			      Usr_ICan_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
+			      Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			      const char *ClassTxt,
 			      const char *ClassFeedback);
 

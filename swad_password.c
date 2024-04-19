@@ -178,11 +178,11 @@ void Pwd_UpdateOtherUsrPwd (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    /***** Check and update password *****/
 	    Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;

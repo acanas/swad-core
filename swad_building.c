@@ -60,7 +60,7 @@ static struct Bld_Building *Bld_EditingBuilding = NULL;	// Static variable to ke
 /*****************************************************************************/
 
 static Bld_Order_t Bld_GetParBuildingOrder (void);
-static Usr_ICan_t Bld_CheckIfICanCreateBuildings (void);
+static Usr_Can_t Bld_CheckIfICanCreateBuildings (void);
 static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args);
 static void Bld_PutIconToEditBuildings (void);
 static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args);
@@ -196,10 +196,10 @@ static Bld_Order_t Bld_GetParBuildingOrder (void)
 /********************* Check if I can create buildings ***********************/
 /*****************************************************************************/
 
-static Usr_ICan_t Bld_CheckIfICanCreateBuildings (void)
+static Usr_Can_t Bld_CheckIfICanCreateBuildings (void)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_I_CAN :
-						     Usr_I_CAN_NOT;
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ? Usr_CAN :
+						     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -209,7 +209,7 @@ static Usr_ICan_t Bld_CheckIfICanCreateBuildings (void)
 static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit buildings *****/
-   if (Bld_CheckIfICanCreateBuildings () == Usr_I_CAN)
+   if (Bld_CheckIfICanCreateBuildings () == Usr_CAN)
       Bld_PutIconToEditBuildings ();
   }
 

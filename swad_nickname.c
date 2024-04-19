@@ -425,7 +425,7 @@ void Nck_RemoveOtherUsrNick (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    /***** Get nickname from form *****/
 	    Par_GetParText ("Nick",NickWithoutArr,
 			      Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
@@ -441,7 +441,7 @@ void Nck_RemoveOtherUsrNick (void)
 	    /***** Show user's account again *****/
 	    Acc_ShowFormChgOtherUsrAccount ();
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -473,14 +473,14 @@ void Nck_ChangeOtherUsrNick (void)
    if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
       switch (Usr_CheckIfICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 case Usr_I_CAN:
+	 case Usr_CAN:
 	    /***** Update user's nickname *****/
 	    Nck_ChangeUsrNick (&Gbl.Usrs.Other.UsrDat);
 
 	    /***** Show user's account again *****/
 	    Acc_ShowFormChgOtherUsrAccount ();
 	    break;
-	 case Usr_I_CAN_NOT:
+	 case Usr_CAN_NOT:
 	 default:
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;

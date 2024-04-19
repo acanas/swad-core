@@ -323,11 +323,11 @@ void Prg_ShowAllItems (Prg_ListingType_t ListingType,
 /******************* Check if I can create program items *********************/
 /*****************************************************************************/
 
-Usr_ICan_t Prg_CheckIfICanEditProgram (void)
+Usr_Can_t Prg_CheckIfICanEditProgram (void)
   {
    return (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-        					     Usr_I_CAN_NOT;
+           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+        					     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -337,7 +337,7 @@ Usr_ICan_t Prg_CheckIfICanEditProgram (void)
 static void Prg_PutIconsListItems (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit program *****/
-   if (Prg_CheckIfICanEditProgram () == Usr_I_CAN)
+   if (Prg_CheckIfICanEditProgram () == Usr_CAN)
       Prg_PutIconToEditProgram ();
 
    /***** Put icon to show a figure *****/
@@ -353,7 +353,7 @@ static void Prg_PutIconsEditItems (__attribute__((unused)) void *Args)
    /***** Put icon to view program *****/
    Prg_PutIconToViewProgram ();
 
-   if (Prg_CheckIfICanEditProgram () == Usr_I_CAN)
+   if (Prg_CheckIfICanEditProgram () == Usr_CAN)
      {
       /***** Put icon to create a new program item *****/
       Prg_PutIconToCreateNewItem ();
@@ -438,7 +438,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
       [ConExp_CONTRACTED] = "",			// Not expanded
       [ConExp_EXPANDED  ] = " rowspan=\"2\"",	// Expanded
      };
-   HidVis_HiddenOrVisible_t HiddenOrVisible = HidVis_HIDDEN;	// Initialized to avoid warning
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
    char *Id;
    unsigned ColSpan;
    unsigned NumCol;
@@ -450,11 +450,12 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
    Prg_SetHiddenLevel (Item->Hierarchy.Level,Item->Hierarchy.HiddenOrVisible);
    switch (Item->Hierarchy.HiddenOrVisible)
      {
-      case HidVis_HIDDEN:	// this item is marked as hidden
-         HiddenOrVisible = HidVis_HIDDEN;
-	 break;
       case HidVis_VISIBLE:	// this item is not marked as hidden
          HiddenOrVisible = Prg_CheckIfAnyHigherLevelIsHidden (Item->Hierarchy.Level);
+	 break;
+      case HidVis_HIDDEN:	// this item is marked as hidden
+      default:
+         HiddenOrVisible = HidVis_HIDDEN;
 	 break;
      }
 

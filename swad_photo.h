@@ -95,7 +95,7 @@ struct Pho_DegPhotos
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-Usr_ICan_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat);
+Usr_Can_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat);
 void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat);
 void Pho_ReqMyPhoto (void);
 void Pho_SendPhotoUsr (void);

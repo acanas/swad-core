@@ -106,7 +106,7 @@ long Act_GetActCod (Act_Action_t Action);
 signed int Act_GetIndexInMenu (Act_Action_t Action);
 Tab_Tab_t Act_GetTab (Act_Action_t Action);
 Act_Action_t Act_GetSuperAction (Act_Action_t Action);
-Usr_ICan_t Act_CheckIfICanExecuteAction (Act_Action_t Action);
+Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action);
 Act_Content_t Act_GetContentType (Act_Action_t Action);
 Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action);
 void (*Act_GetFunctionPriori (Act_Action_t Action)) (void);

@@ -234,8 +234,8 @@ static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
 static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
-                                                    Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
-static void Usr_PutOptionsListUsrs (const Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+                                                    Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
@@ -774,11 +774,11 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
 /**************** Check if I can change another user's data ******************/
 /*****************************************************************************/
 
-Usr_ICan_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
+Usr_Can_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
   {
    /***** I can change my data *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -786,20 +786,20 @@ Usr_ICan_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
       case Rol_TCH:
 	 /* Check 1: I can change data of users who do not exist in database */
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
-            return Usr_I_CAN;
+            return Usr_CAN;
 
          /* Check 2: I change data of users without password */
          if (!UsrDat->Password[0])	// User has no password (never logged)
-            return Usr_I_CAN;
+            return Usr_CAN;
 
-         return Usr_I_CAN_NOT;
+         return Usr_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
          return Usr_CheckIfICanEditOtherUsr (UsrDat);
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -807,11 +807,11 @@ Usr_ICan_t Usr_ICanChangeOtherUsrData (const struct Usr_Data *UsrDat)
 /***************** Check if I can edit another user's data *******************/
 /*****************************************************************************/
 
-Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
+Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
   {
    /***** I can edit me *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -823,8 +823,8 @@ Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      true))	// count only accepted courses
 	    // Degree admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
-	       return Usr_I_CAN;
-	 return Usr_I_CAN_NOT;
+	       return Usr_CAN;
+	 return Usr_CAN_NOT;
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can edit from current center who have accepted */
@@ -833,8 +833,8 @@ Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      true))	// count only accepted courses
 	    // Center admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
-	       return Usr_I_CAN;
-	 return Usr_I_CAN_NOT;
+	       return Usr_CAN;
+	 return Usr_CAN_NOT;
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can edit from current institution who have accepted */
@@ -843,12 +843,12 @@ Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 				      true))	// count only accepted courses
 	    // Institution admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
-	       return Usr_I_CAN;
-	 return Usr_I_CAN_NOT;
+	       return Usr_CAN;
+	 return Usr_CAN_NOT;
       case Rol_SYS_ADM:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -856,51 +856,51 @@ Usr_ICan_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 /************ Check if I can view the record card of a student ***************/
 /*****************************************************************************/
 
-Usr_ICan_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
+Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a student? *****/
    if (UsrDat->Roles.InCurrentCrs != Rol_STD)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 5. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return Usr_I_CAN_NOT;
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+      return Usr_CAN_NOT;
 
    /***** 7. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 8. Fast / slow check: Does he/she belong to the current course? *****/
    if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 9. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
-								       Usr_I_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
+								       Usr_CAN_NOT;
       case Rol_TCH:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -911,70 +911,70 @@ Usr_ICan_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
 // - a non-editing teacher
 // - or a teacher
 
-Usr_ICan_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
+Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
    return (UsrDat->Roles.InCurrentCrs == Rol_NET ||
-           UsrDat->Roles.InCurrentCrs == Rol_TCH) ? Usr_I_CAN :
-						    Usr_I_CAN_NOT;
+           UsrDat->Roles.InCurrentCrs == Rol_TCH) ? Usr_CAN :
+						    Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
 /********* Check if I can view test/exam/match result of another user ********/
 /*****************************************************************************/
 
-Usr_ICan_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
+Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 4. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return Usr_I_CAN_NOT;
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+      return Usr_CAN_NOT;
 
    /***** 6. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 7. Fast check: Does he/she belong to the current course? *****/
    if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 8. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
-								       Usr_I_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
+								       Usr_CAN_NOT;
       case Rol_TCH:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -982,47 +982,47 @@ Usr_ICan_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
 /********** Check if I can view assigments / works of another user ***********/
 /*****************************************************************************/
 
-Usr_ICan_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
+Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
    // Only users beloging to course can have files in assignments/works
    if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 5. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return Usr_I_CAN_NOT;
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+      return Usr_CAN_NOT;
 
    /***** 7. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 8. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
-								       Usr_I_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
+								       Usr_CAN_NOT;
       case Rol_TCH:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -1030,42 +1030,42 @@ Usr_ICan_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
 /************** Check if I can view attendance of another user ***************/
 /*****************************************************************************/
 
-Usr_ICan_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
+Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 2. Fast check: Is it a valid user code? *****/
    if (UsrDat->UsrCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
-      return Usr_I_CAN_NOT;
+      return Usr_CAN_NOT;
 
    /***** 4. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
-      return Usr_I_CAN_NOT;
+   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+      return Usr_CAN_NOT;
 
    /***** 6. Fast check: It's me? *****/
    if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_I_CAN;
+      return Usr_CAN;
 
    /***** 7. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_I_CAN :
-								       Usr_I_CAN_NOT;
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat) ? Usr_CAN :
+								       Usr_CAN_NOT;
       case Rol_TCH:
-	 return Usr_I_CAN;
+	 return Usr_CAN;
       default:
-	 return Usr_I_CAN_NOT;
+	 return Usr_CAN_NOT;
      }
   }
 
@@ -2622,22 +2622,22 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct Usr_Data *UsrDat,
 
 static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
   {
-   Usr_ICan_t ShowEmail;
+   Usr_Can_t ShowEmail;
    char MailLink[7 + Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// mailto:mail_address
 
    if (UsrDat->Email[0])
      {
       ShowEmail = Mai_ICanSeeOtherUsrEmail (UsrDat);
-      if (ShowEmail == Usr_I_CAN)
+      if (ShowEmail == Usr_CAN)
          snprintf (MailLink,sizeof (MailLink),"mailto:%s",UsrDat->Email);
      }
    else
-      ShowEmail = Usr_I_CAN_NOT;
+      ShowEmail = Usr_CAN_NOT;
    Usr_WriteUsrData (BgColor,
-                     UsrDat->Email[0] ? (ShowEmail == Usr_I_CAN ? UsrDat->Email :
+                     UsrDat->Email[0] ? (ShowEmail == Usr_CAN ? UsrDat->Email :
                 						  "********") :
                 	                "&nbsp;",
-                     ShowEmail == Usr_I_CAN ? MailLink :
+                     ShowEmail == Usr_CAN ? MailLink :
                 			      NULL,
                      true,UsrDat->Accepted);
   }
@@ -5022,7 +5022,7 @@ void Usr_SeeGuests (void)
    extern const char *Hlp_USERS_Guests;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
    /***** Contextual menu *****/
@@ -5142,7 +5142,7 @@ void Usr_SeeStudents (void)
    extern const char *Hlp_USERS_Students;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
    /***** Put contextual links *****/
@@ -5301,7 +5301,7 @@ void Usr_SeeTeachers (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    unsigned NumUsrs;
-   Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Frm_PutForm_t PutForm;
 
    /***** Put contextual links *****/
@@ -5477,7 +5477,7 @@ void Usr_SeeTeachers (void)
 // Returns true if any option is allowed
 
 static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
-                                                    Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+                                                    Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    Usr_ListUsrsOption_t Opt;
 
@@ -5486,14 +5486,14 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
-      ICanChooseOption[Opt] = Usr_I_CAN_NOT;
+      ICanChooseOption[Opt] = Usr_CAN_NOT;
 
    /* Activate some options depending on users' role, on my role, etc. */
    switch (UsrsRole)
      {
       case Rol_GST:
-	 ICanChooseOption[Usr_OPTION_RECORDS]    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_I_CAN :
-											      Usr_I_CAN_NOT;
+	 ICanChooseOption[Usr_OPTION_RECORDS]    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+											      Usr_CAN_NOT;
 	 break;
       case Rol_STD:
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
@@ -5503,16 +5503,16 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
-											        Usr_I_CAN_NOT;
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+											        Usr_CAN_NOT;
 
          ICanChooseOption[Usr_OPTION_HOMEWORK]   =
          ICanChooseOption[Usr_OPTION_ATTENDANCE] =
          ICanChooseOption[Usr_OPTION_EMAIL]      = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
-											        Usr_I_CAN_NOT;
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+											        Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
@@ -5523,13 +5523,13 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
-											        Usr_I_CAN_NOT;
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+											        Usr_CAN_NOT;
          ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_I_CAN :
-											        Usr_I_CAN_NOT;
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+											        Usr_CAN_NOT;
 	 break;
       default:
 	 return Frm_DONT_PUT_FORM;
@@ -5539,7 +5539,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
-      if (ICanChooseOption[Opt] == Usr_I_CAN)
+      if (ICanChooseOption[Opt] == Usr_CAN)
 	 return Frm_PUT_FORM;
 
    return Frm_DONT_PUT_FORM;
@@ -5550,7 +5550,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 /*****************************************************************************/
 // Returns true if at least one action can be shown
 
-static void Usr_PutOptionsListUsrs (const Usr_ICan_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    extern const char *Txt_View_records;
    extern const char *Txt_View_homework;
@@ -5584,7 +5584,7 @@ static void Usr_PutOptionsListUsrs (const Usr_ICan_t ICanChooseOption[Usr_LIST_U
       for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	   Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	   Opt++)
-	 if (ICanChooseOption[Opt] == Usr_I_CAN)
+	 if (ICanChooseOption[Opt] == Usr_CAN)
 	    Usr_ShowOneListUsrsOption (Opt,*Label[Opt]);
 
    /* End list of options */

@@ -128,7 +128,7 @@ void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod);
 //--------------------------------- Groups ------------------------------------
 void Exa_DB_CreateGrpAssociatedToSes (long SesCod,long GrpCod);
 unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod);
-Usr_ICan_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
+Usr_Can_t Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
 void Exa_DB_RemoveAllGrpsFromExa (long ExaCod);
 void Exa_DB_RemoveAllGrpsFromCrs (long CrsCod);
 void Exa_DB_RemoveAllGrpsFromSes (long SesCod);

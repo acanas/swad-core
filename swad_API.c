@@ -264,7 +264,7 @@ static void API_CopyListUsers (struct soap *soap,
 			       struct swad__getUsersOutput *getUsersOut);
 static void API_CopyUsrData (struct soap *soap,
 			     struct swad__user *Usr,struct Usr_Data *UsrDat,
-			     Usr_ICan_t ICanSeeUsrID);
+			     Usr_Can_t ICanSeeUsrID);
 
 static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
 						    long AttCod,char **ListGroups);
@@ -1743,7 +1743,7 @@ static void API_CopyListUsers (struct soap *soap,
    unsigned NumUsrs;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
-   Usr_ICan_t ICanSeeUsrID;
+   Usr_Can_t ICanSeeUsrID;
 
    /***** Initialize result *****/
    getUsersOut->numUsers = 0;
@@ -2191,7 +2191,7 @@ int swad__sendMyGroups (struct soap *soap,
 
 static void API_CopyUsrData (struct soap *soap,
 			     struct swad__user *Usr,struct Usr_Data *UsrDat,
-			     Usr_ICan_t ICanSeeUsrID)
+			     Usr_Can_t ICanSeeUsrID)
   {
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    const char *FirstID;
@@ -2206,7 +2206,7 @@ static void API_CopyUsrData (struct soap *soap,
    Str_Copy (Usr->userNickname,UsrDat->Nickname,Length);
 
    /* Copy user's first ID */
-   if (ICanSeeUsrID == Usr_I_CAN && UsrDat->IDs.List)
+   if (ICanSeeUsrID == Usr_CAN && UsrDat->IDs.List)
       FirstID = UsrDat->IDs.List[0].ID;
    else	// Hide user's ID
       FirstID = "********";
@@ -3262,7 +3262,7 @@ int swad__sendMessage (struct soap *soap,
 	       API_CopyUsrData (soap,
 				&(sendMessageOut->usersArray.__ptr[NumUsr]),
 				&Gbl.Usrs.Other.UsrDat,
-				Usr_I_CAN_NOT);
+				Usr_CAN_NOT);
 	      }
 	}
      }
@@ -4394,7 +4394,7 @@ int swad__getMatchStatus (struct soap *soap,
 				  "Requester must be a student in the course");
 
    /***** Can I play this match? *****/
-   if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_I_CAN_NOT)
+   if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN_NOT)
       return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester can not join this match");
@@ -4697,7 +4697,7 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Get directory tree into XML file */
    XML_WriteStartFile (XML,"tree",false);
-   if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_IS_FOLDER,
+   if (Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_IS_FOLDER,
                                                  Gbl.FileBrowser.FilFolLnk.Full) == HidVis_VISIBLE)
       API_ListDir (XML,1,
                    Gbl.FileBrowser.Path.RootFolder,
@@ -4811,7 +4811,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
    /***** Is this row hidden or visible? *****/
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
        Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP)
-      if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
+      if (Brw_CheckIfFileOrFolderIsHiddenOrVisible (FileType,
                                                     Gbl.FileBrowser.FilFolLnk.Full) == HidVis_HIDDEN)
 	 return false;
 
@@ -5263,7 +5263,7 @@ int swad__getLastLocation (struct soap *soap,
    */
    switch (Roo_DB_CheckIfICanSeeUsrLocation ((long) userCode))
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Get list of locations *****/
 	 NumLocs = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);
 	 API_GetLocationData (soap,
@@ -5271,7 +5271,7 @@ int swad__getLastLocation (struct soap *soap,
 				&(getLastLocationOut->checkinTime),	// Get check in time
 				&mysql_res,NumLocs);
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
 	 /* I can not see user's location ==> reset output */
 	 API_ResetLocation (soap, &(getLastLocationOut->location));

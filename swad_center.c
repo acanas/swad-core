@@ -89,7 +89,7 @@ static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 				 struct Map_Coordinates *Coord);
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
-static Usr_ICan_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr);
+static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 
@@ -289,7 +289,7 @@ static void Ctr_ListCenters (void)
 static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit centers *****/
-   if (Hie_CheckIfICanEdit () == Usr_I_CAN)
+   if (Hie_CheckIfICanEdit () == Usr_CAN)
       Ctr_PutIconToEditCenters ();
 
    /***** Put icon to show a figure *****/
@@ -735,7 +735,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    const struct Plc_Place *Plc;
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
-   Usr_ICan_t ICanEdit;
+   Usr_Can_t ICanEdit;
    unsigned NumDegs;
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
@@ -771,7 +771,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	    /* Put icon to remove center */
 	    HTM_TD_Begin ("class=\"BT\"");
-	       if (ICanEdit == Usr_I_CAN_NOT ||		// I cannot edit
+	       if (ICanEdit == Usr_CAN_NOT ||		// I cannot edit
 		   NumDegs ||				// Center has degrees
 		   NumUsrsCtr ||			// Center has users who claim to belong to it
 		   NumUsrsInCrssOfCtr)			// Center has users
@@ -795,7 +795,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       switch (ICanEdit)
 		 {
-		  case Usr_I_CAN:
+		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCtrPlc);
 			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
 			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
@@ -821,7 +821,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			HTM_SELECT_End ();
 		     Frm_EndForm ();
 		     break;
-		  case Usr_I_CAN_NOT:
+		  case Usr_CAN_NOT:
 		  default:
 		     for (NumPlc = 0;
 			  NumPlc < Places->Num;
@@ -838,14 +838,14 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    Nam_ExistingShortAndFullNames (ActionRename,
 				           ParCod_OthHie,Ctr->HieCod,
 				           Names,
-				           ICanEdit == Usr_I_CAN ? Frm_PUT_FORM :
+				           ICanEdit == Usr_CAN ? Frm_PUT_FORM :
 				        			   Frm_DONT_PUT_FORM);
 
 	    /* Center WWW */
 	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       switch (ICanEdit)
 		 {
-		  case Usr_I_CAN:
+		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCtrWWW);
 			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
 			HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
@@ -854,7 +854,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 				       The_GetSuffix ());
 		     Frm_EndForm ();
 		     break;
-		  case Usr_I_CAN_NOT:
+		  case Usr_CAN_NOT:
 		  default:
 		     Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
 		     HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
@@ -890,8 +890,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center status */
-	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Usr_I_CAN :
-										  Usr_I_CAN_NOT,
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ? Usr_CAN :
+										  Usr_CAN_NOT,
 	                                 Ctr->Status,ActChgCtrSta,Ctr->HieCod,
                                          Txt_CENTER_STATUS);
 
@@ -909,12 +909,12 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 /************** Check if I can edit, remove, etc. a center *******************/
 /*****************************************************************************/
 
-static Usr_ICan_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
+static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
   {
    return (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
            ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
-            Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod)) ? Usr_I_CAN :	// I am the requester
-        							  Usr_I_CAN_NOT;
+            Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
+        							  Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

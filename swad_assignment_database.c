@@ -331,7 +331,7 @@ void Asg_DB_RemoveAssignment (long AsgCod)
 /********************* Check if I can do an assignment ***********************/
 /*****************************************************************************/
 
-Usr_ICan_t Asg_DB_CheckIfICanDoAssignment (long AsgCod)
+Usr_Can_t Asg_DB_CheckIfICanDoAsgBasedOnGroups (long AsgCod)
   {
    // Students and teachers can do assignments depending on groups
    return
@@ -355,8 +355,8 @@ Usr_ICan_t Asg_DB_CheckIfICanDoAssignment (long AsgCod)
 				" AND asg_groups.GrpCod=grp_users.GrpCod)"
 			   "))",
 		   AsgCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_I_CAN :
-						Usr_I_CAN_NOT;
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_CAN :
+						Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

@@ -91,13 +91,13 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 					        unsigned MaxSetInd,
 					        unsigned NumSets,
                                                 MYSQL_RES *mysql_res,
-                                                Usr_ICan_t ICanEditSets);
+                                                Usr_Can_t ICanEditSets);
 static void ExaSet_PutTableHeadingForSets (void);
 
 static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						     unsigned NumQsts,
                                                      MYSQL_RES *mysql_res,
-						     Usr_ICan_t ICanEditQuestions);
+						     Usr_Can_t ICanEditQuestions);
 static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
                                            unsigned QstInd,const char *Anchor);
 
@@ -106,7 +106,7 @@ static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
 
 static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long QstCod);
 
-static Usr_ICan_t ExaSet_CheckIfICanEditExamSets (const struct Exa_Exam *Exam);
+static Usr_Can_t ExaSet_CheckIfICanEditExamSets (const struct Exa_Exam *Exam);
 
 static void ExaSet_RemoveMediaFromStemOfQst (long QstCod,long SetCod);
 static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod);
@@ -253,7 +253,7 @@ void ExaSet_ReceiveSet (void)
    Exa_GetExamDataByCod (&Exams.Exam);
 
    /***** Check if exam is editable *****/
-   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_I_CAN_NOT)
+   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** If I can edit exams ==> receive set from form *****/
@@ -320,7 +320,7 @@ void ExaSet_ChangeSetTitle (void)
    char NewTitle[ExaSet_MAX_BYTES_TITLE + 1];
 
    /***** Check if I can edit exams *****/
-   if (Exa_CheckIfICanEditExams () == Usr_I_CAN_NOT)
+   if (Exa_CheckIfICanEditExams () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
@@ -332,7 +332,7 @@ void ExaSet_ChangeSetTitle (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_I_CAN_NOT)
+   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Receive new title from form *****/
@@ -363,7 +363,7 @@ void ExaSet_ChangeNumQstsToExam (void)
    unsigned NumQstsToPrint;
 
    /***** Check if I can edit exams *****/
-   if (Exa_CheckIfICanEditExams () == Usr_I_CAN_NOT)
+   if (Exa_CheckIfICanEditExams () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Reset exams context *****/
@@ -375,7 +375,7 @@ void ExaSet_ChangeNumQstsToExam (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_I_CAN_NOT)
+   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get number of questions in set to appear in exam print *****/
@@ -482,7 +482,7 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams)
    MYSQL_RES *mysql_res;
    unsigned MaxSetInd;
    unsigned NumSets;
-   Usr_ICan_t ICanEditSets = ExaSet_CheckIfICanEditExamSets (&Exams->Exam);
+   Usr_Can_t ICanEditSets = ExaSet_CheckIfICanEditExamSets (&Exams->Exam);
 
    /***** Get maximum set index *****/
    MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exams->Exam.ExaCod);
@@ -518,13 +518,13 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    extern const char *Txt_Questions;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
-   Usr_ICan_t ICanEditQuestions = ExaSet_CheckIfICanEditExamSets (&Exams->Exam);
+   Usr_Can_t ICanEditQuestions = ExaSet_CheckIfICanEditExamSets (&Exams->Exam);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Questions,
-		 ICanEditQuestions == Usr_I_CAN ? ExaSet_PutIconToAddNewQuestions :
+		 ICanEditQuestions == Usr_CAN ? ExaSet_PutIconToAddNewQuestions :
 						  NULL,
-		 ICanEditQuestions == Usr_I_CAN ? Exams :
+		 ICanEditQuestions == Usr_CAN ? Exams :
 						  NULL,
 		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
@@ -548,7 +548,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 					        unsigned MaxSetInd,
 					        unsigned NumSets,
                                                 MYSQL_RES *mysql_res,
-                                                Usr_ICan_t ICanEditSets)
+                                                Usr_Can_t ICanEditSets)
   {
    extern const char *Txt_Movement_not_allowed;
    unsigned NumSet;
@@ -590,18 +590,18 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       /* Put icon to remove the set */
 	       switch (ICanEditSets)
 		 {
-		  case Usr_I_CAN:
+		  case Usr_CAN:
 		     Ico_PutContextualIconToRemove (ActReqRemExaSet,NULL,
 						    ExaSet_PutParsOneSet,Exams);
 		     break;
-		  case Usr_I_CAN_NOT:
+		  case Usr_CAN_NOT:
 		  default:
 		     Ico_PutIconRemovalNotAllowed ();
 		     break;
 		 }
 
 	       /* Put icon to move up the question */
-	       if (ICanEditSets == Usr_I_CAN && Set.SetInd > 1)
+	       if (ICanEditSets == Usr_CAN && Set.SetInd > 1)
 		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
 						 ExaSet_PutParsOneSet,Exams,
 						 "arrow-up.svg",Ico_BLACK);
@@ -793,7 +793,7 @@ void ExaSet_GetSetDataFromRow (MYSQL_RES *mysql_res,struct ExaSet_Set *Set)
 static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 						     unsigned NumQsts,
                                                      MYSQL_RES *mysql_res,
-						     Usr_ICan_t ICanEditQuestions)
+						     Usr_Can_t ICanEditQuestions)
   {
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
@@ -849,11 +849,11 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	       /* Put icon to remove the question */
 	       switch (ICanEditQuestions)
 		 {
-		  case Usr_I_CAN:
+		  case Usr_CAN:
 		     Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
 						    ExaSet_PutParsOneQst,Exams);
 		     break;
-		  case Usr_I_CAN_NOT:
+		  case Usr_CAN_NOT:
 		  default:
 		     Ico_PutIconRemovalNotAllowed ();
 		     break;
@@ -1264,7 +1264,7 @@ void ExaSet_ReqRemSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_I_CAN_NOT)
+   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Show question and button to remove question *****/
@@ -1296,7 +1296,7 @@ void ExaSet_RemoveSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_I_CAN_NOT)
+   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Remove the set from all tables *****/
@@ -1337,7 +1337,7 @@ void ExaSet_MoveUpSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_I_CAN_NOT)
+   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
@@ -1383,7 +1383,7 @@ void ExaSet_MoveDownSet (void)
    ExaSet_GetAndCheckPars (&Exams,&Set);
 
    /***** Check if exam is editable *****/
-   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_I_CAN_NOT)
+   if (ExaSet_CheckIfICanEditExamSets (&Exams.Exam) == Usr_CAN_NOT)
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
@@ -1415,22 +1415,22 @@ void ExaSet_MoveDownSet (void)
 /*****************************************************************************/
 // Before calling this function, number of sessions must be calculated
 
-static Usr_ICan_t ExaSet_CheckIfICanEditExamSets (const struct Exa_Exam *Exam)
+static Usr_Can_t ExaSet_CheckIfICanEditExamSets (const struct Exa_Exam *Exam)
   {
    switch (Exa_CheckIfICanEditExams ())
      {
-      case Usr_I_CAN:
+      case Usr_CAN:
 	 /***** Questions are editable only if exam has no sessions *****/
-	 return (Exam->NumSess == 0) ? Usr_I_CAN :	// Exams with sessions should not be edited
-				       Usr_I_CAN_NOT;
+	 return (Exam->NumSess == 0) ? Usr_CAN :	// Exams with sessions should not be edited
+				       Usr_CAN_NOT;
 	 break;
-      case Usr_I_CAN_NOT:
+      case Usr_CAN_NOT:
       default:
-	 return Usr_I_CAN_NOT;	// Sets of questions are not editable
+	 return Usr_CAN_NOT;	// Sets of questions are not editable
 	 break;
      }
 
-   return Usr_I_CAN_NOT;
+   return Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

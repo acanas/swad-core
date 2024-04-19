@@ -572,13 +572,13 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO60x80",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR60x80",
      };
-   Usr_ICan_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
+   Usr_Can_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
 
    HTM_DIV_Begin ("class=\"FOLLOW_USR\"");
 
       /***** Show user's photo *****/
       HTM_DIV_Begin ("class=\"FOLLOW_PHOTO\"");
-	 if (ICanView == Usr_I_CAN)
+	 if (ICanView == Usr_CAN)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_DIV_End ();
@@ -586,7 +586,7 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
       /***** Show user's name and icon to follow/unfollow *****/
       HTM_DIV_Begin ("class=\"FOLLOW_TXT\"");
 
-	 if (ICanView == Usr_I_CAN)
+	 if (ICanView == Usr_CAN)
 	   {
 	    /* Put form to go to public profile */
 	    Frm_BeginForm (ActSeeOthPubPrf);
@@ -612,7 +612,7 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 					     UsrDat->UsrCod))	// I follow user
 	       /* Form to unfollow */
 	       Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
-	    else if (ICanView == Usr_I_CAN)	// I do not follow this user and I can follow
+	    else if (ICanView == Usr_CAN)	// I do not follow this user and I can follow
 	       /* Form to follow */
 	       Fol_PutIconToFollow (UsrDat->EnUsrCod);
 	   }
@@ -636,13 +636,13 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
-   Usr_ICan_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
+   Usr_Can_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
 
    /***** Show user's photo *****/
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
-	 if (ICanView == Usr_I_CAN)
+	 if (ICanView == Usr_CAN)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
@@ -650,7 +650,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
       /***** User's name *****/
       HTM_TD_Begin ("class=\"CON_NAME_FOLLOW %s\"",
                     The_GetColorRows ());
-	 if (ICanView == Usr_I_CAN)
+	 if (ICanView == Usr_CAN)
 	   {
 	    /* Put form to go to public profile */
 	    Frm_BeginForm (ActSeeOthPubPrf);
@@ -679,7 +679,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
 					     UsrDat->UsrCod))	// I follow user
 	       /* Form to unfollow */
 	       Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
-	    else if (ICanView == Usr_I_CAN)	// I do not follow this user and I can follow
+	    else if (ICanView == Usr_CAN)	// I do not follow this user and I can follow
 	       /* Form to follow */
 	       Fol_PutIconToFollow (UsrDat->EnUsrCod);
 	   }

@@ -54,7 +54,7 @@ void Cty_ListCountries (void);
 void Cty_ListCountries1 (void);
 void Cty_ListCountries2 (void);
 
-Usr_ICan_t Cty_CheckIfICanEditCountries (void);
+Usr_Can_t Cty_CheckIfICanEditCountries (void);
 
 void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
                                         const char *ClassContainer,

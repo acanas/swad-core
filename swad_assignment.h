@@ -42,8 +42,8 @@
 #define Asg_NUM_TYPES_SEND_WORK 2
 typedef enum
   {
-   Asg_DO_NOT_SEND_WORK = 0,
-   Asg_SEND_WORK        = 1,
+   Asg_DONT_SEND_WORK = 0,
+   Asg_SEND_WORK      = 1,
   } Asg_SendWork_t;
 
 struct Asg_Assignment
@@ -56,10 +56,10 @@ struct Asg_Assignment
    char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
    Asg_SendWork_t SendWork;
    char Folder[Brw_MAX_BYTES_FOLDER + 1];
-   bool IBelongToCrsOrGrps;	// I can do this assignment
-				// (it is associated to no groups
-				// or, if associated to groups,
-				// I belong to any of the groups)
+   Usr_Can_t ICanDo;	// I can do this assignment
+			// (it is associated to no groups
+			// or, if associated to groups,
+			// I belong to any of the groups)
   };
 
 struct Asg_Assignments
@@ -106,7 +106,7 @@ void Asg_ReceiveAssignment (void);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
 void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg);
-Usr_ICan_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg);
+Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (const struct Asg_Assignment *Asg);
 void Asg_SetFolder (struct Asg_Assignment *Asg,unsigned Level);
 
 unsigned Asg_GetNumAssignments (Hie_Level_t Level,unsigned *NumNotif);

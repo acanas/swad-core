@@ -60,7 +60,7 @@ static struct Hld_Holiday *Hld_EditingHld = NULL;	// Static variable to keep the
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Usr_ICan_t Hld_CheckIfICanEditHlds (void);
+static Usr_Can_t Hld_CheckIfICanEditHlds (void);
 
 static Hld_Order_t Hld_GetParHldOrder (void);
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
@@ -88,13 +88,13 @@ static void Hld_EditingHolidayDestructor (void);
 /************************ Check if I can edit holidays ***********************/
 /*****************************************************************************/
 
-static Usr_ICan_t Hld_CheckIfICanEditHlds (void)
+static Usr_Can_t Hld_CheckIfICanEditHlds (void)
   {
-   static Usr_ICan_t Hld_ICanEditHlds[Rol_NUM_ROLES] =
+   static Usr_Can_t Hld_ICanEditHlds[Rol_NUM_ROLES] =
      {
       /* Users who can edit */
-      [Rol_INS_ADM] = Usr_I_CAN,
-      [Rol_SYS_ADM] = Usr_I_CAN,
+      [Rol_INS_ADM] = Usr_CAN,
+      [Rol_SYS_ADM] = Usr_CAN,
      };
 
    return Hld_ICanEditHlds[Gbl.Usrs.Me.Role.Logged];
@@ -241,7 +241,7 @@ static Hld_Order_t Hld_GetParHldOrder (void)
 static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
   {
    /***** Edit holidays *****/
-   if (Hld_CheckIfICanEditHlds () == Usr_I_CAN)
+   if (Hld_CheckIfICanEditHlds () == Usr_CAN)
       Ico_PutContextualIconToEdit (ActEdiHld,NULL,NULL,NULL);
 
    /***** View calendar *****/

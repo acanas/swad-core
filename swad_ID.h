@@ -70,7 +70,7 @@ bool ID_CheckIfUsrIDIsValid (const char *UsrID);
 bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
 void ID_WriteUsrIDs (struct Usr_Data *UsrDat,const char *Anchor);
-Usr_ICan_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat);
+Usr_Can_t ID_ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat);
 
 void ID_ShowFormChangeMyID (bool IShouldFillInID);
 void ID_ShowFormChangeOtherUsrID (void);
