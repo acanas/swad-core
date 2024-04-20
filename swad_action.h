@@ -77,8 +77,7 @@ struct Act_Actions
    signed int IndexInMenu;
    Tab_Tab_t Tab;
    Act_Action_t SuperAction;
-   unsigned PermissionCrsIfIBelong;
-   unsigned PermissionCrsIfIDontBelong;
+   unsigned PermissionCrs[Usr_NUM_BELONG];
    unsigned PermissionDeg;
    unsigned PermissionCtr;
    unsigned PermissionIns;

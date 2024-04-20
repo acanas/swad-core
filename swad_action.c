@@ -124,8 +124,7 @@ Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
          Permission = ActLst_Actions[Action].PermissionDeg;
 	 break;
       case Hie_CRS:	// Course selected
-	 Permission = (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG) ? ActLst_Actions[Action].PermissionCrsIfIBelong :
-									      ActLst_Actions[Action].PermissionCrsIfIDontBelong;
+	 Permission = ActLst_Actions[Action].PermissionCrs[Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS]];
 	 break;
       default:
 	 return Usr_CAN_NOT;
@@ -423,7 +422,7 @@ void Act_AdjustCurrentAction (void)
 		   the only action possible
 		   is to show a form to send my photo *****/
 	    if (!Gbl.Usrs.Me.MyPhotoExists)
-	       if (!(ActLst_Actions[Gbl.Action.Act].PermissionCrsIfIBelong & (1 << Rol_UNK)))
+	       if (!(ActLst_Actions[Gbl.Action.Act].PermissionCrs[Usr_BELONG] & (1 << Rol_UNK)))
 		  if ((Gbl.Usrs.Me.NumAccWithoutPhoto =
 		       Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)
 		    {
