@@ -1015,7 +1015,7 @@ void Roo_ChangeType (void)
 /********************** Change the short name of a room **********************/
 /*****************************************************************************/
 
-void Roo_RenameRoomShort (void)
+void Roo_RenameRoomShrt (void)
   {
    /***** Room constructor *****/
    Roo_EditingRoomConstructor ();

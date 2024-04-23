@@ -54,6 +54,7 @@
 #include "swad_QR.h"
 #include "swad_setting.h"
 #include "swad_string.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -725,7 +726,7 @@ static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod)
 
 static void Agd_PutIconToShowQR (void)
   {
-   char URL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    snprintf (URL,sizeof (URL),"%s/%s?agd=@%s",

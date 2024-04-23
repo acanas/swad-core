@@ -49,6 +49,7 @@
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_survey.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -863,9 +864,9 @@ void Cty_WriteSelectorOfCountry (void)
 void Cty_WriteCountryName (long CtyCod)
   {
    char CtyName[Cty_MAX_BYTES_NAME + 1];
-   Frm_PutForm_t PutForm = (!Frm_CheckIfInside () &&							// Only if not inside another form
-                            Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB) ? Frm_PUT_FORM :	// Only in main browser tab
-                        							     Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutForm = (!Frm_CheckIfInside () &&						// Only if not inside another form
+                            Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST) ? Frm_PUT_FORM :	// Only in main browser tab
+                        						     Frm_DONT_PUT_FORM;
 
    /***** Get country name *****/
    Cty_GetCountryNameInLanguage (CtyCod,Gbl.Prefs.Language,CtyName);
@@ -945,7 +946,7 @@ bool Cty_GetCountrDataByCod (struct Hie_Node *Node)
 
 void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
-			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1])
+			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -965,7 +966,7 @@ void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 	 Str_Copy (NameInSeveralLanguages[Lan],row[Lan - 1],
 	           Cty_MAX_BYTES_NAME);
 	 Str_Copy (WWWInSeveralLanguages[Lan],row[Lan_NUM_LANGUAGES + Lan - 1],
-	           Cns_MAX_BYTES_WWW - 1);
+	           WWW_MAX_BYTES_WWW - 1);
 	}
      }
    else
@@ -1030,7 +1031,7 @@ static void Cty_ListCountriesForEdition (void)
    unsigned NumUsrsCty;
    Lan_Language_t Lan;
    char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
-   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
+   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1];
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("TBL_SCROLL");
@@ -1300,7 +1301,7 @@ void Cty_ChangeCtyWWW (void)
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
    char FldName[3 + 1 + 2 + 1];	// Example: "WWW_en"
 
@@ -1314,7 +1315,7 @@ void Cty_ChangeCtyWWW (void)
    Language = Lan_GetParLanguage ();
 
    /***** Get the new WWW for the country *****/
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get from the database the data of the country *****/
    Hie_GetDataByCod[Hie_CTY] (Cty_EditingCty);
@@ -1519,7 +1520,7 @@ void Cty_ReceiveNewCountry (void)
    bool CreateCountry = true;
    Lan_Language_t Lan;
    char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
-   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
+   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1];
    unsigned i;
 
    /***** Country constructoor *****/
@@ -1603,7 +1604,7 @@ void Cty_ReceiveNewCountry (void)
                  }
 
                snprintf (ParName,sizeof (ParName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
-               Par_GetParText (ParName,WWWInSeveralLanguages[Lan],Cns_MAX_BYTES_WWW);
+               Par_GetParText (ParName,WWWInSeveralLanguages[Lan],WWW_MAX_BYTES_WWW);
               }
            }
         }

@@ -38,6 +38,7 @@
 #include "swad_hierarchy_database.h"
 #include "swad_media.h"
 #include "swad_search.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -564,7 +565,7 @@ void Ctr_DB_UpdateCtrName (long HieCod,
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the web of a center",
 		   "UPDATE ctr_centers"

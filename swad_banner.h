@@ -27,10 +27,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_constant.h"
 #include "swad_hidden_visible.h"
 #include "swad_name.h"
 #include "swad_string.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -46,7 +46,7 @@ struct Ban_Banner
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Nam_MAX_BYTES_FULL_NAME + 1];
    char Img[Ban_MAX_BYTES_IMAGE + 1];
-   char WWW[Cns_MAX_BYTES_WWW + 1];
+   char WWW[WWW_MAX_BYTES_WWW + 1];
   };
 
 /*****************************************************************************/

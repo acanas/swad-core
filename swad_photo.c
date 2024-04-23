@@ -224,7 +224,7 @@ static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args)
 
 static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args)
   {
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    bool PhotoExists;
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -509,7 +509,7 @@ void Pho_ReqRemUsrPhoto (void)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO186x248",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR186x248",
      };
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get user's code from form *****/
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
@@ -974,7 +974,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
                                 const char *ClassPhoto,Pho_Zoom_t Zoom)
   {
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    bool ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
 
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -989,7 +989,7 @@ void Pho_ShowUsrPhotoIfAllowed (struct Usr_Data *UsrDat,
 // Public photo means two different things depending on the user's type
 
 bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
-                                   char PhotoURL[Cns_MAX_BYTES_WWW + 1])
+                                   char PhotoURL[WWW_MAX_BYTES_WWW + 1])
   {
    /***** Photo is shown if I can see it, and it exists *****/
    return (Pri_CheckIfICanView (UsrDat->PhotoVisibility,UsrDat) == Usr_CAN) ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :
@@ -1002,7 +1002,7 @@ bool Pho_ShowingUsrPhotoIsAllowed (struct Usr_Data *UsrDat,
 // Returns false if photo does not exist
 // Returns true if link is created successfully
 
-bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[Cns_MAX_BYTES_WWW + 1])
+bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[WWW_MAX_BYTES_WWW + 1])
   {
    char PathPublPhoto[PATH_MAX + 1];
    char PathPrivPhoto[PATH_MAX + 1];
@@ -1025,7 +1025,7 @@ bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[Cns_MAX_B
                                  " to access to user's private photo");
 
       /***** Create the public URL of the photo *****/
-      snprintf (PhotoURL,Cns_MAX_BYTES_WWW + 1,"%s/%s.jpg",
+      snprintf (PhotoURL,WWW_MAX_BYTES_WWW + 1,"%s/%s.jpg",
                 Cfg_URL_PHOTO_PUBLIC,UsrDat->Photo);
 
       return true;
@@ -1068,9 +1068,9 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
    unsigned NumFollowers;
    bool PhotoExists;
    Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
-   bool BrowserTabIs1stTab = (BrowserTab == Act_1ST_TAB ||
-	                      BrowserTab == Act_AJAX_NR ||
-			      BrowserTab == Act_AJAX_RF);
+   bool BrowserTabIs1stTab = (BrowserTab == Act_1ST ||
+	                      BrowserTab == Act_AJA ||
+			      BrowserTab == Act_REF);
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
                       BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
    char IdCaption[Frm_MAX_BYTES_ID + 1];
@@ -1274,9 +1274,9 @@ void Pho_ShowUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom)
   {
    Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
-   bool BrowserTabIs1stTab = (BrowserTab == Act_1ST_TAB ||
-	                      BrowserTab == Act_AJAX_NR ||
-			      BrowserTab == Act_AJAX_RF);
+   bool BrowserTabIs1stTab = (BrowserTab == Act_1ST ||
+	                      BrowserTab == Act_AJA ||
+			      BrowserTab == Act_REF);
    Frm_PutForm_t PutFormPublicProfile = (!Frm_CheckIfInside () &&		// Only if not inside another form
                                          BrowserTabIs1stTab) ? Frm_PUT_FORM :	// Only in main browser tab (or AJAX)
 							       Frm_DONT_PUT_FORM;
@@ -2370,7 +2370,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Hie_Node *Deg,
    unsigned PhotoWidth;
    unsigned PhotoHeight;
    char PathRelAvgPhoto[PATH_MAX + 1];
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    char PhotoCaption[1024 + Nam_MAX_BYTES_SHRT_NAME];
    bool ShowDegPhoto;
    char IdCaption[Frm_MAX_BYTES_ID + 1];

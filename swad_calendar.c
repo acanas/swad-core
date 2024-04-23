@@ -149,7 +149,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 /************************* Change first day of week **************************/
 /*****************************************************************************/
 
-void Cal_ChangeFirstDayOfWeek (void)
+void Cal_Change1stDayOfWeek (void)
   {
    /***** Get param with icon set *****/
    Gbl.Prefs.FirstDayOfWeek = Cal_GetParFirstDayOfWeek ();

@@ -2516,7 +2516,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    bool UsrValid;
    bool ShowPhoto;
    const char *Title;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get number of recipients of a message from database *****/
    NumRecipients.Total = Msg_DB_GetNumRecipients (MsgCod);

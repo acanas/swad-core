@@ -242,7 +242,7 @@ void Dpt_DB_UpdateDptName (long DptCod,
 /**************** Update the table changing old WWW by new WWW ***************/
 /*****************************************************************************/
 
-void Dpt_DB_UpdateDptWWW (long DptCod,char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Dpt_DB_UpdateDptWWW (long DptCod,char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the web of a department",
 		   "UPDATE dpt_departments"

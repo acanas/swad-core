@@ -56,7 +56,7 @@ void Ctr_GetCoordByCod (long CtrCod,struct Map_Coordinates *Coord);
 void Ctr_WriteSelectorOfCenter (void);
 void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);
-void Ctr_RenameCenterShort (void);
+void Ctr_RenameCenterShrt (void);
 void Ctr_RenameCenterFull (void);
 void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull);
 void Ctr_ChangeCtrWWW (void);

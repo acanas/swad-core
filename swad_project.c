@@ -4073,7 +4073,7 @@ void Prj_ReceiveProject (void)
    Par_GetParHTML ("Materials"  ,Projects.Prj.Materials  ,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /* Get degree WWW */
-   Par_GetParText ("URL",Projects.Prj.URL,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("URL",Projects.Prj.URL,WWW_MAX_BYTES_WWW);
 
    /***** Check if title is correct *****/
    if (!Projects.Prj.Title[0])	// If there is not a project title

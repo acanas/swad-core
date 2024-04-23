@@ -57,7 +57,7 @@ struct Rep_Report
    struct Rep_Hits Hits;
    unsigned long MaxHitsPerYear;
    char FilenameReport[NAME_MAX + 1];
-   char Permalink[Cns_MAX_BYTES_WWW + 1];
+   char Permalink[WWW_MAX_BYTES_WWW + 1];
   };
 
 /*****************************************************************************/

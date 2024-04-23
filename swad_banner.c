@@ -707,7 +707,7 @@ void Ban_ChangeBannerWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    struct Ban_Banner *Ban = Ban_GetEditingBanner ();
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Reset banner *****/
    Ban_ResetBanner (Ban);
@@ -717,7 +717,7 @@ void Ban_ChangeBannerWWW (void)
    Ban->BanCod = ParCod_GetAndCheckPar (ParCod_Ban);
 
    /* Get the new WWW for the banner */
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get banner data from the database *****/
    Ban_GetBannerDataByCod (Ban);
@@ -867,7 +867,7 @@ void Ban_ReceiveNewBanner (void)
    Names[Nam_FULL_NAME] = Ban->FullName;
    Nam_GetParsShrtAndFullName (Names);
    Par_GetParText ("Img",Ban->Img,Ban_MAX_BYTES_IMAGE);
-   Par_GetParText ("WWW",Ban->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Ban->WWW,WWW_MAX_BYTES_WWW);
 
    if (Ban->ShrtName[0] &&
        Ban->FullName[0])	// If there's a banner name

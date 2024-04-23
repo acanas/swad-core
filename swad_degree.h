@@ -68,14 +68,14 @@ void Deg_FreeListAllDegsWithStds (struct Hie_List *Degs);
 
 void Deg_ReceiveReqDeg (void);
 void Deg_ReceiveNewDeg (void);
-void Deg_RemoveDegree (void);
+void Deg_RemoveDeg (void);
 
 bool Deg_GetDegreeDataByCod (struct Hie_Node *Node);
 void Deg_RemoveDegreeCompletely (long DegCod);
-void Deg_RenameDegreeShort (void);
-void Deg_RenameDegreeFull (void);
+void Deg_RenameDegShrt (void);
+void Deg_RenameDegFull (void);
 void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull);
-void Deg_ChangeDegreeType (void);
+void Deg_ChangeDegTyp (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);

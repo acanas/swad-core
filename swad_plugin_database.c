@@ -112,7 +112,7 @@ void Plg_DB_ChangeAppKey (long PlgCod,
 /*****************************************************************************/
 
 void Plg_DB_ChangeURL (long PlgCod,
-                       const char NewURL[Cns_MAX_BYTES_WWW + 1])
+                       const char NewURL[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the URL of a plugin",
 		   "UPDATE plg_plugins"

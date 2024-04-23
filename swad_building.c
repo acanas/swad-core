@@ -497,7 +497,7 @@ void Bld_RemoveBuilding (void)
 /******************** Change the short name of a building ********************/
 /*****************************************************************************/
 
-void Bld_RenameBuildingShort (void)
+void Bld_RenameBuildingShrt (void)
   {
    /***** Building constructor *****/
    Bld_EditingBuildingConstructor ();
@@ -588,7 +588,7 @@ static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFull)
 /******************** Change the location of a building **********************/
 /*****************************************************************************/
 
-void Bld_ChangeBuildingLocation (void)
+void Bld_ChangeBuildingLoc (void)
   {
    extern const char *Txt_The_location_of_the_building_X_has_changed_to_Y;
    extern const char *Txt_The_location_of_the_building_X_has_not_changed;

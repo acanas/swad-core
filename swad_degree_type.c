@@ -59,57 +59,57 @@ extern struct Globals Gbl;
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct DegTyp_DegreeType *DegTyp_EditingDegTyp = NULL;	// Static variable to keep the degree type being edited
+static struct DegTyp_DegType *DegTyp_EditingDegTyp = NULL;	// Static variable to keep the degree type being edited
 
 /*****************************************************************************/
 /*************************** Private prototypes ******************************/
 /*****************************************************************************/
 
-static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Level,
-                                   DegTyp_Order_t DefaultOrder);
+static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t Level,
+                                DegTyp_Order_t DefaultOrder);
 static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder);
 
-static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
-                                    Act_Action_t NextAction,
-                                    Hie_Level_t Level,
-                                    DegTyp_Order_t SelectedOrder);
+static void DegTyp_ListDegTypes (const struct DegTyp_DegTypes *DegTypes,
+                                 Act_Action_t NextAction,
+                                 Hie_Level_t Level,
+                                 DegTyp_Order_t SelectedOrder);
 
-static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTypes);
-static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Args);
+static void DegTyp_EditDegTypesInternal (const struct DegTyp_DegTypes *DegTypes);
+static void DegTyp_PutIconsEditingDegTypes (__attribute__((unused)) void *Args);
 
-static void DegTyp_ListDegreeTypesForSeeing (const struct DegTyp_DegTypes *DegTypes);
+static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes);
 static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args);
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args);
-static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegTypes);
+static void DegTyp_ListDegTypesForEdition (const struct DegTyp_DegTypes *DegTypes);
 
 static void DegTyp_PutFormToCreateDegreeType (void);
 
-static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                                Hie_Level_t Level,
-                                                DegTyp_Order_t SelectedOrder);
-static void DegTyp_PutHeadDegreeTypesForEdition (void);
+static void DegTyp_PutHeadDegTypesForSeeing (Act_Action_t NextAction,
+                                             Hie_Level_t Level,
+                                             DegTyp_Order_t SelectedOrder);
+static void DegTyp_PutHeadDegTypesForEdition (void);
 
 static void DegTyp_PutParOtherDegTypCod (void *DegTypCod);
 
-static void DegTyp_RemoveDegreeTypeCompletely (long DegTypCod);
+static void DegTyp_RemoveDegTypeCompletely (long DegTypCod);
 
-static void DegTyp_EditingDegreeTypeConstructor (void);
-static void DegTyp_EditingDegreeTypeDestructor (void);
+static void DegTyp_EditingDegTypeConstructor (void);
+static void DegTyp_EditingDegTypeDestructor (void);
 
 /*****************************************************************************/
 /************** Show selector of degree types for statistics *****************/
 /*****************************************************************************/
 
-void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
+void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod)
   {
    extern const char *Txt_Any_type_of_degree;
    struct DegTyp_DegTypes DegTypes;
    unsigned NumDegTyp;
-   const struct DegTyp_DegreeType *DegTyp;
+   const struct DegTyp_DegType *DegTyp;
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
-   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_GetListDegTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEG_TYPE);
 
    /* List degree types */
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
@@ -135,27 +135,27 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
    HTM_SELECT_End ();
 
    /***** Free list of degree types *****/
-   DegTyp_FreeListDegreeTypes (&DegTypes);
+   DegTyp_FreeListDegTypes (&DegTypes);
   }
 
 /*****************************************************************************/
 /***************************** Show degree types *****************************/
 /*****************************************************************************/
 
-void DegTyp_SeeDegreeTypesInDegTab (void)
+void DegTyp_SeeDegTypesInDegTab (void)
   {
-   DegTyp_SeeDegreeTypes (ActSeeDegTyp,Hie_SYS,
-                          DegTyp_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
+   DegTyp_SeeDegTypes (ActSeeDegTyp,Hie_SYS,
+                          DegTyp_ORDER_BY_DEG_TYPE);	// Default order if not specified
   }
 
-void DegTyp_SeeDegreeTypesInStaTab (void)
+void DegTyp_SeeDegTypesInStaTab (void)
   {
-   DegTyp_SeeDegreeTypes (ActSeeUseGbl,Gbl.Scope.Current,
-                          DegTyp_ORDER_BY_NUM_DEGREES);	// Default order if not specified
+   DegTyp_SeeDegTypes (ActSeeUseGbl,Gbl.Scope.Current,
+                          DegTyp_ORDER_BY_NUM_DEGS);	// Default order if not specified
   }
 
-static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Level,
-                                   DegTyp_Order_t DefaultOrder)
+static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t Level,
+                                DegTyp_Order_t DefaultOrder)
   {
    DegTyp_Order_t SelectedOrder;
    struct DegTyp_DegTypes DegTypes;
@@ -164,13 +164,13 @@ static void DegTyp_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Level,
    SelectedOrder = DegTyp_GetParDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
-   DegTyp_GetListDegreeTypes (&DegTypes,Level,SelectedOrder);
+   DegTyp_GetListDegTypes (&DegTypes,Level,SelectedOrder);
 
    /***** List degree types *****/
-   DegTyp_ListDegreeTypes (&DegTypes,NextAction,Level,SelectedOrder);
+   DegTyp_ListDegTypes (&DegTypes,NextAction,Level,SelectedOrder);
 
    /***** Free list of degree types *****/
-   DegTyp_FreeListDegreeTypes (&DegTypes);
+   DegTyp_FreeListDegTypes (&DegTypes);
   }
 
 /*****************************************************************************/
@@ -192,10 +192,10 @@ static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder)
 // - center tab		=> NextAction = ActSeeDegTyp
 // - statistic tab	=> NextAction = ActSeeUseGbl
 
-static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
-                                    Act_Action_t NextAction,
-                                    Hie_Level_t Level,
-                                    DegTyp_Order_t SelectedOrder)
+static void DegTyp_ListDegTypes (const struct DegTyp_DegTypes *DegTypes,
+                                 Act_Action_t NextAction,
+                                 Hie_Level_t Level,
+                                 DegTyp_Order_t SelectedOrder)
   {
    extern const char *Hlp_CENTER_DegreeTypes;
    extern const char *Hlp_ANALYTICS_Figures_types_of_degree;
@@ -225,10 +225,10 @@ static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
       HTM_TABLE_BeginWideMarginPadding (2);
 
          /***** Write heading *****/
-	 DegTyp_PutHeadDegreeTypesForSeeing (NextAction,Level,SelectedOrder);
+	 DegTyp_PutHeadDegTypesForSeeing (NextAction,Level,SelectedOrder);
 
 	 /***** List current degree types for seeing *****/
-	 DegTyp_ListDegreeTypesForSeeing (DegTypes);
+	 DegTyp_ListDegTypesForSeeing (DegTypes);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -244,29 +244,29 @@ static void DegTyp_ListDegreeTypes (const struct DegTyp_DegTypes *DegTypes,
 /************************ Put forms to edit degree types *********************/
 /*****************************************************************************/
 
-void DegTyp_GetAndEditDegreeTypes (void)
+void DegTyp_GetAndEditDegTypes (void)
   {
    struct DegTyp_DegTypes DegTypes;
 
-   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
-   DegTyp_EditDegreeTypes (&DegTypes);
-   DegTyp_FreeListDegreeTypes (&DegTypes);
+   DegTyp_GetListDegTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEG_TYPE);
+   DegTyp_EditDegTypes (&DegTypes);
+   DegTyp_FreeListDegTypes (&DegTypes);
   }
 
-void DegTyp_EditDegreeTypes (const struct DegTyp_DegTypes *DegTypes)
+void DegTyp_EditDegTypes (const struct DegTyp_DegTypes *DegTypes)
   {
-   DegTyp_EditingDegreeTypeConstructor ();
-   DegTyp_EditDegreeTypesInternal (DegTypes);
-   DegTyp_EditingDegreeTypeDestructor ();
+   DegTyp_EditingDegTypeConstructor ();
+   DegTyp_EditDegTypesInternal (DegTypes);
+   DegTyp_EditingDegTypeDestructor ();
   }
 
-static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTypes)
+static void DegTyp_EditDegTypesInternal (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Hlp_CENTER_DegreeTypes_edit;
    extern const char *Txt_Types_of_degree;
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Types_of_degree,DegTyp_PutIconsEditingDegreeTypes,NULL,
+   Box_BoxBegin (Txt_Types_of_degree,DegTyp_PutIconsEditingDegTypes,NULL,
                  Hlp_CENTER_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new degree type *****/
@@ -274,7 +274,7 @@ static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTyp
 
       /***** Forms to edit current degree types *****/
       if (DegTypes->Num)
-	 DegTyp_ListDegreeTypesForEdition (DegTypes);
+	 DegTyp_ListDegTypesForEdition (DegTypes);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -284,7 +284,7 @@ static void DegTyp_EditDegreeTypesInternal (const struct DegTyp_DegTypes *DegTyp
 /************ Put contextual icons when editing degree types *****************/
 /*****************************************************************************/
 
-static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Args)
+static void DegTyp_PutIconsEditingDegTypes (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view degree types *****/
    Ico_PutContextualIconToView (ActSeeDegTyp,NULL,NULL,NULL);
@@ -300,7 +300,7 @@ static void DegTyp_PutIconsEditingDegreeTypes (__attribute__((unused)) void *Arg
 /******************* Put link (form) to view degree types ********************/
 /*****************************************************************************/
 
-void DegTyp_PutIconToViewDegreeTypes (void)
+void DegTyp_PutIconToViewDegTypes (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeDegTyp,NULL,NULL,NULL,
 				  "sitemap.svg",Ico_BLACK);
@@ -310,7 +310,7 @@ void DegTyp_PutIconToViewDegreeTypes (void)
 /******************* List current degree types for seeing ********************/
 /*****************************************************************************/
 
-static void DegTyp_ListDegreeTypesForSeeing (const struct DegTyp_DegTypes *DegTypes)
+static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes)
   {
    unsigned NumDegTyp;
    const char *BgColor;
@@ -373,7 +373,7 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
   {
    if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if center tab is visible
-       DegTyp_CheckIfICanCreateDegreeTypes () == Usr_CAN)
+       DegTyp_CheckIfICanCreateDegTypes () == Usr_CAN)
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,NULL,NULL);
   }
 
@@ -381,7 +381,7 @@ static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
 /******************* List current degree types for edition *******************/
 /*****************************************************************************/
 
-static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegTypes)
+static void DegTyp_ListDegTypesForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    unsigned NumDegTyp;
 
@@ -389,7 +389,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      DegTyp_PutHeadDegreeTypesForEdition ();
+      DegTyp_PutHeadDegTypesForEdition ();
 
       /***** List degree types with forms for edition *****/
       for (NumDegTyp = 0;
@@ -442,7 +442,7 @@ static void DegTyp_ListDegreeTypesForEdition (const struct DegTyp_DegTypes *DegT
 /******************** Check if I can create degree types *********************/
 /*****************************************************************************/
 
-Usr_Can_t DegTyp_CheckIfICanCreateDegreeTypes (void)
+Usr_Can_t DegTyp_CheckIfICanCreateDegTypes (void)
   {
    return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
 						     Usr_CAN_NOT;
@@ -458,7 +458,7 @@ static void DegTyp_PutFormToCreateDegreeType (void)
    Frm_BeginFormTable (ActNewDegTyp,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      DegTyp_PutHeadDegreeTypesForEdition ();
+      DegTyp_PutHeadDegTypesForEdition ();
 
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
@@ -494,17 +494,17 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 /***************** Write header with fields of a degree type *****************/
 /*****************************************************************************/
 
-static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
-                                                Hie_Level_t Level,
-                                                DegTyp_Order_t SelectedOrder)
+static void DegTyp_PutHeadDegTypesForSeeing (Act_Action_t NextAction,
+                                             Hie_Level_t Level,
+                                             DegTyp_Order_t SelectedOrder)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS];
    extern const char *Txt_DEGREE_TYPES_ORDER[DegTyp_NUM_ORDERS];
    DegTyp_Order_t Order;
    static HTM_HeadAlign Align[DegTyp_NUM_ORDERS] =
      {
-      [DegTyp_ORDER_BY_DEGREE_TYPE] = HTM_HEAD_LEFT,
-      [DegTyp_ORDER_BY_NUM_DEGREES] = HTM_HEAD_RIGHT
+      [DegTyp_ORDER_BY_DEG_TYPE] = HTM_HEAD_LEFT,
+      [DegTyp_ORDER_BY_NUM_DEGS] = HTM_HEAD_RIGHT
      };
    struct Fig_Figures Figures;
 
@@ -551,7 +551,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 /***************** Write header with fields of a degree type *****************/
 /*****************************************************************************/
 
-static void DegTyp_PutHeadDegreeTypesForEdition (void)
+static void DegTyp_PutHeadDegTypesForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Type_of_degree;
@@ -571,8 +571,8 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
 /****************** Create a list with all degree types **********************/
 /*****************************************************************************/
 
-void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
-                                Hie_Level_t Level,DegTyp_Order_t Order)
+void DegTyp_GetListDegTypes (struct DegTyp_DegTypes *DegTypes,
+                             Hie_Level_t Level,DegTyp_Order_t Order)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -587,7 +587,7 @@ void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
      {
       /***** Create a list of degree types *****/
       if ((DegTypes->Lst = calloc ((size_t) DegTypes->Num,
-			           sizeof (struct DegTyp_DegreeType))) == NULL)
+			           sizeof (struct DegTyp_DegType))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get degree types *****/
@@ -620,7 +620,7 @@ void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
 /********* Free list of degree types and list of degrees of each type ********/
 /*****************************************************************************/
 
-void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes)
+void DegTyp_FreeListDegTypes (struct DegTyp_DegTypes *DegTypes)
   {
    /***** Free memory used by the list of degree types *****/
    if (DegTypes->Num && DegTypes->Lst)
@@ -635,14 +635,14 @@ void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes)
 /***************** Receive form to create a new degree type ******************/
 /*****************************************************************************/
 
-void DegTyp_ReceiveNewDegreeType (void)
+void DegTyp_ReceiveNewDegTyp (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_Created_new_type_of_degree_X;
    extern const char *Txt_You_must_specify_the_name;
 
    /***** Degree type constructor *****/
-   DegTyp_EditingDegreeTypeConstructor ();
+   DegTyp_EditingDegTypeConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the name of degree type */
@@ -672,19 +672,19 @@ void DegTyp_ReceiveNewDegreeType (void)
 /**************************** Remove a degree type ***************************/
 /*****************************************************************************/
 
-void DegTyp_RemoveDegreeType (void)
+void DegTyp_RemoveDegTyp (void)
   {
    extern const char *Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type;
    extern const char *Txt_Type_of_degree_X_removed;
 
    /***** Degree type constructor *****/
-   DegTyp_EditingDegreeTypeConstructor ();
+   DegTyp_EditingDegTypeConstructor ();
 
    /***** Get the code of the degree type *****/
    DegTyp_EditingDegTyp->DegTypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /***** Get data of the degree type from database *****/
-   if (!DegTyp_GetDegreeTypeDataByCod (DegTyp_EditingDegTyp))
+   if (!DegTyp_GetDegTypeDataByCod (DegTyp_EditingDegTyp))
       Err_WrongDegTypExit ();
 
    /***** Check if this degree type has degrees *****/
@@ -694,7 +694,7 @@ void DegTyp_RemoveDegreeType (void)
    else	// Degree type has no degrees => remove it
      {
       /***** Remove degree type *****/
-      DegTyp_RemoveDegreeTypeCompletely (DegTyp_EditingDegTyp->DegTypCod);
+      DegTyp_RemoveDegTypeCompletely (DegTyp_EditingDegTyp->DegTypCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -717,7 +717,7 @@ static void DegTyp_PutParOtherDegTypCod (void *DegTypCod)
 /****************** Get data of a degree type from its code ******************/
 /*****************************************************************************/
 
-bool DegTyp_GetDegreeTypeDataByCod (struct DegTyp_DegreeType *DegTyp)
+bool DegTyp_GetDegTypeDataByCod (struct DegTyp_DegType *DegTyp)
   {
    /***** Trivial check: code of degree type should be >= 0 *****/
    if (DegTyp->DegTypCod <= 0)
@@ -745,7 +745,7 @@ bool DegTyp_GetDegreeTypeDataByCod (struct DegTyp_DegreeType *DegTyp)
 /******************** Remove a degree type and its degrees *******************/
 /*****************************************************************************/
 
-static void DegTyp_RemoveDegreeTypeCompletely (long DegTypCod)
+static void DegTyp_RemoveDegTypeCompletely (long DegTypCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumDegs;
@@ -779,7 +779,7 @@ static void DegTyp_RemoveDegreeTypeCompletely (long DegTypCod)
 /**************************** Rename a degree type ***************************/
 /*****************************************************************************/
 
-void DegTyp_RenameDegreeType (void)
+void DegTyp_RenameDegTyp (void)
   {
    extern const char *Txt_The_type_of_degree_X_already_exists;
    extern const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y;
@@ -787,7 +787,7 @@ void DegTyp_RenameDegreeType (void)
    char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1];
 
    /***** Degree type constructor *****/
-   DegTyp_EditingDegreeTypeConstructor ();
+   DegTyp_EditingDegTypeConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the degree type */
@@ -797,7 +797,7 @@ void DegTyp_RenameDegreeType (void)
    Par_GetParText ("DegTypName",NewNameDegTyp,DegTyp_MAX_BYTES_DEGREE_TYPE_NAME);
 
    /***** Get from the database the old name of the degree type *****/
-   if (!DegTyp_GetDegreeTypeDataByCod (DegTyp_EditingDegTyp))
+   if (!DegTyp_GetDegTypeDataByCod (DegTyp_EditingDegTyp))
       Err_WrongDegTypExit ();
 
    /***** Check if new name is empty *****/
@@ -849,19 +849,19 @@ void DegTyp_ContEditAfterChgDegTyp (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
-   DegTyp_EditDegreeTypesInternal (&DegTypes);
-   DegTyp_FreeListDegreeTypes (&DegTypes);
+   DegTyp_GetListDegTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEG_TYPE);
+   DegTyp_EditDegTypesInternal (&DegTypes);
+   DegTyp_FreeListDegTypes (&DegTypes);
 
    /***** Degree type destructor *****/
-   DegTyp_EditingDegreeTypeDestructor ();
+   DegTyp_EditingDegTypeDestructor ();
   }
 
 /*****************************************************************************/
 /********************* Degree type constructor/destructor ********************/
 /*****************************************************************************/
 
-static void DegTyp_EditingDegreeTypeConstructor (void)
+static void DegTyp_EditingDegTypeConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (DegTyp_EditingDegTyp != NULL)
@@ -877,7 +877,7 @@ static void DegTyp_EditingDegreeTypeConstructor (void)
    DegTyp_EditingDegTyp->NumDegs       = 0;
   }
 
-static void DegTyp_EditingDegreeTypeDestructor (void)
+static void DegTyp_EditingDegTypeDestructor (void)
   {
    /***** Free memory used for degree type *****/
    if (DegTyp_EditingDegTyp != NULL)
@@ -891,8 +891,8 @@ static void DegTyp_EditingDegreeTypeDestructor (void)
 /****************** Get and show stats about institutions ********************/
 /*****************************************************************************/
 
-void DegTyp_GetAndShowDegreeTypesStats (void)
+void DegTyp_GetAndShowDegTypesStats (void)
   {
    /***** Show statistic about number of degrees in each type of degree *****/
-   DegTyp_SeeDegreeTypesInStaTab ();
+   DegTyp_SeeDegTypesInStaTab ();
   }

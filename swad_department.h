@@ -39,7 +39,7 @@ struct Dpt_Department
    long InsCod;
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Nam_MAX_BYTES_FULL_NAME + 1];
-   char WWW[Cns_MAX_BYTES_WWW + 1];
+   char WWW[WWW_MAX_BYTES_WWW + 1];
    unsigned NumTchs;	// Non-editing teachers and teachers
   };
 
@@ -68,7 +68,7 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
 void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt);
 void Dpt_RemoveDepartment (void);
 void Dpt_ChangeDepartIns (void);
-void Dpt_RenameDepartShort (void);
+void Dpt_RenameDepartShrt (void);
 void Dpt_RenameDepartFull (void);
 void Dpt_ChangeDptWWW (void);
 void Dpt_ContEditAfterChgDpt (void);

@@ -135,14 +135,14 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParLocationIf
             HTM_TxtF (" onsubmit=\"%s\"",OnSubmit);
       switch (Act_GetBrowserTab (NextAction))
 	{
-	 case Act_NEW_TAB:
-	 case Act_DWN_FIL:
+	 case Act_NEW:
+	 case Act_DWN:
 	    HTM_Txt (" target=\"_blank\"");
 	    break;
 	 default:
 	    break;
 	}
-      if (Act_GetContentType (NextAction) == Act_CONT_DATA)
+      if (Act_GetContentType (NextAction) == Act_DATA)
 	 HTM_Txt (" enctype=\"multipart/form-data\"");
       HTM_Txt (" accept-charset=\"windows-1252\">");
 

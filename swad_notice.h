@@ -65,7 +65,7 @@ void Not_ShowFormNotice (void);
 void Not_ReceiveNotice (void);
 void Not_ListNoticesAfterRemoval (void);
 void Not_ListFullNotices (void);
-void Not_GetHighLightedNotCod (void);
+void Not_GetHighlightNotCod (void);
 
 void Not_HideNotice (void);
 void Not_UnhideNotice (void);

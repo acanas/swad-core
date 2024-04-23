@@ -167,7 +167,7 @@ struct Prj_Project
    char *Description;
    char *Knowledge;
    char *Materials;
-   char URL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
    struct
      {
       Prj_ReviewStatus_t Status;

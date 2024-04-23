@@ -150,7 +150,7 @@ void Ind_ReqIndicatorsCourses (void)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
-		  DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
+		  DegTyp_WriteSelectorDegTypes (Indicators.DegTypCod);
 		  HTM_Txt (" (");
 		  HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
 		  HTM_Txt (")");

@@ -40,7 +40,7 @@
 
 void Cty_DB_CreateCountry (const struct Hie_Node *Cty,
 			   char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
-			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1]);
+			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1]);
 
 unsigned Cty_DB_GetCtysBasic (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res);

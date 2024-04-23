@@ -30,10 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_action_list.h"
-#include "swad_constant.h"
-#include "swad_cryptography.h"
-#include "swad_language.h"
-#include "swad_string.h"
+#include "swad_hierarchy_type.h"
 #include "swad_tab.h"
 #include "swad_user_type.h"
 
@@ -53,22 +50,22 @@
 #define Act_NUM_CONTENTS 2
 typedef enum
   {
-   Act_CONT_NORM,
-   Act_CONT_DATA,
+   Act_NORM,
+   Act_DATA,
   } Act_Content_t;
 
 typedef enum
   {
-   Act_UNK_TAB,	// Unknown tab
-   Act_1ST_TAB,	// The main (original, first) tab in the browser
-   Act_NEW_TAB,	// A new (second) blank tab in the browser
-   Act_2ND_TAB,	// The second tab in the browser
-   Act_AJAX_NR,	// Update a zone of the page using AJAX
-   Act_AJAX_RF,	// Update a zone of the page using AJAX, with auto-refresh
-   Act_UPL_FIL,	// Upload a file. Do not write HTML content. Write Status code instead for Dropzone.js
-   Act_DWN_FIL,	// Download a file in a new tab. Do not write HTML content.
-   Act_204_NOC,	// Do not write HTML content. HTTP will return Status 204 No Content
-   Act_WEB_SVC,	// Web service. Send output to client using SOAP.
+   Act_UNK,	// Unknown tab
+   Act_1ST,	// The main (original, first) tab in the browser
+   Act_NEW,	// A new (second) blank tab in the browser
+   Act_2ND,	// The second tab in the browser
+   Act_AJA,	// Update a zone of the page using AJAX
+   Act_REF,	// Update a zone of the page using AJAX, with auto-refresh
+   Act_UPL,	// Upload a file. Do not write HTML content. Write Status code instead for Dropzone.js
+   Act_DWN,	// Download a file in a new tab. Do not write HTML content.
+   Act_204,	// Do not write HTML content. HTTP will return Status 204 No Content
+   Act_SVC,	// Web service. Send output to client using SOAP.
   } Act_BrowserTab_t;
 
 struct Act_Actions
@@ -77,16 +74,11 @@ struct Act_Actions
    signed int IndexInMenu;
    Tab_Tab_t Tab;
    Act_Action_t SuperAction;
-   unsigned PermissionCrs[Usr_NUM_BELONG];
-   unsigned PermissionDeg;
-   unsigned PermissionCtr;
-   unsigned PermissionIns;
-   unsigned PermissionCty;
-   unsigned PermissionSys;
+   void (*FunctionPriori) (void);
+   void (*FunctionPosteriori) (void);
+   unsigned Permission[Hie_NUM_LEVELS][Usr_NUM_BELONG];
    Act_Content_t ContentType;
    Act_BrowserTab_t BrowserTab;
-   void (*FunctionPriori) ();
-   void (*FunctionPosteriori) ();
   };
 
 struct Act_ActionFunc

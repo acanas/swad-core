@@ -63,7 +63,7 @@ void Lnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkNam
 /****************** Update link changing old WWW by new WWW ******************/
 /*****************************************************************************/
 
-void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the web of an institutional link",
 		   "UPDATE lnk_links"

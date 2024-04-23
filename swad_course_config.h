@@ -37,7 +37,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType);
 void CrsCfg_PrintConfiguration (void);
 
 void CrsCfg_ChangeCrsDeg (void);
-void CrsCfg_RenameCourseShort (void);
+void CrsCfg_RenameCourseShrt (void);
 void CrsCfg_RenameCourseFull (void);
 void CrsCfg_ChangeCrsYear (void);
 void CrsCfg_ChangeInsCrsCod (void);

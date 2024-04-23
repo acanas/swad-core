@@ -80,10 +80,10 @@ void QR_PutParQRString (void *QRString)
 
 void QR_PrintQRCode (void)
   {
-   char QRString[Cns_MAX_BYTES_WWW + 1];
+   char QRString[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get QR string *****/
-   Par_GetParText ("QRString",QRString,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("QRString",QRString,WWW_MAX_BYTES_WWW);
 
    /***** Show QR code *****/
    QR_ImageQRCode (QRString);

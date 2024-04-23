@@ -30,6 +30,8 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_banner.h"
+#include "swad_hidden_visible.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -50,7 +52,7 @@ void Ban_DB_UpdateBanName (long BanCod,
 void Ban_DB_UpdateBanImg (long BanCod,
                           const char NewImg[Ban_MAX_BYTES_IMAGE + 1]);
 void Ban_DB_UpdateBanWWW (long BanCod,
-                          const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+                          const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 
 void Ban_DB_RemoveBanner (long BanCod);
 

@@ -34,10 +34,10 @@
 /*****************************************************************************/
 
 void Net_DB_UpdateMyWeb (Net_WebsAndSocialNetworks_t NumURL,
-                         const char URL[Cns_MAX_BYTES_WWW + 1]);
+                         const char URL[WWW_MAX_BYTES_WWW + 1]);
 
 void Net_DB_GetURL (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
-                    char URL[Cns_MAX_BYTES_WWW + 1]);
+                    char URL[WWW_MAX_BYTES_WWW + 1]);
 unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res);
 
 void Net_DB_RemoveMyWeb (Net_WebsAndSocialNetworks_t NumURL);

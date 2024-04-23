@@ -322,8 +322,8 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    unsigned NumDeg;
    struct Hie_Node *Deg;
    unsigned NumDegTyp;
-   struct DegTyp_DegreeType *DegTyp;
-   char WWW[Cns_MAX_BYTES_WWW + 1];
+   struct DegTyp_DegType *DegTyp;
+   char WWW[WWW_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    Usr_Can_t ICanEdit;
    unsigned NumCrss;
@@ -507,7 +507,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
   {
    Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
-   struct DegTyp_DegreeType *DegTyp;
+   struct DegTyp_DegType *DegTyp;
    struct Hie_Node Deg;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
@@ -732,7 +732,7 @@ static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
       Deg_PutIconToEditDegrees ();
 
    /***** Put icon to view degree types *****/
-   DegTyp_PutIconToViewDegreeTypes ();
+   DegTyp_PutIconToViewDegTypes ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
@@ -756,7 +756,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
-   struct DegTyp_DegreeType DegTyp;
+   struct DegTyp_DegType DegTyp;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
@@ -766,7 +766,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->Specific.TypCod;
-   if (!DegTyp_GetDegreeTypeDataByCod (&DegTyp))
+   if (!DegTyp_GetDegTypeDataByCod (&DegTyp))
       Err_WrongDegTypExit ();
 
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
@@ -859,7 +859,7 @@ static void Deg_EditDegreesInternal (void)
    char *Title;
 
    /***** Get list of degree types *****/
-   DegTyp_GetListDegreeTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEGREE_TYPE);
+   DegTyp_GetListDegTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEG_TYPE);
 
    /***** Get list of degrees in the current center *****/
    Deg_GetListDegsInCurrentCtr ();
@@ -890,15 +890,15 @@ static void Deg_EditDegreesInternal (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_No_types_of_degree);
 
 	 /***** Form to create the first degree type *****/
-	 if (DegTyp_CheckIfICanCreateDegreeTypes () == Usr_CAN)
-	    DegTyp_EditDegreeTypes (&DegTypes);
+	 if (DegTyp_CheckIfICanCreateDegTypes () == Usr_CAN)
+	    DegTyp_EditDegTypes (&DegTypes);
 	}
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of degree types *****/
-   DegTyp_FreeListDegreeTypes (&DegTypes);
+   DegTyp_FreeListDegTypes (&DegTypes);
   }
 
 /*****************************************************************************/
@@ -911,7 +911,7 @@ static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
    Ico_PutContextualIconToView (ActSeeDeg,NULL,NULL,NULL);
 
    /***** Put icon to view types of degree *****/
-   DegTyp_PutIconToViewDegreeTypes ();
+   DegTyp_PutIconToViewDegTypes ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
@@ -1049,7 +1049,7 @@ static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status)
    Deg_EditingDeg->Specific.TypCod = ParCod_GetAndCheckPar (ParCod_OthDegTyp);
 
    /* Get degree WWW */
-   Par_GetParText ("WWW",Deg_EditingDeg->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Deg_EditingDeg->WWW,WWW_MAX_BYTES_WWW);
 
    if (Deg_EditingDeg->ShrtName[0] &&
        Deg_EditingDeg->FullName[0])	// If there's a degree name
@@ -1079,7 +1079,7 @@ static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status)
 /************************ Request removing of a degree ***********************/
 /*****************************************************************************/
 
-void Deg_RemoveDegree (void)
+void Deg_RemoveDeg (void)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree;
@@ -1248,7 +1248,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-void Deg_RenameDegreeShort (void)
+void Deg_RenameDegShrt (void)
   {
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
@@ -1258,7 +1258,7 @@ void Deg_RenameDegreeShort (void)
    Deg_RenameDegree (Deg_EditingDeg,Nam_SHRT_NAME);
   }
 
-void Deg_RenameDegreeFull (void)
+void Deg_RenameDegFull (void)
   {
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
@@ -1335,7 +1335,7 @@ void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull)
 /************************ Change the type of a degree ************************/
 /*****************************************************************************/
 
-void Deg_ChangeDegreeType (void)
+void Deg_ChangeDegTyp (void)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
@@ -1373,7 +1373,7 @@ void Deg_ChangeDegWWW (void)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
@@ -1383,7 +1383,7 @@ void Deg_ChangeDegWWW (void)
    Deg_EditingDeg->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get the new WWW for the degree */
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get data of degree *****/
    Hie_GetDataByCod[Hie_DEG] (Deg_EditingDeg);

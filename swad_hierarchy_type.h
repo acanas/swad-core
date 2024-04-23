@@ -27,10 +27,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_constant.h"
 #include "swad_name.h"
 #include "swad_role_type.h"
 #include "swad_string.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -95,7 +95,7 @@ struct Hie_Node
    char InstitutionalCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the node
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];	// Short name of the node
    char FullName[Nam_MAX_BYTES_FULL_NAME + 1];	// Full name of the node
-   char WWW[Cns_MAX_BYTES_WWW + 1];
+   char WWW[WWW_MAX_BYTES_WWW + 1];
    struct
      {
       bool Valid;

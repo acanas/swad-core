@@ -43,6 +43,7 @@
 #include "swad_photo.h"
 #include "swad_string.h"
 #include "swad_user.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -479,7 +480,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
    char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
    struct Usr_Data UsrDat;
    bool ShowPhoto = false;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    char *CaptionStr;
    char *ImgStr;
    char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];

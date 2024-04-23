@@ -680,7 +680,7 @@ static bool Inf_CheckURL (long CrsCod,Inf_Type_t InfoType)
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
 	 Gbl.Crs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
@@ -709,7 +709,7 @@ static bool Inf_CheckAndShowURL (void)
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
 	 Gbl.Crs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
@@ -740,7 +740,7 @@ static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
 /*****************************************************************************/
 // This function is called only from web service
 
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1])
   {
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
@@ -755,7 +755,7 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (TxtBuffer,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+      if (fgets (TxtBuffer,WWW_MAX_BYTES_WWW,FileURL) == NULL)
 	 TxtBuffer[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
@@ -1073,7 +1073,7 @@ void Inf_FormToSendURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc)
       /***** Link *****/
       if ((FileURL = fopen (PathFile,"rb")) != NULL)
 	{
-	 if (fgets (Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+	 if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
 	    Gbl.Crs.Info.URL[0] = '\0';
 	 /* File is not longer needed. Close it */
 	 fclose (FileURL);
@@ -1754,7 +1754,7 @@ void Inf_ReceiveURLInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Get parameter with URL *****/
-   Par_GetParText ("InfoSrcURL",Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("InfoSrcURL",Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
    Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,

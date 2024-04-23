@@ -154,7 +154,7 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
 /*****************************************************************************/
 
 void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
-		 Act_Action_t NextAction,const char WWW[Cns_MAX_BYTES_WWW + 1])
+		 Act_Action_t NextAction,const char WWW[WWW_MAX_BYTES_WWW + 1])
   {
    extern const char *Txt_Web;
    static const char *Id[Frm_NUM_PUT_FORM] =

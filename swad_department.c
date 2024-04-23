@@ -614,7 +614,7 @@ void Dpt_ChangeDepartIns (void)
 /******************* Change the short name of a department *******************/
 /*****************************************************************************/
 
-void Dpt_RenameDepartShort (void)
+void Dpt_RenameDepartShrt (void)
   {
    /***** Department constructor *****/
    Dpt_EditingDepartmentConstructor ();
@@ -709,7 +709,7 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
 void Dpt_ChangeDptWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Department constructor *****/
    Dpt_EditingDepartmentConstructor ();
@@ -719,7 +719,7 @@ void Dpt_ChangeDptWWW (void)
    Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /* Get the new WWW for the department */
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get data of the department from database *****/
    Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
@@ -878,7 +878,7 @@ void Dpt_ReceiveNewDpt (void)
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get department WWW */
-   Par_GetParText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Dpt_EditingDpt->WWW,WWW_MAX_BYTES_WWW);
 
    if (Dpt_EditingDpt->ShrtName[0] &&
        Dpt_EditingDpt->FullName[0])	// If there's a department name

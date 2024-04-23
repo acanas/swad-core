@@ -197,20 +197,20 @@ void Brw_ShowFileBrowserProject (long PrjCod);
 
 void Brw_PutLegalNotice (void);
 
-void Brw_AskRemFileFromTree (void);
-void Brw_RemFileFromTree (void);
-void Brw_RemFolderFromTree (void);
+void Brw_ReqRemFile (void);
+void Brw_RemFile (void);
+void Brw_RemFolder (void);
 void Brw_ExpandFileTree (void);
 void Brw_ContractFileTree (void);
-void Brw_CopyFromFileBrowser (void);
-void Brw_PasteIntoFileBrowser (void);
-void Brw_RemSubtreeInFileBrowser (void);
+void Brw_Copy (void);
+void Brw_Paste (void);
+void Brw_RemSubtree (void);
 void Brw_ShowFormFileBrowser (void);
-void Brw_RecFolderFileBrowser (void);
-void Brw_RenFolderFileBrowser (void);
-void Brw_RcvFileInFileBrwDZ (void);
-void Brw_RcvFileInFileBrwClassic (void);
-void Brw_RecLinkFileBrowser (void);
+void Brw_CreateFolder (void);
+void Brw_RenFolder (void);
+void Brw_RcvFileDZ (void);
+void Brw_RcvFileClassic (void);
+void Brw_CreateLink (void);
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
 HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHiddenOrVisible (Brw_FileType_t FileType,

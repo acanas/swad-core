@@ -37,7 +37,7 @@
 
 void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk);
 void Lnk_DB_UpdateLnkName (long LnkCod,const char *FldName,const char *NewLnkName);
-void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 
 unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res);
 unsigned Lnk_DB_GetLinkDataByCod (MYSQL_RES **mysql_res,long LnkCod);

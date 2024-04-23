@@ -25,10 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_banner.h"
 #include "swad_banner_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************************** Get list of all banners **************************/
@@ -198,7 +198,7 @@ void Ban_DB_UpdateBanImg (long BanCod,
 /*****************************************************************************/
 
 void Ban_DB_UpdateBanWWW (long BanCod,
-                          const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+                          const char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the web of a banner",
 		   "UPDATE ban_banners"

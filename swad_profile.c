@@ -128,13 +128,13 @@ void Prf_SeeSocialProfiles (void)
 /************************** Get public profile URL ***************************/
 /*****************************************************************************/
 
-char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
+char *Prf_GetURLPublicProfile (char URL[WWW_MAX_BYTES_WWW + 1],
                                const char *NickWithoutArr)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
-   snprintf (URL,Cns_MAX_BYTES_WWW + 1,"%s/%s?usr=@%s",
+   snprintf (URL,WWW_MAX_BYTES_WWW + 1,"%s/%s?usr=@%s",
 	     Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	     NickWithoutArr);
 

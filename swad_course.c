@@ -1409,7 +1409,7 @@ void Crs_UpdateCrsYear (struct Hie_Node *Crs,unsigned NewYear)
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
-void Crs_RenameCourseShort (void)
+void Crs_RenameCourseShrt (void)
   {
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();

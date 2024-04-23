@@ -880,7 +880,7 @@ static void Ins_ListInstitutionsForEdition (void)
      };
    unsigned NumIns;
    struct Hie_Node *Ins;
-   char WWW[Cns_MAX_BYTES_WWW + 1];
+   char WWW[WWW_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    Usr_Can_t ICanEdit;
    unsigned NumCtrs;
@@ -1215,7 +1215,7 @@ void Ins_ChangeInsWWW (void)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Institution constructor *****/
    Ins_EditingInstitutionConstructor ();
@@ -1225,7 +1225,7 @@ void Ins_ChangeInsWWW (void)
    Ins_EditingIns->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get the new WWW for the institution */
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get data of institution *****/
    Hie_GetDataByCod[Hie_INS] (Ins_EditingIns);
@@ -1477,7 +1477,7 @@ static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status)
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get institution URL */
-   Par_GetParText ("WWW",Ins_EditingIns->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Ins_EditingIns->WWW,WWW_MAX_BYTES_WWW);
 
    if (Ins_EditingIns->ShrtName[0] &&
        Ins_EditingIns->FullName[0])	// If there's a institution name

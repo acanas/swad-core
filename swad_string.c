@@ -758,7 +758,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
             case Str_FROM_FORM:
                switch (Par_GetContentReceivedByCGI ())
                  {
-		  case Act_CONT_NORM:
+		  case Act_NORM:
 		     // The form contained text and was sent with content type application/x-www-form-urlencoded
 		     switch (Ch)
 		       {
@@ -804,7 +804,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			   break;
 		       }
                      break;
-		  case Act_CONT_DATA:
+		  case Act_DATA:
 		     // The form contained data and was sent with content type multipart/form-data
 		     switch (Ch)
 		       {

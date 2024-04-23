@@ -4924,7 +4924,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
 /************** Ask for confirmation of removing a file or link **************/
 /*****************************************************************************/
 
-void Brw_AskRemFileFromTree (void)
+void Brw_ReqRemFile (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
@@ -4962,7 +4962,7 @@ void Brw_AskRemFileFromTree (void)
 /************************ Remove a file of a file browser ********************/
 /*****************************************************************************/
 
-void Brw_RemFileFromTree (void)
+void Brw_RemFile (void)
   {
    extern const char *Txt_FILE_X_removed;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
@@ -5020,7 +5020,7 @@ void Brw_RemFileFromTree (void)
 /******************* Remove a folder of a file browser ***********************/
 /*****************************************************************************/
 
-void Brw_RemFolderFromTree (void)
+void Brw_RemFolder (void)
   {
    extern const char *Txt_Folder_X_removed;
    extern const char *Txt_You_can_not_remove_this_folder;
@@ -5092,7 +5092,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
 /********* Complete removing of a not empty folder in a file browser *********/
 /*****************************************************************************/
 
-void Brw_RemSubtreeInFileBrowser (void)
+void Brw_RemSubtree (void)
   {
    extern const char *Txt_Folder_X_and_all_its_contents_removed;
    char Path[PATH_MAX + 1 + PATH_MAX + 1];
@@ -5164,7 +5164,7 @@ void Brw_ContractFileTree (void)
 /****** Copy the path of a file/folder of a file browser in clipboard ********/
 /*****************************************************************************/
 
-void Brw_CopyFromFileBrowser (void)
+void Brw_Copy (void)
   {
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -5698,7 +5698,7 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char P
 /**** Paste the arch/carp indicado in the portapapelesde in file browser *****/
 /*****************************************************************************/
 
-void Brw_PasteIntoFileBrowser (void)
+void Brw_Paste (void)
   {
    extern const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_;
    struct GroupData GrpDat;
@@ -6490,7 +6490,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 /*********** Receive the name of a new folder in a file browser **************/
 /*****************************************************************************/
 
-void Brw_RecFolderFileBrowser (void)
+void Brw_CreateFolder (void)
   {
    extern const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota;
    extern const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name;
@@ -6596,7 +6596,7 @@ void Brw_RecFolderFileBrowser (void)
 /**************** Rename an existing folder in a file browser ****************/
 /*****************************************************************************/
 
-void Brw_RenFolderFileBrowser (void)
+void Brw_RenFolder (void)
   {
    extern const char *Txt_The_folder_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_X_has_not_changed;
@@ -6712,7 +6712,7 @@ void Brw_RenFolderFileBrowser (void)
 /****** Receive a new file in a file browser unsigned Dropzone.js ************/
 /*****************************************************************************/
 
-void Brw_RcvFileInFileBrwDZ (void)
+void Brw_RcvFileDZ (void)
   {
    bool UploadSucessful;
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
@@ -6743,7 +6743,7 @@ void Brw_RcvFileInFileBrwDZ (void)
 /******** Receive a new file in a file browser using the classic way *********/
 /*****************************************************************************/
 
-void Brw_RcvFileInFileBrwClassic (void)
+void Brw_RcvFileClassic (void)
   {
    struct BrwSiz_BrowserSize *Size = BrwSiz_GetSize ();
 
@@ -6949,7 +6949,7 @@ static bool Brw_RcvFileInFileBrw (struct BrwSiz_BrowserSize *Size,
 /******************* Receive a new link in a file browser ********************/
 /*****************************************************************************/
 
-void Brw_RecLinkFileBrowser (void)
+void Brw_CreateLink (void)
   {
    extern const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name;
    extern const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota;

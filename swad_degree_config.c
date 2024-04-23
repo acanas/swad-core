@@ -352,7 +352,7 @@ void DegCfg_ChangeDegCtr (void)
 /*************** Change the name of a degree in configuration ****************/
 /*****************************************************************************/
 
-void DegCfg_RenameDegreeShort (void)
+void DegCfg_RenameDegreeShrt (void)
   {
    Deg_RenameDegree (&Gbl.Hierarchy.Node[Hie_DEG],Nam_SHRT_NAME);
   }
@@ -369,11 +369,11 @@ void DegCfg_RenameDegreeFull (void)
 void DegCfg_ChangeDegWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the degree */
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])

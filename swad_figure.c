@@ -220,7 +220,7 @@ void Fig_ShowFigures (void)
       [Fig_USERS_RANKING    ] = Usr_GetAndShowUsersRanking,
       [Fig_HIERARCHY        ] = Hie_GetAndShowHierarchyStats,
       [Fig_INSTITS          ] = Ins_GetAndShowInstitutionsStats,
-      [Fig_DEGREE_TYPES     ] = DegTyp_GetAndShowDegreeTypesStats,
+      [Fig_DEGREE_TYPES     ] = DegTyp_GetAndShowDegTypesStats,
       [Fig_FOLDERS_AND_FILES] = Brw_GetAndShowFileBrowsersStats,
       [Fig_OER              ] = Brw_GetAndShowOERsStats,
       [Fig_COURSE_PROGRAMS  ] = Prg_GetAndShowCourseProgramStats,

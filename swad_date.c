@@ -1098,7 +1098,7 @@ void Dat_GetDateFromForm (const char *ParNameDay,const char *ParNameMonth,const 
 /******* Set initial date to distant past and end date to current date *******/
 /*****************************************************************************/
 
-void Dat_SetDatesToPastAndNow (void)
+void Dat_SetDatesToPastNow (void)
   {
    Dat_Time.Range.TimeUTC[Dat_STR_TIME] = (time_t) 0;
    Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
@@ -1109,7 +1109,7 @@ void Dat_SetDatesToPastAndNow (void)
 /************ and set initial date to end date minus several days ************/
 /*****************************************************************************/
 
-void Dat_SetDatesToRecentWeeks (void)
+void Dat_SetDatesToRecWeeks (void)
   {
    Dat_Time.Range.TimeUTC[Dat_END_TIME] = Dat_GetStartExecutionTimeUTC ();
    Dat_Time.Range.TimeUTC[Dat_STR_TIME] = Dat_Time.Range.TimeUTC[Dat_END_TIME] -

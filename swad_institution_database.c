@@ -112,7 +112,7 @@ void Ins_DB_UpdateInsName (long HieCod,const char *FldName,const char *NewName)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of an institution",

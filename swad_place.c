@@ -532,7 +532,7 @@ void Plc_RemovePlace (void)
 /********************* Change the short name of a place **********************/
 /*****************************************************************************/
 
-void Plc_RenamePlaceShort (void)
+void Plc_RenamePlaceShrt (void)
   {
    /***** Place constructor *****/
    Plc_EditingPlaceConstructor ();

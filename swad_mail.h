@@ -67,11 +67,11 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct Usr_Data *UsrDat);
 void Mai_WriteWarningEmailNotifications (void);
 
 void Mai_GetMailDomainDataByCod (struct Mail *Plc);
-void Mai_RemoveMailDomain (void);
-void Mai_RenameMailDomainShort (void);
-void Mai_RenameMailDomainFull (void);
+void Mai_RemoveMailDom (void);
+void Mai_RenameMailDomShrt (void);
+void Mai_RenameMailDomFull (void);
 void Mai_ContEditAfterChgMai (void);
-void Mai_ReceiveNewMailDomain (void);
+void Mai_ReceiveNewMailDom (void);
 
 void Mai_ReqUsrsToListEmails (void);
 void Mai_GetSelUsrsAndListEmails (void);

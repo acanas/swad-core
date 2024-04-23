@@ -55,7 +55,7 @@ void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
    char PathRelPublRSSDir[PATH_MAX + 1];
    char PathRelPublRSSFile[PATH_MAX + 1 + NAME_MAX + 1];
    FILE *FileRSS;
-   char RSSLink[Cns_MAX_BYTES_WWW + 1];
+   char RSSLink[WWW_MAX_BYTES_WWW + 1];
    struct tm *tm;
    time_t t = Dat_GetStartExecutionTimeUTC ();
 
@@ -300,8 +300,8 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs)
 /********* Write URL to RSS archive with active notices in a course **********/
 /*****************************************************************************/
 
-void RSS_BuildRSSLink (char RSSLink[Cns_MAX_BYTES_WWW + 1],long CrsCod)
+void RSS_BuildRSSLink (char RSSLink[WWW_MAX_BYTES_WWW + 1],long CrsCod)
   {
-   snprintf (RSSLink,Cns_MAX_BYTES_WWW + 1,"%s/%ld/%s/%s",
+   snprintf (RSSLink,WWW_MAX_BYTES_WWW + 1,"%s/%ld/%s/%s",
              Cfg_URL_CRS_PUBLIC,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

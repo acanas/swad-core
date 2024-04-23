@@ -33,9 +33,6 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Cns_MAX_CHARS_WWW	(256 - 1)		// 255: max. number of chars of a URL
-#define Cns_MAX_BYTES_WWW	Cns_MAX_CHARS_WWW	// 255
-
 #define Cns_MAX_CHARS_IP	(3 + 1 + 3 + 1 + 3 + 1 + 3)	// 15: max. number of chars of an IP address
 				// Example: 255.255.255.255
 				//           3+1+3+1+3+1+3

@@ -289,8 +289,8 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 	{
 	 /* Get and limit length of the URL */
 	 Length = strlen (row[2]);
-	 if (Length > Cns_MAX_BYTES_WWW)
-	     Length = Cns_MAX_BYTES_WWW;
+	 if (Length > WWW_MAX_BYTES_WWW)
+	     Length = WWW_MAX_BYTES_WWW;
 
 	 if ((Media->URL = malloc (Length + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
@@ -478,7 +478,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 			      "id=\"%s_url\" class=\"%s\""			// <id>_url
 			      " placeholder=\"%s\" maxlength=\"%u\""
 			      " disabled=\"disabled\" style=\"display:none;\"",
-			      Id,ClassInput,Txt_Link,Cns_MAX_CHARS_WWW);
+			      Id,ClassInput,Txt_Link,WWW_MAX_CHARS_WWW);
 
 	    /* End container */
 	    HTM_DIV_End ();
@@ -698,11 +698,11 @@ static Med_FormType_t Usr_GetFormTypeFromForm (struct Med_ParUpload *ParUpload)
 
 static void Usr_GetURLFromForm (const char *ParName,struct Med_Media *Media)
   {
-   char URL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
    size_t Length;
 
    /***** Get media URL from form *****/
-   Par_GetParText (ParName,URL,Cns_MAX_BYTES_WWW);
+   Par_GetParText (ParName,URL,WWW_MAX_BYTES_WWW);
    /* If the URL coming from the form is empty, keep current media URL unchanged
       If not empty, copy it to current media URL */
    if ((Length = strlen (URL)) > 0)
@@ -1888,8 +1888,8 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
      {
       /* Get and limit length of the URL */
       Length = strlen (MediaSrc->URL);
-      if (Length > Cns_MAX_BYTES_WWW)
-	  Length = Cns_MAX_BYTES_WWW;
+      if (Length > WWW_MAX_BYTES_WWW)
+	  Length = WWW_MAX_BYTES_WWW;
       if ((MediaDst.URL = malloc (Length + 1)) == NULL)
          Err_NotEnoughMemoryExit ();
       Str_Copy (MediaDst.URL,MediaSrc->URL,Length);
@@ -1901,8 +1901,8 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
      {
       /* Get and limit length of the title */
       Length = strlen (MediaSrc->Title);
-      if (Length > Cns_MAX_BYTES_WWW)
-	  Length = Cns_MAX_BYTES_WWW;
+      if (Length > WWW_MAX_BYTES_WWW)
+	  Length = WWW_MAX_BYTES_WWW;
       if ((MediaDst.Title = malloc (Length + 1)) == NULL)
          Err_NotEnoughMemoryExit ();
       Str_Copy (MediaDst.Title,MediaSrc->Title,Length);

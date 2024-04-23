@@ -101,37 +101,15 @@ Act_Action_t Act_GetSuperAction (Act_Action_t Action)
 
 Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
   {
-   unsigned Permission;
-
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return Usr_CAN_NOT;
 
-   switch (Gbl.Hierarchy.Level)
-     {
-      case Hie_SYS:	// System
-         Permission = ActLst_Actions[Action].PermissionSys;
-	 break;
-      case Hie_CTY:	// Country selected
-         Permission = ActLst_Actions[Action].PermissionCty;
-	 break;
-      case Hie_INS:	// Institution selected
-         Permission = ActLst_Actions[Action].PermissionIns;
-	 break;
-      case Hie_CTR:	// Center selected
-         Permission = ActLst_Actions[Action].PermissionCtr;
-	 break;
-      case Hie_DEG:	// Degree selected
-         Permission = ActLst_Actions[Action].PermissionDeg;
-	 break;
-      case Hie_CRS:	// Course selected
-	 Permission = ActLst_Actions[Action].PermissionCrs[Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS]];
-	 break;
-      default:
-	 return Usr_CAN_NOT;
-     }
+   if (Gbl.Hierarchy.Level == Hie_UNK)
+      return Usr_CAN_NOT;
 
-   return ((Permission & (1 << Gbl.Usrs.Me.Role.Logged)) != 0) ? Usr_CAN :
-								 Usr_CAN_NOT;
+   return ((ActLst_Actions[Action].Permission[Gbl.Hierarchy.Level][Gbl.Usrs.Me.IBelongToCurrent[Gbl.Hierarchy.Level]]
+           & (1 << Gbl.Usrs.Me.Role.Logged)) != 0) ? Usr_CAN :
+						     Usr_CAN_NOT;
   }
 
 /*****************************************************************************/
@@ -141,7 +119,7 @@ Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
 Act_Content_t Act_GetContentType (Act_Action_t Action)
   {
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
-      return Act_CONT_NORM;
+      return Act_NORM;
 
    return ActLst_Actions[Action].ContentType;
   }
@@ -153,7 +131,7 @@ Act_Content_t Act_GetContentType (Act_Action_t Action)
 Act_BrowserTab_t Act_GetBrowserTab (Act_Action_t Action)
   {
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
-      return Act_UNK_TAB;
+      return Act_UNK;
 
    return ActLst_Actions[Action].BrowserTab;
   }
@@ -422,7 +400,7 @@ void Act_AdjustCurrentAction (void)
 		   the only action possible
 		   is to show a form to send my photo *****/
 	    if (!Gbl.Usrs.Me.MyPhotoExists)
-	       if (!(ActLst_Actions[Gbl.Action.Act].PermissionCrs[Usr_BELONG] & (1 << Rol_UNK)))
+	       if (!(ActLst_Actions[Gbl.Action.Act].Permission[Hie_CRS][Usr_BELONG] & (1 << Rol_UNK)))
 		  if ((Gbl.Usrs.Me.NumAccWithoutPhoto =
 		       Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)
 		    {

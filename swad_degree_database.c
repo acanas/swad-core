@@ -154,8 +154,8 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
   {
    static const char *OrderBySubQuery[DegTyp_NUM_ORDERS] =
      {
-      [DegTyp_ORDER_BY_DEGREE_TYPE] = "DegTypName",
-      [DegTyp_ORDER_BY_NUM_DEGREES] = "NumDegs DESC,"
+      [DegTyp_ORDER_BY_DEG_TYPE] = "DegTypName",
+      [DegTyp_ORDER_BY_NUM_DEGS] = "NumDegs DESC,"
 	                              "DegTypName",
      };
 
@@ -266,7 +266,7 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
 /************** Get the name of a type of degree from database ***************/
 /*****************************************************************************/
 
-void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegreeType *DegTyp)
+void Deg_DB_GetDegTypeNameByCod (struct DegTyp_DegType *DegTyp)
   {
    DB_QuerySELECTString (DegTyp->DegTypName,sizeof (DegTyp->DegTypName) - 1,
 		         "can not get the name of a type of degree",
@@ -732,7 +732,7 @@ void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod)
 /************************ Update the WWW of a degree *************************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Deg_DB_UpdateDegWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryUPDATE ("can not update the web of a degree",
 		   "UPDATE deg_degrees"

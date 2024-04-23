@@ -144,7 +144,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void);
 void Net_ShowWebsAndSocialNets (const struct Usr_Data *UsrDat)
   {
    Net_WebsAndSocialNetworks_t NumURL;
-   char URL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"REC_WEBS\"");
@@ -196,7 +196,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    extern const char *Txt_Webs_social_networks;
    extern const char *Txt_Save_changes;
    Net_WebsAndSocialNetworks_t NumURL;
-   char URL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char StrName[32];
 
    /***** Begin section *****/
@@ -295,7 +295,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
    Net_WebsAndSocialNetworks_t NumURL;
    char ParName[3 + 10 + 1];
-   char URL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get URLs *****/
    for (NumURL  = (Net_WebsAndSocialNetworks_t) 0;
@@ -304,7 +304,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
      {
       /***** Get URL from the form *****/
       snprintf (ParName,sizeof (ParName),"URL%u",(unsigned) NumURL);
-      Par_GetParText (ParName,URL,Cns_MAX_BYTES_WWW);
+      Par_GetParText (ParName,URL,WWW_MAX_BYTES_WWW);
 
       if (URL[0])
 	 /***** Insert or replace web / social network *****/

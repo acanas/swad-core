@@ -87,9 +87,9 @@ void Bld_GetListBuildingsInThisCtr (void);
 void Bld_GetBuildingDataByCod (struct Bld_Building *Roo);
 
 void Bld_RemoveBuilding (void);
-void Bld_RenameBuildingShort (void);
+void Bld_RenameBuildingShrt (void);
 void Bld_RenameBuildingFull (void);
-void Bld_ChangeBuildingLocation (void);
+void Bld_ChangeBuildingLoc (void);
 void Bld_ContEditAfterChgBuilding (void);
 
 void Bld_ReceiveNewBuilding (void);

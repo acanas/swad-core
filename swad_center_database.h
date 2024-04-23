@@ -74,7 +74,7 @@ void Ctr_DB_UpdateCtrIns (long HieCod,long NewInsCod);
 void Ctr_DB_UpdateCtrPlc (long HieCod,long NewPlcCod);
 void Ctr_DB_UpdateCtrName (long HieCod,
 			   const char *FldName,const char *NewCtrName);
-void Ctr_DB_UpdateCtrWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Ctr_DB_UpdateCtrWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 void Ctr_DB_UpdateCtrPhotoAttribution (long HieCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 void Ctr_DB_UpdateCtrCoordinate (long HieCod,
 				 const char *CoordField,double NewCoord);

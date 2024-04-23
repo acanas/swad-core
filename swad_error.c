@@ -653,7 +653,7 @@ void Err_ShowErrorAndExit (const char *Txt)
 	 /***** End the output *****/
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {
-	    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB)
+	    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST)
 	       Lay_WriteAboutZone ();
 
 	    HTM_Txt ("</body>\n"

@@ -51,6 +51,7 @@
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_place.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1050,7 +1051,7 @@ void CtrCfg_ChangeCtrPlc (void)
 /*************** Change the name of a center in configuration ****************/
 /*****************************************************************************/
 
-void CtrCfg_RenameCenterShort (void)
+void CtrCfg_RenameCenterShrt (void)
   {
    Ctr_RenameCenter (&Gbl.Hierarchy.Node[Hie_CTR],Nam_SHRT_NAME);
   }
@@ -1130,11 +1131,11 @@ void CtrCfg_ChangeCtrAltitude (void)
 void CtrCfg_ChangeCtrWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the center */
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])

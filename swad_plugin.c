@@ -108,7 +108,7 @@ void Plg_ListPlugins (void)
    extern const char *Txt_Plugin;
    unsigned NumPlg;
    struct Plg_Plugin *Plg;
-   char URL[Cns_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
+   char URL[WWW_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
    char *Icon;
    struct Plg_Plugins Plugins;
 
@@ -563,7 +563,7 @@ void Plg_RenamePlugin (void)
 /******************* Change the description of a plugin **********************/
 /*****************************************************************************/
 
-void Plg_ChangePlgDescription (void)
+void Plg_ChangePlgDesc (void)
   {
    extern const char *Txt_The_new_description_is_X;
    char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
@@ -689,7 +689,7 @@ void Plg_ChangePlgAppKey (void)
 void Plg_ChangePlgURL (void)
   {
    extern const char *Txt_The_new_URL_is_X;
-   char NewURL[Cns_MAX_BYTES_WWW + 1];
+   char NewURL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Plugin constructor *****/
    Plg_EditingPluginConstructor ();
@@ -699,7 +699,7 @@ void Plg_ChangePlgURL (void)
    Plg_EditingPlg->PlgCod = ParCod_GetAndCheckPar (ParCod_Plg);
 
    /* Get the new URL for the plugin */
-   Par_GetParText ("URL",NewURL,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("URL",NewURL,WWW_MAX_BYTES_WWW);
 
    /***** Get plugin data from the database *****/
    Plg_GetPluginDataByCod (Plg_EditingPlg);
@@ -915,7 +915,7 @@ void Plg_ReceiveNewPlg (void)
    Par_GetParText ("Description",Plg_EditingPlg->Description,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
    Par_GetParText ("Logo"       ,Plg_EditingPlg->Logo       ,Plg_MAX_BYTES_PLUGIN_LOGO);
    Par_GetParText ("AppKey"     ,Plg_EditingPlg->AppKey     ,Plg_MAX_BYTES_PLUGIN_APP_KEY);
-   Par_GetParText ("URL"        ,Plg_EditingPlg->URL        ,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("URL"        ,Plg_EditingPlg->URL        ,WWW_MAX_BYTES_WWW);
    Par_GetParText ("IP"         ,Plg_EditingPlg->IP         ,Cns_MAX_BYTES_IP);
 
    if (Plg_EditingPlg->Name[0])	// If there's a plugin name

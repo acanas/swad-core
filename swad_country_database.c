@@ -36,6 +36,7 @@
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_database.h"
 #include "swad_search.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -49,7 +50,7 @@ extern struct Globals Gbl;
 
 #define Cty_DB_MAX_BYTES_SUBQUERY_CTYS		((1 + Lan_NUM_LANGUAGES) * 32)
 #define Cty_DB_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Lan_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
-#define Cty_DB_MAX_BYTES_SUBQUERY_CTYS_WWW	((1 + Lan_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
+#define Cty_DB_MAX_BYTES_SUBQUERY_CTYS_WWW	((1 + Lan_NUM_LANGUAGES) * WWW_MAX_BYTES_WWW)
 
 /*****************************************************************************/
 /**************************** Create a new country ***************************/
@@ -57,7 +58,7 @@ extern struct Globals Gbl;
 
 void Cty_DB_CreateCountry (const struct Hie_Node *Cty,
 			   char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
-			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1])
+			   char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1])
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t Lan;

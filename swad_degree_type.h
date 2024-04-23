@@ -40,7 +40,7 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct DegTyp_DegreeType
+struct DegTyp_DegType
   {
    long DegTypCod;						// Degree type code
    char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1];	// Degree type name
@@ -49,46 +49,46 @@ struct DegTyp_DegreeType
 
 struct DegTyp_DegTypes
   {
-   unsigned Num;			// Number of degree types
-   struct DegTyp_DegreeType *Lst;	// List of degree types
+   unsigned Num;		// Number of degree types
+   struct DegTyp_DegType *Lst;	// List of degree types
   };
 
 #define DegTyp_NUM_ORDERS 2
 typedef enum
   {
-   DegTyp_ORDER_BY_DEGREE_TYPE = 0,
-   DegTyp_ORDER_BY_NUM_DEGREES = 1,
+   DegTyp_ORDER_BY_DEG_TYPE = 0,
+   DegTyp_ORDER_BY_NUM_DEGS = 1,
   } DegTyp_Order_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod);
+void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod);
 
-void DegTyp_SeeDegreeTypesInDegTab (void);
-void DegTyp_SeeDegreeTypesInStaTab (void);
-void DegTyp_GetAndEditDegreeTypes (void);
-void DegTyp_EditDegreeTypes (const struct DegTyp_DegTypes *DegTypes);
+void DegTyp_SeeDegTypesInDegTab (void);
+void DegTyp_SeeDegTypesInStaTab (void);
+void DegTyp_GetAndEditDegTypes (void);
+void DegTyp_EditDegTypes (const struct DegTyp_DegTypes *DegTypes);
 
-void DegTyp_PutIconToViewDegreeTypes (void);
+void DegTyp_PutIconToViewDegTypes (void);
 
-Usr_Can_t DegTyp_CheckIfICanCreateDegreeTypes (void);
+Usr_Can_t DegTyp_CheckIfICanCreateDegTypes (void);
 
-void DegTyp_GetListDegreeTypes (struct DegTyp_DegTypes *DegTypes,
-                                Hie_Level_t Level,DegTyp_Order_t Order);
-void DegTyp_FreeListDegreeTypes (struct DegTyp_DegTypes *DegTypes);
+void DegTyp_GetListDegTypes (struct DegTyp_DegTypes *DegTypes,
+                             Hie_Level_t Level,DegTyp_Order_t Order);
+void DegTyp_FreeListDegTypes (struct DegTyp_DegTypes *DegTypes);
 
-void DegTyp_ReceiveNewDegreeType (void);
+void DegTyp_ReceiveNewDegTyp (void);
 
-void DegTyp_RemoveDegreeType (void);
+void DegTyp_RemoveDegTyp (void);
 
-bool DegTyp_GetDegreeTypeDataByCod (struct DegTyp_DegreeType *DegTyp);
-void DegTyp_RenameDegreeType (void);
+bool DegTyp_GetDegTypeDataByCod (struct DegTyp_DegType *DegTyp);
+void DegTyp_RenameDegTyp (void);
 
 void DegTyp_ContEditAfterChgDegTyp (void);
 
 //-------------------------------- Figures ------------------------------------
-void DegTyp_GetAndShowDegreeTypesStats (void);
+void DegTyp_GetAndShowDegTypesStats (void);
 
 #endif

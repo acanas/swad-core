@@ -45,7 +45,7 @@ void Plg_DB_ChangeLogo (long PlgCod,
 void Plg_DB_ChangeAppKey (long PlgCod,
                           const char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1]);
 void Plg_DB_ChangeURL (long PlgCod,
-                       const char NewURL[Cns_MAX_BYTES_WWW + 1]);
+                       const char NewURL[WWW_MAX_BYTES_WWW + 1]);
 void Plg_DB_ChangeIP (long PlgCod,
                       const char NewIP[Cns_MAX_BYTES_IP + 1]);
 

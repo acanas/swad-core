@@ -143,6 +143,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_test_visibility.h"
 #include "swad_user.h"
 #include "swad_user_database.h"
+#include "swad_www.h"
 #include "swad_xml.h"
 
 /*****************************************************************************/
@@ -723,7 +724,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
   {
    char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];
    int ReturnCode;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    bool UsrFound;
 
    /***** Initializations *****/
@@ -737,7 +738,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    loginByUserPasswordKeyOut->userFirstname = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginByUserPasswordKeyOut->userSurname1  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginByUserPasswordKeyOut->userSurname2  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginByUserPasswordKeyOut->userPhoto     = soap_malloc (soap,Cns_MAX_BYTES_WWW                  + 1);
+   loginByUserPasswordKeyOut->userPhoto     = soap_malloc (soap,WWW_MAX_BYTES_WWW                  + 1);
    loginByUserPasswordKeyOut->userBirthday  = soap_malloc (soap,Dat_LENGTH_YYYYMMDD                + 1);
 
    /***** Default values returned on error *****/
@@ -816,7 +817,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
                 Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-      Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,Cns_MAX_BYTES_WWW);
+      Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 
       Str_Copy (loginByUserPasswordKeyOut->userBirthday,
                 Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
@@ -857,7 +858,7 @@ int swad__loginBySessionKey (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    bool UsrFound;
 
    /***** Initializations *****/
@@ -871,7 +872,7 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userFirstname = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userSurname1  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userSurname2  = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
-   loginBySessionKeyOut->userPhoto     = soap_malloc (soap,Cns_MAX_BYTES_WWW                  + 1);
+   loginBySessionKeyOut->userPhoto     = soap_malloc (soap,WWW_MAX_BYTES_WWW                  + 1);
    loginBySessionKeyOut->userBirthday  = soap_malloc (soap,Dat_LENGTH_YYYYMMDD                + 1);
    loginBySessionKeyOut->degreeName    = soap_malloc (soap,Nam_MAX_BYTES_FULL_NAME  + 1);
    loginBySessionKeyOut->courseName    = soap_malloc (soap,Nam_MAX_BYTES_FULL_NAME  + 1);
@@ -963,7 +964,7 @@ int swad__loginBySessionKey (struct soap *soap,
                 Gbl.Usrs.Me.UsrDat.FrstName,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-      Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,Cns_MAX_BYTES_WWW);
+      Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 
       Str_Copy (loginBySessionKeyOut->userBirthday,
                 Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
@@ -1299,7 +1300,7 @@ int swad__getCourseInfo (struct soap *soap,
 	 Result = API_WritePageIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
          break;
       case Inf_URL:		// Link to a web page
-         getCourseInfo->infoTxt = soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
+         getCourseInfo->infoTxt = soap_malloc (soap,WWW_MAX_BYTES_WWW + 1);
          Inf_WriteURLIntoTxtBuffer (getCourseInfo->infoTxt);
          break;
      }
@@ -2193,7 +2194,7 @@ static void API_CopyUsrData (struct soap *soap,
 			     struct swad__user *Usr,struct Usr_Data *UsrDat,
 			     Usr_Can_t ICanSeeUsrID)
   {
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    const char *FirstID;
    size_t Length;
 
@@ -2250,7 +2251,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    unsigned NumAttEvents;
    unsigned NumAttEvent;
    struct Att_Event Event;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    size_t Length;
 
    /***** Initializations *****/
@@ -2647,7 +2648,7 @@ int swad__getAttendanceUsers (struct soap *soap,
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    size_t Length;
 
    /***** Initializations *****/
@@ -2861,7 +2862,7 @@ int swad__getNotifications (struct soap *soap,
    long NtfCod;
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    long Cod;
    struct For_Forum ForumSelected;
@@ -2971,9 +2972,9 @@ int swad__getNotifications (struct soap *soap,
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto =
-               soap_malloc (soap,Cns_MAX_BYTES_WWW + 1);
+               soap_malloc (soap,WWW_MAX_BYTES_WWW + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,
-                      PhotoURL,Cns_MAX_BYTES_WWW);
+                      PhotoURL,WWW_MAX_BYTES_WWW);
            }
          else
            {
@@ -4017,7 +4018,7 @@ int swad__getGames (struct soap *soap,
    unsigned NumGames;
    int NumGame;
    long GamCod;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    long StartTime;
    long EndTime;
    size_t Length;
@@ -4171,7 +4172,7 @@ int swad__getMatches (struct soap *soap,
    unsigned NumMatches;
    int NumMatch;
    long MchCod;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    long StartTime;
    long EndTime;
    size_t Length;
@@ -4806,7 +4807,7 @@ static bool API_WriteRowFileBrowser (FILE *XML,unsigned Level,
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    struct Brw_FileMetadata FileMetadata;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Is this row hidden or visible? *****/
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
@@ -4884,8 +4885,8 @@ int swad__getFile (struct soap *soap,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
    struct Brw_FileMetadata FileMetadata;
-   char URL[Cns_MAX_BYTES_WWW + 1];
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -4893,10 +4894,10 @@ int swad__getFile (struct soap *soap,
 
    /***** Allocate space for strings *****/
    getFileOut->fileName       = soap_malloc (soap,NAME_MAX                + 1);
-   getFileOut->URL            = soap_malloc (soap,Cns_MAX_BYTES_WWW       + 1);
+   getFileOut->URL            = soap_malloc (soap,WWW_MAX_BYTES_WWW       + 1);
    getFileOut->license        = soap_malloc (soap,Brw_MAX_BYTES_LICENSE   + 1);
    getFileOut->publisherName  = soap_malloc (soap,Usr_MAX_BYTES_FULL_NAME + 1);
-   getFileOut->publisherPhoto = soap_malloc (soap,Cns_MAX_BYTES_WWW       + 1);
+   getFileOut->publisherPhoto = soap_malloc (soap,WWW_MAX_BYTES_WWW       + 1);
 
    /***** Default values returned on error *****/
    getFileOut->fileName[0]       = '\0';
@@ -5011,7 +5012,7 @@ int swad__getFile (struct soap *soap,
    /***** Copy data into output structure *****/
    Str_Copy (getFileOut->fileName,FileMetadata.FilFolLnk.Name,NAME_MAX);
 
-   Str_Copy (getFileOut->URL,URL,Cns_MAX_BYTES_WWW);
+   Str_Copy (getFileOut->URL,URL,WWW_MAX_BYTES_WWW);
 
    getFileOut->size = (int) FileMetadata.Size;
 
@@ -5031,7 +5032,7 @@ int swad__getFile (struct soap *soap,
 	           Usr_MAX_BYTES_FULL_NAME);
 
 	 Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-	 Str_Copy (getFileOut->publisherPhoto,PhotoURL,Cns_MAX_BYTES_WWW);
+	 Str_Copy (getFileOut->publisherPhoto,PhotoURL,WWW_MAX_BYTES_WWW);
 	}
 
    return SOAP_OK;

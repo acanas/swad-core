@@ -8019,7 +8019,7 @@ const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 
 const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS] =
 	{
-	[DegTyp_ORDER_BY_DEGREE_TYPE] =
+	[DegTyp_ORDER_BY_DEG_TYPE] =
 #if   L==1	// ca
 	"Ordenar por tipus de titulaci&oacute;"
 #elif L==2	// de
@@ -8042,7 +8042,7 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS] =
 	"Sort by type of degree"		// Çeviri lazim!
 #endif
 	,
-	[DegTyp_ORDER_BY_NUM_DEGREES] =
+	[DegTyp_ORDER_BY_NUM_DEGS] =
 #if   L==1	// ca
 	"Ordenar per nombre de titulacions"
 #elif L==2	// de
@@ -8068,7 +8068,7 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS] =
 
 const char *Txt_DEGREE_TYPES_ORDER[DegTyp_NUM_ORDERS] =
 	{
-	[DegTyp_ORDER_BY_DEGREE_TYPE] =
+	[DegTyp_ORDER_BY_DEG_TYPE] =
 #if   L==1	// ca
 	"Tipus de titulaci&oacute;"
 #elif L==2	// de
@@ -8091,7 +8091,7 @@ const char *Txt_DEGREE_TYPES_ORDER[DegTyp_NUM_ORDERS] =
 	"Types of degree"	// Çeviri lazim!
 #endif
 	,
-	[DegTyp_ORDER_BY_NUM_DEGREES] =
+	[DegTyp_ORDER_BY_NUM_DEGS] =
 #if   L==1	// ca
 	"Titulacions"
 #elif L==2	// de

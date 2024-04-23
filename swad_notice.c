@@ -197,7 +197,7 @@ void Not_ListFullNotices (void)
 /************************* Get highlighted notice code ***********************/
 /*****************************************************************************/
 
-void Not_GetHighLightedNotCod (void)
+void Not_GetHighlightNotCod (void)
   {
    Gbl.Crs.Notices.HighlightNotCod = ParCod_GetPar (ParCod_Not);
   }
@@ -379,7 +379,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 static void Not_PutLinkToRSSFile (void)
   {
    char PathRelRSSFile[PATH_MAX + 1];
-   char RSSLink[Cns_MAX_BYTES_WWW + 1];
+   char RSSLink[WWW_MAX_BYTES_WWW + 1];
 
    /***** Create RSS file if not exists *****/
    snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),"%s/%ld/%s/%s",

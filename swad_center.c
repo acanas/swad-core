@@ -57,6 +57,7 @@
 #include "swad_place.h"
 #include "swad_room_database.h"
 #include "swad_survey.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -733,7 +734,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    struct Hie_Node *Ctr;
    unsigned NumPlc;
    const struct Plc_Place *Plc;
-   char WWW[Cns_MAX_BYTES_WWW + 1];
+   char WWW[WWW_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
    Usr_Can_t ICanEdit;
    unsigned NumDegs;
@@ -1027,7 +1028,7 @@ void Ctr_ChangeCtrPlc (void)
 /************************ Change the name of a center ************************/
 /*****************************************************************************/
 
-void Ctr_RenameCenterShort (void)
+void Ctr_RenameCenterShrt (void)
   {
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
@@ -1119,7 +1120,7 @@ void Ctr_ChangeCtrWWW (void)
   {
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
@@ -1128,7 +1129,7 @@ void Ctr_ChangeCtrWWW (void)
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /***** Get the new WWW for the center *****/
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get data of center *****/
    Hie_GetDataByCod[Hie_CTR] (Ctr_EditingCtr);
@@ -1473,7 +1474,7 @@ static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get center WWW */
-   Par_GetParText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Ctr_EditingCtr->WWW,WWW_MAX_BYTES_WWW);
 
    if (Ctr_EditingCtr->ShrtName[0] &&
        Ctr_EditingCtr->FullName[0])	// If there's a center name

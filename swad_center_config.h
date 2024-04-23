@@ -37,7 +37,7 @@ void CtrCfg_ReqPhoto (void);
 void CtrCfg_ReceivePhoto (void);
 void CtrCfg_ChangeCtrPhotoAttr (void);
 void CtrCfg_ChangeCtrIns (void);
-void CtrCfg_RenameCenterShort (void);
+void CtrCfg_RenameCenterShrt (void);
 void CtrCfg_RenameCenterFull (void);
 void CtrCfg_ChangeCtrPlc (void);
 void CtrCfg_ChangeCtrLatitude (void);

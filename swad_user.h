@@ -36,6 +36,7 @@
 #include "swad_date.h"
 #include "swad_degree.h"
 #include "swad_icon.h"
+#include "swad_language.h"
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_nickname.h"
@@ -319,8 +320,8 @@ void Usr_SeeGuests (void);
 void Usr_SeeStudents (void);
 void Usr_SeeTeachers (void);
 
-void Usr_DoActionOnSeveralUsrs1 (void);
-void Usr_DoActionOnSeveralUsrs2 (void);
+void Usr_DoActionOnUsrs1 (void);
+void Usr_DoActionOnUsrs2 (void);
 
 void Usr_SeeGstClassPhotoPrn (void);
 void Usr_SeeStdClassPhotoPrn (void);

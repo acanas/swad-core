@@ -63,7 +63,7 @@ typedef enum
 struct Inf_Info
   {
    Inf_Type_t Type;
-   char URL[Cns_MAX_BYTES_WWW + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
    bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
    bool ShowMsgMustBeRead;
   };
@@ -85,7 +85,7 @@ void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1]);
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
 void Inf_FormsToSelSendInfo (void);
 void Inf_FormToEnterIntegratedEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);

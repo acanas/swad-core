@@ -276,7 +276,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
          Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
-      else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST_TAB)
+      else if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST)
          Ale_ShowAlertAndButton (ActReqMyPho,NULL,NULL,
                                  NULL,NULL,
                                  Btn_CONFIRM_BUTTON,Txt_Upload_photo,
@@ -5617,7 +5617,7 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
 /********************** Do action on several students ************************/
 /*****************************************************************************/
 
-void Usr_DoActionOnSeveralUsrs1 (void)
+void Usr_DoActionOnUsrs1 (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
 
@@ -5734,7 +5734,7 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	               Txt_You_must_select_one_ore_more_users);
   }
 
-void Usr_DoActionOnSeveralUsrs2 (void)
+void Usr_DoActionOnUsrs2 (void)
   {
    /***** Show possible alerts *****/
    Ale_ShowAlerts (NULL);
@@ -6375,7 +6375,7 @@ void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
      };
    extern const char *HidVis_MsgClass[HidVis_NUM_HIDDEN_VISIBLE];
    bool ShowPhoto = false;
-   char PhotoURL[Cns_MAX_BYTES_WWW + 1];
+   char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    struct Usr_Data UsrDat;
 
    /***** Initialize structure with user's data *****/

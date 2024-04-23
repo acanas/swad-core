@@ -596,7 +596,7 @@ static void Lnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull)
 void Lnk_ChangeLinkWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   char NewWWW[Cns_MAX_BYTES_WWW + 1];
+   char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Link constructor *****/
    Lnk_EditingLinkConstructor ();
@@ -606,7 +606,7 @@ void Lnk_ChangeLinkWWW (void)
    Lnk_EditingLnk->LnkCod = ParCod_GetAndCheckPar (ParCod_Lnk);
 
    /* Get the new WWW for the link */
-   Par_GetParText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get link data from the database *****/
    Lnk_GetLinkDataByCod (Lnk_EditingLnk);
@@ -728,7 +728,7 @@ void Lnk_ReceiveNewLink (void)
    Nam_GetParsShrtAndFullName (Names);
 
    /* Get link URL */
-   Par_GetParText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParText ("WWW",Lnk_EditingLnk->WWW,WWW_MAX_BYTES_WWW);
 
    if (Lnk_EditingLnk->ShrtName[0] &&
        Lnk_EditingLnk->FullName[0])	// If there's a link name

@@ -127,7 +127,7 @@ void Roo_RemoveRoom (void);
 void Roo_ChangeBuilding (void);
 void Roo_ChangeFloor (void);
 void Roo_ChangeType (void);
-void Roo_RenameRoomShort (void);
+void Roo_RenameRoomShrt (void);
 void Roo_RenameRoomFull (void);
 void Roo_ChangeCapacity (void);
 void Roo_ContEditAfterChgRoom (void);

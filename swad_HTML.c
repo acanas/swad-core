@@ -1230,7 +1230,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
    char *Attr;
 
    HTM_TxtF ("<input type=\"url\" name=\"%s\" maxlength=\"%u\" value=\"%s\"",
-	     Name,Cns_MAX_CHARS_WWW,Value);
+	     Name,WWW_MAX_CHARS_WWW,Value);
 
    if (fmt)
      {

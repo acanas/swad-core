@@ -47,7 +47,7 @@ void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t Level);
 void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
 		  Nam_ShrtOrFullName_t ShrtOrFull);
 void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
-		 Act_Action_t NextAction,const char WWW[Cns_MAX_BYTES_WWW + 1]);
+		 Act_Action_t NextAction,const char WWW[WWW_MAX_BYTES_WWW + 1]);
 void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod);
 void HieCfg_NumCtrs (unsigned NumCtrs,Frm_PutForm_t PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);

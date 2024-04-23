@@ -70,7 +70,7 @@ static struct
   {
    /* Content send by the form and received by the CGI:
       Act_CONTENT_NORM (if CONTENT_TYPE==text/plain)
-      Act_CONT_DATA    (if CONTENT_TYPE==multipart/form-data) */
+      Act_DATA    (if CONTENT_TYPE==multipart/form-data) */
    Act_Content_t ContentReceivedByCGI;
    size_t ContentLength;
    char *QueryString;	// String allocated dynamically with the arguments sent to the CGI
@@ -87,7 +87,7 @@ static struct
    char IP[Cns_MAX_BYTES_IP + 1];
   } Par_Pars =
   {
-   .ContentReceivedByCGI = Act_CONT_NORM,
+   .ContentReceivedByCGI = Act_NORM,
    .ContentLength = 0,
    .QueryString = NULL,
    .List = NULL,
@@ -143,7 +143,7 @@ bool Par_GetQueryString (void)
      {
       /***** GET method *****/
       Par_Pars.Method = Par_METHOD_GET;
-      Par_SetContentReceivedByCGI (Act_CONT_NORM);
+      Par_SetContentReceivedByCGI (Act_NORM);
 
       /* Get content length */
       Par_Pars.ContentLength = strlen (getenv ("QUERY_STRING"));
@@ -183,7 +183,7 @@ bool Par_GetQueryString (void)
 
       if (!strncmp (ContentType,"multipart/form-data",strlen ("multipart/form-data")))
         {
-         Par_SetContentReceivedByCGI (Act_CONT_DATA);
+         Par_SetContentReceivedByCGI (Act_DATA);
          Par_GetBoundary ();
          return Fil_ReadStdinIntoTmpFile ();
         }
@@ -193,7 +193,7 @@ bool Par_GetQueryString (void)
         }
       else
         {
-         Par_SetContentReceivedByCGI (Act_CONT_NORM);
+         Par_SetContentReceivedByCGI (Act_NORM);
 
 	 /* Allocate memory for query string */
 	 if ((Par_Pars.QueryString = malloc (Par_Pars.ContentLength + 1)) == NULL)
@@ -281,8 +281,8 @@ void Par_CreateListOfPars (void)
   {
    static void (*CreateListOfPars[Act_NUM_CONTENTS]) (void) =
      {
-      [Act_CONT_NORM] = Par_CreateListOfParsFromQueryString,
-      [Act_CONT_DATA] = Par_CreateListOfParsFromTmpFile,
+      [Act_NORM] = Par_CreateListOfParsFromQueryString,
+      [Act_DATA] = Par_CreateListOfParsFromTmpFile,
      };
 
    /***** Initialize empty list of parameters *****/
@@ -586,11 +586,11 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 	    // Check if the name of the parameter is the same
 	    switch (Par_GetContentReceivedByCGI ())
 	      {
-	       case Act_CONT_NORM:
+	       case Act_NORM:
 		  ParFound = !strncmp (ParName,&Par_Pars.QueryString[Par->Name.Start],
 					 Par->Name.Length);
 		  break;
-	       case Act_CONT_DATA:
+	       case Act_DATA:
 		  fseek (QueryFile,Par->Name.Start,SEEK_SET);
 		  for (i = 0, ParFound = true;
 		       i < Par->Name.Length && ParFound;
@@ -648,12 +648,12 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 		  /* Copy parameter value */
 		  switch (Par_GetContentReceivedByCGI ())
 		    {
-		     case Act_CONT_NORM:
+		     case Act_NORM:
 			if (PtrDst)
 			   strncpy (PtrDst,&Par_Pars.QueryString[Par->Value.Start],
 				    Par->Value.Length);
 			break;
-		     case Act_CONT_DATA:
+		     case Act_DATA:
 		        if (Par->FileName.Start == 0 &&	// Copy into destination only if it's not a file
 		            PtrDst)
 		          {
@@ -776,11 +776,11 @@ void Par_GetMainPars (void)
    /***** Some preliminary adjusts depending on action *****/
    switch (Act_GetBrowserTab (Gbl.Action.Act))
      {
-      case Act_AJAX_NR:
+      case Act_AJA:
 	 Gbl.Action.UsesAJAX          = true;
 	 Gbl.Action.IsAJAXAutoRefresh = false;
 	 break;
-      case Act_AJAX_RF:
+      case Act_REF:
          Gbl.Action.UsesAJAX          = true;
          Gbl.Action.IsAJAXAutoRefresh = true;
          break;

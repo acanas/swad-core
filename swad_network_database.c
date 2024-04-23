@@ -84,7 +84,7 @@ const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
 /*****************************************************************************/
 
 void Net_DB_UpdateMyWeb (Net_WebsAndSocialNetworks_t NumURL,
-                         const char URL[Cns_MAX_BYTES_WWW + 1])
+                         const char URL[WWW_MAX_BYTES_WWW + 1])
   {
    DB_QueryREPLACE ("can not update user's web / social network",
 		    "REPLACE INTO usr_webs"
@@ -101,9 +101,9 @@ void Net_DB_UpdateMyWeb (Net_WebsAndSocialNetworks_t NumURL,
 /*****************************************************************************/
 
 void Net_DB_GetURL (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
-                    char URL[Cns_MAX_BYTES_WWW + 1])
+                    char URL[WWW_MAX_BYTES_WWW + 1])
   {
-   DB_QuerySELECTString (URL,Cns_MAX_BYTES_WWW,
+   DB_QuerySELECTString (URL,WWW_MAX_BYTES_WWW,
 			 "can not get user's web / social network",
 			 "SELECT URL"
 			  " FROM usr_webs"

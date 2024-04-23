@@ -519,7 +519,7 @@ static void Mai_PutParMaiCod (void *MaiCod)
 /******************************* Remove a mail *******************************/
 /*****************************************************************************/
 
-void Mai_RemoveMailDomain (void)
+void Mai_RemoveMailDom (void)
   {
    extern const char *Txt_Email_domain_X_removed;
 
@@ -545,7 +545,7 @@ void Mai_RemoveMailDomain (void)
 /********************* Change the short name of a mail ***********************/
 /*****************************************************************************/
 
-void Mai_RenameMailDomainShort (void)
+void Mai_RenameMailDomShrt (void)
   {
    /***** Mail domain constructor *****/
    Mai_EditingMailDomainConstructor ();
@@ -558,7 +558,7 @@ void Mai_RenameMailDomainShort (void)
 /********************* Change the full name of a mail ************************/
 /*****************************************************************************/
 
-void Mai_RenameMailDomainFull (void)
+void Mai_RenameMailDomFull (void)
   {
    /***** Mail domain constructor *****/
    Mai_EditingMailDomainConstructor ();
@@ -732,7 +732,7 @@ static void Mai_PutHeadMailDomains (void)
 /******************* Receive form to create a new mail ***********************/
 /*****************************************************************************/
 
-void Mai_ReceiveNewMailDomain (void)
+void Mai_ReceiveNewMailDom (void)
   {
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_Created_new_email_domain_X;

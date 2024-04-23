@@ -41,7 +41,7 @@ long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status);
 void Ins_DB_UpdateInsCty (long HieCod,long CtyCod);
 void Ins_DB_UpdateInsStatus (long HieCod,Hie_Status_t Status);
 void Ins_DB_UpdateInsName (long HieCod,const char *FldName,const char *NewName);
-void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Ins_DB_UpdateInsWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 
 unsigned Ins_DB_GetInsDataByCod (MYSQL_RES **mysql_res,long HieCod);
 void Ins_DB_GetInsShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1]);

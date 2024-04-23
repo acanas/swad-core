@@ -486,7 +486,7 @@ void CrsCfg_ChangeCrsDeg (void)
 /*************** Change the name of a course in configuration ****************/
 /*****************************************************************************/
 
-void CrsCfg_RenameCourseShort (void)
+void CrsCfg_RenameCourseShrt (void)
   {
    Crs_RenameCourse (&Gbl.Hierarchy.Node[Hie_CRS],Nam_SHRT_NAME);
   }

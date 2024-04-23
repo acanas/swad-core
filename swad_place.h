@@ -70,7 +70,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places);
 void Plc_FreeListPlaces (struct Plc_Places *Places);
 void Plc_GetPlaceDataByCod (struct Plc_Place *Plc);
 void Plc_RemovePlace (void);
-void Plc_RenamePlaceShort (void);
+void Plc_RenamePlaceShrt (void);
 void Plc_RenamePlaceFull (void);
 void Plc_ContEditAfterChgPlc (void);
 
