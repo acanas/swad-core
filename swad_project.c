@@ -1580,7 +1580,12 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 	}
 	 Dat_WriteLocalDateHMSFromUTC (Id,Projects->Prj.CreatTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x7);
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_WEEK_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE |
+				       Dat_WRITE_SECOND);
       HTM_TD_End ();
       free (Id);
 
@@ -1604,7 +1609,12 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 	}
 	 Dat_WriteLocalDateHMSFromUTC (Id,Projects->Prj.ModifTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x7);
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_WEEK_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE |
+				       Dat_WRITE_SECOND);
       HTM_TD_End ();
       free (Id);
 
@@ -1776,7 +1786,10 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 HTM_DIV_Begin ("id=\"%s\" class=\"PRJ_DATE\"",Id);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Projects->Prj.Review.Time,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  true,true,false,0x6);
+					  Dat_WRITE_TODAY |
+					  Dat_WRITE_DATE_ON_SAME_DAY |
+					  Dat_WRITE_HOUR |
+					  Dat_WRITE_MINUTE);
 	 HTM_DIV_End ();
 	 free (Id);
 	}
@@ -2552,7 +2565,11 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 		    Id,HidVis_DateBlueClass[Prj->Hidden],The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,false,0x7);
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE |
+				       Dat_WRITE_SECOND);
       HTM_TD_End ();
       free (Id);
 
@@ -2564,7 +2581,11 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 		    Id,HidVis_DateBlueClass[Prj->Hidden],The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,false,0x7);
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE |
+				       Dat_WRITE_SECOND);
       HTM_TD_End ();
       free (Id);
 

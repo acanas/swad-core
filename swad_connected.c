@@ -112,7 +112,10 @@ void Con_ShowConnectedUsrs (void)
       HTM_DIV_End ();
       Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Dat_GetStartExecutionTimeUTC (),
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    false,false,true,0x7);
+				    Dat_WRITE_WEEK_DAY |
+				    Dat_WRITE_HOUR |
+				    Dat_WRITE_MINUTE |
+				    Dat_WRITE_SECOND);
 
       /***** Number of connected users in the whole platform *****/
       HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());

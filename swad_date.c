@@ -360,7 +360,7 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
       Err_NotEnoughMemoryExit ();
    Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetStartExecutionTimeUTC (),
 				 Format,Dat_SEPARATOR_NONE,
-				 false,true,false,0x0);
+				 Dat_WRITE_DATE_ON_SAME_DAY);
    free (Id);
   }
 
@@ -1786,8 +1786,7 @@ void Dat_WriteHoursMinutesSeconds (struct Dat_Time *Time)
 
 void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 				   Dat_Format_t DateFormat,Dat_Separator_t Separator,
-				   bool WriteToday,bool WriteDateOnSameDay,
-				   bool WriteWeekDay,unsigned WriteHMS)
+				   Dat_WhatToWrite_t Write)
   {
    static const char *SeparatorStr[Dat_NUM_SEPARATORS] =
      {
@@ -1797,16 +1796,9 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
      };
 
    HTM_SCRIPT_Begin (NULL,NULL);
-      HTM_TxtF ("writeLocalDateHMSFromUTC('%s',%ld,%u,'%s',%u,%s,%s,%s,0x%x);",
+      HTM_TxtF ("writeLocalDateHMSFromUTC('%s',%ld,%u,'%s',%u,%u);",
 		Id,(long) TimeUTC,(unsigned) DateFormat,SeparatorStr[Separator],
-		(unsigned) Gbl.Prefs.Language,
-		WriteToday         ? "true" :
-				     "false",
-		WriteDateOnSameDay ? "true" :
-				     "false",
-		WriteWeekDay       ? "true" :
-				     "false",
-		WriteHMS);
+		(unsigned) Gbl.Prefs.Language,(unsigned) Write);
    HTM_SCRIPT_End ();
   }
 

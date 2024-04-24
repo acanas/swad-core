@@ -2374,7 +2374,10 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	                     Id,Class,The_GetSuffix (),BgColor);
 		  Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-						true,true,false,0x6);
+						Dat_WRITE_TODAY |
+						Dat_WRITE_DATE_ON_SAME_DAY |
+						Dat_WRITE_HOUR |
+						Dat_WRITE_MINUTE);
 	       HTM_TD_End ();
 	       free (Id);
 	      }

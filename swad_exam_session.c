@@ -475,7 +475,11 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 		    The_GetSuffix (),The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x6);
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_WEEK_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE);
       HTM_TD_End ();
       free (Id);
      }

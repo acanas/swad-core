@@ -500,7 +500,10 @@ static void Prf_ShowTimeSinceFirstClick (const struct Usr_Data *UsrDat,
         }
       Dat_WriteLocalDateHMSFromUTC (IdFirstClickTime,UsrFigures->FirstClickTimeUTC,
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,false,0x6);
+				    Dat_WRITE_TODAY |
+				    Dat_WRITE_DATE_ON_SAME_DAY |
+				    Dat_WRITE_HOUR |
+				    Dat_WRITE_MINUTE);
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store user's figures *****/

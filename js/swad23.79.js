@@ -72,11 +72,16 @@ function submitForm(FormId) {
 // 	Dat_FORMAT_YYYY_MM_DD		= 0
 // 	Dat_FORMAT_DD_MONTH_YYYY	= 1
 // 	Dat_FORMAT_MONTH_DD_YYYY	= 2
-// separator is HTML code to write between date and time
-// StrToday is a string in current language ('today', 'hoy'...)
-// WriteDateOnSameDay = false ==> don't write date if it's the same day than the last call
-// WriteWeekDay = true ==> write day of the week ('monday', 'tuesday'...)
-// WriteHMS = 3 least significant bits for hour, minute and second
+// Separator is HTML code to write between date and time
+// Write: a bit set ==> true
+
+const Dat_WRITE_TODAY				= (1 << 5);
+const Dat_WRITE_DATE_ON_SAME_DAY	= (1 << 4);
+const Dat_WRITE_WEEK_DAY			= (1 << 3);
+const Dat_WRITE_HOUR				= (1 << 2);
+const Dat_WRITE_MINUTE				= (1 << 1);
+const Dat_WRITE_SECOND				= (1 << 0);
+
 const txtToday = [
 	"",					// Unknown
 	"Avui",				// CA
@@ -91,9 +96,7 @@ const txtToday = [
 	"Bug&uuml;n",		// TR
 ];
 
-function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
-									WriteToday,WriteDateOnSameDay,WriteWeekDay,WriteHMS) {
-	// HMS: Hour, Minutes, Seconds
+function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,WhatToWrite) {
 	var today = new Date();
 	var todayYea = today.getFullYear ();
 	var todayMon = today.getMonth () + 1;
@@ -115,7 +118,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 	Mon = d.getMonth () + 1;
 	Day = d.getDate ();
 	
-	if (WriteDateOnSameDay)
+	if ((WhatToWrite & Dat_WRITE_DATE_ON_SAME_DAY) != 0)
 		WriteDate = true;
 	// Check to see if the last date has been initialized
 	else if (typeof writeLocalDateHMSFromUTC.lastd == 'undefined')
@@ -132,11 +135,11 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 	/* Set date */
 	StrDat = '';
 	if (WriteDate) {
-        WriteToday = WriteToday && (Yea == todayYea &&
-        							Mon == todayMon &&
-        							Day == todayDay);	// Date is today
-        if (WriteToday)
-        	StrDat = txtToday[Language];
+		if ((WhatToWrite & Dat_WRITE_TODAY) != 0 &&
+			Yea == todayYea &&
+			Mon == todayMon &&
+			Day == todayDay)	// Date is today
+			StrDat = txtToday[Language];
 		else
 			switch (DateFormat) {
 				case 0:	// Dat_FORMAT_YYYY_MM_DD
@@ -158,7 +161,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 					break;
 			}
 		
-		if (WriteWeekDay) {
+		if ((WhatToWrite & Dat_WRITE_WEEK_DAY) != 0) {
 			DayOfWeek = d.getDay();
 			DayOfWeek = (DayOfWeek == 0) ? 6 : DayOfWeek - 1;
 			StrDat += Separator + DAYS[DayOfWeek];
@@ -170,15 +173,15 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 	StrHou = '';
 	StrMin = '';
 	StrSec = '';
-	if (WriteHMS & (1<<2)) {
+	if ((WhatToWrite & Dat_WRITE_HOUR) != 0) {
 		// Bit 2 on => Write hour
 		Hou = d.getHours();
 		StrHou = ((Hou < 10) ?  '0' :  '') + Hou;
-		if (WriteHMS & (1<<1)) {
+		if ((WhatToWrite & Dat_WRITE_MINUTE) != 0) {
 			// Bits 2,1 on => Write minutes
 			Min = d.getMinutes ();
 			StrMin = ((Min < 10) ? ':0' : ':') + Min;
-			if (WriteHMS & 1) {
+			if ((WhatToWrite & Dat_WRITE_SECOND) != 0) {
 				// Bits 2,1,0 on => Write seconds
 				Sec = d.getSeconds ();
 				StrSec = ((Sec < 10) ? ':0' : ':') + Sec;

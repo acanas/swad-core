@@ -123,6 +123,14 @@ typedef enum
    Dat_SEPARATOR_BREAK,	// Line break
   } Dat_Separator_t;
 
+typedef unsigned Dat_WhatToWrite_t;
+#define Dat_WRITE_TODAY			((Dat_WhatToWrite_t) (1 << 5))
+#define Dat_WRITE_DATE_ON_SAME_DAY	((Dat_WhatToWrite_t) (1 << 4))
+#define Dat_WRITE_WEEK_DAY		((Dat_WhatToWrite_t) (1 << 3))
+#define Dat_WRITE_HOUR			((Dat_WhatToWrite_t) (1 << 2))
+#define Dat_WRITE_MINUTE		((Dat_WhatToWrite_t) (1 << 1))
+#define Dat_WRITE_SECOND		((Dat_WhatToWrite_t) (1 << 0))
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -226,8 +234,7 @@ void Dat_WriteHoursMinutesSeconds (struct Dat_Time *Time);
 
 void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 				   Dat_Format_t DateFormat,Dat_Separator_t Separator,
-				   bool WriteToday,bool WriteDateOnSameDay,
-				   bool WriteWeekDay,unsigned WriteHMS);
+				   Dat_WhatToWrite_t Write);
 
 //-------------------------------- Figures ------------------------------------
 void Dat_GetAndShowNumUsrsPerDateFormat (void);

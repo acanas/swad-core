@@ -4868,7 +4868,10 @@ static void Brw_WriteFileSizeAndDate (struct Brw_FileMetadata *FileMetadata,
 	 HTM_SPAN_End ();
 	 Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				       true,true,false,0x6);
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE);
 	 free (Id);
 	}
    HTM_TD_End ();
@@ -7506,7 +7509,12 @@ void Brw_ShowFileMetadata (void)
 				The_GetSuffix ());
 		     Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-						   true,true,true,0x7);
+						   Dat_WRITE_TODAY |
+						   Dat_WRITE_DATE_ON_SAME_DAY |
+						   Dat_WRITE_WEEK_DAY |
+						   Dat_WRITE_HOUR |
+						   Dat_WRITE_MINUTE |
+						   Dat_WRITE_SECOND);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();

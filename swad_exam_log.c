@@ -334,7 +334,12 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		                The_GetColorRows ());
 		     Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-						   true,true,true,0x7);
+						   Dat_WRITE_TODAY |
+						   Dat_WRITE_DATE_ON_SAME_DAY |
+						   Dat_WRITE_WEEK_DAY |
+						   Dat_WRITE_HOUR |
+						   Dat_WRITE_MINUTE |
+						   Dat_WRITE_SECOND);
 		     free (Id);
 		  HTM_TD_End ();
 

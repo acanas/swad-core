@@ -542,7 +542,10 @@ void Tml_WriteDateTime (time_t TimeUTC)
    // because it will be evaluated in a loop in JavaScript
    Dat_WriteLocalDateHMSFromUTC (IdDateTime,TimeUTC,
 		                 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				 true,true,false,0x6);
+				 Dat_WRITE_TODAY |
+				 Dat_WRITE_DATE_ON_SAME_DAY |
+				 Dat_WRITE_HOUR |
+				 Dat_WRITE_MINUTE);
   }
 
 /*****************************************************************************/

@@ -435,12 +435,18 @@ static bool Tst_CheckIfNextTstAllowed (void)
 	                         "<span id=\"date_next_test\"></span>."
 				 "<script type=\"text/javascript\">"
 				 "writeLocalDateHMSFromUTC('date_next_test',%ld,"
-				 "%u,',&nbsp;',%u,true,true,true,0x7);"
+				 "%u,',&nbsp;',%u,%u);"
 				 "</script>",
 		     Txt_You_can_not_take_a_new_test_until,
 		     (long) TimeNextTestUTC,
 		     (unsigned) Gbl.Prefs.DateFormat,
-		     (unsigned) Gbl.Prefs.Language);
+		     (unsigned) Gbl.Prefs.Language,
+		     (unsigned) (Dat_WRITE_TODAY |
+				 Dat_WRITE_DATE_ON_SAME_DAY |
+				 Dat_WRITE_WEEK_DAY |
+				 Dat_WRITE_HOUR |
+				 Dat_WRITE_MINUTE |
+				 Dat_WRITE_SECOND));
       return false;
      }
    return true;

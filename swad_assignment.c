@@ -526,7 +526,12 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	   }
 	 Dat_WriteLocalDateHMSFromUTC (Id,Assignments->Asg.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x7);
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_WEEK_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE |
+				       Dat_WRITE_SECOND);
 	 HTM_TD_End ();
 	 free (Id);
 	}
@@ -1675,7 +1680,11 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
 	 HTM_SPAN_Begin ("id=\"%s\"",Id);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Asg->TimeUTC[Dat_STR_TIME],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  true,true,false,0x7);
+				          Dat_WRITE_TODAY |
+				          Dat_WRITE_DATE_ON_SAME_DAY |
+				          Dat_WRITE_HOUR |
+				          Dat_WRITE_MINUTE |
+				          Dat_WRITE_SECOND);
 	 HTM_SPAN_End ();
 	 free (Id);
 
@@ -1688,7 +1697,11 @@ void Asg_WriteDatesAssignment (const struct Asg_Assignment *Asg)
 	 HTM_SPAN_Begin ("id=\"%s\"",Id);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Asg->TimeUTC[Dat_END_TIME],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  true,false,false,0x7);
+					  Dat_WRITE_TODAY |
+					  Dat_WRITE_DATE_ON_SAME_DAY |
+					  Dat_WRITE_HOUR |
+					  Dat_WRITE_MINUTE |
+					  Dat_WRITE_SECOND);
 	 HTM_SPAN_End ();
 	 free (Id);
 	}

@@ -1288,7 +1288,11 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	               Id,The_GetSuffix (),The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  true,true,false,0x7);
+					  Dat_WRITE_TODAY |
+					  Dat_WRITE_DATE_ON_SAME_DAY |
+					  Dat_WRITE_HOUR |
+					  Dat_WRITE_MINUTE |
+					  Dat_WRITE_SECOND);
 	 HTM_TD_End ();
 	 free (Id);
 

@@ -458,7 +458,12 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		       The_GetSuffix (),The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_STR_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,true,0x7);
+				    Dat_WRITE_TODAY |
+				    Dat_WRITE_DATE_ON_SAME_DAY |
+				    Dat_WRITE_WEEK_DAY |
+				    Dat_WRITE_HOUR |
+				    Dat_WRITE_MINUTE |
+				    Dat_WRITE_SECOND);
       HTM_TD_End ();
       free (Id);
 
@@ -478,7 +483,11 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Surveys->Svy.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,false,true,0x7);
+				    Dat_WRITE_TODAY |
+				    Dat_WRITE_WEEK_DAY |
+				    Dat_WRITE_HOUR |
+				    Dat_WRITE_MINUTE |
+				    Dat_WRITE_SECOND);
       HTM_TD_End ();
       free (Id);
 

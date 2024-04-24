@@ -563,7 +563,12 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 if (Games->Game.TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Games->Game.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-					  true,true,true,0x7);
+					  Dat_WRITE_TODAY |
+					  Dat_WRITE_DATE_ON_SAME_DAY |
+					  Dat_WRITE_WEEK_DAY |
+					  Dat_WRITE_HOUR |
+					  Dat_WRITE_MINUTE |
+					  Dat_WRITE_SECOND);
 	 HTM_TD_End ();
 	 free (Id);
 	}

@@ -958,7 +958,11 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Questions->Question.EditTime,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-					  true,true,false,0x7);
+					  Dat_WRITE_TODAY |
+					  Dat_WRITE_DATE_ON_SAME_DAY |
+					  Dat_WRITE_HOUR |
+					  Dat_WRITE_MINUTE |
+					  Dat_WRITE_SECOND);
 	 HTM_TD_End ();
 	 free (Id);
 
@@ -1265,7 +1269,11 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Question->EditTime,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-					  true,true,false,0x7);
+					  Dat_WRITE_TODAY |
+					  Dat_WRITE_DATE_ON_SAME_DAY |
+					  Dat_WRITE_HOUR |
+					  Dat_WRITE_MINUTE |
+					  Dat_WRITE_SECOND);
 	 HTM_TD_End ();
 	 free (Id);
 
