@@ -52,6 +52,13 @@ typedef enum
    HTM_SUBMIT_ON_CLICK,
   } HTM_SubmitOnClick_t;
 
+#define HTM_NUM_REQUIRED 2
+typedef enum
+  {
+   HTM_NOT_REQUIRED,
+   HTM_REQUIRED,
+  } HTM_Required_t;
+
 typedef enum
   {
    HTM_OPTION_UNSELECTED,
@@ -175,7 +182,7 @@ void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr);
 void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,
 	              const char *fmt,...);
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
-			 const char *AutoComplete,bool Required,
+			 const char *AutoComplete,HTM_Required_t Required,
 	                 const char *fmt,...);
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
                      HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,

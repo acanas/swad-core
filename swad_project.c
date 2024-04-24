@@ -300,7 +300,7 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects);
 static void Prj_PutFormProject (struct Prj_Projects *Projects,bool ItsANewProject);
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
-                                       unsigned NumRows,bool Required);
+                                       unsigned NumRows,HTM_Required_t Required);
 
 static void Prj_CreateProject (struct Prj_Project *Prj);
 static void Prj_UpdateProject (struct Prj_Project *Prj);
@@ -3901,17 +3901,17 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       /* Description of the project */
 	       Prj_EditOneProjectTxtArea ("Description",Txt_Description,
 					  Projects->Prj.Description,12,
-					  true);	// Required
+					  HTM_REQUIRED);
 
 	       /* Required knowledge to carry out the project */
 	       Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
 					  Projects->Prj.Knowledge,4,
-					  false);	// Not required
+					  HTM_NOT_REQUIRED);
 
 	       /* Required materials to carry out the project */
 	       Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
 					  Projects->Prj.Materials,4,
-					  false);	// Not required
+					  HTM_NOT_REQUIRED);
 
 	       /* URL for additional info */
 	       HTM_TR_Begin (NULL);
@@ -3952,8 +3952,14 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
-                                       unsigned NumRows,bool Required)
+                                       unsigned NumRows,HTM_Required_t Required)
   {
+   static const char *RequiredTxt[HTM_NUM_REQUIRED] =
+     {
+      [HTM_NOT_REQUIRED] = "",
+      [HTM_REQUIRED    ] = " required=\"required\"",
+     };
+
    /***** Description *****/
    HTM_TR_Begin (NULL);
 
@@ -3965,9 +3971,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\"%s",
 			     Id,Id,NumRows,
-			     The_GetSuffix (),
-			     Required ? " required=\"required\"" :
-					"");
+			     The_GetSuffix (),RequiredTxt[Required]);
 	    HTM_Txt (TxtField);
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();

@@ -637,6 +637,7 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
+	Version 23.79.1:  Apr 24, 2024  Code refactoring in HTML related to required field in form. (335751 lines)
 	Version 23.79:    Apr 24, 2024  Code refactoring writing dates. (335741 lines)
 	Version 23.78:    Apr 23, 2024  Code refactoring in list of actions. (335577 lines)
 	Version 23.77:    Apr 19, 2024  Code refactoring in list of actions. (335567 lines)

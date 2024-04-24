@@ -1333,7 +1333,7 @@ void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,
   }
 
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
-			 const char *AutoComplete,bool Required,
+			 const char *AutoComplete,HTM_Required_t Required,
 	                 const char *fmt,...)
   {
    va_list ap;
@@ -1348,7 +1348,7 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
    if (AutoComplete)
       if (AutoComplete[0])
          HTM_TxtF (" autocomplete=\"%s\"",AutoComplete);
-   if (Required)
+   if (Required == HTM_REQUIRED)
       HTM_Txt (" required=\"required\"");
 
    if (fmt)

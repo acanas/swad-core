@@ -620,7 +620,7 @@ void Pwd_ShowFormChgMyPwd (void)
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",
-					 true,	// Required
+					 HTM_REQUIRED,
 					 "id=\"UsrPwd\""
 					 " class=\"Frm_C2_INPUT INPUT_%s\"",
 					 The_GetSuffix ());
@@ -670,7 +670,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,
-			     true,	// Required
+			     HTM_REQUIRED,
 			     "id=\"Paswd\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
 
@@ -698,7 +698,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,
-			     true,	// Required
+			     HTM_REQUIRED,
 			     "id=\"Paswd1\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
@@ -714,7 +714,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,
-			     true,	// Required
+			     HTM_REQUIRED,
 			     "id=\"Paswd2\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_TD_End ();
@@ -799,7 +799,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
 	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",
-			     true,	// Required
+			     HTM_REQUIRED,
 			     "class=\"INPUT_%s\"",
 			     The_GetSuffix ());
       HTM_LABEL_End ();

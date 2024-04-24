@@ -1180,7 +1180,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 		               Txt_Password,"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,
-				   false,	// Not required
+				   HTM_NOT_REQUIRED,
 				   "id=\"UsrPwd\" class=\"INPUT_%s\"",
 				   The_GetSuffix ());
 	    HTM_DIV_End ();
