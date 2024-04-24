@@ -986,15 +986,16 @@ See also http://www.ashleyit.com/rs/jsrs/select/php/select.php
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Dat_Date *DateSelected,
-                        HTM_SubmitOnChange_t SubmitOnChange,bool Disabled)
+                        HTM_SubmitOnChange_t SubmitOnChange,
+                        Cns_DisabledOrEnabled_t DisabledOrEnabled)
   {
+   extern const char *Cns_DisabledTxt[Cns_NUM_DISABLED_ENABLED];
    extern const char *Txt_MONTHS_SMALL[12];
    char *FuncOnChange;
    unsigned Year;
    unsigned Month;
    unsigned Day;
    unsigned NumDaysSelectedMonth;
-
 
    if (asprintf (&FuncOnChange,"adjustDateForm('%s');",Id) < 0)
       Err_NotEnoughMemoryExit ();
@@ -1004,10 +1005,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
 			"id=\"%sYear\" name=\"%sYear\""
 			" class=\"INPUT_%s\"%s",
-			Id,Id,
-			The_GetSuffix (),
-			Disabled ? " disabled=\"disabled\"" :
-				   "");
+			Id,Id,The_GetSuffix (),
+			Cns_DisabledTxt[DisabledOrEnabled]);
 	 HTM_OPTION (HTM_Type_STRING,"0",
 		     HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
@@ -1028,10 +1027,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
 			"id=\"%sMonth\" name=\"%sMonth\""
 			" class=\"INPUT_%s\"%s",
-			Id,Id,
-			The_GetSuffix (),
-			Disabled ? " disabled=\"disabled\"" :
-				   "");
+			Id,Id,The_GetSuffix (),
+			Cns_DisabledTxt[DisabledOrEnabled]);
 	 HTM_OPTION (HTM_Type_STRING,"0",
 		     HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,
@@ -1054,10 +1051,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       HTM_SELECT_Begin (SubmitOnChange,NULL,
 			"id=\"%sDay\" name=\"%sDay\""
 			" class=\"INPUT_%s\"%s",
-			Id,Id,
-			The_GetSuffix (),
-			Disabled ? " disabled=\"disabled\"" :
-				   "");
+			Id,Id,The_GetSuffix (),
+			Cns_DisabledTxt[DisabledOrEnabled]);
 	    HTM_OPTION (HTM_Type_STRING,"0",
 			HTM_OPTION_UNSELECTED,
 			HTM_OPTION_ENABLED,

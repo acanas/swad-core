@@ -132,7 +132,8 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 /*****************************************************************************/
 
 static void Inf_PutIconToViewInfo (void *Type);
-static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled);
+static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
+						Cns_DisabledOrEnabled_t DisabledOrEnabled);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
@@ -175,10 +176,9 @@ void Inf_ShowInfo (void)
    extern const char *Txt_No_information;
    struct Syl_Syllabus Syllabus;
    struct Inf_FromDB FromDB;
-   bool Disabled;
    Usr_Can_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-                        					    Usr_CAN_NOT;
+                         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+                        					   Usr_CAN_NOT;
    bool ShowWarningNoInfo = false;
    static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
      {
@@ -232,10 +232,11 @@ void Inf_ShowInfo (void)
          if (FromDB.Src != Inf_NONE)
            {
             /***** Contextual menu *****/
+            // Checkbox to force students to read this couse info
             Mnu_ContextMenuBegin ();
-	       Disabled = (Gbl.Usrs.Me.Role.Logged == Rol_NET);	// Non-editing teachers can not change the status of checkbox
-	       Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,Disabled);	// Checkbox to force students...
-										// ...to read this couse info
+	       Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,
+						   (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? Cns_DISABLED :
+											  Cns_ENABLED);	// Non-editing teachers can not change the status of checkbox);
             Mnu_ContextMenuEnd ();
            }
          break;
@@ -346,7 +347,8 @@ void Inf_PutIconToEditInfo (void *Type)
 /********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
-static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
+static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
+						Cns_DisabledOrEnabled_t DisabledOrEnabled)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Force_students_to_read_this_information;
@@ -366,7 +368,7 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "MustBeRead",
-                              MustBeRead,Disabled,
+                              MustBeRead,DisabledOrEnabled,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
   }

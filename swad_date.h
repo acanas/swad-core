@@ -194,7 +194,8 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1]);
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Dat_Date *DateSelected,
-                        HTM_SubmitOnChange_t SubmitOnChange,bool Disabled);
+                        HTM_SubmitOnChange_t SubmitOnChange,
+                        Cns_DisabledOrEnabled_t DisabledOrEnabled);
 void Dat_GetDateFromForm (const char *ParNameDay,const char *ParNameMonth,const char *ParNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
 

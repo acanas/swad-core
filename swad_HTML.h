@@ -185,12 +185,14 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 			 const char *AutoComplete,HTM_Required_t Required,
 	                 const char *fmt,...);
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
-                     HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,
+                     HTM_SubmitOnChange_t SubmitOnChange,
+                     Cns_DisabledOrEnabled_t DisabledOrEnabled,
 	             const char *fmt,...);
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
-                      HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,
+                      HTM_SubmitOnChange_t SubmitOnChange,
+                      Cns_DisabledOrEnabled_t DisabledOrEnabled,
 	              const char *fmt,...);
 void HTM_INPUT_RADIO (const char *Name,HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...);

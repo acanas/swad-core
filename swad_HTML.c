@@ -1372,7 +1372,8 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
   }
 
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
-                     HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,
+                     HTM_SubmitOnChange_t SubmitOnChange,
+                     Cns_DisabledOrEnabled_t DisabledOrEnabled,
 	             const char *fmt,...)
   {
    va_list ap;
@@ -1381,7 +1382,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 
    HTM_TxtF ("<input type=\"number\" name=\"%s\" min=\"%ld\" max=\"%ld\" value=\"%ld\"",
 	     Name,Min,Max,Value);
-   if (Disabled)
+   if (DisabledOrEnabled == Cns_DISABLED)
       HTM_Txt (" disabled=\"disabled\"");
 
    if (fmt)
@@ -1410,7 +1411,8 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
-                      HTM_SubmitOnChange_t SubmitOnChange,bool Disabled,
+                      HTM_SubmitOnChange_t SubmitOnChange,
+                      Cns_DisabledOrEnabled_t DisabledOrEnabled,
 	              const char *fmt,...)
   {
    va_list ap;
@@ -1428,7 +1430,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
       HTM_TxtF (" step=\"%.15lg\"",Step);
    HTM_TxtF (" value=\"%.15lg\"",Value);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   if (Disabled)
+   if (DisabledOrEnabled == Cns_DISABLED)
       HTM_Txt (" disabled=\"disabled\"");
 
    if (fmt)

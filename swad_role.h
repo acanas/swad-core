@@ -53,7 +53,8 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect);
 void Rol_ChangeMyRole (void);
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             bool Disabled,HTM_SubmitOnChange_t SubmitOnChange);
+                             Cns_DisabledOrEnabled_t DisabledOrEnabled,
+                             HTM_SubmitOnChange_t SubmitOnChange);
 void Rol_PutParRoles (unsigned Roles);
 unsigned Rol_GetSelectedRoles (void);
 

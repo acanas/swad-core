@@ -990,6 +990,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
                break;
             case Cns_ENABLED:
+            default:
 	       if (Subject[0])
 		  HTM_Txt (Subject);
 	       else
