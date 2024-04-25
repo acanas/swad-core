@@ -1266,11 +1266,17 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 				void (*FuncPars) (void *Args),void *Args,
                                 const char *CheckboxName,
-                                bool Checked,
+                                Cns_UncheckedOrChecked_t UncheckedOrChecked,
                                 Cns_DisabledOrEnabled_t DisabledOrEnabled,
                                 const char *Title,const char *Text)
   {
-   extern const char *Cns_DisabledTxt[Cns_NUM_DISABLED_ENABLED];
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
+   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED_ENABLED];
+   static const char *Class[Cns_NUM_UNCHECKED_CHECKED] =
+     {
+      [Cns_UNCHECKED] = "CHECKBOX_UNCHECKED",
+      [Cns_CHECKED  ] = "CHECKBOX_CHECKED",
+     };
 
    /***** Separator *****/
    if (Text)
@@ -1284,10 +1290,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"CONTEXT_OPT %s FORM_OUT_%s BOLD\" title=\"%s\"",
-		     Checked ? "CHECKBOX_CHECKED" :
-			       "CHECKBOX_UNCHECKED",
-		     The_GetSuffix (),
-		     Title);
+		     Class[UncheckedOrChecked],The_GetSuffix (),Title);
 
 	 /***** Begin label *****/
 	 HTM_LABEL_Begin (NULL);
@@ -1295,9 +1298,8 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	    /****** Checkbox *****/
 	    HTM_INPUT_CHECKBOX (CheckboxName,HTM_SUBMIT_ON_CHANGE,
 				"value=\"Y\"%s%s",
-				Checked ? " checked=\"checked\"" :
-					  "",
-				Cns_DisabledTxt[DisabledOrEnabled]);
+				HTM_CheckedTxt[UncheckedOrChecked],
+				HTM_DisabledTxt[DisabledOrEnabled]);
 
 	    /***** Text *****/
 	    if (Text)

@@ -199,8 +199,11 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 /*****************************************************************************/
 
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
-                            HTM_SubmitOnClick_t SubmitOnClick,bool Checked)
+                            HTM_SubmitOnClick_t SubmitOnClick,
+                            Cns_UncheckedOrChecked_t UncheckedOrChecked)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
+
    /***** Begin list row *****/
    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
@@ -209,8 +212,7 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 	 HTM_INPUT_RADIO ("Link",SubmitOnClick,
 			  "value=\"%s_%ld\"%s",
 			  Rsc_ResourceTypesDB[Link->Type],Link->Cod,
-			  Checked ? " checked=\"checked\"" :
-				    "");
+			  HTM_CheckedTxt[UncheckedOrChecked]);
 
 	 /***** Name *****/
          Rsc_WriteLinkName (Link,Frm_DONT_PUT_FORM);

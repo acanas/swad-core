@@ -2121,13 +2121,14 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_users_with_no_group;
    unsigned NumGrpThisType;
    unsigned NumGrpSel;
    struct ListCodGrps LstGrpsIBelong;
    bool IBelongToThisGroup;
    Usr_Can_t ICanSelUnselGroup;
-   bool Checked;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    struct Group *Grp;
    Rol_Role_t Role;
 
@@ -2174,14 +2175,14 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
       /* This group should be checked? */
       if (Gbl.Crs.Grps.AllGrps)
-         Checked = true;
+         UncheckedOrChecked = Cns_CHECKED;
       else
-         for (NumGrpSel = 0, Checked = false;
+         for (NumGrpSel = 0, UncheckedOrChecked = Cns_UNCHECKED;
               NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
               NumGrpSel++)
             if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == Grp->GrpCod)
               {
-               Checked = true;
+               UncheckedOrChecked = Cns_CHECKED;
                break;
               }
 
@@ -2193,8 +2194,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 	    HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
 				"id=\"Grp%ld\" value=\"%ld\"%s%s",
 				Grp->GrpCod,Grp->GrpCod,
-				Checked ? " checked=\"checked\"" :
-					  "",
+				HTM_CheckedTxt[UncheckedOrChecked],
 				ICanSelUnselGroup == Usr_CAN ? " onclick=\"checkParent(this,'AllGroups')\"" :
 								 " disabled=\"disabled\"");
 	 HTM_TD_End ();
@@ -2217,20 +2217,20 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
      {
       case Usr_CAN:
 	 if (Gbl.Crs.Grps.AllGrps)
-	    Checked = true;
+	    UncheckedOrChecked = Cns_CHECKED;
 	 else
-	    for (NumGrpSel = 0, Checked = false;
+	    for (NumGrpSel = 0, UncheckedOrChecked = Cns_UNCHECKED;
 		 NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 		 NumGrpSel++)
 	       if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
 		 {
-		  Checked = true;
+		  UncheckedOrChecked = Cns_CHECKED;
 		  break;
 		 }
 	 break;
       case Usr_CAN_NOT:
       default:
-	 Checked = false;
+	 UncheckedOrChecked = Cns_UNCHECKED;
 	 break;
      }
 
@@ -2241,9 +2241,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 			     "id=\"Grp%ld\" value=\"%ld\"%s"
 			     " onclick=\"checkParent(this,'AllGroups')\"",
 			     -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod,
-			     ICanSelUnselGroup == Usr_CAN ? (Checked ? " checked=\"checked\"" :
-				                                         "") :
-				                              " disabled=\"disabled\"");
+			     ICanSelUnselGroup == Usr_CAN ? HTM_CheckedTxt[UncheckedOrChecked] :
+				                            " disabled=\"disabled\"");
       HTM_TD_End ();
 
       /* Column closed/open */

@@ -102,6 +102,13 @@ typedef enum
    Cns_VERBOSE,
   } Cns_QuietOrVerbose_t;
 
+#define Cns_NUM_UNCHECKED_CHECKED 2
+typedef enum
+  {
+   Cns_UNCHECKED,
+   Cns_CHECKED,
+  } Cns_UncheckedOrChecked_t;
+
 #define Cns_NUM_DISABLED_ENABLED 2
 typedef enum
   {

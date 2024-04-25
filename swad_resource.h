@@ -78,7 +78,8 @@ struct Rsc_Link
 void Rsc_ShowClipboard (void);
 void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink);
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
-                            HTM_SubmitOnClick_t SubmitOnClick,bool Checked);
+                            HTM_SubmitOnClick_t SubmitOnClick,
+                            Cns_UncheckedOrChecked_t UncheckedOrChecked);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo);
 
 void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,

@@ -515,7 +515,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
                              Cns_DisabledOrEnabled_t DisabledOrEnabled,
                              HTM_SubmitOnChange_t SubmitOnChange)
   {
-   extern const char *Cns_DisabledTxt[Cns_NUM_DISABLED_ENABLED];
+   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED_ENABLED];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
 
@@ -531,7 +531,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 				The_GetSuffix (),
 				(RolesSelected & (1 << Role)) ? " checked=\"checked\"" :
 								"",
-				Cns_DisabledTxt[DisabledOrEnabled]);
+				HTM_DisabledTxt[DisabledOrEnabled]);
 	    HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	 HTM_LABEL_End ();
 	 HTM_BR ();

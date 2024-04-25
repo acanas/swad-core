@@ -276,6 +276,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
                           bool ShowOnlyEnabledTags)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
@@ -283,7 +284,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    unsigned NumTag;
    MYSQL_ROW row;
    bool TagHidden = false;
-   bool Checked;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
    /*
@@ -338,7 +339,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		     HTM_TD_End ();
 		    }
 
-		  Checked = false;
+		  UncheckedOrChecked = Cns_UNCHECKED;
 		  if (Tags->List)
 		    {
 		     Ptr = Tags->List;
@@ -347,7 +348,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 			Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
 			if (!strcmp (row[1],TagText))
 			  {
-			   Checked = true;
+			   UncheckedOrChecked = Cns_CHECKED;
 			   break;
 			  }
 		       }
@@ -359,8 +360,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 			HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
 					    row[1],
-					    Checked ? " checked=\"checked\"" :
-						      "");
+					    HTM_CheckedTxt[UncheckedOrChecked]);
 			HTM_NBSPTxt (row[1]);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();

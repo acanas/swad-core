@@ -210,11 +210,12 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 
 void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Types_of_answers;
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    Qst_AnswerType_t AnsType;
-   bool Checked;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    const char *Ptr;
 
@@ -249,14 +250,14 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	   {
 	    HTM_TR_Begin (NULL);
 
-	       Checked = false;
+	       UncheckedOrChecked = Cns_UNCHECKED;
 	       Ptr = AnswerTypes->List;
 	       while (*Ptr)
 		 {
 		  Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 		  if (Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
 		    {
-		     Checked = true;
+		     UncheckedOrChecked = Cns_CHECKED;
 		     break;
 		    }
 		 }
@@ -266,8 +267,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 					 "value=\"%u\"%s"
 					 " onclick=\"checkParent(this,'AllAnsTypes');\"",
 					 (unsigned) AnsType,
-					 Checked ? " checked=\"checked\"" :
-						   "");
+					 HTM_CheckedTxt[UncheckedOrChecked]);
 		     HTM_NBSPTxt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();

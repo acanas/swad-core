@@ -1710,7 +1710,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 			     NumUsr,UsrDat->EnUsrCod,
 			     Present ? " checked=\"checked\"" : "",
 			     (ICanChangeStdAttendance == Usr_CAN) ? "" :
-								      " disabled=\"disabled\"");
+								    " disabled=\"disabled\"");
       HTM_TD_End ();
 
       /***** Write number of student in the list *****/
