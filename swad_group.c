@@ -409,8 +409,10 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 
 static void Grp_PutCheckboxAllGrps (void)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_All_groups;
    Usr_Can_t ICanSelUnselGroup;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -428,11 +430,13 @@ static void Grp_PutCheckboxAllGrps (void)
 
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+         UncheckedOrChecked = (ICanSelUnselGroup == Usr_CAN &&
+			       Gbl.Crs.Grps.AllGrps) ? Cns_UNCHECKED :
+						       Cns_CHECKED;
 	 HTM_INPUT_CHECKBOX ("AllGroups",HTM_DONT_SUBMIT_ON_CHANGE,
-			     "value=\"Y\"%s",
-			     ICanSelUnselGroup == Usr_CAN ? (Gbl.Crs.Grps.AllGrps ? " checked=\"checked\""
-										      " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
-										      " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
+			     "value=\"Y\"%s%s",
+			     HTM_CheckedTxt[UncheckedOrChecked],
+			     (ICanSelUnselGroup == Usr_CAN) ? " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 							      " disabled=\"disabled\"");
 	 HTM_NBSPTxt (Txt_All_groups);
       HTM_LABEL_End ();
@@ -1631,6 +1635,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
                                         Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod)	// Assignment, attendance event, survey, exam event or match
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    static const struct
      {
       const char *Table;
@@ -1647,7 +1652,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    unsigned NumGrpThisType;
    bool IBelongToThisGroup;
    struct Group *Grp;
-   bool AssociatedToGrp;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -1664,12 +1669,12 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
+      UncheckedOrChecked = Cns_UNCHECKED;
       if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey, exam event or match
-	 AssociatedToGrp = Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
-	                                                  AssociationsToGrps[WhichIsAssociatedToGrp].Field,
-	                                                  Cod,Grp->GrpCod);
-      else
-         AssociatedToGrp = false;
+	 if (Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
+	                                    AssociationsToGrps[WhichIsAssociatedToGrp].Field,
+	                                    Cod,Grp->GrpCod))
+            UncheckedOrChecked = Cns_CHECKED;
 
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
@@ -1680,8 +1685,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 				"id=\"Grp%ld\" value=\"%ld\"%s%s"
 				" onclick=\"uncheckParent(this,'WholeCrs')\"",
 				Grp->GrpCod,Grp->GrpCod,
-				AssociatedToGrp ? " checked=\"checked\"" :
-						  "",
+				HTM_CheckedTxt[UncheckedOrChecked],
 				(IBelongToThisGroup ||
 				 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" :
 									   " disabled=\"disabled\"");
@@ -1845,6 +1849,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
                                                     unsigned *NumGrpsThisTypeIBelong)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
    struct Group *Grp;
@@ -1852,6 +1857,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    bool IBelongToAClosedGroup;
    Usr_Can_t ICanChangeMySelectionForThisGrpTyp;
    Usr_Can_t ICanChangeMySelectionForThisGrp;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    char StrGrpCod[32];
 
    /***** Write heading *****/
@@ -1968,7 +1974,8 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 
 	 HTM_TD_Begin (IBelongToThisGroup ? "class=\"LM BG_HIGHLIGHT\"" :
 					    "class=\"LM\"");
-
+	    UncheckedOrChecked = IBelongToThisGroup ? Cns_CHECKED :
+						      Cns_UNCHECKED;
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
 		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
@@ -1979,7 +1986,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 		  HTM_INPUT_RADIO (StrGrpCod,HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
 				   Grp->GrpCod,Grp->GrpCod,
-				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+				   HTM_CheckedTxt[UncheckedOrChecked], // Group selected?
 				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
 								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
 											               " disabled=\"disabled\"");	// I can not register
@@ -1988,7 +1995,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 				   "id=\"Grp%ld\" value=\"%ld\"%s%s"
 				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
 				   Grp->GrpCod,Grp->GrpCod,
-				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+				   HTM_CheckedTxt[UncheckedOrChecked], // Group selected?
 				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
 								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
 											               " disabled=\"disabled\"",	// I can not register
@@ -1999,7 +2006,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	       HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
 				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
 				   Grp->GrpCod,Grp->GrpCod,
-				   IBelongToThisGroup ? " checked=\"checked\"" : "",
+				   HTM_CheckedTxt[UncheckedOrChecked], // Group selected?
 				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
 								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
 											               " disabled=\"disabled\"");	// I can not register
@@ -2059,9 +2066,11 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpThisType;
    bool UsrBelongsToThisGroup;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    struct Group *Grp;
    char StrGrpCod[32];
 
@@ -2092,12 +2101,13 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 	    /* Put checkbox to select the group */
 	    // Always checkbox, not radio, because the role in the form may be teacher,
 	    // so if he/she is registered as teacher, he/she can belong to several groups
+	    UncheckedOrChecked = UsrBelongsToThisGroup ? Cns_CHECKED :
+							 Cns_UNCHECKED;
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
 				"id=\"Grp%ld\" value=\"%ld\"%s",
 				Grp->GrpCod,Grp->GrpCod,
-				UsrBelongsToThisGroup ? " checked=\"checked\"" :
-							"");	// I can not register
+				HTM_CheckedTxt[UncheckedOrChecked]);
 
 	 /* End cell for checkbox */
 	 HTM_TD_End ();

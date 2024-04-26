@@ -803,6 +803,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 static void Enr_PutActionsRegRemSeveralUsrs (void)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Register_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_not_indicated_in_step_1;
@@ -818,8 +819,9 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",HTM_DONT_SUBMIT_ON_CLICK,
-				" value=\"%u\" checked=\"checked\"",
-				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
+				" value=\"%u\"%s",
+				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
+				HTM_CheckedTxt[Cns_CHECKED]);
 	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();
@@ -2179,7 +2181,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					  1 << Rol_NET |
 					  1 << Rol_TCH,
 					  RolesSelected,
-					  false,
+					  Cns_DISABLED,
 					  HTM_SUBMIT_ON_CHANGE);
 	       HTM_TD_End ();
 

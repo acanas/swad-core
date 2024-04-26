@@ -63,8 +63,10 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args);
 void Coo_EditMyPrefsOnCookies (void)
   {
    extern const char *Hlp_PROFILE_Settings_cookies;
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Cookies;
    extern const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    /***** Begin section with preferences about cookies *****/
    HTM_SECTION_Begin (Coo_COOKIES_ID);
@@ -92,10 +94,11 @@ void Coo_EditMyPrefsOnCookies (void)
 
 	    /* Check box */
 	    HTM_LABEL_Begin (NULL);
+	       UncheckedOrChecked = (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT) ? Cns_CHECKED :
+												   Cns_UNCHECKED;
 	       HTM_INPUT_CHECKBOX ("cookies",HTM_SUBMIT_ON_CHANGE,
 				   "value=\"Y\"%s",
-				   (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT) ? " checked=\"checked\"" :
-									                          "");
+				   HTM_CheckedTxt[UncheckedOrChecked]);
 	       HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
 	    HTM_LABEL_End ();
 

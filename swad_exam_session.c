@@ -983,8 +983,10 @@ static void ExaSes_ParsFormSession (void *Session)
 
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1007,13 +1009,14 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
 		                The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
+		        UncheckedOrChecked = Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
+					                                     "SesCod",
+					                                     SesCod) ? Cns_CHECKED :
+					                                	       Cns_UNCHECKED;
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
-					                                    "SesCod",
-					                                    SesCod) ? "" :
-										      " checked=\"checked\"");
+					    HTM_CheckedTxt[UncheckedOrChecked]);
 			Grp_WriteTheWholeCourse ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();

@@ -159,7 +159,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events);
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct Usr_Data *UsrDat);
-static void Att_PutCheckOrCross (bool Present);
+static void Att_PutCheckOrCross (Cns_UncheckedOrChecked_t UncheckedOrChecked);
 static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
                                               unsigned NumUsrsInList,
                                               long *LstSelectedUsrCods);
@@ -1073,8 +1073,10 @@ void Att_ReqCreatOrEditEvent (void)
 
 static void Att_ShowLstGrpsToEditEvent (long AttCod)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1097,13 +1099,14 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
 		                The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
+		        UncheckedOrChecked = Grp_DB_CheckIfAssociatedToGrps ("att_groups",
+					                                     "AttCod",
+					                                     AttCod) ? Cns_UNCHECKED :
+										       Cns_CHECKED;
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_DB_CheckIfAssociatedToGrps ("att_groups",
-					                                    "AttCod",
-					                                    AttCod) ? "" :
-										      " checked=\"checked\"");
+					    HTM_CheckedTxt[UncheckedOrChecked]);
 			Grp_WriteTheWholeCourse ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
@@ -1647,6 +1650,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct Usr_Data *UsrDat,
                                           struct Att_Event *Event)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
@@ -1655,6 +1659,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    bool Present;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
    Usr_Can_t ICanChangeStdAttendance;
@@ -1692,6 +1697,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
    /***** Check if this student is already present in the current event *****/
    Present = Att_CheckIfUsrIsPresentInEventAndGetComments (Event->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
+   UncheckedOrChecked = Present ? Cns_CHECKED :
+				  Cns_UNCHECKED;
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);
@@ -1699,7 +1706,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       /***** Icon to show if the user is already present *****/
       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 	 HTM_LABEL_Begin ("for=\"Std%u\"",NumUsr);
-	    Att_PutCheckOrCross (Present);
+	    Att_PutCheckOrCross (UncheckedOrChecked);
 	 HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -1708,7 +1715,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Std%u\" value=\"%s\"%s%s",
 			     NumUsr,UsrDat->EnUsrCod,
-			     Present ? " checked=\"checked\"" : "",
+			     HTM_CheckedTxt[UncheckedOrChecked],
 			     (ICanChangeStdAttendance == Usr_CAN) ? "" :
 								    " disabled=\"disabled\"");
       HTM_TD_End ();
@@ -2440,7 +2447,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
       for (NumAttEvent = 0;
 	   NumAttEvent < Events->Num;
 	   NumAttEvent++)
-	 Events->Lst[NumAttEvent].Selected = false;
+	 Events->Lst[NumAttEvent].UncheckedOrChecked = Cns_UNCHECKED;
 
       /* Set some events as selected */
       for (Ptr = Events->StrAttCodsSelected;
@@ -2457,7 +2464,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 	      NumAttEvent++)
 	    if (Events->Lst[NumAttEvent].AttCod == AttCod)
 	      {
-	       Events->Lst[NumAttEvent].Selected = true;
+	       Events->Lst[NumAttEvent].UncheckedOrChecked = Cns_CHECKED;
 	       break;
 	      }
 	}
@@ -2471,18 +2478,18 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 	 for (NumAttEvent = 0;
 	      NumAttEvent < Events->Num;
 	      NumAttEvent++)
-	    Events->Lst[NumAttEvent].Selected = true;
+	    Events->Lst[NumAttEvent].UncheckedOrChecked = Cns_CHECKED;
       else					// Course has groups and not all of them are selected
 	 for (NumAttEvent = 0;
 	      NumAttEvent < Events->Num;
 	      NumAttEvent++)
 	   {
 	    /* Reset selection */
-	    Events->Lst[NumAttEvent].Selected = false;
+	    Events->Lst[NumAttEvent].UncheckedOrChecked = Cns_UNCHECKED;
 
 	    /* Set this event as selected? */
 	    if (Events->Lst[NumAttEvent].NumStdsFromList)	// Some students attended to this event
-	       Events->Lst[NumAttEvent].Selected = true;
+	       Events->Lst[NumAttEvent].UncheckedOrChecked = Cns_CHECKED;
 	    else						// No students attended to this event
 	      {
 	       /***** Get groups associated to an attendance event from database *****/
@@ -2491,7 +2498,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 		  /* Get groups associated to this event */
 		  for (NumGrpInThisEvent = 0;
 		       NumGrpInThisEvent < NumGrpsInThisEvent &&
-		       !Events->Lst[NumAttEvent].Selected;
+		       Events->Lst[NumAttEvent].UncheckedOrChecked == Cns_UNCHECKED;
 		       NumGrpInThisEvent++)
 		    {
 		     /* Get next group associated to this event */
@@ -2499,13 +2506,13 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 			/* Check if this group is selected */
 			for (NumGrpSel = 0;
 			     NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps &&
-			     !Events->Lst[NumAttEvent].Selected;
+			     Events->Lst[NumAttEvent].UncheckedOrChecked == Cns_UNCHECKED;
 			     NumGrpSel++)
 			   if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == GrpCodInThisEvent)
-			      Events->Lst[NumAttEvent].Selected = true;
+			      Events->Lst[NumAttEvent].UncheckedOrChecked = Cns_CHECKED;
 		    }
 	       else			// This event is not associated to groups
-		  Events->Lst[NumAttEvent].Selected = true;
+		  Events->Lst[NumAttEvent].UncheckedOrChecked = Cns_CHECKED;
 
 	       /***** Free structure that stores the query result *****/
 	       DB_FreeMySQLResult (&mysql_res);
@@ -2608,6 +2615,7 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
 static void Att_ListEventsToSelect (struct Att_Events *Events,
                                     Att_TypeOfView_t TypeOfView)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -2666,8 +2674,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 		  HTM_INPUT_CHECKBOX ("AttCods",HTM_DONT_SUBMIT_ON_CHANGE,
 				      "id=\"Event%u\" value=\"%ld\"%s",
 				      NumAttEvent,Events->Event.AttCod,
-				      Events->Lst[NumAttEvent].Selected ? " checked=\"checked\"" :
-									  "");
+				      HTM_CheckedTxt[Events->Lst[NumAttEvent].UncheckedOrChecked]);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
@@ -2807,7 +2814,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	       for (NumAttEvent = 0, Total = 0;
 		    NumAttEvent < Events->Num;
 		    NumAttEvent++)
-		  if (Events->Lst[NumAttEvent].Selected)
+		  if (Events->Lst[NumAttEvent].UncheckedOrChecked == Cns_CHECKED)
 		    {
 		     HTM_TD_LINE_TOP_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
 		     Total += Events->Lst[NumAttEvent].NumStdsFromList;
@@ -2852,7 +2859,7 @@ static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events)
       for (NumAttEvent = 0;
 	   NumAttEvent < Events->Num;
 	   NumAttEvent++)
-	 if (Events->Lst[NumAttEvent].Selected)
+	 if (Events->Lst[NumAttEvent].UncheckedOrChecked == Cns_CHECKED)
 	   {
 	    /***** Get data of this attendance event *****/
 	    Events->Event.AttCod = Events->Lst[NumAttEvent].AttCod;
@@ -2888,6 +2895,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
      };
    unsigned NumAttEvent;
    bool Present;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    unsigned NumTimesPresent;
 
    /***** Write number of user in the list *****/
@@ -2935,16 +2943,18 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       for (NumAttEvent = 0, NumTimesPresent = 0;
 	   NumAttEvent < Events->Num;
 	   NumAttEvent++)
-	 if (Events->Lst[NumAttEvent].Selected)
+	 if (Events->Lst[NumAttEvent].UncheckedOrChecked == Cns_CHECKED)
 	   {
 	    /* Check if this student is already registered in the current event */
 	    // Here it is not necessary to get comments
 	    Present = Att_CheckIfUsrIsPresentInEvent (Events->Lst[NumAttEvent].AttCod,
-							 UsrDat->UsrCod);
+						      UsrDat->UsrCod);
+	    UncheckedOrChecked = Present ? Cns_CHECKED :
+					   Cns_UNCHECKED;
 
 	    /* Write check or cross */
 	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-	       Att_PutCheckOrCross (Present);
+	       Att_PutCheckOrCross (UncheckedOrChecked);
 	    HTM_TD_End ();
 
 	    if (Present)
@@ -2966,24 +2976,31 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 /*********************** Put check or cross character ************************/
 /*****************************************************************************/
 
-static void Att_PutCheckOrCross (bool Present)
+static void Att_PutCheckOrCross (Cns_UncheckedOrChecked_t UncheckedOrChecked)
   {
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
-
-   if (Present)
+   static const char *Class[Cns_NUM_UNCHECKED_CHECKED] =
      {
-      HTM_DIV_Begin ("class=\"ATT_CHECK ATT_CHECK_%s\" title=\"%s\"",
-                     The_GetSuffix (),Txt_Present);
-	 HTM_Txt ("&check;");
-     }
-   else
+      [Cns_UNCHECKED] = "ATT_CROSS",
+      [Cns_CHECKED  ] = "ATT_CHECK",
+     };
+   static const char **Title[Cns_NUM_UNCHECKED_CHECKED] =
      {
-      HTM_DIV_Begin ("class=\"ATT_CROSS ATT_CROSS_%s\" title=\"%s\"",
-                     The_GetSuffix (),Txt_Absent);
-	 HTM_Txt ("&cross;");
-     }
+      [Cns_UNCHECKED] = &Txt_Absent,
+      [Cns_CHECKED  ] = &Txt_Present,
+     };
+   static const char *Txt[Cns_NUM_UNCHECKED_CHECKED] =
+     {
+      [Cns_UNCHECKED] = "&cross;",
+      [Cns_CHECKED  ] = "&check;",
+     };
 
+   HTM_DIV_Begin ("class=\"%s %s_%s\" title=\"%s\"",
+		  Class[UncheckedOrChecked],
+		  Class[UncheckedOrChecked],The_GetSuffix (),
+		  *Title[UncheckedOrChecked]);
+      HTM_Txt (Txt[UncheckedOrChecked]);
    HTM_DIV_End ();
   }
 
@@ -3060,6 +3077,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
    unsigned UniqueId;
    char *Id;
    bool Present;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    bool ShowCommentStd;
    bool ShowCommentTch;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
@@ -3119,7 +3137,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
    for (NumAttEvent = 0, UniqueId = 1;
 	NumAttEvent < Events->Num;
 	NumAttEvent++, UniqueId++)
-      if (Events->Lst[NumAttEvent].Selected)
+      if (Events->Lst[NumAttEvent].UncheckedOrChecked == Cns_CHECKED)
 	{
 	 /***** Get data of the attendance event from database *****/
 	 Events->Event.AttCod = Events->Lst[NumAttEvent].AttCod;
@@ -3128,6 +3146,8 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 
 	 /***** Get comments for this student *****/
 	 Present = Att_CheckIfUsrIsPresentInEventAndGetComments (Events->Event.AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
+	 UncheckedOrChecked = Present ? Cns_CHECKED :
+					Cns_UNCHECKED;
          ShowCommentStd = CommentStd[0];
 	 ShowCommentTch = CommentTch[0] &&
 	                  (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -3147,7 +3167,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	       Att_PutCheckOrCross (Present);
+	       Att_PutCheckOrCross (UncheckedOrChecked);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",

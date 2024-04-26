@@ -815,6 +815,7 @@ void Inf_FormsToSelSendInfo (void)
    extern const char *Hlp_COURSE_FAQ_edit;
    extern const char *Hlp_COURSE_Links_edit;
    extern const char *Hlp_COURSE_Assessment_edit;
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -822,6 +823,7 @@ void Inf_FormsToSelSendInfo (void)
    struct Inf_FromDB FromDB;
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
    static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION   ] = ActSelInfSrcCrsInf,
@@ -902,16 +904,18 @@ void Inf_FormsToSelSendInfo (void)
 						  "");
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 	          Syl_PutParWhichSyllabus (&Syllabus.WhichSyllabus);
+	          UncheckedOrChecked = (InfoSrc == FromDB.Src) ? Cns_CHECKED :
+	        						 Cns_UNCHECKED;
 		  HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
 					     (InfoSrc == Inf_NONE ||
 					      InfoAvailable[InfoSrc]) ? HTM_SUBMIT_ON_CLICK :
 						                        HTM_DONT_SUBMIT_ON_CLICK,
-				   "id=\"InfoSrc%u\" value=\"%u\"%s",
+				   "id=\"InfoSrc%u\" value=\"%u\"%s%s",
 				   (unsigned) InfoSrc,(unsigned) InfoSrc,
-				   InfoSrc == FromDB.Src ? " checked=\"checked\"" :
-							   (InfoSrc == Inf_NONE ||
-							   InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
-										     " disabled=\"disabled\"");
+				   HTM_CheckedTxt[UncheckedOrChecked],
+				   (InfoSrc == Inf_NONE ||
+				    InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
+							      " disabled=\"disabled\"");
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 

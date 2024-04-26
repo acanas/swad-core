@@ -554,6 +554,7 @@ static void ExaRes_ShowResultsEnd (void)
 
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Exams;
    extern const char *Txt_Exam;
@@ -600,8 +601,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Exa],HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"%s",
 					 NumExam,Exams->Lst[NumExam].ExaCod,
-					 Exams->Lst[NumExam].Selected ? " checked=\"checked\"" :
-									"");
+					 HTM_CheckedTxt[Exams->Lst[NumExam].UncheckedOrChecked]);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
@@ -718,7 +718,7 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
    for (NumExam = 0;
 	NumExam < Exams->Num;
 	NumExam++)
-      if (Exams->Lst[NumExam].Selected)
+      if (Exams->Lst[NumExam].UncheckedOrChecked == Cns_CHECKED)
 	{
 	 sprintf (LongStr,"%ld",Exams->Lst[NumExam].ExaCod);
 	 if ((*ExamsSelectedCommas)[0])

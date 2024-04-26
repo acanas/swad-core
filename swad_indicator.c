@@ -211,7 +211,7 @@ void Ind_ReqIndicatorsCourses (void)
       for (Ind  = 0, NumCrssToList = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 if (Indicators.IndicatorsSelected[Ind])
+	 if (Indicators.IndicatorsSelected[Ind] == Cns_CHECKED)
 	    NumCrssToList += NumCrssWithIndicatorYes[Ind];
       if (Ind_GetIfShowBigList (&Indicators,NumCrssToList))
 	{
@@ -314,7 +314,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators->IndicatorsSelected[Ind] = false;
+	 Indicators->IndicatorsSelected[Ind] = Cns_UNCHECKED;
 
       /* Set indicators selected */
       for (Ptr = Indicators->StrIndicatorsSelected;
@@ -330,7 +330,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
 	      Ind <= Ind_NUM_INDICATORS;
 	      Ind++)
 	    if ((long) Ind == Indicator)
-	       Indicators->IndicatorsSelected[Ind] = true;
+	       Indicators->IndicatorsSelected[Ind] = Cns_CHECKED;
 	}
      }
    else
@@ -338,7 +338,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators->IndicatorsSelected[Ind] = true;
+	 Indicators->IndicatorsSelected[Ind] = Cns_CHECKED;
   }
 
 /*****************************************************************************/
@@ -438,6 +438,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
                                               unsigned NumCrss,
                                               Frm_PutForm_t PutForm)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Total;
    char *ClassNormal;
@@ -466,8 +467,8 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
 	{
-	 Class = Indicators->IndicatorsSelected[Ind] ? ClassHighlight :
-						       ClassNormal;
+	 Class = (Indicators->IndicatorsSelected[Ind] == Cns_CHECKED) ? ClassHighlight :
+								        ClassNormal;
 	 HTM_TR_Begin (NULL);
 
 	    if (PutForm == Frm_PUT_FORM)
@@ -476,8 +477,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 		  HTM_INPUT_CHECKBOX ("Indicators",HTM_SUBMIT_ON_CHANGE,
 				      "id=\"Indicators%u\" value=\"%u\"%s",
 				      Ind,Ind,
-				      Indicators->IndicatorsSelected[Ind] ? " checked=\"checked\"" :
-									    "");
+				      HTM_CheckedTxt[Indicators->IndicatorsSelected[Ind]]);
 	       HTM_TD_End ();
 	      }
 
@@ -688,13 +688,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 	 /* Get stored number of indicators of this course */
 	 NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
-	 if (Indicators->IndicatorsSelected[NumIndicators])
+	 if (Indicators->IndicatorsSelected[NumIndicators] == Cns_CHECKED)
 	   {
 	    /* Compute and store indicators */
 	    Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&IndicatorsCrs);
 
 	    /* The number of indicators may have changed */
-	    if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators])
+	    if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators] == Cns_CHECKED)
 	      {
 	       ActCod = Act_GetActCod (ActReqStaCrs);
 

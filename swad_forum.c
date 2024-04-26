@@ -1432,8 +1432,10 @@ static void For_PutIconsForums (__attribute__((unused)) void *Args)
 
 static void For_PutFormWhichForums (const struct For_Forums *Forums)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS];
    For_ForumSet_t ForumSet;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    /***** Form to select which forums I want to see:
           - all my forums
@@ -1449,11 +1451,12 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 	      {
 	       HTM_LI_Begin (NULL);
 		  HTM_LABEL_Begin (NULL);
+		     UncheckedOrChecked = (ForumSet == Forums->ForumSet) ? Cns_UNCHECKED :
+									   Cns_CHECKED;
 		     HTM_INPUT_RADIO ("ForumSet",HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"%s",
 				      (unsigned) ForumSet,
-				      (ForumSet == Forums->ForumSet) ? " checked=\"checked\"" :
-								       "");
+				      HTM_CheckedTxt[UncheckedOrChecked]);
 		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
 		  HTM_LABEL_End ();
 	       HTM_LI_End ();

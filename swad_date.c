@@ -287,8 +287,10 @@ void Dat_ResetHour (struct Dat_Hour *Hour)
 void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Settings_dates;
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Dates;
    Dat_Format_t Format;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Dates,Dat_PutIconsDateFormat,NULL,
@@ -311,11 +313,12 @@ void Dat_PutBoxToSelectDateFormat (void)
 		  HTM_LI_Begin ("class=\"DAT_%s\"",
 		                The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
+	          UncheckedOrChecked = (Format == Gbl.Prefs.DateFormat) ? Cns_CHECKED :
+									  Cns_UNCHECKED;
 		  HTM_INPUT_RADIO ("DateFormat",HTM_SUBMIT_ON_CLICK,
 				   " value=\"%u\"%s",
 				   (unsigned) Format,
-				   (Format == Gbl.Prefs.DateFormat) ? " checked=\"checked\"" :
-								      "");
+				   HTM_CheckedTxt[UncheckedOrChecked]);
 		  Dat_PutSpanDateFormat (Format);
 		  Dat_PutScriptDateFormat (Format);
 	       HTM_LABEL_End ();

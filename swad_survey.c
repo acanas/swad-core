@@ -615,7 +615,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 				 1 << Rol_NET |
 				 1 << Rol_TCH,
 				 Surveys->Svy.Roles,
-				 true,
+				 Cns_ENABLED,
 				 HTM_DONT_SUBMIT_ON_CHANGE);
       HTM_DIV_End ();
 
@@ -1703,7 +1703,7 @@ void Svy_ReqCreatOrEditSvy (void)
 				       1 << Rol_NET |
 				       1 << Rol_TCH,
 				       Surveys.Svy.Roles,
-				       false,
+				       Cns_DISABLED,
 				       HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 	 HTM_TR_End ();

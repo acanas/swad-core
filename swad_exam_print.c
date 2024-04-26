@@ -840,9 +840,10 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       unsigned QstInd,
                                       struct Qst_Question *Question)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Change format of answers text *****/
@@ -875,8 +876,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 			 Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? "radio" :
 									  "checkbox",
 			 Id,NumOpt,Indexes[NumOpt],
-			 UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-						       "");
+			 HTM_CheckedTxt[UsrAnswers[Indexes[NumOpt]]]);
 	       ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
 	       HTM_Txt (" />");
 	    HTM_TD_End ();

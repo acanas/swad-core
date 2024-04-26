@@ -70,7 +70,7 @@ struct Att_Events
      {
       long AttCod;		// Attendance event code
       unsigned NumStdsFromList;	// Number of students (taken from a list) who has assisted to the event
-      bool Selected;		// I have selected this attendance event
+      Cns_UncheckedOrChecked_t UncheckedOrChecked;	// Do I have selected this attendance event?
      } *Lst;			// List of attendance events
    Dat_StartEndTime_t SelectedOrder;
    struct Att_Event Event;	// Selected/current event

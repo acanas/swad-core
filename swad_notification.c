@@ -1615,12 +1615,14 @@ void Ntf_MarkAllNotifAsSeen (void)
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
    extern const char *Hlp_PROFILE_Settings_notifications;
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
    extern const char *Txt_Notify_me_BR_by_email;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;
 
    /***** Begin section with settings on privacy *****/
    HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
@@ -1659,19 +1661,23 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"CM\"");
-			HTM_INPUT_CHECKBOX (Ntf_ParNotifMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
+		        UncheckedOrChecked = (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
+					      (1 << NotifyEvent)) ? Cns_CHECKED :
+								    Cns_UNCHECKED;
+			HTM_INPUT_CHECKBOX (Ntf_ParNotifMeAboutNotifyEvents[NotifyEvent],
+					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"%s",
-					    (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
-					     (1 << NotifyEvent)) ? " checked=\"checked\"" :
-								   "");
+					    HTM_CheckedTxt[UncheckedOrChecked]);
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"CM\"");
-			HTM_INPUT_CHECKBOX (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
+		        UncheckedOrChecked = (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
+					      (1 << NotifyEvent)) ? Cns_CHECKED :
+								    Cns_UNCHECKED;
+			HTM_INPUT_CHECKBOX (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent],
+					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"%s",
-					    (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
-					     (1 << NotifyEvent)) ? " checked=\"checked\"" :
-								   "");
+					    HTM_CheckedTxt[UncheckedOrChecked]);
 		     HTM_TD_End ();
 
 		  HTM_TR_End ();

@@ -418,9 +418,10 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       struct Qst_Question *Question)
   {
+   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Change format of answers text *****/
@@ -454,18 +455,14 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 		  HTM_INPUT_RADIO (StrAns,HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"Ans%010u_%u\" value=\"%u\"%s"
 				   " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
-				   QstInd,NumOpt,
-				   Indexes[NumOpt],
-				   UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-								    "",
+				   QstInd,NumOpt,Indexes[NumOpt],
+				   HTM_CheckedTxt[UsrAnswers[Indexes[NumOpt]]],
 				   QstInd,Question->Answer.NumOptions);
 	       else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
 		  HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
 				      "id=\"Ans%010u_%u\" value=\"%u\"%s",
-				      QstInd,NumOpt,
-				      Indexes[NumOpt],
-				      UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-								    "");
+				      QstInd,NumOpt,Indexes[NumOpt],
+				      HTM_CheckedTxt[UsrAnswers[Indexes[NumOpt]]]);
 
 	    HTM_TD_End ();
 
@@ -918,7 +915,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	                        const struct Qst_Question *Question)
   {
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    unsigned NumOpt;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
@@ -943,7 +940,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
       if (Question->Answer.Options[Indexes[NumOpt]].Correct)
          NumOptCorrInQst++;
 
-      if (UsrAnswers[Indexes[NumOpt]])	// This answer has been selected by the user
+      if (UsrAnswers[Indexes[NumOpt]] == Cns_CHECKED)	// This answer has been selected by the user
         {
          if (Question->Answer.Options[Indexes[NumOpt]].Correct)
             NumAnsGood++;
@@ -1093,20 +1090,20 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES
 /*****************************************************************************/
 
 void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
+			       Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
   {
    unsigned NumOpt;
    const char *Ptr;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned AnsUsr;
 
-   /***** Initialize all answers to false *****/
+   /***** Initialize all answers to unchecked *****/
    for (NumOpt = 0;
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      UsrAnswers[NumOpt] = false;
+      UsrAnswers[NumOpt] = Cns_UNCHECKED;
 
-   /***** Set selected answers to true *****/
+   /***** Set selected answers to checked *****/
    for (NumOpt = 0, Ptr = StrAnswersOneQst;
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
@@ -1119,7 +1116,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
       if (AnsUsr >= Qst_MAX_OPTIONS_PER_QUESTION)
 	 Err_WrongAnswerExit ();
 
-      UsrAnswers[AnsUsr] = true;
+      UsrAnswers[AnsUsr] = Cns_CHECKED;
      }
   }
 
@@ -1406,7 +1403,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    struct
      {
       char *Class;
@@ -1442,7 +1439,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	 HTM_TR_Begin (NULL);
 
 	    /* Draw icon depending on user's answer */
-	    if (UsrAnswers[Indexes[NumOpt]])	// This answer has been selected by the user
+	    if (UsrAnswers[Indexes[NumOpt]] == Cns_CHECKED)	// This answer has been selected by the user
 	      {
 	       switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 		 {

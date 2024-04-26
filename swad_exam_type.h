@@ -72,7 +72,7 @@ typedef enum
 struct Exa_ExamSelected
   {
    long ExaCod;		// Exam code
-   bool Selected;	// Is this exam selected when seeing match results?
+   Cns_UncheckedOrChecked_t UncheckedOrChecked;	// Is this exam selected when seeing match results?
   };
 
 struct Exa_Exam
