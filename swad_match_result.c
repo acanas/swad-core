@@ -518,7 +518,6 @@ static void MchRes_ShowResultsEnd (void)
 
 static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Games;
    extern const char *Txt_Game;
@@ -560,25 +559,23 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
-		                The_GetSuffix (),
-		                The_GetColorRows ());
-		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Gam],HTM_DONT_SUBMIT_ON_CHANGE,
-					 "id=\"Gam%u\" value=\"%ld\"%s",
-					 NumGame,Games->Lst[NumGame].GamCod,
-					 HTM_CheckedTxt[Games->Lst[NumGame].UncheckedOrChecked]);
+		                The_GetSuffix (),The_GetColorRows ());
+		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Gam],
+					 Games->Lst[NumGame].Checked,
+					 HTM_DONT_SUBMIT_ON_CHANGE,
+					 "id=\"Gam%u\" value=\"%ld\"",
+					 NumGame,Games->Lst[NumGame].GamCod);
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-		                The_GetSuffix (),
-		                The_GetColorRows ());
+		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumGame);
 			HTM_UnsignedColon (NumGame + 1);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		                The_GetSuffix (),
-		                The_GetColorRows ());
+		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_Txt (Games->Game.Title);
 		  HTM_TD_End ();
 
@@ -671,7 +668,7 @@ static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
    for (NumGame = 0;
 	NumGame < Games->Num;
 	NumGame++)
-      if (Games->Lst[NumGame].UncheckedOrChecked == Cns_CHECKED)
+      if (Games->Lst[NumGame].Checked == Cns_CHECKED)
 	{
 	 sprintf (LongStr,"%ld",Games->Lst[NumGame].GamCod);
 	 if ((*GamesSelectedCommas)[0])

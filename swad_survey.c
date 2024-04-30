@@ -1813,6 +1813,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
+   Cns_Checked_t Checked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1835,12 +1836,14 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	       HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
 	                     The_GetSuffix ());
 		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-					 "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
-					 Grp_DB_CheckIfAssociatedToGrps ("svy_groups",
-					                                 "SvyCod",
-					                                 SvyCod) ? "" :
-									           " checked=\"checked\"");
+		     Checked = Grp_DB_CheckIfAssociatedToGrps ("svy_groups",
+					                       "SvyCod",
+					                       SvyCod) ? Cns_CHECKED :
+					                		 Cns_UNCHECKED;
+		     HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
+					 HTM_DONT_SUBMIT_ON_CHANGE,
+					 "id=\"WholeCrs\" value=\"Y\""
+					 " onclick=\"uncheckChildren(this,'GrpCods')\"");
 		     Grp_WriteTheWholeCourse ();
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
@@ -2197,6 +2200,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    char *Title;
    Svy_AnswerType_t AnsType;
    bool NewQuestion = (SvyQst->QstCod <= 0);
+   Cns_Checked_t Checked;
 
    if (Gbl.Action.Act == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
       if (!NewQuestion)
@@ -2282,10 +2286,11 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		    AnsType++)
 		 {
 		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_RADIO ("AnswerType",HTM_DONT_SUBMIT_ON_CLICK,
-				      "value=\"%u\"%s",
-				      (unsigned) AnsType,
-				      AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
+		     Checked = (AnsType == SvyQst->AnswerType) ? Cns_CHECKED :
+								 Cns_UNCHECKED;
+		     HTM_INPUT_RADIO ("AnswerType",Checked,
+				      HTM_DONT_SUBMIT_ON_CLICK,
+				      "value=\"%u\"",(unsigned) AnsType);
 		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
 		  HTM_LABEL_End ();
 		  HTM_BR ();
@@ -2335,10 +2340,11 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	    HTM_TD_TxtColon (Txt_Comments);
 	    HTM_TD_Begin ("class=\"LT FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
-		  HTM_INPUT_CHECKBOX ("Comment",HTM_DONT_SUBMIT_ON_CHANGE,
-				      "value=\"Y\"%s",
-				      SvyQst->CommentsAllowed ? " checked=\"checked\"" :
-							        "");
+	          Checked = SvyQst->CommentsAllowed ? Cns_CHECKED :
+						      Cns_UNCHECKED;
+		  HTM_INPUT_CHECKBOX ("Comment",Checked,
+				      HTM_DONT_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"");
 		  HTM_Txt (Txt_Comments_allowed);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -2853,16 +2859,20 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 		     switch (SvyQst->AnswerType)
 		       {
 			case Svy_ANS_UNIQUE_CHOICE:
-			   HTM_INPUT_RADIO (StrAns,HTM_DONT_SUBMIT_ON_CLICK,
+			   HTM_INPUT_RADIO (StrAns,Cns_UNCHECKED,
+					    HTM_DONT_SUBMIT_ON_CLICK,
 					    "id=\"Ans%010u_%u\" value=\"%u\""
 					    " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
-					    (unsigned) SvyQst->QstCod,NumAns,NumAns,
+					    (unsigned) SvyQst->QstCod,NumAns,
+					    NumAns,
 					    (unsigned) SvyQst->QstCod,NumAnswers);
 			   break;
 			case Svy_ANS_MULTIPLE_CHOICE:
-			   HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
+			   HTM_INPUT_CHECKBOX (StrAns,Cns_UNCHECKED,
+					       HTM_DONT_SUBMIT_ON_CHANGE,
 					       "id=\"Ans%010u_%u\" value=\"%u\"",
-					       (unsigned) SvyQst->QstCod,NumAns,NumAns);
+					       (unsigned) SvyQst->QstCod,NumAns,
+					       NumAns);
 			   break;
 			default:
 			   break;

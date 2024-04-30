@@ -66,7 +66,7 @@ struct Ind_Indicators
    long DegTypCod;
    long DptCod;
    char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
-   Cns_UncheckedOrChecked_t IndicatorsSelected[1 + Ind_NUM_INDICATORS];
+   Cns_Checked_t IndicatorsSelected[1 + Ind_NUM_INDICATORS];
   };
 
 /*****************************************************************************/

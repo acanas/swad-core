@@ -242,6 +242,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
    size_t i;
+   Cns_Checked_t Checked;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -346,11 +347,13 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option a) Graphic of clicks in this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 					    The_GetSuffix ());
-			      HTM_INPUT_RADIO ("GroupedOrDetailed",HTM_DONT_SUBMIT_ON_CLICK,
-					       "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
-					       (unsigned) Sta_CLICKS_GROUPED,
-					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
-													" checked=\"checked\"");
+			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? Cns_UNCHECKED :
+													      Cns_CHECKED;
+			      HTM_INPUT_RADIO ("GroupedOrDetailed",Checked,
+					       HTM_DONT_SUBMIT_ON_CLICK,
+					       "value=\"%u\""
+					       " onclick=\"disableDetailedClicks();\"",
+					       (unsigned) Sta_CLICKS_GROUPED);
 			      HTM_Txt (Txt_Graph);
 			   HTM_LABEL_End ();
 
@@ -388,11 +391,12 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option b) Listing of detailed clicks to this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 					    The_GetSuffix ());
-			      HTM_INPUT_RADIO ("GroupedOrDetailed",HTM_DONT_SUBMIT_ON_CLICK,
-					       "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
-					       (unsigned) Sta_CLICKS_DETAILED,
-					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" :
-													"");
+			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? Cns_CHECKED :
+													      Cns_UNCHECKED;
+			      HTM_INPUT_RADIO ("GroupedOrDetailed",Checked,
+					       HTM_DONT_SUBMIT_ON_CLICK,
+					       "value=\"%u\" onclick=\"enableDetailedClicks();\"",
+					       (unsigned) Sta_CLICKS_DETAILED);
 			      HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
 			   HTM_LABEL_End ();
 

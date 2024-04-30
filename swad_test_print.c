@@ -418,11 +418,11 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       struct Qst_Question *Question)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -451,18 +451,27 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	    HTM_TD_Begin ("class=\"LT\"");
 
 	       snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-	       if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
-		  HTM_INPUT_RADIO (StrAns,HTM_DONT_SUBMIT_ON_CLICK,
-				   "id=\"Ans%010u_%u\" value=\"%u\"%s"
-				   " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
-				   QstInd,NumOpt,Indexes[NumOpt],
-				   HTM_CheckedTxt[UsrAnswers[Indexes[NumOpt]]],
-				   QstInd,Question->Answer.NumOptions);
-	       else // Answer.Type == Tst_ANS_MULTIPLE_CHOICE
-		  HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
-				      "id=\"Ans%010u_%u\" value=\"%u\"%s",
-				      QstInd,NumOpt,Indexes[NumOpt],
-				      HTM_CheckedTxt[UsrAnswers[Indexes[NumOpt]]]);
+	       snprintf (Id,sizeof (Id),"%s_%u",StrAns,NumOpt);
+	       switch (Question->Answer.Type)
+	         {
+	          case Qst_ANS_UNIQUE_CHOICE:
+		     HTM_INPUT_RADIO (StrAns,UsrAnswers[Indexes[NumOpt]],
+				      HTM_DONT_SUBMIT_ON_CLICK,
+				      "id=\"%s\" value=\"%u\""
+				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
+				      Id,Indexes[NumOpt],
+				      QstInd,Question->Answer.NumOptions);
+	             break;
+	          case Qst_ANS_MULTIPLE_CHOICE:
+		     HTM_INPUT_CHECKBOX (StrAns,UsrAnswers[Indexes[NumOpt]],
+					 HTM_DONT_SUBMIT_ON_CHANGE,
+					 "id=\"%s\" value=\"%u\"",
+					 Id,Indexes[NumOpt]);
+	             break;
+	          default:
+	             Err_WrongAnswerTypeExit ();
+	             break;
+	         }
 
 	    HTM_TD_End ();
 
@@ -516,14 +525,15 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
 static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
   {
    extern const char *Txt_Allow_teachers_to_consult_this_test;
+   Cns_Checked_t Checked;
 
    /***** Test exam will be available for teachers? *****/
    HTM_DIV_Begin ("class=\"CM\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_INPUT_CHECKBOX ("AllowTchs",HTM_DONT_SUBMIT_ON_CHANGE,
-			     "value=\"Y\"%s",
-			     AllowTeachers ? " checked=\"checked\"" :	// Teachers can see test exam
-					     "");
+	 Checked = AllowTeachers ? Cns_CHECKED :	// Teachers can see test exam
+				   Cns_UNCHECKED;
+	 HTM_INPUT_CHECKBOX ("AllowTchs",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+			     "value=\"Y\"");
 	 HTM_NBSPTxt (Txt_Allow_teachers_to_consult_this_test);
       HTM_LABEL_End ();
    HTM_DIV_End ();
@@ -915,7 +925,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	                        const struct Qst_Question *Question)
   {
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    unsigned NumOpt;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
@@ -1090,7 +1100,7 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES
 /*****************************************************************************/
 
 void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
+			       Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
   {
    unsigned NumOpt;
    const char *Ptr;
@@ -1403,7 +1413,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    struct
      {
       char *Class;

@@ -910,17 +910,17 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    extern const char *Txt_FORUM_Post_banned;
    extern const char *Txt_FORUM_Post_X_banned;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
-   static const char *Icon[Cns_NUM_DISABLED_ENABLED] =
+   static const char *Icon[Cns_NUM_DISABLED] =
      {
       [Cns_DISABLED] = "eye-slash.svg",
       [Cns_ENABLED ] = "eye.svg",
      };
-   static Ico_Color_t Color[Cns_NUM_DISABLED_ENABLED] =
+   static Ico_Color_t Color[Cns_NUM_DISABLED] =
      {
       [Cns_DISABLED] = Ico_RED,
       [Cns_ENABLED ] = Ico_GREEN,
      };
-   static const char **TxtAllowedBanned[Cns_NUM_DISABLED_ENABLED] =
+   static const char **TxtAllowedBanned[Cns_NUM_DISABLED] =
      {
       [Cns_DISABLED] = &Txt_FORUM_Post_X_banned,
       [Cns_ENABLED ] = &Txt_FORUM_Post_X_allowed,
@@ -931,7 +931,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
-   Cns_DisabledOrEnabled_t DisabledOrEnabled;
+   Cns_Disabled_t Disabled;
    char *Title;
    Act_Action_t NextAction;
 
@@ -942,13 +942,13 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    Med_MediaConstructor (&Media);
 
    /***** Check if post is enabled *****/
-   DisabledOrEnabled = For_DB_GetIfPstIsDisabledOrEnabled (Forums->PstCod);
+   Disabled = For_DB_GetIfPstIsDisabledOrEnabled (Forums->PstCod);
 
    /***** Get data of post *****/
    For_GetPstData (Forums->PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
                    Subject,OriginalContent,&Media);
 
-   if (DisabledOrEnabled == Cns_ENABLED)
+   if (Disabled == Cns_ENABLED)
       /* Return this subject as last subject */
       Str_Copy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
 
@@ -984,7 +984,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                     NewPst ? "MSG_BG_NEW" :
 	  	             "MSG_BG",
 	  	    The_GetSuffix ());
-         switch (DisabledOrEnabled)
+         switch (Disabled)
            {
             case Cns_DISABLED:
                HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
@@ -1008,18 +1008,18 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	 switch (ICanModerateForum)
 	   {
 	    case Usr_CAN:
-	       NextAction = DisabledOrEnabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
+	       NextAction = Disabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
 							       For_ActionsEnbPstFor[Forums->Forum.Type];
 	       Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
 		  For_PutParsForum (Forums);
-		  Ico_PutIconLink (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],NextAction);
+		  Ico_PutIconLink (Icon[Disabled],Color[Disabled],NextAction);
 	       Frm_EndForm ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       if (asprintf (&Title,*TxtAllowedBanned[DisabledOrEnabled],PstNum) < 0)
+	       if (asprintf (&Title,*TxtAllowedBanned[Disabled],PstNum) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Ico_PutIcon (Icon[DisabledOrEnabled],Color[DisabledOrEnabled],Title,
+	       Ico_PutIcon (Icon[Disabled],Color[Disabled],Title,
 			    "ICO_HIDDEN ICO16x16");
 	       free (Title);
 	       break;
@@ -1042,15 +1042,15 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CRS);
-         Usr_WriteAuthor (&UsrDat,DisabledOrEnabled);
-	 if (DisabledOrEnabled == Cns_ENABLED)
+         Usr_WriteAuthor (&UsrDat,Disabled);
+	 if (Disabled == Cns_ENABLED)
 	    /* Write number of posts from this user */
 	    For_WriteNumberOfPosts (Forums,UsrDat.UsrCod);
       HTM_TD_End ();
 
       /***** Write post content *****/
       HTM_TD_Begin ("class=\"LT MSG_TXT_%s\"",The_GetSuffix ());
-         switch (DisabledOrEnabled)
+         switch (Disabled)
            {
             case Cns_DISABLED:
 	       HTM_Txt (Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
@@ -1432,10 +1432,9 @@ static void For_PutIconsForums (__attribute__((unused)) void *Args)
 
 static void For_PutFormWhichForums (const struct For_Forums *Forums)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS];
    For_ForumSet_t ForumSet;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Form to select which forums I want to see:
           - all my forums
@@ -1451,12 +1450,10 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 	      {
 	       HTM_LI_Begin (NULL);
 		  HTM_LABEL_Begin (NULL);
-		     UncheckedOrChecked = (ForumSet == Forums->ForumSet) ? Cns_UNCHECKED :
-									   Cns_CHECKED;
-		     HTM_INPUT_RADIO ("ForumSet",HTM_SUBMIT_ON_CLICK,
-				      "value=\"%u\"%s",
-				      (unsigned) ForumSet,
-				      HTM_CheckedTxt[UncheckedOrChecked]);
+		     Checked = (ForumSet == Forums->ForumSet) ? Cns_UNCHECKED :
+								Cns_CHECKED;
+		     HTM_INPUT_RADIO ("ForumSet",Checked,HTM_SUBMIT_ON_CLICK,
+				      "value=\"%u\"",(unsigned) ForumSet);
 		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
 		  HTM_LABEL_End ();
 	       HTM_LI_End ();

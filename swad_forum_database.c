@@ -969,7 +969,7 @@ void For_DB_InsertPstIntoDisabled (long PstCod)
 /*********************** Get if a forum post is disabled *********************/
 /*****************************************************************************/
 
-Cns_DisabledOrEnabled_t For_DB_GetIfPstIsDisabledOrEnabled (long PstCod)
+Cns_Disabled_t For_DB_GetIfPstIsDisabledOrEnabled (long PstCod)
   {
    /***** Trivial check: post code should be > 0 *****/
    if (PstCod <= 0)

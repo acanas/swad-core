@@ -174,7 +174,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
 void Grp_GetParCodsSeveralGrps (void);
 void Grp_FreeListCodSelectedGrps (void);
 void Grp_ChangeMyGrpsAndShowChanges (void);
-void Grp_ChangeMyGrps (Cns_QuietOrVerbose_t QuietOrVerbose);
+void Grp_ChangeMyGrps (Cns_Verbose_t Verbose);
 void Grp_ChangeOtherUsrGrps (void);
 bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant);
 void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);

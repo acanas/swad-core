@@ -438,7 +438,6 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
                                               unsigned NumCrss,
                                               Frm_PutForm_t PutForm)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Total;
    char *ClassNormal;
@@ -474,10 +473,10 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       HTM_TD_Begin ("class=\"%s\"",Class);
-		  HTM_INPUT_CHECKBOX ("Indicators",HTM_SUBMIT_ON_CHANGE,
-				      "id=\"Indicators%u\" value=\"%u\"%s",
-				      Ind,Ind,
-				      HTM_CheckedTxt[Indicators->IndicatorsSelected[Ind]]);
+		  HTM_INPUT_CHECKBOX ("Indicators",Indicators->IndicatorsSelected[Ind],
+				      HTM_SUBMIT_ON_CHANGE,
+				      "id=\"Indicators%u\" value=\"%u\"",
+				      Ind,Ind);
 	       HTM_TD_End ();
 	      }
 

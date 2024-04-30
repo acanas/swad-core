@@ -66,7 +66,7 @@ Usr_Can_t Acc_CheckIfICanEliminateAccount (long UsrCod);
 void Acc_AskIfRemoveMyAccount (void);
 void Acc_RemoveMyAccount (void);
 void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
-                                     Cns_QuietOrVerbose_t QuietOrVerbose);
+                                     Cns_Verbose_t Verbose);
 
 void Acc_PutIconToChangeUsrAccount (struct Usr_Data *UsrDat);
 

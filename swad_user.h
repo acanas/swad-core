@@ -272,8 +272,8 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 
-bool Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind,
-							      struct Usr_SelectedUsrs *SelectedUsrs);
+bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
+						  struct Usr_SelectedUsrs *SelectedUsrs);
 bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
 unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
@@ -335,7 +335,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 unsigned Usr_GetTotalNumberOfUsers (void);
 
 void Usr_WriteAuthor (struct Usr_Data *UsrDat,
-                      Cns_DisabledOrEnabled_t DisabledOrEnabled);
+                      Cns_Disabled_t Disabled);
 void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows);

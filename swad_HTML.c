@@ -39,16 +39,10 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *HTM_DisabledTxt[Cns_NUM_DISABLED_ENABLED] =
+const char *HTM_DisabledTxt[Cns_NUM_DISABLED] =
   {
    [Cns_DISABLED] = " disabled=\"disabled\"",
    [Cns_ENABLED ] = "",
-  };
-
-const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED] =
-  {
-   [Cns_UNCHECKED] = "",
-   [Cns_CHECKED  ] = " checked=\"checked\"",
   };
 
 /*****************************************************************************/
@@ -1389,7 +1383,7 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
                      HTM_SubmitOnChange_t SubmitOnChange,
-                     Cns_DisabledOrEnabled_t DisabledOrEnabled,
+                     Cns_Disabled_t Disabled,
 	             const char *fmt,...)
   {
    va_list ap;
@@ -1398,7 +1392,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 
    HTM_TxtF ("<input type=\"number\" name=\"%s\" min=\"%ld\" max=\"%ld\" value=\"%ld\"",
 	     Name,Min,Max,Value);
-   if (DisabledOrEnabled == Cns_DISABLED)
+   if (Disabled == Cns_DISABLED)
       HTM_Txt (" disabled=\"disabled\"");
 
    if (fmt)
@@ -1428,7 +1422,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
                       HTM_SubmitOnChange_t SubmitOnChange,
-                      Cns_DisabledOrEnabled_t DisabledOrEnabled,
+                      Cns_Disabled_t Disabled,
 	              const char *fmt,...)
   {
    va_list ap;
@@ -1446,7 +1440,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
       HTM_TxtF (" step=\"%.15lg\"",Step);
    HTM_TxtF (" value=\"%.15lg\"",Value);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   if (DisabledOrEnabled == Cns_DISABLED)
+   if (Disabled == Cns_DISABLED)
       HTM_Txt (" disabled=\"disabled\"");
 
    if (fmt)
@@ -1472,7 +1466,9 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_RADIO (const char *Name,HTM_SubmitOnClick_t SubmitOnClick,
+void HTM_INPUT_RADIO (const char *Name,
+      		      Cns_Checked_t Checked,
+		      HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...)
   {
    va_list ap;
@@ -1498,12 +1494,18 @@ void HTM_INPUT_RADIO (const char *Name,HTM_SubmitOnClick_t SubmitOnClick,
 	}
      }
 
+   if (Checked == Cns_CHECKED)
+      HTM_Txt (" checked=\"checked\"");
+
    if (SubmitOnClick == HTM_SUBMIT_ON_CLICK)
       HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
+void HTM_INPUT_CHECKBOX (const char *Name,
+			 Cns_Checked_t Checked,
+			 HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...)
   {
    va_list ap;
@@ -1528,6 +1530,9 @@ void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
 	 free (Attr);
 	}
      }
+
+   if (Checked == Cns_CHECKED)
+      HTM_Txt (" checked=\"checked\"");
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_Txt (" onchange=\"this.form.submit();return false;\"");

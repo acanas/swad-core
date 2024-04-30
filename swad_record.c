@@ -3008,15 +3008,16 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 
 static void Rec_ShowFormSex (struct Usr_Data *UsrDat,Usr_Sex_t Sex)
   {
-   extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
+   extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
+   Cns_Checked_t Checked;
 
    HTM_LABEL_Begin ("class=\"DAT_STRONG_%s\"",
 		    The_GetSuffix ());
-      HTM_INPUT_RADIO ("Sex",HTM_DONT_SUBMIT_ON_CLICK,
-		       "value=\"%u\"%s  required=\"required\"",
-		       (unsigned) Sex,
-		       Sex == UsrDat->Sex ? " checked=\"checked\"" : "");
+      Checked = (Sex == UsrDat->Sex) ? Cns_CHECKED :
+				       Cns_UNCHECKED;
+      HTM_INPUT_RADIO ("Sex",Checked,HTM_DONT_SUBMIT_ON_CLICK,
+		       "value=\"%u\" required=\"required\"",(unsigned) Sex);
       HTM_TxtF ("%s&nbsp;%s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
    HTM_LABEL_End ();
   }

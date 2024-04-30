@@ -133,7 +133,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
 static void Inf_PutIconToViewInfo (void *Type);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
-						Cns_DisabledOrEnabled_t DisabledOrEnabled);
+						Cns_Disabled_t Disabled);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
@@ -348,7 +348,7 @@ void Inf_PutIconToEditInfo (void *Type)
 /*****************************************************************************/
 
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
-						Cns_DisabledOrEnabled_t DisabledOrEnabled)
+						Cns_Disabled_t Disabled)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Force_students_to_read_this_information;
@@ -368,7 +368,7 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "MustBeRead",
-                              MustBeRead,DisabledOrEnabled,
+                              MustBeRead,Disabled,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
   }
@@ -815,7 +815,6 @@ void Inf_FormsToSelSendInfo (void)
    extern const char *Hlp_COURSE_FAQ_edit;
    extern const char *Hlp_COURSE_Links_edit;
    extern const char *Hlp_COURSE_Assessment_edit;
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -823,7 +822,7 @@ void Inf_FormsToSelSendInfo (void)
    struct Inf_FromDB FromDB;
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
    static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION   ] = ActSelInfSrcCrsInf,
@@ -904,15 +903,15 @@ void Inf_FormsToSelSendInfo (void)
 						  "");
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 	          Syl_PutParWhichSyllabus (&Syllabus.WhichSyllabus);
-	          UncheckedOrChecked = (InfoSrc == FromDB.Src) ? Cns_CHECKED :
+	          Checked = (InfoSrc == FromDB.Src) ? Cns_CHECKED :
 	        						 Cns_UNCHECKED;
-		  HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
-					     (InfoSrc == Inf_NONE ||
-					      InfoAvailable[InfoSrc]) ? HTM_SUBMIT_ON_CLICK :
-						                        HTM_DONT_SUBMIT_ON_CLICK,
-				   "id=\"InfoSrc%u\" value=\"%u\"%s%s",
+		  HTM_INPUT_RADIO ("InfoSrc",Checked,
+			           (InfoSrc != FromDB.Src &&
+				    (InfoSrc == Inf_NONE ||
+				     InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
+						                HTM_DONT_SUBMIT_ON_CLICK,
+				   "id=\"InfoSrc%u\" value=\"%u\"%s",
 				   (unsigned) InfoSrc,(unsigned) InfoSrc,
-				   HTM_CheckedTxt[UncheckedOrChecked],
 				   (InfoSrc == Inf_NONE ||
 				    InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
 							      " disabled=\"disabled\"");

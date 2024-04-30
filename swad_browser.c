@@ -2883,12 +2883,11 @@ void Brw_PutLegalNotice (void)
 
 static void Brw_FormToChangeCrsGrpZone (void)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Get list of groups to show *****/
    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
@@ -2907,11 +2906,11 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	               Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? "BROWSER_TITLE" :
 						                "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
-	       UncheckedOrChecked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? Cns_CHECKED :
+	       Checked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? Cns_CHECKED :
 									     Cns_UNCHECKED;
-	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],HTM_SUBMIT_ON_CLICK,
-				"value=\"-1\"%s",
-				HTM_CheckedTxt[UncheckedOrChecked]);
+	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],Checked,
+				HTM_SUBMIT_ON_CLICK,
+				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();
@@ -2938,12 +2937,12 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   NULL,
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
-		     UncheckedOrChecked = (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
-				           GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? Cns_CHECKED :
-										   Cns_UNCHECKED;
-		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],HTM_SUBMIT_ON_CLICK,
-				      "value=\"%ld\"%s",
-				      GrpDat.GrpCod,HTM_CheckedTxt[UncheckedOrChecked]);
+		     Checked = (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
+				GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? Cns_CHECKED :
+									Cns_UNCHECKED;
+		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],Checked,
+				      HTM_SUBMIT_ON_CLICK,
+				      "value=\"%ld\"",GrpDat.GrpCod);
 		     HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
 		  HTM_LABEL_End ();
 	       HTM_LI_End ();

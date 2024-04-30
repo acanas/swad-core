@@ -1900,17 +1900,15 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_only_unread_messages;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      UncheckedOrChecked = Messages->ShowOnlyUnreadMsgs ? Cns_CHECKED :
-							  Cns_UNCHECKED;
-      HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"Y\"%s",
-			  HTM_CheckedTxt[UncheckedOrChecked]);
+      Checked = Messages->ShowOnlyUnreadMsgs ? Cns_CHECKED :
+					       Cns_UNCHECKED;
+      HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+			  "value=\"Y\"");
       HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();
   }

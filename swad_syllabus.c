@@ -182,6 +182,7 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
   {
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyl;
+   Cns_Checked_t Checked;
 
    /***** If no syllabus ==> nothing to do *****/
    switch (Gbl.Crs.Info.Type)
@@ -204,11 +205,10 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
 	   {
 	    HTM_LI_Begin (NULL);
 	       HTM_LABEL_Begin (NULL);
-		  HTM_INPUT_RADIO ("WhichSyllabus",HTM_SUBMIT_ON_CLICK,
-				   "value=\"%u\"%s",
-				   (unsigned) WhichSyl,
-				   WhichSyl == WhichSyllabus ? " checked=\"checked\"" :
-							       "");
+	          Checked = (WhichSyl == WhichSyllabus) ? Cns_CHECKED :
+	        					  Cns_UNCHECKED;
+		  HTM_INPUT_RADIO ("WhichSyllabus",Checked,HTM_SUBMIT_ON_CLICK,
+				   "value=\"%u\"",(unsigned) WhichSyl);
 		  HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);
 	       HTM_LABEL_End ();
 	    HTM_LI_End ();

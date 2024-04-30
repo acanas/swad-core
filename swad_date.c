@@ -287,10 +287,9 @@ void Dat_ResetHour (struct Dat_Hour *Hour)
 void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Settings_dates;
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Dates;
    Dat_Format_t Format;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Dates,Dat_PutIconsDateFormat,NULL,
@@ -313,12 +312,10 @@ void Dat_PutBoxToSelectDateFormat (void)
 		  HTM_LI_Begin ("class=\"DAT_%s\"",
 		                The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
-	          UncheckedOrChecked = (Format == Gbl.Prefs.DateFormat) ? Cns_CHECKED :
-									  Cns_UNCHECKED;
-		  HTM_INPUT_RADIO ("DateFormat",HTM_SUBMIT_ON_CLICK,
-				   " value=\"%u\"%s",
-				   (unsigned) Format,
-				   HTM_CheckedTxt[UncheckedOrChecked]);
+	          Checked = (Format == Gbl.Prefs.DateFormat) ? Cns_CHECKED :
+							       Cns_UNCHECKED;
+		  HTM_INPUT_RADIO ("DateFormat",Checked,HTM_SUBMIT_ON_CLICK,
+				   " value=\"%u\"",(unsigned) Format);
 		  Dat_PutSpanDateFormat (Format);
 		  Dat_PutScriptDateFormat (Format);
 	       HTM_LABEL_End ();
@@ -990,9 +987,9 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Dat_Date *DateSelected,
                         HTM_SubmitOnChange_t SubmitOnChange,
-                        Cns_DisabledOrEnabled_t DisabledOrEnabled)
+                        Cns_Disabled_t Disabled)
   {
-   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED_ENABLED];
+   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED];
    extern const char *Txt_MONTHS_SMALL[12];
    char *FuncOnChange;
    unsigned Year;
@@ -1008,7 +1005,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		     "id=\"%sYear\" name=\"%sYear\""
 		     " class=\"INPUT_%s\"%s",
 		     Id,Id,The_GetSuffix (),
-		     HTM_DisabledTxt[DisabledOrEnabled]);
+		     HTM_DisabledTxt[Disabled]);
       HTM_OPTION (HTM_Type_STRING,"0",
 		  HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_ENABLED,
@@ -1028,7 +1025,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		     "id=\"%sMonth\" name=\"%sMonth\""
 		     " class=\"INPUT_%s\"%s",
 		     Id,Id,The_GetSuffix (),
-		     HTM_DisabledTxt[DisabledOrEnabled]);
+		     HTM_DisabledTxt[Disabled]);
       HTM_OPTION (HTM_Type_STRING,"0",
 		  HTM_OPTION_UNSELECTED,
 		  HTM_OPTION_ENABLED,
@@ -1050,7 +1047,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		     "id=\"%sDay\" name=\"%sDay\""
 		     " class=\"INPUT_%s\"%s",
 		     Id,Id,The_GetSuffix (),
-		     HTM_DisabledTxt[DisabledOrEnabled]);
+		     HTM_DisabledTxt[Disabled]);
 	 HTM_OPTION (HTM_Type_STRING,"0",
 		     HTM_OPTION_UNSELECTED,
 		     HTM_OPTION_ENABLED,

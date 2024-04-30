@@ -77,7 +77,7 @@ struct For_Thread
    long PstCod[Dat_NUM_START_END_TIME];
    long UsrCod[Dat_NUM_START_END_TIME];
    time_t WriteTime[Dat_NUM_START_END_TIME];
-   Cns_DisabledOrEnabled_t Enabled[Dat_NUM_START_END_TIME];
+   Cns_Disabled_t Enabled[Dat_NUM_START_END_TIME];
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    unsigned NumPosts;
    unsigned NumUnreadPosts;	// Number of my unread posts in thread

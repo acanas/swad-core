@@ -931,7 +931,7 @@ void Acc_RemoveMyAccount (void)
   }
 
 void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
-                                     Cns_QuietOrVerbose_t QuietOrVerbose)
+                                     Cns_Verbose_t Verbose)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses;
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator;
@@ -966,14 +966,14 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
    Set_DB_RemUsrFromAllCrssSettings (UsrDat->UsrCod);
    Enr_DB_RemUsrFromAllCrss (UsrDat->UsrCod);
 
-   if (QuietOrVerbose == Cns_VERBOSE)
+   if (Verbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
                      UsrDat->FullName);
 
    /***** Remove user as administrator of any degree/center/institution *****/
    Adm_DB_RemUsrAsAdmin (UsrDat->UsrCod);
 
-   if (QuietOrVerbose == Cns_VERBOSE)
+   if (Verbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator,
                      UsrDat->FullName);
 
@@ -985,7 +985,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
 
    /***** Remove the file tree of a user *****/
    Acc_RemoveUsrBriefcase (UsrDat);
-   if (QuietOrVerbose == Cns_VERBOSE)
+   if (Verbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Briefcase_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
 
@@ -1000,7 +1000,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
 
    /***** Delete user's messages sent and received *****/
    Msg_DB_RemoveAllRecAndSntMsgsUsr (UsrDat->UsrCod);
-   if (QuietOrVerbose == Cns_VERBOSE)
+   if (Verbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Messages_of_THE_USER_X_have_been_deleted,
                      UsrDat->FullName);
 
@@ -1040,7 +1040,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
 
    /***** Remove user's photo *****/
    PhotoRemoved = Pho_RemovePhoto (UsrDat);
-   if (PhotoRemoved && QuietOrVerbose == Cns_VERBOSE)
+   if (PhotoRemoved && Verbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Photo_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
 
@@ -1063,7 +1063,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
    /***** Remove user's data *****/
    Usr_DB_RemoveUsrData (UsrDat->UsrCod);
 
-   if (QuietOrVerbose == Cns_VERBOSE)
+   if (Verbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Record_card_of_THE_USER_X_has_been_removed,
                      UsrDat->FullName);
   }

@@ -100,20 +100,20 @@ typedef enum
   {
    Cns_QUIET,
    Cns_VERBOSE,
-  } Cns_QuietOrVerbose_t;
+  } Cns_Verbose_t;
 
-#define Cns_NUM_UNCHECKED_CHECKED 2
+#define Cns_NUM_CHECKED 2
 typedef enum
   {
    Cns_UNCHECKED,
    Cns_CHECKED,
-  } Cns_UncheckedOrChecked_t;
+  } Cns_Checked_t;
 
-#define Cns_NUM_DISABLED_ENABLED 2
+#define Cns_NUM_DISABLED 2
 typedef enum
   {
    Cns_DISABLED,
    Cns_ENABLED,
-  } Cns_DisabledOrEnabled_t;
+  } Cns_Disabled_t;
 
 #endif

@@ -122,7 +122,7 @@ void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
 void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
 			       unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION]);
 void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       Cns_UncheckedOrChecked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION]);
+			       Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION]);
 
 void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);

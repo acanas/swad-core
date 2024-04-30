@@ -276,7 +276,6 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
                           bool ShowOnlyEnabledTags)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
@@ -284,7 +283,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    unsigned NumTag;
    MYSQL_ROW row;
    bool TagHidden = false;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
    /*
@@ -308,12 +307,13 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		  HTM_TD_Empty (1);
 
 	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-				   The_GetSuffix ());
-		     HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
-					 "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
-					 Tags->All ? " checked=\"checked\"" :
-						     "");
+		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+		     Checked = Tags->All ? Cns_CHECKED :
+					   Cns_UNCHECKED;
+		     HTM_INPUT_CHECKBOX ("AllTags",Checked,
+					 HTM_DONT_SUBMIT_ON_CHANGE,
+					 "value=\"Y\""
+					 " onclick=\"togglecheckChildren(this,'ChkTag');\"");
 		     HTM_NBSPTxt (Txt_All_tags);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
@@ -339,7 +339,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		     HTM_TD_End ();
 		    }
 
-		  UncheckedOrChecked = Cns_UNCHECKED;
+		  Checked = Cns_UNCHECKED;
 		  if (Tags->List)
 		    {
 		     Ptr = Tags->List;
@@ -348,7 +348,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 			Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
 			if (!strcmp (row[1],TagText))
 			  {
-			   UncheckedOrChecked = Cns_CHECKED;
+			   Checked = Cns_CHECKED;
 			   break;
 			  }
 		       }
@@ -357,10 +357,11 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		  HTM_TD_Begin ("class=\"LT\"");
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",
 				      The_GetSuffix ());
-			HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
-					    "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
-					    row[1],
-					    HTM_CheckedTxt[UncheckedOrChecked]);
+			HTM_INPUT_CHECKBOX ("ChkTag",Checked,
+					    HTM_DONT_SUBMIT_ON_CHANGE,
+					    "value=\"%s\""
+					    " onclick=\"checkParent(this,'AllTags');\"",
+					    row[1]);
 			HTM_NBSPTxt (row[1]);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();

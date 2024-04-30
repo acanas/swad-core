@@ -210,12 +210,11 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 
 void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Types_of_answers;
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    Qst_AnswerType_t AnsType;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    const char *Ptr;
 
@@ -233,11 +232,12 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 	                        The_GetSuffix ());
-	          UncheckedOrChecked = AnswerTypes->All ? Cns_CHECKED :
+	          Checked = AnswerTypes->All ? Cns_CHECKED :
 	        					  Cns_UNCHECKED;
-		  HTM_INPUT_CHECKBOX ("AllAnsTypes",HTM_DONT_SUBMIT_ON_CHANGE,
-				      "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
-				      HTM_CheckedTxt[UncheckedOrChecked]);
+		  HTM_INPUT_CHECKBOX ("AllAnsTypes",Checked,
+				      HTM_DONT_SUBMIT_ON_CHANGE,
+				      "value=\"Y\""
+				      " onclick=\"togglecheckChildren(this,'AnswerType');\"");
 		  HTM_NBSPTxt (Txt_All_types_of_answers);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -251,24 +251,24 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	   {
 	    HTM_TR_Begin (NULL);
 
-	       UncheckedOrChecked = Cns_UNCHECKED;
+	       Checked = Cns_UNCHECKED;
 	       Ptr = AnswerTypes->List;
 	       while (*Ptr)
 		 {
 		  Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 		  if (Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
 		    {
-		     UncheckedOrChecked = Cns_CHECKED;
+		     Checked = Cns_CHECKED;
 		     break;
 		    }
 		 }
 	       HTM_TD_Begin ("class=\"LM\"");
 		  HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		     HTM_INPUT_CHECKBOX ("AnswerType",HTM_DONT_SUBMIT_ON_CHANGE,
-					 "value=\"%u\"%s"
+		     HTM_INPUT_CHECKBOX ("AnswerType",Checked,
+					 HTM_DONT_SUBMIT_ON_CHANGE,
+					 "value=\"%u\""
 					 " onclick=\"checkParent(this,'AllAnsTypes');\"",
-					 (unsigned) AnsType,
-					 HTM_CheckedTxt[UncheckedOrChecked]);
+					 (unsigned) AnsType);
 		     HTM_NBSPTxt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
@@ -620,20 +620,22 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 
 	 /***** Choice 1: No media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,HTM_DONT_SUBMIT_ON_CLICK,
-			     "value=\"%u\"%s",
-			     (unsigned) Med_ACTION_NO_MEDIA,
-			     OptionsDisabled ? " disabled=\"disabled\"" : "");
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,Cns_UNCHECKED,
+			     HTM_DONT_SUBMIT_ON_CLICK,
+			     "value=\"%u\"%s",(unsigned) Med_ACTION_NO_MEDIA,
+			     OptionsDisabled ? " disabled=\"disabled\"" :
+					       "");
 	    HTM_Txt (Txt_No_image_video);
 	 HTM_LABEL_End ();
 	 HTM_BR ();
 
 	 /***** Choice 2: Current media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,HTM_DONT_SUBMIT_ON_CLICK,
-			     "value=\"%u\"%s checked=\"checked\"",
-			     (unsigned) Med_ACTION_KEEP_MEDIA,
-			     OptionsDisabled ? " disabled=\"disabled\"" : "");
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,Cns_CHECKED,
+			     HTM_DONT_SUBMIT_ON_CLICK,
+			     "value=\"%u\"%s",(unsigned) Med_ACTION_KEEP_MEDIA,
+			     OptionsDisabled ? " disabled=\"disabled\"" :
+					       "");
 	    HTM_Txt (Txt_Current_image_video);
 	 HTM_LABEL_End ();
 	 Med_ShowMedia (Media,
@@ -643,11 +645,12 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 	 /***** Choice 3: Change media *****/
 	 UniqueId++;
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,HTM_DONT_SUBMIT_ON_CLICK,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,Cns_UNCHECKED,
+			     HTM_DONT_SUBMIT_ON_CLICK,
 			     "id=\"chg_img_%u\" value=\"%u\"%s",
-			     UniqueId,
-			     (unsigned) Med_ACTION_NEW_MEDIA,
-			     OptionsDisabled ? " disabled=\"disabled\"" : "");
+			     UniqueId,(unsigned) Med_ACTION_NEW_MEDIA,
+			     OptionsDisabled ? " disabled=\"disabled\"" :
+					       "");
 	    HTM_TxtColonNBSP (Txt_Change_image_video);
 	 HTM_LABEL_End ();
 	 if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",
@@ -915,10 +918,9 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 
 void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    static unsigned UniqueId = 0;
    char *Id;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Get and show question data *****/
    if (Qst_GetQstDataByCod (&Questions->Question))
@@ -984,11 +986,10 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	       Frm_BeginForm (ActChgShfTstQst);
 		  Qst_PutParsEditQst (Questions);
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
-		  UncheckedOrChecked = Questions->Question.Answer.Shuffle ? Cns_CHECKED :
-									    Cns_UNCHECKED;
-		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
-				      "value=\"Y\"%s",
-				      HTM_CheckedTxt[UncheckedOrChecked]);
+		  Checked = Questions->Question.Answer.Shuffle ? Cns_CHECKED :
+								 Cns_UNCHECKED;
+		  HTM_INPUT_CHECKBOX ("Shuffle",Checked,HTM_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"");
 	       Frm_EndForm ();
 	      }
 	 HTM_TD_End ();
@@ -1220,8 +1221,9 @@ void Qst_PutCheckboxToSelectAllQuestions (void)
    extern const char *Txt_All_questions;
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX ("AllQsts",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"Y\" onclick=\"togglecheckChildren(this,'QstCods');\"");
+      HTM_INPUT_CHECKBOX ("AllQsts",Cns_UNCHECKED,HTM_DONT_SUBMIT_ON_CHANGE,
+			  "value=\"Y\""
+			  " onclick=\"togglecheckChildren(this,'QstCods');\"");
       HTM_NBSPTxt (Txt_All_questions);
    HTM_LABEL_End ();
   }
@@ -1233,11 +1235,10 @@ void Qst_PutCheckboxToSelectAllQuestions (void)
 void Qst_WriteQuestionRowForSelection (unsigned QstInd,
                                        struct Qst_Question *Question)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    static unsigned UniqueId = 0;
    char *Id;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Get and show questvoidion data *****/
    if (Qst_GetQstDataByCod (Question))
@@ -1247,8 +1248,10 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 	 /* Write checkbox to select the question */
 	 HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	    HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
-				"value=\"%ld\" onclick=\"checkParent(this,'AllQsts');\"",
+	    HTM_INPUT_CHECKBOX ("QstCods",Cns_UNCHECKED,
+				HTM_DONT_SUBMIT_ON_CHANGE,
+				"value=\"%ld\""
+				" onclick=\"checkParent(this,'AllQsts');\"",
 				Question->QstCod);
    	 HTM_TD_End ();
 
@@ -1298,11 +1301,10 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 /* Write if shuffle is enabled */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    UncheckedOrChecked = Question->Answer.Shuffle ? Cns_CHECKED :
-							    Cns_UNCHECKED;
-	    HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
-				"value=\"Y\"%s  disabled=\"disabled\"",
-				HTM_CheckedTxt[UncheckedOrChecked]);
+	    Checked = Question->Answer.Shuffle ? Cns_CHECKED :
+						 Cns_UNCHECKED;
+	    HTM_INPUT_CHECKBOX ("Shuffle",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+				"value=\"Y\" disabled=\"disabled\"");
 	 HTM_TD_End ();
 
 	 /* Write stem */
@@ -1809,7 +1811,6 @@ void Qst_ShowFormEditOneQst (void)
 void Qst_PutFormEditOneQst (struct Qst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Questions_writing_a_question;
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Question_code_X;
    extern const char *Txt_Question;
    extern const char *Txt_Tags;
@@ -1846,7 +1847,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    char *Title;
    char *FuncOnChange;
    bool NewQuestion = (Question->QstCod > 0);
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Begin box *****/
    if (NewQuestion)	// The question already has assigned a code
@@ -2018,13 +2019,13 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		    AnsType++)
 		 {
 		  HTM_LABEL_Begin (NULL);
-		     UncheckedOrChecked = (AnsType == Question->Answer.Type) ? Cns_CHECKED :
-									       Cns_UNCHECKED;
-		     HTM_INPUT_RADIO ("AnswerType",HTM_DONT_SUBMIT_ON_CLICK,
-				      "value=\"%u\"%s"
+		     Checked = (AnsType == Question->Answer.Type) ? Cns_CHECKED :
+								    Cns_UNCHECKED;
+		     HTM_INPUT_RADIO ("AnswerType",Checked,
+				      HTM_DONT_SUBMIT_ON_CLICK,
+				      "value=\"%u\""
 				      " onclick=\"enableDisableAns(this.form);\"",
-				      (unsigned) AnsType,
-				      HTM_CheckedTxt[UncheckedOrChecked]);
+				      (unsigned) AnsType);
 		     HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
 		  HTM_LABEL_End ();
 		  HTM_BR ();
@@ -2080,11 +2081,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	    HTM_TD_Empty (1);
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	          UncheckedOrChecked = Question->Answer.Shuffle ? Cns_CHECKED :
-	        						  Cns_UNCHECKED;
-		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
-				      "value=\"Y\"%s%s",
-				      HTM_CheckedTxt[UncheckedOrChecked],
+	          Checked = Question->Answer.Shuffle ? Cns_CHECKED :
+	        				       Cns_UNCHECKED;
+		  HTM_INPUT_CHECKBOX ("Shuffle",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"%s",
 				      (Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 				       Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE) ? " disabled=\"disabled\"" :
 											   "");
@@ -2119,25 +2119,25 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     /***** Left column: selectors *****/
 		     HTM_TD_Begin ("class=\"Qst_ANS_LEFT_COL %s\"",
 		                   The_GetColorRows ());
-			UncheckedOrChecked = Question->Answer.Options[NumOpt].Correct ? Cns_CHECKED :
-										        Cns_UNCHECKED;
+			Checked = Question->Answer.Options[NumOpt].Correct ? Cns_CHECKED :
+									     Cns_UNCHECKED;
 
 			/* Radio selector for unique choice answers */
-			HTM_INPUT_RADIO ("AnsUni",HTM_DONT_SUBMIT_ON_CLICK,
-					 "value=\"%u\"%s%s%s"
+			HTM_INPUT_RADIO ("AnsUni",Checked,
+					 HTM_DONT_SUBMIT_ON_CLICK,
+					 "value=\"%u\"%s"
 					 " onclick=\"enableDisableAns(this.form);\"",
 					 NumOpt,
-					 HTM_CheckedTxt[UncheckedOrChecked],
 					 NumOpt < 2 ? " required=\"required\"" :	// First or second options required
 						      "",
 					 (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE) ? "" :
 											    " disabled=\"disabled\"");
 
 			/* Checkbox for multiple choice answers */
-			HTM_INPUT_CHECKBOX ("AnsMulti",HTM_DONT_SUBMIT_ON_CHANGE,
-					    "value=\"%u\"%s%s",
+			HTM_INPUT_CHECKBOX ("AnsMulti",Checked,
+					    HTM_DONT_SUBMIT_ON_CHANGE,
+					    "value=\"%u\"%s",
 					    NumOpt,
-					    HTM_CheckedTxt[UncheckedOrChecked],
 					    (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE) ? "" :
 											         " disabled=\"disabled\"");
 
@@ -2276,18 +2276,16 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
 void Qst_PutTFInputField (const struct Qst_Question *Question,
                           const char *Label,char Value)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      UncheckedOrChecked = (Question->Answer.TF == Value) ? Cns_CHECKED :
-							    Cns_UNCHECKED;
-      HTM_INPUT_RADIO ("AnsTF",HTM_DONT_SUBMIT_ON_CLICK,
-		       "value=\"%c\"%s%s required=\"required\"",
+      Checked = (Question->Answer.TF == Value) ? Cns_CHECKED :
+						 Cns_UNCHECKED;
+      HTM_INPUT_RADIO ("AnsTF",Checked,HTM_DONT_SUBMIT_ON_CLICK,
+		       "value=\"%c\"%s required=\"required\"",
 		       Value,
-		       HTM_CheckedTxt[UncheckedOrChecked],
-		       Question->Answer.Type == Qst_ANS_TRUE_FALSE ? "" :
-								     " disabled=\"disabled\"");
+		       (Question->Answer.Type == Qst_ANS_TRUE_FALSE) ? "" :
+								       " disabled=\"disabled\"");
       HTM_Txt (Label);
    HTM_LABEL_End ();
   }

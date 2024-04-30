@@ -3316,7 +3316,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	                                 Usr_DONT_GET_ROLE_IN_CRS);
 
                /* Find if encrypted user's code is already in list */
-               if (!Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
+               if (!Usr_FindEncUsrCodInListOfSelectedEncUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
                  {
                   LengthUsrCod = strlen (UsrDat.EnUsrCod);
 
@@ -3367,8 +3367,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 /*****************************************************************************/
 // Returns true if EncryptedUsrCodToFind is in list
 
-bool Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind,
-							      struct Usr_SelectedUsrs *SelectedUsrs)
+bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToFind,
+						  struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -3918,8 +3918,10 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
 	    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
 	      {
 	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
-	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],HTM_DONT_SUBMIT_ON_CHANGE,
-				   "value=\"\" onclick=\"togglecheckChildren(this,'%s')\"",
+	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],Cns_UNCHECKED,
+				   HTM_DONT_SUBMIT_ON_CHANGE,
+				   "value=\"\""
+				   " onclick=\"togglecheckChildren(this,'%s')\"",
 				   ParName);
 	       free (ParName);
 	      }
@@ -3981,26 +3983,24 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          bool UsrIsTheMsgSender,
 					 struct Usr_SelectedUsrs *SelectedUsrs)
   {
-   bool CheckboxChecked;
+   Cns_Checked_t Checked;
    char *ParName;
 
    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
      {
       /***** Check box must be checked? *****/
       if (UsrIsTheMsgSender)
-	 CheckboxChecked = true;
+	 Checked = Cns_CHECKED;
       else
 	 /* Check if user is in lists of selected users */
-	 CheckboxChecked = Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (EncryptedUsrCod,SelectedUsrs);
+	 Checked = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,SelectedUsrs) ? Cns_CHECKED :
+												Cns_UNCHECKED;
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
-      HTM_INPUT_CHECKBOX (ParName,HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"%s\"%s onclick=\"checkParent(this,'%s')\"",
-			  EncryptedUsrCod,
-			  CheckboxChecked ? " checked=\"checked\"" :
-				            "",
-			  Usr_NameSelUnsel[Role]);
+      HTM_INPUT_CHECKBOX (ParName,Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+			  "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
+			  EncryptedUsrCod,Usr_NameSelUnsel[Role]);
       free (ParName);
      }
    else
@@ -4014,15 +4014,16 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 static void Usr_PutCheckboxListWithPhotos (void)
   {
    extern const char *Txt_Display_photos;
+   Cns_Checked_t Checked;
 
    Par_PutParChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX ("WithPhotos",HTM_SUBMIT_ON_CHANGE,
-			  "value=\"Y\"%s",
-			  Gbl.Usrs.Listing.WithPhotos ? " checked=\"checked\"" :
-							"");
+      Checked = Gbl.Usrs.Listing.WithPhotos ? Cns_CHECKED :
+					      Cns_UNCHECKED;
+      HTM_INPUT_CHECKBOX ("WithPhotos",Checked,HTM_SUBMIT_ON_CHANGE,
+			  "value=\"Y\"");
       HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
   }
@@ -5601,13 +5602,14 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label)
   {
+   Cns_Checked_t Checked;
+
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO ("ListUsrsAction",HTM_DONT_SUBMIT_ON_CLICK,
-			  "value=\"%u\"%s",
-			  (unsigned) ListUsrsAction,
-			  ListUsrsAction == Gbl.Usrs.Selected.Option ? " checked=\"checked\"" :
-				                                       "");
+         Checked = (ListUsrsAction == Gbl.Usrs.Selected.Option) ? Cns_CHECKED :
+								  Cns_UNCHECKED;
+	 HTM_INPUT_RADIO ("ListUsrsAction",Checked,HTM_DONT_SUBMIT_ON_CLICK,
+			  "value=\"%u\"",(unsigned) ListUsrsAction);
 	 HTM_Txt (Label);
       HTM_LABEL_End ();
    HTM_LI_End ();
@@ -6309,7 +6311,7 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 // Input: UsrDat must hold user's data
 
 void Usr_WriteAuthor (struct Usr_Data *UsrDat,
-                      Cns_DisabledOrEnabled_t DisabledOrEnabled)
+                      Cns_Disabled_t Disabled)
   {
    extern const char *Txt_Unknown_or_without_photo;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -6323,7 +6325,7 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,
 
    /***** Write author name or don't write it? *****/
    WriteAuthor = false;
-   if (DisabledOrEnabled == Cns_ENABLED)
+   if (Disabled == Cns_ENABLED)
       if (UsrDat->UsrCod > 0)
          WriteAuthor = true;
 

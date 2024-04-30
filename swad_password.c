@@ -788,7 +788,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 
       /***** Checkbox *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_INPUT_CHECKBOX ("Consent",HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_INPUT_CHECKBOX ("Consent",Cns_UNCHECKED,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"");
 	 HTM_Txt (Txt_I_understand_that_this_action_can_not_be_undone);
       HTM_LABEL_End ();
@@ -798,10 +798,8 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
       /***** Password *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
-	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",
-			     HTM_REQUIRED,
-			     "class=\"INPUT_%s\"",
-			     The_GetSuffix ());
+	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",HTM_REQUIRED,
+			     "class=\"INPUT_%s\"",The_GetSuffix ());
       HTM_LABEL_End ();
 
    HTM_DIV_End ();

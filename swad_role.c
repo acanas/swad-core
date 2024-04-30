@@ -512,12 +512,13 @@ void Rol_ChangeMyRole (void)
 /*****************************************************************************/
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             Cns_DisabledOrEnabled_t DisabledOrEnabled,
+                             Cns_Disabled_t Disabled,
                              HTM_SubmitOnChange_t SubmitOnChange)
   {
-   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED_ENABLED];
+   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
+   Cns_Checked_t Checked;
 
    for (Role  = Rol_UNK;
         Role <= Rol_SYS_ADM;
@@ -525,13 +526,11 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
       if ((RolesAllowed & (1 << Role)))
 	{
 	 HTM_LABEL_Begin (NULL);
-	    HTM_INPUT_CHECKBOX ("Role",SubmitOnChange,
-				"id=\"Role\" value=\"%u\" class=\"INPUT_%s\"%s%s",
-				(unsigned) Role,
-				The_GetSuffix (),
-				(RolesSelected & (1 << Role)) ? " checked=\"checked\"" :
-								"",
-				HTM_DisabledTxt[DisabledOrEnabled]);
+	    Checked = (RolesSelected & (1 << Role));
+	    HTM_INPUT_CHECKBOX ("Role",Checked,SubmitOnChange,
+				"id=\"Role\" value=\"%u\" class=\"INPUT_%s\"%s",
+				(unsigned) Role,The_GetSuffix (),
+				HTM_DisabledTxt[Disabled]);
 	    HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	 HTM_LABEL_End ();
 	 HTM_BR ();

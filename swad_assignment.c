@@ -1303,10 +1303,9 @@ void Asg_ReqCreatOrEditAsg (void)
 
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
-   extern const char *HTM_CheckedTxt[Cns_NUM_UNCHECKED_CHECKED];
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
-   Cns_UncheckedOrChecked_t UncheckedOrChecked;
+   Cns_Checked_t Checked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1328,14 +1327,14 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
 				The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
-		        UncheckedOrChecked = Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
-									     "AsgCod",
-									     AsgCod) ? Cns_UNCHECKED :
-										       Cns_CHECKED;
-			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-					    "id=\"WholeCrs\" value=\"Y\"%s"
-					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    HTM_CheckedTxt[UncheckedOrChecked]);
+		        Checked = Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
+								  "AsgCod",
+								  AsgCod) ? Cns_UNCHECKED :
+									    Cns_CHECKED;
+			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
+					    HTM_DONT_SUBMIT_ON_CHANGE,
+					    "id=\"WholeCrs\" value=\"Y\""
+					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
 			Grp_WriteTheWholeCourse ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();

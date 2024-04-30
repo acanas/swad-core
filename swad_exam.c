@@ -829,7 +829,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
       for (NumExam = 0;
 	   NumExam < Exams->Num;
 	   NumExam++)
-	 Exams->Lst[NumExam].UncheckedOrChecked = Cns_UNCHECKED;
+	 Exams->Lst[NumExam].Checked = Cns_UNCHECKED;
       Exams->NumSelected = 0;
 
       /* Set some exams as selected */
@@ -847,7 +847,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
 	      NumExam++)
 	    if (Exams->Lst[NumExam].ExaCod == ExaCod)
 	      {
-	       Exams->Lst[NumExam].UncheckedOrChecked = Cns_CHECKED;
+	       Exams->Lst[NumExam].Checked = Cns_CHECKED;
 	       Exams->NumSelected++;
 	       break;
 	      }
@@ -859,7 +859,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
       for (NumExam = 0;
 	   NumExam < Exams->Num;
 	   NumExam++)
-	 Exams->Lst[NumExam].UncheckedOrChecked = Cns_CHECKED;
+	 Exams->Lst[NumExam].Checked = Cns_CHECKED;
       Exams->NumSelected = Exams->Num;
      }
   }
