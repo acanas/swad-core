@@ -808,56 +808,55 @@ void Ins_WriteSelectorOfInstitution (void)
    unsigned NumInss;
    unsigned NumIns;
    long InsCod;
+   HTM_Disabled_t Disabled = (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0) ? HTM_ENABLED :
+									HTM_DISABLED;
+   HTM_SubmitOnChange_t SubmitOnChange = (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
+										    HTM_DONT_SUBMIT_ON_CHANGE;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCtr);
 
       /***** Begin selector *****/
-      if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
-			   The_GetSuffix ());
-      else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\""
-			   " disabled=\"disabled\"",
-			   The_GetSuffix ());
+      HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+			"id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
+			The_GetSuffix ());
 
-      HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Node[Hie_INS].HieCod < 0 ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-		  HTM_OPTION_DISABLED,
-		  "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
+	 /***** Initial disabled option *****/
+	 HTM_OPTION (HTM_Type_STRING,"",
+		     Gbl.Hierarchy.Node[Hie_INS].HieCod < 0 ? HTM_OPTION_SELECTED :
+							      HTM_OPTION_UNSELECTED,
+		     HTM_DISABLED,
+		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
-      if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
-	{
-	 /***** Get institutions of current country *****/
-	 NumInss = Ins_DB_GetInssInCtyOrderedByShrtName (&mysql_res,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
-
-	 /***** List institutions *****/
-	 for (NumIns = 0;
-	      NumIns < NumInss;
-	      NumIns++)
+	 if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
 	   {
-	    /* Get next institution */
-	    row = mysql_fetch_row (mysql_res);
+	    /***** Get institutions of current country *****/
+	    NumInss = Ins_DB_GetInssInCtyOrderedByShrtName (&mysql_res,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
-	    /* Get institution code (row[0]) */
-	    if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Err_WrongInstitExit ();
+	    /***** List institutions *****/
+	    for (NumIns = 0;
+		 NumIns < NumInss;
+		 NumIns++)
+	      {
+	       /* Get next institution */
+	       row = mysql_fetch_row (mysql_res);
 
-	    /* Write option */
-	    HTM_OPTION (HTM_Type_LONG,&InsCod,
-			Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
-			InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
-								       HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
-			"%s",row[1]);
+	       /* Get institution code (row[0]) */
+	       if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+		  Err_WrongInstitExit ();
+
+	       /* Write option */
+	       HTM_OPTION (HTM_Type_LONG,&InsCod,
+			   Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
+			   InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
+									  HTM_OPTION_UNSELECTED,
+			   HTM_ENABLED,
+			   "%s",row[1]);
+	      }
+
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
 	   }
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
 
       /***** End selector *****/
       HTM_SELECT_End ();
@@ -993,7 +992,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							Usr_DONT_GET_PREFS,
 							Usr_DONT_GET_ROLE_IN_CRS);
-	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
+	       Usr_WriteAuthor (&UsrDat,For_ENABLED);
 	    HTM_TD_End ();
 
 	    /* Institution status */
@@ -1384,7 +1383,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",The_GetSuffix ());
-	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
+	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,For_ENABLED);
 	 HTM_TD_End ();
 
 	 /***** Institution status *****/

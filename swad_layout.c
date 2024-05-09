@@ -1267,10 +1267,9 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 				void (*FuncPars) (void *Args),void *Args,
                                 const char *CheckboxName,
                                 Cns_Checked_t Checked,
-                                Cns_Disabled_t Disabled,
+                                HTM_Disabled_t Disabled,
                                 const char *Title,const char *Text)
   {
-   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED];
    static const char *Class[Cns_NUM_CHECKED] =
      {
       [Cns_UNCHECKED] = "CHECKBOX_UNCHECKED",
@@ -1295,9 +1294,9 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	 HTM_LABEL_Begin (NULL);
 
 	    /****** Checkbox *****/
-	    HTM_INPUT_CHECKBOX (CheckboxName,Checked,HTM_SUBMIT_ON_CHANGE,
-				"value=\"Y\"%s",
-				HTM_DisabledTxt[Disabled]);
+	    HTM_INPUT_CHECKBOX (CheckboxName,
+				Checked,Disabled,HTM_SUBMIT_ON_CHANGE,
+				"value=\"Y\"");
 
 	    /***** Text *****/
 	    if (Text)

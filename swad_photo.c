@@ -1793,7 +1793,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"AvgType\" name=\"AvgType\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1805,7 +1805,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
 			      TypeOfAvg == DegPhotos->TypeOfAverage ? HTM_OPTION_SELECTED :
 								      HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
 		 }
 	    HTM_SELECT_End ();
@@ -1860,7 +1860,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"PhotoSize\" name=\"PhotoSize\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1872,7 +1872,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 		  HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
 			      PhoSi == DegPhotos->HowComputePhotoSize ? HTM_OPTION_SELECTED :
 								        HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
 		 }
 	    HTM_SELECT_End ();
@@ -1927,7 +1927,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"Order\" name=\"Order\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1939,7 +1939,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 		  HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
 			      Order == DegPhotos->HowOrderDegrees ? HTM_OPTION_SELECTED :
 								    HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
 		 }
 	    HTM_SELECT_End ();
@@ -2005,7 +2005,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
    char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
    HTM_OptionSelected_t Selected;
-   HTM_OptionDisabled_t Disabled;
+   HTM_Disabled_t Disabled;
 
    if ((Deg.HieCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
@@ -2033,7 +2033,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    HTM_BUTTON_End ();
 
 	    /* Selector with all degrees with students */
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthDegCod\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -2053,12 +2053,12 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		  Selected = (Degs.Lst[NumDeg].HieCod == Deg.HieCod) ? HTM_OPTION_SELECTED :
 								       HTM_OPTION_UNSELECTED;
 		  if (Selected == HTM_OPTION_SELECTED)
-		     Disabled = HTM_OPTION_ENABLED;
+		     Disabled = HTM_ENABLED;
 		  else
 		     // Too recently computed ?
 		     Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].HieCod) >=
-				Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO ? HTM_OPTION_DISABLED :
-					                                                                HTM_OPTION_ENABLED;
+				Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO ? HTM_DISABLED :
+					                                                                HTM_ENABLED;
 		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].HieCod,
 		              Selected,
 		              Disabled,

@@ -2907,9 +2907,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
 						                "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
 	       Checked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? Cns_CHECKED :
-									     Cns_UNCHECKED;
-	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],Checked,
-				HTM_SUBMIT_ON_CLICK,
+								  Cns_UNCHECKED;
+	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
+			        Checked,HTM_ENABLED,HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	    HTM_LABEL_End ();
@@ -2940,8 +2940,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		     Checked = (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
 				GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? Cns_CHECKED :
 									Cns_UNCHECKED;
-		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],Checked,
-				      HTM_SUBMIT_ON_CLICK,
+		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
+				      Checked,HTM_ENABLED,HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"",GrpDat.GrpCod);
 		     HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
 		  HTM_LABEL_End ();
@@ -4727,7 +4727,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 			Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 			HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,
 				        Gbl.FileBrowser.FilFolLnk.Name,
-					HTM_SUBMIT_ON_CHANGE,
+					HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 					"class=\"LST_EDIT %s_%s %s\"",
 					InputStyle,
 					The_GetSuffix (),
@@ -6281,7 +6281,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Folder);
 	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
-			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"30\" class=\"INPUT_%s\""
 			    " required=\"required\"",
 			    The_GetSuffix ());
@@ -6474,7 +6474,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"NewLinkName\" size=\"30\""
 			       " class=\"INPUT_%s\"",
 			       The_GetSuffix ());
@@ -7534,17 +7534,18 @@ void Brw_ShowFileMetadata (void)
 				The_GetSuffix ());
 		     if (ICanChangePublic == Usr_CAN)	// I can change file to public
 		       {
-			HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-					  "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+					  "id=\"PublicFile\" name=\"PublicFile\""
+					  " class=\"PUBLIC_FILE\"");
 			   HTM_OPTION (HTM_Type_STRING,"N",
 				       FileMetadata.IsPublic ? HTM_OPTION_UNSELECTED :
 							       HTM_OPTION_SELECTED,
-				       HTM_OPTION_ENABLED,
+				       HTM_ENABLED,
 				       "%s",Txt_Private_available_to_certain_users_identified);
 			   HTM_OPTION (HTM_Type_STRING,"Y",
 				       FileMetadata.IsPublic ? HTM_OPTION_SELECTED :
 							       HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
+				       HTM_ENABLED,
 				       "%s",Txt_Public_open_educational_resource_OER_for_everyone);
 			HTM_SELECT_End ();
 		       }
@@ -7568,8 +7569,9 @@ void Brw_ShowFileMetadata (void)
 				The_GetSuffix ());
 		     if (ICanEdit == Usr_CAN)	// I can edit file properties
 		       {
-			HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-					  "id=\"License\" name=\"License\" class=\"LICENSE\"");
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+					  "id=\"License\" name=\"License\""
+					  " class=\"LICENSE\"");
 			   for (License  = (Brw_License_t) 0;
 				License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
 				License++)
@@ -7578,7 +7580,7 @@ void Brw_ShowFileMetadata (void)
 			      HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
 					  License == FileMetadata.License ? HTM_OPTION_SELECTED :
 									    HTM_OPTION_UNSELECTED,
-					  HTM_OPTION_ENABLED,
+					  HTM_ENABLED,
 					  "%s",Txt_LICENSES[License]);
 			     }
 			HTM_SELECT_End ();
@@ -9519,7 +9521,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 	 /***** Form to request number of months (to remove files older) *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"Months\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
@@ -9528,7 +9530,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
 			      Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES ? HTM_OPTION_SELECTED :
 									     HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%u",Months);
 	    HTM_SELECT_End ();
 	    HTM_NBSP ();

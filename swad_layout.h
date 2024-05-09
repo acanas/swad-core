@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_action.h"
+#include "swad_HTML.h"
 #include "swad_icon.h"
 #include "swad_view.h"
 
@@ -82,7 +83,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 void (*FuncPars) (void *Args),void *Args,
                                 const char *CheckboxName,
                                 Cns_Checked_t Checked,
-                                Cns_Disabled_t Disabled,
+                                HTM_Disabled_t Disabled,
                                 const char *Title,const char *Text);
 
 void Lay_WriteAboutZone (void);

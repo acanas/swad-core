@@ -859,9 +859,8 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Rub_MAX_CHARS_TITLE,Rubrics->Rubric.Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\""
-			       " class=\"Frm_C2_INPUT INPUT_%s\""
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -876,7 +875,8 @@ static void Rub_PutFormEditionRubric (struct Rub_Rubrics *Rubrics,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  HTM_Txt (Rubrics->Rubric.Txt);

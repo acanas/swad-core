@@ -148,7 +148,8 @@ void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr)
 	 else
 	    NewNickWithArr[0] = '\0';
 	 HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-			 NewNickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+			 NewNickWithArr,
+			 HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			 "id=\"NewNick\" size=\"16\" placeholder=\"%s\""
 			 " class=\"Frm_C2_INPUT INPUT_%s\""
 			 " required=\"required\"",
@@ -345,7 +346,8 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
 			       UsrDat[MeOrOther]->Nickname);
 		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+				     NickWithArr,
+				     HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"NewNick\""
 				     " class=\"Frm_C2_INPUT INPUT_%s\""
 				     " size=\"16\"",

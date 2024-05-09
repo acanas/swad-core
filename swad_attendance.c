@@ -992,7 +992,7 @@ void Att_ReqCreatOrEditEvent (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Events.Event.Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
@@ -1013,19 +1013,19 @@ void Att_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"ComTchVisible\" name=\"ComTchVisible\""
 				 " class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
 			      Events.Event.CommentTchVisible ? HTM_OPTION_UNSELECTED :
 							       HTM_OPTION_SELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_Hidden_MALE_PLURAL);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
 			      Events.Event.CommentTchVisible ? HTM_OPTION_SELECTED :
 							       HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_Visible_MALE_PLURAL);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -1040,7 +1040,8 @@ void Att_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewAttEvent)
@@ -1102,7 +1103,7 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 					                                     "AttCod",
 					                                     AttCod) ? Cns_UNCHECKED :
 										       Cns_CHECKED;
-			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
+			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,HTM_ENABLED,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
@@ -1658,6 +1659,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      };
    bool Present;
    Cns_Checked_t Checked;
+   HTM_Disabled_t Disabled;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
    Usr_Can_t ICanChangeStdAttendance;
@@ -1696,7 +1698,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    /***** Check if this student is already present in the current event *****/
    Present = Att_CheckIfUsrIsPresentInEventAndGetComments (Event->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
    Checked = Present ? Cns_CHECKED :
-				  Cns_UNCHECKED;
+		       Cns_UNCHECKED;
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);
@@ -1710,11 +1712,12 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
       /***** Checkbox to select user *****/
       HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
-	 HTM_INPUT_CHECKBOX ("UsrCodStd",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Std%u\" value=\"%s\"%s",
-			     NumUsr,UsrDat->EnUsrCod,
-			     (ICanChangeStdAttendance == Usr_CAN) ? "" :
-								    " disabled=\"disabled\"");
+         Disabled = (ICanChangeStdAttendance == Usr_CAN) ? HTM_ENABLED :
+							   HTM_DISABLED;
+	 HTM_INPUT_CHECKBOX ("UsrCodStd",Checked,Disabled,
+			     HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Std%u\" value=\"%s\"",
+			     NumUsr,UsrDat->EnUsrCod);
       HTM_TD_End ();
 
       /***** Write number of student in the list *****/
@@ -1765,10 +1768,10 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 switch (ICanEditStdComment)
 	   {
 	    case Usr_CAN:	// Show with form
-	       HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
-				   UsrDat->EnUsrCod,
-				   The_GetSuffix ());
+				   UsrDat->EnUsrCod,The_GetSuffix ());
 		  HTM_Txt (CommentStd);
 	       HTM_TEXTAREA_End ();
 	       break;
@@ -1790,10 +1793,10 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 switch (ICanEditTchComment)
 	   {
 	    case Usr_CAN:			// Show with form
-	       HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
-				   UsrDat->EnUsrCod,
-				   The_GetSuffix ());
+				   UsrDat->EnUsrCod,The_GetSuffix ());
 		  HTM_Txt (CommentTch);
 	       HTM_TEXTAREA_End ();
 	       break;
@@ -2667,7 +2670,8 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	       HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
 	                     The_GetSuffix (),
 	                     The_GetColorRows ());
-		  HTM_INPUT_CHECKBOX ("AttCods",Events->Lst[NumAttEvent].Checked,
+		  HTM_INPUT_CHECKBOX ("AttCods",
+				      Events->Lst[NumAttEvent].Checked,HTM_ENABLED,
 				      HTM_DONT_SUBMIT_ON_CHANGE,
 				      "id=\"Event%u\" value=\"%ld\"",
 				      NumAttEvent,Events->Event.AttCod);

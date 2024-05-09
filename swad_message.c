@@ -546,7 +546,8 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    /***** Textarea with users' @nicknames, emails or IDs *****/
    HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
-	 HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+			     "id=\"OtherRecipients\" name=\"OtherRecipients\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\""
 			     " placeholder=\"%s\"",
 			     The_GetSuffix (),
@@ -592,7 +593,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+			     "id=\"MsgSubject\" name=\"Subject\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\"",
 			     The_GetSuffix ());
 
@@ -632,7 +634,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"MsgContent\" name=\"Content\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " rows=\"20\"",
 				   The_GetSuffix ());
@@ -668,7 +671,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"MsgContent\" name=\"Content\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " rows=\"20\"",
 				   The_GetSuffix ());
@@ -1811,7 +1815,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -1819,7 +1823,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 	 HTM_OPTION (HTM_Type_STRING,"",
 		     Messages->FilterCrsCod < 0 ? HTM_OPTION_SELECTED :
 						  HTM_OPTION_UNSELECTED,
-		     HTM_OPTION_ENABLED,
+		     HTM_ENABLED,
 		     "%s",Txt_any_course);
 
 	 /* Write an option for each origin course */
@@ -1834,7 +1838,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			   CrsCod == Messages->FilterCrsCod ? HTM_OPTION_SELECTED :
 							      HTM_OPTION_UNSELECTED,
-			   HTM_OPTION_ENABLED,
+			   HTM_ENABLED,
 			   "%s",row[1]);	// Course short name
 	   }
 
@@ -1907,7 +1911,8 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       Checked = Messages->ShowOnlyUnreadMsgs ? Cns_CHECKED :
 					       Cns_UNCHECKED;
-      HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
+			  Checked,HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
       HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();
@@ -2107,7 +2112,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CRS);
-	 Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
+	 Usr_WriteAuthor (&UsrDat,For_ENABLED);
       HTM_TD_End ();
 
       /***** Subject *****/

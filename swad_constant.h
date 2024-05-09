@@ -109,11 +109,4 @@ typedef enum
    Cns_CHECKED,
   } Cns_Checked_t;
 
-#define Cns_NUM_DISABLED 2
-typedef enum
-  {
-   Cns_DISABLED,
-   Cns_ENABLED,
-  } Cns_Disabled_t;
-
 #endif

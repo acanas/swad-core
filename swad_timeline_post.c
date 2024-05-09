@@ -226,11 +226,11 @@ void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    Frm_SetUniqueId (IdDivImgButton);
 
    /***** Textarea to write the content *****/
-   HTM_TEXTAREA_Begin ("name=\"Txt\" rows=\"1\" maxlength=\"%u\""
+   HTM_TEXTAREA_Begin (HTM_ENABLED,
+		       "name=\"Txt\" rows=\"1\" maxlength=\"%u\""
                        " placeholder=\"%s&hellip;\" class=\"%s\""
 	               " onfocus=\"expandTextarea(this,'%s','6');\"",
-		       TmlPst_MAX_CHARS_IN_POST,
-		       Placeholder,ClassTextArea,
+		       TmlPst_MAX_CHARS_IN_POST,Placeholder,ClassTextArea,
 		       IdDivImgButton);
    HTM_TEXTAREA_End ();
 

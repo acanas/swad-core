@@ -310,7 +310,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		     Checked = Tags->All ? Cns_CHECKED :
 					   Cns_UNCHECKED;
-		     HTM_INPUT_CHECKBOX ("AllTags",Checked,
+		     HTM_INPUT_CHECKBOX ("AllTags",Checked,HTM_ENABLED,
 					 HTM_DONT_SUBMIT_ON_CHANGE,
 					 "value=\"Y\""
 					 " onclick=\"togglecheckChildren(this,'ChkTag');\"");
@@ -357,7 +357,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		  HTM_TD_Begin ("class=\"LT\"");
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",
 				      The_GetSuffix ());
-			HTM_INPUT_CHECKBOX ("ChkTag",Checked,
+			HTM_INPUT_CHECKBOX ("ChkTag",Checked,HTM_ENABLED,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"%s\""
 					    " onclick=\"checkParent(this,'AllTags');\"",
@@ -424,7 +424,7 @@ void Tag_ShowFormEditTags (void)
 		  Frm_BeginForm (ActRenTag);
 		     Par_PutParString (NULL,"OldTagTxt",row[1]);
 		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
-				     HTM_SUBMIT_ON_CHANGE,
+				     HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				     "size=\"36\" class=\"INPUT_%s\""
 				     " required=\"required\"",
 				     The_GetSuffix ());

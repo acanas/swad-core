@@ -225,55 +225,55 @@ void Deg_WriteSelectorOfDegree (void)
    unsigned NumDegs;
    unsigned NumDeg;
    long DegCod;
+   HTM_Disabled_t Disabled = (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0) ? HTM_ENABLED :
+									HTM_DISABLED;
+   HTM_SubmitOnChange_t SubmitOnChange = (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
+										    HTM_DONT_SUBMIT_ON_CHANGE;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCrs);
 
       /***** Begin selector of degree *****/
-      if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\"",
-			   The_GetSuffix ());
-      else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\""
-			   " disabled=\"disabled\"",
-			   The_GetSuffix ());
-      HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0 ? HTM_OPTION_SELECTED :
-							    HTM_OPTION_UNSELECTED,
-		  HTM_OPTION_DISABLED,
-		  "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
+      HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+			"id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\"",
+			The_GetSuffix ());
 
-      if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
-	{
-	 /***** Get degrees belonging to the current center from database *****/
-	 NumDegs = Deg_DB_GetDegsOfCurrentCtrBasic (&mysql_res);
+	 /***** Initial disabled option *****/
+	 HTM_OPTION (HTM_Type_STRING,"",
+		     Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0 ? HTM_OPTION_SELECTED :
+							       HTM_OPTION_UNSELECTED,
+		     HTM_DISABLED,
+		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 
-	 /***** Get degrees of this center *****/
-	 for (NumDeg = 0;
-	      NumDeg < NumDegs;
-	      NumDeg++)
+	 if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	   {
-	    /* Get next degree */
-	    row = mysql_fetch_row (mysql_res);
+	    /***** Get degrees belonging to the current center from database *****/
+	    NumDegs = Deg_DB_GetDegsOfCurrentCtrBasic (&mysql_res);
 
-	    /* Get degree code (row[0]) */
-	    if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Err_WrongDegreeExit ();
+	    /***** Get degrees of this center *****/
+	    for (NumDeg = 0;
+		 NumDeg < NumDegs;
+		 NumDeg++)
+	      {
+	       /* Get next degree */
+	       row = mysql_fetch_row (mysql_res);
 
-	    /* Write option */
-	    HTM_OPTION (HTM_Type_LONG,&DegCod,
-			Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 &&
-			DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
-								       HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
-			"%s",row[1]);
+	       /* Get degree code (row[0]) */
+	       if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+		  Err_WrongDegreeExit ();
+
+	       /* Write option */
+	       HTM_OPTION (HTM_Type_LONG,&DegCod,
+			   Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 &&
+			   DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
+									  HTM_OPTION_UNSELECTED,
+			   HTM_ENABLED,
+			   "%s",row[1]);
+	      }
+
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
 	   }
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
 
       /***** End selector of degree *****/
       HTM_SELECT_End ();
@@ -394,7 +394,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgDegTyp);
 			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
-			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"OthDegTypCod\""
 					  " class=\"HIE_SEL_NARROW INPUT_%s\"",
 					  The_GetSuffix ());
@@ -406,7 +406,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			      HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
 					  DegTyp->DegTypCod == Deg->Specific.TypCod ? HTM_OPTION_SELECTED :
 										      HTM_OPTION_UNSELECTED,
-					  HTM_OPTION_ENABLED,
+					  HTM_ENABLED,
 					  "%s",DegTyp->DegTypName);
 			     }
 			HTM_SELECT_End ();
@@ -468,7 +468,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 						     Usr_DONT_GET_ROLE_IN_CRS);
 	    HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",
 	                  The_GetSuffix ());
-	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
+	       Usr_WriteAuthor (&UsrDat,For_ENABLED);
 	    HTM_TD_End ();
 
 	    /* Degree status */
@@ -549,7 +549,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree type *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthDegTypCod\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
@@ -561,7 +561,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 		  HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
 			      DegTyp->DegTypCod == Deg_EditingDeg->Specific.TypCod ? HTM_OPTION_SELECTED :
 										     HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",DegTyp->DegTypName);
 		 }
 	    HTM_SELECT_End ();
@@ -583,7 +583,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree requester *****/
 	 HTM_TD_Begin ("class=\"LT DAT_%s INPUT_REQUESTER\"",The_GetSuffix ());
-	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
+	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,For_ENABLED);
 	 HTM_TD_End ();
 
 	 /***** Degree status *****/

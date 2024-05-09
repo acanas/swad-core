@@ -1165,12 +1165,11 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"UsrId\" size=\"16\" placeholder=\"%s\""
 			       " class=\"INPUT_%s\" autofocus=\"autofocus\""
 			       " required=\"required\"",
-			       Txt_nick_email_or_ID,
-			       The_GetSuffix ());
+			       Txt_nick_email_or_ID,The_GetSuffix ());
 	    HTM_DIV_End ();
 
 	    /***** User's password *****/
@@ -3918,7 +3917,8 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
 	    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
 	      {
 	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
-	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],Cns_UNCHECKED,
+	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],
+				   Cns_UNCHECKED,HTM_ENABLED,
 				   HTM_DONT_SUBMIT_ON_CHANGE,
 				   "value=\"\""
 				   " onclick=\"togglecheckChildren(this,'%s')\"",
@@ -3998,7 +3998,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
-      HTM_INPUT_CHECKBOX (ParName,Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX (ParName,Checked,HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,Usr_NameSelUnsel[Role]);
       free (ParName);
@@ -4022,7 +4022,7 @@ static void Usr_PutCheckboxListWithPhotos (void)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       Checked = Gbl.Usrs.Listing.WithPhotos ? Cns_CHECKED :
 					      Cns_UNCHECKED;
-      HTM_INPUT_CHECKBOX ("WithPhotos",Checked,HTM_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX ("WithPhotos",Checked,HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
       HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
@@ -5608,7 +5608,8 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
       HTM_LABEL_Begin (NULL);
          Checked = (ListUsrsAction == Gbl.Usrs.Selected.Option) ? Cns_CHECKED :
 								  Cns_UNCHECKED;
-	 HTM_INPUT_RADIO ("ListUsrsAction",Checked,HTM_DONT_SUBMIT_ON_CLICK,
+	 HTM_INPUT_RADIO ("ListUsrsAction",Checked,HTM_ENABLED,
+			  HTM_DONT_SUBMIT_ON_CLICK,
 			  "value=\"%u\"",(unsigned) ListUsrsAction);
 	 HTM_Txt (Label);
       HTM_LABEL_End ();
@@ -6189,7 +6190,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -6200,7 +6201,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Cols,
 			Cols == Gbl.Usrs.ClassPhoto.Cols ? HTM_OPTION_SELECTED :
 	                				   HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
+			HTM_ENABLED,
 			"%u",Cols);
 
       /***** End selector *****/
@@ -6310,8 +6311,7 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 /*****************************************************************************/
 // Input: UsrDat must hold user's data
 
-void Usr_WriteAuthor (struct Usr_Data *UsrDat,
-                      Cns_Disabled_t Disabled)
+void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled)
   {
    extern const char *Txt_Unknown_or_without_photo;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -6321,13 +6321,7 @@ void Usr_WriteAuthor (struct Usr_Data *UsrDat,
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
-   bool WriteAuthor;
-
-   /***** Write author name or don't write it? *****/
-   WriteAuthor = false;
-   if (Disabled == Cns_ENABLED)
-      if (UsrDat->UsrCod > 0)
-         WriteAuthor = true;
+   bool WriteAuthor = (Disabled == For_ENABLED && UsrDat->UsrCod > 0);
 
    /***** Begin table and row *****/
    HTM_TABLE_BeginPadding (2);

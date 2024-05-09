@@ -473,8 +473,9 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       HTM_TD_Begin ("class=\"%s\"",Class);
-		  HTM_INPUT_CHECKBOX ("Indicators",Indicators->IndicatorsSelected[Ind],
-				      HTM_SUBMIT_ON_CHANGE,
+		  HTM_INPUT_CHECKBOX ("Indicators",
+				      Indicators->IndicatorsSelected[Ind],
+				      HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				      "id=\"Indicators%u\" value=\"%u\"",
 				      Ind,Ind);
 	       HTM_TD_End ();

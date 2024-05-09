@@ -314,7 +314,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 	       HTM_LABEL_Begin (NULL);
 	          Checked = (Format == Gbl.Prefs.DateFormat) ? Cns_CHECKED :
 							       Cns_UNCHECKED;
-		  HTM_INPUT_RADIO ("DateFormat",Checked,HTM_SUBMIT_ON_CLICK,
+		  HTM_INPUT_RADIO ("DateFormat",
+				   Checked,HTM_ENABLED,HTM_SUBMIT_ON_CLICK,
 				   " value=\"%u\"",(unsigned) Format);
 		  Dat_PutSpanDateFormat (Format);
 		  Dat_PutScriptDateFormat (Format);
@@ -757,47 +758,42 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    HTM_DIV_Begin ("class=\"DATE_FORM_YMD\"");
 
       /* Year */
-      HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
-			"id=\"%sYear\" name=\"%sYear\""
-			" class=\"INPUT_%s\"",
-			Id,Dat_ParName[StartEndTime],
-			The_GetSuffix ());
+      HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncsYearMonth,
+			"id=\"%sYear\" name=\"%sYear\" class=\"INPUT_%s\"",
+			Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	 for (Year  = FirstYear;
 	      Year <= LastYear;
 	      Year++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 			HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
+			HTM_ENABLED,
 			"%u",Year);
       HTM_SELECT_End ();
 
       /* Month */
-      HTM_SELECT_Begin (SubmitOnChange,FuncsYearMonth,
+      HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncsYearMonth,
 			"id=\"%sMonth\" name=\"%sMonth\""
 			" class=\"DATE_FORM_MONTH INPUT_%s\"",
-			Id,Dat_ParName[StartEndTime],
-			The_GetSuffix ());
+			Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	 for (Month = 1;
 	      Month <= 12;
 	      Month++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Month,
 			HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
+			HTM_ENABLED,
 			"%s",Txt_MONTHS_SMALL[Month - 1]);
       HTM_SELECT_End ();
 
       /* Day */
-      HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
-			"id=\"%sDay\" name=\"%sDay\""
-			" class=\"INPUT_%s\"",
-			Id,Dat_ParName[StartEndTime],
-			The_GetSuffix ());
+      HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
+			"id=\"%sDay\" name=\"%sDay\" class=\"INPUT_%s\"",
+			Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	 for (Day  = 1;
 	      Day <= 31;
 	      Day++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Day,
 			HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
+			HTM_ENABLED,
 			"%u",Day);
       HTM_SELECT_End ();
 
@@ -807,49 +803,45 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    HTM_DIV_Begin ("class=\"DATE_FORM_HMS\"");
 
 	 /* Hour */
-	 HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
-			   "id=\"%sHour\" name=\"%sHour\""
-			   " class=\"INPUT_%s\"",
-			   Id,Dat_ParName[StartEndTime],
-			   The_GetSuffix ());
+	 HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
+			   "id=\"%sHour\" name=\"%sHour\" class=\"INPUT_%s\"",
+			   Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	    for (Hour  = 0;
 		 Hour <= 23;
 		 Hour++)
 	       HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
 			   HTM_OPTION_UNSELECTED,
-			   HTM_OPTION_ENABLED,
+			   HTM_ENABLED,
 			   "%02u h",Hour);
 	 HTM_SELECT_End ();
 
 	 /* Minute */
-	 HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
+	 HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
 			   "id=\"%sMinute\" name=\"%sMinute\""
 			   " class=\"INPUT_%s\"",
-			   Id,Dat_ParName[StartEndTime],
-			   The_GetSuffix ());
+			   Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	    for (Minute = 0;
 		 Minute < 60;
 		 Minute += MinutesIInterval[FormSeconds])
 	       HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
 			   HTM_OPTION_UNSELECTED,
-			   HTM_OPTION_ENABLED,
+			   HTM_ENABLED,
 			   "%02u &prime;",Minute);
 	 HTM_SELECT_End ();
 
 	 /* Second */
 	 if (FormSeconds == Dat_FORM_SECONDS_ON)
 	   {
-	    HTM_SELECT_Begin (SubmitOnChange,FuncDayHMS,
+	    HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
 			      "id=\"%sSecond\" name=\"%sSecond\""
 			      " class=\"INPUT_%s\"",
-			      Id,Dat_ParName[StartEndTime],
-			      The_GetSuffix ());
+			      Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	       for (Second  = 0;
 		    Second <= 59;
 		    Second++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Second,
 			      HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%02u &Prime;",Second);
 	    HTM_SELECT_End ();
 	   }
@@ -987,9 +979,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Dat_Date *DateSelected,
                         HTM_SubmitOnChange_t SubmitOnChange,
-                        Cns_Disabled_t Disabled)
+                        HTM_Disabled_t Disabled)
   {
-   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED];
    extern const char *Txt_MONTHS_SMALL[12];
    char *FuncOnChange;
    unsigned Year;
@@ -1001,14 +992,12 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       Err_NotEnoughMemoryExit ();
 
    /***** Year *****/
-   HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
-		     "id=\"%sYear\" name=\"%sYear\""
-		     " class=\"INPUT_%s\"%s",
-		     Id,Id,The_GetSuffix (),
-		     HTM_DisabledTxt[Disabled]);
+   HTM_SELECT_Begin (Disabled,SubmitOnChange,FuncOnChange,
+		     "id=\"%sYear\" name=\"%sYear\" class=\"INPUT_%s\"",
+		     Id,Id,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"0",
 		  HTM_OPTION_UNSELECTED,
-		  HTM_OPTION_ENABLED,
+		  HTM_ENABLED,
 		  "-");
       for (Year  = FirstYear;
 	   Year <= LastYear;
@@ -1016,19 +1005,17 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Year,
 		     (Year == DateSelected->Year) ? HTM_OPTION_SELECTED :
 						    HTM_OPTION_UNSELECTED,
-		     HTM_OPTION_ENABLED,
+		     HTM_ENABLED,
 		     "%u",Year);
    HTM_SELECT_End ();
 
    /***** Month *****/
-   HTM_SELECT_Begin (SubmitOnChange,FuncOnChange,
-		     "id=\"%sMonth\" name=\"%sMonth\""
-		     " class=\"INPUT_%s\"%s",
-		     Id,Id,The_GetSuffix (),
-		     HTM_DisabledTxt[Disabled]);
+   HTM_SELECT_Begin (Disabled,SubmitOnChange,FuncOnChange,
+		     "id=\"%sMonth\" name=\"%sMonth\" class=\"INPUT_%s\"",
+		     Id,Id,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"0",
 		  HTM_OPTION_UNSELECTED,
-		  HTM_OPTION_ENABLED,
+		  HTM_ENABLED,
 		  "-");
       for (Month  =  1;
 	   Month <= 12;
@@ -1036,21 +1023,19 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Month,
 		     (Month == DateSelected->Month) ? HTM_OPTION_SELECTED :
 						      HTM_OPTION_UNSELECTED,
-		     HTM_OPTION_ENABLED,
+		     HTM_ENABLED,
 		     "%s",Txt_MONTHS_SMALL[Month - 1]);
    HTM_SELECT_End ();
 
    free (FuncOnChange);
 
    /***** Day *****/
-   HTM_SELECT_Begin (SubmitOnChange,NULL,
-		     "id=\"%sDay\" name=\"%sDay\""
-		     " class=\"INPUT_%s\"%s",
-		     Id,Id,The_GetSuffix (),
-		     HTM_DisabledTxt[Disabled]);
+   HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+		     "id=\"%sDay\" name=\"%sDay\" class=\"INPUT_%s\"",
+		     Id,Id,The_GetSuffix ());
 	 HTM_OPTION (HTM_Type_STRING,"0",
 		     HTM_OPTION_UNSELECTED,
-		     HTM_OPTION_ENABLED,
+		     HTM_ENABLED,
 		     "-");
 	 NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
 							     ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
@@ -1061,7 +1046,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Day,
 			(Day == DateSelected->Day) ? HTM_OPTION_SELECTED :
 						     HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
+			HTM_ENABLED,
 			"%u",Day);
    HTM_SELECT_End ();
   }

@@ -761,19 +761,19 @@ void Hie_WriteStatusCellEditable (Usr_Can_t ICanEdit,Hie_Status_t Status,
 	    ParCod_PutPar (ParCod_OthHie,HieCod);
 
 	    /* Selector */
-	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"Status\" class=\"INPUT_STATUS\"");
 
 	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_PENDING);
 	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,
 	                   HTM_OPTION_SELECTED,
-	                   HTM_OPTION_ENABLED,
+	                   HTM_ENABLED,
 			   "%s",Txt[Hie_STATUS_PENDING]);
 
 	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_ACTIVE);
 	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,
 	                   HTM_OPTION_UNSELECTED,
-	                   HTM_OPTION_ENABLED,
+	                   HTM_ENABLED,
 			   "%s",Txt[Hie_STATUS_ACTIVE]);
 
 	    HTM_SELECT_End ();

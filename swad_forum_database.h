@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
+
 #include "swad_forum.h"
 
 /*****************************************************************************/
@@ -98,7 +100,7 @@ void For_DB_RemoveExpiredClipboards (void);
 
 //--------------------------- Disabled posts ----------------------------------
 void For_DB_InsertPstIntoDisabled (long PstCod);
-Cns_Disabled_t For_DB_GetIfPstIsDisabledOrEnabled (long PstCod);
+For_Disabled_t For_DB_GetIfPstIsDisabled (long PstCod);
 void For_DB_RemovePstFromDisabled (long PstCod);
 void For_DB_RemoveDisabledPstsInThread (long ThrCod);
 

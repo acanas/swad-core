@@ -187,8 +187,9 @@ static void Tst_ShowFormNumQsts (void)
 			 (long) TstCfg_GetConfigMin (),
 			 (long) TstCfg_GetConfigMax (),
 			 (long) TstCfg_GetConfigDef (),
+			 (TstCfg_GetConfigMin () == TstCfg_GetConfigMax ()) ? HTM_DISABLED :
+									      HTM_ENABLED,
 			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
 			 "id=\"NumQst\" class=\"Frm_C2_INPUT INPUT_%s\""
 			 " required=\"required\"",
 			 The_GetSuffix ());

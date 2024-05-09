@@ -126,7 +126,7 @@ void Lan_PutSelectorToSelectLanguage (void)
    unsigned LanUnsigned;
 
    Frm_BeginForm (ActReqChgLan);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"Lan\" class=\"INPUT_%s\""
 			" style=\"width:112px; margin:0;\"",
 			The_GetSuffix ());
@@ -138,7 +138,7 @@ void Lan_PutSelectorToSelectLanguage (void)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&LanUnsigned,
 			Lan == Gbl.Prefs.Language ? HTM_OPTION_SELECTED :
 						    HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
+			HTM_ENABLED,
 			"%s",Txt_STR_LANG_NAME[Lan]);
 	   }
       HTM_SELECT_End ();

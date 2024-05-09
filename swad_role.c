@@ -447,10 +447,10 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
 	 if (ClassSelect[0])
 	    PutClassSelect = true;
       if (PutClassSelect)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"MyRole\" class=\"%s\"",ClassSelect);
       else
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"MyRole\"");
       for (Role  = (Rol_Role_t) 1;
 	   Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
@@ -461,7 +461,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 			Role == Gbl.Usrs.Me.Role.Logged ? HTM_OPTION_SELECTED :
 						   	  HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
+			HTM_ENABLED,
 			"%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
 	   }
       HTM_SELECT_End ();
@@ -512,10 +512,9 @@ void Rol_ChangeMyRole (void)
 /*****************************************************************************/
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             Cns_Disabled_t Disabled,
+                             HTM_Disabled_t Disabled,
                              HTM_SubmitOnChange_t SubmitOnChange)
   {
-   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
    Cns_Checked_t Checked;
@@ -527,10 +526,9 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 	{
 	 HTM_LABEL_Begin (NULL);
 	    Checked = (RolesSelected & (1 << Role));
-	    HTM_INPUT_CHECKBOX ("Role",Checked,SubmitOnChange,
-				"id=\"Role\" value=\"%u\" class=\"INPUT_%s\"%s",
-				(unsigned) Role,The_GetSuffix (),
-				HTM_DisabledTxt[Disabled]);
+	    HTM_INPUT_CHECKBOX ("Role",Checked,Disabled,SubmitOnChange,
+				"id=\"Role\" value=\"%u\" class=\"INPUT_%s\"",
+				(unsigned) Role,The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	 HTM_LABEL_End ();
 	 HTM_BR ();

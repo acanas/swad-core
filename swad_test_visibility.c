@@ -113,7 +113,8 @@ void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
          /* Checkbox with icon and text */
          Checked = ((SelectedVisibility & (1 << Visibility)) != 0) ? Cns_CHECKED :
 								     Cns_UNCHECKED;
-	 HTM_INPUT_CHECKBOX ("Visibility",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_INPUT_CHECKBOX ("Visibility",Checked,HTM_ENABLED,
+			     HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"%u\"",(unsigned) Visibility);
 	 Ico_PutIconOn (Icons[Visibility],Ico_BLACK,
 	                Txt_TST_STR_VISIBILITY[Visibility]);

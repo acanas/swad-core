@@ -1210,7 +1210,7 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
@@ -1268,7 +1268,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 					                          "MchCod",
 					                          MchCod) ? Cns_CHECKED :
 					                                    Cns_UNCHECKED;
-			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
+			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,HTM_ENABLED,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");

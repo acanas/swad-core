@@ -134,7 +134,7 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
 		  HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],
 				  Nam_MaxChars[ShrtOrFull],
 				  Name[ShrtOrFull],
-				  HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "id=\"%s\""
 				  " class=\"%s INPUT_%s\""
 				  " required=\"required\"",

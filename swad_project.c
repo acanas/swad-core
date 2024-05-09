@@ -1825,7 +1825,8 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 case Frm_PUT_FORM:
 	       /* Show text form */
 	       HTM_BR ();
-	       HTM_TEXTAREA_Begin ("name=\"ReviewTxt\" rows=\"2\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "name=\"ReviewTxt\" rows=\"2\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " placeholder=\"%s&hellip;\""
 				   " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
@@ -1865,7 +1866,7 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
    /* Selector for review status */
    if (asprintf (&FuncOnChange,"unhideElement('prj_rev_%ld');",Projects->Prj.PrjCod) < 0)
       Err_NotEnoughMemoryExit ();
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
@@ -1878,7 +1879,7 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
 		     ReviewStatus == Projects->Prj.Review.Status ? HTM_OPTION_SELECTED :
 								   HTM_OPTION_UNSELECTED,
-		     HTM_OPTION_ENABLED,
+		     HTM_ENABLED,
 		     "%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
 	}
    HTM_SELECT_End ();
@@ -3795,7 +3796,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		     HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_TITLE,Projects->Prj.Title,
-				     HTM_DONT_SUBMIT_ON_CHANGE,
+				     HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"Title\""
 				     " class=\"Frm_C2_INPUT INPUT_%s\""
 				     " required=\"required\"",
@@ -3835,19 +3836,19 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"Assigned\""
 				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"Y",
 				    Projects->Prj.Assigned == Prj_ASSIGNED ? HTM_OPTION_SELECTED :
 									     HTM_OPTION_SELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Txt_Yes);
 			HTM_OPTION (HTM_Type_STRING,"N",
 				    Projects->Prj.Assigned == Prj_NONASSIG ? HTM_OPTION_SELECTED :
 									     HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Txt_No);
 		     HTM_SELECT_End ();
 		  HTM_TD_End ();
@@ -3863,7 +3864,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 		     HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Projects->Prj.NumStds,
-				     HTM_DONT_SUBMIT_ON_CHANGE,false,
+				     HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "class=\"Frm_C2_INPUT INPUT_%s\"",
 				     The_GetSuffix ());
 		  HTM_TD_End ();
@@ -3878,7 +3879,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"Proposal\""
 				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
@@ -3890,7 +3891,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 			   HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
 				       Projects->Prj.Proposal == Proposal ? HTM_OPTION_SELECTED :
 									    HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
+				       HTM_ENABLED,
 				       "%s",Txt_PROJECT_STATUS[Proposal]);
 			  }
 		     HTM_SELECT_End ();
@@ -3968,7 +3969,8 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\""
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+			     "id=\"%s\" name=\"%s\" rows=\"%u\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\"%s",
 			     Id,Id,NumRows,
 			     The_GetSuffix (),RequiredTxt[Required]);

@@ -238,7 +238,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 
 	       /* Put form to select center */
 	       Frm_BeginForm (ActChgDegCtrCfg);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthCtrCod\" name=\"OthCtrCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -250,7 +250,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 			HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
 				    Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
 											HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Ctr->ShrtName);
 		       }
 		  HTM_SELECT_End ();

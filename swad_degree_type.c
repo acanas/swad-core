@@ -112,14 +112,14 @@ void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod)
    DegTyp_GetListDegTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEG_TYPE);
 
    /* List degree types */
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"-1",
 		  SelectedDegTypCod <= 0 ? HTM_OPTION_SELECTED :
 					   HTM_OPTION_UNSELECTED,
-		  HTM_OPTION_ENABLED,
+		  HTM_ENABLED,
 		  "%s",Txt_Any_type_of_degree);
       for (NumDegTyp = 0;
 	   NumDegTyp < DegTypes.Num;
@@ -129,7 +129,7 @@ void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod)
 	 HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
 		     DegTyp->DegTypCod == SelectedDegTypCod ? HTM_OPTION_SELECTED :
 							      HTM_OPTION_UNSELECTED,
-		     HTM_OPTION_ENABLED,
+		     HTM_ENABLED,
 		     "%s",DegTyp->DegTypName);
 	}
    HTM_SELECT_End ();
@@ -420,7 +420,7 @@ static void DegTyp_ListDegTypesForEdition (const struct DegTyp_DegTypes *DegType
 		  DegTyp_PutParOtherDegTypCod (&DegTypes->Lst[NumDegTyp].DegTypCod);
 		  HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,
 				  DegTypes->Lst[NumDegTyp].DegTypName,
-				  HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"25\" class=\"INPUT_%s\""
 				  " required=\"required\"",
 				  The_GetSuffix ());
@@ -474,9 +474,8 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 	 /***** Degree type name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,DegTyp_EditingDegTyp->DegTypName,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"25\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"25\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 

@@ -631,7 +631,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
 		    Class.Author,The_GetSuffix (),
 		    Class.Bg,The_GetSuffix ());
-	 Usr_WriteAuthor (UsrDat,Cns_ENABLED);
+	 Usr_WriteAuthor (UsrDat,For_ENABLED);
       HTM_TD_End ();
 
       /* Write location */
@@ -1664,7 +1664,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 					      (1 << NotifyEvent)) ? Cns_CHECKED :
 								    Cns_UNCHECKED;
 			HTM_INPUT_CHECKBOX (Ntf_ParNotifMeAboutNotifyEvents[NotifyEvent],
-					    Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+					    Checked,HTM_ENABLED,
+					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"");
 		     HTM_TD_End ();
 
@@ -1673,7 +1674,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 					      (1 << NotifyEvent)) ? Cns_CHECKED :
 								    Cns_UNCHECKED;
 			HTM_INPUT_CHECKBOX (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent],
-					    Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+					    Checked,HTM_ENABLED,
+					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"");
 		     HTM_TD_End ();
 

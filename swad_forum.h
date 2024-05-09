@@ -28,16 +28,20 @@
 /*****************************************************************************/
 
 #include "swad_alert.h"
-#include "swad_center.h"
-#include "swad_degree.h"
-#include "swad_institution.h"
+#include "swad_date.h"
+#include "swad_language.h"
 #include "swad_notification.h"
-#include "swad_scope.h"
-#include "swad_string.h"
 
 /*****************************************************************************/
 /************************ Public constants and types *************************/
 /*****************************************************************************/
+
+#define For_NUM_DISABLED 2
+typedef enum
+  {
+   For_DISABLED,
+   For_ENABLED,
+  } For_Disabled_t;
 
 #define For_NUM_FORUM_SETS 2
 typedef enum
@@ -77,7 +81,7 @@ struct For_Thread
    long PstCod[Dat_NUM_START_END_TIME];
    long UsrCod[Dat_NUM_START_END_TIME];
    time_t WriteTime[Dat_NUM_START_END_TIME];
-   Cns_Disabled_t Enabled[Dat_NUM_START_END_TIME];
+   For_Disabled_t Disabled[Dat_NUM_START_END_TIME];
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    unsigned NumPosts;
    unsigned NumUnreadPosts;	// Number of my unread posts in thread

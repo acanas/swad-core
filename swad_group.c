@@ -412,6 +412,7 @@ static void Grp_PutCheckboxAllGrps (void)
    extern const char *Txt_All_groups;
    Usr_Can_t ICanSelUnselGroup;
    Cns_Checked_t Checked;
+   HTM_Disabled_t Disabled;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -432,10 +433,13 @@ static void Grp_PutCheckboxAllGrps (void)
          Checked = (ICanSelUnselGroup == Usr_CAN &&
 			       Gbl.Crs.Grps.AllGrps) ? Cns_UNCHECKED :
 						       Cns_CHECKED;
-	 HTM_INPUT_CHECKBOX ("AllGroups",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+         Disabled = (ICanSelUnselGroup == Usr_CAN) ? HTM_ENABLED :
+						     HTM_DISABLED;
+	 HTM_INPUT_CHECKBOX ("AllGroups",
+			     Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
 			     (ICanSelUnselGroup == Usr_CAN) ? " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
-							      " disabled=\"disabled\"");
+							      "");
 	 HTM_NBSPTxt (Txt_All_groups);
       HTM_LABEL_End ();
    HTM_DIV_End ();
@@ -1242,7 +1246,7 @@ static void Grp_ListGroupTypesForEdition (void)
 		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-				  HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"12\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -1252,19 +1256,19 @@ static void Grp_ListGroupTypesForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"MandatoryEnrolment\""
 		                    " class=\"INPUT_%s\" style=\"width:150px;\"",
 		                    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment ? HTM_OPTION_UNSELECTED :
 												   HTM_OPTION_SELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Txt_It_is_optional_to_choose_a_group);
 		     HTM_OPTION (HTM_Type_STRING,"Y",
 				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment ? HTM_OPTION_SELECTED :
 												   HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Txt_It_is_mandatory_to_choose_a_group);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -1274,19 +1278,19 @@ static void Grp_ListGroupTypesForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"MultipleEnrolment\""
 				    " class=\"INPUT_%s\" style=\"width:150px;\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"N",
 				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment ? HTM_OPTION_UNSELECTED :
 												  HTM_OPTION_SELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Txt_A_student_can_only_belong_to_one_group);
 		     HTM_OPTION (HTM_Type_STRING,"Y",
 				 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment ? HTM_OPTION_SELECTED :
 												  HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Txt_A_student_can_belong_to_several_groups);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -1474,7 +1478,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"GrpTypCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
 				       The_GetSuffix ());
@@ -1488,7 +1492,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			   HTM_OPTION (HTM_Type_LONG,&GrpTyp2->GrpTypCod,
 				       GrpTyp2->GrpTypCod == GrpTyp1->GrpTypCod ? HTM_OPTION_SELECTED :
 										  HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
+				       HTM_ENABLED,
 				       "%s",GrpTyp2->GrpTypName);
 			  }
 
@@ -1502,7 +1506,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
-				     HTM_SUBMIT_ON_CHANGE,
+				     HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				     "size=\"20\" class=\"INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
@@ -1513,7 +1517,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"RooCod\""
 				       " class=\"INPUT_%s\" style=\"width:100px;\"",
 				       The_GetSuffix ());
@@ -1522,14 +1526,14 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			HTM_OPTION (HTM_Type_STRING,"-1",
 				    Grp->Room.RooCod < 0 ? HTM_OPTION_SELECTED :
 							   HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Txt_No_assigned_room);
 
 			/* Option for another room */
 			HTM_OPTION (HTM_Type_STRING,"0",
 				    Grp->Room.RooCod == 0 ? HTM_OPTION_SELECTED :
 							    HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Txt_Another_room);
 
 			/* Options for rooms */
@@ -1541,7 +1545,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 			   HTM_OPTION (HTM_Type_LONG,&Roo->RooCod,
 				       Roo->RooCod == Grp->Room.RooCod ? HTM_OPTION_SELECTED :
 									 HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
+				       HTM_ENABLED,
 				       "%s",Roo->ShrtName);
 			  }
 
@@ -1566,7 +1570,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
 		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
-				     HTM_SUBMIT_ON_CHANGE,
+				     HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				     "size=\"3\" class=\"INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
@@ -1650,6 +1654,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    bool IBelongToThisGroup;
    struct Group *Grp;
    Cns_Checked_t Checked;
+   HTM_Disabled_t Disabled;
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -1678,13 +1683,14 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 
 	 HTM_TD_Begin (IBelongToThisGroup ? "class=\"LM BG_HIGHLIGHT\"" :
 		                            "class=\"LM\"");
-	    HTM_INPUT_CHECKBOX ("GrpCods",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
-				"id=\"Grp%ld\" value=\"%ld\"%s"
+	    Disabled = (IBelongToThisGroup ||
+			Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? HTM_ENABLED :
+								  HTM_DISABLED;
+	    HTM_INPUT_CHECKBOX ("GrpCods",
+				Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
+				"id=\"Grp%ld\" value=\"%ld\""
 				" onclick=\"uncheckParent(this,'WholeCrs')\"",
-				Grp->GrpCod,Grp->GrpCod,
-				(IBelongToThisGroup ||
-				 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" :
-									   " disabled=\"disabled\"");
+				Grp->GrpCod,Grp->GrpCod);
 	 HTM_TD_End ();
 
 	 Grp_WriteRowGrp (Grp,IBelongToThisGroup ? Lay_HIGHLIGHT :
@@ -1853,6 +1859,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    Usr_Can_t ICanChangeMySelectionForThisGrpTyp;
    Usr_Can_t ICanChangeMySelectionForThisGrp;
    Cns_Checked_t Checked;
+   HTM_Disabled_t Disabled;
    char StrGrpCod[32];
 
    /***** Write heading *****/
@@ -1970,7 +1977,10 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	 HTM_TD_Begin (IBelongToThisGroup ? "class=\"LM BG_HIGHLIGHT\"" :
 					    "class=\"LM\"");
 	    Checked = IBelongToThisGroup ? Cns_CHECKED :
-						      Cns_UNCHECKED;
+					   Cns_UNCHECKED;
+	    Disabled = (ICanChangeMySelectionForThisGrp == Usr_CAN ||
+		        IBelongToThisGroup) ? HTM_ENABLED :
+					      HTM_DISABLED;
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
 		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
@@ -1978,30 +1988,33 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	      {
 	       /* Put a radio item */
 	       if (GrpTyp->MandatoryEnrolment)
-		  HTM_INPUT_RADIO (StrGrpCod,Checked,HTM_DONT_SUBMIT_ON_CLICK,
+		  HTM_INPUT_RADIO (StrGrpCod,Checked,Disabled,
+				   HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"Grp%ld\" value=\"%ld\"%s",
 				   Grp->GrpCod,Grp->GrpCod,
-				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
-								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-											               " disabled=\"disabled\"");	// I can not register
+				   (ICanChangeMySelectionForThisGrp == Usr_CAN_NOT &&
+				    IBelongToThisGroup) ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+							  "");
 	       else	// If the enrolment is not mandatory, I can select no groups
-		  HTM_INPUT_RADIO (StrGrpCod,Checked,HTM_DONT_SUBMIT_ON_CLICK,
+		  HTM_INPUT_RADIO (StrGrpCod,Checked,Disabled,
+				   HTM_DONT_SUBMIT_ON_CLICK,
 				   "id=\"Grp%ld\" value=\"%ld\"%s"
 				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
 				   Grp->GrpCod,Grp->GrpCod,
-				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
-								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-											               " disabled=\"disabled\"",	// I can not register
+				   (ICanChangeMySelectionForThisGrp == Usr_CAN_NOT &&
+				    IBelongToThisGroup) ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+							  "",
 				   GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	      }
 	    else
 	       /* Put a checkbox item */
-	       HTM_INPUT_CHECKBOX (StrGrpCod,Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+	       HTM_INPUT_CHECKBOX (StrGrpCod,
+				   Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
 				   "id=\"Grp%ld\" value=\"%ld\"%s",
 				   Grp->GrpCod,Grp->GrpCod,
-				   ICanChangeMySelectionForThisGrp == Usr_CAN ? "" :
-								                  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-											               " disabled=\"disabled\"");	// I can not register
+				   (ICanChangeMySelectionForThisGrp == Usr_CAN_NOT &&
+				    IBelongToThisGroup) ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+							  "");
 
 	 HTM_TD_End ();
 
@@ -2095,7 +2108,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    Checked = UsrBelongsToThisGroup ? Cns_CHECKED :
 					      Cns_UNCHECKED;
-	    HTM_INPUT_CHECKBOX (StrGrpCod,Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_INPUT_CHECKBOX (StrGrpCod,
+				Checked,HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 				"id=\"Grp%ld\" value=\"%ld\"",
 				Grp->GrpCod,Grp->GrpCod);
 
@@ -2121,7 +2135,6 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
   {
-   extern const char *HTM_DisabledTxt[Cns_NUM_DISABLED];
    extern const char *Txt_users_with_no_group;
    unsigned NumGrpThisType;
    unsigned NumGrpSel;
@@ -2129,7 +2142,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    bool IBelongToThisGroup;
    Usr_Can_t ICanSelUnselGroup;
    Cns_Checked_t Checked;
-   Cns_Disabled_t Disabled;
+   HTM_Disabled_t Disabled;
    struct Group *Grp;
    Rol_Role_t Role;
 
@@ -2192,11 +2205,14 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
 	 HTM_TD_Begin (IBelongToThisGroup ? "class=\"LM BG_HIGHLIGHT\"" :
 					    "class=\"LM\"");
-	    HTM_INPUT_CHECKBOX ("GrpCods",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
+	    Disabled = (ICanSelUnselGroup == Usr_CAN) ? HTM_ENABLED :
+							HTM_DISABLED;
+	    HTM_INPUT_CHECKBOX ("GrpCods",
+				Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
 				"id=\"Grp%ld\" value=\"%ld\"%s",
 				Grp->GrpCod,Grp->GrpCod,
-				ICanSelUnselGroup == Usr_CAN ? " onclick=\"checkParent(this,'AllGroups')\"" :
-							       HTM_DisabledTxt[Cns_DISABLED]);
+				(ICanSelUnselGroup == Usr_CAN) ? " onclick=\"checkParent(this,'AllGroups')\"" :
+							         "");
 	 HTM_TD_End ();
 
 	 Grp_WriteRowGrp (Grp,IBelongToThisGroup ? Lay_HIGHLIGHT :
@@ -2237,13 +2253,13 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LM\"");
-         Disabled = (ICanSelUnselGroup == Usr_CAN_NOT) ? Cns_DISABLED :
-							 Cns_ENABLED;
-	 HTM_INPUT_CHECKBOX ("GrpCods",Checked,HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Grp%ld\" value=\"%ld\"%s"
+         Disabled = (ICanSelUnselGroup == Usr_CAN_NOT) ? HTM_DISABLED :
+							 HTM_ENABLED;
+	 HTM_INPUT_CHECKBOX ("GrpCods",
+			     Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Grp%ld\" value=\"%ld\""
 			     " onclick=\"checkParent(this,'AllGroups')\"",
-			     -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod,
-			     HTM_DisabledTxt[Disabled]);
+			     -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod);
       HTM_TD_End ();
 
       /* Column closed/open */
@@ -2455,46 +2471,46 @@ static void Grp_PutFormToCreateGroupType (void)
 	    /***** Name of group type *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
-			       Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"12\" class=\"INPUT_%s\""
-			       " required=\"required\"",
+			       Gbl.Crs.Grps.GrpTyp.GrpTypName,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"12\" class=\"INPUT_%s\" required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Is it mandatory to register in any groups of this type? *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"MandatoryEnrolment\""
 				 " class=\"INPUT_%s\" style=\"width:150px;\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
 			      Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment ? HTM_OPTION_UNSELECTED :
 								       HTM_OPTION_SELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_It_is_optional_to_choose_a_group);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
 			      Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment ? HTM_OPTION_SELECTED :
 								       HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_It_is_mandatory_to_choose_a_group);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 
 	    /***** Is it possible to register in multiple groups of this type? *****/
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"MultipleEnrolment\""
 				 " class=\"INPUT_%s\" style=\"width:150px;\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
 			      Gbl.Crs.Grps.GrpTyp.MultipleEnrolment ? HTM_OPTION_UNSELECTED :
 								      HTM_OPTION_SELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_A_student_can_only_belong_to_one_group);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
 			      Gbl.Crs.Grps.GrpTyp.MultipleEnrolment ? HTM_OPTION_SELECTED :
 								      HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_A_student_can_belong_to_several_groups);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -2590,7 +2606,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	    /***** Group type *****/
 	    /* Begin selector */
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"GrpTypCod\""
 				 " class=\"INPUT_%s\" style=\"width:100px;\"",
 				 The_GetSuffix ());
@@ -2604,7 +2620,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		     HTM_OPTION (HTM_Type_LONG,&GrpTyp->GrpTypCod,
 				 GrpTyp->GrpTypCod == Gbl.Crs.Grps.GrpTyp.GrpTypCod ? HTM_OPTION_SELECTED :
 										      HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",GrpTyp->GrpTypName);
 		    }
 
@@ -2615,16 +2631,15 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	    /***** Group name *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"20\" class=\"INPUT_%s\""
-			       " required=\"required\"",
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"20\" class=\"INPUT_%s\" required=\"required\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Room *****/
 	    /* Begin selector */
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"RooCod\""
 				 " class=\"INPUT_%s\" style=\"width:100px;\"",
 				 The_GetSuffix ());
@@ -2633,14 +2648,14 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		  HTM_OPTION (HTM_Type_STRING,"-1",
 			      Gbl.Crs.Grps.RooCod < 0 ? HTM_OPTION_SELECTED :
 							HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_No_assigned_room);
 
 		  /* Option for another room */
 		  HTM_OPTION (HTM_Type_STRING,"0",
 			      Gbl.Crs.Grps.RooCod == 0 ? HTM_OPTION_SELECTED :
 							 HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Txt_Another_room);
 
 		  /* Options for rooms */
@@ -2652,7 +2667,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		     HTM_OPTION (HTM_Type_LONG,&Roo->RooCod,
 				 Roo->RooCod == Gbl.Crs.Grps.RooCod ? HTM_OPTION_SELECTED :
 								      HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Roo->ShrtName);
 		    }
 
@@ -2675,7 +2690,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
 	       HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "size=\"3\" class=\"INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();

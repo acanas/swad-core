@@ -207,7 +207,8 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
 	       HTM_LABEL_Begin (NULL);
 	          Checked = (WhichSyl == WhichSyllabus) ? Cns_CHECKED :
 	        					  Cns_UNCHECKED;
-		  HTM_INPUT_RADIO ("WhichSyllabus",Checked,HTM_SUBMIT_ON_CLICK,
+		  HTM_INPUT_RADIO ("WhichSyllabus",Checked,HTM_ENABLED,
+				   HTM_SUBMIT_ON_CLICK,
 				   "value=\"%u\"",(unsigned) WhichSyl);
 		  HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);
 	       HTM_LABEL_End ();
@@ -819,7 +820,7 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 	 Syllabus->ParNumItem = NumItem;
 	 Syl_PutParsSyllabus (Syllabus);
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
-			 HTM_SUBMIT_ON_CHANGE,
+			 HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 			 "size=\"60\" class=\"INPUT_%s\" placeholder=\"%s\"%s",
 			 The_GetSuffix (),
 			 Txt_Enter_a_new_item_here,

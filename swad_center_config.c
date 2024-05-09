@@ -355,7 +355,7 @@ static void CtrCfg_Latitude (double Latitude)
 			     90.0,	// North Pole
 			     0.0,	// step="any"
 			     Latitude,
-			     HTM_SUBMIT_ON_CHANGE,false,
+			     HTM_SUBMIT_ON_CHANGE,
 			     "class=\"Frm_C2_INPUT INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
@@ -383,7 +383,7 @@ static void CtrCfg_Longitude (double Longitude)
 			     180.0,	// East
 			     0.0,	// step="any"
 			     Longitude,
-			     HTM_SUBMIT_ON_CHANGE,false,
+			     HTM_SUBMIT_ON_CHANGE,
 			     "class=\"Frm_C2_INPUT INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
@@ -411,7 +411,7 @@ static void CtrCfg_Altitude (double Altitude)
 			     8848.0,	// Mount Everest
 			     0.0,	// step="any"
 			     Altitude,
-			     HTM_SUBMIT_ON_CHANGE,false,
+			     HTM_SUBMIT_ON_CHANGE,
 			     "class=\"Frm_C2_INPUT INPUT_%s\""
 			     " required=\"required\"",
 			     The_GetSuffix ());
@@ -478,7 +478,9 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
       case Frm_PUT_FORM:
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgCtrPhoAtt);
-	       HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"AttributionArea\" name=\"Attribution\""
+				   " rows=\"3\""
 				   " onchange=\"this.form.submit();return false;\"");
 		  if (PhotoAttribution)
 		     HTM_Txt (PhotoAttribution);
@@ -591,7 +593,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 
 	       /* Put form to select institution */
 	       Frm_BeginForm (ActChgCtrInsCfg);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -603,7 +605,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
 				    Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
 											HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Ins->ShrtName);
 		       }
 		  HTM_SELECT_End ();
@@ -663,14 +665,14 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
 
 	       /* Put form to select place */
 	       Frm_BeginForm (ActChgCtrPlcCfg);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"PlcCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
 				 Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
 										    HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Txt_Another_place);
 		     for (NumPlc = 0;
 			  NumPlc < Places.Num;
@@ -678,7 +680,7 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
 			HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
 				    Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod ? HTM_OPTION_SELECTED :
 													       HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Places.Lst[NumPlc].ShrtName);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();

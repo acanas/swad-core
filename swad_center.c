@@ -662,53 +662,53 @@ void Ctr_WriteSelectorOfCenter (void)
    unsigned NumCtrs;
    unsigned NumCtr;
    long CtrCod;
+   HTM_Disabled_t Disabled = (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0) ? HTM_ENABLED :
+									HTM_DISABLED;
+   HTM_SubmitOnChange_t SubmitOnChange = (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
+										    HTM_DONT_SUBMIT_ON_CHANGE;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeDeg);
 
       /***** Begin selector *****/
-      if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
-			   The_GetSuffix ());
-      else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
-			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\""
-			   " disabled=\"disabled\"",
-			   The_GetSuffix ());
-      HTM_OPTION (HTM_Type_STRING,"",
-		  Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0 ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-		  HTM_OPTION_DISABLED,
-		  "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
+      HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
+			The_GetSuffix ());
 
-      if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
-	{
-	 /***** Get centers in current institution from database *****/
-	 NumCtrs = Ctr_DB_GetListOfCtrsInCurrentIns (&mysql_res);
-	 for (NumCtr = 0;
-	      NumCtr < NumCtrs;
-	      NumCtr++)
+	 /***** Initial disabled option *****/
+	 HTM_OPTION (HTM_Type_STRING,"",
+		     Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0 ? HTM_OPTION_SELECTED :
+							      HTM_OPTION_UNSELECTED,
+		     HTM_DISABLED,
+		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
+
+	 if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
 	   {
-	    /* Get next center */
-	    row = mysql_fetch_row (mysql_res);
+	    /***** Get centers in current institution from database *****/
+	    NumCtrs = Ctr_DB_GetListOfCtrsInCurrentIns (&mysql_res);
+	    for (NumCtr = 0;
+		 NumCtr < NumCtrs;
+		 NumCtr++)
+	      {
+	       /* Get next center */
+	       row = mysql_fetch_row (mysql_res);
 
-	    /* Get center code (row[0]) */
-	    if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	       Err_WrongCenterExit ();
+	       /* Get center code (row[0]) */
+	       if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+		  Err_WrongCenterExit ();
 
-	    /* Write option */
-	    HTM_OPTION (HTM_Type_LONG,&CtrCod,
-			Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 &&
-			CtrCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
-								       HTM_OPTION_UNSELECTED,
-			HTM_OPTION_ENABLED,
-			"%s",row[1]);
+	       /* Write option */
+	       HTM_OPTION (HTM_Type_LONG,&CtrCod,
+			   Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 &&
+			   CtrCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
+									  HTM_OPTION_UNSELECTED,
+			   HTM_ENABLED,
+			   "%s",row[1]);
+	      }
+
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
 	   }
-
-	 /***** Free structure that stores the query result *****/
-	 DB_FreeMySQLResult (&mysql_res);
-	}
 
       /***** End selector *****/
       HTM_SELECT_End ();
@@ -799,14 +799,14 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCtrPlc);
 			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"PlcCod\""
 					  " class=\"PLC_SEL INPUT_%s\"",
 					  The_GetSuffix ());
 			   HTM_OPTION (HTM_Type_STRING,"0",
 				       Ctr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
 								   HTM_OPTION_UNSELECTED,
-				       HTM_OPTION_ENABLED,
+				       HTM_ENABLED,
 				       "%s",Txt_Another_place);
 			   for (NumPlc = 0;
 				NumPlc < Places->Num;
@@ -816,7 +816,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			      HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
 					  Plc->PlcCod == Ctr->Specific.PlcCod ? HTM_OPTION_SELECTED :
 										HTM_OPTION_UNSELECTED,
-					  HTM_OPTION_ENABLED,
+					  HTM_ENABLED,
 					  "%s",Plc->ShrtName);
 			     }
 			HTM_SELECT_End ();
@@ -887,7 +887,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 						     Usr_DONT_GET_ROLE_IN_CRS);
 	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
 	                  The_GetSuffix ());
-	       Usr_WriteAuthor (&UsrDat,Cns_ENABLED);
+	       Usr_WriteAuthor (&UsrDat,For_ENABLED);
 	    HTM_TD_End ();
 
 	    /* Center status */
@@ -1270,13 +1270,13 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Place *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"0",
 			   Ctr_EditingCtr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
 							          HTM_OPTION_UNSELECTED,
-			   HTM_OPTION_ENABLED,
+			   HTM_ENABLED,
 			   "%s",Txt_Another_place);
 	       for (NumPlc = 0;
 		    NumPlc < Places->Num;
@@ -1286,7 +1286,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 		  HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
 			      Plc->PlcCod == Ctr_EditingCtr->Specific.PlcCod ? HTM_OPTION_SELECTED :
 									       HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "%s",Plc->ShrtName);
 		 }
 	    HTM_SELECT_End ();
@@ -1315,7 +1315,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 /***** Center requester *****/
 	 HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
 		       The_GetSuffix ());
-	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,Cns_ENABLED);
+	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,For_ENABLED);
 	 HTM_TD_End ();
 
 	 /***** Center status *****/

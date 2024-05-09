@@ -114,7 +114,8 @@ void Not_ShowFormNotice (void)
 		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
 
 	 /***** Message body *****/
-	 HTM_TEXTAREA_Begin ("name=\"Content\" cols=\"30\" rows=\"10\""
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+			     "name=\"Content\" cols=\"30\" rows=\"10\""
 			     " class=\"INPUT_%s\""
 			     " autofocus=\"autofocus\" required=\"required\"",
 			     The_GetSuffix ());

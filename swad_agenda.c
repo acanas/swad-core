@@ -1408,7 +1408,7 @@ void Agd_ReqCreatOrEditEvent (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Event\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
@@ -1427,7 +1427,7 @@ void Agd_ReqCreatOrEditEvent (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Location\" class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
 			       The_GetSuffix ());
@@ -1450,7 +1450,8 @@ void Agd_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewEvent)

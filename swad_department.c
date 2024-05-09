@@ -483,14 +483,14 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgDptIns);
 		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
 		                 Dpt->InsCod == 0 ? HTM_OPTION_SELECTED :
 						    HTM_OPTION_UNSELECTED,
-		                 HTM_OPTION_ENABLED,
+		                 HTM_ENABLED,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
@@ -500,7 +500,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
 				    Ins->HieCod == Dpt->InsCod ? HTM_OPTION_SELECTED :
 								 HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Ins->ShrtName);
 		       }
 		  HTM_SELECT_End ();
@@ -787,14 +787,14 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Institution *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthInsCod\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"0",
 			   Dpt_EditingDpt->InsCod == 0 ? HTM_OPTION_SELECTED :
 							 HTM_OPTION_UNSELECTED,
-			   HTM_OPTION_ENABLED,
+			   HTM_ENABLED,
 			   "%s",Txt_Another_institution);
 	       for (NumIns = 0;
 		    NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
@@ -804,7 +804,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 		  HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
 			     Ins->HieCod == Dpt_EditingDpt->InsCod ? HTM_OPTION_SELECTED :
 								     HTM_OPTION_UNSELECTED,
-			     HTM_OPTION_ENABLED,
+			     HTM_ENABLED,
 			      "%s",Ins->ShrtName);
 		 }
 	    HTM_SELECT_End ();
@@ -966,7 +966,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
    /***** Selector to select department *****/
    /* Begin selector */
-   HTM_SELECT_Begin (SubmitOnChange,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
 		     ParName,ParName,SelectClass);
 
@@ -983,8 +983,8 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 	                DptCod < 0 ? HTM_OPTION_SELECTED :
 	                	     HTM_OPTION_UNSELECTED,
-	                NoDptSelectable ? HTM_OPTION_ENABLED :
-	                		  HTM_OPTION_DISABLED,
+	                NoDptSelectable ? HTM_ENABLED :
+	                		  HTM_DISABLED,
 			"%s",TextWhenNoDptSelected);
 	   }
 
@@ -992,7 +992,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	 HTM_OPTION (HTM_Type_STRING,"0",
 	             DptCod == 0 ? HTM_OPTION_SELECTED :
 	        		   HTM_OPTION_UNSELECTED,
-	             HTM_OPTION_ENABLED,
+	             HTM_ENABLED,
 		     "%s",Txt_Another_department);
 	}
 
@@ -1005,7 +1005,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	 HTM_OPTION (HTM_Type_LONG,&Dpt->DptCod,
 		     Dpt->DptCod == DptCod ? HTM_OPTION_SELECTED :
 					     HTM_OPTION_UNSELECTED,
-		     HTM_OPTION_ENABLED,
+		     HTM_ENABLED,
 		     "%s",Dpt->FullName);
 	}
 

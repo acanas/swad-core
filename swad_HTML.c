@@ -36,18 +36,14 @@
 #include "swad_HTML.h"
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-const char *HTM_DisabledTxt[Cns_NUM_DISABLED] =
-  {
-   [Cns_DISABLED] = " disabled=\"disabled\"",
-   [Cns_ENABLED ] = "",
-  };
-
-/*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
+
+static const char *HTM_DisabledTxt[HTM_NUM_DISABLED] =
+  {
+   [HTM_DISABLED] = " disabled=\"disabled\"",
+   [HTM_ENABLED ] = "",
+  };
 
 static const char *ClassAlign[HTM_NUM_HEAD_ALIGN] =
   {
@@ -85,35 +81,6 @@ static unsigned HTM_EM_NestingLevel       = 0;
 static unsigned HTM_U_NestingLevel        = 0;
 
 /*****************************************************************************/
-/***************************** Private prototypes ****************************/
-/*****************************************************************************/
-
-static void HTM_TABLE_BeginWithoutAttr (void);
-
-static void HTM_TBODY_BeginWithoutAttr (void);
-
-static void HTM_TR_BeginWithoutAttr (void);
-
-static void HTM_TD_BeginWithoutAttr (void);
-
-static void HTM_DIV_BeginWithoutAttr (void);
-
-static void HTM_SPAN_BeginWithoutAttr (void);
-
-static void HTM_UL_BeginWithoutAttr (void);
-static void HTM_LI_BeginWithoutAttr (void);
-
-static void HTM_A_BeginWithoutAttr (void);
-
-static void HTM_FIELDSET_BeginWithoutAttr (void);
-
-static void HTM_LABEL_BeginWithoutAttr (void);
-
-static void HTM_TEXTAREA_BeginWithoutAttr (void);
-
-static void HTM_SELECT_BeginWithoutAttr (void);
-
-/*****************************************************************************/
 /******************************* Begin/end title *****************************/
 /*****************************************************************************/
 
@@ -137,8 +104,9 @@ void HTM_TABLE_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Class;
 
+   HTM_Txt ("<table");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -148,35 +116,25 @@ void HTM_TABLE_Begin (const char *fmt,...)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 HTM_TxtF ("<table class=\"%s\">",Class);
-
-	 HTM_TABLE_NestingLevel++;
+	 HTM_TxtF (" class=\"%s\"",Class);
 
 	 free (Class);
 	}
-      else
-         HTM_TABLE_BeginWithoutAttr ();
-     }
-   else
-      HTM_TABLE_BeginWithoutAttr ();
+
+   HTM_Txt (">");
+
+   HTM_TABLE_NestingLevel++;
   }
 
 void HTM_TABLE_BeginPadding (unsigned CellPadding)
   {
+   HTM_Txt ("<table");
+
    if (CellPadding)
-     {
-      HTM_TxtF ("<table class=\"CELLS_PAD_%u\">",
+      HTM_TxtF (" class=\"CELLS_PAD_%u\">",
 	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
-      HTM_TABLE_NestingLevel++;
-     }
-   else
-      HTM_TABLE_BeginWithoutAttr ();
-  }
-
-static void HTM_TABLE_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<table>");
+   HTM_Txt (">");
 
    HTM_TABLE_NestingLevel++;
   }
@@ -253,8 +211,9 @@ void HTM_TBODY_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<tbody");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -263,21 +222,13 @@ void HTM_TBODY_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<tbody %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_TBODY_BeginWithoutAttr ();
-     }
-   else
-      HTM_TBODY_BeginWithoutAttr ();
-  }
 
-static void HTM_TBODY_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<tbody>");
+   HTM_Txt (">");
   }
 
 void HTM_TBODY_End (void)
@@ -295,8 +246,9 @@ void HTM_TR_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<tr");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -305,23 +257,15 @@ void HTM_TR_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<tr %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_TR_BeginWithoutAttr ();
-     }
-   else
-      HTM_TR_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_TR_NestingLevel++;
-  }
-
-static void HTM_TR_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<tr>");
   }
 
 void HTM_TR_End (void)
@@ -515,8 +459,9 @@ void HTM_TD_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<td");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -525,23 +470,15 @@ void HTM_TD_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<td %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_TD_BeginWithoutAttr ();
-     }
-   else
-      HTM_TD_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_TD_NestingLevel++;
-  }
-
-static void HTM_TD_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<td>");
   }
 
 void HTM_TD_End (void)
@@ -590,8 +527,9 @@ void HTM_DIV_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<div");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -600,23 +538,15 @@ void HTM_DIV_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<div %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_DIV_BeginWithoutAttr ();
-     }
-   else
-      HTM_DIV_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_DIV_NestingLevel++;
-  }
-
-static void HTM_DIV_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<div>");
   }
 
 void HTM_DIV_End (void)
@@ -681,8 +611,9 @@ void HTM_SPAN_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<span");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -691,23 +622,15 @@ void HTM_SPAN_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<span %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_SPAN_BeginWithoutAttr ();
-     }
-   else
-      HTM_SPAN_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_SPAN_NestingLevel++;
-  }
-
-static void HTM_SPAN_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<span>");
   }
 
 void HTM_SPAN_End (void)
@@ -747,8 +670,9 @@ void HTM_UL_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<ul");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -757,23 +681,15 @@ void HTM_UL_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<ul %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_UL_BeginWithoutAttr ();
-     }
-   else
-      HTM_UL_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_UL_NestingLevel++;
-  }
-
-static void HTM_UL_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<ul>");
   }
 
 void HTM_UL_End (void)
@@ -796,8 +712,9 @@ void HTM_LI_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<li");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -806,23 +723,15 @@ void HTM_LI_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<li %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_LI_BeginWithoutAttr ();
-     }
-   else
-      HTM_LI_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_LI_NestingLevel++;
-  }
-
-static void HTM_LI_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<li>");
   }
 
 void HTM_LI_End (void)
@@ -900,8 +809,9 @@ void HTM_A_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<a");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -910,23 +820,15 @@ void HTM_A_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<a %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_A_BeginWithoutAttr ();
-     }
-   else
-      HTM_A_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_A_NestingLevel++;
-  }
-
-static void HTM_A_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<a>");
   }
 
 void HTM_A_End (void)
@@ -1004,8 +906,9 @@ void HTM_FIELDSET_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<fieldset");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -1014,23 +917,15 @@ void HTM_FIELDSET_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<fieldset %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_FIELDSET_BeginWithoutAttr ();
-     }
-   else
-      HTM_FIELDSET_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_FIELDSET_NestingLevel++;
-  }
-
-static void HTM_FIELDSET_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<fieldset>");
   }
 
 void HTM_FIELDSET_End (void)
@@ -1060,8 +955,9 @@ void HTM_LABEL_Begin (const char *fmt,...)
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<label");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -1070,23 +966,15 @@ void HTM_LABEL_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<label %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_LABEL_BeginWithoutAttr ();
-     }
-   else
-      HTM_LABEL_BeginWithoutAttr ();
+
+   HTM_Txt (">");
 
    HTM_LABEL_NestingLevel++;
-  }
-
-static void HTM_LABEL_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<label>");
   }
 
 void HTM_LABEL_End (void)
@@ -1104,6 +992,7 @@ void HTM_LABEL_End (void)
 /*****************************************************************************/
 
 void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
+                     HTM_Disabled_t Disabled,
                      HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...)
   {
@@ -1113,6 +1002,8 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
 
    HTM_TxtF ("<input type=\"text\" name=\"%s\" maxlength=\"%u\" value=\"%s\"",
 	     Name,MaxLength,Value);
+
+   HTM_Txt (HTM_DisabledTxt[Disabled]);
 
    if (fmt)
      {
@@ -1382,18 +1273,19 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
   }
 
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
+                     HTM_Disabled_t Disabled,
                      HTM_SubmitOnChange_t SubmitOnChange,
-                     Cns_Disabled_t Disabled,
 	             const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
    char *Attr;
 
-   HTM_TxtF ("<input type=\"number\" name=\"%s\" min=\"%ld\" max=\"%ld\" value=\"%ld\"",
+   HTM_TxtF ("<input type=\"number\" name=\"%s\""
+	     " min=\"%ld\" max=\"%ld\" value=\"%ld\"",
 	     Name,Min,Max,Value);
-   if (Disabled == Cns_DISABLED)
-      HTM_Txt (" disabled=\"disabled\"");
+
+   HTM_Txt (HTM_DisabledTxt[Disabled]);
 
    if (fmt)
      {
@@ -1422,7 +1314,6 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
                       HTM_SubmitOnChange_t SubmitOnChange,
-                      Cns_Disabled_t Disabled,
 	              const char *fmt,...)
   {
    va_list ap;
@@ -1432,16 +1323,13 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    HTM_TxtF ("<input type=\"number\" name=\"%s\""
 	     " min=\"%.15lg\" max=\"%.15lg\"",
-	     Name,
-	     Min,Max);
+	     Name,Min,Max);
    if (Step == 0.0)
       HTM_Txt (" step=\"any\"");
    else
       HTM_TxtF (" step=\"%.15lg\"",Step);
    HTM_TxtF (" value=\"%.15lg\"",Value);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   if (Disabled == Cns_DISABLED)
-      HTM_Txt (" disabled=\"disabled\"");
 
    if (fmt)
      {
@@ -1467,7 +1355,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
   }
 
 void HTM_INPUT_RADIO (const char *Name,
-      		      Cns_Checked_t Checked,
+      		      Cns_Checked_t Checked,HTM_Disabled_t Disabled,
 		      HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...)
   {
@@ -1497,6 +1385,8 @@ void HTM_INPUT_RADIO (const char *Name,
    if (Checked == Cns_CHECKED)
       HTM_Txt (" checked=\"checked\"");
 
+   HTM_Txt (HTM_DisabledTxt[Disabled]);
+
    if (SubmitOnClick == HTM_SUBMIT_ON_CLICK)
       HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 
@@ -1504,7 +1394,7 @@ void HTM_INPUT_RADIO (const char *Name,
   }
 
 void HTM_INPUT_CHECKBOX (const char *Name,
-			 Cns_Checked_t Checked,
+			 Cns_Checked_t Checked,HTM_Disabled_t Disabled,
 			 HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...)
   {
@@ -1533,6 +1423,8 @@ void HTM_INPUT_CHECKBOX (const char *Name,
 
    if (Checked == Cns_CHECKED)
       HTM_Txt (" checked=\"checked\"");
+
+   HTM_Txt (HTM_DisabledTxt[Disabled]);
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_Txt (" onchange=\"this.form.submit();return false;\"");
@@ -1623,14 +1515,15 @@ void HTM_BUTTON_End (void)
 /********************************* Text areas ********************************/
 /*****************************************************************************/
 
-void HTM_TEXTAREA_Begin (const char *fmt,...)
+void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<textarea");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -1639,23 +1532,16 @@ void HTM_TEXTAREA_Begin (const char *fmt,...)
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<textarea %s>",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_TEXTAREA_BeginWithoutAttr ();
-     }
-   else
-      HTM_TEXTAREA_BeginWithoutAttr ();
 
+   HTM_Txt (HTM_DisabledTxt[Disabled]);
+
+   HTM_Txt (">");
    HTM_TEXTAREA_NestingLevel++;
-  }
-
-static void HTM_TEXTAREA_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<textarea>");
   }
 
 void HTM_TEXTAREA_End (void)
@@ -1672,7 +1558,8 @@ void HTM_TEXTAREA_End (void)
 /********************************** Selectors ********************************/
 /*****************************************************************************/
 
-void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
+void HTM_SELECT_Begin (HTM_Disabled_t Disabled,
+		       HTM_SubmitOnChange_t SubmitOnChange,
                        const char *FuncsOnChange,	// if not null ==> must include ending ";"
 		       const char *fmt,...)
   {
@@ -1680,8 +1567,9 @@ void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
    int NumBytesPrinted;
    char *Attr;
 
+   HTM_Txt ("<select");
+
    if (fmt)
-     {
       if (fmt[0])
 	{
 	 va_start (ap,fmt);
@@ -1690,16 +1578,13 @@ void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
 
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<select %s",Attr);
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
 
 	 free (Attr);
 	}
-      else
-         HTM_SELECT_BeginWithoutAttr ();
-     }
-   else
-      HTM_SELECT_BeginWithoutAttr ();
+
+   HTM_Txt (HTM_DisabledTxt[Disabled]);
 
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE || FuncsOnChange)
      {
@@ -1714,13 +1599,8 @@ void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
       HTM_Txt ("return false;\"");
      }
 
-   HTM_Txt (" />");
+   HTM_Txt (">");
    HTM_SELECT_NestingLevel++;
-  }
-
-static void HTM_SELECT_BeginWithoutAttr (void)
-  {
-   HTM_Txt ("<select");
   }
 
 void HTM_SELECT_End (void)
@@ -1751,7 +1631,7 @@ void HTM_OPTGROUP_End (void)
   }
 
 void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
-                 HTM_OptionSelected_t Selected,HTM_OptionDisabled_t Disabled,
+                 HTM_OptionSelected_t Selected,HTM_Disabled_t Disabled,
 		 const char *fmt,...)
   {
    va_list ap;
@@ -1774,8 +1654,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
    HTM_Txt ("\"");
    if (Selected == HTM_OPTION_SELECTED)
       HTM_Txt (" selected=\"selected\"");
-   if (Disabled == HTM_OPTION_DISABLED)
-      HTM_Txt (" disabled=\"disabled\"");
+   HTM_Txt (HTM_DisabledTxt[Disabled]);
    HTM_Txt (">");
 
    if (fmt)

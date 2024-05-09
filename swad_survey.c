@@ -615,7 +615,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 				 1 << Rol_NET |
 				 1 << Rol_TCH,
 				 Surveys->Svy.Roles,
-				 Cns_ENABLED,
+				 HTM_ENABLED,
 				 HTM_DONT_SUBMIT_ON_CHANGE);
       HTM_DIV_End ();
 
@@ -1659,7 +1659,7 @@ void Svy_ReqCreatOrEditSvy (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Surveys.Svy.Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"Title\""
 			       " class=\"Frm_C2_INPUT INPUT_%s\""
 			       " required=\"required\"",
@@ -1681,7 +1681,8 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 		  if (!ItsANewSurvey)
@@ -1703,7 +1704,7 @@ void Svy_ReqCreatOrEditSvy (void)
 				       1 << Rol_NET |
 				       1 << Rol_TCH,
 				       Surveys.Svy.Roles,
-				       Cns_DISABLED,
+				       HTM_DISABLED,
 				       HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -1840,7 +1841,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 					                       "SvyCod",
 					                       SvyCod) ? Cns_CHECKED :
 					                		 Cns_UNCHECKED;
-		     HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
+		     HTM_INPUT_CHECKBOX ("WholeCrs",Checked,HTM_ENABLED,
 					 HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"WholeCrs\" value=\"Y\""
 					 " onclick=\"uncheckChildren(this,'GrpCods')\"");
@@ -2267,7 +2268,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\""
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+				   "id=\"Txt\" name=\"Txt\""
 			           " cols=\"60\" rows=\"4\""
 			           " class=\"INPUT_%s\"",
 			           The_GetSuffix ());
@@ -2288,7 +2290,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		  HTM_LABEL_Begin (NULL);
 		     Checked = (AnsType == SvyQst->AnswerType) ? Cns_CHECKED :
 								 Cns_UNCHECKED;
-		     HTM_INPUT_RADIO ("AnswerType",Checked,
+		     HTM_INPUT_RADIO ("AnswerType",Checked,HTM_ENABLED,
 				      HTM_DONT_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) AnsType);
 		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
@@ -2321,7 +2323,9 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 			/* Answer text */
 			HTM_TD_Begin ("class=\"RT\"");
-			   HTM_TEXTAREA_Begin ("id=\"AnsStr%u\" name=\"AnsStr%u\" cols=\"50\" rows=\"1\"",
+			   HTM_TEXTAREA_Begin (HTM_ENABLED,
+					       "id=\"AnsStr%u\" name=\"AnsStr%u\""
+					       " cols=\"50\" rows=\"1\"",
 					       NumAns,NumAns);
 			      if (SvyQst->AnsChoice[NumAns].Text)
 				 HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
@@ -2342,7 +2346,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	       HTM_LABEL_Begin (NULL);
 	          Checked = SvyQst->CommentsAllowed ? Cns_CHECKED :
 						      Cns_UNCHECKED;
-		  HTM_INPUT_CHECKBOX ("Comment",Checked,
+		  HTM_INPUT_CHECKBOX ("Comment",Checked,HTM_ENABLED,
 				      HTM_DONT_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"");
 		  HTM_Txt (Txt_Comments_allowed);
@@ -2859,7 +2863,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 		     switch (SvyQst->AnswerType)
 		       {
 			case Svy_ANS_UNIQUE_CHOICE:
-			   HTM_INPUT_RADIO (StrAns,Cns_UNCHECKED,
+			   HTM_INPUT_RADIO (StrAns,Cns_UNCHECKED,HTM_ENABLED,
 					    HTM_DONT_SUBMIT_ON_CLICK,
 					    "id=\"Ans%010u_%u\" value=\"%u\""
 					    " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
@@ -2868,7 +2872,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 					    (unsigned) SvyQst->QstCod,NumAnswers);
 			   break;
 			case Svy_ANS_MULTIPLE_CHOICE:
-			   HTM_INPUT_CHECKBOX (StrAns,Cns_UNCHECKED,
+			   HTM_INPUT_CHECKBOX (StrAns,Cns_UNCHECKED,HTM_ENABLED,
 					       HTM_DONT_SUBMIT_ON_CHANGE,
 					       "id=\"Ans%010u_%u\" value=\"%u\"",
 					       (unsigned) SvyQst->QstCod,NumAns,
@@ -2976,12 +2980,12 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
 	   }
 	 break;
       case Frm_PUT_FORM:
-	 HTM_TEXTAREA_Begin ("name=\"Com%010u\""
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+			     "name=\"Com%010u\""
 			     " cols=\"60\" rows=\"4\""
 			     " class=\"INPUT_%s\""
 			     " placeholder=\"%s&hellip;\"",
-			     (unsigned) SvyQst->QstCod,
-			     The_GetSuffix (),
+			     (unsigned) SvyQst->QstCod,The_GetSuffix (),
 			     Txt_Comments);
 	 HTM_TEXTAREA_End ();
 	 break;

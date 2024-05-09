@@ -67,11 +67,12 @@ typedef enum
    HTM_OPTION_SELECTED,
   } HTM_OptionSelected_t;
 
+#define HTM_NUM_DISABLED 2
 typedef enum
   {
-   HTM_OPTION_ENABLED,
-   HTM_OPTION_DISABLED,
-  } HTM_OptionDisabled_t;
+   HTM_ENABLED,
+   HTM_DISABLED,
+  } HTM_Disabled_t;
 
 #define HTM_NUM_HEAD_ALIGN 3
 typedef enum
@@ -165,6 +166,7 @@ void HTM_LABEL_Begin (const char *fmt,...);
 void HTM_LABEL_End (void);
 
 void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
+                     HTM_Disabled_t Disabled,
                      HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...);
 void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
@@ -187,21 +189,20 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 			 const char *AutoComplete,HTM_Required_t Required,
 	                 const char *fmt,...);
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
+                     HTM_Disabled_t Disabled,
                      HTM_SubmitOnChange_t SubmitOnChange,
-                     Cns_Disabled_t Disabled,
 	             const char *fmt,...);
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
                       HTM_SubmitOnChange_t SubmitOnChange,
-                      Cns_Disabled_t Disabled,
 	              const char *fmt,...);
 void HTM_INPUT_RADIO (const char *Name,
-      		      Cns_Checked_t Checked,
+      		      Cns_Checked_t Checked,HTM_Disabled_t Disabled,
 		      HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...);
 void HTM_INPUT_CHECKBOX (const char *Name,
-			 Cns_Checked_t Checked,
+			 Cns_Checked_t Checked,HTM_Disabled_t Disabled,
 			 HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...);
 
@@ -209,17 +210,18 @@ void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_End (void);
 
-void HTM_TEXTAREA_Begin (const char *fmt,...);
+void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,const char *fmt,...);
 void HTM_TEXTAREA_End (void);
 
-void HTM_SELECT_Begin (HTM_SubmitOnChange_t SubmitOnChange,
+void HTM_SELECT_Begin (HTM_Disabled_t Disabled,
+		       HTM_SubmitOnChange_t SubmitOnChange,
                        const char *FuncsOnChange,
 		       const char *fmt,...);
 void HTM_SELECT_End (void);
 void HTM_OPTGROUP_Begin (const char *Label);
 void HTM_OPTGROUP_End (void);
 void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
-                 HTM_OptionSelected_t Selected,HTM_OptionDisabled_t Disabled,
+                 HTM_OptionSelected_t Selected,HTM_Disabled_t Disabled,
 		 const char *fmt,...);
 
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,

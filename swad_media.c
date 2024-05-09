@@ -489,7 +489,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 
 	       /* Media title */
 	       HTM_INPUT_TEXT (ParUpload.Title,Med_MAX_CHARS_TITLE,"",
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"%s_tit\" class=\"%s\""		// <id>_tit
 			       " placeholder=\"%s\""
 			       " disabled=\"disabled\" style=\"display:none;\"",

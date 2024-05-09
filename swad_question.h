@@ -149,8 +149,6 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
                                  const char *Anchor);
 void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class);
 void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
-void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
-                                bool OptionsDisabled);
 void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Qst_ListQuestionsToEdit (void);

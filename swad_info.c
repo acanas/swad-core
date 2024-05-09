@@ -133,7 +133,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
 static void Inf_PutIconToViewInfo (void *Type);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
-						Cns_Disabled_t Disabled);
+						HTM_Disabled_t Disabled);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
@@ -235,8 +235,8 @@ void Inf_ShowInfo (void)
             // Checkbox to force students to read this couse info
             Mnu_ContextMenuBegin ();
 	       Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,
-						   (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? Cns_DISABLED :
-											  Cns_ENABLED);	// Non-editing teachers can not change the status of checkbox);
+						   (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
+											  HTM_ENABLED);	// Non-editing teachers can not change the status of checkbox);
             Mnu_ContextMenuEnd ();
            }
          break;
@@ -348,7 +348,7 @@ void Inf_PutIconToEditInfo (void *Type)
 /*****************************************************************************/
 
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
-						Cns_Disabled_t Disabled)
+						HTM_Disabled_t Disabled)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Force_students_to_read_this_information;
@@ -823,6 +823,7 @@ void Inf_FormsToSelSendInfo (void)
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
    Cns_Checked_t Checked;
+   HTM_Disabled_t Disabled;
    static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION   ] = ActSelInfSrcCrsInf,
@@ -904,17 +905,17 @@ void Inf_FormsToSelSendInfo (void)
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 	          Syl_PutParWhichSyllabus (&Syllabus.WhichSyllabus);
 	          Checked = (InfoSrc == FromDB.Src) ? Cns_CHECKED :
-	        						 Cns_UNCHECKED;
-		  HTM_INPUT_RADIO ("InfoSrc",Checked,
+	        				      Cns_UNCHECKED;
+	          Disabled = (InfoSrc == Inf_NONE ||
+			      InfoAvailable[InfoSrc]) ? HTM_ENABLED :
+							HTM_DISABLED;
+		  HTM_INPUT_RADIO ("InfoSrc",Checked,Disabled,
 			           (InfoSrc != FromDB.Src &&
 				    (InfoSrc == Inf_NONE ||
 				     InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
 						                HTM_DONT_SUBMIT_ON_CLICK,
-				   "id=\"InfoSrc%u\" value=\"%u\"%s",
-				   (unsigned) InfoSrc,(unsigned) InfoSrc,
-				   (InfoSrc == Inf_NONE ||
-				    InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
-							      " disabled=\"disabled\"");
+				   "id=\"InfoSrc%u\" value=\"%u\"",
+				   (unsigned) InfoSrc,(unsigned) InfoSrc);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -1567,7 +1568,8 @@ void Inf_EditPlainTxtInfo (void)
 	 /***** Edition area *****/
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_HelpPlainEditor ();
-	    HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\""
+	    HTM_TEXTAREA_Begin (HTM_ENABLED,
+				"name=\"Txt\" cols=\"80\" rows=\"20\""
 		                " class=\"INPUT_%s\"",
 		                The_GetSuffix ());
 	       HTM_Txt (TxtHTML);
@@ -1650,7 +1652,8 @@ void Inf_EditRichTxtInfo (void)
       /***** Edition area *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Lay_HelpRichEditor ();
-	 HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\""
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+			     "name=\"Txt\" cols=\"80\" rows=\"20\""
 		             " class=\"INPUT_%s\"",
 	                     The_GetSuffix ());
 	    HTM_Txt (TxtHTML);

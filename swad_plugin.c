@@ -398,7 +398,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActRenPlg);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
-				  HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -409,7 +409,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgDes);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
-				  HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"16\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -420,7 +420,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgLog);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
-				  HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"4\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -431,7 +431,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgAppKey);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
-				  HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -451,7 +451,8 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgPlgIP);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
-		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
+		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,
+				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -810,9 +811,8 @@ static void Plg_PutFormToCreatePlugin (void)
 	 /***** Plugin name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -820,27 +820,24 @@ static void Plg_PutFormToCreatePlugin (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
 			    Plg_EditingPlg->Description,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"16\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"16\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Plugin logo *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"4\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"4\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Plugin application key *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -855,9 +852,8 @@ static void Plg_PutFormToCreatePlugin (void)
 	 /***** Plugin IP address *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 

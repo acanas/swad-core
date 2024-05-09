@@ -51,7 +51,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    unsigned ScopeUnsigned;
    bool WriteScope;
 
-   HTM_SELECT_Begin (SubmitOnChange,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());
@@ -87,7 +87,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 	       HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
 			   Level == Gbl.Scope.Current ? HTM_OPTION_SELECTED :
 							HTM_OPTION_UNSELECTED,
-			   HTM_OPTION_ENABLED,
+			   HTM_ENABLED,
 			   "%s: %s",
 			   Txt_HIERARCHY_SINGUL_Abc[Level],
 			   Gbl.Hierarchy.Node[Level].ShrtName);

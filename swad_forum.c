@@ -910,20 +910,20 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    extern const char *Txt_FORUM_Post_banned;
    extern const char *Txt_FORUM_Post_X_banned;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
-   static const char *Icon[Cns_NUM_DISABLED] =
+   static const char *Icon[For_NUM_DISABLED] =
      {
-      [Cns_DISABLED] = "eye-slash.svg",
-      [Cns_ENABLED ] = "eye.svg",
+      [For_DISABLED] = "eye-slash.svg",
+      [For_ENABLED ] = "eye.svg",
      };
-   static Ico_Color_t Color[Cns_NUM_DISABLED] =
+   static Ico_Color_t Color[For_NUM_DISABLED] =
      {
-      [Cns_DISABLED] = Ico_RED,
-      [Cns_ENABLED ] = Ico_GREEN,
+      [For_DISABLED] = Ico_RED,
+      [For_ENABLED ] = Ico_GREEN,
      };
-   static const char **TxtAllowedBanned[Cns_NUM_DISABLED] =
+   static const char **TxtAllowedBanned[For_NUM_DISABLED] =
      {
-      [Cns_DISABLED] = &Txt_FORUM_Post_X_banned,
-      [Cns_ENABLED ] = &Txt_FORUM_Post_X_allowed,
+      [For_DISABLED] = &Txt_FORUM_Post_X_banned,
+      [For_ENABLED ] = &Txt_FORUM_Post_X_allowed,
      };
    struct Usr_Data UsrDat;
    time_t CreatTimeUTC;	// Creation time of a post
@@ -931,7 +931,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
-   Cns_Disabled_t Disabled;
+   For_Disabled_t Disabled;
    char *Title;
    Act_Action_t NextAction;
 
@@ -942,13 +942,13 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    Med_MediaConstructor (&Media);
 
    /***** Check if post is enabled *****/
-   Disabled = For_DB_GetIfPstIsDisabledOrEnabled (Forums->PstCod);
+   Disabled = For_DB_GetIfPstIsDisabled (Forums->PstCod);
 
    /***** Get data of post *****/
    For_GetPstData (Forums->PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
                    Subject,OriginalContent,&Media);
 
-   if (Disabled == Cns_ENABLED)
+   if (Disabled == For_ENABLED)
       /* Return this subject as last subject */
       Str_Copy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
 
@@ -986,10 +986,10 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	  	    The_GetSuffix ());
          switch (Disabled)
            {
-            case Cns_DISABLED:
+            case For_DISABLED:
                HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
                break;
-            case Cns_ENABLED:
+            case For_ENABLED:
             default:
 	       if (Subject[0])
 		  HTM_Txt (Subject);
@@ -1008,8 +1008,8 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	 switch (ICanModerateForum)
 	   {
 	    case Usr_CAN:
-	       NextAction = Disabled == Cns_ENABLED ? For_ActionsDisPstFor[Forums->Forum.Type] :
-							       For_ActionsEnbPstFor[Forums->Forum.Type];
+	       NextAction = (Disabled == For_ENABLED) ? For_ActionsDisPstFor[Forums->Forum.Type] :
+							For_ActionsEnbPstFor[Forums->Forum.Type];
 	       Frm_BeginFormAnchor (NextAction,For_FORUM_POSTS_SECTION_ID);
 		  For_PutParsForum (Forums);
 		  Ico_PutIconLink (Icon[Disabled],Color[Disabled],NextAction);
@@ -1043,7 +1043,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 						  Usr_DONT_GET_PREFS,
 						  Usr_DONT_GET_ROLE_IN_CRS);
          Usr_WriteAuthor (&UsrDat,Disabled);
-	 if (Disabled == Cns_ENABLED)
+	 if (Disabled == For_ENABLED)
 	    /* Write number of posts from this user */
 	    For_WriteNumberOfPosts (Forums,UsrDat.UsrCod);
       HTM_TD_End ();
@@ -1052,10 +1052,10 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       HTM_TD_Begin ("class=\"LT MSG_TXT_%s\"",The_GetSuffix ());
          switch (Disabled)
            {
-            case Cns_DISABLED:
+            case For_DISABLED:
 	       HTM_Txt (Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
                break;
-            case Cns_ENABLED:
+            case For_ENABLED:
 	       Str_Copy (Content,OriginalContent,sizeof (Content) - 1);
 	       Msg_WriteMsgContent (Content,true,false);
    	       Med_ShowMedia (&Media,"FOR_IMG_CONT","FOR_IMG");
@@ -1452,7 +1452,8 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 		  HTM_LABEL_Begin (NULL);
 		     Checked = (ForumSet == Forums->ForumSet) ? Cns_UNCHECKED :
 								Cns_CHECKED;
-		     HTM_INPUT_RADIO ("ForumSet",Checked,HTM_SUBMIT_ON_CLICK,
+		     HTM_INPUT_RADIO ("ForumSet",Checked,HTM_ENABLED,
+				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) ForumSet);
 		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
 		  HTM_LABEL_End ();
@@ -2342,7 +2343,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	    Pag_WriteLinksToPages (Pag_POSTS_FORUM,
 				   &PaginationPsts,
 				   Forums,Thr.ThrCod,
-				   Thr.Enabled[Dat_STR_TIME],
+				   Thr.Disabled[Dat_STR_TIME],
 				   Thr.Subject,
 				   Thr.NumUnreadPosts ? "BOLD PAG_TXT" :
 							"PAG_TXT",
@@ -2363,7 +2364,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 							Usr_DONT_GET_ROLE_IN_CRS);
 	       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 	                     Class,The_GetSuffix (),BgColor);
-		  Usr_WriteAuthor (&UsrDat,Thr.Enabled[Order]);
+		  Usr_WriteAuthor (&UsrDat,Thr.Disabled[Order]);
 	       HTM_TD_End ();
 
 	       /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
@@ -2470,7 +2471,7 @@ void For_GetThreadData (struct For_Thread *Thr)
    for (Order  = (Dat_StartEndTime_t) 0;
 	Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	Order++)
-      Thr->Enabled[Order] = For_DB_GetIfPstIsDisabledOrEnabled (Thr->PstCod[Order]);
+      Thr->Disabled[Order] = For_DB_GetIfPstIsDisabled (Thr->PstCod[Order]);
 
    /***** Get number of posts in this thread *****/
    Thr->NumPosts = For_DB_GetNumPstsInThr (Thr->ThrCod);
@@ -2841,7 +2842,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 		  HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 				  IsReply ? Subject :
 					    "",
-				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"Subject\""
 				  " class=\"Frm_C2_INPUT INPUT_%s\""
 				  " required=\"required\"",
@@ -2858,9 +2859,10 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		  HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\""
-				      " class=\"Frm_C2_INPUT INPUT_%s\""
-				      " rows=\"10\"",
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,
+				      "id=\"Content\" name=\"Content\""
+				      " rows=\"10\""
+				      " class=\"Frm_C2_INPUT INPUT_%s\"",
 				      The_GetSuffix ());
 		  HTM_TEXTAREA_End ();
 	       HTM_TD_End ();

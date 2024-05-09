@@ -201,13 +201,13 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 	      {
 	       RubCodThisType = DB_GetNextCode (mysql_res);
 
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"%s\" class=\"PrjCfg_RUBRIC_SEL\"",
 				 Par_CodeStr[ParCod_Rub]);
 		  /* First option to indicate that no rubric is selected */
 		  HTM_OPTION (HTM_Type_STRING,"-1",
 			      HTM_OPTION_UNSELECTED,
-			      HTM_OPTION_ENABLED,
+			      HTM_ENABLED,
 			      "[%s]",Txt_no_rubric);
 
 		  /* One option for each rubric in this course */
@@ -219,7 +219,7 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 		     HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRubThisCrs],
 				 Rubrics->Lst[NumRubThisCrs] == RubCodThisType ? HTM_OPTION_SELECTED :
 										 HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Title);
 		    }
 
@@ -231,14 +231,14 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 	       only if not all available rubrics are selected */
 	    if (NumRubricsThisType < Rubrics->Num)
 	      {
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"%s\" class=\"PrjCfg_RUBRIC_SEL\"",
 				 Par_CodeStr[ParCod_Rub]);
 
 		  /* First option to indicate that no rubric is selected */
 		  HTM_OPTION (HTM_Type_STRING,"-1",
 			      HTM_OPTION_SELECTED,
-			      HTM_OPTION_DISABLED,
+			      HTM_DISABLED,
 			      "[%s]",Txt_add_rubric);
 
 		  /* One option for each rubric in this course */
@@ -249,7 +249,7 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 		     Rub_DB_GetRubricTitle (Rubrics->Lst[NumRubThisCrs],Title,Rub_MAX_BYTES_TITLE);
 		     HTM_OPTION (HTM_Type_LONG,&Rubrics->Lst[NumRubThisCrs],
 				 HTM_OPTION_UNSELECTED,
-				 HTM_OPTION_ENABLED,
+				 HTM_ENABLED,
 				 "%s",Title);
 		    }
 
@@ -313,7 +313,8 @@ static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
    HTM_LABEL_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
       Checked = Config->NETCanCreate ? Cns_CHECKED :
 				       Cns_UNCHECKED;
-      HTM_INPUT_CHECKBOX ("NETCanCreate",Checked,HTM_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX ("NETCanCreate",Checked,HTM_ENABLED,
+			  HTM_SUBMIT_ON_CHANGE,
 			  "id=\"NETCanCreate\" value=\"Y\"");
       HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);
    HTM_LABEL_End ();

@@ -128,7 +128,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
-		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"FigureType\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -140,7 +140,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 			HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
 				    FigType == SelectedFigureType ? HTM_OPTION_SELECTED :
 								    HTM_OPTION_UNSELECTED,
-				    HTM_OPTION_ENABLED,
+				    HTM_ENABLED,
 				    "%s",Txt_FIGURE_TYPES[FigType]);
 		       }
 		  HTM_SELECT_End ();

@@ -35,6 +35,7 @@
 #include "swad_cryptography.h"
 #include "swad_date.h"
 #include "swad_degree.h"
+#include "swad_forum.h"
 #include "swad_icon.h"
 #include "swad_language.h"
 #include "swad_layout.h"
@@ -334,8 +335,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsers (void);
 
-void Usr_WriteAuthor (struct Usr_Data *UsrDat,
-                      Cns_Disabled_t Disabled);
+void Usr_WriteAuthor (struct Usr_Data *UsrDat,For_Disabled_t Disabled);
 void Usr_WriteAuthor1Line (long UsrCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows);

@@ -474,7 +474,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 		     Frm_BeginForm (ActRenMaiSho);
 			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 			HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
-					HTM_SUBMIT_ON_CHANGE,
+					HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 					"size=\"15\" class=\"INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -485,7 +485,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 		     Frm_BeginForm (ActRenMaiFul);
 			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 			HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
-					HTM_SUBMIT_ON_CHANGE,
+					HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
 					"size=\"40\" class=\"INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -686,18 +686,16 @@ static void Mai_PutFormToCreateMailDomain (void)
 	 /* Mail domain */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"15\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"15\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /* Mail domain info */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"40\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"40\" class=\"INPUT_%s\" required=\"required\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
