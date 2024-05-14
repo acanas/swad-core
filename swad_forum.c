@@ -1452,7 +1452,8 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 		  HTM_LABEL_Begin (NULL);
 		     Checked = (ForumSet == Forums->ForumSet) ? Cns_UNCHECKED :
 								Cns_CHECKED;
-		     HTM_INPUT_RADIO ("ForumSet",Checked,HTM_ENABLED,
+		     HTM_INPUT_RADIO ("ForumSet",
+				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
 				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) ForumSet);
 		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
@@ -2842,10 +2843,9 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 		  HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
 				  IsReply ? Subject :
 					    "",
-				  HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"Subject\""
-				  " class=\"Frm_C2_INPUT INPUT_%s\""
-				  " required=\"required\"",
+				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
 	       HTM_TD_End ();
 
@@ -2859,7 +2859,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				      "id=\"Content\" name=\"Content\""
 				      " rows=\"10\""
 				      " class=\"Frm_C2_INPUT INPUT_%s\"",

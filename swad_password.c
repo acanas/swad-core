@@ -276,8 +276,8 @@ void Pwd_ShowFormSendNewPwd (void)
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_nick_email_or_ID);
 	    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\" required=\"required\"",
+			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_LABEL_End ();
 

@@ -352,7 +352,7 @@ static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *Print
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
-                   HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+                   HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
 
@@ -369,7 +369,7 @@ static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *Print
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Qst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
-                   HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+                   HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"11\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
 
@@ -387,7 +387,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
    /* Initially user has not answered the question ==> initially all answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"" ,
@@ -454,7 +454,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	         {
 	          case Qst_ANS_UNIQUE_CHOICE:
 		     HTM_INPUT_RADIO (StrAns,
-				      UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,
+				      UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,HTM_NOT_REQUIRED,
 				      HTM_DONT_SUBMIT_ON_CLICK,
 				      "id=\"%s\" value=\"%u\""
 				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
@@ -513,7 +513,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Qst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
-                   HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+                   HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 		   "size=\"40\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
 

@@ -546,7 +546,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    /***** Textarea with users' @nicknames, emails or IDs *****/
    HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 			     "id=\"OtherRecipients\" name=\"OtherRecipients\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\""
 			     " placeholder=\"%s\"",
@@ -593,7 +593,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 			     "id=\"MsgSubject\" name=\"Subject\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\"",
 			     The_GetSuffix ());
@@ -634,7 +634,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "id=\"MsgContent\" name=\"Content\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " rows=\"20\"",
@@ -671,7 +671,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "id=\"MsgContent\" name=\"Content\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " rows=\"20\"",
@@ -1815,7 +1815,8 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 

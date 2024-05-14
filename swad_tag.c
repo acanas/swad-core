@@ -424,9 +424,8 @@ void Tag_ShowFormEditTags (void)
 		  Frm_BeginForm (ActRenTag);
 		     Par_PutParString (NULL,"OldTagTxt",row[1]);
 		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
-				     HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
-				     "size=\"36\" class=\"INPUT_%s\""
-				     " required=\"required\"",
+				     HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				     "size=\"36\" class=\"INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
 	       HTM_TD_End ();

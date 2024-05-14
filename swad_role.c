@@ -447,10 +447,10 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
 	 if (ClassSelect[0])
 	    PutClassSelect = true;
       if (PutClassSelect)
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"MyRole\" class=\"%s\"",ClassSelect);
       else
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"MyRole\"");
       for (Role  = (Rol_Role_t) 1;
 	   Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);

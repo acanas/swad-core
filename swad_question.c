@@ -623,7 +623,8 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 
 	 /***** Choice 1: No media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,Cns_UNCHECKED,Disabled,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,
+			     Cns_UNCHECKED,Disabled,HTM_NOT_REQUIRED,
 			     HTM_DONT_SUBMIT_ON_CLICK,
 			     "value=\"%u\"",(unsigned) Med_ACTION_NO_MEDIA);
 	    HTM_Txt (Txt_No_image_video);
@@ -632,7 +633,8 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 
 	 /***** Choice 2: Current media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,Cns_CHECKED,Disabled,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,
+			     Cns_CHECKED,Disabled,HTM_NOT_REQUIRED,
 			     HTM_DONT_SUBMIT_ON_CLICK,
 			     "value=\"%u\"",(unsigned) Med_ACTION_KEEP_MEDIA);
 	    HTM_Txt (Txt_Current_image_video);
@@ -644,7 +646,8 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 	 /***** Choice 3: Change media *****/
 	 UniqueId++;
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_RADIO (ParUploadMedia.Action,Cns_UNCHECKED,Disabled,
+	    HTM_INPUT_RADIO (ParUploadMedia.Action,
+			     Cns_UNCHECKED,Disabled,HTM_NOT_REQUIRED,
 			     HTM_DONT_SUBMIT_ON_CLICK,
 			     "id=\"chg_img_%u\" value=\"%u\"",
 			     UniqueId,(unsigned) Med_ACTION_NEW_MEDIA);
@@ -1849,6 +1852,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    Cns_Checked_t Checked;
    HTM_Disabled_t Disabled;
    HTM_Disabled_t MediaDisabled;
+   HTM_Required_t Required;
 
    /***** Begin box *****/
    if (NewQuestion)	// The question already has assigned a code
@@ -1902,7 +1906,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			HTM_TD_Begin ("class=\"Qst_TAG_CELL LM\"");
 			   if (asprintf (&FuncOnChange,"changeTxtTag('%u');",IndTag) < 0)
 			      Err_NotEnoughMemoryExit ();
-			   HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
+			   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+					     HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 					     "id=\"SelTag%u\" name=\"SelTag%u\""
 					     " class=\"Qst_TAG_SEL INPUT_%s\"",
 					     IndTag,IndTag,The_GetSuffix ());
@@ -1953,7 +1958,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			   snprintf (StrTagTxt,sizeof (StrTagTxt),"TagTxt%u",IndTag);
 			   HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,
 					   Question->Tags.Txt[IndTag],
-					   HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+					   HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 					   "id=\"%s\""
 					   " class=\"Qst_TAG_TXT INPUT_%s\""
 					   " onchange=\"changeSelTag('%u')\"",
@@ -1978,10 +1983,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_REQUIRED,
 				   "id=\"Stem\" name=\"Stem\" rows=\"5\""
-			           " class=\"Qst_STEM_TXT INPUT_%s\""
-				   " required=\"required\"",
+			           " class=\"Qst_STEM_TXT INPUT_%s\"",
 				   The_GetSuffix ());
 		  HTM_Txt (Question->Stem);
 	       HTM_TEXTAREA_End ();
@@ -1993,7 +1997,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	                        The_GetSuffix ());
 		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 		  HTM_BR ();
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				      "name=\"Feedback\" rows=\"2\""
 			              " class=\"Qst_STEM_TXT INPUT_%s\"",
 			              The_GetSuffix ());
@@ -2020,7 +2024,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  HTM_LABEL_Begin (NULL);
 		     Checked = (AnsType == Question->Answer.Type) ? Cns_CHECKED :
 								    Cns_UNCHECKED;
-		     HTM_INPUT_RADIO ("AnswerType",Checked,HTM_ENABLED,
+		     HTM_INPUT_RADIO ("AnswerType",
+				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
 				      HTM_DONT_SUBMIT_ON_CLICK,
 				      "value=\"%u\""
 				      " onclick=\"enableDisableAns(this.form);\"",
@@ -2047,9 +2052,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  Disabled = (Question->Answer.Type == Qst_ANS_INT) ? HTM_ENABLED :
 								      HTM_DISABLED;
 		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
-				  Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"11\" class=\"INPUT_%s\""
-				  " required=\"required\"",
+				  Disabled,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"11\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -2126,13 +2130,14 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			/* Radio selector for unique choice answers */
 			Disabled = (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE) ? HTM_ENABLED :
 										      HTM_DISABLED;
-			HTM_INPUT_RADIO ("AnsUni",Checked,Disabled,
+			Required = (NumOpt < 2) ? HTM_REQUIRED :  // First or second options required
+						  HTM_NOT_REQUIRED;
+			HTM_INPUT_RADIO ("AnsUni",
+					 Checked,Disabled,Required,
 					 HTM_DONT_SUBMIT_ON_CLICK,
-					 "value=\"%u\"%s"
+					 "value=\"%u\""
 					 " onclick=\"enableDisableAns(this.form);\"",
-					 NumOpt,
-					 (NumOpt < 2) ? " required=\"required\"" :	// First or second options required
-						        "");
+					 NumOpt);
 
 			/* Checkbox for multiple choice answers */
 			Disabled = (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE) ? HTM_ENABLED :
@@ -2186,7 +2191,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 							    " style=\"display:none;\"");	// Answer does not have content ==> Hide column
 
 			   /* Answer text */
-			   HTM_TEXTAREA_Begin (Disabled,
+			   HTM_TEXTAREA_Begin (Disabled,HTM_NOT_REQUIRED,
 					       "name=\"AnsStr%u\" rows=\"5\""
 				               " class=\"Qst_ANS_TXT INPUT_%s\"",
 					       NumOpt,The_GetSuffix ());
@@ -2203,7 +2208,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			                    The_GetSuffix ());
 			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 			      HTM_BR ();
-			      HTM_TEXTAREA_Begin (Disabled,
+			      HTM_TEXTAREA_Begin (Disabled,HTM_NOT_REQUIRED,
 						  "name=\"FbStr%u\" rows=\"2\""
 				                  " class=\"Qst_ANS_TXT INPUT_%s\"",
 						  NumOpt,The_GetSuffix ());
@@ -2257,8 +2262,8 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
       Disabled = (Question->Answer.Type == Qst_ANS_FLOAT) ? HTM_ENABLED :
 							    HTM_DISABLED;
       HTM_INPUT_TEXT (Field,Qst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
-		      Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
-		      "size=\"11\" class=\"INPUT_%s\" required=\"required\"",
+		      Disabled,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+		      "size=\"11\" class=\"INPUT_%s\"",
 		      The_GetSuffix ());
    HTM_LABEL_End ();
   }
@@ -2278,9 +2283,9 @@ void Qst_PutTFInputField (const struct Qst_Question *Question,
 						 Cns_UNCHECKED;
       Disabled = (Question->Answer.Type == Qst_ANS_TRUE_FALSE) ? HTM_ENABLED :
 								 HTM_DISABLED;
-      HTM_INPUT_RADIO ("AnsTF",Checked,Disabled,HTM_DONT_SUBMIT_ON_CLICK,
-		       "value=\"%c\" required=\"required\"",
-		       Value);
+      HTM_INPUT_RADIO ("AnsTF",
+		       Checked,Disabled,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CLICK,
+		       "value=\"%c\"",Value);
       HTM_Txt (Label);
    HTM_LABEL_End ();
   }

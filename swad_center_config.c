@@ -355,9 +355,8 @@ static void CtrCfg_Latitude (double Latitude)
 			     90.0,	// North Pole
 			     0.0,	// step="any"
 			     Latitude,
-			     HTM_SUBMIT_ON_CHANGE,
-			     "class=\"Frm_C2_INPUT INPUT_%s\""
-			     " required=\"required\"",
+			     HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+			     "class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -383,9 +382,8 @@ static void CtrCfg_Longitude (double Longitude)
 			     180.0,	// East
 			     0.0,	// step="any"
 			     Longitude,
-			     HTM_SUBMIT_ON_CHANGE,
-			     "class=\"Frm_C2_INPUT INPUT_%s\""
-			     " required=\"required\"",
+			     HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+			     "class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -411,9 +409,8 @@ static void CtrCfg_Altitude (double Altitude)
 			     8848.0,	// Mount Everest
 			     0.0,	// step="any"
 			     Altitude,
-			     HTM_SUBMIT_ON_CHANGE,
-			     "class=\"Frm_C2_INPUT INPUT_%s\""
-			     " required=\"required\"",
+			     HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+			     "class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -478,7 +475,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
       case Frm_PUT_FORM:
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgCtrPhoAtt);
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "id=\"AttributionArea\" name=\"Attribution\""
 				   " rows=\"3\""
 				   " onchange=\"this.form.submit();return false;\"");
@@ -593,7 +590,8 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 
 	       /* Put form to select institution */
 	       Frm_BeginForm (ActChgCtrInsCfg);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				    HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -665,7 +663,8 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
 
 	       /* Put form to select place */
 	       Frm_BeginForm (ActChgCtrPlcCfg);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				    HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"PlcCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());

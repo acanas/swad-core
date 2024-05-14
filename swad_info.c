@@ -909,7 +909,8 @@ void Inf_FormsToSelSendInfo (void)
 	          Disabled = (InfoSrc == Inf_NONE ||
 			      InfoAvailable[InfoSrc]) ? HTM_ENABLED :
 							HTM_DISABLED;
-		  HTM_INPUT_RADIO ("InfoSrc",Checked,Disabled,
+		  HTM_INPUT_RADIO ("InfoSrc",
+				   Checked,Disabled,HTM_NOT_REQUIRED,
 			           (InfoSrc != FromDB.Src &&
 				    (InfoSrc == Inf_NONE ||
 				     InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
@@ -1090,7 +1091,8 @@ void Inf_FormToSendURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc)
       HTM_DIV_Begin ("class=\"CM\"");
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_URL);
-	    HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,
+			   HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,	// TODO: Required?
 			   "size=\"50\" class=\"INPUT_%s\"",
 			   The_GetSuffix ());
 	 HTM_LABEL_End ();
@@ -1568,7 +1570,7 @@ void Inf_EditPlainTxtInfo (void)
 	 /***** Edition area *****/
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_HelpPlainEditor ();
-	    HTM_TEXTAREA_Begin (HTM_ENABLED,
+	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				"name=\"Txt\" cols=\"80\" rows=\"20\""
 		                " class=\"INPUT_%s\"",
 		                The_GetSuffix ());
@@ -1652,7 +1654,7 @@ void Inf_EditRichTxtInfo (void)
       /***** Edition area *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Lay_HelpRichEditor ();
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 			     "name=\"Txt\" cols=\"80\" rows=\"20\""
 		             " class=\"INPUT_%s\"",
 	                     The_GetSuffix ());

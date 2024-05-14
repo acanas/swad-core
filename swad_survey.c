@@ -1659,10 +1659,8 @@ void Svy_ReqCreatOrEditSvy (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Surveys.Svy.Title,
-			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\""
-			       " class=\"Frm_C2_INPUT INPUT_%s\""
-			       " required=\"required\"",
+			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -1681,7 +1679,7 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
@@ -2268,7 +2266,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "id=\"Txt\" name=\"Txt\""
 			           " cols=\"60\" rows=\"4\""
 			           " class=\"INPUT_%s\"",
@@ -2290,7 +2288,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		  HTM_LABEL_Begin (NULL);
 		     Checked = (AnsType == SvyQst->AnswerType) ? Cns_CHECKED :
 								 Cns_UNCHECKED;
-		     HTM_INPUT_RADIO ("AnswerType",Checked,HTM_ENABLED,
+		     HTM_INPUT_RADIO ("AnswerType",
+				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
 				      HTM_DONT_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) AnsType);
 		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
@@ -2323,7 +2322,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 			/* Answer text */
 			HTM_TD_Begin ("class=\"RT\"");
-			   HTM_TEXTAREA_Begin (HTM_ENABLED,
+			   HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 					       "id=\"AnsStr%u\" name=\"AnsStr%u\""
 					       " cols=\"50\" rows=\"1\"",
 					       NumAns,NumAns);
@@ -2863,7 +2862,8 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 		     switch (SvyQst->AnswerType)
 		       {
 			case Svy_ANS_UNIQUE_CHOICE:
-			   HTM_INPUT_RADIO (StrAns,Cns_UNCHECKED,HTM_ENABLED,
+			   HTM_INPUT_RADIO (StrAns,
+					    Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
 					    HTM_DONT_SUBMIT_ON_CLICK,
 					    "id=\"Ans%010u_%u\" value=\"%u\""
 					    " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
@@ -2980,11 +2980,10 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
 	   }
 	 break;
       case Frm_PUT_FORM:
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 			     "name=\"Com%010u\""
 			     " cols=\"60\" rows=\"4\""
-			     " class=\"INPUT_%s\""
-			     " placeholder=\"%s&hellip;\"",
+			     " class=\"INPUT_%s\" placeholder=\"%s&hellip;\"",
 			     (unsigned) SvyQst->QstCod,The_GetSuffix (),
 			     Txt_Comments);
 	 HTM_TEXTAREA_End ();

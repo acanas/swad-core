@@ -203,9 +203,8 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	 /***** Title *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -217,9 +216,8 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	 /***** Number of questions to appear in the exam *****/
 	 HTM_TD_Begin ("class=\"RM\"");
 	    HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_LONG INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_LONG INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -633,10 +631,9 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		     Frm_BeginFormAnchor (ActChgTitExaSet,Anchor);
 			ExaSet_PutParsOneSet (Exams);
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
-					HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+					HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 					"id=\"Title\""
-					" class=\"Frm_C2_INPUT INPUT_%s\""
-					" required=\"required\"",
+					" class=\"Frm_C2_INPUT INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
 		    }
@@ -663,9 +660,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		  Frm_BeginFormAnchor (ActChgNumQstExaSet,Anchor);
 		     ExaSet_PutParsOneSet (Exams);
 		     HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
-				     HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
-				      "class=\"INPUT_LONG INPUT_%s\""
-				      " required=\"required\"",
+				     HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				      "class=\"INPUT_LONG INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
 		 }

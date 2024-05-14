@@ -192,10 +192,9 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	 /***** Title *****/
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\""
-			    " class=\"INPUT_FULL_NAME INPUT_%s\""
-			    " required=\"required\"",
+			    " class=\"INPUT_FULL_NAME INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -213,9 +212,8 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 	       HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
 				0.0,DBL_MAX,RubCri_SCORE_STEP,
 				Rubrics->Criterion.Values[ValueRange],
-				HTM_DONT_SUBMIT_ON_CHANGE,
-				" class=\"INPUT_FLOAT INPUT_%s\""
-				" required=\"required\"",
+				HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				" class=\"INPUT_FLOAT INPUT_%s\"",
 				The_GetSuffix ());
 	    HTM_TD_End ();
 	   }
@@ -227,9 +225,8 @@ static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 			     RubCri_WEIGHT_MAX,
 			     RubCri_WEIGHT_STEP,
 			     Rubrics->Criterion.Weight,
-			     HTM_DONT_SUBMIT_ON_CHANGE,
-			     " class=\"INPUT_FLOAT INPUT_%s\""
-			     " required=\"required\"",
+			     HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			     " class=\"INPUT_FLOAT INPUT_%s\"",
 			     The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -724,10 +721,9 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		  Frm_BeginFormAnchor (ActChgTitRubCri,Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
-				     HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+				     HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 				     "id=\"Title\""
-				     " class=\"INPUT_FULL_NAME INPUT_%s\""
-				     " required=\"required\"",
+				     " class=\"INPUT_FULL_NAME INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
 	    HTM_TD_End ();
@@ -751,9 +747,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
 		                      0.0,DBL_MAX,RubCri_SCORE_STEP,
 				      Rubrics->Criterion.Values[ValueRange],
-				      HTM_SUBMIT_ON_CHANGE,
-				      " class=\"INPUT_FLOAT INPUT_%s\""
-				      " required=\"required\"",
+				      HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				      " class=\"INPUT_FLOAT INPUT_%s\"",
 				      The_GetSuffix ());
 		  Frm_EndForm ();
 	       HTM_TD_End ();
@@ -768,9 +763,8 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 				   RubCri_WEIGHT_MAX,
 				   RubCri_WEIGHT_STEP,
 				   Rubrics->Criterion.Weight,
-				   HTM_SUBMIT_ON_CHANGE,
-				   " class=\"INPUT_FLOAT INPUT_%s\""
-				   " required=\"required\"",
+				   HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				   " class=\"INPUT_FLOAT INPUT_%s\"",
 				   The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -858,9 +852,8 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 					 Criterion.Values[RubCri_MAX],
 					 RubCri_SCORE_STEP,
 					 CriterionScore,
-					 HTM_SUBMIT_ON_CHANGE,
-					 " class=\"INPUT_FLOAT INPUT_%s\""
-					 " required=\"required\"",
+					 HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+					 " class=\"INPUT_FLOAT INPUT_%s\"",
 					 The_GetSuffix ());
 		     Frm_EndForm ();
 		    }

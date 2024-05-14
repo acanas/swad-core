@@ -126,7 +126,7 @@ void Lan_PutSelectorToSelectLanguage (void)
    unsigned LanUnsigned;
 
    Frm_BeginForm (ActReqChgLan);
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"Lan\" class=\"INPUT_%s\""
 			" style=\"width:112px; margin:0;\"",
 			The_GetSuffix ());

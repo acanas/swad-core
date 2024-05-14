@@ -128,7 +128,8 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"FigureType\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());

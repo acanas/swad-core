@@ -680,7 +680,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	       Frm_BeginFormAnchor (ActChgRooFlo,Anchor);
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
-				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_LONG INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -708,7 +708,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  Roo_WriteCapacity (StrCapacity,Room->Capacity);
 		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
-				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"3\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -751,7 +751,7 @@ static void Roo_PutSelectorBuilding (long BldCod,
    const struct Bld_Building *Bld;
 
    /***** Begin selector *****/
-   HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 		     "name=\"BldCod\" class=\"BLD_SEL INPUT_%s\"",
 		     The_GetSuffix ());
 
@@ -797,7 +797,7 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
    Roo_RoomType_t Type;
 
    /***** Begin selector *****/
-   HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 		     "name=\"Type\" class=\"ROOM_TYPE_SEL INPUT_%s\"",
 		     The_GetSuffix ());
 
@@ -1219,7 +1219,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 /***** Floor *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_LONG INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -1238,7 +1238,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
 	    HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"3\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1247,7 +1247,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    MAC_MACnumToMACstr (Roo_EditingRoom->MACnum,MACstr);
 	    HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"8\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();

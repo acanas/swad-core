@@ -441,7 +441,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	       Frm_BeginFormAnchor (ActRenBldLoc,Anchor);
 		  ParCod_PutPar (ParCod_Bld,Building->BldCod);
 		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
-				  HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 				  "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -676,7 +676,7 @@ static void Bld_PutFormToCreateBuilding (void)
 	 /***** Building location *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"15\" class=\"INPUT_FULL_NAME INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();

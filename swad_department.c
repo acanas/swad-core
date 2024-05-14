@@ -483,7 +483,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgDptIns);
 		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				    HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"OthInsCod\""
 				    " class=\"HIE_SEL_NARROW INPUT_%s\"",
 				    The_GetSuffix ());
@@ -519,9 +520,9 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActChgDptWWW);
 		  ParCod_PutPar (ParCod_Dpt,Dpt->DptCod);
-		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW INPUT_%s\""
-				 " required=\"required\"",
+		  HTM_INPUT_URL ("WWW",Dpt->WWW,
+				 HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW INPUT_%s\"",
 				 The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
@@ -787,7 +788,8 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Institution *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthInsCod\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
@@ -817,9 +819,9 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Department WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\""
-			   " required=\"required\"",
+	    HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,
+			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW INPUT_%s\"",
 			   The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -966,7 +968,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 
    /***** Selector to select department *****/
    /* Begin selector */
-   HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
 		     ParName,ParName,SelectClass);
 

@@ -187,7 +187,7 @@ void Crs_WriteSelectorOfCourse (void)
    Frm_BeginFormGoTo (ActSeeCrsInf);
 
       /***** Begin selector of course *****/
-      HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 			"id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -311,7 +311,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 							   ActReqSch);
 
       /***** Begin selector of courses *****/
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
 			"id=\"my_courses\" name=\"crs\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -708,7 +708,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCrsYea);
 			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+					  HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"OthCrsYear\""
 					  " class=\"HIE_SEL_NARROW INPUT_%s\"",
 					  The_GetSuffix ());
@@ -741,7 +742,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
 			HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 					Crs->InstitutionalCod,
-					HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+					HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 					"class=\"INPUT_INS_CODE INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -842,7 +843,8 @@ static void Crs_PutFormToCreateCourse (void)
 
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthCrsYear\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
@@ -861,7 +863,7 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 			    Crs_EditingCrs->InstitutionalCod,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			    "class=\"INPUT_INS_CODE INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1939,7 +1941,8 @@ void Crs_AskRemoveOldCrss (void)
       /***** Form to request number of months without clicks *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			   HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"Months\" class=\"INPUT_%s\"",
 			   The_GetSuffix ());
 	    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;

@@ -1165,10 +1165,9 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
-			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"UsrId\" size=\"16\" placeholder=\"%s\""
-			       " class=\"INPUT_%s\" autofocus=\"autofocus\""
-			       " required=\"required\"",
+			       " class=\"INPUT_%s\" autofocus=\"autofocus\"",
 			       Txt_nick_email_or_ID,The_GetSuffix ());
 	    HTM_DIV_End ();
 
@@ -5608,7 +5607,8 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
       HTM_LABEL_Begin (NULL);
          Checked = (ListUsrsAction == Gbl.Usrs.Selected.Option) ? Cns_CHECKED :
 								  Cns_UNCHECKED;
-	 HTM_INPUT_RADIO ("ListUsrsAction",Checked,HTM_ENABLED,
+	 HTM_INPUT_RADIO ("ListUsrsAction",
+			  Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
 			  HTM_DONT_SUBMIT_ON_CLICK,
 			  "value=\"%u\"",(unsigned) ListUsrsAction);
 	 HTM_Txt (Label);
@@ -6190,7 +6190,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 

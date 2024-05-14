@@ -531,7 +531,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		  HTM_TD_Begin ("class=\"CM\"");
 		     Frm_BeginForm (ActChgHldPlc);
 			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+					  HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 					  The_GetSuffix ());
 			   HTM_OPTION (HTM_Type_STRING,"-1",
@@ -558,7 +559,8 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		  HTM_TD_Begin ("class=\"CM\"");
 		     Frm_BeginForm (ActChgHldTyp);
 			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+					  HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"HldTyp\" class=\"INPUT_%s\""
 					  " style=\"width:62px;\"",	// TODO: Use a CSS class
 					  The_GetSuffix ());
@@ -608,7 +610,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 		     Frm_BeginForm (ActRenHld);
 			ParCod_PutPar (ParCod_Hld,Hld->HldCod);
 			HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
-					HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+					HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 					"size=\"20\" class=\"INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -906,7 +908,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	 /***** Holiday place *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",
@@ -930,7 +933,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	 /***** Holiday type *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"HldTyp\" class=\"INPUT_%s\""
 			      " style=\"width:62px;\"",	// TODO: Use a CSS class
 			      The_GetSuffix ());
@@ -971,9 +975,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 	 /***** Holiday name *****/
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"20\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"20\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 

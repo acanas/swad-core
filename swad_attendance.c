@@ -992,9 +992,8 @@ void Att_ReqCreatOrEditEvent (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Events.Event.Title,
-			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
-			       " required=\"required\"",
+			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -1013,7 +1012,8 @@ void Att_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				 HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				 "id=\"ComTchVisible\" name=\"ComTchVisible\""
 				 " class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
@@ -1040,7 +1040,7 @@ void Att_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
@@ -1768,7 +1768,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 switch (ICanEditStdComment)
 	   {
 	    case Usr_CAN:	// Show with form
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,The_GetSuffix ());
@@ -1793,7 +1793,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 switch (ICanEditTchComment)
 	   {
 	    case Usr_CAN:			// Show with form
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,The_GetSuffix ());

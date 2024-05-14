@@ -643,7 +643,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 		  HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
 				  UsrDat[MeOrOther]->IDs.Num ? UsrDat[MeOrOther]->IDs.List[UsrDat[MeOrOther]->IDs.Num - 1].ID :
 						               "",	// Show the most recent ID
-				  HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"NewID\" class=\"Frm_C2_INPUT INPUT_%s\""
 				  " size=\"16\"",
 				  The_GetSuffix ());

@@ -1825,7 +1825,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 case Frm_PUT_FORM:
 	       /* Show text form */
 	       HTM_BR ();
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "name=\"ReviewTxt\" rows=\"2\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " placeholder=\"%s&hellip;\""
@@ -1866,7 +1866,8 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
    /* Selector for review status */
    if (asprintf (&FuncOnChange,"unhideElement('prj_rev_%ld');",Projects->Prj.PrjCod) < 0)
       Err_NotEnoughMemoryExit ();
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		     HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
 		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
@@ -3796,10 +3797,9 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		     HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_TITLE,Projects->Prj.Title,
-				     HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+				     HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "id=\"Title\""
-				     " class=\"Frm_C2_INPUT INPUT_%s\""
-				     " required=\"required\"",
+				     " class=\"Frm_C2_INPUT INPUT_%s\"",
 				     The_GetSuffix ());
 		  HTM_TD_End ();
 
@@ -3836,7 +3836,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				       HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"Assigned\""
 				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
@@ -3864,7 +3865,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 		     HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Projects->Prj.NumStds,
-				     HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+				     HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 				     "class=\"Frm_C2_INPUT INPUT_%s\"",
 				     The_GetSuffix ());
 		  HTM_TD_End ();
@@ -3879,7 +3880,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				       HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 				       "name=\"Proposal\""
 				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
@@ -3922,7 +3924,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
-		     HTM_INPUT_URL ("URL",Projects->Prj.URL,HTM_DONT_SUBMIT_ON_CHANGE,
+		     HTM_INPUT_URL ("URL",Projects->Prj.URL,
+				    HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 				    "class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		  HTM_TD_End ();
@@ -3955,12 +3958,6 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
                                        unsigned NumRows,HTM_Required_t Required)
   {
-   static const char *RequiredTxt[HTM_NUM_REQUIRED] =
-     {
-      [HTM_NOT_REQUIRED] = "",
-      [HTM_REQUIRED    ] = " required=\"required\"",
-     };
-
    /***** Description *****/
    HTM_TR_Begin (NULL);
 
@@ -3969,11 +3966,10 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,Required,
 			     "id=\"%s\" name=\"%s\" rows=\"%u\""
-			     " class=\"Frm_C2_INPUT INPUT_%s\"%s",
-			     Id,Id,NumRows,
-			     The_GetSuffix (),RequiredTxt[Required]);
+			     " class=\"Frm_C2_INPUT INPUT_%s\"",
+			     Id,Id,NumRows,The_GetSuffix ());
 	    HTM_Txt (TxtField);
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();

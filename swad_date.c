@@ -315,7 +315,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 	          Checked = (Format == Gbl.Prefs.DateFormat) ? Cns_CHECKED :
 							       Cns_UNCHECKED;
 		  HTM_INPUT_RADIO ("DateFormat",
-				   Checked,HTM_ENABLED,HTM_SUBMIT_ON_CLICK,
+				   Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				   HTM_SUBMIT_ON_CLICK,
 				   " value=\"%u\"",(unsigned) Format);
 		  Dat_PutSpanDateFormat (Format);
 		  Dat_PutScriptDateFormat (Format);
@@ -758,7 +759,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    HTM_DIV_Begin ("class=\"DATE_FORM_YMD\"");
 
       /* Year */
-      HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncsYearMonth,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			SubmitOnChange,FuncsYearMonth,
 			"id=\"%sYear\" name=\"%sYear\" class=\"INPUT_%s\"",
 			Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	 for (Year  = FirstYear;
@@ -771,7 +773,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       HTM_SELECT_End ();
 
       /* Month */
-      HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncsYearMonth,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			SubmitOnChange,FuncsYearMonth,
 			"id=\"%sMonth\" name=\"%sMonth\""
 			" class=\"DATE_FORM_MONTH INPUT_%s\"",
 			Id,Dat_ParName[StartEndTime],The_GetSuffix ());
@@ -785,7 +788,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       HTM_SELECT_End ();
 
       /* Day */
-      HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
+      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,FuncDayHMS,
 			"id=\"%sDay\" name=\"%sDay\" class=\"INPUT_%s\"",
 			Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	 for (Day  = 1;
@@ -803,7 +806,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    HTM_DIV_Begin ("class=\"DATE_FORM_HMS\"");
 
 	 /* Hour */
-	 HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
+	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,FuncDayHMS,
 			   "id=\"%sHour\" name=\"%sHour\" class=\"INPUT_%s\"",
 			   Id,Dat_ParName[StartEndTime],The_GetSuffix ());
 	    for (Hour  = 0;
@@ -816,7 +819,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	 HTM_SELECT_End ();
 
 	 /* Minute */
-	 HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
+	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,FuncDayHMS,
 			   "id=\"%sMinute\" name=\"%sMinute\""
 			   " class=\"INPUT_%s\"",
 			   Id,Dat_ParName[StartEndTime],The_GetSuffix ());
@@ -832,7 +835,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	 /* Second */
 	 if (FormSeconds == Dat_FORM_SECONDS_ON)
 	   {
-	    HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,FuncDayHMS,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,FuncDayHMS,
 			      "id=\"%sSecond\" name=\"%sSecond\""
 			      " class=\"INPUT_%s\"",
 			      Id,Dat_ParName[StartEndTime],The_GetSuffix ());
@@ -992,7 +995,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
       Err_NotEnoughMemoryExit ();
 
    /***** Year *****/
-   HTM_SELECT_Begin (Disabled,SubmitOnChange,FuncOnChange,
+   HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,FuncOnChange,
 		     "id=\"%sYear\" name=\"%sYear\" class=\"INPUT_%s\"",
 		     Id,Id,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"0",
@@ -1010,7 +1013,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    HTM_SELECT_End ();
 
    /***** Month *****/
-   HTM_SELECT_Begin (Disabled,SubmitOnChange,FuncOnChange,
+   HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,FuncOnChange,
 		     "id=\"%sMonth\" name=\"%sMonth\" class=\"INPUT_%s\"",
 		     Id,Id,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"0",
@@ -1030,7 +1033,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    free (FuncOnChange);
 
    /***** Day *****/
-   HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 		     "id=\"%sDay\" name=\"%sDay\" class=\"INPUT_%s\"",
 		     Id,Id,The_GetSuffix ());
 	 HTM_OPTION (HTM_Type_STRING,"0",

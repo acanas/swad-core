@@ -1210,9 +1210,8 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
-			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
-			       " required=\"required\"",
+			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 

@@ -817,7 +817,7 @@ void Ins_WriteSelectorOfInstitution (void)
    Frm_BeginFormGoTo (ActSeeCtr);
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 			"id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -954,9 +954,9 @@ static void Ins_ListInstitutionsForEdition (void)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgInsWWW);
 			ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
-			HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
-				       "class=\"INPUT_WWW INPUT_%s\""
-				       " required=\"required\"",
+			HTM_INPUT_URL ("WWW",Ins->WWW,
+				       HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				       "class=\"INPUT_WWW INPUT_%s\"",
 				       The_GetSuffix ());
 		     Frm_EndForm ();
 		     break;
@@ -1367,9 +1367,10 @@ static void Ins_PutFormToCreateInstitution (void)
 
 	 /***** Institution WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\""
-			   " required=\"required\"",The_GetSuffix ());
+	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,
+			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW INPUT_%s\"",
+			   The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this institution ****/

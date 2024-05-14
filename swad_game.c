@@ -1359,9 +1359,8 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Games->Game.Title,
-			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\""
-			       " required=\"required\"",
+			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -1376,9 +1375,8 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,
-				HTM_DONT_SUBMIT_ON_CHANGE,
-				" class=\"Frm_C2_INPUT INPUT_%s\""
-				" required=\"required\"",
+				HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				" class=\"Frm_C2_INPUT INPUT_%s\"",
 				The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -1405,7 +1403,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());

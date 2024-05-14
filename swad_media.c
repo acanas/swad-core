@@ -474,7 +474,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 
 	       /* Media URL */
 	       HTM_INPUT_URL (ParUpload.URL,"",
-			      HTM_DONT_SUBMIT_ON_CHANGE,
+			      HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"%s_url\" class=\"%s\""			// <id>_url
 			      " placeholder=\"%s\" maxlength=\"%u\""
 			      " disabled=\"disabled\" style=\"display:none;\"",
@@ -489,7 +489,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 
 	       /* Media title */
 	       HTM_INPUT_TEXT (ParUpload.Title,Med_MAX_CHARS_TITLE,"",
-			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"%s_tit\" class=\"%s\""		// <id>_tit
 			       " placeholder=\"%s\""
 			       " disabled=\"disabled\" style=\"display:none;\"",

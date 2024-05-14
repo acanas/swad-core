@@ -440,7 +440,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    ParCod_PutPar (ParCod_Rsc,Item->Resource.Hierarchy.RscCod);
 	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,Item->Resource.Title,
-			    HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    The_GetSuffix ());
 	 Frm_EndForm ();
@@ -503,7 +503,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
 	 Frm_BeginFormAnchor (ActNewPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
 	    ParCod_PutPar (ParCod_Itm,Item->Hierarchy.ItmCod);
 	    HTM_INPUT_TEXT ("Title",Rsc_MAX_CHARS_RESOURCE_TITLE,"",
-			    HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 			    "placeholder=\"%s\""
 			    " class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    Txt_New_resource,

@@ -2909,7 +2909,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	       Checked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? Cns_CHECKED :
 								  Cns_UNCHECKED;
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-			        Checked,HTM_ENABLED,HTM_SUBMIT_ON_CLICK,
+			        Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+			        HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	    HTM_LABEL_End ();
@@ -2941,7 +2942,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 				GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? Cns_CHECKED :
 									Cns_UNCHECKED;
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-				      Checked,HTM_ENABLED,HTM_SUBMIT_ON_CLICK,
+				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"",GrpDat.GrpCod);
 		     HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
 		  HTM_LABEL_End ();
@@ -4727,7 +4729,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 			Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 			HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,
 				        Gbl.FileBrowser.FilFolLnk.Name,
-					HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+					HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
 					"class=\"LST_EDIT %s_%s %s\"",
 					InputStyle,
 					The_GetSuffix (),
@@ -6281,9 +6283,8 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Folder);
 	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
-			    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"30\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"30\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_LABEL_End ();
 
@@ -6454,9 +6455,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_URL ("NewLinkURL","",HTM_DONT_SUBMIT_ON_CHANGE,
-			      "size=\"30\" class=\"INPUT_%s\""
-			      " required=\"required\"",
+	       HTM_INPUT_URL ("NewLinkURL","",
+			      HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			      "size=\"30\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	    HTM_TD_End ();
 
@@ -6474,7 +6475,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
-			       HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"NewLinkName\" size=\"30\""
 			       " class=\"INPUT_%s\"",
 			       The_GetSuffix ());
@@ -7534,7 +7535,8 @@ void Brw_ShowFileMetadata (void)
 				The_GetSuffix ());
 		     if (ICanChangePublic == Usr_CAN)	// I can change file to public
 		       {
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+					  HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 					  "id=\"PublicFile\" name=\"PublicFile\""
 					  " class=\"PUBLIC_FILE\"");
 			   HTM_OPTION (HTM_Type_STRING,"N",
@@ -7569,7 +7571,8 @@ void Brw_ShowFileMetadata (void)
 				The_GetSuffix ());
 		     if (ICanEdit == Usr_CAN)	// I can edit file properties
 		       {
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+					  HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 					  "id=\"License\" name=\"License\""
 					  " class=\"LICENSE\"");
 			   for (License  = (Brw_License_t) 0;
@@ -9521,7 +9524,8 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 	 /***** Form to request number of months (to remove files older) *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"Months\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;

@@ -1793,7 +1793,8 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"AvgType\" name=\"AvgType\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1860,7 +1861,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"PhotoSize\" name=\"PhotoSize\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1927,7 +1929,8 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"Order\" name=\"Order\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -2033,7 +2036,8 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    HTM_BUTTON_End ();
 
 	    /* Selector with all degrees with students */
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"OthDegCod\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());

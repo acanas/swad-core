@@ -343,7 +343,8 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
             case Frm_PUT_FORM:
 	       /* Put form to select country */
 	       Frm_BeginForm (ActChgInsCtyCfg);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				    HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthCtyCod\" name=\"OthCtyCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());

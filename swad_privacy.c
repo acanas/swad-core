@@ -195,7 +195,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 								       Cns_UNCHECKED;
 		     Disabled = (Action == ActUnk) ? HTM_DISABLED :
 						     HTM_ENABLED;
-		     HTM_INPUT_RADIO (ParName,Checked,Disabled,
+		     HTM_INPUT_RADIO (ParName,
+				      Checked,Disabled,HTM_NOT_REQUIRED,
 				      (Action == ActUnk) ? HTM_DONT_SUBMIT_ON_CLICK :
 			                                   HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) Visibility);

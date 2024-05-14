@@ -61,6 +61,7 @@ typedef enum
    HTM_REQUIRED,
   } HTM_Required_t;
 
+#define HTM_NUM_SELECTED 2
 typedef enum
   {
    HTM_OPTION_UNSELECTED,
@@ -166,7 +167,7 @@ void HTM_LABEL_Begin (const char *fmt,...);
 void HTM_LABEL_End (void);
 
 void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
-                     HTM_Disabled_t Disabled,
+                     HTM_Disabled_t Disabled,HTM_Required_t Required,
                      HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...);
 void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
@@ -175,9 +176,10 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,
                     HTM_SubmitOnChange_t SubmitOnChange,
 	            const char *fmt,...);
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
+		      HTM_Required_t Required,
 	              const char *fmt,...);
 void HTM_INPUT_URL (const char *Name,const char *Value,
-                    HTM_SubmitOnChange_t SubmitOnChange,
+		    HTM_Required_t Required,HTM_SubmitOnChange_t SubmitOnChange,
 	            const char *fmt,...);
 void HTM_INPUT_FILE (const char *Name,const char *Accept,
                      HTM_SubmitOnChange_t SubmitOnChange,
@@ -189,17 +191,17 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 			 const char *AutoComplete,HTM_Required_t Required,
 	                 const char *fmt,...);
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
-                     HTM_Disabled_t Disabled,
+                     HTM_Disabled_t Disabled,HTM_Required_t Required,
                      HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...);
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
-                      HTM_SubmitOnChange_t SubmitOnChange,
+                      HTM_Required_t Required,HTM_SubmitOnChange_t SubmitOnChange,
 	              const char *fmt,...);
 void HTM_INPUT_RADIO (const char *Name,
       		      Cns_Checked_t Checked,HTM_Disabled_t Disabled,
-		      HTM_SubmitOnClick_t SubmitOnClick,
+      		      HTM_Required_t Required,HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...);
 void HTM_INPUT_CHECKBOX (const char *Name,
 			 Cns_Checked_t Checked,HTM_Disabled_t Disabled,
@@ -210,10 +212,11 @@ void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_End (void);
 
-void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,const char *fmt,...);
+void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,HTM_Required_t Required,
+			 const char *fmt,...);
 void HTM_TEXTAREA_End (void);
 
-void HTM_SELECT_Begin (HTM_Disabled_t Disabled,
+void HTM_SELECT_Begin (HTM_Disabled_t Disabled,HTM_Required_t Required,
 		       HTM_SubmitOnChange_t SubmitOnChange,
                        const char *FuncsOnChange,
 		       const char *fmt,...);

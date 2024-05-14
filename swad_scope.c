@@ -51,7 +51,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
    unsigned ScopeUnsigned;
    bool WriteScope;
 
-   HTM_SELECT_Begin (HTM_ENABLED,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 		     "id=\"%s\" name=\"%s\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());

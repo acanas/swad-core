@@ -671,7 +671,7 @@ void Ctr_WriteSelectorOfCenter (void)
    Frm_BeginFormGoTo (ActSeeDeg);
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (Disabled,SubmitOnChange,NULL,
+      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -799,7 +799,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCtrPlc);
 			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+					  HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"PlcCod\""
 					  " class=\"PLC_SEL INPUT_%s\"",
 					  The_GetSuffix ());
@@ -849,9 +850,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCtrWWW);
 			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-			HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
-				       "class=\"INPUT_WWW INPUT_%s\""
-				       " required=\"required\"",
+			HTM_INPUT_URL ("WWW",Ctr->WWW,
+				       HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				       "class=\"INPUT_WWW INPUT_%s\"",
 				       The_GetSuffix ());
 		     Frm_EndForm ();
 		     break;
@@ -1270,7 +1271,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Place *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"0",
@@ -1299,9 +1301,9 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Center WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\""
-			   " required=\"required\"",
+	    HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,
+			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW INPUT_%s\"",
 			   The_GetSuffix ());
 	 HTM_TD_End ();
 

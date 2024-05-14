@@ -183,7 +183,8 @@ static void TstCfg_ShowFormConfig (void)
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 		        Checked = (Pluggable == TstCfg_GetConfigPluggable ()) ? Cns_CHECKED :
 										Cns_UNCHECKED;
-			HTM_INPUT_RADIO ("Pluggable",Checked,HTM_ENABLED,
+			HTM_INPUT_RADIO ("Pluggable",
+					 Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
 					 HTM_DONT_SUBMIT_ON_CLICK,
 					 "value=\"%u\"%s",(unsigned) Pluggable);
 			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
@@ -220,10 +221,9 @@ static void TstCfg_ShowFormConfig (void)
 		  snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
 			    TstCfg_GetConfigMinTimeNxtTstPerQst ());
 		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
-				  HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+				  HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 				  "id=\"MinTimeNxtTstPerQst\" size=\"7\""
-				  " class=\"INPUT_%s\""
-				  " required=\"required\"",
+				  " class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       HTM_TD_End ();
 
@@ -273,9 +273,8 @@ static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
       HTM_TD_Begin ("class=\"LM\"");
 	 snprintf (StrValue,sizeof (StrValue),"%u",Value);
 	 HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
-			 HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			 "id=\"%s\" size=\"3\" class=\"INPUT_%s\""
-			 " required=\"required\"",
+			 HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			 "id=\"%s\" size=\"3\" class=\"INPUT_%s\"",
 			 Field,The_GetSuffix ());
       HTM_TD_End ();
 

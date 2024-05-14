@@ -356,9 +356,9 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
 
       /***** Input box to enter user *****/
       HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
-		      HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+		      HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
 		      "id=\"OtherUsrIDNickOrEMail\" size=\"16\""
-		      " class=\"INPUT_%s\" required=\"required\"",
+		      " class=\"INPUT_%s\"",
 		      The_GetSuffix ());
 
       /***** Send button*****/
@@ -676,7 +676,8 @@ void Enr_AskRemoveOldUsrs (void)
 	 /***** Form to request number of months without clicks *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
 			      "name=\"Months\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
@@ -785,7 +786,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin (HTM_ENABLED,
+	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
 				"id=\"UsrsIDs\" name=\"UsrsIDs\""
 		                " cols=\"60\" rows=\"10\" class=\"INPUT_%s\"",
 		                The_GetSuffix ());
@@ -816,7 +817,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	{
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",Cns_CHECKED,HTM_ENABLED,
+	       HTM_INPUT_RADIO ("RegRemAction",
+			        Cns_CHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
 			        HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
@@ -826,7 +828,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",Cns_UNCHECKED,HTM_ENABLED,
+	       HTM_INPUT_RADIO ("RegRemAction",
+				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
@@ -836,7 +839,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",Cns_UNCHECKED,HTM_ENABLED,
+	       HTM_INPUT_RADIO ("RegRemAction",
+				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
@@ -846,7 +850,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",Cns_UNCHECKED,HTM_ENABLED,
+	       HTM_INPUT_RADIO ("RegRemAction",
+				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_UPDATE_USRS_IN_CRS);
@@ -860,7 +865,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	{
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",Cns_UNCHECKED,HTM_ENABLED,
+	       HTM_INPUT_RADIO ("RegRemAction",
+				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
@@ -1631,7 +1637,8 @@ static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAc
 
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO ("RegRemAction",ThisChecked,HTM_ENABLED,
+	 HTM_INPUT_RADIO ("RegRemAction",
+			  ThisChecked,HTM_ENABLED,HTM_NOT_REQUIRED,
 			  HTM_DONT_SUBMIT_ON_CLICK,
 			  "value=\"%u\"",(unsigned) RegRemOneUsrAction);
 

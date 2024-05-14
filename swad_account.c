@@ -166,9 +166,8 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_ID);
 	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
-	                    HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"16\" placeholder=\"%s\" class=\"INPUT_%s\""
-			    " required=\"required\"",
+	                    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"16\" placeholder=\"%s\" class=\"INPUT_%s\"",
 			    Txt_ID_identity_number,The_GetSuffix ());
 	 HTM_LABEL_End ();
 	 Btn_PutCreateButtonInline (Txt_Check);

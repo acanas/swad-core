@@ -201,7 +201,8 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 	      {
 	       RubCodThisType = DB_GetNextCode (mysql_res);
 
-	       HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				 HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"%s\" class=\"PrjCfg_RUBRIC_SEL\"",
 				 Par_CodeStr[ParCod_Rub]);
 		  /* First option to indicate that no rubric is selected */
@@ -231,7 +232,8 @@ static void PrjCfg_ShowFormsRubricsOfType (const struct Rub_Rubrics *Rubrics,
 	       only if not all available rubrics are selected */
 	    if (NumRubricsThisType < Rubrics->Num)
 	      {
-	       HTM_SELECT_Begin (HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+				 HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"%s\" class=\"PrjCfg_RUBRIC_SEL\"",
 				 Par_CodeStr[ParCod_Rub]);
 
