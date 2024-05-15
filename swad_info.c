@@ -368,7 +368,9 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "MustBeRead",
-                              MustBeRead,Disabled,
+                              MustBeRead ? Cns_CHECKED :
+                        		   Cns_UNCHECKED,
+                              Disabled,HTM_READWRITE,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
   }
@@ -398,7 +400,9 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "IHaveRead",
-                              IHaveRead,false,
+                              IHaveRead ? Cns_CHECKED :
+                        		  Cns_UNCHECKED,
+                              HTM_ENABLED,HTM_READWRITE,
                               Txt_I_have_read_this_information,
                               Txt_I_have_read_this_information);
   }
@@ -910,7 +914,7 @@ void Inf_FormsToSelSendInfo (void)
 			      InfoAvailable[InfoSrc]) ? HTM_ENABLED :
 							HTM_DISABLED;
 		  HTM_INPUT_RADIO ("InfoSrc",
-				   Checked,Disabled,HTM_NOT_REQUIRED,
+				   Checked,Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
 			           (InfoSrc != FromDB.Src &&
 				    (InfoSrc == Inf_NONE ||
 				     InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :

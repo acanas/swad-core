@@ -1453,7 +1453,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 		     Checked = (ForumSet == Forums->ForumSet) ? Cns_UNCHECKED :
 								Cns_CHECKED;
 		     HTM_INPUT_RADIO ("ForumSet",
-				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				      Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) ForumSet);
 		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);

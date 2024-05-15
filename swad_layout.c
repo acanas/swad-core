@@ -1268,6 +1268,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 const char *CheckboxName,
                                 Cns_Checked_t Checked,
                                 HTM_Disabled_t Disabled,
+                                HTM_Readonly_t Readonly,
                                 const char *Title,const char *Text)
   {
    static const char *Class[Cns_NUM_CHECKED] =
@@ -1295,7 +1296,8 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
 	    /****** Checkbox *****/
 	    HTM_INPUT_CHECKBOX (CheckboxName,
-				Checked,Disabled,HTM_SUBMIT_ON_CHANGE,
+				Checked,Disabled,Readonly,
+				HTM_SUBMIT_ON_CHANGE,
 				"value=\"Y\"");
 
 	    /***** Text *****/

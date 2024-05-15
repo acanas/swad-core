@@ -513,6 +513,7 @@ void Rol_ChangeMyRole (void)
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
                              HTM_Disabled_t Disabled,
+                             HTM_Readonly_t Readonly,
                              HTM_SubmitOnChange_t SubmitOnChange)
   {
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -526,7 +527,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 	{
 	 HTM_LABEL_Begin (NULL);
 	    Checked = (RolesSelected & (1 << Role));
-	    HTM_INPUT_CHECKBOX ("Role",Checked,Disabled,SubmitOnChange,
+	    HTM_INPUT_CHECKBOX ("Role",Checked,Disabled,Readonly,SubmitOnChange,
 				"id=\"Role\" value=\"%u\" class=\"INPUT_%s\"",
 				(unsigned) Role,The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);

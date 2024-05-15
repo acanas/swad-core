@@ -315,7 +315,7 @@ void Dat_PutBoxToSelectDateFormat (void)
 	          Checked = (Format == Gbl.Prefs.DateFormat) ? Cns_CHECKED :
 							       Cns_UNCHECKED;
 		  HTM_INPUT_RADIO ("DateFormat",
-				   Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				   Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   HTM_SUBMIT_ON_CLICK,
 				   " value=\"%u\"",(unsigned) Format);
 		  Dat_PutSpanDateFormat (Format);

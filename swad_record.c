@@ -1440,7 +1440,9 @@ static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
    Lay_PutContextualCheckbox (ActSeeRecOneTch,
                               Rec_PutParsShowOfficeHoursOneTch,NULL,
                               "ShowOfficeHours",
-                              ShowOfficeHours,false,
+                              ShowOfficeHours ? Cns_CHECKED :
+						Cns_UNCHECKED,
+			      HTM_ENABLED,HTM_READWRITE,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
@@ -1452,7 +1454,9 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
    Lay_PutContextualCheckbox (ActSeeRecSevTch,
                               Rec_PutParsShowOfficeHoursSeveralTchs,NULL,
                               "ShowOfficeHours",
-                              ShowOfficeHours,false,
+                              ShowOfficeHours ? Cns_CHECKED :
+						Cns_UNCHECKED,
+			      HTM_ENABLED,HTM_READWRITE,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
@@ -3023,7 +3027,7 @@ static void Rec_ShowFormSex (struct Usr_Data *UsrDat,Usr_Sex_t Sex)
       Checked = (Sex == UsrDat->Sex) ? Cns_CHECKED :
 				       Cns_UNCHECKED;
       HTM_INPUT_RADIO ("Sex",
-		       Checked,HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CLICK,
+		       Checked,HTM_ENABLED,HTM_READWRITE,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CLICK,
 		       "value=\"%u\"",(unsigned) Sex);
       HTM_TxtF ("%s&nbsp;%s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
    HTM_LABEL_End ();

@@ -412,7 +412,7 @@ static void Grp_PutCheckboxAllGrps (void)
    extern const char *Txt_All_groups;
    Usr_Can_t ICanSelUnselGroup;
    Cns_Checked_t Checked;
-   HTM_Disabled_t Disabled;
+   HTM_Readonly_t Readonly;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -431,12 +431,13 @@ static void Grp_PutCheckboxAllGrps (void)
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
          Checked = (ICanSelUnselGroup == Usr_CAN &&
-			       Gbl.Crs.Grps.AllGrps) ? Cns_UNCHECKED :
-						       Cns_CHECKED;
-         Disabled = (ICanSelUnselGroup == Usr_CAN) ? HTM_ENABLED :
-						     HTM_DISABLED;
+		    Gbl.Crs.Grps.AllGrps) ? Cns_UNCHECKED :
+					    Cns_CHECKED;
+         Readonly = (ICanSelUnselGroup == Usr_CAN) ? HTM_READWRITE :
+						     HTM_READONLY;
 	 HTM_INPUT_CHECKBOX ("AllGroups",
-			     Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
+			     Checked,HTM_ENABLED,Readonly,
+			     HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"%s",
 			     (ICanSelUnselGroup == Usr_CAN) ? " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 							      "");
@@ -1658,7 +1659,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    bool IBelongToThisGroup;
    struct Group *Grp;
    Cns_Checked_t Checked;
-   HTM_Disabled_t Disabled;
+   HTM_Readonly_t Readonly;
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -1687,11 +1688,12 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 
 	 HTM_TD_Begin (IBelongToThisGroup ? "class=\"LM BG_HIGHLIGHT\"" :
 		                            "class=\"LM\"");
-	    Disabled = (IBelongToThisGroup ||
-			Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? HTM_ENABLED :
-								  HTM_DISABLED;
+	    Readonly = (IBelongToThisGroup ||
+			Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? HTM_READWRITE :
+								  HTM_READONLY;
 	    HTM_INPUT_CHECKBOX ("GrpCods",
-				Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
+				Checked,HTM_ENABLED,Readonly,
+				HTM_DONT_SUBMIT_ON_CHANGE,
 				"id=\"Grp%ld\" value=\"%ld\""
 				" onclick=\"uncheckParent(this,'WholeCrs')\"",
 				Grp->GrpCod,Grp->GrpCod);
@@ -1863,7 +1865,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    Usr_Can_t ICanChangeMySelectionForThisGrpTyp;
    Usr_Can_t ICanChangeMySelectionForThisGrp;
    Cns_Checked_t Checked;
-   HTM_Disabled_t Disabled;
+   HTM_Readonly_t Readonly;
    char StrGrpCod[32];
 
    /***** Write heading *****/
@@ -1982,9 +1984,8 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 					    "class=\"LM\"");
 	    Checked = IBelongToThisGroup ? Cns_CHECKED :
 					   Cns_UNCHECKED;
-	    Disabled = (ICanChangeMySelectionForThisGrp == Usr_CAN ||
-		        IBelongToThisGroup) ? HTM_ENABLED :
-					      HTM_DISABLED;
+	    Readonly = ICanChangeMySelectionForThisGrp ? HTM_READWRITE :
+							 HTM_READONLY;
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
 		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
@@ -1993,34 +1994,26 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	       /* Put a radio item */
 	       if (GrpTyp->MandatoryEnrolment)
 		  HTM_INPUT_RADIO (StrGrpCod,
-				   Checked,Disabled,HTM_NOT_REQUIRED,
+				   Checked,HTM_ENABLED,Readonly,HTM_NOT_REQUIRED,
 				   HTM_DONT_SUBMIT_ON_CLICK,
-				   "id=\"Grp%ld\" value=\"%ld\"%s",
-				   Grp->GrpCod,Grp->GrpCod,
-				   (ICanChangeMySelectionForThisGrp == Usr_CAN_NOT &&
-				    IBelongToThisGroup) ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-							  "");
+				   "id=\"Grp%ld\" value=\"%ld\"",
+				   Grp->GrpCod,Grp->GrpCod);
 	       else	// If the enrolment is not mandatory, I can select no groups
 		  HTM_INPUT_RADIO (StrGrpCod,
-				   Checked,Disabled,HTM_NOT_REQUIRED,
+				   Checked,HTM_ENABLED,Readonly,HTM_NOT_REQUIRED,
 				   HTM_DONT_SUBMIT_ON_CLICK,
-				   "id=\"Grp%ld\" value=\"%ld\"%s"
+				   "id=\"Grp%ld\" value=\"%ld\""
 				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
 				   Grp->GrpCod,Grp->GrpCod,
-				   (ICanChangeMySelectionForThisGrp == Usr_CAN_NOT &&
-				    IBelongToThisGroup) ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-							  "",
 				   GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	      }
 	    else
 	       /* Put a checkbox item */
 	       HTM_INPUT_CHECKBOX (StrGrpCod,
-				   Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
-				   "id=\"Grp%ld\" value=\"%ld\"%s",
-				   Grp->GrpCod,Grp->GrpCod,
-				   (ICanChangeMySelectionForThisGrp == Usr_CAN_NOT &&
-				    IBelongToThisGroup) ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-							  "");
+				   Checked,HTM_ENABLED,Readonly,
+				   HTM_DONT_SUBMIT_ON_CHANGE,
+				   "id=\"Grp%ld\" value=\"%ld\"",
+				   Grp->GrpCod,Grp->GrpCod);
 
 	 HTM_TD_End ();
 
@@ -2115,7 +2108,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 	    Checked = UsrBelongsToThisGroup ? Cns_CHECKED :
 					      Cns_UNCHECKED;
 	    HTM_INPUT_CHECKBOX (StrGrpCod,
-				Checked,HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+				Checked,HTM_ENABLED,HTM_READWRITE,
+				HTM_DONT_SUBMIT_ON_CHANGE,
 				"id=\"Grp%ld\" value=\"%ld\"",
 				Grp->GrpCod,Grp->GrpCod);
 
@@ -2148,7 +2142,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    bool IBelongToThisGroup;
    Usr_Can_t ICanSelUnselGroup;
    Cns_Checked_t Checked;
-   HTM_Disabled_t Disabled;
+   HTM_Readonly_t Readonly;
    struct Group *Grp;
    Rol_Role_t Role;
 
@@ -2211,10 +2205,11 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
 	 HTM_TD_Begin (IBelongToThisGroup ? "class=\"LM BG_HIGHLIGHT\"" :
 					    "class=\"LM\"");
-	    Disabled = (ICanSelUnselGroup == Usr_CAN) ? HTM_ENABLED :
-							HTM_DISABLED;
+	    Readonly = (ICanSelUnselGroup == Usr_CAN) ? HTM_READWRITE :
+							HTM_READONLY;
 	    HTM_INPUT_CHECKBOX ("GrpCods",
-				Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
+				Checked,HTM_ENABLED,Readonly,
+				HTM_DONT_SUBMIT_ON_CHANGE,
 				"id=\"Grp%ld\" value=\"%ld\"%s",
 				Grp->GrpCod,Grp->GrpCod,
 				(ICanSelUnselGroup == Usr_CAN) ? " onclick=\"checkParent(this,'AllGroups')\"" :
@@ -2259,10 +2254,11 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LM\"");
-         Disabled = (ICanSelUnselGroup == Usr_CAN_NOT) ? HTM_DISABLED :
-							 HTM_ENABLED;
+         Readonly = (ICanSelUnselGroup == Usr_CAN_NOT) ? HTM_READWRITE :
+							 HTM_READONLY;
 	 HTM_INPUT_CHECKBOX ("GrpCods",
-			     Checked,Disabled,HTM_DONT_SUBMIT_ON_CHANGE,
+			     Checked,HTM_ENABLED,Readonly,
+			     HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Grp%ld\" value=\"%ld\""
 			     " onclick=\"checkParent(this,'AllGroups')\"",
 			     -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod);

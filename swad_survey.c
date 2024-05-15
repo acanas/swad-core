@@ -615,7 +615,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 				 1 << Rol_NET |
 				 1 << Rol_TCH,
 				 Surveys->Svy.Roles,
-				 HTM_ENABLED,
+				 HTM_ENABLED,HTM_READWRITE,
 				 HTM_DONT_SUBMIT_ON_CHANGE);
       HTM_DIV_End ();
 
@@ -1702,7 +1702,7 @@ void Svy_ReqCreatOrEditSvy (void)
 				       1 << Rol_NET |
 				       1 << Rol_TCH,
 				       Surveys.Svy.Roles,
-				       HTM_DISABLED,
+				       HTM_ENABLED,HTM_READWRITE,
 				       HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -1839,7 +1839,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 					                       "SvyCod",
 					                       SvyCod) ? Cns_CHECKED :
 					                		 Cns_UNCHECKED;
-		     HTM_INPUT_CHECKBOX ("WholeCrs",Checked,HTM_ENABLED,
+		     HTM_INPUT_CHECKBOX ("WholeCrs",
+					 Checked,HTM_ENABLED,HTM_READWRITE,
 					 HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"WholeCrs\" value=\"Y\""
 					 " onclick=\"uncheckChildren(this,'GrpCods')\"");
@@ -2289,7 +2290,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 		     Checked = (AnsType == SvyQst->AnswerType) ? Cns_CHECKED :
 								 Cns_UNCHECKED;
 		     HTM_INPUT_RADIO ("AnswerType",
-				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				      Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      HTM_DONT_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) AnsType);
 		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
@@ -2345,7 +2346,8 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	       HTM_LABEL_Begin (NULL);
 	          Checked = SvyQst->CommentsAllowed ? Cns_CHECKED :
 						      Cns_UNCHECKED;
-		  HTM_INPUT_CHECKBOX ("Comment",Checked,HTM_ENABLED,
+		  HTM_INPUT_CHECKBOX ("Comment",
+				      Checked,HTM_ENABLED,HTM_READWRITE,
 				      HTM_DONT_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"");
 		  HTM_Txt (Txt_Comments_allowed);
@@ -2863,7 +2865,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 		       {
 			case Svy_ANS_UNIQUE_CHOICE:
 			   HTM_INPUT_RADIO (StrAns,
-					    Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
+					    Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					    HTM_DONT_SUBMIT_ON_CLICK,
 					    "id=\"Ans%010u_%u\" value=\"%u\""
 					    " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
@@ -2872,7 +2874,8 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 					    (unsigned) SvyQst->QstCod,NumAnswers);
 			   break;
 			case Svy_ANS_MULTIPLE_CHOICE:
-			   HTM_INPUT_CHECKBOX (StrAns,Cns_UNCHECKED,HTM_ENABLED,
+			   HTM_INPUT_CHECKBOX (StrAns,
+					       Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
 					       HTM_DONT_SUBMIT_ON_CHANGE,
 					       "id=\"Ans%010u_%u\" value=\"%u\"",
 					       (unsigned) SvyQst->QstCod,NumAns,

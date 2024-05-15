@@ -416,7 +416,9 @@ static void Ntf_PutContextualLinks (bool AllNotifications,
       Lay_PutContextualCheckbox (ActSeeNtf,
 				 NULL,NULL,
 				 "All",
-				 AllNotifications,false,
+				 AllNotifications ? Cns_CHECKED :
+						    Cns_UNCHECKED,
+				 HTM_ENABLED,HTM_READWRITE,
 				 Txt_Show_all_notifications,
 				 Txt_Show_all_NOTIFICATIONS);
 
@@ -1664,7 +1666,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 					      (1 << NotifyEvent)) ? Cns_CHECKED :
 								    Cns_UNCHECKED;
 			HTM_INPUT_CHECKBOX (Ntf_ParNotifMeAboutNotifyEvents[NotifyEvent],
-					    Checked,HTM_ENABLED,
+					    Checked,HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"");
 		     HTM_TD_End ();
@@ -1674,7 +1676,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 					      (1 << NotifyEvent)) ? Cns_CHECKED :
 								    Cns_UNCHECKED;
 			HTM_INPUT_CHECKBOX (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent],
-					    Checked,HTM_ENABLED,
+					    Checked,HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"Y\"");
 		     HTM_TD_End ();

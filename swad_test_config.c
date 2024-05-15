@@ -184,7 +184,7 @@ static void TstCfg_ShowFormConfig (void)
 		        Checked = (Pluggable == TstCfg_GetConfigPluggable ()) ? Cns_CHECKED :
 										Cns_UNCHECKED;
 			HTM_INPUT_RADIO ("Pluggable",
-					 Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+					 Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					 HTM_DONT_SUBMIT_ON_CLICK,
 					 "value=\"%u\"%s",(unsigned) Pluggable);
 			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);

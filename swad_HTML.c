@@ -53,8 +53,14 @@ static const char *HTM_SelectedTxt[HTM_NUM_SELECTED] =
 
 static const char *HTM_DisabledTxt[HTM_NUM_DISABLED] =
   {
-   [HTM_DISABLED] = " disabled=\"disabled\"",
    [HTM_ENABLED ] = "",
+   [HTM_DISABLED] = " disabled=\"disabled\"",
+  };
+
+static const char *HTM_ReadonlyTxt[HTM_NUM_READONLY] =
+  {
+   [HTM_READWRITE] = "",
+   [HTM_READONLY ] = " readonly",
   };
 
 static const char *HTM_RequiredTxt[HTM_NUM_REQUIRED] =
@@ -149,7 +155,7 @@ void HTM_TABLE_BeginPadding (unsigned CellPadding)
    HTM_Txt ("<table");
 
    if (CellPadding)
-      HTM_TxtF (" class=\"CELLS_PAD_%u\">",
+      HTM_TxtF (" class=\"CELLS_PAD_%u\"",
 	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
    HTM_Txt (">");
@@ -1378,7 +1384,9 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
   }
 
 void HTM_INPUT_RADIO (const char *Name,
-      		      Cns_Checked_t Checked,HTM_Disabled_t Disabled,
+      		      Cns_Checked_t Checked,
+      		      HTM_Disabled_t Disabled,
+      		      HTM_Readonly_t Readonly,
       		      HTM_Required_t Required,HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...)
   {
@@ -1407,6 +1415,7 @@ void HTM_INPUT_RADIO (const char *Name,
 
    HTM_Txt (HTM_CheckedTxt[Checked]);
    HTM_Txt (HTM_DisabledTxt[Disabled]);
+   HTM_Txt (HTM_ReadonlyTxt[Readonly]);
    HTM_Txt (HTM_RequiredTxt[Required]);
    if (SubmitOnClick == HTM_SUBMIT_ON_CLICK)
       HTM_Txt (" onchange=\"this.form.submit();return false;\"");
@@ -1415,7 +1424,9 @@ void HTM_INPUT_RADIO (const char *Name,
   }
 
 void HTM_INPUT_CHECKBOX (const char *Name,
-			 Cns_Checked_t Checked,HTM_Disabled_t Disabled,
+			 Cns_Checked_t Checked,
+			 HTM_Disabled_t Disabled,
+			 HTM_Readonly_t Readonly,
 			 HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...)
   {
@@ -1444,6 +1455,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,
 
    HTM_Txt (HTM_CheckedTxt[Checked]);
    HTM_Txt (HTM_DisabledTxt[Disabled]);
+   HTM_Txt (HTM_ReadonlyTxt[Readonly]);
    if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
       HTM_Txt (" onchange=\"this.form.submit();return false;\"");
 

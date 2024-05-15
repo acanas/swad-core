@@ -351,7 +351,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? Cns_UNCHECKED :
 													      Cns_CHECKED;
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+					       Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					       HTM_DONT_SUBMIT_ON_CLICK,
 					       "value=\"%u\""
 					       " onclick=\"disableDetailedClicks();\"",
@@ -397,7 +397,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? Cns_CHECKED :
 													      Cns_UNCHECKED;
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+					       Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					       HTM_DONT_SUBMIT_ON_CLICK,
 					       "value=\"%u\" onclick=\"enableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_DETAILED);

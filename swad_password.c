@@ -788,7 +788,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 
       /***** Checkbox *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_INPUT_CHECKBOX ("Consent",Cns_UNCHECKED,HTM_ENABLED,
+	 HTM_INPUT_CHECKBOX ("Consent",Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
 			     HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"");
 	 HTM_Txt (Txt_I_understand_that_this_action_can_not_be_undone);

@@ -95,8 +95,9 @@ void Coo_EditMyPrefsOnCookies (void)
 	    HTM_LABEL_Begin (NULL);
 	       Checked = (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT) ? Cns_CHECKED :
 												   Cns_UNCHECKED;
-	       HTM_INPUT_CHECKBOX ("cookies",
-				   Checked,HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+	       HTM_INPUT_CHECKBOX ("cookies",Checked,
+				   HTM_ENABLED,HTM_READWRITE,
+				   HTM_SUBMIT_ON_CHANGE,
 				   "value=\"Y\"");
 	       HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
 	    HTM_LABEL_End ();

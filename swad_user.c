@@ -3917,7 +3917,7 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
 	      {
 	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
 	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],
-				   Cns_UNCHECKED,HTM_ENABLED,
+				   Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
 				   HTM_DONT_SUBMIT_ON_CHANGE,
 				   "value=\"\""
 				   " onclick=\"togglecheckChildren(this,'%s')\"",
@@ -3997,7 +3997,8 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
-      HTM_INPUT_CHECKBOX (ParName,Checked,HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX (ParName,Checked,HTM_ENABLED,HTM_READWRITE,
+			  HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,Usr_NameSelUnsel[Role]);
       free (ParName);
@@ -4021,7 +4022,8 @@ static void Usr_PutCheckboxListWithPhotos (void)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       Checked = Gbl.Usrs.Listing.WithPhotos ? Cns_CHECKED :
 					      Cns_UNCHECKED;
-      HTM_INPUT_CHECKBOX ("WithPhotos",Checked,HTM_ENABLED,HTM_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX ("WithPhotos",Checked,HTM_ENABLED,HTM_READWRITE,
+			  HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
       HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
@@ -5608,7 +5610,7 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
          Checked = (ListUsrsAction == Gbl.Usrs.Selected.Option) ? Cns_CHECKED :
 								  Cns_UNCHECKED;
 	 HTM_INPUT_RADIO ("ListUsrsAction",
-			  Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+			  Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			  HTM_DONT_SUBMIT_ON_CLICK,
 			  "value=\"%u\"",(unsigned) ListUsrsAction);
 	 HTM_Txt (Label);

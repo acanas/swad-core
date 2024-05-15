@@ -356,7 +356,7 @@ void Ann_ShowFormAnnouncement (void)
 				       1 << Rol_STD |
 				       1 << Rol_NET |
 				       1 << Rol_TCH,
-				       HTM_DISABLED,
+				       HTM_ENABLED,HTM_READWRITE,
 				       HTM_DONT_SUBMIT_ON_CHANGE);
 	    HTM_TD_End ();
 	 HTM_TR_End ();

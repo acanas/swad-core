@@ -818,7 +818,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-			        Cns_CHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
+			        Cns_CHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			        HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
@@ -829,7 +829,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
+				Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
@@ -840,7 +840,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
+				Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
@@ -851,7 +851,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
+				Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_UPDATE_USRS_IN_CRS);
@@ -866,7 +866,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				Cns_UNCHECKED,HTM_ENABLED,HTM_NOT_REQUIRED,
+				Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				HTM_DONT_SUBMIT_ON_CLICK,
 				" value=\"%u\"",
 				(unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
@@ -1638,7 +1638,7 @@ static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAc
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
 	 HTM_INPUT_RADIO ("RegRemAction",
-			  ThisChecked,HTM_ENABLED,HTM_NOT_REQUIRED,
+			  ThisChecked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			  HTM_DONT_SUBMIT_ON_CLICK,
 			  "value=\"%u\"",(unsigned) RegRemOneUsrAction);
 
@@ -2188,7 +2188,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					  1 << Rol_NET |
 					  1 << Rol_TCH,
 					  RolesSelected,
-					  HTM_DISABLED,
+					  HTM_ENABLED,HTM_READWRITE,
 					  HTM_SUBMIT_ON_CHANGE);
 	       HTM_TD_End ();
 

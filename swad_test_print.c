@@ -454,7 +454,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	         {
 	          case Qst_ANS_UNIQUE_CHOICE:
 		     HTM_INPUT_RADIO (StrAns,
-				      UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,HTM_NOT_REQUIRED,
+				      UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      HTM_DONT_SUBMIT_ON_CLICK,
 				      "id=\"%s\" value=\"%u\""
 				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
@@ -463,7 +463,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	             break;
 	          case Qst_ANS_MULTIPLE_CHOICE:
 		     HTM_INPUT_CHECKBOX (StrAns,
-					 UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,
+					 UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,HTM_READWRITE,
 					 HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"%s\" value=\"%u\"",
 					 Id,Indexes[NumOpt]);
@@ -531,7 +531,8 @@ static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 Checked = AllowTeachers ? Cns_CHECKED :	// Teachers can see test exam
 				   Cns_UNCHECKED;
-	 HTM_INPUT_CHECKBOX ("AllowTchs",Checked,HTM_ENABLED,
+	 HTM_INPUT_CHECKBOX ("AllowTchs",
+			     Checked,HTM_ENABLED,HTM_READWRITE,
 			     HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"Y\"");
 	 HTM_NBSPTxt (Txt_Allow_teachers_to_consult_this_test);

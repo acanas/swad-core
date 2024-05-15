@@ -1329,7 +1329,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 								  "AsgCod",
 								  AsgCod) ? Cns_UNCHECKED :
 									    Cns_CHECKED;
-			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,HTM_ENABLED,
+			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
+					    HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");

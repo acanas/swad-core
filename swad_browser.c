@@ -2909,7 +2909,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	       Checked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? Cns_CHECKED :
 								  Cns_UNCHECKED;
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-			        Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+			        Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			        HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
@@ -2942,7 +2942,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 				GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? Cns_CHECKED :
 									Cns_UNCHECKED;
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				      Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"",GrpDat.GrpCod);
 		     HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
@@ -3600,7 +3600,9 @@ static void Brw_PutCheckboxFullTree (void)
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParsFullTree,NULL,
                               "FullTree",
-                              Gbl.FileBrowser.FullTree,false,
+                              Gbl.FileBrowser.FullTree ? Cns_CHECKED :
+                        				 Cns_UNCHECKED,
+                              HTM_ENABLED,HTM_READWRITE,
                               Txt_Show_all_files,Txt_Show_all_files);
   }
 

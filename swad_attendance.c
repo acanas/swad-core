@@ -1103,7 +1103,8 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 					                                     "AttCod",
 					                                     AttCod) ? Cns_UNCHECKED :
 										       Cns_CHECKED;
-			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,HTM_ENABLED,
+			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
+					    HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
@@ -1659,7 +1660,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      };
    bool Present;
    Cns_Checked_t Checked;
-   HTM_Disabled_t Disabled;
+   HTM_Readonly_t Readonly;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
    Usr_Can_t ICanChangeStdAttendance;
@@ -1712,9 +1713,9 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
       /***** Checkbox to select user *****/
       HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
-         Disabled = (ICanChangeStdAttendance == Usr_CAN) ? HTM_ENABLED :
-							   HTM_DISABLED;
-	 HTM_INPUT_CHECKBOX ("UsrCodStd",Checked,Disabled,
+         Readonly = (ICanChangeStdAttendance == Usr_CAN) ? HTM_READWRITE :
+							   HTM_READONLY;
+	 HTM_INPUT_CHECKBOX ("UsrCodStd",Checked,HTM_ENABLED,Readonly,
 			     HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Std%u\" value=\"%s\"",
 			     NumUsr,UsrDat->EnUsrCod);
@@ -2671,7 +2672,8 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	                     The_GetSuffix (),
 	                     The_GetColorRows ());
 		  HTM_INPUT_CHECKBOX ("AttCods",
-				      Events->Lst[NumAttEvent].Checked,HTM_ENABLED,
+				      Events->Lst[NumAttEvent].Checked,
+				      HTM_ENABLED,HTM_READWRITE,
 				      HTM_DONT_SUBMIT_ON_CHANGE,
 				      "id=\"Event%u\" value=\"%ld\"",
 				      NumAttEvent,Events->Event.AttCod);

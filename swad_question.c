@@ -237,7 +237,8 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	                        The_GetSuffix ());
 	          Checked = AnswerTypes->All ? Cns_CHECKED :
 	        			       Cns_UNCHECKED;
-		  HTM_INPUT_CHECKBOX ("AllAnsTypes",Checked,HTM_ENABLED,
+		  HTM_INPUT_CHECKBOX ("AllAnsTypes",
+				      Checked,HTM_ENABLED,HTM_READWRITE,
 				      HTM_DONT_SUBMIT_ON_CHANGE,
 				      "value=\"Y\""
 				      " onclick=\"togglecheckChildren(this,'AnswerType');\"");
@@ -267,7 +268,8 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 		 }
 	       HTM_TD_Begin ("class=\"LM\"");
 		  HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		     HTM_INPUT_CHECKBOX ("AnswerType",Checked,HTM_ENABLED,
+		     HTM_INPUT_CHECKBOX ("AnswerType",
+					 Checked,HTM_ENABLED,HTM_READWRITE,
 					 HTM_DONT_SUBMIT_ON_CHANGE,
 					 "value=\"%u\""
 					 " onclick=\"checkParent(this,'AllAnsTypes');\"",
@@ -624,7 +626,7 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 	 /***** Choice 1: No media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_RADIO (ParUploadMedia.Action,
-			     Cns_UNCHECKED,Disabled,HTM_NOT_REQUIRED,
+			     Cns_UNCHECKED,Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
 			     HTM_DONT_SUBMIT_ON_CLICK,
 			     "value=\"%u\"",(unsigned) Med_ACTION_NO_MEDIA);
 	    HTM_Txt (Txt_No_image_video);
@@ -634,7 +636,7 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 	 /***** Choice 2: Current media *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_RADIO (ParUploadMedia.Action,
-			     Cns_CHECKED,Disabled,HTM_NOT_REQUIRED,
+			     Cns_CHECKED,Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
 			     HTM_DONT_SUBMIT_ON_CLICK,
 			     "value=\"%u\"",(unsigned) Med_ACTION_KEEP_MEDIA);
 	    HTM_Txt (Txt_Current_image_video);
@@ -647,7 +649,7 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 	 UniqueId++;
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_RADIO (ParUploadMedia.Action,
-			     Cns_UNCHECKED,Disabled,HTM_NOT_REQUIRED,
+			     Cns_UNCHECKED,Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
 			     HTM_DONT_SUBMIT_ON_CLICK,
 			     "id=\"chg_img_%u\" value=\"%u\"",
 			     UniqueId,(unsigned) Med_ACTION_NEW_MEDIA);
@@ -988,7 +990,8 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
 		  Checked = Questions->Question.Answer.Shuffle ? Cns_CHECKED :
 								 Cns_UNCHECKED;
-		  HTM_INPUT_CHECKBOX ("Shuffle",Checked,HTM_ENABLED,
+		  HTM_INPUT_CHECKBOX ("Shuffle",
+				      Checked,HTM_ENABLED,HTM_READWRITE,
 				      HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"");
 	       Frm_EndForm ();
@@ -1222,7 +1225,7 @@ void Qst_PutCheckboxToSelectAllQuestions (void)
    extern const char *Txt_All_questions;
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX ("AllQsts",Cns_UNCHECKED,HTM_ENABLED,
+      HTM_INPUT_CHECKBOX ("AllQsts",Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
 			  HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\""
 			  " onclick=\"togglecheckChildren(this,'QstCods');\"");
@@ -1250,7 +1253,8 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 	 /* Write checkbox to select the question */
 	 HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	    HTM_INPUT_CHECKBOX ("QstCods",Cns_UNCHECKED,HTM_ENABLED,
+	    HTM_INPUT_CHECKBOX ("QstCods",
+				Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
 				HTM_DONT_SUBMIT_ON_CHANGE,
 				"value=\"%ld\""
 				" onclick=\"checkParent(this,'AllQsts');\"",
@@ -1305,7 +1309,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	               The_GetSuffix (),The_GetColorRows ());
 	    Checked = Question->Answer.Shuffle ? Cns_CHECKED :
 						 Cns_UNCHECKED;
-	    HTM_INPUT_CHECKBOX ("Shuffle",Checked,HTM_DISABLED,
+	    HTM_INPUT_CHECKBOX ("Shuffle",Checked,HTM_DISABLED,HTM_READONLY,
 				HTM_DONT_SUBMIT_ON_CHANGE,
 				"value=\"Y\"");
 	 HTM_TD_End ();
@@ -2025,7 +2029,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     Checked = (AnsType == Question->Answer.Type) ? Cns_CHECKED :
 								    Cns_UNCHECKED;
 		     HTM_INPUT_RADIO ("AnswerType",
-				      Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				      Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      HTM_DONT_SUBMIT_ON_CLICK,
 				      "value=\"%u\""
 				      " onclick=\"enableDisableAns(this.form);\"",
@@ -2089,7 +2093,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	          Disabled = (Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
 			      Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE) ? HTM_DISABLED :
 										  HTM_ENABLED;
-		  HTM_INPUT_CHECKBOX ("Shuffle",Checked,Disabled,
+		  HTM_INPUT_CHECKBOX ("Shuffle",
+				      Checked,Disabled,HTM_READWRITE,
 				      HTM_DONT_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"");
 		  HTM_Txt (Txt_Shuffle);
@@ -2133,7 +2138,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			Required = (NumOpt < 2) ? HTM_REQUIRED :  // First or second options required
 						  HTM_NOT_REQUIRED;
 			HTM_INPUT_RADIO ("AnsUni",
-					 Checked,Disabled,Required,
+					 Checked,Disabled,HTM_READWRITE,Required,
 					 HTM_DONT_SUBMIT_ON_CLICK,
 					 "value=\"%u\""
 					 " onclick=\"enableDisableAns(this.form);\"",
@@ -2142,7 +2147,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			/* Checkbox for multiple choice answers */
 			Disabled = (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE) ? HTM_ENABLED :
 										        HTM_DISABLED;
-			HTM_INPUT_CHECKBOX ("AnsMulti",Checked,Disabled,
+			HTM_INPUT_CHECKBOX ("AnsMulti",
+					    Checked,Disabled,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
 					    "value=\"%u\"",NumOpt);
 
@@ -2284,7 +2290,7 @@ void Qst_PutTFInputField (const struct Qst_Question *Question,
       Disabled = (Question->Answer.Type == Qst_ANS_TRUE_FALSE) ? HTM_ENABLED :
 								 HTM_DISABLED;
       HTM_INPUT_RADIO ("AnsTF",
-		       Checked,Disabled,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CLICK,
+		       Checked,Disabled,HTM_READWRITE,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CLICK,
 		       "value=\"%c\"",Value);
       HTM_Txt (Label);
    HTM_LABEL_End ();

@@ -562,7 +562,8 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Gam],
 					 Games->Lst[NumGame].Checked,
-					 HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+					 HTM_ENABLED,HTM_READWRITE,
+					 HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"",
 					 NumGame,Games->Lst[NumGame].GamCod);
 		  HTM_TD_End ();

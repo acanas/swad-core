@@ -54,6 +54,7 @@ void Rol_ChangeMyRole (void);
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
                              HTM_Disabled_t Disabled,
+                             HTM_Readonly_t Readonly,
                              HTM_SubmitOnChange_t SubmitOnChange);
 void Rol_PutParRoles (unsigned Roles);
 unsigned Rol_GetSelectedRoles (void);

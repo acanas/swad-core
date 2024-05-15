@@ -315,7 +315,7 @@ static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
    HTM_LABEL_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
       Checked = Config->NETCanCreate ? Cns_CHECKED :
 				       Cns_UNCHECKED;
-      HTM_INPUT_CHECKBOX ("NETCanCreate",Checked,HTM_ENABLED,
+      HTM_INPUT_CHECKBOX ("NETCanCreate",Checked,HTM_ENABLED,HTM_READWRITE,
 			  HTM_SUBMIT_ON_CHANGE,
 			  "id=\"NETCanCreate\" value=\"Y\"");
       HTM_Txt (Txt_Non_editing_teachers_can_create_new_projects);

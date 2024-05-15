@@ -208,7 +208,7 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
 	          Checked = (WhichSyl == WhichSyllabus) ? Cns_CHECKED :
 	        					  Cns_UNCHECKED;
 		  HTM_INPUT_RADIO ("WhichSyllabus",
-				   Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+				   Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   HTM_SUBMIT_ON_CLICK,
 				   "value=\"%u\"",(unsigned) WhichSyl);
 		  HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);

@@ -207,7 +207,7 @@ void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
       HTM_LABEL_Begin (NULL);
 
          /***** Radio selector *****/
-	 HTM_INPUT_RADIO ("Link",Checked,HTM_ENABLED,HTM_NOT_REQUIRED,
+	 HTM_INPUT_RADIO ("Link",Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			  SubmitOnClick,
 			  "value=\"%s_%ld\"",
 			  Rsc_ResourceTypesDB[Link->Type],Link->Cod);

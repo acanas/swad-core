@@ -1913,7 +1913,8 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
       Checked = Messages->ShowOnlyUnreadMsgs ? Cns_CHECKED :
 					       Cns_UNCHECKED;
       HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
-			  Checked,HTM_ENABLED,HTM_DONT_SUBMIT_ON_CHANGE,
+			  Checked,HTM_ENABLED,HTM_READWRITE,
+			  HTM_DONT_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
       HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();

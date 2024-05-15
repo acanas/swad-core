@@ -75,6 +75,13 @@ typedef enum
    HTM_DISABLED,
   } HTM_Disabled_t;
 
+#define HTM_NUM_READONLY 2
+typedef enum
+  {
+   HTM_READWRITE,
+   HTM_READONLY,
+  } HTM_Readonly_t;
+
 #define HTM_NUM_HEAD_ALIGN 3
 typedef enum
   {
@@ -200,11 +207,15 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
                       HTM_Required_t Required,HTM_SubmitOnChange_t SubmitOnChange,
 	              const char *fmt,...);
 void HTM_INPUT_RADIO (const char *Name,
-      		      Cns_Checked_t Checked,HTM_Disabled_t Disabled,
+      		      Cns_Checked_t Checked,
+      		      HTM_Disabled_t Disabled,
+      		      HTM_Readonly_t Readonly,
       		      HTM_Required_t Required,HTM_SubmitOnClick_t SubmitOnClick,
 		      const char *fmt,...);
 void HTM_INPUT_CHECKBOX (const char *Name,
-			 Cns_Checked_t Checked,HTM_Disabled_t Disabled,
+			 Cns_Checked_t Checked,
+			 HTM_Disabled_t Disabled,
+			 HTM_Readonly_t Readonly,
 			 HTM_SubmitOnChange_t SubmitOnChange,
 		         const char *fmt,...);
 
