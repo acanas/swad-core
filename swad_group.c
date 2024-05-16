@@ -411,7 +411,7 @@ static void Grp_PutCheckboxAllGrps (void)
   {
    extern const char *Txt_All_groups;
    Usr_Can_t ICanSelUnselGroup;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    HTM_Readonly_t Readonly;
 
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -431,8 +431,8 @@ static void Grp_PutCheckboxAllGrps (void)
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
          Checked = (ICanSelUnselGroup == Usr_CAN &&
-		    Gbl.Crs.Grps.AllGrps) ? Cns_UNCHECKED :
-					    Cns_CHECKED;
+		    Gbl.Crs.Grps.AllGrps) ? HTM_UNCHECKED :
+					    HTM_CHECKED;
          Readonly = (ICanSelUnselGroup == Usr_CAN) ? HTM_READWRITE :
 						     HTM_READONLY;
 	 HTM_INPUT_CHECKBOX ("AllGroups",
@@ -1658,7 +1658,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    unsigned NumGrpThisType;
    bool IBelongToThisGroup;
    struct Group *Grp;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    HTM_Readonly_t Readonly;
 
    /***** Write heading *****/
@@ -1676,12 +1676,12 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
-      Checked = Cns_UNCHECKED;
+      Checked = HTM_UNCHECKED;
       if (Cod > 0)	// Cod == -1L means new item, assignment, event, survey, exam event or match
 	 if (Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
 	                                    AssociationsToGrps[WhichIsAssociatedToGrp].Field,
 	                                    Cod,Grp->GrpCod))
-            Checked = Cns_CHECKED;
+            Checked = HTM_CHECKED;
 
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
@@ -1864,7 +1864,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    bool IBelongToAClosedGroup;
    Usr_Can_t ICanChangeMySelectionForThisGrpTyp;
    Usr_Can_t ICanChangeMySelectionForThisGrp;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    HTM_Readonly_t Readonly;
    char StrGrpCod[32];
 
@@ -1982,8 +1982,8 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 
 	 HTM_TD_Begin (IBelongToThisGroup ? "class=\"LM BG_HIGHLIGHT\"" :
 					    "class=\"LM\"");
-	    Checked = IBelongToThisGroup ? Cns_CHECKED :
-					   Cns_UNCHECKED;
+	    Checked = IBelongToThisGroup ? HTM_CHECKED :
+					   HTM_UNCHECKED;
 	    Readonly = ICanChangeMySelectionForThisGrp ? HTM_READWRITE :
 							 HTM_READONLY;
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
@@ -2073,7 +2073,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
    struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpThisType;
    bool UsrBelongsToThisGroup;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    struct Group *Grp;
    char StrGrpCod[32];
 
@@ -2105,8 +2105,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 	    // Always checkbox, not radio, because the role in the form may be teacher,
 	    // so if he/she is registered as teacher, he/she can belong to several groups
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-	    Checked = UsrBelongsToThisGroup ? Cns_CHECKED :
-					      Cns_UNCHECKED;
+	    Checked = UsrBelongsToThisGroup ? HTM_CHECKED :
+					      HTM_UNCHECKED;
 	    HTM_INPUT_CHECKBOX (StrGrpCod,
 				Checked,HTM_ENABLED,HTM_READWRITE,
 				HTM_DONT_SUBMIT_ON_CHANGE,
@@ -2141,7 +2141,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    struct ListCodGrps LstGrpsIBelong;
    bool IBelongToThisGroup;
    Usr_Can_t ICanSelUnselGroup;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    HTM_Readonly_t Readonly;
    struct Group *Grp;
    Rol_Role_t Role;
@@ -2189,14 +2189,14 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
       /* This group should be checked? */
       if (Gbl.Crs.Grps.AllGrps)
-         Checked = Cns_CHECKED;
+         Checked = HTM_CHECKED;
       else
-         for (NumGrpSel = 0, Checked = Cns_UNCHECKED;
+         for (NumGrpSel = 0, Checked = HTM_UNCHECKED;
               NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
               NumGrpSel++)
             if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == Grp->GrpCod)
               {
-               Checked = Cns_CHECKED;
+               Checked = HTM_CHECKED;
                break;
               }
 
@@ -2234,20 +2234,20 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
      {
       case Usr_CAN:
 	 if (Gbl.Crs.Grps.AllGrps)
-	    Checked = Cns_CHECKED;
+	    Checked = HTM_CHECKED;
 	 else
-	    for (NumGrpSel = 0, Checked = Cns_UNCHECKED;
+	    for (NumGrpSel = 0, Checked = HTM_UNCHECKED;
 		 NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 		 NumGrpSel++)
 	       if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
 		 {
-		  Checked = Cns_CHECKED;
+		  Checked = HTM_CHECKED;
 		  break;
 		 }
 	 break;
       case Usr_CAN_NOT:
       default:
-	 Checked = Cns_UNCHECKED;
+	 Checked = HTM_UNCHECKED;
 	 break;
      }
 

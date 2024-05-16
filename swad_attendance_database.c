@@ -448,7 +448,8 @@ unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQuer
 /*****************************************************************************/
 // Return if user is in table
 
-bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present)
+bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
+				       Att_Present_t *Presente)
   {
    char StrPresent[1 + 1];
 
@@ -463,10 +464,11 @@ bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present)
 		         UsrCod);
    if (StrPresent[0])
      {
-      *Present = (StrPresent[0] == 'Y');
+      *Presente = (StrPresent[0] == 'Y') ? Att_PRESENT :
+					   Att_ABSENT;
       return true;	// User is in table
      }
-   *Present = false;
+   *Presente = Att_ABSENT;
    return false;	// User is not in table
   }
 
@@ -479,7 +481,7 @@ unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long Us
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get if a student"
 			     " is already registered in an event",
-		   "SELECT Present,"		// row[0]
+		   "SELECT Present,"	// row[0]
 			  "CommentStd,"	// row[1]
 			  "CommentTch"	// row[2]
 		    " FROM att_users"
@@ -579,7 +581,7 @@ unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 
 void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
-                                           bool Present,
+                                           Att_Present_t Present,
                                            const char *CommentStd,
                                            const char *CommentTch)
   {
@@ -591,8 +593,8 @@ void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
 		    " (%ld,%ld,'%c','%s','%s')",
                     AttCod,
                     UsrCod,
-                    Present ? 'Y' :
-        	              'N',
+                    (Present == Att_PRESENT) ? 'Y' :
+        				       'N',
                     CommentStd,
                     CommentTch);
   }
@@ -624,7 +626,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
    unsigned NumCodsInList;
    char *SubQueryAllUsrs = NULL;
    char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   bool Present;
+   Att_Present_t Present;
    size_t Length = 0;	// Initialized to avoid warning
    unsigned NumUsrsPresent = 0;
 
@@ -664,12 +666,14 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
 	       /* Mark user as present */
 	       if (Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrDat.UsrCod,&Present))	// User is in table att_users
 		 {
-		  if (!Present)	// If already present ==> nothing to do
-		     /***** Set user as present in database *****/
+		  if (Present == Att_ABSENT)	// If already present ==> nothing to do
+		     /***** If user is in database as absent ==>
+		            set user as present in database *****/
 		     Att_DB_SetUsrAsPresent (AttCod,UsrDat.UsrCod);
 		 }
 	       else									// User is not in table att_users
-		  Att_DB_RegUsrInEventChangingComments (AttCod,UsrDat.UsrCod,true,"","");
+		  Att_DB_RegUsrInEventChangingComments (AttCod,UsrDat.UsrCod,
+							Att_PRESENT,"","");
 
 	       /* Add this user to query used to mark not present users as absent */
 	       if (SetOthersAsAbsent)

@@ -1906,12 +1906,12 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages)
   {
    extern const char *Txt_only_unread_messages;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      Checked = Messages->ShowOnlyUnreadMsgs ? Cns_CHECKED :
-					       Cns_UNCHECKED;
+      Checked = Messages->ShowOnlyUnreadMsgs ? HTM_CHECKED :
+					       HTM_UNCHECKED;
       HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
 			  Checked,HTM_ENABLED,HTM_READWRITE,
 			  HTM_DONT_SUBMIT_ON_CHANGE,

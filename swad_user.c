@@ -3917,7 +3917,7 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
 	      {
 	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
 	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],
-				   Cns_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
+				   HTM_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
 				   HTM_DONT_SUBMIT_ON_CHANGE,
 				   "value=\"\""
 				   " onclick=\"togglecheckChildren(this,'%s')\"",
@@ -3982,18 +3982,18 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          bool UsrIsTheMsgSender,
 					 struct Usr_SelectedUsrs *SelectedUsrs)
   {
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    char *ParName;
 
    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
      {
       /***** Check box must be checked? *****/
       if (UsrIsTheMsgSender)
-	 Checked = Cns_CHECKED;
+	 Checked = HTM_CHECKED;
       else
 	 /* Check if user is in lists of selected users */
-	 Checked = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,SelectedUsrs) ? Cns_CHECKED :
-												Cns_UNCHECKED;
+	 Checked = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,SelectedUsrs) ? HTM_CHECKED :
+												HTM_UNCHECKED;
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
@@ -4014,14 +4014,14 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 static void Usr_PutCheckboxListWithPhotos (void)
   {
    extern const char *Txt_Display_photos;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    Par_PutParChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      Checked = Gbl.Usrs.Listing.WithPhotos ? Cns_CHECKED :
-					      Cns_UNCHECKED;
+      Checked = Gbl.Usrs.Listing.WithPhotos ? HTM_CHECKED :
+					      HTM_UNCHECKED;
       HTM_INPUT_CHECKBOX ("WithPhotos",Checked,HTM_ENABLED,HTM_READWRITE,
 			  HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
@@ -5603,12 +5603,12 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label)
   {
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-         Checked = (ListUsrsAction == Gbl.Usrs.Selected.Option) ? Cns_CHECKED :
-								  Cns_UNCHECKED;
+         Checked = (ListUsrsAction == Gbl.Usrs.Selected.Option) ? HTM_CHECKED :
+								  HTM_UNCHECKED;
 	 HTM_INPUT_RADIO ("ListUsrsAction",
 			  Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			  HTM_DONT_SUBMIT_ON_CLICK,

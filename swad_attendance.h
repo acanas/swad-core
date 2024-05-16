@@ -70,7 +70,7 @@ struct Att_Events
      {
       long AttCod;		// Attendance event code
       unsigned NumStdsFromList;	// Number of students (taken from a list) who has assisted to the event
-      Cns_Checked_t Checked;	// Do I have selected this attendance event?
+      HTM_Checked_t Checked;	// Do I have selected this attendance event?
      } *Lst;			// List of attendance events
    Dat_StartEndTime_t SelectedOrder;
    struct Att_Event Event;	// Selected/current event
@@ -78,6 +78,13 @@ struct Att_Events
    char *StrAttCodsSelected;
    unsigned CurrentPage;
   };
+
+#define Att_NUM_PRESENT 2
+typedef enum
+  {
+   Att_ABSENT,
+   Att_PRESENT,
+  } Att_Present_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

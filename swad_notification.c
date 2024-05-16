@@ -416,8 +416,8 @@ static void Ntf_PutContextualLinks (bool AllNotifications,
       Lay_PutContextualCheckbox (ActSeeNtf,
 				 NULL,NULL,
 				 "All",
-				 AllNotifications ? Cns_CHECKED :
-						    Cns_UNCHECKED,
+				 AllNotifications ? HTM_CHECKED :
+						    HTM_UNCHECKED,
 				 HTM_ENABLED,HTM_READWRITE,
 				 Txt_Show_all_notifications,
 				 Txt_Show_all_NOTIFICATIONS);
@@ -1623,7 +1623,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_Notify_me_BR_by_email;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Begin section with settings on privacy *****/
    HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
@@ -1656,15 +1656,14 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		 {
 		  HTM_TR_Begin (NULL);
 
-		     HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"RM FORM_IN_%s\"",The_GetSuffix ());
 			HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("class=\"CM\"");
 		        Checked = (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
-					      (1 << NotifyEvent)) ? Cns_CHECKED :
-								    Cns_UNCHECKED;
+				   (1 << NotifyEvent)) ? HTM_CHECKED :
+							 HTM_UNCHECKED;
 			HTM_INPUT_CHECKBOX (Ntf_ParNotifMeAboutNotifyEvents[NotifyEvent],
 					    Checked,HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1673,8 +1672,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
 		     HTM_TD_Begin ("class=\"CM\"");
 		        Checked = (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
-					      (1 << NotifyEvent)) ? Cns_CHECKED :
-								    Cns_UNCHECKED;
+				   (1 << NotifyEvent)) ? HTM_CHECKED :
+							 HTM_UNCHECKED;
 			HTM_INPUT_CHECKBOX (Ntf_ParEmailMeAboutNotifyEvents[NotifyEvent],
 					    Checked,HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,

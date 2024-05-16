@@ -65,7 +65,7 @@ void Coo_EditMyPrefsOnCookies (void)
    extern const char *Hlp_PROFILE_Settings_cookies;
    extern const char *Txt_Cookies;
    extern const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Begin section with preferences about cookies *****/
    HTM_SECTION_Begin (Coo_COOKIES_ID);
@@ -93,8 +93,8 @@ void Coo_EditMyPrefsOnCookies (void)
 
 	    /* Check box */
 	    HTM_LABEL_Begin (NULL);
-	       Checked = (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT) ? Cns_CHECKED :
-												   Cns_UNCHECKED;
+	       Checked = (Gbl.Usrs.Me.UsrDat.Prefs.RefuseAcceptCookies == Coo_ACCEPT) ? HTM_CHECKED :
+												   HTM_UNCHECKED;
 	       HTM_INPUT_CHECKBOX ("cookies",Checked,
 				   HTM_ENABLED,HTM_READWRITE,
 				   HTM_SUBMIT_ON_CHANGE,

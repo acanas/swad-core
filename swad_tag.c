@@ -283,7 +283,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    unsigned NumTag;
    MYSQL_ROW row;
    bool TagHidden = false;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
    /*
@@ -308,8 +308,8 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
 	       HTM_TD_Begin ("class=\"LT\"");
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		     Checked = Tags->All ? Cns_CHECKED :
-					   Cns_UNCHECKED;
+		     Checked = Tags->All ? HTM_CHECKED :
+					   HTM_UNCHECKED;
 		     HTM_INPUT_CHECKBOX ("AllTags",
 					 Checked,HTM_ENABLED,HTM_READWRITE,
 					 HTM_DONT_SUBMIT_ON_CHANGE,
@@ -340,7 +340,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		     HTM_TD_End ();
 		    }
 
-		  Checked = Cns_UNCHECKED;
+		  Checked = HTM_UNCHECKED;
 		  if (Tags->List)
 		    {
 		     Ptr = Tags->List;
@@ -349,7 +349,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 			Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
 			if (!strcmp (row[1],TagText))
 			  {
-			   Checked = Cns_CHECKED;
+			   Checked = HTM_CHECKED;
 			   break;
 			  }
 		       }

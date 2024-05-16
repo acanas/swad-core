@@ -2887,7 +2887,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Get list of groups to show *****/
    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
@@ -2906,8 +2906,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	               Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? "BROWSER_TITLE" :
 						                "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
-	       Checked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? Cns_CHECKED :
-								  Cns_UNCHECKED;
+	       Checked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? HTM_CHECKED :
+								  HTM_UNCHECKED;
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
 			        Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			        HTM_SUBMIT_ON_CLICK,
@@ -2939,8 +2939,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
 		     Checked = (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
-				GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? Cns_CHECKED :
-									Cns_UNCHECKED;
+				GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? HTM_CHECKED :
+									HTM_UNCHECKED;
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
 				      Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      HTM_SUBMIT_ON_CLICK,
@@ -3600,8 +3600,8 @@ static void Brw_PutCheckboxFullTree (void)
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParsFullTree,NULL,
                               "FullTree",
-                              Gbl.FileBrowser.FullTree ? Cns_CHECKED :
-                        				 Cns_UNCHECKED,
+                              Gbl.FileBrowser.FullTree ? HTM_CHECKED :
+                        				 HTM_UNCHECKED,
                               HTM_ENABLED,HTM_READWRITE,
                               Txt_Show_all_files,Txt_Show_all_files);
   }

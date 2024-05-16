@@ -984,7 +984,7 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1009,8 +1009,8 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
 		     HTM_LABEL_Begin (NULL);
 		        Checked = Grp_DB_CheckIfAssociatedToGrps ("exa_groups",
 					                          "SesCod",
-					                          SesCod) ? Cns_CHECKED :
-					                        	    Cns_UNCHECKED;
+					                          SesCod) ? HTM_CHECKED :
+					                        	    HTM_UNCHECKED;
 			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
 					    HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,

@@ -418,7 +418,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
   {
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
 
@@ -524,13 +524,13 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
 static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
   {
    extern const char *Txt_Allow_teachers_to_consult_this_test;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Test exam will be available for teachers? *****/
    HTM_DIV_Begin ("class=\"CM\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 Checked = AllowTeachers ? Cns_CHECKED :	// Teachers can see test exam
-				   Cns_UNCHECKED;
+	 Checked = AllowTeachers ? HTM_CHECKED :	// Teachers can see test exam
+				   HTM_UNCHECKED;
 	 HTM_INPUT_CHECKBOX ("AllowTchs",
 			     Checked,HTM_ENABLED,HTM_READWRITE,
 			     HTM_DONT_SUBMIT_ON_CHANGE,
@@ -926,7 +926,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	                        const struct Qst_Question *Question)
   {
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    unsigned NumOpt;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
@@ -951,7 +951,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
       if (Question->Answer.Options[Indexes[NumOpt]].Correct)
          NumOptCorrInQst++;
 
-      if (UsrAnswers[Indexes[NumOpt]] == Cns_CHECKED)	// This answer has been selected by the user
+      if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
         {
          if (Question->Answer.Options[Indexes[NumOpt]].Correct)
             NumAnsGood++;
@@ -1101,7 +1101,7 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES
 /*****************************************************************************/
 
 void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
+			       HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
   {
    unsigned NumOpt;
    const char *Ptr;
@@ -1112,7 +1112,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
    for (NumOpt = 0;
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      UsrAnswers[NumOpt] = Cns_UNCHECKED;
+      UsrAnswers[NumOpt] = HTM_UNCHECKED;
 
    /***** Set selected answers to checked *****/
    for (NumOpt = 0, Ptr = StrAnswersOneQst;
@@ -1127,7 +1127,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
       if (AnsUsr >= Qst_MAX_OPTIONS_PER_QUESTION)
 	 Err_WrongAnswerExit ();
 
-      UsrAnswers[AnsUsr] = Cns_CHECKED;
+      UsrAnswers[AnsUsr] = HTM_CHECKED;
      }
   }
 
@@ -1414,7 +1414,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    struct
      {
       char *Class;
@@ -1450,7 +1450,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
 	 HTM_TR_Begin (NULL);
 
 	    /* Draw icon depending on user's answer */
-	    if (UsrAnswers[Indexes[NumOpt]] == Cns_CHECKED)	// This answer has been selected by the user
+	    if (UsrAnswers[Indexes[NumOpt]] == HTM_CHECKED)	// This answer has been selected by the user
 	      {
 	       switch (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 		 {

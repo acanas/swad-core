@@ -242,7 +242,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
    size_t i;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    HTM_Disabled_t Disabled;
 
    /***** Contextual menu *****/
@@ -348,8 +348,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option a) Graphic of clicks in this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 					    The_GetSuffix ());
-			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? Cns_UNCHECKED :
-													      Cns_CHECKED;
+			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_UNCHECKED :
+													      HTM_CHECKED;
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
 					       Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					       HTM_DONT_SUBMIT_ON_CLICK,
@@ -394,8 +394,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option b) Listing of detailed clicks to this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 					    The_GetSuffix ());
-			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? Cns_CHECKED :
-													      Cns_UNCHECKED;
+			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_CHECKED :
+													      HTM_UNCHECKED;
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
 					       Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					       HTM_DONT_SUBMIT_ON_CLICK,

@@ -1266,15 +1266,15 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 				void (*FuncPars) (void *Args),void *Args,
                                 const char *CheckboxName,
-                                Cns_Checked_t Checked,
+                                HTM_Checked_t Checked,
                                 HTM_Disabled_t Disabled,
                                 HTM_Readonly_t Readonly,
                                 const char *Title,const char *Text)
   {
-   static const char *Class[Cns_NUM_CHECKED] =
+   static const char *Class[HTM_NUM_CHECKED] =
      {
-      [Cns_UNCHECKED] = "CHECKBOX_UNCHECKED",
-      [Cns_CHECKED  ] = "CHECKBOX_CHECKED",
+      [HTM_UNCHECKED] = "CHECKBOX_UNCHECKED",
+      [HTM_CHECKED  ] = "CHECKBOX_CHECKED",
      };
 
    /***** Separator *****/

@@ -200,7 +200,7 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 
 void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                             HTM_SubmitOnClick_t SubmitOnClick,
-                            Cns_Checked_t Checked)
+                            HTM_Checked_t Checked)
   {
    /***** Begin list row *****/
    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());

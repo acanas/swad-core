@@ -669,7 +669,7 @@ static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
    for (NumGame = 0;
 	NumGame < Games->Num;
 	NumGame++)
-      if (Games->Lst[NumGame].Checked == Cns_CHECKED)
+      if (Games->Lst[NumGame].Checked == HTM_CHECKED)
 	{
 	 sprintf (LongStr,"%ld",Games->Lst[NumGame].GamCod);
 	 if ((*GamesSelectedCommas)[0])

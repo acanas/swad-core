@@ -310,11 +310,11 @@ PrjCfg_RubricType_t PrjCfg_GetRubricFromString (const char *Str)
 static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
   {
    extern const char *Txt_Non_editing_teachers_can_create_new_projects;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    HTM_LABEL_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-      Checked = Config->NETCanCreate ? Cns_CHECKED :
-				       Cns_UNCHECKED;
+      Checked = Config->NETCanCreate ? HTM_CHECKED :
+				       HTM_UNCHECKED;
       HTM_INPUT_CHECKBOX ("NETCanCreate",Checked,HTM_ENABLED,HTM_READWRITE,
 			  HTM_SUBMIT_ON_CHANGE,
 			  "id=\"NETCanCreate\" value=\"Y\"");

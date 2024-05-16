@@ -64,12 +64,13 @@ void Att_DB_RemoveGrpsAssociatedToAnEvent (long AttCod);
 
 unsigned Att_DB_GetNumStdsTotalWhoAreInEvent (long AttCod);
 unsigned Att_DB_GetNumStdsFromListWhoAreInEvent (long AttCod,const char *SubQueryUsrs);
-bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present);
+bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,
+				       Att_Present_t *Presente);
 unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long UsrCod);
 unsigned Att_DB_GetListUsrsInEvent (MYSQL_RES **mysql_res,
                                     long AttCod,bool AttEventIsAsociatedToGrps);
 void Att_DB_RegUsrInEventChangingComments (long AttCod,long UsrCod,
-                                           bool Present,
+                                           Att_Present_t Present,
                                            const char *CommentStd,
                                            const char *CommentTch);
 void Att_DB_SetUsrAsPresent (long AttCod,long UsrCod);

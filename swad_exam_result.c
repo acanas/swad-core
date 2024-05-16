@@ -719,7 +719,7 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
    for (NumExam = 0;
 	NumExam < Exams->Num;
 	NumExam++)
-      if (Exams->Lst[NumExam].Checked == Cns_CHECKED)
+      if (Exams->Lst[NumExam].Checked == HTM_CHECKED)
 	{
 	 sprintf (LongStr,"%ld",Exams->Lst[NumExam].ExaCod);
 	 if ((*ExamsSelectedCommas)[0])

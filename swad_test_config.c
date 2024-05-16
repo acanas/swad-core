@@ -156,7 +156,7 @@ static void TstCfg_ShowFormConfig (void)
    struct Qst_Questions Questions;
    TstCfg_Pluggable_t Pluggable;
    char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -181,8 +181,8 @@ static void TstCfg_ShowFormConfig (void)
 		       Pluggable++)
 		    {
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		        Checked = (Pluggable == TstCfg_GetConfigPluggable ()) ? Cns_CHECKED :
-										Cns_UNCHECKED;
+		        Checked = (Pluggable == TstCfg_GetConfigPluggable ()) ? HTM_CHECKED :
+										HTM_UNCHECKED;
 			HTM_INPUT_RADIO ("Pluggable",
 					 Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					 HTM_DONT_SUBMIT_ON_CLICK,

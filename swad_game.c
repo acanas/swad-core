@@ -908,7 +908,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
       for (NumGame = 0;
 	   NumGame < Games->Num;
 	   NumGame++)
-	 Games->Lst[NumGame].Checked = Cns_UNCHECKED;
+	 Games->Lst[NumGame].Checked = HTM_UNCHECKED;
 
       /* Set some games as selected */
       for (Ptr = Games->GamCodsSelected;
@@ -925,7 +925,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
 	      NumGame++)
 	    if (Games->Lst[NumGame].GamCod == GamCod)
 	      {
-	       Games->Lst[NumGame].Checked = Cns_CHECKED;
+	       Games->Lst[NumGame].Checked = HTM_CHECKED;
 	       Games->NumSelected++;
 	       break;
 	      }
@@ -937,7 +937,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
       for (NumGame = 0;
 	   NumGame < Games->Num;
 	   NumGame++)
-	 Games->Lst[NumGame].Checked = Cns_CHECKED;
+	 Games->Lst[NumGame].Checked = HTM_CHECKED;
       Games->NumSelected = Games->Num;
      }
   }

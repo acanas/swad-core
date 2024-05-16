@@ -842,12 +842,12 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
   {
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   Cns_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-   static const char *CheckedTxt[Cns_NUM_CHECKED] =
+   static const char *CheckedTxt[HTM_NUM_CHECKED] =
      {
-      [Cns_UNCHECKED] = "",
-      [Cns_CHECKED  ] = " checked=\"checked\"",
+      [HTM_UNCHECKED] = "",
+      [HTM_CHECKED  ] = " checked=\"checked\"",
      };
 
    /***** Change format of answers text *****/

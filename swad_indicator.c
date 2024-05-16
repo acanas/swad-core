@@ -211,7 +211,7 @@ void Ind_ReqIndicatorsCourses (void)
       for (Ind  = 0, NumCrssToList = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 if (Indicators.IndicatorsSelected[Ind] == Cns_CHECKED)
+	 if (Indicators.IndicatorsSelected[Ind] == HTM_CHECKED)
 	    NumCrssToList += NumCrssWithIndicatorYes[Ind];
       if (Ind_GetIfShowBigList (&Indicators,NumCrssToList))
 	{
@@ -314,7 +314,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators->IndicatorsSelected[Ind] = Cns_UNCHECKED;
+	 Indicators->IndicatorsSelected[Ind] = HTM_UNCHECKED;
 
       /* Set indicators selected */
       for (Ptr = Indicators->StrIndicatorsSelected;
@@ -330,7 +330,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
 	      Ind <= Ind_NUM_INDICATORS;
 	      Ind++)
 	    if ((long) Ind == Indicator)
-	       Indicators->IndicatorsSelected[Ind] = Cns_CHECKED;
+	       Indicators->IndicatorsSelected[Ind] = HTM_CHECKED;
 	}
      }
    else
@@ -338,7 +338,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators->IndicatorsSelected[Ind] = Cns_CHECKED;
+	 Indicators->IndicatorsSelected[Ind] = HTM_CHECKED;
   }
 
 /*****************************************************************************/
@@ -466,7 +466,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
 	{
-	 Class = (Indicators->IndicatorsSelected[Ind] == Cns_CHECKED) ? ClassHighlight :
+	 Class = (Indicators->IndicatorsSelected[Ind] == HTM_CHECKED) ? ClassHighlight :
 								        ClassNormal;
 	 HTM_TR_Begin (NULL);
 
@@ -689,13 +689,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 	 /* Get stored number of indicators of this course */
 	 NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
-	 if (Indicators->IndicatorsSelected[NumIndicators] == Cns_CHECKED)
+	 if (Indicators->IndicatorsSelected[NumIndicators] == HTM_CHECKED)
 	   {
 	    /* Compute and store indicators */
 	    Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&IndicatorsCrs);
 
 	    /* The number of indicators may have changed */
-	    if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators] == Cns_CHECKED)
+	    if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators] == HTM_CHECKED)
 	      {
 	       ActCod = Act_GetActCod (ActReqStaCrs);
 

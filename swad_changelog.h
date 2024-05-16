@@ -633,11 +633,12 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.82 (2024-05-15)"
+#define Log_PLATFORM_VERSION	"SWAD 23.82.1 (2024-05-16)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
-	Version 23.82:    May 15, 2024  Fixed issue in groups. Reported by Mancia Anguita López and Christian Agustín Morillas Gutiérrez (? lines)
+	Version 23.82.1:  May 16, 2024  Code refactoring related to absent/present users in attendance. (335850 lines)
+	Version 23.82:    May 15, 2024  Fixed issue in groups. Reported by Mancia Anguita López and Christian Agustín Morillas Gutiérrez. (335841 lines)
 	Version 23.81:    May 14, 2024  Code refactoring in HTML related to required field in forms. (335782 lines)
 	Version 23.80:    May 09, 2024  Code refactoring in HTML related to disabled field in forms. (335713 lines)
 	Version 23.79.8:  Apr 30, 2024  Code refactoring in HTML related to checked field in forms. (335817 lines)

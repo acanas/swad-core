@@ -100,7 +100,7 @@ void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
       [TstVis_VISIBLE_TOTAL_SCORE   ] = "check-circle-regular.svg",
      };
    TstVis_Visibility_t Visibility;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Write list of checkboxes for visibility *****/
    for (Visibility  = (TstVis_Visibility_t) 0;
@@ -111,8 +111,8 @@ void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 
          /* Checkbox with icon and text */
-         Checked = ((SelectedVisibility & (1 << Visibility)) != 0) ? Cns_CHECKED :
-								     Cns_UNCHECKED;
+         Checked = ((SelectedVisibility & (1 << Visibility)) != 0) ? HTM_CHECKED :
+								     HTM_UNCHECKED;
 	 HTM_INPUT_CHECKBOX ("Visibility",Checked,HTM_ENABLED,HTM_READWRITE,
 			     HTM_DONT_SUBMIT_ON_CHANGE,
 			     "value=\"%u\"",(unsigned) Visibility);

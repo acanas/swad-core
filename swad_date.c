@@ -289,7 +289,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    extern const char *Hlp_PROFILE_Settings_dates;
    extern const char *Txt_Dates;
    Dat_Format_t Format;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Dates,Dat_PutIconsDateFormat,NULL,
@@ -312,8 +312,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 		  HTM_LI_Begin ("class=\"DAT_%s\"",
 		                The_GetSuffix ());
 	       HTM_LABEL_Begin (NULL);
-	          Checked = (Format == Gbl.Prefs.DateFormat) ? Cns_CHECKED :
-							       Cns_UNCHECKED;
+	          Checked = (Format == Gbl.Prefs.DateFormat) ? HTM_CHECKED :
+							       HTM_UNCHECKED;
 		  HTM_INPUT_RADIO ("DateFormat",
 				   Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   HTM_SUBMIT_ON_CLICK,

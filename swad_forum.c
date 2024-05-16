@@ -1434,7 +1434,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
   {
    extern const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS];
    For_ForumSet_t ForumSet;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Form to select which forums I want to see:
           - all my forums
@@ -1450,8 +1450,8 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 	      {
 	       HTM_LI_Begin (NULL);
 		  HTM_LABEL_Begin (NULL);
-		     Checked = (ForumSet == Forums->ForumSet) ? Cns_UNCHECKED :
-								Cns_CHECKED;
+		     Checked = (ForumSet == Forums->ForumSet) ? HTM_UNCHECKED :
+								HTM_CHECKED;
 		     HTM_INPUT_RADIO ("ForumSet",
 				      Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      HTM_SUBMIT_ON_CLICK,

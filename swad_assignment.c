@@ -1303,7 +1303,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1327,8 +1327,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 		     HTM_LABEL_Begin (NULL);
 		        Checked = Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
 								  "AsgCod",
-								  AsgCod) ? Cns_UNCHECKED :
-									    Cns_CHECKED;
+								  AsgCod) ? HTM_UNCHECKED :
+									    HTM_CHECKED;
 			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
 					    HTM_ENABLED,HTM_READWRITE,
 					    HTM_DONT_SUBMIT_ON_CHANGE,

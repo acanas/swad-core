@@ -368,8 +368,8 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "MustBeRead",
-                              MustBeRead ? Cns_CHECKED :
-                        		   Cns_UNCHECKED,
+                              MustBeRead ? HTM_CHECKED :
+                        		   HTM_UNCHECKED,
                               Disabled,HTM_READWRITE,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
@@ -400,8 +400,8 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "IHaveRead",
-                              IHaveRead ? Cns_CHECKED :
-                        		  Cns_UNCHECKED,
+                              IHaveRead ? HTM_CHECKED :
+                        		  HTM_UNCHECKED,
                               HTM_ENABLED,HTM_READWRITE,
                               Txt_I_have_read_this_information,
                               Txt_I_have_read_this_information);
@@ -826,7 +826,7 @@ void Inf_FormsToSelSendInfo (void)
    struct Inf_FromDB FromDB;
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
    HTM_Disabled_t Disabled;
    static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
      {
@@ -908,8 +908,8 @@ void Inf_FormsToSelSendInfo (void)
 						  "");
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 	          Syl_PutParWhichSyllabus (&Syllabus.WhichSyllabus);
-	          Checked = (InfoSrc == FromDB.Src) ? Cns_CHECKED :
-	        				      Cns_UNCHECKED;
+	          Checked = (InfoSrc == FromDB.Src) ? HTM_CHECKED :
+	        				      HTM_UNCHECKED;
 	          Disabled = (InfoSrc == Inf_NONE ||
 			      InfoAvailable[InfoSrc]) ? HTM_ENABLED :
 							HTM_DISABLED;

@@ -518,7 +518,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
   {
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
-   Cns_Checked_t Checked;
+   HTM_Checked_t Checked;
 
    for (Role  = Rol_UNK;
         Role <= Rol_SYS_ADM;

@@ -102,11 +102,4 @@ typedef enum
    Cns_VERBOSE,
   } Cns_Verbose_t;
 
-#define Cns_NUM_CHECKED 2
-typedef enum
-  {
-   Cns_UNCHECKED,
-   Cns_CHECKED,
-  } Cns_Checked_t;
-
 #endif

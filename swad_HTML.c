@@ -39,10 +39,10 @@
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-static const char *HTM_CheckedTxt[Cns_NUM_CHECKED] =
+static const char *HTM_CheckedTxt[HTM_NUM_CHECKED] =
   {
-   [Cns_UNCHECKED] = "",
-   [Cns_CHECKED  ] = " checked=\"checked\""
+   [HTM_UNCHECKED] = "",
+   [HTM_CHECKED  ] = " checked=\"checked\""
   };
 
 static const char *HTM_SelectedTxt[HTM_NUM_SELECTED] =
@@ -1384,7 +1384,7 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
   }
 
 void HTM_INPUT_RADIO (const char *Name,
-      		      Cns_Checked_t Checked,
+      		      HTM_Checked_t Checked,
       		      HTM_Disabled_t Disabled,
       		      HTM_Readonly_t Readonly,
       		      HTM_Required_t Required,HTM_SubmitOnClick_t SubmitOnClick,
@@ -1424,7 +1424,7 @@ void HTM_INPUT_RADIO (const char *Name,
   }
 
 void HTM_INPUT_CHECKBOX (const char *Name,
-			 Cns_Checked_t Checked,
+			 HTM_Checked_t Checked,
 			 HTM_Disabled_t Disabled,
 			 HTM_Readonly_t Readonly,
 			 HTM_SubmitOnChange_t SubmitOnChange,
