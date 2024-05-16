@@ -299,7 +299,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
 	 Qst_WriteParQstCod (QstInd,Question->QstCod);
 
 	 /* Stem */
-	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",true);
+	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 
 	 /* Media */
 	 Med_ShowMedia (&Question->Media,
@@ -672,7 +672,8 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	      {
 	       /* Stem */
 	       Qst_WriteQstStem (Question->Stem,"Qst_TXT",
-	                         ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
+	                         ICanView[TstVis_VISIBLE_QST_ANS_TXT] ? HidVis_VISIBLE :
+									HidVis_HIDDEN);
 
 	       /* Media */
 	       if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)

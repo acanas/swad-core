@@ -1740,7 +1740,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  switch (ICanEditThisField)
 		    {
 		     case Usr_CAN:		// Show with form
-			HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					    "name=\"Field%ld\" rows=\"%u\""
 					    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 					    Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
@@ -3404,7 +3404,7 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
 		    }
 		  break;
 	       case Vie_EDIT:
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"Comments\" name=\"Comments\""
 				      " rows=\"4\""
 				      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",

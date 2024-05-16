@@ -481,9 +481,9 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 
       /***** Print XML tree *****/
       HTM_DIV_Begin ("class=\"Tst_FILE_CONTENT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READONLY,HTM_NOT_REQUIRED,
 			     "title=\"%s\" cols=\"60\" rows=\"5\""
-			     " spellcheck=\"false\" readonly",
+			     " spellcheck=\"false\"",
 			     Txt_XML_file_content);
 	    XML_PrintTree (RootElem);
 	 HTM_TEXTAREA_End ();
@@ -948,8 +948,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Write the stem and the answers *****/
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	 Qst_WriteQstStem (Stem,ClassStem,
-			   true);	// Visible
+	 Qst_WriteQstStem (Stem,ClassStem,HidVis_VISIBLE);
 	 Qst_WriteQstFeedback (Feedback,"Qst_TXT_LIGHT");
 	 switch (Question->Answer.Type)
 	   {

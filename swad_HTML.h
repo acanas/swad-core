@@ -230,7 +230,9 @@ void HTM_BUTTON_Submit_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_Begin (const char *Title,const char *fmt,...);
 void HTM_BUTTON_End (void);
 
-void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,HTM_Required_t Required,
+void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,
+			 HTM_Readonly_t Readonly,
+			 HTM_Required_t Required,
 			 const char *fmt,...);
 void HTM_TEXTAREA_End (void);
 

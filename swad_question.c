@@ -522,8 +522,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 	 if (QuestionExists)
 	   {
 	    /* Write stem */
-	    Qst_WriteQstStem (Question->Stem,"Qst_TXT",
-			      true);	// Visible
+	    Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 
 	    /* Show media */
 	    Med_ShowMedia (&Question->Media,
@@ -564,7 +563,8 @@ void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class)
 /********************* Write the stem of a test question *********************/
 /*****************************************************************************/
 
-void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
+void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
+		       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    unsigned long StemLength;
    char *StemRigorousHTML;
@@ -573,7 +573,7 @@ void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
    HTM_DIV_Begin ("class=\"%s_%s\"",ClassStem,The_GetSuffix ());
 
       /***** Write stem *****/
-      if (Stem && Visible)
+      if (Stem && HiddenOrVisible == HidVis_VISIBLE)
 	{
 	 if (Stem[0])
 	   {
@@ -1000,8 +1000,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	 /* Stem (row[3]) */
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    Qst_WriteQstStem (Questions->Question.Stem,"Qst_TXT",
-			      true);	// Visible
+	    Qst_WriteQstStem (Questions->Question.Stem,"Qst_TXT",HidVis_VISIBLE);
 
 	    /***** Get and show media (row[5]) *****/
 	    Med_ShowMedia (&Questions->Question.Media,
@@ -1316,8 +1315,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 	 /* Write stem */
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    Qst_WriteQstStem (Question->Stem,"Qst_TXT",
-			      true);	// Visible
+	    Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 
 	    /***** Get and show media *****/
 	    Med_ShowMedia (&Question->Media,
@@ -1987,7 +1985,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_REQUIRED,
 				   "id=\"Stem\" name=\"Stem\" rows=\"5\""
 			           " class=\"Qst_STEM_TXT INPUT_%s\"",
 				   The_GetSuffix ());
@@ -2001,7 +1999,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	                        The_GetSuffix ());
 		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 		  HTM_BR ();
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "name=\"Feedback\" rows=\"2\""
 			              " class=\"Qst_STEM_TXT INPUT_%s\"",
 			              The_GetSuffix ());
@@ -2197,7 +2195,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 							    " style=\"display:none;\"");	// Answer does not have content ==> Hide column
 
 			   /* Answer text */
-			   HTM_TEXTAREA_Begin (Disabled,HTM_NOT_REQUIRED,
+			   HTM_TEXTAREA_Begin (Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
 					       "name=\"AnsStr%u\" rows=\"5\""
 				               " class=\"Qst_ANS_TXT INPUT_%s\"",
 					       NumOpt,The_GetSuffix ());
@@ -2214,7 +2212,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			                    The_GetSuffix ());
 			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 			      HTM_BR ();
-			      HTM_TEXTAREA_Begin (Disabled,HTM_NOT_REQUIRED,
+			      HTM_TEXTAREA_Begin (Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
 						  "name=\"FbStr%u\" rows=\"2\""
 				                  " class=\"Qst_ANS_TXT INPUT_%s\"",
 						  NumOpt,The_GetSuffix ());

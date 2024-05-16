@@ -786,7 +786,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				"id=\"UsrsIDs\" name=\"UsrsIDs\""
 		                " cols=\"60\" rows=\"10\" class=\"INPUT_%s\"",
 		                The_GetSuffix ());

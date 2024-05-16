@@ -1230,7 +1230,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"Place\" name=\"Place\" rows=\"4\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",
 			              The_GetSuffix ());
@@ -1261,7 +1261,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	    if (ViewType == Vie_EDIT)
 	      {
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "id=\"ExamMode\" name=\"ExamMode\" rows=\"2\""
 			           " class=\"Frm_C2_INPUT INPUT_%s\"",
 			           The_GetSuffix ());
@@ -1292,7 +1292,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"Structure\" name=\"Structure\""
 				      " rows=\"8\""
 				      " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1324,7 +1324,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"DocRequired\" name=\"DocRequired\""
 			              " rows=\"2\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1356,7 +1356,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"MatRequired\" name=\"MatRequired\""
 				      " rows=\"4\""
 				      " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1388,7 +1388,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"MatAllowed\" name=\"MatAllowed\""
 			              " rows=\"4\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1420,7 +1420,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"OtherInfo\" name=\"OtherInfo\""
 			              " rows=\"5\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",

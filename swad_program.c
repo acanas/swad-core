@@ -1986,7 +1986,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			     "id=\"Txt\" name=\"Txt\" rows=\"10\""
 			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 			     The_GetSuffix ());

@@ -1040,7 +1040,7 @@ void Att_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
@@ -1770,7 +1770,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 switch (ICanEditStdComment)
 	   {
 	    case Usr_CAN:	// Show with form
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,The_GetSuffix ());
@@ -1795,7 +1795,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	 switch (ICanEditTchComment)
 	   {
 	    case Usr_CAN:			// Show with form
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,The_GetSuffix ());

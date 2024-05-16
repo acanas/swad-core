@@ -1960,7 +1960,8 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 
 	 /* Stem */
 	 Qst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
-			   ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN);
+			   ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN ? HidVis_VISIBLE :
+									     HidVis_HIDDEN);
 
 	 /* Media */
 	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] == Usr_CAN)

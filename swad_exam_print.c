@@ -714,7 +714,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       HTM_TD_Begin ("class=\"LT\"");
 
 	 /* Stem */
-	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",true);
+	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",HidVis_VISIBLE);
 
 	 /* Media */
 	 Med_ShowMedia (&Question->Media,

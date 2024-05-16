@@ -1546,7 +1546,9 @@ void HTM_BUTTON_End (void)
 /********************************* Text areas ********************************/
 /*****************************************************************************/
 
-void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,HTM_Required_t Required,
+void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,
+			 HTM_Readonly_t Readonly,
+			 HTM_Required_t Required,
 			 const char *fmt,...)
   {
    va_list ap;
@@ -1571,6 +1573,7 @@ void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,HTM_Required_t Required,
 	}
 
    HTM_Txt (HTM_DisabledTxt[Disabled]);
+   HTM_Txt (HTM_ReadonlyTxt[Readonly]);
    HTM_Txt (HTM_RequiredTxt[Required]);
 
    HTM_Txt (">");

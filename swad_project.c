@@ -1825,7 +1825,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 case Frm_PUT_FORM:
 	       /* Show text form */
 	       HTM_BR ();
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "name=\"ReviewTxt\" rows=\"2\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " placeholder=\"%s&hellip;\""
@@ -3966,7 +3966,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,Required,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,Required,
 			     "id=\"%s\" name=\"%s\" rows=\"%u\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\"",
 			     Id,Id,NumRows,The_GetSuffix ());

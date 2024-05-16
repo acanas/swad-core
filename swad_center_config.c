@@ -475,7 +475,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
       case Frm_PUT_FORM:
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgCtrPhoAtt);
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "id=\"AttributionArea\" name=\"Attribution\""
 				   " rows=\"3\""
 				   " onchange=\"this.form.submit();return false;\"");

@@ -1679,7 +1679,7 @@ void Svy_ReqCreatOrEditSvy (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
@@ -2267,7 +2267,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				   "id=\"Txt\" name=\"Txt\""
 			           " cols=\"60\" rows=\"4\""
 			           " class=\"INPUT_%s\"",
@@ -2323,7 +2323,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 			/* Answer text */
 			HTM_TD_Begin ("class=\"RT\"");
-			   HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+			   HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 					       "id=\"AnsStr%u\" name=\"AnsStr%u\""
 					       " cols=\"50\" rows=\"1\"",
 					       NumAns,NumAns);
@@ -2983,7 +2983,7 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
 	   }
 	 break;
       case Frm_PUT_FORM:
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			     "name=\"Com%010u\""
 			     " cols=\"60\" rows=\"4\""
 			     " class=\"INPUT_%s\" placeholder=\"%s&hellip;\"",

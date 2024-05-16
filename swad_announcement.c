@@ -383,7 +383,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			     "id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\""
 		             " class=\"INPUT_%s\"",
 			     Field,Field,Rows,The_GetSuffix ());

@@ -2764,8 +2764,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
       HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
 
 	 /* Write stem */
-	 Qst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",
-			   true);		// Visible
+	 Qst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",HidVis_VISIBLE);
 
 	 /* Show media */
 	 Med_ShowMedia (&Question.Media,

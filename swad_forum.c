@@ -2859,7 +2859,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				      "id=\"Content\" name=\"Content\""
 				      " rows=\"10\""
 				      " class=\"Frm_C2_INPUT INPUT_%s\"",

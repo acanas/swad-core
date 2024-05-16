@@ -1574,7 +1574,7 @@ void Inf_EditPlainTxtInfo (void)
 	 /***** Edition area *****/
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_HelpPlainEditor ();
-	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 				"name=\"Txt\" cols=\"80\" rows=\"20\""
 		                " class=\"INPUT_%s\"",
 		                The_GetSuffix ());
@@ -1658,7 +1658,7 @@ void Inf_EditRichTxtInfo (void)
       /***** Edition area *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Lay_HelpRichEditor ();
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
 			     "name=\"Txt\" cols=\"80\" rows=\"20\""
 		             " class=\"INPUT_%s\"",
 	                     The_GetSuffix ());
