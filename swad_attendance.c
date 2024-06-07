@@ -992,7 +992,7 @@ void Att_ReqCreatOrEditEvent (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Events.Event.Title,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1012,20 +1012,17 @@ void Att_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				 HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				 "id=\"ComTchVisible\" name=\"ComTchVisible\""
 				 " class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
 		  HTM_OPTION (HTM_Type_STRING,"N",
-			      Events.Event.CommentTchVisible ? HTM_OPTION_UNSELECTED :
-							       HTM_OPTION_SELECTED,
-			      HTM_ENABLED,
+			      Events.Event.CommentTchVisible ? HTM_NO_ATTR :
+							       HTM_SELECTED,
 			      "%s",Txt_Hidden_MALE_PLURAL);
 		  HTM_OPTION (HTM_Type_STRING,"Y",
-			      Events.Event.CommentTchVisible ? HTM_OPTION_SELECTED :
-							       HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      Events.Event.CommentTchVisible ? HTM_SELECTED :
+							       HTM_NO_ATTR,
 			      "%s",Txt_Visible_MALE_PLURAL);
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
@@ -1040,7 +1037,7 @@ void Att_ReqCreatOrEditEvent (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
@@ -1076,7 +1073,6 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
-   HTM_Checked_t Checked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1096,16 +1092,13 @@ static void Att_ShowLstGrpsToEditEvent (long AttCod)
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
-		                The_GetSuffix ());
+		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
-		        Checked = Grp_DB_CheckIfAssociatedToGrps ("att_groups",
-					                          "AttCod",
-					                          AttCod) ? HTM_UNCHECKED :
-									    HTM_CHECKED;
-			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
-					    HTM_ENABLED,HTM_READWRITE,
-					    HTM_DONT_SUBMIT_ON_CHANGE,
+			HTM_INPUT_CHECKBOX ("WholeCrs",
+					    Grp_DB_CheckIfAssociatedToGrps ("att_groups",
+									    "AttCod",
+									    AttCod) ? HTM_NO_ATTR :
+										      HTM_CHECKED,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
 			Grp_WriteTheWholeCourse ();
@@ -1659,8 +1652,6 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    Att_Present_t Present;
-   HTM_Checked_t Checked;
-   HTM_Readonly_t Readonly;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
    Usr_Can_t ICanChangeStdAttendance;
@@ -1712,12 +1703,11 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
       /***** Checkbox to select user *****/
       HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
-         Checked = (Present == Att_PRESENT) ? HTM_CHECKED :
-					      HTM_UNCHECKED;
-         Readonly = (ICanChangeStdAttendance == Usr_CAN) ? HTM_READWRITE :
-							   HTM_READONLY;
-	 HTM_INPUT_CHECKBOX ("UsrCodStd",Checked,HTM_ENABLED,Readonly,
-			     HTM_DONT_SUBMIT_ON_CHANGE,
+	 HTM_INPUT_CHECKBOX ("UsrCodStd",
+			     ((Present == Att_PRESENT) ? HTM_CHECKED :
+					                 HTM_NO_ATTR) |
+			     ((ICanChangeStdAttendance == Usr_CAN) ? HTM_NO_ATTR :
+								     HTM_DISABLED),
 			     "id=\"Std%u\" value=\"%s\"",
 			     NumUsr,UsrDat->EnUsrCod);
       HTM_TD_End ();
@@ -1726,8 +1716,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_STRONG" :
 				       "DAT",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
@@ -1744,8 +1733,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 				       "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
@@ -1753,8 +1741,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 				       "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	    HTM_SPTxt (UsrDat->Surname2);
@@ -1765,12 +1752,11 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 				       "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 switch (ICanEditStdComment)
 	   {
 	    case Usr_CAN:	// Show with form
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,The_GetSuffix ());
@@ -1790,12 +1776,11 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 				       "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 switch (ICanEditTchComment)
 	   {
 	    case Usr_CAN:			// Show with form
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
 				   " class=\"INPUT_%s\"",
 				   UsrDat->EnUsrCod,The_GetSuffix ());
@@ -2450,7 +2435,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
       for (NumAttEvent = 0;
 	   NumAttEvent < Events->Num;
 	   NumAttEvent++)
-	 Events->Lst[NumAttEvent].Checked = HTM_UNCHECKED;
+	 Events->Lst[NumAttEvent].Checked = HTM_NO_ATTR;
 
       /* Set some events as selected */
       for (Ptr = Events->StrAttCodsSelected;
@@ -2488,7 +2473,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 	      NumAttEvent++)
 	   {
 	    /* Reset selection */
-	    Events->Lst[NumAttEvent].Checked = HTM_UNCHECKED;
+	    Events->Lst[NumAttEvent].Checked = HTM_NO_ATTR;
 
 	    /* Set this event as selected? */
 	    if (Events->Lst[NumAttEvent].NumStdsFromList)	// Some students attended to this event
@@ -2501,7 +2486,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 		  /* Get groups associated to this event */
 		  for (NumGrpInThisEvent = 0;
 		       NumGrpInThisEvent < NumGrpsInThisEvent &&
-		       Events->Lst[NumAttEvent].Checked == HTM_UNCHECKED;
+		       Events->Lst[NumAttEvent].Checked == HTM_NO_ATTR;
 		       NumGrpInThisEvent++)
 		    {
 		     /* Get next group associated to this event */
@@ -2509,7 +2494,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 			/* Check if this group is selected */
 			for (NumGrpSel = 0;
 			     NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps &&
-			     Events->Lst[NumAttEvent].Checked == HTM_UNCHECKED;
+			     Events->Lst[NumAttEvent].Checked == HTM_NO_ATTR;
 			     NumGrpSel++)
 			   if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == GrpCodInThisEvent)
 			      Events->Lst[NumAttEvent].Checked = HTM_CHECKED;
@@ -2671,27 +2656,22 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_INPUT_CHECKBOX ("AttCods",
 				      Events->Lst[NumAttEvent].Checked,
-				      HTM_ENABLED,HTM_READWRITE,
-				      HTM_DONT_SUBMIT_ON_CHANGE,
 				      "id=\"Event%u\" value=\"%ld\"",
 				      NumAttEvent,Events->Event.AttCod);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
 		     HTM_UnsignedColon (NumAttEvent + 1);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
@@ -2710,14 +2690,12 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_Txt (Events->Event.Title);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_Unsigned (Events->Event.NumStdsTotal);
 	       HTM_TD_End ();
 
@@ -2907,8 +2885,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_STRONG" :
 				       "DAT",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumUsr + 1);
       HTM_TD_End ();
 
@@ -2925,8 +2902,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 				       "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
@@ -2934,8 +2910,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 				       "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	    HTM_SPTxt (UsrDat->Surname2);
@@ -3095,8 +3070,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_STRONG" :
 				       "DAT",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_UnsignedColon (NumUsr);
       HTM_TD_End ();
 

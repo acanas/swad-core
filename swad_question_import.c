@@ -481,10 +481,9 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 
       /***** Print XML tree *****/
       HTM_DIV_Begin ("class=\"Tst_FILE_CONTENT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READONLY,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_DISABLED,
 			     "title=\"%s\" cols=\"60\" rows=\"5\""
-			     " spellcheck=\"false\"",
-			     Txt_XML_file_content);
+			     " spellcheck=\"false\"",Txt_XML_file_content);
 	    XML_PrintTree (RootElem);
 	 HTM_TEXTAREA_End ();
       HTM_DIV_End ();

@@ -157,14 +157,12 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    /* Center logo and full name */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
-	                     The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",The_GetSuffix (),BgColor);
 		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
-	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -334,50 +332,43 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
    HTM_TR_Begin (NULL);
 
       /***** Number of center in this list *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCtr);
       HTM_TD_End ();
 
       /***** Center logo and name *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    TxtClassStrong,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassStrong,The_GetSuffix (),BgColor);
 	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CT ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTR,Ctr));
       HTM_TD_End ();
 
       /***** Place *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
 	 Plc.PlcCod = Ctr->Specific.PlcCod;
 	 Plc_GetPlaceDataByCod (&Plc);
 	 HTM_Txt (Plc.ShrtName);
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_CTR,	// ...in center
 						      Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTR,	// ...in center
 						      Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTR,Ctr->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -662,24 +653,21 @@ void Ctr_WriteSelectorOfCenter (void)
    unsigned NumCtrs;
    unsigned NumCtr;
    long CtrCod;
-   HTM_Disabled_t Disabled = (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0) ? HTM_ENABLED :
-									HTM_DISABLED;
-   HTM_SubmitOnChange_t SubmitOnChange = (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-										    HTM_DONT_SUBMIT_ON_CHANGE;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeDeg);
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
+      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_INS].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
+								   HTM_DISABLED,
+			NULL,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0 ? HTM_OPTION_SELECTED :
-							      HTM_OPTION_UNSELECTED,
-		     HTM_DISABLED,
+		     ((Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0) ? HTM_SELECTED :
+							         HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
 	 if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
@@ -700,9 +688,8 @@ void Ctr_WriteSelectorOfCenter (void)
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&CtrCod,
 			   Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 &&
-			   CtrCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_OPTION_SELECTED :
-									  HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (CtrCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod) ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
 
@@ -799,15 +786,13 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCtrPlc);
 			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-					  HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"PlcCod\""
 					  " class=\"PLC_SEL INPUT_%s\"",
 					  The_GetSuffix ());
 			   HTM_OPTION (HTM_Type_STRING,"0",
-				       Ctr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
-								   HTM_OPTION_UNSELECTED,
-				       HTM_ENABLED,
+				       (Ctr->Specific.PlcCod == 0) ? HTM_SELECTED :
+								     HTM_NO_ATTR,
 				       "%s",Txt_Another_place);
 			   for (NumPlc = 0;
 				NumPlc < Places->Num;
@@ -815,9 +800,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 			     {
 			      Plc = &Places->Lst[NumPlc];
 			      HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
-					  Plc->PlcCod == Ctr->Specific.PlcCod ? HTM_OPTION_SELECTED :
-										HTM_OPTION_UNSELECTED,
-					  HTM_ENABLED,
+					  (Plc->PlcCod == Ctr->Specific.PlcCod) ? HTM_SELECTED :
+										  HTM_NO_ATTR,
 					  "%s",Plc->ShrtName);
 			     }
 			HTM_SELECT_End ();
@@ -851,7 +835,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     Frm_BeginForm (ActChgCtrWWW);
 			ParCod_PutPar (ParCod_OthHie,Ctr->HieCod);
 			HTM_INPUT_URL ("WWW",Ctr->WWW,
-				       HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				       HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				       "class=\"INPUT_WWW INPUT_%s\"",
 				       The_GetSuffix ());
 		     Frm_EndForm ();
@@ -862,9 +846,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHRT\"");
 			HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 				     " class=\"DAT_%s\" title=\"%s\"",
-				     Ctr->WWW,
-				     The_GetSuffix (),
-				     Ctr->WWW);
+				     Ctr->WWW,The_GetSuffix (),Ctr->WWW);
 			   HTM_Txt (WWW);
 			HTM_A_End ();
 		     HTM_DIV_End ();
@@ -886,8 +868,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CRS);
-	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",The_GetSuffix ());
 	       Usr_WriteAuthor (&UsrDat,For_ENABLED);
 	    HTM_TD_End ();
 
@@ -914,7 +895,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
   {
    return (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
-           ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
+           ((Ctr->Status & Hie_STATUS_BIT_PENDING) &&	// Center is not yet activated
             Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
         							  Usr_CAN_NOT;
   }
@@ -1271,14 +1252,12 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 	 /***** Place *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"PlcCod\" class=\"PLC_SEL INPUT_%s\"",
 			      The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"0",
-			   Ctr_EditingCtr->Specific.PlcCod == 0 ? HTM_OPTION_SELECTED :
-							          HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (Ctr_EditingCtr->Specific.PlcCod == 0) ? HTM_SELECTED :
+							            HTM_NO_ATTR,
 			   "%s",Txt_Another_place);
 	       for (NumPlc = 0;
 		    NumPlc < Places->Num;
@@ -1286,9 +1265,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 		 {
 		  Plc = &Places->Lst[NumPlc];
 		  HTM_OPTION (HTM_Type_LONG,&Plc->PlcCod,
-			      Plc->PlcCod == Ctr_EditingCtr->Specific.PlcCod ? HTM_OPTION_SELECTED :
-									       HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Plc->PlcCod == Ctr_EditingCtr->Specific.PlcCod) ? HTM_SELECTED :
+									         HTM_NO_ATTR,
 			      "%s",Plc->ShrtName);
 		 }
 	    HTM_SELECT_End ();
@@ -1302,9 +1280,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 /***** Center WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,
-			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\"",
-			   The_GetSuffix ());
+			   HTM_REQUIRED,
+			   "class=\"INPUT_WWW INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this center,
@@ -1315,8 +1292,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 	 HTM_TD_Unsigned (0);
 
 	 /***** Center requester *****/
-	 HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",
-		       The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"DAT_%s INPUT_REQUESTER LT\"",The_GetSuffix ());
 	    Usr_WriteAuthor (&Gbl.Usrs.Me.UsrDat,For_ENABLED);
 	 HTM_TD_End ();
 

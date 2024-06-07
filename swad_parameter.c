@@ -610,7 +610,7 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 		     *ParPtr = Par;
 
 		  /***** If this parameter is a file ==> do not find more ocurrences ******/
-		  if (Par->FileName.Start != 0)	// It's a file
+		  if (Par->FileName.Start)	// It's a file
 		     FindMoreThanOneOcurrence = false;
 		 }
 	       else			// NumTimes > 1 ==> not the first ocurrence of this parameter

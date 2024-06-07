@@ -182,7 +182,6 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
   {
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyl;
-   HTM_Checked_t Checked;
 
    /***** If no syllabus ==> nothing to do *****/
    switch (Gbl.Crs.Info.Type)
@@ -205,11 +204,9 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
 	   {
 	    HTM_LI_Begin (NULL);
 	       HTM_LABEL_Begin (NULL);
-	          Checked = (WhichSyl == WhichSyllabus) ? HTM_CHECKED :
-	        					  HTM_UNCHECKED;
 		  HTM_INPUT_RADIO ("WhichSyllabus",
-				   Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-				   HTM_SUBMIT_ON_CLICK,
+				   ((WhichSyl == WhichSyllabus) ? HTM_CHECKED :
+								  HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				   "value=\"%u\"",(unsigned) WhichSyl);
 		  HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);
 	       HTM_LABEL_End ();
@@ -821,12 +818,10 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 	 Syllabus->ParNumItem = NumItem;
 	 Syl_PutParsSyllabus (Syllabus);
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
-			 HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
-			 "size=\"60\" class=\"INPUT_%s\" placeholder=\"%s\"%s",
-			 The_GetSuffix (),
-			 Txt_Enter_a_new_item_here,
-			 NewItem ? " autofocus=\"autofocus\"" :
-				   "");
+			 (NewItem ? HTM_AUTOFOCUS :
+				    HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+			 "size=\"60\" class=\"INPUT_%s\" placeholder=\"%s\"",
+			 The_GetSuffix (),Txt_Enter_a_new_item_here);
       Frm_EndForm ();
    HTM_TD_End ();
   }

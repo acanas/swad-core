@@ -44,14 +44,14 @@ extern struct Globals Gbl;
 /** Put a selector to choice between ranges when getting users for listing ***/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange)
+void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    Hie_Level_t Level;
    unsigned ScopeUnsigned;
    bool WriteScope;
 
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (Attributes,NULL,
 		     "id=\"%s\" name=\"%s\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     ParName,ParName,The_GetSuffix ());
@@ -85,9 +85,8 @@ void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChan
 	       /***** Write allowed option *****/
 	       ScopeUnsigned = (unsigned) Level;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			   Level == Gbl.Scope.Current ? HTM_OPTION_SELECTED :
-							HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (Level == Gbl.Scope.Current) ? HTM_SELECTED :
+							  HTM_NO_ATTR,
 			   "%s: %s",
 			   Txt_HIERARCHY_SINGUL_Abc[Level],
 			   Gbl.Hierarchy.Node[Level].ShrtName);

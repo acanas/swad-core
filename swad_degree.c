@@ -225,24 +225,21 @@ void Deg_WriteSelectorOfDegree (void)
    unsigned NumDegs;
    unsigned NumDeg;
    long DegCod;
-   HTM_Disabled_t Disabled = (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0) ? HTM_ENABLED :
-									HTM_DISABLED;
-   HTM_SubmitOnChange_t SubmitOnChange = (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-										    HTM_DONT_SUBMIT_ON_CHANGE;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCrs);
 
       /***** Begin selector of degree *****/
-      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
+      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
+								   HTM_DISABLED,
+			NULL,
 			"id=\"deg\" name=\"deg\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0 ? HTM_OPTION_SELECTED :
-							       HTM_OPTION_UNSELECTED,
-		     HTM_DISABLED,
+		     ((Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0) ? HTM_SELECTED :
+							         HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_DEG]);
 
 	 if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
@@ -265,9 +262,8 @@ void Deg_WriteSelectorOfDegree (void)
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&DegCod,
 			   Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 &&
-			   DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
-									  HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (DegCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
 
@@ -394,8 +390,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgDegTyp);
 			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-					  HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"OthDegTypCod\""
 					  " class=\"HIE_SEL_NARROW INPUT_%s\"",
 					  The_GetSuffix ());
@@ -405,9 +400,8 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 			     {
 			      DegTyp = &DegTypes->Lst[NumDegTyp];
 			      HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-					  DegTyp->DegTypCod == Deg->Specific.TypCod ? HTM_OPTION_SELECTED :
-										      HTM_OPTION_UNSELECTED,
-					  HTM_ENABLED,
+					  (DegTyp->DegTypCod == Deg->Specific.TypCod) ? HTM_SELECTED :
+										        HTM_NO_ATTR,
 					  "%s",DegTyp->DegTypName);
 			     }
 			HTM_SELECT_End ();
@@ -435,7 +429,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 		     Frm_BeginForm (ActChgDegWWW);
 			ParCod_PutPar (ParCod_OthHie,Deg->HieCod);
 			HTM_INPUT_URL ("WWW",Deg->WWW,
-				       HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				       HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				       "class=\"INPUT_WWW INPUT_%s\"",
 				       The_GetSuffix ());
 		     Frm_EndForm ();
@@ -495,7 +489,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 static Usr_Can_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
   {
    return (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
-           ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
+           ((Deg->Status & Hie_STATUS_BIT_PENDING) &&	// Degree is not yet activated
            Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
         							 Usr_CAN_NOT;
   }
@@ -550,8 +544,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 
 	 /***** Degree type *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"OthDegTypCod\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
@@ -561,9 +554,8 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 		 {
 		  DegTyp = &DegTypes->Lst[NumDegTyp];
 		  HTM_OPTION (HTM_Type_LONG,&DegTyp->DegTypCod,
-			      DegTyp->DegTypCod == Deg_EditingDeg->Specific.TypCod ? HTM_OPTION_SELECTED :
-										     HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (DegTyp->DegTypCod == Deg_EditingDeg->Specific.TypCod) ? HTM_SELECTED :
+										       HTM_NO_ATTR,
 			      "%s",DegTyp->DegTypName);
 		 }
 	    HTM_SELECT_End ();
@@ -572,9 +564,8 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 	 /***** Degree WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,
-			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\"",
-			   The_GetSuffix ());
+			   HTM_REQUIRED,
+			   "class=\"INPUT_WWW INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of courses in this degree *****/

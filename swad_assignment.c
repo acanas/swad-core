@@ -1228,7 +1228,7 @@ void Asg_ReqCreatOrEditAsg (void)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments.Asg.Title,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1251,7 +1251,7 @@ void Asg_ReqCreatOrEditAsg (void)
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments.Asg.Folder,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				  HTM_NO_ATTR,
 				  "id=\"Folder\" class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
 	       HTM_LABEL_End ();
@@ -1267,7 +1267,7 @@ void Asg_ReqCreatOrEditAsg (void)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "id=\"Txt\" name=\"Txt\" rows=\"10\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
@@ -1303,7 +1303,6 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
-   HTM_Checked_t Checked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1322,16 +1321,13 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
-		        Checked = Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
-								  "AsgCod",
-								  AsgCod) ? HTM_UNCHECKED :
-									    HTM_CHECKED;
-			HTM_INPUT_CHECKBOX ("WholeCrs",Checked,
-					    HTM_ENABLED,HTM_READWRITE,
-					    HTM_DONT_SUBMIT_ON_CHANGE,
+			HTM_INPUT_CHECKBOX ("WholeCrs",
+					    Grp_DB_CheckIfAssociatedToGrps ("asg_groups",
+									    "AsgCod",
+									    AsgCod) ? HTM_NO_ATTR :
+										      HTM_CHECKED,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
 			Grp_WriteTheWholeCourse ();

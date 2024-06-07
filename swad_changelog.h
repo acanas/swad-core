@@ -633,10 +633,14 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.82.2 (2024-05-17)"
+#define Log_PLATFORM_VERSION	"SWAD 23.83 (2024-06-07)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
+ *
+ * TODO: Al actualizar usuarios en proyectos sale un mensaje de que debe seleccionarse uno o más profesores.
+ *
+	Version 23.83:    Jun 07, 2024  Code refactoring in HTML attributes. (335258 lines)
 	Version 23.82.2:  May 17, 2024  Code refactoring related to hidden/visible stem. (335855 lines)
 	Version 23.82.1:  May 16, 2024  Code refactoring related to absent/present users in attendance. (335850 lines)
 	Version 23.82:    May 15, 2024  Fixed issue in groups. Reported by Mancia Anguita López and Christian Agustín Morillas Gutiérrez. (335841 lines)

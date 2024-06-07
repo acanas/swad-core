@@ -300,7 +300,8 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Projects);
 static void Prj_PutFormProject (struct Prj_Projects *Projects,bool ItsANewProject);
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
-                                       unsigned NumRows,HTM_Required_t Required);
+                                       unsigned NumRows,
+                                       HTM_Attributes_t Attributes);
 
 static void Prj_CreateProject (struct Prj_Project *Prj);
 static void Prj_UpdateProject (struct Prj_Project *Prj);
@@ -870,8 +871,8 @@ static Usr_Can_t Prj_CheckIfICanViewProjectFiles (long PrjCod)
      {
       case Rol_STD:
       case Rol_NET:
-	 return (Prj_GetMyRolesInProject (PrjCod) != 0) ? Usr_CAN :	// Am I a member?
-							  Usr_CAN_NOT;
+	 return Prj_GetMyRolesInProject (PrjCod) ? Usr_CAN :	// Am I a member?
+						   Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
 	 return Usr_CAN;
@@ -890,8 +891,8 @@ Usr_Can_t Prj_CheckIfICanViewProjectDocuments (long PrjCod)
      {
       case Rol_STD:
       case Rol_NET:
-	 return (Prj_GetMyRolesInProject (PrjCod) != 0) ? Usr_CAN :	// Am I a member?
-							  Usr_CAN_NOT;
+	 return Prj_GetMyRolesInProject (PrjCod) ? Usr_CAN :	// Am I a member?
+						   Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return Usr_CAN;
@@ -910,9 +911,9 @@ Usr_Can_t Prj_CheckIfICanViewProjectAssessment (long PrjCod)
      {
       case Rol_STD:
       case Rol_NET:
-	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |			// Tutor...
-	                                              1 << Prj_ROLE_EVL)) != 0) ? Usr_CAN :	// ...or evaluator
-	                                        				  Usr_CAN_NOT;
+	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// Tutor...
+	                                              1 << Prj_ROLE_EVL))) ? Usr_CAN :	// ...or evaluator
+	                                        			     Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return Usr_CAN;
@@ -1825,7 +1826,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Projects,
 	 case Frm_PUT_FORM:
 	       /* Show text form */
 	       HTM_BR ();
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "name=\"ReviewTxt\" rows=\"2\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\""
 				   " placeholder=\"%s&hellip;\""
@@ -1866,11 +1867,9 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
    /* Selector for review status */
    if (asprintf (&FuncOnChange,"unhideElement('prj_rev_%ld');",Projects->Prj.PrjCod) < 0)
       Err_NotEnoughMemoryExit ();
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-		     HTM_DONT_SUBMIT_ON_CHANGE,FuncOnChange,
+   HTM_SELECT_Begin (HTM_NO_ATTR,FuncOnChange,
 		     "id=\"ReviewStatus\" name=\"ReviewStatus\""
-		     " class=\"Frm_C2_INPUT INPUT_%s\"",
-		     The_GetSuffix ());
+		     " class=\"Frm_C2_INPUT INPUT_%s\"",The_GetSuffix ());
    free (FuncOnChange);
       for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
 	   ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
@@ -1878,9 +1877,8 @@ static void Prj_PutSelectorReviewStatus (struct Prj_Projects *Projects)
 	{
 	 ReviewStatusUnsigned = (unsigned) ReviewStatus;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&ReviewStatusUnsigned,
-		     ReviewStatus == Projects->Prj.Review.Status ? HTM_OPTION_SELECTED :
-								   HTM_OPTION_UNSELECTED,
-		     HTM_ENABLED,
+		     (ReviewStatus == Projects->Prj.Review.Status) ? HTM_SELECTED :
+								     HTM_NO_ATTR,
 		     "%s",Txt_PROJECT_REVIEW_SINGUL[ReviewStatus]);
 	}
    HTM_SELECT_End ();
@@ -2056,8 +2054,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Projects->Prj.PrjCod,RoleInPrj);
-   WriteRow = (NumUsrs != 0 ||
-	       Projects->View == Prj_EDIT_ONE_PROJECT);
+   WriteRow = (NumUsrs || Projects->View == Prj_EDIT_ONE_PROJECT);
 
    if (WriteRow)
      {
@@ -3269,8 +3266,8 @@ static Usr_Can_t Prj_CheckIfICanEditProject (const struct Prj_Project *Prj)
 	 if (Prj->Locked == Prj_LOCKED)				// Locked edition
 	    return Usr_CAN_NOT;
 	 return ((Prj_GetMyRolesInProject (Prj->PrjCod) &
-	          (1 << Prj_ROLE_TUT)) != 0) ? Usr_CAN :	// Am I a tutor?
-	        			       Usr_CAN_NOT;
+	          (1 << Prj_ROLE_TUT))) ? Usr_CAN :	// Am I a tutor?
+	        			  Usr_CAN_NOT;
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return Usr_CAN;
@@ -3797,7 +3794,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 		     HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_TITLE,Projects->Prj.Title,
-				     HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				     HTM_REQUIRED,
 				     "id=\"Title\""
 				     " class=\"Frm_C2_INPUT INPUT_%s\"",
 				     The_GetSuffix ());
@@ -3822,7 +3819,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 						  SelectClass,				// Selector class
 						  0,					// First option
 						  Txt_Another_department,		// Text when no department selected
-						  HTM_DONT_SUBMIT_ON_CHANGE);
+						  HTM_NO_ATTR);
 		     free (SelectClass);
 		  HTM_TD_End ();
 
@@ -3836,20 +3833,17 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				       HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				       "name=\"Assigned\""
 				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"Y",
-				    Projects->Prj.Assigned == Prj_ASSIGNED ? HTM_OPTION_SELECTED :
-									     HTM_OPTION_SELECTED,
-				    HTM_ENABLED,
+				    (Projects->Prj.Assigned == Prj_ASSIGNED) ? HTM_SELECTED :
+									       HTM_NO_ATTR,
 				    "%s",Txt_Yes);
 			HTM_OPTION (HTM_Type_STRING,"N",
-				    Projects->Prj.Assigned == Prj_NONASSIG ? HTM_OPTION_SELECTED :
-									     HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Projects->Prj.Assigned == Prj_NONASSIG) ? HTM_SELECTED :
+									       HTM_NO_ATTR,
 				    "%s",Txt_No);
 		     HTM_SELECT_End ();
 		  HTM_TD_End ();
@@ -3864,8 +3858,9 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Projects->Prj.NumStds,
-				     HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+		     HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,
+				     (long) Projects->Prj.NumStds,
+				     HTM_REQUIRED,
 				     "class=\"Frm_C2_INPUT INPUT_%s\"",
 				     The_GetSuffix ());
 		  HTM_TD_End ();
@@ -3880,8 +3875,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-		     HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				       HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				       "name=\"Proposal\""
 				       " class=\"Frm_C2_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
@@ -3891,9 +3885,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 			  {
 			   ProposalUnsigned = (unsigned) Proposal;
 			   HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
-				       Projects->Prj.Proposal == Proposal ? HTM_OPTION_SELECTED :
-									    HTM_OPTION_UNSELECTED,
-				       HTM_ENABLED,
+				       (Projects->Prj.Proposal == Proposal) ? HTM_SELECTED :
+									      HTM_NO_ATTR,
 				       "%s",Txt_PROJECT_STATUS[Proposal]);
 			  }
 		     HTM_SELECT_End ();
@@ -3909,12 +3902,12 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	       /* Required knowledge to carry out the project */
 	       Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
 					  Projects->Prj.Knowledge,4,
-					  HTM_NOT_REQUIRED);
+					  HTM_NO_ATTR);
 
 	       /* Required materials to carry out the project */
 	       Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
 					  Projects->Prj.Materials,4,
-					  HTM_NOT_REQUIRED);
+					  HTM_NO_ATTR);
 
 	       /* URL for additional info */
 	       HTM_TR_Begin (NULL);
@@ -3925,7 +3918,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 		  /* Data */
 		  HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 		     HTM_INPUT_URL ("URL",Projects->Prj.URL,
-				    HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				    HTM_NO_ATTR,
 				    "class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		  HTM_TD_End ();
@@ -3956,7 +3949,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
-                                       unsigned NumRows,HTM_Required_t Required)
+                                       unsigned NumRows,
+                                       HTM_Attributes_t Attributes)
   {
    /***** Description *****/
    HTM_TR_Begin (NULL);
@@ -3966,7 +3960,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,Required,
+	 HTM_TEXTAREA_Begin (Attributes,
 			     "id=\"%s\" name=\"%s\" rows=\"%u\""
 			     " class=\"Frm_C2_INPUT INPUT_%s\"",
 			     Id,Id,NumRows,The_GetSuffix ());
@@ -4637,12 +4631,12 @@ static Usr_Can_t Prj_CheckIfICanViewRubric (long PrjCod,PrjCfg_RubricType_t Whic
 	       return Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_TUT:
 	    case PrjCfg_RUBRIC_EVL:
-	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |				// I am a tutor...
-		                                            1 << Prj_ROLE_EVL)) != 0) ? Usr_CAN :	// ...or an evaluator
-		                                        			        Usr_CAN_NOT;
+	       return (Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |			// I am a tutor...
+		                                           1 << Prj_ROLE_EVL)) ? Usr_CAN :	// ...or an evaluator
+		                                        			 Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_GBL:
-	       return (Prj_GetMyRolesInProject (PrjCod) != 0) ? Usr_CAN :	// I am a member
-								Usr_CAN_NOT;
+	       return Prj_GetMyRolesInProject (PrjCod) ? Usr_CAN :	// I am a member
+							 Usr_CAN_NOT;
 	   }
          return Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can view all rubrics
@@ -4664,11 +4658,11 @@ static Usr_Can_t Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t Whic
 	    case PrjCfg_RUBRIC_ERR:
 	       return Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_TUT:
-	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0) ? Usr_CAN :	// I am a tutor
-											Usr_CAN_NOT;
+	       return (Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) ? Usr_CAN :	// I am a tutor
+										 Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_EVL:
-	       return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_EVL)) != 0) ? Usr_CAN :	// Am I an evaluator
-											Usr_CAN_NOT;
+	       return (Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_EVL)) ? Usr_CAN :	// Am I an evaluator
+										 Usr_CAN_NOT;
 	    case PrjCfg_RUBRIC_GBL:
 	       return Usr_CAN_NOT;
 	   }

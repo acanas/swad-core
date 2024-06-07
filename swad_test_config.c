@@ -156,7 +156,6 @@ static void TstCfg_ShowFormConfig (void)
    struct Qst_Questions Questions;
    TstCfg_Pluggable_t Pluggable;
    char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
-   HTM_Checked_t Checked;
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -181,11 +180,9 @@ static void TstCfg_ShowFormConfig (void)
 		       Pluggable++)
 		    {
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		        Checked = (Pluggable == TstCfg_GetConfigPluggable ()) ? HTM_CHECKED :
-										HTM_UNCHECKED;
 			HTM_INPUT_RADIO ("Pluggable",
-					 Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-					 HTM_DONT_SUBMIT_ON_CLICK,
+					 ((Pluggable == TstCfg_GetConfigPluggable ()) ? HTM_CHECKED :
+										        HTM_NO_ATTR),
 					 "value=\"%u\"%s",(unsigned) Pluggable);
 			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
 		     HTM_LABEL_End ();
@@ -220,11 +217,11 @@ static void TstCfg_ShowFormConfig (void)
 	       HTM_TD_Begin ("class=\"LB\"");
 		  snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
 			    TstCfg_GetConfigMinTimeNxtTstPerQst ());
-		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
-				  HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,
+				  StrMinTimeNxtTstPerQst,
+				  HTM_REQUIRED,
 				  "id=\"MinTimeNxtTstPerQst\" size=\"7\""
-				  " class=\"INPUT_%s\"",
-				  The_GetSuffix ());
+				  " class=\"INPUT_%s\"",The_GetSuffix ());
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -273,7 +270,7 @@ static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
       HTM_TD_Begin ("class=\"LM\"");
 	 snprintf (StrValue,sizeof (StrValue),"%u",Value);
 	 HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
-			 HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			 HTM_REQUIRED,
 			 "id=\"%s\" size=\"3\" class=\"INPUT_%s\"",
 			 Field,The_GetSuffix ());
       HTM_TD_End ();

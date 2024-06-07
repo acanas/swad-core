@@ -165,8 +165,6 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
   {
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
-   HTM_Checked_t Checked;
-   HTM_Disabled_t Disabled;
 
    HTM_TR_Begin (NULL);
 
@@ -191,14 +189,11 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 		     HTM_LI_Begin ("class=\"DAT_%s\"",
 		                   The_GetSuffix ());
 		  HTM_LABEL_Begin (NULL);
-		     Checked = (Visibility == CurrentVisibilityInDB) ? HTM_CHECKED :
-								       HTM_UNCHECKED;
-		     Disabled = (Action == ActUnk) ? HTM_DISABLED :
-						     HTM_ENABLED;
 		     HTM_INPUT_RADIO (ParName,
-				      Checked,Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
-				      (Action == ActUnk) ? HTM_DONT_SUBMIT_ON_CLICK :
-			                                   HTM_SUBMIT_ON_CLICK,
+				      ((Visibility == CurrentVisibilityInDB) ? HTM_CHECKED :
+								               HTM_NO_ATTR) |
+				      ((Action == ActUnk) ? HTM_DISABLED :
+						            HTM_SUBMIT_ON_CLICK),
 				      "value=\"%u\"",(unsigned) Visibility);
 		     HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
 		  HTM_LABEL_End ();

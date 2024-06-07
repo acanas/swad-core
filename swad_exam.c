@@ -829,7 +829,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
       for (NumExam = 0;
 	   NumExam < Exams->Num;
 	   NumExam++)
-	 Exams->Lst[NumExam].Checked = HTM_UNCHECKED;
+	 Exams->Lst[NumExam].Checked = HTM_NO_ATTR;
       Exams->NumSelected = 0;
 
       /* Set some exams as selected */
@@ -1351,7 +1351,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exams->Exam.Title,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1367,9 +1367,8 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exams->Exam.MaxGrade,
-				HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-				" class=\"Frm_C2_INPUT INPUT_%s\"",
-				The_GetSuffix ());
+				HTM_REQUIRED,
+				" class=\"Frm_C2_INPUT INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1395,7 +1394,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());

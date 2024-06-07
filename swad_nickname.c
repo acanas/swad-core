@@ -149,7 +149,7 @@ void Nck_PutFormToGetNewNickname (const char *NewNickWithoutArr)
 	    NewNickWithArr[0] = '\0';
 	 HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 			 NewNickWithArr,
-			 HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			 HTM_REQUIRED,
 			 "id=\"NewNick\" size=\"16\" placeholder=\"%s\""
 			 " class=\"Frm_C2_INPUT INPUT_%s\"",
 			 Txt_HELP_nickname,The_GetSuffix ());
@@ -345,11 +345,10 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 			       UsrDat[MeOrOther]->Nickname);
 		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 				     NickWithArr,
-				     HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				     HTM_NO_ATTR,
 				     "id=\"NewNick\""
 				     " class=\"Frm_C2_INPUT INPUT_%s\""
-				     " size=\"16\"",
-				     The_GetSuffix ());
+				     " size=\"16\"",The_GetSuffix ());
 		     HTM_BR ();
 		     Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
 							   Txt_Save_changes);	// I have no nickname yet);

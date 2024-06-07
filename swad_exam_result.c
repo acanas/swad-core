@@ -599,8 +599,6 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		                The_GetColorRows ());
 		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Exa],
 					 Exams->Lst[NumExam].Checked,
-					 HTM_ENABLED,HTM_READWRITE,
-					 HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"",
 					 NumExam,Exams->Lst[NumExam].ExaCod);
 		  HTM_TD_End ();

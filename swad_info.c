@@ -133,7 +133,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
 static void Inf_PutIconToViewInfo (void *Type);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
-						HTM_Disabled_t Disabled);
+						HTM_Attributes_t Attributes);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
@@ -234,9 +234,10 @@ void Inf_ShowInfo (void)
             /***** Contextual menu *****/
             // Checkbox to force students to read this couse info
             Mnu_ContextMenuBegin ();
+               // Non-editing teachers can not change the status of checkbox
 	       Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,
 						   (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
-											  HTM_ENABLED);	// Non-editing teachers can not change the status of checkbox);
+											  HTM_NO_ATTR);
             Mnu_ContextMenuEnd ();
            }
          break;
@@ -348,7 +349,7 @@ void Inf_PutIconToEditInfo (void *Type)
 /*****************************************************************************/
 
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
-						HTM_Disabled_t Disabled)
+						HTM_Attributes_t Attributes)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Force_students_to_read_this_information;
@@ -368,9 +369,10 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "MustBeRead",
-                              MustBeRead ? HTM_CHECKED :
-                        		   HTM_UNCHECKED,
-                              Disabled,HTM_READWRITE,
+                              Attributes |
+                              (MustBeRead ? HTM_CHECKED :
+                        		    HTM_NO_ATTR) |
+                              HTM_SUBMIT_ON_CHANGE,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
   }
@@ -400,9 +402,8 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
                               Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
                               Inf_Actions[Gbl.Crs.Info.Type].Args,
                               "IHaveRead",
-                              IHaveRead ? HTM_CHECKED :
-                        		  HTM_UNCHECKED,
-                              HTM_ENABLED,HTM_READWRITE,
+                              (IHaveRead ? HTM_CHECKED :
+                        		   HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_I_have_read_this_information,
                               Txt_I_have_read_this_information);
   }
@@ -826,8 +827,6 @@ void Inf_FormsToSelSendInfo (void)
    struct Inf_FromDB FromDB;
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
-   HTM_Checked_t Checked;
-   HTM_Disabled_t Disabled;
    static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION   ] = ActSelInfSrcCrsInf,
@@ -908,17 +907,16 @@ void Inf_FormsToSelSendInfo (void)
 						  "");
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
 	          Syl_PutParWhichSyllabus (&Syllabus.WhichSyllabus);
-	          Checked = (InfoSrc == FromDB.Src) ? HTM_CHECKED :
-	        				      HTM_UNCHECKED;
-	          Disabled = (InfoSrc == Inf_NONE ||
-			      InfoAvailable[InfoSrc]) ? HTM_ENABLED :
-							HTM_DISABLED;
 		  HTM_INPUT_RADIO ("InfoSrc",
-				   Checked,Disabled,HTM_READWRITE,HTM_NOT_REQUIRED,
-			           (InfoSrc != FromDB.Src &&
+				   ((InfoSrc == FromDB.Src) ? HTM_CHECKED :
+	        					      HTM_NO_ATTR) |
+	        		   ((InfoSrc == Inf_NONE ||
+	        		    InfoAvailable[InfoSrc]) ? HTM_NO_ATTR :
+							      HTM_DISABLED) |
+	        		   ((InfoSrc != FromDB.Src &&
 				    (InfoSrc == Inf_NONE ||
-				     InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
-						                HTM_DONT_SUBMIT_ON_CLICK,
+				    InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
+						               HTM_NO_ATTR),
 				   "id=\"InfoSrc%u\" value=\"%u\"",
 				   (unsigned) InfoSrc,(unsigned) InfoSrc);
 	       Frm_EndForm ();
@@ -934,8 +932,7 @@ void Inf_FormsToSelSendInfo (void)
 	       HTM_LABEL_End ();
 	       if (Txt_INFO_SRC_HELP[InfoSrc])
 		 {
-		  HTM_SPAN_Begin ("class=\"DAT_%s\"",
-		                  The_GetSuffix ());
+		  HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 		     HTM_BR ();
 		     HTM_TxtF ("(%s)",Txt_INFO_SRC_HELP[InfoSrc]);
 		  HTM_SPAN_End ();
@@ -1050,7 +1047,7 @@ void Inf_FormToSendPage (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc)
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_File);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
-			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_NO_ATTR,
 			    NULL);
 	 HTM_LABEL_End ();
       HTM_DIV_End ();
@@ -1096,9 +1093,8 @@ void Inf_FormToSendURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc)
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_URL);
 	    HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,
-			   HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,	// TODO: Required?
-			   "size=\"50\" class=\"INPUT_%s\"",
-			   The_GetSuffix ());
+			   HTM_NO_ATTR,	// TODO: Required?
+			   "size=\"50\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_LABEL_End ();
       HTM_DIV_End ();
 
@@ -1574,7 +1570,7 @@ void Inf_EditPlainTxtInfo (void)
 	 /***** Edition area *****/
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_HelpPlainEditor ();
-	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				"name=\"Txt\" cols=\"80\" rows=\"20\""
 		                " class=\"INPUT_%s\"",
 		                The_GetSuffix ());
@@ -1658,7 +1654,7 @@ void Inf_EditRichTxtInfo (void)
       /***** Edition area *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Lay_HelpRichEditor ();
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 			     "name=\"Txt\" cols=\"80\" rows=\"20\""
 		             " class=\"INPUT_%s\"",
 	                     The_GetSuffix ());

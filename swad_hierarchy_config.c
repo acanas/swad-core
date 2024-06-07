@@ -134,7 +134,7 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
 		  HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],
 				  Nam_MaxChars[ShrtOrFull],
 				  Name[ShrtOrFull],
-				  HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				  "id=\"%s\" class=\"%s INPUT_%s\"",
 				  Nam_Params[ShrtOrFull],
 				  Nam_Classes[ShrtOrFull],
@@ -186,7 +186,7 @@ void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
 	       /* Form to change web */
 	       Frm_BeginForm (NextAction);
 		  HTM_INPUT_URL ("WWW",WWW,
-				 HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				 HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				 "id=\"WWW\" class=\"Frm_C2_INPUT INPUT_%s\"",
 				 The_GetSuffix ());
 	       Frm_EndForm ();

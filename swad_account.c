@@ -166,7 +166,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_ID);
 	    HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
-	                    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_REQUIRED,
 			    "size=\"16\" placeholder=\"%s\" class=\"INPUT_%s\"",
 			    Txt_ID_identity_number,The_GetSuffix ());
 	 HTM_LABEL_End ();
@@ -286,15 +286,13 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
 
       /***** Write number of user in the list *****/
       HTM_TD_Begin ("rowspan=\"2\" class=\"RT USR_LIST_NUM_N_%s %s\"",
-		    The_GetSuffix (),
-                    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Write user's ID and name *****/
       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows ());
          HTM_TxtColon (Txt_ID);
          HTM_NBSPTxt (ID);
 	 HTM_BR ();

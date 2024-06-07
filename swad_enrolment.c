@@ -113,19 +113,25 @@ static void Enr_PutActionsRegRemSeveralUsrs (void);
 
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
 
-static void Enr_PutActionModifyOneUsr (HTM_Checked_t *Checked,
-                                       Usr_Belong_t UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther);
-static void Enr_PutActionRegOneDegAdm (HTM_Checked_t *Checked);
-static void Enr_PutActionRegOneCtrAdm (HTM_Checked_t *Checked);
-static void Enr_PutActionRegOneInsAdm (HTM_Checked_t *Checked);
-static void Enr_PutActionRepUsrAsDup (HTM_Checked_t *Checked);
-static void Enr_PutActionRemUsrFromCrs (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther);
-static void Enr_PutActionRemUsrAsDegAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther);
-static void Enr_PutActionRemUsrAsCtrAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther);
-static void Enr_PutActionRemUsrAsInsAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther);
-static void Enr_PutActionRemUsrAcc (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
+                                       Usr_Belong_t UsrBelongsToCrs,
+                                       Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRegOneDegAdm (HTM_Attributes_t *Attributes);
+static void Enr_PutActionRegOneCtrAdm (HTM_Attributes_t *Attributes);
+static void Enr_PutActionRegOneInsAdm (HTM_Attributes_t *Attributes);
+static void Enr_PutActionRepUsrAsDup (HTM_Attributes_t *Attributes);
+static void Enr_PutActionRemUsrFromCrs (HTM_Attributes_t *Attributes,
+					Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAsDegAdm (HTM_Attributes_t *Attributes,
+					 Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAsCtrAdm (HTM_Attributes_t *Attributes,
+					 Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAsInsAdm (HTM_Attributes_t *Attributes,
+					 Usr_MeOrOther_t MeOrOther);
+static void Enr_PutActionRemUsrAcc (HTM_Attributes_t *Attributes,
+				    Usr_MeOrOther_t MeOrOther);
 static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
-                                         HTM_Checked_t *Checked);
+                                         HTM_Attributes_t *Attributes);
 static void Enr_RegRemOneUsrActionEnd (void);
 
 static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
@@ -356,7 +362,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
 
       /***** Input box to enter user *****/
       HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
-		      HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+		      HTM_REQUIRED,
 		      "id=\"OtherUsrIDNickOrEMail\" size=\"16\""
 		      " class=\"INPUT_%s\"",
 		      The_GetSuffix ());
@@ -676,17 +682,15 @@ void Enr_AskRemoveOldUsrs (void)
 	 /***** Form to request number of months without clicks *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"Months\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
 		    Months++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
-			      Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS ? HTM_OPTION_SELECTED :
-											   HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS) ? HTM_SELECTED :
+											     HTM_NO_ATTR,
 			      "%u",Months);
 	    HTM_SELECT_End ();
 	    HTM_NBSP ();
@@ -786,7 +790,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				"id=\"UsrsIDs\" name=\"UsrsIDs\""
 		                " cols=\"60\" rows=\"10\" class=\"INPUT_%s\"",
 		                The_GetSuffix ());
@@ -818,8 +822,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-			        HTM_CHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-			        HTM_DONT_SUBMIT_ON_CLICK,
+			        HTM_CHECKED,
 				" value=\"%u\"",
 				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
 	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1);
@@ -829,8 +832,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				HTM_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-				HTM_DONT_SUBMIT_ON_CLICK,
+				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
 	       HTM_Txt (Txt_Remove_the_users_indicated_in_step_1);
@@ -840,8 +842,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				HTM_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-				HTM_DONT_SUBMIT_ON_CLICK,
+				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
 	       HTM_Txt (Txt_Remove_the_users_not_indicated_in_step_1);
@@ -851,8 +852,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				HTM_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-				HTM_DONT_SUBMIT_ON_CLICK,
+				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_UPDATE_USRS_IN_CRS);
 	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
@@ -866,8 +866,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_INPUT_RADIO ("RegRemAction",
-				HTM_UNCHECKED,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-				HTM_DONT_SUBMIT_ON_CLICK,
+				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
 	       HTM_Txt (Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
@@ -1329,7 +1328,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
    bool UsrIsDegAdmin = false;
    bool UsrIsCtrAdmin = false;
    bool UsrIsInsAdmin = false;
-   HTM_Checked_t Checked = HTM_UNCHECKED;
+   HTM_Attributes_t Attributes = HTM_NO_ATTR;
 
    /***** Check if the other user belongs to the current course *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)
@@ -1360,7 +1359,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
       /***** Register user in course / Modify user's data *****/
       if (Gbl.Hierarchy.Level == Hie_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
 	{
-	 Enr_PutActionModifyOneUsr (&Checked,UsrBelongsToCrs,MeOrOther);
+	 Enr_PutActionModifyOneUsr (&Attributes,UsrBelongsToCrs,MeOrOther);
 	 OptionsShown = true;
 	}
 
@@ -1372,14 +1371,14 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	       /***** Register user as administrator of degree *****/
 	       if (!UsrIsDegAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
 		 {
-		  Enr_PutActionRegOneDegAdm (&Checked);
+		  Enr_PutActionRegOneDegAdm (&Attributes);
 		  OptionsShown = true;
 		 }
 
 	    /***** Register user as administrator of center *****/
 	    if (!UsrIsCtrAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
 	      {
-	       Enr_PutActionRegOneCtrAdm (&Checked);
+	       Enr_PutActionRegOneCtrAdm (&Attributes);
 	       OptionsShown = true;
 	      }
 	   }
@@ -1387,7 +1386,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	 /***** Register user as administrator of institution *****/
 	 if (!UsrIsInsAdmin && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
-	    Enr_PutActionRegOneInsAdm (&Checked);
+	    Enr_PutActionRegOneInsAdm (&Attributes);
 	    OptionsShown = true;
 	   }
 	}
@@ -1395,14 +1394,14 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
       /***** Report user as possible duplicate *****/
       if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
-	 Enr_PutActionRepUsrAsDup (&Checked);
+	 Enr_PutActionRepUsrAsDup (&Attributes);
 	 OptionsShown = true;
 	}
 
       /***** Remove user from the course *****/
       if (UsrBelongsToCrs == Usr_BELONG)
 	{
-	 Enr_PutActionRemUsrFromCrs (&Checked,MeOrOther);
+	 Enr_PutActionRemUsrFromCrs (&Attributes,MeOrOther);
 	 OptionsShown = true;
 	}
 
@@ -1415,7 +1414,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	       if (UsrIsDegAdmin &&
 	           (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
 		 {
-		  Enr_PutActionRemUsrAsDegAdm (&Checked,MeOrOther);
+		  Enr_PutActionRemUsrAsDegAdm (&Attributes,MeOrOther);
 		  OptionsShown = true;
 		 }
 
@@ -1423,7 +1422,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	    if (UsrIsCtrAdmin &&
 		(MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
 	      {
-	       Enr_PutActionRemUsrAsCtrAdm (&Checked,MeOrOther);
+	       Enr_PutActionRemUsrAsCtrAdm (&Attributes,MeOrOther);
 	       OptionsShown = true;
 	      }
 	   }
@@ -1432,7 +1431,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	 if (UsrIsInsAdmin &&
 	     (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
 	   {
-	    Enr_PutActionRemUsrAsInsAdm (&Checked,MeOrOther);
+	    Enr_PutActionRemUsrAsInsAdm (&Attributes,MeOrOther);
 	    OptionsShown = true;
 	   }
 	}
@@ -1440,7 +1439,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
       /***** Eliminate user completely from platform *****/
       if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_CAN)
 	{
-	 Enr_PutActionRemUsrAcc (&Checked,MeOrOther);
+	 Enr_PutActionRemUsrAcc (&Attributes,MeOrOther);
 	 OptionsShown = true;
 	}
 
@@ -1454,8 +1453,9 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 /**************** Put action to modify user in current course ****************/
 /*****************************************************************************/
 
-static void Enr_PutActionModifyOneUsr (HTM_Checked_t *Checked,
-                                       Usr_Belong_t UsrBelongsToCrs,Usr_MeOrOther_t MeOrOther)
+static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
+                                       Usr_Belong_t UsrBelongsToCrs,
+                                       Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Register_me_in_X;
    extern const char *Txt_Register_USER_in_the_course_X;
@@ -1469,7 +1469,7 @@ static void Enr_PutActionModifyOneUsr (HTM_Checked_t *Checked,
       [Usr_BELONG     ][Usr_OTHER] = Txt_Modify_user_in_the_course_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,Attributes);
       HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther],
 		Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
@@ -1479,11 +1479,11 @@ static void Enr_PutActionModifyOneUsr (HTM_Checked_t *Checked,
 /**************** Put action to register user as degree admin ****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRegOneDegAdm (HTM_Checked_t *Checked)
+static void Enr_PutActionRegOneDegAdm (HTM_Attributes_t *Attributes)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_DEG_ADMIN,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_DEG_ADMIN,Attributes);
       HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_degree_X,
 		Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
@@ -1493,11 +1493,11 @@ static void Enr_PutActionRegOneDegAdm (HTM_Checked_t *Checked)
 /**************** Put action to register user as center admin ****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRegOneCtrAdm (HTM_Checked_t *Checked)
+static void Enr_PutActionRegOneCtrAdm (HTM_Attributes_t *Attributes)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_center_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_CTR_ADMIN,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_CTR_ADMIN,Attributes);
       HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_center_X,
 		Gbl.Hierarchy.Node[Hie_CTR].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
@@ -1507,11 +1507,11 @@ static void Enr_PutActionRegOneCtrAdm (HTM_Checked_t *Checked)
 /************* Put action to register user as institution admin **************/
 /*****************************************************************************/
 
-static void Enr_PutActionRegOneInsAdm (HTM_Checked_t *Checked)
+static void Enr_PutActionRegOneInsAdm (HTM_Attributes_t *Attributes)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_INS_ADMIN,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_INS_ADMIN,Attributes);
       HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_institution_X,
 		Gbl.Hierarchy.Node[Hie_INS].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
@@ -1521,11 +1521,11 @@ static void Enr_PutActionRegOneInsAdm (HTM_Checked_t *Checked)
 /****************** Put action to report user as duplicate *******************/
 /*****************************************************************************/
 
-static void Enr_PutActionRepUsrAsDup (HTM_Checked_t *Checked)
+static void Enr_PutActionRepUsrAsDup (HTM_Attributes_t *Attributes)
   {
    extern const char *Txt_Report_possible_duplicate_user;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,Attributes);
       HTM_Txt (Txt_Report_possible_duplicate_user);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1534,7 +1534,8 @@ static void Enr_PutActionRepUsrAsDup (HTM_Checked_t *Checked)
 /****************** Put action to remove user from course ********************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrFromCrs (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther)
+static void Enr_PutActionRemUsrFromCrs (HTM_Attributes_t *Attributes,
+					Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_from_THE_COURSE_X;
    extern const char *Txt_Remove_USER_from_THE_COURSE_X;
@@ -1544,7 +1545,7 @@ static void Enr_PutActionRemUsrFromCrs (HTM_Checked_t *Checked,Usr_MeOrOther_t M
       [Usr_OTHER] = Txt_Remove_USER_from_THE_COURSE_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_USR_FROM_CRS,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_USR_FROM_CRS,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1553,7 +1554,8 @@ static void Enr_PutActionRemUsrFromCrs (HTM_Checked_t *Checked,Usr_MeOrOther_t M
 /***************** Put action to remove user as degree admin *****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAsDegAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther)
+static void Enr_PutActionRemUsrAsDegAdm (HTM_Attributes_t *Attributes,
+					 Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
@@ -1563,7 +1565,7 @@ static void Enr_PutActionRemUsrAsDegAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t 
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_degree_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_DEG_ADMIN,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_DEG_ADMIN,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1572,7 +1574,8 @@ static void Enr_PutActionRemUsrAsDegAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t 
 /***************** Put action to remove user as center admin *****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAsCtrAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther)
+static void Enr_PutActionRemUsrAsCtrAdm (HTM_Attributes_t *Attributes,
+					 Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_as_an_administrator_of_the_center_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_center_X;
@@ -1582,7 +1585,7 @@ static void Enr_PutActionRemUsrAsCtrAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t 
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_center_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_CTR_ADMIN,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_CTR_ADMIN,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_CTR].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1591,7 +1594,8 @@ static void Enr_PutActionRemUsrAsCtrAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t 
 /************** Put action to remove user as institution admin ***************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAsInsAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther)
+static void Enr_PutActionRemUsrAsInsAdm (HTM_Attributes_t *Attributes,
+					 Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X;
@@ -1601,7 +1605,7 @@ static void Enr_PutActionRemUsrAsInsAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t 
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_institution_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_INS_ADMIN,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_INS_ADMIN,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_INS].ShrtName);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1610,7 +1614,8 @@ static void Enr_PutActionRemUsrAsInsAdm (HTM_Checked_t *Checked,Usr_MeOrOther_t 
 /********************* Put action to remove user account *********************/
 /*****************************************************************************/
 
-static void Enr_PutActionRemUsrAcc (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrOther)
+static void Enr_PutActionRemUsrAcc (HTM_Attributes_t *Attributes,
+				    Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Eliminate_my_user_account;
    extern const char *Txt_Eliminate_user_account;
@@ -1620,7 +1625,7 @@ static void Enr_PutActionRemUsrAcc (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrO
       [Usr_OTHER] = Txt_Eliminate_user_account,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,Checked);
+   Enr_RegRemOneUsrActionBegin (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,Attributes);
       HTM_Txt (Txt[MeOrOther]);
    Enr_RegRemOneUsrActionEnd ();
   }
@@ -1630,19 +1635,15 @@ static void Enr_PutActionRemUsrAcc (HTM_Checked_t *Checked,Usr_MeOrOther_t MeOrO
 /*****************************************************************************/
 
 static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
-                                         HTM_Checked_t *Checked)
+                                         HTM_Attributes_t *Attributes)
   {
-   HTM_Checked_t ThisChecked = (*Checked == HTM_CHECKED) ? HTM_UNCHECKED :
-							   HTM_CHECKED;
-
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
 	 HTM_INPUT_RADIO ("RegRemAction",
-			  ThisChecked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-			  HTM_DONT_SUBMIT_ON_CLICK,
+			  (*Attributes & HTM_CHECKED) ? HTM_NO_ATTR :
+							HTM_CHECKED,
 			  "value=\"%u\"",(unsigned) RegRemOneUsrAction);
-
-	    *Checked = HTM_CHECKED;
+	    *Attributes = HTM_CHECKED;
   }
 
 static void Enr_RegRemOneUsrActionEnd (void)
@@ -2188,7 +2189,6 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					  1 << Rol_NET |
 					  1 << Rol_TCH,
 					  RolesSelected,
-					  HTM_ENABLED,HTM_READWRITE,
 					  HTM_SUBMIT_ON_CHANGE);
 	       HTM_TD_End ();
 

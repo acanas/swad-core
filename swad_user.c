@@ -1165,9 +1165,9 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED | HTM_AUTOFOCUS,
 			       "id=\"UsrId\" size=\"16\" placeholder=\"%s\""
-			       " class=\"INPUT_%s\" autofocus=\"autofocus\"",
+			       " class=\"INPUT_%s\"",
 			       Txt_nick_email_or_ID,The_GetSuffix ());
 	    HTM_DIV_End ();
 
@@ -1178,7 +1178,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 		               Txt_Password,"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,
-				   HTM_NOT_REQUIRED,
+				   HTM_NO_ATTR,
 				   "id=\"UsrPwd\" class=\"INPUT_%s\"",
 				   The_GetSuffix ());
 	    HTM_DIV_End ();
@@ -3917,8 +3917,7 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
 	      {
 	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
 	       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],
-				   HTM_UNCHECKED,HTM_ENABLED,HTM_READWRITE,
-				   HTM_DONT_SUBMIT_ON_CHANGE,
+				   HTM_NO_ATTR,
 				   "value=\"\""
 				   " onclick=\"togglecheckChildren(this,'%s')\"",
 				   ParName);
@@ -3982,7 +3981,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          bool UsrIsTheMsgSender,
 					 struct Usr_SelectedUsrs *SelectedUsrs)
   {
-   HTM_Checked_t Checked;
+   HTM_Attributes_t Checked;
    char *ParName;
 
    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
@@ -3993,12 +3992,12 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
       else
 	 /* Check if user is in lists of selected users */
 	 Checked = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,SelectedUsrs) ? HTM_CHECKED :
-												HTM_UNCHECKED;
+												HTM_NO_ATTR;
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
-      HTM_INPUT_CHECKBOX (ParName,Checked,HTM_ENABLED,HTM_READWRITE,
-			  HTM_DONT_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX (ParName,
+			  Checked,
 			  "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,Usr_NameSelUnsel[Role]);
       free (ParName);
@@ -4014,16 +4013,14 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 static void Usr_PutCheckboxListWithPhotos (void)
   {
    extern const char *Txt_Display_photos;
-   HTM_Checked_t Checked;
 
    Par_PutParChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      Checked = Gbl.Usrs.Listing.WithPhotos ? HTM_CHECKED :
-					      HTM_UNCHECKED;
-      HTM_INPUT_CHECKBOX ("WithPhotos",Checked,HTM_ENABLED,HTM_READWRITE,
-			  HTM_SUBMIT_ON_CHANGE,
+      HTM_INPUT_CHECKBOX ("WithPhotos",
+			  (Gbl.Usrs.Listing.WithPhotos ? HTM_CHECKED :
+							 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
       HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
@@ -5603,15 +5600,11 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label)
   {
-   HTM_Checked_t Checked;
-
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-         Checked = (ListUsrsAction == Gbl.Usrs.Selected.Option) ? HTM_CHECKED :
-								  HTM_UNCHECKED;
 	 HTM_INPUT_RADIO ("ListUsrsAction",
-			  Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-			  HTM_DONT_SUBMIT_ON_CLICK,
+			  (ListUsrsAction == Gbl.Usrs.Selected.Option) ? HTM_CHECKED :
+								         HTM_NO_ATTR,
 			  "value=\"%u\"",(unsigned) ListUsrsAction);
 	 HTM_Txt (Label);
       HTM_LABEL_End ();
@@ -6192,7 +6185,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"ColsClassPhoto\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
@@ -6201,9 +6194,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 	      Cols <= Usr_CLASS_PHOTO_COLS_MAX;
 	      Cols++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Cols,
-			Cols == Gbl.Usrs.ClassPhoto.Cols ? HTM_OPTION_SELECTED :
-	                				   HTM_OPTION_UNSELECTED,
-			HTM_ENABLED,
+			(Cols == Gbl.Usrs.ClassPhoto.Cols) ? HTM_SELECTED :
+	                				     HTM_NO_ATTR,
 			"%u",Cols);
 
       /***** End selector *****/

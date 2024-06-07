@@ -460,7 +460,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 
 	       /* Media file */
 	       HTM_INPUT_FILE (ParUpload.File,"image/,video/",
-			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_NO_ATTR,
 			       "id=\"%s_fil\" class=\"%s\""		// <id>_fil
 			       " disabled=\"disabled\" style=\"display:none;\"",
 			       Id,ClassInput);
@@ -474,7 +474,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 
 	       /* Media URL */
 	       HTM_INPUT_URL (ParUpload.URL,"",
-			      HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			      HTM_NO_ATTR,
 			      "id=\"%s_url\" class=\"%s\""			// <id>_url
 			      " placeholder=\"%s\" maxlength=\"%u\""
 			      " disabled=\"disabled\" style=\"display:none;\"",
@@ -489,7 +489,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 
 	       /* Media title */
 	       HTM_INPUT_TEXT (ParUpload.Title,Med_MAX_CHARS_TITLE,"",
-			       HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_NO_ATTR,
 			       "id=\"%s_tit\" class=\"%s\""		// <id>_tit
 			       " placeholder=\"%s\""
 			       " disabled=\"disabled\" style=\"display:none;\"",
@@ -849,7 +849,7 @@ static bool Med_DetectIfAnimated (struct Med_Media *Media,
    if (ReturnCode == -1)
       return false;		// Error
    ReturnCode = WEXITSTATUS(ReturnCode);
-   if (ReturnCode != 0)
+   if (ReturnCode)
       return false;		// Error
 
    /***** Read temporary file *****/

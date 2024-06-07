@@ -682,6 +682,11 @@ long Grp_DB_GetGrpTypeFromGrp (long GrpCod)
 bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod)
   {
+   /***** Trivial check: Cod <= 0 means
+ 			 new item, assignment, event, survey, exam event or match *****/
+   if (Cod <= 0)
+      return false;
+
    return
    DB_QueryEXISTS ("can not check if associated to a group",
 		   "SELECT EXISTS"

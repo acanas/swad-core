@@ -1519,7 +1519,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
       Par_PutParUnsigned (NULL,"TTCol",WhichCell->Column  );
 
       /***** Class type *****/
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"name=\"TTTyp\" class=\"Tmt_TYP INPUT_%s\"",
 			The_GetSuffix ());
 	 for (CT  = (Tmt_ClassType_t) 0;
@@ -1529,9 +1529,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 		((Timetable->Type == Tmt_COURSE_TIMETABLE  ) && (CT == Tmt_LECTURE || CT == Tmt_PRACTICAL)) ||
 		((Timetable->Type == Tmt_TUTORING_TIMETABLE) && (CT == Tmt_TUTORING)))
 	       HTM_OPTION (HTM_Type_STRING,Tmt_DB_ClassType[CT],
-			   CT == ClassType ? HTM_OPTION_SELECTED :
-	                		     HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (CT == ClassType) ? HTM_SELECTED :
+	                		       HTM_NO_ATTR,
 			   "%s",Txt_TIMETABLE_CLASS_TYPES[CT]);
       HTM_SELECT_End ();
 
@@ -1556,7 +1555,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
       else
 	{
 	 /***** Class duration *****/
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"TTDur\" class=\"Tmt_DUR INPUT_%s\"",
 			   The_GetSuffix ());
 	    for (i = WhichCell->Interval +
@@ -1578,9 +1577,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			     Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
 		  Err_NotEnoughMemoryExit ();
 	       HTM_OPTION (HTM_Type_STRING,TTDur,
-			   Dur == DurationNumIntervals ? HTM_OPTION_SELECTED :
-	                				 HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (Dur == DurationNumIntervals) ? HTM_SELECTED :
+	                				   HTM_NO_ATTR,
 			   "%s",TTDur);
 	       free (TTDur);
 	      }
@@ -1600,15 +1598,13 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	    HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
 	       HTM_Txt (Txt_Group);
 	    HTM_LABEL_End ();
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"TTGrp%s\" name=\"%s\""
 			      " class=\"Tmt_GRP INPUT_%s\"",
 			      CellStr,Par_CodeStr[ParCod_Grp],The_GetSuffix ());
 	       HTM_OPTION (HTM_Type_STRING,"-1",
-	                   GrpCod <= 0 ? HTM_OPTION_SELECTED :
-	                		 HTM_OPTION_UNSELECTED,
-	                   HTM_ENABLED,
+	                   (GrpCod <= 0) ? HTM_SELECTED :
+	                		   HTM_NO_ATTR,
 			   "%s",Txt_All_groups);
 	       for (NumGrpTyp = 0;
 		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
@@ -1632,9 +1628,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			   Err_NotEnoughMemoryExit ();
 		       }
 		     HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
-				 GrpCod == Grp->GrpCod ? HTM_OPTION_SELECTED :
-	                				 HTM_OPTION_UNSELECTED,
-				 HTM_ENABLED,
+				 (GrpCod == Grp->GrpCod) ? HTM_SELECTED :
+	                				   HTM_NO_ATTR,
 				 "%s %s%s",
 				 GrpTyp->GrpTypName,Grp->GrpName,Room);
 		     free (Room);
@@ -1649,7 +1644,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	    HTM_LABEL_End ();
 	    HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info ? Info :
 							     "",
-			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+			    HTM_SUBMIT_ON_CHANGE,
 			    "id=\"TTInf%s\" size=\"1\""
 			    " class=\"Tmt_INF INPUT_%s\"",
 			    CellStr,The_GetSuffix ());
@@ -1664,7 +1659,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	       HTM_Txt (Txt_Info);
 	    HTM_LABEL_End ();
 	    HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info,
-			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+			    HTM_SUBMIT_ON_CHANGE,
 			    "id=\"TTInf%s\" size=\"12\""
 			    " class=\"Tmt_INF INPUT_%s\"",
 			    CellStr,The_GetSuffix ());

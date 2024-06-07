@@ -1939,7 +1939,7 @@ void Str_GetNextStringUntilSpace (const char **StrSrc,char *StrDst,size_t MaxLen
    /***** Skip leading spaces *****/
    do
      {
-      if ((Ch = (int) **StrSrc) != 0)
+      if ((Ch = (int) **StrSrc))
 	 (*StrSrc)++;
      }
    while (isspace (Ch) ||
@@ -1954,7 +1954,7 @@ void Str_GetNextStringUntilSpace (const char **StrSrc,char *StrDst,size_t MaxLen
      {
       if (i < MaxLength)
 	 StrDst[i++] = (char) Ch;
-      if ((Ch = (int) **StrSrc) != 0)
+      if ((Ch = (int) **StrSrc))
 	 (*StrSrc)++;
      }
    StrDst[i] = '\0';
@@ -1973,7 +1973,7 @@ void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t Ma
    /***** Skip separators *****/
    do
      {
-      if ((Ch = (int) **StrSrc) != 0)
+      if ((Ch = (int) **StrSrc))
 	 (*StrSrc)++;
      }
    while (isspace (Ch)    ||
@@ -1992,7 +1992,7 @@ void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t Ma
      {
       if (i < MaxLength)
 	 StrDst[i++] = (char) Ch;
-      if ((Ch = (int) **StrSrc) != 0)
+      if ((Ch = (int) **StrSrc))
 	 (*StrSrc)++;
      }
    StrDst[i] = '\0';

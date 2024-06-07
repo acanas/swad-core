@@ -1266,17 +1266,9 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 				void (*FuncPars) (void *Args),void *Args,
                                 const char *CheckboxName,
-                                HTM_Checked_t Checked,
-                                HTM_Disabled_t Disabled,
-                                HTM_Readonly_t Readonly,
+                                HTM_Attributes_t Attributes,
                                 const char *Title,const char *Text)
   {
-   static const char *Class[HTM_NUM_CHECKED] =
-     {
-      [HTM_UNCHECKED] = "CHECKBOX_UNCHECKED",
-      [HTM_CHECKED  ] = "CHECKBOX_CHECKED",
-     };
-
    /***** Separator *****/
    if (Text)
       HTM_SP ();	// This space is necessary to enable
@@ -1289,15 +1281,16 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"CONTEXT_OPT %s FORM_OUT_%s BOLD\" title=\"%s\"",
-		     Class[Checked],The_GetSuffix (),Title);
+		     (Attributes & HTM_CHECKED) ? "CHECKBOX_CHECKED" :
+						  "CHECKBOX_UNCHECKED",
+		     The_GetSuffix (),Title);
 
 	 /***** Begin label *****/
 	 HTM_LABEL_Begin (NULL);
 
 	    /****** Checkbox *****/
 	    HTM_INPUT_CHECKBOX (CheckboxName,
-				Checked,Disabled,Readonly,
-				HTM_SUBMIT_ON_CHANGE,
+				Attributes,
 				"value=\"Y\"");
 
 	    /***** Text *****/

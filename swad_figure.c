@@ -115,7 +115,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
-		  Sco_PutSelectorScope ("FigScope",HTM_DONT_SUBMIT_ON_CHANGE);
+		  Sco_PutSelectorScope ("FigScope",HTM_NO_ATTR);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -128,8 +128,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "name=\"FigureType\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -139,9 +138,8 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 		       {
 			FigureTypeUnsigned = (unsigned) FigType;
 			HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
-				    FigType == SelectedFigureType ? HTM_OPTION_SELECTED :
-								    HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (FigType == SelectedFigureType) ? HTM_SELECTED :
+								      HTM_NO_ATTR,
 				    "%s",Txt_FIGURE_TYPES[FigType]);
 		       }
 		  HTM_SELECT_End ();

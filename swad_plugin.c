@@ -398,7 +398,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActRenPlg);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -409,7 +409,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgDes);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"16\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -420,7 +420,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgLog);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"4\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -431,7 +431,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgAppKey);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"8\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -442,9 +442,8 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgURL);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_URL ("URL",Plg->URL,
-				 HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
-				 "size=\"8\" class=\"INPUT_%s\"",
-				 The_GetSuffix ());
+				 HTM_SUBMIT_ON_CHANGE,
+				 "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -453,9 +452,8 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 	       Frm_BeginForm (ActChgPlgIP);
 		  ParCod_PutPar (ParCod_Plg,Plg->PlgCod);
 		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
-				  "size=\"8\" class=\"INPUT_%s\"",
-				  The_GetSuffix ());
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -812,50 +810,44 @@ static void Plg_PutFormToCreatePlugin (void)
 	 /***** Plugin name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Plugin description *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
 			    Plg_EditingPlg->Description,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"16\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "size=\"16\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Plugin logo *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"4\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "size=\"4\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Plugin application key *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Plugin URL *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,
-			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "size=\"8\" class=\"INPUT_%s\"",
-			   The_GetSuffix ());
+			   HTM_REQUIRED,
+			   "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Plugin IP address *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
       /***** Row end *****/

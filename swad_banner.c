@@ -450,7 +450,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	       Frm_BeginForm (ActChgBanImg);
 		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"12\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -461,7 +461,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	       Frm_BeginForm (ActChgBanWWW);
 		  ParCod_PutPar (ParCod_Ban,Banners->BanCodToEdit);
 		  HTM_INPUT_URL ("WWW",Ban->WWW,
-				 HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				 HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW INPUT_%s\"",
 				 The_GetSuffix ());
 	       Frm_EndForm ();
@@ -797,7 +797,7 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	 /* Banner image */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_REQUIRED,
 			    "size=\"12\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -805,9 +805,8 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	 /* Banner WWW */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ban->WWW,
-			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\"",
-			   The_GetSuffix ());
+			   HTM_REQUIRED,
+			   "class=\"INPUT_WWW INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
       /* End table row */

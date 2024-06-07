@@ -356,8 +356,7 @@ void Ann_ShowFormAnnouncement (void)
 				       1 << Rol_STD |
 				       1 << Rol_NET |
 				       1 << Rol_TCH,
-				       HTM_ENABLED,HTM_READWRITE,
-				       HTM_DONT_SUBMIT_ON_CHANGE);
+				       HTM_NO_ATTR);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
@@ -383,7 +382,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 			     "id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\""
 		             " class=\"INPUT_%s\"",
 			     Field,Field,Rows,The_GetSuffix ());

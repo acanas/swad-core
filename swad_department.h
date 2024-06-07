@@ -83,6 +83,6 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 		                  const char *SelectClass,
                                   long FirstOption,
                                   const char *TextWhenNoDptSelected,
-                                  HTM_SubmitOnChange_t SubmitOnChange);
+                                  HTM_Attributes_t Attributes);
 
 #endif

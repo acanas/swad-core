@@ -116,9 +116,9 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 static void Roo_PutParRooCod (void *RooCod);
 static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
-                                     HTM_SubmitOnChange_t SubmitOnChange);
+                                     HTM_Attributes_t Attributes);
 static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
-                                 HTM_SubmitOnChange_t SubmitOnChange);
+                                 HTM_Attributes_t Attributes);
 static int Roo_GetParFloor (void);
 static Roo_RoomType_t Roo_GetParType (void);
 
@@ -679,8 +679,9 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActChgRooFlo,Anchor);
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
-		  HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+		  HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,
+				  (long) Room->Floor,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_LONG INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -708,7 +709,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  Roo_WriteCapacity (StrCapacity,Room->Capacity);
 		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"3\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -742,7 +743,7 @@ static void Roo_PutParRooCod (void *RooCod)
 
 static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
-                                     HTM_SubmitOnChange_t SubmitOnChange)
+                                     HTM_Attributes_t Attributes)
   {
 
    extern const char *Txt_No_assigned_building;
@@ -751,22 +752,20 @@ static void Roo_PutSelectorBuilding (long BldCod,
    const struct Bld_Building *Bld;
 
    /***** Begin selector *****/
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (Attributes,NULL,
 		     "name=\"BldCod\" class=\"BLD_SEL INPUT_%s\"",
 		     The_GetSuffix ());
 
       /***** Option for no assigned building *****/
       HTM_OPTION (HTM_Type_STRING,"-1",
-		  BldCod < 0 ? HTM_OPTION_SELECTED :
-			       HTM_OPTION_UNSELECTED,
-		  HTM_ENABLED,
+		  (BldCod < 0) ? HTM_SELECTED :
+			         HTM_NO_ATTR,
 		  "%s",Txt_No_assigned_building);
 
       /***** Option for another room *****/
       HTM_OPTION (HTM_Type_STRING,"0",
-		  BldCod == 0 ? HTM_OPTION_SELECTED :
-			        HTM_OPTION_UNSELECTED,
-		  HTM_ENABLED,
+		  (BldCod == 0) ? HTM_SELECTED :
+			          HTM_NO_ATTR,
 		  "%s",Txt_Another_building);
 
       /***** Options for buildings *****/
@@ -776,9 +775,8 @@ static void Roo_PutSelectorBuilding (long BldCod,
 	{
 	 Bld = &Buildings->Lst[NumBld];
 	 HTM_OPTION (HTM_Type_LONG,&Bld->BldCod,
-		     BldCod == Bld->BldCod ? HTM_OPTION_SELECTED :
-					     HTM_OPTION_UNSELECTED,
-		     HTM_ENABLED,
+		     (BldCod == Bld->BldCod) ? HTM_SELECTED :
+					       HTM_NO_ATTR,
 		     "%s",Bld->ShrtName);
 	}
 
@@ -791,13 +789,13 @@ static void Roo_PutSelectorBuilding (long BldCod,
 /*****************************************************************************/
 
 static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
-                                 HTM_SubmitOnChange_t SubmitOnChange)
+                                 HTM_Attributes_t Attributes)
   {
    extern const char *Txt_ROOM_TYPES[Roo_NUM_TYPES];
    Roo_RoomType_t Type;
 
    /***** Begin selector *****/
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
+   HTM_SELECT_Begin (Attributes,NULL,
 		     "name=\"Type\" class=\"ROOM_TYPE_SEL INPUT_%s\"",
 		     The_GetSuffix ());
 
@@ -806,9 +804,8 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
 	   Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
 	   Type++)
 	 HTM_OPTION (HTM_Type_UNSIGNED,&Type,
-		     Type == RoomType ? HTM_OPTION_SELECTED :
-					HTM_OPTION_UNSELECTED,
-		     HTM_ENABLED,
+		     (Type == RoomType) ? HTM_SELECTED :
+					  HTM_NO_ATTR,
 		     "%s",Txt_ROOM_TYPES[Type]);
 
    /***** End selector *****/
@@ -1213,20 +1210,20 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 /***** Building *****/
 	 HTM_TD_Begin ("class=\"CM\"");
 	    Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings,
-				     HTM_DONT_SUBMIT_ON_CHANGE);
+				     HTM_NO_ATTR);
 	 HTM_TD_End ();
 
 	 /***** Floor *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
-			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+	    HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,
+			    (long) Roo_EditingRoom->Floor,
+			    HTM_NO_ATTR,
 			    "class=\"INPUT_LONG INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Room type *****/
 	 HTM_TD_Begin ("class=\"LM\"");
-	    Roo_PutSelectorType (Roo_EditingRoom->Type,
-				 HTM_DONT_SUBMIT_ON_CHANGE);
+	    Roo_PutSelectorType (Roo_EditingRoom->Type,HTM_NO_ATTR);
 	 HTM_TD_End ();
 
 	 /***** Room short name and full name *****/
@@ -1238,18 +1235,16 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
 	    HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
-			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"3\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_NO_ATTR,
+			    "size=\"3\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** MAC address *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    MAC_MACnumToMACstr (Roo_EditingRoom->MACnum,MACstr);
 	    HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
-			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_NO_ATTR,
+			    "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();

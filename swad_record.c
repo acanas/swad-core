@@ -305,7 +305,7 @@ static void Rec_ListFieldsRecordsForEdition (void)
 		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
 		  HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 				  Gbl.Crs.Records.LstFields.Lst[NumField].Name,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"REC_FIELDNAME INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -316,7 +316,7 @@ static void Rec_ListFieldsRecordsForEdition (void)
 	       Frm_BeginForm (ActChgRowFie);
 		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
 		  HTM_INPUT_LONG ("NumLines",1,UINT_MAX,(long) Fld->NumLines,
-				  HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_LONG INPUT_%s\"",
 				  The_GetSuffix ());
 	       Frm_EndForm ();
@@ -326,8 +326,7 @@ static void Rec_ListFieldsRecordsForEdition (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgVisFie);
 		  ParCod_PutPar (ParCod_Fld,Fld->FieldCod);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "name=\"Visibility\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (Vis  = (Rec_VisibilityRecordFields_t) 0;
@@ -336,9 +335,8 @@ static void Rec_ListFieldsRecordsForEdition (void)
 		       {
 			VisUnsigned = (unsigned) Vis;
 			HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-				    Vis == Fld->Visibility ? HTM_OPTION_SELECTED :
-							     HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Vis == Fld->Visibility) ? HTM_SELECTED :
+							       HTM_NO_ATTR,
 				    "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
 		       }
 		  HTM_SELECT_End ();
@@ -379,24 +377,21 @@ void Rec_ShowFormCreateRecordField (void)
 	 /***** Field name *****/
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"REC_FIELDNAME INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "class=\"REC_FIELDNAME INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of lines in form ******/
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_INPUT_LONG ("NumLines",1,UINT_MAX,
 			    (long) Gbl.Crs.Records.Field.NumLines,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_LONG INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "class=\"INPUT_LONG INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Visibility to students *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"Visibility\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Vis  = (Rec_VisibilityRecordFields_t) 0;
@@ -405,9 +400,8 @@ void Rec_ShowFormCreateRecordField (void)
 		 {
 		  VisUnsigned = (unsigned) Vis;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-			      Vis == Gbl.Crs.Records.Field.Visibility ? HTM_OPTION_SELECTED :
-									HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Vis == Gbl.Crs.Records.Field.Visibility) ? HTM_SELECTED :
+									  HTM_NO_ATTR,
 			      "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
 		 }
 	    HTM_SELECT_End ();
@@ -918,7 +912,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	 HTM_SECTION_Begin (RecordSectionId);
 
 	    if (Gbl.Action.Act == ActPrnRecSevGst &&
-		NumUsr != 0 &&
+		NumUsr &&
 		(NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
 	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
 	    else
@@ -1123,7 +1117,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 	    HTM_SECTION_Begin (RecordSectionId);
 
 	       if (Gbl.Action.Act == ActPrnRecSevStd &&
-		   NumUsr != 0 &&
+		   NumUsr &&
 		   (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
 		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
 	       else
@@ -1336,7 +1330,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	    HTM_SECTION_Begin (RecordSectionId);
 
 	       if (Gbl.Action.Act == ActPrnRecSevTch &&
-		   NumUsr != 0 &&
+		   NumUsr &&
 		   (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
 		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
 	       else
@@ -1400,16 +1394,14 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_Txt ("(");
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			"name=\"RecsPerPag\"");
 	 for (i  = Rec_MIN_RECORDS_PER_PAGE;
 	      i <= Rec_MAX_RECORDS_PER_PAGE;
 	      i++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			i == Gbl.Usrs.Listing.RecsPerPag ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-			HTM_ENABLED,
+			(i == Gbl.Usrs.Listing.RecsPerPag) ? HTM_SELECTED :
+							     HTM_NO_ATTR,
 			"%u",i);
       HTM_SELECT_End ();
       HTM_TxtF (" %s)",Txt_record_cards_per_page);
@@ -1440,9 +1432,8 @@ static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
    Lay_PutContextualCheckbox (ActSeeRecOneTch,
                               Rec_PutParsShowOfficeHoursOneTch,NULL,
                               "ShowOfficeHours",
-                              ShowOfficeHours ? HTM_CHECKED :
-						HTM_UNCHECKED,
-			      HTM_ENABLED,HTM_READWRITE,
+                              (ShowOfficeHours ? HTM_CHECKED :
+						 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
@@ -1454,9 +1445,8 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
    Lay_PutContextualCheckbox (ActSeeRecSevTch,
                               Rec_PutParsShowOfficeHoursSeveralTchs,NULL,
                               "ShowOfficeHours",
-                              ShowOfficeHours ? HTM_CHECKED :
-						HTM_UNCHECKED,
-			      HTM_ENABLED,HTM_READWRITE,
+                              (ShowOfficeHours ? HTM_CHECKED :
+						 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_tutoring_hours,
                               Txt_Show_tutoring_hours);
   }
@@ -1740,7 +1730,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  switch (ICanEditThisField)
 		    {
 		     case Usr_CAN:		// Show with form
-			HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+			HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 					    "name=\"Field%ld\" rows=\"%u\""
 					    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 					    Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
@@ -2778,8 +2768,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		     DefaultRoleInForm = Rol_STD;	// Request sign up as a student
 
 		  /***** Selector of role *****/
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "id=\"Role\" name=\"Role\""
 				    " class=\"INPUT_%s\"",
 				    The_GetSuffix ());
@@ -2789,9 +2778,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		       {
 			RoleUnsigned = (unsigned) Role;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-				    Role == DefaultRoleInForm ? HTM_OPTION_SELECTED :
-								HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Role == DefaultRoleInForm) ? HTM_SELECTED :
+								  HTM_NO_ATTR,
 				    "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 		       }
 		  HTM_SELECT_End ();
@@ -2845,11 +2833,9 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		       }
 
 		     /***** Selector of role *****/
-		     HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				       HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				       "id=\"Role\" name=\"Role\""
-				       " class=\"INPUT_%s\"",
-				       The_GetSuffix ());
+				       " class=\"INPUT_%s\"",The_GetSuffix ());
 			switch (Gbl.Usrs.Me.Role.Logged)
 			  {
 			   case Rol_GST:
@@ -2858,8 +2844,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 			   case Rol_NET:
 			      RoleUnsigned = (unsigned) Gbl.Usrs.Me.Role.Logged;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-			                  HTM_OPTION_SELECTED,
-			                  HTM_DISABLED,
+			                  HTM_SELECTED | HTM_DISABLED,
 					  "%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][UsrDat->Sex]);
 			      break;
 			   case Rol_TCH:
@@ -2873,9 +2858,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				{
 				 RoleUnsigned = (unsigned) Role;
 				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					     Role == DefaultRoleInForm ? HTM_OPTION_SELECTED :
-									 HTM_OPTION_UNSELECTED,
-					     HTM_ENABLED,
+					     (Role == DefaultRoleInForm) ? HTM_SELECTED :
+									   HTM_NO_ATTR,
 					     "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 				}
 			      break;
@@ -2893,15 +2877,12 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 										     Rol_GST;	// If user don't belong to any course
 
 		     /***** Selector of role *****/
-		     HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				       HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				       "id=\"Role\" name=\"Role\""
-				       " class=\"INPUT_%s\"",
-				       The_GetSuffix ());
+				       " class=\"INPUT_%s\"",The_GetSuffix ());
 			RoleUnsigned = (unsigned) DefaultRoleInForm;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-			            HTM_OPTION_SELECTED,
-			            HTM_DISABLED,
+			            HTM_SELECTED | HTM_DISABLED,
 				    "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
 		     HTM_SELECT_End ();
 		    }
@@ -2933,8 +2914,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 			     }
 
 			   /***** Selector of role *****/
-			   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-					     HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 					     "id=\"Role\" name=\"Role\""
 					     " class=\"INPUT_%s\"",
 				             The_GetSuffix ());
@@ -2944,9 +2924,8 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 				{
 				 RoleUnsigned = (unsigned) Role;
 				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					     Role == DefaultRoleInForm ? HTM_OPTION_SELECTED :
-								         HTM_OPTION_UNSELECTED,
-					     HTM_ENABLED,
+					     (Role == DefaultRoleInForm) ? HTM_SELECTED :
+								           HTM_NO_ATTR,
 					     "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
 				}
 			   HTM_SELECT_End ();
@@ -2959,15 +2938,13 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		       {
 			case Rol_SYS_ADM:
 			   /***** Selector of role *****/
-			   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-					     HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 					     "id=\"Role\" name=\"Role\""
 					     " class=\"INPUT_%s\"",
 				             The_GetSuffix ());
 			      RoleUnsigned = (unsigned) Rol_GST;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-					  HTM_OPTION_SELECTED,
-					  HTM_ENABLED,
+					  HTM_SELECTED,
 					  "%s",Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
 			   HTM_SELECT_End ();
 			   break;
@@ -3020,14 +2997,11 @@ static void Rec_ShowFormSex (struct Usr_Data *UsrDat,Usr_Sex_t Sex)
   {
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
    extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
-   HTM_Checked_t Checked;
 
-   HTM_LABEL_Begin ("class=\"DAT_STRONG_%s\"",
-		    The_GetSuffix ());
-      Checked = (Sex == UsrDat->Sex) ? HTM_CHECKED :
-				       HTM_UNCHECKED;
+   HTM_LABEL_Begin ("class=\"DAT_STRONG_%s\"",The_GetSuffix ());
       HTM_INPUT_RADIO ("Sex",
-		       Checked,HTM_ENABLED,HTM_READWRITE,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CLICK,
+		       ((Sex == UsrDat->Sex) ? HTM_CHECKED :
+					       HTM_NO_ATTR) | HTM_REQUIRED,
 		       "value=\"%u\"",(unsigned) Sex);
       HTM_TxtF ("%s&nbsp;%s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
    HTM_LABEL_End ();
@@ -3076,7 +3050,7 @@ static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	       break;
 	    case Vie_EDIT:
 	       HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED,
 			       "id=\"Surname1\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	       break;
@@ -3120,7 +3094,7 @@ static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	    case Vie_EDIT:
 	       HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			       UsrDat->Surname2,
-			       HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_NO_ATTR,
 			       "id=\"Surname2\""
 			       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
@@ -3178,7 +3152,7 @@ static void Rec_ShowFirstName (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	    case Vie_EDIT:
 	       HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			       UsrDat->FrstName,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED,
 			       "id=\"FirstName\""
 			       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
@@ -3230,18 +3204,16 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 
       /* Data */
       HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_REQUIRED,
-			   HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_REQUIRED,NULL,
 			   "id=\"OthCtyCod\" name=\"OthCtyCod\""
 			   " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"",
-	                HTM_OPTION_UNSELECTED,HTM_ENABLED,
+	                HTM_NO_ATTR,
 			"%s",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 	    HTM_OPTION (HTM_Type_STRING,"0",
-	                (UsrDat->CtyCod == 0) ? HTM_OPTION_SELECTED :
-	                		        HTM_OPTION_UNSELECTED,
-	                HTM_ENABLED,
+	                (UsrDat->CtyCod == 0) ? HTM_SELECTED :
+	                		        HTM_NO_ATTR,
 			"%s",Txt_Another_country);
 	    for (NumCty = 0;
 		 NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
@@ -3249,9 +3221,8 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	      {
 	       Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 	       HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-			   Cty->HieCod == UsrDat->CtyCod ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (Cty->HieCod == UsrDat->CtyCod) ? HTM_SELECTED :
+							     HTM_NO_ATTR,
 			   "%s",Cty->FullName);
 	      }
 	 HTM_SELECT_End ();
@@ -3294,8 +3265,7 @@ static void Rec_ShowDateOfBirth (struct Usr_Data *UsrDat,bool ShowData,
 				     CurrentYear - Rec_USR_MIN_AGE,
 				     "Birth",
 				     &(UsrDat->Birthday),
-				     HTM_DONT_SUBMIT_ON_CHANGE,
-				     false);
+				     HTM_NO_ATTR);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -3351,10 +3321,9 @@ static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
 		  break;
 	       case Vie_EDIT:
 		  HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
-				 HTM_DONT_SUBMIT_ON_CHANGE,
+				 HTM_NO_ATTR,
 				 "id=\"%s\" class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-				 Name,
-				 The_GetSuffix ());
+				 Name,The_GetSuffix ());
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -3404,7 +3373,7 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
 		    }
 		  break;
 	       case Vie_EDIT:
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "id=\"Comments\" name=\"Comments\""
 				      " rows=\"4\""
 				      " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
@@ -3909,15 +3878,13 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
 	       /* Begin form to select the country of my institution */
 	       Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
-				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0 ? HTM_OPTION_SELECTED :
-								     HTM_OPTION_UNSELECTED,
-				 HTM_DISABLED,
+				 ((Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0) ? HTM_SELECTED :
+								        HTM_NO_ATTR) | HTM_DISABLED,
 				 NULL);
 		     for (NumCty = 0;
 			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
@@ -3925,9 +3892,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		       {
 			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-				    Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod ? HTM_OPTION_SELECTED :
-										  HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Cty->HieCod == Gbl.Usrs.Me.UsrDat.InsCtyCod) ? HTM_SELECTED :
+										    HTM_NO_ATTR,
 				    "%s",Cty->FullName);
 		       }
 		  HTM_SELECT_End ();
@@ -3956,20 +3922,17 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
 	       /* Begin form to select institution */
 	       Frm_BeginFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
 				    " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"-1",
-				 Gbl.Usrs.Me.UsrDat.InsCod < 0 ? HTM_OPTION_SELECTED :
-								 HTM_OPTION_UNSELECTED,
-				 HTM_DISABLED,
+				 ((Gbl.Usrs.Me.UsrDat.InsCod < 0) ? HTM_SELECTED :
+								    HTM_NO_ATTR) | HTM_DISABLED,
 				 NULL);
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 Gbl.Usrs.Me.UsrDat.InsCod == 0 ? HTM_OPTION_SELECTED :
-								  HTM_OPTION_UNSELECTED,
-				 HTM_ENABLED,
+				 (Gbl.Usrs.Me.UsrDat.InsCod == 0) ? HTM_SELECTED :
+								    HTM_NO_ATTR,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
@@ -3977,9 +3940,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		       {
 			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				    Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod ? HTM_OPTION_SELECTED :
-									       HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Ins->HieCod == Gbl.Usrs.Me.UsrDat.InsCod) ? HTM_SELECTED :
+									         HTM_NO_ATTR,
 				    "%s",Ins->FullName);
 		       }
 		  HTM_SELECT_End ();
@@ -4009,20 +3971,17 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
 		  /* Begin form to select center */
 		  Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
-		     HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				       HTM_SUBMIT_ON_CHANGE,NULL,
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
 				       " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				       The_GetSuffix ());
 			HTM_OPTION (HTM_Type_STRING,"-1",
-				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ? HTM_OPTION_SELECTED :
-									HTM_OPTION_UNSELECTED,
-				    HTM_DISABLED,
+				    ((Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0) ? HTM_SELECTED :
+									   HTM_NO_ATTR) | HTM_DISABLED,
 				    NULL);
 			HTM_OPTION (HTM_Type_STRING,"0",
-				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0 ? HTM_OPTION_SELECTED :
-									 HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0) ? HTM_SELECTED :
+									   HTM_NO_ATTR,
 				    Txt_Another_center);
 			for (NumCtr = 0;
 			     NumCtr < Gbl.Hierarchy.List[Hie_SYS].Num;
@@ -4030,9 +3989,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			  {
 			   Ctr = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCtr];
 			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
-				       Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod ? HTM_OPTION_SELECTED :
-										      HTM_OPTION_UNSELECTED,
-				       HTM_ENABLED,
+				       (Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod) ? HTM_SELECTED :
+										        HTM_NO_ATTR,
 				       Ctr->FullName);
 			  }
 		     HTM_SELECT_End ();
@@ -4079,7 +4037,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		  Frm_BeginFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
-				     HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				     HTM_SUBMIT_ON_CHANGE,
 				     "id=\"Office\""
 				     " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
 				     The_GetSuffix ());

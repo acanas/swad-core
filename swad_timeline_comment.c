@@ -646,8 +646,7 @@ static void TmlCom_WriteContent (struct TmlCom_Comment *Com)
    /***** Write content of the comment *****/
    if (Com->Content.Txt[0])
      {
-      HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",
-                     The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",The_GetSuffix ());
 	 Msg_WriteMsgContent (Com->Content.Txt,true,false);
       HTM_DIV_End ();
      }

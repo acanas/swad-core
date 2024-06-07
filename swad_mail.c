@@ -474,7 +474,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 		     Frm_BeginForm (ActRenMaiSho);
 			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 			HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
-					HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+					HTM_SUBMIT_ON_CHANGE,
 					"size=\"15\" class=\"INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -485,7 +485,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 		     Frm_BeginForm (ActRenMaiFul);
 			ParCod_PutPar (ParCod_Mai,Mai->MaiCod);
 			HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
-					HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+					HTM_SUBMIT_ON_CHANGE,
 					"size=\"40\" class=\"INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -686,7 +686,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 	 /* Mail domain */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_REQUIRED,
 			    "size=\"15\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -694,7 +694,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 	 /* Mail domain info */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_REQUIRED,
 			    "size=\"40\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1018,8 +1018,7 @@ void Mai_PutFormToGetNewEmail (const char *NewEmail)
 			  HTM_REQUIRED,
 			  "id=\"NewEmail\" size=\"16\" placeholder=\"%s\""
 			  " class=\"Frm_C2_INPUT INPUT_%s\"",
-			  Txt_HELP_email,
-			  The_GetSuffix ());
+			  Txt_HELP_email,The_GetSuffix ());
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1243,7 +1242,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 	       if (MeOrOther == Usr_OTHER)
 		  Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,UsrDat[MeOrOther]->Email,
-				HTM_NOT_REQUIRED,
+				HTM_NO_ATTR,
 				"id=\"NewEmail\""
 				" class=\"Frm_C2_INPUT INPUT_%s\" size=\"16\"",
 				The_GetSuffix ());

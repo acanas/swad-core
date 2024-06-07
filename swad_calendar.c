@@ -288,8 +288,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (long) Dat_GetStartExecutionTimeUTC (),
 		   Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
-		   Print[ViewType],
-		   The_GetSuffix (),
+		   Print[ViewType],The_GetSuffix (),
 		   Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 Frm_SetParsForm (ParsStr,ActionSeeCalendar,true);
 	 HTM_TxtF ("'%s',",ParsStr);

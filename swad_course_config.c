@@ -245,8 +245,7 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 
 	       /* Put form to select degree */
 	       Frm_BeginForm (ActChgCrsDegCfg);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthDegCod\" name=\"OthDegCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -256,9 +255,8 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		       {
 			Deg = &Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg];
 			HTM_OPTION (HTM_Type_LONG,&Deg->HieCod,
-				    Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod ? HTM_OPTION_SELECTED :
-											HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Deg->HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod) ? HTM_SELECTED :
+											  HTM_NO_ATTR,
 				    "%s",Deg->ShrtName);
 		       }
 		  HTM_SELECT_End ();
@@ -305,8 +303,7 @@ static void CrsCfg_Year (Frm_PutForm_t PutForm)
                break;
             case Frm_PUT_FORM:
 	       Frm_BeginForm (ActChgCrsYeaCfg);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthCrsYear\" name=\"OthCrsYear\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -314,9 +311,8 @@ static void CrsCfg_Year (Frm_PutForm_t PutForm)
 			  Year <= Deg_MAX_YEARS_PER_DEGREE;
 			  Year++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				    Year == Gbl.Hierarchy.Node[Hie_CRS].Specific.Year ? HTM_OPTION_SELECTED :
-											HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Year == Gbl.Hierarchy.Node[Hie_CRS].Specific.Year) ? HTM_SELECTED :
+											  HTM_NO_ATTR,
 				    "%s",Txt_YEAR_OF_DEGREE[Year]);
 		  HTM_SELECT_End ();
 	       Frm_EndForm ();
@@ -357,7 +353,7 @@ static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm)
 	       Frm_BeginForm (ActChgInsCrsCodCfg);
 		  HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 				  Gbl.Hierarchy.Node[Hie_CRS].InstitutionalCod,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_SUBMIT_ON_CHANGE,
 				  "id=\"InsCrsCod\" maxlength=\"%u\""
 				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  Hie_MAX_CHARS_INSTITUTIONAL_COD,

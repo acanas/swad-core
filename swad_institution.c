@@ -808,24 +808,21 @@ void Ins_WriteSelectorOfInstitution (void)
    unsigned NumInss;
    unsigned NumIns;
    long InsCod;
-   HTM_Disabled_t Disabled = (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0) ? HTM_ENABLED :
-									HTM_DISABLED;
-   HTM_SubmitOnChange_t SubmitOnChange = (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-										    HTM_DONT_SUBMIT_ON_CHANGE;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCtr);
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
+      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
+								   HTM_DISABLED,
+			NULL,
 			"id=\"ins\" name=\"ins\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     Gbl.Hierarchy.Node[Hie_INS].HieCod < 0 ? HTM_OPTION_SELECTED :
-							      HTM_OPTION_UNSELECTED,
-		     HTM_DISABLED,
+		     ((Gbl.Hierarchy.Node[Hie_INS].HieCod < 0) ? HTM_SELECTED :
+							         HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
 	 if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
@@ -847,10 +844,9 @@ void Ins_WriteSelectorOfInstitution (void)
 
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&InsCod,
-			   Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
-			   InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_OPTION_SELECTED :
-									  HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 &&
+			   InsCod == Gbl.Hierarchy.Node[Hie_INS].HieCod) ? HTM_SELECTED :
+									   HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
 
@@ -955,7 +951,7 @@ static void Ins_ListInstitutionsForEdition (void)
 		     Frm_BeginForm (ActChgInsWWW);
 			ParCod_PutPar (ParCod_OthHie,Ins->HieCod);
 			HTM_INPUT_URL ("WWW",Ins->WWW,
-				       HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				       HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				       "class=\"INPUT_WWW INPUT_%s\"",
 				       The_GetSuffix ());
 		     Frm_EndForm ();
@@ -1018,7 +1014,7 @@ static void Ins_ListInstitutionsForEdition (void)
 static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins)
   {
    return (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
-           ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
+           ((Ins->Status & Hie_STATUS_BIT_PENDING) &&	// Institution is not yet activated
            Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
         							 Usr_CAN_NOT;
   }
@@ -1368,9 +1364,8 @@ static void Ins_PutFormToCreateInstitution (void)
 	 /***** Institution WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,
-			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\"",
-			   The_GetSuffix ());
+			   HTM_REQUIRED,
+			   "class=\"INPUT_WWW INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this institution ****/

@@ -815,19 +815,16 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_Txt (" />");
       HTM_OPTION (HTM_Type_STRING,"" ,
-                  Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0' ? HTM_OPTION_SELECTED :
-                							  HTM_OPTION_UNSELECTED,
-                  HTM_ENABLED,
+                  (Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0') ? HTM_SELECTED :
+                							    HTM_NO_ATTR,
                   "&nbsp;");
       HTM_OPTION (HTM_Type_STRING,"T",
-                  Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T' ? HTM_OPTION_SELECTED :
-                							 HTM_OPTION_UNSELECTED,
-                  HTM_ENABLED,
+                  (Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T') ? HTM_SELECTED :
+                							   HTM_NO_ATTR,
                   "%s",Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
-                  Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F' ? HTM_OPTION_SELECTED :
-                							 HTM_OPTION_UNSELECTED,
-                  HTM_ENABLED,
+                  (Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F') ? HTM_SELECTED :
+                							   HTM_NO_ATTR,
                   "%s",Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }
@@ -842,13 +839,8 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
   {
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-   static const char *CheckedTxt[HTM_NUM_CHECKED] =
-     {
-      [HTM_UNCHECKED] = "",
-      [HTM_CHECKED  ] = " checked=\"checked\"",
-     };
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -876,11 +868,12 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-	       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
+	       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"",
 			 Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? "radio" :
 									  "checkbox",
-			 Id,NumOpt,Indexes[NumOpt],
-			 CheckedTxt[UsrAnswers[Indexes[NumOpt]]]);
+			 Id,NumOpt,Indexes[NumOpt]);
+	       if ((UsrAnswers[Indexes[NumOpt]] & HTM_CHECKED))
+		  HTM_Txt (" checked");
 	       ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
 	       HTM_Txt (" />");
 	    HTM_TD_End ();

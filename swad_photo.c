@@ -329,7 +329,8 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_File_with_the_photo);
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
-			    HTM_SUBMIT_ON_CHANGE,NULL);
+			    HTM_SUBMIT_ON_CHANGE,
+			    NULL);
 	 HTM_LABEL_End ();
 
       /***** End form *****/
@@ -1020,7 +1021,7 @@ bool Pho_BuildLinkToPhoto (const struct Usr_Data *UsrDat,char PhotoURL[WWW_MAX_B
 
       /***** Create a symbolic link to the private photo, if not exists *****/
       if (!Fil_CheckIfPathExists (PathPublPhoto))
-         if (symlink (PathPrivPhoto,PathPublPhoto) != 0)
+         if (symlink (PathPrivPhoto,PathPublPhoto))
             Err_ShowErrorAndExit ("Can not create public link"
                                  " to access to user's private photo");
 
@@ -1793,8 +1794,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"AvgType\" name=\"AvgType\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1804,9 +1804,8 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 		 {
 		  TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
-			      TypeOfAvg == DegPhotos->TypeOfAverage ? HTM_OPTION_SELECTED :
-								      HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (TypeOfAvg == DegPhotos->TypeOfAverage) ? HTM_SELECTED :
+								        HTM_NO_ATTR,
 			      "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
 		 }
 	    HTM_SELECT_End ();
@@ -1861,8 +1860,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"PhotoSize\" name=\"PhotoSize\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1872,9 +1870,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 		 {
 		  PhoSiUnsigned = (unsigned) PhoSi;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
-			      PhoSi == DegPhotos->HowComputePhotoSize ? HTM_OPTION_SELECTED :
-								        HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (PhoSi == DegPhotos->HowComputePhotoSize) ? HTM_SELECTED :
+								          HTM_NO_ATTR,
 			      "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
 		 }
 	    HTM_SELECT_End ();
@@ -1929,8 +1926,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 	    Pho_PutParTypeOfAvg (DegPhotos->TypeOfAverage);
 	    Pho_PutParPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			      "id=\"Order\" name=\"Order\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -1940,9 +1936,8 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 		 {
 		  OrderUnsigned = (unsigned) Order;
 		  HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
-			      Order == DegPhotos->HowOrderDegrees ? HTM_OPTION_SELECTED :
-								    HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Order == DegPhotos->HowOrderDegrees) ? HTM_SELECTED :
+								      HTM_NO_ATTR,
 			      "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
 		 }
 	    HTM_SELECT_End ();
@@ -2007,8 +2002,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
    struct Hie_Node Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
    char StrEstimatedTimeToComputeAvgPhoto[Dat_MAX_BYTES_TIME + 1];
-   HTM_OptionSelected_t Selected;
-   HTM_Disabled_t Disabled;
+   HTM_Attributes_t Attributes;
 
    if ((Deg.HieCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
@@ -2036,8 +2030,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    HTM_BUTTON_End ();
 
 	    /* Selector with all degrees with students */
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"OthDegCod\""
 			      " class=\"Frm_C2_INPUT INPUT_%s\"",
 			      The_GetSuffix ());
@@ -2054,18 +2047,16 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		     Dat_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
 				    EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
-		  Selected = (Degs.Lst[NumDeg].HieCod == Deg.HieCod) ? HTM_OPTION_SELECTED :
-								       HTM_OPTION_UNSELECTED;
-		  if (Selected == HTM_OPTION_SELECTED)
-		     Disabled = HTM_ENABLED;
+		  if (Degs.Lst[NumDeg].HieCod == Deg.HieCod)
+		     Attributes = HTM_SELECTED;
 		  else
 		     // Too recently computed ?
-		     Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].HieCod) >=
-				Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO ? HTM_DISABLED :
-					                                                                HTM_ENABLED;
+		     Attributes = (Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].HieCod) >=
+				   Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? HTM_DISABLED :
+					                                                                    HTM_NO_ATTR;
+
 		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].HieCod,
-		              Selected,
-		              Disabled,
+		              Attributes,
 			      "%s (%s: %s)",
 			      Degs.Lst[NumDeg].ShrtName,
 			      Txt_time,StrEstimatedTimeToComputeAvgPhoto);

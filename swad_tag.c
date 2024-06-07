@@ -283,7 +283,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    unsigned NumTag;
    MYSQL_ROW row;
    bool TagHidden = false;
-   HTM_Checked_t Checked;
+   HTM_Attributes_t Checked;
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
    /*
@@ -308,11 +308,9 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
 	       HTM_TD_Begin ("class=\"LT\"");
 		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		     Checked = Tags->All ? HTM_CHECKED :
-					   HTM_UNCHECKED;
 		     HTM_INPUT_CHECKBOX ("AllTags",
-					 Checked,HTM_ENABLED,HTM_READWRITE,
-					 HTM_DONT_SUBMIT_ON_CHANGE,
+					 Tags->All ? HTM_CHECKED :
+						     HTM_NO_ATTR,
 					 "value=\"Y\""
 					 " onclick=\"togglecheckChildren(this,'ChkTag');\"");
 		     HTM_NBSPTxt (Txt_All_tags);
@@ -340,7 +338,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		     HTM_TD_End ();
 		    }
 
-		  Checked = HTM_UNCHECKED;
+		  Checked = HTM_NO_ATTR;
 		  if (Tags->List)
 		    {
 		     Ptr = Tags->List;
@@ -356,11 +354,9 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		    }
 
 		  HTM_TD_Begin ("class=\"LT\"");
-		     HTM_LABEL_Begin ("class=\"DAT_%s\"",
-				      The_GetSuffix ());
+		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 			HTM_INPUT_CHECKBOX ("ChkTag",
-					    Checked,HTM_ENABLED,HTM_READWRITE,
-					    HTM_DONT_SUBMIT_ON_CHANGE,
+					    Checked,
 					    "value=\"%s\""
 					    " onclick=\"checkParent(this,'AllTags');\"",
 					    row[1]);
@@ -426,7 +422,7 @@ void Tag_ShowFormEditTags (void)
 		  Frm_BeginForm (ActRenTag);
 		     Par_PutParString (NULL,"OldTagTxt",row[1]);
 		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
-				     HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				     HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				     "size=\"36\" class=\"INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();

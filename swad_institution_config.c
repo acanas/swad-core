@@ -343,8 +343,7 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
             case Frm_PUT_FORM:
 	       /* Put form to select country */
 	       Frm_BeginForm (ActChgInsCtyCfg);
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				    "id=\"OthCtyCod\" name=\"OthCtyCod\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -354,9 +353,8 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 		       {
 			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-				    Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_OPTION_SELECTED :
-											HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? HTM_SELECTED :
+											  HTM_NO_ATTR,
 				    "%s",Cty->FullName);
 		       }
 		  HTM_SELECT_End ();

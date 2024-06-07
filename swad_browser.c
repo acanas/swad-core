@@ -2887,7 +2887,6 @@ static void Brw_FormToChangeCrsGrpZone (void)
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
    struct GroupData GrpDat;
-   HTM_Checked_t Checked;
 
    /***** Get list of groups to show *****/
    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
@@ -2906,11 +2905,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	               Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? "BROWSER_TITLE" :
 						                "BROWSER_TITLE_LIGHT");
 	    HTM_LABEL_Begin (NULL);
-	       Checked = Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? HTM_CHECKED :
-								  HTM_UNCHECKED;
 	       HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-			        Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-			        HTM_SUBMIT_ON_CLICK,
+			        (Brw_TypeIsCrsBrw[Gbl.FileBrowser.Type] ? HTM_CHECKED :
+								          HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				"value=\"-1\"");
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	    HTM_LABEL_End ();
@@ -2938,12 +2935,10 @@ static void Brw_FormToChangeCrsGrpZone (void)
 			   NULL,
 			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
 		  HTM_LABEL_Begin (NULL);
-		     Checked = (Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
-				GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? HTM_CHECKED :
-									HTM_UNCHECKED;
 		     HTM_INPUT_RADIO (Par_CodeStr[ParCod_Grp],
-				      Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-				      HTM_SUBMIT_ON_CLICK,
+				      ((Brw_TypeIsGrpBrw[Gbl.FileBrowser.Type] &&
+				        GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? HTM_CHECKED :
+									        HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				      "value=\"%ld\"",GrpDat.GrpCod);
 		     HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
 		  HTM_LABEL_End ();
@@ -3600,9 +3595,8 @@ static void Brw_PutCheckboxFullTree (void)
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParsFullTree,NULL,
                               "FullTree",
-                              Gbl.FileBrowser.FullTree ? HTM_CHECKED :
-                        				 HTM_UNCHECKED,
-                              HTM_ENABLED,HTM_READWRITE,
+                              (Gbl.FileBrowser.FullTree ? HTM_CHECKED :
+                        				  HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
                               Txt_Show_all_files,Txt_Show_all_files);
   }
 
@@ -4018,7 +4012,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
        !Gbl.FileBrowser.ShowOnlyPublicFiles)
      {
       if (Gbl.FileBrowser.Clipboard.IsThisTree &&
-	  Level != 0)	// Never copy root folder
+	  Level)	// Never copy root folder
 	 // If path in the clipboard is equal to complete path in tree...
 	 // ...or is the start of complete path in tree...
          if (Str_Path1BeginsByPath2 (Gbl.FileBrowser.FilFolLnk.Full,
@@ -4731,10 +4725,9 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 			Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 			HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,
 				        Gbl.FileBrowser.FilFolLnk.Name,
-					HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+					HTM_SUBMIT_ON_CHANGE,
 					"class=\"LST_EDIT %s_%s %s\"",
-					InputStyle,
-					The_GetSuffix (),
+					InputStyle,The_GetSuffix (),
 					Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
 									       The_GetColorRows ());
 		     Frm_EndForm ();
@@ -4837,7 +4830,7 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
              Gbl.FileBrowser.TmpPubDir.L,
              Gbl.FileBrowser.TmpPubDir.R,
 	     FileName);
-   if (symlink (FullPathIncludingFile,Link) != 0)
+   if (symlink (FullPathIncludingFile,Link))
       Err_ShowErrorAndExit ("Can not create temporary link.");
   }
 
@@ -6157,7 +6150,7 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 	       else	// Quota not exceded
 		 {
 		  /* Create directory */
-		  if (mkdir (PathDstWithFile,(mode_t) 0xFFF) != 0)
+		  if (mkdir (PathDstWithFile,(mode_t) 0xFFF))
 		     Err_ShowErrorAndExit ("Can not create folder.");
 
 		  /* Add entry to the table of files/folders */
@@ -6194,8 +6187,8 @@ static bool Brw_PasteTreeIntoFolder (struct BrwSiz_BrowserSize *Size,
 	    Err_ShowErrorAndExit ("Error while scanning directory.");
 
 	 if (CopyIsGoingSuccessful &&
-	     LevelOrg != 0)	// When copying all files inside root folder,
-				// do not count the root folder itself
+	     LevelOrg)	// When copying all files inside root folder,
+			// do not count the root folder itself
 	    (Pasted->NumFolds)++;
 	}
      }
@@ -6285,9 +6278,8 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Folder);
 	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"30\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    HTM_REQUIRED,
+			    "size=\"30\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
@@ -6333,8 +6325,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 	 Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 HTM_DIV_Begin ("class=\"dz-message\"");
-	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",
-	                    The_GetSuffix ());
+	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
 	    HTM_SPAN_End ();
 	 HTM_DIV_End ();
@@ -6382,7 +6373,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
 	    /* File */
 	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"*",
-			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_NO_ATTR,
 			    NULL);
 
 	    /* Button to send */
@@ -6458,9 +6449,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_URL ("NewLinkURL","",
-			      HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "size=\"30\" class=\"INPUT_%s\"",
-			      The_GetSuffix ());
+			      HTM_REQUIRED,
+			      "size=\"30\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -6477,10 +6467,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
-			       HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_NO_ATTR,
 			       "id=\"NewLinkName\" size=\"30\""
-			       " class=\"INPUT_%s\"",
-			       The_GetSuffix ());
+			       " class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -7457,8 +7446,7 @@ void Brw_ShowFileMetadata (void)
 
 		  Frm_LabelColumn ("RT",NULL,Txt_Filename);
 
-		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 		     Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 		  HTM_TD_End ();
 
@@ -7469,8 +7457,7 @@ void Brw_ShowFileMetadata (void)
 
 		  Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
 
-		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 		     if (FileHasPublisher)
 		       {
 			/* Show photo */
@@ -7498,8 +7485,7 @@ void Brw_ShowFileMetadata (void)
 
 		  Frm_LabelColumn ("RT",NULL,Txt_File_size);
 
-		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 		     HTM_Txt (FileSizeStr);
 		  HTM_TD_End ();
 
@@ -7533,23 +7519,19 @@ void Brw_ShowFileMetadata (void)
 				   Txt_Availability);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
 		     if (ICanChangePublic == Usr_CAN)	// I can change file to public
 		       {
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-					  HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 					  "id=\"PublicFile\" name=\"PublicFile\""
 					  " class=\"PUBLIC_FILE\"");
 			   HTM_OPTION (HTM_Type_STRING,"N",
-				       FileMetadata.IsPublic ? HTM_OPTION_UNSELECTED :
-							       HTM_OPTION_SELECTED,
-				       HTM_ENABLED,
+				       FileMetadata.IsPublic ? HTM_NO_ATTR :
+							       HTM_SELECTED,
 				       "%s",Txt_Private_available_to_certain_users_identified);
 			   HTM_OPTION (HTM_Type_STRING,"Y",
-				       FileMetadata.IsPublic ? HTM_OPTION_SELECTED :
-							       HTM_OPTION_UNSELECTED,
-				       HTM_ENABLED,
+				       FileMetadata.IsPublic ? HTM_SELECTED :
+							       HTM_NO_ATTR,
 				       "%s",Txt_Public_open_educational_resource_OER_for_everyone);
 			HTM_SELECT_End ();
 		       }
@@ -7569,12 +7551,10 @@ void Brw_ShowFileMetadata (void)
 				   Txt_License);
 
 		  /* Data */
-		  HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
 		     if (ICanEdit == Usr_CAN)	// I can edit file properties
 		       {
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-					  HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 					  "id=\"License\" name=\"License\""
 					  " class=\"LICENSE\"");
 			   for (License  = (Brw_License_t) 0;
@@ -7583,9 +7563,8 @@ void Brw_ShowFileMetadata (void)
 			     {
 			      LicenseUnsigned = (unsigned) License;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
-					  License == FileMetadata.License ? HTM_OPTION_SELECTED :
-									    HTM_OPTION_UNSELECTED,
-					  HTM_ENABLED,
+					  License == FileMetadata.License ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 					  "%s",Txt_LICENSES[License]);
 			     }
 			HTM_SELECT_End ();
@@ -7603,8 +7582,7 @@ void Brw_ShowFileMetadata (void)
 
 		     Frm_LabelColumn ("RT",NULL,Txt_My_views);
 
-		     HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-				   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 			HTM_Unsigned (FileMetadata.NumMyViews);
 		     HTM_TD_End ();
 
@@ -7616,8 +7594,7 @@ void Brw_ShowFileMetadata (void)
 
 		  Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
 
-		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 		     HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
 		     HTM_TxtF ("(%u %s)",
 			       FileMetadata.NumLoggedUsrs,
@@ -7632,8 +7609,7 @@ void Brw_ShowFileMetadata (void)
 
 		  Frm_LabelColumn ("RT",NULL,Txt_Public_views);
 
-		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",
-				The_GetSuffix ());
+		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
 		     HTM_Unsigned (FileMetadata.NumPublicViews);
 		  HTM_TD_End ();
 
@@ -9526,17 +9502,15 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 	 /***** Form to request number of months (to remove files older) *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"Months\" class=\"INPUT_%s\"",
 			      The_GetSuffix ());
 	       for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
 		    Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
 		    Months++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
-			      Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES ? HTM_OPTION_SELECTED :
-									     HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES) ? HTM_SELECTED :
+									       HTM_NO_ATTR,
 			      "%u",Months);
 	    HTM_SELECT_End ();
 	    HTM_NBSP ();

@@ -36,7 +36,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Sco_PutSelectorScope (const char *ParName,HTM_SubmitOnChange_t SubmitOnChange);
+void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes);
 void Sco_PutParCurrentScope (void *Level);
 void Sco_PutParScope (const char *ParName,Hie_Level_t Level);
 void Sco_GetScope (const char *ParName,Hie_Level_t DefaultScope);

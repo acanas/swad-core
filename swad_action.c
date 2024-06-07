@@ -108,8 +108,8 @@ Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
       return Usr_CAN_NOT;
 
    return ((ActLst_Actions[Action].Permission[Gbl.Hierarchy.Level][Gbl.Usrs.Me.IBelongToCurrent[Gbl.Hierarchy.Level]]
-           & (1 << Gbl.Usrs.Me.Role.Logged)) != 0) ? Usr_CAN :
-						     Usr_CAN_NOT;
+           & (1 << Gbl.Usrs.Me.Role.Logged))) ? Usr_CAN :
+						Usr_CAN_NOT;
   }
 
 /*****************************************************************************/

@@ -34,7 +34,7 @@
 /*****************************************************************************/
 
 #define Ind_NUM_INDICATORS 5
-#define Ind_MAX_SIZE_INDICATORS_SELECTED ((1 + Ind_NUM_INDICATORS) * (10 + 1))
+#define Ind_MAX_SIZE_INDICATORS_CHECKED ((1 + Ind_NUM_INDICATORS) * (10 + 1))
 
 struct Ind_IndicatorsCrs
   {
@@ -65,8 +65,8 @@ struct Ind_Indicators
   {
    long DegTypCod;
    long DptCod;
-   char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
-   HTM_Checked_t IndicatorsSelected[1 + Ind_NUM_INDICATORS];
+   char StrChecked[Ind_MAX_SIZE_INDICATORS_CHECKED + 1];
+   HTM_Attributes_t Checked[1 + Ind_NUM_INDICATORS];
   };
 
 /*****************************************************************************/

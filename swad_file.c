@@ -309,7 +309,7 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Par_Param *Param)
 
    /* Copy part of query file to FileDataTmp */
    for (RemainingBytesToCopy  = Param->Value.Length;
-	RemainingBytesToCopy != 0;
+	RemainingBytesToCopy;
 	RemainingBytesToCopy -= BytesToCopy)
      {
       BytesToCopy = (RemainingBytesToCopy >= Fil_NUM_BYTES_PER_CHUNK) ? Fil_NUM_BYTES_PER_CHUNK :
@@ -420,7 +420,7 @@ void Fil_CreateDirIfNotExists (const char *Path)
    char ErrorMsg[128 + PATH_MAX];
 
    if (!Fil_CheckIfPathExists (Path))
-      if (mkdir (Path,(mode_t) 0xFFF) != 0)
+      if (mkdir (Path,(mode_t) 0xFFF))
         {
 	 snprintf (ErrorMsg,sizeof (ErrorMsg),
 	           "Can not create folder <strong>%s</strong>.",Path);

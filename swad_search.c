@@ -173,7 +173,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 				      1 << Hie_DEG |
 				      1 << Hie_CRS;
 		  Sco_GetScope ("ScopeSch",DefaultScope);
-		  Sco_PutSelectorScope ("ScopeSch",HTM_DONT_SUBMIT_ON_CHANGE);
+		  Sco_PutSelectorScope ("ScopeSch",HTM_NO_ATTR);
 	       HTM_LABEL_End ();
 	    HTM_DIV_End ();
 
@@ -183,8 +183,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 	    /***** What to search? *****/
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
-	       HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				 HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				 "name=\"WhatToSearch\""
 				 " class=\"WHAT_TO_SEARCH INPUT_%s\"",
 				 The_GetSuffix ());
@@ -195,9 +194,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t DefaultScop
 		       {
 			WTS = (unsigned) WhatToSearch;
 			HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
-				    WhatToSearch == Search->WhatToSearch ? HTM_OPTION_SELECTED :
-									   HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (WhatToSearch == Search->WhatToSearch) ? HTM_SELECTED :
+									     HTM_NO_ATTR,
 				    "%s",*Titles[WhatToSearch]);
 		       }
 	       HTM_SELECT_End ();

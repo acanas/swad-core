@@ -823,15 +823,14 @@ void Cty_WriteSelectorOfCountry (void)
    Frm_BeginFormGoTo (ActSeeIns);
 
       /***** Begin selector of country *****/
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"id=\"cty\" name=\"cty\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
          /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-	             Gbl.Hierarchy.Node[Hie_CTY].HieCod < 0 ? HTM_OPTION_SELECTED :
-	        					      HTM_OPTION_UNSELECTED,
-	             HTM_DISABLED,
+	             ((Gbl.Hierarchy.Node[Hie_CTY].HieCod < 0) ? HTM_SELECTED :
+	        					         HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
 	 /***** List countries *****/
@@ -841,9 +840,8 @@ void Cty_WriteSelectorOfCountry (void)
 	   {
 	    Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
 	    HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-			Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_OPTION_SELECTED :
-									    HTM_OPTION_UNSELECTED,
-			HTM_ENABLED,
+			(Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? HTM_SELECTED :
+									      HTM_NO_ATTR,
 			"%s",Cty->FullName);
 	   }
 
@@ -953,7 +951,7 @@ void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
    Lan_Language_t Lan;
 
    /***** Get data of a country from database *****/
-   if (Cty_DB_GetNamesAndWWWsByCod (&mysql_res,Cty->HieCod) != 0) // Country found...
+   if (Cty_DB_GetNamesAndWWWsByCod (&mysql_res,Cty->HieCod)) // Country found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1118,7 +1116,7 @@ static void Cty_ListCountriesForEdition (void)
 		     ParCod_PutPar (ParCod_OthCty,Cty->HieCod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,NameInSeveralLanguages[Lan],
-				     HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"15\" class=\"INPUT_%s\"",
 				     The_GetSuffix ());
 		  Frm_EndForm ();
@@ -1130,7 +1128,7 @@ static void Cty_ListCountriesForEdition (void)
 		     ParCod_PutPar (ParCod_OthCty,Cty->HieCod);
 		     Par_PutParUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",WWWInSeveralLanguages[Lan],
-				    HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				    HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW INPUT_%s\"",
 				    The_GetSuffix ());
 		  Frm_EndForm ();
@@ -1408,7 +1406,7 @@ static void Cty_PutFormToCreateCountry (void)
 	    else
 	       StrCtyCod[0] = '\0';
 	    HTM_INPUT_TEXT (Par_CodeStr[ParCod_OthCty],3,StrCtyCod,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_REQUIRED,
 			    "size=\"3\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1416,7 +1414,7 @@ static void Cty_PutFormToCreateCountry (void)
 	 /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
 	 HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
 	    HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->ShrtName,
-			    HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_REQUIRED,
 			    "size=\"2\" class=\"INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1453,18 +1451,16 @@ static void Cty_PutFormToCreateCountry (void)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       snprintf (StrName,sizeof (StrName),"Name_%s",Lan_STR_LANG_ID[Lan]);
 	       HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,"",
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"15\" class=\"INPUT_%s\"",
-			       The_GetSuffix ());
+			       HTM_REQUIRED,
+			       "size=\"15\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /* WWW */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       snprintf (StrName,sizeof (StrName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
 	       HTM_INPUT_URL (StrName,"",
-			      HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"INPUT_WWW INPUT_%s\"",
-			      The_GetSuffix ());
+			      HTM_REQUIRED,
+			      "class=\"INPUT_WWW INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

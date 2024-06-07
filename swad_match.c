@@ -1210,7 +1210,7 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1242,7 +1242,6 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
-   HTM_Checked_t Checked;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1263,13 +1262,11 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
 		                The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
-		        Checked = Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
-					                          "MchCod",
-					                          MchCod) ? HTM_CHECKED :
-					                                    HTM_UNCHECKED;
 			HTM_INPUT_CHECKBOX ("WholeCrs",
-					    Checked,HTM_ENABLED,HTM_READWRITE,
-					    HTM_DONT_SUBMIT_ON_CHANGE,
+					    Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
+									    "MchCod",
+									    MchCod) ? HTM_CHECKED :
+										      HTM_NO_ATTR,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
 			Grp_WriteTheWholeCourse ();

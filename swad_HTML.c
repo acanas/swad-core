@@ -39,36 +39,6 @@
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-static const char *HTM_CheckedTxt[HTM_NUM_CHECKED] =
-  {
-   [HTM_UNCHECKED] = "",
-   [HTM_CHECKED  ] = " checked=\"checked\""
-  };
-
-static const char *HTM_SelectedTxt[HTM_NUM_SELECTED] =
-  {
-   [HTM_OPTION_UNSELECTED] = "",
-   [HTM_OPTION_SELECTED  ] = " selected=\"selected\""
-  };
-
-static const char *HTM_DisabledTxt[HTM_NUM_DISABLED] =
-  {
-   [HTM_ENABLED ] = "",
-   [HTM_DISABLED] = " disabled=\"disabled\"",
-  };
-
-static const char *HTM_ReadonlyTxt[HTM_NUM_READONLY] =
-  {
-   [HTM_READWRITE] = "",
-   [HTM_READONLY ] = " readonly",
-  };
-
-static const char *HTM_RequiredTxt[HTM_NUM_REQUIRED] =
-  {
-   [HTM_NOT_REQUIRED] = "",
-   [HTM_REQUIRED    ] = " required=\"required\"",
-  };
-
 static const char *ClassAlign[HTM_NUM_HEAD_ALIGN] =
   {
    [HTM_HEAD_LEFT  ] = "LT",
@@ -103,6 +73,13 @@ static unsigned HTM_OPTGROUP_NestingLevel = 0;
 static unsigned HTM_STRONG_NestingLevel   = 0;
 static unsigned HTM_EM_NestingLevel       = 0;
 static unsigned HTM_U_NestingLevel        = 0;
+
+/*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static void HTM_PutAttributes (HTM_Attributes_t Attributes,
+			       const char *FuncsOnChange);	// if not null ==> must include ending ";"
 
 /*****************************************************************************/
 /******************************* Begin/end title *****************************/
@@ -897,8 +874,7 @@ void HTM_SCRIPT_End (void)
 /********************************* Parameters ********************************/
 /*****************************************************************************/
 
-void HTM_PARAM (const char *Name,
-		const char *fmt,...)
+void HTM_PARAM (const char *Name,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1016,9 +992,7 @@ void HTM_LABEL_End (void)
 /*****************************************************************************/
 
 void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
-                     HTM_Disabled_t Disabled,HTM_Required_t Required,
-                     HTM_SubmitOnChange_t SubmitOnChange,
-	             const char *fmt,...)
+		     HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1044,10 +1018,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
 	}
      }
 
-   HTM_Txt (HTM_DisabledTxt[Disabled]);
-   HTM_Txt (HTM_RequiredTxt[Required]);
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
@@ -1083,8 +1054,7 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
   }
 
 void HTM_INPUT_TEL (const char *Name,const char *Value,
-                    HTM_SubmitOnChange_t SubmitOnChange,
-	            const char *fmt,...)
+                    HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1110,15 +1080,13 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,
 	}
      }
 
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
 
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
-		      HTM_Required_t Required,
-	              const char *fmt,...)
+		      HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1144,14 +1112,13 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	}
      }
 
-   HTM_Txt (HTM_RequiredTxt[Required]);
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
 
 void HTM_INPUT_URL (const char *Name,const char *Value,
-		    HTM_Required_t Required,HTM_SubmitOnChange_t SubmitOnChange,
-	            const char *fmt,...)
+		     HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1177,16 +1144,13 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
 	}
      }
 
-   HTM_Txt (HTM_RequiredTxt[Required]);
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
 
 void HTM_INPUT_FILE (const char *Name,const char *Accept,
-                     HTM_SubmitOnChange_t SubmitOnChange,
-	             const char *fmt,...)
+                     HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1212,8 +1176,8 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 	}
      }
 
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
+
    HTM_Txt (" />");
   }
 
@@ -1261,9 +1225,9 @@ void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,
    HTM_Txt (" />");
   }
 
-void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
-			 const char *AutoComplete,HTM_Required_t Required,
-	                 const char *fmt,...)
+void HTM_INPUT_PASSWORD (const char *Name,
+			 const char *PlaceHolder,const char *AutoComplete,
+			 HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1295,15 +1259,13 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 	}
      }
 
-   HTM_Txt (HTM_RequiredTxt[Required]);
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
 
 void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
-                     HTM_Disabled_t Disabled,HTM_Required_t Required,
-                     HTM_SubmitOnChange_t SubmitOnChange,
-	             const char *fmt,...)
+                     HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1330,10 +1292,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 	}
      }
 
-   HTM_Txt (HTM_DisabledTxt[Disabled]);
-   HTM_Txt (HTM_RequiredTxt[Required]);
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
@@ -1341,8 +1300,7 @@ void HTM_INPUT_LONG (const char *Name,long Min,long Max,long Value,
 void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 		      double Step,	// Use 0 for "any"
 		      double Value,
-                      HTM_Required_t Required,HTM_SubmitOnChange_t SubmitOnChange,
-	              const char *fmt,...)
+                      HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1376,19 +1334,13 @@ void HTM_INPUT_FLOAT (const char *Name,double Min,double Max,
 	}
      }
 
-   HTM_Txt (HTM_RequiredTxt[Required]);
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
 
 void HTM_INPUT_RADIO (const char *Name,
-      		      HTM_Checked_t Checked,
-      		      HTM_Disabled_t Disabled,
-      		      HTM_Readonly_t Readonly,
-      		      HTM_Required_t Required,HTM_SubmitOnClick_t SubmitOnClick,
-		      const char *fmt,...)
+      		      HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1413,22 +1365,13 @@ void HTM_INPUT_RADIO (const char *Name,
 	}
      }
 
-   HTM_Txt (HTM_CheckedTxt[Checked]);
-   HTM_Txt (HTM_DisabledTxt[Disabled]);
-   HTM_Txt (HTM_ReadonlyTxt[Readonly]);
-   HTM_Txt (HTM_RequiredTxt[Required]);
-   if (SubmitOnClick == HTM_SUBMIT_ON_CLICK)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
 
 void HTM_INPUT_CHECKBOX (const char *Name,
-			 HTM_Checked_t Checked,
-			 HTM_Disabled_t Disabled,
-			 HTM_Readonly_t Readonly,
-			 HTM_SubmitOnChange_t SubmitOnChange,
-		         const char *fmt,...)
+			 HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1453,11 +1396,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,
 	}
      }
 
-   HTM_Txt (HTM_CheckedTxt[Checked]);
-   HTM_Txt (HTM_DisabledTxt[Disabled]);
-   HTM_Txt (HTM_ReadonlyTxt[Readonly]);
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-      HTM_Txt (" onchange=\"this.form.submit();return false;\"");
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (" />");
   }
@@ -1546,10 +1485,7 @@ void HTM_BUTTON_End (void)
 /********************************* Text areas ********************************/
 /*****************************************************************************/
 
-void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,
-			 HTM_Readonly_t Readonly,
-			 HTM_Required_t Required,
-			 const char *fmt,...)
+void HTM_TEXTAREA_Begin (HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1572,9 +1508,7 @@ void HTM_TEXTAREA_Begin (HTM_Disabled_t Disabled,
 	 free (Attr);
 	}
 
-   HTM_Txt (HTM_DisabledTxt[Disabled]);
-   HTM_Txt (HTM_ReadonlyTxt[Readonly]);
-   HTM_Txt (HTM_RequiredTxt[Required]);
+   HTM_PutAttributes (Attributes,NULL);
 
    HTM_Txt (">");
 
@@ -1595,8 +1529,7 @@ void HTM_TEXTAREA_End (void)
 /********************************** Selectors ********************************/
 /*****************************************************************************/
 
-void HTM_SELECT_Begin (HTM_Disabled_t Disabled,HTM_Required_t Required,
-		       HTM_SubmitOnChange_t SubmitOnChange,
+void HTM_SELECT_Begin (HTM_Attributes_t Attributes,
                        const char *FuncsOnChange,	// if not null ==> must include ending ";"
 		       const char *fmt,...)
   {
@@ -1621,20 +1554,7 @@ void HTM_SELECT_Begin (HTM_Disabled_t Disabled,HTM_Required_t Required,
 	 free (Attr);
 	}
 
-   HTM_Txt (HTM_DisabledTxt[Disabled]);
-   HTM_Txt (HTM_RequiredTxt[Required]);
-   if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE || FuncsOnChange)
-     {
-      HTM_Txt (" onchange=\"");
-      // 1. List of functions
-      if (FuncsOnChange)
-         if (FuncsOnChange[0])
-            HTM_Txt (FuncsOnChange);
-      // 2. submit
-      if (SubmitOnChange == HTM_SUBMIT_ON_CHANGE)
-         HTM_Txt ("this.form.submit();");
-      HTM_Txt ("return false;\"");
-     }
+   HTM_PutAttributes (Attributes,FuncsOnChange);
 
    HTM_Txt (">");
 
@@ -1669,8 +1589,7 @@ void HTM_OPTGROUP_End (void)
   }
 
 void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
-                 HTM_OptionSelected_t Selected,HTM_Disabled_t Disabled,
-		 const char *fmt,...)
+                 HTM_Attributes_t Attributes,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -1690,8 +1609,7 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
 	 break;
      }
    HTM_Txt ("\"");
-   HTM_Txt (HTM_SelectedTxt[Selected]);
-   HTM_Txt (HTM_DisabledTxt[Disabled]);
+   HTM_PutAttributes (Attributes,NULL);
    HTM_Txt (">");
 
    if (fmt)
@@ -1712,6 +1630,41 @@ void HTM_OPTION (HTM_Type_t Type,const void *ValuePtr,
      }
 
    HTM_Txt ("</option>");
+  }
+
+/*****************************************************************************/
+/****************************** Write attributes *****************************/
+/*****************************************************************************/
+
+static void HTM_PutAttributes (HTM_Attributes_t Attributes,
+			       const char *FuncsOnChange)	// if not null ==> must include ending ";"
+  {
+   if (Attributes & HTM_CHECKED)
+      HTM_Txt (" checked");
+   if (Attributes & HTM_SELECTED)
+      HTM_Txt (" selected");
+   if (Attributes & HTM_REQUIRED)
+      HTM_Txt (" required");
+   if (Attributes & HTM_AUTOFOCUS)
+      HTM_Txt (" autofocus");
+   if (Attributes & HTM_DISABLED)
+      HTM_Txt (" disabled");
+   if (Attributes & HTM_READONLY)
+      HTM_Txt (" readonly");
+   if ((Attributes & HTM_SUBMIT_ON_CHANGE) || FuncsOnChange)
+     {
+      HTM_Txt (" onchange=\"");
+      // 1. List of functions
+      if (FuncsOnChange)
+         if (FuncsOnChange[0])
+            HTM_Txt (FuncsOnChange);
+      // 2. submit
+      if (Attributes & HTM_SUBMIT_ON_CHANGE)
+         HTM_Txt ("this.form.submit();");
+      HTM_Txt ("return false;\"");
+     }
+   if (Attributes & HTM_SUBMIT_ON_CLICK)
+      HTM_Txt (" onclick=\"this.form.submit();return false;\"");
   }
 
 /*****************************************************************************/

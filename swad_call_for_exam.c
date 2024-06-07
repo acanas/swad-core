@@ -940,8 +940,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /***** Institution logo *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
 			       Gbl.Hierarchy.Node[Hie_INS].WWW,The_GetSuffix ());
@@ -955,12 +954,10 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /***** Degree *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
-			       Gbl.Hierarchy.Node[Hie_DEG].WWW,
-			       The_GetSuffix ());
+			       Gbl.Hierarchy.Node[Hie_DEG].WWW,The_GetSuffix ());
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
@@ -993,7 +990,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	       if (ViewType == Vie_EDIT)
 		  HTM_INPUT_TEXT ("CrsName",Nam_MaxChars[Nam_FULL_NAME],
 				  CallsForExams->CallForExam.CrsFullName,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				  HTM_NO_ATTR,
 				  "id=\"CrsName\" size=\"30\""
 				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1020,18 +1017,15 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "id=\"Year\" name=\"Year\""
-				    " class=\"INPUT_%s\"",
-				    The_GetSuffix ());
+				    " class=\"INPUT_%s\"",The_GetSuffix ());
 		     for (Year  = 0;
 			  Year <= Deg_MAX_YEARS_PER_DEGREE;
 			  Year++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-				    Year == CallsForExams->CallForExam.Year ? HTM_OPTION_SELECTED :
-									      HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Year == CallsForExams->CallForExam.Year) ? HTM_SELECTED :
+									        HTM_NO_ATTR,
 				    "%s",Txt_YEAR_OF_DEGREE[Year]);
 		  HTM_SELECT_End ();
 		 }
@@ -1054,7 +1048,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		  HTM_INPUT_TEXT ("ExamSession",Cfe_MAX_CHARS_SESSION,CallsForExams->CallForExam.Session,
-				  HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+				  HTM_NO_ATTR,
 				  "id=\"ExamSession\" size=\"30\""
 				  " class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1081,8 +1075,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 											      CurrentYear,
 				     CurrentYear + 1,"Exam",
 				     &(CallsForExams->CallForExam.ExamDate),
-				     HTM_DONT_SUBMIT_ON_CHANGE,
-				     false);
+				     HTM_NO_ATTR);
 	       HTM_TD_End ();
 	      }
 	    else
@@ -1108,37 +1101,31 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "id=\"ExamHour\" name=\"ExamHour\""
-				    " class=\"INPUT_%s\"",
-				    The_GetSuffix ());
+				    " class=\"INPUT_%s\"",The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 CallsForExams->CallForExam.StartTime.Hour == 0 ? HTM_OPTION_SELECTED :
-										  HTM_OPTION_UNSELECTED,
-				 HTM_ENABLED,
+				 (CallsForExams->CallForExam.StartTime.Hour == 0) ? HTM_SELECTED :
+										    HTM_NO_ATTR,
 				 "-");
 		     for (Hour  = 7;
 			  Hour <= 22;
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-				    Hour == CallsForExams->CallForExam.StartTime.Hour ? HTM_OPTION_SELECTED :
-											HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Hour == CallsForExams->CallForExam.StartTime.Hour) ? HTM_SELECTED :
+											  HTM_NO_ATTR,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "name=\"ExamMinute\" class=\"INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (Minute  = 0;
 			  Minute <= 59;
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-				    Minute == CallsForExams->CallForExam.StartTime.Minute ? HTM_OPTION_SELECTED :
-											    HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Minute == CallsForExams->CallForExam.StartTime.Minute) ? HTM_SELECTED :
+											      HTM_NO_ATTR,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();
 		 }
@@ -1162,33 +1149,27 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "id=\"DurationHour\" name=\"DurationHour\""
-				    " class=\"INPUT_%s\"",
-				    The_GetSuffix ());
+				    " class=\"INPUT_%s\"",The_GetSuffix ());
 		     for (Hour  = 0;
 			  Hour <= 8;
 			  Hour++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-				    Hour == CallsForExams->CallForExam.Duration.Hour ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Hour == CallsForExams->CallForExam.Duration.Hour) ? HTM_SELECTED :
+										         HTM_NO_ATTR,
 				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
 		  HTM_SELECT_End ();
 
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "name=\"DurationMinute\""
-				    " class=\"INPUT_%s\"",
-				    The_GetSuffix ());
+				    " class=\"INPUT_%s\"",The_GetSuffix ());
 		     for (Minute  = 0;
 			  Minute <= 59;
 			  Minute++)
 			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-				    Minute == CallsForExams->CallForExam.Duration.Minute ? HTM_OPTION_SELECTED :
-											   HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (Minute == CallsForExams->CallForExam.Duration.Minute) ? HTM_SELECTED :
+											     HTM_NO_ATTR,
 				    "%02u &prime;",Minute);
 		  HTM_SELECT_End ();
 		 }
@@ -1230,7 +1211,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "id=\"Place\" name=\"Place\" rows=\"4\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",
 			              The_GetSuffix ());
@@ -1261,7 +1242,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	    if (ViewType == Vie_EDIT)
 	      {
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "id=\"ExamMode\" name=\"ExamMode\" rows=\"2\""
 			           " class=\"Frm_C2_INPUT INPUT_%s\"",
 			           The_GetSuffix ());
@@ -1292,7 +1273,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "id=\"Structure\" name=\"Structure\""
 				      " rows=\"8\""
 				      " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1324,7 +1305,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "id=\"DocRequired\" name=\"DocRequired\""
 			              " rows=\"2\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1356,7 +1337,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "id=\"MatRequired\" name=\"MatRequired\""
 				      " rows=\"4\""
 				      " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1388,7 +1369,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "id=\"MatAllowed\" name=\"MatAllowed\""
 			              " rows=\"4\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -1420,7 +1401,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_EDIT)
 		 {
-		  HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				      "id=\"OtherInfo\" name=\"OtherInfo\""
 			              " rows=\"5\""
 			              " class=\"Frm_C2_INPUT INPUT_%s\"",

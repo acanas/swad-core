@@ -185,7 +185,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   unsigned LastYear,
                                                   Dat_FormSeconds FormSeconds,
                                                   Dat_SetHMS SetHMS,
-                                                  HTM_SubmitOnChange_t SubmitOnChange);
+                                                  HTM_Attributes_t Attributes);
 time_t Dat_GetTimeUTCFromForm (Dat_StartEndTime_t StartEndTime);
 
 void Dat_PutParBrowserTZDiff (void);
@@ -194,8 +194,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1]);
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
 		        struct Dat_Date *DateSelected,
-                        HTM_SubmitOnChange_t SubmitOnChange,
-                        HTM_Disabled_t Disabled);
+                        HTM_Attributes_t Attributes);
 void Dat_GetDateFromForm (const char *ParNameDay,const char *ParNameMonth,const char *ParNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
 

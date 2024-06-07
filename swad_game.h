@@ -66,7 +66,7 @@ typedef enum
 struct Gam_GameSelected
   {
    long GamCod;		// Game code
-   HTM_Checked_t Checked;	// Is this game selected when seeing match results?
+   HTM_Attributes_t Checked;	// Is this game selected when seeing match results?
   };
 
 struct Gam_Game

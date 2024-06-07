@@ -352,7 +352,7 @@ static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *Print
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,11,PrintedQuestion->StrAnswers,
-                   HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+                   HTM_NO_ATTR,
 		   "size=\"11\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
 
@@ -369,7 +369,7 @@ static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *Print
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Qst_MAX_BYTES_FLOAT_ANSWER,PrintedQuestion->StrAnswers,
-                   HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+                   HTM_NO_ATTR,
 		   "size=\"11\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
 
@@ -387,23 +387,20 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
    /* Initially user has not answered the question ==> initially all answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 		     "name=\"Ans%010u\" class=\"INPUT_%s\"",
 		     QstInd,The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"" ,
-                  PrintedQuestion->StrAnswers[0] == '\0' ? HTM_OPTION_SELECTED :
-	                				   HTM_OPTION_UNSELECTED,
-                  HTM_ENABLED,
+                  (PrintedQuestion->StrAnswers[0] == '\0') ? HTM_SELECTED :
+	                				     HTM_NO_ATTR,
                   "&nbsp;");
       HTM_OPTION (HTM_Type_STRING,"T",
-                  PrintedQuestion->StrAnswers[0] == 'T' ? HTM_OPTION_SELECTED :
-	                				  HTM_OPTION_UNSELECTED,
-                  HTM_ENABLED,
+                  (PrintedQuestion->StrAnswers[0] == 'T') ? HTM_SELECTED :
+	                				    HTM_NO_ATTR,
                   "%s",Txt_TF_QST[0]);
       HTM_OPTION (HTM_Type_STRING,"F",
-                  PrintedQuestion->StrAnswers[0] == 'F' ? HTM_OPTION_SELECTED :
-	                				  HTM_OPTION_UNSELECTED,
-                  HTM_ENABLED,
+                  (PrintedQuestion->StrAnswers[0] == 'F') ? HTM_SELECTED :
+	                				    HTM_NO_ATTR,
                   "%s",Txt_TF_QST[1]);
    HTM_SELECT_End ();
   }
@@ -418,7 +415,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
   {
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
 
@@ -454,8 +451,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	         {
 	          case Qst_ANS_UNIQUE_CHOICE:
 		     HTM_INPUT_RADIO (StrAns,
-				      UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-				      HTM_DONT_SUBMIT_ON_CLICK,
+				      UsrAnswers[Indexes[NumOpt]],
 				      "id=\"%s\" value=\"%u\""
 				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
 				      Id,Indexes[NumOpt],
@@ -463,8 +459,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	             break;
 	          case Qst_ANS_MULTIPLE_CHOICE:
 		     HTM_INPUT_CHECKBOX (StrAns,
-					 UsrAnswers[Indexes[NumOpt]],HTM_ENABLED,HTM_READWRITE,
-					 HTM_DONT_SUBMIT_ON_CHANGE,
+					 UsrAnswers[Indexes[NumOpt]],
 					 "id=\"%s\" value=\"%u\"",
 					 Id,Indexes[NumOpt]);
 	             break;
@@ -513,7 +508,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
    HTM_INPUT_TEXT (StrAns,Qst_MAX_CHARS_ANSWERS_ONE_QST,PrintedQuestion->StrAnswers,
-                   HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+                   HTM_NO_ATTR,
 		   "size=\"40\" class=\"INPUT_%s\"",The_GetSuffix ());
   }
 
@@ -524,16 +519,13 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
 static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
   {
    extern const char *Txt_Allow_teachers_to_consult_this_test;
-   HTM_Checked_t Checked;
 
    /***** Test exam will be available for teachers? *****/
    HTM_DIV_Begin ("class=\"CM\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 Checked = AllowTeachers ? HTM_CHECKED :	// Teachers can see test exam
-				   HTM_UNCHECKED;
 	 HTM_INPUT_CHECKBOX ("AllowTchs",
-			     Checked,HTM_ENABLED,HTM_READWRITE,
-			     HTM_DONT_SUBMIT_ON_CHANGE,
+			     AllowTeachers ? HTM_CHECKED :	// Teachers can see test exam
+					     HTM_NO_ATTR,
 			     "value=\"Y\"");
 	 HTM_NBSPTxt (Txt_Allow_teachers_to_consult_this_test);
       HTM_LABEL_End ();
@@ -927,7 +919,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	                        const struct Qst_Question *Question)
   {
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    unsigned NumOpt;
    unsigned NumOptTotInQst = 0;
    unsigned NumOptCorrInQst = 0;
@@ -1102,7 +1094,7 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES
 /*****************************************************************************/
 
 void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
+			       HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION])
   {
    unsigned NumOpt;
    const char *Ptr;
@@ -1113,7 +1105,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
    for (NumOpt = 0;
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      UsrAnswers[NumOpt] = HTM_UNCHECKED;
+      UsrAnswers[NumOpt] = HTM_NO_ATTR;
 
    /***** Set selected answers to checked *****/
    for (NumOpt = 0, Ptr = StrAnswersOneQst;
@@ -1415,7 +1407,7 @@ static void TstPrn_WriteChoAnsPrint (struct Usr_Data *UsrDat,
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   HTM_Checked_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
+   HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
    struct
      {
       char *Class;

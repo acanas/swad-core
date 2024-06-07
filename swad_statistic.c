@@ -242,8 +242,6 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
    size_t i;
-   HTM_Checked_t Checked;
-   HTM_Disabled_t Disabled;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
@@ -346,13 +344,10 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			      Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
 
 			   /***** Option a) Graphic of clicks in this course *****/
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-					    The_GetSuffix ());
-			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_UNCHECKED :
-													      HTM_CHECKED;
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-					       HTM_DONT_SUBMIT_ON_CLICK,
+					       ((Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
+													   HTM_CHECKED),
 					       "value=\"%u\""
 					       " onclick=\"disableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_GROUPED);
@@ -369,8 +364,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			                    The_GetSuffix ());
 			      HTM_Txt (Txt_distributed_by);
 			      HTM_NBSP ();
-			      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-						HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 						"id=\"GroupedBy\" name=\"GroupedBy\""
 						" class=\"INPUT_%s\"",
 						The_GetSuffix ());
@@ -380,9 +374,8 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				   {
 				    ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 				    HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-						ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_OPTION_SELECTED :
-											    HTM_OPTION_UNSELECTED,
-						HTM_ENABLED,
+						(ClicksGroupedBy == Stats->ClicksGroupedBy) ? HTM_SELECTED :
+											      HTM_NO_ATTR,
 						"%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 				   }
 			      HTM_SELECT_End ();
@@ -394,11 +387,9 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /***** Option b) Listing of detailed clicks to this course *****/
 			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
 					    The_GetSuffix ());
-			      Checked = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_CHECKED :
-													      HTM_UNCHECKED;
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-					       HTM_DONT_SUBMIT_ON_CLICK,
+					       (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_CHECKED :
+													  HTM_NO_ATTR,
 					       "value=\"%u\" onclick=\"enableDetailedClicks();\"",
 					       (unsigned) Sta_CLICKS_DETAILED);
 			      HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
@@ -409,21 +400,18 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
 			   /* Number of rows per page */
 			   // To use getElementById in Firefox, it's necessary to have the id attribute
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-					    The_GetSuffix ());
-			      Disabled = (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_ENABLED :
-												    HTM_DISABLED;
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_TxtF ("(%s: ",Txt_results_per_page);
-			      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,
-						HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+			      HTM_SELECT_Begin ((Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_NO_ATTR :
+													   HTM_DISABLED,
+						NULL,
 						"id=\"RowsPage\" name=\"RowsPage\"");
 				 for (i = 0;
 				      i < NUM_OPTIONS_ROWS_PER_PAGE;
 				      i++)
 				    HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-						RowsPerPage[i] == Stats->RowsPerPage ? HTM_OPTION_SELECTED :
-										       HTM_OPTION_UNSELECTED,
-						HTM_ENABLED,
+						(RowsPerPage[i] == Stats->RowsPerPage) ? HTM_SELECTED :
+										         HTM_NO_ATTR,
 						"%u",RowsPerPage[i]);
 			      HTM_SELECT_End ();
 			      HTM_Txt (")");
@@ -539,8 +527,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		      Stats->ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
 		     Stats->ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
-		  HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				    HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "name=\"GroupedBy\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
@@ -550,9 +537,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 		       {
 			ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
 			HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-				    ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_OPTION_SELECTED :
-										HTM_OPTION_UNSELECTED,
-				    HTM_ENABLED,
+				    (ClicksGroupedBy == Stats->ClicksGroupedBy) ? HTM_SELECTED :
+										  HTM_NO_ATTR,
 				    "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
 		       }
 		  HTM_SELECT_End ();
@@ -630,8 +616,7 @@ static void Sta_WriteSelectorRoles (const struct Sta_Stats *Stats)
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			   HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			   "id=\"Role\" name=\"Role\""
 			   " class=\"Frm_C2_INPUT INPUT_%s\"",
 			   The_GetSuffix ());
@@ -641,9 +626,8 @@ static void Sta_WriteSelectorRoles (const struct Sta_Stats *Stats)
 	      {
 	       RoleStatUnsigned = (unsigned) RoleStat;
 	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
-			   RoleStat == Stats->Role ? HTM_OPTION_SELECTED :
-						     HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (RoleStat == Stats->Role) ? HTM_SELECTED :
+						       HTM_NO_ATTR,
 			   "%s",Txt_ROLE_STATS[RoleStat]);
 	      }
 	 HTM_SELECT_End ();
@@ -671,15 +655,13 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
       Frm_LabelColumn ("Frm_C1 RT","StatAct",Txt_Action);
 
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			   HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			   "id=\"StatAct\" name=\"StatAct\""
 			   " class=\"Frm_C2_INPUT INPUT_%s\"",
 			   The_GetSuffix ());
 	    HTM_OPTION (HTM_Type_STRING,"0",
-	                Stats->NumAction == 0 ? HTM_OPTION_SELECTED :
-	                			HTM_OPTION_UNSELECTED,
-	                HTM_ENABLED,
+	                (Stats->NumAction == 0) ? HTM_SELECTED :
+	                			  HTM_NO_ATTR,
 			"%s",Txt_Any_action);
 	    for (Action  = (Act_Action_t) 1;
 		 Action <= (Act_Action_t) (ActLst_NUM_ACTIONS - 1);
@@ -689,16 +671,14 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 	       Tab = Act_GetTab (Action);
 	       if (Tab == TabUnk)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			      Action == Stats->NumAction ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Action == Stats->NumAction) ? HTM_SELECTED :
+							     HTM_NO_ATTR,
 			      "%04u: %s",
 			      (unsigned) Action,Act_GetActionText (Action));
 	       else
 		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-			      Action == Stats->NumAction ? HTM_OPTION_SELECTED :
-							   HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Action == Stats->NumAction) ? HTM_SELECTED :
+							     HTM_NO_ATTR,
 			      "%04u: %s &gt; %s &gt; %s",
 			      (unsigned) Action,Tab_GetTxt (Tab),
 			      Act_GetTitleAction (Action),
@@ -732,7 +712,7 @@ static void Sta_WriteSelectorScope (void)
 			     1 << Hie_DEG |
 			     1 << Hie_CRS;
 	 Sco_GetScope ("ScopeSta",Hie_SYS);
-	 Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
+	 Sco_PutSelectorScope ("ScopeSta",HTM_NO_ATTR);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -749,7 +729,7 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
    unsigned StatCountTypeUnsigned;
 
    /**** Count type *****/
-   HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 		     "id=\"CountType\" name=\"CountType\""
 		     " class=\"Frm_C2_INPUT INPUT_%s\"",
 		     The_GetSuffix ());
@@ -759,9 +739,8 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
 	{
 	 StatCountTypeUnsigned = (unsigned) StatCountType;
 	 HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
-		     StatCountType == Stats->CountType ? HTM_OPTION_SELECTED :
-							 HTM_OPTION_UNSELECTED,
-		     HTM_ENABLED,
+		     (StatCountType == Stats->CountType) ? HTM_SELECTED :
+							   HTM_NO_ATTR,
 		     "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
 	}
    HTM_SELECT_End ();
@@ -1666,8 +1645,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
-	       HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-				 HTM_SUBMIT_ON_CHANGE,NULL,
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 				 "name=\"ColorType\"");
 		  for (ColorType  = (Sta_ColorType_t) 0;
 		       ColorType <= (Sta_ColorType_t) (Sta_NUM_COLOR_TYPES - 1);
@@ -1675,9 +1653,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 		    {
 		     ColorTypeUnsigned = (unsigned) ColorType;
 		     HTM_OPTION (HTM_Type_UNSIGNED,&ColorTypeUnsigned,
-				 ColorType == SelectedColorType ? HTM_OPTION_SELECTED :
-	                					  HTM_OPTION_UNSELECTED,
-				 HTM_ENABLED,
+				 (ColorType == SelectedColorType) ? HTM_SELECTED :
+	                					    HTM_NO_ATTR,
 				 "%s",Txt_STAT_COLOR_TYPES[ColorType]);
 		    }
 	       HTM_SELECT_End ();
@@ -2701,7 +2678,7 @@ static void Sta_WriteHitsMinute (unsigned Minute,double HitsNum,double MaxX)
 
 	 /***** Draw bar with a width proportional to the number of hits *****/
 	 if (HitsNum != 0.0)
-	    if ((BarWidth = (unsigned) (((HitsNum * (double) Sta_WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
+	    if ((BarWidth = (unsigned) (((HitsNum * (double) Sta_WIDTH_GRAPHIC / MaxX)) + 0.5)))
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,
 			(Minute % 60) == 0 ? "r1x1.png" :	// red background
 					     "o1x1.png",	// orange background

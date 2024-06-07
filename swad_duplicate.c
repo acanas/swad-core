@@ -153,7 +153,7 @@ void Dup_ListDuplicateUsrs (void)
 							    Usr_DONT_GET_ROLE_IN_CRS))
 		 {
 		  /* Get if user has accepted all his/her courses */
-		  if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
+		  if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod))
 		     UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
 		  else
 		     UsrDat.Accepted = false;
@@ -271,7 +271,7 @@ static void Dup_ListSimilarUsrs (void)
 							 Usr_DONT_GET_ROLE_IN_CRS))
 	      {
 	       /* Get if user has accepted all his/her courses */
-	       if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
+	       if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod))
 		  UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
 	       else
 		  UsrDat.Accepted = false;

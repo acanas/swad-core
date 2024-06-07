@@ -130,7 +130,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 
       /***** Get tags *****/
       if ((Questions->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
-                                                               Gbl.Hierarchy.Node[Hie_CRS].HieCod)) != 0)
+                                                               Gbl.Hierarchy.Node[Hie_CRS].HieCod)))
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
 	 if (Tst_CheckIfNextTstAllowed ())
@@ -178,8 +178,7 @@ static void Tst_ShowFormNumQsts (void)
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      Frm_LabelColumn ("Frm_C1 RT","NumQst",
-		       Txt_Number_of_questions);
+      Frm_LabelColumn ("Frm_C1 RT","NumQst",Txt_Number_of_questions);
 
       /***** Data *****/
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
@@ -187,9 +186,9 @@ static void Tst_ShowFormNumQsts (void)
 			 (long) TstCfg_GetConfigMin (),
 			 (long) TstCfg_GetConfigMax (),
 			 (long) TstCfg_GetConfigDef (),
-			 (TstCfg_GetConfigMin () == TstCfg_GetConfigMax ()) ? HTM_DISABLED :
-									      HTM_ENABLED,
-			 HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			 HTM_REQUIRED |
+			 ((TstCfg_GetConfigMin () == TstCfg_GetConfigMax ()) ? HTM_DISABLED :
+									       HTM_NO_ATTR),
 			 "id=\"NumQst\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			 The_GetSuffix ());
       HTM_TD_End ();

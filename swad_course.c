@@ -178,24 +178,21 @@ void Crs_WriteSelectorOfCourse (void)
    unsigned NumCrss;
    unsigned NumCrs;
    long CrsCod;
-   HTM_Disabled_t Disabled = (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0) ? HTM_ENABLED :
-									HTM_DISABLED;
-   HTM_SubmitOnChange_t SubmitOnChange = (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
-										    HTM_DONT_SUBMIT_ON_CHANGE;
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCrsInf);
 
       /***** Begin selector of course *****/
-      HTM_SELECT_Begin (Disabled,HTM_NOT_REQUIRED,SubmitOnChange,NULL,
+      HTM_SELECT_Begin ((Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0) ? HTM_SUBMIT_ON_CHANGE :
+								   HTM_DISABLED,
+			NULL,
 			"id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     Gbl.Hierarchy.Node[Hie_CRS].HieCod < 0 ? HTM_OPTION_SELECTED :
-							      HTM_OPTION_UNSELECTED,
-		     HTM_DISABLED,
+		     ((Gbl.Hierarchy.Node[Hie_CRS].HieCod < 0) ? HTM_SELECTED :
+							         HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
 
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
@@ -216,9 +213,8 @@ void Crs_WriteSelectorOfCourse (void)
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
 			   Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
-			   CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_OPTION_SELECTED :
-									  HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 			   "%s",row[1]);	// Short name (row[1])
 	      }
 
@@ -311,15 +307,14 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 							   ActReqSch);
 
       /***** Begin selector of courses *****/
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			"id=\"my_courses\" name=\"crs\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
 	 /***** Write an option when no course selected *****/
 	 if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)	// No course selected
 	    HTM_OPTION (HTM_Type_STRING,"-1",
-	                HTM_OPTION_SELECTED,
-	                HTM_DISABLED,
+	                HTM_SELECTED | HTM_DISABLED,
 			"%s",Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
 
 	 if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
@@ -343,9 +338,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		 }
 
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			   CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_OPTION_SELECTED :
-									  HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (CrsCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod) ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 			   "%s",CrsShortName);
 	      }
 
@@ -355,11 +349,10 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
 	 /***** Write an option with the current course
 		when I don't belong to it *****/
-	 if (Gbl.Hierarchy.Level == Hie_CRS &&					// Course selected
+	 if (Gbl.Hierarchy.Level == Hie_CRS &&				// Course selected
 	     Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)	// I do not belong to it
 	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	                HTM_OPTION_SELECTED,
-	                HTM_DISABLED,
+	                HTM_SELECTED | HTM_DISABLED,
 			"%s",Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 
       /***** End selector of courses *****/
@@ -708,8 +701,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		  case Usr_CAN:
 		     Frm_BeginForm (ActChgCrsYea);
 			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
-			HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-					  HTM_SUBMIT_ON_CHANGE,NULL,
+			HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 					  "name=\"OthCrsYear\""
 					  " class=\"HIE_SEL_NARROW INPUT_%s\"",
 					  The_GetSuffix ());
@@ -719,9 +711,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 					      // because it's possible to move this course
 					      // to another degree (with other active years)
 			      HTM_OPTION (HTM_Type_UNSIGNED,&YearAux,
-					  YearAux == Crs->Specific.Year ? HTM_OPTION_SELECTED :
-									  HTM_OPTION_UNSELECTED,
-					  HTM_ENABLED,
+					  (YearAux == Crs->Specific.Year) ? HTM_SELECTED :
+									    HTM_NO_ATTR,
 					  "%s",Txt_YEAR_OF_DEGREE[YearAux]);
 			HTM_SELECT_End ();
 		     Frm_EndForm ();
@@ -742,7 +733,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
 			HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 					Crs->InstitutionalCod,
-					HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+					HTM_SUBMIT_ON_CHANGE,
 					"class=\"INPUT_INS_CODE INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
@@ -800,8 +791,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 static Usr_Can_t Crs_CheckIfICanEdit (struct Hie_Node *Crs)
   {
-   return (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
-           ((Crs->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
+   return (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||	// I am a degree administrator or higher
+           ((Crs->Status & Hie_STATUS_BIT_PENDING) &&	// Course is not yet activated
            Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod)) ? Usr_CAN :	// I am the requester
         						         Usr_CAN_NOT;
   }
@@ -843,8 +834,7 @@ static void Crs_PutFormToCreateCourse (void)
 
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"CM\"");
-	    HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			      HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			      "name=\"OthCrsYear\""
 			      " class=\"HIE_SEL_NARROW INPUT_%s\"",
 			      The_GetSuffix ());
@@ -852,9 +842,8 @@ static void Crs_PutFormToCreateCourse (void)
 		    Year <= Deg_MAX_YEARS_PER_DEGREE;
 		    Year++)
 		  HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-			      Year == Crs_EditingCrs->Specific.Year ? HTM_OPTION_SELECTED :
-								      HTM_OPTION_UNSELECTED,
-			      HTM_ENABLED,
+			      (Year == Crs_EditingCrs->Specific.Year) ? HTM_SELECTED :
+								        HTM_NO_ATTR,
 			      "%s",Txt_YEAR_OF_DEGREE[Year]);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
@@ -863,7 +852,7 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 			    Crs_EditingCrs->InstitutionalCod,
-			    HTM_ENABLED,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			    HTM_NO_ATTR,
 			    "class=\"INPUT_INS_CODE INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
@@ -1941,17 +1930,15 @@ void Crs_AskRemoveOldCrss (void)
       /***** Form to request number of months without clicks *****/
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			   HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			   "name=\"Months\" class=\"INPUT_%s\"",
 			   The_GetSuffix ());
 	    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i++)
 	       HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			   i == MonthsWithoutAccess ? HTM_OPTION_SELECTED :
-						      HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (i == MonthsWithoutAccess) ? HTM_SELECTED :
+						        HTM_NO_ATTR,
 			   "%u",i);
 	 HTM_SELECT_End ();
 	 HTM_NBSP ();

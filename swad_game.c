@@ -908,7 +908,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
       for (NumGame = 0;
 	   NumGame < Games->Num;
 	   NumGame++)
-	 Games->Lst[NumGame].Checked = HTM_UNCHECKED;
+	 Games->Lst[NumGame].Checked = HTM_NO_ATTR;
 
       /* Set some games as selected */
       for (Ptr = Games->GamCodsSelected;
@@ -1359,7 +1359,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	       HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Games->Game.Title,
-			       HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			       HTM_REQUIRED,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
 	    HTM_TD_End ();
@@ -1375,9 +1375,8 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Games->Game.MaxGrade,
-				HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-				" class=\"Frm_C2_INPUT INPUT_%s\"",
-				The_GetSuffix ());
+				HTM_REQUIRED,
+				" class=\"Frm_C2_INPUT INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1403,7 +1402,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "id=\"Txt\" name=\"Txt\" rows=\"5\""
 				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());

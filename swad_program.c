@@ -1965,7 +1965,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
       /* Data */
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_INPUT_TEXT ("Title",Prg_MAX_CHARS_PROGRAM_ITEM_TITLE,Item->Title,
-			 HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			 HTM_REQUIRED,
 			 "id=\"Title\""
 			 " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 			 The_GetSuffix ());
@@ -1986,7 +1986,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 			     "id=\"Txt\" name=\"Txt\" rows=\"10\""
 			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH INPUT_%s\"",
 			     The_GetSuffix ());

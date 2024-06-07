@@ -1426,8 +1426,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
       /***** Write start of HTML code *****/
       Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
       fprintf (FileHTMLTmp,"<body>\n"
-                           "<div class=\"LM DAT_%s\">\n",
-               The_GetSuffix ());
+                           "<div class=\"LM DAT_%s\">\n",The_GetSuffix ());
 
       /***** Write plain text into text buffer *****/
       /* Convert to respectful HTML and insert links */

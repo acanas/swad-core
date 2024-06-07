@@ -108,6 +108,13 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
+                                   HTM_Attributes_t Attributes);
+
+/*****************************************************************************/
 /************************* Show resources clipboard **************************/
 /*****************************************************************************/
 
@@ -161,20 +168,17 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 	{
          /***** Current link (empty or not) *****/
 	 Rsc_WriteRowClipboard (CurrentLink,
-				HTM_DONT_SUBMIT_ON_CLICK,
-				true);	// Checked
+				HTM_CHECKED);
 
 	 /***** Row with empty link to remove the current link *****/
 	 if (CurrentLink->Type != Rsc_NONE)
 	    Rsc_WriteRowClipboard (&EmptyLink,
-				   HTM_SUBMIT_ON_CLICK,
-				   false);	// Not checked
+				   HTM_SUBMIT_ON_CLICK);
 	}
       else		// Inside form to create a new element
 	 /***** Row with empty link *****/
 	 Rsc_WriteRowClipboard (&EmptyLink,
-				HTM_DONT_SUBMIT_ON_CLICK,
-				true);	// Checked
+				HTM_CHECKED);
 
       /***** Get links in clipboard from database and write them *****/
       NumLinks = Rsc_DB_GetClipboard (&mysql_res);
@@ -185,8 +189,7 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
 	 Rsc_WriteRowClipboard (&Link,
 				CurrentLink ? HTM_SUBMIT_ON_CLICK :
-					      HTM_DONT_SUBMIT_ON_CLICK,
-				false);	// Checked
+					      HTM_NO_ATTR);
 	}
       DB_FreeMySQLResult (&mysql_res);
 
@@ -198,17 +201,16 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 /************************ Show one link from clipboard ***********************/
 /*****************************************************************************/
 
-void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
-                            HTM_SubmitOnClick_t SubmitOnClick,
-                            HTM_Checked_t Checked)
+static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
+                                   HTM_Attributes_t Attributes)
   {
    /***** Begin list row *****/
    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
 
          /***** Radio selector *****/
-	 HTM_INPUT_RADIO ("Link",Checked,HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-			  SubmitOnClick,
+	 HTM_INPUT_RADIO ("Link",
+			  Attributes,
 			  "value=\"%s_%ld\"",
 			  Rsc_ResourceTypesDB[Link->Type],Link->Cod);
 

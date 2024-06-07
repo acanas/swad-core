@@ -546,9 +546,9 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    /***** Textarea with users' @nicknames, emails or IDs *****/
    HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 			     "id=\"OtherRecipients\" name=\"OtherRecipients\""
-			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\""
+			     " rows=\"2\" class=\"Frm_C2_INPUT INPUT_%s\""
 			     " placeholder=\"%s\"",
 			     The_GetSuffix (),
 			     Txt_nicks_emails_or_IDs_separated_by_commas);
@@ -593,9 +593,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
-			     "id=\"MsgSubject\" name=\"Subject\""
-			     " class=\"Frm_C2_INPUT INPUT_%s\" rows=\"2\"",
+	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+			     "id=\"MsgSubject\" name=\"Subject\" rows=\"2\""
+			     " class=\"Frm_C2_INPUT INPUT_%s\"",
 			     The_GetSuffix ());
 
       /* If message is a reply ==> get original message */
@@ -634,10 +634,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "id=\"MsgContent\" name=\"Content\""
-				   " class=\"Frm_C2_INPUT INPUT_%s\""
-				   " rows=\"20\"",
+				   " rows=\"20\""
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.
@@ -671,17 +671,18 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	       HTM_TEXTAREA_Begin (HTM_ENABLED,HTM_READWRITE,HTM_NOT_REQUIRED,
+	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				   "id=\"MsgContent\" name=\"Content\""
-				   " class=\"Frm_C2_INPUT INPUT_%s\""
-				   " rows=\"20\"",
+				   " rows=\"20\""
+				   " class=\"Frm_C2_INPUT INPUT_%s\"",
 				   The_GetSuffix ());
 
 		  /* Begin textarea with a '\n', that will be not visible in textarea.
 		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
 		     if we don't put the initial '\n' ==> the form will be sent starting
 		     by "Lorem", without the white line */
-		  HTM_TxtF ("\n%s",Content);
+		  HTM_Txt ("\n");
+		  HTM_Txt (Content);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 	}
@@ -1815,16 +1816,14 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
-      HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,
-			HTM_DONT_SUBMIT_ON_CHANGE,NULL,
+      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
 			The_GetSuffix ());
 
          /* Write a first option to select any course */
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     Messages->FilterCrsCod < 0 ? HTM_OPTION_SELECTED :
-						  HTM_OPTION_UNSELECTED,
-		     HTM_ENABLED,
+		     (Messages->FilterCrsCod < 0) ? HTM_SELECTED :
+						    HTM_NO_ATTR,
 		     "%s",Txt_any_course);
 
 	 /* Write an option for each origin course */
@@ -1837,9 +1836,8 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
 	    if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			   CrsCod == Messages->FilterCrsCod ? HTM_OPTION_SELECTED :
-							      HTM_OPTION_UNSELECTED,
-			   HTM_ENABLED,
+			   (CrsCod == Messages->FilterCrsCod) ? HTM_SELECTED :
+							        HTM_NO_ATTR,
 			   "%s",row[1]);	// Course short name
 	   }
 
@@ -1906,15 +1904,12 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages)
   {
    extern const char *Txt_only_unread_messages;
-   HTM_Checked_t Checked;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      Checked = Messages->ShowOnlyUnreadMsgs ? HTM_CHECKED :
-					       HTM_UNCHECKED;
       HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
-			  Checked,HTM_ENABLED,HTM_READWRITE,
-			  HTM_DONT_SUBMIT_ON_CHANGE,
+			  Messages->ShowOnlyUnreadMsgs ? HTM_CHECKED :
+							 HTM_NO_ATTR,
 			  "value=\"Y\"");
       HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();
@@ -2192,8 +2187,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 HTM_TD_End ();
 
 	 /***** Show content and media *****/
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT MSG_TXT_%s\"",
-	               The_GetSuffix ());
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT MSG_TXT_%s\"",The_GetSuffix ());
 	    if (Content[0])
 	       Msg_WriteMsgContent (Content,true,false);
 	    Med_ShowMedia (&Media,"MSG_IMG_CONT","MSG_IMG");

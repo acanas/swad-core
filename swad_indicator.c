@@ -198,7 +198,9 @@ void Ind_ReqIndicatorsCourses (void)
 	       Frm_LabelColumn ("Frm_C1 RT","",Txt_Number_of_indicators);
 
 	       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-		  Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,true);
+		  Ind_ShowNumCoursesWithIndicators (&Indicators,
+						    NumCrssWithIndicatorYes,NumCrss,
+						    Frm_PUT_FORM);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -211,7 +213,7 @@ void Ind_ReqIndicatorsCourses (void)
       for (Ind  = 0, NumCrssToList = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 if (Indicators.IndicatorsSelected[Ind] == HTM_CHECKED)
+	 if (Indicators.Checked[Ind] == HTM_CHECKED)
 	    NumCrssToList += NumCrssWithIndicatorYes[Ind];
       if (Ind_GetIfShowBigList (&Indicators,NumCrssToList))
 	{
@@ -223,8 +225,8 @@ void Ind_ReqIndicatorsCourses (void)
 	    Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
 	    ParCod_PutPar (ParCod_OthDegTyp,Indicators.DegTypCod);
 	    ParCod_PutPar (ParCod_Dpt      ,Indicators.DptCod   );
-	    if (Indicators.StrIndicatorsSelected[0])
-	       Par_PutParString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
+	    if (Indicators.StrChecked[0])
+	       Par_PutParString (NULL,"Indicators",Indicators.StrChecked);
 	    Btn_PutConfirmButton (Txt_Show_more_details);
 	 Frm_EndForm ();
 	}
@@ -284,7 +286,9 @@ void Ind_ShowIndicatorsCourses (void)
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
 
    /***** Show table with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,false);
+   Ind_ShowNumCoursesWithIndicators (&Indicators,
+				     NumCrssWithIndicatorYes,NumCrss,
+				     Frm_DONT_PUT_FORM);
 
    /***** Show the stats of courses *****/
    Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_FULL,NumCrss,mysql_res);
@@ -305,19 +309,19 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
    long Indicator;
 
    /***** Get parameter multiple with list of indicators selected *****/
-   Par_GetParMultiToText ("Indicators",Indicators->StrIndicatorsSelected,Ind_MAX_SIZE_INDICATORS_SELECTED);
+   Par_GetParMultiToText ("Indicators",Indicators->StrChecked,Ind_MAX_SIZE_INDICATORS_CHECKED);
 
    /***** Set which indicators have been selected (checkboxes on) *****/
-   if (Indicators->StrIndicatorsSelected[0])
+   if (Indicators->StrChecked[0])
      {
       /* Reset all indicators */
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators->IndicatorsSelected[Ind] = HTM_UNCHECKED;
+	 Indicators->Checked[Ind] = HTM_NO_ATTR;
 
       /* Set indicators selected */
-      for (Ptr = Indicators->StrIndicatorsSelected;
+      for (Ptr = Indicators->StrChecked;
 	   *Ptr;
 	   )
 	{
@@ -330,7 +334,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
 	      Ind <= Ind_NUM_INDICATORS;
 	      Ind++)
 	    if ((long) Ind == Indicator)
-	       Indicators->IndicatorsSelected[Ind] = HTM_CHECKED;
+	       Indicators->Checked[Ind] = HTM_CHECKED;
 	}
      }
    else
@@ -338,7 +342,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
       for (Ind = 0;
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
-	 Indicators->IndicatorsSelected[Ind] = HTM_CHECKED;
+	 Indicators->Checked[Ind] = HTM_CHECKED;
   }
 
 /*****************************************************************************/
@@ -386,8 +390,8 @@ static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators)
       Sco_PutParScope ("ScopeInd",Gbl.Scope.Current);
       ParCod_PutPar (ParCod_OthDegTyp,((struct Ind_Indicators *) Indicators)->DegTypCod);
       ParCod_PutPar (ParCod_Dpt      ,((struct Ind_Indicators *) Indicators)->DptCod   );
-      if (((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected[0])
-	 Par_PutParString (NULL,"Indicators",((struct Ind_Indicators *) Indicators)->StrIndicatorsSelected);
+      if (((struct Ind_Indicators *) Indicators)->StrChecked[0])
+	 Par_PutParString (NULL,"Indicators",((struct Ind_Indicators *) Indicators)->StrChecked);
       Par_PutParChar ("ShowBigList",'Y');
      }
   }
@@ -466,17 +470,15 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
 	{
-	 Class = (Indicators->IndicatorsSelected[Ind] == HTM_CHECKED) ? ClassHighlight :
-								        ClassNormal;
+	 Class = (Indicators->Checked[Ind] == HTM_CHECKED) ? ClassHighlight :
+							      ClassNormal;
 	 HTM_TR_Begin (NULL);
 
 	    if (PutForm == Frm_PUT_FORM)
 	      {
 	       HTM_TD_Begin ("class=\"%s\"",Class);
 		  HTM_INPUT_CHECKBOX ("Indicators",
-				      Indicators->IndicatorsSelected[Ind],
-				      HTM_ENABLED,HTM_READWRITE,
-				      HTM_SUBMIT_ON_CHANGE,
+				      Indicators->Checked[Ind] | HTM_SUBMIT_ON_CHANGE,
 				      "id=\"Indicators%u\" value=\"%u\"",
 				      Ind,Ind);
 	       HTM_TD_End ();
@@ -689,13 +691,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 	 /* Get stored number of indicators of this course */
 	 NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
-	 if (Indicators->IndicatorsSelected[NumIndicators] == HTM_CHECKED)
+	 if (Indicators->Checked[NumIndicators] == HTM_CHECKED)
 	   {
 	    /* Compute and store indicators */
 	    Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&IndicatorsCrs);
 
 	    /* The number of indicators may have changed */
-	    if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators] == HTM_CHECKED)
+	    if (Indicators->Checked[IndicatorsCrs.NumIndicators] == HTM_CHECKED)
 	      {
 	       ActCod = Act_GetActCod (ActReqStaCrs);
 
@@ -871,16 +873,16 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      NumTchs != 0 ? "DAT_SMALL_GREEN" :
-						     "DAT_SMALL_RED",
+				      NumTchs ? "DAT_SMALL_GREEN" :
+						"DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (NumTchs);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      NumStds != 0 ? "DAT_SMALL_GREEN" :
-						     "DAT_SMALL_RED",
+				      NumStds ? "DAT_SMALL_GREEN" :
+						"DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (NumStds);
@@ -948,24 +950,24 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      (IndicatorsCrs.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
-									    "DAT_SMALL_RED",
+				      IndicatorsCrs.NumAssignments ? "DAT_SMALL_GREEN" :
+								     "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumAssignments);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      (IndicatorsCrs.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
-										 "DAT_SMALL_RED",
+				      IndicatorsCrs.NumFilesAssignments ? "DAT_SMALL_GREEN" :
+									  "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesAssignments);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      (IndicatorsCrs.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
-									   "DAT_SMALL_RED",
+				      IndicatorsCrs.NumFilesWorks ? "DAT_SMALL_GREEN" :
+								    "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesWorks);
@@ -986,24 +988,24 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s RM\"",
-				      (IndicatorsCrs.NumThreads != 0) ? "DAT_SMALL_GREEN" :
-									"DAT_SMALL_RED",
+				      IndicatorsCrs.NumThreads ? "DAT_SMALL_GREEN" :
+								 "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumThreads);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      (IndicatorsCrs.NumPosts != 0) ? "DAT_SMALL_GREEN" :
-								      "DAT_SMALL_RED",
+				      IndicatorsCrs.NumPosts ? "DAT_SMALL_GREEN" :
+							       "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumPosts);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      (IndicatorsCrs.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
-									       "DAT_SMALL_RED",
+				      IndicatorsCrs.NumMsgsSentByTchs ? "DAT_SMALL_GREEN" :
+									"DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumMsgsSentByTchs);
@@ -1024,16 +1026,16 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      (IndicatorsCrs.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
-										     "DAT_SMALL_RED",
+				      IndicatorsCrs.NumFilesInDocumentZones ? "DAT_SMALL_GREEN" :
+									      "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInDocumentZones);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-				      (IndicatorsCrs.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
-										   "DAT_SMALL_RED",
+				      IndicatorsCrs.NumFilesInSharedZones ? "DAT_SMALL_GREEN" :
+									    "DAT_SMALL_RED",
 				      The_GetSuffix (),
 				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInSharedZones);
@@ -1174,9 +1176,9 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    IndicatorsCrs->NumAssignments      = Asg_DB_GetNumAssignmentsInCrs (CrsCod);
    IndicatorsCrs->NumFilesAssignments = Brw_DB_GetNumFilesInAssigZonesOfCrs (CrsCod);
    IndicatorsCrs->NumFilesWorks       = Brw_DB_GetNumFilesInWorksZonesOfCrs (CrsCod);
-   IndicatorsCrs->ThereAreAssignments = (IndicatorsCrs->NumAssignments      != 0) ||
-                                        (IndicatorsCrs->NumFilesAssignments != 0) ||
-                                        (IndicatorsCrs->NumFilesWorks       != 0);
+   IndicatorsCrs->ThereAreAssignments = IndicatorsCrs->NumAssignments ||
+                                        IndicatorsCrs->NumFilesAssignments ||
+                                        IndicatorsCrs->NumFilesWorks;
    if (IndicatorsCrs->ThereAreAssignments)
       IndicatorsCrs->NumIndicators++;
 
@@ -1184,15 +1186,15 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,HieCod);
    IndicatorsCrs->NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,HieCod,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
    IndicatorsCrs->NumMsgsSentByTchs = Msg_DB_GetNumMsgsSentByTchsCrs (CrsCod);
-   IndicatorsCrs->ThereIsOnlineTutoring = (IndicatorsCrs->NumThreads        != 0) ||
-	                                  (IndicatorsCrs->NumPosts          != 0) ||
-	                                  (IndicatorsCrs->NumMsgsSentByTchs != 0);
+   IndicatorsCrs->ThereIsOnlineTutoring = IndicatorsCrs->NumThreads ||
+	                                  IndicatorsCrs->NumPosts ||
+	                                  IndicatorsCrs->NumMsgsSentByTchs;
    if (IndicatorsCrs->ThereIsOnlineTutoring)
       IndicatorsCrs->NumIndicators++;
 
    /***** Indicator #4: information about materials *****/
-   IndicatorsCrs->ThereAreMaterials = (IndicatorsCrs->NumFilesInDocumentZones != 0) ||
-                                      (IndicatorsCrs->NumFilesInSharedZones   != 0);
+   IndicatorsCrs->ThereAreMaterials = IndicatorsCrs->NumFilesInDocumentZones ||
+                                      IndicatorsCrs->NumFilesInSharedZones;
    if (IndicatorsCrs->ThereAreMaterials)
       IndicatorsCrs->NumIndicators++;
 

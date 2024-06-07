@@ -96,7 +96,7 @@ void Nam_NewShortAndFullNames (const char *Names[Nam_NUM_SHRT_FULL_NAMES])
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],Nam_MaxChars[ShrtOrFull],
 			 Names[ShrtOrFull],
-			 HTM_ENABLED,HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			 HTM_REQUIRED,
 			 "class=\"%s INPUT_%s\"",
 			 Nam_Classes[ShrtOrFull],The_GetSuffix ());
       HTM_TD_End ();
@@ -125,7 +125,7 @@ void Nam_ExistingShortAndFullNames (Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_
 		  ParCod_PutPar (ParCod,Cod);
 		  HTM_INPUT_TEXT (Nam_Params[ShrtOrFull],Nam_MaxChars[ShrtOrFull],
 				  Names[ShrtOrFull],
-				  HTM_ENABLED,HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
+				  HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 				  "class=\"%s INPUT_%s\"",
 				  Nam_Classes[ShrtOrFull],The_GetSuffix ());
 	       Frm_EndForm ();

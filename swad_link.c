@@ -448,9 +448,8 @@ static void Lnk_ListLinksForEdition (const struct Lnk_Links *Links)
 	       Frm_BeginForm (ActChgLnkWWW);
 	       ParCod_PutPar (ParCod_Lnk,Lnk->LnkCod);
 		  HTM_INPUT_URL ("WWW",Lnk->WWW,
-				 HTM_REQUIRED,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW INPUT_%s\"",
-				 The_GetSuffix ());
+				 HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW INPUT_%s\"",The_GetSuffix ());
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -677,9 +676,8 @@ static void Lnk_PutFormToCreateLink (void)
 	 /***** Link WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,
-			   HTM_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW INPUT_%s\"",
-			   The_GetSuffix ());
+			   HTM_REQUIRED,
+			   "class=\"INPUT_WWW INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();

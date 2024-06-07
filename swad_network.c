@@ -237,11 +237,11 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-			   HTM_INPUT_URL (StrName,URL,HTM_NOT_REQUIRED,HTM_DONT_SUBMIT_ON_CHANGE,
+			   HTM_INPUT_URL (StrName,URL,
+					  HTM_NO_ATTR,
 					  "id=\"%s\""
 					  " class=\"REC_C2_BOT_INPUT INPUT_%s\"",
-					  StrName,
-					  The_GetSuffix ());
+					  StrName,The_GetSuffix ());
 			HTM_TD_End ();
 
 		     HTM_TR_End ();

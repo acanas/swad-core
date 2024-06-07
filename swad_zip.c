@@ -280,7 +280,7 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir,FullNameAndUsrID);
 
    /* Try to create a link named LinkTmpUsr to PathFolderUsrInsideCrs */
-   if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr) != 0)
+   if (symlink (PathFolderUsrInsideCrs,LinkTmpUsr))
      {
       for (Success = false, NumTry = 2;
 	   !Success && errno == EEXIST && NumTry<=1000;
@@ -497,7 +497,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 		     FullSize += (unsigned long long) FileStatus.st_size;
 
 		     /***** Create a symbolic link (clone) to original file *****/
-		     if (symlink (PathFile,PathFileClone) != 0)
+		     if (symlink (PathFile,PathFileClone))
 			Err_ShowErrorAndExit ("Can not create temporary link for compression.");
 
 		     /***** Update number of my views of this file *****/

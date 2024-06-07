@@ -447,10 +447,10 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
 	 if (ClassSelect[0])
 	    PutClassSelect = true;
       if (PutClassSelect)
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"MyRole\" class=\"%s\"",ClassSelect);
       else
-	 HTM_SELECT_Begin (HTM_ENABLED,HTM_NOT_REQUIRED,HTM_SUBMIT_ON_CHANGE,NULL,
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 			   "name=\"MyRole\"");
       for (Role  = (Rol_Role_t) 1;
 	   Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
@@ -459,9 +459,8 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
 	   {
 	    RoleUnsigned = (unsigned) Role;
 	    HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-			Role == Gbl.Usrs.Me.Role.Logged ? HTM_OPTION_SELECTED :
-						   	  HTM_OPTION_UNSELECTED,
-			HTM_ENABLED,
+			(Role == Gbl.Usrs.Me.Role.Logged) ? HTM_SELECTED :
+						   	    HTM_NO_ATTR,
 			"%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
 	   }
       HTM_SELECT_End ();
@@ -512,13 +511,10 @@ void Rol_ChangeMyRole (void)
 /*****************************************************************************/
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             HTM_Disabled_t Disabled,
-                             HTM_Readonly_t Readonly,
-                             HTM_SubmitOnChange_t SubmitOnChange)
+                             HTM_Attributes_t Attributes)
   {
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
-   HTM_Checked_t Checked;
 
    for (Role  = Rol_UNK;
         Role <= Rol_SYS_ADM;
@@ -526,8 +522,10 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
       if ((RolesAllowed & (1 << Role)))
 	{
 	 HTM_LABEL_Begin (NULL);
-	    Checked = (RolesSelected & (1 << Role));
-	    HTM_INPUT_CHECKBOX ("Role",Checked,Disabled,Readonly,SubmitOnChange,
+	    HTM_INPUT_CHECKBOX ("Role",
+				Attributes |
+				((RolesSelected & (1 << Role)) ? HTM_CHECKED :
+							         HTM_NO_ATTR),
 				"id=\"Role\" value=\"%u\" class=\"INPUT_%s\"",
 				(unsigned) Role,The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);

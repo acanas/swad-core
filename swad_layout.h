@@ -82,9 +82,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 				void (*FuncPars) (void *Args),void *Args,
                                 const char *CheckboxName,
-                                HTM_Checked_t Checked,
-                                HTM_Disabled_t Disabled,
-                                HTM_Readonly_t Readonly,
+                                HTM_Attributes_t Attributes,
                                 const char *Title,const char *Text);
 
 void Lay_WriteAboutZone (void);
