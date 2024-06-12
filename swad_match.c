@@ -1259,14 +1259,13 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",
-		                The_GetSuffix ());
+		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",The_GetSuffix ());
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",
 					    Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
 									    "MchCod",
-									    MchCod) ? HTM_CHECKED :
-										      HTM_NO_ATTR,
+									    MchCod) ? HTM_NO_ATTR :
+										      HTM_CHECKED,
 					    "id=\"WholeCrs\" value=\"Y\""
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
 			Grp_WriteTheWholeCourse ();

@@ -436,11 +436,9 @@ static void Grp_PutCheckboxAllGrps (void)
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	 HTM_INPUT_CHECKBOX ("AllGroups",
-			     ((ICanSelUnselGroup == Usr_CAN &&
-			       Gbl.Crs.Grps.AllGrps) ? HTM_CHECKED :
-						       HTM_NO_ATTR) |
-			     ((ICanSelUnselGroup == Usr_CAN) ? HTM_NO_ATTR :
-							       HTM_READONLY),
+			     (ICanSelUnselGroup == Usr_CAN) ? (Gbl.Crs.Grps.AllGrps ? HTM_CHECKED :
+										      HTM_NO_ATTR) :
+							      HTM_DISABLED,
 			     "value=\"Y\"%s",
 			     (ICanSelUnselGroup == Usr_CAN) ? " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 							      "");
@@ -1677,7 +1675,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 										   HTM_NO_ATTR) |
 				((IBelongToThisGroup ||
 				  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? HTM_NO_ATTR :
-									    HTM_READONLY),
+									    HTM_DISABLED),
 				"id=\"Grp%ld\" value=\"%ld\""
 				" onclick=\"uncheckParent(this,'WholeCrs')\"",
 				Grp->GrpCod,Grp->GrpCod);
@@ -1944,7 +1942,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	       switch (Grp->ClosedOrOpen)
 	         {
 	          case CloOpe_OPEN:		// If group is open
-		     if (!IBelongToThisGroup &&			// I don't belong to group
+		     if (!IBelongToThisGroup &&				// I don't belong to group
 			 Grp->NumUsrs[Rol_STD] >= Grp->MaxStudents)	// Group is full
 			ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
 		     break;
@@ -1968,7 +1966,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	    Attributes = (IBelongToThisGroup ? HTM_CHECKED :
 					       HTM_NO_ATTR) |
 		         (ICanChangeMySelectionForThisGrp ? HTM_NO_ATTR :
-							    HTM_READONLY);
+							    HTM_DISABLED);
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
 		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
@@ -2168,7 +2166,7 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
 	    HTM_INPUT_CHECKBOX ("GrpCods",
 				Grp_Checked (Grp->GrpCod) |
 				((ICanSelUnselGroup == Usr_CAN) ? HTM_NO_ATTR :
-								  HTM_READONLY),
+								  HTM_DISABLED),
 				"id=\"Grp%ld\" value=\"%ld\"%s",
 				Grp->GrpCod,Grp->GrpCod,
 				(ICanSelUnselGroup == Usr_CAN) ? " onclick=\"checkParent(this,'AllGroups')\"" :
@@ -2212,22 +2210,15 @@ static HTM_Attributes_t Grp_Checked (long GrpCod)
 static void Grp_WriteRowToSelectUsrsWhoDontBelongToAnyGrp (const struct GroupType *GrpTyp)
   {
    extern const char *Txt_users_with_no_group;
-   // HTM_Attributes_t Attributes;
    Rol_Role_t Role;
-
-   /* To get the users who don't belong to a type of group, use group code -(GrpTyp->GrpTypCod) */
-   /* Write checkbox to select the group */
-   /*
-   if (Gbl.Usrs.Me.Role.Logged >= Rol_STD)
-      Attributes = Grp_Checked (-GrpTyp->GrpTypCod);
-   else
-      Attributes = HTM_READONLY;
-   */
 
    HTM_TR_Begin (NULL);
 
+      /* Write checkbox to select the group */
       HTM_TD_Begin ("class=\"LM\"");
-	 HTM_INPUT_CHECKBOX ("GrpCods",
+	 // To get the users who don't belong to a type of group,
+	 // use group code -(GrpTyp->GrpTypCod)
+         HTM_INPUT_CHECKBOX ("GrpCods",
 			     Grp_Checked (-GrpTyp->GrpTypCod),
 			     "id=\"Grp%ld\" value=\"%ld\""
 			     " onclick=\"checkParent(this,'AllGroups')\"",

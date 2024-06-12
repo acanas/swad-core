@@ -1649,8 +1649,6 @@ static void HTM_PutAttributes (HTM_Attributes_t Attributes,
       HTM_Txt (" autofocus");
    if (Attributes & HTM_DISABLED)
       HTM_Txt (" disabled");
-   if (Attributes & HTM_READONLY)
-      HTM_Txt (" readonly");
    if ((Attributes & HTM_SUBMIT_ON_CHANGE) || FuncsOnChange)
      {
       HTM_Txt (" onchange=\"");

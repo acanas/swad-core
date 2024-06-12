@@ -1474,6 +1474,20 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Save_changes;
+   static Usr_Can_t ICanMakeAnyChange;
+
+   /***** Set who can edit *****/
+   ICanMakeAnyChange = Usr_CAN_NOT;
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:	// A student can see only her/his attendance
+	 if (Event->ClosedOrOpen == CloOpe_OPEN)
+	    ICanMakeAnyChange = Usr_CAN;
+	 break;
+      default:
+	 Err_ShowErrorAndExit ("Wrong call.");
+	 break;
+     }
 
    /***** Get my setting about photos in users' list for current course *****/
    Set_GetMyPrefAboutListWithPhotosFromDB ();
@@ -1484,38 +1498,38 @@ static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
-      if (Event->ClosedOrOpen == CloOpe_OPEN)
+      if (ICanMakeAnyChange)
 	{
 	 Frm_BeginForm (ActRecAttMe);
 	    ParCod_PutPar (ParCod_Att,Event->AttCod);
 	}
 
-	 /***** List students (only me) *****/
-	 /* Begin table */
-	 HTM_TABLE_Begin ("TBL_SCROLL");
+      /***** List students (only me) *****/
+      /* Begin table */
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-	    /* Header */
-	    HTM_TR_Begin (NULL);
+	 /* Header */
+	 HTM_TR_Begin (NULL);
 
-	       HTM_TH_Empty (3);
-	       if (Gbl.Usrs.Listing.WithPhotos)
-		  HTM_TH_Empty (1);
-	       HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
-	       HTM_TH      (Txt_Student_comment                           ,HTM_HEAD_LEFT);
-	       HTM_TH      (Txt_Teachers_comment                          ,HTM_HEAD_LEFT);
+	    HTM_TH_Empty (3);
+	    if (Gbl.Usrs.Listing.WithPhotos)
+	       HTM_TH_Empty (1);
+	    HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
+	    HTM_TH      (Txt_Student_comment                           ,HTM_HEAD_LEFT);
+	    HTM_TH      (Txt_Teachers_comment                          ,HTM_HEAD_LEFT);
 
-	    HTM_TR_End ();
+	 HTM_TR_End ();
 
-	    /* List of students (only me) */
-	    Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Event);
+	 /* List of students (only me) */
+	 Att_WriteRowUsrToCallTheRoll (1,&Gbl.Usrs.Me.UsrDat,Event);
 
-	 /* End table */
-	 HTM_TABLE_End ();
+      /* End table */
+      HTM_TABLE_End ();
 
-      /* Send button */
-      if (Event->ClosedOrOpen == CloOpe_OPEN)
+      /* Send button and end form */
+      if (ICanMakeAnyChange == Usr_CAN)
 	{
-	 Btn_PutConfirmButton (Txt_Save_changes);
+	    Btn_PutConfirmButton (Txt_Save_changes);
 	 Frm_EndForm ();
 	}
 
@@ -1538,6 +1552,19 @@ static void Att_ListEventStudents (struct Att_Events *Events)
    extern const char *Txt_Save_changes;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
+   static Usr_Can_t ICanMakeAnyChange;
+
+   /***** Set who can edit *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 ICanMakeAnyChange = Usr_CAN;
+	 break;
+      default:
+	 ICanMakeAnyChange = Usr_CAN_NOT;
+	 break;
+     }
 
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -1564,47 +1591,51 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /* Begin form */
-	    Frm_BeginForm (ActRecAttStd);
-	       ParCod_PutPar (ParCod_Att,Events->Event.AttCod);
-	       Grp_PutParsCodGrps ();
+	    if (ICanMakeAnyChange)
+	      {
+	       Frm_BeginForm (ActRecAttStd);
+		  ParCod_PutPar (ParCod_Att,Events->Event.AttCod);
+		  Grp_PutParsCodGrps ();
+	      }
 
-	       /* Begin table */
-	       HTM_TABLE_Begin ("TBL_SCROLL");
+	    /* Begin table */
+	    HTM_TABLE_Begin ("TBL_SCROLL");
 
-		  /* Header */
-		  HTM_TR_Begin (NULL);
+	       /* Header */
+	       HTM_TR_Begin (NULL);
 
-		     HTM_TH_Empty (3);
-		     if (Gbl.Usrs.Listing.WithPhotos)
-			HTM_TH_Empty (1);
-		     HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
-		     HTM_TH      (Txt_Student_comment                           ,HTM_HEAD_LEFT);
-		     HTM_TH      (Txt_Teachers_comment                          ,HTM_HEAD_LEFT);
+		  HTM_TH_Empty (3);
+		  if (Gbl.Usrs.Listing.WithPhotos)
+		     HTM_TH_Empty (1);
+		  HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,1,2,NULL);
+		  HTM_TH      (Txt_Student_comment                           ,HTM_HEAD_LEFT);
+		  HTM_TH      (Txt_Teachers_comment                          ,HTM_HEAD_LEFT);
 
-		  HTM_TR_End ();
+	       HTM_TR_End ();
 
-		  /* List of students */
-		  for (NumUsr = 0;
-		       NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-		       NumUsr++)
-		    {
-		     /* Copy user's basic data from list */
-		     Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+	       /* List of students */
+	       for (NumUsr = 0;
+		    NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+		    NumUsr++)
+		 {
+		  /* Copy user's basic data from list */
+		  Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
-		     /* Get list of user's IDs */
-		     ID_GetListIDsFromUsrCod (&UsrDat);
+		  /* Get list of user's IDs */
+		  ID_GetListIDsFromUsrCod (&UsrDat);
 
-		     Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,&Events->Event);
-		    }
+		  Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,&Events->Event);
+		 }
 
-	       /* End table */
-	       HTM_TABLE_End ();
+	    /* End table */
+	    HTM_TABLE_End ();
 
-	       /* Send button */
-	       Btn_PutConfirmButton (Txt_Save_changes);
-
-	    /***** End form *****/
-	    Frm_EndForm ();
+            /* Send button and end form */
+	    if (ICanMakeAnyChange)
+	      {
+		  Btn_PutConfirmButton (Txt_Save_changes);
+	       Frm_EndForm ();
+	      }
 
 	    /***** Free memory used for user's data *****/
 	    Usr_UsrDataDestructor (&UsrDat);

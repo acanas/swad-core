@@ -1834,8 +1834,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 		     HTM_INPUT_CHECKBOX ("WholeCrs",
 					 Grp_DB_CheckIfAssociatedToGrps ("svy_groups",
 								         "SvyCod",
-									 SvyCod) ? HTM_CHECKED :
-										   HTM_NO_ATTR,
+									 SvyCod) ? HTM_NO_ATTR :
+									           HTM_CHECKED,
 					 "id=\"WholeCrs\" value=\"Y\""
 					 " onclick=\"uncheckChildren(this,'GrpCods')\"");
 		     Grp_WriteTheWholeCourse ();

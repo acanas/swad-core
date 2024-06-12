@@ -49,9 +49,8 @@ typedef unsigned HTM_Attributes_t;
 #define HTM_REQUIRED		(1 << 2)
 #define HTM_AUTOFOCUS		(1 << 3)
 #define HTM_DISABLED		(1 << 4)
-#define HTM_READONLY		(1 << 5)
-#define HTM_SUBMIT_ON_CHANGE	(1 << 6)
-#define HTM_SUBMIT_ON_CLICK	(1 << 7)
+#define HTM_SUBMIT_ON_CHANGE	(1 << 5)
+#define HTM_SUBMIT_ON_CLICK	(1 << 6)
 
 #define HTM_NUM_HEAD_ALIGN 3
 typedef enum
