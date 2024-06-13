@@ -275,10 +275,11 @@ static void Prj_FormToSelectTuts (void *Projects);
 static void Prj_FormToSelectEvls (void *Projects);
 static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
                                   Prj_RoleInProject_t RoleInPrj);
-static void Prj_AddStds (__attribute__((unused)) void *Args);
-static void Prj_AddTuts (__attribute__((unused)) void *Args);
-static void Prj_AddEvls (__attribute__((unused)) void *Args);
-static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj);
+static void Prj_AddStds (void *Projects);
+static void Prj_AddTuts (void *Projects);
+static void Prj_AddEvls (void *Projects);
+static void Prj_AddUsrsToProject (struct Prj_Projects *Projects,
+				  Prj_RoleInProject_t RoleInPrj);
 static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
                                   Prj_RoleInProject_t RoleInPrj);
 static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj);
@@ -2916,57 +2917,72 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
 
 void Prj_GetSelectedUsrsAndAddStds (void)
   {
+   struct Prj_Projects Projects;
+
+   /***** Reset projects *****/
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
    Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
-				  Prj_AddStds,NULL,		// when user(s) selected
-                                  Prj_FormToSelectStds,NULL);	// when no user selected
+				  Prj_AddStds,&Projects,		// when user(s) selected
+                                  Prj_FormToSelectStds,&Projects);	// when no user selected
   }
 
 void Prj_GetSelectedUsrsAndAddTuts (void)
   {
+   struct Prj_Projects Projects;
+
+   /***** Reset projects *****/
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
    Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
-				  Prj_AddTuts,NULL,		// when user(s) selected
-                                  Prj_FormToSelectTuts,NULL);	// when no user selected
+				  Prj_AddTuts,&Projects,		// when user(s) selected
+                                  Prj_FormToSelectTuts,&Projects);	// when no user selected
   }
 
 void Prj_GetSelectedUsrsAndAddEvls (void)
   {
+   struct Prj_Projects Projects;
+
+   /***** Reset projects *****/
+   Prj_ResetPrjsAndReadConfig (&Projects);
+
    Usr_GetSelectedUsrsAndGoToAct (&Prj_MembersToAdd,
-				  Prj_AddEvls,NULL,		// when user(s) selected
-                                  Prj_FormToSelectEvls,NULL);	// when no user selected
+				  Prj_AddEvls,&Projects,		// when user(s) selected
+                                  Prj_FormToSelectEvls,&Projects);	// when no user selected
   }
 
 /*****************************************************************************/
 /**************************** Add users to project ***************************/
 /*****************************************************************************/
 
-static void Prj_AddStds (__attribute__((unused)) void *Args)
+static void Prj_AddStds (void *Projects)
   {
-   Prj_AddUsrsToProject (Prj_ROLE_STD);
+   if (Projects)
+      Prj_AddUsrsToProject ((struct Prj_Projects *) Projects,Prj_ROLE_STD);
   }
 
-static void Prj_AddTuts (__attribute__((unused)) void *Args)
+static void Prj_AddTuts (void *Projects)
   {
-   Prj_AddUsrsToProject (Prj_ROLE_TUT);
+   if (Projects)
+      Prj_AddUsrsToProject ((struct Prj_Projects *) Projects,Prj_ROLE_TUT);
   }
 
-static void Prj_AddEvls (__attribute__((unused)) void *Args)
+static void Prj_AddEvls (void *Projects)
   {
-   Prj_AddUsrsToProject (Prj_ROLE_EVL);
+   if (Projects)
+      Prj_AddUsrsToProject ((struct Prj_Projects *) Projects,Prj_ROLE_EVL);
   }
 
-static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
+static void Prj_AddUsrsToProject (struct Prj_Projects *Projects,
+				  Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
-   struct Prj_Projects Projects;
    const char *Ptr;
 
-   /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
-
    /***** Get parameters *****/
-   Prj_GetPars (&Projects);
-   Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
+   Prj_GetPars (Projects);
+   Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Add the selected users to project *****/
    Ptr = Prj_MembersToAdd.List[Rol_UNK];
@@ -2974,7 +2990,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
      {
       /* Get next user */
       Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /* Get user's data */
@@ -2983,7 +2999,8 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
                                                    Usr_DONT_GET_ROLE_IN_CRS))
         {
 	 /* Add user to project */
-	 Prj_DB_AddUsrToPrj (Projects.Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Prj_DB_AddUsrToPrj (Projects->Prj.PrjCod,RoleInPrj,
+			     Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Flush cache */
 	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
@@ -3000,7 +3017,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Prj_MembersToAdd);
 
    /***** Put form to edit project again *****/
-   Prj_ReqCreatOrEditPrj (&Projects);
+   Prj_ReqCreatOrEditPrj (Projects);
   }
 
 /*****************************************************************************/

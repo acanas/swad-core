@@ -633,13 +633,11 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.84 (2024-06-12)"
+#define Log_PLATFORM_VERSION	"SWAD 23.84.1 (2024-06-13)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
- *
- * TODO: Al actualizar usuarios en proyectos sale un mensaje de que debe seleccionarse uno o más profesores.
- *
+	Version 23.84.1:  Jun 13, 2024  Fixed bug in projects. Reported by Oresti Baños Legrán. (335287 lines)
 	Version 23.84:    Jun 12, 2024  HTML attributes readonly removed because it does not work in checkboxes. (335277 lines)
 	Version 23.83:    Jun 07, 2024  Code refactoring in HTML attributes. (335258 lines)
 	Version 23.82.2:  May 17, 2024  Code refactoring related to hidden/visible stem. (335855 lines)
@@ -5450,7 +5448,7 @@ sudo cp crs64x64.gif /var/www/html/swad/icon/
 	Version 18.17.1:  Nov 15, 2018  Icon to view places in box with info about institution. (236900 lines)
 	Version 18.17:    Nov 14, 2018  Code refactoring related to database queries. (236899 lines)
 	Version 18.16.3:  Nov 14, 2018  Fixed bug when copying-pasting on assignments/works of another user, reported by Javier Fernández Baldomero. (236890 lines)
-	Version 18.16.2:  Nov 14, 2018  Fixed bug in account, discovered by Oresti Baños. (236848 lines)
+	Version 18.16.2:  Nov 14, 2018  Fixed bug in account, discovered by Oresti Baños Legrán. (236848 lines)
 	Version 18.16.1:  Nov 12, 2018  MOOC advertisement. (236846 lines)
 	Version 18.16:    Nov 10, 2018  New module swad_file_MIME for allowed MIME types in files. (236831 lines)
 	Version 18.15:    Nov 10, 2018  New module swad_file_extension for allowed file extensions. (236735 lines)
