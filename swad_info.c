@@ -901,8 +901,7 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Select info source */
-	    HTM_TD_Begin ("class=\"LT DAT_%s%s\"",
-			  The_GetSuffix (),
+	    HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
 			  InfoSrc == FromDB.Src ? " BG_HIGHLIGHT" :
 						  "");
 	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
@@ -1417,8 +1416,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 	    break;
 	}
 
-      HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",
-		     The_GetSuffix ());
+      HTM_DIV_Begin ("id=\"crs_info\" class=\"LM CRS_INFO_%s\"",The_GetSuffix ());
 
 	 /***** Store text into a temporary .md file in HTML output directory *****/
 	 // TODO: change to another directory?
@@ -1572,8 +1570,7 @@ void Inf_EditPlainTxtInfo (void)
 	    Lay_HelpPlainEditor ();
 	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 				"name=\"Txt\" cols=\"80\" rows=\"20\""
-		                " class=\"INPUT_%s\"",
-		                The_GetSuffix ());
+		                " class=\"INPUT_%s\"",The_GetSuffix ());
 	       HTM_Txt (TxtHTML);
 	    HTM_TEXTAREA_End ();
 	 HTM_DIV_End ();
@@ -1656,8 +1653,7 @@ void Inf_EditRichTxtInfo (void)
 	 Lay_HelpRichEditor ();
 	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 			     "name=\"Txt\" cols=\"80\" rows=\"20\""
-		             " class=\"INPUT_%s\"",
-	                     The_GetSuffix ());
+		             " class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_Txt (TxtHTML);
 	 HTM_TEXTAREA_End ();
       HTM_DIV_End ();

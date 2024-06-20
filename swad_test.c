@@ -364,8 +364,7 @@ void Tst_AssessTest (void)
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
 	   {
-	    HTM_DIV_Begin ("class=\"Tst_SUBTITLE DAT_%s\"",
-	                   The_GetSuffix ());
+	    HTM_DIV_Begin ("class=\"Tst_SUBTITLE DAT_%s\"",The_GetSuffix ());
 	       HTM_TxtF (Txt_Test_No_X_that_you_make_in_this_course,NumTst);
 	    HTM_DIV_End ();
 	   }
@@ -376,8 +375,7 @@ void Tst_AssessTest (void)
 	 /***** Write total score and grade *****/
 	 if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
 	   {
-	    HTM_DIV_Begin ("class=\"CM DAT_STRONG_%s BOLD\"",
-	                   The_GetSuffix ());
+	    HTM_DIV_Begin ("class=\"CM DAT_STRONG_%s BOLD\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Score);
 	       HTM_Double2Decimals (Print.Score);
 	       HTM_BR ();
@@ -575,7 +573,7 @@ static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQue
    MYSQL_ROW row;
    unsigned Index;
    bool ErrorInIndex;
-   char StrInd[1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrInd[1 + Cns_MAX_DIGITS_UINT + 1];
 
    /***** Create test question *****/
    Qst_QstConstructor (&Question);
@@ -637,7 +635,7 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
    extern const char *Txt_The_number_of_questions_must_be_in_the_interval_X;
    bool Error = false;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned UnsignedNum;
 
    /***** Tags *****/
@@ -703,7 +701,7 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	 Dat_GetIniEndDatesFromForm ();
 
 	 /* Get ordering criteria */
-	 Par_GetParMultiToText ("Order",UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+	 Par_GetParMultiToText ("Order",UnsignedStr,Cns_MAX_DIGITS_UINT);
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	    Questions->SelectedOrder = (Qst_QuestionsOrder_t)
 				       ((UnsignedNum < Qst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
@@ -829,8 +827,7 @@ void Tst_GetAndShowTestsStats (void)
 	 HTM_TD_LINE_TOP_Txt (Txt_Total);
 	 HTM_TD_LINE_TOP_Unsigned (Stats.NumCoursesWithQuestions);
 
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
 	    HTM_TxtF ("%u (%.1f%%)",
 		      Stats.NumCoursesWithPluggableQuestions,
 		      Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /

@@ -384,7 +384,7 @@ static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    char *ParLstRubCods;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    unsigned NumRub;
    unsigned MaxSizeListRubCods;
 
@@ -393,7 +393,7 @@ static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
    if (Rubrics->Num)	// If course has rubrics
      {
       /***** Allocate memory for the list of rubric codes specified *****/
-      MaxSizeListRubCods = ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Rubrics->Num) - 1;
+      MaxSizeListRubCods = ((Cns_MAX_DIGITS_LONG + 1) * Rubrics->Num) - 1;
       if ((ParLstRubCods = malloc (MaxSizeListRubCods + 1)) == NULL)
 	 Err_NotEnoughMemoryExit ();
 
@@ -405,7 +405,7 @@ static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
 	 for (Ptr = ParLstRubCods, NumRub = 0;
 	      *Ptr;
 	      NumRub++)
-	    Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	    Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 ListRubCods->NumRubrics = NumRub;
 
 	 if (ListRubCods->NumRubrics)	// If rubrics specified...
@@ -418,7 +418,7 @@ static void PrjCfg_GetListRubCods (const struct Rub_Rubrics *Rubrics,
 		 *Ptr;
 		 NumRub++)
 	      {
-	       Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	       Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	       ListRubCods->RubCods[NumRub] = Str_ConvertStrCodToLongCod (LongStr);
 	      }
 	   }

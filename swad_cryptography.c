@@ -136,9 +136,9 @@ void Cry_CreateUniqueNameEncrypted (char *UniqueNameEncrypted)
   {
    static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
    char UniqueNamePlain[Cns_MAX_BYTES_IP +
-                        Cns_MAX_DECIMAL_DIGITS_LONG +
-                        Cns_MAX_DECIMAL_DIGITS_LONG +
-                        Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+                        Cns_MAX_DIGITS_LONG +
+                        Cns_MAX_DIGITS_LONG +
+                        Cns_MAX_DIGITS_UINT + 1];
 
    NumCall++;
    snprintf (UniqueNamePlain,sizeof (UniqueNamePlain),"%s-%lx-%lx-%x",

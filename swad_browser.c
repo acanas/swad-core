@@ -2800,7 +2800,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+					  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
@@ -9936,9 +9936,9 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
-   char StrNumCrss[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumCrss[Cns_MAX_DIGITS_UINT + 1];
+   char StrNumGrps[Cns_MAX_DIGITS_UINT + 1];
+   char StrNumUsrs[Cns_MAX_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
 	                                           "DAT";
@@ -10004,8 +10004,8 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
-   char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumFoldersPerCrs[Cns_MAX_DIGITS_UINT + 1];
+   char StrNumFilesPerCrs[Cns_MAX_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
 						   "DAT";
@@ -10057,8 +10057,8 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct BrwSiz_SizeOfFileZone *SizeOfFileZone)
   {
-   char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumFoldersPerUsr[Cns_MAX_DIGITS_UINT + 1];
+   char StrNumFilesPerUsr[Cns_MAX_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    const char *Class = (FileZone == Brw_UNKNOWN) ? "LINE_TOP DAT_STRONG" :
 						   "DAT";

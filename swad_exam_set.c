@@ -68,7 +68,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define ExaSet_MAX_SELECTED_QUESTIONS			10000
-#define ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS	(ExaSet_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
+#define ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS	(ExaSet_MAX_SELECTED_QUESTIONS * (Cns_MAX_DIGITS_LONG + 1))
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -1097,7 +1097,7 @@ void ExaSet_AddQstsToSet (void)
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    long QstCod;
 
    /***** Reset exams context *****/
@@ -1128,7 +1128,7 @@ void ExaSet_AddQstsToSet (void)
       while (*Ptr)
 	{
 	 /* Get next code */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
 	    Err_WrongQuestionExit ();
 
@@ -1439,7 +1439,7 @@ void ExaSet_ReqRemQstFromSet (void)
    struct Exa_Exams Exams;
    struct ExaSet_Set Set;
    char *Anchor;
-   char StrQstCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char StrQstCod[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);

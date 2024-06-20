@@ -320,8 +320,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_Begin ("class=\"RT %s_%s %s\"",
 				UsrCouldAnswer ? "DAT_SMALL" :
 						 "DAT_SMALL_LIGHT",
-				The_GetSuffix (),
-				The_GetColorRows ());
+				The_GetSuffix (),The_GetColorRows ());
 		     HTM_Unsigned (NumClick + 1);
 		  HTM_TD_End ();
 
@@ -329,9 +328,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  if (asprintf (&Id,"click_date_%u",NumClick) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-		                Id,
-		                Class[Action],The_GetSuffix (),
-		                The_GetColorRows ());
+		                Id,Class[Action],The_GetSuffix (),The_GetColorRows ());
 		     Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						   Dat_WRITE_TODAY |
@@ -345,15 +342,13 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
 		  /* Write action */
 		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),
-		                The_GetColorRows ());
+		                Class[Action],The_GetSuffix (),The_GetColorRows ());
 		     HTM_Txt (Txt_EXAM_LOG_ACTIONS[Action]);
 		  HTM_TD_End ();
 
 		  /* Write number of question */
 		  HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),
-		                The_GetColorRows ());
+		                Class[Action],The_GetSuffix (),The_GetColorRows ());
 		     if (QstInd >= 0)
 			HTM_Unsigned ((unsigned) QstInd + 1);
 		  HTM_TD_End ();
@@ -362,16 +357,14 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_Begin ("class=\"CT %s_%s %s\"",
 				UsrCouldAnswer ? "DAT_SMALL_GREEN" :
 						 "DAT_SMALL_RED",
-				The_GetSuffix (),
-				The_GetColorRows ());
+				The_GetSuffix (),The_GetColorRows ());
 		     HTM_Txt (UsrCouldAnswer ? "&check;" :
 					       "&cross;");
 		  HTM_TD_End ();
 
 		  /* Write IP */
 		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),
-		                The_GetColorRows ());
+		                Class[Action],The_GetSuffix (),The_GetColorRows ());
 		     Length = strlen (IP);
 		     if (Length > 6)
 		       {

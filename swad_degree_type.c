@@ -114,8 +114,7 @@ void DegTyp_WriteSelectorDegTypes (long SelectedDegTypCod)
    /* List degree types */
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
 		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\""
-		     " class=\"Frm_C2_INPUT INPUT_%s\"",
-		     The_GetSuffix ());
+		     " class=\"Frm_C2_INPUT INPUT_%s\"",The_GetSuffix ());
       HTM_OPTION (HTM_Type_STRING,"-1",
 		  (SelectedDegTypCod <= 0) ? HTM_SELECTED :
 					     HTM_NO_ATTR,
@@ -326,20 +325,17 @@ static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes
       HTM_TR_Begin (NULL);
 
 	 /* Number of degree type in this list */
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
-	               The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
 	    HTM_Unsigned (NumDegTyp + 1);
 	 HTM_TD_End ();
 
 	 /* Name of degree type */
-	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",
-	               The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
 	    HTM_Txt (DegTypes->Lst[NumDegTyp].DegTypName);
 	 HTM_TD_End ();
 
 	 /* Number of degrees of this type */
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
-	               The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
 	    HTM_Unsigned (DegTypes->Lst[NumDegTyp].NumDegs);
 	 HTM_TD_End ();
 
@@ -472,8 +468,7 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,DegTyp_EditingDegTyp->DegTypName,
 			    HTM_REQUIRED,
-			    "size=\"25\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    "size=\"25\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Number of degrees of this degree type ****/

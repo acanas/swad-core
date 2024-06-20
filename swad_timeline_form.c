@@ -194,7 +194,7 @@ void TmlFrm_EndForm (void)
 void TmlFrm_FormFavSha (const struct Tml_Form *Form)
   {
    char *OnSubmit;
-   char ParStr[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char ParStr[7 + Cns_MAX_DIGITS_LONG + 1];
 
    /***** Create parameter string *****/
    sprintf (ParStr,Form->ParFormat,Form->ParCod);

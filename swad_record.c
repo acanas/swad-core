@@ -901,7 +901,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get guest's data from database
                                                    Usr_DONT_GET_PREFS,
@@ -1101,7 +1101,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
@@ -1314,7 +1314,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
                                                    Usr_DONT_GET_PREFS,
@@ -1695,15 +1695,13 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
 	       HTM_TD_Begin ("class=\"REC_C1_BOT %s_%s RT %s\"",
 			     ICanEditThisField == Usr_CAN ? "FORM_IN" :
-							      "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			     The_GetSuffix (),
-			     The_GetColorRows ());
+							    "REC_DAT_SMALL",	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			     The_GetSuffix (),The_GetColorRows ());
 		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 		    {
-		     HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",
-		                     The_GetSuffix ());
+		     HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_GetSuffix ());
 			HTM_NBSP ();
 			HTM_TxtF ("(%s)",
 			          Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
@@ -1725,8 +1723,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       /* Write form, text, or nothing depending on
 		  the user's role and the visibility of the field */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  switch (ICanEditThisField)
 		    {
 		     case Usr_CAN:		// Show with form
@@ -1788,7 +1785,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 void Rec_GetFieldsCrsRecordFromForm (void)
   {
    unsigned NumField;
-   char FieldParName[5 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char FieldParName[5 + Cns_MAX_DIGITS_LONG + 1];
 
    for (NumField = 0;
 	NumField < Gbl.Crs.Records.LstFields.Num;
@@ -2643,8 +2640,7 @@ static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,bool ShowData)
   {
 
 
-   HTM_TD_Begin ("class=\"REC_C2_MID LT DAT_STRONG_%s\"",
-                 The_GetSuffix ());
+   HTM_TD_Begin ("class=\"REC_C2_MID LT DAT_STRONG_%s\"",The_GetSuffix ());
       if (ShowData && UsrDat->CtyCod > 0)
 	 /* Link to see country information */
 	 Cty_WriteCountryName (UsrDat->CtyCod);	// Put link to country
@@ -2714,8 +2710,7 @@ static void Rec_ShowUsrIDs (struct Usr_Data *UsrDat,const char *Anchor)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID_identity_number);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	 ID_WriteUsrIDs (UsrDat,Anchor);
       HTM_TD_End ();
 
@@ -2753,8 +2748,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 	 Frm_LabelColumn ("REC_C1_BOT RM","Role",Txt_Role);
 
 	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-	               The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	    switch (TypeOfView)
 	      {
 	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:		// I want to apply for enrolment
@@ -2770,8 +2764,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		  /***** Selector of role *****/
 		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				    "id=\"Role\" name=\"Role\""
-				    " class=\"INPUT_%s\"",
-				    The_GetSuffix ());
+				    " class=\"INPUT_%s\"",The_GetSuffix ());
 		     for (Role  = Rol_STD;
 			  Role <= Rol_TCH;
 			  Role++)
@@ -2980,8 +2973,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Role);
 
 	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-	               The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
 	 HTM_TD_End ();
 	}
@@ -3036,8 +3028,7 @@ static void Rec_ShowSurname1 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
         }
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	 switch (ViewType)
 	   {
 	    case Vie_VIEW:
@@ -3079,8 +3070,7 @@ static void Rec_ShowSurname2 (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 		       Txt_Surname_2);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	 switch (ViewType)
 	   {
 	    case Vie_VIEW:
@@ -3305,8 +3295,7 @@ static void Rec_ShowPhone (struct Usr_Data *UsrDat,bool ShowData,
 		       Label);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
 	    switch (ViewType)
 	      {
@@ -3358,8 +3347,7 @@ static void Rec_ShowComments (struct Usr_Data *UsrDat,bool ShowData,
 		       Txt_USER_comments);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
 	    switch (ViewType)
 	      {
@@ -3428,8 +3416,7 @@ static void Rec_ShowInstitution (struct Hie_Node *Ins,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_INS]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
 	    if (Ins->HieCod > 0)
 	      {
@@ -3463,8 +3450,7 @@ static void Rec_ShowCenter (struct Usr_Data *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    if (UsrDat->Tch.CtrCod > 0)
@@ -3501,8 +3487,7 @@ static void Rec_ShowDepartment (struct Usr_Data *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Department);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    if (UsrDat->Tch.DptCod > 0)
@@ -3538,8 +3523,7 @@ static void Rec_ShowOffice (struct Usr_Data *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Office);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
 	    HTM_Txt (UsrDat->Tch.Office);
       HTM_TD_End ();
@@ -3562,8 +3546,7 @@ static void Rec_ShowOfficePhone (struct Usr_Data *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Phone);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",
-                    The_GetSuffix ());
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (ShowData)
 	   {
 	    HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_STRONG_%s\"",

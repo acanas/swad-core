@@ -69,7 +69,7 @@ extern struct Globals Gbl;
 #define Svy_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
 #define Svy_MAX_BYTES_ANSWER	((Svy_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
-#define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(Svy_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
+#define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(Svy_NUM_ANS_TYPES * (Cns_MAX_DIGITS_UINT + 1))
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -3061,7 +3061,7 @@ void Svy_ReqRemQst (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    struct Svy_Surveys Surveys;
    struct Svy_Question SvyQst;
-   char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Reset surveys *****/
    Svy_ResetSurveys (&Surveys);
@@ -3179,9 +3179,9 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
    unsigned NumQsts;
    long QstCod;
    char ParName[3 + 10 + 6 + 1];
-   char StrAnswersIndexes[Svy_MAX_ANSWERS_PER_QUESTION * (Cns_MAX_DECIMAL_DIGITS_UINT + 1)];
+   char StrAnswersIndexes[Svy_MAX_ANSWERS_PER_QUESTION * (Cns_MAX_DIGITS_UINT + 1)];
    const char *Ptr;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned AnsInd;
    char Comments[Cns_MAX_BYTES_TEXT + 1];
 
@@ -3201,11 +3201,13 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
          /* Get possible parameter with the user's answer */
          snprintf (ParName,sizeof (ParName),"Ans%010u",(unsigned) QstCod);
          Par_GetParMultiToText (ParName,StrAnswersIndexes,
-                                Svy_MAX_ANSWERS_PER_QUESTION * (Cns_MAX_DECIMAL_DIGITS_UINT + 1));
+                                Svy_MAX_ANSWERS_PER_QUESTION *
+                                (Cns_MAX_DIGITS_UINT + 1));
          Ptr = StrAnswersIndexes;
          while (*Ptr)
            {
-            Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+            Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,
+        				     Cns_MAX_DIGITS_UINT);
             if (sscanf (UnsignedStr,"%u",&AnsInd) == 1)
                // Parameter exists ==> user has checked this answer
                // 		   ==> store it in database

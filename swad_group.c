@@ -131,7 +131,7 @@ static void Grp_AskConfirmRemGrp (void);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
-static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents);
+static void Grp_WriteMaxStds (char Str[Cns_MAX_DIGITS_UINT + 1],unsigned MaxStudents);
 static void Grp_PutParGrpTypCod (void *GrpTypCod);
 static void Grp_PutParGrpCod (void *GrpCod);
 
@@ -457,7 +457,7 @@ void Grp_PutParsCodGrps (void)
    unsigned NumGrpSel;
    size_t MaxLengthGrpCods;
    char *GrpCods;
-   char GrpCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char GrpCod[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Write the boolean parameter that indicates if all groups must be listed *****/
    Par_PutParChar ("AllGroups",
@@ -468,7 +468,7 @@ void Grp_PutParsCodGrps (void)
    if (!Gbl.Crs.Grps.AllGrps &&
        Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
-      MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
+      MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (Cns_MAX_DIGITS_LONG + 1) - 1;
       if ((GrpCods = malloc (MaxLengthGrpCods + 1)) == NULL)
 	 Err_NotEnoughMemoryExit ();
       GrpCods[0] = '\0';
@@ -548,7 +548,7 @@ void Grp_GetParCodsSeveralGrps (void)
   {
    char *ParLstCodGrps;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    unsigned NumGrp;
    unsigned long MaxSizeLstGrpCods;
 
@@ -557,7 +557,7 @@ void Grp_GetParCodsSeveralGrps (void)
 
    if (Gbl.Crs.Grps.NumGrps)	// If course has groups
      {
-      MaxSizeLstGrpCods = ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Gbl.Crs.Grps.NumGrps) - 1;
+      MaxSizeLstGrpCods = ((Cns_MAX_DIGITS_LONG + 1) * Gbl.Crs.Grps.NumGrps) - 1;
 
       /***** Allocate memory for the list of group codes selected *****/
       if ((ParLstCodGrps = malloc (MaxSizeLstGrpCods + 1)) == NULL)
@@ -574,7 +574,7 @@ void Grp_GetParCodsSeveralGrps (void)
 	 for (Ptr = ParLstCodGrps, NumGrp = 0;
 	      *Ptr;
 	      NumGrp++)
-	    Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	    Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
 	 if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
@@ -587,7 +587,7 @@ void Grp_GetParCodsSeveralGrps (void)
 		 *Ptr;
 		 NumGrp++)
 	      {
-	       Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	       Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	       Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	      }
 	   }
@@ -1417,7 +1417,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
    unsigned NumRoo;
    const struct Roo_Room *Roo;
    Rol_Role_t Role;
-   char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrMaxStudents[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("TBL_SCROLL");
@@ -1563,7 +1563,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
 		     ParCod_PutPar (ParCod_Grp,Grp->GrpCod);
 		     Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
-		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
+		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DIGITS_UINT,StrMaxStudents,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"3\" class=\"INPUT_%s\"",
 				     The_GetSuffix ());
@@ -2325,7 +2325,7 @@ static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight)
    char *Title;
    int Vacant;
    Rol_Role_t Role;
-   char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrMaxStudents[Cns_MAX_DIGITS_UINT + 1];
    static const char *HighlightClass[Lay_NUM_HIGHLIGHT] =
      {
       [Lay_NO_HIGHLIGHT] = "",
@@ -2436,8 +2436,7 @@ static void Grp_PutFormToCreateGroupType (void)
 	       HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 			       Gbl.Crs.Grps.GrpTyp.GrpTypName,
 			       HTM_REQUIRED,
-			       "size=\"12\" class=\"INPUT_%s\"",
-			       The_GetSuffix ());
+			       "size=\"12\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Is it mandatory to register in any groups of this type? *****/
@@ -2504,8 +2503,7 @@ static void Grp_PutFormToCreateGroupType (void)
 	    HTM_TD_End ();
 
 	    /***** Number of groups of this type *****/
-	    HTM_TD_Begin ("class=\"CM DAT_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 	       HTM_Unsigned (0);	// It's a new group type ==> 0 groups
 	    HTM_TD_End ();
 
@@ -2534,7 +2532,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    unsigned NumRoo;
    const struct Roo_Room *Roo;
    Rol_Role_t Role;
-   char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrMaxStudents[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
@@ -2590,8 +2588,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
 			       HTM_REQUIRED,
-			       "size=\"20\" class=\"INPUT_%s\"",
-			       The_GetSuffix ());
+			       "size=\"20\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	    /***** Room *****/
@@ -2635,8 +2632,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 		 Role >= Rol_STD;
 		 Role--)
 	      {
-	       HTM_TD_Begin ("class=\"CM DAT_%s\"",
-			     The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 		  HTM_Unsigned (0);
 	       HTM_TD_End ();
 	      }
@@ -2644,10 +2640,9 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	    /***** Maximum number of students *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
-	       HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
+	       HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DIGITS_UINT,StrMaxStudents,
 			       HTM_NO_ATTR,
-			       "size=\"3\" class=\"INPUT_%s\"",
-			       The_GetSuffix ());
+			       "size=\"3\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3983,10 +3978,10 @@ void Grp_ChangeMaxStdsGrp (void)
 /************* Write the maximum number of students in a group ***************/
 /*****************************************************************************/
 
-static void Grp_WriteMaxStds (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned MaxStudents)
+static void Grp_WriteMaxStds (char Str[Cns_MAX_DIGITS_UINT + 1],unsigned MaxStudents)
   {
    if (MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
-      snprintf (Str,Cns_MAX_DECIMAL_DIGITS_UINT + 1,"%u",MaxStudents);
+      snprintf (Str,Cns_MAX_DIGITS_UINT + 1,"%u",MaxStudents);
    else
       Str[0] = '\0';
   }
@@ -4178,8 +4173,8 @@ static void Grp_PutParGrpCod (void *GrpCod)
 void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
   {
    unsigned NumGrpTyp;
-   char Par[6 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   char LongStr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char Par[6 + Cns_MAX_DIGITS_LONG + 1];
+   char LongStr[1 + Cns_MAX_DIGITS_LONG + 1];
    char **LstStrCodGrps;
    const char *Ptr;
    unsigned NumGrpWanted;
@@ -4197,21 +4192,21 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
      {
       /***** Allocate memory for the list of group codes of this type *****/
       if ((LstStrCodGrps[NumGrpTyp] = malloc (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps *
-                                              (Cns_MAX_DECIMAL_DIGITS_LONG + 1))) == NULL)
+                                              (Cns_MAX_DIGITS_LONG + 1))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the multiple parameter code of group of this type *****/
       snprintf (Par,sizeof (Par),"GrpCod%ld",
                 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Par_GetParMultiToText (Par,LstStrCodGrps[NumGrpTyp],
-                             ((Cns_MAX_DECIMAL_DIGITS_LONG + 1) * Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
+                             ((Cns_MAX_DIGITS_LONG + 1) * Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
       if (LstStrCodGrps[NumGrpTyp][0])
         {
          /***** Count the number of groups selected of this type of LstCodGrps[NumGrpTyp] *****/
          for (Ptr = LstStrCodGrps[NumGrpTyp], NumGrpWanted = 0;
               *Ptr;
               NumGrpWanted++)
-            Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+            Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 
          /***** Add the number of groups selected of this type to the number of groups selected total *****/
          LstGrpsWanted->NumGrps += NumGrpWanted;
@@ -4236,7 +4231,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
               *Ptr;
               NumGrpWanted++)
            {
-            Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+            Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
             LstGrpsWanted->GrpCods[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
            }
          /* Free memory used by the list of group codes of this type */

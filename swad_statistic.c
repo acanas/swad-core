@@ -360,8 +360,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   /* Selection of count type (number of pages generated, accesses per user, etc.) */
 			   Sta_WriteSelectorCountType (Stats);
 
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-			                    The_GetSuffix ());
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_Txt (Txt_distributed_by);
 			      HTM_NBSP ();
 			      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
@@ -385,8 +384,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			   HTM_BR ();
 
 			   /***** Option b) Listing of detailed clicks to this course *****/
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-					    The_GetSuffix ());
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_INPUT_RADIO ("GroupedOrDetailed",
 					       (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST) ? HTM_CHECKED :
 													  HTM_NO_ATTR,
@@ -518,8 +516,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 	       Sta_WriteSelectorCountType (Stats);
 
 	       /***** Type of statistic *****/
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_GetSuffix ());
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       	  HTM_Txt (Txt_distributed_by);
 	       	  HTM_NBSP ();
 
@@ -1694,8 +1691,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 	   Hour++)
 	{
 	 HTM_TD_Begin ("class=\"CT LOG_%s\" style=\"width:%upx;\"",
-	               The_GetSuffix (),
-		       GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
+	               The_GetSuffix (),GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
 	    HTM_TxtF ("%02uh",Hour);
 	 HTM_TD_End ();
 	}
@@ -1916,17 +1912,17 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
 	      Interval++)
 	   {
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"CB LOG_%s\" style=\"width:%upx;\"",
-			  GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
+			  GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH / 5,
 			  The_GetSuffix (),
-			  GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
+			  GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH / 5);
 	       HTM_DoubleFewDigits ((double) Interval * HitsMax / 5.0);
 	    HTM_TD_End ();
 	   }
 
 	 HTM_TD_Begin ("colspan=\"%u\" class=\"RB LOG_%s\" style=\"width:%upx;\"",
-		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
+		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH / 5) / 2,
 		       The_GetSuffix (),
-		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
+		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH / 5) / 2);
 	    HTM_DoubleFewDigits (HitsMax);
 	 HTM_TD_End ();
 
@@ -2432,8 +2428,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
    unsigned BarHeight;
 
    HTM_TD_Begin ("class=\"CB DAT_SMALL_%s\" style=\"width:%upx;\"",
-                 The_GetSuffix (),
-                 ColumnWidth);
+                 The_GetSuffix (),ColumnWidth);
 
       /* Draw bar with a height porportional to the number of clicks */
       if (Hits->Num > 0.0)
@@ -2903,9 +2898,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 	 HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
 	    HTM_A_Begin ("href=\"%s\" title=\"%s\" target=\"_blank\""
 		         " class=\"DAT_%s\"",
-			 Ban.WWW,
-			 Ban.FullName,
-			 The_GetSuffix ());
+			 Ban.WWW,Ban.FullName,The_GetSuffix ());
 	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Ban.Img,Ban.FullName,
 			"style=\"margin:0 10px 5px 0;\"");
 	    HTM_A_End ();

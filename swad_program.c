@@ -658,8 +658,7 @@ static void Prg_WriteItemText (long ItmCod,HidVis_HiddenOrVisible_t HiddenOrVisi
 		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    HTM_DIV_Begin ("class=\"PAR PRG_TXT_%s%s\"",
-		  The_GetSuffix (),
-		  HidVis_PrgClass[HiddenOrVisible]);
+		  The_GetSuffix (),HidVis_PrgClass[HiddenOrVisible]);
       HTM_Txt (Txt);
    HTM_DIV_End ();
   }
@@ -940,7 +939,7 @@ static void Prg_PutFormsToRemEditOneItem (Prg_ListingType_t ListingType,
       [HidVis_HIDDEN ] = ActUnhPrgItm,	// Hidden ==> action to unhide
       [HidVis_VISIBLE] = ActHidPrgItm,	// Visible ==> action to hide
      };
-   char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrItemIndex[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.ItmInd);

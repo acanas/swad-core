@@ -887,15 +887,13 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Write number of question *****/
       HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-                    ClassData,The_GetSuffix (),
-                    The_GetColorRows ());
+                    ClassData,The_GetSuffix (),The_GetColorRows ());
 	 if (!QuestionExists)
 	    HTM_TxtF ("%u&nbsp;",++NumNonExistingQst);
       HTM_TD_End ();
 
       /***** Write the question tags *****/
-      HTM_TD_Begin ("class=\"LT %s\"",
-                    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
 	 if (Question->Tags.Num)
 	   {

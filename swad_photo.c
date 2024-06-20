@@ -1142,8 +1142,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"
 					  "%s"
 				       "</div>",
-		       The_GetSuffix (),
-		       CtyName) < 0)
+		       The_GetSuffix (),CtyName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
       else if (asprintf (&Caption.InsCty,"%s","") < 0)
@@ -1158,10 +1157,8 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 					    " class=\"ICO16x16 ICO_BLACK_%s\" />"
 					    " %s"
 					 "</div>",
-		       The_GetSuffix (),
-		       Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
-		       The_GetSuffix (),
-		       MainDegreeShrtName) < 0)
+		       The_GetSuffix (),Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
+		       The_GetSuffix (),MainDegreeShrtName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
       else if (asprintf (&Caption.MainDeg,"%s","") < 0)
@@ -1185,14 +1182,10 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 					      "&nbsp;%s"
 					   "</span>"
 					"</div>",
-		       The_GetSuffix (),
-		       NumFollowing,
-		       The_GetSuffix (),
-		       Txt_Following,
-		       The_GetSuffix (),
-		       NumFollowers,
-		       The_GetSuffix (),
-		       Txt_Followers) < 0)
+		       The_GetSuffix (),NumFollowing,
+		       The_GetSuffix (),Txt_Following,
+		       The_GetSuffix (),NumFollowers,
+		       The_GetSuffix (),Txt_Followers) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
       else if (asprintf (&Caption.Follow,"%s","") < 0)
@@ -2050,7 +2043,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 		  if (Degs.Lst[NumDeg].HieCod == Deg.HieCod)
 		     Attributes = HTM_SELECTED;
 		  else
-		     // Too recently computed ?
+		     // Too recently computed?
 		     Attributes = (Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].HieCod) >=
 				   Dat_GetStartExecutionTimeUTC () - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? HTM_DISABLED :
 					                                                                    HTM_NO_ATTR;
@@ -2249,15 +2242,13 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 
 	       /***** Show logo and name of this degree *****/
 	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_Unsigned (++NumDegsNotEmpty);
 	       HTM_TD_End ();
 
 	       /***** Show logo and name of this degree *****/
 	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT ICO20x20");
 		  else	// Pho_DEGREES_PRINT
@@ -2274,8 +2265,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  /***** Show average photo of students belonging to this degree *****/
 		  Pho_GetNumStdsInDegree (Deg.HieCod,Sex,&NumStds,&NumStdsWithPhoto);
 		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
-		                The_GetSuffix (),
-		                The_GetColorRows ());
+		                The_GetSuffix (),The_GetColorRows ());
 		     if (Gbl.Usrs.Listing.WithPhotos)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,

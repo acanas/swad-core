@@ -621,11 +621,11 @@ void Att_DB_SetUsrAsPresent (long AttCod,long UsrCod)
 void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsAbsent)
   {
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    struct Usr_Data UsrDat;
    unsigned NumCodsInList;
    char *SubQueryAllUsrs = NULL;
-   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char SubQueryOneUsr[1 + Cns_MAX_DIGITS_LONG + 1];
    Att_Present_t Present;
    size_t Length = 0;	// Initialized to avoid warning
    unsigned NumUsrsPresent = 0;
@@ -641,10 +641,10 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
 	   *Ptr;
 	   NumCodsInList++)
 	 /* Find next string in text until comma (leading and trailing spaces are removed) */
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 
       /***** Allocate subquery used to mark not present users as absent *****/
-      Length = 256 + NumCodsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
+      Length = 256 + NumCodsInList * (1 + Cns_MAX_DIGITS_LONG + 1) - 1;
       if ((SubQueryAllUsrs = malloc (Length + 1)) == NULL)
 	 Err_NotEnoughMemoryExit ();
       SubQueryAllUsrs[0] = '\0';
@@ -656,7 +656,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsA
      {
       /* Find next string in text until comma
          (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
       if ((UsrDat.UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
 	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod))
 	    // The user must belong to course,

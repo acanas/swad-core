@@ -1184,9 +1184,7 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
   {
    HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\" class=\"INPUT_%s\"%s />",
-	     Name,Value,
-	     The_GetSuffix (),
-	     Attr);
+	     Name,Value,The_GetSuffix (),Attr);
   }
 
 void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,

@@ -2027,7 +2027,7 @@ void Att_RegisterStudentsInEvent (void)
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,UsrData.EnUsrCod,
-	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	                                  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
 	 if (UsrData.UsrCod > 0)	// Student exists in database
 	    /***** Mark student to not be removed *****/
@@ -2444,7 +2444,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
    unsigned NumAttEvent;
    const char *Ptr;
    long AttCod;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    MYSQL_RES *mysql_res;
    unsigned NumGrpsInThisEvent;
    unsigned NumGrpInThisEvent;
@@ -2452,7 +2452,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
    unsigned NumGrpSel;
 
    /***** Allocate memory for list of attendance events selected *****/
-   MaxSizeListAttCodsSelected = (size_t) Events->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   MaxSizeListAttCodsSelected = (size_t) Events->Num * (Cns_MAX_DIGITS_LONG + 1);
    if ((Events->StrAttCodsSelected = malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
 
@@ -2474,7 +2474,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 	  )
 	{
 	 /* Get next attendance event selected */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 AttCod = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each event in *StrAttCodsSelected as selected */
@@ -2861,7 +2861,7 @@ static void Att_WriteTableHeadSeveralAttEvents (struct Att_Events *Events)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Attendance;
    unsigned NumAttEvent;
-   char StrNumAttEvent[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumAttEvent[Cns_MAX_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 

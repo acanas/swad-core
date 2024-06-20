@@ -102,7 +102,8 @@ void Tab_DrawTabs (void)
 		        if (ClassIcoTab[Gbl.Prefs.IconSet])
 			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),TabTxt,
 				    "class=\"TAB_ICO %s_%s\"",
-				    ClassIcoTab[Gbl.Prefs.IconSet],The_GetSuffix ());
+				    ClassIcoTab[Gbl.Prefs.IconSet],
+				    The_GetSuffix ());
 		        else
 			   HTM_IMG (URLIconSet,Tab_GetIcon (NumTab),TabTxt,
 				    "class=\"TAB_ICO\"");

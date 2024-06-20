@@ -853,8 +853,7 @@ static void Crs_PutFormToCreateCourse (void)
 	    HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
 			    Crs_EditingCrs->InstitutionalCod,
 			    HTM_NO_ATTR,
-			    "class=\"INPUT_INS_CODE INPUT_%s\"",
-			    The_GetSuffix ());
+			    "class=\"INPUT_INS_CODE INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Course short name and full name *****/

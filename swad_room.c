@@ -124,7 +124,7 @@ static Roo_RoomType_t Roo_GetParType (void);
 
 static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull);
 
-static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity);
+static void Roo_WriteCapacity (char Str[Cns_MAX_DIGITS_UINT + 1],unsigned Capacity);
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings);
 static void Roo_PutHeadRooms (void);
@@ -159,7 +159,7 @@ void Roo_SeeRooms (void)
    struct Roo_Rooms Rooms;
    Roo_Order_t Order;
    unsigned NumRoom;
-   char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrCapacity[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)		// No center selected
@@ -223,44 +223,38 @@ void Roo_SeeRooms (void)
 
 	       /* Building short name */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
 	       HTM_TD_End ();
 
 	       /* Floor */
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_Int (Rooms.Lst[NumRoom].Floor);
 	       HTM_TD_End ();
 
 	       /* Type */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Ico_BLACK,
 		                 Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
 	       HTM_TD_End ();
 
 	       /* Short name */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
 	       HTM_TD_End ();
 
 	       /* Full name */
 	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].FullName);
 	       HTM_TD_End ();
 
 	       /* Capacity */
 	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),
-	                     The_GetColorRows ());
+	                     The_GetSuffix (),The_GetColorRows ());
 		  Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
 		  HTM_Txt (StrCapacity);
 	       HTM_TD_End ();
@@ -272,8 +266,7 @@ void Roo_SeeRooms (void)
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
 		     HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		                   The_GetSuffix (),
-		                   The_GetColorRows ());
+		                   The_GetSuffix (),The_GetColorRows ());
 			Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
 		     HTM_TD_End ();
 		     break;
@@ -633,7 +626,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
    unsigned NumRoom;
    struct Roo_Room *Room;
    char *Anchor = NULL;
-   char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrCapacity[Cns_MAX_DIGITS_UINT + 1];
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    HTM_TABLE_Begin ("TBL_SCROLL");
@@ -708,7 +701,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 	       Frm_BeginFormAnchor (ActChgRooMaxUsr,Anchor);
 		  ParCod_PutPar (ParCod_Roo,Room->RooCod);
 		  Roo_WriteCapacity (StrCapacity,Room->Capacity);
-		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
+		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DIGITS_UINT,StrCapacity,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"3\" class=\"INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1157,10 +1150,10 @@ void Roo_ChangeCapacity (void)
 /********************* Write seating capacity of a room **********************/
 /*****************************************************************************/
 
-static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity)
+static void Roo_WriteCapacity (char Str[Cns_MAX_DIGITS_UINT + 1],unsigned Capacity)
   {
    if (Capacity <= Roo_MAX_CAPACITY)
-      snprintf (Str,Cns_MAX_DECIMAL_DIGITS_UINT + 1,"%u",Capacity);
+      snprintf (Str,Cns_MAX_DIGITS_UINT + 1,"%u",Capacity);
    else
       Str[0] = '\0';
   }
@@ -1187,7 +1180,7 @@ void Roo_ContEditAfterChgRoom (void)
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
-   char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrCapacity[Cns_MAX_DIGITS_UINT + 1];
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address in xx:xx:xx:xx:xx:xx format
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
@@ -1234,7 +1227,7 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	 /***** Seating capacity *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
-	    HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
+	    HTM_INPUT_TEXT ("Capacity",Cns_MAX_DIGITS_UINT,StrCapacity,
 			    HTM_NO_ATTR,
 			    "size=\"3\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();

@@ -378,12 +378,12 @@ unsigned Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role
 /****** Get number of users with some given roles in courses of a user *******/
 /*****************************************************************************/
 
-#define Enr_DB_MAX_BYTES_ROLES_STR (Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
+#define Enr_DB_MAX_BYTES_ROLES_STR (Rol_NUM_ROLES * (Cns_MAX_DIGITS_UINT + 1))
 unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                         unsigned OthersRoles)
   {
    Rol_Role_t Role;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    char OthersRolesStr[Enr_DB_MAX_BYTES_ROLES_STR + 1];
    char SubQueryRole[64];
    unsigned NumUsrs;
@@ -454,7 +454,7 @@ unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 unsigned Enr_DB_GetNumUsrsInCrss (Hie_Level_t Level,long Cod,unsigned Roles,
                                   bool AnyUserInCourses)
   {
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    char SubQueryRoles[Enr_DB_MAX_BYTES_SUBQUERY_ROLES + 1];
    bool FirstRole;
    bool MoreThanOneRole;

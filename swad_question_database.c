@@ -268,10 +268,10 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
    unsigned NumItemInList;
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    Qst_AnswerType_t AnsType;
-   char CrsCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char CrsCodStr[Cns_MAX_DIGITS_LONG + 1];
    unsigned NumQsts;
 
    /***** Allocate space for query *****/
@@ -412,9 +412,9 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
    unsigned NumItemInList;
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    Qst_AnswerType_t AnswerType;
-   char StrNumQsts[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumQsts[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Allocate space for query *****/
    if ((Query = malloc (Qst_MAX_BYTES_QUERY_QUESTIONS + 1)) == NULL)

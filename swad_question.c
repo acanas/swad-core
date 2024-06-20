@@ -217,8 +217,8 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    Qst_AnswerType_t AnsType;
-   HTM_Attributes_t Checked;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   HTM_Attributes_t Attributes;
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    const char *Ptr;
 
    HTM_TR_Begin (NULL);
@@ -233,8 +233,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"LM\"");
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_GetSuffix ());
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 
 		  HTM_INPUT_CHECKBOX ("AllAnsTypes",
 				      AnswerTypes->All ? HTM_CHECKED :
@@ -254,21 +253,22 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	   {
 	    HTM_TR_Begin (NULL);
 
-	       Checked = HTM_NO_ATTR;
+	       Attributes = HTM_NO_ATTR;
 	       Ptr = AnswerTypes->List;
 	       while (*Ptr)
 		 {
-		  Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+		  Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,
+						   Cns_MAX_DIGITS_UINT);
 		  if (Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
 		    {
-		     Checked = HTM_CHECKED;
+		     Attributes = HTM_CHECKED;
 		     break;
 		    }
 		 }
 	       HTM_TD_Begin ("class=\"LM\"");
 		  HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 		     HTM_INPUT_CHECKBOX ("AnswerType",
-					 Checked,
+					 Attributes,
 					 "value=\"%u\""
 					 " onclick=\"checkParent(this,'AllAnsTypes');\"",
 					 (unsigned) AnsType);
@@ -535,8 +535,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 	   }
 	 else
 	   {
-	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",
-	                    The_GetSuffix ());
+	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Txt_Question_removed);
 	    HTM_SPAN_End ();
 	   }
@@ -662,8 +661,7 @@ static void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
    else	// No current image
      {
       /***** Attached media *****/
-      if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",
-                    The_GetSuffix ()) < 0)
+      if (asprintf (&ClassInput,"Tst_MED_INPUT INPUT_%s",The_GetSuffix ()) < 0)
 	 Err_NotEnoughMemoryExit ();
       Med_PutMediaUploader (NumMedia,ClassInput);
       free (ClassInput);
@@ -692,8 +690,7 @@ void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 			   Str_DONT_REMOVE_SPACES);
 
 	 /***** Write the feedback *****/
-	 HTM_DIV_Begin ("class=\"%s_%s\"",
-	                ClassFeedback,The_GetSuffix ());
+	 HTM_DIV_Begin ("class=\"%s_%s\"",ClassFeedback,The_GetSuffix ());
 	    HTM_Txt (FeedbackRigorousHTML);
 	 HTM_DIV_End ();
 
@@ -945,8 +942,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	 /* Question code */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    HTM_TxtF ("%ld&nbsp;",Questions->Question.QstCod);
 	 HTM_TD_End ();
 
@@ -954,9 +950,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"CT DAT_SMALL_%s %s\"",
-		       Id,
-		       The_GetSuffix (),
-		       The_GetColorRows ());
+		       Id,The_GetSuffix (),The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Questions->Question.EditTime,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  Dat_WRITE_TODAY |
@@ -974,8 +968,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	 /* Shuffle (row[2]) */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    if (Questions->Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
 		Questions->Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	      {
@@ -984,7 +977,8 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
 		  HTM_INPUT_CHECKBOX ("Shuffle",
 				      (Questions->Question.Answer.Shuffle ? HTM_CHECKED :
-									    HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+									    HTM_NO_ATTR) |
+				      HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"");
 	       Frm_EndForm ();
 	      }
@@ -1006,15 +1000,13 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	 /* Number of times this question has been answered */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    HTM_UnsignedLong (Questions->Question.NumHits);
 	 HTM_TD_End ();
 
 	 /* Average score */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    if (Questions->Question.NumHits)
 	       HTM_Double2Decimals (Questions->Question.Score /
 				    (double) Questions->Question.NumHits);
@@ -1024,15 +1016,13 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	 /* Number of times this question has been answered (not blank) */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    HTM_UnsignedLong (Questions->Question.NumHitsNotBlank);
 	 HTM_TD_End ();
 
 	 /* Average score (not blank) */
 	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
-	               The_GetSuffix (),
-	               The_GetColorRows ());
+	               The_GetSuffix (),The_GetColorRows ());
 	    if (Questions->Question.NumHitsNotBlank)
 	       HTM_Double2Decimals (Questions->Question.Score /
 				    (double) Questions->Question.NumHitsNotBlank);
@@ -1470,16 +1460,14 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
 	    HTM_TD_End ();
 
 	    /* Write the number of option */
-	    HTM_TD_Begin ("class=\"LT %s_%s\"",
-	                  ClassTxt,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
 	       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT\"");
 
 	       /* Write the text of the answer and the media */
-	       HTM_DIV_Begin ("class=\"%s_%s\"",
-	                      ClassTxt,The_GetSuffix ());
+	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassTxt,The_GetSuffix ());
 		  HTM_Txt (Question->Answer.Options[NumOpt].Text);
 		  Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
 				 "Tst_MED_EDIT_LIST_CONT",
@@ -1487,8 +1475,7 @@ static void Qst_WriteChoAns (struct Qst_Question *Question,
 	       HTM_DIV_End ();
 
 	       /* Write the text of the feedback */
-	       HTM_DIV_Begin ("class=\"%s_%s\"",
-	                      ClassFeedback,The_GetSuffix ());
+	       HTM_DIV_Begin ("class=\"%s_%s\"",ClassFeedback,The_GetSuffix ());
 		  HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
 	       HTM_DIV_End ();
 
@@ -1665,7 +1652,7 @@ void Qst_WriteAnsTF (char AnsTF)
 
 void Qst_WriteParQstCod (unsigned QstInd,long QstCod)
   {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    snprintf (StrAns,sizeof (StrAns),"Qst%010u",QstInd);
    Par_PutParLong (NULL,StrAns,QstCod);
@@ -1831,8 +1818,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    bool TagFound;
    bool AnswerHasContent;
    bool DisplayRightColumn;
-   char StrTagTxt[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrInteger[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrTagTxt[6 + Cns_MAX_DIGITS_UINT + 1];
+   char StrInteger[Cns_MAX_DIGITS_UINT + 1];
    char *Title;
    char *FuncOnChange;
    bool NewQuestion = (Question->QstCod > 0);
@@ -1975,8 +1962,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	       Qst_PutFormToEditQstMedia (&Question->Media,-1,HTM_NO_ATTR);
 
 	       /***** Feedback *****/
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_GetSuffix ());
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 		  HTM_BR ();
 		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
@@ -2029,7 +2015,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Integer_number);
 		  snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
-		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
+		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DIGITS_LONG,StrInteger,
 				  (Question->Answer.Type == Qst_ANS_INT) ? HTM_NO_ATTR :
 								           HTM_DISABLED | HTM_REQUIRED,
 				  "size=\"11\" class=\"INPUT_%s\"",
@@ -2127,8 +2113,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 		     /***** Center column: letter of the answer and expand / contract icon *****/
 		     HTM_TD_Begin ("class=\"FORM_IN_%s Qst_ANS_CENTER_COL %s\"",
-				   The_GetSuffix (),
-				   The_GetColorRows ());
+				   The_GetSuffix (),The_GetColorRows ());
 			HTM_TxtF ("%c)",'a' + (char) NumOpt);
 
 			/* Icon to expand (show the answer) */
@@ -2181,8 +2166,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 						      (int) NumOpt,ChoiceDisabled);
 
 			   /* Feedback */
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-			                    The_GetSuffix ());
+			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 			      HTM_BR ();
 			      HTM_TEXTAREA_Begin (ChoiceDisabled,
@@ -2664,10 +2648,10 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
    unsigned NumTag;
    unsigned NumTagRead;
    unsigned NumOpt;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char TagStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char AnsStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char FbStr[5 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
+   char TagStr[6 + Cns_MAX_DIGITS_UINT + 1];
+   char AnsStr[6 + Cns_MAX_DIGITS_UINT + 1];
+   char FbStr[5 + Cns_MAX_DIGITS_UINT + 1];
    char StrMultiAns[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
@@ -2737,7 +2721,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParText ("AnsInt",Question->Answer.Options[0].Text,
-			 Cns_MAX_DECIMAL_DIGITS_LONG);
+			 Cns_MAX_DIGITS_LONG);
 	 break;
       case Qst_ANS_FLOAT:
          if (!Qst_AllocateTextChoiceAnswer (Question,0))
@@ -2819,7 +2803,8 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {
-  	       Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+  	       Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,
+  						Cns_MAX_DIGITS_UINT);
 	       if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
 	          Err_WrongAnswerExit ();
                if (NumCorrectAns >= Qst_MAX_OPTIONS_PER_QUESTION)
@@ -3273,7 +3258,7 @@ void Qst_ReqRemOneQst (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    bool EditingOnlyThisQst;
    struct Qst_Questions Questions;
-   char StrQstCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char StrQstCod[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -3496,13 +3481,13 @@ unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerType
   {
    const char *Ptr;
    unsigned NumAnsTypes = 0;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Go over the list of answer types counting the number of types of answer *****/
    Ptr = AnswerTypes->List;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DIGITS_UINT);
       Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
       NumAnsTypes++;
      }
@@ -3517,14 +3502,14 @@ unsigned Qst_CountNumQuestionsInList (const char *ListQuestions)
   {
    const char *Ptr;
    unsigned NumQuestions = 0;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    long QstCod;
 
    /***** Go over list of questions counting the number of questions *****/
    Ptr = ListQuestions;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
       if (sscanf (LongStr,"%ld",&QstCod) != 1)
          Err_WrongQuestionExit ();
       NumQuestions++;

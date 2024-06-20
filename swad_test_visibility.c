@@ -133,13 +133,13 @@ unsigned TstVis_GetVisibilityFromForm (void)
    size_t MaxSizeListVisibilitySelected;
    char *StrVisibilitySelected;
    const char *Ptr;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned UnsignedNum;
    TstVis_Visibility_t VisibilityItem;
    unsigned Visibility = 0;	// Nothing selected
 
    /***** Allocate memory for list of attendance events selected *****/
-   MaxSizeListVisibilitySelected = TstVis_NUM_ITEMS_VISIBILITY * (Cns_MAX_DECIMAL_DIGITS_UINT + 1);
+   MaxSizeListVisibilitySelected = TstVis_NUM_ITEMS_VISIBILITY * (Cns_MAX_DIGITS_UINT + 1);
    if ((StrVisibilitySelected = malloc (MaxSizeListVisibilitySelected + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
 
@@ -153,7 +153,7 @@ unsigned TstVis_GetVisibilityFromForm (void)
 	  )
 	{
 	 /* Get next visibility item selected */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DIGITS_UINT);
          if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
             if (UnsignedNum < TstVis_NUM_ITEMS_VISIBILITY)
               {

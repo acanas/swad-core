@@ -630,8 +630,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 
       /* Write user (from) */
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		    Class.Author,The_GetSuffix (),
-		    Class.Bg,The_GetSuffix ());
+		    Class.Author,The_GetSuffix (),Class.Bg,The_GetSuffix ());
 	 Usr_WriteAuthor (UsrDat,For_ENABLED);
       HTM_TD_End ();
 
@@ -729,8 +728,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 
       /* Write status (sent by email / pending to be sent by email) */
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		    Class.Txt,The_GetSuffix (),
-		    Class.Bg,The_GetSuffix ());
+		    Class.Txt,The_GetSuffix (),Class.Bg,The_GetSuffix ());
 	 StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
 	 HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
       HTM_TD_End ();
@@ -752,8 +750,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"4\" class=\"LT DAT_%s\""
-		       " style=\"padding-bottom:12px;\"",
-		       The_GetSuffix ());
+		       " style=\"padding-bottom:12px;\"",The_GetSuffix ());
 	    HTM_Txt (SummaryStr);
 	 HTM_TD_End ();
 

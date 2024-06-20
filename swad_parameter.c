@@ -134,7 +134,7 @@ bool Par_GetQueryString (void)
   {
    char Method[Par_MAX_BYTES_METHOD + 1];
    char ContentType[Par_MAX_BYTES_CONTENT_TYPE + 1];
-   char UnsignedLongStr[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
+   char UnsignedLongStr[Cns_MAX_DIGITS_ULONG + 1];
    unsigned long UnsignedLong;
 
    Str_Copy (Method,getenv ("REQUEST_METHOD"),sizeof (Method) - 1);
@@ -717,7 +717,7 @@ void Par_GetMainPars (void)
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    long ActCod;
    char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
 
    // First of all, get action, and session identifier.
    // So, if other parameters have been stored in the database, there will be no problems to get them.
@@ -841,7 +841,7 @@ void Par_GetMainPars (void)
    Set_GetSettingsFromIP ();
 
    /***** Get country if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[ParCod_Cty],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Cty],LongStr,Cns_MAX_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Node[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -852,7 +852,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get institution if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[ParCod_Ins],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Ins],LongStr,Cns_MAX_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Node[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -862,7 +862,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get center if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[ParCod_Ctr],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Ctr],LongStr,Cns_MAX_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Node[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -871,7 +871,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[ParCod_Deg],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Deg],LongStr,Cns_MAX_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
      {
       Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -879,7 +879,7 @@ void Par_GetMainPars (void)
      }
 
    /***** Get numerical course code if exists (from menu) *****/
-   Par_GetParText (Par_CodeStr[ParCod_Crs],LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (Par_CodeStr[ParCod_Crs],LongStr,Cns_MAX_DIGITS_LONG);
    if (LongStr[0])	// Parameter available
       Gbl.Hierarchy.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
@@ -919,11 +919,11 @@ unsigned long Par_GetParUnsignedLong (const char *ParName,
                                       unsigned long Max,
                                       unsigned long Default)
   {
-   char UnsignedLongStr[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
+   char UnsignedLongStr[Cns_MAX_DIGITS_ULONG + 1];
    unsigned long UnsignedLongNum;
 
    /***** Get parameter with unsigned number *****/
-   Par_GetParText (ParName,UnsignedLongStr,Cns_MAX_DECIMAL_DIGITS_ULONG);
+   Par_GetParText (ParName,UnsignedLongStr,Cns_MAX_DIGITS_ULONG);
    if (sscanf (UnsignedLongStr,"%lu",&UnsignedLongNum) == 1)
       if (UnsignedLongNum >= Min && UnsignedLongNum <= Max)
          return UnsignedLongNum;
@@ -937,10 +937,10 @@ unsigned long Par_GetParUnsignedLong (const char *ParName,
 
 long Par_GetParLong (const char *ParName)
   {
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Get parameter with long number *****/
-   Par_GetParText (ParName,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+   Par_GetParText (ParName,LongStr,Cns_MAX_DIGITS_LONG);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1007,7 +1007,8 @@ unsigned Par_GetParAndChangeFormat (const char *ParName,char *ParValue,size_t Ma
 // When StrDst is NULL, nothing is stored
 // Return true if characters found
 
-bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,size_t LongMax)
+bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
+				      size_t LongMax)
   {
    size_t i = 0;
    unsigned char Ch;	// Must be unsigned to work with characters > 127

@@ -549,9 +549,9 @@ void Rol_PutParRoles (unsigned Roles)
 
 unsigned Rol_GetSelectedRoles (void)
   {
-   char StrRoles[Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1)];
+   char StrRoles[Rol_NUM_ROLES * (Cns_MAX_DIGITS_UINT + 1)];
    const char *Ptr;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    Rol_Role_t Role;
    unsigned Roles;
 
@@ -563,11 +563,11 @@ unsigned Rol_GetSelectedRoles (void)
                                    0);				// 000...000
 
    /***** Try to get multiple param "Role" *****/
-   Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1));
+   Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (Cns_MAX_DIGITS_UINT + 1));
    for (Ptr = StrRoles;
         *Ptr;)
      {
-      Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DIGITS_UINT);
       Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);
       if (Role != Rol_UNK)
          Roles |= (1 << Role);

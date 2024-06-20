@@ -644,9 +644,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 
 	 /***** Write institution, center, degree *****/
 	 HTM_TD_Begin ("colspan=\"%u\" class=\"LT DAT_SMALL_NOBR_%s %s\"",
-		       ColSpan - 1,
-		       The_GetSuffix (),
-		       The_GetColorRows ());
+		       ColSpan - 1,The_GetSuffix (),The_GetColorRows ());
 
 	    /* Get next institution, center, degree */
 	    row = mysql_fetch_row (mysql_res);
@@ -738,8 +736,7 @@ void Hie_WriteStatusCell (Hie_Status_t Status,
   {
    Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
 
-   HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                 Class,The_GetSuffix (),BgColor);
+   HTM_TD_Begin ("class=\"LT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
       if (StatusTxt != Hie_STATUS_ACTIVE) // If active ==> do not show anything
 	 HTM_Txt (Txt[StatusTxt]);
    HTM_TD_End ();

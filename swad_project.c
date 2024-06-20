@@ -1536,8 +1536,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("rowspan=\"4\" class=\"RT BIG_INDEX_%s %s\"",
-	                  The_GetSuffix (),
-			  The_GetColorRows ());
+	                  The_GetSuffix (),The_GetColorRows ());
 	       HTM_Unsigned (Projects->NumIndex);
 	       if (Faults->PrjIsFaulty)
 		 {
@@ -2095,8 +2094,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Projects,
 	    case Prj_LIST_PROJECTS:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
 			     HidVis_DataClass[Projects->Prj.Hidden],
-			     The_GetSuffix (),
-			     The_GetColorRows ());
+			     The_GetSuffix (),The_GetColorRows ());
 	       break;
 	    case Prj_VIEW_ONE_PROJECT:
 	    case Prj_PRINT_ONE_PROJECT:
@@ -2275,8 +2273,7 @@ static void Prj_ShowProposal (const struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),
-			  The_GetColorRows ());
+			  ClassData,The_GetSuffix (),The_GetColorRows ());
 	    break;
 	 default:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
@@ -2343,8 +2340,7 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),
-			  The_GetColorRows ());
+			  ClassData,The_GetSuffix (),The_GetColorRows ());
 	    break;
 	 default:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
@@ -2402,8 +2398,7 @@ static void Prj_ShowURL (const struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),
-			  The_GetColorRows ());
+			  ClassData,The_GetSuffix (),The_GetColorRows ());
 	    break;
 	 default:
 	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
@@ -2530,8 +2525,7 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
    /***** Link to toggle on/off some fields of project *****/
    HTM_A_Begin ("href=\"\" title=\"%s\" class=\"FORM_IN_%s\""
                 " onclick=\"toggleProject('%u');return false;\"",
-               Text,The_GetSuffix (),
-               UniqueId);
+               Text,The_GetSuffix (),UniqueId);
       Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_A_End ();
   }
@@ -2591,7 +2585,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 
       /***** Project title *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    HidVis_DataClass[Prj->Hidden],The_GetSuffix (),The_GetColorRows ());
+		    HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
+		    The_GetColorRows ());
 	 HTM_Txt (Prj->Title);
       HTM_TD_End ();
 

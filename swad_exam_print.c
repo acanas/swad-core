@@ -450,7 +450,7 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
    MYSQL_ROW row;
    unsigned Index;
    bool ErrorInIndex;
-   char StrInd[1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrInd[1 + Cns_MAX_DIGITS_UINT + 1];
 
    /***** Create test question *****/
    Qst_QstConstructor (&Question);
@@ -621,8 +621,7 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod)
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
 
    /***** Write description *****/
-   HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL_%s\"",
-                  The_GetSuffix ());
+   HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL_%s\"",The_GetSuffix ());
       HTM_Txt (Txt);
    HTM_DIV_End ();
   }
@@ -764,7 +763,7 @@ static void ExaPrn_WriteIntAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
@@ -783,7 +782,7 @@ static void ExaPrn_WriteFltAnsToFill (const struct ExaPrn_Print *Print,
 				      unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
@@ -804,7 +803,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
    extern const char *Txt_TF_QST[2];
-   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write selector for the answer *****/
    /* Initially user has not answered the question ==> initially all answers will be blank.
@@ -840,7 +839,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
-   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -911,7 +910,7 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
 	                              unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);

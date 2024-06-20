@@ -283,7 +283,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    unsigned NumTag;
    MYSQL_ROW row;
    bool TagHidden = false;
-   HTM_Attributes_t Checked;
+   HTM_Attributes_t Attributes;
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
    /*
@@ -338,16 +338,17 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		     HTM_TD_End ();
 		    }
 
-		  Checked = HTM_NO_ATTR;
+		  Attributes = HTM_NO_ATTR;
 		  if (Tags->List)
 		    {
 		     Ptr = Tags->List;
 		     while (*Ptr)
 		       {
-			Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+			Par_GetNextStrUntilSeparParMult (&Ptr,TagText,
+							 Tag_MAX_BYTES_TAG);
 			if (!strcmp (row[1],TagText))
 			  {
-			   Checked = HTM_CHECKED;
+			   Attributes = HTM_CHECKED;
 			   break;
 			  }
 		       }
@@ -356,7 +357,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		  HTM_TD_Begin ("class=\"LT\"");
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 			HTM_INPUT_CHECKBOX ("ChkTag",
-					    Checked,
+					    Attributes,
 					    "value=\"%s\""
 					    " onclick=\"checkParent(this,'AllTags');\"",
 					    row[1]);
@@ -484,8 +485,7 @@ void Tag_GetAndWriteTagsQst (long QstCod)
    if ((NumTags = Tag_DB_GetTagsQst (&mysql_res,QstCod)))
      {
       /***** Write the tags *****/
-      HTM_UL_Begin ("class=\"Tst_TAG_LIST DAT_SMALL_%s\"",
-                    The_GetSuffix ());
+      HTM_UL_Begin ("class=\"Tst_TAG_LIST DAT_SMALL_%s\"",The_GetSuffix ());
 	 for (NumTag = 0;
 	      NumTag < NumTags;
 	      NumTag++)
@@ -499,8 +499,7 @@ void Tag_GetAndWriteTagsQst (long QstCod)
      }
    else
      {
-      HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",
-                      The_GetSuffix ());
+      HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",The_GetSuffix ());
 	 HTM_TxtF ("(%s)",Txt_no_tags);
       HTM_SPAN_End ();
      }

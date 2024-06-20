@@ -353,7 +353,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
@@ -595,8 +595,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
-		                The_GetSuffix (),
-		                The_GetColorRows ());
+		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Exa],
 					 Exams->Lst[NumExam].Checked,
 					 "id=\"Gam%u\" value=\"%ld\"",
@@ -604,16 +603,14 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-		                The_GetSuffix (),
-		                The_GetColorRows ());
+		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumExam);
 			HTM_UnsignedColon (NumExam + 1);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		                The_GetSuffix (),
-		                The_GetColorRows ());
+		                The_GetSuffix (),The_GetColorRows ());
 		     HTM_Txt (Exams->Exam.Title);
 		  HTM_TD_End ();
 
@@ -705,10 +702,10 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
   {
    size_t MaxLength;
    unsigned NumExam;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Allocate memory for subquery of exams selected *****/
-   MaxLength = (size_t) Exams->NumSelected * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   MaxLength = (size_t) Exams->NumSelected * (Cns_MAX_DIGITS_LONG + 1);
    if ((*ExamsSelectedCommas = malloc (MaxLength + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
 
@@ -813,8 +810,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       if (asprintf (&Id,"exa_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_TD_Begin ("id =\"%s\" class=\"LT DAT_%s %s\"",
-			     Id,The_GetSuffix (),
-			     The_GetColorRows ());
+			     Id,The_GetSuffix (),The_GetColorRows ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						Dat_WRITE_TODAY |
@@ -1135,23 +1131,20 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Row title *****/
    HTM_TD_Begin ("colspan=\"3\" class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       HTM_TxtColonNBSP (Txt_Sessions);
       HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
    HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       HTM_Unsigned (NumTotalQsts->All);
    HTM_TD_End ();
 
    /***** Write total number of valid questions *****/
    HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       if (NumTotalQsts->Valid.Total)
 	 HTM_Unsigned (NumTotalQsts->Valid.Total);
       else
@@ -1160,8 +1153,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Write total number of invalid questions *****/
    HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       NumTotalQstsInvalid = NumTotalQsts->All - NumTotalQsts->Valid.Total;
       if (NumTotalQstsInvalid)
 	 HTM_Unsigned (NumTotalQstsInvalid);
@@ -1171,8 +1163,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Write number of correct questions *****/
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       if (NumTotalQsts->Valid.Correct)
 	 HTM_Unsigned (NumTotalQsts->Valid.Correct);
       else
@@ -1181,8 +1172,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Write number of wrong questions *****/
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       if (NumTotalQsts->Valid.Wrong.Negative)
 	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Negative);
       else
@@ -1190,8 +1180,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       if (NumTotalQsts->Valid.Wrong.Zero)
 	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Zero);
       else
@@ -1199,8 +1188,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       if (NumTotalQsts->Valid.Wrong.Positive)
 	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Positive);
       else
@@ -1209,8 +1197,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Write number of blank questions *****/
    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       if (NumTotalQsts->Valid.Blank)
 	 HTM_Unsigned (NumTotalQsts->Valid.Blank);
       else
@@ -1219,8 +1206,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Write total valid score *****/
    HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       HTM_Double2Decimals (TotalScore->Valid);
       HTM_Txt ("/");
       HTM_Unsigned (NumTotalQsts->Valid.Total);
@@ -1228,8 +1214,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Write average valid score per valid question *****/
    HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
 						       (double) NumTotalQsts->Valid.Total :
 						       0.0);
@@ -1238,15 +1223,13 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
    /***** Write total grade *****/
    HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
       HTM_Double2Decimals (TotalGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/
    HTM_TD_Begin ("class=\"DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                 The_GetSuffix (),
-                 The_GetColorRows ());
+                 The_GetSuffix (),The_GetColorRows ());
    HTM_TD_End ();
   }
 
@@ -1608,16 +1591,14 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
       HTM_TR_Begin (NULL);
 
 	 /***** Label *****/
-	 HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",
-	               The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
 	    HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 	 HTM_TD_End ();
 
 	 /***** Time *****/
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LB DAT_%s\"",
-	               Id,The_GetSuffix ());
+	 HTM_TD_Begin ("id=\"%s\" class=\"LB DAT_%s\"",Id,The_GetSuffix ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					  Dat_WRITE_TODAY |
@@ -1977,8 +1958,7 @@ static void ExaRes_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 	 /* Write score retrieved from database */
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE] == Usr_CAN)
 	   {
-	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
-	                   The_GetSuffix ());
+	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Score);
 	       HTM_SPAN_Begin ("class=\"%s_%s\"",
 			       Print->PrintedQuestions[QstInd].StrAnswers[0] ?

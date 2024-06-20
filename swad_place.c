@@ -183,8 +183,7 @@ void Plc_SeeAllPlaces (void)
 
 	    /***** Separation row *****/
 	    HTM_TR_Begin (NULL);
-	       HTM_TD_Begin ("colspan=\"2\" class=\"DAT_%s\"",
-	                     The_GetSuffix ());
+	       HTM_TD_Begin ("colspan=\"2\" class=\"DAT_%s\"",The_GetSuffix ());
 		  HTM_NBSP ();
 	       HTM_TD_End ();
 	    HTM_TR_End ();

@@ -170,8 +170,7 @@ void Dup_ListDuplicateUsrs (void)
 
 		     HTM_TD_Begin ("colspan=\"%u\" class=\"LM DAT_%s %s\"",
 				   Usr_NUM_MAIN_FIELDS_DATA_USR - 2,
-				   The_GetSuffix (),
-				   The_GetColorRows ());
+				   The_GetSuffix (),The_GetColorRows ());
 
 			/* Write number of informants (row[1]) if greater than 1 */
 			if (sscanf (row[1],"%u",&NumInformants) != 1)

@@ -2872,8 +2872,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 	 Lay_HelpPlainEditor ();
 
 	 /***** Attached image (optional) *****/
-	 if (asprintf (&ClassInput,"FOR_MED_INPUT INPUT_%s",
-		       The_GetSuffix ()) < 0)
+	 if (asprintf (&ClassInput,"FOR_MED_INPUT INPUT_%s",The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Med_PutMediaUploader (-1,ClassInput);
 	 free (ClassInput);

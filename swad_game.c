@@ -73,7 +73,7 @@ extern struct Globals Gbl;
 #define Gam_MAX_ANSWERS_PER_QUESTION	10
 
 #define Gam_MAX_SELECTED_QUESTIONS		10000
-#define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
+#define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (Cns_MAX_DIGITS_LONG + 1))
 
 /* Score range [0...max.score]
    will be converted to
@@ -883,7 +883,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
    unsigned NumGame;
    const char *Ptr;
    long GamCod;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Default selected *****/
    Games->NumSelected = 0;
@@ -893,7 +893,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
       return;
 
    /***** Allocate memory for list of games selected *****/
-   MaxSizeListGamCodsSelected = Games->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   MaxSizeListGamCodsSelected = Games->Num * (Cns_MAX_DIGITS_LONG + 1);
    if ((Games->GamCodsSelected = malloc (MaxSizeListGamCodsSelected + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
 
@@ -916,7 +916,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
 	   )
 	{
 	 /* Get next game selected */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 GamCod = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each game in *StrGamCodsSelected as selected */
@@ -1694,7 +1694,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    struct Qst_Question Question;
    unsigned QstInd;
    unsigned MaxQstInd;
-   char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
    bool QuestionExists;
    char *Anchor = NULL;
 
@@ -1825,7 +1825,7 @@ void Gam_AddQstsToGame (void)
    extern const char *Txt_X_questions_have_been_added;
    struct Gam_Games Games;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    long QstCod;
    unsigned MaxQstInd;
    unsigned NumQstsAdded;
@@ -1862,7 +1862,7 @@ void Gam_AddQstsToGame (void)
       while (*Ptr)
 	{
 	 /* Get next code */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
 	    Err_WrongQuestionExit ();
 
@@ -1936,7 +1936,7 @@ void Gam_ReqRemQstFromGame (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    struct Gam_Games Games;
    unsigned QstInd;
-   char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);

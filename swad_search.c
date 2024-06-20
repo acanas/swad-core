@@ -277,9 +277,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
    HTM_INPUT_SEARCH ("Search",Sch_MAX_CHARS_STRING_TO_FIND,Search->Str,
 	             "id=\"%s\" size=\"16\" class=\"INPUT_%s\""
 	             " placeholder=\"%s&hellip;\"",
-		     IdInputText,
-		     The_GetSuffix (),
-		     Txt_Search);
+		     IdInputText,The_GetSuffix (),Txt_Search);
   }
 
 /*****************************************************************************/

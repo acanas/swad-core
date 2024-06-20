@@ -364,8 +364,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
       HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
 		      HTM_REQUIRED,
 		      "id=\"OtherUsrIDNickOrEMail\" size=\"16\""
-		      " class=\"INPUT_%s\"",
-		      The_GetSuffix ());
+		      " class=\"INPUT_%s\"",The_GetSuffix ());
 
       /***** Send button*****/
       Btn_PutConfirmButton (Txt_Continue);
@@ -2257,8 +2256,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		  HTM_TR_Begin (NULL);
 
 		     /***** Number *****/
-		     HTM_TD_Begin ("class=\"RT DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 			HTM_Unsigned (NumReqs - NumReq);
 		     HTM_TD_End ();
 
@@ -2281,8 +2279,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** Number of teachers in the course *****/
-		     HTM_TD_Begin ("class=\"RT DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 			HTM_Unsigned (Enr_GetNumUsrsInCrss (Hie_CRS,Crs.HieCod,
 							    1 << Rol_TCH));
 		     HTM_TD_End ();
@@ -2295,16 +2292,14 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** User name *****/
-		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 			HTM_DIV_Begin ("class=\"REQUESTER_NAME\"");	// Limited width
 			   Usr_WriteFirstNameBRSurnames (&UsrDat);
 			HTM_DIV_End ();
 		     HTM_TD_End ();
 
 		     /***** Requested role (row[3]) *****/
-		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 			HTM_Txt (Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
 		     HTM_TD_End ();
 
@@ -2313,8 +2308,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		                       "DAT",The_GetColorRows ());
 
 		     /***** Button to confirm the request *****/
-		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 			if (!NextAction[DesiredRole])
 			   Err_WrongRoleExit ();
 			Frm_BeginForm (NextAction[DesiredRole]);
@@ -2325,8 +2319,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** Button to reject the request *****/
-		     HTM_TD_Begin ("class=\"LT DAT_%s\"",
-		                   The_GetSuffix ());
+		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 			Frm_BeginForm (ActReqRejSignUp);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);

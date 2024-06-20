@@ -476,7 +476,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
   {
    unsigned NumPositiveCods = 0;
    unsigned NumNegativeCods = 0;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    unsigned NumGrpSel;
    long GrpCod;
    unsigned NumGrpTyp;

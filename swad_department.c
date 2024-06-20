@@ -187,8 +187,7 @@ void Dpt_SeeAllDepts (void)
 
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_%s\"",
-			    Departments.Lst[NumDpt].WWW,
-			    The_GetSuffix ());
+			    Departments.Lst[NumDpt].WWW,The_GetSuffix ());
 		  HTM_Txt (Departments.Lst[NumDpt].FullName);
 	       HTM_A_End ();
 	    HTM_TD_End ();
@@ -200,8 +199,7 @@ void Dpt_SeeAllDepts (void)
 
       /***** Separation row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"3\" class=\"DAT_%s\"",
-	               The_GetSuffix ());
+	 HTM_TD_Begin ("colspan=\"3\" class=\"DAT_%s\"",The_GetSuffix ());
 	    HTM_NBSP ();
 	 HTM_TD_End ();
       HTM_TR_End ();

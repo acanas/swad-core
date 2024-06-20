@@ -89,7 +89,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
    struct Mrk_Properties Marks;
-   char StrHeadOrFoot[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrHeadOrFoot[Cns_MAX_DIGITS_UINT + 1];
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
       HTM_TD_ColouredEmpty (2);
@@ -100,8 +100,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
 						  ActChgNumRowHeaCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
@@ -109,7 +108,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	       // HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
 	       HTM_TxtColon (Txt_TABLE_Header);
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Header);
-	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
+	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "size=\"1\" class=\"LST_EDIT_ROWS LST_EDIT_%s %s\"",
 			       The_GetSuffix (),The_GetColorRows ());
@@ -119,8 +118,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 
       /***** Write the number of rows of footer *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
 						  ActChgNumRowFooCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
@@ -128,7 +126,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	       // HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
 	       HTM_TxtColon (Txt_TABLE_Footer);
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Footer);
-	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
+	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,
 			       "size=\"1\" class=\"LST_EDIT_ROWS LST_EDIT_%s %s\"",
 			       The_GetSuffix (),The_GetColorRows ());
@@ -197,14 +195,14 @@ void Mrk_ChangeNumRowsFooter (void)
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
    extern const char *Txt_The_number_of_rows_is_now_X;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
-   Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+   Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
      {
       /***** Update properties of marks in the database *****/
@@ -653,7 +651,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    char FullPathInTreeFromDBMarksTable[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];
-   char PathMarks[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1 + 3 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1 + PATH_MAX + 1];
+   char PathMarks[PATH_MAX + 1 + Cns_MAX_DIGITS_LONG + 1 + 3 + 1 + Cns_MAX_DIGITS_LONG + 1 + PATH_MAX + 1];
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
    size_t SizeOfMyMarks;

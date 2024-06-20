@@ -81,8 +81,7 @@ static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anc
       FuncPars (Args);
       HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Pars *) Args)->MACstr,
 		      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"8\" class=\"INPUT_%s\"",
-		      The_GetSuffix ());
+		      "size=\"8\" class=\"INPUT_%s\"",The_GetSuffix ());
    Frm_EndForm ();
   }
 

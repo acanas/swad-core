@@ -1305,9 +1305,9 @@ void Usr_WelcomeUsr (void)
 void Usr_CreateBirthdayStrDB (const struct Usr_Data *UsrDat,
                               char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1])
   {
-   char BirthdayStrTmp[1 + Cns_MAX_DECIMAL_DIGITS_UINT +
-                       1 + Cns_MAX_DECIMAL_DIGITS_UINT +
-                       1 + Cns_MAX_DECIMAL_DIGITS_UINT +
+   char BirthdayStrTmp[1 + Cns_MAX_DIGITS_UINT +
+                       1 + Cns_MAX_DIGITS_UINT +
+                       1 + Cns_MAX_DIGITS_UINT +
                        1 + 1];
 
    if (UsrDat->Birthday.Year  == 0 ||
@@ -1384,8 +1384,7 @@ void Usr_WriteLoggedUsrHead (void)
 	}
       else
 	{
-	 if (asprintf (&ClassSelect,"SEL_ROLE INPUT_%s",
-	               The_GetSuffix ()) < 0)
+	 if (asprintf (&ClassSelect,"SEL_ROLE INPUT_%s",The_GetSuffix ()) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Rol_PutFormToChangeMyRole (ClassSelect);
 	 free (ClassSelect);
@@ -2071,8 +2070,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	    HTM_TxtColonNBSP (Txt_Role);
 	 HTM_SPAN_End ();
 
-	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",
-	                 The_GetSuffix ());
+	 HTM_SPAN_Begin ("class=\"DAT_STRONG_%s BOLD\"",The_GetSuffix ());
 	    HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	 HTM_SPAN_End ();
 	}
@@ -2080,8 +2078,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	{
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_TxtColonNBSP (Txt_Role);
-	    if (asprintf (&ClassSelect,"INPUT_%s",
-			  The_GetSuffix ()) < 0)
+	    if (asprintf (&ClassSelect,"INPUT_%s",The_GetSuffix ()) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Rol_PutFormToChangeMyRole (ClassSelect);
 	    free (ClassSelect);
@@ -2198,8 +2195,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 	 HTM_TD_Begin ("class=\"BM %s_%s %s\" title=\"%s\"",
 		       UsrDat->Accepted ? "USR_LIST_NUM_N" :
 					  "USR_LIST_NUM",
-		       The_GetSuffix (),
-		       BgColor,
+		       The_GetSuffix (),BgColor,
 		       UsrDat->Accepted ? Txt_Enrolment_confirmed :
 					  Txt_Enrolment_not_confirmed);
       HTM_Txt (UsrDat->Accepted ? "&check;" :
@@ -2210,8 +2206,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       HTM_TD_Begin ("class=\"%s_%s RM %s\"",
 		    UsrDat->Accepted ? "USR_LIST_NUM_N" :
 				       "USR_LIST_NUM",
-		    The_GetSuffix (),
-		    BgColor);
+		    The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
@@ -2228,8 +2223,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_GetSuffix (),
-		    BgColor);
+		    The_GetSuffix (),BgColor);
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
@@ -2278,8 +2272,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
 
       /****** Write user's ID ******/
       HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
-                    The_GetSuffix (),
-                    The_GetColorRows ());
+                    The_GetSuffix (),The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2375,8 +2368,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2485,8 +2477,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2497,8 +2488,8 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
-			Ins.FullName,
-			NULL,true,UsrDat->Accepted);
+			Ins.FullName,NULL,
+			true,UsrDat->Accepted);
 
       /***** Write the rest of teacher's data *****/
       if (ShowData && UsrDat->Tch.CtrCod > 0)
@@ -2552,8 +2543,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
 
       /***** Write number of user *****/
       HTM_TD_Begin ("class=\"CM USR_LIST_NUM_N_%s %s\"",
-		    The_GetSuffix (),
-                    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
@@ -2570,8 +2560,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
       HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
 			               "DAT_SMALL",
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2654,8 +2643,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 				        "DAT_SMALL_STRONG") :
 			    (NonBreak ? "DAT_SMALL_NOBR" :
 				        "DAT_SMALL"),
-		 The_GetSuffix (),
-		 BgColor);
+		 The_GetSuffix (),BgColor);
 
       /***** Container to limit length *****/
       HTM_DIV_Begin ("class=\"USR_DAT\"");
@@ -3377,7 +3365,7 @@ bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToF
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,EncryptedUsrCod,
-	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	                                  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
 	    return true;        // Found!
 	}
@@ -3399,7 +3387,7 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_Selecte
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
          return true;
@@ -3422,7 +3410,7 @@ unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUs
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
          NumUsrs++;
@@ -3501,7 +3489,7 @@ void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
 	NumUsr++)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       (*LstSelectedUsrCods)[NumUsr] = UsrDat.UsrCod;
      }
@@ -3525,12 +3513,12 @@ void Usr_CreateSubqueryUsrCods (long *LstSelectedUsrCods,
 				unsigned NumUsrsInList,
 				char **UsrsSubQuery)
   {
-   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char SubQueryOneUsr[1 + Cns_MAX_DIGITS_LONG + 1];
    unsigned NumUsr;
    size_t MaxLength;
 
    /***** Allocate space for subquery *****/
-   MaxLength = (size_t) NumUsrsInList * (size_t) (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
+   MaxLength = (size_t) NumUsrsInList * (size_t) (1 + Cns_MAX_DIGITS_LONG);
    if ((*UsrsSubQuery = malloc (MaxLength + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
    (*UsrsSubQuery)[0] = '\0';
@@ -3981,23 +3969,23 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
                                          bool UsrIsTheMsgSender,
 					 struct Usr_SelectedUsrs *SelectedUsrs)
   {
-   HTM_Attributes_t Checked;
+   HTM_Attributes_t Attributes;
    char *ParName;
 
    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
      {
       /***** Check box must be checked? *****/
       if (UsrIsTheMsgSender)
-	 Checked = HTM_CHECKED;
+	 Attributes = HTM_CHECKED;
       else
 	 /* Check if user is in lists of selected users */
-	 Checked = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,SelectedUsrs) ? HTM_CHECKED :
-												HTM_NO_ATTR;
+	 Attributes = Usr_FindEncUsrCodInListOfSelectedEncUsrCods (EncryptedUsrCod,SelectedUsrs) ? HTM_CHECKED :
+												   HTM_NO_ATTR;
 
       /***** Check box *****/
       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
       HTM_INPUT_CHECKBOX (ParName,
-			  Checked,
+			  Attributes,
 			  "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
 			  EncryptedUsrCod,Usr_NameSelUnsel[Role]);
       free (ParName);
@@ -4020,7 +4008,8 @@ static void Usr_PutCheckboxListWithPhotos (void)
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_CHECKBOX ("WithPhotos",
 			  (Gbl.Usrs.Listing.WithPhotos ? HTM_CHECKED :
-							 HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+							 HTM_NO_ATTR) |
+			  HTM_SUBMIT_ON_CHANGE,
 			  "value=\"Y\"");
       HTM_Txt (Txt_Display_photos);
    HTM_LABEL_End ();
@@ -5055,8 +5044,7 @@ void Usr_SeeGuests (void)
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActLstGst);
 	       Set_PutParsPrefsAboutUsrList ();
-	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                        The_GetSuffix ());
+	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		  HTM_TxtColonNBSP (Txt_Scope);
 		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	       HTM_LABEL_End ();
@@ -5199,8 +5187,7 @@ void Usr_SeeStudents (void)
 	    HTM_DIV_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActLstStd);
 		  Set_PutParsPrefsAboutUsrList ();
-		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-		                   The_GetSuffix ());
+		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 		     HTM_TxtColonNBSP (Txt_Scope);
 		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 		  HTM_LABEL_End ();
@@ -5371,8 +5358,7 @@ void Usr_SeeTeachers (void)
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstTch);
 	    Set_PutParsPrefsAboutUsrList ();
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-	                     The_GetSuffix ());
+	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
 	    HTM_LABEL_End ();
@@ -6214,7 +6200,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
   {
    char PathAboveUsr[PATH_MAX + 1];
-   char PathUsrTmp[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char PathUsrTmp[PATH_MAX + 1 + Cns_MAX_DIGITS_LONG + 1];
 
    /***** Path for users *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_USR_PRIVATE);

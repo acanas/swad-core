@@ -963,8 +963,7 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,
 			    HTM_REQUIRED,
-			    "size=\"20\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    "size=\"20\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 HTM_TD_Empty (1);

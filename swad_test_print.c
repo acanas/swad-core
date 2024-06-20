@@ -347,7 +347,7 @@ static void TstPrn_WriteIntAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
@@ -364,7 +364,7 @@ static void TstPrn_WriteFltAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
@@ -416,8 +416,8 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    HTM_Attributes_t UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-   char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
+   char Id[3 + Cns_MAX_DIGITS_UINT + 1 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x_yy...y"
 
    /***** Change format of answers text *****/
    Qst_ChangeFormatAnswersText (Question);
@@ -503,7 +503,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       __attribute__((unused)) struct Qst_Question *Question)
   {
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write input field for the answer *****/
    snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
@@ -718,7 +718,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
 void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
   {
    unsigned QstInd;
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+   char StrAns[3 + Cns_MAX_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Loop for every question getting user's answers *****/
    for (QstInd = 0;
@@ -1066,14 +1066,14 @@ void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES
   {
    unsigned NumOpt;
    const char *Ptr;
-   char StrOneIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrOneIndex[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Get indexes from string *****/
    for (NumOpt = 0, Ptr = StrIndexesOneQst;
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
-      Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilComma (&Ptr,StrOneIndex,Cns_MAX_DIGITS_UINT);
 
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
 	 Err_WrongAnswerIndexExit ();
@@ -1098,7 +1098,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
   {
    unsigned NumOpt;
    const char *Ptr;
-   char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrOneAnswer[Cns_MAX_DIGITS_UINT + 1];
    unsigned AnsUsr;
 
    /***** Initialize all answers to unchecked *****/
@@ -1112,7 +1112,7 @@ void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS
 	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
-      Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Par_GetNextStrUntilComma (&Ptr,StrOneAnswer,Cns_MAX_DIGITS_UINT);
 
       if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
 	 Err_WrongAnswerExit ();
@@ -1804,7 +1804,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+					  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,

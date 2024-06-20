@@ -1089,11 +1089,10 @@ static void Lay_WritePageTopHeading (void)
 	 HTM_DIV_End ();
 
 	 /* 2nd. row, 3rd. column */
-	 HTM_DIV_Begin ("id=\"msg\" class=\"NOTIF_%s\"",	// Used for AJAX based refresh
-	                The_GetSuffix ());
+	 HTM_DIV_Begin ("id=\"msg\" class=\"NOTIF_%s\"",The_GetSuffix ());	// Used for AJAX based refresh
 	    if (Gbl.Usrs.Me.Logged)
 	       Ntf_WriteNumberOfNewNtfs ();
-	 HTM_DIV_End ();					// Used for AJAX based refresh
+	 HTM_DIV_End ();							// Used for AJAX based refresh
 
       /* End 2nd. row */
       HTM_DIV_End ();

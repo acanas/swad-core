@@ -58,8 +58,8 @@ unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES] =
   };
 const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES] =
   {
-   [Nam_SHRT_NAME] = "Frm_C2_INPUT",
-   [Nam_FULL_NAME] = "Frm_C2_INPUT",
+   [Nam_SHRT_NAME] = "INPUT_SHRT_NAME",
+   [Nam_FULL_NAME] = "INPUT_FULL_NAME",
   };
 
 /*****************************************************************************/

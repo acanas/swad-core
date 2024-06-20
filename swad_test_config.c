@@ -155,7 +155,7 @@ static void TstCfg_ShowFormConfig (void)
    extern const char *Txt_Save_changes;
    struct Qst_Questions Questions;
    TstCfg_Pluggable_t Pluggable;
-   char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
+   char StrMinTimeNxtTstPerQst[Cns_MAX_DIGITS_ULONG + 1];
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -217,7 +217,7 @@ static void TstCfg_ShowFormConfig (void)
 	       HTM_TD_Begin ("class=\"LB\"");
 		  snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
 			    TstCfg_GetConfigMinTimeNxtTstPerQst ());
-		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,
+		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DIGITS_ULONG,
 				  StrMinTimeNxtTstPerQst,
 				  HTM_REQUIRED,
 				  "id=\"MinTimeNxtTstPerQst\" size=\"7\""
@@ -256,20 +256,19 @@ static void TstCfg_ShowFormConfig (void)
 static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
                                          unsigned Value)
   {
-   char StrValue[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrValue[Cns_MAX_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-	 HTM_LABEL_Begin ("for=\"%s\" class=\"DAT_%s\"",
-	                  Field,The_GetSuffix ());
+	 HTM_LABEL_Begin ("for=\"%s\" class=\"DAT_%s\"",Field,The_GetSuffix ());
 	    HTM_Txt (Label);
 	 HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
 	 snprintf (StrValue,sizeof (StrValue),"%u",Value);
-	 HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
+	 HTM_INPUT_TEXT (Field,Cns_MAX_DIGITS_UINT,StrValue,
 			 HTM_REQUIRED,
 			 "id=\"%s\" size=\"3\" class=\"INPUT_%s\"",
 			 Field,The_GetSuffix ());

@@ -613,8 +613,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Gam_Games *Games,
       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
 		    Id,
 		    Dat_TimeStatusClass[TimeStatus[Match->Status.Showing]][Games->Game.HiddenOrVisible],
-		    The_GetSuffix (),
-		    The_GetColorRows ());
+		    The_GetSuffix (),The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -1500,7 +1499,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    unsigned NumAnss;
    unsigned NumAns;
    unsigned AnsInd;
-   char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrOneAnswer[Cns_MAX_DIGITS_UINT + 1];
    char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/
@@ -2597,8 +2596,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
    extern const char *Txt_View_results;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS DAT_%s\"",
-                  The_GetSuffix ());
+   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS DAT_%s\"",The_GetSuffix ());
 
       /***** Begin form *****/
       Frm_BeginForm (ActChgVisResMchQst);

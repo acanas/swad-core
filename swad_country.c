@@ -156,16 +156,14 @@ void Cty_SeeCtyWithPendingInss (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Country map */
-	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",The_GetSuffix (),BgColor);
 		  Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
 						     "COUNTRY_MAP_SMALL");
 	       HTM_TD_End ();
 
 	       /* Number of pending institutions (row[1]) */
-	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -241,8 +239,7 @@ void Cty_ListCountries2 (void)
 
 	 /***** Separation row *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"8\" class=\"CM DAT_%s\"",
-			  The_GetSuffix ());
+	    HTM_TD_Begin ("colspan=\"8\" class=\"CM DAT_%s\"",The_GetSuffix ());
 	       HTM_NBSP ();
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -394,60 +391,52 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
    HTM_TR_Begin (NULL);
 
       /***** Number of country in this list *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 	 HTM_Unsigned (NumCty);
       HTM_TD_End ();
 
       /***** Country map (and link to WWW if exists) *****/
-      HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
 	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this country *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,Cty));
       HTM_TD_End ();
 
       /***** Number of institutions *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of centers *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTY,	// ...in country
 						      Cty->HieCod));
       HTM_TD_End ();
 
       /***** Number of users in courses *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-                    The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,Cty->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -1384,7 +1373,7 @@ static void Cty_PutFormToCreateCountry (void)
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t Lan;
-   char StrCtyCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char StrCtyCod[Cns_MAX_DIGITS_LONG + 1];
    char StrName[32];
 
    /***** Begin form to create *****/
@@ -1407,16 +1396,14 @@ static void Cty_PutFormToCreateCountry (void)
 	       StrCtyCod[0] = '\0';
 	    HTM_INPUT_TEXT (Par_CodeStr[ParCod_OthCty],3,StrCtyCod,
 			    HTM_REQUIRED,
-			    "size=\"3\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    "size=\"3\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
 	 HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
 	    HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->ShrtName,
 			    HTM_REQUIRED,
-			    "size=\"2\" class=\"INPUT_%s\"",
-			    The_GetSuffix ());
+			    "size=\"2\" class=\"INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
 	 HTM_TD_Empty (3);

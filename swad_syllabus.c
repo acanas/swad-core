@@ -607,8 +607,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    /***** Code of the item *****/
 	    HTM_TD_Begin ("class=\"RT %s_%s %s\" style=\"width:%dpx;\"",
 			  ClassSyllabus[Level],The_GetSuffix (),
-			  The_GetColorRows (),
-			  Level * Syl_WIDTH_NUM_SYLLABUS);
+			  The_GetColorRows (),Level * Syl_WIDTH_NUM_SYLLABUS);
 	       if (Level == 1)
 		  HTM_NBSP ();
 	       HTM_TxtF ("%s&nbsp;",StrItemCod);
@@ -848,7 +847,7 @@ static void Syl_PutParsSyllabus (void *Syllabus)
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
   {
    int N;
-   char InStr[Cns_MAX_DECIMAL_DIGITS_INT + 1];
+   char InStr[Cns_MAX_DIGITS_INT + 1];
 
    if (StrDst)
       StrDst[0] = '\0';

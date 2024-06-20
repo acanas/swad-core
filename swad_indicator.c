@@ -305,7 +305,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
   {
    unsigned Ind;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    long Indicator;
 
    /***** Get parameter multiple with list of indicators selected *****/
@@ -326,7 +326,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
 	   )
 	{
 	 /* Get next indicator selected */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 Indicator = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each indicator in list StrIndicatorsSelected as selected */
@@ -513,8 +513,7 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	 HTM_TD_LINE_TOP_Txt (Txt_Total);
 	 HTM_TD_LINE_TOP_Unsigned (NumCrss);
 
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",
-	               The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP\"",The_GetSuffix ());
 	    HTM_TxtF ("(%.1f%%)",100.0);
 	 HTM_TD_End ();
 
@@ -711,8 +710,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
@@ -720,8 +718,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
@@ -729,14 +726,12 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
-				      The_GetSuffix (),
-			              The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
@@ -748,77 +743,66 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-			              The_GetSuffix (),
-				      The_GetColorRows ());
+			              The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -839,8 +823,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
@@ -848,8 +831,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
@@ -857,14 +839,12 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
-				      The_GetSuffix (),
-			              The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
@@ -875,16 +855,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      NumTchs ? "DAT_SMALL_GREEN" :
 						"DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (NumTchs);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      NumStds ? "DAT_SMALL_GREEN" :
 						"DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (NumStds);
 			HTM_TD_End ();
 
@@ -892,21 +870,18 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -914,37 +889,32 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 				      (IndicatorsCrs.SyllabusLecSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										   "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 				      (IndicatorsCrs.SyllabusPraSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										   "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										     "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -952,37 +922,32 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      IndicatorsCrs.NumAssignments ? "DAT_SMALL_GREEN" :
 								     "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumAssignments);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      IndicatorsCrs.NumFilesAssignments ? "DAT_SMALL_GREEN" :
 									  "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesAssignments);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      IndicatorsCrs.NumFilesWorks ? "DAT_SMALL_GREEN" :
 								    "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesWorks);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -990,37 +955,32 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"RM %s_%s %s RM\"",
 				      IndicatorsCrs.NumThreads ? "DAT_SMALL_GREEN" :
 								 "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumThreads);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      IndicatorsCrs.NumPosts ? "DAT_SMALL_GREEN" :
 							       "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumPosts);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      IndicatorsCrs.NumMsgsSentByTchs ? "DAT_SMALL_GREEN" :
 									"DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumMsgsSentByTchs);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -1028,29 +988,25 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      IndicatorsCrs.NumFilesInDocumentZones ? "DAT_SMALL_GREEN" :
 									      "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInDocumentZones);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"RM %s_%s %s\"",
 				      IndicatorsCrs.NumFilesInSharedZones ? "DAT_SMALL_GREEN" :
 									    "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInSharedZones);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_GREEN_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"CM DAT_SMALL_RED_%s %s\"",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -1058,16 +1014,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 				      (IndicatorsCrs.AssessmentSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										  "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM %s_%s %s\"",
 				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										     "DAT_SMALL_RED",
-				      The_GetSuffix (),
-				      The_GetColorRows ());
+				      The_GetSuffix (),The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();
 

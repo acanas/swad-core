@@ -893,9 +893,7 @@ static void RubCri_ListOneOrMoreCriteriaInProject (struct Prj_Projects *Projects
 
 	 /***** Weighted score *****/
          RubCri_WriteTxt ("=");
-	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-		       The_GetSuffix (),
-		       The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
 	    WeightedScore = CriterionScore * Criterion.Weight;
 	    HTM_Double2Decimals (WeightedScore);
 	 HTM_TD_End ();

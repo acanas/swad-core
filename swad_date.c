@@ -900,7 +900,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool TZNameIsUsable = false;
-   char IntStr[Cns_MAX_DECIMAL_DIGITS_INT + 1];
+   char IntStr[Cns_MAX_DIGITS_INT + 1];
    int ClientUTCMinusLocal;	// Time difference between UTC time and client local time, in minutes
 
    /***** 1. Get client time zone name *****/
@@ -936,7 +936,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
       // We get client TZ difference using JavaScript getTimezoneOffset() method
       // getTimezoneOffset() returns UTC-time - browser-local-time, in minutes.
       // For example, if browser time zone is GMT+2, -120 will be returned.
-      Par_GetParText ("BrowserTZDiff",IntStr,Cns_MAX_DECIMAL_DIGITS_INT);
+      Par_GetParText ("BrowserTZDiff",IntStr,Cns_MAX_DIGITS_INT);
       if (sscanf (IntStr,"%d",&ClientUTCMinusLocal) != 1)
 	 ClientUTCMinusLocal = 0;
 

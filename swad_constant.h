@@ -78,19 +78,19 @@ so that all calculations should be performed by the preprocessor with integers.
 
 #define LOG2_x_2_11 616	// log10(2) * 2^11
 
-#define Cns_MAX_DECIMAL_DIGITS_UCHAR		(((sizeof (unsigned char     ) * LOG2_x_2_11) >> 8) + 1)
-#define Cns_MAX_DECIMAL_DIGITS_USHORT		(((sizeof (unsigned short    ) * LOG2_x_2_11) >> 8) + 1)
-#define Cns_MAX_DECIMAL_DIGITS_UINT		(((sizeof (unsigned int      ) * LOG2_x_2_11) >> 8) + 1)
-#define Cns_MAX_DECIMAL_DIGITS_ULONG		(((sizeof (unsigned long     ) * LOG2_x_2_11) >> 8) + 1)
-#define Cns_MAX_DECIMAL_DIGITS_ULONGLONG	(((sizeof (unsigned long long) * LOG2_x_2_11) >> 8) + 1)
-#define Cns_MAX_DECIMAL_DIGITS_UINT128		(((sizeof (unsigned __int128 ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DIGITS_UCHAR		(((sizeof (unsigned char     ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DIGITS_USHORT		(((sizeof (unsigned short    ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DIGITS_UINT		(((sizeof (unsigned int      ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DIGITS_ULONG		(((sizeof (unsigned long     ) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DIGITS_ULONGLONG	(((sizeof (unsigned long long) * LOG2_x_2_11) >> 8) + 1)
+#define Cns_MAX_DIGITS_UINT128		(((sizeof (unsigned __int128 ) * LOG2_x_2_11) >> 8) + 1)
 
-#define Cns_MAX_DECIMAL_DIGITS_CHAR		(1 + Cns_MAX_DECIMAL_DIGITS_UCHAR    )
-#define Cns_MAX_DECIMAL_DIGITS_SHORT		(1 + Cns_MAX_DECIMAL_DIGITS_USHORT   )
-#define Cns_MAX_DECIMAL_DIGITS_INT		(1 + Cns_MAX_DECIMAL_DIGITS_UINT     )
-#define Cns_MAX_DECIMAL_DIGITS_LONG		(1 + Cns_MAX_DECIMAL_DIGITS_ULONG    )
-#define Cns_MAX_DECIMAL_DIGITS_LONGLONG		(1 + Cns_MAX_DECIMAL_DIGITS_ULONGLONG)
-#define Cns_MAX_DECIMAL_DIGITS_INT128		(1 + Cns_MAX_DECIMAL_DIGITS_UINT128  )
+#define Cns_MAX_DIGITS_CHAR		(1 + Cns_MAX_DIGITS_UCHAR    )
+#define Cns_MAX_DIGITS_SHORT		(1 + Cns_MAX_DIGITS_USHORT   )
+#define Cns_MAX_DIGITS_INT		(1 + Cns_MAX_DIGITS_UINT     )
+#define Cns_MAX_DIGITS_LONG		(1 + Cns_MAX_DIGITS_ULONG    )
+#define Cns_MAX_DIGITS_LONGLONG		(1 + Cns_MAX_DIGITS_ULONGLONG)
+#define Cns_MAX_DIGITS_INT128		(1 + Cns_MAX_DIGITS_UINT128  )
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

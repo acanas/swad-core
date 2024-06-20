@@ -811,10 +811,10 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
    unsigned NumExam;
    const char *Ptr;
    long ExaCod;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Allocate memory for list of exams selected *****/
-   MaxSizeListExaCodsSelected = Exams->Num * (Cns_MAX_DECIMAL_DIGITS_LONG + 1);
+   MaxSizeListExaCodsSelected = Exams->Num * (Cns_MAX_DIGITS_LONG + 1);
    if ((Exams->ExaCodsSelected = malloc (MaxSizeListExaCodsSelected + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
 
@@ -838,7 +838,7 @@ void Exa_GetListSelectedExaCods (struct Exa_Exams *Exams)
 	   )
 	{
 	 /* Get next exam selected */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 ExaCod = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each exam in *StrExaCodsSelected as selected */

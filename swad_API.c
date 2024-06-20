@@ -2039,7 +2039,7 @@ int swad__sendMyGroups (struct soap *soap,
    int ReturnCode;
    struct ListCodGrps LstGrpsIWant;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    unsigned NumGrps;
    unsigned NumGrp;
    MYSQL_RES *mysql_res;
@@ -2092,7 +2092,7 @@ int swad__sendMyGroups (struct soap *soap,
       for (NumGrp = 0, Ptr = myGroups;
 	   *Ptr;
 	   NumGrp++)
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
       LstGrpsIWant.NumGrps = NumGrp;
 
       if (LstGrpsIWant.NumGrps)	// If I have selected groups...
@@ -2106,7 +2106,7 @@ int swad__sendMyGroups (struct soap *soap,
               NumGrp++)
 	   {
 	    /* Find next string in text until comma (leading and trailing spaces are removed) */
-            Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+            Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	    LstGrpsIWant.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	   }
         }
@@ -2390,7 +2390,7 @@ static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
    long NumGrps;
    long NumGrp;
    long GrpCod;
-   char GrpCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char GrpCodStr[Cns_MAX_DIGITS_LONG + 1];
    size_t Length;
 
    /***** Get list of groups *****/
@@ -2599,14 +2599,14 @@ int swad__removeAttendanceEvent (struct soap *soap,
 static void API_GetLstGrpsSel (const char *Groups)
   {
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    unsigned NumGrp;
 
    /***** Count number of groups *****/
    for (Ptr = Groups, NumGrp = 0;
 	*Ptr;
 	NumGrp++)
-      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
    Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
    /***** Create a list of groups selected *****/
@@ -2623,7 +2623,7 @@ static void API_GetLstGrpsSel (const char *Groups)
 	   *Ptr;
 	   )
 	{
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	 if (Grp_DB_CheckIfGrpBelongsToCrs (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.Hierarchy.Node[Hie_CRS].HieCod))
 	    NumGrp++;
@@ -3110,7 +3110,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
   {
    int ReturnCode;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    unsigned NumNtf;
    unsigned NumNtfsMarkedAsRead = 0;
    long NtfCod;
@@ -3143,7 +3143,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 	   NumNtf++)
 	{
 	 /* Find next string in text until comma (leading and trailing spaces are removed) */
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
          if ((NtfCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
            {
 	    /***** Mark notification as read in the database *****/
@@ -3815,9 +3815,9 @@ int swad__getTrivialQuestion (struct soap *soap,
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    int ReturnCode;
    const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1];
-   char DegStr[ 1 + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1 + 1];
+   char DegStr[ 1 + 1 + Cns_MAX_DIGITS_LONG + 1 + 1];
    //   DegStr=",   '   - number '  \0"
    long DegCod;
    bool FirstDegree = true;
@@ -3855,7 +3855,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
 
       /* Check if degree code from string is a valid code */
       if (sscanf (LongStr,"%ld",&DegCod) == 1)	// Degree code
@@ -4535,13 +4535,13 @@ static void API_GetListGrpsInMatchFromDB (struct soap *soap,
    long NumGrps;
    long NumGrp;
    long GrpCod;
-   char GrpCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char GrpCodStr[Cns_MAX_DIGITS_LONG + 1];
    size_t Length;
 
    /***** Get list of groups *****/
    if ((NumGrps = Mch_DB_GetGrpCodsAssociatedToMatch (&mysql_res,MchCod)))	// Groups found
      {
-      Length = NumGrps * (Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
+      Length = NumGrps * (Cns_MAX_DIGITS_LONG + 1) - 1;
       *ListGroups = soap_malloc (soap,Length + 1);
       (*ListGroups)[0] = '\0';
 

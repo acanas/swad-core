@@ -1227,10 +1227,8 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	    HTM_TR_Begin (NULL);
 	       MeOrOther = Usr_ItsMe (UsrDat.UsrCod);
 	       Prf_ShowUsrInRanking (&UsrDat,Rank,MeOrOther);
-	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-			     Class[MeOrOther],
-		             The_GetSuffix (),
-			     The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",Class[MeOrOther],
+		             The_GetSuffix (),The_GetColorRows ());
 		  HTM_Long (Figure);
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -1301,8 +1299,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	       MeOrOther = Usr_ItsMe (UsrDat.UsrCod);
 	       Prf_ShowUsrInRanking (&UsrDat,Rank,MeOrOther);
 	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",Class[MeOrOther],
-			     The_GetSuffix (),
-			     The_GetColorRows ());
+			     The_GetSuffix (),The_GetColorRows ());
 		  HTM_DoubleFewDigits (NumClicksPerDay);
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -1341,9 +1338,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
    Usr_Can_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
 
    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-		 Class[MeOrOther],
-		 The_GetSuffix (),
-                 The_GetColorRows ());
+		 Class[MeOrOther],The_GetSuffix (),The_GetColorRows ());
       HTM_TxtF ("#%u",Rank);
    HTM_TD_End ();
 
@@ -1357,9 +1352,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 
    /***** Put form to go to public profile *****/
    HTM_TD_Begin ("class=\"RANK_USR %s_%s %s\"",	// Limited width
-                 Class[MeOrOther],
-	         The_GetSuffix (),
-                 The_GetColorRows ());
+                 Class[MeOrOther],The_GetSuffix (),The_GetColorRows ());
       if (ICanView == Usr_CAN)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);

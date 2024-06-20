@@ -389,8 +389,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
 	}
 
       /***** Text *****/
-      HTM_DIV_Begin ("class=\"FORM_OUT_%s%s\"",
-                     The_GetSuffix (),
+      HTM_DIV_Begin ("class=\"FORM_OUT_%s%s\"",The_GetSuffix (),
 		     (Gbl.Action.Act == Action) ? " BOLD" :
 						  "");
 	 if (NumUsrs)
@@ -921,7 +920,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
@@ -969,7 +968,7 @@ void Fol_FollowUsrs ()
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
@@ -1018,7 +1017,7 @@ void Fol_UnfollowUsrs (void)
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database

@@ -620,8 +620,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	 /***** Write help text *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("colspan=\"2\" class=\"CM DAT_%s\"",
-	                  The_GetSuffix ());
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM DAT_%s\"",The_GetSuffix ());
 	       Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
 	    HTM_TD_End ();
 
@@ -645,8 +644,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 						               "",	// Show the most recent ID
 				  HTM_NO_ATTR,
 				  "id=\"NewID\" class=\"Frm_C2_INPUT INPUT_%s\""
-				  " size=\"16\"",
-				  The_GetSuffix ());
+				  " size=\"16\"",The_GetSuffix ());
 		  HTM_BR ();
 		  Btn_PutCreateButtonInline (Txt_Add_this_ID);
 	       Frm_EndForm ();

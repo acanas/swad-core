@@ -408,8 +408,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,
 	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
-	                             The_GetSuffix (),
-	                             ClassTxt,The_GetSuffix ());
+	                             The_GetSuffix (),ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (1);
 	    HTM_BUTTON_End ();
 	    free (Title);
@@ -529,8 +528,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,
 	                             "class=\"BT_LINK PAG PAG_%s %s_%s\"",
-	                             The_GetSuffix (),
-	                             ClassTxt,The_GetSuffix ());
+	                             The_GetSuffix (),ClassTxt,The_GetSuffix ());
 	       HTM_Unsigned (Pagination->LeftPage);
 	    HTM_BUTTON_End ();
 	    free (Title);

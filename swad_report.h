@@ -36,8 +36,8 @@
 
 struct Rep_CurrentTimeUTC
   {
-   char StrDate[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 2016-10-02
-   char StrTime[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 19:03:49
+   char StrDate[3 * (Cns_MAX_DIGITS_INT + 1)];	// Example: 2016-10-02
+   char StrTime[3 * (Cns_MAX_DIGITS_INT + 1)];	// Example: 19:03:49
    unsigned Date;		// Example: 20161002
    unsigned Time;		// Example: 190349
   };

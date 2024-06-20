@@ -175,8 +175,7 @@ void HieCfg_WWW (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm,
 	       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_FULL\"");
 		  if (ViewType == Vie_VIEW)
 		     HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-				  " class=\"DAT_%s\"",
-				  WWW,The_GetSuffix ());
+				  " class=\"DAT_%s\"",WWW,The_GetSuffix ());
 		  HTM_Txt (WWW);
 		  if (ViewType == Vie_VIEW)
 		     HTM_A_End ();
@@ -218,22 +217,17 @@ void HieCfg_Shortcut (Vie_ViewType_t ViewType,ParCod_Param_t ParCode,long HieCod
 	   {
 	    if (ParCode == ParCod_None)
 	       HTM_A_Begin ("href=\"%s/\" target=\"_blank\" class=\"DAT_%s\"",
-			    Cfg_URL_SWAD_CGI,
-			    The_GetSuffix ());
+			    Cfg_URL_SWAD_CGI,The_GetSuffix ());
 	    else
 	       HTM_A_Begin ("href=\"%s/?%s=%ld\" target=\"_blank\""
 			    " class=\"DAT_%s\"",
 			    Cfg_URL_SWAD_CGI,
-			    Par_CodeStr[ParCode],HieCod,
-			    The_GetSuffix ());
+			    Par_CodeStr[ParCode],HieCod,The_GetSuffix ());
 	   }
 	 if (ParCode == ParCod_None)
-	    HTM_TxtF ("%s/",
-		      Cfg_URL_SWAD_CGI);
+	    HTM_TxtF ("%s/",Cfg_URL_SWAD_CGI);
 	 else
-	    HTM_TxtF ("%s/?%s=%ld",
-		      Cfg_URL_SWAD_CGI,
-		      Par_CodeStr[ParCode],HieCod);
+	    HTM_TxtF ("%s/?%s=%ld",Cfg_URL_SWAD_CGI,Par_CodeStr[ParCode],HieCod);
 	 if (ViewType == Vie_VIEW)
 	    HTM_A_End ();
       HTM_TD_End ();

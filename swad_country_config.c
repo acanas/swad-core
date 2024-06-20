@@ -230,8 +230,7 @@ static void CtyCfg_Title (Hie_PutLink_t PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
 		      Gbl.Hierarchy.Node[Hie_CTY].WWW,
-		      Gbl.Hierarchy.Node[Hie_CTY].FullName,
-		      The_GetSuffix ());
+		      Gbl.Hierarchy.Node[Hie_CTY].FullName,The_GetSuffix ());
 
       /* Country name */
       HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
@@ -420,8 +419,7 @@ static void CtyCfg_Name (Hie_PutLink_t PutLink)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (PutLink == Hie_PUT_LINK)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_STRONG_%s\"",
-			 Gbl.Hierarchy.Node[Hie_CTY].WWW,
-			 The_GetSuffix ());
+			 Gbl.Hierarchy.Node[Hie_CTY].WWW,The_GetSuffix ());
 	 HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
 	 if (PutLink == Hie_PUT_LINK)
 	    HTM_A_End ();

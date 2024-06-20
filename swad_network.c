@@ -376,8 +376,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"LM DAT_%s\"",
-	                     The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	          Ico_PutIcon (Net_WebsAndSocialNetworksIcons[Web],Ico_BLACK,
 	                       Net_WebsAndSocialNetworksTitle[Web],"ICOx16");
 	          HTM_NBSPTxt (Net_WebsAndSocialNetworksTitle[Web]);

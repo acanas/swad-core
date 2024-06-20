@@ -310,7 +310,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
-   // char StrWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
+   // char StrWidth[Cns_MAX_DIGITS_UINT + 2 + 1];
    struct Not_Notice Notice;
    unsigned NumNot;
    unsigned NumNotices = 0;	// Initialized to avoid warning
@@ -566,8 +566,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Write the date */
       UniqueId++;
-      HTM_DIV_Begin ("class=\"NOTICE_DATE NOTICE_DATE_%s RT\"",
-                     The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"NOTICE_DATE NOTICE_DATE_%s RT\"",The_GetSuffix ());
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	   {
 	    /* Form to view full notice */
@@ -611,15 +610,13 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	}
       else
 	{
-         HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",
-                        The_GetSuffix ());
+         HTM_DIV_Begin ("class=\"NOTICE_TEXT NOTICE_TEXT_%s\"",The_GetSuffix ());
             HTM_Txt (Notice->Content);
 	 HTM_DIV_End ();
 	}
 
       /***** Write the author *****/
-      HTM_DIV_Begin ("class=\"NOTICE_AUTHOR NOTICE_AUTHOR_%s\"",	// Limited width
-                     The_GetSuffix ());
+      HTM_DIV_Begin ("class=\"NOTICE_AUTHOR NOTICE_AUTHOR_%s\"",The_GetSuffix ());	// Limited width
 	 Usr_UsrDataConstructor (&UsrDat);
 	 UsrDat.UsrCod = Notice->UsrCod;
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database

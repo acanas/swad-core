@@ -261,23 +261,19 @@ void Log_GetAndShowLastClicks (void)
 	 /* Print table row */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LC_CLK %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LC_CLK %s_%s\"",ClassRow,The_GetSuffix ());
 	       HTM_Txt (row[0]);					// Click
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_TIM %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LC_TIM %s_%s\"",ClassRow,The_GetSuffix ());
 	       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);	// Elapsed time
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_ROL %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LC_ROL %s_%s\"",ClassRow,The_GetSuffix ());
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);	// Role
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_HIE %s_%s\"",
-			  ClassRow,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LC_HIE %s_%s\"",ClassRow,The_GetSuffix ());
 	       HTM_Txt (Hie[Hie_CTY].FullName);				// Country
 	    HTM_TD_End ();
 
@@ -285,14 +281,12 @@ void Log_GetAndShowLastClicks (void)
 		 Level <= Hie_DEG;
 		 Level++)
 	      {
-	       HTM_TD_Begin ("class=\"LC_HIE %s_%s\"",
-			     ClassRow,The_GetSuffix ());
+	       HTM_TD_Begin ("class=\"LC_HIE %s_%s\"",ClassRow,The_GetSuffix ());
 		  HTM_Txt (Hie[Level].ShrtName);			// Institution, Center, Degree
 	       HTM_TD_End ();
 	      }
 
-	    HTM_TD_Begin ("class=\"LC_ACT %s_%s\"",
-	                  ClassRow,The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"LC_ACT %s_%s\"",ClassRow,The_GetSuffix ());
 	       HTM_Txt (Act_GetActionText (Action));			// Action
 	    HTM_TD_End ();
 

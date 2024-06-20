@@ -35,7 +35,7 @@
 /*****************************************************************************/
 
 #define Qst_NUM_ANS_TYPES	6
-#define Qst_MAX_BYTES_LIST_ANSWER_TYPES	(Qst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
+#define Qst_MAX_BYTES_LIST_ANSWER_TYPES	(Qst_NUM_ANS_TYPES * (Cns_MAX_DIGITS_UINT + 1))
 typedef enum
   {
    Qst_ANS_INT             = 0,

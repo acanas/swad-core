@@ -3052,25 +3052,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqInsLog] =
 #if   L==1	// ca
-	"Request logo of the current institution"		// Necessita traducció
+	"Sol·licitar canvi de logo de la instituci&oacute;"
 #elif L==2	// de
-	"Request logo of the current institution"		// Need Übersetzung
+	"Fordern Sie eine &Auml;nderung des Logos der Institution an"
 #elif L==3	// en
-	"Request logo of the current institution"
+	"Request change of institution logo"
 #elif L==4	// es
-	"Solicitar el logo de instituci&oacute;n actual"
+	"Solicitar cambio del logo de instituci&oacute;n"
 #elif L==5	// fr
-	"Request logo of the current institution"		// Besoin de traduction
+	"Demander le changement du logo de l'&eacute;tablissement"
 #elif L==6	// gn
-	"Solicitar el logo de instituci&oacute;n actual"	// Okoteve traducción
+	"Ojer&uacute;re o&ntilde;emoambue hagu&atilde; instituci&oacute;n logotipo"
 #elif L==7	// it
-	"Request logo of the current institution"		// Bisogno di traduzione
+	"Richiedere la modifica del logo dell'istituzione"
 #elif L==8	// pl
-	"Request logo of the current institution"		// Potrzebujesz tlumaczenie
+	"Z&lstrok;&oacute;&zdot; wniosek o zmian&eogon; logo instytucji"
 #elif L==9	// pt
-	"Request logo of the current institution"		// Precisa de tradução
+	"Solicitar altera&ccedil;&atilde;o da logomarca da institui&ccedil;&atilde;o"
 #elif L==10	// tr
-	"Request logo of the current institution"		// Çeviri lazim!
+	"Kurumun logosunun de&gbreve;i&scedil;tirilmesini talep edin"
 #endif
 	,
 	[ActRecInsLog] =

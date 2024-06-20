@@ -340,11 +340,9 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
    if (Id)
      {
       if (Id[0])
-	 HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",
-			  Id,The_GetSuffix ());
+	 HTM_LABEL_Begin ("for=\"%s\" class=\"FORM_IN_%s\"",Id,The_GetSuffix ());
       else
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",
-			  The_GetSuffix ());
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
      }
    else
       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());

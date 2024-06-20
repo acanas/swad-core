@@ -841,7 +841,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	   {
 	    /* Get next user */
 	    Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
-					       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+					     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 
 	    /* Get user's email */
