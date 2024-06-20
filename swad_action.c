@@ -69,9 +69,9 @@ long Act_GetActCod (Act_Action_t Action)
 /***************** Get index in menu associated to an action ******************/
 /*****************************************************************************/
 
-signed int Act_GetIndexInMenu (Act_Action_t Action)
+unsigned Act_GetIndexInMenu (Act_Action_t Action)
   {
-   return ActLst_Actions[Act_GetSuperAction (Action)].IndexInMenu;
+   return ActLst_Actions[Action].IndexInMenu;
   }
 
 /*****************************************************************************/
@@ -80,7 +80,7 @@ signed int Act_GetIndexInMenu (Act_Action_t Action)
 
 Tab_Tab_t Act_GetTab (Act_Action_t Action)
   {
-   return ActLst_Actions[Act_GetSuperAction (Action)].Tab;
+   return ActLst_Actions[Action].Tab;
   }
 
 /*****************************************************************************/
@@ -89,10 +89,16 @@ Tab_Tab_t Act_GetTab (Act_Action_t Action)
 
 Act_Action_t Act_GetSuperAction (Act_Action_t Action)
   {
+   extern struct Mnu_Menu Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   Tab_Tab_t Tab;
+
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return ActUnk;
 
-   return ActLst_Actions[Action].SuperAction;
+   if ((Tab = Act_GetTab (Action)) == TabUnk)
+      return Action;
+
+   return Mnu_Menu[Tab][Act_GetIndexInMenu (Action)].Action;
   }
 
 /*****************************************************************************/
@@ -180,20 +186,14 @@ const char *Act_GetTitleAction (Act_Action_t Action)
   {
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    Tab_Tab_t Tab;
-   signed int IndexInMenu;
 
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return NULL;
 
-   Tab = Act_GetTab (Action);
-   if (Tab == TabUnk)
+   if ((Tab = Act_GetTab (Action)) == TabUnk)
       return NULL;
 
-   IndexInMenu = Act_GetIndexInMenu (Action);
-   if (IndexInMenu < 0)
-      return NULL;
-
-   return Txt_MENU_TITLE[Tab][IndexInMenu];
+   return Txt_MENU_TITLE[Tab][Act_GetIndexInMenu (Action)];
   }
 
 /*****************************************************************************/

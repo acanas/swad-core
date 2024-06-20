@@ -68,11 +68,7 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
 #define MAX_MENU_ID 16
 
 // Actions not initialized are 0 by default
-static const struct Mnu_Menu
-  {
-   Act_Action_t Action;
-   const char *Icon;
-  } Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
+struct Mnu_Menu Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
   {
    [TabUnk] =  {
 	       },
@@ -208,7 +204,12 @@ const char *Mnu_GetIconFromNumOptInMenu (unsigned NumOptInMenu)
 
 const char *Mnu_GetIconFromAction (Act_Action_t Action)
   {
-   return Mnu_Menu[Act_GetTab (Action)][Act_GetIndexInMenu (Action)].Icon;
+   Tab_Tab_t Tab;
+
+   if ((Tab = Act_GetTab (Action)) == TabUnk)
+      return NULL;
+
+   return Mnu_Menu[Tab][Act_GetIndexInMenu (Action)].Icon;
   }
 
 /*****************************************************************************/

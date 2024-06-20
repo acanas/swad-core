@@ -41,6 +41,12 @@ typedef enum
    } Mnu_Menu_t;	// Stored in database. Don't change numbers!
 #define Mnu_MENU_DEFAULT Mnu_MENU_HORIZONTAL
 
+struct Mnu_Menu
+  {
+   Act_Action_t Action;
+   const char *Icon;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

@@ -3855,7 +3855,7 @@ const char *Txt_Buildings =
 #elif L==5	// fr
 	"B&acirc;timents";
 #elif L==6	// gn
-	"Edificios";	// Okoteve traducción
+	"Edificio-ku&eacute;ra";
 #elif L==7	// it
 	"Edifici";
 #elif L==8	// pl
@@ -20705,7 +20705,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"B&acirc;timents"
 #elif L==6	// gn
-	"Edificios"	// Okoteve traducción
+	"Edificio-ku&eacute;ra"
 #elif L==7	// it
 	"Edifici"
 #elif L==8	// pl

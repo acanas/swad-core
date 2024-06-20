@@ -70,11 +70,12 @@ static void MFU_PutIconAndText (Act_Action_t Action,
 /************** Allocate list of most frequently used actions ****************/
 /*****************************************************************************/
 
-void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown)
+void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,
+			     unsigned MaxActionsShown)
   {
    if ((ListMFUActions->Actions = malloc (MaxActionsShown *
                                           sizeof (*ListMFUActions->Actions))) == NULL)
-      Err_ShowErrorAndExit ("Can not allocate memory for list of most frequently used actions.");
+      Err_ShowErrorAndExit ("Can not allocate memory for list of MFU actions.");
   }
 
 /*****************************************************************************/
@@ -92,7 +93,8 @@ void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 /*****************************************************************************/
 // ListMFUActions->Actions must have space for MaxActionsShown actions
 
-void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown)
+void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,
+			unsigned MaxActionsShown)
   {
    MYSQL_RES *mysql_res;
    unsigned NumActions;
@@ -111,7 +113,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
       /* Get action code */
       ActCod = DB_GetNextCode (mysql_res);
       if ((Action = Act_GetActionFromActCod (ActCod)) != ActUnk)
-	 if (Act_GetIndexInMenu (Action) >= 0)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
+	 if (Act_GetSuperAction (Action) == Action)	// MFU actions must be only actions shown on menu (database could contain wrong action numbers)
 	    if (Act_CheckIfICanExecuteAction (Action) == Usr_CAN)
 	       ListMFUActions->Actions[ListMFUActions->NumActions++] = Action;
      }
@@ -143,16 +145,20 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
 	   NumAct < NumActions;
 	   NumAct++)
         {
-         /* Get action code */
+         /* Get permanent action code */
          ActCod = DB_GetNextCode (mysql_res);
          if (ActCod >= 0 && ActCod <= ActLst_MAX_ACTION_COD)
-            if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
-               if (Act_GetTab (Action) == Gbl.Action.Tab)
-                  if (Act_CheckIfICanExecuteAction (Action) == Usr_CAN)
-                    {
-                     MoreRecentActionInCurrentTab = Action;
-                     break;
-                    }
+           {
+            /* Get action from permanent action code */
+            Action = Act_GetActionFromActCod (ActCod);
+
+	    if (Act_GetTab (Action) == Gbl.Action.Tab)
+	       if (Act_CheckIfICanExecuteAction (Action) == Usr_CAN)
+		 {
+		  MoreRecentActionInCurrentTab = Action;
+		  break;
+		 }
+           }
         }
 
       /***** Free structure that stores the query result *****/
@@ -339,10 +345,9 @@ void MFU_UpdateMFUActions (void)
    /***** In some cases, don't register action *****/
    if (!Gbl.Usrs.Me.Logged)
       return;
-   if (Act_GetIndexInMenu (Gbl.Action.Act) < 0)
-      return;
    SuperAction = Act_GetSuperAction (Gbl.Action.Act);
-   if (SuperAction == ActMFUAct)
+   if (SuperAction == ActMFUAct ||
+       SuperAction != Gbl.Action.Act)
       return;
 
    ActCod = Act_GetActCod (SuperAction);

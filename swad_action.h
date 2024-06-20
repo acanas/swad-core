@@ -71,9 +71,8 @@ typedef enum
 struct Act_Actions
   {
    long ActCod;	// Unique, time-persistent numerical code for the action
-   signed int IndexInMenu;
+   unsigned IndexInMenu;
    Tab_Tab_t Tab;
-   Act_Action_t SuperAction;
    void (*FunctionPriori) (void);
    void (*FunctionPosteriori) (void);
    unsigned Permission[Hie_NUM_LEVELS][Usr_NUM_BELONG];
@@ -94,7 +93,7 @@ struct Act_ActionFunc
 
 Act_Action_t Act_GetActionFromActCod (long ActCod);
 long Act_GetActCod (Act_Action_t Action);
-signed int Act_GetIndexInMenu (Act_Action_t Action);
+unsigned Act_GetIndexInMenu (Act_Action_t Action);
 Tab_Tab_t Act_GetTab (Act_Action_t Action);
 Act_Action_t Act_GetSuperAction (Act_Action_t Action);
 Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action);

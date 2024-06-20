@@ -46,9 +46,11 @@ struct MFU_ListMFUActions
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown);
+void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,
+			     unsigned MaxActionsShown);
 void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions);
-void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown);
+void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,
+			unsigned MaxActionsShown);
 Act_Action_t MFU_GetMyLastActionInCurrentTab (void);
 void MFU_ShowMyMFUActions (void);
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions);

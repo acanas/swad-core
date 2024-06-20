@@ -754,12 +754,12 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
       fprintf (Rep_File,"&nbsp;");
       if (ActCod >= 0)
 	{
-	 if ((Action = Act_GetActionFromActCod (ActCod)) >= 0)
-	   {
-	    TabTxt = Tab_GetTxt (Act_GetTab (Action));
-	    if (TabTxt)
-	       fprintf (Rep_File,"%s &gt; ",TabTxt);
-	   }
+	 /* Get action from permanent action code */
+	 Action = Act_GetActionFromActCod (ActCod);
+
+	 TabTxt = Tab_GetTxt (Act_GetTab (Action));
+	 if (TabTxt)
+	    fprintf (Rep_File,"%s &gt; ",TabTxt);
 
 	 fprintf (Rep_File,"%s",Act_GetActionText (Action));
 	}
