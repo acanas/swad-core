@@ -88,7 +88,6 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
   {
    extern const char *Nam_Params[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxChars[Nam_NUM_SHRT_FULL_NAMES];
-   extern const char *Nam_Classes[Nam_NUM_SHRT_FULL_NAMES];
    extern const char *Txt_Short_name;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    static Act_Action_t Action[Hie_NUM_LEVELS][Nam_NUM_SHRT_FULL_NAMES] =
@@ -135,9 +134,8 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t Level,
 				  Nam_MaxChars[ShrtOrFull],
 				  Name[ShrtOrFull],
 				  HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
-				  "id=\"%s\" class=\"%s INPUT_%s\"",
+				  "id=\"%s\" class=\"Frm_C2_INPUT INPUT_%s\"",
 				  Nam_Params[ShrtOrFull],
-				  Nam_Classes[ShrtOrFull],
 				  The_GetSuffix ());
 	       Frm_EndForm ();
                break;
