@@ -224,8 +224,8 @@ void Ses_InsertParInDB (const char *ParName,const char *ParValue)
 
    /***** For a unique session-parameter,
           don't insert a parameter more than one time *****/
-   if (ParName)
-      if (ParName[0])
+   if (ParName && ParValue)
+      if (ParName[0] && ParValue[0])
          if (!Ses_DB_CheckIfParIsAlreadyStored (ParName))
 	   {
 	    /***** Insert session parameter in the database *****/

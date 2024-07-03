@@ -188,7 +188,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				   ((struct Prj_Projects *) Context)->SelectedOrder,
 				   1,
-				   Cod);
+				   Cod,
+				   true);	// Put list of selected users
 		  break;
 	       case Pag_EXAMS:
 		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -320,7 +321,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 			        ((struct Prj_Projects *) Context)->SelectedOrder,
 			        1,
-				Cod);
+				Cod,
+				true);	// Put list of selected users
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -439,7 +441,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				((struct Prj_Projects *) Context)->SelectedOrder,
 				Pagination->LeftPage,
-				Cod);
+				Cod,
+				true);	// Put list of selected users
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -571,7 +574,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		     Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				   ((struct Prj_Projects *) Context)->SelectedOrder,
 				   NumPage,
-				   Cod);
+				   Cod,
+				   true);	// Put list of selected users
 		  break;
                case Pag_EXAMS:
                   Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -690,7 +694,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				((struct Prj_Projects *) Context)->SelectedOrder,
 				Pagination->RightPage,
-				Cod);
+				Cod,
+				true);	// Put list of selected users
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -810,7 +815,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Prj_PutPars (&((struct Prj_Projects *) Context)->Filter,
 				((struct Prj_Projects *) Context)->SelectedOrder,
 				Pagination->NumPags,
-				Cod);
+				Cod,
+				true);	// Put list of selected users
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);

@@ -3052,12 +3052,12 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs 
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 
-void Usr_PutParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
+void Usr_PutParSelectedUsrsCods (const struct Usr_SelectedUsrs *SelectedUsrs)
   {
    char *ParName;
 
    /***** Put a parameter indicating that a list of several users is present *****/
-   Par_PutParChar ("MultiUsrs",'Y');
+   // Par_PutParChar ("MultiUsrs",'Y');
 
    /***** Put a parameter with the encrypted user codes of several users *****/
    /* Build name of the parameter.
@@ -3065,7 +3065,7 @@ void Usr_PutParSelectedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs)
       so, it's necessary to use distinct names for the parameters. */
    Usr_BuildParName (&ParName,Usr_ParUsrCod[Rol_UNK],SelectedUsrs->ParSuffix);
 
-   /* Put the parameter *****/
+   /* Put the parameter */
    if (Gbl.Session.IsOpen)
       Ses_InsertParInDB (ParName,SelectedUsrs->List[Rol_UNK]);
    else

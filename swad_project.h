@@ -209,11 +209,12 @@ Usr_Can_t Prj_CheckIfICanViewProjectDocuments (long PrjCod);
 Usr_Can_t Prj_CheckIfICanViewProjectAssessment (long PrjCod);
 
 void Prj_PutCurrentPars (void *Projects);
-void Prj_PutPars (struct Prj_Filter *Filter,
+void Prj_PutPars (const struct Prj_Filter *Filter,
                   Prj_Order_t Order,
                   unsigned NumPage,
-                  long PrjCod);
-void Prj_GetPars (struct Prj_Projects *Projects);
+                  long PrjCod,
+                  bool PutSelectedUsers);
+void Prj_GetPars (struct Prj_Projects *Projects,bool GetSelectedUsers);
 
 void Prj_PutIconsListProjects (void *Projects);
 
