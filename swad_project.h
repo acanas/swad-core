@@ -213,8 +213,9 @@ void Prj_PutPars (const struct Prj_Filter *Filter,
                   Prj_Order_t Order,
                   unsigned NumPage,
                   long PrjCod,
-                  bool PutSelectedUsers);
-void Prj_GetPars (struct Prj_Projects *Projects,bool GetSelectedUsers);
+                  Usr_UseListSelectedUsrs UseListSelectedUsrs);
+void Prj_GetPars (struct Prj_Projects *Projects,
+		  Usr_UseListSelectedUsrs UseListSelectedUsrs);
 
 void Prj_PutIconsListProjects (void *Projects);
 

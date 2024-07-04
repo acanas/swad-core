@@ -189,7 +189,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				   ((struct Prj_Projects *) Context)->SelectedOrder,
 				   1,
 				   Cod,
-				   true);	// Put list of selected users
+				   Usr_USE_LIST_SELECTED_USERS);
 		  break;
 	       case Pag_EXAMS:
 		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -322,7 +322,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 			        ((struct Prj_Projects *) Context)->SelectedOrder,
 			        1,
 				Cod,
-				true);	// Put list of selected users
+				Usr_USE_LIST_SELECTED_USERS);
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -442,7 +442,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				((struct Prj_Projects *) Context)->SelectedOrder,
 				Pagination->LeftPage,
 				Cod,
-				true);	// Put list of selected users
+				Usr_USE_LIST_SELECTED_USERS);
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -575,7 +575,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				   ((struct Prj_Projects *) Context)->SelectedOrder,
 				   NumPage,
 				   Cod,
-				   true);	// Put list of selected users
+				   Usr_USE_LIST_SELECTED_USERS);
 		  break;
                case Pag_EXAMS:
                   Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -695,7 +695,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				((struct Prj_Projects *) Context)->SelectedOrder,
 				Pagination->RightPage,
 				Cod,
-				true);	// Put list of selected users
+				Usr_USE_LIST_SELECTED_USERS);
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
@@ -816,7 +816,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 				((struct Prj_Projects *) Context)->SelectedOrder,
 				Pagination->NumPags,
 				Cod,
-				true);	// Put list of selected users
+				Usr_USE_LIST_SELECTED_USERS);
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);

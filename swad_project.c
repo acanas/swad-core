@@ -379,8 +379,7 @@ void Prj_ListUsrsToSelect (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        false);	// Don't get list of selected users
+   Prj_GetPars (&Projects,Usr_DONT_USE_LIST_SELECTED_USERS);
 
    /***** Show list of users to select some of them *****/
    Prj_ReqUsrsToSelect (&Projects);
@@ -414,8 +413,7 @@ void Prj_SeeAllProjects (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
 
    /***** Show projects *****/
    Prj_ShowProjects (&Projects);
@@ -469,8 +467,7 @@ void Prj_ShowTableSelectedPrjs (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
 
    /***** Get list of projects *****/
    Prj_GetListProjects (&Projects);
@@ -656,7 +653,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 			    Projects->SelectedOrder,
 			    Projects->CurrentPage,
 			    -1L,
-			    false);	// Don't put list of selected users
+			    Usr_DONT_USE_LIST_SELECTED_USERS);
 	       Usr_PutWhoIcon (Who);
 	    Frm_EndForm ();
 	 Set_EndPref ();
@@ -691,7 +688,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 			 Projects->SelectedOrder,
 			 Projects->CurrentPage,
 			 -1L,
-			 true);	// Put list of selected users
+			 Usr_USE_LIST_SELECTED_USERS);
 	    Ico_PutSettingIconLink (AssignedNonassigIcon[Assign],Ico_BLACK,
 				    Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
 	 Frm_EndForm ();
@@ -736,7 +733,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 			 Projects->SelectedOrder,
 			 Projects->CurrentPage,
 			 -1L,
-			 true);	// Put list of selected users
+			 Usr_USE_LIST_SELECTED_USERS);
 	    Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis].Icon,
 				    HiddenVisiblIcon[HidVis].Color,
 				    Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
@@ -782,7 +779,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 			 Projects->SelectedOrder,
 			 Projects->CurrentPage,
 			 -1L,
-			 true);	// Put list of selected users
+			 Usr_USE_LIST_SELECTED_USERS);
 	    Ico_PutSettingIconLink (FaultinessIcon[Faultiness].Icon,
 				    FaultinessIcon[Faultiness].Color,
 				    Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
@@ -819,7 +816,7 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
 			 Projects->SelectedOrder,
 			 Projects->CurrentPage,
 			 -1L,
-			 true);	// Put list of selected users
+			 Usr_USE_LIST_SELECTED_USERS);
 	    Ico_PutSettingIconLink (ReviewIcon[ReviewStatus].Icon,
 				    ReviewIcon[ReviewStatus].Color,
 				    Txt_PROJECT_REVIEW_PLURAL[ReviewStatus]);
@@ -852,7 +849,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 		      Projects->SelectedOrder,
 		      Projects->CurrentPage,
 		      -1L,
-		      true);	// Put list of selected users
+		      Usr_USE_LIST_SELECTED_USERS);
 
 	 /***** Write selector with departments *****/
 	 if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",
@@ -944,7 +941,7 @@ void Prj_PutCurrentPars (void *Projects)
 		    ((struct Prj_Projects *) Projects)->SelectedOrder,
 		    ((struct Prj_Projects *) Projects)->CurrentPage,
 		    ((struct Prj_Projects *) Projects)->Prj.PrjCod,
-		   true);	// Put list of selected users
+		   Usr_USE_LIST_SELECTED_USERS);
   }
 
 /* The following function is called
@@ -955,7 +952,7 @@ void Prj_PutPars (const struct Prj_Filter *Filter,
                   Prj_Order_t Order,
                   unsigned NumPage,
                   long PrjCod,
-                  bool PutSelectedUsers)
+                  Usr_UseListSelectedUsrs UseListSelectedUsrs)
   {
    /***** Put filter parameters (which projects to show) *****/
    if (Filter->Who != Prj_FILTER_WHO_DEFAULT)
@@ -997,7 +994,8 @@ void Prj_PutPars (const struct Prj_Filter *Filter,
       Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
    /***** Put selected users' codes *****/
-   if (PutSelectedUsers && Filter->Who == Usr_WHO_SELECTED)
+   if (Filter->Who == Usr_WHO_SELECTED &&
+       UseListSelectedUsrs == Usr_USE_LIST_SELECTED_USERS)
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
@@ -1099,7 +1097,8 @@ static long Prj_GetParFilterDptCod (void)
 /***************** Get generic parameters to list projects *******************/
 /*****************************************************************************/
 
-void Prj_GetPars (struct Prj_Projects *Projects,bool GetSelectedUsers)
+void Prj_GetPars (struct Prj_Projects *Projects,
+		  Usr_UseListSelectedUsrs UseListSelectedUsrs)
   {
    /***** Get filter (which projects to show) *****/
    Projects->Filter.Who = Prj_GetParWho ();
@@ -1114,7 +1113,8 @@ void Prj_GetPars (struct Prj_Projects *Projects,bool GetSelectedUsers)
    Projects->CurrentPage = Pag_GetParPagNum (Pag_PROJECTS);
 
    /***** Get selected users *****/
-   if (Projects->Filter.Who == Usr_WHO_SELECTED && GetSelectedUsers)
+   if (Projects->Filter.Who == Usr_WHO_SELECTED &&
+       UseListSelectedUsrs == Usr_USE_LIST_SELECTED_USERS)
       Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
@@ -1185,7 +1185,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects)
 				  Order,
 				  Projects->CurrentPage,
 				  -1L,
-				  true);	// Put list of selected users
+				  Usr_USE_LIST_SELECTED_USERS);
 		     HTM_BUTTON_Submit_Begin (Txt_PROJECT_ORDER_HELP[Order],
 		                              "class=\"BT_LINK\"");
 			if (Order == Projects->SelectedOrder)
@@ -1334,8 +1334,7 @@ void Prj_ShowOneProject (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get project data,
@@ -2900,8 +2899,7 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
    char *TxtButton;
 
    /***** Get parameters *****/
-   Prj_GetPars (Projects,
-		true);	// Get list of selected users
+   Prj_GetPars (Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Put form to select users *****/
@@ -2991,8 +2989,7 @@ static void Prj_AddUsrsToProject (struct Prj_Projects *Projects,
    const char *Ptr;
 
    /***** Get parameters *****/
-   Prj_GetPars (Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Add the selected users to project *****/
@@ -3090,8 +3087,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
    Prj_AllocMemProject (&Projects->Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
@@ -3171,8 +3167,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
@@ -3560,8 +3555,7 @@ void Prj_ReqRemProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
@@ -3601,8 +3595,7 @@ void Prj_RemoveProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
@@ -3666,8 +3659,7 @@ static void Prj_HideUnhideProject (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
@@ -3703,8 +3695,7 @@ void Prj_ReqCreatePrj (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = -1L;	// It's a new, non existing, project
 
    /***** Form to create project *****/
@@ -3719,8 +3710,7 @@ void Prj_ReqEditPrj (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Form to edit project *****/
@@ -4073,8 +4063,7 @@ void Prj_ReceiveProject (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    ItsANewProject = ((Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj)) <= 0);
 
    if (ItsANewProject)
@@ -4235,8 +4224,7 @@ void Prj_ReqLockSelectedPrjsEdition (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
 
    /***** Show question and button to lock all selected projects *****/
    /* Get list of projects */
@@ -4274,8 +4262,7 @@ void Prj_ReqUnloSelectedPrjsEdition (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
 
    /***** Show question and button to unlock all selected projects *****/
    /* Get list of projects */
@@ -4316,8 +4303,7 @@ void Prj_LockSelectedPrjsEdition (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
 
    /***** Lock all selected projects *****/
    /* Get list of projects */
@@ -4353,8 +4339,7 @@ void Prj_UnloSelectedPrjsEdition (void)
       Err_NoPermissionExit ();
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
 
    /***** Unlock all selected projects *****/
    /* Get list of projects */
@@ -4447,8 +4432,7 @@ void Prj_LockProjectEdition (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
@@ -4484,8 +4468,7 @@ void Prj_UnloProjectEdition (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/
@@ -4521,8 +4504,7 @@ void Prj_ChangeReviewStatus (void)
    Prj_AllocMemProject (&Projects.Prj);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Get data of the project from database *****/

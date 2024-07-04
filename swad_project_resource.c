@@ -49,8 +49,7 @@ void PrjRsc_GetLinkToProject (void)
    Prj_ResetPrjsAndReadConfig (&Projects);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,
-	        true);	// Get list of selected users
+   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
    Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj);
 
    /***** Allocate memory for the project *****/

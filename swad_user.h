@@ -159,6 +159,12 @@ struct Usr_ListUsrs
    unsigned NumUsrs;		// Number of users in the list
   };
 
+typedef enum
+  {
+   Usr_DONT_USE_LIST_SELECTED_USERS,
+   Usr_USE_LIST_SELECTED_USERS,
+  } Usr_UseListSelectedUsrs;
+
 struct Usr_SelectedUsrs
   {
    char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
