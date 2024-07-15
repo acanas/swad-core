@@ -284,8 +284,8 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
       /****** Print fix alert and button ******/
       Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
       Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,
-			       NULL,NULL,
-			       Btn_NO_BUTTON,NULL);
+			         NULL,NULL,
+			         Btn_NO_BUTTON,NULL);
      }
   }
 

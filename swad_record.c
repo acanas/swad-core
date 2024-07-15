@@ -3970,7 +3970,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 			     NumCtr < Gbl.Hierarchy.List[Hie_SYS].Num;
 			     NumCtr++)
 			  {
-			   Ctr = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCtr];
+			   Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
 			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
 				       (Ctr->HieCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod) ? HTM_SELECTED :
 										        HTM_NO_ATTR,

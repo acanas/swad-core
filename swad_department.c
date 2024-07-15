@@ -493,7 +493,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 			  NumIns++)
 		       {
-			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			Ins = &Gbl.Hierarchy.List[Hie_INS].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
 				    (Ins->HieCod == Dpt->InsCod) ? HTM_SELECTED :
 								   HTM_NO_ATTR,

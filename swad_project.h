@@ -40,23 +40,40 @@
 /***** Configuration *****/
 #define PrjCfg_NET_CAN_CREATE_DEFAULT true
 
+/***** User roles in a project *****/
+// Don't change these numbers! They are used in database
+#define Prj_NUM_ROLES_IN_PROJECT 4
+typedef enum
+  {
+   Prj_ROLE_UNK	= 0,	// Unknown
+   Prj_ROLE_STD	= 1,	// Student
+   Prj_ROLE_TUT	= 2,	// Tutor
+   Prj_ROLE_EVL	= 3,	// Evaluator
+  } Prj_RoleInProject_t;
+
 /***** Filters to list projects *****/
 /* Whose projects */
 #define Prj_FILTER_WHO_DEFAULT	Usr_WHO_ME
 
-/* Assigned projects / non-assigned projects */
-#define Prj_NUM_ASSIGNED_NONASSIG 2
+/* Roles in projects */
+#define Prj_FILTER_ROLE_UNK_DEFAULT	(1 << Prj_ROLE_UNK)	// on
+#define Prj_FILTER_ROLE_STD_DEFAULT	(1 << Prj_ROLE_STD)	// on
+#define Prj_FILTER_ROLE_TUT_DEFAULT	(1 << Prj_ROLE_TUT)	// on
+#define Prj_FILTER_ROLE_EVL_DEFAULT	(1 << Prj_ROLE_EVL)	// on
+
+/* Non-assigned/assigned projects */
+#define Prj_NUM_ASSIGNED 2
 typedef enum
   {
-   Prj_ASSIGNED = 0,
-   Prj_NONASSIG = 1,
-  } Prj_AssignedNonassig_t;
-#define Prj_NEW_PRJ_ASSIGNED_NONASSIG_DEFAULT Prj_NONASSIG
-#define Prj_FILTER_ASSIGNED_DEFAULT	(1 << Prj_ASSIGNED)	// on
+   Prj_NONASSIG = 0,
+   Prj_ASSIGNED = 1,
+  } Prj_Assigned_t;
+#define Prj_NEW_PRJ_ASSIGNED_DEFAULT	Prj_NONASSIG
 #define Prj_FILTER_NONASSIG_DEFAULT	(1 << Prj_NONASSIG)	// on
+#define Prj_FILTER_ASSIGNED_DEFAULT	(1 << Prj_ASSIGNED)	// on
 
 /* Locked/unlocked project */
-#define Prj_NUM_LOCKED_UNLOCKED 2
+#define Prj_NUM_LOCKED 2
 typedef enum
   {
    Prj_LOCKED   = 0,
@@ -98,6 +115,7 @@ typedef enum
 struct Prj_Filter
   {
    Usr_Who_t Who;		// Show my / selected users' / all projects
+   unsigned RolPrj;		// Show projects with selected users with a role in project
    unsigned Assign;		// Show assigned / non assigned projects
    unsigned Hidden;		// Show hidden / visible projects
    unsigned Faulti;		// Show faulty / faultless projects
@@ -130,17 +148,6 @@ typedef enum
   } Prj_Proposal_t;
 #define Prj_PROPOSAL_DEFAULT Prj_PROPOSAL_NEW
 
-/***** User roles in a project *****/
-// Don't change these numbers! They are used in database
-#define Prj_NUM_ROLES_IN_PROJECT 4
-typedef enum
-  {
-   Prj_ROLE_UNK	= 0,	// Unknown
-   Prj_ROLE_STD	= 1,	// Student
-   Prj_ROLE_TUT	= 2,	// Tutor
-   Prj_ROLE_EVL	= 3,	// Evaluator
-  } Prj_RoleInProject_t;
-
 /***** Type of view when writing one project *****/
 typedef enum
   {
@@ -157,7 +164,7 @@ struct Prj_Project
    long HieCod;	// Course code
    Prj_Locked_t Locked;
    HidVis_HiddenOrVisible_t Hidden;
-   Prj_AssignedNonassig_t Assigned;
+   Prj_Assigned_t Assigned;
    unsigned NumStds;
    Prj_Proposal_t Proposal;
    time_t CreatTime;

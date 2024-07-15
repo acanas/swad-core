@@ -238,6 +238,26 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const struct Prj_Projects *Projects,
                                  const char *UsrsSubQuery)	// NULL if no users
   {
+   /* Role in project subquery */
+   static const char *RolPrjSubQuery[16] =									// EVL TUT STD UNK
+     {														//  3   2   1   0
+      [0b0000] = "",												//  ·   ·   ·   ·
+      [0b0001] = " AND ("                                	  	    "prj_users.RoleInProject IS NULL)",	//  ·   ·   ·   1
+      [0b0010] = " AND (prj_users.RoleInProject IN "	"(1)"						   ")",	//  ·   ·   1   ·
+      [0b0011] = " AND (prj_users.RoleInProject IN "	"(1)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   ·   1   1
+      [0b0100] = " AND (prj_users.RoleInProject IN "	  "(2)"						   ")",	//  ·   1   ·   ·
+      [0b0101] = " AND (prj_users.RoleInProject IN "	  "(2)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   1   ·   1
+      [0b0110] = " AND (prj_users.RoleInProject IN "	"(1,2)"						   ")",	//  ·   1   1   ·
+      [0b0111] = " AND (prj_users.RoleInProject IN "	"(1,2)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   1   1   1
+      [0b1000] = " AND (prj_users.RoleInProject IN "	    "(3)"					   ")",	//  1   ·   ·   ·
+      [0b1001] = " AND (prj_users.RoleInProject IN "	    "(3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   ·   ·   1
+      [0b1010] = " AND (prj_users.RoleInProject IN "	"(1,""3)"					   ")",	//  1   ·   1   ·
+      [0b1011] = " AND (prj_users.RoleInProject IN "	"(1,""3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   ·   1   1
+      [0b1100] = " AND (prj_users.RoleInProject IN "	  "(2,3)"					   ")",	//  1   1   ·   ·
+      [0b1101] = " AND (prj_users.RoleInProject IN "	  "(2,3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   1   ·   1
+      [0b1110] = " AND (prj_users.RoleInProject IN "	"(1,2,3)"					   ")",	//  1   1   1   ·
+      [0b1111] = "",												//  1   1   1   1
+     };
    char *AssignSubQuery;
    char *HidVisSubQuery;
    char *ReviewSubQuery;
@@ -263,12 +283,12 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
    /* Assigned subquery */
    switch (Projects->Filter.Assign)
      {
-      case (1 << Prj_ASSIGNED):	// Assigned projects
-	 if (asprintf (&AssignSubQuery," AND prj_projects.Assigned='Y'") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
       case (1 << Prj_NONASSIG):	// Non-assigned projects
 	 if (asprintf (&AssignSubQuery," AND prj_projects.Assigned='N'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case (1 << Prj_ASSIGNED):	// Assigned projects
+	 if (asprintf (&AssignSubQuery," AND prj_projects.Assigned='Y'") < 0)
 	    Err_NotEnoughMemoryExit ();
 	 break;
       default:			// All projects
@@ -388,6 +408,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 " AND prj_projects.PrjCod=prj_users.PrjCod"
 				 " AND prj_users.UsrCod=%ld"
+		                 "%s"
 			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			    " ORDER BY %s",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -396,6 +417,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			       ReviewSubQuery,
 			       DptCodSubQuery,
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
+			       RolPrjSubQuery[Projects->Filter.RolPrj],
 			       OrderBySubQuery[Projects->SelectedOrder]);
 	       break;
 	    case Prj_ORDER_DEPARTMENT:
@@ -413,6 +435,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				 "%s"
 				 " AND prj_projects.PrjCod=prj_users.PrjCod"
 				 " AND prj_users.UsrCod=%ld"
+		                 "%s"
 			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			    " ORDER BY %s",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -421,6 +444,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			       ReviewSubQuery,
 			       DptCodSubQuery,
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
+			       RolPrjSubQuery[Projects->Filter.RolPrj],
 			       OrderBySubQuery[Projects->SelectedOrder]);
 	       break;
 	   }
@@ -446,6 +470,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				    "%s"
 				    " AND prj_projects.PrjCod=prj_users.PrjCod"
 				    " AND prj_users.UsrCod IN (%s)"
+		                    "%s"
 			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			       " ORDER BY %s",
 				  Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -454,6 +479,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			          ReviewSubQuery,
 				  DptCodSubQuery,
 				  UsrsSubQuery,
+			          RolPrjSubQuery[Projects->Filter.RolPrj],
 				  OrderBySubQuery[Projects->SelectedOrder]);
 		  break;
 	       case Prj_ORDER_DEPARTMENT:
@@ -471,6 +497,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				      "%s"
 				    " AND prj_projects.PrjCod=prj_users.PrjCod"
 				    " AND prj_users.UsrCod IN (%s)"
+		                    "%s"
 			       " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			       " ORDER BY %s",
 				  Gbl.Hierarchy.Node[Hie_CRS].HieCod,
@@ -479,6 +506,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			          ReviewSubQuery,
 				  DptCodSubQuery,
 				  UsrsSubQuery,
+			          RolPrjSubQuery[Projects->Filter.RolPrj],
 				  OrderBySubQuery[Projects->SelectedOrder]);
 		  break;
 	      }
@@ -491,21 +519,45 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	    case Prj_ORDER_START_TIME:
 	    case Prj_ORDER_END_TIME:
 	    case Prj_ORDER_TITLE:
-	       NumPrjsFromDB = (unsigned)
-	       DB_QuerySELECT (mysql_res,"can not get projects",
+
+	       Ale_ShowAlert (Ale_INFO,
 			       "SELECT prj_projects.PrjCod"
-				" FROM prj_projects"
+				" FROM prj_projects LEFT JOIN prj_users"
+				  " ON prj_projects.PrjCod=prj_users.PrjCod"
 			       " WHERE prj_projects.CrsCod=%ld"
 				   "%s"
 				   "%s"
 				   "%s"
 				   "%s"
+		                   "%s"
 			    " ORDER BY %s",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
 			       ReviewSubQuery,
 			       DptCodSubQuery,
+			       RolPrjSubQuery[Projects->Filter.RolPrj],
+			       OrderBySubQuery[Projects->SelectedOrder]);
+
+
+	       NumPrjsFromDB = (unsigned)
+	       DB_QuerySELECT (mysql_res,"can not get projects",
+			       "SELECT prj_projects.PrjCod"
+				" FROM prj_projects LEFT JOIN prj_users"
+				  " ON prj_projects.PrjCod=prj_users.PrjCod"
+			       " WHERE prj_projects.CrsCod=%ld"
+				   "%s"
+				   "%s"
+				   "%s"
+				   "%s"
+		                   "%s"
+			    " ORDER BY %s",
+			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			       AssignSubQuery,
+			       HidVisSubQuery,
+			       ReviewSubQuery,
+			       DptCodSubQuery,
+			       RolPrjSubQuery[Projects->Filter.RolPrj],
 			       OrderBySubQuery[Projects->SelectedOrder]);
 	       break;
 	    case Prj_ORDER_DEPARTMENT:
@@ -514,17 +566,21 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 			       "SELECT prj_projects.PrjCod"
 				" FROM prj_projects LEFT JOIN dpt_departments"
 				  " ON prj_projects.DptCod=dpt_departments.DptCod"
+	                                          " LEFT JOIN prj_users"
+				  " ON prj_projects.PrjCod=prj_users.PrjCod"
 			       " WHERE prj_projects.CrsCod=%ld"
 				   "%s"
 				   "%s"
 				   "%s"
 				   "%s"
+		                   "%s"
 			    " ORDER BY %s",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       AssignSubQuery,
 			       HidVisSubQuery,
 			       ReviewSubQuery,
 			       DptCodSubQuery,
+			       RolPrjSubQuery[Projects->Filter.RolPrj],
 			       OrderBySubQuery[Projects->SelectedOrder]);
 	       break;
 	   }

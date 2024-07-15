@@ -2028,7 +2028,7 @@ const char *Txt_Another_center =
 #elif L==5	// fr
 	"Un autre center";
 #elif L==6	// gn
-	"Otro centro";		// Okoteve traducción
+	"Ambue mbo'ehao";
 #elif L==7	// it
 	"Un altro centro";
 #elif L==8	// pl
@@ -2036,7 +2036,7 @@ const char *Txt_Another_center =
 #elif L==9	// pt
 	"Outro centro";
 #elif L==10	// tr
-	"Another center";	// Çeviri lazim!
+	"Ba&scedil;ka bir merkez";
 #endif
 
 const char *Txt_Another_room =
@@ -13154,7 +13154,30 @@ const char *Txt_Filter =	// As a noun
 #elif L==5	// fr
 	"Filtre";
 #elif L==6	// gn
-	"Ayga";
+	"Filtro";
+#elif L==7	// it
+	"Filtri";
+#elif L==8	// pl
+	"Filtry";
+#elif L==9	// pt
+	"Filtros";
+#elif L==10	// tr
+	"Filtreler";
+#endif
+
+const char *Txt_Filters =	// As a noun
+#if   L==1	// ca
+	"Filtres";
+#elif L==2	// de
+	"Filter";
+#elif L==3	// en
+	"Filters";
+#elif L==4	// es
+	"Filtros";
+#elif L==5	// fr
+	"Filtres";
+#elif L==6	// gn
+	"Filtro";
 #elif L==7	// it
 	"Filtro";
 #elif L==8	// pl
@@ -13162,7 +13185,7 @@ const char *Txt_Filter =	// As a noun
 #elif L==9	// pt
 	"Filtro";
 #elif L==10	// tr
-	"Filter";	// Çeviri lazim!
+	"Filtre";
 #endif
 
 const char *Txt_First_day_of_the_week_X =	// Warning: it is very important to include %s in the following sentences
@@ -19361,7 +19384,7 @@ const char *Txt_Locations =
 	"Locations";	// Çeviri lazim!
 #endif
 
-const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
+const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED] =
 	{
 	[Prj_LOCKED] =
 #if   L==1	// ca
@@ -31920,31 +31943,8 @@ const char *Txt_PROJECT_REVIEW_SINGUL[Prj_NUM_REVIEW_STATUS] =
 #endif
 	};
 
-const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
+const char *Txt_PROJECT_NONASSIGNED_ASSIGNED_PLURAL[Prj_NUM_ASSIGNED] =
 	{
-	[Prj_ASSIGNED] =
-#if   L==1	// ca
-	"Projectes assignats"
-#elif L==2	// de
-	"Vorbelegt Projekte"
-#elif L==3	// en
-	"Assigned projects"
-#elif L==4	// es
-	"Proyectos asignados"
-#elif L==5	// fr
-	"Projets assign&eacute;s"
-#elif L==6	// gn
-	"Proyectos asignados"	// Okoteve traducción
-#elif L==7	// it
-	"Progetti assegnati"
-#elif L==8	// pl
-	"Zadany projekty"
-#elif L==9	// pt
-	"Projetos atribu&iacute;dos"
-#elif L==10	// tr
-	"Assigned projects"	// Çeviri lazim!
-#endif
-	,
 	[Prj_NONASSIG] =
 #if   L==1	// ca
 	"Projectes no assignats"
@@ -31967,10 +31967,56 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 #elif L==10	// tr
 	"Non-assigned projects"		// Çeviri lazim!
 #endif
+	,
+	[Prj_ASSIGNED] =
+#if   L==1	// ca
+	"Projectes assignats"
+#elif L==2	// de
+	"Vorbelegt Projekte"
+#elif L==3	// en
+	"Assigned projects"
+#elif L==4	// es
+	"Proyectos asignados"
+#elif L==5	// fr
+	"Projets assign&eacute;s"
+#elif L==6	// gn
+	"Proyectos asignados"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti assegnati"
+#elif L==8	// pl
+	"Zadany projekty"
+#elif L==9	// pt
+	"Projetos atribu&iacute;dos"
+#elif L==10	// tr
+	"Assigned projects"	// Çeviri lazim!
+#endif
 	};
 
-const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
+const char *Txt_PROJECT_NONASSIGNED_ASSIGNED_SINGUL[Prj_NUM_ASSIGNED] =
 	{
+	[Prj_NONASSIG] =
+#if   L==1	// ca
+	"Projecte no assignat"
+#elif L==2	// de
+	"Nicht vorbelegt Projekt"
+#elif L==3	// en
+	"Non-assigned project"
+#elif L==4	// es
+	"Proyecto no asignado"
+#elif L==5	// fr
+	"Projet non assign&eacute;"
+#elif L==6	// gn
+	"Proyecto no asignado"	// Okoteve traducción
+#elif L==7	// it
+	"Progetto non-assegnato"
+#elif L==8	// pl
+	"Nieprzypisane projekt"
+#elif L==9	// pt
+	"Projeto n&atilde;o atribu&iacute;do"
+#elif L==10	// tr
+	"Non-assigned project"	// Çeviri lazim!
+#endif
+	,
 	[Prj_ASSIGNED] =
 #if   L==1	// ca
 	"Projecte assignat"
@@ -31994,28 +32040,6 @@ const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 	"Assigned project"	// Çeviri lazim!
 #endif
 	,
-	[Prj_NONASSIG] =
-#if   L==1	// ca
-	"Projecte no assignat"
-#elif L==2	// de
-	"Nicht vorbelegt Projekt"
-#elif L==3	// en
-	"Non-assigned project"
-#elif L==4	// es
-	"Proyecto no asignado"
-#elif L==5	// fr
-	"Projet non assign&eacute;"
-#elif L==6	// gn
-	"Proyecto no asignado"	// Okoteve traducción
-#elif L==7	// it
-	"Progetto non-assegnato"
-#elif L==8	// pl
-	"Nieprzypisane projekt"
-#elif L==9	// pt
-	"Projeto n&atilde;o atribu&iacute;do"
-#elif L==10	// tr
-	"Non-assigned project"	// Çeviri lazim!
-#endif
 	};
 
 const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE] =
