@@ -2542,39 +2542,35 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
       "4col.png",	// 4 columns
      };
 
-   /***** Begin selector *****/
    Set_BeginOneSettingSelector ();
+      for (NumCols  = 1;
+	   NumCols <= Mch_MAX_COLS;
+	   NumCols++)
+	{
+	 /* Begin container for this option */
+	 HTM_DIV_Begin ("class=\"%s\"",
+			(Match->Status.NumCols == NumCols) ? "MCH_NUM_COL_ON" :
+							     "MCH_NUM_COL_OFF");
 
-   for (NumCols  = 1;
-	NumCols <= Mch_MAX_COLS;
-	NumCols++)
-     {
-      /* Begin container for this option */
-      HTM_DIV_Begin ("class=\"%s\"",
-		     (Match->Status.NumCols == NumCols) ? "MCH_NUM_COL_ON" :
-							  "MCH_NUM_COL_OFF");
+	    /* Begin form */
+	    Frm_BeginForm (ActChgNumColMch);
+	       ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
+	       Mch_PutParNumCols (NumCols);		// Number of columns
 
-	 /* Begin form */
-	 Frm_BeginForm (ActChgNumColMch);
-	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
-	    Mch_PutParNumCols (NumCols);		// Number of columns
+	       /* Number of columns */
+	       if (asprintf (&Title,"%u %s",NumCols,
+					    NumCols == 1 ? Txt_column :
+							   Txt_columns) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Ico_PutSettingIconLink (NumColsIcon[NumCols],Ico_BLACK,Title);
+	       free (Title);
 
-	    /* Number of columns */
-	    if (asprintf (&Title,"%u %s",NumCols,
-					 NumCols == 1 ? Txt_column :
-							Txt_columns) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Ico_PutSettingIconLink (NumColsIcon[NumCols],Ico_BLACK,Title);
-	    free (Title);
+	    /* End form */
+	    Frm_EndForm ();
 
-	 /* End form */
-	 Frm_EndForm ();
-
-      /* End container for this option */
-      HTM_DIV_End ();
-     }
-
-   /***** End selector *****/
+	 /* End container for this option */
+	 HTM_DIV_End ();
+	}
    Set_EndOneSettingSelector ();
   }
 

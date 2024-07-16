@@ -204,9 +204,9 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects);
 
 static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByRoleInPrj (const struct Prj_Projects *Projects);
-static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects);
+static void Prj_ShowFormToFilterByAssignation (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects);
-static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects);
+static void Prj_ShowFormToFilterByFaultiness (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects);
 
@@ -542,12 +542,23 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Projects;
    extern const char *Txt_Filters;
+   extern const char *Txt_Users;
+   extern const char *Txt_Roles;
+   extern const char *Txt_Assignation;
+   extern const char *Txt_Visibility;
+   extern const char *Txt_Faultiness;
+   extern const char *Txt_Review;
+   extern const char *Txt_Department;
    extern const char *Txt_No_projects;
    struct Pag_Pagination Pagination;
    unsigned NumPrj;
 
    if (Projects)
      {
+      /***** Students will see only visible projects *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
+	 ((struct Prj_Projects *) Projects)->Filter.Hidden &= ~(1 << HidVis_HIDDEN);
+
       /***** Get list of projects *****/
       Prj_GetListProjects ((struct Prj_Projects *) Projects);
 
@@ -566,29 +577,81 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	 HTM_FIELDSET_Begin (NULL);
 	    HTM_LEGEND (Txt_Filters);
 
-	    /* 1st. row */
-	    Set_BeginSettingsHead ();
+	       HTM_TABLE_BeginPadding (2);
 
-	       Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
-	       Prj_ShowFormToFilterByRoleInPrj ((struct Prj_Projects *) Projects);
-	       Prj_ShowFormToFilterByAssign ((struct Prj_Projects *) Projects);
-	       switch (Gbl.Usrs.Me.Role.Logged)
-		 {
-		  case Rol_NET:
-		  case Rol_TCH:
-		  case Rol_SYS_ADM:
-		     Prj_ShowFormToFilterByHidden ((struct Prj_Projects *) Projects);
-		     break;
-		  default:	// Students will see only visible projects
-		     break;
-		 }
-	       Prj_ShowFormToFilterByWarning ((struct Prj_Projects *) Projects);
-	       Prj_ShowFormToFilterByReview ((struct Prj_Projects *) Projects);
+		  // TODO: Put the following in a loop
 
-	    Set_EndSettingsHead ();
+		  /***** Users *****/
+		  HTM_TR_Begin (NULL);
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Users);
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+		  HTM_TR_End ();
 
-	    /* 2nd. row */
-	    Prj_ShowFormToFilterByDpt ((struct Prj_Projects *) Projects);
+		  /***** Roles in project *****/
+		  HTM_TR_Begin (NULL);
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Roles);
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   Prj_ShowFormToFilterByRoleInPrj ((struct Prj_Projects *) Projects);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+
+		  /***** Assignation to students *****/
+		  HTM_TR_Begin (NULL);
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Assignation);
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   Prj_ShowFormToFilterByAssignation ((struct Prj_Projects *) Projects);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+
+		  /***** Hidden/visible projects *****/
+		  HTM_TR_Begin (NULL);
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Visibility);
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   Prj_ShowFormToFilterByHidden ((struct Prj_Projects *) Projects);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+
+		  /***** Faultiness *****/
+		  HTM_TR_Begin (NULL);
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Faultiness);
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   Prj_ShowFormToFilterByFaultiness ((struct Prj_Projects *) Projects);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+
+		  /***** Review status *****/
+		  HTM_TR_Begin (NULL);
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Review);
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   Prj_ShowFormToFilterByReview ((struct Prj_Projects *) Projects);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+
+		  /***** Department *****/
+		  HTM_TR_Begin (NULL);
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Department);
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+		  	    Prj_ShowFormToFilterByDpt ((struct Prj_Projects *) Projects);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+
+	      HTM_TABLE_End ();
 
 	 /* End fieldset */
 	 HTM_FIELDSET_End ();
@@ -670,7 +733,6 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	           1 << Usr_WHO_SELECTED |
 		   1 << Usr_WHO_ALL;
 
-   Set_BeginOneSettingSelector ();
    for (Who  = (Usr_Who_t) 1;
 	Who <= (Usr_Who_t) (Usr_NUM_WHO - 1);
 	Who++)
@@ -696,7 +758,6 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	    Frm_EndForm ();
 	 Set_EndPref ();
 	}
-   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
@@ -709,7 +770,6 @@ static void Prj_ShowFormToFilterByRoleInPrj (const struct Prj_Projects *Projects
    struct Prj_Filter Filter;
    Prj_RoleInProject_t RoleInPrj;
 
-   Set_BeginOneSettingSelector ();
    for (RoleInPrj  = (Prj_RoleInProject_t) 0;
 	RoleInPrj <= (Prj_RoleInProject_t) (Prj_NUM_ROLES_IN_PROJECT - 1);
 	RoleInPrj++)
@@ -729,24 +789,22 @@ static void Prj_ShowFormToFilterByRoleInPrj (const struct Prj_Projects *Projects
 			 -1L,
 			 Usr_USE_LIST_SELECTED_USERS);
 	    Ico_PutSettingIconLink (RoleIcon[RoleInPrj],Ico_BLACK,
-		                    Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj]);
+				    Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj]);
 	 Frm_EndForm ();
       Set_EndPref ();
      }
-   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
 /*********** Show form to select assigned / non-assigned projects ************/
 /*****************************************************************************/
 
-static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
+static void Prj_ShowFormToFilterByAssignation (const struct Prj_Projects *Projects)
   {
    extern const char *Txt_PROJECT_NONASSIGNED_ASSIGNED_PLURAL[Prj_NUM_ASSIGNED];
    struct Prj_Filter Filter;
    Prj_Assigned_t Assign;
 
-   Set_BeginOneSettingSelector ();
    for (Assign  = (Prj_Assigned_t) 0;
 	Assign <= (Prj_Assigned_t) (Prj_NUM_ASSIGNED - 1);
 	Assign++)
@@ -770,7 +828,6 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 	 Frm_EndForm ();
       Set_EndPref ();
      }
-   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
@@ -792,7 +849,6 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
       [HidVis_VISIBLE] = {"eye.svg"      ,Ico_GREEN},
      };
 
-   Set_BeginOneSettingSelector ();
    for (HidVis  = (HidVis_HiddenOrVisible_t) 0;
 	HidVis <= (HidVis_HiddenOrVisible_t) (HidVis_NUM_HIDDEN_VISIBLE - 1);
 	HidVis++)
@@ -817,14 +873,13 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	 Frm_EndForm ();
       Set_EndPref ();
      }
-   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
 /************** Show form to select faulty/faultless projects ****************/
 /*****************************************************************************/
 
-static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
+static void Prj_ShowFormToFilterByFaultiness (const struct Prj_Projects *Projects)
   {
    extern const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS];
    struct Prj_Filter Filter;
@@ -839,7 +894,6 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
       [Prj_FAULTLESS] = {"check-circle.svg"        ,Ico_GREEN },
      };
 
-   Set_BeginOneSettingSelector ();
    for (Faultiness  = (Prj_Faultiness_t) 0;
 	Faultiness <= (Prj_Faultiness_t) (Prj_NUM_FAULTINESS - 1);
 	Faultiness++)
@@ -864,7 +918,6 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	 Frm_EndForm ();
       Set_EndPref ();
      }
-   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
@@ -877,7 +930,6 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
    struct Prj_Filter Filter;
    Prj_ReviewStatus_t ReviewStatus;
 
-   Set_BeginOneSettingSelector ();
    for (ReviewStatus  = (Prj_ReviewStatus_t) 0;
 	ReviewStatus <= (Prj_ReviewStatus_t) (Prj_NUM_REVIEW_STATUS - 1);
 	ReviewStatus++)
@@ -902,7 +954,6 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
 	 Frm_EndForm ();
       Set_EndPref ();
      }
-   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
@@ -916,37 +967,34 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
    char *SelectClass;
 
    /***** Begin form *****/
-   HTM_DIV_Begin (NULL);
-      Frm_BeginForm (ActSeeAllPrj);
-	 Filter.Who    = Projects->Filter.Who;
-	 Filter.RolPrj = Projects->Filter.RolPrj;
-	 Filter.Assign = Projects->Filter.Assign;
-	 Filter.Hidden = Projects->Filter.Hidden;
-	 Filter.Faulti = Projects->Filter.Faulti;
-	 Filter.Review = Projects->Filter.Review;
-	 Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
-	 Prj_PutPars (&Filter,
-		      Projects->SelectedOrder,
-		      Projects->CurrentPage,
-		      -1L,
-		      Usr_USE_LIST_SELECTED_USERS);
+   Frm_BeginForm (ActSeeAllPrj);
+      Filter.Who    = Projects->Filter.Who;
+      Filter.RolPrj = Projects->Filter.RolPrj;
+      Filter.Assign = Projects->Filter.Assign;
+      Filter.Hidden = Projects->Filter.Hidden;
+      Filter.Faulti = Projects->Filter.Faulti;
+      Filter.Review = Projects->Filter.Review;
+      Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
+      Prj_PutPars (&Filter,
+		   Projects->SelectedOrder,
+		   Projects->CurrentPage,
+		   -1L,
+		   Usr_USE_LIST_SELECTED_USERS);
 
-	 /***** Write selector with departments *****/
-	 if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",
-	               The_GetSuffix ()) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
-				      Projects->Filter.DptCod,			// Selected department
-				      Prj_PAR_FILTER_DPT_COD_NAME,		// Parameter name
-				      SelectClass,				// Selector class
-				      -1L,					// First option
-				      Txt_Any_department,			// Text when no department selected
-				      HTM_SUBMIT_ON_CHANGE);
-	 free (SelectClass);
+      /***** Write selector with departments *****/
+      if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",The_GetSuffix ()) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
+				   Projects->Filter.DptCod,			// Selected department
+				   Prj_PAR_FILTER_DPT_COD_NAME,		// Parameter name
+				   SelectClass,				// Selector class
+				   -1L,					// First option
+				   Txt_Any_department,			// Text when no department selected
+				   HTM_SUBMIT_ON_CHANGE);
+      free (SelectClass);
 
-      /***** End form *****/
-      Frm_EndForm ();
-   HTM_DIV_End ();
+   /***** End form *****/
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1169,24 +1217,13 @@ static unsigned Prj_GetParAssign (void)
 
 static unsigned Prj_GetParHidden (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:	// Students can view only visible projects
-	 return (unsigned) (1 << HidVis_VISIBLE);	// Only visible projects
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 return (unsigned)
-         Par_GetParUnsignedLong (Prj_PAR_FILTER_HID_VIS_NAME,
-				 0,
-				 (1 << HidVis_HIDDEN) |
-				 (1 << HidVis_VISIBLE),
-				 (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
-				 (unsigned) Prj_FILTER_VISIBL_DEFAULT);
-      default:
-	 Err_WrongRoleExit ();
-         return Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;	// Not reached
-     }
+   return (unsigned)
+	  Par_GetParUnsignedLong (Prj_PAR_FILTER_HID_VIS_NAME,
+				  0,
+				  (1 << HidVis_HIDDEN) |
+				  (1 << HidVis_VISIBLE),
+				  (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
+				  (unsigned) Prj_FILTER_VISIBL_DEFAULT);
   }
 
 static unsigned Prj_GetParFaulti (void)

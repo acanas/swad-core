@@ -3579,44 +3579,44 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,
 				       const char *OnSubmit)
   {
    Set_BeginSettingsHead ();
-   Set_BeginOneSettingSelector ();
+      Set_BeginOneSettingSelector ();
 
-   /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
-   Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO);
+	 /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
+	 Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO);
 
-      Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
-				   Set_USR_LIST_AS_CLASS_PHOTO);
+	    Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
+					 Set_USR_LIST_AS_CLASS_PHOTO);
 
-      /* Number of columns in the class photo */
-      Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
-	 Grp_PutParsCodGrps ();
-	 Set_PutParUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
-	 Set_PutParListWithPhotos ();
-	 Usr_PutSelectorNumColsClassPhoto ();
-	 if (FuncPars)
-	    FuncPars (Args);
-      Frm_EndForm ();
+	    /* Number of columns in the class photo */
+	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+	       Grp_PutParsCodGrps ();
+	       Set_PutParUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
+	       Set_PutParListWithPhotos ();
+	       Usr_PutSelectorNumColsClassPhoto ();
+	       if (FuncPars)
+		  FuncPars (Args);
+	    Frm_EndForm ();
 
-   Set_EndPref ();
+	 Set_EndPref ();
 
-   /***** Select Usr_LIST_AS_LISTING *****/
-   Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING);
+	 /***** Select Usr_LIST_AS_LISTING *****/
+	 Set_BeginPref (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING);
 
-      Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
-				   Set_USR_LIST_AS_LISTING);
+	    Set_FormToSelectUsrListType (NextAction,FuncPars,Args,OnSubmit,
+					 Set_USR_LIST_AS_LISTING);
 
-      /* See the photos in list? */
-      Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
-	 Grp_PutParsCodGrps ();
-	 Set_PutParUsrListType (Set_USR_LIST_AS_LISTING);
-	 if (FuncPars)
-	    FuncPars (Args);
-	 Usr_PutCheckboxListWithPhotos ();
-      Frm_EndForm ();
+	    /* See the photos in list? */
+	    Frm_BeginFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+	       Grp_PutParsCodGrps ();
+	       Set_PutParUsrListType (Set_USR_LIST_AS_LISTING);
+	       if (FuncPars)
+		  FuncPars (Args);
+	       Usr_PutCheckboxListWithPhotos ();
+	    Frm_EndForm ();
 
-   Set_EndPref ();
+	 Set_EndPref ();
 
-   Set_EndOneSettingSelector ();
+      Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();
   }
 

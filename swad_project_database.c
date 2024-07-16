@@ -519,27 +519,6 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	    case Prj_ORDER_START_TIME:
 	    case Prj_ORDER_END_TIME:
 	    case Prj_ORDER_TITLE:
-
-	       Ale_ShowAlert (Ale_INFO,
-			       "SELECT prj_projects.PrjCod"
-				" FROM prj_projects LEFT JOIN prj_users"
-				  " ON prj_projects.PrjCod=prj_users.PrjCod"
-			       " WHERE prj_projects.CrsCod=%ld"
-				   "%s"
-				   "%s"
-				   "%s"
-				   "%s"
-		                   "%s"
-			    " ORDER BY %s",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-			       AssignSubQuery,
-			       HidVisSubQuery,
-			       ReviewSubQuery,
-			       DptCodSubQuery,
-			       RolPrjSubQuery[Projects->Filter.RolPrj],
-			       OrderBySubQuery[Projects->SelectedOrder]);
-
-
 	       NumPrjsFromDB = (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get projects",
 			       "SELECT prj_projects.PrjCod"

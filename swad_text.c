@@ -2804,6 +2804,29 @@ const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 #endif
 	};
 
+const char *Txt_Assignation =	// Project assigned/non-assigned to students
+#if   L==1	// ca
+	"Assignaci&oacute;";
+#elif L==2	// de
+	"Zuweisung";
+#elif L==3	// en
+	"Assignation";
+#elif L==4	// es
+	"Asignaci&oacute;n";
+#elif L==5	// fr
+	"Assignation";
+#elif L==6	// gn
+	"Assignaci&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Assegnazione";
+#elif L==8	// pl
+	"Ustalenie";
+#elif L==9	// pt
+	"Atribui&ccedil;&atilde,o";
+#elif L==10	// tr
+	"Atama";
+#endif
+
 const char *Txt_Assignments_area =
 #if   L==1	// ca
 	"Zona d'activitats";
@@ -12443,6 +12466,29 @@ const char *Txt_Failed_email_confirmation_key =
 	"Erro na chave de confirma&ccedil;&atilde;o de email.";
 #elif L==10	// tr
 	"Failed email confirmation key.";			// Çeviri lazim!
+#endif
+
+const char *Txt_Faultiness =	// In projects
+#if   L==1	// ca
+	"Defectuositat";
+#elif L==2	// de
+	"Mangelhaftigkeit";
+#elif L==3	// en
+	"Faultiness";
+#elif L==4	// es
+	"Defectuosos";
+#elif L==5	// fr
+	"D&eacute;fectueux";
+#elif L==6	// gn
+	"Defectuosos";		// Okoteve traducción
+#elif L==7	// it
+	"Difettosi";
+#elif L==8	// pl
+	"Wadliwo&sacute;&cacute;";
+#elif L==9	// pt
+	"Defeituosos";
+#elif L==10	// tr
+	"Kusurlu";
 #endif
 
 const char *Txt_Feedback =
@@ -34775,7 +34821,7 @@ const char *Txt_Review =
 #elif L==5	// fr
 	"Examen";
 #elif L==6	// gn
-	"Revisi&oacute;n";	// Okoteve traducción
+	"Hechajey";
 #elif L==7	// it
 	"Revisione";
 #elif L==8	// pl
@@ -34798,7 +34844,7 @@ const char *Txt_Role =
 #elif L==5	// fr
 	"R&ocirc;le";
 #elif L==6	// gn
-	"Rol";	// Okoteve traducción
+	"Kuatia";
 #elif L==7	// it
 	"Ruolo";
 #elif L==8	// pl
@@ -34806,7 +34852,30 @@ const char *Txt_Role =
 #elif L==9	// pt
 	"Papel";
 #elif L==10	// tr
-	"Role";	// Çeviri lazim!
+	"Rol";
+#endif
+
+const char *Txt_Roles =
+#if   L==1	// ca
+	"Rols";
+#elif L==2	// de
+	"Rollen";
+#elif L==3	// en
+	"Roles";
+#elif L==4	// es
+	"Roles";
+#elif L==5	// fr
+	"R&ocirc;les";
+#elif L==6	// gn
+	"Kuatia";
+#elif L==7	// it
+	"Ruoli";
+#elif L==8	// pl
+	"Role";
+#elif L==9	// pt
+	"Pap&eacute;is";
+#elif L==10	// tr
+	"Roller";
 #endif
 
 const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
@@ -56841,6 +56910,29 @@ const char *Txt_View_homework =
 	"View homework";	// Çeviri lazim!
 #endif
 
+const char *Txt_Visibility =
+#if   L==1	// ca
+	"Visibilitat";
+#elif L==2	// de
+	"Sichtweite";
+#elif L==3	// en
+	"Visibility";
+#elif L==4	// es
+	"Visibilidad";
+#elif L==5	// fr
+	"Visibilit&eacute;";
+#elif L==6	// gn
+	"Visibilidad";	// Okoteve traducción
+#elif L==7	// it
+	"Visibilit&agrave;";
+#elif L==8	// pl
+	"Widoczno&sacute;&cacute;";
+#elif L==9	// pt
+	"Visibilidade";
+#elif L==10	// tr
+	"G&ouml;r&uuml;n&uuml;rl&uuml;&gbreve;&uuml;k";
+#endif
+
 const char *Txt_Visible =
 #if   L==1	// ca
 	"Visible";
@@ -56853,7 +56945,7 @@ const char *Txt_Visible =
 #elif L==5	// fr
 	"Visible";
 #elif L==6	// gn
-	"Visible";	// Okoteve traducción
+	"Ojehecha";
 #elif L==7	// it
 	"Visibile";
 #elif L==8	// pl

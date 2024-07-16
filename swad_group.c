@@ -4295,10 +4295,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
-   /***** Begin setting selector *****/
    Set_BeginOneSettingSelector ();
-
-      /***** Put icons to select which groups *****/
       for (WhichGrps  = Grp_MY_GROUPS;
 	   WhichGrps <= Grp_ALL_GROUPS;
 	   WhichGrps++)
@@ -4314,8 +4311,6 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	    Frm_EndForm ();
 	 Set_EndPref ();
 	}
-
-   /***** End setting selector *****/
    Set_EndOneSettingSelector ();
   }
 

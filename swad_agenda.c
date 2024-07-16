@@ -241,23 +241,23 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
      };
 
    Set_BeginOneSettingSelector ();
-   for (PstFut  = Agd_PAST___EVENTS;
-	PstFut <= Agd_FUTURE_EVENTS;
-	PstFut++)
-     {
-      Set_BeginPref ((Agenda->Past__FutureEvents & (1 << PstFut)));
-	 Frm_BeginForm (ActSeeMyAgd);
-	    Agd_PutParsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
-				 Agenda->PrivatPublicEvents,
-				 Agenda->HiddenVisiblEvents,
-				 Agenda->SelectedOrder,
-				 Agenda->CurrentPage,
-				 -1L);
-	    Ico_PutSettingIconLink (Icon[PstFut],Ico_BLACK,
-				    Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
-	 Frm_EndForm ();
-      Set_EndPref ();
-     }
+      for (PstFut  = Agd_PAST___EVENTS;
+	   PstFut <= Agd_FUTURE_EVENTS;
+	   PstFut++)
+	{
+	 Set_BeginPref ((Agenda->Past__FutureEvents & (1 << PstFut)));
+	    Frm_BeginForm (ActSeeMyAgd);
+	       Agd_PutParsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
+				    Agenda->PrivatPublicEvents,
+				    Agenda->HiddenVisiblEvents,
+				    Agenda->SelectedOrder,
+				    Agenda->CurrentPage,
+				    -1L);
+	       Ico_PutSettingIconLink (Icon[PstFut],Ico_BLACK,
+				       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
+	    Frm_EndForm ();
+	 Set_EndPref ();
+	}
    Set_EndOneSettingSelector ();
   }
 
@@ -280,23 +280,23 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
      };
 
    Set_BeginOneSettingSelector ();
-   for (PrvPub  = Agd_PRIVAT_EVENTS;
-	PrvPub <= Agd_PUBLIC_EVENTS;
-	PrvPub++)
-     {
-      Set_BeginPref ((Agenda->PrivatPublicEvents & (1 << PrvPub)));
-	 Frm_BeginForm (ActSeeMyAgd);
-	    Agd_PutParsMyAgenda (Agenda->Past__FutureEvents,
-				 Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
-				 Agenda->HiddenVisiblEvents,
-				 Agenda->SelectedOrder,
-				 Agenda->CurrentPage,
-				 -1L);
-	    Ico_PutSettingIconLink (Icon[PrvPub].Icon,Icon[PrvPub].Color,
-				    Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
-	 Frm_EndForm ();
-      Set_EndPref ();
-     }
+      for (PrvPub  = Agd_PRIVAT_EVENTS;
+	   PrvPub <= Agd_PUBLIC_EVENTS;
+	   PrvPub++)
+	{
+	 Set_BeginPref ((Agenda->PrivatPublicEvents & (1 << PrvPub)));
+	    Frm_BeginForm (ActSeeMyAgd);
+	       Agd_PutParsMyAgenda (Agenda->Past__FutureEvents,
+				    Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
+				    Agenda->HiddenVisiblEvents,
+				    Agenda->SelectedOrder,
+				    Agenda->CurrentPage,
+				    -1L);
+	       Ico_PutSettingIconLink (Icon[PrvPub].Icon,Icon[PrvPub].Color,
+				       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
+	    Frm_EndForm ();
+	 Set_EndPref ();
+	}
    Set_EndOneSettingSelector ();
   }
 
@@ -311,24 +311,24 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
    HidVis_HiddenOrVisible_t HiddenOrVisible;
 
    Set_BeginOneSettingSelector ();
-   for (HiddenOrVisible  = HidVis_HIDDEN;
-	HiddenOrVisible <= HidVis_VISIBLE;
-	HiddenOrVisible++)
-     {
-      Set_BeginPref ((Agenda->HiddenVisiblEvents & (1 << HiddenOrVisible)));
-	 Frm_BeginForm (ActSeeMyAgd);
-	    Agd_PutParsMyAgenda (Agenda->Past__FutureEvents,
-				 Agenda->PrivatPublicEvents,
-				 Agenda->HiddenVisiblEvents ^ (1 << HiddenOrVisible),	// Toggle
-				 Agenda->SelectedOrder,
-				 Agenda->CurrentPage,
-				 -1L);
-	    Ico_PutSettingIconLink (Ico_HiddenVisible[HiddenOrVisible].Icon,
-	                            Ico_HiddenVisible[HiddenOrVisible].Color,
-				    Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HiddenOrVisible]);
-	 Frm_EndForm ();
-      Set_EndPref ();
-     }
+      for (HiddenOrVisible  = HidVis_HIDDEN;
+	   HiddenOrVisible <= HidVis_VISIBLE;
+	   HiddenOrVisible++)
+	{
+	 Set_BeginPref ((Agenda->HiddenVisiblEvents & (1 << HiddenOrVisible)));
+	    Frm_BeginForm (ActSeeMyAgd);
+	       Agd_PutParsMyAgenda (Agenda->Past__FutureEvents,
+				    Agenda->PrivatPublicEvents,
+				    Agenda->HiddenVisiblEvents ^ (1 << HiddenOrVisible),	// Toggle
+				    Agenda->SelectedOrder,
+				    Agenda->CurrentPage,
+				    -1L);
+	       Ico_PutSettingIconLink (Ico_HiddenVisible[HiddenOrVisible].Icon,
+				       Ico_HiddenVisible[HiddenOrVisible].Color,
+				       Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HiddenOrVisible]);
+	    Frm_EndForm ();
+	 Set_EndPref ();
+	}
    Set_EndOneSettingSelector ();
   }
 
