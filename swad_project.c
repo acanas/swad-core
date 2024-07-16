@@ -202,13 +202,13 @@ static void Prj_ReqUsrsToSelect (void *Projects);
 static void Prj_GetSelectedUsrsAndShowTheirPrjs (struct Prj_Projects *Projects);
 static void Prj_ShowPrjsInCurrentPage (void *Projects);
 
-static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects);
+static void Prj_ShowFormToFilterByUsrs (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByRoleInPrj (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByAssignation (const struct Prj_Projects *Projects);
-static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects);
+static void Prj_ShowFormToFilterByVisibility (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByFaultiness (const struct Prj_Projects *Projects);
 static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects);
-static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects);
+static void Prj_ShowFormToFilterByDepartment (const struct Prj_Projects *Projects);
 
 static Usr_Can_t Prj_CheckIfICanViewProjectFiles (long PrjCod);
 
@@ -550,6 +550,22 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
    extern const char *Txt_Review;
    extern const char *Txt_Department;
    extern const char *Txt_No_projects;
+#define Prj_NUM_FILTERS 7
+   static struct
+     {
+      const char **Label;
+      void (*FuncToShowForm) (const struct Prj_Projects *Projects);
+     } Filters[Prj_NUM_FILTERS] =
+     {
+        {&Txt_Users		,Prj_ShowFormToFilterByUsrs	  },
+        {&Txt_Roles		,Prj_ShowFormToFilterByRoleInPrj  },
+        {&Txt_Assignation	,Prj_ShowFormToFilterByAssignation},
+        {&Txt_Visibility	,Prj_ShowFormToFilterByVisibility },
+        {&Txt_Faultiness	,Prj_ShowFormToFilterByFaultiness },
+        {&Txt_Review		,Prj_ShowFormToFilterByReview     },
+        {&Txt_Department	,Prj_ShowFormToFilterByDepartment },
+     };
+   size_t Filter;
    struct Pag_Pagination Pagination;
    unsigned NumPrj;
 
@@ -572,107 +588,44 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
       Box_BoxBegin (Txt_Projects,Prj_PutIconsListProjects,Projects,
 		    Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-	 /***** Put filters to choice which projects to show *****/
-	 /* Begin fieldset */
+	 /***** Filters to choice which projects to show *****/
 	 HTM_FIELDSET_Begin (NULL);
 	    HTM_LEGEND (Txt_Filters);
-
-	       HTM_TABLE_BeginPadding (2);
-
-		  // TODO: Put the following in a loop
-
-		  /***** Users *****/
+	    HTM_TABLE_BeginPadding (2);
+	       for (Filter = 0;
+		    Filter < Prj_NUM_FILTERS;
+		    Filter++)
+		 {
 		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Users);
+		     Frm_LabelColumn ("Frm_C1 RT","",*(Filters[Filter].Label));
 		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			   Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
+			   Filters[Filter].FuncToShowForm ((struct Prj_Projects *) Projects);
 			HTM_LABEL_End ();
 		     HTM_TD_End ();
 		  HTM_TR_End ();
-
-		  /***** Roles in project *****/
-		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Roles);
-		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			   Prj_ShowFormToFilterByRoleInPrj ((struct Prj_Projects *) Projects);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-
-		  /***** Assignation to students *****/
-		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Assignation);
-		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			   Prj_ShowFormToFilterByAssignation ((struct Prj_Projects *) Projects);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-
-		  /***** Hidden/visible projects *****/
-		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Visibility);
-		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			   Prj_ShowFormToFilterByHidden ((struct Prj_Projects *) Projects);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-
-		  /***** Faultiness *****/
-		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Faultiness);
-		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			   Prj_ShowFormToFilterByFaultiness ((struct Prj_Projects *) Projects);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-
-		  /***** Review status *****/
-		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Review);
-		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			   Prj_ShowFormToFilterByReview ((struct Prj_Projects *) Projects);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-
-		  /***** Department *****/
-		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Department);
-		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		  	    Prj_ShowFormToFilterByDpt ((struct Prj_Projects *) Projects);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-
-	      HTM_TABLE_End ();
-
-	 /* End fieldset */
+		 }
+	   HTM_TABLE_End ();
 	 HTM_FIELDSET_End ();
 
+	 /***** Project listing *****/
 	 if (((struct Prj_Projects *) Projects)->Num)
 	   {
-	    /***** Write links to pages *****/
+	    /* Write links to pages */
 	    Pag_WriteLinksToPagesCentered (Pag_PROJECTS,&Pagination,
 					   (struct Prj_Projects *) Projects,-1L);
 
-	    /***** Allocate memory for the project *****/
+	    /* Allocate memory for the project */
 	    Prj_AllocMemProject (&((struct Prj_Projects *) Projects)->Prj);
 
-	    /***** Begin table *****/
+	    /* Begin table */
 	    HTM_TABLE_Begin ("TBL_SCROLL");
 
-	       /***** Table head *****/
+	       /* Table head */
 	       ((struct Prj_Projects *) Projects)->View = Prj_LIST_PROJECTS;
 	       Prj_ShowProjectsHead ((struct Prj_Projects *) Projects);
 
-	       /***** Write all projects *****/
+	       /* Write all projects */
 	       for (NumPrj  = Pagination.FirstItemVisible, The_ResetRowColor ();
 		    NumPrj <= Pagination.LastItemVisible;
 		    NumPrj++, The_ChangeRowColor ())
@@ -700,13 +653,13 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		  Prj_ShowProjectRow ((struct Prj_Projects *) Projects);
 		 }
 
-	    /***** End table *****/
+	    /* End table */
 	    HTM_TABLE_End ();
 
-	    /***** Free memory of the project *****/
+	    /* Free memory of the project */
 	    Prj_FreeMemProject (&((struct Prj_Projects *) Projects)->Prj);
 
-	    /***** Write again links to pages *****/
+	    /* Write again links to pages */
 	    Pag_WriteLinksToPagesCentered (Pag_PROJECTS,&Pagination,
 					   (struct Prj_Projects *) Projects,-1L);
 	   }
@@ -725,7 +678,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 /**** Show form to choice only my projects, some projects or all projects ****/
 /*****************************************************************************/
 
-static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
+static void Prj_ShowFormToFilterByUsrs (const struct Prj_Projects *Projects)
   {
    struct Prj_Filter Filter;
    Usr_Who_t Who;
@@ -834,7 +787,7 @@ static void Prj_ShowFormToFilterByAssignation (const struct Prj_Projects *Projec
 /************* Show form to select hidden / visible projects *****************/
 /*****************************************************************************/
 
-static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
+static void Prj_ShowFormToFilterByVisibility (const struct Prj_Projects *Projects)
   {
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE];
    struct Prj_Filter Filter;
@@ -960,7 +913,7 @@ static void Prj_ShowFormToFilterByReview (const struct Prj_Projects *Projects)
 /*************** Show form to filter projects by department ******************/
 /*****************************************************************************/
 
-static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
+static void Prj_ShowFormToFilterByDepartment (const struct Prj_Projects *Projects)
   {
    extern const char *Txt_Any_department;
    struct Prj_Filter Filter;
