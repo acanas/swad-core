@@ -2388,7 +2388,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 
    Lay_PutContextualLinkIconText (NextAction,NULL,
                                   NULL,NULL,
-				  "user-cog.svg",Ico_BLACK,
+				  "user-gear.svg",Ico_BLACK,
 				  *TitleText[Adm_CheckIfICanAdminOtherUsrs ()],NULL);
   }
 
@@ -2416,7 +2416,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
       Err_WrongRoleExit ();
    Lay_PutContextualLinkIconText (WhatToDo[Role].NextAction,NULL,
                                   NULL,NULL,
-				  "users-cog.svg",Ico_BLACK,
+				  "users-gear.svg",Ico_BLACK,
 				  *WhatToDo[Role].Title,NULL);
   }
 

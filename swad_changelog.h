@@ -633,10 +633,38 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.87.3 (2024-07-17)"
+#define Log_PLATFORM_VERSION	"SWAD 23.87.4 (2024-07-17)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
+	Version 23.87.4:  Jul 17, 2024  Changes in some icons. (335196 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/chalkboard-user.svg /var/www/html/swad/icon/
+sudo cp icon/circle-user.svg /var/www/html/swad/icon/
+sudo cp icon/person-chalkboard.svg /var/www/html/swad/icon/
+sudo cp icon/user.svg /var/www/html/swad/icon/
+sudo cp icon/user-check.svg /var/www/html/swad/icon/
+sudo cp icon/user-gear.svg /var/www/html/swad/icon/
+sudo cp icon/user-group.svg /var/www/html/swad/icon/
+sudo cp icon/user-lock.svg /var/www/html/swad/icon/
+sudo cp icon/user-plus.svg /var/www/html/swad/icon/
+sudo cp icon/user-slash.svg /var/www/html/swad/icon/
+sudo cp icon/user-tie.svg /var/www/html/swad/icon/
+sudo cp icon/users.svg /var/www/html/swad/icon/
+sudo cp icon/users-gear.svg /var/www/html/swad/icon/
+sudo cp icon/iconset/awesome/chalkboard-user.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/awesome/circle-user.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/awesome/person-chalkboard.svg /var/www/html/swad/icon/iconset/awesome/
+sudo cp icon/iconset/awesome/user.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/awesome/user-clock.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/awesome/user-group.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/awesome/user-tie.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/awesome/users.svg /var/www/html/swad/icon/iconset/awesome
+sudo cp icon/iconset/nuvola/chalkboard-user.svg /var/www/html/swad/icon/iconset/nuvola
+sudo cp icon/iconset/nuvola/circle-user.svg /var/www/html/swad/icon/iconset/nuvola
+sudo cp icon/iconset/nuvola/person-chalkboard.png /var/www/html/swad/icon/iconset/nuvola/
+sudo cp icon/iconset/nuvola/user-group.svg /var/www/html/swad/icon/iconset/nuvola
+
 	Version 23.87.3:  Jul 17, 2024  New layout of filters in messages. (335169 lines)
 	Version 23.87.2:  Jul 17, 2024  Fixed bug in statistics (course hits). (335287 lines)
 	Version 23.87.1:  Jul 16, 2024  Code refactoring in project filters. (335286 lines)

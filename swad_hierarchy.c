@@ -78,7 +78,7 @@ const char *Hie_Icons[Hie_NUM_LEVELS] =
    [Hie_INS] = "university.svg",
    [Hie_CTR] = "building.svg",
    [Hie_DEG] = "graduation-cap.svg",
-   [Hie_CRS] = "chalkboard-teacher.svg",
+   [Hie_CRS] = "chalkboard-user.svg",
   };
 
 unsigned (*Hie_GetMyNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,

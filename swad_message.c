@@ -1588,7 +1588,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
 
    Lay_PutContextualLinkIconText (ActLstBanUsr,NULL,
                                   NULL,NULL,
-				  "lock.svg",Ico_RED,
+				  "user-lock.svg",Ico_RED,
 				  Txt_Banned_users,NULL);
   }
 

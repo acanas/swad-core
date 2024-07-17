@@ -274,8 +274,8 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    [Ntf_EVENT_MESSAGE          ] = "envelope.svg",
    /* Users tab */
    [Ntf_EVENT_ENROLMENT_STD    ] = "user.svg",
-   [Ntf_EVENT_ENROLMENT_NET    ] = "user-tie.svg",
-   [Ntf_EVENT_ENROLMENT_TCH    ] = "user-tie.svg",
+   [Ntf_EVENT_ENROLMENT_NET    ] = "person-chalkboard.svg",
+   [Ntf_EVENT_ENROLMENT_TCH    ] = "person-chalkboard.svg",
    [Ntf_EVENT_ENROLMENT_REQUEST] = "hand-point-up.svg",
    /* Analytics tab */
    [Ntf_EVENT_SURVEY           ] = "poll.svg",

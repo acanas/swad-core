@@ -2396,7 +2396,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	    Lay_PutContextualLinkOnlyIcon (NextAction[Rec_Record.UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
-					   "user-cog.svg",Ico_BLACK);
+					   "user-gear.svg",Ico_BLACK);
 
 	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	   {

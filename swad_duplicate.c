@@ -99,7 +99,7 @@ void Dup_PutLinkToListDupUsrs (void)
    /***** Put form to remove old users *****/
    Lay_PutContextualLinkIconText (ActLstDupUsr,NULL,
                                   NULL,NULL,
-				  "user-friends.svg",Ico_BLACK,
+				  "user-group.svg",Ico_BLACK,
 				  Txt_Duplicate_USERS,NULL);
   }
 

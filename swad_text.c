@@ -3394,7 +3394,7 @@ const char *Txt_Banned_users =
 #elif L==5	// fr
 	"Utilisateurs bannis";
 #elif L==6	// gn
-	"Usuarios bloqueados";	// Okoteve traducción
+	"Puruh&aacute;ra o&ntilde;embotov&eacute;va";
 #elif L==7	// it
 	"Utenti vietati";
 #elif L==8	// pl
@@ -3402,7 +3402,7 @@ const char *Txt_Banned_users =
 #elif L==9	// pt
 	"Usu&aacute;rios banidos";
 #elif L==10	// tr
-	"Banned users";		// Çeviri lazim!
+	"Engellenmi&scedil; kullan&inodot;c&inodot;lar";
 #endif
 
 const char *Txt_Banner =
