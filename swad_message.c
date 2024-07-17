@@ -1423,10 +1423,8 @@ void Msg_ShowRecMsgs (void)
 static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
   {
    extern const char *Hlp_COMMUNICATION_Messages_received;
-   extern const char *Hlp_COMMUNICATION_Messages_received_filter;
    extern const char *Hlp_COMMUNICATION_Messages_sent;
-   extern const char *Hlp_COMMUNICATION_Messages_sent_filter;
-   extern const char *Txt_Filter;
+   extern const char *Txt_Filters;
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
@@ -1453,12 +1451,6 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
       [Msg_WRITING ] = NULL,
       [Msg_RECEIVED] = Hlp_COMMUNICATION_Messages_received,
       [Msg_SENT    ] = Hlp_COMMUNICATION_Messages_sent,
-     };
-   const char *HelpFilter[Msg_NUM_TYPES_OF_MSGS] =
-     {
-      [Msg_WRITING ] = NULL,
-      [Msg_RECEIVED] = Hlp_COMMUNICATION_Messages_received_filter,
-      [Msg_SENT    ] = Hlp_COMMUNICATION_Messages_sent_filter,
      };
 
    /***** Get the page number *****/
@@ -1495,29 +1487,29 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
                  Help[Messages->TypeOfMessages],Box_NOT_CLOSABLE);
    free (NumMsgsStr);
 
-      /***** Filter messages *****/
-      /* Begin box with filter */
-      Box_BoxBegin (Txt_Filter,NULL,NULL,
-		    HelpFilter[Messages->TypeOfMessages],Box_CLOSABLE);
+      /***** Filters for messages *****/
+      HTM_FIELDSET_Begin (NULL);
+	 HTM_LEGEND (Txt_Filters);
 
 	 /* Form to see messages again */
 	 Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
 
-	    HTM_DIV_Begin ("class=\"CM\"");
+	    /* Filters */
+	    HTM_TABLE_BeginPadding (2);
+
 	       Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
 	       if (Messages->TypeOfMessages == Msg_RECEIVED)
 		  Msg_ShowFormToShowOnlyUnreadMessages (Messages);
-	    HTM_DIV_End ();
 
-	    Msg_ShowFormToFilterMsgs (Messages);
+	       Msg_ShowFormToFilterMsgs (Messages);
+	    HTM_TABLE_End ();
 
-	    /***** Put button to refresh *****/
+	    /* Put button to refresh */
 	    Lay_WriteLinkToUpdate (Txt_Update_messages,"CopyMessageToHiddenFields();");
 
 	 Frm_EndForm ();
 
-      /* End box */
-      Box_BoxEnd ();
+      HTM_FIELDSET_End ();
 
       if (Messages->NumMsgs)		// If there are messages...
 	{
@@ -1788,20 +1780,13 @@ void Msg_PutParsMsgsFilters (void *Messages)
 
 static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages)
   {
-   extern const char *Txt_Messages_received_from_A_COURSE;
-   extern const char *Txt_Messages_sent_from_A_COURSE;
+   extern const char *Txt_MSG_From_COURSE;
    extern const char *Txt_any_course;
    static unsigned (*GetDistinctCrssInMyRcvMsgs[Msg_NUM_TYPES_OF_MSGS]) (MYSQL_RES **mysql_res) =
      {
       [Msg_WRITING ] = NULL,
       [Msg_RECEIVED] = Msg_DB_GetDistinctCrssInMyRcvMsgs,
       [Msg_SENT    ] = Msg_DB_GetDistinctCrssInMySntMsgs,
-     };
-   static const char **TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
-     {
-      [Msg_WRITING ] = NULL,
-      [Msg_RECEIVED] = &Txt_Messages_received_from_A_COURSE,
-      [Msg_SENT    ] = &Txt_Messages_sent_from_A_COURSE,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1814,35 +1799,39 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
       NumCrss = GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages] (&mysql_res);
 
    /***** Course selection *****/
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
-      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-			"name=\"FilterCrsCod\" class=\"INPUT_%s\"",
-			The_GetSuffix ());
+   HTM_TR_Begin (NULL);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_MSG_From_COURSE);
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+			      "name=\"FilterCrsCod\" class=\"Frm_C2 INPUT_%s\"",
+			      The_GetSuffix ());
 
-         /* Write a first option to select any course */
-	 HTM_OPTION (HTM_Type_STRING,"",
-		     (Messages->FilterCrsCod < 0) ? HTM_SELECTED :
-						    HTM_NO_ATTR,
-		     "%s",Txt_any_course);
+	       /* Write a first option to select any course */
+	       HTM_OPTION (HTM_Type_STRING,"",
+			   (Messages->FilterCrsCod < 0) ? HTM_SELECTED :
+							  HTM_NO_ATTR,
+			   "%s",Txt_any_course);
 
-	 /* Write an option for each origin course */
-	 for (NumCrs = 0;
-	      NumCrs < NumCrss;
-	      NumCrs++)
-	   {
-	    /* Get next course */
-	    row = mysql_fetch_row (mysql_res);
+	       /* Write an option for each origin course */
+	       for (NumCrs = 0;
+		    NumCrs < NumCrss;
+		    NumCrs++)
+		 {
+		  /* Get next course */
+		  row = mysql_fetch_row (mysql_res);
 
-	    if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			   (CrsCod == Messages->FilterCrsCod) ? HTM_SELECTED :
-							        HTM_NO_ATTR,
-			   "%s",row[1]);	// Course short name
-	   }
+		  if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+		     HTM_OPTION (HTM_Type_LONG,&CrsCod,
+				 (CrsCod == Messages->FilterCrsCod) ? HTM_SELECTED :
+								      HTM_NO_ATTR,
+				 "%s",row[1]);	// Course short name
+		 }
 
-      HTM_SELECT_End ();
-   HTM_LABEL_End ();
+	    HTM_SELECT_End ();
+	 HTM_LABEL_End ();
+      HTM_TD_End ();
+   HTM_TR_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1854,47 +1843,41 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
 static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
   {
-   extern const char *Txt_MSG_From;
+   extern const char *Txt_MSG_From_USER;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
    static const char **TxtFromTo[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = NULL,
-      [Msg_RECEIVED] = &Txt_MSG_From,
+      [Msg_RECEIVED] = &Txt_MSG_From_USER,
       [Msg_SENT    ] = &Txt_MSG_To
      };
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginCenterPadding (2);
+   /***** Filter authors/recipients *****/
+   HTM_TR_Begin (NULL);
+      Frm_LabelColumn ("Frm_C1 RT","",*TxtFromTo[Messages->TypeOfMessages]);
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
+			      Messages->FilterFromTo,
+			      "size=\"20\" class=\"Frm_C2 INPUT_%s\"",
+			      The_GetSuffix ());
+	 HTM_LABEL_End ();
+      HTM_TD_End ();
+   HTM_TR_End ();
 
-      HTM_TR_Begin (NULL);
-
-	 /***** Filter authors/recipients *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColonNBSP (*TxtFromTo[Messages->TypeOfMessages]);
-	       HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
-				 Messages->FilterFromTo,
-				 "size=\"20\" class=\"INPUT_%s\"",
-				 The_GetSuffix ());
-	    HTM_LABEL_End ();
-	 HTM_TD_End ();
-
-	 /***** Filter message content *****/
-	 HTM_TD_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	       HTM_TxtColonNBSP (Txt_MSG_Content);
-	       HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
-				 Messages->FilterContent,
-				 "size=\"20\" class=\"INPUT_%s\"",
-				 The_GetSuffix ());
-	    HTM_LABEL_End ();
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-   /***** End table *****/
-   HTM_TABLE_End ();
+   /***** Filter message content *****/
+   HTM_TR_Begin (NULL);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_MSG_Content);
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
+			      Messages->FilterContent,
+			      "size=\"20\" class=\"Frm_C2 INPUT_%s\"",
+			      The_GetSuffix ());
+	 HTM_LABEL_End ();
+      HTM_TD_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1903,16 +1886,22 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Messages)
   {
-   extern const char *Txt_only_unread_messages;
+   extern const char *Txt_MSG_Unopened;
+   extern const char *Txt_only_unopened_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
-			  Messages->ShowOnlyUnreadMsgs ? HTM_CHECKED :
-							 HTM_NO_ATTR,
-			  "value=\"Y\"");
-      HTM_Txt (Txt_only_unread_messages);
-   HTM_LABEL_End ();
+   HTM_TR_Begin (NULL);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_MSG_Unopened);	// TODO: Translate!!!!!!
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",
+				Messages->ShowOnlyUnreadMsgs ? HTM_CHECKED :
+							       HTM_NO_ATTR,
+				"value=\"Y\"");
+	    HTM_Txt (Txt_only_unopened_messages);
+	 HTM_LABEL_End ();
+      HTM_TD_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1921,7 +1910,6 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
 
 static bool Msg_GetParOnlyUnreadMsgs (void)
   {
-   /***** Get parameter to show only unread (received) messages *****/
    return Par_GetParBool ("OnlyUnreadMsgs");
   }
 
@@ -2001,7 +1989,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    extern const char *Txt_MSG_Not_replied;
    extern const char *Txt_MSG_Unopened;
    extern const char *Txt_MSG_Sent;
-   extern const char *Txt_MSG_From;
+   extern const char *Txt_MSG_From_USER;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
    static Act_Action_t ActionDelMsg[Msg_NUM_TYPES_OF_MSGS] =
@@ -2151,7 +2139,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
 	 /***** Write "From:" *****/
 	 HTM_TD_Begin ("class=\"RT MSG_TIT_%s\"",The_GetSuffix ());
-	    HTM_TxtColonNBSP (Txt_MSG_From);
+	    HTM_TxtColonNBSP (Txt_MSG_From_USER);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");

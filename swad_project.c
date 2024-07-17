@@ -597,7 +597,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		    Filter++)
 		 {
 		  HTM_TR_Begin (NULL);
-		     Frm_LabelColumn ("Frm_C1 RT","",*(Filters[Filter].Label));
+		     Frm_LabelColumn ("Frm_C1 RT","",*Filters[Filter].Label);
 		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 			   Filters[Filter].FuncToShowForm ((struct Prj_Projects *) Projects);

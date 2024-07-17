@@ -13188,29 +13188,6 @@ const char *Txt_Files_works =
 	"Files homework";	// Çeviri lazim!
 #endif
 
-const char *Txt_Filter =	// As a noun
-#if   L==1	// ca
-	"Filtre";
-#elif L==2	// de
-	"Filter";
-#elif L==3	// en
-	"Filter";
-#elif L==4	// es
-	"Filtro";
-#elif L==5	// fr
-	"Filtre";
-#elif L==6	// gn
-	"Filtro";
-#elif L==7	// it
-	"Filtri";
-#elif L==8	// pl
-	"Filtry";
-#elif L==9	// pt
-	"Filtros";
-#elif L==10	// tr
-	"Filtreler";
-#endif
-
 const char *Txt_Filters =	// As a noun
 #if   L==1	// ca
 	"Filtres";
@@ -14327,7 +14304,7 @@ const char *Txt_Frequent_ACTIONS =	// Check that this sentence fits within the a
 
 const char *Txt_from =
 #if   L==1	// ca
-	"de";	// Necessita traducció
+	"des de";
 #elif L==2	// de
 	"von";
 #elif L==3	// en
@@ -14337,7 +14314,7 @@ const char *Txt_from =
 #elif L==5	// fr
 	"de";
 #elif L==6	// gn
-	"de";	// Okoteve traducción
+	"gua";
 #elif L==7	// it
 	"da";
 #elif L==8	// pl
@@ -14345,7 +14322,7 @@ const char *Txt_from =
 #elif L==9	// pt
 	"de";
 #elif L==10	// tr
-	"from";	// Çeviri lazim!
+	"itibaren";
 #endif
 
 const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	// Warning: it is very important to include %s and %u (in this order) in the following sentences
@@ -14393,7 +14370,7 @@ const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	//
 
 const char *Txt_from_this_course =
 #if   L==1	// ca
-	"desde esta asignatura";	// Necessita traducció
+	"des d'aquesta assignatura";
 #elif L==2	// de
 	"von dieser Kurs";
 #elif L==3	// en
@@ -14411,7 +14388,7 @@ const char *Txt_from_this_course =
 #elif L==9	// pt
 	"desta disciplina";
 #elif L==10	// tr
-	"from this course";		// Çeviri lazim!
+	"bu kurstan";
 #endif
 
 const char *Txt_From_this_time_you_can_receive_messages_from_X =	// Warning: it is very important to include %s in the following sentences
@@ -22482,29 +22459,6 @@ const char *Txt_messages_received =
 	"messages received";	// Çeviri lazim!
 #endif
 
-const char *Txt_Messages_received_from_A_COURSE =
-#if   L==1	// ca
-	"Missatges rebuts des de";
-#elif L==2	// de
-	"Empfangene Nachrichten aus";
-#elif L==3	// en
-	"Messages received from";
-#elif L==4	// es
-	"Mensajes recibidos desde";
-#elif L==5	// fr
-	"Messages re&ccedil;us de";
-#elif L==6	// gn
-	"Mensajes recibidos desde";	// Okoteve traducción
-#elif L==7	// it
-	"Messaggi ricevuti da";
-#elif L==8	// pl
-	"Wiadomo&sacute;ci odebrane";
-#elif L==9	// pt
-	"Mensagens recebidas de";
-#elif L==10	// tr
-	"Messages received from";	// Çeviri lazim!
-#endif
-
 const char *Txt_message_sent =
 #if   L==1	// ca
 	"missatge enviat";
@@ -22595,29 +22549,6 @@ const char *Txt_Messages_sent_by_teachers =
 	"Mensagens enviadas por professores";
 #elif L==10	// tr
 	"Messages sent by teachers";		// Çeviri lazim!
-#endif
-
-const char *Txt_Messages_sent_from_A_COURSE =
-#if   L==1	// ca
-	"Missatges enviats des de";
-#elif L==2	// de
-	"Gesendete Nachrichten aus";
-#elif L==3	// en
-	"Messages sent from";
-#elif L==4	// es
-	"Mensajes enviados desde";
-#elif L==5	// fr
-	"Messages envoy&eacute;s de";
-#elif L==6	// gn
-	"Mensajes enviados desde";	// Okoteve traducción
-#elif L==7	// it
-	"Messaggi inviati da";
-#elif L==8	// pl
-	"Wiadomo&sacute;ci wyslane z";
-#elif L==9	// pt
-	"Mensagens enviadas de";
-#elif L==10	// tr
-	"Messages sent from";		// Çeviri lazim!
 #endif
 
 const char *Txt_Minimum =
@@ -23453,7 +23384,30 @@ const char *Txt_MSG_Deleted_without_opening =
 	"Deleted without opening";	// Çeviri lazim!
 #endif
 
-const char *Txt_MSG_From =
+const char *Txt_MSG_From_COURSE =	// Message received/sent FROM a given course
+#if   L==1	// ca
+	"Des de";
+#elif L==2	// de
+	"Von";
+#elif L==3	// en
+	"From";
+#elif L==4	// es
+	"Desde";
+#elif L==5	// fr
+	"De";
+#elif L==6	// gn
+	"Gua";
+#elif L==7	// it
+	"Da";
+#elif L==8	// pl
+	"Z";
+#elif L==9	// pt
+	"De";
+#elif L==10	// tr
+	"Itibaren";
+#endif
+
+const char *Txt_MSG_From_USER =	// Message received/sent FROM a given user
 #if   L==1	// ca
 	"De";
 #elif L==2	// de
@@ -23474,29 +23428,6 @@ const char *Txt_MSG_From =
 	"De";
 #elif L==10	// tr
 	"From";		// Çeviri lazim!
-#endif
-
-const char *Txt_MSG_from =
-#if   L==1	// ca
-	"from";		// Necessita traducció
-#elif L==2	// de
-	"von";
-#elif L==3	// en
-	"from";
-#elif L==4	// es
-	"de";
-#elif L==5	// fr
-	"de";
-#elif L==6	// gn
-	"de";		// Okoteve traducción
-#elif L==7	// it
-	"da";
-#elif L==8	// pl
-	"z";
-#elif L==9	// pt
-	"de";
-#elif L==10	// tr
-	"from";		// Çeviri lazim!
 #endif
 
 const char *Txt_MSG_New =
@@ -28529,27 +28460,27 @@ const char *Txt_only_teachers =
 	", teachers";	// Çeviri lazim!
 #endif
 
-const char *Txt_only_unread_messages =
+const char *Txt_only_unopened_messages =
 #if   L==1	// ca
-	"nom&eacute;s els missatges no llegits";
+	"nom&eacute;s els missatges no oberts";
 #elif L==2	// de
-	"nur ungelesene Nachrichten";
+	"nur unge&ouml;ffnete Nachrichten";
 #elif L==3	// en
-	"only unread messages";
+	"only unopened messages";
 #elif L==4	// es
-	"&uacute;nicamente los mensajes no le&iacute;dos";
+	"s&oacute;lo los mensajes no abiertos";
 #elif L==5	// fr
-	"uniquement les messages non lus";
+	"uniquement les messages non ouverts";
 #elif L==6	// gn
-	"&uacute;nicamente los mensajes no le&iacute;dos";	// Okoteve traducción
+	"marandu ojepe'a'&ytilde;va a&ntilde;oite";
 #elif L==7	// it
-	"solo i messaggi non letti";
+	"solo i messaggi non aperti";
 #elif L==8	// pl
-	"only unread messages";					// Potrzebujesz tlumaczenie
+	"tylko nieotwarte wiadomo&sacute;ci";
 #elif L==9	// pt
-	"apenas mensagens n&atilde;o lidas";
+	"apenas mensagens n&atilde;o abertas";
 #elif L==10	// tr
-	"only unread messages";					// Çeviri lazim!
+	"yaln&inodot;zca a&ccedil;&inodot;lmam&inodot;&scedil; mesajlar";
 #endif
 
 const char *Txt_open_document =
@@ -35015,7 +34946,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	"teachers"	// Çeviri lazim!
+	"&ouml;&gbreve;retmenler"
 #endif
 	,
 	[Sta_ROLE_NON_EDITING_TEACHERS] =
@@ -38641,7 +38572,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	"teachers"	// Çeviri lazim!
+	"&ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_FEMALE] =
@@ -38664,7 +38595,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professoras"
 #elif L==10	// tr
-	"teachers"	// Çeviri lazim!
+	"&ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_MALE] =
@@ -38687,7 +38618,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	"teachers"	// Çeviri lazim!
+	"&ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_TCH][Usr_SEX_ALL] =
@@ -38710,7 +38641,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9	// pt
 	"professores"
 #elif L==10	// tr
-	"teachers"	// Çeviri lazim!
+	"&ouml;&gbreve;retmenler"
 #endif
 	,
 	[Rol_DEG_ADM][Usr_SEX_UNKNOWN] =

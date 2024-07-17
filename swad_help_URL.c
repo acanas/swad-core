@@ -3019,29 +3019,6 @@ const char *Hlp_COMMUNICATION_Messages_received =
 	"COMMUNICATION.Received.en";
 #endif
 
-const char *Hlp_COMMUNICATION_Messages_received_filter =
-#if   L==1
-	"COMMUNICATION.Received.es#filtro";
-#elif L==2
-	"COMMUNICATION.Received.en#filter";
-#elif L==3
-	"COMMUNICATION.Received.en#filter";
-#elif L==4
-	"COMMUNICATION.Received.es#filtro";
-#elif L==5
-	"COMMUNICATION.Received.en#filter";
-#elif L==6
-	"COMMUNICATION.Received.es#filtro";
-#elif L==7
-	"COMMUNICATION.Received.en#filter";
-#elif L==8
-	"COMMUNICATION.Received.en#filter";
-#elif L==9
-	"COMMUNICATION.Received.en#filter";
-#elif L==10	// tr
-	"COMMUNICATION.Received.en#filter";
-#endif
-
 const char *Hlp_COMMUNICATION_Messages_sent =
 #if   L==1
 	"COMMUNICATION.Sent.es";
@@ -3063,29 +3040,6 @@ const char *Hlp_COMMUNICATION_Messages_sent =
 	"COMMUNICATION.Sent.en";
 #elif L==10	// tr
 	"COMMUNICATION.Sent.en";
-#endif
-
-const char *Hlp_COMMUNICATION_Messages_sent_filter =
-#if   L==1
-	"COMMUNICATION.Sent.es#filtro";
-#elif L==2
-	"COMMUNICATION.Sent.en#filter";
-#elif L==3
-	"COMMUNICATION.Sent.en#filter";
-#elif L==4
-	"COMMUNICATION.Sent.es#filtro";
-#elif L==5
-	"COMMUNICATION.Sent.en#filter";
-#elif L==6
-	"COMMUNICATION.Sent.es#filtro";
-#elif L==7
-	"COMMUNICATION.Sent.en#filter";
-#elif L==8
-	"COMMUNICATION.Sent.en#filter";
-#elif L==9
-	"COMMUNICATION.Sent.en#filter";
-#elif L==10	// tr
-	"COMMUNICATION.Sent.en#filter";
 #endif
 
 const char *Hlp_COMMUNICATION_Email =
