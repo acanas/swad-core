@@ -1450,8 +1450,9 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
 	       HTM_LI_Begin (NULL);
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("ForumSet",
-				      ((ForumSet == Forums->ForumSet) ? HTM_NO_ATTR :
-								        HTM_CHECKED) | HTM_SUBMIT_ON_CLICK,
+				      ((ForumSet == Forums->ForumSet) ? HTM_CHECKED :
+								        HTM_NO_ATTR) |
+				      HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) ForumSet);
 		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
 		  HTM_LABEL_End ();

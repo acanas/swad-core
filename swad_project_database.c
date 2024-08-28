@@ -239,24 +239,16 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const char *UsrsSubQuery)	// NULL if no users
   {
    /* Role in project subquery */
-   static const char *RolPrjSubQuery[16] =									// EVL TUT STD UNK
-     {														//  3   2   1   0
-      [0b0000] = "",												//  ·   ·   ·   ·
-      [0b0001] = " AND ("                                	  	    "prj_users.RoleInProject IS NULL)",	//  ·   ·   ·   1
-      [0b0010] = " AND (prj_users.RoleInProject IN "	"(1)"						   ")",	//  ·   ·   1   ·
-      [0b0011] = " AND (prj_users.RoleInProject IN "	"(1)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   ·   1   1
-      [0b0100] = " AND (prj_users.RoleInProject IN "	  "(2)"						   ")",	//  ·   1   ·   ·
-      [0b0101] = " AND (prj_users.RoleInProject IN "	  "(2)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   1   ·   1
-      [0b0110] = " AND (prj_users.RoleInProject IN "	"(1,2)"						   ")",	//  ·   1   1   ·
-      [0b0111] = " AND (prj_users.RoleInProject IN "	"(1,2)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   1   1   1
-      [0b1000] = " AND (prj_users.RoleInProject IN "	    "(3)"					   ")",	//  1   ·   ·   ·
-      [0b1001] = " AND (prj_users.RoleInProject IN "	    "(3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   ·   ·   1
-      [0b1010] = " AND (prj_users.RoleInProject IN "	"(1,""3)"					   ")",	//  1   ·   1   ·
-      [0b1011] = " AND (prj_users.RoleInProject IN "	"(1,""3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   ·   1   1
-      [0b1100] = " AND (prj_users.RoleInProject IN "	  "(2,3)"					   ")",	//  1   1   ·   ·
-      [0b1101] = " AND (prj_users.RoleInProject IN "	  "(2,3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   1   ·   1
-      [0b1110] = " AND (prj_users.RoleInProject IN "	"(1,2,3)"					   ")",	//  1   1   1   ·
-      [0b1111] = "",												//  1   1   1   1
+   static const char *RolPrjSubQuery[16] =				// EVL TUT STD UNK
+     {									//  3   2   1   0
+      [0b0000] = "",							//  ·   ·   ·   ·
+      [0b0010] = " AND (prj_users.RoleInProject IN "	"(1)"	   ")",	//  ·   ·   1   ·
+      [0b0100] = " AND (prj_users.RoleInProject IN "	  "(2)"	   ")",	//  ·   1   ·   ·
+      [0b0110] = " AND (prj_users.RoleInProject IN "	"(1,2)"	   ")",	//  ·   1   1   ·
+      [0b1000] = " AND (prj_users.RoleInProject IN "	    "(3)"  ")",	//  1   ·   ·   ·
+      [0b1010] = " AND (prj_users.RoleInProject IN "	"(1,""3)"  ")",	//  1   ·   1   ·
+      [0b1100] = " AND (prj_users.RoleInProject IN "	  "(2,3)"  ")",	//  1   1   ·   ·
+      [0b1110] = " AND (prj_users.RoleInProject IN "	"(1,2,3)"  ")",	//  1   1   1   ·
      };
    char *AssignSubQuery;
    char *HidVisSubQuery;
@@ -389,8 +381,62 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
    /* Query */
    switch (Projects->Filter.Who)
      {
-      case Usr_WHO_ME:
-	 /* Get list of projects */
+      case Usr_WHO_NONE:
+	 /* Get list of projects without users */
+	 switch (Projects->SelectedOrder)
+	   {
+	    case Prj_ORDER_START_TIME:
+	    case Prj_ORDER_END_TIME:
+	    case Prj_ORDER_TITLE:
+	       NumPrjsFromDB = (unsigned)
+	       DB_QuerySELECT (mysql_res,"can not get projects",
+			       "SELECT prj_projects.PrjCod"
+				" FROM prj_projects"
+			       " WHERE prj_projects.CrsCod=%ld"
+				 "%s"
+				 "%s"
+				 "%s"
+				 "%s"
+				 " AND prj_projects.PrjCod NOT IN (SELECT PrjCod FROM prj_users)"
+			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+			    " ORDER BY %s",
+			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			       AssignSubQuery,
+			       HidVisSubQuery,
+			       ReviewSubQuery,
+			       DptCodSubQuery,
+			       OrderBySubQuery[Projects->SelectedOrder]);
+	       break;
+	    case Prj_ORDER_DEPARTMENT:
+	       NumPrjsFromDB = (unsigned)
+	       DB_QuerySELECT (mysql_res,"can not get projects",
+			       "SELECT prj_projects.PrjCod"
+				" FROM prj_projects LEFT JOIN dpt_departments"
+				  " ON prj_projects.DptCod=dpt_departments.DptCod"
+	                                          " LEFT JOIN prj_users"
+				  " ON prj_projects.PrjCod=prj_users.PrjCod"
+			       " WHERE prj_projects.CrsCod=%ld"
+				 "%s"
+				 "%s"
+				 "%s"
+				 "%s"
+				 " AND prj_projects.PrjCod=prj_users.PrjCod"
+				 " AND prj_users.UsrCod=%ld"
+		                 "%s"
+			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
+			    " ORDER BY %s",
+			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			       AssignSubQuery,
+			       HidVisSubQuery,
+			       ReviewSubQuery,
+			       DptCodSubQuery,
+			       Gbl.Usrs.Me.UsrDat.UsrCod,
+			       RolPrjSubQuery[Projects->Filter.RolPrj],
+			       OrderBySubQuery[Projects->SelectedOrder]);
+	       break;
+	   }
+	 break;
+      case Usr_WHO_ME:	 /* Get list of my projects */
 	 switch (Projects->SelectedOrder)
 	   {
 	    case Prj_ORDER_START_TIME:
@@ -449,10 +495,9 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	       break;
 	   }
 	 break;
-      case Usr_WHO_SELECTED:
+      case Usr_WHO_SELECTED:	    /* Get list of projects associated to selected users */
 	 if (UsrsSubQuery)
 	   {
-	    /* Get list of projects */
 	    switch (Projects->SelectedOrder)
 	      {
 	       case Prj_ORDER_START_TIME:
@@ -512,8 +557,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	      }
 	   }
 	 break;
-      case Usr_WHO_ALL:
-	 /* Get list of projects */
+      case Usr_WHO_ALL:	 /* Get list of projects associated to any user */
 	 switch (Projects->SelectedOrder)
 	   {
 	    case Prj_ORDER_START_TIME:
@@ -530,6 +574,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				   "%s"
 				   "%s"
 		                   "%s"
+			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			    " ORDER BY %s",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       AssignSubQuery,
@@ -553,6 +598,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 				   "%s"
 				   "%s"
 		                   "%s"
+			    " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
 			    " ORDER BY %s",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       AssignSubQuery,

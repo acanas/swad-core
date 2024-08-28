@@ -131,10 +131,11 @@ typedef enum
    Usr_OTHER,
   } Usr_MeOrOther_t;
 
-#define Usr_NUM_WHO 5
+#define Usr_NUM_WHO 6
 typedef enum
   {
    Usr_WHO_UNKNOWN,
+   Usr_WHO_NONE,
    Usr_WHO_ME,
    Usr_WHO_SELECTED,
    Usr_WHO_FOLLOWED,

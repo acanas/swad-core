@@ -633,10 +633,11 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.87.4 (2024-07-17)"
+#define Log_PLATFORM_VERSION	"SWAD 23.87.5 (2024-07-23)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
+	Version 23.87.5:  Jul 23, 2024  Fixed bug in list of projects. (335272 lines)
 	Version 23.87.4:  Jul 17, 2024  Changes in some icons. (335196 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/chalkboard-user.svg /var/www/html/swad/icon/

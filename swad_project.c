@@ -90,7 +90,7 @@ static const Prj_RoleInProject_t Prj_RolesToShow[Prj_NUM_ROLES_TO_SHOW] =
   };
 static const char *RoleIcon[Prj_NUM_ROLES_IN_PROJECT] =
   {
-   [Prj_ROLE_UNK] = "user-slash.svg",
+   [Prj_ROLE_UNK] = NULL,
    [Prj_ROLE_STD] = "person.svg",
    [Prj_ROLE_TUT] = "people-pulling.svg",
    [Prj_ROLE_EVL] = "people-line.svg",	// "people-group.svg"
@@ -455,6 +455,7 @@ void Prj_ShowProjects (struct Prj_Projects *Projects)
   {
    switch (Projects->Filter.Who)
      {
+      case Usr_WHO_NONE:
       case Usr_WHO_ME:
       case Usr_WHO_ALL:
 	 /* Show my projects / all projects */
@@ -682,7 +683,8 @@ static void Prj_ShowFormToFilterByUsrs (const struct Prj_Projects *Projects)
   {
    struct Prj_Filter Filter;
    Usr_Who_t Who;
-   unsigned Mask = 1 << Usr_WHO_ME   |
+   unsigned Mask = 1 << Usr_WHO_NONE |
+		   1 << Usr_WHO_ME |
 	           1 << Usr_WHO_SELECTED |
 		   1 << Usr_WHO_ALL;
 
@@ -723,7 +725,7 @@ static void Prj_ShowFormToFilterByRoleInPrj (const struct Prj_Projects *Projects
    struct Prj_Filter Filter;
    Prj_RoleInProject_t RoleInPrj;
 
-   for (RoleInPrj  = (Prj_RoleInProject_t) 0;
+   for (RoleInPrj  = (Prj_RoleInProject_t) 1;
 	RoleInPrj <= (Prj_RoleInProject_t) (Prj_NUM_ROLES_IN_PROJECT - 1);
 	RoleInPrj++)
      {

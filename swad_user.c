@@ -6469,6 +6469,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
    static const char *Icon[Usr_NUM_WHO] =
      {
       [Usr_WHO_UNKNOWN ] = NULL,
+      [Usr_WHO_NONE    ] = "user-slash.svg",
       [Usr_WHO_ME      ] = NULL,
       [Usr_WHO_SELECTED] = "search.svg",
       [Usr_WHO_FOLLOWED] = "user-check.svg",
@@ -6487,6 +6488,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 		          Txt_WHO[Who],
 	                  "class=\"ICO_HIGHLIGHT PHOTOR15x20\"");
 	 break;
+      case Usr_WHO_NONE:
       case Usr_WHO_SELECTED:
       case Usr_WHO_FOLLOWED:
       case Usr_WHO_ALL:

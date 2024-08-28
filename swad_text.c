@@ -14206,7 +14206,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
 #elif L==9	// pt
 	"F&oacute;runs deste site"
 #elif L==10	// tr
-	"Forums of this location"	// Çeviri lazim!
+	"Bu konumdaki forumlar"
 #endif
 	,
 	[For_ALL_MY_FORUMS] =
@@ -14229,7 +14229,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
 #elif L==9	// pt
 	"Todos os meus f&oacute;runs"
 #elif L==10	// tr
-	"All my forums"		// Çeviri lazim!
+	"T&uuml;m forumlar&inodot;m"
 #endif
 	};
 
@@ -57283,6 +57283,29 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 	"Me"	// Çeviri lazim!
 #endif
 	,
+	[Usr_WHO_NONE] =
+#if   L==1	// ca
+	"Cap usuari"
+#elif L==2	// de
+	"Kein Benutzer"
+#elif L==3	// en
+	"No user"
+#elif L==4	// es
+	"Ning&uacute;n usuario"
+#elif L==5	// fr
+	"Aucun utilisateur"
+#elif L==6	// gn
+	"Ndaip&oacute;ri puruh&aacute;ra"
+#elif L==7	// it
+	"Nessun utente"
+#elif L==8	// pl
+	"Brak u&zdot;ytkownika"
+#elif L==9	// pt
+	"Nenhum utilizador"
+#elif L==10	// tr
+	"Kullan&inodot;c&inodot; yok"
+#endif
+	,
 	[Usr_WHO_SELECTED] =
 #if   L==1	// ca
 	"Usuaris seleccionats"
@@ -57295,7 +57318,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==5	// fr
 	"Utilisateurs s&eacute;lectionn&eacute;s"
 #elif L==6	// gn
-	"Usuarios seleccionados"	// Okoteve traducción
+	"Umi puruh&aacute;ra ojeporav&oacute;va"
 #elif L==7	// it
 	"Utenti selezionati"
 #elif L==8	// pl
@@ -57303,7 +57326,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Usu&aacute;rios selecionados"
 #elif L==10	// tr
-	"Selected users"		// Çeviri lazim!
+	"Se&ccedil;ilen kullan&inodot;c&inodot;lar"
 #endif
 	,
 	[Usr_WHO_FOLLOWED] =
@@ -57318,7 +57341,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==5	// fr
 	"Utilisateurs qui je suis"
 #elif L==6	// gn
-	"Usuarios que sigo"	// Okoteve traducción
+	"Usuario-ku&eacute;ra che aseg&iacute;va"
 #elif L==7	// it
 	"Utenti che sto seguenti"
 #elif L==8	// pl
@@ -57326,7 +57349,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Usu&aacute;rios que estou seguindo"
 #elif L==10	// tr
-	"Users I'm following"	// Çeviri lazim!
+	"Takip etti&gbreve;im kullan&inodot;c&inodot;lar"
 #endif
 	,
 	[Usr_WHO_ALL] =
@@ -57341,7 +57364,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==5	// fr
 	"Tous les utilisateurs"
 #elif L==6	// gn
-	"Todos los usuarios"	// Okoteve traducción
+	"Mayma puruh&aacute;ra"
 #elif L==7	// it
 	"Tutti gli utenti"
 #elif L==8	// pl
@@ -57349,7 +57372,7 @@ const char *Txt_WHO[Usr_NUM_WHO] =
 #elif L==9	// pt
 	"Todos os usu&aacute;rios"
 #elif L==10	// tr
-	"All users"		// Çeviri lazim!
+	"T&uuml;m kullan&inodot;c&inodot;lar"
 #endif
 	};
 
