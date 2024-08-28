@@ -134,7 +134,20 @@ static Usr_Who_t TmlWho_GetWhoFromDB (void)
       /* Get who */
       if (sscanf (row[0],"%u",&UnsignedNum) == 1)
          if (UnsignedNum < Usr_NUM_WHO)
+           {
             Who = (Usr_Who_t) UnsignedNum;
+
+	    switch (Who)
+	      {
+	       case Usr_WHO_ME:	// Show my timeline
+	       case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
+	       case Usr_WHO_ALL:	// Show the timeline of all users
+		  break;
+	       default:
+		  Who = TmlWho_DEFAULT_WHO;
+		  break;
+	      }
+           }
      }
 
    /***** Free structure that stores the query result *****/

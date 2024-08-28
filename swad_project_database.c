@@ -239,6 +239,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
                                  const char *UsrsSubQuery)	// NULL if no users
   {
    /* Role in project subquery */
+   /*
    static const char *RolPrjSubQuery[16] =				// EVL TUT STD UNK
      {									//  3   2   1   0
       [0b0000] = "",							//  ·   ·   ·   ·
@@ -249,6 +250,26 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
       [0b1010] = " AND (prj_users.RoleInProject IN "	"(1,""3)"  ")",	//  1   ·   1   ·
       [0b1100] = " AND (prj_users.RoleInProject IN "	  "(2,3)"  ")",	//  1   1   ·   ·
       [0b1110] = " AND (prj_users.RoleInProject IN "	"(1,2,3)"  ")",	//  1   1   1   ·
+     };
+   */
+   static const char *RolPrjSubQuery[16] =									// EVL TUT STD UNK
+     {														//  3   2   1   0
+      [0b0000] = "",												//  ·   ·   ·   ·
+      [0b0001] = " AND ("                                	  	    "prj_users.RoleInProject IS NULL)",	//  ·   ·   ·   1
+      [0b0010] = " AND (prj_users.RoleInProject IN "	"(1)"						   ")",	//  ·   ·   1   ·
+      [0b0011] = " AND (prj_users.RoleInProject IN "	"(1)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   ·   1   1
+      [0b0100] = " AND (prj_users.RoleInProject IN "	  "(2)"						   ")",	//  ·   1   ·   ·
+      [0b0101] = " AND (prj_users.RoleInProject IN "	  "(2)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   1   ·   1
+      [0b0110] = " AND (prj_users.RoleInProject IN "	"(1,2)"						   ")",	//  ·   1   1   ·
+      [0b0111] = " AND (prj_users.RoleInProject IN "	"(1,2)"		" OR prj_users.RoleInProject IS NULL)",	//  ·   1   1   1
+      [0b1000] = " AND (prj_users.RoleInProject IN "	    "(3)"					   ")",	//  1   ·   ·   ·
+      [0b1001] = " AND (prj_users.RoleInProject IN "	    "(3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   ·   ·   1
+      [0b1010] = " AND (prj_users.RoleInProject IN "	"(1,""3)"					   ")",	//  1   ·   1   ·
+      [0b1011] = " AND (prj_users.RoleInProject IN "	"(1,""3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   ·   1   1
+      [0b1100] = " AND (prj_users.RoleInProject IN "	  "(2,3)"					   ")",	//  1   1   ·   ·
+      [0b1101] = " AND (prj_users.RoleInProject IN "	  "(2,3)"	" OR prj_users.RoleInProject IS NULL)",	//  1   1   ·   1
+      [0b1110] = " AND (prj_users.RoleInProject IN "	"(1,2,3)"					   ")",	//  1   1   1   ·
+      [0b1111] = "",												//  1   1   1   1
      };
    char *AssignSubQuery;
    char *HidVisSubQuery;

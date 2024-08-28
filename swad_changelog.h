@@ -629,14 +629,15 @@ TODO: Emilce Barrera Mesa: Podrías agregar por favor una opción que me permita e
 TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la hora de poner la foto porque la plataforma es muy exigente respecto al fondo de la imagen.
 
 TODO: Francisco Javier Fernández Baldomero: intento mandar un mensaje a un estudiante vacío sin nickname, que se debe haber creado hoy mismo otro usuario con DNI distinto y nickname
-Me sale este error, no sé si por no recordar yo la sintaxis apropiada para mandar a varios destinatarios. ¿No era así?
+Me sale este error, no sé si por no rdbg_debugecordar yo la sintaxis apropiada para mandar a varios destinatarios. ¿No era así?
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.87.5 (2024-07-23)"
+#define Log_PLATFORM_VERSION	"SWAD 23.87.6 (2024-08-28)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
+	Version 23.87.6:  Aug 28, 2024  Fixed bugs in timeline and projects. (335307 lines)
 	Version 23.87.5:  Jul 23, 2024  Fixed bug in list of projects. (335272 lines)
 	Version 23.87.4:  Jul 17, 2024  Changes in some icons. (335196 lines)
 					Copy the following icons to icon public directory:

@@ -861,8 +861,9 @@ void Tml_DB_CreateSubQueryPublishers (TmlUsr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
      {
       case TmlUsr_TIMELINE_USR:	// Show the timeline of a user
 	 *Table = "";
-	 sprintf (SubQuery,"tml_pubs.PublisherCod=%ld AND ",
-	          Gbl.Usrs.Other.UsrDat.UsrCod);
+	 snprintf (SubQuery,TmlPub_MAX_BYTES_SUBQUERY + 1,
+		   "tml_pubs.PublisherCod=%ld AND ",
+		   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
       case TmlUsr_TIMELINE_GBL:	// Show the global timeline
 	 switch (Who)
