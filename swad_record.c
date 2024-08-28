@@ -3967,7 +3967,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 									   HTM_NO_ATTR,
 				    Txt_Another_center);
 			for (NumCtr = 0;
-			     NumCtr < Gbl.Hierarchy.List[Hie_SYS].Num;
+			     NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
 			     NumCtr++)
 			  {
 			   Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];

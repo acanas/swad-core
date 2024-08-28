@@ -633,10 +633,11 @@ Me sale este error, no sé si por no rdbg_debugecordar yo la sintaxis apropiada p
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.87.6 (2024-08-28)"
+#define Log_PLATFORM_VERSION	"SWAD 23.87.7 (2024-08-29)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.79.js"
 /*
+	Version 23.87.7:  Aug 29, 2024  Fixed bug in record card. Reported by Emilce Barrera Mesa. (335308 lines)
 	Version 23.87.6:  Aug 28, 2024  Fixed bugs in timeline and projects. (335307 lines)
 	Version 23.87.5:  Jul 23, 2024  Fixed bug in list of projects. (335272 lines)
 	Version 23.87.4:  Jul 17, 2024  Changes in some icons. (335196 lines)
