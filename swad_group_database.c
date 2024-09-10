@@ -569,8 +569,16 @@ unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod)
 /*********** to which a user belongs to (in the current course) **************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod)
+unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
+							      long UsrCod,
+							      Grp_ClosedOpenGroups_t ClosedOpenGroups)
   {
+   static const char *ClosedOpenGroupsTxt[Grp_NUM_CLOSED_OPEN_GROUPS] =
+     {
+      [Grp_ONLY_CLOSED_GROUPS    ] = " AND grp_groups.Open='N'",
+      [Grp_CLOSED_AND_OPEN_GROUPS] = "",
+     };
+
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the groups which a user belongs to",
 		   "SELECT grp_groups.GrpCod"	// row[0]
@@ -579,11 +587,13 @@ unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_
 			  "grp_users"
 		   " WHERE grp_types.CrsCod=%ld"
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     "%s"
 		     " AND grp_groups.GrpCod=grp_users.GrpCod"
 		     " AND grp_users.UsrCod=%ld"
 		   " ORDER BY grp_types.GrpTypName,"
 			     "grp_groups.GrpName",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   ClosedOpenGroupsTxt[ClosedOpenGroups],
 		   UsrCod);
   }
 

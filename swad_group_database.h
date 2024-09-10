@@ -70,7 +70,9 @@ unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
 
 unsigned Grp_DB_GetLstCodGrpsInAllCrssUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);
-unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);
+unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
+							      long UsrCod,
+							      Grp_ClosedOpenGroups_t ClosedOpenGroups);
 unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod,long GrpTypCod);
 unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql_res);
 unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,

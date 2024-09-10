@@ -1020,7 +1020,8 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
              when the type of group only allows to register in one group *****/
       if (WhatToDo.RegisterUsrs)
 	 /* Check if I have selected more than one group of single enrolment */
-	 if (!Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Role,&LstGrps))
+	 if (!Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Role,&LstGrps,
+							      false))	// Don't check closed groups
 	   {
 	    /* Show warning message and exit */
 	    Ale_ShowAlert (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);

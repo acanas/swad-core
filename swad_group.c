@@ -122,7 +122,8 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
 static void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
-                                         struct ListCodGrps *LstGrps);
+                                         struct ListCodGrps *LstGrps,
+                                         Grp_ClosedOpenGroups_t ClosedOpenGroups);
 static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
 
@@ -143,8 +144,15 @@ static Usr_Can_t Grp_CheckIfICanChangeGrps (void)
   {
    static Usr_Can_t Grp_ICanChangeGrps[Rol_NUM_ROLES] =
      {
+      [Rol_UNK    ] = Usr_CAN_NOT,
+      [Rol_GST    ] = Usr_CAN_NOT,
+      [Rol_USR    ] = Usr_CAN_NOT,
       [Rol_STD    ] = Usr_CAN,
+      [Rol_NET    ] = Usr_CAN_NOT,
       [Rol_TCH    ] = Usr_CAN,
+      [Rol_DEG_ADM] = Usr_CAN_NOT,
+      [Rol_CTR_ADM] = Usr_CAN_NOT,
+      [Rol_INS_ADM] = Usr_CAN_NOT,
       [Rol_SYS_ADM] = Usr_CAN,
      };
 
@@ -514,7 +522,8 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
       /***** I I haven't selected any group, show by default the groups I belong to *****/
       /* Get list of groups of all types in current course I belong to */
       Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
-                                   &LstGrpsIBelong);
+                                   &LstGrpsIBelong,
+                                   Grp_CLOSED_AND_OPEN_GROUPS);
 
       if (LstGrpsIBelong.NumGrps)
 	{
@@ -623,6 +632,9 @@ void Grp_ChangeMyGrpsAndShowChanges (void)
    /***** Change my groups *****/
    Grp_ChangeMyGrps (Cns_VERBOSE);
 
+   /***** Show possible alerts *****/
+   Ale_ShowAlerts (NULL);
+
    /***** Show again the table of selection of groups with the changes already made *****/
    Grp_ReqRegisterInGrps ();
   }
@@ -648,7 +660,7 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the group codes which I want to join to *****/
-   LstGrpsIWant.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
+   LstGrpsIWant.GrpCods = NULL;		// Initialized to avoid bug reported by Coverity
    LstGrpsIWant.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
 
@@ -658,7 +670,8 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose)
    // ...is a radio-based form and not a checkbox-based form...
    // ...this check is made only to avoid problems...
    // ...if the student manipulates the form
-   MySelectionIsValid = Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Gbl.Usrs.Me.Role.Logged,&LstGrpsIWant);
+   MySelectionIsValid = Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Gbl.Usrs.Me.Role.Logged,&LstGrpsIWant,
+									true);	// Check also closed groups I belong
 
    /***** Free list of groups types and groups in this course *****/
    // The lists of group types and groups need to be freed here...
@@ -714,7 +727,8 @@ void Grp_ChangeOtherUsrGrps (void)
    /***** A student can not be enroled in more than one group
 	  if the type of group is of single enrolment *****/
    SelectionIsValid = Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs,
-								      &LstGrpsUsrWants);
+								      &LstGrpsUsrWants,
+							              false);	// Don't check closed groups
 
    /***** Free list of groups types and groups in this course *****/
    // The lists of group types and groups need to be freed here...
@@ -745,7 +759,6 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    unsigned NumGrpIWant;
    unsigned NumGrpThisType;
    struct GroupType *GrpTyp;
-   bool ITryToLeaveAClosedGroup      = false;
    bool ITryToRegisterInAClosedGroup = false;
    bool ITryToRegisterInFullGroup    = false;
    bool RemoveMeFromThisGrp;
@@ -758,86 +771,58 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Query in the database the group codes which I belong to *****/
+   /***** Query in the database the groups which I belong to *****/
    Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
-				&LstGrpsIBelong);
+				&LstGrpsIBelong,
+                                Grp_CLOSED_AND_OPEN_GROUPS);
 
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-     {
-      /***** Go across the list of groups which I belong to and check if I try to leave a closed group *****/
-      for (NumGrpIBelong = 0;
-	   NumGrpIBelong < LstGrpsIBelong.NumGrps && !ITryToLeaveAClosedGroup;
-	   NumGrpIBelong++)
+      /***** Go across the received list of groups which I want to belong
+	     and check that they are not closed or full *****/
+      for (NumGrpIWant = 0;
+	   NumGrpIWant < LstGrpsIWant->NumGrps &&
+			 !ITryToRegisterInAClosedGroup &&
+			 !ITryToRegisterInFullGroup;
+	   NumGrpIWant++)
 	{
-	 for (NumGrpIWant = 0, RemoveMeFromThisGrp = true;
-	      NumGrpIWant < LstGrpsIWant->NumGrps && RemoveMeFromThisGrp;
-	      NumGrpIWant++)
-	    if (LstGrpsIBelong.GrpCods[NumGrpIBelong] == LstGrpsIWant->GrpCods[NumGrpIWant])
-	       RemoveMeFromThisGrp = false;
-	 if (RemoveMeFromThisGrp)
-	    /* Check if the group is closed */
+	 for (NumGrpIBelong = 0, RegisterMeInThisGrp = true;
+	      NumGrpIBelong < LstGrpsIBelong.NumGrps && RegisterMeInThisGrp;
+	      NumGrpIBelong++)
+	    if (LstGrpsIWant->GrpCods[NumGrpIWant] == LstGrpsIBelong.GrpCods[NumGrpIBelong])
+	       RegisterMeInThisGrp = false;
+	 if (RegisterMeInThisGrp)
+	    /* Check if the group is closed or full */
 	    for (NumGrpTyp = 0;
 		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes &&
-		 !ITryToLeaveAClosedGroup;
+			     !ITryToRegisterInAClosedGroup &&
+			     !ITryToRegisterInFullGroup;
 		 NumGrpTyp++)
 	      {
 	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 	       for (NumGrpThisType = 0;
-		    NumGrpThisType < GrpTyp->NumGrps && !ITryToLeaveAClosedGroup;
+		    NumGrpThisType < GrpTyp->NumGrps &&
+				     !ITryToRegisterInAClosedGroup &&
+				     !ITryToRegisterInFullGroup;
 		    NumGrpThisType++)
-		  if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIBelong.GrpCods[NumGrpIBelong])
-		     if ((GrpTyp->LstGrps[NumGrpThisType]).ClosedOrOpen == CloOpe_CLOSED)
-			ITryToLeaveAClosedGroup = true;
+		  if (GrpTyp->LstGrps[NumGrpThisType].GrpCod == LstGrpsIWant->GrpCods[NumGrpIWant])
+		    {
+		     /* Check if the group is closed */
+		     if (GrpTyp->LstGrps[NumGrpThisType].ClosedOrOpen == CloOpe_CLOSED)
+			ITryToRegisterInAClosedGroup = true;
+		     /* Check if the group is full */
+		     else if ((GrpTyp->LstGrps[NumGrpThisType]).NumUsrs[Rol_STD] >=
+			      (GrpTyp->LstGrps[NumGrpThisType]).MaxStudents)
+			ITryToRegisterInFullGroup = true;
+		    }
 	      }
 	}
 
-      if (!ITryToLeaveAClosedGroup)
-	 /***** Go across the list of groups which I want to belong
-		and check that they are not closed or full *****/
-	 for (NumGrpIWant = 0;
-	      NumGrpIWant < LstGrpsIWant->NumGrps &&
-			    !ITryToRegisterInAClosedGroup &&
-			    !ITryToRegisterInFullGroup;
-	      NumGrpIWant++)
-	   {
-	    for (NumGrpIBelong = 0, RegisterMeInThisGrp = true;
-		 NumGrpIBelong < LstGrpsIBelong.NumGrps && RegisterMeInThisGrp;
-		 NumGrpIBelong++)
-	       if (LstGrpsIWant->GrpCods[NumGrpIWant] == LstGrpsIBelong.GrpCods[NumGrpIBelong])
-		  RegisterMeInThisGrp = false;
-	    if (RegisterMeInThisGrp)
-	       /* Check if the group is closed or full */
-	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes &&
-				!ITryToRegisterInAClosedGroup &&
-				!ITryToRegisterInFullGroup;
-		    NumGrpTyp++)
-		 {
-		  GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
-		  for (NumGrpThisType = 0;
-		       NumGrpThisType < GrpTyp->NumGrps &&
-					!ITryToRegisterInAClosedGroup &&
-					!ITryToRegisterInFullGroup;
-		       NumGrpThisType++)
-		     if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIWant->GrpCods[NumGrpIWant])
-		       {
-			/* Check if the group is closed */
-			if ((GrpTyp->LstGrps[NumGrpThisType]).ClosedOrOpen == CloOpe_CLOSED)
-			   ITryToRegisterInAClosedGroup = true;
-			/* Check if the group is full */
-			else if ((GrpTyp->LstGrps[NumGrpThisType]).NumUsrs[Rol_STD] >=
-				 (GrpTyp->LstGrps[NumGrpThisType]).MaxStudents)
-			   ITryToRegisterInFullGroup = true;
-		       }
-		 }
-	   }
-     }
-
-   if (!ITryToLeaveAClosedGroup &&
-       !ITryToRegisterInAClosedGroup &&
+   if (!ITryToRegisterInAClosedGroup &&
        !ITryToRegisterInFullGroup)
      {
-      /***** Go across the list of groups I belong to, removing those groups that are not present in the list of groups I want to belong to *****/
+      /***** Go across the list of groups I belong to,
+             removing me from those open groups that are not present
+             in the received list of groups I want to belong to *****/
       for (NumGrpIBelong = 0;
 	   NumGrpIBelong < LstGrpsIBelong.NumGrps;
 	   NumGrpIBelong++)
@@ -848,10 +833,28 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	    if (LstGrpsIBelong.GrpCods[NumGrpIBelong] == LstGrpsIWant->GrpCods[NumGrpIWant])
 	       RemoveMeFromThisGrp = false;
 	 if (RemoveMeFromThisGrp)
-	    Grp_RemoveUsrFromGroup (Gbl.Usrs.Me.UsrDat.UsrCod,LstGrpsIBelong.GrpCods[NumGrpIBelong]);
+	   {
+	    /* Remove me from this group only if the group is open */
+	    for (NumGrpTyp = 0;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+		 NumGrpTyp++)
+	      {
+	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+	       for (NumGrpThisType = 0;
+		    NumGrpThisType < GrpTyp->NumGrps && RemoveMeFromThisGrp;
+		    NumGrpThisType++)
+		  if (GrpTyp->LstGrps[NumGrpThisType].GrpCod == LstGrpsIBelong.GrpCods[NumGrpIBelong])
+		     if (GrpTyp->LstGrps[NumGrpThisType].ClosedOrOpen == CloOpe_CLOSED)
+			RemoveMeFromThisGrp = false;
+	      }
+	    if (RemoveMeFromThisGrp)
+	       Grp_RemoveUsrFromGroup (Gbl.Usrs.Me.UsrDat.UsrCod,
+				       LstGrpsIBelong.GrpCods[NumGrpIBelong]);
+	   }
 	}
 
-      /***** Go across the list of groups that I want to register in, adding those groups that are not present in the list of groups I belong to *****/
+      /***** Go across the list of groups that I want to register in,
+             adding me to those groups that are not present in the list of groups I belong to *****/
       for (NumGrpIWant = 0;
 	   NumGrpIWant < LstGrpsIWant->NumGrps;
 	   NumGrpIWant++)
@@ -863,13 +866,13 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	       RegisterMeInThisGrp = false;
 	 if (RegisterMeInThisGrp)
 	    Grp_DB_AddUsrToGrp (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                          LstGrpsIWant->GrpCods[NumGrpIWant]);
+	                        LstGrpsIWant->GrpCods[NumGrpIWant]);
 	}
 
       ChangesMade = true;
      }
 
-   /***** Free memory with the list of groups which I belonged to *****/
+   /***** Free memory with the list of open groups which I belonged to *****/
    Grp_FreeListCodGrp (&LstGrpsIBelong);
 
    /***** Unlock tables after changes in my groups *****/
@@ -902,7 +905,8 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 
    /***** Query in the database the group codes which user belongs to *****/
    Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
-				&LstGrpsUsrBelongs);
+				&LstGrpsUsrBelongs,
+                                Grp_CLOSED_AND_OPEN_GROUPS);
 
    /***** Go across the list of groups user belongs to, removing those groups that are not present in the list of groups user wants to belong to *****/
    for (NumGrpUsrBelongs = 0;
@@ -948,8 +952,11 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 /******* Check if not selected more than a group of single enrolment *********/
 /*****************************************************************************/
 
-bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct ListCodGrps *LstGrps)
+bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,
+						     struct ListCodGrps *LstGrps,
+						     bool CheckClosedGroupsIBelong)
   {
+   struct ListCodGrps LstClosedGrpsIBelong;
    struct ListGrpsAlreadySelec *AlreadyExistsGroupOfType;
    unsigned NumCodGrp;
    unsigned NumGrpTyp;
@@ -966,11 +973,45 @@ bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct List
 	 /***** Create and initialize list of groups already selected *****/
 	 Grp_ConstructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
 
-	 /***** Go across the list of groups selected
+	 /***** Go across the list of closed groups to which i belong
 	        checking if a group of the same type is already selected *****/
          SelectionValid = true;
+
+         if (CheckClosedGroupsIBelong)
+           {
+            /***** Query in the database the closed group codes which I belong to *****/
+            Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
+				         &LstClosedGrpsIBelong,
+                                         Grp_ONLY_CLOSED_GROUPS);
+	    for (NumCodGrp = 0;
+		 NumCodGrp < LstClosedGrpsIBelong.NumGrps && SelectionValid;
+		 NumCodGrp++)
+	      {
+	       GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstClosedGrpsIBelong.GrpCods[NumCodGrp]);
+	       MultipleEnrolment = Grp_GetMultipleEnrolmentOfAGroupType (GrpTypCod);
+
+	       if (!MultipleEnrolment)
+		  for (NumGrpTyp = 0;
+		       NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+		       NumGrpTyp++)
+		     if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
+		       {
+			if (AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected)
+			   SelectionValid = false;
+			else
+			   AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected = true;
+			break;
+		       }
+	      }
+
+	    /***** Free memory with the list of closed groups which I belongs to *****/
+	    Grp_FreeListCodGrp (&LstClosedGrpsIBelong);
+           }
+
+	 /***** Go across the list of groups selected
+	        checking if a group of the same type is already selected *****/
 	 for (NumCodGrp = 0;
-	      SelectionValid && NumCodGrp < LstGrps->NumGrps;
+	      NumCodGrp < LstGrps->NumGrps && SelectionValid;
 	      NumCodGrp++)
 	   {
 	    GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstGrps->GrpCods[NumCodGrp]);
@@ -1043,7 +1084,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged;
    extern const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z;
-   struct ListCodGrps LstGrpsHeBelongs;
+   struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpTyp;
    unsigned NumGrpSel;
    unsigned NumGrpThisType;
@@ -1059,10 +1100,11 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
       MultipleEnrolment = Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment;
 
       /***** Query in the database the group codes of any group of this type the student belongs to *****/
-      LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
-      LstGrpsHeBelongs.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
+      LstGrpsUsrBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
+      LstGrpsUsrBelongs.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
       Grp_GetLstCodGrpsUsrBelongs (UsrDat->UsrCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
-	                           &LstGrpsHeBelongs);
+	                           &LstGrpsUsrBelongs,
+                                   Grp_CLOSED_AND_OPEN_GROUPS);
 
       /***** For each group selected by me... *****/
       for (NumGrpSel = 0;
@@ -1079,15 +1121,15 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
 
                /* For each group of this type to which the user belongs... */
                for (NumGrpHeBelongs = 0;
-        	    NumGrpHeBelongs < LstGrpsHeBelongs.NumGrps;
+        	    NumGrpHeBelongs < LstGrpsUsrBelongs.NumGrps;
         	    NumGrpHeBelongs++)
-                  if (LstGrps->GrpCods[NumGrpSel] == LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs])
+                  if (LstGrps->GrpCods[NumGrpSel] == LstGrpsUsrBelongs.GrpCods[NumGrpHeBelongs])
                      AlreadyRegisteredInGrp = true;
                   else if (!MultipleEnrolment)	// If the type of group is of single enrolment
                     {
                      /* If the enrolment is single and the group to which the user belongs is different from the selected ==>
                         remove user from the group to which he belongs */
-                     Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
+                     Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsUsrBelongs.GrpCods[NumGrpHeBelongs]);
                      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
 			            UsrDat->FullName,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
                     }
@@ -1106,7 +1148,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
         }
 
       /***** Free the list of groups of this type to which the user belonged *****/
-      Grp_FreeListCodGrp (&LstGrpsHeBelongs);
+      Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
      }
   }
 
@@ -1120,45 +1162,46 @@ unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *Ls
    extern const char *Txt_THE_USER_X_has_not_been_removed_from_any_group;
    extern const char *Txt_THE_USER_X_has_been_removed_from_one_group;
    extern const char *Txt_THE_USER_X_has_been_removed_from_Y_groups;
-   struct ListCodGrps LstGrpsHeBelongs;
+   struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpSel;
-   unsigned NumGrpHeBelongs;
-   unsigned NumGrpsHeIsRemoved = 0;
+   unsigned NumGrpUsrBelongs;
+   unsigned NumGrpsUsrIsRemoved = 0;
 
    /***** Query in the database the group codes of any group the user belongs to *****/
    Grp_GetLstCodGrpsUsrBelongs (UsrDat->UsrCod,-1L,
-	                        &LstGrpsHeBelongs);
+	                        &LstGrpsUsrBelongs,
+                                Grp_CLOSED_AND_OPEN_GROUPS);
 
    /***** For each group selected by me... *****/
    for (NumGrpSel = 0;
 	NumGrpSel < LstGrps->NumGrps;
 	NumGrpSel++)
       /* For each group to which the user belongs... */
-      for (NumGrpHeBelongs = 0;
-	   NumGrpHeBelongs < LstGrpsHeBelongs.NumGrps;
-	   NumGrpHeBelongs++)
+      for (NumGrpUsrBelongs = 0;
+	   NumGrpUsrBelongs < LstGrpsUsrBelongs.NumGrps;
+	   NumGrpUsrBelongs++)
          /* If the user belongs to a selected group from which he must be removed */
-         if (LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs] == LstGrps->GrpCods[NumGrpSel])
+         if (LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs] == LstGrps->GrpCods[NumGrpSel])
            {
-            Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
-            NumGrpsHeIsRemoved++;
+            Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs]);
+            NumGrpsUsrIsRemoved++;
            }
 
    /***** Write message to inform about how many groups the student has been removed from *****/
-   if (NumGrpsHeIsRemoved == 0)
+   if (NumGrpsUsrIsRemoved == 0)
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_not_been_removed_from_any_group,
                      UsrDat->FullName);
-   else if (NumGrpsHeIsRemoved == 1)
+   else if (NumGrpsUsrIsRemoved == 1)
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_one_group,
                      UsrDat->FullName);
    else	// NumGrpsHeIsRemoved > 1
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_Y_groups,
-                     UsrDat->FullName,NumGrpsHeIsRemoved);
+                     UsrDat->FullName,NumGrpsUsrIsRemoved);
 
    /***** Free the list of groups of this type to which the user belonged *****/
-   Grp_FreeListCodGrp (&LstGrpsHeBelongs);
+   Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
-   return NumGrpsHeIsRemoved;
+   return NumGrpsUsrIsRemoved;
   }
 
 /*****************************************************************************/
@@ -1653,7 +1696,8 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 
    /***** Query from the database the groups of this type which I belong to *****/
    Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-	                        &LstGrpsIBelong);
+	                        &LstGrpsIBelong,
+                                Grp_CLOSED_AND_OPEN_GROUPS);
 
    /***** List the groups *****/
    for (NumGrpThisType = 0;
@@ -1854,7 +1898,8 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 
    /***** Query in the database the group of this type that I belong to *****/
    Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-	                        &LstGrpsIBelong);
+	                        &LstGrpsIBelong,
+                                Grp_CLOSED_AND_OPEN_GROUPS);
    *NumGrpsThisTypeIBelong = LstGrpsIBelong.NumGrps;
 
    /***** Check if I can change my selection *****/
@@ -1966,7 +2011,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	    Attributes = (IBelongToThisGroup ? HTM_CHECKED :
 					       HTM_NO_ATTR) |
 		         ((ICanChangeMySelectionForThisGrp == Usr_CAN) ? HTM_NO_ATTR :
-							                 HTM_NO_ATTR);	// HTM_DISABLED !!!!!!!!!!!!!!!!!
+							                 HTM_DISABLED);
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
 		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
@@ -2060,7 +2105,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
    /***** Query the groups of this type which the user belongs to *****/
    if (UsrCod > 0)
       Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Other.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-				   &LstGrpsUsrBelongs);
+				   &LstGrpsUsrBelongs,
+                                   Grp_CLOSED_AND_OPEN_GROUPS);
 
    /***** List the groups *****/
    for (NumGrpThisType = 0;
@@ -2122,7 +2168,8 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
 
    /***** Query from the database the groups of this type which I belong to *****/
    Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-	                        &LstGrpsIBelong);
+	                        &LstGrpsIBelong,
+                                Grp_CLOSED_AND_OPEN_GROUPS);
 
    /***** List the groups of this type *****/
    for (NumGrpThisType = 0;
@@ -3104,14 +3151,16 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
 // If GrpTypCod < 0 ==> get the groups of any type
 
 static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
-                                         struct ListCodGrps *LstGrps)
+                                         struct ListCodGrps *LstGrps,
+                                         Grp_ClosedOpenGroups_t ClosedOpenGroups)
   {
    MYSQL_RES *mysql_res;
    unsigned NumGrp;
 
    /***** Get groups which a user belong to from database *****/
-   if (GrpTypCod < 0)	// Query the groups of any type in the current course
-      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (&mysql_res,UsrCod);
+   if (GrpTypCod < 0)		// Query the groups of any type in the current course
+      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (&mysql_res,UsrCod,
+									      ClosedOpenGroups);
    else				// Query only the groups of specified type in the current course
       LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (&mysql_res,UsrCod,GrpTypCod);
 
@@ -4226,7 +4275,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp++)
         {
-         /* Add the groups selected of this type to the complete list of groups selected */
+	 /* Open groups of this type selected by user */
          for (Ptr = LstStrCodGrps[NumGrpTyp];
               *Ptr;
               NumGrpWanted++)
@@ -4234,6 +4283,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
             Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
             LstGrpsWanted->GrpCods[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
            }
+
          /* Free memory used by the list of group codes of this type */
          free (LstStrCodGrps[NumGrpTyp]);
         }

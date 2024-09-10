@@ -56,6 +56,13 @@ typedef enum
    Grp_ALL_GROUP_TYPES,
   } Grp_WhichGroupTypes_t;
 
+#define Grp_NUM_CLOSED_OPEN_GROUPS 2
+typedef enum
+  {
+   Grp_ONLY_CLOSED_GROUPS,
+   Grp_CLOSED_AND_OPEN_GROUPS,
+  } Grp_ClosedOpenGroups_t;
+
 // Related with groups
 struct GroupData
   {
@@ -178,7 +185,9 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose);
 void Grp_ChangeOtherUsrGrps (void);
 bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant);
 void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);
-bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct ListCodGrps *LstGrps);
+bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,
+						     struct ListCodGrps *LstGrps,
+						     bool CheckClosedGroupsIBelong);
 void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
 unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);

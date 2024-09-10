@@ -1554,7 +1554,7 @@ function selectUnselectRadio (radio,groupRadios,numRadiosInGroup){
 	if (radio.IsChecked) radio.checked = false;
 	radio.IsChecked = !radio.IsChecked;
 	for (var i=0; i<numRadiosInGroup; i++)
-		if (groupRadios[i] != radio) groupRadios[i].IsChecked = 0;
+		if (groupRadios[i] != radio) groupRadios[i].IsChecked = false;
 }
 
 // Activate a parent checkbox when all children checkboxes are activated
