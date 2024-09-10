@@ -157,8 +157,8 @@ Usr_Can_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
 
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
-         return (UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat)) ? Usr_CAN :
-										      Usr_CAN_NOT;
+         return ((UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat))) ? Usr_CAN :
+										        Usr_CAN_NOT;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -341,10 +341,10 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
   }
 
 /*****************************************************************************/
-/*********************** Send another user's photograph **********************/
+/**** Request the change (sending or removing) another user's photograph *****/
 /*****************************************************************************/
 
-void Pho_SendPhotoUsr (void)
+void Pho_ReqPhotoUsr (void)
   {
    /***** Get user whose photo must be sent or removed *****/
    if (!Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
@@ -518,7 +518,7 @@ void Pho_ReqRemUsrPhoto (void)
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CRS))
+                                                Usr_GET_ROLE_IN_CRS))
       switch (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
 	 case Usr_CAN:

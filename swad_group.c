@@ -1965,8 +1965,8 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 					    "class=\"LM\"");
 	    Attributes = (IBelongToThisGroup ? HTM_CHECKED :
 					       HTM_NO_ATTR) |
-		         (ICanChangeMySelectionForThisGrp ? HTM_NO_ATTR :
-							    HTM_DISABLED);
+		         ((ICanChangeMySelectionForThisGrp == Usr_CAN) ? HTM_NO_ATTR :
+							                 HTM_NO_ATTR);	// HTM_DISABLED !!!!!!!!!!!!!!!!!
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
 		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
