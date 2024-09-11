@@ -2871,7 +2871,7 @@ void Enr_CreateNewUsr1 (void)
 
 	 /***** Change user's groups *****/
 	 if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-	    Grp_ChangeOtherUsrGrps ();
+	    Grp_ChangeUsrGrps (Usr_OTHER,Cns_QUIET);
 	}
 
       /***** Change current action *****/
@@ -2984,15 +2984,7 @@ void Enr_ModifyUsr1 (void)
 
 		  /***** Change user's groups *****/
 		  if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-		     switch (MeOrOther)
-		       {
-			case Usr_ME:
-			   Grp_ChangeMyGrps (Cns_QUIET);
-			   break;
-			case Usr_OTHER:
-			   Grp_ChangeOtherUsrGrps ();
-			   break;
-		       }
+		     Grp_ChangeUsrGrps (MeOrOther,Cns_QUIET);
 
 		  /***** If it's me, change my roles *****/
 		  if (MeOrOther == Usr_ME)

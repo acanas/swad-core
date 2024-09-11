@@ -94,10 +94,12 @@ static void Grp_PutCheckboxAllGrps (void);
 
 static bool Grp_CheckIfSelectionIsValid (struct ListCodGrps *LstGrpsIWant,
 				         struct ListCodGrps *LstGrpsIBelong);
-static void Grp_RemoveMeFromGrps (struct ListCodGrps *LstGrpsIWant,
-				  struct ListCodGrps *LstGrpsIBelong);
-static void Grp_RegisterMeInGrps (struct ListCodGrps *LstGrpsIWant,
-				  struct ListCodGrps *LstGrpsIBelong);
+static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
+				   struct ListCodGrps *LstGrpsUsrWants,
+				   struct ListCodGrps *LstGrpsUsrBelongs);
+static void Grp_RegisterUsrInGrps (Usr_MeOrOther_t MeOrOther,
+				   struct ListCodGrps *LstGrpsUsrWants,
+				   struct ListCodGrps *LstGrpsUsrBelongs);
 
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
@@ -637,7 +639,7 @@ void Grp_FreeListCodSelectedGrps (void)
 void Grp_ChangeMyGrpsAndShowChanges (void)
   {
    /***** Change my groups *****/
-   Grp_ChangeMyGrps (Cns_VERBOSE);
+   Grp_ChangeUsrGrps (Usr_ME,Cns_VERBOSE);
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (NULL);
@@ -647,88 +649,22 @@ void Grp_ChangeMyGrpsAndShowChanges (void)
   }
 
 /*****************************************************************************/
-/****************************** Change my groups *****************************/
-/*****************************************************************************/
-
-void Grp_ChangeMyGrps (Cns_Verbose_t Verbose)
-  {
-   extern const char *Txt_The_requested_group_changes_were_successful;
-   extern const char *Txt_There_has_been_no_change_in_groups;
-   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
-   struct ListCodGrps LstGrpsIWant;
-   bool SelectionIsValid = true;
-   bool ChangesMade;
-
-   /***** Can I change my groups? *****/
-   if (Grp_CheckIfICanChangeGrps () == Usr_CAN_NOT)
-      return;
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   /***** Get the group codes which I want to join to *****/
-   LstGrpsIWant.GrpCods = NULL;		// Initialized to avoid bug reported by Coverity
-   LstGrpsIWant.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
-   Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
-
-   /***** A student can not be enroled in more than one group
-	  if the type of group is of single enrolment *****/
-   // As the form to register in groups of single enrolment...
-   // ...is a radio-based form and not a checkbox-based form...
-   // ...this check is made only to avoid problems...
-   // ...if the student manipulates the form
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrpsIWant,
-									      true);	// Check also closed groups I belong
-         break;
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         break;
-      default:
-         Err_WrongRoleExit ();
-         break;
-     }
-
-   /***** Free list of groups types and groups in this course *****/
-   // The lists of group types and groups need to be freed here...
-   // ...in order to get them again when changing my groups atomically
-   Grp_FreeListGrpTypesAndGrps ();
-
-   /***** Change my groups *****/
-   if (SelectionIsValid)
-     {
-      ChangesMade = Grp_ChangeMyGrpsAtomically (&LstGrpsIWant);
-      if (Verbose == Cns_VERBOSE)
-	{
-	 if (ChangesMade)
-	    Ale_CreateAlert (Ale_SUCCESS,NULL,
-			     Txt_The_requested_group_changes_were_successful);
-	 else
-	    Ale_CreateAlert (Ale_WARNING,NULL,
-			     Txt_There_has_been_no_change_in_groups);
-	}
-     }
-   else if (Verbose == Cns_VERBOSE)
-      Ale_CreateAlert (Ale_WARNING,NULL,
-		       Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
-
-   /***** Free memory with the list of groups which I want to belong to *****/
-   Grp_FreeListCodGrp (&LstGrpsIWant);
-  }
-
-/*****************************************************************************/
 /********************** Change groups of another user ************************/
 /*****************************************************************************/
 
-void Grp_ChangeOtherUsrGrps (void)
+void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
   {
    extern const char *Txt_The_requested_group_changes_were_successful;
    extern const char *Txt_There_has_been_no_change_in_groups;
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
+   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
+     };
    struct ListCodGrps LstGrpsUsrWants;
    bool SelectionIsValid = true;
+   bool ChangesMade;
 
    /***** Can I change another user's groups? *****/
    if (Grp_CheckIfICanChangeGrps () == Usr_CAN_NOT)
@@ -744,11 +680,11 @@ void Grp_ChangeOtherUsrGrps (void)
 
    /***** A student can not be enroled in more than one group
 	  if the type of group is of single enrolment *****/
-   switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
+   switch (UsrDat[MeOrOther]->Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrpsUsrWants,
-									      false);	// Don't check closed groups
+									      MeOrOther == Usr_ME);	// Check closed groups?
          break;
       case Rol_NET:
       case Rol_TCH:
@@ -765,8 +701,19 @@ void Grp_ChangeOtherUsrGrps (void)
 
    /***** Register user in the selected groups *****/
    if (SelectionIsValid)
-      Grp_ChangeGrpsOtherUsrAtomically (&LstGrpsUsrWants);
-   else
+     {
+      ChangesMade = Grp_ChangeGrpsAtomically (MeOrOther,&LstGrpsUsrWants);
+      if (Verbose == Cns_VERBOSE)
+	{
+	 if (ChangesMade)
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_The_requested_group_changes_were_successful);
+	 else
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_There_has_been_no_change_in_groups);
+	}
+     }
+   else if (Verbose == Cns_VERBOSE)
       Ale_CreateAlert (Ale_WARNING,NULL,
 		       Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
 
@@ -775,58 +722,55 @@ void Grp_ChangeOtherUsrGrps (void)
   }
 
 /*****************************************************************************/
-/********************** Change my groups atomically **************************/
+/***************** Change another user's groups atomically *******************/
 /*****************************************************************************/
 // Return true if desired changes are made
 
-bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
+bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
+			       struct ListCodGrps *LstGrpsUsrWants)
   {
-   struct ListCodGrps LstGrpsIBelong;
+   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
+     };
+   struct ListCodGrps LstGrpsUsrBelongs;
    bool SelectionIsValid = true;
 
    /***** Lock tables to make the inscription atomic *****/
-   Grp_DB_LockTables ();
+   if (UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
+      Grp_DB_LockTables ();
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Query in the database the groups which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
-				&LstGrpsIBelong,
+   /***** Query in the database the group codes which user belongs to *****/
+   Grp_GetLstCodGrpsUsrBelongs (UsrDat[MeOrOther]->UsrCod,-1L,
+				&LstGrpsUsrBelongs,
                                 Grp_CLOSED_AND_OPEN_GROUPS);
 
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 /***** Go across the received list of groups which I want to belong
-		and check that they are not closed or full *****/
-	 SelectionIsValid = Grp_CheckIfSelectionIsValid (LstGrpsIWant,&LstGrpsIBelong);
-	 break;
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         break;
-      default:
-         Err_WrongRoleExit ();
-         break;
-     }
+   if (MeOrOther == Usr_ME && Gbl.Usrs.Me.Role.Logged == Rol_STD)
+      /***** Go across the received list of groups which I want to belong
+	     and check that they are not closed or full *****/
+      SelectionIsValid = Grp_CheckIfSelectionIsValid (LstGrpsUsrWants,&LstGrpsUsrBelongs);
 
    if (SelectionIsValid)
      {
-      /***** Go across the list of groups I belong to,
-             removing me from those open groups that are not present
-             in the received list of groups I want to belong to *****/
-      Grp_RemoveMeFromGrps (LstGrpsIWant,&LstGrpsIBelong);
+      /***** Go across the list of groups user belongs to,
+	     removing her/him from those groups not wanted *****/
+      Grp_RemoveUsrFromGrps (MeOrOther,LstGrpsUsrWants,&LstGrpsUsrBelongs);
 
-      /***** Go across the list of groups that I want to register in,
-             adding me to those groups that are not present in the list of groups I belong to *****/
-      Grp_RegisterMeInGrps (LstGrpsIWant,&LstGrpsIBelong);
+      /***** Go across the list of groups wanted,
+	     adding user to those groups to which user doesn't belong to *****/
+      Grp_RegisterUsrInGrps (MeOrOther,LstGrpsUsrWants,&LstGrpsUsrBelongs);
      }
 
-   /***** Unlock tables after changes in my groups *****/
-   DB_UnlockTables ();
+   /***** Unlock tables after changes in groups *****/
+   if (UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
+      DB_UnlockTables ();
 
-   /***** Free memory with the list of open groups which I belonged to *****/
-   Grp_FreeListCodGrp (&LstGrpsIBelong);
+   /***** Free memory with the list of groups which user belonged to *****/
+   Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -894,37 +838,43 @@ static bool Grp_CheckIfSelectionIsValid (struct ListCodGrps *LstGrpsIWant,
   }
 
 /*****************************************************************************/
-/********* Go across the list of groups I belong to,               ***********/
-/********* removing me from those open groups that are not present ***********/
-/********* in the received list of groups I want to register in    ***********/
+/************** Go across the list of groups users belong to, ****************/
+/************** removing user from those groups not wanted    ****************/
 /*****************************************************************************/
 
-static void Grp_RemoveMeFromGrps (struct ListCodGrps *LstGrpsIWant,
-				  struct ListCodGrps *LstGrpsIBelong)
+static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
+				   struct ListCodGrps *LstGrpsUsrWants,
+				   struct ListCodGrps *LstGrpsUsrBelongs)
   {
-   unsigned NumGrpIBelong;
-   unsigned NumGrpIWant;
-   long GrpCodIBelong;
-   bool RemoveMeFromThisGrp;
+   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
+     {
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
+     };
+   unsigned NumGrpUsrBelongs;
+   unsigned NumGrpUsrWants;
+   long GrpCodUsrBelongs;
+   bool RemoveUsrFromThisGrp;
    unsigned NumGrpTyp;
    unsigned NumGrpThisType;
    struct GroupType *GrpTyp;
 
-   for (NumGrpIBelong = 0;
-	NumGrpIBelong < LstGrpsIBelong->NumGrps;
-	NumGrpIBelong++)
+   for (NumGrpUsrBelongs = 0;
+	NumGrpUsrBelongs < LstGrpsUsrBelongs->NumGrps;
+	NumGrpUsrBelongs++)
      {
-      GrpCodIBelong = LstGrpsIBelong->GrpCods[NumGrpIBelong];
+      GrpCodUsrBelongs = LstGrpsUsrBelongs->GrpCods[NumGrpUsrBelongs];
 
       /* Step 1: if I checked this group ==> don't remove me */
-      for (NumGrpIWant = 0, RemoveMeFromThisGrp = true;
-	   NumGrpIWant < LstGrpsIWant->NumGrps && RemoveMeFromThisGrp;
-	   NumGrpIWant++)
-	 if (GrpCodIBelong == LstGrpsIWant->GrpCods[NumGrpIWant])	// I checked this group ==> don't remove me
-	    RemoveMeFromThisGrp = false;
+      for (NumGrpUsrWants = 0, RemoveUsrFromThisGrp = true;
+	   NumGrpUsrWants < LstGrpsUsrWants->NumGrps && RemoveUsrFromThisGrp;
+	   NumGrpUsrWants++)
+	 if (GrpCodUsrBelongs == LstGrpsUsrWants->GrpCods[NumGrpUsrWants])	// This group has been checked ==> don't remove user
+	    RemoveUsrFromThisGrp = false;
 
-      /* Step 2 (only for students): if the group is closed ==> don't remove me */
-      if (Gbl.Usrs.Me.Role.Logged == Rol_STD && RemoveMeFromThisGrp)
+      /* Step 2 (only for a student changing its groups): if the group is closed ==> don't remove user */
+      if (MeOrOther == Usr_ME && Gbl.Usrs.Me.Role.Logged == Rol_STD &&
+	  RemoveUsrFromThisGrp)
 	 /* Find if this group is closed.
 	    - If the group is closed,
 	      it was not sent in the received list of groups I want
@@ -933,20 +883,20 @@ static void Grp_RemoveMeFromGrps (struct ListCodGrps *LstGrpsIWant,
 	      it was not sent in the received list of groups I want
 	      because I unchecked it ==> remove me. */
 	 for (NumGrpTyp = 0;
-	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes && RemoveMeFromThisGrp;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes && RemoveUsrFromThisGrp;
 	      NumGrpTyp++)
 	   {
 	    GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 	    for (NumGrpThisType = 0;
-		 NumGrpThisType < GrpTyp->NumGrps && RemoveMeFromThisGrp;
+		 NumGrpThisType < GrpTyp->NumGrps && RemoveUsrFromThisGrp;
 		 NumGrpThisType++)
-	       if (GrpTyp->LstGrps[NumGrpThisType].GrpCod == GrpCodIBelong)	// Found
+	       if (GrpTyp->LstGrps[NumGrpThisType].GrpCod == GrpCodUsrBelongs)	// Found
 		  if (GrpTyp->LstGrps[NumGrpThisType].ClosedOrOpen == CloOpe_CLOSED)
-		     RemoveMeFromThisGrp = false;
+		     RemoveUsrFromThisGrp = false;
 	   }
 
-      if (RemoveMeFromThisGrp)
-	 Grp_RemoveUsrFromGroup (Gbl.Usrs.Me.UsrDat.UsrCod,GrpCodIBelong);
+      if (RemoveUsrFromThisGrp)
+	 Grp_RemoveUsrFromGroup (UsrDat[MeOrOther]->UsrCod,GrpCodUsrBelongs);
      }
   }
 
@@ -955,93 +905,35 @@ static void Grp_RemoveMeFromGrps (struct ListCodGrps *LstGrpsIWant,
 /***** adding me to those groups that I don't belong to                  *****/
 /*****************************************************************************/
 
-static void Grp_RegisterMeInGrps (struct ListCodGrps *LstGrpsIWant,
-				  struct ListCodGrps *LstGrpsIBelong)
+static void Grp_RegisterUsrInGrps (Usr_MeOrOther_t MeOrOther,
+				   struct ListCodGrps *LstGrpsUsrWants,
+				   struct ListCodGrps *LstGrpsUsrBelongs)
   {
-   unsigned NumGrpIWant;
-   unsigned NumGrpIBelong;
-   long GrpCodIWant;
-   bool RegisterMeInThisGrp;
-
-   for (NumGrpIWant = 0;
-	NumGrpIWant < LstGrpsIWant->NumGrps;
-	NumGrpIWant++)
+   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
      {
-      GrpCodIWant = LstGrpsIWant->GrpCods[NumGrpIWant];
-
-      for (NumGrpIBelong = 0, RegisterMeInThisGrp = true;
-	   NumGrpIBelong < LstGrpsIBelong->NumGrps && RegisterMeInThisGrp;
-	   NumGrpIBelong++)
-	 if (GrpCodIWant == LstGrpsIBelong->GrpCods[NumGrpIBelong])	// I already belong
-	    RegisterMeInThisGrp = false;
-
-      if (RegisterMeInThisGrp)
-	 Grp_DB_AddUsrToGrp (Gbl.Usrs.Me.UsrDat.UsrCod,GrpCodIWant);
-     }
-  }
-
-/*****************************************************************************/
-/********************** Change my groups atomically **************************/
-/*****************************************************************************/
-
-void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
-  {
-   struct ListCodGrps LstGrpsUsrBelongs;
-   unsigned NumGrpUsrBelongs;
+      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
+      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
+     };
    unsigned NumGrpUsrWants;
-   bool RemoveUsrFromThisGrp;
+   unsigned NumGrpUsrBelongs;
+   long GrpCodUsrWants;
    bool RegisterUsrInThisGrp;
 
-   /***** Lock tables to make the inscription atomic *****/
-   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
-      Grp_DB_LockTables ();
-
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   /***** Query in the database the group codes which user belongs to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
-				&LstGrpsUsrBelongs,
-                                Grp_CLOSED_AND_OPEN_GROUPS);
-
-   /***** Go across the list of groups user belongs to, removing those groups that are not present in the list of groups user wants to belong to *****/
-   for (NumGrpUsrBelongs = 0;
-	NumGrpUsrBelongs < LstGrpsUsrBelongs.NumGrps;
-	NumGrpUsrBelongs++)
-     {
-      for (NumGrpUsrWants = 0, RemoveUsrFromThisGrp = true;
-	   NumGrpUsrWants < LstGrpsUsrWants->NumGrps && RemoveUsrFromThisGrp;
-	   NumGrpUsrWants++)
-	 if (LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs] == LstGrpsUsrWants->GrpCods[NumGrpUsrWants])
-	    RemoveUsrFromThisGrp = false;
-      if (RemoveUsrFromThisGrp)
-	 Grp_RemoveUsrFromGroup (Gbl.Usrs.Other.UsrDat.UsrCod,LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs]);
-     }
-
-   /***** Go across the list of groups that user wants to register in, adding those groups that are not present in the list of groups user belongs to *****/
    for (NumGrpUsrWants = 0;
 	NumGrpUsrWants < LstGrpsUsrWants->NumGrps;
 	NumGrpUsrWants++)
      {
+      GrpCodUsrWants = LstGrpsUsrWants->GrpCods[NumGrpUsrWants];
+
       for (NumGrpUsrBelongs = 0, RegisterUsrInThisGrp = true;
-	   NumGrpUsrBelongs < LstGrpsUsrBelongs.NumGrps && RegisterUsrInThisGrp;
+	   NumGrpUsrBelongs < LstGrpsUsrBelongs->NumGrps && RegisterUsrInThisGrp;
 	   NumGrpUsrBelongs++)
-	 if (LstGrpsUsrWants->GrpCods[NumGrpUsrWants] == LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs])
+	 if (GrpCodUsrWants == LstGrpsUsrBelongs->GrpCods[NumGrpUsrBelongs])	// User already belongs
 	    RegisterUsrInThisGrp = false;
+
       if (RegisterUsrInThisGrp)
-	 Grp_DB_AddUsrToGrp (Gbl.Usrs.Other.UsrDat.UsrCod,
-	                       LstGrpsUsrWants->GrpCods[NumGrpUsrWants]);
+	 Grp_DB_AddUsrToGrp (UsrDat[MeOrOther]->UsrCod,GrpCodUsrWants);
      }
-
-   /***** Free memory with the list of groups which user belonged to *****/
-   Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
-
-   /***** Unlock tables after changes in groups *****/
-   if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
-      DB_UnlockTables ();
-
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
   }
 
 /*****************************************************************************/

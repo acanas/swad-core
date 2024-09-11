@@ -2113,7 +2113,7 @@ int swad__sendMyGroups (struct soap *soap,
      }
 
    /***** Change my groups *****/
-   SendMyGroupsOut->success = Grp_ChangeMyGrpsAtomically (&LstGrpsIWant);
+   SendMyGroupsOut->success = Grp_ChangeGrpsAtomically (Usr_ME,&LstGrpsIWant);
 
    /***** Free memory with the list of groups which I want to belong to *****/
    Grp_FreeListCodGrp (&LstGrpsIWant);

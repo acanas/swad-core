@@ -181,10 +181,9 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
 void Grp_GetParCodsSeveralGrps (void);
 void Grp_FreeListCodSelectedGrps (void);
 void Grp_ChangeMyGrpsAndShowChanges (void);
-void Grp_ChangeMyGrps (Cns_Verbose_t Verbose);
-void Grp_ChangeOtherUsrGrps (void);
-bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant);
-void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);
+void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose);
+bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
+			       struct ListCodGrps *LstGrpsUsrWants);
 bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
 						       bool CheckClosedGroupsIBelong);
 void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
