@@ -512,6 +512,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    unsigned NumID;
    char *Title;
    static const struct
@@ -530,11 +531,6 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
       [Rol_CTR_ADM] = {ActRemID_Oth,ActChgID_Oth},
       [Rol_INS_ADM] = {ActRemID_Oth,ActChgID_Oth},
       [Rol_SYS_ADM] = {ActRemID_Oth,ActChgID_Oth},
-     };
-   static const struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat
      };
    static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
      {
@@ -565,7 +561,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 
       /***** List existing user's IDs *****/
       for (NumID = 0;
-	   NumID < UsrDat[MeOrOther]->IDs.Num;
+	   NumID < Usr_UsrDat[MeOrOther]->IDs.Num;
 	   NumID++)
 	{
 	 if (NumID == 0)
@@ -581,41 +577,41 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 	 else	// NumID >= 1
 	    HTM_BR ();
 
-	 if (UsrDat[MeOrOther]->IDs.Num > 1)	// I have two or more IDs
+	 if (Usr_UsrDat[MeOrOther]->IDs.Num > 1)	// I have two or more IDs
 	   {
 	    if (MeOrOther == Usr_ME &&
-		UsrDat[MeOrOther]->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
+		Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
 	       /* Put disabled icon to remove user's ID */
 	       Ico_PutIconRemovalNotAllowed ();
 	    else						// I can remove
 	       /* Form to remove user's ID */
 	       Ico_PutContextualIconToRemove (ActID[MeOrOther].Remove,ID_ID_SECTION_ID,
-					      FuncParsRemove[MeOrOther],UsrDat[MeOrOther]->IDs.List[NumID].ID);
+					      FuncParsRemove[MeOrOther],Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID);
 	   }
 
 	    /* User's ID */
-	    if (asprintf (&Title,UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-								                Txt_ID_X_not_confirmed,
-			  UsrDat[MeOrOther]->IDs.List[NumID].ID) < 0)
+	    if (asprintf (&Title,Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+								                    Txt_ID_X_not_confirmed,
+			  Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
-			    UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-								           "USR_ID_NC",
+			    Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "USR_ID_C" :
+								               "USR_ID_NC",
 			    Title);
 	    free (Title);
-	       HTM_Txt (UsrDat[MeOrOther]->IDs.List[NumID].ID);
-	       HTM_Txt (UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "&check;" :
-							     "");
+	       HTM_Txt (Usr_UsrDat[MeOrOther]->IDs.List[NumID].ID);
+	       HTM_Txt (Usr_UsrDat[MeOrOther]->IDs.List[NumID].Confirmed ? "&check;" :
+							                   "");
 	    HTM_SPAN_End ();
 
-	 if (NumID == UsrDat[MeOrOther]->IDs.Num - 1)
+	 if (NumID == Usr_UsrDat[MeOrOther]->IDs.Num - 1)
 	   {
 	       HTM_TD_End ();
 	    HTM_TR_End ();
 	   }
 	}
 
-      if (UsrDat[MeOrOther]->IDs.Num < ID_MAX_IDS_PER_USER)
+      if (Usr_UsrDat[MeOrOther]->IDs.Num < ID_MAX_IDS_PER_USER)
 	{
 	 /***** Write help text *****/
 	 HTM_TR_Begin (NULL);
@@ -631,8 +627,8 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 
 	    /* Label */
 	    Frm_LabelColumn ("Frm_C1 RT","NewID",
-			     UsrDat[MeOrOther]->IDs.Num ? Txt_Another_ID :		// A new user's ID
-					                  Txt_ID_identity_number);	// The first user's ID
+			     Usr_UsrDat[MeOrOther]->IDs.Num ? Txt_Another_ID :		// A new user's ID
+					                      Txt_ID_identity_number);	// The first user's ID
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
@@ -640,8 +636,8 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
 		  if (MeOrOther == Usr_OTHER)
 		     Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
-				  UsrDat[MeOrOther]->IDs.Num ? UsrDat[MeOrOther]->IDs.List[UsrDat[MeOrOther]->IDs.Num - 1].ID :
-						               "",	// Show the most recent ID
+				  Usr_UsrDat[MeOrOther]->IDs.Num ? Usr_UsrDat[MeOrOther]->IDs.List[Usr_UsrDat[MeOrOther]->IDs.Num - 1].ID :
+						                   "",	// Show the most recent ID
 				  HTM_NO_ATTR,
 				  "id=\"NewID\" class=\"Frm_C2_INPUT INPUT_%s\""
 				  " size=\"16\"",The_GetSuffix ());

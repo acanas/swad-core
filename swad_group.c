@@ -657,11 +657,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
    extern const char *Txt_The_requested_group_changes_were_successful;
    extern const char *Txt_There_has_been_no_change_in_groups;
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
-   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
-     };
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct ListCodGrps LstGrpsUsrWants;
    bool SelectionIsValid = true;
    bool ChangesMade;
@@ -680,7 +676,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
 
    /***** A student can not be enroled in more than one group
 	  if the type of group is of single enrolment *****/
-   switch (UsrDat[MeOrOther]->Roles.InCurrentCrs)
+   switch (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs)
      {
       case Rol_STD:
 	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrpsUsrWants,
@@ -729,23 +725,19 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
 bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
 			       struct ListCodGrps *LstGrpsUsrWants)
   {
-   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
-     };
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct ListCodGrps LstGrpsUsrBelongs;
    bool SelectionIsValid = true;
 
    /***** Lock tables to make the inscription atomic *****/
-   if (UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
+   if (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
       Grp_DB_LockTables ();
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Query in the database the group codes which user belongs to *****/
-   Grp_GetLstCodGrpsUsrBelongs (UsrDat[MeOrOther]->UsrCod,-1L,
+   Grp_GetLstCodGrpsUsrBelongs (Usr_UsrDat[MeOrOther]->UsrCod,-1L,
 				&LstGrpsUsrBelongs,
                                 Grp_CLOSED_AND_OPEN_GROUPS);
 
@@ -766,7 +758,7 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
      }
 
    /***** Unlock tables after changes in groups *****/
-   if (UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
+   if (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
       DB_UnlockTables ();
 
    /***** Free memory with the list of groups which user belonged to *****/
@@ -846,11 +838,7 @@ static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
 				   struct ListCodGrps *LstGrpsUsrWants,
 				   struct ListCodGrps *LstGrpsUsrBelongs)
   {
-   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
-     };
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    unsigned NumGrpUsrBelongs;
    unsigned NumGrpUsrWants;
    long GrpCodUsrBelongs;
@@ -896,7 +884,7 @@ static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
 	   }
 
       if (RemoveUsrFromThisGrp)
-	 Grp_RemoveUsrFromGroup (UsrDat[MeOrOther]->UsrCod,GrpCodUsrBelongs);
+	 Grp_RemoveUsrFromGroup (Usr_UsrDat[MeOrOther]->UsrCod,GrpCodUsrBelongs);
      }
   }
 
@@ -909,11 +897,7 @@ static void Grp_RegisterUsrInGrps (Usr_MeOrOther_t MeOrOther,
 				   struct ListCodGrps *LstGrpsUsrWants,
 				   struct ListCodGrps *LstGrpsUsrBelongs)
   {
-   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
-     };
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    unsigned NumGrpUsrWants;
    unsigned NumGrpUsrBelongs;
    long GrpCodUsrWants;
@@ -932,7 +916,7 @@ static void Grp_RegisterUsrInGrps (Usr_MeOrOther_t MeOrOther,
 	    RegisterUsrInThisGrp = false;
 
       if (RegisterUsrInThisGrp)
-	 Grp_DB_AddUsrToGrp (UsrDat[MeOrOther]->UsrCod,GrpCodUsrWants);
+	 Grp_DB_AddUsrToGrp (Usr_UsrDat[MeOrOther]->UsrCod,GrpCodUsrWants);
      }
   }
 

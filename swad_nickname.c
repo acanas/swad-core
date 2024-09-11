@@ -194,6 +194,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_New_nickname;
    extern const char *Txt_Change_nickname;
    extern const char *Txt_Save_changes;
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    static const struct
      {
       Act_Action_t Remove;
@@ -216,11 +217,6 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
    unsigned NumNicks;
    unsigned NumNick;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat
-     };
    static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
      {
       [Usr_ME   ] = Nck_PutParsRemoveMyNick,
@@ -242,7 +238,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
 
       /***** Get my nicknames *****/
-      NumNicks = Nck_DB_GetUsrNicknames (&mysql_res,UsrDat[MeOrOther]->UsrCod);
+      NumNicks = Nck_DB_GetUsrNicknames (&mysql_res,Usr_UsrDat[MeOrOther]->UsrCod);
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Nickname,Acc_PutLinkToRemoveMyAccount,NULL,
@@ -301,9 +297,9 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 	       HTM_TxtF ("@%s",row[0]);
 
 	       /* Link to QR code */
-	       if (NumNick == 1 && UsrDat[MeOrOther]->Nickname[0])
+	       if (NumNick == 1 && Usr_UsrDat[MeOrOther]->Nickname[0])
 		  QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-					   Usr_PutParOtherUsrCodEncrypted,UsrDat[MeOrOther]->EnUsrCod);
+					   Usr_PutParOtherUsrCodEncrypted,Usr_UsrDat[MeOrOther]->EnUsrCod);
 
 	       /* Form to change the nickname */
 	       if (NumNick > 1)
@@ -342,7 +338,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
 		     if (MeOrOther == Usr_OTHER)
 			Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
-			       UsrDat[MeOrOther]->Nickname);
+			       Usr_UsrDat[MeOrOther]->Nickname);
 		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 				     NickWithArr,
 				     HTM_NO_ATTR,

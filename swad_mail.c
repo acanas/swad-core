@@ -1098,6 +1098,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Email;
    extern const char *Txt_Change_email;
    extern const char *Txt_Save_changes;
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumEmails;
@@ -1120,11 +1121,6 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
       [Rol_CTR_ADM] = {ActRemMaiOth,ActChgMaiOth},
       [Rol_INS_ADM] = {ActRemMaiOth,ActChgMaiOth},
       [Rol_SYS_ADM] = {ActRemMaiOth,ActChgMaiOth},
-     };
-   static const struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat
      };
    static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
      {
@@ -1153,7 +1149,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
-   NumEmails = Mai_DB_GetMyEmails (&mysql_res,UsrDat[MeOrOther]->UsrCod);
+   NumEmails = Mai_DB_GetMyEmails (&mysql_res,Usr_UsrDat[MeOrOther]->UsrCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
@@ -1241,7 +1237,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
 	    Frm_BeginFormAnchor (ActMail[MeOrOther].Change,Mai_EMAIL_SECTION_ID);
 	       if (MeOrOther == Usr_OTHER)
 		  Usr_PutParUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,UsrDat[MeOrOther]->Email,
+	       HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Usr_UsrDat[MeOrOther]->Email,
 				HTM_NO_ATTR,
 				"id=\"NewEmail\""
 				" class=\"Frm_C2_INPUT INPUT_%s\" size=\"16\"",

@@ -393,14 +393,10 @@ void Agd_ShowUsrAgenda (void)
   {
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const char *Txt_Public_agenda_USER;
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct Agd_Agenda Agenda;
    Usr_MeOrOther_t MeOrOther;
    char *Title;
-   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
-     };
    static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (void *EncryptedUsrCod) =
      {
       [Usr_ME   ] = Agd_PutIconsMyPublicAgenda,
@@ -417,10 +413,10 @@ void Agd_ShowUsrAgenda (void)
 
 	    /***** Begin box *****/
 	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
+	    if (asprintf (&Title,Txt_Public_agenda_USER,Usr_UsrDat[MeOrOther]->FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin (Title,
-			  FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
+			  FuncPutIcons[MeOrOther],Usr_UsrDat[MeOrOther]->EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	    free (Title);
 
@@ -452,14 +448,10 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
+   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct Agd_Agenda Agenda;
    Usr_MeOrOther_t MeOrOther;
    char *Title;
-   static struct Usr_Data *UsrDat[Usr_NUM_ME_OR_OTHER] =
-     {
-      [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
-      [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
-     };
    static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (void *EncryptedUsrCod) =
      {
       [Usr_ME   ] = Agd_PutIconToViewEditMyFullAgenda,
@@ -481,10 +473,10 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 
 	    /***** Begin box *****/
 	    MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    if (asprintf (&Title,Txt_Public_agenda_USER,UsrDat[MeOrOther]->FullName) < 0)
+	    if (asprintf (&Title,Txt_Public_agenda_USER,Usr_UsrDat[MeOrOther]->FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin (Title,
-	                  FuncPutIcons[MeOrOther],UsrDat[MeOrOther]->EnUsrCod,
+	                  FuncPutIcons[MeOrOther],Usr_UsrDat[MeOrOther]->EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             free (Title);
 
