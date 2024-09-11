@@ -74,6 +74,9 @@ void Gbl_InitializeGlobals (void)
   {
    extern unsigned Txt_Current_CGI_SWAD_Language;
    Rol_Role_t Role;
+   Hie_Level_t Level;
+   Hie_Level_t LevelParent;
+   Hie_Level_t LevelChildren;
 
    Gbl.Layout.WritingHTMLStart =
    Gbl.Layout.HTMLStartWritten =
@@ -212,31 +215,28 @@ void Gbl_InitializeGlobals (void)
    Cty_FlushCacheCountryName ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
-   Hie_FlushCachedNumNodesInHieLvl (Hie_INS,Hie_CTY);	// Number of institutions in country
-   Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_CTY);	// Number of centers in country
-   Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_CTY);	// Number of degrees in country
-   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_CTY);	// Number of courses in country
+   Dpt_FlushCacheNumDptsInIns ();	// Number of departments in institution
 
-   Dpt_FlushCacheNumDptsInIns ();				// Number of departments in institution
-   Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_INS);	// Number of centers in institution
-   Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_INS);	// Number of degrees in institution
-   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_INS);	// Number of courses in institution
-
-   Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_CTR);	// Number of degrees in center
-   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_CTR);	// Number of courses in center
-
-   Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_DEG);	// Number of courses in degree
+   for (LevelParent  = Hie_CTY;
+	LevelParent <= Hie_DEG;
+	LevelParent++)
+      for (LevelChildren  = LevelParent + 1;
+	   LevelChildren <= Hie_CRS;
+	   LevelChildren++)
+	 Hie_FlushCachedNumNodesInHieLvl (LevelChildren,LevelParent);	// Number of children nodes in parent node
 
    Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
    Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
-   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTY);
-   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_INS);
-   Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTR);
+   for (Level  = Hie_CTY;
+	Level <= Hie_CTR;
+	Level++)
+      Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTY);
    Usr_FlushCacheUsrIsSuperuser ();
-   Hie_FlushCacheUsrBelongsTo (Hie_INS);
-   Hie_FlushCacheUsrBelongsTo (Hie_CTR);
-   Hie_FlushCacheUsrBelongsTo (Hie_DEG);
-   Hie_FlushCacheUsrBelongsTo (Hie_CRS);
+   for (Level  = Hie_INS;
+	Level <= Hie_CRS;
+	Level++)
+      Hie_FlushCacheUsrBelongsTo (Level);
+
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();

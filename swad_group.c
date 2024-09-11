@@ -92,8 +92,8 @@ static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args);
 
 static void Grp_PutCheckboxAllGrps (void);
 
-static bool Grp_CheckIfSelectionIsValid (struct ListCodGrps *LstGrpsIWant,
-				         struct ListCodGrps *LstGrpsIBelong);
+static bool Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsIWant,
+				        struct ListCodGrps *LstGrpsIBelong);
 static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
 				   struct ListCodGrps *LstGrpsUsrWants,
 				   struct ListCodGrps *LstGrpsUsrBelongs);
@@ -727,9 +727,9 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
   {
    extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct ListCodGrps LstGrpsUsrBelongs;
-   bool SelectionIsValid = true;
+   bool SelectionIsValid;
 
-   /***** Lock tables to make the inscription atomic *****/
+   /***** Lock tables to make the registration atomic *****/
    if (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
       Grp_DB_LockTables ();
 
@@ -741,10 +741,12 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
 				&LstGrpsUsrBelongs,
                                 Grp_CLOSED_AND_OPEN_GROUPS);
 
-   if (MeOrOther == Usr_ME && Gbl.Usrs.Me.Role.Logged == Rol_STD)
-      /***** Go across the received list of groups which I want to belong
-	     and check that they are not closed or full *****/
-      SelectionIsValid = Grp_CheckIfSelectionIsValid (LstGrpsUsrWants,&LstGrpsUsrBelongs);
+   /***** Check if selection of groups is valid *****/
+   SelectionIsValid = true;
+   if (MeOrOther == Usr_ME && Gbl.Usrs.Me.Role.Logged == Rol_STD)	// It's me, a student, trying to changing my groups
+      /* Go across the received list of groups which I want to belong
+	 and check that they are not closed or full */
+      SelectionIsValid = Grp_CheckIfNotClosedOrFull (LstGrpsUsrWants,&LstGrpsUsrBelongs);
 
    if (SelectionIsValid)
      {
@@ -775,9 +777,10 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
 /********* removing me from those open groups that are not present ***********/
 /********* in the received list of groups I want to register in    ***********/
 /*****************************************************************************/
+// Return true is selection is valid
 
-static bool Grp_CheckIfSelectionIsValid (struct ListCodGrps *LstGrpsIWant,
-				         struct ListCodGrps *LstGrpsIBelong)
+static bool Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsIWant,
+				        struct ListCodGrps *LstGrpsIBelong)
   {
    unsigned NumGrpIWant;
    unsigned NumGrpIBelong;
@@ -923,6 +926,7 @@ static void Grp_RegisterUsrInGrps (Usr_MeOrOther_t MeOrOther,
 /*****************************************************************************/
 /******* Check if at most one single-enrolment group has been selected *******/
 /*****************************************************************************/
+ // Return true if the selection of groups is valid
 
 bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
 						       bool CheckClosedGroupsIBelong)
@@ -1000,7 +1004,7 @@ bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGr
 	  if a group of each type has been selected *****/
    Grp_DestructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
 
-   return SelectionIsValid; // Return true if the selection of groups is correct
+   return SelectionIsValid;
   }
 
 /*****************************************************************************/
@@ -1011,7 +1015,8 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
   {
    unsigned NumGrpTyp;
 
-   /***** Allocate memory to a list of booleanos that indica if already se ha selected a group of cada type *****/
+   /***** Allocate memory for a list of booleans
+          that indicates if already a group of each type has been selected *****/
    if ((*AlreadyExistsGroupOfType = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                             sizeof (**AlreadyExistsGroupOfType))) == NULL)
       Err_NotEnoughMemoryExit ();
@@ -1049,6 +1054,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
    unsigned NumGrpSel;
    unsigned NumGrpThisType;
    unsigned NumGrpHeBelongs;
+   long GrpCod;
    bool MultipleEnrolment;
    bool AlreadyRegisteredInGrp;
 
@@ -1071,11 +1077,13 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
 	   NumGrpSel < LstGrps->NumGrps;
 	   NumGrpSel++)
         {
+	 GrpCod = LstGrps->GrpCods[NumGrpSel];
+
          /* Check if the selected group is of this type */
          for (NumGrpThisType = 0;
               NumGrpThisType < Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
               NumGrpThisType++)
-            if (LstGrps->GrpCods[NumGrpSel] == Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpCod)
+            if (GrpCod == Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpCod)
               {	// The selected group is of this type
                AlreadyRegisteredInGrp = false;
 
@@ -1083,7 +1091,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
                for (NumGrpHeBelongs = 0;
         	    NumGrpHeBelongs < LstGrpsUsrBelongs.NumGrps;
         	    NumGrpHeBelongs++)
-                  if (LstGrps->GrpCods[NumGrpSel] == LstGrpsUsrBelongs.GrpCods[NumGrpHeBelongs])
+                  if (GrpCod == LstGrpsUsrBelongs.GrpCods[NumGrpHeBelongs])
                      AlreadyRegisteredInGrp = true;
                   else if (!MultipleEnrolment)	// If the type of group is of single enrolment
                     {
@@ -1096,8 +1104,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
 
                if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
                  {
-                  Grp_DB_AddUsrToGrp (UsrDat->UsrCod,
-                                        LstGrps->GrpCods[NumGrpSel]);
+                  Grp_DB_AddUsrToGrp (UsrDat->UsrCod,GrpCod);
                   Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
 		                 UsrDat->FullName,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                                  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);

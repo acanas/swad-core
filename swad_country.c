@@ -211,6 +211,7 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
    unsigned NumCty;
+   Hie_Level_t Level;
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -256,21 +257,12 @@ void Cty_ListCountries2 (void)
 	    /* Number of users who claim to belong to another country */
 	    HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
 
-	    /* Number of institutions in other countries */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
-							   Hie_CTY,0));	// ...in other countries
-
-	    /* Number of centers in other countries */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-							   Hie_CTY,0));	// ...in other countries
-
-	    /* Number of degrees in other countries */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
-							   Hie_CTY,0));	// ...in other countries
-
-	    /* Number of courses in other countries */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
-							   Hie_CTY,0));	// ...in other countries
+	    /* Number of institutions/centers/degrees/courses in other countries */
+	    for (Level  = Hie_INS;
+		 Level <= Hie_CRS;
+		 Level++)
+	       HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Level,		// Number of institutions/centers/degrees/courses...
+							       Hie_CTY,0));	// ...in other countries
 
 	    /* Number of users in courses of other countries */
 	    HTM_TD_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,0,
@@ -289,21 +281,12 @@ void Cty_ListCountries2 (void)
 	    /* Number of users who do not claim to belong to any country */
 	    HTM_TD_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
 
-	    /* Number of institutions with unknown country */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
-							    Hie_CTY,-1L));	// ...with unknown country
-
-	    /* Number of centers with unknown country */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-							    Hie_CTY,-1L));	// ...with unknown country
-
-	    /* Number of degrees with unknown country */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
-							    Hie_CTY,-1L));	// ...with unknown country
-
-	    /* Number of courses with unknown country */
-	    HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
-							    Hie_CTY,-1L));	// ...with unknown country
+	    /* Number of institutions/centers/degrees/courses with unknown country */
+	    for (Level  = Hie_INS;
+		 Level <= Hie_CRS;
+		 Level++)
+	       HTM_TD_Unsigned (Hie_GetCachedNumNodesInHieLvl (Level,		// Number of institutions/centers/degrees/courses...
+							       Hie_CTY,-1L));	// ...with unknown country
 
 	    HTM_TD_Unsigned (0);
 
@@ -384,6 +367,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
   {
    const char *BgColor;
+   Hie_Level_t Level;
 
    BgColor = (Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod) ? "BG_HIGHLIGHT" :
 							        The_GetColorRows ();
@@ -407,33 +391,17 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,Cty));
       HTM_TD_End ();
 
-      /***** Number of institutions *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
-						      Hie_CTY,	// ...in country
-						      Cty->HieCod));
-      HTM_TD_End ();
-
-      /***** Number of centers *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
-						      Hie_CTY,	// ...in country
-						      Cty->HieCod));
-      HTM_TD_End ();
-
-      /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
-						      Hie_CTY,	// ...in country
-						      Cty->HieCod));
-      HTM_TD_End ();
-
-      /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
-						      Hie_CTY,	// ...in country
-						      Cty->HieCod));
-      HTM_TD_End ();
+      /***** Number of institutions/centers/degrees/courses *****/
+      for (Level  = Hie_INS;
+	   Level <= Hie_CRS;
+	   Level++)
+        {
+	 HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Level,		// Number of institutions/centers/degrees/courses...
+							 Hie_CTY,	// ...in country
+							 Cty->HieCod));
+	 HTM_TD_End ();
+        }
 
       /***** Number of users in courses *****/
       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
@@ -1150,6 +1118,7 @@ void Cty_RemoveCountry (void)
    extern bool (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
    extern const char *Txt_Country_X_removed;
+   Hie_Level_t Level;
 
    /***** Country constructor *****/
    Cty_EditingCountryConstructor ();
@@ -1185,10 +1154,10 @@ void Cty_RemoveCountry (void)
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
-      Hie_FlushCachedNumNodesInHieLvl (Hie_INS,Hie_CTY);	// Number of institutions in country
-      Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_CTY);	// Number of centers in country
-      Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_CTY);	// Number of degrees in country
-      Hie_FlushCachedNumNodesInHieLvl (Hie_CRS,Hie_CTY);	// Number of courses in country
+      for (Level  = Hie_INS;
+	   Level <= Hie_CRS;
+	   Level++)
+         Hie_FlushCachedNumNodesInHieLvl (Level,Hie_CTY);	// Number of institutions/centers/degrees/courses in country
       Hie_FlushCacheNumUsrsWhoClaimToBelongTo (Hie_CTY);
 
       /***** Write message to show the change made *****/

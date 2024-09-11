@@ -1270,7 +1270,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 		     ICanSeeInsForum = (Hie_CheckIfIBelongTo (Hie_INS,
 							      Gbl.Hierarchy.Node[Hie_INS].HieCod)
 				        == Usr_BELONG) ? Usr_CAN :
-							   Usr_CAN_NOT;
+							 Usr_CAN_NOT;
 		 }
 	       else
 		  ICanSeeInsForum = Usr_CAN_NOT;
@@ -1286,7 +1286,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 		     ICanSeeCtrForum = (Hie_CheckIfIBelongTo (Hie_CTR,
 							      Gbl.Hierarchy.Node[Hie_CTR].HieCod)
 				        == Usr_BELONG) ? Usr_CAN :
-							   Usr_CAN_NOT;
+							 Usr_CAN_NOT;
 
 		  /***** Links to forums of current institution *****/
 		  if (For_WriteLinksToInsForums (Forums,Gbl.Hierarchy.Node[Hie_INS].HieCod,
@@ -1300,7 +1300,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 			   ICanSeeDegForum = (Hie_CheckIfIBelongTo (Hie_DEG,
 								    Gbl.Hierarchy.Node[Hie_DEG].HieCod)
 				              == Usr_BELONG) ? Usr_CAN :
-								 Usr_CAN_NOT;
+							       Usr_CAN_NOT;
 
 			/***** Links to forums of current center *****/
 			if (For_WriteLinksToCtrForums (Forums,

@@ -739,10 +739,13 @@ void Usr_WriteFirstNameBRSurnames (const struct Usr_Data *UsrDat)
 
 void Usr_FlushCachesUsr (void)
   {
-   Hie_FlushCacheUsrBelongsTo (Hie_INS);
-   Hie_FlushCacheUsrBelongsTo (Hie_CTR);
-   Hie_FlushCacheUsrBelongsTo (Hie_DEG);
-   Hie_FlushCacheUsrBelongsTo (Hie_CRS);
+   Hie_Level_t Level;
+
+   for (Level  = Hie_INS;
+	Level <= Hie_CRS;
+	Level++)
+      Hie_FlushCacheUsrBelongsTo (Level);
+
    Enr_FlushCacheUsrBelongsToCurrentCrs ();
    Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();

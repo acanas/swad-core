@@ -471,7 +471,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	 /* Check if this course is one of my courses */
 	 BgColor = (Hie_CheckIfIBelongTo (Hie_CRS,Crs->HieCod) == Usr_BELONG) ? "BG_HIGHLIGHT" :
-										  The_GetColorRows ();
+										The_GetColorRows ();
 
 	 HTM_TR_Begin (NULL);
 
