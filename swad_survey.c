@@ -2855,7 +2855,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 			   HTM_INPUT_RADIO (StrAns,
 					    HTM_NO_ATTR,
 					    "id=\"Ans%010u_%u\" value=\"%u\""
-					    " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
+					    " onclick=\"selectUnselectRadio(this,false,this.form.Ans%010u,%u)\"",
 					    (unsigned) SvyQst->QstCod,NumAns,
 					    NumAns,
 					    (unsigned) SvyQst->QstCod,NumAnswers);

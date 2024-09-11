@@ -1550,11 +1550,13 @@ function noZoom () {
 /*****************************************************************************/
 
 // Select or unselect a radio element in a form
-function selectUnselectRadio (radio,groupRadios,numRadiosInGroup){
-	if (radio.IsChecked) radio.checked = false;
-	radio.IsChecked = !radio.IsChecked;
+// The second parameter, wasCheckedInitially, provides information about the initial state of the radio
+function selectUnselectRadio (radio,wasCheckedInitially,groupRadios,numRadiosInGroup){
+	if (radio.wasChecked == undefined) radio.wasChecked = wasCheckedInitially;
+	if (radio.wasChecked) radio.checked = false;	// uncheck when clicking on a checked radio
+	radio.wasChecked = !radio.wasChecked;
 	for (var i=0; i<numRadiosInGroup; i++)
-		if (groupRadios[i] != radio) groupRadios[i].IsChecked = false;
+		if (groupRadios[i] != radio) groupRadios[i].wasChecked = false;
 }
 
 // Activate a parent checkbox when all children checkboxes are activated

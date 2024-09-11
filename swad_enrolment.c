@@ -927,6 +927,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
    struct Usr_Data UsrDat;
    bool ItLooksLikeAUsrID;
    Enr_RegRemUsrsAction_t RegRemUsrsAction;
+   bool SelectionIsValid = true;
 
    /***** Check the role of users to register / remove *****/
    switch (Role)
@@ -1019,59 +1020,193 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
       /***** A student can't belong to more than one group
              when the type of group only allows to register in one group *****/
       if (WhatToDo.RegisterUsrs)
-	 /* Check if I have selected more than one group of single enrolment */
-	 if (!Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Role,&LstGrps,
-							      false))	// Don't check closed groups
+        {
+	 switch (Role)
 	   {
-	    /* Show warning message and exit */
-	    Ale_ShowAlert (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
-
-	    /* Free memory used by lists of groups and abort */
-	    Grp_FreeListCodGrp (&LstGrps);
-	    Grp_FreeListGrpTypesAndGrps ();
-	    return;
+	    case Rol_STD:
+	       /* Check if I have selected more than one group of single enrolment */
+	       SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrps,
+							                            false);	// Don't check closed groups
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       break;
+	    default:
+	       Err_WrongRoleExit ();
+	       break;
 	   }
+        }
      }
 
-   /***** Get list of users' IDs *****/
-   if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
-      Err_NotEnoughMemoryExit ();
-   Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Remove users *****/
-   if (WhatToDo.RemoveUsrs)
+   if (SelectionIsValid)
      {
-      /***** Get list of users in current course *****/
-      Usr_GetListUsrs (Hie_CRS,Role);
+      /***** Get list of users' IDs *****/
+      if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
+	 Err_NotEnoughMemoryExit ();
+      Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
 
-      if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** Remove users *****/
+      if (WhatToDo.RemoveUsrs)
 	{
-	 /***** Initialize list of users to remove *****/
-	 for (NumCurrentUsr = 0;
-	      NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-	      NumCurrentUsr++)
-	    Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
+	 /***** Get list of users in current course *****/
+	 Usr_GetListUsrs (Hie_CRS,Role);
 
-	 /***** Loop 1: go through form list setting if a student must be removed *****/
-	 /* Get users from a list of users' IDs */
+	 if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
+	   {
+	    /***** Initialize list of users to remove *****/
+	    for (NumCurrentUsr = 0;
+		 NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+		 NumCurrentUsr++)
+	       Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
+
+	    /***** Loop 1: go through form list setting if a student must be removed *****/
+	    /* Get users from a list of users' IDs */
+	    Ptr = ListUsrsIDs;
+	    while (*Ptr)
+	      {
+	       /* Reset user */
+	       UsrDat.UsrCod = -1L;
+
+	       /* Find next string in text */
+	       Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
+						sizeof (UsrDat.UsrIDNickOrEmail) - 1);
+
+	       /* Reset default list of users' codes */
+	       ListUsrCods.NumUsrs = 0;
+	       ListUsrCods.Lst = NULL;
+
+	       /* Check if string is a user's ID, user's nickname or user's email address */
+	       if (Nck_CheckIfNickWithArrIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
+		 {
+		  if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
+		    {
+		     ListUsrCods.NumUsrs = 1;
+		     Usr_AllocateListUsrCods (&ListUsrCods);
+		     ListUsrCods.Lst[0] = UsrDat.UsrCod;
+		    }
+		 }
+	       else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))	// 2: It's an email
+		 {
+		  if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
+		    {
+		     ListUsrCods.NumUsrs = 1;
+		     Usr_AllocateListUsrCods (&ListUsrCods);
+		     ListUsrCods.Lst[0] = UsrDat.UsrCod;
+		    }
+		 }
+	       else								// 3: It looks like a user's ID
+		 {
+		  // Users' IDs are always stored internally in capitals and without leading zeros
+		  Str_RemoveLeadingZeros (UsrDat.UsrIDNickOrEmail);
+		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat.UsrIDNickOrEmail))
+		    {
+		     /***** Find users for this user's ID *****/
+		     ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
+		     Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
+			       sizeof (UsrDat.IDs.List[0].ID) - 1);
+		     Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
+		     ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
+		    }
+		 }
+
+	       if (WhatToDo.RemoveSpecifiedUsrs)	// Remove the specified users (of the role)
+		 {
+		  if (ListUsrCods.NumUsrs == 1)		// If more than one user found ==> do not remove
+		     for (NumCurrentUsr = 0;
+			  NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+			  NumCurrentUsr++)
+			if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[0])	// User found
+			   Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = true;	// Mark as removable
+		 }
+	       else	// Remove all users (of the role) except these specified
+		 {
+		  for (NumCurrentUsr = 0;
+		       NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+		       NumCurrentUsr++)
+		     for (NumUsrFound = 0;
+			  NumUsrFound < ListUsrCods.NumUsrs;
+			  NumUsrFound++)
+			if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
+			   Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = false;	// Mark as not removable
+		 }
+
+	       /* Free memory used for list of users' codes found for this ID */
+	       Usr_FreeListUsrCods (&ListUsrCods);
+	      }
+
+	    /***** Loop 2: go through users list removing users *****/
+	    for (NumCurrentUsr = 0;
+		 NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+		 NumCurrentUsr++)
+	       if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove)        // If this student must be removed
+		 {
+		  UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod;
+		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							       Usr_DONT_GET_PREFS,
+							       Usr_DONT_GET_ROLE_IN_CRS))
+		    {
+		     // User's data exist...
+		     if (WhatToDo.EliminateUsrs)                // Eliminate user completely from the platform
+		       {
+			Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);                // Remove definitely the user from the platform
+			NumUsrsEliminated++;
+		       }
+		     else
+		       {
+			if (Gbl.Crs.Grps.NumGrps)        // If there are groups in the course
+			  {
+			   if (LstGrps.NumGrps)        // If the teacher has selected groups
+			     {
+			      if (Grp_RemoveUsrFromGroups (&UsrDat,&LstGrps))                // Remove user from the selected groups, not from the whole course
+				 NumUsrsRemoved++;
+			     }
+			   else        // The teacher has not selected groups
+			     {
+			      Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
+							    Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+							    Cns_QUIET);        // Remove user from the course
+			      NumUsrsRemoved++;
+			     }
+			  }
+			else        // No groups
+			  {
+			   Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
+							 Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+							 Cns_QUIET);        // Remove user from the course
+			   NumUsrsRemoved++;
+			  }
+		       }
+		    }
+		 }
+	   }
+
+	 /***** Free memory for users list *****/
+	 Usr_FreeUsrsList (Role);
+	}
+
+      /***** Register users *****/
+      if (WhatToDo.RegisterUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
+	{
+	 /***** Get users from a list of users' IDs ******/
 	 Ptr = ListUsrsIDs;
 	 while (*Ptr)
 	   {
 	    /* Reset user */
 	    UsrDat.UsrCod = -1L;
+	    ItLooksLikeAUsrID = false;
 
 	    /* Find next string in text */
 	    Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                     sizeof (UsrDat.UsrIDNickOrEmail) - 1);
+					     sizeof (UsrDat.UsrIDNickOrEmail) - 1);
 
 	    /* Reset default list of users' codes */
 	    ListUsrCods.NumUsrs = 0;
 	    ListUsrCods.Lst = NULL;
 
-	    /* Check if string is a user's ID, user's nickname or user's email address */
+	    /* Check if the string is a user's ID, a user's nickname or a user's email address */
 	    if (Nck_CheckIfNickWithArrIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
 	      {
 	       if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
@@ -1081,7 +1216,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 		  ListUsrCods.Lst[0] = UsrDat.UsrCod;
 		 }
 	      }
-	    else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))	// 2: It's an email
+	    else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))		// 2: It's an email
 	      {
 	       if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
 		 {
@@ -1096,7 +1231,9 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 	       Str_RemoveLeadingZeros (UsrDat.UsrIDNickOrEmail);
 	       if (ID_CheckIfUsrIDSeemsAValidID (UsrDat.UsrIDNickOrEmail))
 		 {
-		  /***** Find users for this user's ID *****/
+		  ItLooksLikeAUsrID = true;
+
+		  /* Find users for this user's ID */
 		  ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
 		  Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
 			    sizeof (UsrDat.IDs.List[0].ID) - 1);
@@ -1105,209 +1242,82 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 		 }
 	      }
 
-	    if (WhatToDo.RemoveSpecifiedUsrs)	// Remove the specified users (of the role)
-	      {
-	       if (ListUsrCods.NumUsrs == 1)		// If more than one user found ==> do not remove
-		  for (NumCurrentUsr = 0;
-		       NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		       NumCurrentUsr++)
-		     if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[0])	// User found
-			Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = true;	// Mark as removable
-	      }
-	    else	// Remove all users (of the role) except these specified
-	      {
-	       for (NumCurrentUsr = 0;
-		    NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		    NumCurrentUsr++)
-		  for (NumUsrFound = 0;
-		       NumUsrFound < ListUsrCods.NumUsrs;
-		       NumUsrFound++)
-		     if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
-			Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = false;	// Mark as not removable
-	      }
+	    /* Register user(s) */
+	    if (ListUsrCods.NumUsrs)	// User(s) found
+	       for (NumUsrFound = 0;
+		    NumUsrFound < ListUsrCods.NumUsrs;
+		    NumUsrFound++)
+		 {
+		  UsrDat.UsrCod = ListUsrCods.Lst[NumUsrFound];
+		  Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
+		 }
+	    else if (ItLooksLikeAUsrID)	// User not found. He/she is a new user. Register him/her using ID
+	       Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
 
 	    /* Free memory used for list of users' codes found for this ID */
 	    Usr_FreeListUsrCods (&ListUsrCods);
 	   }
-
-	 /***** Loop 2: go through users list removing users *****/
-	 for (NumCurrentUsr = 0;
-	      NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-	      NumCurrentUsr++)
-	    if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove)        // If this student must be removed
-	      {
-	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod;
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-	                                                    Usr_DONT_GET_PREFS,
-	                                                    Usr_DONT_GET_ROLE_IN_CRS))
-		 {
-		  // User's data exist...
-		  if (WhatToDo.EliminateUsrs)                // Eliminate user completely from the platform
-		    {
-		     Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);                // Remove definitely the user from the platform
-		     NumUsrsEliminated++;
-		    }
-		  else
-		    {
-		     if (Gbl.Crs.Grps.NumGrps)        // If there are groups in the course
-		       {
-			if (LstGrps.NumGrps)        // If the teacher has selected groups
-			  {
-			   if (Grp_RemoveUsrFromGroups (&UsrDat,&LstGrps))                // Remove user from the selected groups, not from the whole course
-			      NumUsrsRemoved++;
-			  }
-			else        // The teacher has not selected groups
-			  {
-			   Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
-							 Enr_DO_NOT_REMOVE_USR_PRODUCTION,
-							 Cns_QUIET);        // Remove user from the course
-			   NumUsrsRemoved++;
-			  }
-		       }
-		     else        // No groups
-		       {
-			Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
-						      Enr_DO_NOT_REMOVE_USR_PRODUCTION,
-						      Cns_QUIET);        // Remove user from the course
-			NumUsrsRemoved++;
-		       }
-		    }
-		 }
-	      }
 	}
 
-      /***** Free memory for users list *****/
-      Usr_FreeUsrsList (Role);
-     }
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
 
-   /***** Register users *****/
-   if (WhatToDo.RegisterUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
-     {
-      /***** Get users from a list of users' IDs ******/
-      Ptr = ListUsrsIDs;
-      while (*Ptr)
+      if (NumUsrsEliminated)
+	 /***** Move unused contents of messages to table of deleted contents of messages *****/
+	 Msg_DB_MoveUnusedMsgsContentToDeleted ();
+
+      /***** Write messages with the number of users enroled/removed *****/
+      if (WhatToDo.RemoveUsrs)
 	{
-	 /* Reset user */
-	 UsrDat.UsrCod = -1L;
-	 ItLooksLikeAUsrID = false;
-
-	 /* Find next string in text */
-	 Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                  sizeof (UsrDat.UsrIDNickOrEmail) - 1);
-
-	 /* Reset default list of users' codes */
-	 ListUsrCods.NumUsrs = 0;
-	 ListUsrCods.Lst = NULL;
-
-	 /* Check if the string is a user's ID, a user's nickname or a user's email address */
-	 if (Nck_CheckIfNickWithArrIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
-	   {
-	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
+	 if (WhatToDo.EliminateUsrs)        // Eliminate completely from the platform
+	    switch (NumUsrsEliminated)
 	      {
-	       ListUsrCods.NumUsrs = 1;
-	       Usr_AllocateListUsrCods (&ListUsrCods);
-	       ListUsrCods.Lst[0] = UsrDat.UsrCod;
+	       case 0:
+		  Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_eliminated);
+		  break;
+	       case 1:
+		  Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_eliminated);
+		  break;
+	       default:
+		  Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_eliminated,
+				 NumUsrsEliminated);
+		  break;
 	      }
-	   }
-	 else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))		// 2: It's an email
-	   {
-	    if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
+	 else                       	 // Only remove from course / groups
+	    switch (NumUsrsRemoved)
 	      {
-	       ListUsrCods.NumUsrs = 1;
-	       Usr_AllocateListUsrCods (&ListUsrCods);
-	       ListUsrCods.Lst[0] = UsrDat.UsrCod;
+	       case 0:
+		  Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_removed);
+		  break;
+	       case 1:
+		  Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_removed);
+		  break;
+	       default:
+		  Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_removed,
+				 NumUsrsRemoved);
+		  break;
 	      }
-	   }
-	 else								// 3: It looks like a user's ID
-	   {
-	    // Users' IDs are always stored internally in capitals and without leading zeros
-	    Str_RemoveLeadingZeros (UsrDat.UsrIDNickOrEmail);
-	    if (ID_CheckIfUsrIDSeemsAValidID (UsrDat.UsrIDNickOrEmail))
-	      {
-	       ItLooksLikeAUsrID = true;
-
-	       /* Find users for this user's ID */
-	       ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
-	       Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
-			 sizeof (UsrDat.IDs.List[0].ID) - 1);
-	       Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
-	       ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
-	      }
-	   }
-
-	 /* Register user(s) */
-	 if (ListUsrCods.NumUsrs)	// User(s) found
-	    for (NumUsrFound = 0;
-		 NumUsrFound < ListUsrCods.NumUsrs;
-		 NumUsrFound++)
-	      {
-	       UsrDat.UsrCod = ListUsrCods.Lst[NumUsrFound];
-	       Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
-	      }
-	 else if (ItLooksLikeAUsrID)	// User not found. He/she is a new user. Register him/her using ID
-	    Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
-
-	 /* Free memory used for list of users' codes found for this ID */
-	 Usr_FreeListUsrCods (&ListUsrCods);
 	}
-     }
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
-
-   if (NumUsrsEliminated)
-      /***** Move unused contents of messages to table of deleted contents of messages *****/
-      Msg_DB_MoveUnusedMsgsContentToDeleted ();
-
-   /***** Write messages with the number of users enroled/removed *****/
-   if (WhatToDo.RemoveUsrs)
-     {
-      if (WhatToDo.EliminateUsrs)        // Eliminate completely from the platform
-	 switch (NumUsrsEliminated)
+      if (WhatToDo.RegisterUsrs)
+	 switch (NumUsrsRegistered)
 	   {
 	    case 0:
-	       Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_eliminated);
+	       Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_enroled);
 	       break;
 	    case 1:
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_eliminated);
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_enroled);
 	       break;
 	    default:
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_eliminated,
-			      NumUsrsEliminated);
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_enroled_including_possible_repetitions,
+			      NumUsrsRegistered);
 	       break;
 	   }
-      else                       	 // Only remove from course / groups
-	 switch (NumUsrsRemoved)
-	   {
-	    case 0:
-	       Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_removed);
-	       break;
-	    case 1:
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_removed);
-	       break;
-	    default:
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_removed,
-			      NumUsrsRemoved);
-	       break;
-	   }
-     }
-   if (WhatToDo.RegisterUsrs)
-      switch (NumUsrsRegistered)
-	{
-	 case 0:
-	    Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_enroled);
-	    break;
-	 case 1:
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_enroled);
-	    break;
-	 default:
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_enroled_including_possible_repetitions,
-		           NumUsrsRegistered);
-	    break;
-	}
 
-   /***** Free memory used by the list of user's IDs *****/
-   free (ListUsrsIDs);
+      /***** Free memory used by the list of user's IDs *****/
+      free (ListUsrsIDs);
+     }
+   else	// Selection of groups not valid
+      Ale_ShowAlert (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
 
    /***** Free memory with the list of groups to/from which register/remove users *****/
    Grp_FreeListCodGrp (&LstGrps);

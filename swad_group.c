@@ -649,7 +649,7 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose)
    extern const char *Txt_There_has_been_no_change_in_groups;
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
    struct ListCodGrps LstGrpsIWant;
-   bool MySelectionIsValid;
+   bool SelectionIsValid = true;
    bool ChangesMade;
 
    /***** Can I change my groups? *****/
@@ -670,8 +670,19 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose)
    // ...is a radio-based form and not a checkbox-based form...
    // ...this check is made only to avoid problems...
    // ...if the student manipulates the form
-   MySelectionIsValid = Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Gbl.Usrs.Me.Role.Logged,&LstGrpsIWant,
-									true);	// Check also closed groups I belong
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrpsIWant,
+									      true);	// Check also closed groups I belong
+         break;
+      case Rol_NET:
+      case Rol_TCH:
+         break;
+      default:
+         Err_WrongRoleExit ();
+         break;
+     }
 
    /***** Free list of groups types and groups in this course *****/
    // The lists of group types and groups need to be freed here...
@@ -679,7 +690,7 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose)
    Grp_FreeListGrpTypesAndGrps ();
 
    /***** Change my groups *****/
-   if (MySelectionIsValid)
+   if (SelectionIsValid)
      {
       ChangesMade = Grp_ChangeMyGrpsAtomically (&LstGrpsIWant);
       if (Verbose == Cns_VERBOSE)
@@ -710,7 +721,7 @@ void Grp_ChangeOtherUsrGrps (void)
    extern const char *Txt_There_has_been_no_change_in_groups;
    extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
    struct ListCodGrps LstGrpsUsrWants;
-   bool SelectionIsValid;
+   bool SelectionIsValid = true;
 
    /***** Can I change another user's groups? *****/
    if (Grp_CheckIfICanChangeGrps () == Usr_CAN_NOT)
@@ -726,9 +737,19 @@ void Grp_ChangeOtherUsrGrps (void)
 
    /***** A student can not be enroled in more than one group
 	  if the type of group is of single enrolment *****/
-   SelectionIsValid = Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs,
-								      &LstGrpsUsrWants,
-							              false);	// Don't check closed groups
+   switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
+     {
+      case Rol_STD:
+	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrpsUsrWants,
+									      false);	// Don't check closed groups
+         break;
+      case Rol_NET:
+      case Rol_TCH:
+         break;
+      default:
+         Err_WrongRoleExit ();
+         break;
+     }
 
    /***** Free list of groups types and groups in this course *****/
    // The lists of group types and groups need to be freed here...
@@ -949,12 +970,11 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
   }
 
 /*****************************************************************************/
-/******* Check if not selected more than a group of single enrolment *********/
+/******* Check if at most one single-enrolment group has been selected *******/
 /*****************************************************************************/
 
-bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,
-						     struct ListCodGrps *LstGrps,
-						     bool CheckClosedGroupsIBelong)
+bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
+						       bool CheckClosedGroupsIBelong)
   {
    struct ListCodGrps LstClosedGrpsIBelong;
    struct ListGrpsAlreadySelec *AlreadyExistsGroupOfType;
@@ -962,85 +982,74 @@ bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,
    unsigned NumGrpTyp;
    long GrpTypCod;
    bool MultipleEnrolment;
-   bool SelectionValid;
+   bool SelectionIsValid = true;
 
-   switch (Role)
+   /***** Create and initialize list of groups already selected *****/
+   Grp_ConstructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
+
+   /***** Go across the list of closed groups to which i belong
+	  checking if a group of the same type is already selected *****/
+   /* Step 1 (only if I am a student selecting groups):
+      check the closed groups I belong
+      because these groups are disabled in form, an so not received */
+   if (CheckClosedGroupsIBelong)
      {
-      case Rol_STD:
-	 if (LstGrps->NumGrps <= 1)
-	    return true;
+      /* Query in the database the closed group codes which I belong to */
+      Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
+				   &LstClosedGrpsIBelong,
+				   Grp_ONLY_CLOSED_GROUPS);
+      for (NumCodGrp = 0;
+	   NumCodGrp < LstClosedGrpsIBelong.NumGrps && SelectionIsValid;
+	   NumCodGrp++)
+	{
+	 GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstClosedGrpsIBelong.GrpCods[NumCodGrp]);
+	 MultipleEnrolment = Grp_GetMultipleEnrolmentOfAGroupType (GrpTypCod);
 
-	 /***** Create and initialize list of groups already selected *****/
-	 Grp_ConstructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
+	 if (!MultipleEnrolment)
+	    for (NumGrpTyp = 0;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+		 NumGrpTyp++)
+	       if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
+		 {
+		  if (AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected)
+		     SelectionIsValid = false;
+		  else
+		     AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected = true;
+		  break;
+		 }
+	}
 
-	 /***** Go across the list of closed groups to which i belong
-	        checking if a group of the same type is already selected *****/
-         SelectionValid = true;
-
-         if (CheckClosedGroupsIBelong)
-           {
-            /***** Query in the database the closed group codes which I belong to *****/
-            Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
-				         &LstClosedGrpsIBelong,
-                                         Grp_ONLY_CLOSED_GROUPS);
-	    for (NumCodGrp = 0;
-		 NumCodGrp < LstClosedGrpsIBelong.NumGrps && SelectionValid;
-		 NumCodGrp++)
-	      {
-	       GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstClosedGrpsIBelong.GrpCods[NumCodGrp]);
-	       MultipleEnrolment = Grp_GetMultipleEnrolmentOfAGroupType (GrpTypCod);
-
-	       if (!MultipleEnrolment)
-		  for (NumGrpTyp = 0;
-		       NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-		       NumGrpTyp++)
-		     if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
-		       {
-			if (AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected)
-			   SelectionValid = false;
-			else
-			   AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected = true;
-			break;
-		       }
-	      }
-
-	    /***** Free memory with the list of closed groups which I belongs to *****/
-	    Grp_FreeListCodGrp (&LstClosedGrpsIBelong);
-           }
-
-	 /***** Go across the list of groups selected
-	        checking if a group of the same type is already selected *****/
-	 for (NumCodGrp = 0;
-	      NumCodGrp < LstGrps->NumGrps && SelectionValid;
-	      NumCodGrp++)
-	   {
-	    GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstGrps->GrpCods[NumCodGrp]);
-	    MultipleEnrolment = Grp_GetMultipleEnrolmentOfAGroupType (GrpTypCod);
-
-	    if (!MultipleEnrolment)
-	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-		    NumGrpTyp++)
-		  if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
-		    {
-		     if (AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected)
-			SelectionValid = false;
-		     else
-			AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected = true;
-		     break;
-		    }
-	   }
-
-	 /***** Free memory of the list of booleanos that indicates
-		if a group of each type has been selected *****/
-	 Grp_DestructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
-         return SelectionValid; // Return true if the selection of groups is correct
-      case Rol_NET:
-      case Rol_TCH:
-	 return true;
-      default:
-         return false;
+      /* Free memory with the list of closed groups which I belongs to */
+      Grp_FreeListCodGrp (&LstClosedGrpsIBelong);
      }
+
+   /* Step 2: Check the list of groups selected received from form */
+   for (NumCodGrp = 0;
+	NumCodGrp < LstGrps->NumGrps && SelectionIsValid;
+	NumCodGrp++)
+     {
+      GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstGrps->GrpCods[NumCodGrp]);
+      MultipleEnrolment = Grp_GetMultipleEnrolmentOfAGroupType (GrpTypCod);
+
+      if (!MultipleEnrolment)
+	 for (NumGrpTyp = 0;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	      NumGrpTyp++)
+	    if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
+	      {
+	       if (AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected)
+		  SelectionIsValid = false;
+	       else
+		  AlreadyExistsGroupOfType[NumGrpTyp].AlreadySelected = true;
+	       break;
+	      }
+     }
+
+   /***** Free memory of the list of booleanos that indicates
+	  if a group of each type has been selected *****/
+   Grp_DestructorListGrpAlreadySelec (&AlreadyExistsGroupOfType);
+
+   return SelectionIsValid; // Return true if the selection of groups is correct
   }
 
 /*****************************************************************************/
@@ -1944,21 +1953,29 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	    if (IBelongToAClosedGroup)			// I belong to a closed group
 	       ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not unregister
 	    else					// I don't belong to a closed group
-	       /* Step 2: Check if I can register in at least one group to which I don't belong */
-	       for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
-		    NumGrpThisType < GrpTyp->NumGrps &&
-		    ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
-		    NumGrpThisType++)
-		 {
-		  Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-		  if (Grp->ClosedOrOpen == CloOpe_OPEN &&		// If group is open...
-		      Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)		// ...and not full
+	      {
+	       /* Step 2: If enrolment is not mandatory, I can unregister */
+	       if (!GrpTyp->MandatoryEnrolment)
+		  ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can unregister from group
+	       else
+	         {
+		  /* Step 3: Check if I can register in at least one group to which I don't belong */
+		  for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
+		       NumGrpThisType < GrpTyp->NumGrps &&
+		       ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
+		       NumGrpThisType++)
 		    {
-		     IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
-		     if (!IBelongToThisGroup)		// I don't belong to this group
-			ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can register into this group
+		     Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+		     if (Grp->ClosedOrOpen == CloOpe_OPEN &&		// If group is open...
+			 Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)	// ...and not full
+		       {
+			IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
+			if (!IBelongToThisGroup)		// I don't belong to this group
+			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can register into this group
+		       }
 		    }
-		 }
+	         }
+	      }
 	   }
 	 break;
       case Rol_TCH:
@@ -2027,8 +2044,10 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 		  HTM_INPUT_RADIO (StrGrpCod,
 				   Attributes,
 				   "id=\"Grp%ld\" value=\"%ld\""
-				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
+				   " onclick=\"selectUnselectRadio(this,%s,this.form.GrpCod%ld,%u)\"",
 				   Grp->GrpCod,Grp->GrpCod,
+				   IBelongToThisGroup ? "true" :	// initially checked
+							"false",	// initially unchecked
 				   GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	      }
 	    else

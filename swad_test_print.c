@@ -453,7 +453,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 		     HTM_INPUT_RADIO (StrAns,
 				      UsrAnswers[Indexes[NumOpt]],
 				      "id=\"%s\" value=\"%u\""
-				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u);\"",
+				      " onclick=\"selectUnselectRadio(this,false,this.form.Ans%010u,%u);\"",
 				      Id,Indexes[NumOpt],
 				      QstInd,Question->Answer.NumOptions);
 	             break;

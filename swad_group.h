@@ -185,9 +185,8 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose);
 void Grp_ChangeOtherUsrGrps (void);
 bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant);
 void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants);
-bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,
-						     struct ListCodGrps *LstGrps,
-						     bool CheckClosedGroupsIBelong);
+bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
+						       bool CheckClosedGroupsIBelong);
 void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
 unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
