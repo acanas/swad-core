@@ -633,12 +633,11 @@ Me sale este error, no sé si por no rdbg_debugecordar yo la sintaxis apropiada p
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.89.1 (2024-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 23.89.2 (2024-09-11)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.89.js"
 /*
- * Buscar HTM_DISABLED en swad_group.c y revisar bien!!!!!!
- *
+	Version 23.89.2:  Sep 11, 2024  Fixed issues in groups. (335467 lines)
 	Version 23.89.1:  Sep 11, 2024  Fixed issues and code refactoring in groups. (335467 lines)
 	Version 23.89:    Sep 11, 2024  Fixed issues in groups. (335411 lines)
 	Version 23.88:    Sep 11, 2024  Fixed issue in groups. (335378 lines)

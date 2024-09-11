@@ -683,8 +683,8 @@ void Grp_ChangeMyGrps (Cns_Verbose_t Verbose)
 	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (&LstGrpsIWant,
 									      true);	// Check also closed groups I belong
          break;
-      case Rol_NET:
       case Rol_TCH:
+      case Rol_SYS_ADM:
          break;
       default:
          Err_WrongRoleExit ();
@@ -803,6 +803,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	 SelectionIsValid = Grp_CheckIfSelectionIsValid (LstGrpsIWant,&LstGrpsIBelong);
 	 break;
       case Rol_TCH:
+      case Rol_SYS_ADM:
          break;
       default:
          Err_WrongRoleExit ();
@@ -2054,7 +2055,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	 break;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;		// I can not register/unregister
+	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;			// I can not register/unregister
 	 break;
       default:
 	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not register/unregister
