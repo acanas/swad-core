@@ -512,7 +512,7 @@ static void ID_ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther,bool IShouldFillIn
    extern const char *Txt_Another_ID;
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
-   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    unsigned NumID;
    char *Title;
    static const struct

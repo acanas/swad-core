@@ -393,7 +393,7 @@ void Agd_ShowUsrAgenda (void)
   {
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const char *Txt_Public_agenda_USER;
-   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct Agd_Agenda Agenda;
    Usr_MeOrOther_t MeOrOther;
    char *Title;
@@ -448,7 +448,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
-   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct Agd_Agenda Agenda;
    Usr_MeOrOther_t MeOrOther;
    char *Title;

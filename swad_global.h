@@ -315,7 +315,7 @@ struct Globals
       struct
 	{
 	 long GrpCod;
-	 bool IBelong;
+	 Usr_Belong_t IBelong;
 	 bool Valid;
 	} IBelongToGrp;
       struct

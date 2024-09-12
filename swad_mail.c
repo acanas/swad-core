@@ -1098,7 +1098,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_Email;
    extern const char *Txt_Change_email;
    extern const char *Txt_Save_changes;
-   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumEmails;

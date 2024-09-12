@@ -55,8 +55,8 @@ long Grp_DB_GetRamdomStdFromGrp (long GrpCod);
 unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res);
 unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res);
 
-bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
-bool Grp_DB_CheckIfIBelongToGrp (long GrpCod);
+Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
+Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod);
 bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod);
 
 unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod);

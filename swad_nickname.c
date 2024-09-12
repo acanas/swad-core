@@ -194,7 +194,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther,
    extern const char *Txt_New_nickname;
    extern const char *Txt_Change_nickname;
    extern const char *Txt_Save_changes;
-   extern const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
+   extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    static const struct
      {
       Act_Action_t Remove;

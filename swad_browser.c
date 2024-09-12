@@ -2095,7 +2095,7 @@ static void Brw_GetDataCurrentGrp (void)
 		   and check if I belongs to the selected group *****/
 	    if (GrpDat.FileZones)
 	      {
-	       if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
+	       if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_DONT_BELONG)
 	          Gbl.Crs.Grps.GrpCod = -1L;	// Go to course zone
 	      }
 	    else
@@ -2106,7 +2106,7 @@ static void Brw_GetDataCurrentGrp (void)
 		   and check if I belongs to the selected group *****/
 	    if (!GrpDat.FileZones)
 	       Err_ShowErrorAndExit ("The group has no file zones.");
-	    else if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
+	    else if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_DONT_BELONG)
 	       Err_ShowErrorAndExit ("You don't have access to the group.");
 	    break;
 	}
@@ -2973,7 +2973,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
             Err_ShowErrorAndExit ("The file browser is disabled.");
          GrpDat->GrpCod = -1L;
         }
-      else if (!Grp_GetIfIBelongToGrp (GrpDat->GrpCod))
+      else if (Grp_GetIfIBelongToGrp (GrpDat->GrpCod) == Usr_DONT_BELONG)
         {
          if (AbortOnError)
             Err_NoPermissionExit ();
@@ -3750,7 +3750,7 @@ long Brw_GetGrpLastAccZone (const char *FieldNameDB)
    if (GrpCod >= 0)
       if (Grp_DB_CheckIfGrpExists (GrpCod))
          /* Check if I belong to this group (it's possible that I have been removed from this group after my last access to it) */
-         if (Grp_GetIfIBelongToGrp (GrpCod))
+         if (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG)
             return GrpCod;
 
    return -1L;	// To indicate course zone
@@ -8719,8 +8719,8 @@ static Usr_Can_t Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher...
 							// ...can edit only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_CAN :
-								 Usr_CAN_NOT;
+	    return (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_BELONG) ? Usr_CAN :
+										 Usr_CAN_NOT;
 	 // An administrator can edit
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
 						      Usr_CAN_NOT;
@@ -8775,10 +8775,10 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
          return (Gbl.Usrs.Me.Role.Logged >= Rol_TCH) ? Usr_CAN :
 						       Usr_CAN_NOT;
       case Brw_ADMI_DOC_GRP:
-	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// A teacher
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// A teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_CAN :
-								 Usr_CAN_NOT;
+	    return (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_BELONG) ? Usr_CAN :
+										 Usr_CAN_NOT;
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
 						      Usr_CAN_NOT;
@@ -8787,10 +8787,10 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 						       Usr_CAN_NOT;
       case Brw_ADMI_TCH_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_NET ||	// A non-editing teacher...
-	     Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// ...or a teacher
+	     Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_CAN :
-								 Usr_CAN_NOT;
+	    return (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_BELONG) ? Usr_CAN :
+										 Usr_CAN_NOT;
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH) ? Usr_CAN :
 						      Usr_CAN_NOT;
@@ -8799,18 +8799,18 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 						       Usr_CAN_NOT;
       case Brw_ADMI_SHR_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// A student, non-editing teacher...
-	     Gbl.Usrs.Me.Role.Logged <= Rol_TCH)		// ...or a teacher
+	     Gbl.Usrs.Me.Role.Logged <= Rol_TCH)	// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) ? Usr_CAN :
-								 Usr_CAN_NOT;
+	    return (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_BELONG) ? Usr_CAN :
+										 Usr_CAN_NOT;
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged >= Rol_STD) ? Usr_CAN :
 						       Usr_CAN_NOT;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_ASG_CRS:
-	 if (Level == 0)		// If root folder
+	 if (Level == 0)	// If root folder
 	    return Usr_CAN_NOT;	// Folders of assigments (level 1)
-					// can only be created automatically
+				// can only be created automatically
 	 return Asg_CheckIfICanCreateIntoAssigment (&Gbl.FileBrowser.Asg);
       default:
          return Brw_CheckIfFileBrowserIsEditable (Gbl.FileBrowser.Type) ? Usr_CAN :

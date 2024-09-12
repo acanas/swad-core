@@ -633,10 +633,11 @@ Me sale este error, no sé si por no rdbg_debugecordar yo la sintaxis apropiada p
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 23.90.2 (2024-09-11)"
+#define Log_PLATFORM_VERSION	"SWAD 23.91 (2024-09-12)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 23.91:    Sep 12, 2024  Code refactoring related to don't belong/belong. (335351 lines)
 	Version 23.90.2:  Sep 11, 2024  Code refactoring in hierarchy. (335330 lines)
 	Version 23.90.1:  Sep 11, 2024  Code refactoring in users. (335343 lines)
 	Version 23.90:    Sep 11, 2024  Code refactoring in groups. (335370 lines)

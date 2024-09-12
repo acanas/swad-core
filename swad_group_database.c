@@ -347,7 +347,7 @@ unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 /********* Check if I belong to any groups of a given type I belong **********/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
+Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
   {
    return
    DB_QueryEXISTS ("can not check if you belong to a group type",
@@ -359,14 +359,15 @@ bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
 		      " AND grp_groups.GrpCod=grp_users.GrpCod"
 		      " AND grp_users.UsrCod=%ld)",	// I belong
 		   GrpTypCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_BELONG :
+						Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/
 /*********************** Check if I belong to a group ************************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfIBelongToGrp (long GrpCod)
+Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod)
   {
    return
    DB_QueryEXISTS ("can not check if you belong to a group",
@@ -376,7 +377,8 @@ bool Grp_DB_CheckIfIBelongToGrp (long GrpCod)
 		    " WHERE GrpCod=%ld"
 		      " AND UsrCod=%ld)",	// I belong
 		   GrpCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Usrs.Me.UsrDat.UsrCod) ? Usr_BELONG :
+						Usr_DONT_BELONG;
   }
 
 /*****************************************************************************/

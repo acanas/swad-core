@@ -207,7 +207,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 void Grp_GetGroupDataByCod (struct GroupData *GrpDat);
 
 void Grp_FlushCacheIBelongToGrp (void);
-bool Grp_GetIfIBelongToGrp (long GrpCod);
+Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod);
 void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void);
 bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat);
 

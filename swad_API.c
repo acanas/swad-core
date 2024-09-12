@@ -2017,8 +2017,8 @@ int swad__getGroups (struct soap *soap,
                                                                                   0;
 
          /* Get whether I belong to this group or not */
-         getGroupsOut->groupsArray.__ptr[NumGrp].member = Grp_GetIfIBelongToGrp (GrpCod) ? 1 :
-                                                                                           0;
+         getGroupsOut->groupsArray.__ptr[NumGrp].member = (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG) ? 1 :
+													   0;
 	}
      }
 
@@ -2174,8 +2174,8 @@ int swad__sendMyGroups (struct soap *soap,
                                                                                      0;
 
          /* Get whether I belong to this group or not */
-         SendMyGroupsOut->groupsArray.__ptr[NumGrp].member = Grp_GetIfIBelongToGrp (GrpCod) ? 1 :
-                                                                                              0;
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].member = (Grp_GetIfIBelongToGrp (GrpCod) == Usr_BELONG) ? 1 :
+													      0;
 	}
      }
 
@@ -4620,7 +4620,7 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /***** Check if I belong to course/group *****/
    if (Gbl.Crs.Grps.GrpCod > 0)
-      if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
+      if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_DONT_BELONG)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");
@@ -4961,7 +4961,7 @@ int swad__getFile (struct soap *soap,
 
    /***** Check if I belong to group *****/
    if (Gbl.Crs.Grps.GrpCod > 0)
-      if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
+      if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_DONT_BELONG)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");
@@ -5108,7 +5108,7 @@ int swad__getMarks (struct soap *soap,
 
    /***** Check if I belong to group *****/
    if (Gbl.Crs.Grps.GrpCod > 0)
-      if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
+      if (Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod) == Usr_DONT_BELONG)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to group");

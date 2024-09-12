@@ -156,7 +156,7 @@ extern struct Globals Gbl;
 /************************** Public global variables **************************/
 /*****************************************************************************/
 
-const struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER] =
+struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER] =
   {
    [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
    [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
