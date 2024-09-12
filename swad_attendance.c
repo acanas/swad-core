@@ -88,7 +88,7 @@ typedef enum
 static void Att_ResetEvents (struct Att_Events *Events);
 
 static void Att_ShowAllEvents (struct Att_Events *Events);
-static void Att_ParsWhichGroupsToShow (void *Events);
+static void Att_ParsMyAllGrps (void *Events);
 static void Att_PutIconsInListOfEvents (void *Events);
 static void Att_PutIconToCreateNewEvent (struct Att_Events *Events);
 static void Att_PutParsToCreateNewEvent (void *Events);
@@ -195,7 +195,7 @@ void Att_SeeEvents (void)
 
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get list of attendance events *****/
@@ -220,7 +220,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
    extern const char *Txt_No_events;
    struct Pag_Pagination Pagination;
    Dat_StartEndTime_t Order;
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
    unsigned NumAttEvent;
 
    /***** Compute variables related to pagination *****/
@@ -237,8 +237,8 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
       if (Gbl.Crs.Grps.NumGrps)
 	{
 	 Set_BeginSettingsHead ();
-	 Grp_ShowFormToSelWhichGrps (ActSeeAllAtt,
-				     Att_ParsWhichGroupsToShow,&Events);
+	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAtt,
+					Att_ParsMyAllGrps,&Events);
 	 Set_EndSettingsHead ();
 	}
 
@@ -262,8 +262,8 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
                   HTM_TH_Begin (HTM_HEAD_LEFT);
 
 		     Frm_BeginForm (ActSeeAllAtt);
-			WhichGroups = Grp_GetParWhichGroups ();
-			Grp_PutParWhichGroups (&WhichGroups);
+			MyAllGrps = Grp_GetParMyAllGrps ();
+			Grp_PutParMyAllGrps (&MyAllGrps);
 			Pag_PutParPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 			Par_PutParOrder ((unsigned) Order);
 
@@ -323,7 +323,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 /***************** Put params to select which groups to show *****************/
 /*****************************************************************************/
 
-static void Att_ParsWhichGroupsToShow (void *Events)
+static void Att_ParsMyAllGrps (void *Events)
   {
    if (Events)
      {
@@ -394,13 +394,13 @@ static void Att_PutIconToCreateNewEvent (struct Att_Events *Events)
 
 static void Att_PutParsToCreateNewEvent (void *Events)
   {
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    if (Events)
      {
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      WhichGroups = Grp_GetParWhichGroups ();
-      Grp_PutParWhichGroups (&WhichGroups);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
@@ -411,13 +411,13 @@ static void Att_PutParsToCreateNewEvent (void *Events)
 
 static void Att_PutParsToListUsrsAttendance (void *Events)
   {
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    if (Events)
      {
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      WhichGroups = Grp_GetParWhichGroups ();
-      Grp_PutParWhichGroups (&WhichGroups);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
@@ -622,14 +622,14 @@ Usr_Can_t Att_CheckIfICanEditEvents (void)
 
 static void Att_PutPars (void *Events)
   {
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    if (Events)
      {
       ParCod_PutPar (ParCod_Att,((struct Att_Events *) Events)->Event.AttCod);
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
-      WhichGroups = Grp_GetParWhichGroups ();
-      Grp_PutParWhichGroups (&WhichGroups);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ATT_EVENTS,((struct Att_Events *) Events)->CurrentPage);
      }
   }
@@ -641,7 +641,7 @@ static void Att_PutPars (void *Events)
 static void Att_GetListEvents (struct Att_Events *Events,
                                Att_OrderNewestOldest_t OrderNewestOldest)
   {
-   extern unsigned (*Att_DB_GetListAttEvents[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res,
+   extern unsigned (*Att_DB_GetListAttEvents[Grp_NUM_MY_ALL_GROUPS]) (MYSQL_RES **mysql_res,
 							             Dat_StartEndTime_t SelectedOrder,
 							             Att_OrderNewestOldest_t OrderNewestOldest);
    MYSQL_RES *mysql_res;
@@ -651,7 +651,7 @@ static void Att_GetListEvents (struct Att_Events *Events,
       Att_FreeListEvents (Events);
 
    /***** Get list of attendance events from database *****/
-   Events->Num = Att_DB_GetListAttEvents[Gbl.Crs.Grps.WhichGrps] (&mysql_res,
+   Events->Num = Att_DB_GetListAttEvents[Gbl.Crs.Grps.MyAllGrps] (&mysql_res,
 	                                                          Events->SelectedOrder,
 	                                                          OrderNewestOldest);
    if (Events->Num) // Attendance events found...
@@ -812,7 +812,7 @@ void Att_AskRemEvent (void)
 
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
@@ -922,7 +922,7 @@ void Att_ReqCreatOrEditEvent (void)
    extern const char *Txt_Save_changes;
    struct Att_Events Events;
    bool ItsANewAttEvent;
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
    char Description[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -935,7 +935,7 @@ void Att_ReqCreatOrEditEvent (void)
 
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
@@ -973,8 +973,8 @@ void Att_ReqCreatOrEditEvent (void)
 	 ParCod_PutPar (ParCod_Att,Events.Event.AttCod);
      }
       Par_PutParOrder ((unsigned) Events.SelectedOrder);
-      WhichGroups = Grp_GetParWhichGroups ();
-      Grp_PutParWhichGroups (&WhichGroups);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
       /***** Begin box and table *****/
@@ -1404,7 +1404,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
 
    /***** Get parameters *****/
    Events->SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Events->CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get data of this attendance event *****/

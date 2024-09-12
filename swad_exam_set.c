@@ -1585,7 +1585,7 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
   {
    /***** Get parameters *****/
    Exa_GetPars (Exams,Exa_CHECK_EXA_COD);
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Set->SetCod = ParCod_GetAndCheckPar (ParCod_Set);
 
    /***** Get exam data from database *****/

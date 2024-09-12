@@ -43,7 +43,7 @@ extern struct Globals Gbl;
 /****************************** Public variables *****************************/
 /*****************************************************************************/
 
-unsigned (*Asg_DB_GetListAssignments[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res,
+unsigned (*Asg_DB_GetListAssignments[Grp_NUM_MY_ALL_GROUPS]) (MYSQL_RES **mysql_res,
                                                              Dat_StartEndTime_t SelectedOrder) =
   {
    [Grp_MY_GROUPS ] = Asg_DB_GetListAssignmentsMyGrps,

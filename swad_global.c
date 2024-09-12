@@ -164,13 +164,13 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
 
    Gbl.Crs.Grps.NumGrps = 0;
-   Gbl.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
+   Gbl.Crs.Grps.MyAllGrps = Grp_MY_ALL_GROUPS_DEFAULT;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
    Gbl.Crs.Grps.GrpTypes.NumGrpTypes = 0;
    Gbl.Crs.Grps.GrpTypes.NestedCalls = 0;
    Gbl.Crs.Grps.GrpTyp.GrpTypName[0] = '\0';
-   Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = true;
-   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment = false;
+   Gbl.Crs.Grps.GrpTyp.Enrolment.OptionalMandatory = Grp_MANDATORY;
+   Gbl.Crs.Grps.GrpTyp.Enrolment.SingleMultiple    = Grp_SINGLE;
    Gbl.Crs.Grps.GrpTyp.MustBeOpened = false;
    Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
    Gbl.Crs.Grps.GrpCod = -1L; // -1L stands for the whole course

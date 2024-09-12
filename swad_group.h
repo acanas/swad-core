@@ -54,14 +54,36 @@ typedef enum
   {
    Grp_ONLY_GROUP_TYPES_WITH_GROUPS,
    Grp_ALL_GROUP_TYPES,
-  } Grp_WhichGroupTypes_t;
+  } Grp_WhichGrpTypes_t;
+
+#define Grp_NUM_MY_ALL_GROUPS 2
+typedef enum
+  {
+   Grp_MY_GROUPS,
+   Grp_ALL_GROUPS,
+  } Grp_MyAllGrps_t;
+#define Grp_MY_ALL_GROUPS_DEFAULT Grp_ALL_GROUPS
 
 #define Grp_NUM_CLOSED_OPEN_GROUPS 2
 typedef enum
   {
    Grp_ONLY_CLOSED_GROUPS,
    Grp_CLOSED_AND_OPEN_GROUPS,
-  } Grp_ClosedOpenGroups_t;
+  } Grp_ClosedOpenGrps_t;
+
+#define Grp_NUM_OPTIONAL_MANDATORY 2
+typedef enum
+  {
+   Grp_OPTIONAL,
+   Grp_MANDATORY,
+  } Grp_OptionalMandatory_t;
+
+#define Grp_NUM_SINGLE_MULTIPLE 2
+typedef enum
+  {
+   Grp_SINGLE,
+   Grp_MULTIPLE,
+  } Grp_SingleMultiple_t;
 
 // Related with groups
 struct GroupData
@@ -80,7 +102,7 @@ struct GroupData
    int  Vacant;
    CloOpe_ClosedOrOpen_t ClosedOrOpen;		// Group is closed or open?
    bool FileZones;				// Group has file zones?
-   bool MultipleEnrolment;
+   Grp_SingleMultiple_t SingleMultiple;
   };
 
 struct Group
@@ -103,8 +125,11 @@ struct GroupType
   {
    long GrpTypCod;					// Code of type of group
    char GrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];	// Name of type of group
-   bool MandatoryEnrolment;				// Enrolment is mandatory?
-   bool MultipleEnrolment;				// Enrolment is multiple?
+   struct
+     {
+      Grp_OptionalMandatory_t OptionalMandatory;	// Enrolment is optional or mandatory?
+      Grp_SingleMultiple_t SingleMultiple;		// Enrolment is single or multiple?
+     } Enrolment;
    bool MustBeOpened;					// Groups must be opened?
    time_t OpenTimeUTC;					// Open groups automatically in this date-time. If == 0, don't open.
    unsigned NumGrps;					// Number of groups of this type
@@ -132,14 +157,6 @@ struct ListGrpsAlreadySelec
    bool AlreadySelected;
   };
 
-#define Grp_NUM_WHICH_GROUPS 2
-typedef enum
-  {
-   Grp_MY_GROUPS,
-   Grp_ALL_GROUPS,
-  } Grp_WhichGroups_t;
-#define Grp_WHICH_GROUPS_DEFAULT Grp_ALL_GROUPS
-
 #define Grp_NUM_ASSOCIATIONS_TO_GROUPS 5
 typedef enum
   {
@@ -163,7 +180,7 @@ struct Grp_Groups
    bool FileZones;
    bool AllGrps;	// All groups selected?
    struct ListCodGrps LstGrpsSel;
-   Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
+   Grp_MyAllGrps_t MyAllGrps;	// Show my groups or all groups
   };
 
 /*****************************************************************************/
@@ -199,10 +216,10 @@ void Grp_ReqRegisterInGrps (void);
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
 
-void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
+void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
 void Grp_FreeListGrpTypesAndGrps (void);
 void Grp_OpenGroupsAutomatically (void);
-void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
+void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
 void Grp_GetGroupDataByCod (struct GroupData *GrpDat);
 
 void Grp_FlushCacheIBelongToGrp (void);
@@ -237,12 +254,12 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted);
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps);
 void Grp_PutParAllGroups (void);
 
-void Grp_PutParWhichGroups (void *WhichGrps);
+void Grp_PutParMyAllGrps (void *WhichGrps);
 void Grp_PutParWhichGrpsOnlyMyGrps (void);
 void Grp_PutParWhichGrpsAllGrps (void);
-void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
+void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
                                  void (*FuncPars) (void *Args),void *Args);
-Grp_WhichGroups_t Grp_GetParWhichGroups (void);
+Grp_MyAllGrps_t Grp_GetParMyAllGrps (void);
 
 void Grp_DB_RemoveCrsGrps (long HieCod);
 

@@ -40,7 +40,7 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
 void Grp_DB_CreateGroup (const struct Grp_Groups *Grps);
 
 unsigned Grp_DB_GetGroupTypeDataByCod (MYSQL_RES **mysql_res,long GrpTypCod);
-unsigned Grp_DB_GetMultipleEnrolmentOfAGroupType (MYSQL_RES **mysql_res,long GrpTypCod);
+unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod);
 unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);
 
 bool Grp_DB_CheckIfGrpExists (long GrpCod);
@@ -72,7 +72,7 @@ unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
 unsigned Grp_DB_GetLstCodGrpsInAllCrssUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);
 unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
 							      long UsrCod,
-							      Grp_ClosedOpenGroups_t ClosedOpenGroups);
+							      Grp_ClosedOpenGrps_t ClosedOpenGroups);
 unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod,long GrpTypCod);
 unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql_res);
 unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
@@ -84,12 +84,12 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod);
 bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 
-void Grp_DB_ChangeMandatoryEnrolmentOfAGrpTyp (long GrpTypCod,
-                                               bool NewMandatoryEnrolment);
-void Grp_DB_ChangeMultipleEnrolmentOfAGrpTyp (long GrpTypCod,
-                                              bool NewMultipleEnrolment);
-void Grp_DB_ChangeOpeningTimeOfAGrpTyp (long GrpTypCod,
-                                        bool MustBeOpened,time_t OpenTimeUTC);
+void Grp_DB_ChangeOptionalMandatory (long GrpTypCod,
+				     Grp_OptionalMandatory_t NewOptionalMandatory);
+void Grp_DB_ChangeSingleMultiple (long GrpTypCod,
+                                  Grp_SingleMultiple_t NewSingleMultiple);
+void Grp_DB_ChangeOpeningTime (long GrpTypCod,
+                               bool MustBeOpened,time_t OpenTimeUTC);
 void Grp_DB_ClearMustBeOpened (long GrpTypCod);
 void Grp_DB_OpenGrpsOfType (long GrpTypCod);
 

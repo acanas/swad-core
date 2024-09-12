@@ -82,7 +82,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 static Usr_Can_t Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void *Assignments);
 static void Asg_PutIconToCreateNewAsg (void *Assignments);
-static void Asg_ParsWhichGroupsToShow (void *Assignments);
+static void Asg_ParsMyAllGrps (void *Assignments);
 static void Asg_PutIconsOneAsg (void *Assignments);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    Asg_OneOrMultiple_t OneOrMultiple,
@@ -136,7 +136,7 @@ void Asg_SeeAssignments (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Show all assignments *****/
@@ -172,8 +172,8 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
       if (Gbl.Crs.Grps.NumGrps)
 	{
 	 Set_BeginSettingsHead ();
-	 Grp_ShowFormToSelWhichGrps (ActSeeAllAsg,
-				     Asg_ParsWhichGroupsToShow,Assignments);
+	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAsg,
+					Asg_ParsMyAllGrps,Assignments);
 	 Set_EndSettingsHead ();
 	}
 
@@ -229,7 +229,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
    extern const char *Txt_Assignment;
    extern const char *Txt_Folder;
    Dat_StartEndTime_t Order;
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    HTM_TR_Begin (NULL);
 
@@ -247,8 +247,8 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	      {
 	       /* Begin form */
 	       Frm_BeginForm (ActSeeAllAsg);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
 		  Pag_PutParPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
 		  Par_PutParOrder ((unsigned) Order);
 
@@ -336,7 +336,7 @@ static void Asg_PutIconToCreateNewAsg (void *Assignments)
 /**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
 
-static void Asg_ParsWhichGroupsToShow (void *Assignments)
+static void Asg_ParsMyAllGrps (void *Assignments)
   {
    if (Assignments)
      {
@@ -361,7 +361,7 @@ void Asg_SeeOneAssignment (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
@@ -792,14 +792,14 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 
 static void Asg_PutPars (void *Assignments)
   {
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    if (Assignments)
      {
       ParCod_PutPar (ParCod_Asg,((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
       Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Assignments)->SelectedOrder);
-      WhichGroups = Grp_GetParWhichGroups ();
-      Grp_PutParWhichGroups (&WhichGroups);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ASSIGNMENTS,((struct Asg_Assignments *) Assignments)->CurrentPage);
      }
   }
@@ -810,7 +810,7 @@ static void Asg_PutPars (void *Assignments)
 
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
   {
-   extern unsigned (*Asg_DB_GetListAssignments[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res,
+   extern unsigned (*Asg_DB_GetListAssignments[Grp_NUM_MY_ALL_GROUPS]) (MYSQL_RES **mysql_res,
                                                                        Dat_StartEndTime_t SelectedOrder);
    MYSQL_RES *mysql_res;
    unsigned NumAsg;
@@ -819,7 +819,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
       Asg_FreeListAssignments (Assignments);
 
    /***** Get list of assignments from database *****/
-   Assignments->Num = Asg_DB_GetListAssignments[Gbl.Crs.Grps.WhichGrps] (&mysql_res,Assignments->SelectedOrder);
+   Assignments->Num = Asg_DB_GetListAssignments[Gbl.Crs.Grps.MyAllGrps] (&mysql_res,Assignments->SelectedOrder);
    if (Assignments->Num) // Assignments found...
      {
       /***** Create list of assignments *****/
@@ -1038,7 +1038,7 @@ void Asg_ReqRemAssignment (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
@@ -1071,7 +1071,7 @@ void Asg_RemoveAssignment (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
@@ -1124,7 +1124,7 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.WhichGrps = Grp_GetParWhichGroups ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
@@ -1172,7 +1172,7 @@ void Asg_ReqCreatOrEditAsg (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
@@ -1369,7 +1369,7 @@ void Asg_ReceiveAssignment (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/

@@ -227,7 +227,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
-      Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
+      Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
 
    /***** Get list of exams *****/
    Exa_GetListExams (Exams,Exams->SelectedOrder);
@@ -706,14 +706,14 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 
 void Exa_PutPars (void *Exams)
   {
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    if (Exams)
      {
       ParCod_PutPar (ParCod_Exa,((struct Exa_Exams *) Exams)->Exam.ExaCod);
       Exa_PutParOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
-      WhichGroups = Grp_GetParWhichGroups ();
-      Grp_PutParWhichGroups (&WhichGroups);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
      }
   }

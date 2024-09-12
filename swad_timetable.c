@@ -111,7 +111,7 @@ static void Tmt_FreeTimeTable (void);
 static void Tmt_ShowTimeTableGrpsSelected (void);
 static void Tmt_GetParsTimeTable (struct Tmt_Timetable *Timetable);
 static void Tmt_PutContextualIcons (void *Timetable);
-static void Tmt_PutFormToSelectWhichGroupsToShow (const struct Tmt_Timetable *Timetable);
+static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable);
 
 static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args);
 static void Tmt_PutIconToViewMyTT (__attribute__((unused)) void *Args);
@@ -231,7 +231,7 @@ static void Tmt_ShowTimeTableGrpsSelected (void)
    HTM_DIV_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
                   The_GetSuffix ());
 
-      switch (Gbl.Crs.Grps.WhichGrps)
+      switch (Gbl.Crs.Grps.MyAllGrps)
 	{
 	 case Grp_MY_GROUPS:
 	   HTM_TxtF (Txt_Groups_OF_A_USER,Gbl.Usrs.Me.UsrDat.FullName);
@@ -326,7 +326,7 @@ void Tmt_ShowClassTimeTable (void)
    Vie_ViewType_t ViewType = (Gbl.Action.Act == ActPrnCrsTT ||
 	                      Gbl.Action.Act == ActPrnMyTT) ? Vie_PRINT :
 	                				      Vie_VIEW;
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
    bool PutContextualIcons;
 
    /***** Initializations *****/
@@ -356,7 +356,7 @@ void Tmt_ShowClassTimeTable (void)
    Timetable.ContextualIcons.PutIconPrint = (ViewType == Vie_VIEW);
 
    /***** Get whether to show only my groups or all groups *****/
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
 
    /***** Begin box *****/
    PutContextualIcons = Timetable.ContextualIcons.PutIconEditCrsTT ||
@@ -384,12 +384,12 @@ void Tmt_ShowClassTimeTable (void)
 	    if ( Timetable.Type == Tmt_MY_TIMETABLE ||
 		(Timetable.Type == Tmt_COURSE_TIMETABLE &&
 		 Gbl.Crs.Grps.NumGrps))
-	       Tmt_PutFormToSelectWhichGroupsToShow (&Timetable);
+	       Tmt_PutFormToSelectMyAllGrps (&Timetable);
 
 	    /* Show form to change first day of week */
-	    WhichGroups = Grp_GetParWhichGroups ();
+	    MyAllGrps = Grp_GetParMyAllGrps ();
 	    Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
-					     Grp_PutParWhichGroups,&WhichGroups);
+					     Grp_PutParMyAllGrps,&MyAllGrps);
 
 	    Set_EndSettingsHead ();
 	    break;
@@ -415,15 +415,15 @@ void Tmt_ShowClassTimeTable (void)
 
 static void Tmt_PutContextualIcons (void *Timetable)
   {
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    if (Timetable)
      {
-      WhichGroups = Grp_GetParWhichGroups ();
+      MyAllGrps = Grp_GetParMyAllGrps ();
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditCrsTT)
 	 Ico_PutContextualIconToEdit (ActEdiCrsTT,NULL,
-				      Grp_PutParWhichGroups,&WhichGroups);
+				      Grp_PutParMyAllGrps,&MyAllGrps);
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditOfficeHours)
 	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,NULL,NULL);
@@ -431,7 +431,7 @@ static void Tmt_PutContextualIcons (void *Timetable)
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconPrint)
 	 Ico_PutContextualIconToPrint (((struct Tmt_Timetable *) Timetable)->Type == Tmt_COURSE_TIMETABLE ? ActPrnCrsTT :
 										                            ActPrnMyTT,
-				       Grp_PutParWhichGroups,&WhichGroups);
+				       Grp_PutParMyAllGrps,&MyAllGrps);
      }
   }
 
@@ -439,7 +439,7 @@ static void Tmt_PutContextualIcons (void *Timetable)
 /***************** Put form to select which groups to show *******************/
 /*****************************************************************************/
 
-static void Tmt_PutFormToSelectWhichGroupsToShow (const struct Tmt_Timetable *Timetable)
+static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable)
   {
    static Act_Action_t ActSeeTT[Tmt_NUM_TIMETABLE_TYPES] =
      {
@@ -448,7 +448,7 @@ static void Tmt_PutFormToSelectWhichGroupsToShow (const struct Tmt_Timetable *Ti
       [Tmt_TUTORING_TIMETABLE] = ActUnk,
      };
 
-   Grp_ShowFormToSelWhichGrps (ActSeeTT[Timetable->Type],
+   Grp_ShowFormToSelMyAllGrps (ActSeeTT[Timetable->Type],
                                NULL,NULL);
   }
 

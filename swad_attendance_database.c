@@ -48,7 +48,7 @@ extern struct Globals Gbl;
 /******************************* Public variables ****************************/
 /*****************************************************************************/
 
-unsigned (*Att_DB_GetListAttEvents[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res,
+unsigned (*Att_DB_GetListAttEvents[Grp_NUM_MY_ALL_GROUPS]) (MYSQL_RES **mysql_res,
 							   Dat_StartEndTime_t SelectedOrder,
 							   Att_OrderNewestOldest_t OrderNewestOldest) =
  {

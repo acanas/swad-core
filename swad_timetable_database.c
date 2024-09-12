@@ -102,7 +102,7 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
    switch (Type)
      {
       case Tmt_MY_TIMETABLE:
-         switch (Gbl.Crs.Grps.WhichGrps)
+         switch (Gbl.Crs.Grps.MyAllGrps)
            {
             case Grp_MY_GROUPS:
                return (unsigned)
@@ -187,7 +187,7 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
            }
          return 0;	// Not reached
       case Tmt_COURSE_TIMETABLE:
-         if (Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS ||
+         if (Gbl.Crs.Grps.MyAllGrps == Grp_ALL_GROUPS ||
              Gbl.Action.Act == ActEdiCrsTT ||
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
             return (unsigned)

@@ -74,10 +74,10 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
 				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
 				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				GrpTyp->GrpTypName,
-				GrpTyp->MandatoryEnrolment ? 'Y' :
-							     'N',
-				GrpTyp->MultipleEnrolment ? 'Y' :
-							    'N',
+				(GrpTyp->Enrolment.OptionalMandatory == Grp_MANDATORY) ? 'Y' :
+											 'N',
+				(GrpTyp->Enrolment.SingleMultiple == Grp_MULTIPLE) ? 'Y' :
+										     'N',
 				GrpTyp->MustBeOpened ? 'Y' :
 						       'N',
 				(long) GrpTyp->OpenTimeUTC);
@@ -125,7 +125,7 @@ unsigned Grp_DB_GetGroupTypeDataByCod (MYSQL_RES **mysql_res,long GrpTypCod)
 /************* Check if a group type has multiple enrolment *****************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetMultipleEnrolmentOfAGroupType (MYSQL_RES **mysql_res,long GrpTypCod)
+unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get if type of group has multiple enrolment",
@@ -573,7 +573,7 @@ unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod)
 
 unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
 							      long UsrCod,
-							      Grp_ClosedOpenGroups_t ClosedOpenGroups)
+							      Grp_ClosedOpenGrps_t ClosedOpenGroups)
   {
    static const char *ClosedOpenGroupsTxt[Grp_NUM_CLOSED_OPEN_GROUPS] =
      {
@@ -738,15 +738,15 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 /************ Change the mandatory enrolment of a type of group **************/
 /*****************************************************************************/
 
-void Grp_DB_ChangeMandatoryEnrolmentOfAGrpTyp (long GrpTypCod,
-                                               bool NewMandatoryEnrolment)
+void Grp_DB_ChangeOptionalMandatory (long GrpTypCod,
+				     Grp_OptionalMandatory_t NewOptionalMandatory)
   {
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET Mandatory='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   NewMandatoryEnrolment ? 'Y' :
-					   'N',
+		   (NewOptionalMandatory == Grp_MANDATORY) ? 'Y' :
+							     'N',
 		   GrpTypCod);
   }
 
@@ -754,15 +754,15 @@ void Grp_DB_ChangeMandatoryEnrolmentOfAGrpTyp (long GrpTypCod,
 /************* Change the multiple enrolment of a type of group **************/
 /*****************************************************************************/
 
-void Grp_DB_ChangeMultipleEnrolmentOfAGrpTyp (long GrpTypCod,
-                                              bool NewMultipleEnrolment)
+void Grp_DB_ChangeSingleMultiple (long GrpTypCod,
+                                  Grp_SingleMultiple_t NewSingleMultiple)
   {
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"
 		     " SET Multiple='%c'"
 		   " WHERE GrpTypCod=%ld",
-		   NewMultipleEnrolment ? 'Y' :
-					  'N',
+		   (NewSingleMultiple == Grp_MULTIPLE) ? 'Y' :
+							 'N',
 		   GrpTypCod);
   }
 
@@ -770,8 +770,8 @@ void Grp_DB_ChangeMultipleEnrolmentOfAGrpTyp (long GrpTypCod,
 /*************** Change the opening time of a type of group ******************/
 /*****************************************************************************/
 
-void Grp_DB_ChangeOpeningTimeOfAGrpTyp (long GrpTypCod,
-                                        bool MustBeOpened,time_t OpenTimeUTC)
+void Grp_DB_ChangeOpeningTime (long GrpTypCod,
+                               bool MustBeOpened,time_t OpenTimeUTC)
   {
    DB_QueryUPDATE ("can not update enrolment type of a type of group",
 		   "UPDATE grp_types"

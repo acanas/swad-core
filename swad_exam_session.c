@@ -155,7 +155,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	  ExaSes_CheckIfICanEditSessions () == Usr_CAN)
 	{
 	 Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelWhichGrps (ActSeeOneExa,Exa_PutPars,Exams);
+	    Grp_ShowFormToSelMyAllGrps (ActSeeOneExa,Exa_PutPars,Exams);
 	 Set_EndSettingsHead ();
 	}
 
@@ -899,7 +899,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
   {
    /***** Get parameters *****/
    Exa_GetPars (Exams,Exa_CHECK_EXA_COD);
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Session->SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data from database *****/
@@ -1046,7 +1046,7 @@ void ExaSes_ReqCreatOrEditSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSession = (Session.SesCod <= 0);
 
@@ -1091,7 +1091,7 @@ void ExaSes_ReceiveSession (void)
 
    /***** Get main parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
    ItsANewSession = (Session.SesCod <= 0);
 

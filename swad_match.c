@@ -287,7 +287,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
       if (Gbl.Crs.Grps.NumGrps && Mch_CheckIfICanEditMatches () == Usr_CAN)
 	{
 	 Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelWhichGrps (ActSeeOneGam,Gam_PutPars,Games);
+	    Grp_ShowFormToSelMyAllGrps (ActSeeOneGam,Gam_PutPars,Games);
 	 Set_EndSettingsHead ();
 	}
 
@@ -1162,7 +1162,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
    /* Get parameters of game */
    if ((Games->Game.GamCod = Gam_GetPars (Games)) <= 0)
       Err_WrongGameExit ();
-   Grp_GetParWhichGroups ();
+   Grp_GetParMyAllGrps ();
    Gam_GetGameDataByCod (&Games->Game);
    if (Games->Game.CrsCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
       Err_WrongGameExit ();

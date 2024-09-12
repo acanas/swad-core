@@ -47684,13 +47684,13 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory
 	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";					// Çeviri lazim!
 #endif
 
-const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_optional =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"L'adscripci&oacute; d'estudiants a grups del tipus <strong>%s</strong> ara &eacute;s volunt&agrave;ria.";
 #elif L==2	// de
 	"Die Einschreibung von Studierenden in Gruppen des Typs <strong>%s</strong> ist nun freiwillig.";
 #elif L==3	// en
-	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";
+	"The enrolment of students into groups of type <strong>%s</strong> is now optional.";
 #elif L==4	// es
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es voluntaria.";
 #elif L==5	// fr
@@ -47704,7 +47704,7 @@ const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary
 #elif L==9	// pt
 	"A inscri&ccedil;&atilde;o de estudantes em grupos do tipo <strong>%s</strong> &eacute; agora volunt&aacute;ria.";
 #elif L==10	// tr
-	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Çeviri lazim!
+	"The enrolment of students into groups of type <strong>%s</strong> is now optional.";			// Çeviri lazim!
 #endif
 
 const char *Txt_The_event_has_been_modified =

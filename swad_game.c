@@ -240,7 +240,7 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
-      Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
+      Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
 
    /***** Get list of games *****/
    Gam_GetListGames (Games,Games->SelectedOrder);
@@ -784,14 +784,14 @@ static void Gam_PutParsOneQst (void *Games)
 
 void Gam_PutPars (void *Games)
   {
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
 
    if (Games)
      {
       ParCod_PutPar (ParCod_Gam,((struct Gam_Games *) Games)->Game.GamCod);
       Gam_PutParOrder (((struct Gam_Games *) Games)->SelectedOrder);
-      WhichGroups = Grp_GetParWhichGroups ();
-      Grp_PutParWhichGroups (&WhichGroups);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_GAMES,((struct Gam_Games *) Games)->CurrentPage);
      }
   }

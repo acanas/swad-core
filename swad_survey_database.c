@@ -183,7 +183,7 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
    /***** Fill subquery for course *****/
    if (ScopesAllowed & 1 << Hie_CRS)
      {
-      if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
+      if (Gbl.Crs.Grps.MyAllGrps == Grp_MY_GROUPS)
         {
 	 if (asprintf (&SubQuery[Hie_CRS],"%s("
 						"Scope='%s'"

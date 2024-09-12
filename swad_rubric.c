@@ -155,7 +155,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
-      Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
+      Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
 
    /***** Get list of rubrics *****/
    Rub_GetListRubrics (Rubrics);

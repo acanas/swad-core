@@ -221,7 +221,7 @@ unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
    char *SubQuery;
 
    /***** Fill subquery for game *****/
-   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
+   if (Gbl.Crs.Grps.MyAllGrps == Grp_MY_GROUPS)
      {
       if (asprintf (&SubQuery," AND"
 			      " (MchCod NOT IN"

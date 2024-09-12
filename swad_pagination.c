@@ -164,7 +164,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
   {
    extern const char *Txt_Page_X_of_Y;
    extern const char *Txt_FORUM_Post_banned;
-   Grp_WhichGroups_t WhichGroups;
+   Grp_MyAllGrps_t MyAllGrps;
    unsigned NumPage;
    char *Title;
 
@@ -180,8 +180,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,1);
 		     Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
 		  break;
 	       case Pag_PROJECTS:
 		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
@@ -195,15 +195,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,1);
 		     Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
 		  break;
 	       case Pag_GAMES:
 		  Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,1);
 		     Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
 		  break;
 	       case Pag_RUBRICS:
 		  Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
@@ -213,8 +213,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,1);
 		     Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
 		  break;
 	       case Pag_THREADS_FORUM:
 		  Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
@@ -252,8 +252,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,1);
 		     Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
 		  break;
 	       case Pag_MY_AGENDA:
 		  Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -313,8 +313,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_PROJECTS:
                Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
@@ -328,15 +328,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
 		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
 		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_RUBRICS:
                Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
@@ -346,8 +346,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
@@ -385,8 +385,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,1);
 		  Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_MY_AGENDA:
                Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -433,8 +433,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_PROJECTS:
                Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
@@ -448,15 +448,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
 		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
 		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_RUBRICS:
                Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
@@ -466,8 +466,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
@@ -505,8 +505,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->LeftPage);
 		  Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_MY_AGENDA:
                Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -566,8 +566,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
 		     Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
                   break;
 	       case Pag_PROJECTS:
 		  Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
@@ -581,15 +581,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
 		     Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
                   break;
                case Pag_GAMES:
                   Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
 		     Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
                   break;
                case Pag_RUBRICS:
                   Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
@@ -599,8 +599,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
 		     Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
                   break;
                case Pag_THREADS_FORUM:
                   Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
@@ -638,8 +638,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		     Pag_PutParPagNum (WhatPaginate,NumPage);
 		     Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		     WhichGroups = Grp_GetParWhichGroups ();
-		     Grp_PutParWhichGroups (&WhichGroups);
+		     MyAllGrps = Grp_GetParMyAllGrps ();
+		     Grp_PutParMyAllGrps (&MyAllGrps);
                   break;
                case Pag_MY_AGENDA:
                   Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -686,8 +686,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
 	    case Pag_PROJECTS:
 	       Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
@@ -701,15 +701,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
 		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
 		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_RUBRICS:
                Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
@@ -719,8 +719,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
@@ -758,8 +758,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->RightPage);
 		  Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -807,8 +807,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAsg,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
 		  Par_PutParOrder ((unsigned) ((struct Asg_Assignments *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
 	    case Pag_PROJECTS:
 	       Frm_BeginFormAnchor (ActSeeAllPrj,Pagination->Anchor);
@@ -822,15 +822,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
 		  Par_PutParOrder ((unsigned) ((struct Exa_Exams *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
 		  Par_PutParOrder ((unsigned) ((struct Gam_Games *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_RUBRICS:
                Frm_BeginFormAnchor (ActSeeAllRub,Pagination->Anchor);
@@ -840,8 +840,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllAtt,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
 		  Par_PutParOrder ((unsigned) ((struct Att_Events *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
@@ -879,8 +879,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
 		  Pag_PutParPagNum (WhatPaginate,Pagination->NumPags);
 		  Par_PutParOrder ((unsigned) ((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParWhichGroups ();
-		  Grp_PutParWhichGroups (&WhichGroups);
+		  MyAllGrps = Grp_GetParMyAllGrps ();
+		  Grp_PutParMyAllGrps (&MyAllGrps);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);

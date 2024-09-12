@@ -2114,15 +2114,15 @@ static void Brw_GetDataCurrentGrp (void)
       /***** Get data of the current group *****/
       if (Gbl.Crs.Grps.GrpCod > 0)
 	{
-	 Gbl.Crs.Grps.GrpTyp.GrpTypCod         = GrpDat.GrpTypCod;
+	 Gbl.Crs.Grps.GrpTyp.GrpTypCod = GrpDat.GrpTypCod;
 	 Str_Copy (Gbl.Crs.Grps.GrpTyp.GrpTypName,GrpDat.GrpTypName,
 	           sizeof (Gbl.Crs.Grps.GrpTyp.GrpTypName) - 1);
 	 Str_Copy (Gbl.Crs.Grps.GrpName,GrpDat.GrpName,
 	           sizeof (Gbl.Crs.Grps.GrpName) - 1);
-	 Gbl.Crs.Grps.MaxStudents              = GrpDat.MaxStudents;
-	 Gbl.Crs.Grps.ClosedOrOpen             = GrpDat.ClosedOrOpen;
-	 Gbl.Crs.Grps.FileZones                = GrpDat.FileZones;
-	 Gbl.Crs.Grps.GrpTyp.MultipleEnrolment = GrpDat.MultipleEnrolment;
+	 Gbl.Crs.Grps.MaxStudents  = GrpDat.MaxStudents;
+	 Gbl.Crs.Grps.ClosedOrOpen = GrpDat.ClosedOrOpen;
+	 Gbl.Crs.Grps.FileZones    = GrpDat.FileZones;
+	 Gbl.Crs.Grps.GrpTyp.Enrolment.SingleMultiple = GrpDat.SingleMultiple;
 	}
      }
   }

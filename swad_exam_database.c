@@ -1417,7 +1417,7 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
      }
 
    /***** Subquery: get sessions depending on groups *****/
-   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
+   if (Gbl.Crs.Grps.MyAllGrps == Grp_MY_GROUPS)
      {
       if (asprintf (&GroupsSubQuery," AND"
 				    "(SesCod NOT IN"
