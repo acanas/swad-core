@@ -1810,6 +1810,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
+   struct GroupType *GrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1848,9 +1849,12 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	    for (NumGrpTyp = 0;
 		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		 NumGrpTyp++)
-	       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-		  Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-						     Grp_SURVEY,SvyCod);
+	      {
+	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
+	       if (GrpTyp->NumGrps)
+		  Grp_ListGrpsToEditAsgAttSvyEvtMch (GrpTyp,Grp_SURVEY,SvyCod);
+	      }
 
 	    HTM_TABLE_End ();
 	 HTM_TD_End ();

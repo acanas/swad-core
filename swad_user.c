@@ -2357,7 +2357,9 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
-   unsigned NumGrpTyp,NumField;
+   unsigned NumGrpTyp;
+   struct GroupType *GrpTyp;
+   unsigned NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char Text[Cns_MAX_BYTES_TEXT + 1];
@@ -2418,13 +2420,15 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
 	 for (NumGrpTyp = 0;
 	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	      NumGrpTyp++)
-	    if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
+	   {
+	    GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
+	    if (GrpTyp->NumGrps)         // If current course tiene groups of este type
 	      {
-	       Grp_GetNamesGrpsUsrBelongsTo (UsrDat->UsrCod,
-					     Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
-					     GroupNames);
+	       Grp_GetNamesGrpsUsrBelongsTo (UsrDat->UsrCod,GrpTyp->GrpTypCod,GroupNames);
 	       Usr_WriteUsrData (The_GetColorRows (),GroupNames,NULL,true,UsrDat->Accepted);
 	      }
+	   }
 
 	 /***** Fields of the record dependientes of the course *****/
 	 for (NumField = 0;
@@ -4399,7 +4403,9 @@ void Usr_ListAllDataStds (void)
    unsigned NumCol;
    unsigned NumUsr;
    char *GroupNames;
-   unsigned NumGrpTyp,NumField;
+   unsigned NumGrpTyp;
+   struct GroupType *GrpTyp;
+   unsigned NumField;
    struct Usr_Data UsrDat;
    const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_STD];
    size_t Length;
@@ -4496,14 +4502,16 @@ void Usr_ListAllDataStds (void)
 		  for (NumGrpTyp = 0;
 		       NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		       NumGrpTyp++)
-		     if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
+		    {
+		     GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
+		     if (GrpTyp->NumGrps)         // If current course tiene groups of este type
 		       {
 			HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,1,"BG_HIGHLIGHT");
-			   HTM_TxtF ("%s %s",
-				     Txt_Group,
-				     Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+			   HTM_TxtF ("%s %s",Txt_Group,GrpTyp->GrpTypName);
 			HTM_TH_End ();
 		       }
+		    }
 
 	       if (Gbl.Crs.Records.LstFields.Num)
 		 {

@@ -1303,6 +1303,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
+   struct GroupType *GrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1339,9 +1340,12 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	       for (NumGrpTyp = 0;
 		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		    NumGrpTyp++)
-		  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-							Grp_ASSIGNMENT,AsgCod);
+	         {
+		  GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
+		  if (GrpTyp->NumGrps)
+		     Grp_ListGrpsToEditAsgAttSvyEvtMch (GrpTyp,Grp_ASSIGNMENT,AsgCod);
+	         }
 
 	    HTM_TABLE_End ();
 	 HTM_TD_End ();

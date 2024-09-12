@@ -2984,7 +2984,7 @@ void Enr_ModifyUsr1 (void)
 
 		  /***** Change user's groups *****/
 		  if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-		     Grp_ChangeUsrGrps (MeOrOther,Cns_QUIET);
+		     Grp_ChangeUsrGrps (MeOrOther,Cns_VERBOSE);
 
 		  /***** If it's me, change my roles *****/
 		  if (MeOrOther == Usr_ME)
