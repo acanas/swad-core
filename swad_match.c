@@ -1240,8 +1240,6 @@ static void Mch_ParsFormMatch (void *Match)
 static void Mch_ShowLstGrpsToEditMatch (long MchCod)
   {
    extern const char *Txt_Groups;
-   unsigned NumGrpTyp;
-   struct GroupType *GrpTyp;
 
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1274,15 +1272,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 	       HTM_TR_End ();
 
 	       /***** List the groups for each group type *****/
-	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-		    NumGrpTyp++)
-	         {
-		  GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
-
-		  if (GrpTyp->NumGrps)
-		     Grp_ListGrpsToEditAsgAttSvyEvtMch (GrpTyp,Grp_MATCH,MchCod);
-	         }
+	       Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_MATCH,MchCod);
 
 	    HTM_TABLE_End ();
 	 HTM_TD_End ();

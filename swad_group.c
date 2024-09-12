@@ -113,6 +113,10 @@ static void Grp_WriteHeadingGroupTypes (void);
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms);
 static void Grp_WriteHeadingGroups (void);
 
+static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+						      long Cod,
+						      struct GroupType *GrpTyp);
+
 static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
@@ -1640,13 +1644,38 @@ void Grp_WriteTheWholeCourse (void)
   }
 
 /*****************************************************************************/
-/****** List groups of a type to edit                                   ******/
-/****** assignments, attendance events, surveys, exam events or matches ******/
+/***** List groups of a type to edit                                     *****/
+/***** assignments, attendance events, exam sessions, matches or surveys *****/
 /*****************************************************************************/
 
-void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
-                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+void Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod)	// Assignment, attendance event, survey, exam event or match
+  {
+   unsigned NumGrpTyp;
+   struct GroupType *GrpTyp;
+
+   /***** List the groups for each group type *****/
+   for (NumGrpTyp = 0;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	NumGrpTyp++)
+     {
+      GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
+      if (GrpTyp->NumGrps)
+	 Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (WhichIsAssociatedToGrp,
+						   Cod,
+						   GrpTyp);
+     }
+  }
+
+/*****************************************************************************/
+/***** List groups of a type to edit                                     *****/
+/***** assignments, attendance events, exam sessions, matches or surveys *****/
+/*****************************************************************************/
+
+static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+						      long Cod,	// Assignment, attendance event, survey, exam event or match
+						      struct GroupType *GrpTyp)
   {
    static const struct
      {

@@ -192,8 +192,7 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_RemUsrFromAllGrps (long UsrCod);
 
 void Grp_WriteTheWholeCourse (void);
-void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
-                                        Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
+void Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod);
 
 void Grp_ReqRegisterInGrps (void);
