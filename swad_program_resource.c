@@ -72,8 +72,8 @@ static const char *PrgRsc_RESOURCE_SECTION_ID = "rsc_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsViewResources (void *ItmCod);
-static void PrgRsc_PutIconsEditResources (void *ItmCod);
+static void PrgRsc_PutIconsViewRes (void *ItmCod);
+static void PrgRsc_PutIconsEditRes (void *ItmCod);
 
 static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
                                            struct Prg_Item *Item);
@@ -149,13 +149,13 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
                                long SelectedItmCod,
                                long SelectedRscCod)
   {
-   extern const char *Hlp_COURSE_Program;
+   extern const char *Hlp_COURSE_Program_resources;
    extern const char *Txt_Remove;
    extern const char *Txt_Resources_of_X;
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
    unsigned NumResources;
-   Vie_ViewType_t ViewingOrEditingResourcesOfThisItem;
+   Vie_ViewType_t ViewingOrEditingResOfThisItem;
    char *Title;
    static Vie_ViewType_t ViewingOrEditing[Prg_NUM_LISTING_TYPES] =
      {
@@ -172,7 +172,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_CHANGE_RESOURCE_LINK] = Vie_EDIT,
       [Prg_END_EDIT_RES        ] = Vie_EDIT,
      };
-   static Vie_ViewType_t ViewingOrEditingResources[Prg_NUM_LISTING_TYPES] =
+   static Vie_ViewType_t ViewingOrEditingRes[Prg_NUM_LISTING_TYPES] =
      {
       [Prg_PRINT               ] = Vie_VIEW,
       [Prg_VIEW                ] = Vie_VIEW,
@@ -187,10 +187,10 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
       [Prg_CHANGE_RESOURCE_LINK] = Vie_EDIT,
       [Prg_END_EDIT_RES        ] = Vie_VIEW,
      };
-   static void (*PrgRsc_PutIconsResources[Vie_NUM_VIEW_TYPES]) (void *ItmCod) =
+   static void (*PrgRsc_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *ItmCod) =
      {
-      [Vie_VIEW] = PrgRsc_PutIconsEditResources,
-      [Vie_EDIT] = PrgRsc_PutIconsViewResources,
+      [Vie_VIEW] = PrgRsc_PutIconsEditRes,
+      [Vie_EDIT] = PrgRsc_PutIconsViewRes,
      };
 
    /***** Trivial check *****/
@@ -199,7 +199,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 
    /***** Get list of item resources from database *****/
    NumResources = Prg_DB_GetListResources (&mysql_res,Item->Hierarchy.ItmCod,
-                                           ViewingOrEditingResources[ListingType] == Vie_EDIT);
+                                           ViewingOrEditingRes[ListingType] == Vie_EDIT);
 
    if (NumResources || ViewingOrEditing[ListingType] == Vie_EDIT)
      {
@@ -208,21 +208,20 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	 /***** Begin section *****/
 	 HTM_SECTION_Begin (PrgRsc_RESOURCE_SECTION_ID);
 
-	 /***** Show possible alerts *****/
-	 if (Gbl.Action.Act == ActReqRemPrgRsc)
-	    /* Alert with button to remove resource */
-	    Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
-					PrgRsc_PutParRscCod,&SelectedRscCod,
-					Btn_REMOVE_BUTTON,Txt_Remove);
-	 else
-	    Ale_ShowAlerts (PrgRsc_RESOURCE_SECTION_ID);
+	    /***** Show possible alerts *****/
+	    if (Gbl.Action.Act == ActReqRemPrgRsc)
+	       /* Alert with button to remove resource */
+	       Ale_ShowLastAlertAndButton (ActRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,NULL,
+					   PrgRsc_PutParRscCod,&SelectedRscCod,
+					   Btn_REMOVE_BUTTON,Txt_Remove);
+	    else
+	       Ale_ShowAlerts (PrgRsc_RESOURCE_SECTION_ID);
 	}
 
       /***** Begin box *****/
-      ViewingOrEditingResourcesOfThisItem = ViewingOrEditingResources[ListingType] == Vie_EDIT &&
-				            (Item->Hierarchy.ItmCod == SelectedItmCod) ? Vie_EDIT :
-				        						 Vie_VIEW;
-
+      ViewingOrEditingResOfThisItem = (ViewingOrEditingRes[ListingType] == Vie_EDIT &&
+				       Item->Hierarchy.ItmCod == SelectedItmCod) ? Vie_EDIT :
+										   Vie_VIEW;
       switch (ViewingOrEditing[ListingType])
         {
          case Vie_VIEW:
@@ -232,9 +231,9 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 	    if (asprintf (&Title,Txt_Resources_of_X,Item->Title) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin (Title,
-			  PrgRsc_PutIconsResources[ViewingOrEditingResourcesOfThisItem],
+			  PrgRsc_PutIconsRes[ViewingOrEditingResOfThisItem],
 			  &Item->Hierarchy.ItmCod,
-			  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
+			  Hlp_COURSE_Program_resources,Box_NOT_CLOSABLE);
 	    free (Title);
 	    break;
          default:
@@ -242,47 +241,47 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
             break;
         }
 
-      /***** Table *****/
-      HTM_TABLE_BeginWidePadding (2);
+	 /***** Table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-	 /***** Write all item resources *****/
-	 for (NumRsc = 0, The_ResetRowColor1 (1);
-	      NumRsc < NumResources;
-	      NumRsc++, The_ChangeRowColor1 (1))
-	   {
-	    /* Get data of this item resource */
-	    PrgRsc_GetResourceDataFromRow (mysql_res,Item);
-
-	    /* Show item */
-	    switch (ViewingOrEditingResourcesOfThisItem)
+	    /***** Write all item resources *****/
+	    for (NumRsc = 0, The_ResetRowColor1 (1);
+		 NumRsc < NumResources;
+		 NumRsc++, The_ChangeRowColor1 (1))
 	      {
-	       case Vie_VIEW:
-		  PrgRsc_WriteRowViewResource (NumRsc,Item);
-		  break;
-	       case Vie_EDIT:
-		  PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
-					       (ListingType == Prg_EDIT_RESOURCE_LINK &&
-						Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
-												     Vie_VIEW);
-		  break;
-	       default:
-		  Err_WrongTypeExit ();
-		  break;
+	       /* Get data of this item resource */
+	       PrgRsc_GetResourceDataFromRow (mysql_res,Item);
+
+	       /* Show item */
+	       switch (ViewingOrEditingResOfThisItem)
+		 {
+		  case Vie_VIEW:
+		     PrgRsc_WriteRowViewResource (NumRsc,Item);
+		     break;
+		  case Vie_EDIT:
+		     PrgRsc_WriteRowEditResource (NumRsc,NumResources,Item,
+						  (ListingType == Prg_EDIT_RESOURCE_LINK &&
+						   Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
+													Vie_VIEW);
+		     break;
+		  default:
+		     Err_WrongTypeExit ();
+		     break;
+		 }
 	      }
-	   }
 
-	 /***** Form to create a new resource *****/
-	 if (ViewingOrEditingResourcesOfThisItem == Vie_EDIT)
-	   {
-	    Prg_ResetResource (Item);
-	    PrgRsc_WriteRowNewResource (NumResources,Item,
-					(ListingType == Prg_EDIT_RESOURCE_LINK &&
-					 Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
-											      Vie_VIEW);
-	   }
+	    /***** Form to create a new resource *****/
+	    if (ViewingOrEditingResOfThisItem == Vie_EDIT)
+	      {
+	       Prg_ResetResource (Item);
+	       PrgRsc_WriteRowNewResource (NumResources,Item,
+					   (ListingType == Prg_EDIT_RESOURCE_LINK &&
+					    Item->Resource.Hierarchy.RscCod == SelectedRscCod) ? Vie_EDIT :
+												 Vie_VIEW);
+	      }
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -300,7 +299,7 @@ void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
 /************** Put contextual icons in list of item resources ***************/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsViewResources (void *ItmCod)
+static void PrgRsc_PutIconsViewRes (void *ItmCod)
   {
    /***** Put icon to create a new item resource *****/
    if (ItmCod)
@@ -310,7 +309,7 @@ static void PrgRsc_PutIconsViewResources (void *ItmCod)
 					 Prg_PutParItmCod,ItmCod);
   }
 
-static void PrgRsc_PutIconsEditResources (void *ItmCod)
+static void PrgRsc_PutIconsEditRes (void *ItmCod)
   {
    /***** Put icon to create a new item resource *****/
    if (ItmCod)
