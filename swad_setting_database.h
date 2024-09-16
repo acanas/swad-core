@@ -36,7 +36,7 @@ void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu);
 void Set_DB_UpdateMySettingsAboutTheme (const char *ThemeId);
 void Set_DB_UpdateMySettingsAboutSideCols (void);
 void Set_DB_UpdateMySettingsAboutPhotoShape (void);
-void Set_DB_UpdateMySettingsAboutPhotoVisibility (void);
+void Set_DB_UpdateUsrSettingsAboutPhotoVisibility (const struct Usr_Data *UsrDat);
 void Set_DB_UpdateMySettingsAboutBasicProfile (void);
 void Set_DB_UpdateMySettingsAboutExtendedProfile (void);
 void Set_DB_UpdateMySettingsAboutNotifyEvents (void);

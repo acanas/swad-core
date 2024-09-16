@@ -405,7 +405,17 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
                                                 Usr_DONT_GET_ROLE_IN_CRS))
      {
       /***** Receive photo *****/
-      if (!Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
+      if (Pho_ReceivePhotoAndDetectFaces (Usr_OTHER,&Gbl.Usrs.Other.UsrDat))
+        {
+	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_OTHER)
+	   {
+	    /* Change the visibility of the other user's photo to minimum.
+	       The reason is that the other user is not aware of the change. */
+	    Gbl.Usrs.Other.UsrDat.PhotoVisibility = Pri_VISIBILITY_USER;
+	    Set_DB_UpdateUsrSettingsAboutPhotoVisibility (&Gbl.Usrs.Other.UsrDat);
+	   }
+        }
+      else
         {
          Pho_ReqPhoto (&Gbl.Usrs.Other.UsrDat);	// Request user's photograph again
          HTM_BR ();
@@ -1396,7 +1406,7 @@ void Pho_ChangePhotoVisibility (void)
 	                                                      Pri_PHOTO_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
-   Set_DB_UpdateMySettingsAboutPhotoVisibility ();
+   Set_DB_UpdateUsrSettingsAboutPhotoVisibility (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show form again *****/
    Set_EditSettings ();

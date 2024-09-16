@@ -164,7 +164,7 @@ void Set_DB_UpdateMySettingsAboutPhotoShape (void)
 /***************** Update my settings about photo visibility *****************/
 /*****************************************************************************/
 
-void Set_DB_UpdateMySettingsAboutPhotoVisibility (void)
+void Set_DB_UpdateUsrSettingsAboutPhotoVisibility (const struct Usr_Data *UsrDat)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
 
@@ -172,8 +172,8 @@ void Set_DB_UpdateMySettingsAboutPhotoVisibility (void)
 		   "UPDATE usr_data"
 		     " SET PhotoVisibility='%s'"
 		   " WHERE UsrCod=%ld",
-		   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Pri_VisibilityDB[UsrDat->PhotoVisibility],
+		   UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
