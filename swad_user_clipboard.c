@@ -25,12 +25,14 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+// #include "swad_alert.h"
 #include "swad_cryptography.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_user.h"
+#include "swad_user_clipboard.h"
 #include "swad_user_database.h"
 
 /*****************************************************************************/
@@ -64,7 +66,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void UsrClp_CopyUsrsToClipboard (void);
-static void UsrClp_ListUsrsInMyClipboard (void);
 
 /*****************************************************************************/
 /******************** Copy selected users to clipboard ***********************/
@@ -87,9 +88,10 @@ void UsrClp_CopyTchsToClipboard (void)
 
 static void UsrClp_CopyUsrsToClipboard (void)
   {
-   unsigned NumUsr = 0;
+   unsigned NumUsrs;
    const char *Ptr;
    struct Usr_Data UsrDat;
+   MYSQL_RES *mysql_res;
 
    /***** Remove my clipboard *****/
    Usr_DB_RemoveMyClipboard ();
@@ -113,16 +115,8 @@ static void UsrClp_CopyUsrsToClipboard (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CRS))
-	{
-	 /* Check if this user has accepted
-	    his/her inscription in the current course */
-	 UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-
 	 /* Add user to clipboard */
 	 Usr_DB_CopyToClipboard (UsrDat.UsrCod);
-
-	 NumUsr++;
-	}
      }
 
    /***** Free memory used for user's data *****/
@@ -131,19 +125,17 @@ static void UsrClp_CopyUsrsToClipboard (void)
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
-   /***** Show message *****/
-   Ale_ShowAlert (NumUsr ? Ale_SUCCESS :
-			   Ale_WARNING,
-		  "Usuarios copiados en el portapapeles: %u",NumUsr);
-
-   UsrClp_ListUsrsInMyClipboard ();
+   /***** Get and show users in clipboard *****/
+   NumUsrs = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
+   UsrClp_ListUsrsInMyClipboard (NumUsrs,&mysql_res);
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
 /************************* Show users in my clipboard ************************/
 /*****************************************************************************/
 
-static void UsrClp_ListUsrsInMyClipboard (void)
+void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -152,52 +144,42 @@ static void UsrClp_ListUsrsInMyClipboard (void)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO12x16",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR12x16",
      };
-   unsigned NumUsrs;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
-   MYSQL_RES *mysql_res;
 
-   /***** Get users who have faved/shared *****/
-   NumUsrs = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
+   /***** Get users in clipboard *****/
+   HTM_DIV_Begin ("class=\"UsrClp_USRS\"");
 
-   if (NumUsrs)
-     {
-      HTM_DIV_Begin ("class=\"UsrClp_USRS\"");
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
 
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&UsrDat);
+      /***** List users *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
+	{
+	 /***** Get user's code *****/
+	 UsrDat.UsrCod = DB_GetNextCode (*mysql_res);
 
-	 /***** List users *****/
-	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
-	      NumUsr++)
+	 /***** Get user's data and show user's photo *****/
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+						      Usr_DONT_GET_PREFS,
+						      Usr_DONT_GET_ROLE_IN_CRS))
 	   {
-	    /***** Get user's code *****/
-	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	    /* Begin container */
+	    HTM_DIV_Begin ("class=\"UsrClp_USR\"");
 
-	    /***** Get user's data and show user's photo *****/
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
-	      {
-	       /* Begin container */
-	       HTM_DIV_Begin ("class=\"UsrClp_USR\"");
+	       /* User's photo */
+	       Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
-		  /* User's photo */
-		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-					     ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-
-	       /* End container */
-	       HTM_DIV_End ();
-	      }
+	    /* End container */
+	    HTM_DIV_End ();
 	   }
+	}
 
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&UsrDat);
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
 
-      HTM_DIV_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   HTM_DIV_End ();
   }

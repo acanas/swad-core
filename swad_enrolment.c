@@ -69,6 +69,7 @@
 #include "swad_setting_database.h"
 #include "swad_test_print.h"
 #include "swad_user.h"
+#include "swad_user_clipboard.h"
 #include "swad_user_database.h"
 
 /*****************************************************************************/
@@ -109,6 +110,7 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
 static void Enr_ReqAdminUsrs (Rol_Role_t Role);
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
 static void Enr_PutAreaToEnterUsrsIDs (void);
+static void Enr_PutUsrsClipboard (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
 
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
@@ -541,7 +543,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
-   extern const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_;
    extern const char *Txt_Step_2_Select_the_desired_action;
    extern const char *Txt_Step_3_Optionally_select_groups;
    extern const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_;
@@ -606,8 +607,10 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	    HTM_Txt (Txt_Step_1_Provide_a_list_of_users);
 	 HTM_DIV_End ();
 
-	 Ale_ShowAlert (Ale_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
-	 Enr_PutAreaToEnterUsrsIDs ();
+	 HTM_TABLE_BeginCenterPadding (2);
+	    Enr_PutAreaToEnterUsrsIDs ();
+	    Enr_PutUsrsClipboard ();
+	 HTM_TABLE_End ();
 
 	 /***** Step 2: Put different actions to register/remove users to/from current course *****/
 	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
@@ -779,25 +782,69 @@ void Enr_RemoveOldUsrs (void)
 static void Enr_PutAreaToEnterUsrsIDs (void)
   {
    extern const char *Txt_List_of_nicks_emails_or_IDs;
+   extern const char *Txt_The_nicks_emails_or_IDs_can_be_separated_;
 
    /***** Text area for users' IDs *****/
-   HTM_TABLE_BeginCenterPadding (2);
-      HTM_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
+      /* Label */
+      Frm_LabelColumn ("RT","UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-				"id=\"UsrsIDs\" name=\"UsrsIDs\""
-		                " cols=\"60\" rows=\"10\" class=\"INPUT_%s\"",
-		                The_GetSuffix ());
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+			     "id=\"UsrsIDs\" name=\"UsrsIDs\""
+			     " placeholder=\"%s\""
+			     " cols=\"60\" rows=\"10\" class=\"INPUT_%s\"",
+			     Txt_The_nicks_emails_or_IDs_can_be_separated_,
+			     The_GetSuffix ());
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
 
-      HTM_TR_End ();
-   HTM_TABLE_End ();
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/************************ Put current users' clipboard ***********************/
+/*****************************************************************************/
+
+static void Enr_PutUsrsClipboard (void)
+  {
+   extern const char *Txt_User_clipboard;
+   unsigned NumUsrs;
+   MYSQL_RES *mysql_res;
+
+   /***** Get and show users in clipboard *****/
+   NumUsrs = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
+
+   /***** Users' clipboard *****/
+   HTM_TR_Begin (NULL);
+
+      /* Label */
+      Frm_LabelColumn ("RT","UseClipboard",Txt_User_clipboard);
+
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+
+	 /* Checkbox */
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_INPUT_CHECKBOX ("UseClipboard",
+				NumUsrs ? HTM_NO_ATTR :
+					  HTM_DISABLED,
+				"id=\"UseClipboard\" value=\"Y\"");
+	    HTM_TxtF ("%u usuarios",NumUsrs);	// TODO: Need translation!!!!!
+	 HTM_LABEL_End ();
+
+	 /* Clipboard */
+	 if (NumUsrs)
+	    UsrClp_ListUsrsInMyClipboard (NumUsrs,&mysql_res);
+
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -928,6 +975,10 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
    bool ItLooksLikeAUsrID;
    Enr_RegRemUsrsAction_t RegRemUsrsAction;
    bool SelectionIsValid = true;
+   bool UseClipboard;
+   unsigned NumUsrsInClipboard;
+   unsigned NumUsrInClipboard;
+   MYSQL_RES *mysql_res;
 
    /***** Check the role of users to register / remove *****/
    switch (Role)
@@ -951,6 +1002,9 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
    /***** Get confirmation *****/
    if (!Pwd_GetConfirmationOnDangerousAction ())
       return;
+
+   /***** Get if users' clipboard will be used *****/
+   UseClipboard = Par_GetParBool ("UseClipboard");
 
    /***** Get the action to do *****/
    WhatToDo.RemoveUsrs = false;
@@ -1040,6 +1094,10 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 
    if (SelectionIsValid)
      {
+      /***** Get users' clipboard *****/
+      if (UseClipboard)
+         NumUsrsInClipboard = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
+
       /***** Get list of users' IDs *****/
       if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
 	 Err_NotEnoughMemoryExit ();
@@ -1136,6 +1194,21 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 	       /* Free memory used for list of users' codes found for this ID */
 	       Usr_FreeListUsrCods (&ListUsrCods);
 	      }
+
+	    /* Get users from clipboard */
+	    if (UseClipboard)
+	       for (NumUsrInClipboard = 0;
+		    NumUsrInClipboard < NumUsrsInClipboard;
+		    NumUsrInClipboard++)
+		 {
+		  UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+
+		  for (NumCurrentUsr = 0;
+		       NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+		       NumCurrentUsr++)
+		     if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == UsrDat.UsrCod)	// User found
+			Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = WhatToDo.RemoveSpecifiedUsrs;
+		 }
 
 	    /***** Loop 2: go through users list removing users *****/
 	    for (NumCurrentUsr = 0;
@@ -1257,10 +1330,30 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 	    /* Free memory used for list of users' codes found for this ID */
 	    Usr_FreeListUsrCods (&ListUsrCods);
 	   }
+
+	 /* Register users in clipboard */
+	 if (UseClipboard)
+	   {
+	    mysql_data_seek (mysql_res,0);
+	    for (NumUsrInClipboard = 0;
+		 NumUsrInClipboard < NumUsrsInClipboard;
+		 NumUsrInClipboard++)
+	      {
+	       UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	       Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
+	      }
+	   }
 	}
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
+
+      /***** Free memory used by the list of user's IDs *****/
+      free (ListUsrsIDs);
+
+      /***** Free structure that stores the query result about users' clipboard *****/
+      if (UseClipboard)
+         DB_FreeMySQLResult (&mysql_res);
 
       if (NumUsrsEliminated)
 	 /***** Move unused contents of messages to table of deleted contents of messages *****/
@@ -1312,9 +1405,6 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 			      NumUsrsRegistered);
 	       break;
 	   }
-
-      /***** Free memory used by the list of user's IDs *****/
-      free (ListUsrsIDs);
      }
    else	// Selection of groups not valid
       Ale_ShowAlert (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);

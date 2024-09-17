@@ -43,4 +43,6 @@ void UsrClp_CopyGstsToClipboard (void);
 void UsrClp_CopyStdsToClipboard (void);
 void UsrClp_CopyTchsToClipboard (void);
 
+void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res);
+
 #endif

@@ -633,10 +633,11 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.1 (2024-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 24.2 (2024-09-17)"
 #define CSS_FILE		"swad24.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.2:     Sep 17, 2024  Use users' clipboard in enrolment of several users. (335897 lines)
 	Version 24.1:     Sep 17, 2024  New options to copy users. (335857 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS usr_clipboards (UsrCod INT NOT NULL,OthUsrCod INT NOT NULL,CopyTime TIMESTAMP,UNIQUE INDEX(UsrCod,OthUsrCod),INDEX(CopyTime));

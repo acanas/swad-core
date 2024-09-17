@@ -49448,6 +49448,80 @@ const char *Txt_The_nickname_matches_the_one_you_had_previously_registered =
 	"The nickname matches the one you had previously registered.";		// Çeviri lazim!
 #endif
 
+const char *Txt_The_nicks_emails_or_IDs_can_be_separated_ =
+#if   L==1	// ca
+	"Els @nicks, correus electr&ograve;nics o IDs"
+	" es poden separar per cadenes arbitr&agrave;ries"
+	" (per exemple, noms, llocs, etc.)."
+	" Nom&eacute;s es tindran en compte les paraules"
+	" que sembli @nicks, correus electr&ograve;nics o IDs;"
+	" la resta del text s'ignorar&agrave;.";
+#elif L==2	// de
+	"Die @nicks, E-Mails oder IDs"
+	" k&ouml;nnen durch beliebige Zeichenfolgen"
+	" (z. B. Namen, Orte usw.) getrennt werden."
+	" Nur die W&ouml;rter, die wie @nicks, E-Mails oder IDs aussehen,"
+	" werden ber&uuml;cksichtigt;"
+	" der Rest des Textes wird ignoriert.";
+#elif L==3	// en
+	"The @nicks, emails or IDs"
+	" can be separated by arbitrary strings"
+	" (eg. names, places, etc.)."
+	" Only the words that seems @nicks, emails or IDs"
+	" will be taken into account;"
+	" the rest of the text will be ignored.";
+#elif L==4	// es
+	"Los @apodos, correos o ID (DNI/c&eacute;dulas)"
+	" pueden ir separados por cadenas de caracteres arbitrarias"
+	" (por ej. nombres, apellidos, espacios, etc.)."
+	" Solo se tendr&aacute;n en cuenta aquellas palabras"
+	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
+	" el resto del texto se ignorar&aacute;.";
+#elif L==5	// fr
+	"Les @nicks, emails ou identifiants"
+	" peuvent &ecirc;tre s&eacute;par&eacute;s par des chaînes arbitraires"
+	" (ex. noms, lieux, etc.)."
+	" Seuls les mots qui semblent @nicks, emails ou identifiants"
+	" seront pris en compte;"
+	" le reste du texte sera ignor&eacute;.";
+#elif L==6	// gn
+	"Los @apodos, correos o ID (DNI/c&eacute;dulas)"
+	" pueden ir separados por cadenas de caracteres arbitrarias"
+	" (por ej. nombres, apellidos, espacios, etc.)."
+	" Solo se tendr&aacute;n en cuenta aquellas palabras"
+	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
+	" el resto del texto se ignorar&aacute;.";		// Okoteve traducción
+#elif L==7	// it
+	"I @nome-utenti, emails o IDs"
+	" possono essere separati da caratteri arbitrari"
+	" (eg. nomi, luoghi, etc.)."
+	" Solo le parole che sembrano"
+	" @nome-utenti, emails o IDs"
+	" saranno presi in considerazione;"
+	" il resto del testo sar&agrave; ignorato.";
+#elif L==8	// pl
+	"@nicki, e-maile lub ID"
+	" mog&aogon; by&cacute; oddzielone dowolnymi ci&aogon;gami"
+	" (np. nazwy, miejsca itp.)."
+	" Tylko s&lstrok;owa, kt&oacute;re wygl&aogon;daj&aogon; jak @nick, e-maile lub ID,"
+	" b&eogon;d&aogon; brane pod uwag&eogon;;"
+	" reszta tekstu zostanie zignorowana.";
+#elif L==9	// pt
+	"As @alcunhas, os emails ou os IDs"
+	" podem ser separados por strings arbitr&aacute;rias"
+	" (por exemplo, nomes, lugares, etc.)."
+	" Apenas as palavras que parecem @alcunhas, emails ou IDs"
+	" ser%atilde;o levadas em conta;"
+	" o resto do texto ser&aacute; ignorado.";
+#elif L==10	// tr
+	"The @nicks, emails or IDs"
+	" can be separated by arbitrary strings"
+	" (eg. names, places, etc.)."
+	" Only the words that seems @nicks, emails or IDs"
+	" will be taken into account;"
+	" the rest of the text will be ignored.";		// Çeviri lazim!
+#endif
+
 const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El nombre de l&iacute;nies d'edici&oacute;"
@@ -50197,30 +50271,7 @@ const char *Txt_The_session_has_expired =
 #elif L==10	// tr
 	"Oturumun s&uuml;resi doldu.";		// Çeviri lazim!
 #endif
-/*
-const char *Txt_The_set_of_questions_has_been_modified =
-#if   L==1	// ca
-	"El conjunt de preguntes ha estat modificat.";
-#elif L==2	// de
-	"Der Satz von Fragen wurde ge&auml;ndert.";
-#elif L==3	// en
-	"The set of questions has been modified.";
-#elif L==4	// es
-	"El conjunto de preguntas ha sido modificado.";
-#elif L==5	// fr
-	"L'ensemble de questions a &eacute;t&eacute; modifi&eacute;.";
-#elif L==6	// gn
-	"El conjunto de preguntas ha sido modificado.";	// Okoteve traducción
-#elif L==7	// it
-	"Il set di domande &egrave; stato modificato.";
-#elif L==8	// pl
-	"Zestaw pyta&nacute; zosta&lstrok; zmodyfikowany.";
-#elif L==9	// pt
-	"O conjunto de perguntas foi modificado.";
-#elif L==10	// tr
-	"Soru seti de&gbreve;i&scedil;tirildi.";
-#endif
-*/
+
 const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La mida del fitxer"
@@ -54753,100 +54804,6 @@ const char *Txt_Type_of_group_X_removed =	// Warning: it is very important to in
 	"Type of group <strong>%s</strong> removed.";	// Çeviri lazim!
 #endif
 
-const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
-#if   L==1	// ca
-	"Escriviu o enganxeu una llista"
-	" de @nicks, correus electr&ograve;nics o IDs."
-	" Els @nicks, correus electr&ograve;nics o IDs"
-	" es poden separar per cadenes arbitr&agrave;ries"
-	" (per exemple, noms, llocs, etc.)."
-	" Nom&eacute;s es tindran en compte les paraules"
-	" que sembli @nicks, correus electr&ograve;nics o IDs;"
-	" la resta del text s'ignorar&agrave;.";
-#elif L==2	// de
-	"Geben oder f&uuml;gen Sie eine Liste"
-	" mit @nicks, E-Mails oder IDs ein."
-	" Die @nicks, E-Mails oder IDs"
-	" k&ouml;nnen durch beliebige Zeichenfolgen"
-	" (z. B. Namen, Orte usw.) getrennt werden."
-	" Nur die W&ouml;rter, die wie @nicks, E-Mails oder IDs aussehen,"
-	" werden ber&uuml;cksichtigt;"
-	" der Rest des Textes wird ignoriert.";
-#elif L==3	// en
-	"Type or paste a list"
-	" of @nicks, emails or IDs."
-	" The @nicks, emails or IDs"
-	" can be separated by arbitrary strings"
-	" (eg. names, places, etc.)."
-	" Only the words that seems @nicks, emails or IDs"
-	" will be taken into account;"
-	" the rest of the text will be ignored.";
-#elif L==4	// es
-	"Escriba o pegue una lista"
-	" con @apodos, correos o ID (DNI/c&eacute;dulas)."
-	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
-	" pueden ir separados por cadenas de caracteres arbitrarias"
-	" (por ej. nombres, apellidos, espacios, etc.)."
-	" Solo se tendr&aacute;n en cuenta aquellas palabras"
-	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
-	" el resto del texto se ignorar&aacute;.";
-#elif L==5	// fr
-	"Tapez ou collez une liste"
-	" de @nicks, e-mails ou identifiants."
-	" Les @nicks, emails ou identifiants"
-	" peuvent &ecirc;tre s&eacute;par&eacute;s par des chaînes arbitraires"
-	" (ex. noms, lieux, etc.)."
-	" Seuls les mots qui semblent @nicks, emails ou identifiants"
-	" seront pris en compte;"
-	" le reste du texte sera ignor&eacute;.";
-#elif L==6	// gn
-	"Escriba o pegue una lista"
-	" con @apodos, correos o ID (DNI/c&eacute;dulas)."
-	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
-	" pueden ir separados por cadenas de caracteres arbitrarias"
-	" (por ej. nombres, apellidos, espacios, etc.)."
-	" Solo se tendr&aacute;n en cuenta aquellas palabras"
-	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
-	" el resto del texto se ignorar&aacute;.";		// Okoteve traducción
-#elif L==7	// it
-	"Scrivi o incolla la lista"
-	" di @nome-utenti, emails o IDs."
-	" I @nome-utenti, emails o IDs"
-	" possono essere separati da caratteri arbitrari"
-	" (eg. nomi, luoghi, etc.)."
-	" Solo le parole che sembrano"
-	" @nome-utenti, emails o IDs"
-	" saranno presi in considerazione;"
-	" il resto del testo sar&agrave; ignorato.";
-#elif L==8	// pl
-	"Wpisz lub wklej list&eogon;"
-	" @nick&oacute;w, e-maili lub ID."
-	" @nicki, e-maile lub ID"
-	" mog&aogon; by&cacute; oddzielone dowolnymi ci&aogon;gami"
-	" (np. nazwy, miejsca itp.)."
-	" Tylko s&lstrok;owa, kt&oacute;re wygl&aogon;daj&aogon; jak @nick, e-maile lub ID,"
-	" b&eogon;d&aogon; brane pod uwag&eogon;;"
-	" reszta tekstu zostanie zignorowana.";
-#elif L==9	// pt
-	"Digite ou cole uma lista"
-	" de @alcunhas, emails ou IDs."
-	" As @alcunhas, os emails ou os IDs"
-	" podem ser separados por strings arbitr&aacute;rias"
-	" (por exemplo, nomes, lugares, etc.)."
-	" Apenas as palavras que parecem @alcunhas, emails ou IDs"
-	" ser%atilde;o levadas em conta;"
-	" o resto do texto ser&aacute; ignorado.";
-#elif L==10	// tr
-	"Type or paste a list"
-	" of @nicks, emails or IDs."
-	" The @nicks, emails or IDs"
-	" can be separated by arbitrary strings"
-	" (eg. names, places, etc.)."
-	" Only the words that seems @nicks, emails or IDs"
-	" will be taken into account;"
-	" the rest of the text will be ignored.";		// Çeviri lazim!
-#endif
-
 const char *Txt_Types_of_degree =
 #if   L==1	// ca
 	"Tipus de titulaci&oacute;";
@@ -55825,6 +55782,29 @@ const char *Txt_user[Usr_NUM_SEXS] =
 	"user"	// Çeviri lazim!
 #endif
 	};
+
+const char *Txt_User_clipboard =
+#if   L==1	// ca
+	"Portapapers d'usuaris";
+#elif L==2	// de
+	"Zwischenablage der Benutzer";
+#elif L==3	// en
+	"User clipboard";
+#elif L==4	// es
+	"Portapapeles de usuarios";
+#elif L==5	// fr
+	"Presse-papiers des utilisateurs";
+#elif L==6	// gn
+	"Portapapeles de usuarios";	// Okoteve traducción
+#elif L==7	// it
+	"Appunti degli utenti";
+#elif L==8	// pl
+	"Schowek u&zdot;ytkownika";
+#elif L==9	// pt
+	"&Aacute;rea de transfer&ecirc;ncia de utilizadores";
+#elif L==10	// tr
+	"Kullan&inodot;c&inodot; panosu";
+#endif
 
 const char *Txt_USER_comments =
 #if   L==1	// ca
