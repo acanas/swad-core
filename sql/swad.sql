@@ -1416,7 +1416,7 @@ CREATE TABLE IF NOT EXISTS svy_answers (
 	--
 -- Table svy_comments: stores the comments to the surveys
 --
-CREATE TABLE IF NOT EXISTS svy_comments ("
+CREATE TABLE IF NOT EXISTS svy_comments (
 	ComCod INT NOT NULL AUTO_INCREMENT,
 	QstCod INT NOT NULL,
 	Comments TEXT NOT NULL,
@@ -1677,6 +1677,25 @@ CREATE TABLE IF NOT EXISTS usr_birthdays_today (
 	Today DATE NOT NULL,
 	UNIQUE INDEX(UsrCod),
 	INDEX(Today));
+	
+--
+-- Table usr_clicks_without_photo: number of clicks before uploading user's photo
+--
+CREATE TABLE IF NOT EXISTS usr_clicks_without_photo (
+	UsrCod INT NOT NULL,
+	NumClicks INT NOT NULL,
+	UNIQUE INDEX(UsrCod));
+
+--
+-- Table usr_clipboards: clipboards to store copied users
+--
+CREATE TABLE IF NOT EXISTS usr_clipboards (
+	UsrCod INT NOT NULL,
+	OthUsrCod INT NOT NULL,
+	CopyTime TIMESTAMP,
+	UNIQUE INDEX(UsrCod,OthUsrCod),
+	INDEX(CopyTime));
+
 --
 -- Table usr_connected: users currently connected to the platform
 --

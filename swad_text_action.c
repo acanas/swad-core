@@ -24835,6 +24835,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an action on several selected students"				// Çeviri lazim!
 #endif
 	,
+	[ActCpySevStd] =
+#if   L==1	// ca
+	"Copy several selected students"		// Necessita traducció
+#elif L==2	// de
+	"Copy several selected students"		// Need Übersetzung
+#elif L==3	// en
+	"Copy several selected students"
+#elif L==4	// es
+	"Copiar varios estudiantes seleccionados"
+#elif L==5	// fr
+	"Copy several selected students"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar varios estudiantes seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"Copy several selected students"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy several selected students"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy several selected students"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy several selected students"		// Çeviri lazim!
+#endif
+	,
 	[ActSeeRecSevStd] =
 #if   L==1	// ca
 	"See records of several selected students"		// Necessita traducció
@@ -25891,6 +25914,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an action on several selected teachers"				// Precisa de tradução
 #elif L==10	// tr
 	"Do an action on several selected teachers"				// Çeviri lazim!
+#endif
+	,
+	[ActCpySevTch] =
+#if   L==1	// ca
+	"Copy several selected teachers"		// Necessita traducció
+#elif L==2	// de
+	"Copy several selected teachers"		// Need Übersetzung
+#elif L==3	// en
+	"Copy several selected teachers"
+#elif L==4	// es
+	"Copiar varios profesores seleccionados"
+#elif L==5	// fr
+	"Copy several selected teachers"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar varios profesores seleccionados"	// Okoteve traducción
+#elif L==7	// it
+	"Copy several selected teachers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy several selected teachers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy several selected teachers"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy several selected teachers"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecSevTch] =
@@ -27133,6 +27179,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an action on several selected guests"				// Precisa de tradução
 #elif L==10	// tr
 	"Do an action on several selected guests"				// Çeviri lazim!
+#endif
+	,
+	[ActCpySevGst] =
+#if   L==1	// ca
+	"Copy several selected guests"			// Necessita traducció
+#elif L==2	// de
+	"Copy several selected guests"			// Need Übersetzung
+#elif L==3	// en
+	"Copy several selected guests"
+#elif L==4	// es
+	"Copiar varios invitados seleccionados"
+#elif L==5	// fr
+	"Copy several selected guests"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar varios invitados seleccionados"		// Okoteve traducción
+#elif L==7	// it
+	"Copy several selected guests"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy several selected guests"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy several selected guests"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy several selected guests"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecSevGst] =

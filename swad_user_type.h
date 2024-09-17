@@ -96,17 +96,18 @@ typedef enum
    Usr_CLASS_PHOTO_PRN,		// Only print users
   } Usr_ClassPhotoType_t;
 
-#define Usr_LIST_USRS_NUM_OPTIONS 8
+#define Usr_LIST_USRS_NUM_OPTIONS 9
 typedef enum
   {
    Usr_OPTION_UNKNOWN		= 0,
    Usr_OPTION_RECORDS		= 1,
-   Usr_OPTION_HOMEWORK		= 2,
-   Usr_OPTION_ATTENDANCE	= 3,
-   Usr_OPTION_MESSAGE		= 4,
-   Usr_OPTION_EMAIL		= 5,
-   Usr_OPTION_FOLLOW		= 6,
-   Usr_OPTION_UNFOLLOW		= 7,
+   Usr_OPTION_COPY		= 2,
+   Usr_OPTION_HOMEWORK		= 3,
+   Usr_OPTION_ATTENDANCE	= 4,
+   Usr_OPTION_MESSAGE		= 5,
+   Usr_OPTION_EMAIL		= 6,
+   Usr_OPTION_FOLLOW		= 7,
+   Usr_OPTION_UNFOLLOW		= 8,
   } Usr_ListUsrsOption_t;
 #define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
 

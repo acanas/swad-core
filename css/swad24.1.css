@@ -4796,6 +4796,17 @@ legend {font-size:12pt;}
 	/* box-sizing:border-box; */
 	width:32px;
 	}
+	
+/******************************* Users' clipboard ****************************/
+.UsrClp_USRS
+	{
+	margin:0 auto;
+	}
+.UsrClp_USR
+	{
+	display:inline-block;
+	padding:4px;
+	}
 
 /********************************* Notifications *****************************/
 @media only screen and (max-width:600px)
@@ -5214,50 +5225,50 @@ table.TBL_WIDE > tbody > tr > th {padding:2px;}
 	{	/* For mobile-phones */
 	.TBL_SCROLL
 		{
-	    display:block;
-	    overflow-x:auto;
-	    width:260px;
-	    margin:0 auto;
+		display:block;
+		overflow-x:auto;
+		width:260px;
+		margin:0 auto;
 		}
 	}
 @media only screen and (min-width:480px) and (max-width:800px)
 	{	/* For mobile-phones */
 	.TBL_SCROLL
 		{
-	    display:block;
-	    overflow-x:auto;
-	    width:400px;
-	    margin:0 auto;
+		display:block;
+		overflow-x:auto;
+		width:400px;
+		margin:0 auto;
 		}
 	}
 @media only screen and (min-width:800px) and (max-width:1024px)
 	{	/* For tablets */
 	.TBL_SCROLL
 		{
-	    display:block;
-	    overflow-x:auto;
-	    width:640px;
-	    margin:0 auto;
+		display:block;
+		overflow-x:auto;
+		width:640px;
+		margin:0 auto;
 		}
 	}
 @media only screen and (min-width:1024px) and (max-width:1800px)
 	{	/* For desktop */
 	.TBL_SCROLL
 		{
-	    display:block;
-	    overflow-x:auto;
-	    width:900px;
-	    margin:0 auto;
+		display:block;
+		overflow-x:auto;
+		width:900px;
+		margin:0 auto;
 		}
 	}
 @media only screen and (min-width:1800px)
 	{	/* For desktop */
 	.TBL_SCROLL
 		{
-	    display:block;
-	    overflow-x:auto;
-	    width:1440px;
-	    margin:0 auto;
+		display:block;
+		overflow-x:auto;
+		width:1440px;
+		margin:0 auto;
 		}
 	}
 
@@ -5265,47 +5276,47 @@ table.TBL_WIDE > tbody > tr > th {padding:2px;}
 	{	/* For mobile-phones */
 	.TBL_SCROLL_C2
 		{
-	    display:block;
-	    overflow-x:auto;
-	    width:186px;	/* Frm_C2 - 2px */
-	    margin:0 auto;
+		display:block;
+		overflow-x:auto;
+		width:186px;	/* Frm_C2 - 2px */
+		margin:0 auto;
 		}
 	}
 @media only screen and (min-width:480px) and (max-width:600px)
 	{	/* For mobile-phones */
 	.TBL_SCROLL_C2
 		{
-	    display:block;
-	    overflow-x:auto;
+		display:block;
+		overflow-x:auto;
 		width:278px;	/* Frm_C2 - 2px */
-	    margin:0 auto;
+		margin:0 auto;
 		}
 	}
 @media only screen and (min-width:600px) and (max-width:1024px)
 	{	/* For desktop */
 	.TBL_SCROLL_C2
 		{
-	    display:block;
-	    overflow-x:auto;
+		display:block;
+		overflow-x:auto;
 		width:384px;	/* Frm_C2 - 2px */
-	    margin:0 auto;
+		margin:0 auto;
 		}
 	}
 @media only screen and (min-width:1024px)
 	{	/* For desktop */
 	.TBL_SCROLL_C2
 		{
-	    display:block;
-	    overflow-x:auto;
+		display:block;
+		overflow-x:auto;
 		width:702px;	/* Frm_C2 - 2px */
-	    margin:0 auto;
+		margin:0 auto;
 		}
 	}
 
 .TBL_SCROLL tbody,.TBL_SCROLL_C2 tbody
 	{
-    display:table;
-    width:100%;
+	display:table;
+	width:100%;
 	}
 .TBL_SCROLL th,.TBL_SCROLL td {padding:1px;}
 

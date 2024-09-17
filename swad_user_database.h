@@ -83,4 +83,11 @@ void Usr_DB_MarkMyBirthdayAsCongratulated (void);
 bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void);
 void Usr_DB_DeleteOldBirthdays (void);
 
+//----------------------------- User clipboard --------------------------------
+void Usr_DB_CopyToClipboard (long OthUsrCod);
+unsigned Usr_DB_GetUsrsInMyClipboard (MYSQL_RES **mysql_res);
+void Usr_DB_RemoveMyClipboard (void);
+void Usr_DB_RemoveExpiredClipboards (void);
+
+
 #endif

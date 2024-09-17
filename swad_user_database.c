@@ -1583,7 +1583,7 @@ bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void)
   }
 
 /*****************************************************************************/
-/****************************** Delete old birthdays *************************/
+/**************************** Delete old birthdays ***************************/
 /*****************************************************************************/
 
 void Usr_DB_DeleteOldBirthdays (void)
@@ -1591,4 +1591,62 @@ void Usr_DB_DeleteOldBirthdays (void)
    DB_QueryDELETE ("can not delete old birthdays",
 		   "DELETE FROM usr_birthdays_today"
 		   " WHERE Today<>CURDATE()");
+  }
+
+/*****************************************************************************/
+/********************* Copy user into my users' clipboard ********************/
+/*****************************************************************************/
+
+void Usr_DB_CopyToClipboard (long OthUsrCod)
+  {
+   DB_QueryREPLACE ("can not copy user to clipboard",
+		    "REPLACE INTO usr_clipboards"
+		    " (UsrCod,OthUsrCod,CopyTime)"
+		    " VALUES"
+		    " (%ld,%ld,NOW())",
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    OthUsrCod);
+  }
+
+/*****************************************************************************/
+/***************** Get list of users in my users' clipboard ******************/
+/*****************************************************************************/
+
+unsigned Usr_DB_GetUsrsInMyClipboard (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users in clipboard",
+		   "SELECT OthUsrCod"	// row[0]
+		    " FROM usr_clipboards"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************************** Remove my users' clipboard ***********************/
+/*****************************************************************************/
+
+void Usr_DB_RemoveMyClipboard (void)
+  {
+   DB_QueryDELETE ("can not remove user clipboard",
+		   "DELETE FROM usr_clipboards"
+		   " WHERE UsrCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/****************** Remove expired clipboards (from all users) ***************/
+/*****************************************************************************/
+
+void Usr_DB_RemoveExpiredClipboards (void)
+  {
+   DB_QueryDELETE ("can not remove old user clipboards",
+		   "DELETE LOW_PRIORITY FROM usr_clipboards"
+		   " WHERE UsrCod IN"
+		   " (SELECT UsrCod"
+		      " FROM (SELECT DISTINCT UsrCod"
+		              " FROM usr_clipboards"
+		              " WHERE CopyTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu))"
+		              " AS usr_old_clipboards)",
+                   Cfg_TIME_TO_DELETE_USER_CLIPBOARD);
   }

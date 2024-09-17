@@ -5498,40 +5498,43 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
    switch (UsrsRole)
      {
       case Rol_GST:
-	 ICanChooseOption[Usr_OPTION_RECORDS]    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+	 ICanChooseOption[Usr_OPTION_RECORDS   ] =
+	 ICanChooseOption[Usr_OPTION_COPY      ] = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
 											      Usr_CAN_NOT;
 	 break;
       case Rol_STD:
-	 ICanChooseOption[Usr_OPTION_RECORDS]    =
-	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
-	 ICanChooseOption[Usr_OPTION_FOLLOW]     =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == Hie_CRS &&
+	 ICanChooseOption[Usr_OPTION_RECORDS   ] =
+	 ICanChooseOption[Usr_OPTION_COPY      ] =
+	 ICanChooseOption[Usr_OPTION_MESSAGE   ] =
+	 ICanChooseOption[Usr_OPTION_FOLLOW    ] =
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW  ] = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 											        Usr_CAN_NOT;
 
-         ICanChooseOption[Usr_OPTION_HOMEWORK]   =
+         ICanChooseOption[Usr_OPTION_HOMEWORK  ] =
          ICanChooseOption[Usr_OPTION_ATTENDANCE] =
-         ICanChooseOption[Usr_OPTION_EMAIL]      = (Gbl.Scope.Current == Hie_CRS &&
+         ICanChooseOption[Usr_OPTION_EMAIL     ] = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 											        Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
-	 ICanChooseOption[Usr_OPTION_RECORDS]    =
-	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
-	 ICanChooseOption[Usr_OPTION_EMAIL]      =
-	 ICanChooseOption[Usr_OPTION_FOLLOW]     =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == Hie_CRS &&
+	 ICanChooseOption[Usr_OPTION_RECORDS   ] =
+	 ICanChooseOption[Usr_OPTION_COPY      ] =
+	 ICanChooseOption[Usr_OPTION_MESSAGE   ] =
+	 ICanChooseOption[Usr_OPTION_EMAIL     ] =
+	 ICanChooseOption[Usr_OPTION_FOLLOW    ] =
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW  ] = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
 											        Usr_CAN_NOT;
-         ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Scope.Current == Hie_CRS &&
+         ICanChooseOption[Usr_OPTION_HOMEWORK  ] = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
@@ -5541,7 +5544,7 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 	 return Frm_DONT_PUT_FORM;
      }
 
-   /***** Count allowed options *****/
+   /***** Check if any option is allowed *****/
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
@@ -5563,6 +5566,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
    extern const char *Txt_View_attendance;
    extern const char *Txt_Send_message;
    extern const char *Txt_Create_email_message;
+   extern const char *Txt_Copy;
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
    extern const char *Txt_Continue;
@@ -5570,6 +5574,7 @@ static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_US
      {
       [Usr_OPTION_UNKNOWN   ] = NULL,
       [Usr_OPTION_RECORDS   ] = &Txt_View_records,
+      [Usr_OPTION_COPY      ] = &Txt_Copy,
       [Usr_OPTION_HOMEWORK  ] = &Txt_View_homework,
       [Usr_OPTION_ATTENDANCE] = &Txt_View_attendance,
       [Usr_OPTION_MESSAGE   ] = &Txt_Send_message,
@@ -5657,6 +5662,22 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
+	 case Usr_OPTION_COPY:
+	    switch (Gbl.Action.Act)
+	      {
+	       case Act_DoAct_OnSevGst:
+		  Gbl.Action.Act = ActCpySevGst;
+		  break;
+	       case Act_DoAct_OnSevStd:
+		  Gbl.Action.Act = ActCpySevStd;
+		  break;
+	       case Act_DoAct_OnSevTch:
+		  Gbl.Action.Act = ActCpySevTch;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
 	 case Usr_OPTION_HOMEWORK:
 	    switch (Gbl.Action.Act)
 	      {
@@ -5693,6 +5714,7 @@ void Usr_DoActionOnUsrs1 (void)
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevStd:
+	       case Act_DoAct_OnSevTch:
 		  Gbl.Action.Act = ActMaiUsr;
 		  break;
 	       default:

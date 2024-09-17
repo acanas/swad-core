@@ -3582,6 +3582,26 @@ mysql> DESCRIBE usr_clicks_without_photo;
 			"NumClicks INT NOT NULL,"
 		   "UNIQUE INDEX(UsrCod))");
 
+
+   /***** Table usr_clipboards *****/
+/*
+mysql> DESCRIBE usr_clipboards;
++-----------+-----------+------+-----+---------+-------+
+| Field     | Type      | Null | Key | Default | Extra |
++-----------+-----------+------+-----+---------+-------+
+| UsrCod    | int       | NO   | PRI | NULL    |       |
+| OthUsrCod | int       | NO   | PRI | NULL    |       |
+| CopyTime  | timestamp | YES  | MUL | NULL    |       |
++-----------+-----------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_clipboards ("
+			"UsrCod INT NOT NULL,"
+			"OthUsrCod INT NOT NULL,"
+			"CopyTime TIMESTAMP,"
+		   "UNIQUE INDEX(UsrCod,OthUsrCod),"
+		   "INDEX(CopyTime))");
+
    /***** Table usr_connected *****/
 /*
 mysql> DESCRIBE usr_connected;

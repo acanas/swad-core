@@ -117,6 +117,7 @@
 #include "swad_timeline_share.h"
 #include "swad_timeline_who.h"
 #include "swad_timetable.h"
+#include "swad_user_clipboard.h"
 #include "swad_zip.h"
 
 /*****************************************************************************/
@@ -1328,6 +1329,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstStdAll	] = {  42, 1,TabUsr,NULL			,Usr_ListAllDataStds		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActPrnStdPho	] = { 120, 1,TabUsr,NULL			,Usr_SeeStdClassPhotoPrn	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevStd	] = {1754, 1,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActCpySevStd	] = {1979, 1,TabUsr,NULL			,UsrClp_CopyStdsToClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActSeeRecSevStd	] = {  89, 1,TabUsr,NULL			,Rec_ListRecordsStdsShow	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPrnRecSevStd	] = { 111, 1,TabUsr,NULL			,Rec_ListRecordsStdsPrint	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_NEW},
    [ActReqMdfOneStd	] = {1415, 1,TabUsr,NULL			,Enr_ReqRegRemStd		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
@@ -1376,6 +1378,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstTchAll	] = { 578, 2,TabUsr,NULL			,Usr_ListAllDataTchs 		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActPrnTchPho	] = { 443, 2,TabUsr,NULL			,Usr_SeeTchClassPhotoPrn	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevTch	] = {1755, 2,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
+   [ActCpySevTch	] = {1980, 2,TabUsr,NULL			,UsrClp_CopyTchsToClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeRecSevTch	] = {  22, 2,TabUsr,NULL			,Rec_ListRecordsTchsShow	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActPrnRecSevTch	] = { 127, 2,TabUsr,NULL			,Rec_ListRecordsTchsPrint	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActReqMdfOneTch	] = {1416, 2,TabUsr,NULL			,Enr_ReqRegRemTch		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
@@ -1432,6 +1435,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstGstAll	] = {1189, 3,TabUsr,NULL			,Usr_ListAllDataGsts		,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
    [ActPrnGstPho	] = {1190, 3,TabUsr,NULL			,Usr_SeeGstClassPhotoPrn	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevGst	] = {1753, 3,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActCpySevGst	] = {1978, 3,TabUsr,NULL			,UsrClp_CopyGstsToClipboard	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActSeeRecSevGst	] = {1187, 3,TabUsr,NULL			,Rec_ListRecordsGstsShow	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActPrnRecSevGst	] = {1188, 3,TabUsr,NULL			,Rec_ListRecordsGstsPrint	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
    [ActReqMdfOneOth	] = {1414, 3,TabUsr,NULL			,Enr_ReqRegRemOth		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
@@ -3786,4 +3790,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgTstQst,		// #1975
 	ActChgSvyQst,		// #1976
 	ActChgRubPrj,		// #1977
+	ActCpySevGst,		// #1978
+	ActCpySevStd,		// #1979
+	ActCpySevTch,		// #1980
   };

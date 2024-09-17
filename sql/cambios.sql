@@ -10614,7 +10614,7 @@ ALTER TABLE usr_webs CHANGE Web Web ENUM('www','500px','delicious','deviantart',
 
 
 ----- 2015-09-17, swad14.134
-/*
+
 UPDATE notif SET NotifyEvent=14 WHERE NotifyEvent=13;
 UPDATE notif SET NotifyEvent=13 WHERE NotifyEvent=12;
 UPDATE notif SET NotifyEvent=12 WHERE NotifyEvent=11;
@@ -13544,13 +13544,13 @@ SELECT tml_pubs.PubCod,
           FROM tml_tmp_just_retrieved_notes)
  ORDER BY PubCod DESC
  LIMIT 1;
- 
+ /*
  		   "SELECT tml_pubs.PubCod,"		// row[0]
 			  "tml_pubs.NotCod,"		// row[1]
 			  "tml_pubs.PublisherCod,"	// row[2]
 			  "tml_pubs.PubType"		// row[3]
 		    " FROM tml_pubs%s"
-		   " WHERE tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod
+		   " WHERE tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod"
 		       AND tml_pubs.PubCod>Bottom AND "
 		       AND tml_pubs.PubCod<Top AND "
 		   " ORDER BY tml_pubs.PubCod DESC"
@@ -13560,8 +13560,8 @@ SELECT tml_pubs.PubCod,
 		   SubQueries->RangeTop,
 		   SubQueries->Publishers.SubQuery,
 		   SubQueries->AlreadyExists);
-		   
-		   
+*/
+
 SELECT MAX(PstCod) AS NewestPstCod FROM for_posts GROUP BY ThrCod ORDER BY NewestPstCod DESC LIMIT 10;
  
 SELECT PstCod FROM for_posts ORDER BY PstCod DESC LIMIT 1;
@@ -13612,19 +13612,12 @@ INSERT INTO prg_resources (ItmCod,RscInd,Hidden,Title) VALUES (14,1,'N','Recurso
 INSERT INTO prg_resources (ItmCod,RscInd,Hidden,Title) VALUES (14,2,'N','Recurso 3');
 
 
+-----------------
+
+DELETE FROM usr_clipboards WHERE UsrCod IN (SELECT UsrCod FROM (SELECT UsrCod,MIN(CopyTime) AS OldestCopyTime FROM usr_clipboards GROUP BY UsrCod HAVING OldestCopyTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-1500)) AS usr_users_with_old_clipboards);
 
 
-
-
-
-
-
-
-
-
-
-
-
+DELETE LOW_PRIORITY FROM usr_clipboards WHERE UsrCod IN (SELECT UsrCod FROM (SELECT DISTINCT UsrCod FROM usr_clipboards WHERE CopyTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-15)) AS usr_old_clipboards);
 
 
 

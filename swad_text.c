@@ -5828,6 +5828,29 @@ const char *Txt_Cookies =
 	"&Ccedil;erezleri";
 #endif
 
+const char *Txt_Copy =	// As a verb
+#if   L==1	// ca
+	"Copiar";
+#elif L==2	// de
+	"Kopieren";
+#elif L==3	// en
+	"Copy";
+#elif L==4	// es
+	"Copiar";
+#elif L==5	// fr
+	"Copier";
+#elif L==6	// gn
+	"Kopia";
+#elif L==7	// it
+	"Copiare";
+#elif L==8	// pl
+	"Kopiuj";
+#elif L==9	// pt
+	"Copiar";
+#elif L==10	// tr
+	"Kopyala";
+#endif
+
 const char *Txt_Copy_not_allowed =
 #if   L==1	// ca
 	"C&ograve;pia no perm&egrave;s";
@@ -6424,7 +6447,7 @@ const char *Txt_Create_email_message =
 #elif L==5	// fr
 	"Cr&eacute;er un email message";
 #elif L==6	// gn
-	"Emohe&ntilde;&oacute;i marandu correo electr&oacute;nico"";
+	"Emohe&ntilde;&oacute;i marandu correo electr&oacute;nico";
 #elif L==7	// it
 	"Crea messaggio email";
 #elif L==8	// pl

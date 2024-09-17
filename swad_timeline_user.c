@@ -185,7 +185,7 @@ static void TmlUsr_ShowNumSharersOrFavers (unsigned NumUsrs)
   }
 
 static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
-			                 unsigned NumUsrs,unsigned NumFirstUsrs)
+			                unsigned NumUsrs,unsigned NumFirstUsrs)
   {
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {

@@ -1299,6 +1299,7 @@ typedef enum
 	ActLstStdAll,
 	ActPrnStdPho,
 	Act_DoAct_OnSevStd,
+	ActCpySevStd,
 	ActSeeRecSevStd,
 	ActPrnRecSevStd,
 	ActReqMdfOneStd,
@@ -1348,6 +1349,7 @@ typedef enum
 	ActLstTchAll,
 	ActPrnTchPho,
 	Act_DoAct_OnSevTch,
+	ActCpySevTch,
 	ActSeeRecSevTch,
 	ActPrnRecSevTch,
 	ActReqMdfOneTch,
@@ -1405,6 +1407,7 @@ typedef enum
 	ActLstGstAll,
 	ActPrnGstPho,
 	Act_DoAct_OnSevGst,
+	ActCpySevGst,
 	ActSeeRecSevGst,
 	ActPrnRecSevGst,
 	ActReqMdfOneOth,
@@ -1811,7 +1814,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		1977
+#define ActLst_MAX_ACTION_COD		1980
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

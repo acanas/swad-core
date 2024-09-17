@@ -465,8 +465,10 @@
 
 #define Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files are deleted after these seconds
 #define Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS	((time_t)( 7UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired expanded folders
-#define Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD		((time_t)(              15UL * 60UL))	// Paths older than these seconds are removed from clipboard
 #define Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary zip files are deleted after these seconds
+#define Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD		((time_t)(              15UL * 60UL))	// Paths older than these seconds are removed from clipboard
+
+#define Cfg_TIME_TO_DELETE_USER_CLIPBOARD		((time_t)(              15UL * 60UL))	// User clipboards older than these seconds are removed from clipboard
 
 #define Cfg_TIME_TO_DELETE_MARKS_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files with students' marks are deleted after these seconds
 

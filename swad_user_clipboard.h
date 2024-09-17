@@ -1,7 +1,7 @@
-// swad_cryptography.h: cryptography
+// swad_user_clipboard.h: user clipboard
 
-#ifndef _SWAD_CRY
-#define _SWAD_CRY
+#ifndef _SWAD_USR_CLP
+#define _SWAD_USR_CLP
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,30 +24,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-#define Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64	43	// 42,66 base-64 characters store 256 bits
-#define Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64	86	// 85,33 base-64 characters store 512 bits
-
-/*****************************************************************************/
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdio.h>		// For FILE
+/*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
 
-#include "sha2/sha2.h"		// For sha-256 and sha-512 algorithms
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Cry_EncryptSHA256Base64 (const char *PlainText,
-                              char EncryptedText[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
-void Cry_EncryptSHA512Base64 (const char *PlainText,
-                              char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1]);
-
-void Cry_CreateUniqueNameEncrypted (char *UniqueNameEncrypted);
-char *Cry_GetUniqueNameEncrypted (void);
+void UsrClp_CopyGstsToClipboard (void);
+void UsrClp_CopyStdsToClipboard (void);
+void UsrClp_CopyTchsToClipboard (void);
 
 #endif
