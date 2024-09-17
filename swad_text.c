@@ -6424,7 +6424,7 @@ const char *Txt_Create_email_message =
 #elif L==5	// fr
 	"Cr&eacute;er un email message";
 #elif L==6	// gn
-	"Crear mensaje de correo";	// Okoteve traducción
+	"Emohe&ntilde;&oacute;i marandu correo electr&oacute;nico"";
 #elif L==7	// it
 	"Crea messaggio email";
 #elif L==8	// pl
@@ -6432,7 +6432,7 @@ const char *Txt_Create_email_message =
 #elif L==9	// pt
 	"Criar uma mensagem de email";
 #elif L==10	// tr
-	"Create email message";		// Çeviri lazim!
+	"E-posta mesaj&inodot; olu&scedil;tur";
 #endif
 
 const char *Txt_Create_folder =
@@ -13545,7 +13545,7 @@ const char *Txt_Follow =
 #elif L==5	// fr
 	"Suivre";
 #elif L==6	// gn
-	"Seguir";	// Okoteve traducción
+	"Hakykuerereka";
 #elif L==7	// it
 	"Seguire";
 #elif L==8	// pl
@@ -13553,7 +13553,7 @@ const char *Txt_Follow =
 #elif L==9	// pt
 	"Seguir";
 #elif L==10	// tr
-	"Follow";	// Çeviri lazim!
+	"Takip etmek";
 #endif
 
 const char *Txt_FollowPerFollow[2] =
@@ -41339,7 +41339,7 @@ const char *Txt_Send_message =
 #elif L==5	// fr
 	"Envoyer message";
 #elif L==6	// gn
-	"Enviar mensaje";	// Okoteve traducción
+	"Emondo marandu";
 #elif L==7	// it
 	"Invia messaggio";
 #elif L==8	// pl
@@ -41347,7 +41347,7 @@ const char *Txt_Send_message =
 #elif L==9	// pt
 	"Enviar mensagem";
 #elif L==10	// tr
-	"Send message";		// Çeviri lazim!
+	"Mesaj g&ouml;nder";
 #endif
 
 const char *Txt_Send_survey =
@@ -54905,7 +54905,7 @@ const char *Txt_Undo =
 #elif L==5	// fr
 	"Annuler";
 #elif L==6	// gn
-	"Deshacer";	// Okoteve traducción
+	"Deshacer";
 #elif L==7	// it
 	"Annulla";
 #elif L==8	// pl
@@ -54913,7 +54913,7 @@ const char *Txt_Undo =
 #elif L==9	// pt
 	"Desfazer";
 #elif L==10	// tr
-	"Undo";		// Çeviri lazim!
+	"Geri al";
 #endif
 
 const char *Txt_Unfollow =
@@ -54928,7 +54928,7 @@ const char *Txt_Unfollow =
 #elif L==5	// fr
 	"Se d&eacute;sabonner";
 #elif L==6	// gn
-	"Dejar de seguir";	// Okoteve traducción
+	"Emboyke";
 #elif L==7	// it
 	"Smetti";
 #elif L==8	// pl
@@ -54936,7 +54936,7 @@ const char *Txt_Unfollow =
 #elif L==9	// pt
 	"Deixar de seguir";
 #elif L==10	// tr
-	"Unfollow";		// Çeviri lazim!
+	"Takibi b&inodot;rak";
 #endif
 
 const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_ =
@@ -56531,7 +56531,7 @@ const char *Txt_View_attendance =
 #elif L==5	// fr
 	"Voir pr&eacute;sence";
 #elif L==6	// gn
-	"Ver asistencia";	// Okoteve traducción
+	"Ohecha asistencia";
 #elif L==7	// it
 	"Vedi presenza";
 #elif L==8	// pl
@@ -56539,7 +56539,7 @@ const char *Txt_View_attendance =
 #elif L==9	// pt
 	"Ver presen&ccedil;a";
 #elif L==10	// tr
-	"View attendance";	// Çeviri lazim!
+	"Kat&inodot;l&inodot;m&inodot; g&ouml;r&uuml;nt&uuml;le";
 #endif
 
 const char *Txt_View_email_addresses =
@@ -56738,7 +56738,7 @@ const char *Txt_View_records =
 #elif L==5	// fr
 	"Voir cartes";
 #elif L==6	// gn
-	"Ver fichas";	// Okoteve traducción
+	"Ojehecha registro-ku&eacute;ra";
 #elif L==7	// it
 	"Vedi schede";
 #elif L==8	// pl
@@ -56746,7 +56746,7 @@ const char *Txt_View_records =
 #elif L==9	// pt
 	"Ver cart&otilde;es";
 #elif L==10	// tr
-	"View records";	// Çeviri lazim!
+	"Kay&inodot;tlar&inodot; g&ouml;r&uuml;nt&uuml;le";
 #endif
 
 const char *Txt_View_results =
@@ -56830,7 +56830,7 @@ const char *Txt_View_homework =
 #elif L==5	// fr
 	"Voir travaux";
 #elif L==6	// gn
-	"Ver trabajos";		// Okoteve traducción
+	"Ehecha tarea";
 #elif L==7	// it
 	"Vedi lavori";
 #elif L==8	// pl
@@ -56838,7 +56838,7 @@ const char *Txt_View_homework =
 #elif L==9	// pt
 	"Ver trabalhos";
 #elif L==10	// tr
-	"View homework";	// Çeviri lazim!
+	"&Ouml;devi g&ouml;r&uuml;nt&uuml;le";
 #endif
 
 const char *Txt_Visibility =

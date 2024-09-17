@@ -633,11 +633,12 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.0.1 (2024-09-16)"
+#define Log_PLATFORM_VERSION	"SWAD 24.0.2 (2024-09-17)"
 #define CSS_FILE		"swad23.67.2.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.0.1:   Sep 16, 2024  When a teacher or admin changes another user's photo, the photo visibility is changed to minimum. Suggested by Javier Fernández Baldomero. (335429 lines)
+	Version 24.0.2:   Sep 17, 2024  Some messages translated. (? lines)
+	Version 24.0.1:   Sep 16, 2024  When a teacher or admin changes another user's photo, the photo visibility is changed to maximum privacy. Suggested by Javier Fernández Baldomero. (335429 lines)
 	Version 24.0:     Sep 16, 2024  Specific help for resources of a program item. (335418 lines)
 	Version 23.93:    Sep 12, 2024  Code refactoring in groups. (335395 lines)
 	Version 23.92.1:  Sep 12, 2024  Code refactoring in groups. (335366 lines)
