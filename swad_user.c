@@ -124,22 +124,6 @@ static const char *Usr_IconsClassPhotoOrList[Set_NUM_USR_LIST_TYPES] =
    [Set_USR_LIST_AS_LISTING    ] = "list-ol.svg",
   };
 
-static const char *Usr_NameSelUnsel[Rol_NUM_ROLES] =
-  {
-   [Rol_GST] = "SEL_UNSEL_GSTS",
-   [Rol_STD] = "SEL_UNSEL_STDS",
-   [Rol_NET] = "SEL_UNSEL_NETS",
-   [Rol_TCH] = "SEL_UNSEL_TCHS",
-  };
-static const char *Usr_ParUsrCod[Rol_NUM_ROLES] =
-  {
-   [Rol_UNK] = "UsrCodAll",	//  here means all users
-   [Rol_GST] = "UsrCodGst",
-   [Rol_STD] = "UsrCodStd",
-   [Rol_NET] = "UsrCodNET",
-   [Rol_TCH] = "UsrCodTch",
-  };
-
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 7
 #define Usr_NUM_ALL_FIELDS_DATA_GST	14
 #define Usr_NUM_ALL_FIELDS_DATA_STD	10
@@ -160,6 +144,24 @@ struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER] =
   {
    [Usr_ME   ] = &Gbl.Usrs.Me.UsrDat,
    [Usr_OTHER] = &Gbl.Usrs.Other.UsrDat,
+  };
+
+const char *Usr_NameSelUnsel[Rol_NUM_ROLES] =
+  {
+   [Rol_UNK] = "SEL_UNSEL_USRS",	//  here unknown means all users
+   [Rol_GST] = "SEL_UNSEL_GSTS",
+   [Rol_STD] = "SEL_UNSEL_STDS",
+   [Rol_NET] = "SEL_UNSEL_NETS",
+   [Rol_TCH] = "SEL_UNSEL_TCHS",
+  };
+
+const char *Usr_ParUsrCod[Rol_NUM_ROLES] =
+  {
+   [Rol_UNK] = "UsrCodAll",		//  here unknown means all users
+   [Rol_GST] = "UsrCodGst",
+   [Rol_STD] = "UsrCodStd",
+   [Rol_NET] = "UsrCodNET",
+   [Rol_TCH] = "UsrCodTch",
   };
 
 /*****************************************************************************/
@@ -3112,6 +3114,17 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 
       /***** Get possible list of all selected users *****/
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
+      if (!Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
+				  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS))
+	 if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
+	   {
+	    Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
+			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+	    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
+			      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,
+			      Str_REMOVE_SPACES);
+	   }
+/*
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
 	 Ses_DB_GetPar (ParName,SelectedUsrs->List[Rol_UNK],
@@ -3123,7 +3136,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
       else
 	 Par_GetParMultiToText (ParName,SelectedUsrs->List[Rol_UNK],
 				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-
+*/
       /***** Free allocated memory for parameter name *****/
       free (ParName);
 

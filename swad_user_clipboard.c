@@ -137,6 +137,8 @@ static void UsrClp_CopyUsrsToClipboard (void)
 
 void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res)
   {
+   extern const char *Usr_NameSelUnsel[Rol_NUM_ROLES];
+   extern const char *Usr_ParUsrCod[Rol_NUM_ROLES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC12x16",
@@ -147,39 +149,60 @@ void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res)
    unsigned NumUsr;
    struct Usr_Data UsrDat;
 
-   /***** Get users in clipboard *****/
-   HTM_DIV_Begin ("class=\"UsrClp_USRS\"");
+   /***** Checkbox to selected/unselect all users *****/
+   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+      HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Rol_UNK],
+			  NumUsrs ? HTM_NO_ATTR :
+				    HTM_DISABLED,
+			  "value=\"\""
+			  " onclick=\"togglecheckChildren(this,'%s')\"",
+			  Usr_ParUsrCod[Rol_UNK]);
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+      HTM_TxtF ("%u usuarios",NumUsrs);	// TODO: Need translation!!!!!
+   HTM_LABEL_End ();
 
-      /***** List users *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 /***** Get user's code *****/
-	 UsrDat.UsrCod = DB_GetNextCode (*mysql_res);
+   /***** List users in clipboard *****/
+   if (NumUsrs)
+     {
+      HTM_DIV_Begin ("class=\"UsrClp_USRS\"");
 
-	 /***** Get user's data and show user's photo *****/
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-						      Usr_DONT_GET_PREFS,
-						      Usr_DONT_GET_ROLE_IN_CRS))
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
+
+	 /***** List users *****/
+	 for (NumUsr = 0;
+	      NumUsr < NumUsrs;
+	      NumUsr++)
 	   {
-	    /* Begin container */
-	    HTM_DIV_Begin ("class=\"UsrClp_USR\"");
+	    /***** Get user's code *****/
+	    UsrDat.UsrCod = DB_GetNextCode (*mysql_res);
 
-	       /* User's photo */
-	       Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	    /***** Get user's data and show user's photo *****/
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							 Usr_DONT_GET_PREFS,
+							 Usr_DONT_GET_ROLE_IN_CRS))
+	      {
+	       /* Begin container */
+	       HTM_DIV_Begin ("class=\"UsrClp_USR\"");
 
-	    /* End container */
-	    HTM_DIV_End ();
+		  /* Check box to select this user */
+		  HTM_INPUT_CHECKBOX (Usr_ParUsrCod[Rol_UNK],
+				      HTM_NO_ATTR,
+				      "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
+				      UsrDat.EnUsrCod,Usr_NameSelUnsel[Rol_UNK]);
+
+		  /* User's photo */
+		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+					     ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+
+	       /* End container */
+	       HTM_DIV_End ();
+	      }
 	   }
-	}
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
 
-   HTM_DIV_End ();
+      HTM_DIV_End ();
+     }
   }

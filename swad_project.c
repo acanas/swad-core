@@ -149,9 +149,9 @@ struct Usr_SelectedUsrs Prj_MembersToAdd =
       NULL,	// Rol_INS_ADM
       NULL,	// Rol_SYS_ADM
      },
-   .Filled      = false,
+   .Filled    = false,
    .ParSuffix = "Member",
-   .Option      = Usr_OPTION_UNKNOWN,
+   .Option    = Usr_OPTION_UNKNOWN,
   };
 
 /***** Type of view when writing one project *****/

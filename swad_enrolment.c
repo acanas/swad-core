@@ -114,6 +114,16 @@ static void Enr_PutUsrsClipboard (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
 
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
+static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+						       bool RemoveSpecifiedUsrs,
+						       char *ListUsrsIDs);
+static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+							   bool RemoveSpecifiedUsrs);
+static void Enr_RegisterUsrsFoundInTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+					     struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered,
+					     char *ListUsrsIDs);
+static void Enr_RegisterSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+				      struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
 
 static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
                                        Usr_Belong_t UsrBelongsToCrs,
@@ -821,24 +831,11 @@ static void Enr_PutUsrsClipboard (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","UseClipboard",Txt_User_clipboard);
+      Frm_LabelColumn ("RT","",Txt_User_clipboard);
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-
-	 /* Checkbox */
-	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	    HTM_INPUT_CHECKBOX ("UseClipboard",
-				NumUsrs ? HTM_NO_ATTR :
-					  HTM_DISABLED,
-				"id=\"UseClipboard\" value=\"Y\"");
-	    HTM_TxtF ("%u usuarios",NumUsrs);	// TODO: Need translation!!!!!
-	 HTM_LABEL_End ();
-
-	 /* Clipboard */
-	 if (NumUsrs)
-	    UsrClp_ListUsrsInMyClipboard (NumUsrs,&mysql_res);
-
+	 UsrClp_ListUsrsInMyClipboard (NumUsrs,&mysql_res);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -963,22 +960,14 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
       bool RegisterUsrs;
      } WhatToDo;
    char *ListUsrsIDs;
-   struct Usr_ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
-   unsigned NumUsrFound;
-   const char *Ptr;
-   unsigned NumCurrentUsr;
+   unsigned NumUsr;
    unsigned NumUsrsRegistered = 0;
    unsigned NumUsrsRemoved = 0;
    unsigned NumUsrsEliminated = 0;
    struct ListCodGrps LstGrps;
    struct Usr_Data UsrDat;
-   bool ItLooksLikeAUsrID;
    Enr_RegRemUsrsAction_t RegRemUsrsAction;
    bool SelectionIsValid = true;
-   bool UseClipboard;
-   unsigned NumUsrsInClipboard;
-   unsigned NumUsrInClipboard;
-   MYSQL_RES *mysql_res;
 
    /***** Check the role of users to register / remove *****/
    switch (Role)
@@ -1002,9 +991,6 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
    /***** Get confirmation *****/
    if (!Pwd_GetConfirmationOnDangerousAction ())
       return;
-
-   /***** Get if users' clipboard will be used *****/
-   UseClipboard = Par_GetParBool ("UseClipboard");
 
    /***** Get the action to do *****/
    WhatToDo.RemoveUsrs = false;
@@ -1094,14 +1080,13 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 
    if (SelectionIsValid)
      {
-      /***** Get users' clipboard *****/
-      if (UseClipboard)
-         NumUsrsInClipboard = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
-
       /***** Get list of users' IDs *****/
       if ((ListUsrsIDs = malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
 	 Err_NotEnoughMemoryExit ();
       Par_GetParText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
+
+      /***** Get list of selected users if not already got *****/
+      Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -1114,109 +1099,31 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 
 	 if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
 	   {
-	    /***** Initialize list of users to remove *****/
-	    for (NumCurrentUsr = 0;
-		 NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		 NumCurrentUsr++)
-	       Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
+	    /***** Loop 1: Initialize list of users to remove *****/
+	    for (NumUsr = 0;
+		 NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+		 NumUsr++)
+	       Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
 
-	    /***** Loop 1: go through form list setting if a student must be removed *****/
-	    /* Get users from a list of users' IDs */
-	    Ptr = ListUsrsIDs;
-	    while (*Ptr)
-	      {
-	       /* Reset user */
-	       UsrDat.UsrCod = -1L;
+	    /***** Loop 2: go through form list setting if a user must be removed *****/
+	    /* Update list of users to be removed
+	       using the form with IDs, nicks and emails */
+	    Enr_UpdateLstUsrsToBeRemovedUsingTextarea (&UsrDat,Role,
+						       WhatToDo.RemoveSpecifiedUsrs,
+						       ListUsrsIDs);
 
-	       /* Find next string in text */
-	       Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-						sizeof (UsrDat.UsrIDNickOrEmail) - 1);
+	    /* Update list of users to be removed
+	       using list of users selected from clipboard */
+	    Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (&UsrDat,Role,
+							   WhatToDo.RemoveSpecifiedUsrs);
 
-	       /* Reset default list of users' codes */
-	       ListUsrCods.NumUsrs = 0;
-	       ListUsrCods.Lst = NULL;
-
-	       /* Check if string is a user's ID, user's nickname or user's email address */
-	       if (Nck_CheckIfNickWithArrIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
+	    /***** Loop 3: go through users list removing users *****/
+	    for (NumUsr = 0;
+		 NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+		 NumUsr++)
+	       if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove)        // If this student must be removed
 		 {
-		  if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
-		    {
-		     ListUsrCods.NumUsrs = 1;
-		     Usr_AllocateListUsrCods (&ListUsrCods);
-		     ListUsrCods.Lst[0] = UsrDat.UsrCod;
-		    }
-		 }
-	       else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))	// 2: It's an email
-		 {
-		  if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
-		    {
-		     ListUsrCods.NumUsrs = 1;
-		     Usr_AllocateListUsrCods (&ListUsrCods);
-		     ListUsrCods.Lst[0] = UsrDat.UsrCod;
-		    }
-		 }
-	       else								// 3: It looks like a user's ID
-		 {
-		  // Users' IDs are always stored internally in capitals and without leading zeros
-		  Str_RemoveLeadingZeros (UsrDat.UsrIDNickOrEmail);
-		  if (ID_CheckIfUsrIDSeemsAValidID (UsrDat.UsrIDNickOrEmail))
-		    {
-		     /***** Find users for this user's ID *****/
-		     ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
-		     Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
-			       sizeof (UsrDat.IDs.List[0].ID) - 1);
-		     Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
-		     ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
-		    }
-		 }
-
-	       if (WhatToDo.RemoveSpecifiedUsrs)	// Remove the specified users (of the role)
-		 {
-		  if (ListUsrCods.NumUsrs == 1)		// If more than one user found ==> do not remove
-		     for (NumCurrentUsr = 0;
-			  NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-			  NumCurrentUsr++)
-			if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[0])	// User found
-			   Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = true;	// Mark as removable
-		 }
-	       else	// Remove all users (of the role) except these specified
-		 {
-		  for (NumCurrentUsr = 0;
-		       NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		       NumCurrentUsr++)
-		     for (NumUsrFound = 0;
-			  NumUsrFound < ListUsrCods.NumUsrs;
-			  NumUsrFound++)
-			if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
-			   Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = false;	// Mark as not removable
-		 }
-
-	       /* Free memory used for list of users' codes found for this ID */
-	       Usr_FreeListUsrCods (&ListUsrCods);
-	      }
-
-	    /* Get users from clipboard */
-	    if (UseClipboard)
-	       for (NumUsrInClipboard = 0;
-		    NumUsrInClipboard < NumUsrsInClipboard;
-		    NumUsrInClipboard++)
-		 {
-		  UsrDat.UsrCod = DB_GetNextCode (mysql_res);
-
-		  for (NumCurrentUsr = 0;
-		       NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		       NumCurrentUsr++)
-		     if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == UsrDat.UsrCod)	// User found
-			Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = WhatToDo.RemoveSpecifiedUsrs;
-		 }
-
-	    /***** Loop 2: go through users list removing users *****/
-	    for (NumCurrentUsr = 0;
-		 NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		 NumCurrentUsr++)
-	       if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove)        // If this student must be removed
-		 {
-		  UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod;
+		  UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
 		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							       Usr_DONT_GET_PREFS,
 							       Usr_DONT_GET_ROLE_IN_CRS))
@@ -1263,100 +1170,25 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
       /***** Register users *****/
       if (WhatToDo.RegisterUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
 	{
-	 /***** Get users from a list of users' IDs ******/
-	 Ptr = ListUsrsIDs;
-	 while (*Ptr)
-	   {
-	    /* Reset user */
-	    UsrDat.UsrCod = -1L;
-	    ItLooksLikeAUsrID = false;
+	 /* Register users found in the form with IDs, nicks and emails */
+	 Enr_RegisterUsrsFoundInTextarea (&UsrDat,Role,&LstGrps,&NumUsrsRegistered,
+					  ListUsrsIDs);
 
-	    /* Find next string in text */
-	    Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-					     sizeof (UsrDat.UsrIDNickOrEmail) - 1);
-
-	    /* Reset default list of users' codes */
-	    ListUsrCods.NumUsrs = 0;
-	    ListUsrCods.Lst = NULL;
-
-	    /* Check if the string is a user's ID, a user's nickname or a user's email address */
-	    if (Nck_CheckIfNickWithArrIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
-	      {
-	       if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
-		 {
-		  ListUsrCods.NumUsrs = 1;
-		  Usr_AllocateListUsrCods (&ListUsrCods);
-		  ListUsrCods.Lst[0] = UsrDat.UsrCod;
-		 }
-	      }
-	    else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))		// 2: It's an email
-	      {
-	       if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
-		 {
-		  ListUsrCods.NumUsrs = 1;
-		  Usr_AllocateListUsrCods (&ListUsrCods);
-		  ListUsrCods.Lst[0] = UsrDat.UsrCod;
-		 }
-	      }
-	    else								// 3: It looks like a user's ID
-	      {
-	       // Users' IDs are always stored internally in capitals and without leading zeros
-	       Str_RemoveLeadingZeros (UsrDat.UsrIDNickOrEmail);
-	       if (ID_CheckIfUsrIDSeemsAValidID (UsrDat.UsrIDNickOrEmail))
-		 {
-		  ItLooksLikeAUsrID = true;
-
-		  /* Find users for this user's ID */
-		  ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
-		  Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
-			    sizeof (UsrDat.IDs.List[0].ID) - 1);
-		  Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
-		  ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
-		 }
-	      }
-
-	    /* Register user(s) */
-	    if (ListUsrCods.NumUsrs)	// User(s) found
-	       for (NumUsrFound = 0;
-		    NumUsrFound < ListUsrCods.NumUsrs;
-		    NumUsrFound++)
-		 {
-		  UsrDat.UsrCod = ListUsrCods.Lst[NumUsrFound];
-		  Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
-		 }
-	    else if (ItLooksLikeAUsrID)	// User not found. He/she is a new user. Register him/her using ID
-	       Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
-
-	    /* Free memory used for list of users' codes found for this ID */
-	    Usr_FreeListUsrCods (&ListUsrCods);
-	   }
-
-	 /* Register users in clipboard */
-	 if (UseClipboard)
-	   {
-	    mysql_data_seek (mysql_res,0);
-	    for (NumUsrInClipboard = 0;
-		 NumUsrInClipboard < NumUsrsInClipboard;
-		 NumUsrInClipboard++)
-	      {
-	       UsrDat.UsrCod = DB_GetNextCode (mysql_res);
-	       Enr_RegisterUsr (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
-	      }
-	   }
+	 /* Register users selected from clipboard */
+	 Enr_RegisterSelectedUsrs (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
 	}
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
+      /***** Free memory used by list of selected users' codes *****/
+      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+
       /***** Free memory used by the list of user's IDs *****/
       free (ListUsrsIDs);
 
-      /***** Free structure that stores the query result about users' clipboard *****/
-      if (UseClipboard)
-         DB_FreeMySQLResult (&mysql_res);
-
+      /***** Move unused contents of messages to table of deleted contents of messages *****/
       if (NumUsrsEliminated)
-	 /***** Move unused contents of messages to table of deleted contents of messages *****/
 	 Msg_DB_MoveUnusedMsgsContentToDeleted ();
 
       /***** Write messages with the number of users enroled/removed *****/
@@ -1414,6 +1246,222 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
+  }
+
+/*****************************************************************************/
+/*************** Update list of users to be removed        *******************/
+/*************** using the form with IDs, nicks and emails *******************/
+/*****************************************************************************/
+
+static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+						       bool RemoveSpecifiedUsrs,
+						       char *ListUsrsIDs)
+  {
+   const char *Ptr;
+   unsigned NumUsr;
+   unsigned NumUsrFound;
+   struct Usr_ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
+
+   Ptr = ListUsrsIDs;
+   while (*Ptr)
+     {
+      /* Reset user */
+      UsrDat->UsrCod = -1L;
+
+      /* Find next string in text */
+      Str_GetNextStringUntilSeparator (&Ptr,UsrDat->UsrIDNickOrEmail,
+				       sizeof (UsrDat->UsrIDNickOrEmail) - 1);
+
+      /* Reset default list of users' codes */
+      ListUsrCods.NumUsrs = 0;
+      ListUsrCods.Lst = NULL;
+
+      /* Check if string is a user's ID, user's nickname or user's email address */
+      if (Nck_CheckIfNickWithArrIsValid (UsrDat->UsrIDNickOrEmail))	// 1: It's a nickname
+	{
+	 if ((UsrDat->UsrCod = Nck_GetUsrCodFromNickname (UsrDat->UsrIDNickOrEmail)) > 0)
+	   {
+	    ListUsrCods.NumUsrs = 1;
+	    Usr_AllocateListUsrCods (&ListUsrCods);
+	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
+	   }
+	}
+      else if (Mai_CheckIfEmailIsValid (UsrDat->UsrIDNickOrEmail))	// 2: It's an email
+	{
+	 if ((UsrDat->UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat->UsrIDNickOrEmail)) > 0)
+	   {
+	    ListUsrCods.NumUsrs = 1;
+	    Usr_AllocateListUsrCods (&ListUsrCods);
+	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
+	   }
+	}
+      else								// 3: It looks like a user's ID
+	{
+	 // Users' IDs are always stored internally in capitals and without leading zeros
+	 Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
+	 if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
+	   {
+	    /***** Find users for this user's ID *****/
+	    ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
+	    Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
+		      sizeof (UsrDat->IDs.List[0].ID) - 1);
+	    Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
+	    ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
+	   }
+	}
+
+      if (RemoveSpecifiedUsrs)	// Remove the specified users (of the role)
+	{
+	 if (ListUsrCods.NumUsrs == 1)		// If more than one user found ==> do not remove
+	    for (NumUsr = 0;
+		 NumUsr < Gbl.Usrs.LstUsrs[RegRemRole].NumUsrs;
+		 NumUsr++)
+	       if (Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].UsrCod == ListUsrCods.Lst[0])	// User found
+		  Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].Remove = true;	// Mark as removable
+	}
+      else	// Remove all users (of the role) except these specified
+	{
+	 for (NumUsr = 0;
+	      NumUsr < Gbl.Usrs.LstUsrs[RegRemRole].NumUsrs;
+	      NumUsr++)
+	    for (NumUsrFound = 0;
+		 NumUsrFound < ListUsrCods.NumUsrs;
+		 NumUsrFound++)
+	       if (Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
+		  Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].Remove = false;	// Mark as not removable
+	}
+
+      /* Free memory used for list of users' codes found for this ID */
+      Usr_FreeListUsrCods (&ListUsrCods);
+     }
+  }
+
+/*****************************************************************************/
+/************** Update list of users to be removed          ******************/
+/************** using list of users selected from clipboard ******************/
+/*****************************************************************************/
+
+static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+							   bool RemoveSpecifiedUsrs)
+  {
+   const char *Ptr;
+   unsigned NumUsr;
+
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat->EnUsrCod,
+				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
+      if (UsrDat->UsrCod > 0)
+	 for (NumUsr = 0;
+	      NumUsr < Gbl.Usrs.LstUsrs[RegRemRole].NumUsrs;
+	      NumUsr++)
+	    if (Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].UsrCod == UsrDat->UsrCod)	// User found
+	       Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].Remove = RemoveSpecifiedUsrs;
+     }
+  }
+
+/*****************************************************************************/
+/******** Register users found in the form with IDs, nicks and emails ********/
+/*****************************************************************************/
+
+static void Enr_RegisterUsrsFoundInTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+					     struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered,
+					     char *ListUsrsIDs)
+  {
+   const char *Ptr;
+   bool ItLooksLikeAUsrID;
+   struct Usr_ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
+   unsigned NumUsrFound;
+
+   /***** Get users from a list of users' IDs ******/
+   Ptr = ListUsrsIDs;
+   while (*Ptr)
+     {
+      /* Reset user */
+      UsrDat->UsrCod = -1L;
+      ItLooksLikeAUsrID = false;
+
+      /* Find next string in text */
+      Str_GetNextStringUntilSeparator (&Ptr,UsrDat->UsrIDNickOrEmail,
+				       sizeof (UsrDat->UsrIDNickOrEmail) - 1);
+
+      /* Reset default list of users' codes */
+      ListUsrCods.NumUsrs = 0;
+      ListUsrCods.Lst = NULL;
+
+      /* Check if the string is a user's ID, a user's nickname or a user's email address */
+      if (Nck_CheckIfNickWithArrIsValid (UsrDat->UsrIDNickOrEmail))	// 1: It's a nickname
+	{
+	 if ((UsrDat->UsrCod = Nck_GetUsrCodFromNickname (UsrDat->UsrIDNickOrEmail)) > 0)
+	   {
+	    ListUsrCods.NumUsrs = 1;
+	    Usr_AllocateListUsrCods (&ListUsrCods);
+	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
+	   }
+	}
+      else if (Mai_CheckIfEmailIsValid (UsrDat->UsrIDNickOrEmail))	// 2: It's an email
+	{
+	 if ((UsrDat->UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat->UsrIDNickOrEmail)) > 0)
+	   {
+	    ListUsrCods.NumUsrs = 1;
+	    Usr_AllocateListUsrCods (&ListUsrCods);
+	    ListUsrCods.Lst[0] = UsrDat->UsrCod;
+	   }
+	}
+      else								// 3: It looks like a user's ID
+	{
+	 // Users' IDs are always stored internally in capitals and without leading zeros
+	 Str_RemoveLeadingZeros (UsrDat->UsrIDNickOrEmail);
+	 if (ID_CheckIfUsrIDSeemsAValidID (UsrDat->UsrIDNickOrEmail))
+	   {
+	    ItLooksLikeAUsrID = true;
+
+	    /* Find users for this user's ID */
+	    ID_ReallocateListIDs (UsrDat,1);	// Only one user's ID
+	    Str_Copy (UsrDat->IDs.List[0].ID,UsrDat->UsrIDNickOrEmail,
+		      sizeof (UsrDat->IDs.List[0].ID) - 1);
+	    Str_ConvertToUpperText (UsrDat->IDs.List[0].ID);
+	    ID_GetListUsrCodsFromUsrID (UsrDat,NULL,&ListUsrCods,false);
+	   }
+	}
+
+      /* Register user(s) */
+      if (ListUsrCods.NumUsrs)	// User(s) found
+	 for (NumUsrFound = 0;
+	      NumUsrFound < ListUsrCods.NumUsrs;
+	      NumUsrFound++)
+	   {
+	    UsrDat->UsrCod = ListUsrCods.Lst[NumUsrFound];
+	    Enr_RegisterUsr (UsrDat,RegRemRole,LstGrps,NumUsrsRegistered);
+	   }
+      else if (ItLooksLikeAUsrID)	// User not found. He/she is a new user. Register him/her using ID
+	 Enr_RegisterUsr (UsrDat,RegRemRole,LstGrps,NumUsrsRegistered);
+
+      /* Free memory used for list of users' codes found for this ID */
+      Usr_FreeListUsrCods (&ListUsrCods);
+     }
+   }
+
+/*****************************************************************************/
+/******************* Register users selected from clipboard ******************/
+/*****************************************************************************/
+
+static void Enr_RegisterSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+				      struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered)
+  {
+   const char *Ptr;
+
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat->EnUsrCod,
+				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
+      if (UsrDat->UsrCod > 0)
+	 Enr_RegisterUsr (UsrDat,RegRemRole,LstGrps,NumUsrsRegistered);
+     }
   }
 
 /*****************************************************************************/
