@@ -180,20 +180,6 @@ void Prg_DB_MoveLeftRightItemRange (const struct Prg_ItemRange *ToMove,
 
 unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res)
   {
-   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK    ] = " AND Hidden='N'",
-      [Rol_GST    ] = " AND Hidden='N'",
-      [Rol_USR    ] = " AND Hidden='N'",
-      [Rol_STD    ] = " AND Hidden='N'",
-      [Rol_NET    ] = " AND Hidden='N'",
-      [Rol_TCH    ] = "",
-      [Rol_DEG_ADM] = " AND Hidden='N'",
-      [Rol_CTR_ADM] = " AND Hidden='N'",
-      [Rol_INS_ADM] = " AND Hidden='N'",
-      [Rol_SYS_ADM] = "",
-     };
-
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get program items",
 		   "SELECT ItmCod,"	// row[0]
@@ -202,10 +188,8 @@ unsigned Prg_DB_GetListItems (MYSQL_RES **mysql_res)
 			  "Hidden"	// row[3]
 		    " FROM prg_items"
 		   " WHERE CrsCod=%ld"
-		       "%s"
 		   " ORDER BY ItmInd",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

@@ -471,7 +471,7 @@ static void Prg_WriteRowItem (Prg_ListingType_t ListingType,
 		      (ListingType == Prg_FORM_EDIT_ITEM ||
 		       ListingType == Prg_END_EDIT_ITEM);
       */
-      HighlightItem = Item->Hierarchy.ItmCod == SelectedItmCod;
+      HighlightItem = (Item->Hierarchy.ItmCod == SelectedItmCod);
 
       /***** First row (title and dates) *****/
       HTM_TR_Begin (NULL);
@@ -905,7 +905,7 @@ static bool Prg_CheckIfAllHigherLevelsAreExpanded (unsigned CurrentLevel)
    for (Level = 1;
 	Level < CurrentLevel;
 	Level++)
-      if (!Prg_GetExpandedLevel (Level))	// Contracted?
+      if (Prg_GetExpandedLevel (Level) == ConExp_CONTRACTED)	// Contracted?
          return false;	// A level is contracted. Not all are expanded
 
    return true;	// None is contracted. All are expanded
