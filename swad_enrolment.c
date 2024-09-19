@@ -568,7 +568,7 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
-   extern const char *Txt_Step_2_Select_the_desired_action;
+   extern const char *Txt_Step_2_Select_an_action;
    extern const char *Txt_Step_3_Optionally_select_groups;
    extern const char *Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
@@ -628,43 +628,42 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 		    Box_NOT_CLOSABLE);
 
 	 /***** Step 1: List of students to be enroled / removed *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Step_1_Provide_a_list_of_users);
-	 HTM_DIV_End ();
-
-	 HTM_TABLE_BeginCenterPadding (2);
-	    Enr_PutAreaToEnterUsrsIDs ();
-	    Enr_PutUsrsClipboard ();
-	 HTM_TABLE_End ();
+	 HTM_FIELDSET_Begin (NULL);
+	    HTM_LEGEND (Txt_Step_1_Provide_a_list_of_users);
+	       HTM_TABLE_BeginCenterPadding (2);
+		  Enr_PutAreaToEnterUsrsIDs ();
+		  Enr_PutUsrsClipboard ();
+	       HTM_TABLE_End ();
+	 HTM_FIELDSET_End ();
 
 	 /***** Step 2: Put different actions to enrol/remove users to/from current course *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Step_2_Select_the_desired_action);
-	 HTM_DIV_End ();
-	 Enr_PutActionsEnrRemSeveralUsrs ();
+	 HTM_FIELDSET_Begin (NULL);
+	    HTM_LEGEND (Txt_Step_2_Select_an_action);
+	    Enr_PutActionsEnrRemSeveralUsrs ();
+	 HTM_FIELDSET_End ();
 
 	 /***** Step 3: Select groups in which enrol/remove users *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Step_3_Optionally_select_groups);
-	 HTM_DIV_End ();
-	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
-	   {
-	    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
+	 HTM_FIELDSET_Begin (NULL);
+	    HTM_LEGEND (Txt_Step_3_Optionally_select_groups);
+	    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	      {
-	       Ale_ShowAlert (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_);
-	       Grp_ShowLstGrpsToChgOtherUsrsGrps (-1L);
+	       if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
+		 {
+		  Ale_ShowAlert (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_);
+		  Grp_ShowLstGrpsToChgOtherUsrsGrps (-1L);
+		 }
+	       else
+		  /* Write help message */
+		  Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
+				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	      }
-	    else
-	       /* Write help message */
-	       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
-			      Gbl.Hierarchy.Node[Hie_CRS].FullName);
-	   }
+	 HTM_FIELDSET_End ();
 
 	 /***** Step 4: Confirm enrol / remove students *****/
-	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
-	    HTM_Txt (Txt_Step_4_Confirm_the_enrolment_removing);
-	 HTM_DIV_End ();
-	 Pwd_AskForConfirmationOnDangerousAction ();
+	 HTM_FIELDSET_Begin (NULL);
+	    HTM_LEGEND (Txt_Step_4_Confirm_the_enrolment_removing);
+	    Pwd_AskForConfirmationOnDangerousAction ();
+	 HTM_FIELDSET_End ();
 
       /***** Send button and end box *****/
       Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Confirm);
@@ -813,14 +812,14 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
+      Frm_LabelColumn ("Frm_C1 RT","UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
 			     "id=\"UsrsIDs\" name=\"UsrsIDs\""
-			     " placeholder=\"%s\""
-			     " cols=\"60\" rows=\"10\" class=\"INPUT_%s\"",
+			     " placeholder=\"%s\" rows=\"10\""
+			     " class=\"Frm_C2_INPUT INPUT_%s\"",
 			     Txt_The_nicks_emails_or_IDs_can_be_separated_,
 			     The_GetSuffix ());
 	 HTM_TEXTAREA_End ();
@@ -846,10 +845,10 @@ static void Enr_PutUsrsClipboard (void)
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("RT","",Txt_User_clipboard);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_User_clipboard);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 UsrClp_ListUsrsInMyClipboard (NumUsrs,&mysql_res);
       HTM_TD_End ();
 

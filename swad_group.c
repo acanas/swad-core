@@ -2112,23 +2112,29 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    /***** Get list of groups types and groups in current course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (Txt_Groups,NULL,NULL,
-                      Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_Groups,NULL,NULL,
+                 Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
-      /***** List to select the groups the user belongs to *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	   NumGrpTyp++)
-        {
-	 GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+      /***** Begin table *****/
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-	 if (GrpTyp->NumGrps)
-	    Grp_ListGrpsToAddOrRemUsrs (GrpTyp,UsrCod);
-        }
+	 /***** List to select the groups the user belongs to *****/
+	 for (NumGrpTyp = 0;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	      NumGrpTyp++)
+	   {
+	    GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+	    if (GrpTyp->NumGrps)
+	       Grp_ListGrpsToAddOrRemUsrs (GrpTyp,UsrCod);
+	   }
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();

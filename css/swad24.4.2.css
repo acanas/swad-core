@@ -2492,15 +2492,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .USR_LIST_NUM_N_PINK	{color:#202020; font-size:15pt; font-weight:bold;}
 .USR_LIST_NUM_N_DARK	{color:#e0e0e0; font-size:15pt; font-weight:bold;}
 
-/*****************************************************************************/
-.TITLE_WHITE	{color:#505050; font-size:18pt; padding:12px 0 6px 0;}
-.TITLE_GREY	{color:#505050; font-size:18pt; padding:12px 0 6px 0;}
-.TITLE_PURPLE	{color:#573c4d; font-size:18pt; padding:12px 0 6px 0;}
-.TITLE_BLUE	{color:#4d88a1; font-size:18pt; padding:12px 0 6px 0;}
-.TITLE_YELLOW	{color:#7c4d2a; font-size:18pt; padding:12px 0 6px 0;}
-.TITLE_PINK	{color:#63474e; font-size:18pt; padding:12px 0 6px 0;}
-.TITLE_DARK	{color:#505050; font-size:18pt; padding:12px 0 6px 0;}
-
 /*********************** Icon and checkbox highlighting **********************/
 .ICO_HIDDEN
 	{

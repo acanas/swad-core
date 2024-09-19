@@ -45007,36 +45007,36 @@ const char *Txt_Step_1_Provide_a_list_of_users =
 #elif L==6	// gn
 	"Paso 1: Proporcione una lista de usuarios";	// Okoteve traducción
 #elif L==7	// it
-	"Passo 1: Fornisci una lista di utenti";
+	"Passaggio 1: Fornisci una lista di utenti";
 #elif L==8	// pl
 	"Krok 1: Podaj list&eogon; u&zdot;ytkownik&oacute;w";
 #elif L==9	// pt
-	"Etapa 1: Forne&ccedil;a uma lista de usu&aacute;rios";
+	"Passo 1: Forne&ccedil;a uma lista de usu&aacute;rios";
 #elif L==10	// tr
-	"Step 1: Provide a list of users";		// Çeviri lazim!
+	"Ad&inodot;m 1: Provide a list of users";		// Çeviri lazim!
 #endif
 
-const char *Txt_Step_2_Select_the_desired_action =
+const char *Txt_Step_2_Select_an_action =
 #if   L==1	// ca
-	"Pas 2: Seleccioneu l'acci&oacute; que voleu realitzar";
+	"Pas 2: Seleccioneu una acci&oacute;";
 #elif L==2	// de
-	"Schritt 2: W&auml;hlen Sie die gew&uuml;nschte Aktion aus";
+	"Schritt 2: W&auml;hlen Sie eine Aktion aus";
 #elif L==3	// en
-	"Step 2: Select the desired action";
+	"Step 2: Select an action";
 #elif L==4	// es
-	"Paso 2: Seleccione la acci&oacute;n que desea realizar";
+	"Paso 2: Seleccione una acci&oacute;n";
 #elif L==5	// fr
-	"&Eacute;tape 2 : S&eacute;lectionnez l'action souhait&eacute;e";
+	"&Eacute;tape 2: S&eacute;lectionnez une action";
 #elif L==6	// gn
-	"Paso 2: Seleccione la acci&oacute;n que desea realizar";	// Okoteve traducción
+	"Paso 2: Eiporavo pete&itilde; tembiapo";
 #elif L==7	// it
-	"Passo 2: Seleziona l'azione desiderata";
+	"Passaggio 2: seleziona un'azione";
 #elif L==8	// pl
-	"Krok 2: Wybierz &zdot;&aogon;dan&aogon; akcj&eogon;";
+	"Krok 2: Wybierz akcj&eogon;";
 #elif L==9	// pt
-	"Etapa 2: Selecione a a&ccedil;&atilde;o desejada";
+	"Passo 2: selecione uma a&ccedil;&atilde;o";
 #elif L==10	// tr
-	"Step 2: Select the desired action";				// Çeviri lazim!
+	"Ad&inodot;m 2: Bir eylem se&ccedil;in";
 #endif
 
 const char *Txt_Step_3_Optionally_select_groups =
@@ -45049,17 +45049,17 @@ const char *Txt_Step_3_Optionally_select_groups =
 #elif L==4	// es
 	"Paso 3: Opcionalmente, seleccione grupos";
 #elif L==5	// fr
-	"&Eacute;tape 3 : S&eacute;lectionnez &eacute;ventuellement des groupes";
+	"&Eacute;tape 3: S&eacute;lectionnez &eacute;ventuellement des groupes";
 #elif L==6	// gn
 	"Paso 3: Opcionalmente, seleccione grupos";	// Okoteve traducción
 #elif L==7	// it
-	"Passo 3: A scelta, seleziona i gruppi";
+	"Passaggio 3: A scelta, seleziona i gruppi";
 #elif L==8	// pl
 	"Krok 3: Opcjonalnie wybierz grupy";
 #elif L==9	// pt
-	"Etapa 3: Opcionalmente, selecione grupos";
+	"Passo 3: Opcionalmente, selecione grupos";
 #elif L==10	// tr
-	"Step 3: Optionally, select groups";		// Çeviri lazim!
+	"Ad&inodot;m 3: Optionally, select groups";		// Çeviri lazim!
 #endif
 
 const char *Txt_Step_4_Confirm_the_enrolment_removing =
@@ -45072,17 +45072,17 @@ const char *Txt_Step_4_Confirm_the_enrolment_removing =
 #elif L==4	// es
 	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";
 #elif L==5	// fr
-	"&Eacute;tape 4 : Confirmer l'inscription / la suppression";
+	"&Eacute;tape 4: Confirmer l'inscription / la suppression";
 #elif L==6	// gn
 	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";	// Okoteve traducción
 #elif L==7	// it
-	"Passo 4: Conferma la registrazione / rimozione";
+	"Passaggio 4: Conferma la registrazione / rimozione";
 #elif L==8	// pl
 	"Krok 4: Potwierd&zacute; rejestracj&eogon; / usuni&eogon;cie";
 #elif L==9	// pt
-	"Etapa 4: Confirmar a inscri&ccedil;&atilde;o / remo&ccedil;&atilde;o";
+	"Passo 4: Confirmar a inscri&ccedil;&atilde;o / remo&ccedil;&atilde;o";
 #elif L==10	// tr
-	"Step 4: Confirm the enrolment / removing";			// Çeviri lazim!
+	"Ad&inodot;m 4: Confirm the enrolment / removing";			// Çeviri lazim!
 #endif
 
 const char *Txt_Student_comment =
