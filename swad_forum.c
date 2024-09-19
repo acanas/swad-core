@@ -1865,7 +1865,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 
    /***** Put link to register students *****/
    if (Forum->Type == For_FORUM_COURSE_USRS)
-       Enr_PutButtonInlineToRegisterStds (Forum->HieCod,
+       Enr_PutButtonInlineToEnrolStds (Forum->HieCod,
                                           5,IsLastItemInLevel,
 					  Highlight);
   }

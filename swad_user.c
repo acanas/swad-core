@@ -3742,7 +3742,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	       Usr_ShowFormsToSelectUsrListType (NextAction,FuncPars,Args,NULL);
 
 	       /***** Link to register students *****/
-	       Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
 
 	       /***** Form to select users and select date range ****/
 	       /* Begin form */
@@ -6282,8 +6282,8 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
-   extern const char *Txt_Register_students;
-   extern const char *Txt_Register_teacher;
+   extern const char *Txt_Enrol_students;
+   extern const char *Txt_Enrol_teacher;
 
    if (Gbl.Crs.Grps.AllGrps &&			// All groups selected
        Role == Rol_STD &&			// No students found
@@ -6291,7 +6291,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqEnrSevStd,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE_BUTTON,Txt_Register_students,
+                              Btn_CREATE_BUTTON,Txt_Enrol_students,
 			      Ale_WARNING,Txt_No_users_found[Rol_STD]);
 
    else if (Gbl.Crs.Grps.AllGrps &&		// All groups selected
@@ -6301,7 +6301,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqMdfOneTch,NULL,NULL,
                               NULL,NULL,
-                              Btn_CREATE_BUTTON,Txt_Register_teacher,
+                              Btn_CREATE_BUTTON,Txt_Enrol_teacher,
 			      Ale_WARNING,Txt_No_users_found[Rol_TCH]);
    else
       /***** Show alert *****/

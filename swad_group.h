@@ -203,7 +203,7 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
 			       struct ListCodGrps *LstGrpsUsrWants);
 bool Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (struct ListCodGrps *LstGrps,
 						       bool CheckClosedGroupsIBelong);
-void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
+void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
 unsigned Grp_RemoveUsrFromGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps);
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_RemUsrFromAllGrps (long UsrCod);
@@ -212,7 +212,7 @@ void Grp_WriteTheWholeCourse (void);
 void Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod);
 
-void Grp_ReqRegisterInGrps (void);
+void Grp_ReqEnrolInGrps (void);
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
 

@@ -173,7 +173,7 @@ struct Globals
            } Lst[Cfg_MAX_CONNECTED_SHOWN];
         } Connected;
       char FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg) of the temporary file with the selected face
-      Enr_RegRemOneUsrAction_t RegRemAction;	// Enrolment action
+      Enr_EnrRemOneUsrAction_t EnrRemAction;	// Enrolment action
      } Usrs;
    struct
      {

@@ -9160,7 +9160,7 @@ const char *Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_U
 	" received from %s from %s related to <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
-const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Realment voleu registrar el seg&uuml;ent usuari"
 	" com a administrador de <strong>%s</strong>?";
@@ -9168,7 +9168,7 @@ const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administ
 	"Möchten Sie den folgenden Benutzer wirklich"
 	" als Administrator von <strong>%s</strong> registrieren?";
 #elif L==3	// en
-	"Do you really want to register the following user"
+	"Do you really want to enrol the following user"
 	" as an administrator of <strong>%s</strong>?";
 #elif L==4	// es
 	"&iquest;Realmente desea inscribir el siguiente usuario/a"
@@ -9189,7 +9189,7 @@ const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administ
 	"Voc&ecirc; realmente deseja registrar o seguinte usu&aacute;rio/a"
 	" como administrador/a de <strong>%s</strong>?";
 #elif L==10	// tr
-	"Do you really want to register the following user"
+	"Do you really want to enrol the following user"
 	" as an administrator of <strong>%s</strong>?";		// Çeviri lazim!
 #endif
 
@@ -11438,6 +11438,28 @@ const char *Txt_End_date =
 #elif L==10	// tr
 	"End date";	// Çeviri lazim!
 #endif
+const char *Txt_Enrol =
+#if   L==1	// ca
+	"Inscriure";
+#elif L==2	// de
+	"Anmeldung";
+#elif L==3	// en
+	"Enrol";
+#elif L==4	// es
+	"Inscribir";
+#elif L==5	// fr
+	"Inscrire";
+#elif L==6	// gn
+	"Inscribir";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare";
+#elif L==8	// pl
+	"Zarejestruj sie";
+#elif L==9	// pt
+	"Registrar";
+#elif L==10	// tr
+	"Register";	// Çeviri lazim!
+#endif
 
 const char *Txt_Enrol_in_groups =
 #if   L==1	// ca
@@ -11460,6 +11482,299 @@ const char *Txt_Enrol_in_groups =
 	"Inscreva-me em grupos ";
 #elif L==10	// tr
 	"Enrol in groups";		// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_students =
+#if   L==1	// ca
+	"Inscriure estudiants";
+#elif L==2	// de
+	"Anmeldung Studenten";
+#elif L==3	// en
+	"Enrol students";
+#elif L==4	// es
+	"Inscribir estudiantes";
+#elif L==5	// fr
+	"Inscrire &eacute;tudiants";
+#elif L==6	// gn
+	"Inscribir estudiantes";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare studenti";
+#elif L==8	// pl
+	"Rejestracja student&oacute;w";
+#elif L==9	// pt
+	"Registrar estudantes";
+#elif L==10	// tr
+	"Register students";		// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_students_in_COURSE_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Inscriure estudiants en <strong>%s</strong>";
+#elif L==2	// de
+	"Anmeldung Studenten im <strong>%s</strong>";
+#elif L==3	// en
+	"Enrol students in <strong>%s</strong>";
+#elif L==4	// es
+	"Inscribir estudiantes en <strong>%s</strong>";
+#elif L==5	// fr
+	"Inscrire &eacute;tudiants dans <strong>%s</strong>";
+#elif L==6	// gn
+	"Inscribir estudiantes en <strong>%s</strong>";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare studenti in <strong>%s</strong>";
+#elif L==8	// pl
+	"Rejestracja student&oacute;w w <strong>%s</strong>";
+#elif L==9	// pt
+	"Registrar estudantes em <strong>%s</strong>";
+#elif L==10	// tr
+	"Register students in <strong>%s</strong>";	// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_the_users_indicated_in_step_1 =
+#if   L==1	// ca
+	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Necessita traducció
+#elif L==2	// de
+	"Anmeldung Sie die Benutzer, die auf der Liste";
+#elif L==3	// en
+	"Add (enrol the users indicated in step 1)";
+#elif L==4	// es
+	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";
+#elif L==5	// fr
+	"Inscrire les utilisateurs qui sont sur la liste";
+#elif L==6	// gn
+	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare gli utenti che sono in lista";
+#elif L==8	// pl
+	"Rejestracja uzytkownik&oacute;w, kt&oacute;rzy sa na liscie";
+#elif L==9	// pt
+	"Registrar os utilizadores que est&atilde;o na lista";
+#elif L==10	// tr
+	"Add (enrol the users indicated in step 1)";				// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_the_users_indicated_in_step_1_and_remove_the_users_not_indicated =
+#if   L==1	// ca
+	"Actualizar (inscribir los usuarios indicados en el paso 1"
+	" y eliminar los <strong>no</strong> indicados)";		// Necessita traducció
+#elif L==2	// de
+	"Entfernen Sie die Benutzer, die <strong>nicht</strong> auf der Liste,"
+	" und Anmeldung Sie die Benutzer, die auf der Liste";
+#elif L==3	// en
+	"Update (enrol the users indicated in step 1"
+	" and remove the users <strong>not</strong> indicated)";
+#elif L==4	// es
+	"Actualizar (inscribir los usuarios indicados en el paso 1"
+	" y eliminar los <strong>no</strong> indicados)";
+#elif L==5	// fr
+	"Enlever les utilisateurs qui <strong>ne</strong> sont <strong>pas</strong> sur la liste,"
+	" et inscrire les utilisateurs qui sont sur la liste";
+#elif L==6	// gn
+	"Actualizar (inscribir los usuarios indicados en el paso 1"
+	" y eliminar los <strong>no</strong> indicados)";		// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere gli utenti che <strong>non</strong> sono sulla lista,"
+	" e registrare gli utenti che invece lo sono";
+#elif L==8	// pl
+	"Usun u&zdot;ytkownikami, kt&oacute;rzy sa <strong>nie</strong> na liscie,"
+	"i  zarejestrowac uzytkownik&oacute;w, kt&oacute;rzy sa na liscie";
+#elif L==9	// pt
+	"Tirar os utilizadores que <strong>n&atilde;o</strong> est&atilde;o na lista,"
+	" e registrar os utilizadores que est&atilde;o na lista";
+#elif L==10	// tr
+	"Update (enrol the users indicated in step 1"
+	" and remove the users <strong>not</strong> indicated)";	// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_teacher =
+#if   L==1	// ca
+	"Inscriure professor/a";
+#elif L==2	// de
+	"Anmeldung Lehrkraft";
+#elif L==3	// en
+	"Enrol teacher";
+#elif L==4	// es
+	"Inscribir profesor/a";
+#elif L==5	// fr
+	"Inscrire enseignant/e";
+#elif L==6	// gn
+	"Inscribir profesor/a";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare professore/ssa";
+#elif L==8	// pl
+	"Rejestracja nauczyciel";
+#elif L==9	// pt
+	"Registrar professor/a";
+#elif L==10	// tr
+	"Register teacher";	// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_user_IN_A_COURSE_OR_DEGREE =
+#if   L==1	// ca
+	"Inscriure usuari/a";
+#elif L==2	// de
+	"Anmeldung Benutzer";
+#elif L==3	// en
+	"Enrol user";
+#elif L==4	// es
+	"Inscribir usuario/a";
+#elif L==5	// fr
+	"Inscrire utilisateur/se";
+#elif L==6	// gn
+	"Inscribir usuario/a";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare utente";
+#elif L==8	// pl
+	"Rejestracja u&zdot;ytkownika";
+#elif L==9	// pt
+	"Registrar utilizador/a";
+#elif L==10	// tr
+	"Register user";	// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_me_in_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Inscriureme en <strong>%s</strong>";
+#elif L==2	// de
+	"Anmeldung Sie mir im <strong>%s</strong>";
+#elif L==3	// en
+	"Enrol me in <strong>%s</strong>";
+#elif L==4	// es
+	"Inscribirme en <strong>%s</strong>";
+#elif L==5	// fr
+	"Inscrire-moi dans <strong>%s</strong>";
+#elif L==6	// gn
+	"Inscribirme en <strong>%s</strong>";	// Okoteve traducción
+#elif L==7	// it
+	"Registrami in <strong>%s</strong>";
+#elif L==8	// pl
+	"Rejestracja mnie w <strong>%s</strong>";
+#elif L==9	// pt
+	"Registrar me em <strong>%s</strong>";
+#elif L==10	// tr
+	"Register me in <strong>%s</strong>";	// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_USER_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Inscriure en l'assignatura <strong>%s</strong>";
+#elif L==2	// de
+	"Anmeldung im Kurs <strong>%s</strong>";
+#elif L==3	// en
+	"Enrol in the course <strong>%s</strong>";
+#elif L==4	// es
+	"Inscribir en la asignatura <strong>%s</strong>";
+#elif L==5	// fr
+	"Inscrire dans la mati&egrave;re <strong>%s</strong>";
+#elif L==6	// gn
+	"Inscribir en la asignatura <strong>%s</strong>";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare nel corso <strong>%s</strong>";
+#elif L==8	// pl
+	"Rejestracja w kurs <strong>%s</strong>";
+#elif L==9	// pt
+	"Registrar na disciplina <strong>%s</strong>";
+#elif L==10	// tr
+	"Register in the course <strong>%s</strong>";		// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Inscriure com a administrador/a"
+	" del center <strong>%s</strong>";
+#elif L==2	// de
+	"Anmeldung als Administrator"
+	" des Lehrinstitut <strong>%s</strong>";
+#elif L==3	// en
+	"Enrol as an administrator"
+	" of the center <strong>%s</strong>";
+#elif L==4	// es
+	"Inscribir como administrador/a"
+	" del centro <strong>%s</strong>";
+#elif L==5	// fr
+	"Inscrire en tant qu'administrateur"
+	" du center <strong>%s</strong>";
+#elif L==6	// gn
+	"Inscribir como administrador/a"
+	" del centro <strong>%s</strong>";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare come amministratore"
+	" del centro <strong>%s</strong>";
+#elif L==8	// pl
+	"Rejestracja jako administrator"
+	" centrum <strong>%s</strong>";
+#elif L==9	// pt
+	"Registrar como administrador"
+	" do centro <strong>%s</strong>";
+#elif L==10	// tr
+	"Register as an administrator"
+	" of the center <strong>%s</strong>";	// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_USER_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Inscriure com a administrador/a"
+	" de la titulaci&oacute; <strong>%s</strong>";
+#elif L==2	// de
+	"Anmeldung als Administrator"
+	" des Studiengang <strong>%s</strong>";
+#elif L==3	// en
+	"Enrol as an administrator"
+	" of the degree <strong>%s</strong>";
+#elif L==4	// es
+	"Inscribir como administrador/a"
+	" de la titulaci&oacute;n <strong>%s</strong>";
+#elif L==5	// fr
+	"Inscrire en tant qu'administrateur"
+	" du &eacute;tude <strong>%s</strong>";
+#elif L==6	// gn
+	"Inscribir como administrador/a"
+	" de la titulaci&oacute;n <strong>%s</strong>";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare come amministratore"
+	" della laurea <strong>%s</strong>";
+#elif L==8	// pl
+	"Rejestracja jako administrator"
+	" stopnia <strong>%s</strong>";
+#elif L==9	// pt
+	"Registrar como administrador"
+	" do grau <strong>%s</strong>";
+#elif L==10	// tr
+	"Register as an administrator"
+	" of the degree <strong>%s</strong>";		// Çeviri lazim!
+#endif
+
+const char *Txt_Enrol_USER_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Inscriure com a administrador/a"
+	" de la instituci&oacute; <strong>%s</strong>";
+#elif L==2	// de
+	"Anmeldung als Administrator"
+	" des Hochschule <strong>%s</strong>";
+#elif L==3	// en
+	"Enrol as an administrator"
+	" of the institution <strong>%s</strong>";
+#elif L==4	// es
+	"Inscribir como administrador/a"
+	" de la instituci&oacute;n <strong>%s</strong>";
+#elif L==5	// fr
+	"Inscrire en tant qu'administrateur"
+	" de l'&eacute;tablissement <strong>%s</strong>";
+#elif L==6	// gn
+	"Inscribir como administrador/a"
+	" de la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
+#elif L==7	// it
+	"Registrare come amministratore"
+	" della istituzione <strong>%s</strong>";
+#elif L==8	// pl
+	"Rejestracja jako administrator"
+	" instytucje <strong>%s</strong>";
+#elif L==9	// pt
+	"Registrar como administrador"
+	" da institui&ccedil;&atilde;o <strong>%s</strong>";
+#elif L==10	// tr
+	"Register as an administrator"
+	" of the institution <strong>%s</strong>";		// Çeviri lazim!
 #endif
 
 const char *Txt_Enrolment =
@@ -17222,7 +17537,7 @@ const char *Txt_SEARCH_X_in_Y =	// Search string "in" documentos, users, etc.
 	"in";	// Çeviri lazim!
 #endif
 
-const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group =
+const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group =
 #if   L==1	// ca
 	"En un tipus de grup amb matr&iacute;cula &uacute;nica,"
 	" els alumnes no poden estar matriculats en m&eacute;s d'un grup.";
@@ -17231,7 +17546,7 @@ const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_reg
 	" Studierende nicht in mehr als einer Gruppe angemeldet werden.";
 #elif L==3	// en
 	"In a type of group with single enrolment,"
-	" students can not be registered in more than one group.";
+	" students can not be enroled in more than one group.";
 #elif L==4	// es
 	"En un tipo de grupo de adscripci&oacute;n &uacute;nica"
 	" no es posible apuntar estudiantes a m&aacute;s de un grupo.";
@@ -33073,322 +33388,6 @@ const char *Txt_Recursive_rubric =
 	"&Ouml;zyinelemeli de&gbreve;erlendirme listesi";
 #endif
 
-const char *Txt_Register =
-#if   L==1	// ca
-	"Inscriure";
-#elif L==2	// de
-	"Anmeldung";
-#elif L==3	// en
-	"Register";
-#elif L==4	// es
-	"Inscribir";
-#elif L==5	// fr
-	"Inscrire";
-#elif L==6	// gn
-	"Inscribir";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare";
-#elif L==8	// pl
-	"Zarejestruj sie";
-#elif L==9	// pt
-	"Registrar";
-#elif L==10	// tr
-	"Register";	// Çeviri lazim!
-#endif
-
-const char *Txt_Register_students =
-#if   L==1	// ca
-	"Inscriure estudiants";
-#elif L==2	// de
-	"Anmeldung Studenten";
-#elif L==3	// en
-	"Register students";
-#elif L==4	// es
-	"Inscribir estudiantes";
-#elif L==5	// fr
-	"Inscrire &eacute;tudiants";
-#elif L==6	// gn
-	"Inscribir estudiantes";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare studenti";
-#elif L==8	// pl
-	"Rejestracja student&oacute;w";
-#elif L==9	// pt
-	"Registrar estudantes";
-#elif L==10	// tr
-	"Register students";		// Çeviri lazim!
-#endif
-
-const char *Txt_Register_students_in_COURSE_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Inscriure estudiants en <strong>%s</strong>";
-#elif L==2	// de
-	"Anmeldung Studenten im <strong>%s</strong>";
-#elif L==3	// en
-	"Register students in <strong>%s</strong>";
-#elif L==4	// es
-	"Inscribir estudiantes en <strong>%s</strong>";
-#elif L==5	// fr
-	"Inscrire &eacute;tudiants dans <strong>%s</strong>";
-#elif L==6	// gn
-	"Inscribir estudiantes en <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare studenti in <strong>%s</strong>";
-#elif L==8	// pl
-	"Rejestracja student&oacute;w w <strong>%s</strong>";
-#elif L==9	// pt
-	"Registrar estudantes em <strong>%s</strong>";
-#elif L==10	// tr
-	"Register students in <strong>%s</strong>";	// Çeviri lazim!
-#endif
-
-const char *Txt_Register_the_users_indicated_in_step_1 =
-#if   L==1	// ca
-	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Necessita traducció
-#elif L==2	// de
-	"Anmeldung Sie die Benutzer, die auf der Liste";
-#elif L==3	// en
-	"Add (register the users indicated in step 1)";
-#elif L==4	// es
-	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";
-#elif L==5	// fr
-	"Inscrire les utilisateurs qui sont sur la liste";
-#elif L==6	// gn
-	"A&ntilde;adir (inscribir los usuarios indicados en el paso 1)";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare gli utenti che sono in lista";
-#elif L==8	// pl
-	"Rejestracja uzytkownik&oacute;w, kt&oacute;rzy sa na liscie";
-#elif L==9	// pt
-	"Registrar os utilizadores que est&atilde;o na lista";
-#elif L==10	// tr
-	"Add (register the users indicated in step 1)";				// Çeviri lazim!
-#endif
-
-const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated =
-#if   L==1	// ca
-	"Actualizar (inscribir los usuarios indicados en el paso 1"
-	" y eliminar los <strong>no</strong> indicados)";		// Necessita traducció
-#elif L==2	// de
-	"Entfernen Sie die Benutzer, die <strong>nicht</strong> auf der Liste,"
-	" und Anmeldung Sie die Benutzer, die auf der Liste";
-#elif L==3	// en
-	"Update (register the users indicated in step 1"
-	" and remove the users <strong>not</strong> indicated)";
-#elif L==4	// es
-	"Actualizar (inscribir los usuarios indicados en el paso 1"
-	" y eliminar los <strong>no</strong> indicados)";
-#elif L==5	// fr
-	"Enlever les utilisateurs qui <strong>ne</strong> sont <strong>pas</strong> sur la liste,"
-	" et inscrire les utilisateurs qui sont sur la liste";
-#elif L==6	// gn
-	"Actualizar (inscribir los usuarios indicados en el paso 1"
-	" y eliminar los <strong>no</strong> indicados)";		// Okoteve traducción
-#elif L==7	// it
-	"Rimuovere gli utenti che <strong>non</strong> sono sulla lista,"
-	" e registrare gli utenti che invece lo sono";
-#elif L==8	// pl
-	"Usun u&zdot;ytkownikami, kt&oacute;rzy sa <strong>nie</strong> na liscie,"
-	"i  zarejestrowac uzytkownik&oacute;w, kt&oacute;rzy sa na liscie";
-#elif L==9	// pt
-	"Tirar os utilizadores que <strong>n&atilde;o</strong> est&atilde;o na lista,"
-	" e registrar os utilizadores que est&atilde;o na lista";
-#elif L==10	// tr
-	"Update (register the users indicated in step 1"
-	" and remove the users <strong>not</strong> indicated)";	// Çeviri lazim!
-#endif
-
-const char *Txt_Register_teacher =
-#if   L==1	// ca
-	"Inscriure professor/a";
-#elif L==2	// de
-	"Anmeldung Lehrkraft";
-#elif L==3	// en
-	"Register teacher";
-#elif L==4	// es
-	"Inscribir profesor/a";
-#elif L==5	// fr
-	"Inscrire enseignant/e";
-#elif L==6	// gn
-	"Inscribir profesor/a";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare professore/ssa";
-#elif L==8	// pl
-	"Rejestracja nauczyciel";
-#elif L==9	// pt
-	"Registrar professor/a";
-#elif L==10	// tr
-	"Register teacher";	// Çeviri lazim!
-#endif
-
-const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE =
-#if   L==1	// ca
-	"Inscriure usuari/a";
-#elif L==2	// de
-	"Anmeldung Benutzer";
-#elif L==3	// en
-	"Register user";
-#elif L==4	// es
-	"Inscribir usuario/a";
-#elif L==5	// fr
-	"Inscrire utilisateur/se";
-#elif L==6	// gn
-	"Inscribir usuario/a";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare utente";
-#elif L==8	// pl
-	"Rejestracja u&zdot;ytkownika";
-#elif L==9	// pt
-	"Registrar utilizador/a";
-#elif L==10	// tr
-	"Register user";	// Çeviri lazim!
-#endif
-
-const char *Txt_Register_me_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Inscriureme en <strong>%s</strong>";
-#elif L==2	// de
-	"Anmeldung Sie mir im <strong>%s</strong>";
-#elif L==3	// en
-	"Register me in <strong>%s</strong>";
-#elif L==4	// es
-	"Inscribirme en <strong>%s</strong>";
-#elif L==5	// fr
-	"Inscrire-moi dans <strong>%s</strong>";
-#elif L==6	// gn
-	"Inscribirme en <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Registrami in <strong>%s</strong>";
-#elif L==8	// pl
-	"Rejestracja mnie w <strong>%s</strong>";
-#elif L==9	// pt
-	"Registrar me em <strong>%s</strong>";
-#elif L==10	// tr
-	"Register me in <strong>%s</strong>";	// Çeviri lazim!
-#endif
-
-const char *Txt_Register_USER_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Inscriure en l'assignatura <strong>%s</strong>";
-#elif L==2	// de
-	"Anmeldung im Kurs <strong>%s</strong>";
-#elif L==3	// en
-	"Register in the course <strong>%s</strong>";
-#elif L==4	// es
-	"Inscribir en la asignatura <strong>%s</strong>";
-#elif L==5	// fr
-	"Inscrire dans la mati&egrave;re <strong>%s</strong>";
-#elif L==6	// gn
-	"Inscribir en la asignatura <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare nel corso <strong>%s</strong>";
-#elif L==8	// pl
-	"Rejestracja w kurs <strong>%s</strong>";
-#elif L==9	// pt
-	"Registrar na disciplina <strong>%s</strong>";
-#elif L==10	// tr
-	"Register in the course <strong>%s</strong>";		// Çeviri lazim!
-#endif
-
-const char *Txt_Register_USER_as_an_administrator_of_the_center_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Inscriure com a administrador/a"
-	" del center <strong>%s</strong>";
-#elif L==2	// de
-	"Anmeldung als Administrator"
-	" des Lehrinstitut <strong>%s</strong>";
-#elif L==3	// en
-	"Register as an administrator"
-	" of the center <strong>%s</strong>";
-#elif L==4	// es
-	"Inscribir como administrador/a"
-	" del centro <strong>%s</strong>";
-#elif L==5	// fr
-	"Inscrire en tant qu'administrateur"
-	" du center <strong>%s</strong>";
-#elif L==6	// gn
-	"Inscribir como administrador/a"
-	" del centro <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare come amministratore"
-	" del centro <strong>%s</strong>";
-#elif L==8	// pl
-	"Rejestracja jako administrator"
-	" centrum <strong>%s</strong>";
-#elif L==9	// pt
-	"Registrar como administrador"
-	" do centro <strong>%s</strong>";
-#elif L==10	// tr
-	"Register as an administrator"
-	" of the center <strong>%s</strong>";	// Çeviri lazim!
-#endif
-
-const char *Txt_Register_USER_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Inscriure com a administrador/a"
-	" de la titulaci&oacute; <strong>%s</strong>";
-#elif L==2	// de
-	"Anmeldung als Administrator"
-	" des Studiengang <strong>%s</strong>";
-#elif L==3	// en
-	"Register as an administrator"
-	" of the degree <strong>%s</strong>";
-#elif L==4	// es
-	"Inscribir como administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>";
-#elif L==5	// fr
-	"Inscrire en tant qu'administrateur"
-	" du &eacute;tude <strong>%s</strong>";
-#elif L==6	// gn
-	"Inscribir como administrador/a"
-	" de la titulaci&oacute;n <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare come amministratore"
-	" della laurea <strong>%s</strong>";
-#elif L==8	// pl
-	"Rejestracja jako administrator"
-	" stopnia <strong>%s</strong>";
-#elif L==9	// pt
-	"Registrar como administrador"
-	" do grau <strong>%s</strong>";
-#elif L==10	// tr
-	"Register as an administrator"
-	" of the degree <strong>%s</strong>";		// Çeviri lazim!
-#endif
-
-const char *Txt_Register_USER_as_an_administrator_of_the_institution_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Inscriure com a administrador/a"
-	" de la instituci&oacute; <strong>%s</strong>";
-#elif L==2	// de
-	"Anmeldung als Administrator"
-	" des Hochschule <strong>%s</strong>";
-#elif L==3	// en
-	"Register as an administrator"
-	" of the institution <strong>%s</strong>";
-#elif L==4	// es
-	"Inscribir como administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>";
-#elif L==5	// fr
-	"Inscrire en tant qu'administrateur"
-	" de l'&eacute;tablissement <strong>%s</strong>";
-#elif L==6	// gn
-	"Inscribir como administrador/a"
-	" de la instituci&oacute;n <strong>%s</strong>";	// Okoteve traducción
-#elif L==7	// it
-	"Registrare come amministratore"
-	" della istituzione <strong>%s</strong>";
-#elif L==8	// pl
-	"Rejestracja jako administrator"
-	" instytucje <strong>%s</strong>";
-#elif L==9	// pt
-	"Registrar como administrador"
-	" da institui&ccedil;&atilde;o <strong>%s</strong>";
-#elif L==10	// tr
-	"Register as an administrator"
-	" of the institution <strong>%s</strong>";		// Çeviri lazim!
-#endif
-
 const char *Txt_Reject =
 #if   L==1	// ca
 	"Rebutjar";
@@ -41222,7 +41221,7 @@ const char *Txt_Select_questions =
 	"Select questions";		// Çeviri lazim!
 #endif
 
-const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_ =
+const char *Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_ =
 #if   L==1	// ca
 	"Seleccioneu els grups en/des dels quals voleu registrar/eliminar usuaris.<br />"
 	"Si seleccioneu algun grup, els usuaris s'inscriuran a l'assignatura i als grups seleccionats, o s'eliminaran dels grups seleccionats per&ograve; no de l'assignatura.<br />"
@@ -41235,7 +41234,7 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	"Wenn Sie keine Gruppen ausw&auml;hlen, werden Benutzer in den Kurs eingeschrieben, aber nicht in bestimmte Gruppen,"
 	" oder aus dem Kurs und aus allen Gruppen entfernt.";
 #elif L==3	// en
-	"Select the groups in/from which you want to register/remove users.<br />"
+	"Select the groups in/from which you want to enrol/remove users.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
@@ -41277,7 +41276,7 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	"Se voc&ecirc; n&atilde;o selecionar nenhum grupo, os usu&aacute;rios ser&atilde;o inscritos na disciplina, mas n&atilde;o em grupos espec&iacute;ficos,"
 	" ou ser&atilde;o removidos da disciplina e de todos os grupos.";
 #elif L==10	// tr
-	"Select the groups in/from which you want to register/remove users.<br />"
+	"Select the groups in/from which you want to enrol/remove users.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
@@ -58766,13 +58765,13 @@ const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is
 	" and ends in one of the allowed domains (%s &gt; %s &gt; %s).";	// Çeviri lazim!
 #endif
 
-const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_You_can_enrol_voluntarily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Podeu apuntar-vos volunt&agrave;riament a un grup de tipus %s.";
 #elif L==2	// de
 	"Sie k&ouml;nnen sich freiwillig in einer Gruppe vom Typ %s anmelden.";
 #elif L==3	// en
-	"You can register voluntarily in one group of type %s.";
+	"You can enrol voluntarily in one group of type %s.";
 #elif L==4	// es
 	"Puede apuntarse voluntariamente a un grupo de tipo %s.";
 #elif L==5	// fr
@@ -58786,10 +58785,10 @@ const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning
 #elif L==9	// pt
 	"Voc&ecirc; pode se inscrever voluntariamente em um grupo do tipo %s.";
 #elif L==10	// tr
-	"You can register voluntarily in one group of type %s.";	// Çeviri lazim!
+	"You can enrol voluntarily in one group of type %s.";	// Çeviri lazim!
 #endif
 
-const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_You_can_enrol_voluntarily_in_one_or_more_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Podeu registrar-vos volunt&agrave;riament"
 	" en un o m&eacute;s grups de tipus %s.";
@@ -58797,7 +58796,7 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"Sie k&ouml;nnen sich freiwillig"
 	" in einer oder mehreren Gruppen vom Typ %s registrieren.";
 #elif L==3	// en
-	"You can register voluntarily"
+	"You can enrol voluntarily"
 	" in one or more groups of type %s.";
 #elif L==4	// es
 	"Puede apuntarse voluntariamente"
@@ -58818,7 +58817,7 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	"Voc&ecirc; pode se inscrever voluntariamente"
 	" em um ou mais grupos do tipo %s.";
 #elif L==10	// tr
-	"You can register voluntarily"
+	"You can enrol voluntarily"
 	" in one or more groups of type %s.";		// Çeviri lazim!
 #endif
 
@@ -59329,13 +59328,13 @@ const char *Txt_You_have_stopped_following_X_users =	// Warning: it is very impo
 	"You have stopped following %u users.";	// Çeviri lazim!
 #endif
 
-const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_You_have_to_enrol_compulsorily_at_least_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Cal registrar-se obligat&ograve;riament almenys en un grup de tipus %s.";
 #elif L==2	// de
 	"Sie m&uuml;ssen sich mindestens in einer Gruppe vom Typ %s verpflichtend anmelden.";
 #elif L==3	// en
-	"You have to register compulsorily at least in one group of type %s.";
+	"You have to enrol compulsorily at least in one group of type %s.";
 #elif L==4	// es
 	"Tiene que apuntarse obligatoriamente al menos a un grupo de tipo %s.";
 #elif L==5	// fr
@@ -59349,16 +59348,16 @@ const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_
 #elif L==9	// pt
 	"Voc&ecirc; tem que se registrar obrigatoriamente pelo menos em um grupo do tipo %s.";
 #elif L==10	// tr
-	"You have to register compulsorily at least in one group of type %s.";	// Çeviri lazim!
+	"You have to enrol compulsorily at least in one group of type %s.";	// Çeviri lazim!
 #endif
 
-const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_You_have_to_enrol_compulsorily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Cal inscriure's obligat&ograve;riament en un grup de tipus %s.";
 #elif L==2	// de
 	"Sie m&uuml;ssen sich zwingend in einer Gruppe vom Typ %s anmelden.";
 #elif L==3	// en
-	"You have to register compulsorily in one group of type %s.";
+	"You have to enrol compulsorily in one group of type %s.";
 #elif L==4	// es
 	"Tiene que apuntarse obligatoriamente a un grupo de tipo %s.";
 #elif L==5	// fr
@@ -59372,7 +59371,7 @@ const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Wa
 #elif L==9	// pt
 	"Voc&ecirc; tem que se registrar obrigatoriamente em um grupo do tipo %s.";
 #elif L==10	// tr
-	"You have to register compulsorily in one group of type %s.";	// Çeviri lazim!
+	"You have to enrol compulsorily in one group of type %s.";	// Çeviri lazim!
 #endif
 
 const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer =

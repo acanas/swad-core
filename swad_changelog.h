@@ -638,6 +638,7 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 #define JS_FILE			"swad23.89.js"
 /*
  * INCLUIR LOS TEST EN LOS RECURSOS DEL PROGRAMA!!!!
+	Version 24.4:     Sep 19, 2024  Code refactoring in enrolment. (336013 lines)
 	Version 24.3:     Sep 19, 2024  Changes in enrolment using users' clipboard. (335973 lines)
 	Version 24.2:     Sep 17, 2024  Use users' clipboard in enrolment of several users. (335897 lines)
 	Version 24.1:     Sep 17, 2024  New options to copy users. (335857 lines)

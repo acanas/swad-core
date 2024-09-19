@@ -1,4 +1,4 @@
-// swad_enrolment.c: enrolment (registration) or removing of users
+// swad_enrolment.c: enrolment or removing of users
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -76,16 +76,16 @@
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-#define Enr_NUM_REG_REM_USRS_ACTIONS 6
+#define Enr_NUM_ENR_REM_USRS_ACTIONS 6
 typedef enum
   {
-   Enr_REG_REM_USRS_UNKNOWN_ACTION     	  = 0,
-   Enr_REGISTER_SPECIFIED_USRS_IN_CRS     = 1,
+   Enr_ENR_REM_USRS_UNKNOWN_ACTION     	  = 0,
+   Enr_ENROL_SPECIFIED_USRS_IN_CRS        = 1,
    Enr_REMOVE_SPECIFIED_USRS_FROM_CRS     = 2,
    Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS = 3,
    Enr_UPDATE_USRS_IN_CRS                 = 4,
    Enr_ELIMINATE_USRS_FROM_PLATFORM       = 5,
-  } Enr_RegRemUsrsAction_t;
+  } Enr_EnrRemUsrsAction_t;
 
 /* Remove important user production (works and match results)? */
 typedef enum
@@ -108,29 +108,44 @@ static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
                                       Rol_Role_t NewRole);
 
 static void Enr_ReqAdminUsrs (Rol_Role_t Role);
-static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
+static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role);
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static void Enr_PutUsrsClipboard (void);
-static void Enr_PutActionsRegRemSeveralUsrs (void);
+static void Enr_PutActionsEnrRemSeveralUsrs (void);
 
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role);
-static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+static void Enr_initializeLstUsrsToBeRemoved (Rol_Role_t Role,
+					      bool RemoveSpecifiedUsrs);
+static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 						       bool RemoveSpecifiedUsrs,
+						       struct Usr_Data *UsrDat,
 						       char *ListUsrsIDs);
-static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-							   bool RemoveSpecifiedUsrs);
-static void Enr_RegisterUsrsFoundInTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-					     struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered,
-					     char *ListUsrsIDs);
-static void Enr_RegisterSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-				      struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
+static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Rol_Role_t Role,
+							   bool RemoveSpecifiedUsrs,
+							   struct Usr_Data *UsrDat);
+static void Enr_RemoveUsrsMarkedToBeRemoved (Rol_Role_t Role,
+					     bool EliminateUsrs,
+					     struct Usr_Data *UsrDat,
+					     struct ListCodGrps *LstGrps,
+					     unsigned *NumUsrsRemoved);
+static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
+					  char *ListUsrsIDs,
+					  struct Usr_Data *UsrDat,
+					  struct ListCodGrps *LstGrps,
+					  unsigned *NumUsrsEnroled);
+static void Enr_EnrolSelectedUsrs (Rol_Role_t Role,
+				   struct Usr_Data *UsrDat,
+				   struct ListCodGrps *LstGrps,
+				   unsigned *NumUsrsEnroled);
+static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,bool EliminateUsrs);
+static void Enr_ShowMessageEnroled (unsigned NumUsrsEnroled);
 
 static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
                                        Usr_Belong_t UsrBelongsToCrs,
                                        Usr_MeOrOther_t MeOrOther);
-static void Enr_PutActionRegOneDegAdm (HTM_Attributes_t *Attributes);
-static void Enr_PutActionRegOneCtrAdm (HTM_Attributes_t *Attributes);
-static void Enr_PutActionRegOneInsAdm (HTM_Attributes_t *Attributes);
+static void Enr_PutActionEnrOneDegAdm (HTM_Attributes_t *Attributes);
+static void Enr_PutActionEnrOneCtrAdm (HTM_Attributes_t *Attributes);
+static void Enr_PutActionEnrOneInsAdm (HTM_Attributes_t *Attributes);
 static void Enr_PutActionRepUsrAsDup (HTM_Attributes_t *Attributes);
 static void Enr_PutActionRemUsrFromCrs (HTM_Attributes_t *Attributes,
 					Usr_MeOrOther_t MeOrOther);
@@ -142,12 +157,12 @@ static void Enr_PutActionRemUsrAsInsAdm (HTM_Attributes_t *Attributes,
 					 Usr_MeOrOther_t MeOrOther);
 static void Enr_PutActionRemUsrAcc (HTM_Attributes_t *Attributes,
 				    Usr_MeOrOther_t MeOrOther);
-static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
+static void Enr_EnrRemOneUsrActionBegin (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
                                          HTM_Attributes_t *Attributes);
-static void Enr_RegRemOneUsrActionEnd (void);
+static void Enr_EnrRemOneUsrActionEnd (void);
 
-static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-                             struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
+static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
+                          struct ListCodGrps *LstGrps,unsigned *NumUsrsEnroled);
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void);
 
@@ -155,11 +170,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected);
 
 static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod);
 
-static void Enr_ReqRegRemUsr (Rol_Role_t Role);
-static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role);
-static void Enr_AskIfRegRemMe (Rol_Role_t Role);
-static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role);
-static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t Role);
+static void Enr_ReqEnrRemUsr (Rol_Role_t Role);
+static void Enr_ReqAnotherUsrIDToEnrolRemove (Rol_Role_t Role);
+static void Enr_AskIfEnrRemMe (Rol_Role_t Role);
+static void Enr_AskIfEnrRemAnotherUsr (Rol_Role_t Role);
+static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t Role);
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
@@ -177,9 +192,9 @@ static FigCch_FigureCached_t Enr_GetFigureNumUsrsInCrss (unsigned Roles);
 /** Check if current course has students and show warning no students found **/
 /*****************************************************************************/
 
-void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
+void Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs (void)
   {
-   /***** Put link to register students *****/
+   /***** Put link to enrol students *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
       if (!Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				 1 << Rol_STD))	// No students in course
@@ -187,15 +202,15 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
   }
 
 /*****************************************************************************/
-/****************** Put inline button to register students *******************/
+/******************** Put inline button to enrol students ********************/
 /*****************************************************************************/
 
-void Enr_PutButtonInlineToRegisterStds (long CrsCod,
+void Enr_PutButtonInlineToEnrolStds (long CrsCod,
 				        unsigned Level,const Lay_LastItem_t *IsLastItemInLevel,
 					Lay_Highlight_t Highlight)
   {
    extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
-   extern const char *Txt_Register_students;
+   extern const char *Txt_Enrol_students;
 
    if (Rol_GetMyRoleInCrs (CrsCod) == Rol_TCH)	// I am a teacher in the given course
       if (!Enr_GetNumUsrsInCrss (Hie_CRS,CrsCod,
@@ -206,7 +221,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod,
 					Lay_NO_HORIZONTAL_LINE_AT_RIGHT);
 	    Frm_BeginForm (ActReqEnrSevStd);
 	       ParCod_PutPar (ParCod_Crs,CrsCod);
-	       Btn_PutCreateButtonInline (Txt_Register_students);
+	       Btn_PutCreateButtonInline (Txt_Enrol_students);
 	    Frm_EndForm ();
 	 HTM_LI_End ();
 	}
@@ -266,13 +281,13 @@ void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole)
   }
 
 /*****************************************************************************/
-/*********************** Register user in current course *********************/
+/************************* Enrol user in current course **********************/
 /*****************************************************************************/
 // Before calling this function, you must be sure that
 // the user does not belong to the current course
 
-void Enr_RegisterUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
-                                  Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
+void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
+                               Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
    /***** Trivial check 1: current course code should be > 0 *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
@@ -289,11 +304,11 @@ void Enr_RegisterUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
          Err_WrongRoleExit ();
      }
 
-   /***** Register user in current course in database *****/
+   /***** Enrol user in current course in database *****/
    Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                                  NewRole,KeepOrSetAccepted);
 
-   /***** Register last prefs in current course in database *****/
+   /***** Create last prefs in current course in database *****/
    Set_DB_InsertUsrInCrsSettings (UsrDat->UsrCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Flush caches *****/
@@ -311,7 +326,7 @@ void Enr_RegisterUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
   }
 
 /*****************************************************************************/
-/********* Create notification after register user in current course *********/
+/********* Create notification after enrolling user in current course ********/
 /*****************************************************************************/
 
 static void Enr_NotifyAfterEnrolment (const struct Usr_Data *UsrDat,
@@ -385,10 +400,10 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (v
   }
 
 /*****************************************************************************/
-/****** Request acceptation / refusion of register in current course *********/
+/****** Request acceptation / refusion of enrolment in current course ********/
 /*****************************************************************************/
 
-void Enr_ReqAcceptRegisterInCrs (void)
+void Enr_ReqAcceptEnrolmentInCrs (void)
   {
    extern const char *Hlp_USERS_SignUp_confirm_enrolment;
    extern const char *Txt_Enrolment;
@@ -420,14 +435,14 @@ void Enr_ReqAcceptRegisterInCrs (void)
 		     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
 		     Gbl.Hierarchy.Node[Hie_CRS].FullName);
 
-      /***** Send button to accept register in the current course *****/
+      /***** Send button to accept enrolment in the current course *****/
       if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept);
 	 Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
       Frm_EndForm ();
 
-      /***** Send button to refuse register in the current course *****/
+      /***** Send button to refuse enrolment in the current course *****/
       if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse)
 	 Err_WrongRoleExit ();
       Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse);
@@ -519,22 +534,22 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
       case Rol_GST:
       case Rol_STD:
       case Rol_NET:
-	 Enr_AskIfRegRemMe (Role);
+	 Enr_AskIfEnrRemMe (Role);
 	 break;
       case Rol_TCH:
 	 if (Gbl.Hierarchy.Level == Hie_CRS && Role == Rol_STD)
-	    Enr_ShowFormRegRemSeveralUsrs (Rol_STD);
+	    Enr_ShowFormEnrRemSeveralUsrs (Rol_STD);
 	 else
-	    Enr_AskIfRegRemMe (Rol_TCH);
+	    Enr_AskIfEnrRemMe (Rol_TCH);
 	 break;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 if (Gbl.Hierarchy.Level == Hie_CRS)
-	    Enr_ShowFormRegRemSeveralUsrs (Role);
+	    Enr_ShowFormEnrRemSeveralUsrs (Role);
 	 else
-	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
+	    Enr_ReqAnotherUsrIDToEnrolRemove (Role);
 	 break;
       default:
 	 Err_NoPermissionExit ();
@@ -543,10 +558,10 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/***** Register/remove users (taken from a list) in/from current course ******/
+/******* Enrol/remove users (taken from a list) in/from current course *******/
 /*****************************************************************************/
 
-static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
+static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Administration_administer_multiple_users;
    extern const char *Txt_Administer_multiple_students;
@@ -555,7 +570,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Step_1_Provide_a_list_of_users;
    extern const char *Txt_Step_2_Select_the_desired_action;
    extern const char *Txt_Step_3_Optionally_select_groups;
-   extern const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_;
+   extern const char *Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_4_Confirm_the_enrolment_removing;
    extern const char *Txt_Confirm;
@@ -622,13 +637,13 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	    Enr_PutUsrsClipboard ();
 	 HTM_TABLE_End ();
 
-	 /***** Step 2: Put different actions to register/remove users to/from current course *****/
+	 /***** Step 2: Put different actions to enrol/remove users to/from current course *****/
 	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Step_2_Select_the_desired_action);
 	 HTM_DIV_End ();
-	 Enr_PutActionsRegRemSeveralUsrs ();
+	 Enr_PutActionsEnrRemSeveralUsrs ();
 
-	 /***** Step 3: Select groups in which register / remove users *****/
+	 /***** Step 3: Select groups in which enrol/remove users *****/
 	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Step_3_Optionally_select_groups);
 	 HTM_DIV_End ();
@@ -636,7 +651,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	   {
 	    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
 	      {
-	       Ale_ShowAlert (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_);
+	       Ale_ShowAlert (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_enrol_remove_users_);
 	       Grp_ShowLstGrpsToChgOtherUsrsGrps (-1L);
 	      }
 	    else
@@ -645,7 +660,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Node[Hie_CRS].FullName);
 	   }
 
-	 /***** Step 4: Confirm register / remove students *****/
+	 /***** Step 4: Confirm enrol / remove students *****/
 	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_GetSuffix ());
 	    HTM_Txt (Txt_Step_4_Confirm_the_enrolment_removing);
 	 HTM_DIV_End ();
@@ -845,36 +860,36 @@ static void Enr_PutUsrsClipboard (void)
   }
 
 /*****************************************************************************/
-/*** Put different actions to register/remove users to/from current course ***/
+/**** Put different actions to enrol/remove users to/from current course *****/
 /*****************************************************************************/
 
-static void Enr_PutActionsRegRemSeveralUsrs (void)
+static void Enr_PutActionsEnrRemSeveralUsrs (void)
   {
-   extern const char *Txt_Register_the_users_indicated_in_step_1;
+   extern const char *Txt_Enrol_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_not_indicated_in_step_1;
-   extern const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated;
+   extern const char *Txt_Enrol_the_users_indicated_in_step_1_and_remove_the_users_not_indicated;
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Begin list of options *****/
    HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
-      /***** Register / remove users listed or not listed *****/
+      /***** Enrol / remove users listed or not listed *****/
       if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	{
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",
+	       HTM_INPUT_RADIO ("EnrRemAction",
 			        HTM_CHECKED,
 				" value=\"%u\"",
-				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
-	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1);
+				(unsigned) Enr_ENROL_SPECIFIED_USRS_IN_CRS);
+	       HTM_Txt (Txt_Enrol_the_users_indicated_in_step_1);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",
+	       HTM_INPUT_RADIO ("EnrRemAction",
 				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
@@ -884,7 +899,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",
+	       HTM_INPUT_RADIO ("EnrRemAction",
 				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
@@ -894,11 +909,11 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",
+	       HTM_INPUT_RADIO ("EnrRemAction",
 				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_UPDATE_USRS_IN_CRS);
-	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
+	       HTM_Txt (Txt_Enrol_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
 	    HTM_LABEL_End ();
 	 HTM_LI_End ();
 	}
@@ -908,7 +923,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 	{
 	 HTM_LI_Begin (NULL);
 	    HTM_LABEL_Begin (NULL);
-	       HTM_INPUT_RADIO ("RegRemAction",
+	       HTM_INPUT_RADIO ("EnrRemAction",
 				HTM_NO_ATTR,
 				" value=\"%u\"",
 				(unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
@@ -922,7 +937,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
   }
 
 /*****************************************************************************/
-/******* Receive the list of users of the course to register/remove **********/
+/********** Receive the list of users of the course to enrol/remove **********/
 /*****************************************************************************/
 
 void Enr_ReceiveAdminStds (void)
@@ -942,44 +957,33 @@ void Enr_ReceiveAdminTchs (void)
 
 static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
   {
-   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
-   extern const char *Txt_No_user_has_been_eliminated;
-   extern const char *Txt_One_user_has_been_eliminated;
-   extern const char *Txt_No_user_has_been_removed;
-   extern const char *Txt_One_user_has_been_removed;
-   extern const char *Txt_X_users_have_been_eliminated;
-   extern const char *Txt_X_users_have_been_removed;
-   extern const char *Txt_No_user_has_been_enroled;
-   extern const char *Txt_One_user_has_been_enroled;
-   extern const char *Txt_X_users_have_been_enroled_including_possible_repetitions;
+   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group;
    struct
      {
       bool RemoveUsrs;
       bool RemoveSpecifiedUsrs;
       bool EliminateUsrs;
-      bool RegisterUsrs;
+      bool EnrolUsrs;
      } WhatToDo;
    char *ListUsrsIDs;
-   unsigned NumUsr;
-   unsigned NumUsrsRegistered = 0;
+   unsigned NumUsrsEnroled = 0;
    unsigned NumUsrsRemoved = 0;
-   unsigned NumUsrsEliminated = 0;
    struct ListCodGrps LstGrps;
    struct Usr_Data UsrDat;
-   Enr_RegRemUsrsAction_t RegRemUsrsAction;
+   Enr_EnrRemUsrsAction_t EnrRemUsrsAction;
    bool SelectionIsValid = true;
 
-   /***** Check the role of users to register / remove *****/
+   /***** Check the role of users to enrol/remove *****/
    switch (Role)
      {
       case Rol_STD:
-	 if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)		// Can I register/remove students?
+	 if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)		// Can I enrol/remove students?
 	    // No, I can not
 	    Err_NoPermissionExit ();
 	 break;
       case Rol_NET:
       case Rol_TCH:
-	 if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)	// Can I register/remove teachers?
+	 if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)	// Can I enrol/remove teachers?
 	    // No, I can not
 	    Err_NoPermissionExit ();
 	 break;
@@ -993,73 +997,73 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
       return;
 
    /***** Get the action to do *****/
-   WhatToDo.RemoveUsrs = false;
-   WhatToDo.RemoveSpecifiedUsrs = false;
-   WhatToDo.EliminateUsrs = false;
-   WhatToDo.RegisterUsrs = false;
+   WhatToDo.RemoveUsrs		=
+   WhatToDo.RemoveSpecifiedUsrs	=
+   WhatToDo.EliminateUsrs	=
+   WhatToDo.EnrolUsrs		= false;
 
-   RegRemUsrsAction = (Enr_RegRemUsrsAction_t)
-	              Par_GetParUnsignedLong ("RegRemAction",
+   EnrRemUsrsAction = (Enr_EnrRemUsrsAction_t)
+	              Par_GetParUnsignedLong ("EnrRemAction",
                                               0,
-                                              Enr_NUM_REG_REM_USRS_ACTIONS - 1,
-                                              (unsigned long) Enr_REG_REM_USRS_UNKNOWN_ACTION);
-   switch (RegRemUsrsAction)
+                                              Enr_NUM_ENR_REM_USRS_ACTIONS - 1,
+                                              (unsigned long) Enr_ENR_REM_USRS_UNKNOWN_ACTION);
+   switch (EnrRemUsrsAction)
      {
-      case Enr_REGISTER_SPECIFIED_USRS_IN_CRS:
-	 WhatToDo.RemoveUsrs = false;
-	 WhatToDo.RemoveSpecifiedUsrs = false;	// Ignored
-	 WhatToDo.EliminateUsrs = false;	// Ignored
-	 WhatToDo.RegisterUsrs = true;
+      case Enr_ENROL_SPECIFIED_USRS_IN_CRS:
+	 WhatToDo.RemoveUsrs		= false;
+	 WhatToDo.RemoveSpecifiedUsrs	= false;	// Ignored
+	 WhatToDo.EliminateUsrs		= false;	// Ignored
+	 WhatToDo.EnrolUsrs		= true;
 	 break;
       case Enr_REMOVE_SPECIFIED_USRS_FROM_CRS:
-	 WhatToDo.RemoveUsrs = true;
-	 WhatToDo.RemoveSpecifiedUsrs = true;
-	 WhatToDo.EliminateUsrs = false;
-	 WhatToDo.RegisterUsrs = false;
+	 WhatToDo.RemoveUsrs		= true;
+	 WhatToDo.RemoveSpecifiedUsrs	= true;
+	 WhatToDo.EliminateUsrs		= false;
+	 WhatToDo.EnrolUsrs		= false;
 	 break;
       case Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS:
-	 WhatToDo.RemoveUsrs = true;
-	 WhatToDo.RemoveSpecifiedUsrs = false;
-	 WhatToDo.EliminateUsrs = false;
-	 WhatToDo.RegisterUsrs = false;
+	 WhatToDo.RemoveUsrs		= true;
+	 WhatToDo.RemoveSpecifiedUsrs	= false;
+	 WhatToDo.EliminateUsrs		= false;
+	 WhatToDo.EnrolUsrs		= false;
 	 break;
       case Enr_UPDATE_USRS_IN_CRS:
-	 WhatToDo.RemoveUsrs = true;
-	 WhatToDo.RemoveSpecifiedUsrs = false;
-	 WhatToDo.EliminateUsrs = false;
-	 WhatToDo.RegisterUsrs = true;
+	 WhatToDo.RemoveUsrs		= true;
+	 WhatToDo.RemoveSpecifiedUsrs	= false;
+	 WhatToDo.EliminateUsrs		= false;
+	 WhatToDo.EnrolUsrs		= true;
 	 break;
       case Enr_ELIMINATE_USRS_FROM_PLATFORM:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
-	    WhatToDo.RemoveUsrs = true;
-	    WhatToDo.RemoveSpecifiedUsrs = true;
-	    WhatToDo.EliminateUsrs = true;
-	    WhatToDo.RegisterUsrs = false;
+	    WhatToDo.RemoveUsrs		= true;
+	    WhatToDo.RemoveSpecifiedUsrs= true;
+	    WhatToDo.EliminateUsrs	= true;
+	    WhatToDo.EnrolUsrs		= false;
 	   }
 	 else
 	    Err_NoPermissionExit ();
 	 break;
       default:
-	 Err_ShowErrorAndExit ("Wrong registering / removing specification.");
+	 Err_ShowErrorAndExit ("Wrong enrolment / removing specification.");
 	 break;
      }
 
-   /***** Get groups to which register/remove users *****/
+   /***** Get groups to which remove/enrol users *****/
    LstGrps.NumGrps = 0;
    if (Gbl.Crs.Grps.NumGrps) // This course has groups?
      {
       /***** Get list of groups types and groups in current course *****/
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-      /***** Get the list of groups to which register/remove students *****/
+      /***** Get the list of groups to which enrol/remove students *****/
       LstGrps.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
       LstGrps.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
       Grp_GetLstCodsGrpWanted (&LstGrps);
 
       /***** A student can't belong to more than one group
-             when the type of group only allows to register in one group *****/
-      if (WhatToDo.RegisterUsrs)
+             when the type of group only allows to enrol in one group *****/
+      if (WhatToDo.EnrolUsrs)
         {
 	 switch (Role)
 	   {
@@ -1094,88 +1098,52 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
       /***** Remove users *****/
       if (WhatToDo.RemoveUsrs)
 	{
-	 /***** Get list of users in current course *****/
+	 /* Get list of users in current course */
 	 Usr_GetListUsrs (Hie_CRS,Role);
 
 	 if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
 	   {
-	    /***** Loop 1: Initialize list of users to remove *****/
-	    for (NumUsr = 0;
-		 NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		 NumUsr++)
-	       Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = !WhatToDo.RemoveSpecifiedUsrs;
+	    /* Loop 1: Initialize list of users to remove */
+	    Enr_initializeLstUsrsToBeRemoved (Role,WhatToDo.RemoveSpecifiedUsrs);
 
-	    /***** Loop 2: go through form list setting if a user must be removed *****/
-	    /* Update list of users to be removed
-	       using the form with IDs, nicks and emails */
-	    Enr_UpdateLstUsrsToBeRemovedUsingTextarea (&UsrDat,Role,
-						       WhatToDo.RemoveSpecifiedUsrs,
-						       ListUsrsIDs);
+	    /* Loop 2: Go through form list setting if a user must be removed */
+	    /* 2.1: Update list of users to be removed
+		    using the form with IDs, nicks and emails */
+	    Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Role,WhatToDo.RemoveSpecifiedUsrs,
+						       &UsrDat,ListUsrsIDs);
 
-	    /* Update list of users to be removed
-	       using list of users selected from clipboard */
-	    Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (&UsrDat,Role,
-							   WhatToDo.RemoveSpecifiedUsrs);
+	    /* 2.2: Update list of users to be removed
+		    using list of users selected from clipboard */
+	    Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Role,WhatToDo.RemoveSpecifiedUsrs,
+							   &UsrDat);
 
-	    /***** Loop 3: go through users list removing users *****/
-	    for (NumUsr = 0;
-		 NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-		 NumUsr++)
-	       if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove)        // If this student must be removed
-		 {
-		  UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-							       Usr_DONT_GET_PREFS,
-							       Usr_DONT_GET_ROLE_IN_CRS))
-		    {
-		     // User's data exist...
-		     if (WhatToDo.EliminateUsrs)                // Eliminate user completely from the platform
-		       {
-			Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);                // Remove definitely the user from the platform
-			NumUsrsEliminated++;
-		       }
-		     else
-		       {
-			if (Gbl.Crs.Grps.NumGrps)        // If there are groups in the course
-			  {
-			   if (LstGrps.NumGrps)        // If the teacher has selected groups
-			     {
-			      if (Grp_RemoveUsrFromGroups (&UsrDat,&LstGrps))                // Remove user from the selected groups, not from the whole course
-				 NumUsrsRemoved++;
-			     }
-			   else        // The teacher has not selected groups
-			     {
-			      Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
-							    Enr_DO_NOT_REMOVE_USR_PRODUCTION,
-							    Cns_QUIET);        // Remove user from the course
-			      NumUsrsRemoved++;
-			     }
-			  }
-			else        // No groups
-			  {
-			   Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
-							 Enr_DO_NOT_REMOVE_USR_PRODUCTION,
-							 Cns_QUIET);        // Remove user from the course
-			   NumUsrsRemoved++;
-			  }
-		       }
-		    }
-		 }
+	    /* Loop 3: Go through list removing users */
+	    Enr_RemoveUsrsMarkedToBeRemoved (Role,WhatToDo.EliminateUsrs,
+					     &UsrDat,&LstGrps,&NumUsrsRemoved);
 	   }
 
-	 /***** Free memory for users list *****/
+	 /* Free memory for users list */
 	 Usr_FreeUsrsList (Role);
+
+	 /* Move unused contents of messages to table of deleted contents of messages */
+	 if (WhatToDo.EliminateUsrs && NumUsrsRemoved)
+	    Msg_DB_MoveUnusedMsgsContentToDeleted ();
+
+         /* Write messages */
+	 Enr_ShowMessageRemoved (NumUsrsRemoved,WhatToDo.EliminateUsrs);
 	}
 
-      /***** Register users *****/
-      if (WhatToDo.RegisterUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
+      /***** Enrol users *****/
+      if (WhatToDo.EnrolUsrs)	// TODO: !!!!! NO CAMBIAR EL ROL DE LOS USUARIOS QUE YA ESTÉN EN LA ASIGNATURA SI HAY MÁS DE UN USUARIO ENCONTRADO PARA EL MISMO DNI !!!!!!
 	{
-	 /* Register users found in the form with IDs, nicks and emails */
-	 Enr_RegisterUsrsFoundInTextarea (&UsrDat,Role,&LstGrps,&NumUsrsRegistered,
-					  ListUsrsIDs);
+	 /* Enrol users found in the form with IDs, nicks and emails */
+	 Enr_EnrolUsrsFoundInTextarea (Role,ListUsrsIDs,&UsrDat,&LstGrps,&NumUsrsEnroled);
 
-	 /* Register users selected from clipboard */
-	 Enr_RegisterSelectedUsrs (&UsrDat,Role,&LstGrps,&NumUsrsRegistered);
+	 /* Enrol users selected from clipboard */
+	 Enr_EnrolSelectedUsrs (Role,&UsrDat,&LstGrps,&NumUsrsEnroled);
+
+	 /* Write messages */
+	 Enr_ShowMessageEnroled (NumUsrsEnroled);
 	}
 
       /***** Free memory used for user's data *****/
@@ -1186,62 +1154,12 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 
       /***** Free memory used by the list of user's IDs *****/
       free (ListUsrsIDs);
-
-      /***** Move unused contents of messages to table of deleted contents of messages *****/
-      if (NumUsrsEliminated)
-	 Msg_DB_MoveUnusedMsgsContentToDeleted ();
-
-      /***** Write messages with the number of users enroled/removed *****/
-      if (WhatToDo.RemoveUsrs)
-	{
-	 if (WhatToDo.EliminateUsrs)        // Eliminate completely from the platform
-	    switch (NumUsrsEliminated)
-	      {
-	       case 0:
-		  Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_eliminated);
-		  break;
-	       case 1:
-		  Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_eliminated);
-		  break;
-	       default:
-		  Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_eliminated,
-				 NumUsrsEliminated);
-		  break;
-	      }
-	 else                       	 // Only remove from course / groups
-	    switch (NumUsrsRemoved)
-	      {
-	       case 0:
-		  Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_removed);
-		  break;
-	       case 1:
-		  Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_removed);
-		  break;
-	       default:
-		  Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_removed,
-				 NumUsrsRemoved);
-		  break;
-	      }
-	}
-      if (WhatToDo.RegisterUsrs)
-	 switch (NumUsrsRegistered)
-	   {
-	    case 0:
-	       Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_enroled);
-	       break;
-	    case 1:
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_enroled);
-	       break;
-	    default:
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_enroled_including_possible_repetitions,
-			      NumUsrsRegistered);
-	       break;
-	   }
      }
    else	// Selection of groups not valid
-      Ale_ShowAlert (Ale_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
+      Ale_ShowAlert (Ale_WARNING,
+		     Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group);
 
-   /***** Free memory with the list of groups to/from which register/remove users *****/
+   /***** Free memory with the list of groups to/from which remove/enrol users *****/
    Grp_FreeListCodGrp (&LstGrps);
 
    /***** Free list of groups types and groups in current course *****/
@@ -1249,12 +1167,28 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
   }
 
 /*****************************************************************************/
+/******************** Initialize list of users to remove *********************/
+/*****************************************************************************/
+
+static void Enr_initializeLstUsrsToBeRemoved (Rol_Role_t Role,
+					      bool RemoveSpecifiedUsrs)
+  {
+   unsigned NumUsr;
+
+   for (NumUsr = 0;
+	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+	NumUsr++)
+      Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = !RemoveSpecifiedUsrs;
+  }
+
+/*****************************************************************************/
 /*************** Update list of users to be removed        *******************/
 /*************** using the form with IDs, nicks and emails *******************/
 /*****************************************************************************/
 
-static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
+static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
 						       bool RemoveSpecifiedUsrs,
+						       struct Usr_Data *UsrDat,
 						       char *ListUsrsIDs)
   {
    const char *Ptr;
@@ -1314,21 +1248,21 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (struct Usr_Data *UsrDat,R
 	{
 	 if (ListUsrCods.NumUsrs == 1)		// If more than one user found ==> do not remove
 	    for (NumUsr = 0;
-		 NumUsr < Gbl.Usrs.LstUsrs[RegRemRole].NumUsrs;
+		 NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 		 NumUsr++)
-	       if (Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].UsrCod == ListUsrCods.Lst[0])	// User found
-		  Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].Remove = true;	// Mark as removable
+	       if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod == ListUsrCods.Lst[0])	// User found
+		  Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = true;	// Mark as removable
 	}
       else	// Remove all users (of the role) except these specified
 	{
 	 for (NumUsr = 0;
-	      NumUsr < Gbl.Usrs.LstUsrs[RegRemRole].NumUsrs;
+	      NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 	      NumUsr++)
 	    for (NumUsrFound = 0;
 		 NumUsrFound < ListUsrCods.NumUsrs;
 		 NumUsrFound++)
-	       if (Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
-		  Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].Remove = false;	// Mark as not removable
+	       if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod == ListUsrCods.Lst[NumUsrFound])	// User found
+		  Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = false;	// Mark as not removable
 	}
 
       /* Free memory used for list of users' codes found for this ID */
@@ -1341,8 +1275,9 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (struct Usr_Data *UsrDat,R
 /************** using list of users selected from clipboard ******************/
 /*****************************************************************************/
 
-static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-							   bool RemoveSpecifiedUsrs)
+static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Rol_Role_t Role,
+							   bool RemoveSpecifiedUsrs,
+							   struct Usr_Data *UsrDat)
   {
    const char *Ptr;
    unsigned NumUsr;
@@ -1355,20 +1290,79 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (struct Usr_Data *UsrD
       Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
       if (UsrDat->UsrCod > 0)
 	 for (NumUsr = 0;
-	      NumUsr < Gbl.Usrs.LstUsrs[RegRemRole].NumUsrs;
+	      NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
 	      NumUsr++)
-	    if (Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].UsrCod == UsrDat->UsrCod)	// User found
-	       Gbl.Usrs.LstUsrs[RegRemRole].Lst[NumUsr].Remove = RemoveSpecifiedUsrs;
+	    if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod == UsrDat->UsrCod)	// User found
+	       Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove = RemoveSpecifiedUsrs;
      }
   }
 
 /*****************************************************************************/
-/******** Register users found in the form with IDs, nicks and emails ********/
+/****** Go through users list removing those users marked to be removed ******/
 /*****************************************************************************/
 
-static void Enr_RegisterUsrsFoundInTextarea (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-					     struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered,
-					     char *ListUsrsIDs)
+static void Enr_RemoveUsrsMarkedToBeRemoved (Rol_Role_t Role,
+					     bool EliminateUsrs,
+					     struct Usr_Data *UsrDat,
+					     struct ListCodGrps *LstGrps,
+					     unsigned *NumUsrsRemoved)
+  {
+   unsigned NumUsr;
+
+   /***** Loop 3: go through users list removing users *****/
+   for (NumUsr = 0;
+	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+	NumUsr++)
+      if (Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Remove)        // If this user is marked to be removed/eliminated
+	{
+	 UsrDat->UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
+						      Usr_DONT_GET_PREFS,
+						      Usr_DONT_GET_ROLE_IN_CRS))
+	   {	// User's data exist...
+	    if (EliminateUsrs)			// Eliminate user completely from the platform
+	      {
+	       Acc_CompletelyEliminateAccount (UsrDat,Cns_QUIET);	// Remove definitely the user from the platform
+	       (*NumUsrsRemoved)++;
+	      }
+	    else
+	      {
+	       if (Gbl.Crs.Grps.NumGrps)	// If there are groups in the course
+		 {
+		  if (LstGrps->NumGrps)		// If the teacher has selected groups
+		    {
+		     if (Grp_RemoveUsrFromGroups (UsrDat,LstGrps))	// Remove user from the selected groups, not from the whole course
+			(*NumUsrsRemoved)++;
+		    }
+		  else		// The teacher has not selected groups
+		    {
+		     Enr_EffectivelyRemUsrFromCrs (UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
+						   Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+						   Cns_QUIET);		// Remove user from the course
+		     (*NumUsrsRemoved)++;
+		    }
+		 }
+	       else		// No groups
+		 {
+		  Enr_EffectivelyRemUsrFromCrs (UsrDat,&Gbl.Hierarchy.Node[Hie_CRS],
+						Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+						Cns_QUIET);		// Remove user from the course
+		  (*NumUsrsRemoved)++;
+		 }
+	      }
+	   }
+	}
+  }
+
+/*****************************************************************************/
+/********* Enrol users found in the form with IDs, nicks and emails **********/
+/*****************************************************************************/
+
+static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
+					  char *ListUsrsIDs,
+					  struct Usr_Data *UsrDat,
+					  struct ListCodGrps *LstGrps,
+					  unsigned *NumUsrsEnroled)
   {
    const char *Ptr;
    bool ItLooksLikeAUsrID;
@@ -1427,17 +1421,17 @@ static void Enr_RegisterUsrsFoundInTextarea (struct Usr_Data *UsrDat,Rol_Role_t 
 	   }
 	}
 
-      /* Register user(s) */
+      /* Enrol user(s) */
       if (ListUsrCods.NumUsrs)	// User(s) found
 	 for (NumUsrFound = 0;
 	      NumUsrFound < ListUsrCods.NumUsrs;
 	      NumUsrFound++)
 	   {
 	    UsrDat->UsrCod = ListUsrCods.Lst[NumUsrFound];
-	    Enr_RegisterUsr (UsrDat,RegRemRole,LstGrps,NumUsrsRegistered);
+	    Enr_EnrolUsr (UsrDat,Role,LstGrps,NumUsrsEnroled);
 	   }
-      else if (ItLooksLikeAUsrID)	// User not found. He/she is a new user. Register him/her using ID
-	 Enr_RegisterUsr (UsrDat,RegRemRole,LstGrps,NumUsrsRegistered);
+      else if (ItLooksLikeAUsrID)	// User not found. He/she is a new user. Enrol him/her using ID
+	 Enr_EnrolUsr (UsrDat,Role,LstGrps,NumUsrsEnroled);
 
       /* Free memory used for list of users' codes found for this ID */
       Usr_FreeListUsrCods (&ListUsrCods);
@@ -1445,11 +1439,13 @@ static void Enr_RegisterUsrsFoundInTextarea (struct Usr_Data *UsrDat,Rol_Role_t 
    }
 
 /*****************************************************************************/
-/******************* Register users selected from clipboard ******************/
+/******************** Enrol users selected from clipboard ********************/
 /*****************************************************************************/
 
-static void Enr_RegisterSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-				      struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered)
+static void Enr_EnrolSelectedUsrs (Rol_Role_t Role,
+				   struct Usr_Data *UsrDat,
+				   struct ListCodGrps *LstGrps,
+				   unsigned *NumUsrsEnroled)
   {
    const char *Ptr;
 
@@ -1460,16 +1456,72 @@ static void Enr_RegisterSelectedUsrs (struct Usr_Data *UsrDat,Rol_Role_t RegRemR
 				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
       if (UsrDat->UsrCod > 0)
-	 Enr_RegisterUsr (UsrDat,RegRemRole,LstGrps,NumUsrsRegistered);
+	 Enr_EnrolUsr (UsrDat,Role,LstGrps,NumUsrsEnroled);
      }
   }
 
 /*****************************************************************************/
-/*** Put different actions to register/remove users to/from current course ***/
+/*********************** Write number of users removed ***********************/
+/*****************************************************************************/
+
+static void Enr_ShowMessageRemoved (unsigned NumUsrsRemoved,bool EliminateUsrs)
+  {
+   extern const char *Txt_No_user_has_been_eliminated;
+   extern const char *Txt_No_user_has_been_removed;
+   extern const char *Txt_One_user_has_been_eliminated;
+   extern const char *Txt_One_user_has_been_removed;
+   extern const char *Txt_X_users_have_been_eliminated;
+   extern const char *Txt_X_users_have_been_removed;
+
+   switch (NumUsrsRemoved)
+     {
+      case 0:
+	 Ale_ShowAlert (Ale_INFO,EliminateUsrs ? Txt_No_user_has_been_eliminated :
+						 Txt_No_user_has_been_removed);
+	 break;
+      case 1:
+	 Ale_ShowAlert (Ale_SUCCESS,EliminateUsrs ? Txt_One_user_has_been_eliminated :
+						    Txt_One_user_has_been_removed);
+	 break;
+      default:
+	 Ale_ShowAlert (Ale_SUCCESS,EliminateUsrs ? Txt_X_users_have_been_eliminated :
+						    Txt_X_users_have_been_removed,
+			NumUsrsRemoved);
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Write number of users enroled ***********************/
+/*****************************************************************************/
+
+static void Enr_ShowMessageEnroled (unsigned NumUsrsEnroled)
+  {
+   extern const char *Txt_No_user_has_been_enroled;
+   extern const char *Txt_One_user_has_been_enroled;
+   extern const char *Txt_X_users_have_been_enroled_including_possible_repetitions;
+
+   switch (NumUsrsEnroled)
+     {
+      case 0:
+	 Ale_ShowAlert (Ale_INFO,Txt_No_user_has_been_enroled);
+	 break;
+      case 1:
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_One_user_has_been_enroled);
+	 break;
+      default:
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_X_users_have_been_enroled_including_possible_repetitions,
+			NumUsrsEnroled);
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/***** Put different actions to enrol/remove users to/from current course ****/
 /*****************************************************************************/
 // Returns true if at least one action can be shown
 
-bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
+bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
   {
    bool OptionsShown = false;
    Usr_Belong_t UsrBelongsToCrs = Usr_DONT_BELONG;
@@ -1504,7 +1556,7 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
    /***** Begin list of options *****/
    HTM_UL_Begin ("class=\"LIST_LEFT FORM_IN_%s\"",The_GetSuffix ());
 
-      /***** Register user in course / Modify user's data *****/
+      /***** Enrol user in course / Modify user's data *****/
       if (Gbl.Hierarchy.Level == Hie_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
 	{
 	 Enr_PutActionModifyOneUsr (&Attributes,UsrBelongsToCrs,MeOrOther);
@@ -1516,25 +1568,25 @@ bool Enr_PutActionsRegRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	 if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	   {
 	    if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
-	       /***** Register user as administrator of degree *****/
+	       /***** Enrol user as administrator of degree *****/
 	       if (!UsrIsDegAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
 		 {
-		  Enr_PutActionRegOneDegAdm (&Attributes);
+		  Enr_PutActionEnrOneDegAdm (&Attributes);
 		  OptionsShown = true;
 		 }
 
-	    /***** Register user as administrator of center *****/
+	    /***** Enrol user as administrator of center *****/
 	    if (!UsrIsCtrAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
 	      {
-	       Enr_PutActionRegOneCtrAdm (&Attributes);
+	       Enr_PutActionEnrOneCtrAdm (&Attributes);
 	       OptionsShown = true;
 	      }
 	   }
 
-	 /***** Register user as administrator of institution *****/
+	 /***** Enrol user as administrator of institution *****/
 	 if (!UsrIsInsAdmin && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
-	    Enr_PutActionRegOneInsAdm (&Attributes);
+	    Enr_PutActionEnrOneInsAdm (&Attributes);
 	    OptionsShown = true;
 	   }
 	}
@@ -1605,64 +1657,64 @@ static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
                                        Usr_Belong_t UsrBelongsToCrs,
                                        Usr_MeOrOther_t MeOrOther)
   {
-   extern const char *Txt_Register_me_in_X;
-   extern const char *Txt_Register_USER_in_the_course_X;
+   extern const char *Txt_Enrol_me_in_X;
+   extern const char *Txt_Enrol_USER_in_the_course_X;
    extern const char *Txt_Modify_me_in_the_course_X;
    extern const char *Txt_Modify_user_in_the_course_X;
    const char *Txt[Usr_NUM_BELONG][Usr_NUM_ME_OR_OTHER] =
      {
-      [Usr_DONT_BELONG][Usr_ME   ] = Txt_Register_me_in_X,
-      [Usr_DONT_BELONG][Usr_OTHER] = Txt_Register_USER_in_the_course_X,
+      [Usr_DONT_BELONG][Usr_ME   ] = Txt_Enrol_me_in_X,
+      [Usr_DONT_BELONG][Usr_OTHER] = Txt_Enrol_USER_in_the_course_X,
       [Usr_BELONG     ][Usr_ME   ] = Txt_Modify_me_in_the_course_X,
       [Usr_BELONG     ][Usr_OTHER] = Txt_Modify_user_in_the_course_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,Attributes);
+   Enr_EnrRemOneUsrActionBegin (Enr_ENROL_MODIFY_ONE_USR_IN_CRS,Attributes);
       HTM_TxtF (Txt[UsrBelongsToCrs][MeOrOther],
 		Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
-/**************** Put action to register user as degree admin ****************/
+/****************** Put action to enrol user as degree admin *****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRegOneDegAdm (HTM_Attributes_t *Attributes)
+static void Enr_PutActionEnrOneDegAdm (HTM_Attributes_t *Attributes)
   {
-   extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
+   extern const char *Txt_Enrol_USER_as_an_administrator_of_the_degree_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_DEG_ADMIN,Attributes);
-      HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_degree_X,
+   Enr_EnrRemOneUsrActionBegin (Enr_ENROL_ONE_DEG_ADMIN,Attributes);
+      HTM_TxtF (Txt_Enrol_USER_as_an_administrator_of_the_degree_X,
 		Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
-/**************** Put action to register user as center admin ****************/
+/****************** Put action to enrol user as center admin *****************/
 /*****************************************************************************/
 
-static void Enr_PutActionRegOneCtrAdm (HTM_Attributes_t *Attributes)
+static void Enr_PutActionEnrOneCtrAdm (HTM_Attributes_t *Attributes)
   {
-   extern const char *Txt_Register_USER_as_an_administrator_of_the_center_X;
+   extern const char *Txt_Enrol_USER_as_an_administrator_of_the_center_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_CTR_ADMIN,Attributes);
-      HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_center_X,
+   Enr_EnrRemOneUsrActionBegin (Enr_ENROL_ONE_CTR_ADMIN,Attributes);
+      HTM_TxtF (Txt_Enrol_USER_as_an_administrator_of_the_center_X,
 		Gbl.Hierarchy.Node[Hie_CTR].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
-/************* Put action to register user as institution admin **************/
+/*************** Put action to enrol user as institution admin ***************/
 /*****************************************************************************/
 
-static void Enr_PutActionRegOneInsAdm (HTM_Attributes_t *Attributes)
+static void Enr_PutActionEnrOneInsAdm (HTM_Attributes_t *Attributes)
   {
-   extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Enrol_USER_as_an_administrator_of_the_institution_X;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_INS_ADMIN,Attributes);
-      HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_institution_X,
+   Enr_EnrRemOneUsrActionBegin (Enr_ENROL_ONE_INS_ADMIN,Attributes);
+      HTM_TxtF (Txt_Enrol_USER_as_an_administrator_of_the_institution_X,
 		Gbl.Hierarchy.Node[Hie_INS].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1673,9 +1725,9 @@ static void Enr_PutActionRepUsrAsDup (HTM_Attributes_t *Attributes)
   {
    extern const char *Txt_Report_possible_duplicate_user;
 
-   Enr_RegRemOneUsrActionBegin (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,Attributes);
+   Enr_EnrRemOneUsrActionBegin (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,Attributes);
       HTM_Txt (Txt_Report_possible_duplicate_user);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1693,9 +1745,9 @@ static void Enr_PutActionRemUsrFromCrs (HTM_Attributes_t *Attributes,
       [Usr_OTHER] = Txt_Remove_USER_from_THE_COURSE_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_USR_FROM_CRS,Attributes);
+   Enr_EnrRemOneUsrActionBegin (Enr_REMOVE_ONE_USR_FROM_CRS,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1713,9 +1765,9 @@ static void Enr_PutActionRemUsrAsDegAdm (HTM_Attributes_t *Attributes,
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_degree_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_DEG_ADMIN,Attributes);
+   Enr_EnrRemOneUsrActionBegin (Enr_REMOVE_ONE_DEG_ADMIN,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1733,9 +1785,9 @@ static void Enr_PutActionRemUsrAsCtrAdm (HTM_Attributes_t *Attributes,
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_center_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_CTR_ADMIN,Attributes);
+   Enr_EnrRemOneUsrActionBegin (Enr_REMOVE_ONE_CTR_ADMIN,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_CTR].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1753,9 +1805,9 @@ static void Enr_PutActionRemUsrAsInsAdm (HTM_Attributes_t *Attributes,
       [Usr_OTHER] = Txt_Remove_USER_as_an_administrator_of_the_institution_X,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_INS_ADMIN,Attributes);
+   Enr_EnrRemOneUsrActionBegin (Enr_REMOVE_ONE_INS_ADMIN,Attributes);
       HTM_TxtF (Txt[MeOrOther],Gbl.Hierarchy.Node[Hie_INS].ShrtName);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1773,45 +1825,45 @@ static void Enr_PutActionRemUsrAcc (HTM_Attributes_t *Attributes,
       [Usr_OTHER] = Txt_Eliminate_user_account,
      };
 
-   Enr_RegRemOneUsrActionBegin (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,Attributes);
+   Enr_EnrRemOneUsrActionBegin (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,Attributes);
       HTM_Txt (Txt[MeOrOther]);
-   Enr_RegRemOneUsrActionEnd ();
+   Enr_EnrRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
-/************ Put start/end of action to register/remove one user ************/
+/************** Put start/end of action to enrol/remove one user *************/
 /*****************************************************************************/
 
-static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
+static void Enr_EnrRemOneUsrActionBegin (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
                                          HTM_Attributes_t *Attributes)
   {
    HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO ("RegRemAction",
+	 HTM_INPUT_RADIO ("EnrRemAction",
 			  (*Attributes & HTM_CHECKED) ? HTM_NO_ATTR :
 							HTM_CHECKED,
-			  "value=\"%u\"",(unsigned) RegRemOneUsrAction);
+			  "value=\"%u\"",(unsigned) EnrRemOneUsrAction);
 	    *Attributes = HTM_CHECKED;
   }
 
-static void Enr_RegRemOneUsrActionEnd (void)
+static void Enr_EnrRemOneUsrActionEnd (void)
   {
       HTM_LABEL_End ();
    HTM_LI_End ();
   }
 
 /*****************************************************************************/
-/********************** Register a user using his/her ID *********************/
+/************************ Enrol a user using his/her ID **********************/
 /*****************************************************************************/
 // If user does not exists, UsrDat->IDs must hold the user's ID
 
-static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
-                             struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered)
+static void Enr_EnrolUsr (struct Usr_Data *UsrDat,Rol_Role_t Role,
+                          struct ListCodGrps *LstGrps,unsigned *NumUsrsEnroled)
   {
-   /***** Check if I can register this user *****/
+   /***** Check if I can enrol this user *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH &&
-       RegRemRole != Rol_STD)
-      Err_ShowErrorAndExit ("A teacher only can register several users as students.");
+       Role != Rol_STD)
+      Err_ShowErrorAndExit ("A teacher only can enrol several users as students.");
 
    /***** Check if the record of the user exists and get the type of user *****/
    if (UsrDat->UsrCod > 0)	// User exists in database
@@ -1829,30 +1881,30 @@ static void Enr_RegisterUsr (struct Usr_Data *UsrDat,Rol_Role_t RegRemRole,
       Acc_CreateNewUsr (UsrDat,Usr_OTHER);
      }
 
-   /***** Register user in current course in database *****/
+   /***** Enrol user in current course in database *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
       switch (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
 	{
          case Usr_BELONG:
-	    if (RegRemRole != UsrDat->Roles.InCurrentCrs)	// The role must be updated
+	    if (Role != UsrDat->Roles.InCurrentCrs)	// The role must be updated
 	       /* Modify role */
-	       Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole);
+	       Enr_ModifyRoleInCurrentCrs (UsrDat,Role);
 	    break;
          case Usr_DONT_BELONG:	// User does not belong to this course
          default:
-	    /* Register user */
-	    Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,
-					 Enr_SET_ACCEPTED_TO_FALSE);
+	    /* Enrol user */
+	    Enr_EnrolUsrInCurrentCrs (UsrDat,Role,
+				      Enr_SET_ACCEPTED_TO_FALSE);
 	    break;
 	}
 
-      /***** Register user in the selected groups *****/
+      /***** Enrol user in the selected groups *****/
       if (Gbl.Crs.Grps.NumGrps)	// If there are groups in the course
-	 Grp_RegisterUsrIntoGroups (UsrDat,LstGrps);
+	 Grp_EnrolUsrIntoGroups (UsrDat,LstGrps);
      }
 
-   (*NumUsrsRegistered)++;
+   (*NumUsrsEnroled)++;
   }
 
 /*****************************************************************************/
@@ -2202,7 +2254,7 @@ void Enr_RejectSignUp (void)
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
-   /* Show again the rest of registrarion requests */
+   /* Show again the rest of enrolment requests */
    Enr_ShowEnrolmentRequests ();
   }
 
@@ -2265,7 +2317,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Role;
    extern const char *Txt_Date;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Register;
+   extern const char *Txt_Enrol;
    extern const char *Txt_Reject;
    extern const char *Txt_No_enrolment_requests;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2463,7 +2515,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Frm_BeginForm (NextAction[DesiredRole]);
 			   ParCod_PutPar (ParCod_Crs,Crs.HieCod);
 			   Usr_PutParUsrCodEncrypted (UsrDat.EnUsrCod);
-			   Btn_PutCreateButtonInline (Txt_Register);
+			   Btn_PutCreateButtonInline (Txt_Enrol);
 			Frm_EndForm ();
 		     HTM_TD_End ();
 
@@ -2573,13 +2625,13 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 /************** Form to request the user's ID of another user ****************/
 /*****************************************************************************/
 
-void Enr_ReqRegRemOth (void)
+void Enr_ReqEnrRemOth (void)
   {
    /***** Form to request user to be administered *****/
-   Enr_ReqRegRemUsr (Rol_GST);
+   Enr_ReqEnrRemUsr (Rol_GST);
   }
 
-void Enr_ReqRegRemStd (void)
+void Enr_ReqEnrRemStd (void)
   {
    /***** Contextual menu *****/
    if (Adm_CheckIfICanAdminOtherUsrs () == Usr_CAN)
@@ -2590,27 +2642,27 @@ void Enr_ReqRegRemStd (void)
      }
 
    /***** Form to request user to be administered *****/
-   Enr_ReqRegRemUsr (Rol_STD);
+   Enr_ReqEnrRemUsr (Rol_STD);
   }
 
-void Enr_ReqRegRemTch (void)
+void Enr_ReqEnrRemTch (void)
   {
    /***** Form to request user to be administered *****/
-   Enr_ReqRegRemUsr (Rol_TCH);
+   Enr_ReqEnrRemUsr (Rol_TCH);
   }
 
-static void Enr_ReqRegRemUsr (Rol_Role_t Role)
+static void Enr_ReqEnrRemUsr (Rol_Role_t Role)
   {
    switch (Adm_CheckIfICanAdminOtherUsrs ())
      {
       case Usr_CAN:
 	 /***** Form to request the user's ID of another user *****/
-	 Enr_ReqAnotherUsrIDToRegisterRemove (Role);
+	 Enr_ReqAnotherUsrIDToEnrolRemove (Role);
 	 break;
       case Usr_CAN_NOT:
       default:
-	 /***** Form to request if register/remove me *****/
-	 Enr_AskIfRegRemMe (Role);
+	 /***** Form to request if enrol/remove me *****/
+	 Enr_AskIfEnrRemMe (Role);
 	 break;
      }
   }
@@ -2619,7 +2671,7 @@ static void Enr_ReqRegRemUsr (Rol_Role_t Role)
 /****** Write a form to request another user's ID, @nickname or email ********/
 /*****************************************************************************/
 
-static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
+static void Enr_ReqAnotherUsrIDToEnrolRemove (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Administration_administer_one_user;
    extern const char *Txt_Administer_one_user;
@@ -2645,10 +2697,10 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/********************** Ask me for register/remove me ************************/
+/************************ Ask me for enrol/remove me *************************/
 /*****************************************************************************/
 
-static void Enr_AskIfRegRemMe (Rol_Role_t Role)
+static void Enr_AskIfEnrRemMe (Rol_Role_t Role)
   {
    struct Usr_ListUsrCods ListUsrCods;
 
@@ -2658,29 +2710,29 @@ static void Enr_AskIfRegRemMe (Rol_Role_t Role)
    Usr_AllocateListUsrCods (&ListUsrCods);
    ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 
-   Enr_AskIfRegRemUsr (&ListUsrCods,Role);
+   Enr_AskIfEnrRemUsr (&ListUsrCods,Role);
   }
 
 /*****************************************************************************/
-/****************** Ask me for register/remove another user ******************/
+/******************** Ask me for enrol/remove another user *******************/
 /*****************************************************************************/
 
-void Enr_AskIfRegRemAnotherOth (void)
+void Enr_AskIfEnrRemAnotherOth (void)
   {
-   Enr_AskIfRegRemAnotherUsr (Rol_GST);
+   Enr_AskIfEnrRemAnotherUsr (Rol_GST);
   }
 
-void Enr_AskIfRegRemAnotherStd (void)
+void Enr_AskIfEnrRemAnotherStd (void)
   {
-   Enr_AskIfRegRemAnotherUsr (Rol_STD);
+   Enr_AskIfEnrRemAnotherUsr (Rol_STD);
   }
 
-void Enr_AskIfRegRemAnotherTch (void)
+void Enr_AskIfEnrRemAnotherTch (void)
   {
-   Enr_AskIfRegRemAnotherUsr (Rol_TCH);
+   Enr_AskIfEnrRemAnotherUsr (Rol_TCH);
   }
 
-static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
+static void Enr_AskIfEnrRemAnotherUsr (Rol_Role_t Role)
   {
    struct Usr_ListUsrCods ListUsrCods;
 
@@ -2699,14 +2751,14 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
 	     use user's ID to identify the user to be enroled /removed *****/
       Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (&ListUsrCods);
 
-   Enr_AskIfRegRemUsr (&ListUsrCods,Role);
+   Enr_AskIfEnrRemUsr (&ListUsrCods,Role);
   }
 
 /*****************************************************************************/
-/********************** Ask me for register/remove user **********************/
+/************************ Ask me for enrol/remove user ***********************/
 /*****************************************************************************/
 
-static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t Role)
+static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t Role)
   {
    extern const char *Txt_There_are_X_users_with_the_ID_Y;
    extern const char *Txt_The_user_is_new_not_yet_in_X;
@@ -2760,7 +2812,7 @@ static void Enr_AskIfRegRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
 	 /* Write message and request a new user's ID */
 	 Ale_ShowAlert (Ale_WARNING,Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID,
 		        Cfg_PLATFORM_SHORT_NAME);
-	 Enr_ReqRegRemUsr (Role);
+	 Enr_ReqEnrRemUsr (Role);
 	}
      }
   }
@@ -2916,7 +2968,7 @@ static Usr_Can_t Enr_CheckIfICanRemUsrFromCrs (void)
 /*************** Accept my enrolment in the current course ******************/
 /*****************************************************************************/
 
-void Enr_AcceptRegisterMeInCrs (void)
+void Enr_AcceptEnrolMeInCrs (void)
   {
    extern const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X;
 
@@ -2972,7 +3024,7 @@ void Enr_CreateNewUsr1 (void)
       Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = true;	// User's ID will be stored as confirmed
       Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,Usr_OTHER);
 
-      /***** Register user in current course in database *****/
+      /***** Enrol user in current course in database *****/
       if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	{
 	 switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
@@ -2995,9 +3047,9 @@ void Enr_CreateNewUsr1 (void)
 	       break;
 	    case Usr_DONT_BELONG:	// User does not belong to current course
 	    default:
-	       /* Register user */
-	       Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-					    Enr_SET_ACCEPTED_TO_FALSE);
+	       /* Enrol user */
+	       Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
+					 Enr_SET_ACCEPTED_TO_FALSE);
 
 	       /* Success message */
 	       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -3040,7 +3092,7 @@ void Enr_CreateNewUsr2 (void)
   }
 
 /*****************************************************************************/
-/**** Modify other user's data and register her/him in course and groups *****/
+/****** Modify other user's data and enrol her/him in course and groups ******/
 /*****************************************************************************/
 
 void Enr_ModifyUsr1 (void)
@@ -3065,14 +3117,14 @@ void Enr_ModifyUsr1 (void)
       MeOrOther = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Get the action to do *****/
-      Gbl.Usrs.RegRemAction = (Enr_RegRemOneUsrAction_t)
-	                      Par_GetParUnsignedLong ("RegRemAction",
+      Gbl.Usrs.EnrRemAction = (Enr_EnrRemOneUsrAction_t)
+	                      Par_GetParUnsignedLong ("EnrRemAction",
                                                       0,
-                                                      Enr_REG_REM_ONE_USR_NUM_ACTIONS - 1,
-                                                      (unsigned long) Enr_REG_REM_ONE_USR_UNKNOWN_ACTION);
-      switch (Gbl.Usrs.RegRemAction)
+                                                      Enr_ENR_REM_ONE_USR_NUM_ACTIONS - 1,
+                                                      (unsigned long) Enr_ENR_REM_ONE_USR_UNKNOWN_ACTION);
+      switch (Gbl.Usrs.EnrRemAction)
 	{
-	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
+	 case Enr_ENROL_MODIFY_ONE_USR_IN_CRS:
 	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	      {
 	       /***** Get user's name from record form *****/
@@ -3087,7 +3139,7 @@ void Enr_ModifyUsr1 (void)
 		  /***** Get new role from record form *****/
 		  NewRole = Rec_GetRoleFromRecordForm ();
 
-		  /***** Register user in current course in database *****/
+		  /***** Enrol user in current course in database *****/
 		  switch (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 		    {
 		     case Usr_BELONG:
@@ -3108,9 +3160,9 @@ void Enr_ModifyUsr1 (void)
 			break;
 		     case Usr_DONT_BELONG:	// User does not belong to current course
 		     default:
-			/* Register user */
-			Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
-						     Enr_SET_ACCEPTED_TO_FALSE);
+			/* Enrol user */
+			Enr_EnrolUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
+						  Enr_SET_ACCEPTED_TO_FALSE);
 
 			/* Set success message */
 			Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -3142,15 +3194,15 @@ void Enr_ModifyUsr1 (void)
 	    else
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REGISTER_ONE_DEG_ADMIN:
+	 case Enr_ENROL_ONE_DEG_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REGISTER_ONE_CTR_ADMIN:
+	 case Enr_ENROL_ONE_CTR_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_REGISTER_ONE_INS_ADMIN:
+	 case Enr_ENROL_ONE_INS_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -3198,22 +3250,22 @@ void Enr_ModifyUsr2 (void)
       Enr_ShowFormToEditOtherUsr ();
      }
    else // No error
-      switch (Gbl.Usrs.RegRemAction)
+      switch (Gbl.Usrs.EnrRemAction)
 	{
-	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
+	 case Enr_ENROL_MODIFY_ONE_USR_IN_CRS:
             /***** Show possible alerts *****/
             Ale_ShowAlerts (NULL);
 
             /***** Show form to edit user again *****/
 	    Enr_ShowFormToEditOtherUsr ();
 	    break;
-	 case Enr_REGISTER_ONE_DEG_ADMIN:
+	 case Enr_ENROL_ONE_DEG_ADMIN:
 	    Adm_ReqAddAdm (Hie_DEG);
 	    break;
-	 case Enr_REGISTER_ONE_CTR_ADMIN:
+	 case Enr_ENROL_ONE_CTR_ADMIN:
 	    Adm_ReqAddAdm (Hie_CTR);
 	    break;
-	 case Enr_REGISTER_ONE_INS_ADMIN:
+	 case Enr_ENROL_ONE_INS_ADMIN:
 	    Adm_ReqAddAdm (Hie_INS);
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:

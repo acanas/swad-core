@@ -364,7 +364,7 @@ static void Dup_PutButtonToEliminateUsrAccount (const struct Usr_Data *UsrDat)
 
    Frm_BeginForm (ActUpdOth);
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-      Par_PutParUnsigned (NULL,"RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
+      Par_PutParUnsigned (NULL,"EnrRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
       Btn_PutRemoveButtonInline (Txt_Eliminate_user_account);
    Frm_EndForm ();
   }

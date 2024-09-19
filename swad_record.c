@@ -2004,7 +2004,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Teachers_shared_record_card;
    extern const char *Txt_Sign_up;
    extern const char *Txt_Save_changes;
-   extern const char *Txt_Register;
+   extern const char *Txt_Enrol;
    extern const char *Txt_Confirm;
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
@@ -2238,7 +2238,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		  case Rec_SHA_OTHER_NEW_USR_FORM:
 		     if (Gbl.Crs.Grps.NumGrps) // This course has groups?
 			Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-		     Btn_PutConfirmButton (Txt_Register);
+		     Btn_PutConfirmButton (Txt_Enrol);
 		     Frm_EndForm ();
 		     break;
 		  case Rec_SHA_OTHER_EXISTING_USR_FORM:
@@ -2257,7 +2257,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			  }
 
 		     /***** Which action, register or removing? *****/
-		     if (Enr_PutActionsRegRemOneUsr (MeOrOther))
+		     if (Enr_PutActionsEnrRemOneUsr (MeOrOther))
 			Btn_PutConfirmButton (Txt_Confirm);
 
 		     Frm_EndForm ();

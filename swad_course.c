@@ -1599,7 +1599,7 @@ static void Crs_PutButtonToGoToCrs (void)
 
 static void Crs_PutButtonToRegisterInCrs (void)
   {
-   extern const char *Txt_Register_me_in_X;
+   extern const char *Txt_Enrol_me_in_X;
    char *TxtButton;
 
    Frm_BeginForm (ActReqSignUp);
@@ -1607,7 +1607,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
       if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
 
-      if (asprintf (&TxtButton,Txt_Register_me_in_X,Crs_EditingCrs->ShrtName) < 0)
+      if (asprintf (&TxtButton,Txt_Enrol_me_in_X,Crs_EditingCrs->ShrtName) < 0)
 	 Err_NotEnoughMemoryExit ();
       Btn_PutCreateButton (TxtButton);
       free (TxtButton);

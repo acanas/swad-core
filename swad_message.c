@@ -296,7 +296,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 						    "CopyMessageToHiddenFields();");
 
 		  /***** Put link to register students *****/
-		  Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+		  Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
 
 		  /***** Check if it's a big list *****/
 		  ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,

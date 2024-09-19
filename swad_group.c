@@ -97,9 +97,9 @@ static bool Grp_CheckIfNotClosedOrFull (struct ListCodGrps *LstGrpsWant,
 static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
 				   struct ListCodGrps *LstGrpsWant,
 				   struct ListCodGrps *LstGrpsBelong);
-static void Grp_RegisterUsrInGrps (Usr_MeOrOther_t MeOrOther,
-				   struct ListCodGrps *LstGrpsWant,
-				   struct ListCodGrps *LstGrpsBelong);
+static void Grp_EnrolUsrInGrps (Usr_MeOrOther_t MeOrOther,
+				struct ListCodGrps *LstGrpsWant,
+				struct ListCodGrps *LstGrpsBelong);
 
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
@@ -651,7 +651,7 @@ void Grp_ChangeMyGrpsAndShowChanges (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show again the table of selection of groups with the changes already made *****/
-   Grp_ReqRegisterInGrps ();
+   Grp_ReqEnrolInGrps ();
   }
 
 /*****************************************************************************/
@@ -662,7 +662,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
   {
    extern const char *Txt_The_requested_group_changes_were_successful;
    extern const char *Txt_There_has_been_no_change_in_groups;
-   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
+   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct ListCodGrps LstGrpsUsrWants;
    bool SelectionIsValid = true;
@@ -675,7 +675,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
    /***** Get list of groups types and groups in current course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Get the list of groups to which register this user *****/
+   /***** Get the list of groups to which enrol this user *****/
    LstGrpsUsrWants.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
    LstGrpsUsrWants.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
@@ -701,7 +701,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
    // ...in order to get them again when changing groups atomically
    Grp_FreeListGrpTypesAndGrps ();
 
-   /***** Register user in the selected groups *****/
+   /***** Enrol user in the selected groups *****/
    if (SelectionIsValid)
      {
       ChangesMade = Grp_ChangeGrpsAtomically (MeOrOther,&LstGrpsUsrWants);
@@ -717,9 +717,9 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
      }
    else if (Verbose == Cns_VERBOSE)
       Ale_CreateAlert (Ale_WARNING,NULL,
-		       Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
+		       Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_enroled_in_more_than_one_group);
 
-   /***** Free memory with the list of groups to/from which register/remove users *****/
+   /***** Free memory with the list of groups to/from which enrol/remove users *****/
    Grp_FreeListCodGrp (&LstGrpsUsrWants);
   }
 
@@ -735,7 +735,7 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
    struct ListCodGrps LstGrpsUsrBelongs;
    bool SelectionIsValid;
 
-   /***** Lock tables to make the registration atomic *****/
+   /***** Lock tables to make the enrolment atomic *****/
    if (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
       Grp_DB_LockTables ();
 
@@ -762,7 +762,7 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
 
       /***** Go across the list of groups wanted,
 	     adding user to those groups to which user doesn't belong to *****/
-      Grp_RegisterUsrInGrps (MeOrOther,LstGrpsUsrWants,&LstGrpsUsrBelongs);
+      Grp_EnrolUsrInGrps (MeOrOther,LstGrpsUsrWants,&LstGrpsUsrBelongs);
      }
 
    /***** Unlock tables after changes in groups *****/
@@ -781,7 +781,7 @@ bool Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
 /*****************************************************************************/
 /********* Go across the list of groups I belong to,               ***********/
 /********* removing me from those open groups that are not present ***********/
-/********* in the received list of groups I want to register in    ***********/
+/********* in the received list of groups I want to enrol in       ***********/
 /*****************************************************************************/
 // Return true is selection is valid
 
@@ -894,11 +894,11 @@ static void Grp_RemoveUsrFromGrps (Usr_MeOrOther_t MeOrOther,
   }
 
 /*****************************************************************************/
-/***** Go across the received list of groups that I want to register in, *****/
-/***** adding me to those groups that I don't belong to                  *****/
+/****** Go across the received list of groups that I want to enrol in, *******/
+/****** adding me to those groups that I don't belong to               *******/
 /*****************************************************************************/
 
-static void Grp_RegisterUsrInGrps (Usr_MeOrOther_t MeOrOther,
+static void Grp_EnrolUsrInGrps (Usr_MeOrOther_t MeOrOther,
 				   struct ListCodGrps *LstGrpsWant,
 				   struct ListCodGrps *LstGrpsBelong)
   {
@@ -1033,10 +1033,10 @@ static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Alr
   }
 
 /*****************************************************************************/
-/******************* Register user in the groups of a list *******************/
+/********************* Enrol user in the groups of a list ********************/
 /*****************************************************************************/
 
-void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps)
+void Grp_EnrolUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstGrps)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged;
    extern const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z;
@@ -1050,7 +1050,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
    long GrpCodSel;
    long GrpCodBelong;
    Grp_SingleMultiple_t SingleMultiple;
-   bool AlreadyRegisteredInGrp;
+   bool AlreadyEnroledInGrp;
 
    /***** For each existing type of group in the course... *****/
    for (NumGrpTyp = 0;
@@ -1083,7 +1083,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
 
             if (GrpCodSel == Grp->GrpCod)
               {	// The selected group is of this type
-               AlreadyRegisteredInGrp = false;
+               AlreadyEnroledInGrp = false;
 
                /* For each group of this type to which the user belongs... */
                for (NumGrpBelong = 0;
@@ -1093,7 +1093,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
         	  GrpCodBelong = LstGrpsBelong.GrpCods[NumGrpBelong];
 
                   if (GrpCodSel == GrpCodBelong)
-                     AlreadyRegisteredInGrp = true;
+                     AlreadyEnroledInGrp = true;
                   else if (SingleMultiple == Grp_SINGLE)	// If the type of group is of single enrolment
                     {
                      /* If the enrolment is single
@@ -1105,7 +1105,7 @@ void Grp_RegisterUsrIntoGroups (struct Usr_Data *UsrDat,struct ListCodGrps *LstG
                     }
                  }
 
-               if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
+               if (!AlreadyEnroledInGrp)	// If the user does not belong to the selected group
                  {
                   Grp_DB_AddUsrToGrp (UsrDat->UsrCod,GrpCodSel);
                   Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
@@ -1272,7 +1272,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
-	    /* Is it mandatory to register in any group? */
+	    /* Is it mandatory to enrol in any group? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,GrpTyp->GrpTypCod);
@@ -1292,7 +1292,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
-	    /* Is it possible to register in multiple groups? */
+	    /* Is it possible to enrol in multiple groups? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 		  ParCod_PutPar (ParCod_GrpTyp,GrpTyp->GrpTypCod);
@@ -1737,17 +1737,17 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
   }
 
 /*****************************************************************************/
-/***************** Show list of groups to register/remove me *****************/
+/******************* Show list of groups to enrol/remove me ******************/
 /*****************************************************************************/
 
-void Grp_ReqRegisterInGrps (void)
+void Grp_ReqEnrolInGrps (void)
   {
-   /***** Show list of groups to register/remove me *****/
+   /***** Show list of groups to enrol/remove me *****/
    Grp_ShowLstGrpsToChgMyGrps ();
   }
 
 /*****************************************************************************/
-/***************** Show list of groups to register/remove me *****************/
+/****************** Show list of groups to enrol/remove me *******************/
 /*****************************************************************************/
 
 void Grp_ShowLstGrpsToChgMyGrps (void)
@@ -1849,10 +1849,10 @@ static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args)
 
 static void Grp_ShowWarningToStdsToChangeGrps (void)
   {
-   extern const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X;
-   extern const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X;
-   extern const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X;
-   extern const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X;
+   extern const char *Txt_You_have_to_enrol_compulsorily_at_least_in_one_group_of_type_X;
+   extern const char *Txt_You_have_to_enrol_compulsorily_in_one_group_of_type_X;
+   extern const char *Txt_You_can_enrol_voluntarily_in_one_or_more_groups_of_type_X;
+   extern const char *Txt_You_can_enrol_voluntarily_in_one_group_of_type_X;
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
    static Ale_AlertType_t AlertType[Grp_NUM_OPTIONAL_MANDATORY] =
@@ -1862,10 +1862,10 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
      };
    static const char **Format[Grp_NUM_OPTIONAL_MANDATORY][Grp_NUM_SINGLE_MULTIPLE] =
      {
-      [Grp_OPTIONAL ][Grp_SINGLE  ] = &Txt_You_can_register_voluntarily_in_one_group_of_type_X,			// Optional, single enrolment
-      [Grp_OPTIONAL ][Grp_MULTIPLE] = &Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X,	// Optional, multiple enrolment
-      [Grp_MANDATORY][Grp_SINGLE  ] = &Txt_You_have_to_register_compulsorily_in_one_group_of_type_X,		// Mandatory, single enrolment
-      [Grp_MANDATORY][Grp_MULTIPLE] = &Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X,	// Mandatory, multiple enrolment
+      [Grp_OPTIONAL ][Grp_SINGLE  ] = &Txt_You_can_enrol_voluntarily_in_one_group_of_type_X,			// Optional, single enrolment
+      [Grp_OPTIONAL ][Grp_MULTIPLE] = &Txt_You_can_enrol_voluntarily_in_one_or_more_groups_of_type_X,	// Optional, multiple enrolment
+      [Grp_MANDATORY][Grp_SINGLE  ] = &Txt_You_have_to_enrol_compulsorily_in_one_group_of_type_X,		// Mandatory, single enrolment
+      [Grp_MANDATORY][Grp_MULTIPLE] = &Txt_You_have_to_enrol_compulsorily_at_least_in_one_group_of_type_X,	// Mandatory, multiple enrolment
      };
 
    for (NumGrpTyp = 0;
@@ -1886,7 +1886,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
   }
 
 /*****************************************************************************/
-/*************** List the groups of a type to register in ********************/
+/***************** List the groups of a type to enrol in *********************/
 /*****************************************************************************/
 // Returns true if I can change my selection
 
@@ -1932,12 +1932,12 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 		     switch (IBelongToThisGroup)
 		       {
 			case Usr_BELONG:
-			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can unregister from group
+			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can leave group
 			   break;
 			case Usr_DONT_BELONG:
 			default:
 			   if (Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)	// Group is not full
-			      ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can register into group
+			      ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can enrol into group
 			   break;
 		       }
 		    }
@@ -1963,13 +1963,13 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	       switch (IBelongToAClosedGroup)
 		 {
 		  case Usr_BELONG:
-		     ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;	// I can not unregister
+		     ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;	// I can not leave
 		     break;
 		  case Usr_DONT_BELONG:
 		  default:
 		     switch (GrpTyp->Enrolment.OptionalMandatory)
 		       {
-			case Grp_MANDATORY:	// Check if I can register in at least one group to which I don't belong
+			case Grp_MANDATORY:	// Check if I can enrol in at least one group to which I don't belong
 			   for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
 				NumGrpThisType < GrpTyp->NumGrps &&
 				ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
@@ -1982,13 +1982,13 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 				 IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
 													     Usr_DONT_BELONG;
 				 if (IBelongToThisGroup == Usr_DONT_BELONG)
-				    ICanChangeMySelectionForThisGrpTyp = Usr_CAN;// I can register into this group
+				    ICanChangeMySelectionForThisGrpTyp = Usr_CAN;// I can enrol into this group
 				}
 			     }
 			   break;
-			case Grp_OPTIONAL:	// If enrolment is optional, I can unregister
+			case Grp_OPTIONAL:	// If enrolment is optional, I can leave
 			default:
-			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can unregister from group
+			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can leave group
 			   break;
 		       }
 		     break;
@@ -1998,10 +1998,10 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	 break;
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;			// I can not register/unregister
+	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;			// I can not enrol/leave
 	 break;
       default:
-	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not register/unregister
+	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not enrol/leave
 	 break;
      }
 
@@ -2097,7 +2097,7 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
   }
 
 /*****************************************************************************/
-/*************** Show list of groups to register/remove users ****************/
+/**************** Show list of groups to enrol/remove users ******************/
 /*****************************************************************************/
 // If UsrCod  > 0 ==> mark her/his groups as checked
 // If UsrCod <= 0 ==> do not mark any group as checked
@@ -2176,7 +2176,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
 
 	    /* Put checkbox to select the group */
 	    // Always checkbox, not radio, because the role in the form may be teacher,
-	    // so if he/she is registered as teacher, he/she can belong to several groups
+	    // so if he/she is enroled as teacher, he/she can belong to several groups
 	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
 	    HTM_INPUT_CHECKBOX (StrGrpCod,
 				(UsrBelongsToThisGroup == Usr_BELONG) ? HTM_CHECKED :
@@ -2538,7 +2538,7 @@ static void Grp_PutFormToCreateGroupType (void)
 			       "size=\"12\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_TD_End ();
 
-	    /***** Is it mandatory to register in any groups of this type? *****/
+	    /***** Is it mandatory to enrol in any groups of this type? *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				 "name=\"OptionalMandatory\""
@@ -2555,7 +2555,7 @@ static void Grp_PutFormToCreateGroupType (void)
 	       HTM_SELECT_End ();
 	    HTM_TD_End ();
 
-	    /***** Is it possible to register in multiple groups of this type? *****/
+	    /***** Is it possible to enrol in multiple groups of this type? *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 				 "name=\"SingleMultiple\""
@@ -2807,11 +2807,11 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
          /* Get group type name (row[1]) */
          Str_Copy (GrpTyp->GrpTypName,row[1],sizeof (GrpTyp->GrpTypName) - 1);
 
-         /* Is it mandatory to register in any groups of this type? (row[2]) */
+         /* Is it mandatory to enrol in any groups of this type? (row[2]) */
          GrpTyp->Enrolment.OptionalMandatory = (row[2][0] == 'Y') ? Grp_MANDATORY :
 								    Grp_OPTIONAL;
 
-         /* Is it possible to register in multiple groups of this type? (row[3]) */
+         /* Is it possible to enrol in multiple groups of this type? (row[3]) */
          GrpTyp->Enrolment.SingleMultiple    = (row[3][0] == 'Y') ? Grp_MULTIPLE :
 								    Grp_SINGLE;
 
@@ -3347,8 +3347,8 @@ void Grp_ReceiveNewGrpTyp (void)
    Par_GetParText ("GrpTypName",Gbl.Crs.Grps.GrpTyp.GrpTypName,
                      Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
-   /* Get whether it is mandatory to regisrer in any group of this type
-      and whether it is possible to register in multiple groups of this type */
+   /* Get whether it is mandatory to enrol in any group of this type
+      and whether it is possible to enrol in multiple groups of this type */
    Gbl.Crs.Grps.GrpTyp.Enrolment.OptionalMandatory = Par_GetParBool ("OptionalMandatory") ? Grp_MANDATORY :
 											    Grp_OPTIONAL;
    Gbl.Crs.Grps.GrpTyp.Enrolment.SingleMultiple    = Par_GetParBool ("SingleMultiple"   ) ? Grp_MULTIPLE :
@@ -3888,7 +3888,7 @@ void Grp_ChangeGroupRoom (void)
   }
 
 /*****************************************************************************/
-/************ Change mandatory registration to a group of a type *************/
+/************** Change mandatory enrolment to a group of a type **************/
 /*****************************************************************************/
 
 void Grp_ChangeMandatGrpTyp (void)

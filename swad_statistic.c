@@ -288,7 +288,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	       Usr_ShowFormsToSelectUsrListType (ActReqAccCrs,NULL,NULL,NULL);
 
 	       /***** Put link to register students *****/
-	       Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
 
 	       /***** Begin form *****/
 	       Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);

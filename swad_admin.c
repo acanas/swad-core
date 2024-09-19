@@ -78,8 +78,8 @@ Usr_Can_t Adm_CheckIfICanAdminOtherUsrs (void)
 void Adm_ReqAddAdm (Hie_Level_t Level)
   {
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
-   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X;
-   extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
+   extern const char *Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X;
+   extern const char *Txt_Enrol_user_IN_A_COURSE_OR_DEGREE;
    static Act_Action_t Enr_ActNewAdm[Hie_NUM_LEVELS] =
      {
       [Hie_UNK] = ActUnk,
@@ -116,7 +116,7 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		 {
 		  /***** Show question and button to register user as administrator *****/
 		  /* Begin alert */
-		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
+		  Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_enrol_the_following_user_as_an_administrator_of_X,
 					   Gbl.Hierarchy.Node[Level].FullName);
 
 		  /* Show user's record */
@@ -125,7 +125,7 @@ void Adm_ReqAddAdm (Hie_Level_t Level)
 		  /* End alert */
 		  Ale_ShowAlertAndButtonEnd (Enr_ActNewAdm[Level],NULL,NULL,
 					   Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					   Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
+					   Btn_CREATE_BUTTON,Txt_Enrol_user_IN_A_COURSE_OR_DEGREE);
 		 }
                break;
             case Usr_CAN_NOT:

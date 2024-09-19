@@ -287,7 +287,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    HTM_TABLE_End ();
 
    /***** Put link to register students *****/
-   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+   Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
   }
 
 /*****************************************************************************/

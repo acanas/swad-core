@@ -538,7 +538,7 @@ void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
 static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod)
   {
    Usr_PutParMyUsrCodEncrypted (EncryptedUsrCod);
-   Par_PutParUnsigned (NULL,"RegRemAction",
+   Par_PutParUnsigned (NULL,"EnrRemAction",
                        (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
   }
 
