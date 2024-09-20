@@ -633,11 +633,12 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.5 (2024-09-20)"
+#define Log_PLATFORM_VERSION	"SWAD 24.6 (2024-09-20)"
 #define CSS_FILE		"swad24.5.css"
 #define JS_FILE			"swad23.89.js"
 /*
  * INCLUIR LOS TEST EN LOS RECURSOS DEL PROGRAMA!!!!
+	Version 24.6:     Sep 20, 2024  Changes in listing of users and user clipboard. (336321 lines)
 	Version 24.5:     Sep 20, 2024  Options for removing user clipboard. (336288 lines)
 	Version 24.4.2:   Sep 19, 2024  Changes in layout of enrolment. (335996 lines)
 	Version 24.4.1:   Sep 19, 2024  Fixed bug in program. (335999 lines)

@@ -1624,17 +1624,45 @@ unsigned Usr_DB_GetNumUsrsInMyClipboard (void)
   }
 
 /*****************************************************************************/
-/***************** Get list of users in my users' clipboard ******************/
+/********** Build query to get list of users in my users' clipboard **********/
 /*****************************************************************************/
 
-unsigned Usr_DB_GetUsrsInMyClipboard (MYSQL_RES **mysql_res)
+void Usr_DB_BuildQueryToGetUsrsInMyClipboard (char **Query)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get users in clipboard",
-		   "SELECT OthUsrCod"	// row[0]
-		    " FROM usr_clipboards"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   /*
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
+   */
+   DB_BuildQuery (Query,
+		  "SELECT usr_data.UsrCod,"
+		         "usr_data.EncryptedUsrCod,"
+		         "usr_data.Password,"
+		         "usr_data.Surname1,"
+		         "usr_data.Surname2,"
+		         "usr_data.FirstName,"
+		         "usr_data.Sex,"
+		         "usr_data.Photo,"
+		         "usr_data.PhotoVisibility,"
+		         "usr_data.CtyCod,"
+		         "usr_data.InsCod"
+		   " FROM usr_clipboards,"
+		         "usr_data"
+		  " WHERE usr_clipboards.UsrCod=%ld"
+		    " AND usr_clipboards.OthUsrCod=usr_data.UsrCod"
+	       " ORDER BY usr_data.Surname1,"
+		         "usr_data.Surname2,"
+		         "usr_data.FirstName,"
+		         "usr_data.UsrCod",
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

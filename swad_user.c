@@ -194,8 +194,8 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat);
 static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames);
 static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat);
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat);
-static void Usr_WriteMainUsrDataExceptUsrID (struct Usr_Data *UsrDat,
-                                             const char *BgColor);
+static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
+                                         const char *BgColor);
 static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor);
 static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
@@ -2246,7 +2246,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       /***** Write rest of main user's data *****/
       Ins.HieCod = UsrDat->InsCod;
       Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
+      Usr_WriteUsrSurnamesAndName (UsrDat,BgColor);
 
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 	 Ins_DrawInstitutionLogoWithLink (&Ins,"ICO25x25");
@@ -2296,7 +2296,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
       /***** Write rest of guest's main data *****/
       Ins.HieCod = UsrDat->InsCod;
       Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
@@ -2310,7 +2310,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
-						 "&nbsp;",
+						 NULL,
 			NULL,true,false);
       if (UsrDat->Tch.DptCod > 0)
 	{
@@ -2319,27 +2319,27 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat)
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
-						 "&nbsp;",
+						 NULL,
 			NULL,true,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
-						"&nbsp;",
+						NULL,
 			NULL,true,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
-						     "&nbsp;",
+						     NULL,
 			NULL,true,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
-					      "&nbsp;",
+					      NULL,
 			NULL,true,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
-					      "&nbsp;",
+					      NULL,
 			NULL,true,false);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
-						 "&nbsp;",
+						 NULL,
 			NULL,true,false);
 
    /***** End row *****/
@@ -2394,7 +2394,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
       /***** Write rest of main student's data *****/
       Ins.HieCod = UsrDat->InsCod;
       Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
@@ -2404,17 +2404,17 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames)
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[0][0] ? (ShowData ? UsrDat->Phone[0] :
 							  "********") :
-					      "&nbsp;",
+					      NULL,
 			NULL,true,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[1][0] ? (ShowData ? UsrDat->Phone[1] :
 							  "********") :
-					      "&nbsp;",
+					      NULL,
 			NULL,true,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
 							     "********") :
-						 "&nbsp;",
+						 NULL,
 			NULL,true,UsrDat->Accepted);
 
       if (Gbl.Scope.Current == Hie_CRS)
@@ -2505,7 +2505,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
       /***** Write rest of main teacher's data *****/
       Ins.HieCod = UsrDat->InsCod;
       Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
       Usr_WriteEmail (UsrDat,The_GetColorRows ());
       Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,NULL,
@@ -2519,7 +2519,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
-							       "&nbsp;",
+							       NULL,
 			NULL,true,UsrDat->Accepted);
       if (ShowData && UsrDat->Tch.DptCod > 0)
 	{
@@ -2528,15 +2528,15 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat)
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.DptCod > 0) ? Dpt.FullName :
-							       "&nbsp;",
+							       NULL,
 			NULL,true,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.Office[0]) ? UsrDat->Tch.Office :
-							      "&nbsp;",
+							      NULL,
 			NULL,true,UsrDat->Accepted);
       Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.OfficePhone[0]) ? UsrDat->Tch.OfficePhone :
-								   "&nbsp;",
+								   NULL,
 			NULL,true,UsrDat->Accepted);
 
    HTM_TR_End ();
@@ -2588,7 +2588,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
       /***** Write rest of main administrator's data *****/
       Ins.HieCod = UsrDat->InsCod;
       Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
 
       HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	 Ins_DrawInstitutionLogoWithLink (&Ins,"ICO25x25");
@@ -2603,23 +2603,23 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat)
   }
 
 /*****************************************************************************/
-/************************* Write main data of a user *************************/
+/*********** Write surnames and name of a user in three columns **************/
 /*****************************************************************************/
 
-static void Usr_WriteMainUsrDataExceptUsrID (struct Usr_Data *UsrDat,
-                                             const char *BgColor)
+static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
+                                         const char *BgColor)
   {
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname1[0] ? UsrDat->Surname1 :
-                	                   "&nbsp;",
+                	                   NULL,
                      NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (BgColor,
                      UsrDat->Surname2[0] ? UsrDat->Surname2 :
-                	                   "&nbsp;",
+                	                   NULL,
                      NULL,true,UsrDat->Accepted);
    Usr_WriteUsrData (BgColor,
                      UsrDat->FrstName[0] ? UsrDat->FrstName :
-                	                    "&nbsp;",
+                	                   NULL,
                      NULL,true,UsrDat->Accepted);
   }
 
@@ -2642,10 +2642,10 @@ static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
       ShowEmail = Usr_CAN_NOT;
    Usr_WriteUsrData (BgColor,
                      UsrDat->Email[0] ? (ShowEmail == Usr_CAN ? UsrDat->Email :
-                						  "********") :
-                	                "&nbsp;",
+                						"********") :
+                	                NULL,
                      ShowEmail == Usr_CAN ? MailLink :
-                			      NULL,
+                			    NULL,
                      true,UsrDat->Accepted);
   }
 
@@ -2677,8 +2677,6 @@ static void Usr_WriteUsrData (const char *BgColor,
 
 	 /***** Write data *****/
 	 HTM_Txt (Data);
-	 if (NonBreak)
-	    HTM_NBSP ();
 
 	 /***** End link *****/
 	 if (Link)
@@ -3893,21 +3891,17 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 
       /***** List users' data *****/
       for (NumUsr = 0, The_ResetRowColor ();
-	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
+	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
+	   NumUsr++, The_ChangeRowColor ())
 	{
-	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CRS))
-	   {
-	    UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
-						// It is not necessary to retrieve
-						// his/her role from database.
-	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
-	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role,SelectedUsrs);
+	 /* Copy user's basic data from list */
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
 
-	    The_ChangeRowColor ();
-	   }
+	 /* Get list of user's IDs */
+         ID_GetListIDsFromUsrCod (&UsrDat);
+
+         /* Show row for this user */
+         Usr_WriteRowUsrMainData (NumUsr,&UsrDat,true,Role,SelectedUsrs);
 	}
 
       /***** Free memory used for user's data *****/

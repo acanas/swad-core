@@ -70,6 +70,8 @@ static void UsrClp_CopyUsrsToClipboard (void);
 static void UsrClp_ShowClipboard (Rol_Role_t Role);
 static void UsrClp_PutIconsClipboard (void *Args);
 
+static void UsrClp_GetUsrsLst (void);
+
 /*****************************************************************************/
 /******************** Copy selected users to clipboard ***********************/
 /*****************************************************************************/
@@ -198,7 +200,13 @@ static void UsrClp_PutIconsClipboard (void *Args)
 /*****************************************************************************/
 /************************* Show users in my clipboard ************************/
 /*****************************************************************************/
-
+/*
+ *       Sex = Usr_GetSexOfUsrsLst (Role);
+      if (asprintf (&Title,"%u %s",NumUsrs,
+				   (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
+								       Txt_users[Sex]) :
+ *
+ */
 void UsrClp_ListUsrsInMyClipboard (void)
   {
    extern const char *Usr_NameSelUnsel[Rol_NUM_ROLES];
@@ -210,28 +218,26 @@ void UsrClp_ListUsrsInMyClipboard (void)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO12x16",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR12x16",
      };
-   MYSQL_RES *mysql_res;
-   unsigned NumUsrs;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
 
-   /***** Get and show users in clipboard *****/
-   NumUsrs = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
+   /***** Get users in clipboard *****/
+   UsrClp_GetUsrsLst ();
 
    /***** Checkbox to selected/unselect all users *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
       HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Rol_UNK],
-			  NumUsrs ? HTM_NO_ATTR :
-				    HTM_DISABLED,
+			  Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs ? HTM_NO_ATTR :
+							      HTM_DISABLED,
 			  "value=\"\""
 			  " onclick=\"togglecheckChildren(this,'%s')\"",
 			  Usr_ParUsrCod[Rol_UNK]);
 
-      HTM_TxtF ("%u usuarios",NumUsrs);	// TODO: Need translation!!!!!
+      HTM_TxtF ("%u usuarios",Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs);	// TODO: Need translation!!!!!
    HTM_LABEL_End ();
 
    /***** List users in clipboard *****/
-   if (NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs)
      {
       HTM_DIV_Begin ("class=\"UsrClp_USRS\"");
 
@@ -240,33 +246,27 @@ void UsrClp_ListUsrsInMyClipboard (void)
 
 	 /***** List users *****/
 	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
+	      NumUsr < Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs;
 	      NumUsr++)
 	   {
-	    /***** Get user's code *****/
-	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	    /* Copy user's basic data from list */
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_UNK].Lst[NumUsr]);
 
-	    /***** Get user's data and show user's photo *****/
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-							 Usr_DONT_GET_PREFS,
-							 Usr_DONT_GET_ROLE_IN_CRS))
-	      {
-	       /* Begin container */
-	       HTM_DIV_Begin ("class=\"UsrClp_USR\"");
+	    /* Begin container */
+	    HTM_DIV_Begin ("class=\"UsrClp_USR\"");
 
-		  /* Check box to select this user */
-		  HTM_INPUT_CHECKBOX (Usr_ParUsrCod[Rol_UNK],
-				      HTM_NO_ATTR,
-				      "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
-				      UsrDat.EnUsrCod,Usr_NameSelUnsel[Rol_UNK]);
+	       /* Check box to select this user */
+	       HTM_INPUT_CHECKBOX (Usr_ParUsrCod[Rol_UNK],
+				   HTM_NO_ATTR,
+				   "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
+				   UsrDat.EnUsrCod,Usr_NameSelUnsel[Rol_UNK]);
 
-		  /* User's photo */
-		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-					     ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	       /* User's photo */
+	       Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+					  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 
-	       /* End container */
-	       HTM_DIV_End ();
-	      }
+	    /* End container */
+	    HTM_DIV_End ();
 	   }
 
 	 /***** Free memory used for user's data *****/
@@ -274,9 +274,24 @@ void UsrClp_ListUsrsInMyClipboard (void)
 
       HTM_DIV_End ();
      }
+  }
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+/*****************************************************************************/
+/************************ Get list with data of guests ***********************/
+/*****************************************************************************/
+
+static void UsrClp_GetUsrsLst (void)
+  {
+   char *Query = NULL;
+
+   /***** Build query *****/
+   Usr_DB_BuildQueryToGetUsrsInMyClipboard (&Query);
+
+   /***** Get list of students from database *****/
+   Usr_GetListUsrsFromQuery (Query,Rol_UNK,Hie_SYS);
+
+   /***** Free query string *****/
+   free (Query);
   }
 
 /*****************************************************************************/
