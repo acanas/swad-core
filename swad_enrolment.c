@@ -835,11 +835,6 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 static void Enr_PutUsrsClipboard (void)
   {
    extern const char *Txt_User_clipboard;
-   unsigned NumUsrs;
-   MYSQL_RES *mysql_res;
-
-   /***** Get and show users in clipboard *****/
-   NumUsrs = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
 
    /***** Users' clipboard *****/
    HTM_TR_Begin (NULL);
@@ -849,13 +844,10 @@ static void Enr_PutUsrsClipboard (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 UsrClp_ListUsrsInMyClipboard (NumUsrs,&mysql_res);
+	 UsrClp_ListUsrsInMyClipboard ();
       HTM_TD_End ();
 
    HTM_TR_End ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

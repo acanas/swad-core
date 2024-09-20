@@ -24858,6 +24858,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy several selected students"		// Çeviri lazim!
 #endif
 	,
+	[ActSeeCliStd] =
+#if   L==1	// ca
+	"Show user clipboard in students"			// Necessita traducció
+#elif L==2	// de
+	"Show user clipboard in students"			// Need Übersetzung
+#elif L==3	// en
+	"Show user clipboard in students"
+#elif L==4	// es
+	"Mostrar portapapeles de usuarios en estudiantes"
+#elif L==5	// fr
+	"Show user clipboard in students"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles de usuarios en estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Show user clipboard in students"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show user clipboard in students"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show user clipboard in students"			// Precisa de tradução
+#elif L==10	// tr
+	"Show user clipboard in students"			// Çeviri lazim!
+#endif
+	,
+	[ActRemClpStd] =
+#if   L==1	// ca
+	"Remove user clipboard in students"			// Necessita traducció
+#elif L==2	// de
+	"Remove user clipboard in students"			// Need Übersetzung
+#elif L==3	// en
+	"Remove user clipboard in students"
+#elif L==4	// es
+	"Eliminar portapapeles de usuarios en estudiantes"
+#elif L==5	// fr
+	"Remove user clipboard in students"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar portapapeles de usuarios en estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user clipboard in students"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user clipboard in students"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user clipboard in students"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove user clipboard in students"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeRecSevStd] =
 #if   L==1	// ca
 	"See records of several selected students"		// Necessita traducció
@@ -25937,6 +25983,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy several selected teachers"		// Precisa de tradução
 #elif L==10	// tr
 	"Copy several selected teachers"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeCliTch] =
+#if   L==1	// ca
+	"Show user clipboard in teachers"			// Necessita traducció
+#elif L==2	// de
+	"Show user clipboard in teachers"			// Need Übersetzung
+#elif L==3	// en
+	"Show user clipboard in teachers"
+#elif L==4	// es
+	"Mostrar portapapeles de usuarios en profesores"
+#elif L==5	// fr
+	"Show user clipboard in teachers"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles de usuarios en profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Show user clipboard in teachers"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show user clipboard in teachers"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show user clipboard in teachers"			// Precisa de tradução
+#elif L==10	// tr
+	"Show user clipboard in teachers"			// Çeviri lazim!
+#endif
+	,
+	[ActRemClpTch] =
+#if   L==1	// ca
+	"Remove user clipboard in teachers"			// Necessita traducció
+#elif L==2	// de
+	"Remove user clipboard in teachers"			// Need Übersetzung
+#elif L==3	// en
+	"Remove user clipboard in teachers"
+#elif L==4	// es
+	"Eliminar portapapeles de usuarios en profesores"
+#elif L==5	// fr
+	"Remove user clipboard in teachers"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar portapapeles de usuarios en profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user clipboard in teachers"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user clipboard in teachers"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user clipboard in teachers"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove user clipboard in teachers"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecSevTch] =
@@ -27202,6 +27294,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy several selected guests"			// Precisa de tradução
 #elif L==10	// tr
 	"Copy several selected guests"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeCliGst] =
+#if   L==1	// ca
+	"Show user clipboard in guests"			// Necessita traducció
+#elif L==2	// de
+	"Show user clipboard in guests"			// Need Übersetzung
+#elif L==3	// en
+	"Show user clipboard in guests"
+#elif L==4	// es
+	"Mostrar portapapeles de usuarios en invitados"
+#elif L==5	// fr
+	"Show user clipboard in guests"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles de usuarios en invitados"	// Okoteve traducción
+#elif L==7	// it
+	"Show user clipboard in guests"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show user clipboard in guests"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show user clipboard in guests"			// Precisa de tradução
+#elif L==10	// tr
+	"Show user clipboard in guests"			// Çeviri lazim!
+#endif
+	,
+	[ActRemClpGst] =
+#if   L==1	// ca
+	"Remove user clipboard in guests"			// Necessita traducció
+#elif L==2	// de
+	"Remove user clipboard in guests"			// Need Übersetzung
+#elif L==3	// en
+	"Remove user clipboard in guests"
+#elif L==4	// es
+	"Eliminar portapapeles de usuarios en invitados"
+#elif L==5	// fr
+	"Remove user clipboard in guests"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar portapapeles de usuarios en invitados"	// Okoteve traducción
+#elif L==7	// it
+	"Remove user clipboard in guests"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove user clipboard in guests"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove user clipboard in guests"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove user clipboard in guests"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeRecSevGst] =

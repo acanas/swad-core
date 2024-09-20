@@ -1608,6 +1608,21 @@ void Usr_DB_CopyToClipboard (long OthUsrCod)
 		    OthUsrCod);
   }
 
+
+/*****************************************************************************/
+/**************** Get number of users in my users' clipboard *****************/
+/*****************************************************************************/
+
+unsigned Usr_DB_GetNumUsrsInMyClipboard (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get resources",
+		  "SELECT COUNT(*)"
+		   " FROM usr_clipboards"
+		  " WHERE UsrCod=%ld",
+		  Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
 /*****************************************************************************/
 /***************** Get list of users in my users' clipboard ******************/
 /*****************************************************************************/

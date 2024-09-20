@@ -2327,6 +2327,29 @@ const char *Hlp_USERS_Groups =
 	"USERS.Groups.en";
 #endif
 
+const char *Hlp_USERS_Clipboard =
+#if   L==1	// ca
+	"USERS.Clipboard.es";
+#elif L==2	// de
+	"USERS.Clipboard.en";
+#elif L==3	// en
+	"USERS.Clipboard.en";
+#elif L==4	// es
+	"USERS.Clipboard.es";
+#elif L==5	// fr
+	"USERS.Clipboard.en";
+#elif L==6	// gn
+	"USERS.Clipboard.es";
+#elif L==7	// it
+	"USERS.Clipboard.en";
+#elif L==8	// pl
+	"USERS.Clipboard.en";
+#elif L==9	// pt
+	"USERS.Clipboard.en";
+#elif L==10	// tr
+	"USERS.Clipboard.en";
+#endif
+
 const char *Hlp_USERS_Students =
 #if   L==1	// ca
 	"USERS.Students.es";

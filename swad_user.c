@@ -91,6 +91,7 @@
 #include "swad_setting.h"
 #include "swad_tab.h"
 #include "swad_user.h"
+#include "swad_user_clipboard.h"
 #include "swad_user_database.h"
 
 /*****************************************************************************/
@@ -5834,6 +5835,9 @@ static void Usr_PutIconsListGsts (__attribute__((unused)) void *Args)
 	 break;
      }
 
+   /***** Put icon to view user clipboard *****/
+   UsrClp_PutIconToViewClipboardGsts ();
+
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);
   }
@@ -5859,6 +5863,9 @@ static void Usr_PutIconsListStds (__attribute__((unused)) void *Args)
 	 break;
      }
 
+   /***** Put icon to view user clipboard *****/
+   UsrClp_PutIconToViewClipboardStds ();
+
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);
   }
@@ -5883,6 +5890,9 @@ static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
       default:
 	 break;
      }
+
+   /***** Put icon to view user clipboard *****/
+   UsrClp_PutIconToViewClipboardTchs ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);

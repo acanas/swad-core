@@ -25,7 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_cryptography.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -67,6 +67,9 @@ extern struct Globals Gbl;
 
 static void UsrClp_CopyUsrsToClipboard (void);
 
+static void UsrClp_ShowClipboard (Rol_Role_t Role);
+static void UsrClp_PutIconsClipboard (void *Args);
+
 /*****************************************************************************/
 /******************** Copy selected users to clipboard ***********************/
 /*****************************************************************************/
@@ -74,24 +77,25 @@ static void UsrClp_CopyUsrsToClipboard (void);
 void UsrClp_CopyGstsToClipboard (void)
   {
    UsrClp_CopyUsrsToClipboard ();
+   UsrClp_ShowClipboardGsts ();
   }
 
 void UsrClp_CopyStdsToClipboard (void)
   {
    UsrClp_CopyUsrsToClipboard ();
+   UsrClp_ShowClipboardStds ();
   }
 
 void UsrClp_CopyTchsToClipboard (void)
   {
    UsrClp_CopyUsrsToClipboard ();
+   UsrClp_ShowClipboardTchs ();
   }
 
 static void UsrClp_CopyUsrsToClipboard (void)
   {
-   unsigned NumUsrs;
    const char *Ptr;
    struct Usr_Data UsrDat;
-   MYSQL_RES *mysql_res;
 
    /***** Remove my clipboard *****/
    Usr_DB_RemoveMyClipboard ();
@@ -124,18 +128,78 @@ static void UsrClp_CopyUsrsToClipboard (void)
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+  }
 
-   /***** Get and show users in clipboard *****/
-   NumUsrs = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
-   UsrClp_ListUsrsInMyClipboard (NumUsrs,&mysql_res);
-   DB_FreeMySQLResult (&mysql_res);
+/*****************************************************************************/
+/**************************** Show user clipboard ****************************/
+/*****************************************************************************/
+
+void UsrClp_ShowClipboardGsts (void)
+  {
+   UsrClp_ShowClipboard (Rol_GST);
+   Usr_SeeGuests ();
+  }
+
+void UsrClp_ShowClipboardStds (void)
+  {
+   UsrClp_ShowClipboard (Rol_STD);
+   Usr_SeeStudents ();
+  }
+
+void UsrClp_ShowClipboardTchs (void)
+  {
+   UsrClp_ShowClipboard (Rol_TCH);
+   Usr_SeeTeachers ();
+  }
+
+static void UsrClp_ShowClipboard (Rol_Role_t Role)
+  {
+   extern const char *Hlp_USERS_Clipboard;
+   extern const char *Txt_User_clipboard;
+
+   Box_BoxBegin (Txt_User_clipboard,UsrClp_PutIconsClipboard,&Role,
+		 Hlp_USERS_Clipboard,Box_CLOSABLE);
+      UsrClp_ListUsrsInMyClipboard ();
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************* Put contextual icons when showing user clipboard *************/
+/*****************************************************************************/
+
+static void UsrClp_PutIconsClipboard (void *Args)
+  {
+   static Act_Action_t NextActions[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActUnk,
+      [Rol_GST	  ] = ActRemClpGst,
+      [Rol_USR	  ] = ActUnk,
+      [Rol_STD	  ] = ActRemClpStd,
+      [Rol_NET	  ] = ActUnk,
+      [Rol_TCH	  ] = ActRemClpTch,
+      [Rol_DEG_ADM] = ActUnk,
+      [Rol_CTR_ADM] = ActUnk,
+      [Rol_INS_ADM] = ActUnk,
+      [Rol_SYS_ADM] = ActUnk,
+     };
+   static Act_Action_t NextAction;
+
+   /***** Put icon to remove resource clipboard in program *****/
+   if (Args)
+      if (Usr_DB_GetNumUsrsInMyClipboard ())	// Only if there are users
+        {
+	 NextAction = NextActions[*((Rol_Role_t *) Args)];
+	 if (NextAction != ActUnk)
+	    Ico_PutContextualIconToRemove (NextAction,NULL,
+					   NULL,NULL);
+        }
   }
 
 /*****************************************************************************/
 /************************* Show users in my clipboard ************************/
 /*****************************************************************************/
 
-void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res)
+void UsrClp_ListUsrsInMyClipboard (void)
   {
    extern const char *Usr_NameSelUnsel[Rol_NUM_ROLES];
    extern const char *Usr_ParUsrCod[Rol_NUM_ROLES];
@@ -146,8 +210,13 @@ void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO12x16",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR12x16",
      };
+   MYSQL_RES *mysql_res;
+   unsigned NumUsrs;
    unsigned NumUsr;
    struct Usr_Data UsrDat;
+
+   /***** Get and show users in clipboard *****/
+   NumUsrs = Usr_DB_GetUsrsInMyClipboard (&mysql_res);
 
    /***** Checkbox to selected/unselect all users *****/
    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -175,7 +244,7 @@ void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res)
 	      NumUsr++)
 	   {
 	    /***** Get user's code *****/
-	    UsrDat.UsrCod = DB_GetNextCode (*mysql_res);
+	    UsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
 	    /***** Get user's data and show user's photo *****/
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
@@ -205,4 +274,48 @@ void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res)
 
       HTM_DIV_End ();
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************* Put icon to view user clipboard ***********************/
+/*****************************************************************************/
+
+void UsrClp_PutIconToViewClipboardGsts (void)
+  {
+   Ico_PutContextualIconToViewClipboard (ActSeeCliGst,NULL,NULL,NULL);
+  }
+
+void UsrClp_PutIconToViewClipboardStds (void)
+  {
+   Ico_PutContextualIconToViewClipboard (ActSeeCliStd,NULL,NULL,NULL);
+  }
+
+void UsrClp_PutIconToViewClipboardTchs (void)
+  {
+   Ico_PutContextualIconToViewClipboard (ActSeeCliTch,NULL,NULL,NULL);
+  }
+
+/*****************************************************************************/
+/************************** Remove user clipboard ****************************/
+/*****************************************************************************/
+
+void UsrClp_RemoveClipboardGsts (void)
+  {
+   Usr_DB_RemoveMyClipboard ();
+   UsrClp_ShowClipboardGsts ();
+  }
+
+void UsrClp_RemoveClipboardStds (void)
+  {
+   Usr_DB_RemoveMyClipboard ();
+   UsrClp_ShowClipboardStds ();
+  }
+
+void UsrClp_RemoveClipboardTchs (void)
+  {
+   Usr_DB_RemoveMyClipboard ();
+   UsrClp_ShowClipboardTchs ();
   }

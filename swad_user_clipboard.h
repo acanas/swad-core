@@ -43,6 +43,18 @@ void UsrClp_CopyGstsToClipboard (void);
 void UsrClp_CopyStdsToClipboard (void);
 void UsrClp_CopyTchsToClipboard (void);
 
-void UsrClp_ListUsrsInMyClipboard (unsigned NumUsrs,MYSQL_RES **mysql_res);
+void UsrClp_ShowClipboardGsts (void);
+void UsrClp_ShowClipboardStds (void);
+void UsrClp_ShowClipboardTchs (void);
+
+void UsrClp_ListUsrsInMyClipboard (void);
+
+void UsrClp_PutIconToViewClipboardGsts (void);
+void UsrClp_PutIconToViewClipboardStds (void);
+void UsrClp_PutIconToViewClipboardTchs (void);
+
+void UsrClp_RemoveClipboardGsts (void);
+void UsrClp_RemoveClipboardStds (void);
+void UsrClp_RemoveClipboardTchs (void);
 
 #endif
