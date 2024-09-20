@@ -3901,7 +3901,7 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
          ID_GetListIDsFromUsrCod (&UsrDat);
 
          /* Show row for this user */
-         Usr_WriteRowUsrMainData (NumUsr,&UsrDat,true,Role,SelectedUsrs);
+         Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Role,SelectedUsrs);
 	}
 
       /***** Free memory used for user's data *****/
@@ -3916,15 +3916,10 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
 					     Rol_Role_t Role)
   {
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *ParName;
-   Usr_Sex_t Sex;
 
    HTM_TR_Begin (NULL);
-
       HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,Usr_GetColumnsForSelectUsrs (),"BG_HIGHLIGHT");
-
 	 HTM_LABEL_Begin (NULL);
 	    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
 	      {
@@ -3938,14 +3933,31 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
 	      }
 	    else
 	       Err_WrongRoleExit ();
-	    Sex = Usr_GetSexOfUsrsLst (Role);
-	    HTM_TxtColon (Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
-								Txt_ROLES_PLURAL_Abc[Role][Sex]);
+	    Usr_WriteNumUsrsInList (Role);
 	 HTM_LABEL_End ();
-
       HTM_TH_End ();
-
    HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/***************** Write number of users in list with a role *****************/
+/*****************************************************************************/
+
+void Usr_WriteNumUsrsInList (Rol_Role_t Role)
+  {
+   extern const char *Txt_user[Usr_NUM_SEXS];
+   extern const char *Txt_users[Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   Usr_Sex_t Sex;
+   unsigned NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs;
+
+   Sex = Usr_GetSexOfUsrsLst (Role);
+   HTM_TxtF ("%u %s:",NumUsrs,
+		      (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
+							  Txt_users[Sex]) :
+					  (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+							  Txt_ROLES_PLURAL_abc[Role][Sex]));
   }
 
 /*****************************************************************************/
@@ -4752,7 +4764,6 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
   {
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumUsrs;

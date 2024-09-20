@@ -844,7 +844,7 @@ static void Enr_PutUsrsClipboard (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 UsrClp_ListUsrsInMyClipboard ();
+	 UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM);
       HTM_TD_End ();
 
    HTM_TR_End ();

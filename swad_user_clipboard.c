@@ -161,7 +161,7 @@ static void UsrClp_ShowClipboard (Rol_Role_t Role)
 
    Box_BoxBegin (Txt_User_clipboard,UsrClp_PutIconsClipboard,&Role,
 		 Hlp_USERS_Clipboard,Box_CLOSABLE);
-      UsrClp_ListUsrsInMyClipboard ();
+      UsrClp_ListUsrsInMyClipboard (Frm_DONT_PUT_FORM);
    Box_BoxEnd ();
   }
 
@@ -200,14 +200,8 @@ static void UsrClp_PutIconsClipboard (void *Args)
 /*****************************************************************************/
 /************************* Show users in my clipboard ************************/
 /*****************************************************************************/
-/*
- *       Sex = Usr_GetSexOfUsrsLst (Role);
-      if (asprintf (&Title,"%u %s",NumUsrs,
-				   (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
-								       Txt_users[Sex]) :
- *
- */
-void UsrClp_ListUsrsInMyClipboard (void)
+
+void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm)
   {
    extern const char *Usr_NameSelUnsel[Rol_NUM_ROLES];
    extern const char *Usr_ParUsrCod[Rol_NUM_ROLES];
@@ -225,16 +219,25 @@ void UsrClp_ListUsrsInMyClipboard (void)
    UsrClp_GetUsrsLst ();
 
    /***** Checkbox to selected/unselect all users *****/
-   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Rol_UNK],
-			  Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs ? HTM_NO_ATTR :
-							      HTM_DISABLED,
-			  "value=\"\""
-			  " onclick=\"togglecheckChildren(this,'%s')\"",
-			  Usr_ParUsrCod[Rol_UNK]);
-
-      HTM_TxtF ("%u usuarios",Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs);	// TODO: Need translation!!!!!
-   HTM_LABEL_End ();
+   switch (PutForm)
+     {
+      case Frm_DONT_PUT_FORM:
+	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+	    Usr_WriteNumUsrsInList (Rol_UNK);
+	 HTM_SPAN_End ();
+	 break;
+      case Frm_PUT_FORM:
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Rol_UNK],
+				Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs ? HTM_NO_ATTR :
+								    HTM_DISABLED,
+				"value=\"\""
+				" onclick=\"togglecheckChildren(this,'%s')\"",
+				Usr_ParUsrCod[Rol_UNK]);
+	    Usr_WriteNumUsrsInList (Rol_UNK);
+	 HTM_LABEL_End ();
+	 break;
+     }
 
    /***** List users in clipboard *****/
    if (Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs)
@@ -256,10 +259,11 @@ void UsrClp_ListUsrsInMyClipboard (void)
 	    HTM_DIV_Begin ("class=\"UsrClp_USR\"");
 
 	       /* Check box to select this user */
-	       HTM_INPUT_CHECKBOX (Usr_ParUsrCod[Rol_UNK],
-				   HTM_NO_ATTR,
-				   "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
-				   UsrDat.EnUsrCod,Usr_NameSelUnsel[Rol_UNK]);
+	       if (PutForm == Frm_PUT_FORM)
+		  HTM_INPUT_CHECKBOX (Usr_ParUsrCod[Rol_UNK],
+				      HTM_NO_ATTR,
+				      "value=\"%s\" onclick=\"checkParent(this,'%s')\"",
+				      UsrDat.EnUsrCod,Usr_NameSelUnsel[Rol_UNK]);
 
 	       /* User's photo */
 	       Pho_ShowUsrPhotoIfAllowed (&UsrDat,

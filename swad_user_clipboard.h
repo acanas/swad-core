@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_form.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -47,7 +49,7 @@ void UsrClp_ShowClipboardGsts (void);
 void UsrClp_ShowClipboardStds (void);
 void UsrClp_ShowClipboardTchs (void);
 
-void UsrClp_ListUsrsInMyClipboard (void);
+void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm);
 
 void UsrClp_PutIconToViewClipboardGsts (void);
 void UsrClp_PutIconToViewClipboardStds (void);

@@ -234,7 +234,6 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-
 		  HTM_INPUT_CHECKBOX ("AllAnsTypes",
 				      AnswerTypes->All ? HTM_CHECKED :
 	        			                 HTM_NO_ATTR,

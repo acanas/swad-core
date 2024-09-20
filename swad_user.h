@@ -315,6 +315,7 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				    void (*FuncWhenUsrsSelected) (void *ArgsSelected),void *ArgsSelected,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);
 void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs);
+void Usr_WriteNumUsrsInList (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
