@@ -29295,7 +29295,7 @@ const char *Txt_Other_recipients =
 #elif L==9	// pt
 	"Outros destinat&aacute;rios";
 #elif L==10	// tr
-	"Other recipients";	// Çeviri lazim!
+	"Di&gbreve;er al&inodot;c&inodot;lar";
 #endif
 
 const char *Txt_page =
@@ -33362,7 +33362,7 @@ const char *Txt_Recipients =
 #elif L==9	// pt
 	"Destinat&aacute;rios";
 #elif L==10	// tr
-	"Recipients";		// Çeviri lazim!
+	"Al&inodot;c&inodot;lar";
 #endif
 
 const char *Txt_Recursive_rubric =

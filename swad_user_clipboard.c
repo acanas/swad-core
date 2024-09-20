@@ -36,30 +36,10 @@
 #include "swad_user_database.h"
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/**************************** Private constants ******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-
-/*****************************************************************************/
-/************************** Public global variables **************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/************************* Private global variables **************************/
-/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -161,7 +141,8 @@ static void UsrClp_ShowClipboard (Rol_Role_t Role)
 
    Box_BoxBegin (Txt_User_clipboard,UsrClp_PutIconsClipboard,&Role,
 		 Hlp_USERS_Clipboard,Box_CLOSABLE);
-      UsrClp_ListUsrsInMyClipboard (Frm_DONT_PUT_FORM);
+      UsrClp_ListUsrsInMyClipboard (Frm_DONT_PUT_FORM,
+				    true);	// Show even if empty);
    Box_BoxEnd ();
   }
 
@@ -201,7 +182,7 @@ static void UsrClp_PutIconsClipboard (void *Args)
 /************************* Show users in my clipboard ************************/
 /*****************************************************************************/
 
-void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm)
+void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm,bool ShowWhenEmpty)
   {
    extern const char *Usr_NameSelUnsel[Rol_NUM_ROLES];
    extern const char *Usr_ParUsrCod[Rol_NUM_ROLES];
@@ -219,14 +200,10 @@ void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm)
    UsrClp_GetUsrsLst ();
 
    /***** Checkbox to selected/unselect all users *****/
-   switch (PutForm)
+   if (ShowWhenEmpty || Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs)
      {
-      case Frm_DONT_PUT_FORM:
-	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-	    Usr_WriteNumUsrsInList (Rol_UNK);
-	 HTM_SPAN_End ();
-	 break;
-      case Frm_PUT_FORM:
+      if (PutForm == Frm_PUT_FORM && Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs)
+        {
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Rol_UNK],
 				Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs ? HTM_NO_ATTR :
@@ -236,7 +213,13 @@ void UsrClp_ListUsrsInMyClipboard (Frm_PutForm_t PutForm)
 				Usr_ParUsrCod[Rol_UNK]);
 	    Usr_WriteNumUsrsInList (Rol_UNK);
 	 HTM_LABEL_End ();
-	 break;
+        }
+      else
+        {
+	 HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+	    Usr_WriteNumUsrsInList (Rol_UNK);
+	 HTM_SPAN_End ();
+	}
      }
 
    /***** List users in clipboard *****/

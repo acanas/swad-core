@@ -65,6 +65,7 @@
 #include "swad_session_database.h"
 #include "swad_setting.h"
 #include "swad_user.h"
+#include "swad_user_clipboard.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -343,15 +344,16 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		  if (Messages->ShowOnlyOneRecipient)
 		     /***** Show only one user as recipient *****/
 		     Msg_ShowOneUniqueRecipient ();
-		  else
+		  else if (ShowUsrsInCrs)
 		    {
 		     /***** Show potential recipients *****/
 		     HTM_TABLE_Begin ("TBL_SCROLL_C2");
-			if (ShowUsrsInCrs)
-			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
-			Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
+		        Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
 		     HTM_TABLE_End ();
 		    }
+	          UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
+						false);	// Don't show if empty);
+		  Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
 	       HTM_TD_End ();
 	    HTM_TR_End ();
 
@@ -522,49 +524,35 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
    char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
-   unsigned ColSpan;
    bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
                              (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// I belong to it
                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
-   /***** How many columns? *****/
-   if (StdsAndTchsWritten)
-      ColSpan = Usr_GetColumnsForSelectUsrs ();
-   else
-      ColSpan = 1;
-
    /***** Title *****/
-   HTM_TR_Begin (NULL);
-      HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,ColSpan,"BG_HIGHLIGHT");
-	 HTM_LABEL_Begin ("for=\"OtherRecipients\"");
-	    HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
-					       Txt_Recipients);
-	 HTM_LABEL_End ();
-      HTM_TH_End ();
-   HTM_TR_End ();
+   HTM_LABEL_Begin ("for=\"OtherRecipients\""
+		    " class=\"FORM_IN_%s\"",The_GetSuffix ());
+      HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
+					 Txt_Recipients);
+   HTM_LABEL_End ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/
-   HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
-	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-			     "id=\"OtherRecipients\" name=\"OtherRecipients\""
-			     " rows=\"2\" class=\"Frm_C2_INPUT INPUT_%s\""
-			     " placeholder=\"%s\"",
-			     The_GetSuffix (),
-			     Txt_nicks_emails_or_IDs_separated_by_commas);
-	    if (Gbl.Usrs.ListOtherRecipients[0])
-	       HTM_Txt (Gbl.Usrs.ListOtherRecipients);
-	    else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
-							 // and there's no list of explicit recipients,
-							 // write @nickname of original sender
-	      {
-	       Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
-	       if (Nickname[0])
-		  HTM_TxtF ("@%s",Nickname);
-	      }
-	 HTM_TEXTAREA_End ();
-      HTM_TD_End ();
-   HTM_TR_End ();
+   HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+		       "id=\"OtherRecipients\" name=\"OtherRecipients\""
+		       " rows=\"2\" class=\"Frm_C2_INPUT INPUT_%s\""
+		       " placeholder=\"%s\"",
+		       The_GetSuffix (),
+		       Txt_nicks_emails_or_IDs_separated_by_commas);
+      if (Gbl.Usrs.ListOtherRecipients[0])
+	 HTM_Txt (Gbl.Usrs.ListOtherRecipients);
+      else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
+						   // and there's no list of explicit recipients,
+						   // write @nickname of original sender
+	{
+	 Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
+	 if (Nickname[0])
+	    HTM_TxtF ("@%s",Nickname);
+	}
+   HTM_TEXTAREA_End ();
   }
 
 /*****************************************************************************/

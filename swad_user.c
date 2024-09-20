@@ -3919,8 +3919,8 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
    char *ParName;
 
    HTM_TR_Begin (NULL);
-      HTM_TH_Span_Begin (HTM_HEAD_LEFT,1,Usr_GetColumnsForSelectUsrs (),"BG_HIGHLIGHT");
-	 HTM_LABEL_Begin (NULL);
+      HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",Usr_GetColumnsForSelectUsrs ());
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    if (Usr_NameSelUnsel[Role] && Usr_ParUsrCod[Role])
 	      {
 	       Usr_BuildParName (&ParName,Usr_ParUsrCod[Role],SelectedUsrs->ParSuffix);
@@ -3935,7 +3935,7 @@ static void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUs
 	       Err_WrongRoleExit ();
 	    Usr_WriteNumUsrsInList (Role);
 	 HTM_LABEL_End ();
-      HTM_TH_End ();
+      HTM_TD_End ();
    HTM_TR_End ();
   }
 
@@ -3953,11 +3953,14 @@ void Usr_WriteNumUsrsInList (Rol_Role_t Role)
    unsigned NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs;
 
    Sex = Usr_GetSexOfUsrsLst (Role);
-   HTM_TxtF ("%u %s:",NumUsrs,
-		      (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
-							  Txt_users[Sex]) :
-					  (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-							  Txt_ROLES_PLURAL_abc[Role][Sex]));
+   HTM_Unsigned (NumUsrs);
+   HTM_NBSP ();
+   HTM_TxtF ((Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
+						 Txt_users[Sex]) :
+				 (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+						 Txt_ROLES_PLURAL_abc[Role][Sex]));
+   if (NumUsrs)
+      HTM_Colon ();
   }
 
 /*****************************************************************************/

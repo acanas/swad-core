@@ -2514,22 +2514,22 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 
 /********************************* Form fonts ********************************/
 /* Inside white box */
-.FORM_IN_WHITE		{color: #4d88a1; font-size: 12pt;}
-.FORM_IN_GREY		{color: #4d88a1; font-size: 12pt;}
-.FORM_IN_PURPLE		{color: #4d88a1; font-size: 12pt;}
-.FORM_IN_BLUE		{color: #4d88a1; font-size: 12pt;}
-.FORM_IN_YELLOW		{color: #7c4d2a; font-size: 12pt;}
-.FORM_IN_PINK		{color: #4d88a1; font-size: 12pt;}
-.FORM_IN_DARK		{color: #afc4cc; font-size: 12pt;}
+.FORM_IN_WHITE		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_IN_GREY		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_IN_PURPLE		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_IN_BLUE		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_IN_YELLOW		{color: #7c4d2a; font-size: 12pt; font-weight: bold;}
+.FORM_IN_PINK		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_IN_DARK		{color: #afc4cc; font-size: 12pt; font-weight: bold;}
 
 /* Outside white box */
-.FORM_OUT_WHITE		{color: #4d88a1; font-size: 12pt;}
-.FORM_OUT_GREY		{color: #4d88a1; font-size: 12pt;}
-.FORM_OUT_PURPLE	{color: #573c4d; font-size: 12pt;}
-.FORM_OUT_BLUE		{color: #4d88a1; font-size: 12pt;}
-.FORM_OUT_YELLOW	{color: #7c4d2a; font-size: 12pt;}
-.FORM_OUT_PINK		{color: #63474e; font-size: 12pt;}
-.FORM_OUT_DARK		{color: #d3e2e8; font-size: 12pt;}
+.FORM_OUT_WHITE		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_OUT_GREY		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_OUT_PURPLE	{color: #573c4d; font-size: 12pt; font-weight: bold;}
+.FORM_OUT_BLUE		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
+.FORM_OUT_YELLOW	{color: #7c4d2a; font-size: 12pt; font-weight: bold;}
+.FORM_OUT_PINK		{color: #63474e; font-size: 12pt; font-weight: bold;}
+.FORM_OUT_DARK		{color: #d3e2e8; font-size: 12pt; font-weight: bold;}
 
 /****************************** Placing of objects ***************************/
 .LT	{text-align: left;   vertical-align: top;   }	/* Left Top      */

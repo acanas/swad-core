@@ -843,8 +843,9 @@ static void Enr_PutUsrsClipboard (void)
       Frm_LabelColumn ("Frm_C1 RT","",Txt_User_clipboard);
 
       /* Data */
-      HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	 UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM);
+      HTM_TD_Begin ("class=\"Frm_C2 LB\"");
+	 UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
+				       true);	// Show even if empty
       HTM_TD_End ();
 
    HTM_TR_End ();
