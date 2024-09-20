@@ -350,10 +350,10 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		     HTM_TABLE_Begin ("TBL_SCROLL_C2");
 		        Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
 		     HTM_TABLE_End ();
+		     UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
+						   false);		// Don't show if empty
+		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
 		    }
-	          UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
-						false);	// Don't show if empty);
-		  Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
 	       HTM_TD_End ();
 	    HTM_TR_End ();
 
@@ -544,7 +544,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 		       Txt_nicks_emails_or_IDs_separated_by_commas);
       if (Gbl.Usrs.ListOtherRecipients[0])
 	 HTM_Txt (Gbl.Usrs.ListOtherRecipients);
-      else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
+      else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)   // If there is a recipient
 						   // and there's no list of explicit recipients,
 						   // write @nickname of original sender
 	{

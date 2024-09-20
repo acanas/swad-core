@@ -3227,7 +3227,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 
    /***** Get recipients written explicetely *****/
    Par_GetParText ("OtherRecipients",Gbl.Usrs.ListOtherRecipients,
-                     Msg_MAX_BYTES_LIST_OTHER_RECIPIENTS);
+                   Msg_MAX_BYTES_LIST_OTHER_RECIPIENTS);
 
    /***** Add encrypted users' IDs to the list with all selected users *****/
    if (Gbl.Usrs.ListOtherRecipients[0])
