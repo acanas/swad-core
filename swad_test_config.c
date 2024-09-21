@@ -183,7 +183,7 @@ static void TstCfg_ShowFormConfig (void)
 			HTM_INPUT_RADIO ("Pluggable",
 					 ((Pluggable == TstCfg_GetConfigPluggable ()) ? HTM_CHECKED :
 										        HTM_NO_ATTR),
-					 "value=\"%u\"%s",(unsigned) Pluggable);
+					 "value=\"%u\"",(unsigned) Pluggable);
 			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
 		     HTM_LABEL_End ();
 		     HTM_BR ();

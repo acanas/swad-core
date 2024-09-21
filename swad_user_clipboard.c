@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include <stdlib.h>		// For free
+
 #include "swad_box.h"
 #include "swad_cryptography.h"
 #include "swad_database.h"

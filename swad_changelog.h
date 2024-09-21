@@ -635,10 +635,11 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: INCLUIR LOS TEST EN LOS RECURSOS DEL PROGRAMA!!!!
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.7.2 (2024-09-20)"
+#define Log_PLATFORM_VERSION	"SWAD 24.7.3 (2024-09-21)"
 #define CSS_FILE		"swad24.7.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.7.3:   Sep 21, 2024  Fixed bug in test config. Reported by María Pilar Ossorio Castellanos. (336328 lines)
 	Version 24.7.2:   Sep 20, 2024  Clipboard temporarily available only for system admins. (336326 lines)
 	Version 24.7.1:   Sep 20, 2024  Changes in messages. (336317 lines)
 	Version 24.7:     Sep 20, 2024  User clipboard in message recipients. (336316 lines)

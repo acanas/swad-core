@@ -182,7 +182,6 @@ int main (void)
 
       /***** Make a processing or other depending on the action *****/
       FunctionPosteriori = Act_GetFunctionPosteriori (Gbl.Action.Act);
-
       if (FunctionPosteriori != NULL)
 	  FunctionPosteriori ();
 
