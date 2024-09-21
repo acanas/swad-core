@@ -350,8 +350,9 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		     HTM_TABLE_Begin ("TBL_SCROLL_C2");
 		        Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
 		     HTM_TABLE_End ();
-		     UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
-						   false);		// Don't show if empty
+		     if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
+			UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
+						      false);		// Don't show if empty
 		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
 		    }
 	       HTM_TD_End ();

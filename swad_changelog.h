@@ -631,13 +631,15 @@ TODO: Emilce Barrera Mesa: Mis estudiantes presentan muchas dificultades a la ho
 TODO: Francisco Javier Fernández Baldomero: intento mandar un mensaje a un estudiante vacío sin nickname, que se debe haber creado hoy mismo otro usuario con DNI distinto y nickname
 Me sale este error, no sé si por no recordar yo la sintaxis apropiada para mandar a varios destinatarios. ¿No era así?
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
+
+TODO: INCLUIR LOS TEST EN LOS RECURSOS DEL PROGRAMA!!!!
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.7.1 (2024-09-20)"
+#define Log_PLATFORM_VERSION	"SWAD 24.7.2 (2024-09-20)"
 #define CSS_FILE		"swad24.7.css"
 #define JS_FILE			"swad23.89.js"
 /*
- * INCLUIR LOS TEST EN LOS RECURSOS DEL PROGRAMA!!!!
+	Version 24.7.2:   Sep 20, 2024  Clipboard temporarily available only for system admins. (336326 lines)
 	Version 24.7.1:   Sep 20, 2024  Changes in messages. (336317 lines)
 	Version 24.7:     Sep 20, 2024  User clipboard in message recipients. (336316 lines)
 	Version 24.6.1:   Sep 20, 2024  Changes in listing of user clipboard. (336340 lines)

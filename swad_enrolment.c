@@ -632,7 +632,8 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 	    HTM_LEGEND (Txt_Step_1_Provide_a_list_of_users);
 	       HTM_TABLE_BeginCenterPadding (2);
 		  Enr_PutAreaToEnterUsrsIDs ();
-		  Enr_PutUsrsClipboard ();
+		  if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
+		     Enr_PutUsrsClipboard ();
 	       HTM_TABLE_End ();
 	 HTM_FIELDSET_End ();
 

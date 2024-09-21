@@ -28,6 +28,7 @@
 #include "swad_box.h"
 #include "swad_cryptography.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
@@ -78,6 +79,9 @@ static void UsrClp_CopyUsrsToClipboard (void)
   {
    const char *Ptr;
    struct Usr_Data UsrDat;
+
+   if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)	// TODO: Remove when finished
+      Err_ShowErrorAndExit ("Option under development.");
 
    /***** Remove my clipboard *****/
    Usr_DB_RemoveMyClipboard ();
