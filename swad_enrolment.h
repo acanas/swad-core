@@ -47,7 +47,7 @@ typedef enum
    Enr_SET_ACCEPTED_TO_TRUE,
   } Enr_KeepOrSetAccepted_t;
 
-#define Enr_ENR_REM_ONE_USR_NUM_ACTIONS 11
+#define Enr_ENR_REM_ONE_USR_NUM_ACTIONS 14
 typedef enum
   {
    Enr_ENR_REM_ONE_USR_UNKNOWN_ACTION	=  0,
@@ -55,12 +55,15 @@ typedef enum
    Enr_ENROL_ONE_DEG_ADMIN		=  2,
    Enr_ENROL_ONE_CTR_ADMIN		=  3,
    Enr_ENROL_ONE_INS_ADMIN		=  4,
-   Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE	=  5,
-   Enr_REMOVE_ONE_USR_FROM_CRS		=  6,
-   Enr_REMOVE_ONE_DEG_ADMIN		=  7,
-   Enr_REMOVE_ONE_CTR_ADMIN		=  8,
-   Enr_REMOVE_ONE_INS_ADMIN		=  9,
-   Enr_ELIMINATE_ONE_USR_FROM_PLATFORM	= 10,
+   Enr_COPY_USR_OTH			=  5,
+   Enr_COPY_USR_STD			=  6,
+   Enr_COPY_USR_TCH			=  7,
+   Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE	=  8,
+   Enr_REMOVE_ONE_USR_FROM_CRS		=  9,
+   Enr_REMOVE_ONE_DEG_ADMIN		= 10,
+   Enr_REMOVE_ONE_CTR_ADMIN		= 11,
+   Enr_REMOVE_ONE_INS_ADMIN		= 12,
+   Enr_ELIMINATE_ONE_USR_FROM_PLATFORM	= 13,
   } Enr_EnrRemOneUsrAction_t;
 
 typedef enum

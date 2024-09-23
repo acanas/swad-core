@@ -33,6 +33,10 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void UsrClp_CopyOneUsrToClipboardOth (void);
+void UsrClp_CopyOneUsrToClipboardStd (void);
+void UsrClp_CopyOneUsrToClipboardTch (void);
+
 void UsrClp_CopyGstsToClipboard (void);
 void UsrClp_CopyStdsToClipboard (void);
 void UsrClp_CopyTchsToClipboard (void);

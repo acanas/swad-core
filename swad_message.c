@@ -122,7 +122,7 @@ static void Msg_PutParsShowMorePotentialRecipients (void *Messages);
 static void Msg_PutParsWriteMsg (void *Messages);
 static void Msg_PutParsSubjectAndContent (void);
 static void Msg_ShowOneUniqueRecipient (void);
-static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
+static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefore);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages);
 
 static void Msg_PutParAnotherRecipient (const struct Usr_Data *UsrDat);
@@ -238,6 +238,7 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
+   bool OtherRecipientsBefore = false;
    char *ClassInput;
 
    Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs =
@@ -353,15 +354,21 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		  if (Messages->ShowOnlyOneRecipient)
 		     /***** Show only one user as recipient *****/
 		     Msg_ShowOneUniqueRecipient ();
-		  else if (ShowUsrsInCrs)
+		  else
 		    {
-		     /***** Show potential recipients *****/
-		     HTM_TABLE_Begin ("TBL_SCROLL_C2");
-		        Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
-		     HTM_TABLE_End ();
+		     if (ShowUsrsInCrs)
+		       {
+			/***** Show potential recipients *****/
+			HTM_TABLE_Begin ("TBL_SCROLL_C2");
+			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
+			   OtherRecipientsBefore = true;
+			HTM_TABLE_End ();
+		       }
 		     UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
 						   false);		// Don't show if empty
-		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
+		     if (!OtherRecipientsBefore)
+		        OtherRecipientsBefore = (Gbl.Usrs.LstUsrs[Rol_UNK].NumUsrs != 0);
+		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients (OtherRecipientsBefore);	// Other users (nicknames)
 		    }
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -527,21 +534,18 @@ static void Msg_ShowOneUniqueRecipient (void)
 /************** Nicknames of recipients of a message to users ****************/
 /*****************************************************************************/
 
-static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
+static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (bool OtherRecipientsBefore)
   {
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
    char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
-   bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
-                             (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// I belong to it
-                              Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
    /***** Title *****/
    HTM_LABEL_Begin ("for=\"OtherRecipients\""
 		    " class=\"FORM_IN_%s\"",The_GetSuffix ());
-      HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
-					 Txt_Recipients);
+      HTM_TxtColon (OtherRecipientsBefore ? Txt_Other_recipients :
+					    Txt_Recipients);
    HTM_LABEL_End ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/

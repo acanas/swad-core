@@ -48,12 +48,53 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void UsrClp_CopyOneUsrToClipboard (void);
 static void UsrClp_CopyUsrsToClipboard (void);
 
 static void UsrClp_ShowClipboard (Rol_Role_t Role);
 static void UsrClp_PutIconsClipboard (void *Args);
 
 static void UsrClp_GetUsrsLst (void);
+
+static void UsrClp_RemoveClipboard (void);
+
+/*****************************************************************************/
+/*********************** Copy one user to clipboard **************************/
+/*****************************************************************************/
+
+void UsrClp_CopyOneUsrToClipboardOth (void)
+  {
+   UsrClp_CopyOneUsrToClipboard ();
+   UsrClp_ShowClipboard (Rol_GST);
+  }
+
+void UsrClp_CopyOneUsrToClipboardStd (void)
+  {
+   UsrClp_CopyOneUsrToClipboard ();
+   UsrClp_ShowClipboard (Rol_STD);
+  }
+
+void UsrClp_CopyOneUsrToClipboardTch (void)
+  {
+   UsrClp_CopyOneUsrToClipboard ();
+   UsrClp_ShowClipboard (Rol_TCH);
+  }
+
+static void UsrClp_CopyOneUsrToClipboard (void)
+  {
+   /***** Remove my clipboard *****/
+   Usr_DB_RemoveMyClipboard ();
+
+   /***** Remove old clipboards (from all users) *****/
+   Usr_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in copy
+
+    /***** Get user to be copied *****/
+   if (Usr_GetParOtherUsrCodEncryptedAndGetUsrData ())
+      /***** Add user to clipboard *****/
+      Usr_DB_CopyToClipboard (Gbl.Usrs.Other.UsrDat.UsrCod);
+   else
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+  }
 
 /*****************************************************************************/
 /******************** Copy selected users to clipboard ***********************/
@@ -140,17 +181,17 @@ void UsrClp_ShowClipboardTchs (void)
 static void UsrClp_ShowClipboard (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Clipboard;
-   extern const char *Txt_User_clipboard;
+   extern const char *Txt_Clipboard;
 
-   Box_BoxBegin (Txt_User_clipboard,UsrClp_PutIconsClipboard,&Role,
+   Box_BoxBegin (Txt_Clipboard,UsrClp_PutIconsClipboard,&Role,
 		 Hlp_USERS_Clipboard,Box_CLOSABLE);
       UsrClp_ListUsrsInMyClipboard (Frm_DONT_PUT_FORM,
-				    true);	// Show even if empty);
+				    true);	// Show even if empty
    Box_BoxEnd ();
   }
 
 /*****************************************************************************/
-/************* Put contextual icons when showing user clipboard *************/
+/************* Put contextual icons when showing user clipboard **************/
 /*****************************************************************************/
 
 static void UsrClp_PutIconsClipboard (void *Args)
@@ -309,18 +350,27 @@ void UsrClp_PutIconToViewClipboardTchs (void)
 
 void UsrClp_RemoveClipboardGsts (void)
   {
-   Usr_DB_RemoveMyClipboard ();
+   UsrClp_RemoveClipboard ();
    UsrClp_ShowClipboardGsts ();
   }
 
 void UsrClp_RemoveClipboardStds (void)
   {
-   Usr_DB_RemoveMyClipboard ();
+   UsrClp_RemoveClipboard ();
    UsrClp_ShowClipboardStds ();
   }
 
 void UsrClp_RemoveClipboardTchs (void)
   {
-   Usr_DB_RemoveMyClipboard ();
+   UsrClp_RemoveClipboard ();
    UsrClp_ShowClipboardTchs ();
+  }
+
+static void UsrClp_RemoveClipboard (void)
+  {
+   extern const char *Txt_Clipboard_removed;
+
+   /***** Remove user clipboard *****/
+   Usr_DB_RemoveMyClipboard ();
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Clipboard_removed);
   }

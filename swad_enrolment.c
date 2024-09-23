@@ -146,6 +146,8 @@ static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
 static void Enr_PutActionEnrOneDegAdm (HTM_Attributes_t *Attributes);
 static void Enr_PutActionEnrOneCtrAdm (HTM_Attributes_t *Attributes);
 static void Enr_PutActionEnrOneInsAdm (HTM_Attributes_t *Attributes);
+static void Enr_PutActionCpyUsr (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
+				 HTM_Attributes_t *Attributes);
 static void Enr_PutActionRepUsrAsDup (HTM_Attributes_t *Attributes);
 static void Enr_PutActionRemUsrFromCrs (HTM_Attributes_t *Attributes,
 					Usr_MeOrOther_t MeOrOther);
@@ -834,13 +836,13 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 static void Enr_PutUsrsClipboard (void)
   {
-   extern const char *Txt_User_clipboard;
+   extern const char *Txt_Clipboard;
 
    /***** Users' clipboard *****/
    HTM_TR_Begin (NULL);
 
       /* Label */
-      Frm_LabelColumn ("Frm_C1 RT","",Txt_User_clipboard);
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_Clipboard);
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB\"");
@@ -1583,6 +1585,25 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	   }
 	}
 
+      /***** Copy user to clipboard *****/
+      if (Gbl.Usrs.Me.Role.Logged >= Rol_GST)
+        {
+	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
+	   {
+	    case Rol_STD:
+	       Enr_PutActionCpyUsr (Enr_COPY_USR_STD,&Attributes);
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       Enr_PutActionCpyUsr (Enr_COPY_USR_TCH,&Attributes);
+	       break;
+	    default:
+	       Enr_PutActionCpyUsr (Enr_COPY_USR_OTH,&Attributes);
+	       break;
+	   }
+	 OptionsShown = true;
+	}
+
       /***** Report user as possible duplicate *****/
       if (MeOrOther == Usr_OTHER && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
@@ -1706,6 +1727,20 @@ static void Enr_PutActionEnrOneInsAdm (HTM_Attributes_t *Attributes)
    Enr_EnrRemOneUsrActionBegin (Enr_ENROL_ONE_INS_ADMIN,Attributes);
       HTM_TxtF (Txt_Enrol_USER_as_an_administrator_of_the_institution_X,
 		Gbl.Hierarchy.Node[Hie_INS].ShrtName);
+   Enr_EnrRemOneUsrActionEnd ();
+  }
+
+/*****************************************************************************/
+/****************** Put action to report user as duplicate *******************/
+/*****************************************************************************/
+
+static void Enr_PutActionCpyUsr (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
+				 HTM_Attributes_t *Attributes)
+  {
+   extern const char *Txt_Copy;
+
+   Enr_EnrRemOneUsrActionBegin (EnrRemOneUsrAction,Attributes);
+      HTM_Txt (Txt_Copy);
    Enr_EnrRemOneUsrActionEnd ();
   }
 
@@ -3198,6 +3233,12 @@ void Enr_ModifyUsr1 (void)
 	    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
+	 case Enr_COPY_USR_OTH:
+	 case Enr_COPY_USR_STD:
+	 case Enr_COPY_USR_TCH:
+	    if (Gbl.Usrs.Me.Role.Logged < Rol_GST)
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 	    if (MeOrOther == Usr_ME || Gbl.Usrs.Me.Role.Logged < Rol_TCH)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -3259,6 +3300,15 @@ void Enr_ModifyUsr2 (void)
 	    break;
 	 case Enr_ENROL_ONE_INS_ADMIN:
 	    Adm_ReqAddAdm (Hie_INS);
+	    break;
+	 case Enr_COPY_USR_OTH:
+	    UsrClp_CopyOneUsrToClipboardOth ();
+	    break;
+	 case Enr_COPY_USR_STD:
+	    UsrClp_CopyOneUsrToClipboardStd ();
+	    break;
+	 case Enr_COPY_USR_TCH:
+	    UsrClp_CopyOneUsrToClipboardTch ();
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 	    Dup_ReportUsrAsPossibleDuplicate ();

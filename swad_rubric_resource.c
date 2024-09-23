@@ -99,9 +99,9 @@ void RubRsc_ViewResourceClipboard (void)
 static void RubRsc_ShowClipboard (void)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics_resource_clipboard;
-   extern const char *Txt_Resource_clipboard;
+   extern const char *Txt_Clipboard;
 
-   Box_BoxBegin (Txt_Resource_clipboard,RubRsc_PutIconsClipboard,NULL,
+   Box_BoxBegin (Txt_Clipboard,RubRsc_PutIconsClipboard,NULL,
 		 Hlp_ASSESSMENT_Rubrics_resource_clipboard,Box_CLOSABLE);
       Rsc_ShowClipboard ();
    Box_BoxEnd ();
@@ -126,11 +126,11 @@ static void RubRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
 
 void RubRsc_RemoveResourceClipboard (void)
   {
-   extern const char *Txt_Resource_clipboard_removed;
+   extern const char *Txt_Clipboard_removed;
 
    /***** Remove resource clipboard *****/
    Rsc_DB_RemoveClipboard ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Resource_clipboard_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Clipboard_removed);
 
    /***** View resource clipboard again *****/
    RubRsc_ViewResourceClipboard ();

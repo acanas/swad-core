@@ -2117,7 +2117,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
       /***** Begin table *****/
-      HTM_TABLE_Begin ("TBL_SCROLL");
+      HTM_TABLE_BeginWidePadding (2);
 
 	 /***** List to select the groups the user belongs to *****/
 	 for (NumGrpTyp = 0;

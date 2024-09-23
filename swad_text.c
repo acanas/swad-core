@@ -5203,6 +5203,75 @@ const char *Txt_Clicks_per_day =
 	"Clicks per day";	// Çeviri lazim!
 #endif
 
+const char *Txt_Clipboard =
+#if   L==1	// ca
+	"Portapapers";
+#elif L==2	// de
+	"Zwischenablage";
+#elif L==3	// en
+	"Clipboard";
+#elif L==4	// es
+	"Portapapeles";
+#elif L==5	// fr
+	"Presse-papiers";
+#elif L==6	// gn
+	"Portapapeles";	// Okoteve traducción
+#elif L==7	// it
+	"Appunti";
+#elif L==8	// pl
+	"Schowek";
+#elif L==9	// pt
+	"&Aacute;rea de transfer&ecirc;ncia";
+#elif L==10	// tr
+	"Panosu";
+#endif
+
+const char *Txt_clipboard =
+#if   L==1	// ca
+	"portapapers";
+#elif L==2	// de
+	"Zwischenablage";
+#elif L==3	// en
+	"clipboard";
+#elif L==4	// es
+	"portapapeles";
+#elif L==5	// fr
+	"presse-papiers";
+#elif L==6	// gn
+	"portapapeles";	// Okoteve traducción
+#elif L==7	// it
+	"appunti";
+#elif L==8	// pl
+	"schowek";
+#elif L==9	// pt
+	"&aacute;rea de transfer&ecirc;ncia";
+#elif L==10	// tr
+	"panosu";
+#endif
+
+const char *Txt_Clipboard_removed =
+#if   L==1	// ca
+	"Portapapers eliminat.";
+#elif L==2	// de
+	"Zwischenablage entfernt.";
+#elif L==3	// en
+	"Clipboard removed.";
+#elif L==4	// es
+	"Portapapeles eliminado.";
+#elif L==5	// fr
+	"Presse-papiers supprim&eacute;.";
+#elif L==6	// gn
+	"Portapapeles ojeipe'a.";
+#elif L==7	// it
+	"Appunti rimossi.";
+#elif L==8	// pl
+	"Usuni&eogon;to schowek.";
+#elif L==9	// pt
+	"&Aacute;rea de transfer&ecirc;ncia removida.";
+#elif L==10	// tr
+	"Panosu kald&inodot;r&inodot;ld&inodot;.";
+#endif
+
 const char *Txt_Close =
 #if   L==1	// ca
 	"Tancar";
@@ -34161,52 +34230,6 @@ const char *Txt_Reset_survey =
 	"S&inodot;f&inodot;rla";
 #endif
 
-const char *Txt_Resource_clipboard =
-#if   L==1	// ca
-	"Portapapers de recursos";
-#elif L==2	// de
-	"Ressourcen-Zwischenablage";
-#elif L==3	// en
-	"Resource clipboard";
-#elif L==4	// es
-	"Portapapeles de recursos";
-#elif L==5	// fr
-	"Presse-papiers de ressources";
-#elif L==6	// gn
-	"Recurso portapapeles rehegua";
-#elif L==7	// it
-	"Appunti delle risorse";
-#elif L==8	// pl
-	"Schowek zasob&oacute;w";
-#elif L==9	// pt
-	"&Aacute;rea de transfer&ecirc;ncia de recursos";
-#elif L==10	// tr
-	"Kaynak panosu";
-#endif
-
-const char *Txt_Resource_clipboard_removed =
-#if   L==1	// ca
-	"Portapapers de recursos eliminat.";
-#elif L==2	// de
-	"Ressourcen-Zwischenablage entfernt.";
-#elif L==3	// en
-	"Resource clipboard removed.";
-#elif L==4	// es
-	"Portapapeles de recursos eliminado.";
-#elif L==5	// fr
-	"Presse-papiers de ressources supprim&eacute;.";
-#elif L==6	// gn
-	"Recurso portapapeles ojeipe'a.";
-#elif L==7	// it
-	"Appunti delle risorse rimossi.";
-#elif L==8	// pl
-	"Usuni&eogon;to schowek zasob&oacute;w.";
-#elif L==9	// pt
-	"&Aacute;rea de transfer&ecirc;ncia de recursos removida.";
-#elif L==10	// tr
-	"Kaynak panosu kald&inodot;r&inodot;ld&inodot;.";
-#endif
-
 const char *Txt_Resource_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Recurs <strong>%s</strong> eliminat.";
@@ -55781,29 +55804,6 @@ const char *Txt_user[Usr_NUM_SEXS] =
 	"user"	// Çeviri lazim!
 #endif
 	};
-
-const char *Txt_User_clipboard =
-#if   L==1	// ca
-	"Portapapers d'usuaris";
-#elif L==2	// de
-	"Zwischenablage der Benutzer";
-#elif L==3	// en
-	"User clipboard";
-#elif L==4	// es
-	"Portapapeles de usuarios";
-#elif L==5	// fr
-	"Presse-papiers des utilisateurs";
-#elif L==6	// gn
-	"Portapapeles de usuarios";	// Okoteve traducción
-#elif L==7	// it
-	"Appunti degli utenti";
-#elif L==8	// pl
-	"Schowek u&zdot;ytkownika";
-#elif L==9	// pt
-	"&Aacute;rea de transfer&ecirc;ncia de utilizadores";
-#elif L==10	// tr
-	"Kullan&inodot;c&inodot; panosu";
-#endif
 
 const char *Txt_USER_comments =
 #if   L==1	// ca

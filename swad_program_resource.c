@@ -878,9 +878,9 @@ void PrgRsc_ViewResourceClipboard (void)
 static void PrgRsc_ShowClipboard (void)
   {
    extern const char *Hlp_COURSE_Program_resource_clipboard;
-   extern const char *Txt_Resource_clipboard;
+   extern const char *Txt_Clipboard;
 
-   Box_BoxBegin (Txt_Resource_clipboard,PrgRsc_PutIconsClipboard,NULL,
+   Box_BoxBegin (Txt_Clipboard,PrgRsc_PutIconsClipboard,NULL,
 		 Hlp_COURSE_Program_resource_clipboard,Box_CLOSABLE);
       Rsc_ShowClipboard ();
    Box_BoxEnd ();
@@ -905,11 +905,11 @@ static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
 
 void PrgRsc_RemoveResourceClipboard (void)
   {
-   extern const char *Txt_Resource_clipboard_removed;
+   extern const char *Txt_Clipboard_removed;
 
    /***** Remove resource clipboard *****/
    Rsc_DB_RemoveClipboard ();
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Resource_clipboard_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Clipboard_removed);
 
    /***** View resource clipboard again *****/
    PrgRsc_ViewResourceClipboard ();

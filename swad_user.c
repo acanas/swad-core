@@ -3949,16 +3949,20 @@ void Usr_WriteNumUsrsInList (Rol_Role_t Role)
    extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_clipboard;
    Usr_Sex_t Sex;
    unsigned NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs;
 
    Sex = Usr_GetSexOfUsrsLst (Role);
    HTM_Unsigned (NumUsrs);
    HTM_NBSP ();
-   HTM_TxtF ((Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
-						 Txt_users[Sex]) :
-				 (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-						 Txt_ROLES_PLURAL_abc[Role][Sex]));
+   HTM_Txt ((Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
+						Txt_users[Sex]) :
+				(NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+						Txt_ROLES_PLURAL_abc[Role][Sex]));
+   HTM_SPTxt ("(");
+   HTM_Txt (Txt_clipboard);
+   HTM_Txt (")");
    if (NumUsrs)
       HTM_Colon ();
   }
