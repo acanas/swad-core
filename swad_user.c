@@ -5844,8 +5844,7 @@ static void Usr_PutIconsListGsts (__attribute__((unused)) void *Args)
      }
 
    /***** Put icon to view user clipboard *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
-      UsrClp_PutIconToViewClipboardGsts ();
+   UsrClp_PutIconToViewClipboardGsts ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);
@@ -5873,8 +5872,7 @@ static void Usr_PutIconsListStds (__attribute__((unused)) void *Args)
      }
 
    /***** Put icon to view user clipboard *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
-      UsrClp_PutIconToViewClipboardStds ();
+   UsrClp_PutIconToViewClipboardStds ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);
@@ -5902,8 +5900,7 @@ static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
      }
 
    /***** Put icon to view user clipboard *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
-      UsrClp_PutIconToViewClipboardTchs ();
+   UsrClp_PutIconToViewClipboardTchs ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);

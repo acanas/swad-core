@@ -99,8 +99,7 @@ static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
 static void Msg_ResetMessages (struct Msg_Messages *Messages);
 
 static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
-			        struct Msg_Messages *Messages,
-                                char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
+			        struct Msg_Messages *Messages);
 
 static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages);
 static void Msg_PutLinkToViewBannedUsers(void);
@@ -124,11 +123,12 @@ static void Msg_PutParsWriteMsg (void *Messages);
 static void Msg_PutParsSubjectAndContent (void);
 static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages,
-                                                     char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages);
 
 static void Msg_PutParAnotherRecipient (const struct Usr_Data *UsrDat);
 static void Msg_PutParOtherRecipients (void);
+
+static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages);
 
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
@@ -180,6 +180,7 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
   {
    Messages->NumMsgs              = 0;
    Messages->Subject[0]           = '\0';
+   Messages->Content              = NULL;
    Messages->FilterCrsCod         = -1L;
    Messages->FilterCrsShrtName[0] = '\0';
    Messages->FilterFromTo[0]      = '\0';
@@ -187,7 +188,10 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
    Messages->ShowOnlyUnreadMsgs   = false;
    Messages->ExpandedMsgCod       = -1L;
    Messages->Reply.IsReply        = false;
+   Messages->Reply.Replied        = false;
    Messages->Reply.OriginalMsgCod = -1L;
+   Messages->Rcv.NumRecipients    = 0;
+   Messages->Rcv.NumErrors        = 0;
    Messages->ShowOnlyOneRecipient = false;
    Messages->CurrentPage          = 0;
    Messages->MsgCod               = -1L;
@@ -200,18 +204,24 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
 void Msg_FormMsgUsrs (void)
   {
    struct Msg_Messages Messages;
-   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Reset messages context *****/
    Msg_ResetMessages (&Messages);
 
+   /***** Allocate memory for message content *****/
+   if ((Messages.Content = malloc (Cns_MAX_BYTES_LONG_TEXT + 1)) == NULL)
+      Err_NotEnoughMemoryExit ();
+
    /***** Get possible hidden subject and content of the message *****/
    Par_GetParHTML ("HiddenSubject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
-   Par_GetParAndChangeFormat ("HiddenContent",Content,Cns_MAX_BYTES_LONG_TEXT,
+   Par_GetParAndChangeFormat ("HiddenContent",Messages.Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_TEXT,Str_DONT_REMOVE_SPACES);
 
    /***** Show a form to compose a message to users *****/
-   Msg_PutFormMsgUsrs (ActReqMsgUsr,&Messages,Content);
+   Msg_PutFormMsgUsrs (ActReqMsgUsr,&Messages);
+
+   /***** Free allocated memory for message content *****/
+   free (Messages.Content);
   }
 
 /*****************************************************************************/
@@ -219,8 +229,7 @@ void Msg_FormMsgUsrs (void)
 /*****************************************************************************/
 
 static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
-			        struct Msg_Messages *Messages,
-                                char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
+			        struct Msg_Messages *Messages)
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *Txt_Message;
@@ -350,16 +359,15 @@ static void Msg_PutFormMsgUsrs (Act_Action_t NextAction,
 		     HTM_TABLE_Begin ("TBL_SCROLL_C2");
 		        Usr_ListUsersToSelect (&Gbl.Usrs.Selected);
 		     HTM_TABLE_End ();
-		     if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
-			UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
-						      false);		// Don't show if empty
+		     UsrClp_ListUsrsInMyClipboard (Frm_PUT_FORM,
+						   false);		// Don't show if empty
 		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
 		    }
 	       HTM_TD_End ();
 	    HTM_TR_End ();
 
 	    /***** Subject and content sections *****/
-	    Msg_WriteFormSubjectAndContentMsgToUsrs (Messages,Content);
+	    Msg_WriteFormSubjectAndContentMsgToUsrs (Messages);
 
 	 /***** End table *****/
 	 HTM_TABLE_End ();
@@ -560,8 +568,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 /****** Write form fields with subject and content of a message to users *****/
 /*****************************************************************************/
 
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages,
-                                                     char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messages)
   {
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
@@ -569,7 +576,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long MsgCod;
-   bool SubjectAndContentComeFromForm = (Messages->Subject[0] || Content[0]);
+   bool SubjectAndContentComeFromForm = (Messages->Subject[0] ||
+					 Messages->Content[0]);
 
    /***** Get possible code (of original message if it's a reply) *****/
    MsgCod = ParCod_GetPar (ParCod_Msg);
@@ -600,7 +608,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 		     /* Get subject (row[0]) and content (row[1]) */
 		     Str_Copy (Messages->Subject,row[0],sizeof (Messages->Subject) - 1);
-		     Str_Copy (Content          ,row[1],Cns_MAX_BYTES_LONG_TEXT);
+		     Str_Copy (Messages->Content,row[1],Cns_MAX_BYTES_LONG_TEXT);
 
 		     /* Free structure that stores the query result */
 		     DB_FreeMySQLResult (&mysql_res);
@@ -638,9 +646,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		  if (!SubjectAndContentComeFromForm)
 		     HTM_TxtF ("\n\n----- %s -----\n",Txt_Original_message);
 
-		  Msg_WriteMsgContent (Content,false,true);
-	       HTM_TEXTAREA_End ();
-	    HTM_TD_End ();
+		  Msg_WriteMsgContent (Messages->Content,false,true);
       	}
       else	// It's not a reply
 	{
@@ -671,11 +677,11 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		     if we don't put the initial '\n' ==> the form will be sent starting
 		     by "Lorem", without the white line */
 		  HTM_Txt ("\n");
-		  HTM_Txt (Content);
-	       HTM_TEXTAREA_End ();
-	    HTM_TD_End ();
+		  HTM_Txt (Messages->Content);
 	}
 
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
    HTM_TR_End ();
   }
 
@@ -710,47 +716,30 @@ void Msg_RecMsgFromUsr (void)
   {
    extern const char *Txt_You_can_not_send_a_message_to_so_many_recipients_;
    extern const char *Txt_You_must_select_one_ore_more_recipients;
-   extern const char *Txt_message_not_sent_to_X;
-   extern const char *Txt_message_sent_to_X_notified_by_email;
-   extern const char *Txt_message_sent_to_X_not_notified_by_email;
-   extern const char *Txt_Error_getting_data_from_a_recipient;
    extern const char *Txt_The_message_has_not_been_sent_to_any_recipient;
    extern const char *Txt_The_message_has_been_sent_to_1_recipient;
    extern const char *Txt_The_message_has_been_sent_to_X_recipients;
    extern const char *Txt_There_have_been_X_errors_in_sending_the_message;
    struct Msg_Messages Messages;
-   bool IsReply;
-   bool RecipientHasBannedMe;
-   bool Replied = false;
-   long OriginalMsgCod = -1L;	// Initialized to avoid warning
-   const char *Ptr;
-   unsigned NumRecipients;
-   unsigned NumRecipientsToBeNotifiedByEMail = 0;
-   struct Usr_Data UsrDstData;
-   int NumErrors = 0;
-   long NewMsgCod = -1L;	// Initiliazed to avoid warning
-   bool MsgAlreadyInserted = false;
-   bool CreateNotif;
-   bool NotifyByEmail;
-   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Med_Media Media;
    bool Error = false;
 
    /***** Reset messages context *****/
    Msg_ResetMessages (&Messages);
 
-   /***** Get data from form *****/
-   /* Get subject */
-   Par_GetParHTML ("Subject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
+   /***** Allocate memory for message content *****/
+   if ((Messages.Content = malloc (Cns_MAX_BYTES_LONG_TEXT + 1)) == NULL)
+      Err_NotEnoughMemoryExit ();
 
-   /* Get body */
-   Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
+   /***** Get data from form *****/
+   /* Get subject and body */
+   Par_GetParHTML ("Subject",Messages.Subject,Cns_MAX_BYTES_SUBJECT);
+   Par_GetParAndChangeFormat ("Content",Messages.Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_DONT_CHANGE,Str_DONT_REMOVE_SPACES);
 
    /* Get parameter that indicates if the message is a reply to a previous message */
-   if ((IsReply = Par_GetParBool ("IsReply")))
+   if ((Messages.Reply.IsReply = Par_GetParBool ("IsReply")))
       /* Get original message code */
-      OriginalMsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
+      Messages.Reply.OriginalMsgCod = ParCod_GetAndCheckPar (ParCod_Msg);
 
    /* Get user's code of possible preselected recipient */
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
@@ -762,10 +751,10 @@ void Msg_RecMsgFromUsr (void)
    Error = Usr_GetListMsgRecipientsWrittenExplicitelyBySender (true);
 
    /***** Check number of recipients *****/
-   if ((NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected)))
+   if ((Messages.Rcv.NumRecipients = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected)))
      {
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&
-          NumRecipients > Cfg_MAX_RECIPIENTS)
+          Messages.Rcv.NumRecipients > Cfg_MAX_RECIPIENTS)
         {
          /* Write warning message */
          Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_send_a_message_to_so_many_recipients_);
@@ -784,131 +773,153 @@ void Msg_RecMsgFromUsr (void)
      {
       /* Show the form again, with the subject and the message filled */
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                        Content,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
-      Msg_PutFormMsgUsrs (ActRcvMsgUsr,&Messages,Content);
-      return;
+                        Messages.Content,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);
+      Msg_PutFormMsgUsrs (ActRcvMsgUsr,&Messages);
      }
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDstData);
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&Media);
-
-   /***** Get attached image (action, file and title) *****/
-   Media.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
-   Media.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
-   Media.Quality = Msg_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1L,-1L,-1,&Media,NULL,NULL);
-   Ale_ShowAlerts (NULL);
-
-   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK], that holds the list of the
-	  recipients, creating a received message for each recipient *****/
-   Str_ChangeFormat (Str_FROM_FORM,Str_TO_RIGOROUS_HTML,
-                     Content,Cns_MAX_BYTES_LONG_TEXT,Str_DONT_REMOVE_SPACES);
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   NumRecipients = 0;
-   while (*Ptr)
+   else
      {
-      Par_GetNextStrUntilSeparParMult (&Ptr,UsrDstData.EnUsrCod,
-                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,	// Get recipient's data from database
-                                                   Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CRS))
-        {
-         /***** Check if recipient has banned me *****/
-         RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod);
+      /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK],
+             that holds the list of the recipients,
+             creating a received message for each recipient *****/
+      Msg_CreateRcvMsgForEachRecipient (&Messages);
 
-         if (RecipientHasBannedMe)
-            /***** Show an alert indicating that the message has not been sent successfully *****/
-            Ale_ShowAlert (Ale_WARNING,Txt_message_not_sent_to_X,
-		           UsrDstData.FullName);
-         else
-           {
-            /***** Create message *****/
-            if (!MsgAlreadyInserted)
-              {
-               // The message is inserted only once in the table of messages sent
-               NewMsgCod = Msg_InsertNewMsg (Messages.Subject,Content,&Media);
-               MsgAlreadyInserted = true;
-              }
+      /***** Update received message setting Replied field to true *****/
+      if (Messages.Reply.Replied)
+	 Msg_DB_SetRcvMsgAsReplied (Messages.Reply.OriginalMsgCod);
 
-            /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
-            Replied = (IsReply &&
-        	       UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-
-            /***** This received message must be notified by email? *****/
-            CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
-            NotifyByEmail = CreateNotif &&
-        	            (UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
-                            (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE));
-
-            /***** Create the received message for this recipient
-                   and increment number of new messages received by this recipient *****/
-            Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
-
-            /***** Create notification for this recipient.
-                   If this recipient wants to receive notifications by -mail,
-                   activate the sending of a notification *****/
-            if (CreateNotif)
-               Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
-                                             (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-                                        	                             0),
-                                             Gbl.Hierarchy.Node[Hie_INS].HieCod,
-                                             Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-                                             Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-                                             Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-
-            /***** Show an alert indicating that the message has been sent successfully *****/
-            Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
-                                                       Txt_message_sent_to_X_not_notified_by_email,
-                           UsrDstData.FullName);
-
-            /***** Increment number of recipients *****/
-            if (NotifyByEmail)
-               NumRecipientsToBeNotifiedByEMail++;
-            NumRecipients++;
-           }
-        }
+      /***** Write final message *****/
+      if (Messages.Rcv.NumRecipients == 0)
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_message_has_not_been_sent_to_any_recipient);
+      else if (Messages.Rcv.NumRecipients == 1)
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_1_recipient);
       else
-        {
-         Ale_ShowAlert (Ale_ERROR,Txt_Error_getting_data_from_a_recipient);
-         NumErrors++;
-        }
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_X_recipients,
+			Messages.Rcv.NumRecipients);
+
+      /***** Show alert about errors on sending message *****/
+      if (Messages.Rcv.NumErrors > 1)
+	 Ale_ShowAlert (Ale_ERROR,Txt_There_have_been_X_errors_in_sending_the_message,
+		       Messages.Rcv.NumErrors);
      }
-
-   /***** Free image *****/
-   Med_MediaDestructor (&Media);
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDstData);
 
    /***** Free memory *****/
    /* Free memory used for list of users */
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 
-   /***** Update received message setting Replied field to true *****/
-   if (Replied)
-      Msg_DB_SetRcvMsgAsReplied (OriginalMsgCod);
+   /* Free memory for message content */
+   free (Messages.Content);
+  }
 
-   /***** Write final message *****/
-   if (NumRecipients)
-     {
-      if (NumRecipients == 1)
-         Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_1_recipient);
-      else
-         Ale_ShowAlert (Ale_SUCCESS,Txt_The_message_has_been_sent_to_X_recipients,
-                        (unsigned) NumRecipients);
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_message_has_not_been_sent_to_any_recipient);
+/*****************************************************************************/
+/************ Loop over the list Gbl.Usrs.Selected.List[Rol_UNK], ************/
+/************ that holds the list of the recipients,              ************/
+/************ creating a received message for each recipient      ************/
+/*****************************************************************************/
 
-   /***** Show alert about errors on sending message *****/
-   if (NumErrors > 1)
-      Ale_ShowAlert (Ale_ERROR,Txt_There_have_been_X_errors_in_sending_the_message,
-                    (unsigned) NumErrors);
+static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
+  {
+   extern const char *Txt_message_not_sent_to_X;
+   extern const char *Txt_message_sent_to_X_notified_by_email;
+   extern const char *Txt_message_sent_to_X_not_notified_by_email;
+   extern const char *Txt_Error_getting_data_from_a_recipient;
+   struct Med_Media Media;
+   struct Usr_Data UsrDstData;
+   const char *Ptr;
+   bool MsgAlreadyInserted = false;
+   long NewMsgCod = -1L;	// Initiliazed to avoid warning
+   bool CreateNotif;
+   bool NotifyByEmail;
+
+   /***** Initialize and get media from form *****/
+   Med_MediaConstructor (&Media);
+   Media.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
+   Media.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
+   Media.Quality = Msg_IMAGE_SAVED_QUALITY;
+   Med_GetMediaFromForm (-1L,-1L,-1,&Media,NULL,NULL);
+   Ale_ShowAlerts (NULL);
+
+      /***** Initialize user's data *****/
+      Usr_UsrDataConstructor (&UsrDstData);
+
+         /***** Change content format *****/
+	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_RIGOROUS_HTML,
+			   Messages->Content,Cns_MAX_BYTES_LONG_TEXT,Str_DONT_REMOVE_SPACES);
+
+	 /***** Loop over list of recipients *****/
+	 Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+	 Messages->Rcv.NumRecipients =
+	 Messages->Rcv.NumErrors     = 0;
+	 while (*Ptr)
+	   {
+	    Par_GetNextStrUntilSeparParMult (&Ptr,UsrDstData.EnUsrCod,
+					     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,	// Get recipient's data from database
+							 Usr_DONT_GET_PREFS,
+							 Usr_DONT_GET_ROLE_IN_CRS))
+	      {
+	       /***** Check if recipient has banned me *****/
+	       if (Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod))
+		  /***** Show an alert indicating that the message has not been sent successfully *****/
+		  Ale_ShowAlert (Ale_WARNING,Txt_message_not_sent_to_X,UsrDstData.FullName);
+	       else
+		 {
+		  /***** Create message *****/
+		  if (!MsgAlreadyInserted)
+		    {
+		     // The message is inserted only once in the table of messages sent
+		     NewMsgCod = Msg_InsertNewMsg (Messages->Subject,Messages->Content,&Media);
+		     MsgAlreadyInserted = true;
+		    }
+
+		  /***** If this recipient is the original sender of a message been replied, set Replied to true *****/
+		  Messages->Reply.Replied = (Messages->Reply.IsReply &&
+					     UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+
+		  /***** This received message must be notified by email? *****/
+		  CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
+		  NotifyByEmail = CreateNotif &&
+				  (UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
+				  (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE));
+
+		  /***** Create the received message for this recipient
+			 and increment number of new messages received by this recipient *****/
+		  Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
+
+		  /***** Create notification for this recipient.
+			 If this recipient wants to receive notifications by -mail,
+			 activate the sending of a notification *****/
+		  if (CreateNotif)
+		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,UsrDstData.UsrCod,NewMsgCod,
+						   (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+										   0),
+						   Gbl.Hierarchy.Node[Hie_INS].HieCod,
+						   Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+						   Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+						   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+
+		  /***** Show an alert indicating that the message has been sent successfully *****/
+		  Ale_ShowAlert (Ale_SUCCESS,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
+							     Txt_message_sent_to_X_not_notified_by_email,
+				 UsrDstData.FullName);
+
+		  /***** Increment number of recipients *****/
+		  Messages->Rcv.NumRecipients++;
+		 }
+	      }
+	    else
+	      {
+	       Ale_ShowAlert (Ale_ERROR,Txt_Error_getting_data_from_a_recipient);
+	       Messages->Rcv.NumErrors++;
+	      }
+	   }
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDstData);
+
+   /***** Free image *****/
+   Med_MediaDestructor (&Media);
   }
 
 /*****************************************************************************/
@@ -1880,7 +1891,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    HTM_TR_Begin (NULL);
-      Frm_LabelColumn ("Frm_C1 RT","",Txt_MSG_Unopened);	// TODO: Translate!!!!!!
+      Frm_LabelColumn ("Frm_C1 RT","",Txt_MSG_Unopened);
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",

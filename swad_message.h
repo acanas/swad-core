@@ -71,6 +71,7 @@ struct Msg_Messages
    Msg_TypeOfMessages_t TypeOfMessages;
    unsigned NumMsgs;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char *Content;	// Message content. Must be allocated and freed
    long FilterCrsCod;	// Show only messages sent from this course code
    char FilterCrsShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];
    char FilterFromTo[Usr_MAX_BYTES_FULL_NAME + 1];		// Show only messages from/to these users
@@ -80,8 +81,14 @@ struct Msg_Messages
    struct
      {
       bool IsReply;			// Is the message I am editing a reply?
+      bool Replied;			// If the message has been replied
       long OriginalMsgCod;		// Original message code when I am editing a reply
      } Reply;
+   struct
+     {
+      unsigned NumRecipients;
+      unsigned NumErrors;
+     } Rcv;
    bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
    unsigned CurrentPage;
    long MsgCod;	// Used as parameter with message to be removed
