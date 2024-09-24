@@ -5305,7 +5305,7 @@ table.TBL_WIDE > tbody > tr > th {padding: 2px;}
 	display: table;
 	width: 100%;
 	}
-.TBL_SCROLL th,.TBL_SCROLL td {padding: 1px;}
+.TBL_SCROLL th,.TBL_SCROLL td {padding: 0;}
 
 .Ind_TBL td,.Ind_TBL th
 	{

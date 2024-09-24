@@ -5249,29 +5249,6 @@ const char *Txt_Clipboard =
 	"Panosu";
 #endif
 
-const char *Txt_clipboard =
-#if   L==1	// ca
-	"portapapers";
-#elif L==2	// de
-	"Zwischenablage";
-#elif L==3	// en
-	"clipboard";
-#elif L==4	// es
-	"portapapeles";
-#elif L==5	// fr
-	"presse-papiers";
-#elif L==6	// gn
-	"portapapeles";	// Okoteve traducción
-#elif L==7	// it
-	"appunti";
-#elif L==8	// pl
-	"schowek";
-#elif L==9	// pt
-	"&aacute;rea de transfer&ecirc;ncia";
-#elif L==10	// tr
-	"panosu";
-#endif
-
 const char *Txt_Clipboard_removed =
 #if   L==1	// ca
 	"Portapapers eliminat.";
