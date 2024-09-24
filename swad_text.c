@@ -1156,6 +1156,29 @@ const char *Txt_Add_this_ID =
 	"Bu kimli&gbreve;i ekle";
 #endif
 
+const char *Txt_Add_to_clipboard =
+#if   L==1	// ca
+	"Afegeix al porta-retalls";
+#elif L==2	// de
+	"Zur Zwischenablage hinzuf&uuml;gen";
+#elif L==3	// en
+	"Add to clipboard";
+#elif L==4	// es
+	"Agregar al portapapeles";
+#elif L==5	// fr
+	"Ajouter au presse-papiers";
+#elif L==6	// gn
+	"O&ntilde;emo&itilde;ve portapapeles-pe";
+#elif L==7	// it
+	"Aggiungi agli appunti";
+#elif L==8	// pl
+	"Dodaj do schowka";
+#elif L==9	// pt
+	"Adicionar &agrave; &aacute;rea de transfer&ecirc;ncia";
+#elif L==10	// tr
+	"Panoya ekle";
+#endif
+
 const char *Txt_Add_USERS =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Afegir %s";
@@ -29365,6 +29388,29 @@ const char *Txt_Other_recipients =
 	"Outros destinat&aacute;rios";
 #elif L==10	// tr
 	"Di&gbreve;er al&inodot;c&inodot;lar";
+#endif
+
+const char *Txt_Overwrite_clipboard =
+#if   L==1	// ca
+	"Sobreescriu el porta-retalls";
+#elif L==2	// de
+	"Zwischenablage &uuml;berschreiben";
+#elif L==3	// en
+	"Overwrite clipboard";
+#elif L==4	// es
+	"Sobrescribir el portapapeles";
+#elif L==5	// fr
+	"Remplacer le presse-papiers";
+#elif L==6	// gn
+	"Ojehai &aacute;ri portapapeles";
+#elif L==7	// it
+	"Sovrascrivi gli appunti";
+#elif L==8	// pl
+	"Nadpisz schowek";
+#elif L==9	// pt
+	"Substituir &aacute;rea de transfer&ecirc;ncia";
+#elif L==10	// tr
+	"Panoya yaz";
 #endif
 
 const char *Txt_page =

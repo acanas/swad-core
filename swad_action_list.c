@@ -1329,7 +1329,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstStdAll	] = {  42, 1,TabUsr,NULL			,Usr_ListAllDataStds		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActPrnStdPho	] = { 120, 1,TabUsr,NULL			,Usr_SeeStdClassPhotoPrn	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevStd	] = {1754, 1,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActCpySevStd	] = {1979, 1,TabUsr,NULL			,UsrClp_CopyStdsToClipboard	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
+   [ActAddClpSevStd	] = {1988, 1,TabUsr,NULL			,UsrClp_AddStdsToClipboard	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
+   [ActOwrClpSevStd	] = {1979, 1,TabUsr,NULL			,UsrClp_OverwriteStdsClipboard	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeCliStd	] = {1985, 1,TabUsr,NULL			,UsrClp_ShowClipboardStds	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActRemClpStd	] = {1982, 1,TabUsr,NULL			,UsrClp_RemoveClipboardStds	,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeRecSevStd	] = {  89, 1,TabUsr,NULL			,Rec_ListRecordsStdsShow	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1380,7 +1381,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstTchAll	] = { 578, 2,TabUsr,NULL			,Usr_ListAllDataTchs 		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_NEW},
    [ActPrnTchPho	] = { 443, 2,TabUsr,NULL			,Usr_SeeTchClassPhotoPrn	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevTch	] = {1755, 2,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
-   [ActCpySevTch	] = {1980, 2,TabUsr,NULL			,UsrClp_CopyTchsToClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
+   [ActAddClpSevTch	] = {1989, 2,TabUsr,NULL			,UsrClp_AddTchsToClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
+   [ActOwrClpSevTch	] = {1980, 2,TabUsr,NULL			,UsrClp_OverwriteTchsClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeCliTch	] = {1986, 2,TabUsr,NULL			,UsrClp_ShowClipboardTchs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActRemClpTch	] = {1983, 2,TabUsr,NULL			,UsrClp_RemoveClipboardTchs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeRecSevTch	] = {  22, 2,TabUsr,NULL			,Rec_ListRecordsTchsShow	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
@@ -1439,7 +1441,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActLstGstAll	] = {1189, 3,TabUsr,NULL			,Usr_ListAllDataGsts		,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
    [ActPrnGstPho	] = {1190, 3,TabUsr,NULL			,Usr_SeeGstClassPhotoPrn	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_NEW},
    [Act_DoAct_OnSevGst	] = {1753, 3,TabUsr,Usr_DoActionOnUsrs1		,Usr_DoActionOnUsrs2		,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
-   [ActCpySevGst	] = {1978, 3,TabUsr,NULL			,UsrClp_CopyGstsToClipboard	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActAddClpSevGst	] = {1987, 3,TabUsr,NULL			,UsrClp_AddGstsToClipboard	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
+   [ActOwrClpSevGst	] = {1978, 3,TabUsr,NULL			,UsrClp_OverwriteGstsClipboard	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActSeeCliGst	] = {1984, 3,TabUsr,NULL			,UsrClp_ShowClipboardGsts	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActRemClpGst	] = {1981, 3,TabUsr,NULL			,UsrClp_RemoveClipboardGsts	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
    [ActSeeRecSevGst	] = {1187, 3,TabUsr,NULL			,Rec_ListRecordsGstsShow	,{{    0,    0},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200},{0x200,0x200}},Act_NORM,Act_1ST},
@@ -3796,13 +3799,16 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgTstQst,		// #1975
 	ActChgSvyQst,		// #1976
 	ActChgRubPrj,		// #1977
-	ActCpySevGst,		// #1978
-	ActCpySevStd,		// #1979
-	ActCpySevTch,		// #1980
+	ActOwrClpSevGst,	// #1978
+	ActOwrClpSevStd,	// #1979
+	ActOwrClpSevTch,	// #1980
 	ActRemClpGst,		// #1981
 	ActRemClpStd,		// #1982
 	ActRemClpTch,		// #1983
 	ActSeeCliGst,		// #1984
 	ActSeeCliStd,		// #1985
 	ActSeeCliTch,		// #1986
+	ActAddClpSevGst,	// #1987
+	ActAddClpSevStd,	// #1988
+	ActAddClpSevTch,	// #1989
   };

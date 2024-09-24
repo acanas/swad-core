@@ -5524,47 +5524,50 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
    switch (UsrsRole)
      {
       case Rol_GST:
-	 ICanChooseOption[Usr_OPTION_RECORDS   ] =
-	 ICanChooseOption[Usr_OPTION_COPY      ] = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-											      Usr_CAN_NOT;
+	 ICanChooseOption[Usr_OPTION_RECORDS		] =
+	 ICanChooseOption[Usr_OPTION_ADD_TO_CLIPBOARD	] =
+	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+												       Usr_CAN_NOT;
 	 break;
       case Rol_STD:
-	 ICanChooseOption[Usr_OPTION_RECORDS   ] =
-	 ICanChooseOption[Usr_OPTION_COPY      ] =
-	 ICanChooseOption[Usr_OPTION_MESSAGE   ] =
-	 ICanChooseOption[Usr_OPTION_FOLLOW    ] =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW  ] = (Gbl.Scope.Current == Hie_CRS &&
-						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											        Usr_CAN_NOT;
+	 ICanChooseOption[Usr_OPTION_RECORDS		] =
+	 ICanChooseOption[Usr_OPTION_ADD_TO_CLIPBOARD	] =
+	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] =
+	 ICanChooseOption[Usr_OPTION_MESSAGE		] =
+	 ICanChooseOption[Usr_OPTION_FOLLOW 		] =
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (Gbl.Scope.Current == Hie_CRS &&
+							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+													 Usr_CAN_NOT;
 
-         ICanChooseOption[Usr_OPTION_HOMEWORK  ] =
-         ICanChooseOption[Usr_OPTION_ATTENDANCE] =
-         ICanChooseOption[Usr_OPTION_EMAIL     ] = (Gbl.Scope.Current == Hie_CRS &&
-						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											        Usr_CAN_NOT;
+         ICanChooseOption[Usr_OPTION_HOMEWORK		] =
+         ICanChooseOption[Usr_OPTION_ATTENDANCE		] =
+         ICanChooseOption[Usr_OPTION_EMAIL		] = (Gbl.Scope.Current == Hie_CRS &&
+							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+													 Usr_CAN_NOT;
 	 break;
       case Rol_TCH:
-	 ICanChooseOption[Usr_OPTION_RECORDS   ] =
-	 ICanChooseOption[Usr_OPTION_COPY      ] =
-	 ICanChooseOption[Usr_OPTION_MESSAGE   ] =
-	 ICanChooseOption[Usr_OPTION_EMAIL     ] =
-	 ICanChooseOption[Usr_OPTION_FOLLOW    ] =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW  ] = (Gbl.Scope.Current == Hie_CRS &&
-						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											        Usr_CAN_NOT;
-         ICanChooseOption[Usr_OPTION_HOMEWORK  ] = (Gbl.Scope.Current == Hie_CRS &&
-						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-											        Usr_CAN_NOT;
+	 ICanChooseOption[Usr_OPTION_RECORDS		] =
+	 ICanChooseOption[Usr_OPTION_ADD_TO_CLIPBOARD	] =
+	 ICanChooseOption[Usr_OPTION_OVERWRITE_CLIPBOARD] =
+	 ICanChooseOption[Usr_OPTION_MESSAGE		] =
+	 ICanChooseOption[Usr_OPTION_EMAIL		] =
+	 ICanChooseOption[Usr_OPTION_FOLLOW	]	 =
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW		] = (Gbl.Scope.Current == Hie_CRS &&
+							     (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+													 Usr_CAN_NOT;
+         ICanChooseOption[Usr_OPTION_HOMEWORK		] = (Gbl.Scope.Current == Hie_CRS &&
+							     (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+							      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+													 Usr_CAN_NOT;
 	 break;
       default:
 	 return Frm_DONT_PUT_FORM;
@@ -5588,25 +5591,27 @@ static Frm_PutForm_t Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 static void Usr_PutOptionsListUsrs (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
    extern const char *Txt_View_records;
+   extern const char *Txt_Add_to_clipboard;
+   extern const char *Txt_Overwrite_clipboard;
    extern const char *Txt_View_homework;
    extern const char *Txt_View_attendance;
    extern const char *Txt_Send_message;
    extern const char *Txt_Create_email_message;
-   extern const char *Txt_Copy;
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
    extern const char *Txt_Continue;
    static const char **Label[Usr_LIST_USRS_NUM_OPTIONS] =
      {
-      [Usr_OPTION_UNKNOWN   ] = NULL,
-      [Usr_OPTION_RECORDS   ] = &Txt_View_records,
-      [Usr_OPTION_COPY      ] = &Txt_Copy,
-      [Usr_OPTION_HOMEWORK  ] = &Txt_View_homework,
-      [Usr_OPTION_ATTENDANCE] = &Txt_View_attendance,
-      [Usr_OPTION_MESSAGE   ] = &Txt_Send_message,
-      [Usr_OPTION_EMAIL     ] = &Txt_Create_email_message,
-      [Usr_OPTION_FOLLOW    ] = &Txt_Follow,
-      [Usr_OPTION_UNFOLLOW  ] = &Txt_Unfollow,
+      [Usr_OPTION_UNKNOWN		] = NULL,
+      [Usr_OPTION_RECORDS		] = &Txt_View_records,
+      [Usr_OPTION_ADD_TO_CLIPBOARD	] = &Txt_Add_to_clipboard,
+      [Usr_OPTION_OVERWRITE_CLIPBOARD	] = &Txt_Overwrite_clipboard,
+      [Usr_OPTION_HOMEWORK		] = &Txt_View_homework,
+      [Usr_OPTION_ATTENDANCE		] = &Txt_View_attendance,
+      [Usr_OPTION_MESSAGE		] = &Txt_Send_message,
+      [Usr_OPTION_EMAIL			] = &Txt_Create_email_message,
+      [Usr_OPTION_FOLLOW		] = &Txt_Follow,
+      [Usr_OPTION_UNFOLLOW		] = &Txt_Unfollow,
      };
    Usr_ListUsrsOption_t Opt;
 
@@ -5688,17 +5693,33 @@ void Usr_DoActionOnUsrs1 (void)
 		  break;
 	      }
 	    break;
-	 case Usr_OPTION_COPY:
+	 case Usr_OPTION_ADD_TO_CLIPBOARD:
 	    switch (Gbl.Action.Act)
 	      {
 	       case Act_DoAct_OnSevGst:
-		  Gbl.Action.Act = ActCpySevGst;
+		  Gbl.Action.Act = ActAddClpSevGst;
 		  break;
 	       case Act_DoAct_OnSevStd:
-		  Gbl.Action.Act = ActCpySevStd;
+		  Gbl.Action.Act = ActAddClpSevStd;
 		  break;
 	       case Act_DoAct_OnSevTch:
-		  Gbl.Action.Act = ActCpySevTch;
+		  Gbl.Action.Act = ActAddClpSevTch;
+		  break;
+	       default:
+		  break;
+	      }
+	    break;
+	 case Usr_OPTION_OVERWRITE_CLIPBOARD:
+	    switch (Gbl.Action.Act)
+	      {
+	       case Act_DoAct_OnSevGst:
+		  Gbl.Action.Act = ActOwrClpSevGst;
+		  break;
+	       case Act_DoAct_OnSevStd:
+		  Gbl.Action.Act = ActOwrClpSevStd;
+		  break;
+	       case Act_DoAct_OnSevTch:
+		  Gbl.Action.Act = ActOwrClpSevTch;
 		  break;
 	       default:
 		  break;

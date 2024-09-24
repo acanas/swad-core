@@ -24835,27 +24835,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an action on several selected students"				// Çeviri lazim!
 #endif
 	,
-	[ActCpySevStd] =
+	[ActAddClpSevStd] =
 #if   L==1	// ca
-	"Copy several selected students"		// Necessita traducció
+	"Add several students to clipboard"		// Necessita traducció
 #elif L==2	// de
-	"Copy several selected students"		// Need Übersetzung
+	"Add several students to clipboard"		// Need Übersetzung
 #elif L==3	// en
-	"Copy several selected students"
+	"Add several students to clipboard"
 #elif L==4	// es
-	"Copiar varios estudiantes seleccionados"
+	"Agregar varios estudiantes al portapapeles"
 #elif L==5	// fr
-	"Copy several selected students"		// Besoin de traduction
+	"Add several students to clipboard"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar varios estudiantes seleccionados"	// Okoteve traducción
+	"Agregar varios estudiantes al portapapeles"	// Okoteve traducción
 #elif L==7	// it
-	"Copy several selected students"		// Bisogno di traduzione
+	"Add several students to clipboard"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy several selected students"		// Potrzebujesz tlumaczenie
+	"Add several students to clipboard"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy several selected students"		// Precisa de tradução
+	"Add several students to clipboard"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy several selected students"		// Çeviri lazim!
+	"Add several students to clipboard"		// Çeviri lazim!
+#endif
+	,
+	[ActOwrClpSevStd] =
+#if   L==1	// ca
+	"Overwrite clipboard with several students"		// Necessita traducció
+#elif L==2	// de
+	"Overwrite clipboard with several students"		// Need Übersetzung
+#elif L==3	// en
+	"Overwrite clipboard with several students"
+#elif L==4	// es
+	"Reemplzar el portapapeles con varios estudiantes"
+#elif L==5	// fr
+	"Overwrite clipboard with several students"		// Besoin de traduction
+#elif L==6	// gn
+	"Reemplzar el portapapeles con varios estudiantes"	// Okoteve traducción
+#elif L==7	// it
+	"Overwrite clipboard with several students"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Overwrite clipboard with several students"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Overwrite clipboard with several students"		// Precisa de tradução
+#elif L==10	// tr
+	"Overwrite clipboard with several students"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeCliStd] =
@@ -25962,27 +25985,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an action on several selected teachers"				// Çeviri lazim!
 #endif
 	,
-	[ActCpySevTch] =
+	[ActAddClpSevTch] =
 #if   L==1	// ca
-	"Copy several selected teachers"		// Necessita traducció
+	"Add several teachers to clipboard"		// Necessita traducció
 #elif L==2	// de
-	"Copy several selected teachers"		// Need Übersetzung
+	"Add several teachers to clipboard"		// Need Übersetzung
 #elif L==3	// en
-	"Copy several selected teachers"
+	"Add several teachers to clipboard"
 #elif L==4	// es
-	"Copiar varios profesores seleccionados"
+	"Agregar varios profesores al portapapeles"
 #elif L==5	// fr
-	"Copy several selected teachers"		// Besoin de traduction
+	"Add several teachers to clipboard"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar varios profesores seleccionados"	// Okoteve traducción
+	"Agregar varios profesores al portapapeles"	// Okoteve traducción
 #elif L==7	// it
-	"Copy several selected teachers"		// Bisogno di traduzione
+	"Add several teachers to clipboard"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy several selected teachers"		// Potrzebujesz tlumaczenie
+	"Add several teachers to clipboard"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy several selected teachers"		// Precisa de tradução
+	"Add several teachers to clipboard"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy several selected teachers"		// Çeviri lazim!
+	"Add several teachers to clipboard"		// Çeviri lazim!
+#endif
+	,
+	[ActOwrClpSevTch] =
+#if   L==1	// ca
+	"Overwrite clipboard with several teachers"		// Necessita traducció
+#elif L==2	// de
+	"Overwrite clipboard with several teachers"		// Need Übersetzung
+#elif L==3	// en
+	"Overwrite clipboard with several teachers"
+#elif L==4	// es
+	"Reemplzar el portapapeles con varios profesores"
+#elif L==5	// fr
+	"Overwrite clipboard with several teachers"		// Besoin de traduction
+#elif L==6	// gn
+	"Reemplzar el portapapeles con varios profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Overwrite clipboard with several teachers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Overwrite clipboard with several teachers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Overwrite clipboard with several teachers"		// Precisa de tradução
+#elif L==10	// tr
+	"Overwrite clipboard with several teachers"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeCliTch] =
@@ -27273,27 +27319,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Do an action on several selected guests"				// Çeviri lazim!
 #endif
 	,
-	[ActCpySevGst] =
+	[ActAddClpSevGst] =
 #if   L==1	// ca
-	"Copy several selected guests"			// Necessita traducció
+	"Add several guests to clipboard"		// Necessita traducció
 #elif L==2	// de
-	"Copy several selected guests"			// Need Übersetzung
+	"Add several guests to clipboard"		// Need Übersetzung
 #elif L==3	// en
-	"Copy several selected guests"
+	"Add several guests to clipboard"
 #elif L==4	// es
-	"Copiar varios invitados seleccionados"
+	"Agregar varios invitados al portapapeles"
 #elif L==5	// fr
-	"Copy several selected guests"			// Besoin de traduction
+	"Add several guests to clipboard"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar varios invitados seleccionados"		// Okoteve traducción
+	"Agregar varios invitados al portapapeles"	// Okoteve traducción
 #elif L==7	// it
-	"Copy several selected guests"			// Bisogno di traduzione
+	"Add several guests to clipboard"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy several selected guests"			// Potrzebujesz tlumaczenie
+	"Add several guests to clipboard"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy several selected guests"			// Precisa de tradução
+	"Add several guests to clipboard"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy several selected guests"			// Çeviri lazim!
+	"Add several guests to clipboard"		// Çeviri lazim!
+#endif
+	,
+	[ActOwrClpSevGst] =
+#if   L==1	// ca
+	"Overwrite clipboard with several guests"		// Necessita traducció
+#elif L==2	// de
+	"Overwrite clipboard with several guests"		// Need Übersetzung
+#elif L==3	// en
+	"Overwrite clipboard with several guests"
+#elif L==4	// es
+	"Reemplzar el portapapeles con varios invitados"
+#elif L==5	// fr
+	"Overwrite clipboard with several guests"		// Besoin de traduction
+#elif L==6	// gn
+	"Reemplzar el portapapeles con varios invitados"	// Okoteve traducción
+#elif L==7	// it
+	"Overwrite clipboard with several guests"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Overwrite clipboard with several guests"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Overwrite clipboard with several guests"		// Precisa de tradução
+#elif L==10	// tr
+	"Overwrite clipboard with several guests"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeCliGst] =

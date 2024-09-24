@@ -33,13 +33,21 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void UsrClp_CopyOneUsrToClipboardOth (void);
-void UsrClp_CopyOneUsrToClipboardStd (void);
-void UsrClp_CopyOneUsrToClipboardTch (void);
+void UsrClp_AddOthToClipboard (void);
+void UsrClp_AddStdToClipboard (void);
+void UsrClp_AddTchToClipboard (void);
 
-void UsrClp_CopyGstsToClipboard (void);
-void UsrClp_CopyStdsToClipboard (void);
-void UsrClp_CopyTchsToClipboard (void);
+void UsrClp_OverwriteOthClipboard (void);
+void UsrClp_OverwriteStdClipboard (void);
+void UsrClp_OverwriteTchClipboard (void);
+
+void UsrClp_AddGstsToClipboard (void);
+void UsrClp_AddStdsToClipboard (void);
+void UsrClp_AddTchsToClipboard (void);
+
+void UsrClp_OverwriteGstsClipboard (void);
+void UsrClp_OverwriteStdsClipboard (void);
+void UsrClp_OverwriteTchsClipboard (void);
 
 void UsrClp_ShowClipboardGsts (void);
 void UsrClp_ShowClipboardStds (void);

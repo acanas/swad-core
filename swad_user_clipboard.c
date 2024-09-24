@@ -48,8 +48,10 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void UsrClp_CopyOneUsrToClipboard (void);
-static void UsrClp_CopyUsrsToClipboard (void);
+static void UsrClp_AddUsrToClipboard (void);
+static void UsrClp_OverwriteUsrClipboard (void);
+static void UsrClp_AddUsrsToClipboard (void);
+static void UsrClp_OverwriteUsrsClipboard (void);
 
 static void UsrClp_ShowClipboard (Rol_Role_t Role);
 static void UsrClp_PutIconsClipboard (void *Args);
@@ -59,32 +61,29 @@ static void UsrClp_GetUsrsLst (void);
 static void UsrClp_RemoveClipboard (void);
 
 /*****************************************************************************/
-/*********************** Copy one user to clipboard **************************/
+/************************ Add one user to clipboard **************************/
 /*****************************************************************************/
 
-void UsrClp_CopyOneUsrToClipboardOth (void)
+void UsrClp_AddOthToClipboard (void)
   {
-   UsrClp_CopyOneUsrToClipboard ();
+   UsrClp_AddUsrToClipboard ();
    UsrClp_ShowClipboard (Rol_GST);
   }
 
-void UsrClp_CopyOneUsrToClipboardStd (void)
+void UsrClp_AddStdToClipboard (void)
   {
-   UsrClp_CopyOneUsrToClipboard ();
+   UsrClp_AddUsrToClipboard ();
    UsrClp_ShowClipboard (Rol_STD);
   }
 
-void UsrClp_CopyOneUsrToClipboardTch (void)
+void UsrClp_AddTchToClipboard (void)
   {
-   UsrClp_CopyOneUsrToClipboard ();
+   UsrClp_AddUsrToClipboard ();
    UsrClp_ShowClipboard (Rol_TCH);
   }
 
-static void UsrClp_CopyOneUsrToClipboard (void)
+static void UsrClp_AddUsrToClipboard (void)
   {
-   /***** Remove my clipboard *****/
-   Usr_DB_RemoveMyClipboard ();
-
    /***** Remove old clipboards (from all users) *****/
    Usr_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in copy
 
@@ -97,34 +96,62 @@ static void UsrClp_CopyOneUsrToClipboard (void)
   }
 
 /*****************************************************************************/
-/******************** Copy selected users to clipboard ***********************/
+/********************* Overwrite clipboard with one user *********************/
 /*****************************************************************************/
 
-void UsrClp_CopyGstsToClipboard (void)
+void UsrClp_OverwriteOthClipboard (void)
   {
-   UsrClp_CopyUsrsToClipboard ();
+   UsrClp_OverwriteUsrClipboard ();
+   UsrClp_ShowClipboard (Rol_GST);
+  }
+
+void UsrClp_OverwriteStdClipboard (void)
+  {
+   UsrClp_OverwriteUsrClipboard ();
+   UsrClp_ShowClipboard (Rol_STD);
+  }
+
+void UsrClp_OverwriteTchClipboard (void)
+  {
+   UsrClp_OverwriteUsrClipboard ();
+   UsrClp_ShowClipboard (Rol_TCH);
+  }
+
+static void UsrClp_OverwriteUsrClipboard (void)
+  {
+   /***** Remove my clipboard *****/
+   Usr_DB_RemoveMyClipboard ();
+
+   /***** Add user to clipboard *****/
+   UsrClp_AddUsrToClipboard ();
+  }
+
+/*****************************************************************************/
+/********************* Add selected users to clipboard ***********************/
+/*****************************************************************************/
+
+void UsrClp_AddGstsToClipboard (void)
+  {
+   UsrClp_AddUsrsToClipboard ();
    UsrClp_ShowClipboardGsts ();
   }
 
-void UsrClp_CopyStdsToClipboard (void)
+void UsrClp_AddStdsToClipboard (void)
   {
-   UsrClp_CopyUsrsToClipboard ();
+   UsrClp_AddUsrsToClipboard ();
    UsrClp_ShowClipboardStds ();
   }
 
-void UsrClp_CopyTchsToClipboard (void)
+void UsrClp_AddTchsToClipboard (void)
   {
-   UsrClp_CopyUsrsToClipboard ();
+   UsrClp_AddUsrsToClipboard ();
    UsrClp_ShowClipboardTchs ();
   }
 
-static void UsrClp_CopyUsrsToClipboard (void)
+static void UsrClp_AddUsrsToClipboard (void)
   {
    const char *Ptr;
    struct Usr_Data UsrDat;
-
-   /***** Remove my clipboard *****/
-   Usr_DB_RemoveMyClipboard ();
 
    /***** Remove old clipboards (from all users) *****/
    Usr_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in copy
@@ -154,6 +181,37 @@ static void UsrClp_CopyUsrsToClipboard (void)
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+  }
+
+/*****************************************************************************/
+/********************* Add selected users to clipboard ***********************/
+/*****************************************************************************/
+
+void UsrClp_OverwriteGstsClipboard (void)
+  {
+   UsrClp_OverwriteUsrsClipboard ();
+   UsrClp_ShowClipboardGsts ();
+  }
+
+void UsrClp_OverwriteStdsClipboard (void)
+  {
+   UsrClp_OverwriteUsrsClipboard ();
+   UsrClp_ShowClipboardStds ();
+  }
+
+void UsrClp_OverwriteTchsClipboard (void)
+  {
+   UsrClp_OverwriteUsrsClipboard ();
+   UsrClp_ShowClipboardTchs ();
+  }
+
+static void UsrClp_OverwriteUsrsClipboard (void)
+  {
+   /***** Remove my clipboard *****/
+   Usr_DB_RemoveMyClipboard ();
+
+   /***** Add users to clipboard *****/
+   UsrClp_AddUsrsToClipboard ();
   }
 
 /*****************************************************************************/

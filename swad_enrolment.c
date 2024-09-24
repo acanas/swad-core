@@ -146,8 +146,10 @@ static void Enr_PutActionModifyOneUsr (HTM_Attributes_t *Attributes,
 static void Enr_PutActionEnrOneDegAdm (HTM_Attributes_t *Attributes);
 static void Enr_PutActionEnrOneCtrAdm (HTM_Attributes_t *Attributes);
 static void Enr_PutActionEnrOneInsAdm (HTM_Attributes_t *Attributes);
-static void Enr_PutActionCpyUsr (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
-				 HTM_Attributes_t *Attributes);
+static void Enr_PutActionAddToClipboard (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
+					 HTM_Attributes_t *Attributes);
+static void Enr_PutActionOverwriteClipboard (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
+					     HTM_Attributes_t *Attributes);
 static void Enr_PutActionRepUsrAsDup (HTM_Attributes_t *Attributes);
 static void Enr_PutActionRemUsrFromCrs (HTM_Attributes_t *Attributes,
 					Usr_MeOrOther_t MeOrOther);
@@ -1591,14 +1593,17 @@ bool Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther)
 	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
 	   {
 	    case Rol_STD:
-	       Enr_PutActionCpyUsr (Enr_COPY_USR_STD,&Attributes);
+	       Enr_PutActionAddToClipboard     (Enr_ADD_TO_CLIPBOARD_STD   ,&Attributes);
+	       Enr_PutActionOverwriteClipboard (Enr_OVERWRITE_CLIPBOARD_OTH,&Attributes);
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
-	       Enr_PutActionCpyUsr (Enr_COPY_USR_TCH,&Attributes);
+	       Enr_PutActionAddToClipboard     (Enr_ADD_TO_CLIPBOARD_TCH   ,&Attributes);
+	       Enr_PutActionOverwriteClipboard (Enr_OVERWRITE_CLIPBOARD_TCH,&Attributes);
 	       break;
 	    default:
-	       Enr_PutActionCpyUsr (Enr_COPY_USR_OTH,&Attributes);
+	       Enr_PutActionAddToClipboard     (Enr_ADD_TO_CLIPBOARD_OTH   ,&Attributes);
+	       Enr_PutActionOverwriteClipboard (Enr_OVERWRITE_CLIPBOARD_OTH,&Attributes);
 	       break;
 	   }
 	 OptionsShown = true;
@@ -1731,16 +1736,26 @@ static void Enr_PutActionEnrOneInsAdm (HTM_Attributes_t *Attributes)
   }
 
 /*****************************************************************************/
-/****************** Put action to report user as duplicate *******************/
+/****************** Put action to add user to clipboard **********************/
 /*****************************************************************************/
 
-static void Enr_PutActionCpyUsr (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
-				 HTM_Attributes_t *Attributes)
+static void Enr_PutActionAddToClipboard (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
+					 HTM_Attributes_t *Attributes)
   {
-   extern const char *Txt_Copy;
+   extern const char *Txt_Add_to_clipboard;
 
    Enr_EnrRemOneUsrActionBegin (EnrRemOneUsrAction,Attributes);
-      HTM_Txt (Txt_Copy);
+      HTM_Txt (Txt_Add_to_clipboard);
+   Enr_EnrRemOneUsrActionEnd ();
+  }
+
+static void Enr_PutActionOverwriteClipboard (Enr_EnrRemOneUsrAction_t EnrRemOneUsrAction,
+					     HTM_Attributes_t *Attributes)
+  {
+   extern const char *Txt_Overwrite_clipboard;
+
+   Enr_EnrRemOneUsrActionBegin (EnrRemOneUsrAction,Attributes);
+      HTM_Txt (Txt_Overwrite_clipboard);
    Enr_EnrRemOneUsrActionEnd ();
   }
 
@@ -3233,9 +3248,12 @@ void Enr_ModifyUsr1 (void)
 	    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
-	 case Enr_COPY_USR_OTH:
-	 case Enr_COPY_USR_STD:
-	 case Enr_COPY_USR_TCH:
+	 case Enr_ADD_TO_CLIPBOARD_OTH:
+	 case Enr_ADD_TO_CLIPBOARD_STD:
+	 case Enr_ADD_TO_CLIPBOARD_TCH:
+	 case Enr_OVERWRITE_CLIPBOARD_OTH:
+	 case Enr_OVERWRITE_CLIPBOARD_STD:
+	 case Enr_OVERWRITE_CLIPBOARD_TCH:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_GST)
 	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
@@ -3301,14 +3319,23 @@ void Enr_ModifyUsr2 (void)
 	 case Enr_ENROL_ONE_INS_ADMIN:
 	    Adm_ReqAddAdm (Hie_INS);
 	    break;
-	 case Enr_COPY_USR_OTH:
-	    UsrClp_CopyOneUsrToClipboardOth ();
+	 case Enr_ADD_TO_CLIPBOARD_OTH:
+	    UsrClp_AddOthToClipboard ();
 	    break;
-	 case Enr_COPY_USR_STD:
-	    UsrClp_CopyOneUsrToClipboardStd ();
+	 case Enr_ADD_TO_CLIPBOARD_STD:
+	    UsrClp_AddStdToClipboard ();
 	    break;
-	 case Enr_COPY_USR_TCH:
-	    UsrClp_CopyOneUsrToClipboardTch ();
+	 case Enr_ADD_TO_CLIPBOARD_TCH:
+	    UsrClp_AddTchToClipboard ();
+	    break;
+	 case Enr_OVERWRITE_CLIPBOARD_OTH:
+	    UsrClp_OverwriteOthClipboard ();
+	    break;
+	 case Enr_OVERWRITE_CLIPBOARD_STD:
+	    UsrClp_OverwriteStdClipboard ();
+	    break;
+	 case Enr_OVERWRITE_CLIPBOARD_TCH:
+	    UsrClp_OverwriteTchClipboard ();
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 	    Dup_ReportUsrAsPossibleDuplicate ();
