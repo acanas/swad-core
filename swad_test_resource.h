@@ -1,7 +1,7 @@
-// swad_exam_resource.h: links to exams as program resources
+// swad_test_resource.h: links to tests as program resources
 
-#ifndef _SWAD_EXA_RSC
-#define _SWAD_EXA_RSC
+#ifndef _SWAD_TST_RSC
+#define _SWAD_TST_RSC
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -27,6 +27,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaRsc_GetLinkToExam (void);
+void TstRsc_GetLinkToTest (void);
 
 #endif

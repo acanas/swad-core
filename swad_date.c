@@ -127,7 +127,7 @@ static const char *Dat_ParTimeUTCName[Dat_NUM_START_END_TIME] =
 /*****************************************************************************/
 
 static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args);
-static unsigned Dat_GetParDateFormat (void);
+static Dat_Format_t Dat_GetParDateFormat (void);
 
 /*****************************************************************************/
 /*********************** Set/get start execution time ************************/

@@ -111,6 +111,7 @@
 #include "swad_system_config.h"
 #include "swad_tab.h"
 #include "swad_tag.h"
+#include "swad_test_resource.h"
 #include "swad_timeline.h"
 #include "swad_timeline_comment.h"
 #include "swad_timeline_favourite.h"
@@ -710,6 +711,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqSeeUsrTstRes	] = {1080, 4,TabAss,Dat_SetDatesToPastNow	,TstPrn_SelUsrsToViewUsrsPrints	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActSeeUsrTstResCrs	] = {1081, 4,TabAss,NULL			,TstPrn_GetUsrsAndShowPrints	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActSeeOneTstResOth	] = {1082, 4,TabAss,NULL			,TstPrn_ShowOnePrint		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActReqLnkTst	] = {1990, 4,TabAss,NULL			,TstRsc_GetLinkToTest		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Exams
    [ActSeeAllExa	] = {1848, 5,TabAss,NULL			,Exa_SeeAllExams		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -3811,4 +3813,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActAddClpSevGst,	// #1987
 	ActAddClpSevStd,	// #1988
 	ActAddClpSevTch,	// #1989
+	ActReqLnkTst,		// #1990
   };

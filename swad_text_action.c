@@ -11472,27 +11472,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See a test result for a user"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkTst] =
+#if   L==1	// ca
+	"Copy link to test"	// Necessita traducció
+#elif L==2	// de
+	"Copy link to test"	// Need Übersetzung
+#elif L==3	// en
+	"Copy link to test"
+#elif L==4	// es
+	"Copiar enlace a test"
+#elif L==5	// fr
+	"Copy link to test"	// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a test"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to test"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to test"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to test"	// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to test"	// Çeviri lazim!
+#endif
+	,
 	[ActSeeAllExa] =
 #if   L==1	// ca
-	"See exams"			// Necessita traducció
+	"See exams"		// Necessita traducció
 #elif L==2	// de
-	"See exams"			// Need Übersetzung
+	"See exams"		// Need Übersetzung
 #elif L==3	// en
 	"See exams"
 #elif L==4	// es
 	"Ver ex&aacute;menes"
 #elif L==5	// fr
-	"See exams"			// Besoin de traduction
+	"See exams"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver ex&aacute;menes"		// Okoteve traducción
+	"Ver ex&aacute;menes"	// Okoteve traducción
 #elif L==7	// it
-	"See exams"			// Bisogno di traduzione
+	"See exams"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See exams"			// Potrzebujesz tlumaczenie
+	"See exams"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See exams"			// Precisa de tradução
+	"See exams"		// Precisa de tradução
 #elif L==10	// tr
-	"See exams"			// Çeviri lazim!
+	"See exams"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeOneExa] =

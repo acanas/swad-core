@@ -67,6 +67,7 @@ const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
    [Rsc_PROJECT         ] = "prj",
    [Rsc_CALL_FOR_EXAM   ] = "cfe",
    // tst TEST			// User selects tags, teacher should select
+   [Rsc_TEST		] = "tst",
    [Rsc_EXAM            ] = "exa",
    [Rsc_GAME            ] = "gam",
    [Rsc_RUBRIC          ] = "rub",
@@ -90,6 +91,7 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
    [Rsc_PROJECT         ] = "file-invoice.svg",
    [Rsc_CALL_FOR_EXAM   ] = "bullhorn.svg",
    // tst TEST			// User selects tags, teacher should select
+   [Rsc_TEST            ] = "check.svg",
    [Rsc_EXAM            ] = "file-signature.svg",
    [Rsc_GAME            ] = "gamepad.svg",
    [Rsc_RUBRIC          ] = "tasks.svg",
@@ -242,6 +244,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       [Rsc_ASSIGNMENT      ] = {NULL,NULL},
       [Rsc_PROJECT         ] = {NULL,NULL},
       [Rsc_CALL_FOR_EXAM   ] = {Frm_SetAnchorStr,Frm_FreeAnchorStr},
+      [Rsc_TEST            ] = {NULL,NULL},
       [Rsc_EXAM            ] = {NULL,NULL},
       [Rsc_GAME            ] = {NULL,NULL},
       [Rsc_RUBRIC          ] = {NULL,NULL},
@@ -261,6 +264,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       [Rsc_ASSIGNMENT      ] = {ActSeeOneAsg		,ActSeeAllAsg		},
       [Rsc_PROJECT         ] = {ActSeeOnePrj		,ActSeeAllPrj		},
       [Rsc_CALL_FOR_EXAM   ] = {ActSeeOneCfe		,ActSeeAllCfe		},
+      [Rsc_TEST            ] = {ActReqTst		,ActReqTst		},	// TODO: Action to select test with one tag already selected
       [Rsc_EXAM            ] = {ActSeeOneExa		,ActSeeAllExa		},
       [Rsc_GAME            ] = {ActSeeOneGam		,ActSeeAllGam		},
       [Rsc_RUBRIC          ] = {ActSeeOneRub		,ActSeeAllRub		},
@@ -276,6 +280,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       [Rsc_ASSIGNMENT      ] = ParCod_Asg,
       [Rsc_PROJECT         ] = ParCod_Prj,
       [Rsc_CALL_FOR_EXAM   ] = ParCod_Exa,
+      [Rsc_TEST            ] = ParCod_Exa,	// TODO: ParCod_Tag, code of the tag selected
       [Rsc_EXAM            ] = ParCod_Exa,
       [Rsc_GAME            ] = ParCod_Gam,
       [Rsc_RUBRIC          ] = ParCod_Rub,
@@ -343,6 +348,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
    extern const char *Txt_Assignments;
    extern const char *Txt_Projects;
    extern const char *Txt_Calls_for_exams;
+   extern const char *Txt_Test;
    extern const char *Txt_Exams;
    extern const char *Txt_Games;
    extern const char *Txt_Rubrics;
@@ -357,6 +363,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       [Rsc_ASSIGNMENT      ] = Asg_DB_GetAssignmentTitleByCod,
       [Rsc_PROJECT         ] = Prj_DB_GetProjectTitle,
       [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
+      [Rsc_TEST            ] = Exa_DB_GetExamTitle,	// TODO: Get tag title
       [Rsc_EXAM            ] = Exa_DB_GetExamTitle,
       [Rsc_GAME            ] = Gam_DB_GetGameTitle,
       [Rsc_RUBRIC          ] = Rub_DB_GetRubricTitle,
@@ -372,6 +379,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       [Rsc_ASSIGNMENT      ] = Txt_Assignments,
       [Rsc_PROJECT         ] = Txt_Projects,
       [Rsc_CALL_FOR_EXAM   ] = Txt_Calls_for_exams,
+      [Rsc_TEST            ] = Txt_Test,
       [Rsc_EXAM            ] = Txt_Exams,
       [Rsc_GAME            ] = Txt_Games,
       [Rsc_RUBRIC          ] = Txt_Rubrics,

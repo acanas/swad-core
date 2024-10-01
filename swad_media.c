@@ -1485,8 +1485,6 @@ static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMe
    char PathMedPriv[PATH_MAX + 1];
 
    /***** If no media to show ==> nothing to do *****/
-   if (!Media->Name)
-      return;
    if (!Media->Name[0])
       return;
 
@@ -1868,8 +1866,6 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
       return MedCod;
 
    /***** If no media name ==> nothing to do *****/
-   if (!MediaSrc->Name)
-      return MedCod;
    if (!MediaSrc->Name[0])
       return MedCod;
 

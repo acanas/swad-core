@@ -84,8 +84,7 @@ long Med_DB_StoreMedia (const struct Med_Media *Media)
 				       " VALUES"
 				       " ('%s','%s','%s','%s')",
 				       Med_DB_GetStringType (Media->Type),
-				       Media->Name  ? Media->Name  :
-						      "",
+				       Media->Name,
 				       Media->URL   ? Media->URL   :
 						      "",
 				       Media->Title ? Media->Title :

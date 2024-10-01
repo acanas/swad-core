@@ -34370,6 +34370,29 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"S&inodot;nav i&ccedil;in aray&inodot;n"
 #endif
 	,
+	[Rsc_TEST] =
+#if   L==1	// ca
+	"Test"
+#elif L==2	// de
+	"Test"
+#elif L==3	// en
+	"Test"
+#elif L==4	// es
+	"Test"
+#elif L==5	// fr
+	"Test"
+#elif L==6	// gn
+	"Aranduchauka"
+#elif L==7	// it
+	"Test"
+#elif L==8	// pl
+	"Test"
+#elif L==9	// pt
+	"Teste"
+#elif L==10	// tr
+	"Test"
+#endif
+	,
 	[Rsc_EXAM] =
 #if   L==1	// ca
 	"Ex&agrave;men"
@@ -46503,7 +46526,7 @@ const char *Txt_Test =
 #elif L==5	// fr
 	"Test";
 #elif L==6	// gn
-	"Test";	// Okoteve traducción
+	"Aranduchauka";
 #elif L==7	// it
 	"Test";
 #elif L==8	// pl
@@ -46511,7 +46534,7 @@ const char *Txt_Test =
 #elif L==9	// pt
 	"Teste";
 #elif L==10	// tr
-	"Test";	// Çeviri lazim!
+	"Test";
 #endif
 
 const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very important to include %u in the following sentences
