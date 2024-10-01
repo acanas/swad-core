@@ -1773,11 +1773,6 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
    bool PasswordCorrect = false;
 
    /***** Check if user typed anything *****/
-   if (!Gbl.Usrs.Me.UsrIdLogin)
-     {
-      Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
-      return false;
-     }
    if (!Gbl.Usrs.Me.UsrIdLogin[0])
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();

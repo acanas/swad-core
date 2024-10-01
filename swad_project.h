@@ -232,7 +232,7 @@ void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects);
 void Prj_PrintOneProject (void);
 
 void Prj_FlushCacheMyRolesInProject (void);
-Prj_RoleInProject_t Prj_GetMyRolesInProject (long PrjCod);
+unsigned Prj_GetMyRolesInProject (long PrjCod);
 
 void Prj_ReqAddStds (void);
 void Prj_ReqAddTuts (void);

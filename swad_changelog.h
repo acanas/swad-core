@@ -632,13 +632,15 @@ TODO: Francisco Javier Fernández Baldomero: intento mandar un mensaje a un estud
 Me sale este error, no sé si por no recordar yo la sintaxis apropiada para mandar a varios destinatarios. ¿No era así?
 "can npt create received message (duplicated entry '243218-2160773' for key 'UsrCod_MsgCod')
 
+TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 TODO: INCLUIR LOS TEST EN LOS RECURSOS DEL PROGRAMA!!!!
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.10.1 (2024-09-24)"
-#define CSS_FILE		"swad24.10.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.10.2 (2024-10-01)"
+#define CSS_FILE		"swad24.10.2.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.10.2:  Oct 01, 2024  CSS in scroll tables. (341636 lines)
 	Version 24.10.1:  Sep 24, 2024  Changes related to clipboard. (336639 lines)
 	Version 24.10:    Sep 24, 2024  New options to add users to clipboard. (336664 lines)
 	Version 24.9:     Sep 24, 2024  Copy one user to clipboard. (336437 lines)
