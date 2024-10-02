@@ -40,7 +40,7 @@
 	<td align="center">
 		<h1>SWAD database</h1>
 		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2021
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2023
 	</td>
 	</tr>
 
@@ -64,7 +64,7 @@
 	</p>
 
 	<p align="justify">
-	There are 144 tables in SWAD:
+	There are 151 tables in SWAD:
 	</p>
 
 	<pre>
@@ -101,8 +101,8 @@ mysql> SHOW TABLES;
 | <a href="#crs_record_fields">crs_record_fields</a>        |
 | <a href="#crs_records">crs_records</a>              |
 | <a href="#crs_requests">crs_requests</a>             |
-| <a href="#crs_users">crs_users</a>                |
 | <a href="#crs_user_settings">crs_user_settings</a>        |
+| <a href="#crs_users">crs_users</a>                |
 | <a href="#ctr_centers">ctr_centers</a>              |
 | <a href="#cty_countrs">cty_countrs</a>              |
 | <a href="#dbg_debug">dbg_debug</a>                |
@@ -128,6 +128,7 @@ mysql> SHOW TABLES;
 | <a href="#for_posts">for_posts</a>                |
 | <a href="#for_read">for_read</a>                 |
 | <a href="#for_threads">for_threads</a>              |
+| <a href="#gam_answers">gam_answers</a>              |
 | <a href="#gam_games">gam_games</a>                |
 | <a href="#gam_questions">gam_questions</a>            |
 | <a href="#grp_groups">grp_groups</a>               |
@@ -165,13 +166,19 @@ mysql> SHOW TABLES;
 | <a href="#ntf_notifications">ntf_notifications</a>        |
 | <a href="#plc_places">plc_places</a>               |
 | <a href="#plg_plugins">plg_plugins</a>              |
+| <a href="#prg_expanded">prg_expanded</a>             |
 | <a href="#prg_items">prg_items</a>                |
+| <a href="#prg_resources">prg_resources</a>            |
 | <a href="#prj_config">prj_config</a>               |
 | <a href="#prj_projects">prj_projects</a>             |
+| <a href="#prj_rubrics">prj_rubrics</a>              |
 | <a href="#prj_users">prj_users</a>                |
 | <a href="#roo_check_in">roo_check_in</a>             |
 | <a href="#roo_macs">roo_macs</a>                 |
 | <a href="#roo_rooms">roo_rooms</a>                |
+| <a href="#rsc_clipboards">rsc_clipboards</a>           |
+| <a href="#rub_criteria">rub_criteria</a>             |
+| <a href="#rub_rubrics">rub_rubrics</a>              |
 | <a href="#ses_params">ses_params</a>               |
 | <a href="#ses_sessions">ses_sessions</a>             |
 | <a href="#set_ip_settings">set_ip_settings</a>          |
@@ -216,7 +223,7 @@ mysql> SHOW TABLES;
 | <a href="#usr_reports">usr_reports</a>              |
 | <a href="#usr_webs">usr_webs</a>                 |
 +--------------------------+
-144 rows in set (0,00 sec)
+151 rows in set (0,00 sec)
 	</pre>
 
 	<section id="act_frequent">
@@ -809,25 +816,6 @@ mysql> DESCRIBE crs_requests;
 5 rows in set (0,00 sec)
 	</pre>
 	</section>
-
-	<section id="crs_users">
-	<h3>Table crs_users</h3>
-	<p align="justify">
-	Stores who users belong to what courses:
-	</p>
-	<pre>
-mysql> DESCRIBE crs_users;
-+----------+---------------+------+-----+---------+-------+
-| Field    | Type          | Null | Key | Default | Extra |
-+----------+---------------+------+-----+---------+-------+
-| CrsCod   | int           | NO   | PRI | NULL    |       |
-| UsrCod   | int           | NO   | PRI | NULL    |       |
-| Role     | tinyint       | NO   | MUL | 0       |       |
-| Accepted | enum('N','Y') | NO   |     | N       |       |
-+----------+---------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
-	</pre>
-	</section>
 	
 	<section id="crs_user_settings">
 	<h3>Table crs_user_settings</h3>
@@ -852,6 +840,25 @@ mysql> DESCRIBE crs_user_settings;
 | ListWithPhotos | enum('N','Y')             | NO   |     | Y          |       |
 +----------------+---------------------------+------+-----+------------+-------+
 11 rows in set (0.01 sec)
+	</pre>
+	</section>
+
+	<section id="crs_users">
+	<h3>Table crs_users</h3>
+	<p align="justify">
+	Stores who users belong to what courses:
+	</p>
+	<pre>
+mysql> DESCRIBE crs_users;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| CrsCod   | int           | NO   | PRI | NULL    |       |
+| UsrCod   | int           | NO   | PRI | NULL    |       |
+| Role     | tinyint       | NO   | MUL | 0       |       |
+| Accepted | enum('N','Y') | NO   |     | N       |       |
++----------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
 	</pre>
 	</section>
 
@@ -2151,6 +2158,24 @@ mysql> DESCRIBE plg_plugins;
 	</pre>
 	</section>
 
+	<section id="prg_expanded">
+	<h3>Table prg_expanded</h3>
+	<p align="justify">
+	Stores the items of the course program that are expanded for each user:
+	</p>
+	<pre>
+mysql> DESCRIBE prg_expanded;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| UsrCod    | int      | NO   | PRI | NULL    |       |
+| ItmCod    | int      | NO   | PRI | NULL    |       |
+| ClickTime | datetime | NO   | MUL | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+	</pre>
+	</section>
+
 	<section id="prg_items">
 	<h3>Table prg_items</h3>
 	<p align="justify">
@@ -2173,6 +2198,28 @@ mysql> DESCRIBE prg_items;
 | Txt       | text          | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
 10 rows in set (0.00 sec)
+	</pre>
+	</section>
+
+	<section id="prg_resources">
+	<h3>Table prg_resources</h3>
+	<p align="justify">
+	Stores the resources associated to each course program item:
+	</p>
+	<pre>
+mysql> DESCRIBE prg_resources;
++--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                                          | Null | Key | Default | Extra          |
++--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
+| RscCod | int(11)                                                                       | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int(11)                                                                       | NO   | MUL | -1      |                |
+| RscInd | int(11)                                                                       | NO   |     | 0       |                |
+| Hidden | enum('N','Y')                                                                 | NO   |     | N       |                |
+| Type   | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   |     | non     |                |
+| Cod    | int(11)                                                                       | NO   |     | -1      |                |
+| Title  | varchar(2047)                                                                 | NO   |     | NULL    |                |
++--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2200,25 +2247,47 @@ mysql> DESCRIBE prj_config;
 	</p>
 	<pre>
 mysql> DESCRIBE prj_projects;
-+-------------+-------------------------------------+------+-----+---------+----------------+
-| Field       | Type                                | Null | Key | Default | Extra          |
-+-------------+-------------------------------------+------+-----+---------+----------------+
-| PrjCod      | int(11)                             | NO   | PRI | NULL    | auto_increment |
-| CrsCod      | int(11)                             | NO   | MUL | -1      |                |
-| DptCod      | int(11)                             | NO   |     | -1      |                |
-| Hidden      | enum('N','Y')                       | NO   |     | N       |                |
-| Preassigned | enum('N','Y')                       | NO   |     | N       |                |
-| NumStds     | int(11)                             | NO   |     | 1       |                |
-| Proposal    | enum('new','modified','unmodified') | NO   |     | new     |                |
-| CreatTime   | datetime                            | NO   |     | NULL    |                |
-| ModifTime   | datetime                            | NO   |     | NULL    |                |
-| Title       | varchar(2047)                       | NO   |     | NULL    |                |
-| Description | text                                | NO   |     | NULL    |                |
-| Knowledge   | text                                | NO   |     | NULL    |                |
-| Materials   | text                                | NO   |     | NULL    |                |
-| URL         | varchar(255)                        | NO   |     | NULL    |                |
-+-------------+-------------------------------------+------+-----+---------+----------------+
-14 rows in set (0,00 sec)
++--------------+--------------------------------------------+------+-----+---------------------+----------------+
+| Field        | Type                                       | Null | Key | Default             | Extra          |
++--------------+--------------------------------------------+------+-----+---------------------+----------------+
+| PrjCod       | int(11)                                    | NO   | PRI | NULL                | auto_increment |
+| CrsCod       | int(11)                                    | NO   | MUL | -1                  |                |
+| DptCod       | int(11)                                    | NO   |     | -1                  |                |
+| Locked       | enum('N','Y')                              | NO   |     | N                   |                |
+| Hidden       | enum('N','Y')                              | NO   |     | N                   |                |
+| Assigned     | enum('N','Y')                              | NO   |     | N                   |                |
+| NumStds      | int(11)                                    | NO   |     | 1                   |                |
+| Proposal     | enum('new','modified','unmodified')        | NO   |     | new                 |                |
+| CreatTime    | datetime                                   | NO   |     | NULL                |                |
+| ModifTime    | datetime                                   | NO   |     | NULL                |                |
+| Title        | varchar(4095)                              | NO   |     | NULL                |                |
+| Description  | text                                       | NO   |     | NULL                |                |
+| Knowledge    | text                                       | NO   |     | NULL                |                |
+| Materials    | text                                       | NO   |     | NULL                |                |
+| URL          | varchar(255)                               | NO   |     | NULL                |                |
+| ReviewStatus | enum('unreviewed','unapproved','approved') | NO   |     | unreviewed          |                |
+| ReviewTime   | datetime                                   | NO   |     | 1970-01-01 01:00:00 |                |
+| ReviewTxt    | text                                       | NO   |     | NULL                |                |
++--------------+--------------------------------------------+------+-----+---------------------+----------------+
+18 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="prj_rubrics">
+	<h3>Table prj_rubrics</h3>
+	<p align="justify">
+	Stores the rubrics associated to projects in each course:
+	</p>
+	<pre>
+mysql> DESCRIBE prj_rubrics;
++--------+-------------------------+------+-----+---------+-------+
+| Field  | Type                    | Null | Key | Default | Extra |
++--------+-------------------------+------+-----+---------+-------+
+| CrsCod | int(11)                 | NO   | PRI | NULL    |       |
+| Type   | enum('tut','evl','gbl') | NO   | PRI | NULL    |       |
+| RubCod | int(11)                 | NO   | PRI | NULL    |       |
++--------+-------------------------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2296,6 +2365,70 @@ mysql> DESCRIBE roo_rooms;
 | Capacity  | int                                                                                                                                                                                                                                                                         | NO   |     | NULL    |                |
 +-----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
 8 rows in set (0.00 sec)
+	</pre>
+	</section>
+	
+	<section id="rsc_clipboards">
+	<h3>Table rsc_clipboards</h3>
+	<p align="justify">
+	Stores the resources in current clipboards for each user in each course:
+	</p>
+	<pre style="font-size:0.5em;">
+mysql> DESCRIBE rsc_clipboards;
++----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| Field    | Type                                                                          | Null | Key | Default           | Extra                       |
++----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+| UsrCod   | int(11)                                                                       | NO   | PRI | NULL              |                             |
+| CrsCod   | int(11)                                                                       | NO   | PRI | NULL              |                             |
+| Type     | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non               |                             |
+| Cod      | int(11)                                                                       | NO   | PRI | -1                |                             |
+| CopyTime | timestamp                                                                     | NO   | MUL | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
+5 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="rub_criteria">
+	<h3>Table rub_criteria</h3>
+	<p align="justify">
+	Stores the assessment criteria of each rubric:
+	</p>
+	<pre style="font-size:0.5em;">
+mysql> DESCRIBE rub_criteria;
++--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                                          | Null | Key | Default | Extra          |
++--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
+| CriCod | int(11)                                                                       | NO   | PRI | NULL    | auto_increment |
+| RubCod | int(11)                                                                       | NO   | MUL | NULL    |                |
+| CriInd | int(11)                                                                       | NO   |     | NULL    |                |
+| Type   | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   |     | non     |                |
+| Cod    | int(11)                                                                       | NO   |     | -1      |                |
+| MinVal | double                                                                        | NO   |     | 0       |                |
+| MaxVal | double                                                                        | NO   |     | 1       |                |
+| Weight | double                                                                        | NO   |     | 1       |                |
+| Title  | varchar(2047)                                                                 | NO   |     | NULL    |                |
++--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
+9 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="rub_rubrics">
+	<h3>Table rub_rubrics</h3>
+	<p align="justify">
+	Stores the rubrics of each course:
+	</p>
+	<pre>
+mysql> DESCRIBE rub_rubrics;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| RubCod | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod | int(11)       | NO   | MUL | -1      |                |
+| UsrCod | int(11)       | NO   |     | NULL    |                |
+| Title  | varchar(2047) | NO   |     | NULL    |                |
+| Txt    | text          | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
 	</pre>
 	</section>
 

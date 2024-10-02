@@ -635,10 +635,17 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.11 (2024-10-02)"
+#define Log_PLATFORM_VERSION	"SWAD 24.11.1 (2024-10-02)"
 #define CSS_FILE		"swad24.10.2.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.11.1:  Oct 02, 2024  New resource test. Not finished. (336774 lines)
+					4 changes necessary in database:
+ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rsc_clipboards CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_criteria CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_scores CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non';
+
 	Version 24.11:    Oct 02, 2024  New resource test. Not finished. (336768 lines)
 	Version 24.10.2:  Oct 01, 2024  CSS in scroll tables. (341636 lines)
 	Version 24.10.1:  Sep 24, 2024  Changes related to clipboard. (336639 lines)

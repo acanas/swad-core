@@ -1197,7 +1197,7 @@ CREATE TABLE IF NOT EXISTS prg_resources (
 	ItmCod INT NOT NULL DEFAULT -1,
 	RscInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(RscCod),
 	UNIQUE INDEX(ItmCod,RscInd));
@@ -1291,7 +1291,7 @@ CREATE TABLE IF NOT EXISTS roo_rooms (
 CREATE TABLE IF NOT EXISTS rsc_clipboards (
 	UsrCod INT NOT NULL,
 	CrsCod INT NOT NULL,
-	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
 	Cod INT NOT NULL DEFAULT -1,
 	CopyTime TIMESTAMP,
 	UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),
@@ -1304,7 +1304,7 @@ CREATE TABLE IF NOT EXISTS rub_criteria (
 	CriCod INT NOT NULL AUTO_INCREMENT,
 	RubCod INT NOT NULL,
 	CriInd INT NOT NULL,
-	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy'),
+	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
 	Cod INT NOT NULL DEFAULT -1,
 	MinVal DOUBLE PRECISION NOT NULL DEFAULT 0,
 	MaxVal DOUBLE PRECISION NOT NULL DEFAULT 1,
@@ -1327,7 +1327,7 @@ CREATE TABLE IF NOT EXISTS rub_rubrics (
 -- Table rub_scores: stores the rubric criteria scores for each project
 --
 CREATE TABLE IF NOT EXISTS rub_scores (
-	Type ENUM('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
 	Cod INT NOT NULL,
 	UsrCod INT NOT NULL DEFAULT -1,
 	CriCod INT NOT NULL,
