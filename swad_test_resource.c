@@ -25,12 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_action_list.h"
 #include "swad_alert.h"
-#include "swad_error.h"
-#include "swad_exam.h"
-#include "swad_exam_database.h"
-#include "swad_exam_resource.h"
+#include "swad_tag_database.h"
 #include "swad_parameter_code.h"
 #include "swad_resource_database.h"
 
@@ -42,26 +38,23 @@ void TstRsc_GetLinkToTest (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Test;
-   struct Exa_Exams Exams;
-
-   /***** Reset exams context *****/
-   Exa_ResetExams (&Exams);
-
-   /***** Get parameters *****/
-   Exa_GetPars (&Exams,Exa_DONT_CHECK_EXA_COD);
+   long TagCod = ParCod_GetPar (ParCod_Tag);
+   char TagTxt[Tag_MAX_BYTES_TAG + 1];
 
    /***** Get exam title *****/
-   if (Exams.Exam.ExaCod > 0)
-      Exa_GetExamDataByCod (&Exams.Exam);
+   if (TagCod > 0)
+      Tag_DB_GetTagTitleByCod (TagCod,TagTxt,Tag_MAX_BYTES_TAG);
+   else
+      TagTxt[0] = '\0';
 
    /***** Copy link to exam into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_TEST,Exams.Exam.ExaCod);
+   Rsc_DB_CopyToClipboard (Rsc_TEST,TagCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Exams.Exam.ExaCod > 0 ? Exams.Exam.Title :
-   					  Txt_Test);
+   		  TagCod > 0 ? TagTxt :
+   			       Txt_Test);
 
-   /***** Show exams again *****/
-   Exa_ListAllExams (&Exams);
+   /***** Show tags again *****/
+   // Exa_ListAllExams (&Exams); !!!!! TODO: Show tags again!!!!!!!
   }

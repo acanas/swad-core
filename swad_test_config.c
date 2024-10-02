@@ -153,18 +153,14 @@ static void TstCfg_ShowFormConfig (void)
    extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
    extern const char *Txt_Result_visibility;
    extern const char *Txt_Save_changes;
-   struct Qst_Questions Questions;
    TstCfg_Pluggable_t Pluggable;
    char StrMinTimeNxtTstPerQst[Cns_MAX_DIGITS_ULONG + 1];
-
-   /***** Create test *****/
-   Qst_Constructor (&Questions);
 
    /***** Read test configuration from database *****/
    TstCfg_GetConfig ();
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Configure_tests,Tst_PutIconsTests,&Questions,
+   Box_BoxBegin (Txt_Configure_tests,Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
@@ -244,9 +240,6 @@ static void TstCfg_ShowFormConfig (void)
 
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Destroy test *****/
-   Qst_Destructor (&Questions);
   }
 
 /*****************************************************************************/

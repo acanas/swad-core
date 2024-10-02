@@ -412,6 +412,12 @@ void Tag_ShowFormEditTags (void)
 
 	    HTM_TR_Begin (NULL);
 
+	       /* Link to get resource link */
+	       HTM_TD_Begin ("class=\"LM\"");
+		  Ico_PutContextualIconToGetLink (ActReqLnkTst,NULL,
+						  Tag_PutPars,&TagCod);
+	       HTM_TD_End ();
+
 	       /* Form to enable / disable this tag */
 	       if (row[2][0] == 'Y')	// Tag disabled
 		  Tag_PutIconEnable (TagCod);
@@ -440,6 +446,16 @@ void Tag_ShowFormEditTags (void)
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************* Params used to edit a tag question ********************/
+/*****************************************************************************/
+
+void Tag_PutPars (void *TagCod)
+  {
+   if (TagCod)
+      ParCod_PutPar (ParCod_Tag,*((long *) TagCod));
   }
 
 /*****************************************************************************/

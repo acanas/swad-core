@@ -234,7 +234,7 @@ bool Tag_DB_CheckIfCurrentCrsHasTestTags (void)
   }
 
 /*****************************************************************************/
-/***************** Check if this tag exists for current course ***************/
+/**************** Get tag code from tag text in current course ***************/
 /*****************************************************************************/
 
 long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
@@ -249,6 +249,20 @@ long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
 			      TagTxt);
   }
 
+/*****************************************************************************/
+/************************ Get tag title from database ************************/
+/*****************************************************************************/
+
+void Tag_DB_GetTagTitleByCod (long TagCod,char *Title,size_t TitleSize)
+  {
+   DB_QuerySELECTString (Title,TitleSize,"can not get tag title",
+		         "SELECT TagTxt"
+			  " FROM tst_tags"
+		         " WHERE TagCod=%ld"
+			   " AND CrsCod=%ld",	// Extra check
+		         TagCod,
+		         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+  }
 
 /*****************************************************************************/
 /*** Get tags of recent test questions from database giving a course code ****/

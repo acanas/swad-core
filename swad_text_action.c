@@ -11196,27 +11196,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Rename tag in the question bank"		// Çeviri lazim!
 #endif
 	,
-	[ActReqTst] =
+	[ActReqTstAnyTag] =
 #if   L==1	// ca
-	"Request a test"	// Necessita traducció
+	"Request test"		// Necessita traducció
 #elif L==2	// de
-	"Request a test"	// Need Übersetzung
+	"Request test"		// Need Übersetzung
 #elif L==3	// en
-	"Request a test"
+	"Request test"
 #elif L==4	// es
-	"Solicitar un test"
+	"Solicitar test"
 #elif L==5	// fr
-	"Request a test"	// Besoin de traduction
+	"Request test"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar un test"	// Okoteve traducción
+	"Solicitar test"	// Okoteve traducción
 #elif L==7	// it
-	"Request a test"	// Bisogno di traduzione
+	"Request test"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request a test"	// Potrzebujesz tlumaczenie
+	"Request test"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request a test"	// Precisa de tradução
+	"Request test"		// Precisa de tradução
 #elif L==10	// tr
-	"Request a test"	// Çeviri lazim!
+	"Request test"		// Çeviri lazim!
+#endif
+	,
+	[ActReqTstOneTag] =
+#if   L==1	// ca
+	"Request test with fixed tag"		// Necessita traducció
+#elif L==2	// de
+	"Request test with fixed tag"		// Need Übersetzung
+#elif L==3	// en
+	"Request test with fixed tag"
+#elif L==4	// es
+	"Solicitar test con descriptor fijo"
+#elif L==5	// fr
+	"Request test with fixed tag"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar test con descriptor fijo"	// Okoteve traducción
+#elif L==7	// it
+	"Request test with fixed tag"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request test with fixed tag"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request test with fixed tag"		// Precisa de tradução
+#elif L==10	// tr
+	"Request test with fixed tag"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeTst] =

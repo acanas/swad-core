@@ -39,8 +39,8 @@
 	<tr>
 	<td align="center">
 		<h1>SWAD database</h1>
-		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height=31px; vertical-align:middle;" alt="CC BY-SA" /></a>
-		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2023
+		<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.es_ES" title="License of text on this page" class="COPYRIGHT"><img src="/img/cc-by-sa.png" style="width:88px; height:31px; vertical-align:middle;" alt="CC BY-SA" /></a>
+		<a href="https://openswad.org/en?usr=@acanas" target="_blank">Antonio Ca&ntilde;as Vargas</a>, 1999-2024
 	</td>
 	</tr>
 
@@ -64,7 +64,7 @@
 	</p>
 
 	<p align="justify">
-	There are 151 tables in SWAD:
+	There are 152 tables in SWAD:
 	</p>
 
 	<pre>
@@ -128,7 +128,6 @@ mysql> SHOW TABLES;
 | <a href="#for_posts">for_posts</a>                |
 | <a href="#for_read">for_read</a>                 |
 | <a href="#for_threads">for_threads</a>              |
-| <a href="#gam_answers">gam_answers</a>              |
 | <a href="#gam_games">gam_games</a>                |
 | <a href="#gam_questions">gam_questions</a>            |
 | <a href="#grp_groups">grp_groups</a>               |
@@ -179,12 +178,14 @@ mysql> SHOW TABLES;
 | <a href="#rsc_clipboards">rsc_clipboards</a>           |
 | <a href="#rub_criteria">rub_criteria</a>             |
 | <a href="#rub_rubrics">rub_rubrics</a>              |
+| <a href="#rub_scores">rub_scores</a>               |
 | <a href="#ses_params">ses_params</a>               |
 | <a href="#ses_sessions">ses_sessions</a>             |
 | <a href="#set_ip_settings">set_ip_settings</a>          |
 | <a href="#sta_degrees">sta_degrees</a>              |
 | <a href="#sta_notifications">sta_notifications</a>        |
 | <a href="#svy_answers">svy_answers</a>              |
+| <a href="#svy_comments">svy_comments</a>             |
 | <a href="#svy_groups">svy_groups</a>               |
 | <a href="#svy_questions">svy_questions</a>            |
 | <a href="#svy_surveys">svy_surveys</a>              |
@@ -209,6 +210,7 @@ mysql> SHOW TABLES;
 | <a href="#usr_banned">usr_banned</a>               |
 | <a href="#usr_birthdays_today">usr_birthdays_today</a>      |
 | <a href="#usr_clicks_without_photo">usr_clicks_without_photo</a> |
+| <a href="#usr_clipboards">usr_clipboards</a>           |
 | <a href="#usr_connected">usr_connected</a>            |
 | <a href="#usr_data">usr_data</a>                 |
 | <a href="#usr_duplicated">usr_duplicated</a>           |
@@ -223,7 +225,7 @@ mysql> SHOW TABLES;
 | <a href="#usr_reports">usr_reports</a>              |
 | <a href="#usr_webs">usr_webs</a>                 |
 +--------------------------+
-151 rows in set (0,00 sec)
+152 rows in set (0,00 sec)
 	</pre>
 
 	<section id="act_frequent">
@@ -1387,25 +1389,6 @@ mysql> DESCRIBE for_threads;
 	</pre>
 	</section>
 
-	<section id="gam_answers">
-	<h3>Table gam_answers</h3>
-	<p align="justify">
-	Stores the answers to the games:
-	</p>
-	<pre>
-mysql> DESCRIBE gam_answers;
-+---------+------------+------+-----+---------+-------+
-| Field   | Type       | Null | Key | Default | Extra |
-+---------+------------+------+-----+---------+-------+
-| GamCod  | int(11)    | NO   | PRI | NULL    |       |
-| QstCod  | int(11)    | NO   | PRI | NULL    |       |
-| AnsInd  | tinyint(4) | NO   | PRI | NULL    |       |
-| NumUsrs | int(11)    | NO   |     | 0       |       |
-+---------+------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
-	</pre>
-	</section>
-
 	<section id="gam_games">
 	<h3>Table gam_games</h3>
 	<p align="justify">
@@ -2208,17 +2191,17 @@ mysql> DESCRIBE prg_items;
 	</p>
 	<pre>
 mysql> DESCRIBE prg_resources;
-+--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
-| Field  | Type                                                                          | Null | Key | Default | Extra          |
-+--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
-| RscCod | int(11)                                                                       | NO   | PRI | NULL    | auto_increment |
-| ItmCod | int(11)                                                                       | NO   | MUL | -1      |                |
-| RscInd | int(11)                                                                       | NO   |     | 0       |                |
-| Hidden | enum('N','Y')                                                                 | NO   |     | N       |                |
-| Type   | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   |     | non     |                |
-| Cod    | int(11)                                                                       | NO   |     | -1      |                |
-| Title  | varchar(2047)                                                                 | NO   |     | NULL    |                |
-+--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
++--------+-------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                                                | Null | Key | Default | Extra          |
++--------+-------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| RscCod | int                                                                                 | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int                                                                                 | NO   | MUL | -1      |                |
+| RscInd | int                                                                                 | NO   |     | 0       |                |
+| Hidden | enum('N','Y')                                                                       | NO   |     | N       |                |
+| Type   | enum('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') | NO   |     | non     |                |
+| Cod    | int                                                                                 | NO   |     | -1      |                |
+| Title  | varchar(2047)                                                                       | NO   |     | NULL    |                |
++--------+-------------------------------------------------------------------------------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 	</pre>
 	</section>
@@ -2375,15 +2358,15 @@ mysql> DESCRIBE roo_rooms;
 	</p>
 	<pre style="font-size:0.5em;">
 mysql> DESCRIBE rsc_clipboards;
-+----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
-| Field    | Type                                                                          | Null | Key | Default           | Extra                       |
-+----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
-| UsrCod   | int(11)                                                                       | NO   | PRI | NULL              |                             |
-| CrsCod   | int(11)                                                                       | NO   | PRI | NULL              |                             |
-| Type     | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non               |                             |
-| Cod      | int(11)                                                                       | NO   | PRI | -1                |                             |
-| CopyTime | timestamp                                                                     | NO   | MUL | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+----------+-------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------+
++----------+-------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field    | Type                                                                                | Null | Key | Default | Extra |
++----------+-------------------------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod   | int                                                                                 | NO   | PRI | NULL    |       |
+| CrsCod   | int                                                                                 | NO   | PRI | NULL    |       |
+| Type     | enum('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non     |       |
+| Cod      | int                                                                                 | NO   | PRI | -1      |       |
+| CopyTime | timestamp                                                                           | YES  | MUL | NULL    |       |
++----------+-------------------------------------------------------------------------------------+------+-----+---------+-------+
 5 rows in set (0,00 sec)
 	</pre>
 	</section>
@@ -2395,19 +2378,19 @@ mysql> DESCRIBE rsc_clipboards;
 	</p>
 	<pre style="font-size:0.5em;">
 mysql> DESCRIBE rub_criteria;
-+--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
-| Field  | Type                                                                          | Null | Key | Default | Extra          |
-+--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
-| CriCod | int(11)                                                                       | NO   | PRI | NULL    | auto_increment |
-| RubCod | int(11)                                                                       | NO   | MUL | NULL    |                |
-| CriInd | int(11)                                                                       | NO   |     | NULL    |                |
-| Type   | enum('non','asg','prj','cfe','exa','gam','rub','doc','mrk','att','for','svy') | NO   |     | non     |                |
-| Cod    | int(11)                                                                       | NO   |     | -1      |                |
-| MinVal | double                                                                        | NO   |     | 0       |                |
-| MaxVal | double                                                                        | NO   |     | 1       |                |
-| Weight | double                                                                        | NO   |     | 1       |                |
-| Title  | varchar(2047)                                                                 | NO   |     | NULL    |                |
-+--------+-------------------------------------------------------------------------------+------+-----+---------+----------------+
++--------+-------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                                                | Null | Key | Default | Extra          |
++--------+-------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| CriCod | int                                                                                 | NO   | PRI | NULL    | auto_increment |
+| RubCod | int                                                                                 | NO   | MUL | NULL    |                |
+| CriInd | int                                                                                 | NO   |     | NULL    |                |
+| Type   | enum('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') | NO   |     | non     |                |
+| Cod    | int                                                                                 | NO   |     | -1      |                |
+| MinVal | double                                                                              | NO   |     | 0       |                |
+| MaxVal | double                                                                              | NO   |     | 1       |                |
+| Weight | double                                                                              | NO   |     | 1       |                |
+| Title  | varchar(2047)                                                                       | NO   |     | NULL    |                |
++--------+-------------------------------------------------------------------------------------+------+-----+---------+----------------+
 9 rows in set (0,00 sec)
 	</pre>
 	</section>
@@ -2429,6 +2412,27 @@ mysql> DESCRIBE rub_rubrics;
 | Txt    | text          | NO   |     | NULL    |                |
 +--------+---------------+------+-----+---------+----------------+
 5 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="rub_scores">
+	<h3>Table rub_scores</h3>
+	<p align="justify">
+	Stores the scores for the rubrics:
+	</p>
+	<pre>
+mysql> DESCRIBE rub_scores;
++--------+-------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field  | Type                                                                                | Null | Key | Default | Extra |
++--------+-------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Type   | enum('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') | NO   | PRI | non     |       |
+| Cod    | int                                                                                 | NO   | PRI | NULL    |       |
+| UsrCod | int                                                                                 | NO   | PRI | -1      |       |
+| CriCod | int                                                                                 | NO   | PRI | NULL    |       |
+| EvlCod | int                                                                                 | NO   |     | -1      |       |
+| Score  | double                                                                              | NO   |     | 0       |       |
++--------+-------------------------------------------------------------------------------------+------+-----+---------+-------+
+6 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -2565,6 +2569,24 @@ mysql> DESCRIBE svy_answers;
 | Answer  | text       | NO   |     | NULL    |       |
 +---------+------------+------+-----+---------+-------+
 4 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="svy_comments">
+	<h3>Table svy_comments</h3>
+	<p align="justify">
+	Stores the comments to the surveys:
+	</p>
+	<pre>
+mysql> DESCRIBE svy_comments;
++----------+------+------+-----+---------+----------------+
+| Field    | Type | Null | Key | Default | Extra          |
++----------+------+------+-----+---------+----------------+
+| ComCod   | int  | NO   | PRI | NULL    | auto_increment |
+| QstCod   | int  | NO   | MUL | NULL    |                |
+| Comments | text | NO   |     | NULL    |                |
++----------+------+------+-----+---------+----------------+
+3 rows in set (0,00 sec)
 	</pre>
 	</section>
 
@@ -3060,6 +3082,24 @@ mysql> DESCRIBE usr_clicks_without_photo;
 | NumClicks | int(11) | NO   |     | NULL    |       |
 +-----------+---------+------+-----+---------+-------+
 2 rows in set (0,00 sec)
+	</pre>
+	</section>
+
+	<section id="usr_clipboards">
+	<h3>Table usr_clipboards</h3>
+	<p align="justify">
+	Stores clipboards with users used to enrol/select users:
+	</p>
+	<pre>
+mysql> DESCRIBE usr_clipboards;
++-----------+-----------+------+-----+---------+-------+
+| Field     | Type      | Null | Key | Default | Extra |
++-----------+-----------+------+-----+---------+-------+
+| UsrCod    | int       | NO   | PRI | NULL    |       |
+| OthUsrCod | int       | NO   | PRI | NULL    |       |
+| CopyTime  | timestamp | YES  | MUL | NULL    |       |
++-----------+-----------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
 	</pre>
 	</section>
 

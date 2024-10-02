@@ -699,7 +699,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRenTag		] = { 143, 3,TabAss,NULL			,Tag_RenameTag			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Test
-   [ActReqTst		] = { 103, 4,TabAss,NULL			,Tst_ReqTest			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActReqTstAnyTag	] = { 103, 4,TabAss,NULL			,Tst_ReqTest			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActReqTstOneTag	] = {1991, 4,TabAss,NULL			,Tst_ReqTest			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActSeeTst		] = {  29, 4,TabAss,NULL			,Tst_ShowNewTest		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqAssTst	] = {1837, 4,TabAss,NULL			,Tst_ReceiveTestDraft		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActAssTst		] = {  98, 4,TabAss,NULL			,Tst_AssessTest			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1926,7 +1927,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActMaiUsr,		// #100
 	ActUnk,			// #101 (obsolete action)
 	ActUnk,			// #102 (obsolete action)
-	ActReqTst,		// #103
+	ActReqTstAnyTag,	// #103
 	ActEdiTstQst,		// #104
 	ActEdiOneTstQst,	// #105
 	ActChgMaxStdGrp,	// #106
@@ -3814,4 +3815,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActAddClpSevStd,	// #1988
 	ActAddClpSevTch,	// #1989
 	ActReqLnkTst,		// #1990
+	ActReqTstOneTag,	// #1991
   };
