@@ -1085,6 +1085,29 @@ void Par_ReplaceSeparatorMultipleByComma (char *Str)
   }
 
 /*****************************************************************************/
+/***************** Count number of tags in the list of tags ******************/
+/*****************************************************************************/
+
+unsigned Par_CountNumCodesInList (const char *Ptr)
+  {
+   unsigned NumCods;
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
+   long Cod;
+
+   /***** Go over the list counting the number of codes *****/
+   for (NumCods = 0;
+	*Ptr;
+	NumCods++)
+     {
+      Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
+      if (sscanf (LongStr,"%ld",&Cod) != 1)
+         Err_WrongCodeExit ();
+     }
+
+   return NumCods;
+  }
+
+/*****************************************************************************/
 /********************** Put an unsigned hidden parameter *********************/
 /*****************************************************************************/
 

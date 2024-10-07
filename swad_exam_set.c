@@ -1121,7 +1121,7 @@ void ExaSet_AddQstsToSet (void)
 			  ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS);
 
    /* Check number of questions */
-   if (Qst_CountNumQuestionsInList (Exams.ListQuestions))	// If questions selected...
+   if (Par_CountNumCodesInList (Exams.ListQuestions))	// If questions selected...
      {
       /***** Insert questions in database *****/
       Ptr = Exams.ListQuestions;

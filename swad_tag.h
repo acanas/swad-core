@@ -74,8 +74,6 @@ void Tag_RenameTag (void);
 
 void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags);
 
-unsigned Tag_CountNumTagsInList (const struct Tag_Tags *Tags);
-
 void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
                           Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags);

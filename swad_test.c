@@ -668,8 +668,8 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
 	 Par_GetParMultiToText ("ChkTag",Questions->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
 
 	 /* Check number of tags selected */
-	 if (Tag_CountNumTagsInList (&Questions->Tags) == 0)	// If no tags selected...
-	   {							// ...write alert
+	 if (Par_CountNumCodesInList (Questions->Tags.List) == 0)	// If no tags selected...
+	   {								// ...write alert
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
 	    Error = true;
 	   }

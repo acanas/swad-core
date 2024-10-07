@@ -3497,29 +3497,6 @@ unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerType
   }
 
 /*****************************************************************************/
-/**** Count the number of questions in the list of selected question codes ***/
-/*****************************************************************************/
-
-unsigned Qst_CountNumQuestionsInList (const char *ListQuestions)
-  {
-   const char *Ptr;
-   unsigned NumQuestions = 0;
-   char LongStr[Cns_MAX_DIGITS_LONG + 1];
-   long QstCod;
-
-   /***** Go over list of questions counting the number of questions *****/
-   Ptr = ListQuestions;
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
-      if (sscanf (LongStr,"%ld",&QstCod) != 1)
-         Err_WrongQuestionExit ();
-      NumQuestions++;
-     }
-   return NumQuestions;
-  }
-
-/*****************************************************************************/
 /********************* Remove all questions in a course **********************/
 /*****************************************************************************/
 
