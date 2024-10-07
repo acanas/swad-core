@@ -588,7 +588,7 @@ unsigned Par_GetPar (Par_ParamType_t ParType,const char *ParName,
 	      {
 	       case Act_NORM:
 		  ParFound = !strncmp (ParName,&Par_Pars.QueryString[Par->Name.Start],
-					 Par->Name.Length);
+				       Par->Name.Length);
 		  break;
 	       case Act_DATA:
 		  fseek (QueryFile,Par->Name.Start,SEEK_SET);
@@ -1180,7 +1180,7 @@ void Par_PutParString (const char *Id,const char *ParName,const char *ParValue)
          HTM_TxtF (" id=\"%s\"",Id);
    HTM_TxtF (" name=\"%s\" value=\"%s\" />",
              ParName,ParValue ? ParValue :
-	                     "");
+	                        "");
   }
 
 /*****************************************************************************/

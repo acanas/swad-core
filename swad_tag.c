@@ -67,9 +67,12 @@ void Tag_ResetTags (struct Tag_Tags *Tags)
   {
    unsigned IndTag;
 
-   Tags->Num  = 0;
-   Tags->All  = false;
-   Tags->List = NULL;
+   Tags->PreselectedTagCod = -1L;	// No preselected tag
+   Tags->Num = 0;
+   Tags->NumSelected = 0;
+   Tags->All = false;
+   Tags->ListSelectedTxt = NULL;
+   Tags->ListSelectedTagCods = NULL;
 
    /***** Initialize all tags in question to empty string *****/
    for (IndTag = 0;
@@ -84,11 +87,11 @@ void Tag_ResetTags (struct Tag_Tags *Tags)
 
 void Tag_FreeTagsList (struct Tag_Tags *Tags)
   {
-   if (Tags->List)
-     {
-      free (Tags->List);
-      Tag_ResetTags (Tags);
-     }
+   if (Tags->ListSelectedTagCods)
+      free (Tags->ListSelectedTagCods);
+   if (Tags->ListSelectedTxt)
+      free (Tags->ListSelectedTxt);
+   Tag_ResetTags (Tags);
   }
 
 /*****************************************************************************/
@@ -250,8 +253,7 @@ void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags)
 /********************* Show a form to select test tags ***********************/
 /*****************************************************************************/
 
-void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
-                          MYSQL_RES *mysql_res,
+void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
                           Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags)
   {
    extern const char *Txt_Tags;
@@ -259,14 +261,11 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    extern const char *Txt_Tag_not_allowed;
    extern const char *Txt_Tag_allowed;
    unsigned NumTag;
+   unsigned NumSelTag;
    MYSQL_ROW row;
    bool TagHidden = false;
    HTM_Attributes_t Attributes;
-   const char *Ptr;
-   // char TagText[Tag_MAX_BYTES_TAG + 1];
-   char LongStr[Cns_MAX_DIGITS_LONG + 1];
    long TagCodThisRow;
-   long TagCodSelected;
    /*
    row[0] TagCod
    row[1] TagTxt
@@ -336,23 +335,14 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		  else		// User can select between several tags
 		    {
 		     Attributes = HTM_NO_ATTR;
-		     if (Tags->List)
-		       {
-			Ptr = Tags->List;
-			while (*Ptr)
+		     for (NumSelTag = 0;
+			  NumSelTag < Tags->NumSelected;
+			  NumSelTag++)
+			if (TagCodThisRow == Tags->ListSelectedTagCods[NumSelTag])
 			  {
-			   Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,
-							    Cns_MAX_DIGITS_LONG);
-			   if (sscanf (LongStr,"%ld",&TagCodSelected) != 1)
-			      Err_WrongTagExit ();
-
-			   if (TagCodThisRow == TagCodSelected)
-			     {
-			      Attributes = HTM_CHECKED;
-			      break;
-			     }
+			   Attributes = HTM_CHECKED;
+			   break;
 			  }
-		       }
 		    }
 		  HTM_TD_Begin ("class=\"LT\"");
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());

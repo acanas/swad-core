@@ -48,8 +48,10 @@ struct Tag_Tags
   {
    long PreselectedTagCod;	// If > 0 ==> only one tag is preselected, students can not select
    unsigned Num;
+   unsigned NumSelected;
    bool All;
-   char *List;
+   char *ListSelectedTxt;
+   long *ListSelectedTagCods;
    char Txt[Tag_MAX_TAGS_PER_QUESTION][Tag_MAX_BYTES_TAG + 1];
   };
 
@@ -74,8 +76,7 @@ void Tag_RenameTag (void);
 
 void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags);
 
-void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
-                          MYSQL_RES *mysql_res,
+void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
                           Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags);
 void Tag_ShowFormEditTags (void);
 void Tag_PutPars (void *TagCod);

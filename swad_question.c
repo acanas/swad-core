@@ -1319,13 +1319,17 @@ void Qst_PutParsEditQst (void *Questions)
   {
    if (Questions)
      {
-      Par_PutParChar ("AllTags",((struct Qst_Questions *) Questions)->Tags.All ? 'Y' :
-					                                         'N');
-      Par_PutParString (NULL,"ChkTag",((struct Qst_Questions *) Questions)->Tags.List ? ((struct Qst_Questions *) Questions)->Tags.List :
-								                        "");
-      Par_PutParChar ("AllAnsTypes",((struct Qst_Questions *) Questions)->AnswerTypes.All ? 'Y' :
-								                            'N');
-      Par_PutParString (NULL,"AnswerType",((struct Qst_Questions *) Questions)->AnswerTypes.List);
+      Par_PutParChar ("AllTags",
+	              ((struct Qst_Questions *) Questions)->Tags.All ? 'Y' :
+					                               'N');
+      Par_PutParString (NULL,"ChkTag",
+	                ((struct Qst_Questions *) Questions)->Tags.ListSelectedTxt ? ((struct Qst_Questions *) Questions)->Tags.ListSelectedTxt :
+								             "");
+      Par_PutParChar ("AllAnsTypes",
+	              ((struct Qst_Questions *) Questions)->AnswerTypes.All ? 'Y' :
+								              'N');
+      Par_PutParString (NULL,"AnswerType",
+	                ((struct Qst_Questions *) Questions)->AnswerTypes.List);
 
       ParCod_PutPar (ParCod_Qst,((struct Qst_Questions *) Questions)->Question.QstCod);
       // if (Test->NumQsts == 1)

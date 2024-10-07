@@ -266,9 +266,9 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
    char *Query = NULL;
    long LengthQuery;
    unsigned NumItemInList;
+   unsigned NumSelTag;
    const char *Ptr;
    char LongStr[Cns_MAX_DIGITS_LONG + 1];
-   long TagCod;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    Qst_AnswerType_t AnsType;
    char CrsCodStr[Cns_MAX_DIGITS_LONG + 1];
@@ -308,21 +308,19 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
       Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod",
                   Qst_MAX_BYTES_QUERY_QUESTIONS);
       LengthQuery = strlen (Query);
-      NumItemInList = 0;
-      Ptr = Questions->Tags.List;
-      while (*Ptr)
+      for (NumSelTag = 0;
+	   NumSelTag < Questions->Tags.NumSelected;
+	   NumSelTag++)
         {
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
-	 if (sscanf (LongStr,"%ld",&TagCod) != 1)
-	    Err_WrongTagExit ();
+	 snprintf (LongStr,sizeof (LongStr),
+	           "%ld",Questions->Tags.ListSelectedTagCods[NumSelTag]);
          LengthQuery += 35 + strlen (LongStr) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
             Err_QuerySizeExceededExit ();
-         Str_Concat (Query,NumItemInList ? " OR tst_question_tags.TagCod=" :
-					   " AND (tst_question_tags.TagCod=",
+         Str_Concat (Query,NumSelTag ? " OR tst_question_tags.TagCod=" :
+				       " AND (tst_question_tags.TagCod=",
                      Qst_MAX_BYTES_QUERY_QUESTIONS);
          Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
-         NumItemInList++;
         }
       Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
      }
@@ -404,10 +402,10 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    char *Query = NULL;
    long LengthQuery;
+   unsigned NumSelTag;
    unsigned NumItemInList;
    const char *Ptr;
    char LongStr[Cns_MAX_DIGITS_LONG + 1];
-   long TagCod;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    Qst_AnswerType_t AnswerType;
    char StrNumQsts[Cns_MAX_DIGITS_UINT + 1];
@@ -449,22 +447,19 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
    else if (!Questions->Tags.All)	// User has selected some tags, but not all
      {
       LengthQuery = strlen (Query);
-      NumItemInList = 0;
-      Ptr = Questions->Tags.List;
-      while (*Ptr)
+      for (NumSelTag = 0;
+	   NumSelTag < Questions->Tags.NumSelected;
+	   NumSelTag++)
         {
-	 /* Get next tag code */
-	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
-	 if (sscanf (LongStr,"%ld",&TagCod) != 1)
-	    Err_WrongTagExit ();
+	 snprintf (LongStr,sizeof (LongStr),
+	           "%ld",Questions->Tags.ListSelectedTagCods[NumSelTag]);
          LengthQuery += 35 + strlen (LongStr) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 128)
             Err_QuerySizeExceededExit ();
-         Str_Concat (Query,NumItemInList ? " OR tst_question_tags.TagCod=" :
-					   " AND (tst_question_tags.TagCod=",
+         Str_Concat (Query,NumSelTag ? " OR tst_question_tags.TagCod=" :
+				       " AND (tst_question_tags.TagCod=",
                      Qst_MAX_BYTES_QUERY_QUESTIONS);
          Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
-         NumItemInList++;
         }
       Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
      }

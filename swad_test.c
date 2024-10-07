@@ -124,12 +124,19 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
    extern const char *Txt_Generate_test;
    extern const char *Txt_No_questions;
    MYSQL_RES *mysql_res;
+   char TagTxt[Tag_MAX_BYTES_TAG + 1];
 
    /***** Read test configuration from database *****/
    TstCfg_GetConfig ();
 
+   /***** Get tag title *****/
+   if (Questions->Tags.PreselectedTagCod > 0)
+      Tag_DB_GetTagTitleByCod (Questions->Tags.PreselectedTagCod,TagTxt,Tag_MAX_BYTES_TAG);
+   else
+      Str_Copy (TagTxt,Txt_Test,sizeof (TagTxt) - 1);
+
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Test,Tst_PutIconsTests,NULL,
+   Box_BoxBegin (TagTxt,Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Get tags *****/
@@ -653,6 +660,9 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
    bool Error = false;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned UnsignedNum;
+   unsigned NumSelTag;
+   const char *Ptr;
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Tags *****/
    /* Get preselected tag */
@@ -661,15 +671,36 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
       if (!(Questions->Tags.All = Par_GetParBool ("AllTags")))
         {
 	 /* Allocate memory for tags */
-	 if ((Questions->Tags.List = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
+	 if ((Questions->Tags.ListSelectedTxt = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
 	    Err_NotEnoughMemoryExit ();
 
 	 /* Get the selected tags */
-	 Par_GetParMultiToText ("ChkTag",Questions->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
+	 Par_GetParMultiToText ("ChkTag",Questions->Tags.ListSelectedTxt,Tag_MAX_BYTES_TAGS_LIST);
 
-	 /* Check number of tags selected */
-	 if (Par_CountNumCodesInList (Questions->Tags.List) == 0)	// If no tags selected...
-	   {								// ...write alert
+	 /* Check number of selected tags */
+	 Questions->Tags.NumSelected = Par_CountNumCodesInList (Questions->Tags.ListSelectedTxt);
+
+	 if (Questions->Tags.NumSelected)
+	   {
+	    if ((Questions->Tags.ListSelectedTagCods = malloc ((size_t) Questions->Tags.NumSelected *
+						       sizeof (*Questions->Tags.ListSelectedTagCods))) == NULL)
+	       Err_NotEnoughMemoryExit ();
+	    for (NumSelTag = 0, Ptr = Questions->Tags.ListSelectedTxt;
+		 NumSelTag < Questions->Tags.NumSelected;
+		 NumSelTag++)
+	      {
+	       if (*Ptr)
+	         {
+	          Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
+	          if ((Questions->Tags.ListSelectedTagCods[NumSelTag] = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
+	             Err_WrongTagExit ();
+	         }
+	       else
+	          Err_WrongTagExit ();
+	      }
+	   }
+	 else	// If no tags selected, write alert
+	   {
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
 	    Error = true;
 	   }
