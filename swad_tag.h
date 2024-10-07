@@ -46,11 +46,18 @@
 
 struct Tag_Tags
   {
+   long TagCod;	// If > 0 ==> only one tag is preselected, students can not select
    unsigned Num;
    bool All;
    char *List;
    char Txt[Tag_MAX_TAGS_PER_QUESTION][Tag_MAX_BYTES_TAG + 1];
   };
+
+typedef enum
+  {
+   Tag_SHOW_ALL_TAGS,
+   Tag_SHOW_ONLY_VISIBLE_TAGS,
+  } Tag_ShowAllOrVisibleTags_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -71,7 +78,7 @@ unsigned Tag_CountNumTagsInList (const struct Tag_Tags *Tags);
 
 void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
-                          bool ShowOnlyEnabledTags);
+                          Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags);
 void Tag_ShowFormEditTags (void);
 void Tag_PutPars (void *TagCod);
 

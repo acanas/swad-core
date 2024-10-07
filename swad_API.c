@@ -3574,7 +3574,7 @@ static int API_GetTstTags (struct soap *soap,
    unsigned NumTag;
 
    /***** Get available tags from database *****/
-   NumTags = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,CrsCod);
+   NumTags = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,-1L,CrsCod);
 
    getTestsOut->tagsArray.__size = (int) NumTags;
 

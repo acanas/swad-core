@@ -41,6 +41,10 @@ input
 	{
 	font-size: 12pt;
 	}
+label input
+	{
+	margin-right: 8px;
+	}
 select
 	{
 	font-size: 12pt;

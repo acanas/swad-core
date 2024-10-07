@@ -527,7 +527,7 @@ static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
 			     AllowTeachers ? HTM_CHECKED :	// Teachers can see test exam
 					     HTM_NO_ATTR,
 			     "value=\"Y\"");
-	 HTM_NBSPTxt (Txt_Allow_teachers_to_consult_this_test);
+	 HTM_Txt (Txt_Allow_teachers_to_consult_this_test);
       HTM_LABEL_End ();
    HTM_DIV_End ();
   }

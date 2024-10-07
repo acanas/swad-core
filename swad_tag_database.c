@@ -201,20 +201,32 @@ unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 /********************** Get enabled test tags for this course ****************/
 /*****************************************************************************/
+// If TagCod  > 0 ==> get only that tag if enabled
+// If TagCod <= 0 ==> get all enabled tags
 // Return the number of rows of the result
 
-unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,long CrsCod)
+unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
+				       long TagCod,long CrsCod)
   {
    /***** Get available not hidden tags from database *****/
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get available enabled tags",
-		   "SELECT TagCod,"	// row[0]
-			  "TagTxt"	// row[1]
-		    " FROM tst_tags"
-		   " WHERE CrsCod=%ld"
-		     " AND TagHidden='N'"
-		   " ORDER BY TagTxt",
-		   CrsCod);
+   (TagCod > 0) ? DB_QuerySELECT (mysql_res,"can not get available enabled tags",
+				  "SELECT TagCod,"	// row[0]
+					 "TagTxt"	// row[1]
+				   " FROM tst_tags"
+				  " WHERE TagCod=%ld"
+				    " AND CrsCod=%ld"	// Extra check
+				    " AND TagHidden='N'",
+				  TagCod,
+				  CrsCod) :
+		  DB_QuerySELECT (mysql_res,"can not get available enabled tags",
+				  "SELECT TagCod,"	// row[0]
+					 "TagTxt"	// row[1]
+				   " FROM tst_tags"
+				  " WHERE CrsCod=%ld"
+				    " AND TagHidden='N'"
+				  " ORDER BY TagTxt",
+				  CrsCod);
   }
 
 /*****************************************************************************/

@@ -274,7 +274,7 @@ unsigned Tag_CountNumTagsInList (const struct Tag_Tags *Tags)
 
 void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
-                          bool ShowOnlyEnabledTags)
+                          Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags)
   {
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
@@ -303,7 +303,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
 	    HTM_TR_Begin (NULL);
 
-	       if (!ShowOnlyEnabledTags)
+	       if (ShowAllOrVisibleTags == Tag_SHOW_ALL_TAGS)
 		  HTM_TD_Empty (1);
 
 	       HTM_TD_Begin ("class=\"LT\"");
@@ -313,31 +313,35 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 						     HTM_NO_ATTR,
 					 "value=\"Y\""
 					 " onclick=\"togglecheckChildren(this,'ChkTag');\"");
-		     HTM_NBSPTxt (Txt_All_tags);
+		     HTM_Txt (Txt_All_tags);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 
 	    /***** Select tags one by one *****/
-	    for (NumTag = 1;
+	    for (NumTag  = 1;
 		 NumTag <= Tags->Num;
 		 NumTag++)
 	      {
 	       row = mysql_fetch_row (mysql_res);
 	       HTM_TR_Begin (NULL);
 
-		  if (!ShowOnlyEnabledTags)
+		  /* Hidden/visible icon */
+		  if (ShowAllOrVisibleTags == Tag_SHOW_ALL_TAGS)
 		    {
 		     TagHidden = (row[2][0] == 'Y');
 		     HTM_TD_Begin ("class=\"LT\"");
-			if (TagHidden)
-			   Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Tag_not_allowed);
-			else
-			   Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Tag_allowed    );
+			Ico_PutIconOff (TagHidden ? "eye-slash.svg" :
+						    "eye.svg",
+					TagHidden ? Ico_RED :
+						    Ico_GREEN,
+					TagHidden ? Txt_Tag_not_allowed :
+						    Txt_Tag_allowed);
 		     HTM_TD_End ();
 		    }
 
+		  /* Tag title */
 		  Attributes = HTM_NO_ATTR;
 		  if (Tags->List)
 		    {
@@ -353,7 +357,6 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 			  }
 		       }
 		    }
-
 		  HTM_TD_Begin ("class=\"LT\"");
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 			HTM_INPUT_CHECKBOX ("ChkTag",
@@ -361,7 +364,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 					    "value=\"%s\""
 					    " onclick=\"checkParent(this,'AllTags');\"",
 					    row[1]);
-			HTM_NBSPTxt (row[1]);
+			HTM_Txt (row[1]);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
@@ -369,6 +372,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 	      }
 
 	 HTM_TABLE_End ();
+
       HTM_TD_End ();
 
    HTM_TR_End ();

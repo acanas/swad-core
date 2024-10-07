@@ -467,7 +467,7 @@ static void Grp_PutCheckboxAllGrps (void)
 			     "value=\"Y\"%s",
 			     (ICanSelUnselGroup == Usr_CAN) ? " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
 							      "");
-	 HTM_NBSPTxt (Txt_All_groups);
+	 HTM_Txt (Txt_All_groups);
       HTM_LABEL_End ();
    HTM_DIV_End ();
   }

@@ -103,6 +103,9 @@ void Tst_ReqTest (void)
    /***** Create questions *****/
    Qst_Constructor (&Questions);
 
+   /***** Get if one tag is preselected *****/
+   Questions.Tags.TagCod = ParCod_GetPar (ParCod_Tag);
+
    /***** Show form to generate a self-assessment test *****/
    Tst_ShowFormRequestTest (&Questions);
 
@@ -131,6 +134,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 
       /***** Get tags *****/
       if ((Questions->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
+                                                               Questions->Tags.TagCod,
                                                                Gbl.Hierarchy.Node[Hie_CRS].HieCod)))
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
@@ -141,7 +145,8 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 	       HTM_TABLE_BeginPadding (2);
 
 		  /***** Selection of tags *****/
-		  Tag_ShowFormSelTags (&Questions->Tags,mysql_res,true);
+		  Tag_ShowFormSelTags (&Questions->Tags,mysql_res,
+				       Tag_SHOW_ONLY_VISIBLE_TAGS);
 
 		  /***** Selection of types of answers *****/
 		  Qst_ShowFormAnswerTypes (&Questions->AnswerTypes);
@@ -633,7 +638,8 @@ static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQue
 /*****************************************************************************/
 /************ Get parameters for the selection of test questions *************/
 /*****************************************************************************/
-// Return true (OK) if all parameters are found, or false (error) if any necessary parameter is not found
+// Return true (OK) if all parameters are found,
+// or false (error) if any necessary parameter is not found
 
 bool Tst_GetParsTst (struct Qst_Questions *Questions,
                        Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions)
@@ -646,19 +652,25 @@ bool Tst_GetParsTst (struct Qst_Questions *Questions,
    unsigned UnsignedNum;
 
    /***** Tags *****/
-   /* Get parameter that indicates whether all tags are selected */
-   Questions->Tags.All = Par_GetParBool ("AllTags");
+   /* Get tag code (only one tag selected) */
+   Questions->Tags.TagCod = ParCod_GetPar (ParCod_Tag);
 
-   /* Get the tags */
-   if ((Questions->Tags.List = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
-      Err_NotEnoughMemoryExit ();
-   Par_GetParMultiToText ("ChkTag",Questions->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
+   if (Questions->Tags.TagCod <= 0)	// No tag preselected
+     {
+      /* Get parameter that indicates whether all tags are selected */
+      Questions->Tags.All = Par_GetParBool ("AllTags");
 
-   /* Check number of tags selected */
-   if (Tag_CountNumTagsInList (&Questions->Tags) == 0)	// If no tags selected...
-     {						// ...write alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
-      Error = true;
+      /* Get the tags */
+      if ((Questions->Tags.List = malloc (Tag_MAX_BYTES_TAGS_LIST + 1)) == NULL)
+	 Err_NotEnoughMemoryExit ();
+      Par_GetParMultiToText ("ChkTag",Questions->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
+
+      /* Check number of tags selected */
+      if (Tag_CountNumTagsInList (&Questions->Tags) == 0)	// If no tags selected...
+	{							// ...write alert
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
+	 Error = true;
+	}
      }
 
    /***** Types of answer *****/

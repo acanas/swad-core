@@ -181,7 +181,8 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 	    HTM_TABLE_BeginCenterPadding (2);
 
 	       /***** Selection of tags *****/
-	       Tag_ShowFormSelTags (&Questions->Tags,mysql_res,false);
+	       Tag_ShowFormSelTags (&Questions->Tags,mysql_res,
+				    Tag_SHOW_ALL_TAGS);
 
 	       /***** Selection of types of answers *****/
 	       Qst_ShowFormAnswerTypes (&Questions->AnswerTypes);
@@ -239,7 +240,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	        			                 HTM_NO_ATTR,
 				      "value=\"Y\""
 				      " onclick=\"togglecheckChildren(this,'AnswerType');\"");
-		  HTM_NBSPTxt (Txt_All_types_of_answers);
+		  HTM_Txt (Txt_All_types_of_answers);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
@@ -271,7 +272,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 					 "value=\"%u\""
 					 " onclick=\"checkParent(this,'AllAnsTypes');\"",
 					 (unsigned) AnsType);
-		     HTM_NBSPTxt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
+		     HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
@@ -350,7 +351,8 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 	    HTM_TABLE_BeginPadding (2);
 
 	       /***** Selection of tags *****/
-	       Tag_ShowFormSelTags (&Questions->Tags,mysql_res,false);
+	       Tag_ShowFormSelTags (&Questions->Tags,mysql_res,
+				    Tag_SHOW_ALL_TAGS);
 
 	       /***** Selection of types of answers *****/
 	       Qst_ShowFormAnswerTypes (&Questions->AnswerTypes);
@@ -407,7 +409,8 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 	    HTM_TABLE_BeginPadding (2);
 
 	       /***** Selection of tags *****/
-	       Tag_ShowFormSelTags (&Questions->Tags,mysql_res,false);
+	       Tag_ShowFormSelTags (&Questions->Tags,mysql_res,
+				    Tag_SHOW_ALL_TAGS);
 
 	       /***** Starting and ending dates in the search *****/
 	       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
@@ -1209,7 +1212,7 @@ void Qst_PutCheckboxToSelectAllQuestions (void)
 			  HTM_NO_ATTR,
 			  "value=\"Y\""
 			  " onclick=\"togglecheckChildren(this,'QstCods');\"");
-      HTM_NBSPTxt (Txt_All_questions);
+      HTM_Txt (Txt_All_questions);
    HTM_LABEL_End ();
   }
 
