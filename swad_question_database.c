@@ -438,9 +438,16 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 	     Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	     Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   if (!Questions->Tags.All) // User has not selected all tags
+   /* Add selected tags */
+   if (Questions->Tags.PreselectedTagCod > 0)	// Only one preselected tag
      {
-      /* Add selected tags */
+      Str_Concat (Query," AND tst_question_tags.TagCod=",
+	          Qst_MAX_BYTES_QUERY_QUESTIONS);
+      sprintf (LongStr,"%ld",Questions->Tags.PreselectedTagCod);
+      Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
+     }
+   else if (!Questions->Tags.All)	// User has selected some tags, but not all
+     {
       LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Questions->Tags.List;

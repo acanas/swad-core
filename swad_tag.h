@@ -46,7 +46,7 @@
 
 struct Tag_Tags
   {
-   long TagCod;	// If > 0 ==> only one tag is preselected, students can not select
+   long PreselectedTagCod;	// If > 0 ==> only one tag is preselected, students can not select
    unsigned Num;
    bool All;
    char *List;

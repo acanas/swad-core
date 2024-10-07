@@ -67,7 +67,7 @@ void Tst_AssessTest (void);
 void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 
 bool Tst_GetParsTst (struct Qst_Questions *Questions,
-                       Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
+                     Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 
 //-------------------------------- Figures ------------------------------------
 void Tst_GetAndShowTestsStats (void);

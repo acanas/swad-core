@@ -254,13 +254,13 @@ unsigned Tag_CountNumTagsInList (const struct Tag_Tags *Tags)
   {
    const char *Ptr;
    unsigned NumTags = 0;
-   char TagText[Tag_MAX_BYTES_TAG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
 
    /***** Go over the list of tags counting the number of tags *****/
    Ptr = Tags->List;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+      Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
       NumTags++;
      }
 
@@ -303,7 +303,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 
 	 HTM_TABLE_BeginPadding (2);
 
-	    if (Tags->TagCod <= 0)	// User can select between several tags
+	    if (Tags->PreselectedTagCod <= 0)	// No preselected tag ==> user can select between several tags
 	      {
 	       /* Select all tags */
 	       HTM_TR_Begin (NULL);
@@ -351,9 +351,10 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		    }
 
 		  /* Checkbox and title */
-		  if (Tags->TagCod > 0)	// Tag is fixed. User can not select between several tags
+		  if (Tags->PreselectedTagCod > 0)	// Only one preselected tag
+				// User can not select between several tags
 		     Attributes = HTM_CHECKED | HTM_DISABLED;
-		  else			// User can select between several tags
+		  else		// User can select between several tags
 		    {
 		     Attributes = HTM_NO_ATTR;
 		     if (Tags->List)
