@@ -158,8 +158,7 @@ void Tag_RenameTag (void)
 						// are exactly the same (case sensitively).
 						// This happens when user press INTRO
 						// without changing anything in the form.
-         Ale_ShowAlert (Ale_INFO,Txt_The_tag_X_has_not_changed,
-                        NewTagTxt);
+         Ale_ShowAlert (Ale_INFO,Txt_The_tag_X_has_not_changed,NewTagTxt);
       else					// The old and the new tag
 						// are not exactly the same (case sensitively).
 	{
@@ -285,7 +284,10 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    bool TagHidden = false;
    HTM_Attributes_t Attributes;
    const char *Ptr;
-   char TagText[Tag_MAX_BYTES_TAG + 1];
+   // char TagText[Tag_MAX_BYTES_TAG + 1];
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
+   long TagCodThisRow;
+   long TagCodSelected;
    /*
    row[0] TagCod
    row[1] TagTxt
@@ -296,35 +298,42 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
       /***** Label *****/
       Frm_LabelColumn ("Frm_C1 RT","",Txt_Tags);
 
-      /***** Select all tags *****/
+      /***** Tags *****/
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 
 	 HTM_TABLE_BeginPadding (2);
 
-	    HTM_TR_Begin (NULL);
+	    if (Tags->TagCod <= 0)	// User can select between several tags
+	      {
+	       /* Select all tags */
+	       HTM_TR_Begin (NULL);
 
-	       if (ShowAllOrVisibleTags == Tag_SHOW_ALL_TAGS)
-		  HTM_TD_Empty (1);
+		  if (ShowAllOrVisibleTags == Tag_SHOW_ALL_TAGS)
+		     HTM_TD_Empty (1);
 
-	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-		     HTM_INPUT_CHECKBOX ("AllTags",
-					 Tags->All ? HTM_CHECKED :
-						     HTM_NO_ATTR,
-					 "value=\"Y\""
-					 " onclick=\"togglecheckChildren(this,'ChkTag');\"");
-		     HTM_Txt (Txt_All_tags);
-		  HTM_LABEL_End ();
-	       HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"LT\"");
+		     HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			HTM_INPUT_CHECKBOX ("AllTags",
+					    Tags->All ? HTM_CHECKED :
+							HTM_NO_ATTR,
+					    "value=\"Y\""
+					    " onclick=\"togglecheckChildren(this,'ChkTag');\"");
+			HTM_Txt (Txt_All_tags);
+		     HTM_LABEL_End ();
+		  HTM_TD_End ();
 
-	    HTM_TR_End ();
+	       HTM_TR_End ();
+	      }
 
-	    /***** Select tags one by one *****/
+	    /* Select tags one by one */
 	    for (NumTag  = 1;
 		 NumTag <= Tags->Num;
 		 NumTag++)
 	      {
 	       row = mysql_fetch_row (mysql_res);
+	       if (sscanf (row[0],"%ld",&TagCodThisRow) != 1)
+		  Err_WrongTagExit ();
+
 	       HTM_TR_Begin (NULL);
 
 		  /* Hidden/visible icon */
@@ -341,19 +350,27 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		     HTM_TD_End ();
 		    }
 
-		  /* Tag title */
-		  Attributes = HTM_NO_ATTR;
-		  if (Tags->List)
+		  /* Checkbox and title */
+		  if (Tags->TagCod > 0)	// Tag is fixed. User can not select between several tags
+		     Attributes = HTM_CHECKED | HTM_DISABLED;
+		  else			// User can select between several tags
 		    {
-		     Ptr = Tags->List;
-		     while (*Ptr)
+		     Attributes = HTM_NO_ATTR;
+		     if (Tags->List)
 		       {
-			Par_GetNextStrUntilSeparParMult (&Ptr,TagText,
-							 Tag_MAX_BYTES_TAG);
-			if (!strcmp (row[1],TagText))
+			Ptr = Tags->List;
+			while (*Ptr)
 			  {
-			   Attributes = HTM_CHECKED;
-			   break;
+			   Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,
+							    Cns_MAX_DIGITS_LONG);
+			   if (sscanf (LongStr,"%ld",&TagCodSelected) != 1)
+			      Err_WrongTagExit ();
+
+			   if (TagCodThisRow == TagCodSelected)
+			     {
+			      Attributes = HTM_CHECKED;
+			      break;
+			     }
 			  }
 		       }
 		    }
@@ -361,9 +378,9 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
 			HTM_INPUT_CHECKBOX ("ChkTag",
 					    Attributes,
-					    "value=\"%s\""
+					    "value=\"%ld\""
 					    " onclick=\"checkParent(this,'AllTags');\"",
-					    row[1]);
+					    TagCodThisRow);
 			HTM_Txt (row[1]);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();

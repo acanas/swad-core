@@ -417,7 +417,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 		 NumUsr < NumUsrsInList;
 		 NumUsr++)
 	      {
-	       LengthQuery = LengthQuery + 25 + 10 + 1;
+	       LengthQuery += 25 + 10 + 1;
 	       if (LengthQuery > Sta_DB_MAX_BYTES_QUERY - 128)
                   Err_QuerySizeExceededExit ();
 	       sprintf (SubQuery,

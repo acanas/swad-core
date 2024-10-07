@@ -635,10 +635,11 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.11.3 (2024-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 24.11.4 (2024-10-07)"
 #define CSS_FILE		"swad24.11.3.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.11.4:  Oct 07, 2024  Code refactoring in tags. (336873 lines)
 	Version 24.11.3:  Oct 07, 2024  Code refactoring in tags.
 					Changes in CSS related to input labels. (336861 lines)
 	Version 24.11.2:  Oct 02, 2024  New resource test. Not finished. (336819 lines)

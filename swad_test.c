@@ -141,6 +141,9 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 	 if (Tst_CheckIfNextTstAllowed ())
 	   {
 	    Frm_BeginForm (ActSeeTst);
+	       if (Questions->Tags.TagCod > 0)	// Tag is fixed. User can not select between several tags
+		  /* Tag is one and selected */
+		  ParCod_PutPar (ParCod_Tag,Questions->Tags.TagCod);
 
 	       HTM_TABLE_BeginPadding (2);
 
