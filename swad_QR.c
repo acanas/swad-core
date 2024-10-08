@@ -129,7 +129,7 @@ void QR_ImageQRCode (const char *QRString)
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:0 auto; width:%upx;\"",
 		  QR_CODE_SIZE);
 
-      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s",
+      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s",
 		    QR_CODE_SIZE,QR_CODE_SIZE,QRString) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,NULL,QRString,
@@ -153,15 +153,13 @@ void QR_LinkTo (unsigned Size,ParCod_Param_t ParCode,long Cod)
    /***** Show QR code with link *****/
    if (ParCode == ParCod_None)
      {
-      if (asprintf (&URL,"https://chart.googleapis.com/"
-	                 "chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/",
+      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s/",
 		    Size,Size,Cfg_URL_SWAD_CGI) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
    else
      {
-      if (asprintf (&URL,"https://chart.googleapis.com/"
-	                 "chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?%s=%ld",
+      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s/?%s=%ld",
 		    Size,Size,Cfg_URL_SWAD_CGI,Par_CodeStr[ParCode],Cod) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
@@ -182,7 +180,7 @@ void QR_ExamAnnnouncement (void)
    /***** Show QR code with direct link to the exam announcement *****/
    HTM_DIV_Begin ("class=\"CM\"");
 
-      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld",
+      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s/?crs=%ld%%26act=%ld",
 		    300,300,
 		    Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 		    Act_GetActCod (ActSeeAllCfe)) < 0)
