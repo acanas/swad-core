@@ -64,7 +64,7 @@ void Tst_ShowNewTest (void);
 void Tst_ReceiveTestDraft (void);
 void Tst_AssessTest (void);
 
-void Tst_PutIconsTests (__attribute__((unused)) void *Args);
+void Tst_PutIconsTests (void *Questions);
 
 bool Tst_GetParsTst (struct Qst_Questions *Questions,
                      Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);

@@ -111,6 +111,7 @@
 #include "swad_system_config.h"
 #include "swad_tab.h"
 #include "swad_tag.h"
+#include "swad_tag_resource.h"
 #include "swad_test_resource.h"
 #include "swad_timeline.h"
 #include "swad_timeline_comment.h"
@@ -697,6 +698,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActEnaTag		] = { 453, 3,TabAss,NULL			,Tag_EnableTag			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActDisTag		] = { 452, 3,TabAss,NULL			,Tag_DisableTag			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRenTag		] = { 143, 3,TabAss,NULL			,Tag_RenameTag			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqLnkTag	] = {1992, 4,TabAss,NULL			,TagRsc_GetLinkToTag		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Test
    [ActReqTstAnyTag	] = { 103, 4,TabAss,NULL			,Tst_ReqTest			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -3816,4 +3818,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActAddClpSevTch,	// #1989
 	ActReqLnkTst,		// #1990
 	ActReqTstOneTag,	// #1991
+	ActReqLnkTag,		// #1992
   };

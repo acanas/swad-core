@@ -136,7 +136,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
       Str_Copy (TagTxt,Txt_Test,sizeof (TagTxt) - 1);
 
    /***** Begin box *****/
-   Box_BoxBegin (TagTxt,Tst_PutIconsTests,NULL,
+   Box_BoxBegin (TagTxt,Tst_PutIconsTests,Questions,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Get tags *****/
@@ -469,9 +469,9 @@ static bool Tst_CheckIfNextTstAllowed (void)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-void Tst_PutIconsTests (__attribute__((unused)) void *Args)
+void Tst_PutIconsTests (void *Questions)
   {
-   long TagCod = -1L;
+   long TagCod;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -500,7 +500,13 @@ void Tst_PutIconsTests (__attribute__((unused)) void *Args)
 
    /***** Link to get resource link *****/
    if (Rsc_CheckIfICanGetLink () == Usr_CAN)
+     {
+      if (Questions)
+	 TagCod = ((struct Qst_Questions *) Questions)->Tags.PreselectedTagCod;
+      else
+	 TagCod = -1L;
       Ico_PutContextualIconToGetLink (ActReqLnkTst,NULL,Tag_PutPars,&TagCod);
+     }
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);

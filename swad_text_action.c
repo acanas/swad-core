@@ -11196,6 +11196,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Rename tag in the question bank"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkTag] =
+#if   L==1	// ca
+	"Copy link to test from tags"			// Necessita traducció
+#elif L==2	// de
+	"Copy link to test from tags"			// Need Übersetzung
+#elif L==3	// en
+	"Copy link to test from tags"
+#elif L==4	// es
+	"Copiar enlace a test desde descriptores"
+#elif L==5	// fr
+	"Copy link to test from tags"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a test desde descriptores"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to test from tags"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to test from tags"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to test from tags"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to test from tags"			// Çeviri lazim!
+#endif
+	,
 	[ActReqTstAnyTag] =
 #if   L==1	// ca
 	"Request test"		// Necessita traducció
@@ -11497,25 +11520,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkTst] =
 #if   L==1	// ca
-	"Copy link to test"	// Necessita traducció
+	"Copy link to test from tests"		// Necessita traducció
 #elif L==2	// de
-	"Copy link to test"	// Need Übersetzung
+	"Copy link to test from tests"		// Need Übersetzung
 #elif L==3	// en
-	"Copy link to test"
+	"Copy link to test from tests"
 #elif L==4	// es
-	"Copiar enlace a test"
+	"Copiar enlace a test desde test"
 #elif L==5	// fr
-	"Copy link to test"	// Besoin de traduction
+	"Copy link to test from tests"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a test"	// Okoteve traducción
+	"Copiar enlace a test desde test"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to test"	// Bisogno di traduzione
+	"Copy link to test from tests"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to test"	// Potrzebujesz tlumaczenie
+	"Copy link to test from tests"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to test"	// Precisa de tradução
+	"Copy link to test from tests"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to test"	// Çeviri lazim!
+	"Copy link to test from tests"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllExa] =

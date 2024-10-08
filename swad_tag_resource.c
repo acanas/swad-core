@@ -1,4 +1,4 @@
-// swad_test_resource.c: links to tests as program resources
+// swad_tag_resource.c: links to test tags as program resources
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -26,36 +26,31 @@
 /*****************************************************************************/
 
 #include "swad_alert.h"
+#include "swad_tag.h"
 #include "swad_tag_database.h"
-#include "swad_test.h"
 #include "swad_parameter_code.h"
 #include "swad_resource_database.h"
 
 /*****************************************************************************/
-/***************************** Get link to test ******************************/
+/***************************** Get link to tag *******************************/
 /*****************************************************************************/
 
-void TstRsc_GetLinkToTest (void)
+void TagRsc_GetLinkToTag (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   extern const char *Txt_Test;
-   long TagCod = ParCod_GetPar (ParCod_Tag);
+   long TagCod = ParCod_GetAndCheckPar (ParCod_Tag);
    char TagTxt[Tag_MAX_BYTES_TAG + 1];
 
    /***** Get tag title *****/
-   if (TagCod > 0)
-      Tag_DB_GetTagTitleByCod (TagCod,TagTxt,Tag_MAX_BYTES_TAG);
-   else
-      TagTxt[0] = '\0';
+   Tag_DB_GetTagTitleByCod (TagCod,TagTxt,Tag_MAX_BYTES_TAG);
 
-   /***** Copy link to exam into resource clipboard *****/
+   /***** Copy link to tag into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_TEST,TagCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  TagCod > 0 ? TagTxt :
-   			       Txt_Test);
+   		  TagTxt);
 
-   /***** Show test again *****/
-   Tst_ReqTest ();
+   /***** Show tags again *****/
+   Tag_ShowFormEditTags ();
   }
