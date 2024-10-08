@@ -311,8 +311,8 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
 	   NumSelTag < Questions->Tags.NumSelected;
 	   NumSelTag++)
         {
-	 snprintf (LongStr,sizeof (LongStr),
-	           "%ld",Questions->Tags.ListSelectedTagCods[NumSelTag]);
+	 snprintf (LongStr,sizeof (LongStr),"%ld",
+	           Questions->Tags.ListSelectedTagCods[NumSelTag]);
          LengthQuery += 35 + strlen (LongStr) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
             Err_QuerySizeExceededExit ();
@@ -438,7 +438,8 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
      {
       Str_Concat (Query," AND tst_question_tags.TagCod=",
 	          Qst_MAX_BYTES_QUERY_QUESTIONS);
-      sprintf (LongStr,"%ld",Questions->Tags.PreselectedTagCod);
+      snprintf (LongStr,sizeof (LongStr),"%ld",
+	        Questions->Tags.PreselectedTagCod);
       Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
      }
    else if (!Questions->Tags.All)	// User has selected some tags, but not all
@@ -448,8 +449,8 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 	   NumSelTag < Questions->Tags.NumSelected;
 	   NumSelTag++)
         {
-	 snprintf (LongStr,sizeof (LongStr),
-	           "%ld",Questions->Tags.ListSelectedTagCods[NumSelTag]);
+	 snprintf (LongStr,sizeof (LongStr),"%ld",
+	           Questions->Tags.ListSelectedTagCods[NumSelTag]);
          LengthQuery += 35 + strlen (LongStr) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 128)
             Err_QuerySizeExceededExit ();

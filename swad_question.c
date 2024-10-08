@@ -1322,9 +1322,12 @@ void Qst_PutParsEditQst (void *Questions)
       Par_PutParChar ("AllTags",
 	              ((struct Qst_Questions *) Questions)->Tags.All ? 'Y' :
 					                               'N');
-      Par_PutParString (NULL,"ChkTag",
-	                ((struct Qst_Questions *) Questions)->Tags.ListSelectedTxt ? ((struct Qst_Questions *) Questions)->Tags.ListSelectedTxt :
-								             "");
+
+      if (((struct Qst_Questions *) Questions)->Tags.NumSelected)
+         Par_PutParListOfCodes ("ChkTag",
+				((struct Qst_Questions *) Questions)->Tags.ListSelectedTagCods,
+				((struct Qst_Questions *) Questions)->Tags.NumSelected);
+
       Par_PutParChar ("AllAnsTypes",
 	              ((struct Qst_Questions *) Questions)->AnswerTypes.All ? 'Y' :
 								              'N');

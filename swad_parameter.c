@@ -1085,17 +1085,74 @@ void Par_ReplaceSeparatorMultipleByComma (char *Str)
   }
 
 /*****************************************************************************/
-/***************** Count number of tags in the list of tags ******************/
+/*********** Create list of numerical codes from list of text codes **********/
 /*****************************************************************************/
 
-unsigned Par_CountNumCodesInList (const char *Ptr)
+void Par_CreateListOfCodes (const char *ListTxt,unsigned NumCods,long **ListCods)
+  {
+   unsigned NumCod;
+   const char *Ptr;
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
+
+   /***** Allocate memory for the list of codes *****/
+   if ((*ListCods = malloc ((size_t) NumCods * sizeof (**ListCods))) == NULL)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Loop over the list in text format creating the list in number format *****/
+   for (NumCod = 0, Ptr = ListTxt;
+	NumCod < NumCods;
+	NumCod++)
+      if (*Ptr)
+	{
+	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
+	 (*ListCods)[NumCod] = Str_ConvertStrCodToLongCod (LongStr);
+	}
+  }
+
+/*****************************************************************************/
+/*********** Create list of text codes from list of numerical codes **********/
+/*****************************************************************************/
+
+void Par_PutParListOfCodes (const char *ParName,const long *ListCods,unsigned NumCods)
+  {
+   size_t ListSize = NumCods * (Cns_MAX_DIGITS_LONG + 1);
+   char *ListTxt;
+   unsigned NumCod;
+   char LongStr[Cns_MAX_DIGITS_LONG + 1];
+
+   /***** Allocate memory *****/
+   if ((ListTxt = malloc (ListSize)) == NULL)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Loop over the list in numerical format creating the list in text format *****/
+   for (NumCod = 0;
+	NumCod < NumCods;
+	NumCod++)
+     {
+      snprintf (LongStr,sizeof (LongStr),"%ld",ListCods[NumCod]);
+      if (NumCod)
+	 Str_Concat (ListTxt,Par_SEPARATOR_PARAM_MULTIPLE,ListSize - 1);
+      Str_Concat (ListTxt,LongStr,ListSize - 1);
+     }
+   Par_PutParString (NULL,ParName,ListTxt);
+
+   /***** Free memory *****/
+   free (ListTxt);
+  }
+
+/*****************************************************************************/
+/*************** Count number of codes in a list of text codes ***************/
+/*****************************************************************************/
+
+unsigned Par_CountNumCodesInList (const char *ListTxt)
   {
    unsigned NumCods;
+   const char *Ptr;
    char LongStr[Cns_MAX_DIGITS_LONG + 1];
    long Cod;
 
    /***** Go over the list counting the number of codes *****/
-   for (NumCods = 0;
+   for (NumCods = 0, Ptr = ListTxt;
 	*Ptr;
 	NumCods++)
      {

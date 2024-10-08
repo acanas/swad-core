@@ -99,7 +99,10 @@ bool Par_GetNextStrUntilSeparParMult (const char **StrSrc,char *StrDst,
 bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax);
 void Par_ReplaceSeparatorMultipleByComma (char *Str);
 
-unsigned Par_CountNumCodesInList (const char *List);
+//------------------------------ List of codes --------------------------------
+void Par_CreateListOfCodes (const char *ListTxt,unsigned NumCods,long **ListCods);
+void Par_PutParListOfCodes (const char *ParName,const long *ListCods,unsigned NumCods);
+unsigned Par_CountNumCodesInList (const char *ListTxt);
 
 //------------------------------ Put parameters -------------------------------
 void Par_PutParUnsigned (const char *Id,const char *ParName,unsigned ParValue);

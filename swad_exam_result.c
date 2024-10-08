@@ -717,7 +717,7 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
 	NumExam++)
       if (Exams->Lst[NumExam].Checked == HTM_CHECKED)
 	{
-	 sprintf (LongStr,"%ld",Exams->Lst[NumExam].ExaCod);
+	 snprintf (LongStr,sizeof (LongStr),"%ld",Exams->Lst[NumExam].ExaCod);
 	 if ((*ExamsSelectedCommas)[0])
 	    Str_Concat (*ExamsSelectedCommas,",",MaxLength);
 	 Str_Concat (*ExamsSelectedCommas,LongStr,MaxLength);

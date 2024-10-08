@@ -71,7 +71,6 @@ void Tag_ResetTags (struct Tag_Tags *Tags)
    Tags->Num = 0;
    Tags->NumSelected = 0;
    Tags->All = false;
-   Tags->ListSelectedTxt = NULL;
    Tags->ListSelectedTagCods = NULL;
 
    /***** Initialize all tags in question to empty string *****/
@@ -89,8 +88,6 @@ void Tag_FreeTagsList (struct Tag_Tags *Tags)
   {
    if (Tags->ListSelectedTagCods)
       free (Tags->ListSelectedTagCods);
-   if (Tags->ListSelectedTxt)
-      free (Tags->ListSelectedTxt);
    Tag_ResetTags (Tags);
   }
 
@@ -334,15 +331,17 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
 		     Attributes = HTM_CHECKED | HTM_DISABLED;
 		  else		// User can select between several tags
 		    {
-		     Attributes = HTM_NO_ATTR;
-		     for (NumSelTag = 0;
-			  NumSelTag < Tags->NumSelected;
-			  NumSelTag++)
-			if (TagCodThisRow == Tags->ListSelectedTagCods[NumSelTag])
-			  {
-			   Attributes = HTM_CHECKED;
-			   break;
-			  }
+		     if (Tags->All)	// All selectable tags are selected
+			Attributes = HTM_CHECKED;
+		     else		// Not all selectable tags are selected
+			for (NumSelTag = 0, Attributes = HTM_NO_ATTR;
+			     NumSelTag < Tags->NumSelected;
+			     NumSelTag++)
+			   if (TagCodThisRow == Tags->ListSelectedTagCods[NumSelTag])
+			     {
+			      Attributes = HTM_CHECKED;
+			      break;
+			     }
 		    }
 		  HTM_TD_Begin ("class=\"LT\"");
 		     HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());

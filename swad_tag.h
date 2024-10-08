@@ -52,7 +52,6 @@ struct Tag_Tags
    unsigned Num;
    unsigned NumSelected;
    bool All;
-   char *ListSelectedTxt;
    long *ListSelectedTagCods;
    char Txt[Tag_MAX_TAGS_PER_QUESTION][Tag_MAX_BYTES_TAG + 1];
   };

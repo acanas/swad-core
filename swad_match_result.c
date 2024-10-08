@@ -670,7 +670,7 @@ static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
 	NumGame++)
       if (Games->Lst[NumGame].Checked == HTM_CHECKED)
 	{
-	 sprintf (LongStr,"%ld",Games->Lst[NumGame].GamCod);
+	 snprintf (LongStr,sizeof (LongStr),"%ld",Games->Lst[NumGame].GamCod);
 	 if ((*GamesSelectedCommas)[0])
 	    Str_Concat (*GamesSelectedCommas,",",MaxLength);
 	 Str_Concat (*GamesSelectedCommas,LongStr,MaxLength);
