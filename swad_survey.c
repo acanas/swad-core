@@ -3197,8 +3197,9 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
          Par_GetParMultiToText (ParName,StrAnswersIndexes,
                                 Svy_MAX_ANSWERS_PER_QUESTION *
                                 (Cns_MAX_DIGITS_UINT + 1));
-         Ptr = StrAnswersIndexes;
-         while (*Ptr)
+         for (Ptr = StrAnswersIndexes;
+              *Ptr;
+             )
            {
             Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,
         				     Cns_MAX_DIGITS_UINT);

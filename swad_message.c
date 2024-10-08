@@ -851,10 +851,10 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 			   Messages->Content,Cns_MAX_BYTES_LONG_TEXT,Str_DONT_REMOVE_SPACES);
 
 	 /***** Loop over list of recipients *****/
-	 Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-	 Messages->Rcv.NumRecipients =
-	 Messages->Rcv.NumErrors     = 0;
-	 while (*Ptr)
+	 for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK],
+	      Messages->Rcv.NumRecipients = Messages->Rcv.NumErrors = 0;
+	      *Ptr;
+	     )
 	   {
 	    Par_GetNextStrUntilSeparParMult (&Ptr,UsrDstData.EnUsrCod,
 					     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

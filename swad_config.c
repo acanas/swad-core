@@ -90,8 +90,9 @@ void Cfg_GetConfigFromFile (void)
    /***** Search passwords *****/
    Cfg_Passwords.Database[0] =
    Cfg_Passwords.SMTP[0]     = '\0';
-   Ptr = Config;
-   while (*Ptr)
+   for (Ptr = Config;
+        *Ptr;
+       )
      {
       Str_GetNextStringUntilSpace (&Ptr,Str,Cfg_MAX_BYTES_STR);
       if (!strcasecmp (Str,"DATABASE_PASSWORD"))

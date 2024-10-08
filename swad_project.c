@@ -3088,8 +3088,9 @@ static void Prj_AddUsrsToProject (struct Prj_Projects *Projects,
    Projects->Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Add the selected users to project *****/
-   Ptr = Prj_MembersToAdd.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Prj_MembersToAdd.List[Rol_UNK];
+        *Ptr;
+       )
      {
       /* Get next user */
       Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,

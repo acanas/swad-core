@@ -915,9 +915,9 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Check users to know if I follow them *****/
-   *NumFollowed = 0;
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK], *NumFollowed = 0;
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
@@ -964,8 +964,9 @@ void Fol_FollowUsrs ()
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Check users to know if I follow them *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
@@ -1013,8 +1014,9 @@ void Fol_UnfollowUsrs (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Check users to know if I follow them *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

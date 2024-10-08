@@ -835,9 +835,9 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** Get email addresses of the selected users *****/
-	 StrAddresses[0] = '\0';
-	 Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-	 while (*Ptr)
+	 for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK], StrAddresses[0] = '\0';
+	      *Ptr;
+	     )
 	   {
 	    /* Get next user */
 	    Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,

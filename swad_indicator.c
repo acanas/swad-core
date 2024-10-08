@@ -323,7 +323,7 @@ static void Ind_GetParNumIndicators (struct Ind_Indicators *Indicators)
       /* Set indicators selected */
       for (Ptr = Indicators->StrChecked;
 	   *Ptr;
-	   )
+	  )
 	{
 	 /* Get next indicator selected */
 	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);

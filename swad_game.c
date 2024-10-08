@@ -913,7 +913,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games)
       /* Set some games as selected */
       for (Ptr = Games->GamCodsSelected;
 	   *Ptr;
-	   )
+	  )
 	{
 	 /* Get next game selected */
 	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
@@ -1856,10 +1856,10 @@ void Gam_AddQstsToGame (void)
    /* Check number of questions */
    NumQstsAdded = 0;
    if (Par_CountNumCodesInList (Games.ListQuestions))	// If questions selected...
-     {
       /***** Insert questions in database *****/
-      Ptr = Games.ListQuestions;
-      while (*Ptr)
+      for (Ptr = Games.ListQuestions;
+           *Ptr;
+          )
 	{
 	 /* Get next code */
 	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
@@ -1878,7 +1878,6 @@ void Gam_AddQstsToGame (void)
 	    NumQstsAdded++;
 	   }
 	}
-     }
 
    /***** Show warning in no questions added *****/
    if (NumQstsAdded == 0)

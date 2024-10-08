@@ -565,7 +565,8 @@ unsigned Rol_GetSelectedRoles (void)
    /***** Try to get multiple param "Role" *****/
    Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (Cns_MAX_DIGITS_UINT + 1));
    for (Ptr = StrRoles;
-        *Ptr;)
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DIGITS_UINT);
       Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);

@@ -141,8 +141,9 @@ void ZIP_CreateZIPAsgWrk (void)
 
    /* Create temporary directory for each selected user
       inside the directory used for compression */
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
 				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

@@ -1192,8 +1192,9 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingTextarea (Rol_Role_t Role,
    unsigned NumUsrFound;
    struct Usr_ListUsrCods ListUsrCods;	// List with users' codes for a given user's ID
 
-   Ptr = ListUsrsIDs;
-   while (*Ptr)
+   for (Ptr = ListUsrsIDs;
+        *Ptr;
+       )
      {
       /* Reset user */
       UsrDat->UsrCod = -1L;
@@ -1278,8 +1279,9 @@ static void Enr_UpdateLstUsrsToBeRemovedUsingSelectedUsrs (Rol_Role_t Role,
    const char *Ptr;
    unsigned NumUsr;
 
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat->EnUsrCod,
 				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
@@ -1366,8 +1368,9 @@ static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
    unsigned NumUsrFound;
 
    /***** Get users from a list of users' IDs ******/
-   Ptr = ListUsrsIDs;
-   while (*Ptr)
+   for (Ptr = ListUsrsIDs;
+        *Ptr;
+       )
      {
       /* Reset user */
       UsrDat->UsrCod = -1L;
@@ -1432,7 +1435,7 @@ static void Enr_EnrolUsrsFoundInTextarea (Rol_Role_t Role,
       /* Free memory used for list of users' codes found for this ID */
       Usr_FreeListUsrCods (&ListUsrCods);
      }
-   }
+  }
 
 /*****************************************************************************/
 /******************** Enrol users selected from clipboard ********************/
@@ -1445,8 +1448,9 @@ static void Enr_EnrolSelectedUsrs (Rol_Role_t Role,
   {
    const char *Ptr;
 
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat->EnUsrCod,
 				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

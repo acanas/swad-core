@@ -1800,8 +1800,9 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
       TstPrn_ShowHeaderPrints (Usr_OTHER);
 
       /***** List the tests of the selected users *****/
-      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-      while (*Ptr)
+      for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+           *Ptr;
+          )
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

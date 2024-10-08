@@ -3851,8 +3851,9 @@ int swad__getTrivialQuestion (struct soap *soap,
 
    /***** Loop over recipients' nicknames building query *****/
    DegreesStr[0] = '\0';
-   Ptr = degrees;
-   while (*Ptr)
+   for (Ptr = degrees;
+        *Ptr;
+       )
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
       Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);

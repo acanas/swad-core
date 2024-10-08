@@ -3231,8 +3231,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Get next plain user's ID or nickname */
-      Ptr = Gbl.Usrs.ListOtherRecipients;
-      while (*Ptr)
+      for (Ptr = Gbl.Usrs.ListOtherRecipients;
+           *Ptr;
+          )
         {
          /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
          Str_GetNextStringUntilComma (&Ptr,UsrIDNickOrEmail,sizeof (UsrIDNickOrEmail) - 1);
@@ -3384,16 +3385,15 @@ bool Usr_FindEncUsrCodInListOfSelectedEncUsrCods (const char *EncryptedUsrCodToF
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
 
    if (SelectedUsrs->List[Rol_UNK])
-     {
-      Ptr = SelectedUsrs->List[Rol_UNK];
-      while (*Ptr)
+      for (Ptr = SelectedUsrs->List[Rol_UNK];
+           *Ptr;
+          )
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,EncryptedUsrCod,
 	                                  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
 	    return true;        // Found!
 	}
-     }
    return false;        // List not allocated or user not found
   }
 
@@ -3407,8 +3407,9 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_Selecte
    struct Usr_Data UsrDat;
 
    /***** Loop over the list to check if there are valid users *****/
-   Ptr = SelectedUsrs->List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = SelectedUsrs->List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
@@ -3426,12 +3427,13 @@ bool Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_Selecte
 unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
-   unsigned NumUsrs = 0;
+   unsigned NumUsrs;
    struct Usr_Data UsrDat;
 
    /***** Loop over the list to count the number of users *****/
-   Ptr = SelectedUsrs->List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = SelectedUsrs->List[Rol_UNK], NumUsrs = 0;
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UsrDat.EnUsrCod,
                                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

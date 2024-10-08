@@ -1122,10 +1122,10 @@ void ExaSet_AddQstsToSet (void)
 
    /* Check number of questions */
    if (Par_CountNumCodesInList (Exams.ListQuestions))	// If questions selected...
-     {
       /***** Insert questions in database *****/
-      Ptr = Exams.ListQuestions;
-      while (*Ptr)
+      for (Ptr = Exams.ListQuestions;
+           *Ptr;
+          )
 	{
 	 /* Get next code */
 	 Par_GetNextStrUntilSeparParMult (&Ptr,LongStr,Cns_MAX_DIGITS_LONG);
@@ -1134,7 +1134,6 @@ void ExaSet_AddQstsToSet (void)
 
 	 ExaSet_CopyQstFromBankToExamSet (&Set,QstCod);
 	}
-     }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_No_questions_have_been_added);
 

@@ -2796,8 +2796,9 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
       /***** List the assignments and works of the selected users *****/
-      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-      while (*Ptr)
+      for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+           *Ptr;
+          )
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 					  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

@@ -299,11 +299,12 @@ void Msg_DB_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
    /***** Split "from"/"to" string into words *****/
    if (Messages->FilterFromTo[0])
      {
-      Ptr = Messages->FilterFromTo;
       Str_Copy (FilterFromToSubquery,
                 " AND CONCAT(usr_data.FirstName,' ',usr_data.Surname1,' ',usr_data.Surname2) LIKE '",
                 Msg_DB_MAX_BYTES_MESSAGES_QUERY);
-      while (*Ptr)
+      for (Ptr = Messages->FilterFromTo;
+           *Ptr;
+          )
         {
          Str_GetNextStringUntilSpace (&Ptr,SearchWord,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
          if (strlen (FilterFromToSubquery) + strlen (SearchWord) + 512 >
@@ -865,8 +866,9 @@ unsigned Msg_DB_GetRecipientsCods (MYSQL_RES **mysql_res,
       Query[0] = '\0';
 
    /***** Loop over recipients' nicknames building query *****/
-   Ptr = ListRecipients;
-   while (*Ptr)
+   for (Ptr = ListRecipients;
+        *Ptr;
+       )
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
       Str_GetNextStringUntilComma (&Ptr,Nick,sizeof (Nick) - 1);	// With leading arrobas

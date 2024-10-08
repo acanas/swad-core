@@ -295,8 +295,9 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
 
    /***** List the matches results of the selected users *****/
    MchRes_BuildGamesSelectedCommas (Games,&GamesSelectedCommas);
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

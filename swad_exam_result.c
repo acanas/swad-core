@@ -349,8 +349,9 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
 
    /***** List the sessions results of the selected users *****/
    ExaRes_BuildExamsSelectedCommas (Exams,&ExamsSelectedCommas);
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
+   for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+        *Ptr;
+       )
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

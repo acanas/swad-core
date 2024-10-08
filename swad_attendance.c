@@ -2017,8 +2017,9 @@ void Att_RegisterStudentsInEvent (void)
       /***** 4. Loop over the list Gbl.Usrs.Selected.List[Rol_STD],
                 that holds the list of the students marked as present,
                 marking the students in Gbl.Usrs.LstUsrs[Rol_STD].Lst as Remove=false *****/
-      Ptr = Gbl.Usrs.Selected.List[Rol_STD];
-      while (*Ptr)
+      for (Ptr = Gbl.Usrs.Selected.List[Rol_STD];
+           *Ptr;
+          )
 	{
 	 Par_GetNextStrUntilSeparParMult (&Ptr,UsrData.EnUsrCod,
 	                                  Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

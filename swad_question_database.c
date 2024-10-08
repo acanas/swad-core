@@ -307,8 +307,7 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
      {
       Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod",
                   Qst_MAX_BYTES_QUERY_QUESTIONS);
-      LengthQuery = strlen (Query);
-      for (NumSelTag = 0;
+      for (NumSelTag = 0, LengthQuery = strlen (Query);
 	   NumSelTag < Questions->Tags.NumSelected;
 	   NumSelTag++)
         {
@@ -328,10 +327,9 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
    /* Add the types of answer selected */
    if (!Questions->AnswerTypes.All)
      {
-      LengthQuery = strlen (Query);
-      NumItemInList = 0;
-      Ptr = Questions->AnswerTypes.List;
-      while (*Ptr)
+      for (Ptr = Questions->AnswerTypes.List, NumItemInList = 0, LengthQuery = strlen (Query);
+           *Ptr;
+           NumItemInList++)
         {
          Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
 	 AnsType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
@@ -344,7 +342,6 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
          Str_Concat (Query,Qst_DB_StrAnswerTypes[AnsType],
                      Qst_MAX_BYTES_QUERY_QUESTIONS);
          Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
-         NumItemInList++;
         }
       Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
      }
@@ -467,10 +464,9 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
    /* Add answer types selected */
    if (!Questions->AnswerTypes.All)
      {
-      LengthQuery = strlen (Query);
-      NumItemInList = 0;
-      Ptr = Questions->AnswerTypes.List;
-      while (*Ptr)
+      for (Ptr = Questions->AnswerTypes.List, NumItemInList = 0, LengthQuery = strlen (Query);
+           *Ptr;
+           NumItemInList++)
         {
          Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
 	 AnswerType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
@@ -482,7 +478,6 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
                      Qst_MAX_BYTES_QUERY_QUESTIONS);
          Str_Concat (Query,Qst_DB_StrAnswerTypes[AnswerType],Qst_MAX_BYTES_QUERY_QUESTIONS);
          Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
-         NumItemInList++;
         }
       Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
      }

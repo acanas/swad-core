@@ -253,9 +253,9 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 	   {
 	    HTM_TR_Begin (NULL);
 
-	       Attributes = HTM_NO_ATTR;
-	       Ptr = AnswerTypes->List;
-	       while (*Ptr)
+	       for (Ptr = AnswerTypes->List, Attributes = HTM_NO_ATTR;
+	            *Ptr;
+	           )
 		 {
 		  Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,
 						   Cns_MAX_DIGITS_UINT);
@@ -2806,8 +2806,9 @@ void Qst_GetQstFromForm (struct Qst_Question *Question)
       	 else if (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
            {
 	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,Qst_MAX_BYTES_ANSWERS_ONE_QST);
- 	    Ptr = StrMultiAns;
-            while (*Ptr)
+ 	    for (Ptr = StrMultiAns;
+                 *Ptr;
+                )
               {
   	       Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,
   						Cns_MAX_DIGITS_UINT);
@@ -3486,17 +3487,18 @@ void Qst_InsertAnswersIntoDB (struct Qst_Question *Question)
 unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerTypes)
   {
    const char *Ptr;
-   unsigned NumAnsTypes = 0;
+   unsigned NumAnsTypes;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Go over the list of answer types counting the number of types of answer *****/
-   Ptr = AnswerTypes->List;
-   while (*Ptr)
+   for (Ptr = AnswerTypes->List, NumAnsTypes = 0;
+        *Ptr;
+        NumAnsTypes++)
      {
       Par_GetNextStrUntilSeparParMult (&Ptr,UnsignedStr,Cns_MAX_DIGITS_UINT);
       Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
-      NumAnsTypes++;
      }
+
    return NumAnsTypes;
   }
 
