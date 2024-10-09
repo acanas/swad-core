@@ -1253,28 +1253,22 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 
 	 /* Groups */
 	 HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-	    HTM_TABLE_Begin (NULL);
 
-	       /***** First row: checkbox to select the whole course *****/
-	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"7\" class=\"LM DAT_%s\"",The_GetSuffix ());
-		     HTM_LABEL_Begin (NULL);
-			HTM_INPUT_CHECKBOX ("WholeCrs",
-					    Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
-									    "MchCod",
-									    MchCod) ? HTM_NO_ATTR :
-										      HTM_CHECKED,
-					    "id=\"WholeCrs\" value=\"Y\""
-					    " onclick=\"uncheckChildren(this,'GrpCods')\"");
-			Grp_WriteTheWholeCourse ();
-		     HTM_LABEL_End ();
-		  HTM_TD_End ();
-	       HTM_TR_End ();
+	    /***** First row: checkbox to select the whole course *****/
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_CHECKBOX ("WholeCrs",
+				   Grp_DB_CheckIfAssociatedToGrps ("mch_groups",
+								   "MchCod",
+								   MchCod) ? HTM_NO_ATTR :
+									     HTM_CHECKED,
+				   "id=\"WholeCrs\" value=\"Y\""
+				   " onclick=\"uncheckChildren(this,'GrpCods')\"");
+	       Grp_WriteTheWholeCourse ();
+	    HTM_LABEL_End ();
 
-	       /***** List the groups for each group type *****/
-	       Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_MATCH,MchCod);
+	    /***** List the groups for each group type *****/
+	    Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_MATCH,MchCod);
 
-	    HTM_TABLE_End ();
 	 HTM_TD_End ();
       HTM_TR_End ();
      }

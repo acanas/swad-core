@@ -955,27 +955,27 @@ void Msg_ReqDelAllRecMsgs (void)
      {
       if (Messages.ShowOnlyUnreadMsgs)
          Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
-							     Txt_any_user,
-				  Messages.FilterCrsShrtName,Messages.FilterContent);
+				      Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+								 Txt_any_user,
+				      Messages.FilterCrsShrtName,Messages.FilterContent);
       else
          Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
-				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
-							     Txt_any_user,
-				  Messages.FilterCrsShrtName,Messages.FilterContent);
+				      Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+								 Txt_any_user,
+				      Messages.FilterCrsShrtName,Messages.FilterContent);
      }
    else
      {
       if (Messages.ShowOnlyUnreadMsgs)
          Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
-				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
-							     Txt_any_user,
-				  Messages.FilterCrsShrtName);
+				      Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+								 Txt_any_user,
+				      Messages.FilterCrsShrtName);
       else
          Ale_ShowAlertAndButtonBegin (Ale_QUESTION,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
-				  Messages.FilterFromTo[0] ? Messages.FilterFromTo :
-							     Txt_any_user,
-				  Messages.FilterCrsShrtName);
+				      Messages.FilterFromTo[0] ? Messages.FilterFromTo :
+								 Txt_any_user,
+				      Messages.FilterCrsShrtName);
      }
 
    /* Show received messages again */
@@ -984,8 +984,8 @@ void Msg_ReqDelAllRecMsgs (void)
 
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActDelAllRcvMsg,NULL,NULL,
-                            Msg_PutParsMsgsFilters,&Messages,
-                            Btn_REMOVE_BUTTON,Txt_Delete_messages_received);
+                              Msg_PutParsMsgsFilters,&Messages,
+                              Btn_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
 
 /*****************************************************************************/
@@ -1545,7 +1545,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 
 	 /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
 	 Ses_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
-					 Messages->CurrentPage);
+					    Messages->CurrentPage);
 
 	 /***** Write links to pages *****/
 	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,

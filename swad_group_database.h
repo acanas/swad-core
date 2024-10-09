@@ -39,6 +39,7 @@ void Grp_DB_LockTables (void);
 long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
 void Grp_DB_CreateGroup (const struct Grp_Groups *Grps);
 
+void Grp_DB_GetGrpTypTitleByCod (long GrpTypCod,char *Title,size_t TitleSize);
 unsigned Grp_DB_GetGroupTypeDataByCod (MYSQL_RES **mysql_res,long GrpTypCod);
 unsigned Grp_DB_GetSingleMultiple (MYSQL_RES **mysql_res,long GrpTypCod);
 unsigned Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);

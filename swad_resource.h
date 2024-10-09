@@ -41,7 +41,7 @@
 #define Rsc_MAX_CHARS_RESOURCE_TITLE	(128 - 1)	// 127
 #define Rsc_MAX_BYTES_RESOURCE_TITLE	((Rsc_MAX_CHARS_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Rsc_NUM_TYPES 13
+#define Rsc_NUM_TYPES 14
 typedef enum
   {
   Rsc_NONE,
@@ -51,16 +51,15 @@ typedef enum
   // lnk LINKS		// Link to links
   // tmt TIMETABLE	// Link to timetable
   Rsc_ASSIGNMENT,
-  Rsc_PROJECT,		// A project is only for some students
+  Rsc_PROJECT,
   Rsc_CALL_FOR_EXAM,
-  // tst TEST		// User selects tags, teacher should select
   Rsc_TEST,
   Rsc_EXAM,
   Rsc_GAME,
   Rsc_RUBRIC,
   Rsc_DOCUMENT,
   Rsc_MARKS,
-  // grp GROUPS		// ??? User select groups
+  Rsc_GROUPS,
   Rsc_ATTENDANCE_EVENT,
   Rsc_FORUM_THREAD,
   Rsc_SURVEY,

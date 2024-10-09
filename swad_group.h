@@ -212,7 +212,6 @@ void Grp_WriteTheWholeCourse (void);
 void Grp_ListGrpsToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod);
 
-void Grp_ReqEnrolInGrps (void);
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
 

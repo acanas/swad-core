@@ -101,6 +101,22 @@ void Grp_DB_CreateGroup (const struct Grp_Groups *Grps)
 	           Grps->MaxStudents);
   }
 
+
+/*****************************************************************************/
+/******************** Get group type title from database *********************/
+/*****************************************************************************/
+
+void Grp_DB_GetGrpTypTitleByCod (long GrpTypCod,char *Title,size_t TitleSize)
+  {
+   DB_QuerySELECTString (Title,TitleSize,"can not get group type title",
+		         "SELECT GrpTypName"
+			  " FROM grp_types"
+		         " WHERE GrpTypCod=%ld"
+			   " AND CrsCod=%ld",	// Extra check
+		         GrpTypCod,
+		         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+  }
+
 /*****************************************************************************/
 /******************* Get data of a group type from its code ******************/
 /*****************************************************************************/

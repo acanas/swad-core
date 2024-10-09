@@ -117,7 +117,7 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 						      long Cod,
 						      struct GroupType *GrpTyp);
 
-static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args);
+static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
@@ -126,9 +126,9 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
 
 static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp);
 static HTM_Attributes_t Grp_Checked (long GrpCod);
-static void Grp_WriteRowToSelectUsrsWhoDontBelongToAnyGrp (const struct GroupType *GrpTyp);
 
-static void Grp_WriteGrpHead (const struct GroupType *GrpTyp);
+static void Grp_WriteGrpTypOpening (const struct GroupType *GrpTyp);
+static void Grp_WriteGrpHead (void);
 static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight);
 static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
@@ -373,24 +373,14 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
-   Usr_Can_t ICanEdit;
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
-     {
-      [Usr_CAN_NOT] = NULL,
-      [Usr_CAN    ] = Grp_PutIconToEditGroups,
-     };
 
    /***** Trivial check: if no groups ==> nothing to do *****/
    if (!Gbl.Crs.Grps.NumGrps)
       return;
 
    /***** Begin box *****/
-   ICanEdit = (!Frm_CheckIfInside () &&
-	       (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-							   Usr_CAN_NOT;
    Box_BoxBegin (Txt_Groups,
-		 FunctionToDrawContextualIcons[ICanEdit],NULL,
+		 Grp_PutIconsMyGroups,NULL,
 		 Hlp_USERS_Groups,Box_CLOSABLE);
 
       /***** Begin form to update the students listed
@@ -407,20 +397,15 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
 	 /***** List the groups for each group type *****/
-	 HTM_TABLE_Begin ("TBL_SCROLL");
-	    for (NumGrpTyp = 0;
-		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-		 NumGrpTyp++)
-	      {
-	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+	 for (NumGrpTyp = 0;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	      NumGrpTyp++)
+	   {
+	    GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 
-	       if (GrpTyp->NumGrps)
-	         {
-		  Grp_ListGrpsForMultipleSelection (GrpTyp);
-		  Grp_WriteRowToSelectUsrsWhoDontBelongToAnyGrp (GrpTyp);
-	         }
-	      }
-	 HTM_TABLE_End ();
+	    if (GrpTyp->NumGrps)
+	       Grp_ListGrpsForMultipleSelection (GrpTyp);
+	   }
 
 	 /***** Free list of groups types and groups in this course *****/
 	 Grp_FreeListGrpTypesAndGrps ();
@@ -651,7 +636,7 @@ void Grp_ChangeMyGrpsAndShowChanges (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show again the table of selection of groups with the changes already made *****/
-   Grp_ReqEnrolInGrps ();
+   Grp_ShowLstGrpsToChgMyGrps ();
   }
 
 /*****************************************************************************/
@@ -1692,58 +1677,59 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
    struct Group *Grp;
 
    /***** Write heading *****/
-   Grp_WriteGrpHead (GrpTyp);
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (GrpTyp->GrpTypName);
 
-   /***** Query from the database the groups of this type which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-	                        &LstGrpsIBelong,
-                                Grp_CLOSED_AND_OPEN_GROUPS);
+      /***** Begin table *****/
+      HTM_TABLE_Begin (NULL);
 
-   /***** List the groups *****/
-   for (NumGrpThisType = 0;
-	NumGrpThisType < GrpTyp->NumGrps;
-	NumGrpThisType++)
-     {
-      Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-      IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
-										  Usr_DONT_BELONG;
+	 /***** Write heading *****/
+	 Grp_WriteGrpHead ();
 
-      /* Put checkbox to select the group */
-      HTM_TR_Begin (NULL);
+	 /***** Query from the database the groups of this type which I belong to *****/
+	 Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+				      &LstGrpsIBelong,
+				      Grp_CLOSED_AND_OPEN_GROUPS);
 
-	 HTM_TD_Begin ((IBelongToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
-							    "class=\"LM\"");
-	    HTM_INPUT_CHECKBOX ("GrpCods",
-				(Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
-								AssociationsToGrps[WhichIsAssociatedToGrp].Field,
-								Cod,Grp->GrpCod) ? HTM_CHECKED :
-										   HTM_NO_ATTR) |
-				((IBelongToThisGroup == Usr_BELONG ||
-				  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? HTM_NO_ATTR :
-									    HTM_DISABLED),
-				"id=\"Grp%ld\" value=\"%ld\""
-				" onclick=\"uncheckParent(this,'WholeCrs')\"",
-				Grp->GrpCod,Grp->GrpCod);
-	 HTM_TD_End ();
+	 /***** List the groups *****/
+	 for (NumGrpThisType = 0;
+	      NumGrpThisType < GrpTyp->NumGrps;
+	      NumGrpThisType++)
+	   {
+	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+	    IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
+											Usr_DONT_BELONG;
 
-	 Grp_WriteRowGrp (Grp,(IBelongToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
-								   Lay_NO_HIGHLIGHT);
+	    /* Put checkbox to select the group */
+	    HTM_TR_Begin (NULL);
 
-      HTM_TR_End ();
-     }
+	       HTM_TD_Begin ((IBelongToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
+								  "class=\"LM\"");
+		  HTM_INPUT_CHECKBOX ("GrpCods",
+				      (Grp_DB_CheckIfAssociatedToGrp (AssociationsToGrps[WhichIsAssociatedToGrp].Table,
+								      AssociationsToGrps[WhichIsAssociatedToGrp].Field,
+								      Cod,Grp->GrpCod) ? HTM_CHECKED :
+											 HTM_NO_ATTR) |
+				      ((IBelongToThisGroup == Usr_BELONG ||
+					Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? HTM_NO_ATTR :
+										  HTM_DISABLED),
+				      "id=\"Grp%ld\" value=\"%ld\""
+				      " onclick=\"uncheckParent(this,'WholeCrs')\"",
+				      Grp->GrpCod,Grp->GrpCod);
+	       HTM_TD_End ();
 
-   /***** Free memory with the list of groups which I belongs to *****/
-   Grp_FreeListCodGrp (&LstGrpsIBelong);
-  }
+	       Grp_WriteRowGrp (Grp,(IBelongToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
+									 Lay_NO_HIGHLIGHT);
 
-/*****************************************************************************/
-/******************* Show list of groups to enrol/remove me ******************/
-/*****************************************************************************/
+	    HTM_TR_End ();
+	   }
 
-void Grp_ReqEnrolInGrps (void)
-  {
-   /***** Show list of groups to enrol/remove me *****/
-   Grp_ShowLstGrpsToChgMyGrps ();
+	 /***** Free memory with the list of groups which I belongs to *****/
+	 Grp_FreeListCodGrp (&LstGrpsIBelong);
+
+      HTM_TABLE_End ();
+
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
@@ -1763,16 +1749,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    unsigned NumGrpsIBelong = 0;
    Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
 							      Frm_PUT_FORM;
-   Usr_Can_t ICanEdit = (!Frm_CheckIfInside () &&
-	                  (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-                        					      Usr_CAN_NOT;
    Usr_Can_t ICanChangeMyGrps = Usr_CAN_NOT;
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
-     {
-      [Usr_CAN_NOT] = NULL,
-      [Usr_CAN    ] = Grp_PutIconToEditGroups,
-     };
 
    if (Gbl.Crs.Grps.NumGrps) // This course has groups
      {
@@ -1787,7 +1764,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_My_groups,
-		 FunctionToDrawContextualIcons[ICanEdit],NULL,
+		 Grp_PutIconsMyGroups,NULL,
 		 Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
       if (Gbl.Crs.Grps.NumGrps) // This course has groups
@@ -1797,21 +1774,19 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	    Frm_BeginForm (ActChgGrp);
 
 	 /***** List the groups the user belongs to for change *****/
-	 HTM_TABLE_BeginWidePadding (2);
-	    for (NumGrpTyp = 0;
-		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-		 NumGrpTyp++)
-	      {
-	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+	 for (NumGrpTyp = 0;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	      NumGrpTyp++)
+	   {
+	    GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 
-	       if (GrpTyp->NumGrps)	 // If there are groups of this type
-		 {
-		  if (Grp_ListGrpsForChangeMySelection (GrpTyp,&NumGrpsThisTypeIBelong) == Usr_CAN)
-		     ICanChangeMyGrps = Usr_CAN;
-		  NumGrpsIBelong += NumGrpsThisTypeIBelong;
-		 }
+	    if (GrpTyp->NumGrps)	 // If there are groups of this type
+	      {
+	       if (Grp_ListGrpsForChangeMySelection (GrpTyp,&NumGrpsThisTypeIBelong) == Usr_CAN)
+		  ICanChangeMyGrps = Usr_CAN;
+	       NumGrpsIBelong += NumGrpsThisTypeIBelong;
 	      }
-	 HTM_TABLE_End ();
+	   }
 
 	 /***** End form *****/
 	 if (PutFormToChangeGrps)
@@ -1838,9 +1813,22 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 /*************************** Put icon to edit groups *************************/
 /*****************************************************************************/
 
-static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args)
+static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
   {
-   Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL,NULL);
+   Usr_Can_t ICanEdit = (!Frm_CheckIfInside () &&
+			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
+								     Usr_CAN_NOT;
+
+   /***** Icon to edit groups *****/
+   if (ICanEdit == Usr_CAN)
+      Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL,NULL);
+
+   /***** Link to get resource link *****/
+   if ((Gbl.Action.Act == ActReqSelGrp ||
+        Gbl.Action.Act == ActChgGrp) &&
+       Rsc_CheckIfICanGetLink () == Usr_CAN)
+      Ico_PutContextualIconToGetLink (ActReqLnkGrp,NULL,NULL,NULL);	// TODO: Parameters to select one group type
   }
 
 /*****************************************************************************/
@@ -1904,194 +1892,209 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
    char StrGrpCod[32];
 
    /***** Write heading *****/
-   Grp_WriteGrpHead (GrpTyp);
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (GrpTyp->GrpTypName);
 
-   /***** Query in the database the group of this type that I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-	                        &LstGrpsIBelong,
-                                Grp_CLOSED_AND_OPEN_GROUPS);
-   *NumGrpsThisTypeIBelong = LstGrpsIBelong.NumGrps;
+      /***** Alert with groups opening date *****/
+      if (GrpTyp->MustBeOpened)
+	 Grp_WriteGrpTypOpening (GrpTyp);
 
-   /***** Check if I can change my selection *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 switch (GrpTyp->Enrolment.SingleMultiple)
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
+
+	 /***** Write heading *****/
+	 Grp_WriteGrpHead ();
+
+	 /***** Query in the database the group of this type that I belong to *****/
+	 Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+				      &LstGrpsIBelong,
+				      Grp_CLOSED_AND_OPEN_GROUPS);
+	 *NumGrpsThisTypeIBelong = LstGrpsIBelong.NumGrps;
+
+	 /***** Check if I can change my selection *****/
+	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
-	    case Grp_MULTIPLE:
-	       for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
-		    NumGrpThisType < GrpTyp->NumGrps &&
-		    ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
-		    NumGrpThisType++)
+	    case Rol_STD:
+	       switch (GrpTyp->Enrolment.SingleMultiple)
 		 {
-		  Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-		  if (Grp->ClosedOrOpen == CloOpe_OPEN)	// If group is open
-		    {
-		     IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
-												 Usr_DONT_BELONG;
-		     switch (IBelongToThisGroup)
+		  case Grp_MULTIPLE:
+		     for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
+			  NumGrpThisType < GrpTyp->NumGrps &&
+			  ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
+			  NumGrpThisType++)
+		       {
+			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+			if (Grp->ClosedOrOpen == CloOpe_OPEN)	// If group is open
+			  {
+			   IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
+												       Usr_DONT_BELONG;
+			   switch (IBelongToThisGroup)
+			     {
+			      case Usr_BELONG:
+				 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can leave group
+				 break;
+			      case Usr_DONT_BELONG:
+			      default:
+				 if (Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)	// Group is not full
+				    ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can enrol into group
+				 break;
+			     }
+			  }
+		       }
+		     break;
+		  case Grp_SINGLE:
+		  default:
+		     /* Check if I belong to a closed group */
+		     for (NumGrpThisType = 0, IBelongToAClosedGroup = Usr_DONT_BELONG;
+			  NumGrpThisType < GrpTyp->NumGrps && IBelongToAClosedGroup == Usr_DONT_BELONG;
+			  NumGrpThisType++)
+		       {
+			Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+			if (Grp->ClosedOrOpen == CloOpe_CLOSED)	// If group is closed
+			  {
+			   IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
+												       Usr_DONT_BELONG;
+			   if (IBelongToThisGroup == Usr_BELONG)
+			      IBelongToAClosedGroup = Usr_BELONG;	// I belong to a closed group
+			  }
+		       }
+
+		     switch (IBelongToAClosedGroup)
 		       {
 			case Usr_BELONG:
-			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can leave group
+			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;	// I can not leave
 			   break;
 			case Usr_DONT_BELONG:
 			default:
-			   if (Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)	// Group is not full
-			      ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can enrol into group
-			   break;
-		       }
-		    }
-		 }
-	       break;
-	    case Grp_SINGLE:
-	    default:
-	       /* Check if I belong to a closed group */
-	       for (NumGrpThisType = 0, IBelongToAClosedGroup = Usr_DONT_BELONG;
-		    NumGrpThisType < GrpTyp->NumGrps && IBelongToAClosedGroup == Usr_DONT_BELONG;
-		    NumGrpThisType++)
-		 {
-		  Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-		  if (Grp->ClosedOrOpen == CloOpe_CLOSED)	// If group is closed
-		    {
-		     IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
-												 Usr_DONT_BELONG;
-		     if (IBelongToThisGroup == Usr_BELONG)
-			IBelongToAClosedGroup = Usr_BELONG;	// I belong to a closed group
-		    }
-		 }
-
-	       switch (IBelongToAClosedGroup)
-		 {
-		  case Usr_BELONG:
-		     ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;	// I can not leave
-		     break;
-		  case Usr_DONT_BELONG:
-		  default:
-		     switch (GrpTyp->Enrolment.OptionalMandatory)
-		       {
-			case Grp_MANDATORY:	// Check if I can enrol in at least one group to which I don't belong
-			   for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
-				NumGrpThisType < GrpTyp->NumGrps &&
-				ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
-				NumGrpThisType++)
+			   switch (GrpTyp->Enrolment.OptionalMandatory)
 			     {
-			      Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-			      if (Grp->ClosedOrOpen == CloOpe_OPEN &&		// If group is open...
-				  Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)	// ...and not full
-				{
-				 IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
-													     Usr_DONT_BELONG;
-				 if (IBelongToThisGroup == Usr_DONT_BELONG)
-				    ICanChangeMySelectionForThisGrpTyp = Usr_CAN;// I can enrol into this group
-				}
+			      case Grp_MANDATORY:	// Check if I can enrol in at least one group to which I don't belong
+				 for (NumGrpThisType = 0, ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;
+				      NumGrpThisType < GrpTyp->NumGrps &&
+				      ICanChangeMySelectionForThisGrpTyp == Usr_CAN_NOT;
+				      NumGrpThisType++)
+				   {
+				    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+				    if (Grp->ClosedOrOpen == CloOpe_OPEN &&		// If group is open...
+					Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)	// ...and not full
+				      {
+				       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
+														   Usr_DONT_BELONG;
+				       if (IBelongToThisGroup == Usr_DONT_BELONG)
+					  ICanChangeMySelectionForThisGrpTyp = Usr_CAN;// I can enrol into this group
+				      }
+				   }
+				 break;
+			      case Grp_OPTIONAL:	// If enrolment is optional, I can leave
+			      default:
+				 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can leave group
+				 break;
 			     }
 			   break;
-			case Grp_OPTIONAL:	// If enrolment is optional, I can leave
-			default:
-			   ICanChangeMySelectionForThisGrpTyp = Usr_CAN;	// I can leave group
-			   break;
 		       }
 		     break;
 		 }
 	       break;
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       ICanChangeMySelectionForThisGrpTyp = Usr_CAN;			// I can not enrol/leave
+	       break;
+	    default:
+	       ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not enrol/leave
+	       break;
 	   }
-	 break;
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN;			// I can not enrol/leave
-	 break;
-      default:
-	 ICanChangeMySelectionForThisGrpTyp = Usr_CAN_NOT;		// I can not enrol/leave
-	 break;
-     }
 
-   /***** List the groups *****/
-   for (NumGrpThisType = 0;
-	NumGrpThisType < GrpTyp->NumGrps;
-	NumGrpThisType++)
-     {
-      Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-      IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
-										  Usr_DONT_BELONG;
+	 /***** List the groups *****/
+	 for (NumGrpThisType = 0;
+	      NumGrpThisType < GrpTyp->NumGrps;
+	      NumGrpThisType++)
+	   {
+	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+	    IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
+											Usr_DONT_BELONG;
 
-      /* Selection disabled? */
-      switch (ICanChangeMySelectionForThisGrpTyp)	// I can change my selection for this group type
-	{
-	 case Usr_CAN:
-	    ICanChangeMySelectionForThisGrp = Usr_CAN;
-	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	       switch (Grp->ClosedOrOpen)
-	         {
-	          case CloOpe_OPEN:		// If group is open
-		     if (IBelongToThisGroup == Usr_DONT_BELONG &&
-			 Grp->NumUsrs[Rol_STD] >= Grp->MaxStudents)	// Group is full
-			ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
-		     break;
-		  case CloOpe_CLOSED:		// If group is closed
-		  default:
-		     ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
-		     break;
-	         }
-	    break;
-	 case Usr_CAN_NOT:	// I can not change my selection for this group type
-	 default:
-	    ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
-	    break;
-	}
-
-      /* Put radio item or checkbox to select the group */
-      HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ((IBelongToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
-							    "class=\"LM\"");
-	    Attributes = ((IBelongToThisGroup == Usr_BELONG) ? HTM_CHECKED :
-							       HTM_NO_ATTR) |
-		         ((ICanChangeMySelectionForThisGrp == Usr_CAN) ? HTM_NO_ATTR :
-							                 HTM_DISABLED);
-	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&			// If I am a student
-		GrpTyp->Enrolment.SingleMultiple == Grp_SINGLE &&	// ...and the enrolment is single
-		GrpTyp->NumGrps > 1)					// ...and there are more than one group
+	    /* Selection disabled? */
+	    switch (ICanChangeMySelectionForThisGrpTyp)	// I can change my selection for this group type
 	      {
-	       /* Put a radio item */
-	       switch (GrpTyp->Enrolment.OptionalMandatory)
-		 {
-		  case Grp_MANDATORY:
-		     HTM_INPUT_RADIO (StrGrpCod,
-				      Attributes,
-				      "id=\"Grp%ld\" value=\"%ld\"",
-				      Grp->GrpCod,Grp->GrpCod);
-		     break;
-		  case Grp_OPTIONAL:	// If the enrolment is optional, I can select no groups
-		  default:
-		     HTM_INPUT_RADIO (StrGrpCod,
-				      Attributes,
-				      "id=\"Grp%ld\" value=\"%ld\""
-				      " onclick=\"selectUnselectRadio(this,%s,this.form.GrpCod%ld,%u)\"",
-				      Grp->GrpCod,Grp->GrpCod,
-				      (IBelongToThisGroup == Usr_BELONG) ? "true" :	// initially checked
-									   "false",	// initially unchecked
-				      GrpTyp->GrpTypCod,GrpTyp->NumGrps);
-		     break;
-		 }
+	       case Usr_CAN:
+		  ICanChangeMySelectionForThisGrp = Usr_CAN;
+		  if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
+		     switch (Grp->ClosedOrOpen)
+		       {
+			case CloOpe_OPEN:		// If group is open
+			   if (IBelongToThisGroup == Usr_DONT_BELONG &&
+			       Grp->NumUsrs[Rol_STD] >= Grp->MaxStudents)	// Group is full
+			      ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
+			   break;
+			case CloOpe_CLOSED:		// If group is closed
+			default:
+			   ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
+			   break;
+		       }
+		  break;
+	       case Usr_CAN_NOT:	// I can not change my selection for this group type
+	       default:
+		  ICanChangeMySelectionForThisGrp = Usr_CAN_NOT;
+		  break;
 	      }
-	    else
-	       /* Put a checkbox item */
-	       HTM_INPUT_CHECKBOX (StrGrpCod,
-				   Attributes,
-				   "id=\"Grp%ld\" value=\"%ld\"",
-				   Grp->GrpCod,Grp->GrpCod);
 
-	 HTM_TD_End ();
+	    /* Put radio item or checkbox to select the group */
+	    HTM_TR_Begin (NULL);
 
-	 Grp_WriteRowGrp (Grp,(IBelongToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
-								   Lay_NO_HIGHLIGHT);
+	       HTM_TD_Begin ((IBelongToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
+								  "class=\"LM\"");
+		  Attributes = ((IBelongToThisGroup == Usr_BELONG) ? HTM_CHECKED :
+								     HTM_NO_ATTR) |
+			       ((ICanChangeMySelectionForThisGrp == Usr_CAN) ? HTM_NO_ATTR :
+									       HTM_DISABLED);
+		  snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
+		  if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&			// If I am a student
+		      GrpTyp->Enrolment.SingleMultiple == Grp_SINGLE &&	// ...and the enrolment is single
+		      GrpTyp->NumGrps > 1)					// ...and there are more than one group
+		    {
+		     /* Put a radio item */
+		     switch (GrpTyp->Enrolment.OptionalMandatory)
+		       {
+			case Grp_MANDATORY:
+			   HTM_INPUT_RADIO (StrGrpCod,
+					    Attributes,
+					    "id=\"Grp%ld\" value=\"%ld\"",
+					    Grp->GrpCod,Grp->GrpCod);
+			   break;
+			case Grp_OPTIONAL:	// If the enrolment is optional, I can select no groups
+			default:
+			   HTM_INPUT_RADIO (StrGrpCod,
+					    Attributes,
+					    "id=\"Grp%ld\" value=\"%ld\""
+					    " onclick=\"selectUnselectRadio(this,%s,this.form.GrpCod%ld,%u)\"",
+					    Grp->GrpCod,Grp->GrpCod,
+					    (IBelongToThisGroup == Usr_BELONG) ? "true" :	// initially checked
+										 "false",	// initially unchecked
+					    GrpTyp->GrpTypCod,GrpTyp->NumGrps);
+			   break;
+		       }
+		    }
+		  else
+		     /* Put a checkbox item */
+		     HTM_INPUT_CHECKBOX (StrGrpCod,
+					 Attributes,
+					 "id=\"Grp%ld\" value=\"%ld\"",
+					 Grp->GrpCod,Grp->GrpCod);
 
-      HTM_TR_End ();
-     }
+	       HTM_TD_End ();
 
-   /***** Free memory with the list of groups a the that belongs the user *****/
-   Grp_FreeListCodGrp (&LstGrpsIBelong);
+	       Grp_WriteRowGrp (Grp,(IBelongToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
+									 Lay_NO_HIGHLIGHT);
+
+	    HTM_TR_End ();
+	   }
+
+	 /***** Free memory with the list of groups a the that belongs the user *****/
+	 Grp_FreeListCodGrp (&LstGrpsIBelong);
+
+      HTM_TABLE_End ();
+
+   HTM_FIELDSET_End ();
 
    return ICanChangeMySelectionForThisGrpTyp;
   }
@@ -2116,22 +2119,16 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Box_BoxBegin (Txt_Groups,NULL,NULL,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+      /***** List to select the groups the user belongs to *****/
+      for (NumGrpTyp = 0;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	   NumGrpTyp++)
+	{
+	 GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 
-	 /***** List to select the groups the user belongs to *****/
-	 for (NumGrpTyp = 0;
-	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	      NumGrpTyp++)
-	   {
-	    GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
-
-	    if (GrpTyp->NumGrps)
-	       Grp_ListGrpsToAddOrRemUsrs (GrpTyp,UsrCod);
-	   }
-
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 if (GrpTyp->NumGrps)
+	    Grp_ListGrpsToAddOrRemUsrs (GrpTyp,UsrCod);
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2155,55 +2152,67 @@ static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrC
    char StrGrpCod[32];
 
    /***** Write heading *****/
-   Grp_WriteGrpHead (GrpTyp);
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (GrpTyp->GrpTypName);
 
-   /***** Query the groups of this type which the user belongs to *****/
-   if (UsrCod > 0)
-      Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Other.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-				   &LstGrpsUsrBelongs,
-                                   Grp_CLOSED_AND_OPEN_GROUPS);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-   /***** List the groups *****/
-   for (NumGrpThisType = 0;
-	NumGrpThisType < GrpTyp->NumGrps;
-	NumGrpThisType++)
-     {
-      Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-      UsrBelongsToThisGroup = (UsrCod > 0) ? (Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsUsrBelongs) ? Usr_BELONG :
-													Usr_DONT_BELONG) :
-	                                     Usr_DONT_BELONG;
+	 /***** Write heading *****/
+	 Grp_WriteGrpHead ();
 
-      /* Begin row */
-      HTM_TR_Begin (NULL);
+	 /***** Query the groups of this type which the user belongs to *****/
+	 if (UsrCod > 0)
+	    Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Other.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+					 &LstGrpsUsrBelongs,
+					 Grp_CLOSED_AND_OPEN_GROUPS);
 
-	 /* Begin cell for checkbox */
-	 HTM_TD_Begin ((UsrBelongsToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
-							       "class=\"LM\"");
+	 /***** List the groups *****/
+	 for (NumGrpThisType = 0;
+	      NumGrpThisType < GrpTyp->NumGrps;
+	      NumGrpThisType++)
+	   {
+	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+	    UsrBelongsToThisGroup = (UsrCod > 0) ? (Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsUsrBelongs) ? Usr_BELONG :
+													      Usr_DONT_BELONG) :
+						   Usr_DONT_BELONG;
 
-	    /* Put checkbox to select the group */
-	    // Always checkbox, not radio, because the role in the form may be teacher,
-	    // so if he/she is enroled as teacher, he/she can belong to several groups
-	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-	    HTM_INPUT_CHECKBOX (StrGrpCod,
-				(UsrBelongsToThisGroup == Usr_BELONG) ? HTM_CHECKED :
-									HTM_NO_ATTR,
-				"id=\"Grp%ld\" value=\"%ld\"",
-				Grp->GrpCod,Grp->GrpCod);
+	    /* Begin row */
+	    HTM_TR_Begin (NULL);
 
-	 /* End cell for checkbox */
-	 HTM_TD_End ();
+	       /* Begin cell for checkbox */
+	       HTM_TD_Begin ((UsrBelongsToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
+								     "class=\"LM\"");
 
-	 /* Write cell for group */
-	 Grp_WriteRowGrp (Grp,(UsrBelongsToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
-								      Lay_NO_HIGHLIGHT);
+		  /* Put checkbox to select the group */
+		  // Always checkbox, not radio, because the role in the form may be teacher,
+		  // so if he/she is enroled as teacher, he/she can belong to several groups
+		  snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
+		  HTM_INPUT_CHECKBOX (StrGrpCod,
+				      (UsrBelongsToThisGroup == Usr_BELONG) ? HTM_CHECKED :
+									      HTM_NO_ATTR,
+				      "id=\"Grp%ld\" value=\"%ld\"",
+				      Grp->GrpCod,Grp->GrpCod);
 
-      /* End row */
-      HTM_TR_End ();
-     }
+	       /* End cell for checkbox */
+	       HTM_TD_End ();
 
-   /***** Free memory with the lists of groups *****/
-   if (UsrCod > 0)
-      Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
+	       /* Write cell for group */
+	       Grp_WriteRowGrp (Grp,(UsrBelongsToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
+									    Lay_NO_HIGHLIGHT);
+
+	    /* End row */
+	    HTM_TR_End ();
+	   }
+
+	 /***** Free memory with the lists of groups *****/
+	 if (UsrCod > 0)
+	    Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
@@ -2218,74 +2227,128 @@ static void Grp_ListGrpsForMultipleSelection (const struct GroupType *GrpTyp)
    Usr_Belong_t IBelongToThisGroup;
    Usr_Can_t ICanSelUnselGroup;
    struct Group *Grp;
+   Rol_Role_t Role;
 
-   /***** Write heading *****/
-   Grp_WriteGrpHead (GrpTyp);
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (GrpTyp->GrpTypName);
 
-   /***** Query from the database the groups of this type which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
-	                        &LstGrpsIBelong,
-                                Grp_CLOSED_AND_OPEN_GROUPS);
+      /***** Begin table *****/
+      HTM_TABLE_Begin ("TBL_SCROLL");
 
-   /***** List the groups of this type *****/
-   for (NumGrpThisType = 0;
-	NumGrpThisType < GrpTyp->NumGrps;
-	NumGrpThisType++)
-     {
-      /* Pointer to group */
-      Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+	 /***** Write heading *****/
+	 Grp_WriteGrpHead ();
 
-      /* Check if I belong to his group */
-      IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
-										  Usr_DONT_BELONG;
+	 /***** Query from the database the groups of this type which I belong to *****/
+	 Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+				      &LstGrpsIBelong,
+				      Grp_CLOSED_AND_OPEN_GROUPS);
 
-      /* Check if I can select / unselect this group */
-      switch (IBelongToThisGroup)
-        {
-	 case Usr_BELONG:
-	    ICanSelUnselGroup = Usr_CAN;
-	    break;
-	 case Usr_DONT_BELONG:
-	 default:
-	    switch (Gbl.Usrs.Me.Role.Logged)
+	 /***** List the groups of this type *****/
+	 for (NumGrpThisType = 0;
+	      NumGrpThisType < GrpTyp->NumGrps;
+	      NumGrpThisType++)
+	   {
+	    /* Pointer to group */
+	    Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
+
+	    /* Check if I belong to his group */
+	    IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong) ? Usr_BELONG :
+											Usr_DONT_BELONG;
+
+	    /* Check if I can select / unselect this group */
+	    switch (IBelongToThisGroup)
 	      {
-	       case Rol_TCH:
-	       case Rol_DEG_ADM:
-	       case Rol_CTR_ADM:
-	       case Rol_INS_ADM:
-	       case Rol_SYS_ADM:
+	       case Usr_BELONG:
 		  ICanSelUnselGroup = Usr_CAN;
 		  break;
+	       case Usr_DONT_BELONG:
 	       default:
-		  ICanSelUnselGroup = Usr_CAN_NOT;
+		  switch (Gbl.Usrs.Me.Role.Logged)
+		    {
+		     case Rol_TCH:
+		     case Rol_DEG_ADM:
+		     case Rol_CTR_ADM:
+		     case Rol_INS_ADM:
+		     case Rol_SYS_ADM:
+			ICanSelUnselGroup = Usr_CAN;
+			break;
+		     default:
+			ICanSelUnselGroup = Usr_CAN_NOT;
+			break;
+		    }
 		  break;
 	      }
-	    break;
-        }
 
-      /* Put checkbox to select the group */
-      HTM_TR_Begin (NULL);
+	    /* Put checkbox to select the group */
+	    HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ((IBelongToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
-							    "class=\"LM\"");
-	    HTM_INPUT_CHECKBOX ("GrpCods",
-				Grp_Checked (Grp->GrpCod) |
-				((ICanSelUnselGroup == Usr_CAN) ? HTM_NO_ATTR :
-								  HTM_DISABLED),
-				"id=\"Grp%ld\" value=\"%ld\"%s",
-				Grp->GrpCod,Grp->GrpCod,
-				(ICanSelUnselGroup == Usr_CAN) ? " onclick=\"checkParent(this,'AllGroups')\"" :
-							         "");
-	 HTM_TD_End ();
+	       HTM_TD_Begin ((IBelongToThisGroup == Usr_BELONG) ? "class=\"LM BG_HIGHLIGHT\"" :
+								  "class=\"LM\"");
+		  HTM_INPUT_CHECKBOX ("GrpCods",
+				      Grp_Checked (Grp->GrpCod) |
+				      ((ICanSelUnselGroup == Usr_CAN) ? HTM_NO_ATTR :
+									HTM_DISABLED),
+				      "id=\"Grp%ld\" value=\"%ld\"%s",
+				      Grp->GrpCod,Grp->GrpCod,
+				      (ICanSelUnselGroup == Usr_CAN) ? " onclick=\"checkParent(this,'AllGroups')\"" :
+								       "");
+	       HTM_TD_End ();
 
-	 Grp_WriteRowGrp (Grp,(IBelongToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
-								   Lay_NO_HIGHLIGHT);
+	       Grp_WriteRowGrp (Grp,(IBelongToThisGroup == Usr_BELONG) ? Lay_HIGHLIGHT :
+									 Lay_NO_HIGHLIGHT);
 
-      HTM_TR_End ();
-     }
+	    HTM_TR_End ();
+	   }
 
-   /***** Free memory with the list of groups which I belongs to *****/
-   Grp_FreeListCodGrp (&LstGrpsIBelong);
+	 /***** Free memory with the list of groups which I belongs to *****/
+	 Grp_FreeListCodGrp (&LstGrpsIBelong);
+
+	 /***** Write row to select the users who don't belong to any group *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Write checkbox to select the group */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       // To get the users who don't belong to a type of group,
+	       // use group code -(GrpTyp->GrpTypCod)
+	       HTM_INPUT_CHECKBOX ("GrpCods",
+				   Grp_Checked (-GrpTyp->GrpTypCod),
+				   "id=\"Grp%ld\" value=\"%ld\""
+				   " onclick=\"checkParent(this,'AllGroups')\"",
+				   -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod);
+	    HTM_TD_End ();
+
+	    /* Column closed/open */
+	    HTM_TD_Begin ("class=\"LM\"");
+	    HTM_TD_End ();
+
+	    /* Group name = students with no group */
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
+	       HTM_LABEL_Begin ("for=\"Grp%ld\"",-GrpTyp->GrpTypCod);
+		  HTM_Txt (Txt_users_with_no_group);
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
+
+	    /* Room */
+	    HTM_TD_Empty (1);
+
+	    /* Number of students who don't belong to any group of this type */
+	    for (Role  = Rol_TCH;
+		 Role >= Rol_STD;
+		 Role--)
+	      {
+	       HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
+		  HTM_Unsigned (Grp_DB_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
+	       HTM_TD_End ();
+	      }
+
+	    /* Last empty columns for max. students and vacants */
+	    HTM_TD_Empty (2);
+
+	 HTM_TR_End ();
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
@@ -2309,99 +2372,50 @@ static HTM_Attributes_t Grp_Checked (long GrpCod)
   }
 
 /*****************************************************************************/
-/******* Write row to select the users who don't belong to any group *********/
+/*********************** Alert with groups opening date **********************/
 /*****************************************************************************/
 
-static void Grp_WriteRowToSelectUsrsWhoDontBelongToAnyGrp (const struct GroupType *GrpTyp)
+static void Grp_WriteGrpTypOpening (const struct GroupType *GrpTyp)
   {
-   extern const char *Txt_users_with_no_group;
-   Rol_Role_t Role;
+   extern const char *Txt_Opening_of_groups;
+   static unsigned UniqueId = 0;
+   char *Id;
 
-   HTM_TR_Begin (NULL);
+   /***** Begin alert *****/
+   Ale_ShowAlertAndButtonBegin (Ale_INFO,Txt_Opening_of_groups);
 
-      /* Write checkbox to select the group */
-      HTM_TD_Begin ("class=\"LM\"");
-	 // To get the users who don't belong to a type of group,
-	 // use group code -(GrpTyp->GrpTypCod)
-         HTM_INPUT_CHECKBOX ("GrpCods",
-			     Grp_Checked (-GrpTyp->GrpTypCod),
-			     "id=\"Grp%ld\" value=\"%ld\""
-			     " onclick=\"checkParent(this,'AllGroups')\"",
-			     -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod);
-      HTM_TD_End ();
+      /***** Opening date *****/
+      UniqueId++;
+      if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_SPAN_Begin ("id=\"%s\" class=\"ALERT_TXT_%s\"",Id,The_GetSuffix ());
+      HTM_SPAN_End ();
+      Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				    Dat_WRITE_TODAY |
+				    Dat_WRITE_DATE_ON_SAME_DAY |
+				    Dat_WRITE_WEEK_DAY |
+				    Dat_WRITE_HOUR |
+				    Dat_WRITE_MINUTE |
+				    Dat_WRITE_SECOND);
+      free (Id);
 
-      /* Column closed/open */
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_TD_End ();
-
-      /* Group name = students with no group */
-      HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
-	 HTM_LABEL_Begin ("for=\"Grp%ld\"",-GrpTyp->GrpTypCod);
-	    HTM_Txt (Txt_users_with_no_group);
-	 HTM_LABEL_End ();
-      HTM_TD_End ();
-
-      /* Room */
-      HTM_TD_Empty (1);
-
-      /* Number of students who don't belong to any group of this type */
-      for (Role  = Rol_TCH;
-	   Role >= Rol_STD;
-	   Role--)
-	{
-	 HTM_TD_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
-	    HTM_Unsigned (Grp_DB_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
-	 HTM_TD_End ();
-	}
-
-      /* Last empty columns for max. students and vacants */
-      HTM_TD_Empty (2);
-
-   HTM_TR_End ();
+   /***** End alert *****/
+   Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
 /************** Write a row with the head for list of groups *****************/
 /*****************************************************************************/
 
-static void Grp_WriteGrpHead (const struct GroupType *GrpTyp)
+static void Grp_WriteGrpHead (void)
   {
-   extern const char *Txt_Opening_of_groups;
    extern const char *Txt_Group;
    extern const char *Txt_Room;
    extern const char *Txt_Max_BR_students;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Vacants;
-   static unsigned UniqueId = 0;
-   char *Id;
    Rol_Role_t Role;
-
-   /***** Name of group type *****/
-   HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"9\" class=\"GRP_TITLE LM\"");
-	 HTM_BR ();
-	 HTM_Txt (GrpTyp->GrpTypName);
-	 if (GrpTyp->MustBeOpened)
-	   {
-	    UniqueId++;
-	    if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    HTM_BR ();
-	    HTM_TxtColonNBSP (Txt_Opening_of_groups);
-	    HTM_SPAN_Begin ("id=\"%s\"",Id);
-	    HTM_SPAN_End ();
-	    Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  Dat_WRITE_TODAY |
-					  Dat_WRITE_DATE_ON_SAME_DAY |
-					  Dat_WRITE_WEEK_DAY |
-					  Dat_WRITE_HOUR |
-					  Dat_WRITE_MINUTE |
-					  Dat_WRITE_SECOND);
-	    free (Id);
-	   }
-      HTM_TD_End ();
-   HTM_TR_End ();
 
    /***** Head row with title of each column *****/
    HTM_TR_Begin (NULL);

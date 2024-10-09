@@ -693,33 +693,33 @@ a:hover						/* Default ==> underlined */
 	}
 .HEAD_ROW_3_GREY
 	{
-	background-image: -webkit-linear-gradient(#404040 0,#404040 54px,white 54px,white 100%);	/* Safari */
-	background-image: linear-gradient(#404040 0,#404040 54px,white 54px,white 100%);
+	background-image: -webkit-linear-gradient(#404040 0,#404040 56px,white 56px,white 100%);	/* Safari */
+	background-image: linear-gradient(#404040 0,#404040 56px,white 56px,white 100%);
 	}
 .HEAD_ROW_3_PURPLE
 	{
-	background-image: -webkit-linear-gradient(#a070a1 0,#a070a1 54px,white 54px,white 100%);	/* Safari */
-	background-image: linear-gradient(#a070a1 0,#a070a1 54px,white 54px,white 100%);
+	background-image: -webkit-linear-gradient(#a070a1 0,#a070a1 56px,white 56px,white 100%);	/* Safari */
+	background-image: linear-gradient(#a070a1 0,#a070a1 56px,white 56px,white 100%);
 	}
 .HEAD_ROW_3_BLUE
 	{
-	background-image: -webkit-linear-gradient(#4f90c8 0,#4f90c8 54px,white 54px,white 100%);	/* Safari */
-	background-image: linear-gradient(#4f90c8 0,#4f90c8 54px,white 54px,white 100%);
+	background-image: -webkit-linear-gradient(#4f90c8 0,#4f90c8 56px,white 56px,white 100%);	/* Safari */
+	background-image: linear-gradient(#4f90c8 0,#4f90c8 56px,white 56px,white 100%);
 	}
 .HEAD_ROW_3_YELLOW
 	{
-	background-image: -webkit-linear-gradient(#302830 0,#302830 54px,white 54px,white 100%);	/* Safari */
-	background-image: linear-gradient(#302830 0,#302830 54px,white 54px,white 100%);
+	background-image: -webkit-linear-gradient(#302830 0,#302830 56px,white 56px,white 100%);	/* Safari */
+	background-image: linear-gradient(#302830 0,#302830 56px,white 56px,white 100%);
 	}
 .HEAD_ROW_3_PINK
 	{
-	background-image: -webkit-linear-gradient(#c86b85 0,#c86b85 54px,white 54px,white 100%);	/* Safari */
-	background-image: linear-gradient(#c86b85 0,#c86b85 54px,white 54px,white 100%);
+	background-image: -webkit-linear-gradient(#c86b85 0,#c86b85 56px,white 56px,white 100%);	/* Safari */
+	background-image: linear-gradient(#c86b85 0,#c86b85 56px,white 56px,white 100%);
 	}
 .HEAD_ROW_3_DARK
 	{
-	background-image: -webkit-linear-gradient(#383838 0,#383838 54px,#383838 54px,#383838 100%);	/* Safari */
-	background-image: linear-gradient(#383838 0,#383838 54px,#383838 54px,#383838 100%);
+	background-image: -webkit-linear-gradient(#383838 0,#383838 56px,#383838 56px,#383838 100%);	/* Safari */
+	background-image: linear-gradient(#383838 0,#383838 56px,#383838 56px,#383838 100%);
 	}
 
 .TAB_LIST
@@ -2156,7 +2156,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	{
 	display: inline-block;
 	box-sizing: border-box;
-	margin: 2px 8px 8px 8px;
+	margin: 2px 4px 8px 4px;
 	padding: 10px;
 	border-radius: 2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
@@ -3372,7 +3372,7 @@ fieldset
 .BODY_PINK fieldset	{border-color: #808080;}
 .BODY_DARK fieldset	{border-color: #979797;}
 
-legend {font-size: 12pt;}
+legend {font-size: 12pt; font-weight: bold;}
 .BODY_WHITE legend,
 .BODY_GREY legend,
 .BODY_PURPLE legend,

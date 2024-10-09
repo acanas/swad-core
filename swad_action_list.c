@@ -65,6 +65,7 @@
 #include "swad_game_resource.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
+#include "swad_group_resource.h"
 #include "swad_hierarchy.h"
 #include "swad_holiday.h"
 #include "swad_ID.h"
@@ -1307,7 +1308,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // TabUsr ******************************************************************
    // Groups
-   [ActReqSelGrp	] = { 116, 0,TabUsr,NULL			,Grp_ReqEnrolInGrps		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActReqSelGrp	] = { 116, 0,TabUsr,NULL			,Grp_ShowLstGrpsToChgMyGrps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActChgGrp		] = { 118, 0,TabUsr,NULL			,Grp_ChangeMyGrpsAndShowChanges	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqEdiGrp	] = { 108, 0,TabUsr,NULL			,Grp_ReqEditGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewGrpTyp	] = { 174, 0,TabUsr,NULL			,Grp_ReceiveNewGrpTyp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1328,6 +1329,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRenGrp		] = { 121, 0,TabUsr,NULL			,Grp_RenameGroup		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgGrpRoo	] = {1752, 0,TabUsr,NULL			,Grp_ChangeGroupRoom		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgMaxStdGrp	] = { 106, 0,TabUsr,NULL			,Grp_ChangeMaxStdsGrp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqLnkGrp	] = {1993, 0,TabUsr,NULL			,GrpRsc_GetLinkToGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Students
    [ActLstStd		] = { 678, 1,TabUsr,NULL			,Usr_SeeStudents		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
@@ -3819,4 +3821,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkTst,		// #1990
 	ActReqTstOneTag,	// #1991
 	ActReqLnkTag,		// #1992
+	ActReqLnkGrp,		// #1993
   };

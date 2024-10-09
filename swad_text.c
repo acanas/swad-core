@@ -34508,6 +34508,29 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Marks"			// Çeviri lazim!
 #endif
 	,
+	[Rsc_GROUPS] =
+#if   L==1	// ca
+	"Grups"
+#elif L==2	// de
+	"Gruppen"
+#elif L==3	// en
+	"Groups"
+#elif L==4	// es
+	"Grupos"
+#elif L==5	// fr
+	"Groupes"
+#elif L==6	// gn
+	"Aty"
+#elif L==7	// it
+	"Gruppi"
+#elif L==8	// pl
+	"Grupy"
+#elif L==9	// pt
+	"Grupos"
+#elif L==10	// tr
+	"Gruplar"
+#endif
+	,
 	[Rsc_ATTENDANCE_EVENT] =
 #if   L==1	// ca
 	"Assist&egrave;ncia"

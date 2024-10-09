@@ -348,23 +348,28 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Txt;
+   char *Txt = NULL;
 
    /***** Print format and list of variables into text *****/
-   va_start (ap,fmt);
-   NumBytesPrinted = vasprintf (&Txt,fmt,ap);
-   va_end (ap);
-   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Err_NotEnoughMemoryExit ();
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Txt,fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+	}
 
    /****** Print fix alert and button ******/
    Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
    Ale_ShowAlertAndButtonEnd (NextAction,Anchor,OnSubmit,
-                              FuncPars,Args,
-                              Button,TxtButton);
+			      FuncPars,Args,
+			      Button,TxtButton);
 
    /***** Free text *****/
-   free (Txt);
+   if (Txt)
+      free (Txt);
   }
 
 /*****************************************************************************/
@@ -375,20 +380,25 @@ void Ale_ShowAlertAndButtonBegin (Ale_AlertType_t AlertType,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Txt;
+   char *Txt = NULL;
 
    /***** Print format and list of variables into text *****/
-   va_start (ap,fmt);
-   NumBytesPrinted = vasprintf (&Txt,fmt,ap);
-   va_end (ap);
-   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-      Err_NotEnoughMemoryExit ();
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Txt,fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+	}
 
    /****** Print start of fix alert and button ******/
    Ale_ShowFixAlertAndButtonBegin (AlertType,Txt);
 
    /***** Free text *****/
-   free (Txt);
+   if (Txt)
+      free (Txt);
   }
 
 /*****************************************************************************/

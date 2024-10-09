@@ -635,11 +635,19 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.13.3 (2024-10-08)"
-#define CSS_FILE		"swad24.11.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.14 (2024-10-09)"
+#define CSS_FILE		"swad24.14.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.13.3:  Oct 08, 2024  QR API provider changed from Google (deprecated) to goqr.me. Reported by Javier Fernández Baldomero. (337044 lines)
+	Version 24.14:    Oct 08, 2024  New program resource: groups.
+					Changes in layout of groups. (337171 lines)
+					4 changes necessary in database:
+ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rsc_clipboards CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_criteria CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_scores CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+
+	Version 24.13.3:  Oct 08, 2024  QR API provider changed from Google (deprecated) to goQR.me. Reported by Javier Fernández Baldomero. (337044 lines)
 	Version 24.13.2:  Oct 08, 2024  Code refactoring in tags. (337045 lines)
 	Version 24.13.1:  Oct 08, 2024  Code refactoring in loops. (337010 lines)
 	Version 24.13:    Oct 08, 2024  Changes in links to test resources. (336990 lines)

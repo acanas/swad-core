@@ -24812,6 +24812,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change maximum number of students in group"			// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkGrp] =
+#if   L==1	// ca
+	"Copy link to groups"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to groups"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to groups"
+#elif L==4	// es
+	"Copiar enlace a grupos"
+#elif L==5	// fr
+	"Copy link to groups"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a grupos"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to groups"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to groups"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to groups"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to groups"		// Çeviri lazim!
+#endif
+	,
 	[ActLstStd] =
 #if   L==1	// ca
 	"Show class photo or list of students"		// Necessita traducció
