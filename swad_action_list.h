@@ -1296,6 +1296,7 @@ typedef enum
 	ActChgGrpRoo,
 	ActChgMaxStdGrp,
 	ActReqLnkGrp,
+	ActReqLnkGrpTyp,
 
    // Students ----------------------------------------------------------------
 
@@ -1827,7 +1828,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		1993
+#define ActLst_MAX_ACTION_COD		1994
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

@@ -1245,6 +1245,12 @@ static void Grp_ListGroupTypesForEdition (void)
 					      &GrpTyp->GrpTypCod);
 	    HTM_TD_End ();
 
+	    /* Link to get resource link */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutContextualIconToGetLink (ActReqLnkGrpTyp,NULL,
+					       Grp_PutParGrpTypCod,&GrpTyp->GrpTypCod);
+	    HTM_TD_End ();
+
 	    /* Name of group type */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
@@ -1374,7 +1380,8 @@ static void Grp_WriteHeadingGroupTypes (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH_Span (NULL               ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL              ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL              ,HTM_HEAD_CENTER,1,1,"BT");
       HTM_TH_Begin (HTM_HEAD_CENTER);
 	 HTM_Txt (Txt_Type_of_group);
 	 HTM_BR ();
@@ -1826,7 +1833,8 @@ static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
 
    /***** Link to get resource link *****/
    if ((Gbl.Action.Act == ActReqSelGrp ||
-        Gbl.Action.Act == ActChgGrp) &&
+        Gbl.Action.Act == ActChgGrp ||
+        Gbl.Action.Act == ActReqLnkGrp) &&
        Rsc_CheckIfICanGetLink () == Usr_CAN)
       Ico_PutContextualIconToGetLink (ActReqLnkGrp,NULL,NULL,NULL);	// TODO: Parameters to select one group type
   }
@@ -3022,7 +3030,7 @@ static void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp)
    MYSQL_ROW row;
 
    /***** Get data of a type of group from database *****/
-   if (Grp_DB_GetGroupTypeDataByCod (&mysql_res,GrpTyp->GrpTypCod) != 1)
+   if (Grp_DB_GetGroupTypeData (&mysql_res,GrpTyp->GrpTypCod) != 1)
       Err_WrongGrpTypExit ();
 
    /***** Get some data of group type *****/

@@ -44,7 +44,7 @@ void TstRsc_GetLinkToTest (void)
 
    /***** Get tag title *****/
    if (TagCod > 0)
-      Tag_DB_GetTagTitleByCod (TagCod,TagTxt,Tag_MAX_BYTES_TAG);
+      Tag_DB_GetTagTitle (TagCod,TagTxt,Tag_MAX_BYTES_TAG);
    else
       TagTxt[0] = '\0';
 

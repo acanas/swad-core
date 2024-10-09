@@ -84,7 +84,7 @@ void CfeRsc_GetLinkToCallForExam (void)
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize
 
-void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize)
+void CfeRsc_GetCallForExamTitle (long ExaCod,char *Title,size_t TitleSize)
   {
    struct Cfe_CallsForExams CallsForExams;
    char SessionAndDate[Cfe_MAX_BYTES_SESSION_AND_DATE];

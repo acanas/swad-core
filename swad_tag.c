@@ -403,7 +403,7 @@ void Tag_ShowFormEditTags (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Link to get resource link */
-	       HTM_TD_Begin ("class=\"LM\"");
+	       HTM_TD_Begin ("class=\"BM\"");
 		  Ico_PutContextualIconToGetLink (ActReqLnkTag,NULL,
 						  Tag_PutPars,&TagCod);
 	       HTM_TD_End ();

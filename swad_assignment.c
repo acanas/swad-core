@@ -606,7 +606,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       HTM_TD_End ();
 
       /* Text of the assignment */
-      Asg_DB_GetAssignmentTxtByCod (Assignments->Asg.AsgCod,Txt);
+      Asg_DB_GetAssignmentTxt (Assignments->Asg.AsgCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -1002,7 +1002,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Query database. Result should have a unique row *****/
-   if (Asg_DB_GetAssignmentTitleAndTxtByCod (&mysql_res,AsgCod) == 1)
+   if (Asg_DB_GetAssignmentTitleAndTxt (&mysql_res,AsgCod) == 1)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1197,7 +1197,7 @@ void Asg_ReqCreatOrEditAsg (void)
       Asg_GetAssignmentDataByCod (&Assignments.Asg);
 
       /* Get text of the assignment from database */
-      Asg_DB_GetAssignmentTxtByCod (Assignments.Asg.AsgCod,Txt);
+      Asg_DB_GetAssignmentTxt (Assignments.Asg.AsgCod,Txt);
      }
 
    /***** Begin form *****/

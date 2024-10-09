@@ -3358,8 +3358,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 /***************** Text decoration of fieldset and legend ********************/
 fieldset
 	{
-	margin: 2px 0 8px 0;
-	padding: 10px;
+	margin: 2px 0;
 	border-style: solid;
 	border-width: 1px;
 	border-radius: 2px;

@@ -183,7 +183,7 @@ unsigned Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
 /************* Get title and text of assignment using its code ***************/
 /*****************************************************************************/
 
-unsigned Asg_DB_GetAssignmentTitleAndTxtByCod (MYSQL_RES **mysql_res,long AsgCod)
+unsigned Asg_DB_GetAssignmentTitleAndTxt (MYSQL_RES **mysql_res,long AsgCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get assignment title and text",
@@ -198,7 +198,7 @@ unsigned Asg_DB_GetAssignmentTitleAndTxtByCod (MYSQL_RES **mysql_res,long AsgCod
 /******************** Get assignment title from database *********************/
 /*****************************************************************************/
 
-void Asg_DB_GetAssignmentTitleByCod (long AsgCod,char *Title,size_t TitleSize)
+void Asg_DB_GetAssignmentTitle (long AsgCod,char *Title,size_t TitleSize)
   {
    DB_QuerySELECTString (Title,TitleSize,"can not get assignment title",
 		         "SELECT Title"
@@ -213,7 +213,7 @@ void Asg_DB_GetAssignmentTitleByCod (long AsgCod,char *Title,size_t TitleSize)
 /******************** Get assignment text from database **********************/
 /*****************************************************************************/
 
-void Asg_DB_GetAssignmentTxtByCod (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+void Asg_DB_GetAssignmentTxt (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get assignment text",
 		         "SELECT Txt"

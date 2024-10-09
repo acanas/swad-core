@@ -28,5 +28,6 @@
 /*****************************************************************************/
 
 void GrpRsc_GetLinkToGroups (void);
+void GrpRsc_GetLinkToGrpTyp (void);
 
 #endif

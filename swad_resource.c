@@ -40,6 +40,7 @@
 #include "swad_forum_resource.h"
 #include "swad_game_database.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
@@ -363,16 +364,16 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
    static void (*GetTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
       [Rsc_NONE            ] = NULL,
-      [Rsc_ASSIGNMENT      ] = Asg_DB_GetAssignmentTitleByCod,
+      [Rsc_ASSIGNMENT      ] = Asg_DB_GetAssignmentTitle,
       [Rsc_PROJECT         ] = Prj_DB_GetProjectTitle,
-      [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetTitleFromExaCod,
-      [Rsc_TEST            ] = Tag_DB_GetTagTitleByCod,
+      [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetCallForExamTitle,
+      [Rsc_TEST            ] = Tag_DB_GetTagTitle,
       [Rsc_EXAM            ] = Exa_DB_GetExamTitle,
       [Rsc_GAME            ] = Gam_DB_GetGameTitle,
       [Rsc_RUBRIC          ] = Rub_DB_GetRubricTitle,
-      [Rsc_DOCUMENT        ] = BrwRsc_GetTitleFromFilCod,
-      [Rsc_MARKS           ] = BrwRsc_GetTitleFromFilCod,
-      [Rsc_GROUPS          ] = BrwRsc_GetTitleFromFilCod,	// TODO: Get title of group type
+      [Rsc_DOCUMENT        ] = BrwRsc_GetFileTitle,
+      [Rsc_MARKS           ] = BrwRsc_GetFileTitle,
+      [Rsc_GROUPS          ] = Grp_DB_GetGrpTypTitle,
       [Rsc_ATTENDANCE_EVENT] = Att_DB_GetEventTitle,
       [Rsc_FORUM_THREAD    ] = For_DB_GetThreadTitle,
       [Rsc_SURVEY          ] = Svy_DB_GetSurveyTitle,

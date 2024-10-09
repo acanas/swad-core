@@ -36,6 +36,6 @@
 /*****************************************************************************/
 
 void CfeRsc_GetLinkToCallForExam (void);
-void CfeRsc_GetTitleFromExaCod (long ExaCod,char *Title,size_t TitleSize);
+void CfeRsc_GetCallForExamTitle (long ExaCod,char *Title,size_t TitleSize);
 
 #endif

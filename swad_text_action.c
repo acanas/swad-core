@@ -24835,6 +24835,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to groups"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkGrpTyp] =
+#if   L==1	// ca
+	"Copy link to group type"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to group type"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to group type"
+#elif L==4	// es
+	"Copiar enlace a tipo de grupo"
+#elif L==5	// fr
+	"Copy link to group type"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a tipo de grupo"		// Okoteve traducción
+#elif L==7	// it
+	"Copy link to group type"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to group type"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to group type"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to group type"		// Çeviri lazim!
+#endif
+	,
 	[ActLstStd] =
 #if   L==1	// ca
 	"Show class photo or list of students"		// Necessita traducció

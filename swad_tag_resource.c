@@ -42,7 +42,7 @@ void TagRsc_GetLinkToTag (void)
    char TagTxt[Tag_MAX_BYTES_TAG + 1];
 
    /***** Get tag title *****/
-   Tag_DB_GetTagTitleByCod (TagCod,TagTxt,Tag_MAX_BYTES_TAG);
+   Tag_DB_GetTagTitle (TagCod,TagTxt,Tag_MAX_BYTES_TAG);
 
    /***** Copy link to tag into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_TEST,TagCod);

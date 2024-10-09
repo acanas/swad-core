@@ -1330,6 +1330,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgGrpRoo	] = {1752, 0,TabUsr,NULL			,Grp_ChangeGroupRoom		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgMaxStdGrp	] = { 106, 0,TabUsr,NULL			,Grp_ChangeMaxStdsGrp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkGrp	] = {1993, 0,TabUsr,NULL			,GrpRsc_GetLinkToGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqLnkGrpTyp	] = {1994, 0,TabUsr,NULL			,GrpRsc_GetLinkToGrpTyp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Students
    [ActLstStd		] = { 678, 1,TabUsr,NULL			,Usr_SeeStudents		,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3F8}},Act_NORM,Act_1ST},
@@ -3822,4 +3823,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqTstOneTag,	// #1991
 	ActReqLnkTag,		// #1992
 	ActReqLnkGrp,		// #1993
+	ActReqLnkGrpTyp,	// #1994
   };

@@ -39,23 +39,38 @@ void GrpRsc_GetLinkToGroups (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Groups;
-   long GrpTypCod = ParCod_GetPar (ParCod_GrpTyp);
+
+   /***** Copy link to tag into resource clipboard *****/
+   Rsc_DB_CopyToClipboard (Rsc_GROUPS,-1L);
+
+   /***** Write sucess message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
+   		  Txt_Groups);
+
+   /***** Show my groups again *****/
+   Grp_ShowLstGrpsToChgMyGrps ();
+  }
+
+/*****************************************************************************/
+/************************** Get link to group type ***************************/
+/*****************************************************************************/
+
+void GrpRsc_GetLinkToGrpTyp (void)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   long GrpTypCod = ParCod_GetAndCheckPar (ParCod_GrpTyp);
    char GrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];	// Name of type of group
 
    /***** Get tag title *****/
-   if (GrpTypCod > 0)
-      Grp_DB_GetGrpTypTitleByCod (GrpTypCod,GrpTypName,Grp_MAX_BYTES_GROUP_TYPE_NAME);
-   else
-      GrpTypName[0] = '\0';
+   Grp_DB_GetGrpTypTitle (GrpTypCod,GrpTypName,Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /***** Copy link to tag into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_GROUPS,GrpTypCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  GrpTypCod > 0 ? GrpTypName :
-   			          Txt_Groups);
+   		  GrpTypName);
 
-   /***** Show my groups again *****/
-   Grp_ShowLstGrpsToChgMyGrps ();
+   /***** Show edition of groups again *****/
+   Grp_ReqEditGroups ();
   }

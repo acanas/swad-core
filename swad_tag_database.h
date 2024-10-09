@@ -51,7 +51,7 @@ unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 				       long TagCod,long CrsCod);
 bool Tag_DB_CheckIfCurrentCrsHasTestTags (void);
 long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt);
-void Tag_DB_GetTagTitleByCod (long TagCod,char *Title,size_t TitleSize);
+void Tag_DB_GetTagTitle (long TagCod,char *Title,size_t TitleSize);
 
 unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
 		               long CrsCod,time_t BeginTime);

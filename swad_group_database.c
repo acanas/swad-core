@@ -106,7 +106,7 @@ void Grp_DB_CreateGroup (const struct Grp_Groups *Grps)
 /******************** Get group type title from database *********************/
 /*****************************************************************************/
 
-void Grp_DB_GetGrpTypTitleByCod (long GrpTypCod,char *Title,size_t TitleSize)
+void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize)
   {
    DB_QuerySELECTString (Title,TitleSize,"can not get group type title",
 		         "SELECT GrpTypName"
@@ -121,7 +121,7 @@ void Grp_DB_GetGrpTypTitleByCod (long GrpTypCod,char *Title,size_t TitleSize)
 /******************* Get data of a group type from its code ******************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetGroupTypeDataByCod (MYSQL_RES **mysql_res,long GrpTypCod)
+unsigned Grp_DB_GetGroupTypeData (MYSQL_RES **mysql_res,long GrpTypCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get type of group",

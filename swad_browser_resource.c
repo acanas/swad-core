@@ -101,7 +101,7 @@ void BrwRsc_GetLinkToMrkFil (void)
 /*****************************************************************************/
 // The trailing null character is not counted in TitleSize
 
-void BrwRsc_GetTitleFromFilCod (long FilCod,char *Title,size_t TitleSize)
+void BrwRsc_GetFileTitle (long FilCod,char *Title,size_t TitleSize)
   {
    struct Brw_FileMetadata FileMetadata;
 

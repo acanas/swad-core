@@ -265,7 +265,7 @@ long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
 /************************ Get tag title from database ************************/
 /*****************************************************************************/
 
-void Tag_DB_GetTagTitleByCod (long TagCod,char *Title,size_t TitleSize)
+void Tag_DB_GetTagTitle (long TagCod,char *Title,size_t TitleSize)
   {
    DB_QuerySELECTString (Title,TitleSize,"can not get tag title",
 		         "SELECT TagTxt"

@@ -131,7 +131,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 
    /***** Get tag title *****/
    if (Questions->Tags.PreselectedTagCod > 0)
-      Tag_DB_GetTagTitleByCod (Questions->Tags.PreselectedTagCod,TagTxt,Tag_MAX_BYTES_TAG);
+      Tag_DB_GetTagTitle (Questions->Tags.PreselectedTagCod,TagTxt,Tag_MAX_BYTES_TAG);
    else
       Str_Copy (TagTxt,Txt_Test,sizeof (TagTxt) - 1);
 

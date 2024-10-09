@@ -635,11 +635,12 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.14 (2024-10-09)"
+#define Log_PLATFORM_VERSION	"SWAD 24.14.1 (2024-10-10)"
 #define CSS_FILE		"swad24.14.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.14:    Oct 08, 2024  New program resource: groups.
+	Version 24.14.1:  Oct 10, 2024  Changes in program resource related to groups. (337216 lines)
+	Version 24.14:    Oct 09, 2024  New program resource: groups.
 					Changes in layout of groups. (337171 lines)
 					4 changes necessary in database:
 ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
