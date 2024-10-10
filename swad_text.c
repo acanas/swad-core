@@ -34301,6 +34301,29 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Ba&gbreve;lant&inodot; yok"
 #endif
 	,
+	[Rsc_INFORMATION] =
+#if   L==1	// ca
+	"Informaci&oacute;"
+#elif L==2	// de
+	"Information"
+#elif L==3	// en
+	"Information"
+#elif L==4	// es
+	"Informaci&oacute;n"
+#elif L==5	// fr
+	"Information"
+#elif L==6	// gn
+	"Marandu"
+#elif L==7	// it
+	"Informazione"
+#elif L==8	// pl
+	"Informacja"
+#elif L==9	// pt
+	"Informa&ccedil;&atilde;o"
+#elif L==10	// tr
+	"Bilgi"
+#endif
+	,
 	[Rsc_TEACHING_GUIDE] =
 #if   L==1	// ca
 	"Guia"
@@ -34322,6 +34345,52 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Guia"
 #elif L==10	// tr
 	"K&inodot;lavuz"
+#endif
+	,
+	[Rsc_LECTURES] =
+#if   L==1	// ca
+	"Temari"
+#elif L==2	// de
+	"Studienplan"
+#elif L==3	// en
+	"Topics"
+#elif L==4	// es
+	"Temario"
+#elif L==5	// fr
+	"Plan"
+#elif L==6	// gn
+	"Temario"	// Okoteve traducción
+#elif L==7	// it
+	"Temi"
+#elif L==8	// pl
+	"Sylabus"
+#elif L==9	// pt
+	"Conte&uacute;do"
+#elif L==10	// tr
+	"Konular"
+#endif
+	,
+	[Rsc_PRACTICALS] =
+#if   L==1	// ca
+	"Temari"
+#elif L==2	// de
+	"Studienplan"
+#elif L==3	// en
+	"Topics"
+#elif L==4	// es
+	"Temario"
+#elif L==5	// fr
+	"Plan"
+#elif L==6	// gn
+	"Temario"	// Okoteve traducción
+#elif L==7	// it
+	"Temi"
+#elif L==8	// pl
+	"Sylabus"
+#elif L==9	// pt
+	"Conte&uacute;do"
+#elif L==10	// tr
+	"Konular"
 #endif
 	,
 	[Rsc_BIBLIOGRAPHY] =

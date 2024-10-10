@@ -635,10 +635,17 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.16 (2024-10-10)"
+#define Log_PLATFORM_VERSION	"SWAD 24.16.1 (2024-10-11)"
 #define CSS_FILE		"swad24.15.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.16.1:  Oct 11, 2024  New program resources. Not finished. (337560 lines)
+					4 changes necessary in database:
+ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rsc_clipboards CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_criteria CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_scores CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') NOT NULL DEFAULT 'non';
+
 	Version 24.16:    Oct 10, 2024  New program resources for course info and timetable. Not finished. (337446 lines)
 	Version 24.15:    Oct 10, 2024  Highlighting of a group type in selection of groups. (337274 lines)
 	Version 24.14.1:  Oct 10, 2024  Changes in program resource related to groups. (337216 lines)

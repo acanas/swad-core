@@ -52,6 +52,7 @@
 #include "swad_survey_database.h"
 #include "swad_tag_database.h"
 #include "swad_theme.h"
+#include "swad_timetable.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -60,7 +61,10 @@
 const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
   {
    [Rsc_NONE		] = "non",
+   [Rsc_INFORMATION	] = "inf",
    [Rsc_TEACHING_GUIDE	] = "gui",
+   [Rsc_LECTURES	] = "lec",
+   [Rsc_PRACTICALS	] = "pra",
    [Rsc_BIBLIOGRAPHY	] = "bib",
    [Rsc_FAQ		] = "faq",
    [Rsc_LINKS		] = "lnk",
@@ -84,7 +88,10 @@ const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
 const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
   {
    [Rsc_NONE		] = "link-slash.svg",
+   [Rsc_INFORMATION	] = "info.svg",
    [Rsc_TEACHING_GUIDE	] = "book-open.svg",
+   [Rsc_LECTURES	] = "list-ol.svg",
+   [Rsc_PRACTICALS	] = "list-ol.svg",
    [Rsc_BIBLIOGRAPHY	] = "book.svg",
    [Rsc_FAQ		] = "question.svg",
    [Rsc_LINKS		] = "up-right-from-square.svg",
@@ -243,7 +250,10 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
      } FuncAnchor[Rsc_NUM_TYPES] =
      {
       [Rsc_NONE			] = {NULL		,NULL			},
+      [Rsc_INFORMATION		] = {NULL		,NULL			},
       [Rsc_TEACHING_GUIDE	] = {NULL		,NULL			},
+      [Rsc_LECTURES		] = {NULL		,NULL			},
+      [Rsc_PRACTICALS		] = {NULL		,NULL			},
       [Rsc_BIBLIOGRAPHY		] = {NULL		,NULL			},
       [Rsc_FAQ			] = {NULL		,NULL			},
       [Rsc_LINKS		] = {NULL		,NULL			},
@@ -270,7 +280,10 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
      } NextActions[Rsc_NUM_TYPES] =
      {
       [Rsc_NONE			] = {ActUnk		,ActUnk			},
+      [Rsc_INFORMATION		] = {ActUnk		,ActUnk			},	// TODO: Actions!
       [Rsc_TEACHING_GUIDE	] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_LECTURES		] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_PRACTICALS		] = {ActUnk		,ActUnk			},	// TODO: Actions!
       [Rsc_BIBLIOGRAPHY		] = {ActUnk		,ActUnk			},	// TODO: Actions!
       [Rsc_FAQ			] = {ActUnk		,ActUnk			},	// TODO: Actions!
       [Rsc_LINKS		] = {ActUnk		,ActUnk			},	// TODO: Actions!
@@ -293,7 +306,10 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
    static ParCod_Param_t ParCod[Rsc_NUM_TYPES] =
      {
       [Rsc_NONE			] = ParCod_None,
+      [Rsc_INFORMATION		] = ParCod_None,
       [Rsc_TEACHING_GUIDE	] = ParCod_None,
+      [Rsc_LECTURES		] = ParCod_None,
+      [Rsc_PRACTICALS		] = ParCod_None,
       [Rsc_BIBLIOGRAPHY		] = ParCod_None,
       [Rsc_FAQ			] = ParCod_None,
       [Rsc_LINKS		] = ParCod_None,
@@ -368,6 +384,8 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
                                    char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
   {
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
+   extern const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES];
    extern const char *Txt_Assignments;
    extern const char *Txt_Projects;
    extern const char *Txt_Calls_for_exams;
@@ -384,7 +402,10 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
    static void (*GetTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
       [Rsc_NONE			] = NULL,
+      [Rsc_INFORMATION		] = NULL,	// TODO: Function!
       [Rsc_TEACHING_GUIDE	] = NULL,	// TODO: Function!
+      [Rsc_LECTURES		] = NULL,	// TODO: Function!
+      [Rsc_PRACTICALS		] = NULL,	// TODO: Function!
       [Rsc_BIBLIOGRAPHY		] = NULL,	// TODO: Function!
       [Rsc_FAQ			] = NULL,	// TODO: Function!
       [Rsc_LINKS		] = NULL,	// TODO: Function!
@@ -404,28 +425,31 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       [Rsc_FORUM_THREAD		] = For_DB_GetThreadTitle,
       [Rsc_SURVEY		] = Svy_DB_GetSurveyTitle,
      };
-   const char *GenericTitle[Rsc_NUM_TYPES] =
+   static const char **GenericTitle[Rsc_NUM_TYPES] =
      {
       [Rsc_NONE			] = NULL,
-      [Rsc_TEACHING_GUIDE	] = NULL,	// TODO: Text!
-      [Rsc_BIBLIOGRAPHY		] = NULL,	// TODO: Text!
-      [Rsc_FAQ			] = NULL,	// TODO: Text!
-      [Rsc_LINKS		] = NULL,	// TODO: Text!
-      [Rsc_ASSESSMENT		] = NULL,	// TODO: Text!
-      [Rsc_TIMETABLE		] = NULL,	// TODO: Text!
-      [Rsc_ASSIGNMENT		] = Txt_Assignments,
-      [Rsc_PROJECT		] = Txt_Projects,
-      [Rsc_CALL_FOR_EXAM	] = Txt_Calls_for_exams,
-      [Rsc_TEST			] = Txt_Test,
-      [Rsc_EXAM			] = Txt_Exams,
-      [Rsc_GAME			] = Txt_Games,
-      [Rsc_RUBRIC		] = Txt_Rubrics,
-      [Rsc_DOCUMENT		] = Txt_Documents,
-      [Rsc_MARKS		] = Txt_Marks_area,
-      [Rsc_GROUPS		] = Txt_Groups,
-      [Rsc_ATTENDANCE_EVENT	] = Txt_Control_of_class_attendance,
-      [Rsc_FORUM_THREAD		] = Txt_Course_forum,
-      [Rsc_SURVEY		] = Txt_Surveys,
+      [Rsc_INFORMATION		] = &Txt_INFO_TITLE[Inf_INFORMATION	],
+      [Rsc_TEACHING_GUIDE	] = &Txt_INFO_TITLE[Inf_TEACHING_GUIDE	],
+      [Rsc_LECTURES		] = &Txt_INFO_TITLE[Inf_LECTURES	],
+      [Rsc_PRACTICALS		] = &Txt_INFO_TITLE[Inf_PRACTICALS	],
+      [Rsc_BIBLIOGRAPHY		] = &Txt_INFO_TITLE[Inf_BIBLIOGRAPHY	],
+      [Rsc_FAQ			] = &Txt_INFO_TITLE[Inf_FAQ		],
+      [Rsc_LINKS		] = &Txt_INFO_TITLE[Inf_LINKS		],
+      [Rsc_ASSESSMENT		] = &Txt_INFO_TITLE[Inf_ASSESSMENT	],
+      [Rsc_TIMETABLE		] = &Txt_TIMETABLE_TYPES[Tmt_COURSE_TIMETABLE],
+      [Rsc_ASSIGNMENT		] = &Txt_Assignments,
+      [Rsc_PROJECT		] = &Txt_Projects,
+      [Rsc_CALL_FOR_EXAM	] = &Txt_Calls_for_exams,
+      [Rsc_TEST			] = &Txt_Test,
+      [Rsc_EXAM			] = &Txt_Exams,
+      [Rsc_GAME			] = &Txt_Games,
+      [Rsc_RUBRIC		] = &Txt_Rubrics,
+      [Rsc_DOCUMENT		] = &Txt_Documents,
+      [Rsc_MARKS		] = &Txt_Marks_area,
+      [Rsc_GROUPS		] = &Txt_Groups,
+      [Rsc_ATTENDANCE_EVENT	] = &Txt_Control_of_class_attendance,
+      [Rsc_FORUM_THREAD		] = &Txt_Course_forum,
+      [Rsc_SURVEY		] = &Txt_Surveys,
      };
 
    /***** Reset title *****/
@@ -444,7 +468,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       else
 	{
 	 if (GenericTitle[Link->Type])
-	    Str_Copy (Title,GenericTitle[Link->Type],Rsc_MAX_BYTES_RESOURCE_TITLE);
+	    Str_Copy (Title,*(GenericTitle[Link->Type]),Rsc_MAX_BYTES_RESOURCE_TITLE);
 	 else
 	    Ale_ShowAlert (Ale_ERROR,"Not implemented!");
 	}
