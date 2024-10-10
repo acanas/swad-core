@@ -109,7 +109,7 @@ void Box_BoxShadowBegin (const char *Title,
    char *ClassFrame;
 
    /***** Begin box *****/
-   if (asprintf (&ClassFrame,"FRAME_SHADOW FRAME_SHADOW_%s",The_GetSuffix ()) < 0)
+   if (asprintf (&ClassFrame,"FRAME_SHADOW HIGHLIGHT_%s",The_GetSuffix ()) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxInternalBegin (Title,
                          FunctionToDrawContextualIcons,Args,

@@ -146,7 +146,7 @@ struct Mnu_Menu Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		[12] = {ActAdmBrf		,"briefcase"		},
 	       },
    [TabUsr] =  {
-		[ 0] = {ActReqSelGrp		,"sitemap"		},
+		[ 0] = {ActReqSelAllGrp		,"sitemap"		},
 		[ 1] = {ActLstStd		,"users"		},
 		[ 2] = {ActLstTch		,"person-chalkboard"	},
 		[ 3] = {ActLstOth		,"user-group"		},

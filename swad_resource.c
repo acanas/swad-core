@@ -59,48 +59,50 @@
 
 const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
   {
-   [Rsc_NONE            ] = "non",
-   // gui TEACHING_GUIDE	// Link to teaching guide
-   // bib BIBLIOGRAPHY		// Link to bibliography
-   // faq FAQ			// Link to FAQ
-   // lnk LINKS			// Link to links
-   // tmt TIMETABLE		// Link to timetable
-   [Rsc_ASSIGNMENT      ] = "asg",
-   [Rsc_PROJECT         ] = "prj",
-   [Rsc_CALL_FOR_EXAM   ] = "cfe",
+   [Rsc_NONE		] = "non",
+   [Rsc_TEACHING_GUIDE	] = "gui",
+   [Rsc_BIBLIOGRAPHY	] = "bib",
+   [Rsc_FAQ		] = "faq",
+   [Rsc_LINKS		] = "lnk",
+   [Rsc_ASSESSMENT	] = "ass",
+   [Rsc_TIMETABLE	] = "tmt",
+   [Rsc_ASSIGNMENT	] = "asg",
+   [Rsc_PROJECT		] = "prj",
+   [Rsc_CALL_FOR_EXAM	] = "cfe",
    [Rsc_TEST		] = "tst",
-   [Rsc_EXAM            ] = "exa",
-   [Rsc_GAME            ] = "gam",
-   [Rsc_RUBRIC          ] = "rub",
-   [Rsc_DOCUMENT        ] = "doc",
-   [Rsc_MARKS           ] = "mrk",
-   [Rsc_GROUPS          ] = "grp",
+   [Rsc_EXAM		] = "exa",
+   [Rsc_GAME		] = "gam",
+   [Rsc_RUBRIC		] = "rub",
+   [Rsc_DOCUMENT	] = "doc",
+   [Rsc_MARKS		] = "mrk",
+   [Rsc_GROUPS		] = "grp",
    [Rsc_ATTENDANCE_EVENT] = "att",
-   [Rsc_FORUM_THREAD    ] = "for",
-   [Rsc_SURVEY          ] = "svy",
+   [Rsc_FORUM_THREAD	] = "for",
+   [Rsc_SURVEY		] = "svy",
   };
 
 const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
   {
-   [Rsc_NONE            ] = "link-slash.svg",
-   // gui TEACHING_GUIDE	// Link to teaching guide
-   // bib BIBLIOGRAPHY		// Link to bibliography
-   // faq FAQ			// Link to FAQ
-   // lnk LINKS			// Link to links
-   // tmt TIMETABLE		// Link to timetable
-   [Rsc_ASSIGNMENT      ] = "edit.svg",
-   [Rsc_PROJECT         ] = "file-invoice.svg",
-   [Rsc_CALL_FOR_EXAM   ] = "bullhorn.svg",
-   [Rsc_TEST            ] = "check.svg",
-   [Rsc_EXAM            ] = "file-signature.svg",
-   [Rsc_GAME            ] = "gamepad.svg",
-   [Rsc_RUBRIC          ] = "tasks.svg",
-   [Rsc_DOCUMENT        ] = "file.svg",
-   [Rsc_MARKS           ] = "list-alt.svg",
-   [Rsc_GROUPS          ] = "sitemap.svg",
+   [Rsc_NONE		] = "link-slash.svg",
+   [Rsc_TEACHING_GUIDE	] = "book-open.svg",
+   [Rsc_BIBLIOGRAPHY	] = "book.svg",
+   [Rsc_FAQ		] = "question.svg",
+   [Rsc_LINKS		] = "up-right-from-square.svg",
+   [Rsc_ASSESSMENT	] = "check.svg",
+   [Rsc_TIMETABLE	] = "clock.svg",
+   [Rsc_ASSIGNMENT	] = "edit.svg",
+   [Rsc_PROJECT		] = "file-invoice.svg",
+   [Rsc_CALL_FOR_EXAM	] = "bullhorn.svg",
+   [Rsc_TEST		] = "check.svg",
+   [Rsc_EXAM		] = "file-signature.svg",
+   [Rsc_GAME		] = "gamepad.svg",
+   [Rsc_RUBRIC		] = "tasks.svg",
+   [Rsc_DOCUMENT	] = "file.svg",
+   [Rsc_MARKS		] = "list-alt.svg",
+   [Rsc_GROUPS		] = "sitemap.svg",
    [Rsc_ATTENDANCE_EVENT] = "calendar-check.svg",
-   [Rsc_FORUM_THREAD    ] = "comments.svg",
-   [Rsc_SURVEY          ] = "poll.svg",
+   [Rsc_FORUM_THREAD	] = "comments.svg",
+   [Rsc_SURVEY		] = "poll.svg",
   };
 
 /*****************************************************************************/
@@ -240,20 +242,26 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       void (*Free) (char **Anchor);
      } FuncAnchor[Rsc_NUM_TYPES] =
      {
-      [Rsc_NONE            ] = {NULL,NULL},
-      [Rsc_ASSIGNMENT      ] = {NULL,NULL},
-      [Rsc_PROJECT         ] = {NULL,NULL},
-      [Rsc_CALL_FOR_EXAM   ] = {Frm_SetAnchorStr,Frm_FreeAnchorStr},
-      [Rsc_TEST            ] = {NULL,NULL},
-      [Rsc_EXAM            ] = {NULL,NULL},
-      [Rsc_GAME            ] = {NULL,NULL},
-      [Rsc_RUBRIC          ] = {NULL,NULL},
-      [Rsc_DOCUMENT        ] = {NULL,NULL},
-      [Rsc_MARKS           ] = {NULL,NULL},
-      [Rsc_GROUPS          ] = {NULL,NULL},
-      [Rsc_ATTENDANCE_EVENT] = {NULL,NULL},
-      [Rsc_FORUM_THREAD    ] = {ForRsc_SetAnchorStr,ForRsc_FreeAnchorStr},
-      [Rsc_SURVEY          ] = {NULL,NULL},
+      [Rsc_NONE			] = {NULL		,NULL			},
+      [Rsc_TEACHING_GUIDE	] = {NULL		,NULL			},
+      [Rsc_BIBLIOGRAPHY		] = {NULL		,NULL			},
+      [Rsc_FAQ			] = {NULL		,NULL			},
+      [Rsc_LINKS		] = {NULL		,NULL			},
+      [Rsc_ASSESSMENT		] = {NULL		,NULL			},
+      [Rsc_TIMETABLE		] = {NULL		,NULL			},
+      [Rsc_ASSIGNMENT		] = {NULL		,NULL			},
+      [Rsc_PROJECT		] = {NULL		,NULL			},
+      [Rsc_CALL_FOR_EXAM	] = {Frm_SetAnchorStr	,Frm_FreeAnchorStr	},
+      [Rsc_TEST			] = {NULL		,NULL			},
+      [Rsc_EXAM			] = {NULL		,NULL			},
+      [Rsc_GAME			] = {NULL		,NULL			},
+      [Rsc_RUBRIC		] = {NULL		,NULL			},
+      [Rsc_DOCUMENT		] = {NULL		,NULL			},
+      [Rsc_MARKS		] = {NULL		,NULL			},
+      [Rsc_GROUPS		] = {Frm_SetAnchorStr	,Frm_FreeAnchorStr	},
+      [Rsc_ATTENDANCE_EVENT	] = {NULL		,NULL			},
+      [Rsc_FORUM_THREAD		] = {ForRsc_SetAnchorStr,ForRsc_FreeAnchorStr	},
+      [Rsc_SURVEY		] = {NULL		,NULL			},
      };
    static struct
      {
@@ -261,37 +269,49 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       Act_Action_t IfNotCod;
      } NextActions[Rsc_NUM_TYPES] =
      {
-      [Rsc_NONE            ] = {ActUnk			,ActUnk			},
-      [Rsc_ASSIGNMENT      ] = {ActSeeOneAsg		,ActSeeAllAsg		},
-      [Rsc_PROJECT         ] = {ActSeeOnePrj		,ActSeeAllPrj		},
-      [Rsc_CALL_FOR_EXAM   ] = {ActSeeOneCfe		,ActSeeAllCfe		},
-      [Rsc_TEST            ] = {ActReqTstOneTag		,ActReqTstAnyTag	},
-      [Rsc_EXAM            ] = {ActSeeOneExa		,ActSeeAllExa		},
-      [Rsc_GAME            ] = {ActSeeOneGam		,ActSeeAllGam		},
-      [Rsc_RUBRIC          ] = {ActSeeOneRub		,ActSeeAllRub		},
-      [Rsc_DOCUMENT        ] = {ActReqDatSeeDocCrs	,ActSeeAdmDocCrsGrp	},
-      [Rsc_MARKS           ] = {ActReqDatSeeMrkCrs	,ActSeeAdmMrk		},
-      [Rsc_GROUPS          ] = {ActReqSelGrp		,ActReqSelGrp		},	// TODO: ActReqOneGrpTyp
-      [Rsc_ATTENDANCE_EVENT] = {ActSeeOneAtt		,ActSeeAllAtt		},
-      [Rsc_FORUM_THREAD    ] = {ActSeePstForCrsUsr	,ActSeeForCrsUsr	},
-      [Rsc_SURVEY          ] = {ActSeeOneSvy		,ActSeeAllSvy		},
+      [Rsc_NONE			] = {ActUnk		,ActUnk			},
+      [Rsc_TEACHING_GUIDE	] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_BIBLIOGRAPHY		] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_FAQ			] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_LINKS		] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_ASSESSMENT		] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_TIMETABLE		] = {ActUnk		,ActUnk			},	// TODO: Actions!
+      [Rsc_ASSIGNMENT		] = {ActSeeOneAsg	,ActSeeAllAsg		},
+      [Rsc_PROJECT		] = {ActSeeOnePrj	,ActSeeAllPrj		},
+      [Rsc_CALL_FOR_EXAM	] = {ActSeeOneCfe	,ActSeeAllCfe		},
+      [Rsc_TEST			] = {ActReqTstOneTag	,ActReqTstAnyTag	},
+      [Rsc_EXAM			] = {ActSeeOneExa	,ActSeeAllExa		},
+      [Rsc_GAME			] = {ActSeeOneGam	,ActSeeAllGam		},
+      [Rsc_RUBRIC		] = {ActSeeOneRub	,ActSeeAllRub		},
+      [Rsc_DOCUMENT		] = {ActReqDatSeeDocCrs	,ActSeeAdmDocCrsGrp	},
+      [Rsc_MARKS		] = {ActReqDatSeeMrkCrs	,ActSeeAdmMrk		},
+      [Rsc_GROUPS		] = {ActReqSelOneGrpTyp	,ActReqSelAllGrp	},
+      [Rsc_ATTENDANCE_EVENT	] = {ActSeeOneAtt	,ActSeeAllAtt		},
+      [Rsc_FORUM_THREAD		] = {ActSeePstForCrsUsr	,ActSeeForCrsUsr	},
+      [Rsc_SURVEY		] = {ActSeeOneSvy	,ActSeeAllSvy		},
      };
    static ParCod_Param_t ParCod[Rsc_NUM_TYPES] =
      {
-      [Rsc_NONE            ] = ParCod_None,
-      [Rsc_ASSIGNMENT      ] = ParCod_Asg,
-      [Rsc_PROJECT         ] = ParCod_Prj,
-      [Rsc_CALL_FOR_EXAM   ] = ParCod_Exa,
-      [Rsc_TEST            ] = ParCod_Tag,
-      [Rsc_EXAM            ] = ParCod_Exa,
-      [Rsc_GAME            ] = ParCod_Gam,
-      [Rsc_RUBRIC          ] = ParCod_Rub,
-      [Rsc_DOCUMENT        ] = ParCod_Fil,
-      [Rsc_MARKS           ] = ParCod_Fil,
-      [Rsc_GROUPS          ] = ParCod_GrpTyp,
-      [Rsc_ATTENDANCE_EVENT] = ParCod_Att,
-      [Rsc_FORUM_THREAD    ] = ParCod_Thr,
-      [Rsc_SURVEY          ] = ParCod_Svy,
+      [Rsc_NONE			] = ParCod_None,
+      [Rsc_TEACHING_GUIDE	] = ParCod_None,
+      [Rsc_BIBLIOGRAPHY		] = ParCod_None,
+      [Rsc_FAQ			] = ParCod_None,
+      [Rsc_LINKS		] = ParCod_None,
+      [Rsc_ASSESSMENT		] = ParCod_None,
+      [Rsc_TIMETABLE		] = ParCod_None,
+      [Rsc_ASSIGNMENT		] = ParCod_Asg,
+      [Rsc_PROJECT		] = ParCod_Prj,
+      [Rsc_CALL_FOR_EXAM	] = ParCod_Exa,
+      [Rsc_TEST			] = ParCod_Tag,
+      [Rsc_EXAM			] = ParCod_Exa,
+      [Rsc_GAME			] = ParCod_Gam,
+      [Rsc_RUBRIC		] = ParCod_Rub,
+      [Rsc_DOCUMENT		] = ParCod_Fil,
+      [Rsc_MARKS		] = ParCod_Fil,
+      [Rsc_GROUPS		] = ParCod_GrpTyp,
+      [Rsc_ATTENDANCE_EVENT	] = ParCod_Att,
+      [Rsc_FORUM_THREAD		] = ParCod_Thr,
+      [Rsc_SURVEY		] = ParCod_Svy,
      };
    Act_Action_t NextAction;
    char Title[Cns_MAX_BYTES_SUBJECT + 1];
@@ -363,37 +383,49 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
    extern const char *Txt_Surveys;
    static void (*GetTitle[Rsc_NUM_TYPES]) (long Cod,char *Title,size_t TitleSize) =
      {
-      [Rsc_NONE            ] = NULL,
-      [Rsc_ASSIGNMENT      ] = Asg_DB_GetAssignmentTitle,
-      [Rsc_PROJECT         ] = Prj_DB_GetProjectTitle,
-      [Rsc_CALL_FOR_EXAM   ] = CfeRsc_GetCallForExamTitle,
-      [Rsc_TEST            ] = Tag_DB_GetTagTitle,
-      [Rsc_EXAM            ] = Exa_DB_GetExamTitle,
-      [Rsc_GAME            ] = Gam_DB_GetGameTitle,
-      [Rsc_RUBRIC          ] = Rub_DB_GetRubricTitle,
-      [Rsc_DOCUMENT        ] = BrwRsc_GetFileTitle,
-      [Rsc_MARKS           ] = BrwRsc_GetFileTitle,
-      [Rsc_GROUPS          ] = Grp_DB_GetGrpTypTitle,
-      [Rsc_ATTENDANCE_EVENT] = Att_DB_GetEventTitle,
-      [Rsc_FORUM_THREAD    ] = For_DB_GetThreadTitle,
-      [Rsc_SURVEY          ] = Svy_DB_GetSurveyTitle,
+      [Rsc_NONE			] = NULL,
+      [Rsc_TEACHING_GUIDE	] = NULL,	// TODO: Function!
+      [Rsc_BIBLIOGRAPHY		] = NULL,	// TODO: Function!
+      [Rsc_FAQ			] = NULL,	// TODO: Function!
+      [Rsc_LINKS		] = NULL,	// TODO: Function!
+      [Rsc_ASSESSMENT		] = NULL,	// TODO: Function!
+      [Rsc_TIMETABLE		] = NULL,	// TODO: Function!
+      [Rsc_ASSIGNMENT		] = Asg_DB_GetAssignmentTitle,
+      [Rsc_PROJECT		] = Prj_DB_GetProjectTitle,
+      [Rsc_CALL_FOR_EXAM	] = CfeRsc_GetCallForExamTitle,
+      [Rsc_TEST			] = Tag_DB_GetTagTitle,
+      [Rsc_EXAM			] = Exa_DB_GetExamTitle,
+      [Rsc_GAME			] = Gam_DB_GetGameTitle,
+      [Rsc_RUBRIC		] = Rub_DB_GetRubricTitle,
+      [Rsc_DOCUMENT		] = BrwRsc_GetFileTitle,
+      [Rsc_MARKS		] = BrwRsc_GetFileTitle,
+      [Rsc_GROUPS		] = Grp_DB_GetGrpTypTitle,
+      [Rsc_ATTENDANCE_EVENT	] = Att_DB_GetEventTitle,
+      [Rsc_FORUM_THREAD		] = For_DB_GetThreadTitle,
+      [Rsc_SURVEY		] = Svy_DB_GetSurveyTitle,
      };
    const char *GenericTitle[Rsc_NUM_TYPES] =
      {
-      [Rsc_NONE            ] = NULL,
-      [Rsc_ASSIGNMENT      ] = Txt_Assignments,
-      [Rsc_PROJECT         ] = Txt_Projects,
-      [Rsc_CALL_FOR_EXAM   ] = Txt_Calls_for_exams,
-      [Rsc_TEST            ] = Txt_Test,
-      [Rsc_EXAM            ] = Txt_Exams,
-      [Rsc_GAME            ] = Txt_Games,
-      [Rsc_RUBRIC          ] = Txt_Rubrics,
-      [Rsc_DOCUMENT        ] = Txt_Documents,
-      [Rsc_MARKS           ] = Txt_Marks_area,
-      [Rsc_GROUPS          ] = Txt_Groups,
-      [Rsc_ATTENDANCE_EVENT] = Txt_Control_of_class_attendance,
-      [Rsc_FORUM_THREAD    ] = Txt_Course_forum,
-      [Rsc_SURVEY          ] = Txt_Surveys,
+      [Rsc_NONE			] = NULL,
+      [Rsc_TEACHING_GUIDE	] = NULL,	// TODO: Text!
+      [Rsc_BIBLIOGRAPHY		] = NULL,	// TODO: Text!
+      [Rsc_FAQ			] = NULL,	// TODO: Text!
+      [Rsc_LINKS		] = NULL,	// TODO: Text!
+      [Rsc_ASSESSMENT		] = NULL,	// TODO: Text!
+      [Rsc_TIMETABLE		] = NULL,	// TODO: Text!
+      [Rsc_ASSIGNMENT		] = Txt_Assignments,
+      [Rsc_PROJECT		] = Txt_Projects,
+      [Rsc_CALL_FOR_EXAM	] = Txt_Calls_for_exams,
+      [Rsc_TEST			] = Txt_Test,
+      [Rsc_EXAM			] = Txt_Exams,
+      [Rsc_GAME			] = Txt_Games,
+      [Rsc_RUBRIC		] = Txt_Rubrics,
+      [Rsc_DOCUMENT		] = Txt_Documents,
+      [Rsc_MARKS		] = Txt_Marks_area,
+      [Rsc_GROUPS		] = Txt_Groups,
+      [Rsc_ATTENDANCE_EVENT	] = Txt_Control_of_class_attendance,
+      [Rsc_FORUM_THREAD		] = Txt_Course_forum,
+      [Rsc_SURVEY		] = Txt_Surveys,
      };
 
    /***** Reset title *****/

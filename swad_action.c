@@ -386,7 +386,7 @@ void Act_AdjustCurrentAction (void)
             if (JustAfterLogin)				// Only after login because the following query may be slow
 	       if (Grp_DB_CheckIfAvailableGrpTyp (-1L))	// This query may be slow
 		 {
-		  Gbl.Action.Act = ActReqSelGrp;
+		  Gbl.Action.Act = ActReqSelAllGrp;
 		  Tab_SetCurrentTab ();
 		  return;
 		 }

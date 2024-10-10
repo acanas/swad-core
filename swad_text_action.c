@@ -24329,27 +24329,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove old files in briefcase"			// Çeviri lazim!
 #endif
 	,
-	[ActReqSelGrp] =
+	[ActReqSelAllGrp] =
 #if   L==1	// ca
-	"Request selection of groups of students"		// Necessita traducció
+	"Request selection of groups"		// Necessita traducció
 #elif L==2	// de
-	"Request selection of groups of students"		// Need Übersetzung
+	"Request selection of groups"		// Need Übersetzung
 #elif L==3	// en
-	"Request selection of groups of students"
+	"Request selection of groups"
 #elif L==4	// es
-	"Solicitar selecci&oacute;n de grupos de estudiantes"
+	"Solicitar selecci&oacute;n de grupos"
 #elif L==5	// fr
-	"Request selection of groups of students"		// Besoin de traduction
+	"Request selection of groups"		// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar selecci&oacute;n de grupos de estudiantes"	// Okoteve traducción
+	"Solicitar selecci&oacute;n de grupos"	// Okoteve traducción
 #elif L==7	// it
-	"Request selection of groups of students"		// Bisogno di traduzione
+	"Request selection of groups"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Request selection of groups of students"		// Potrzebujesz tlumaczenie
+	"Request selection of groups"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request selection of groups of students"		// Precisa de tradução
+	"Request selection of groups"		// Precisa de tradução
 #elif L==10	// tr
-	"Request selection of groups of students"		// Çeviri lazim!
+	"Request selection of groups"		// Çeviri lazim!
+#endif
+	,
+	[ActReqSelOneGrpTyp] =
+#if   L==1	// ca
+	"Request selection of groups highlighting group type"		// Necessita traducció
+#elif L==2	// de
+	"Request selection of groups highlighting group type"		// Need Übersetzung
+#elif L==3	// en
+	"Request selection of groups highlighting group type"
+#elif L==4	// es
+	"Solicitar selecci&oacute;n de grupos destacando tipo de grupo"
+#elif L==5	// fr
+	"Request selection of groups highlighting group type"		// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar selecci&oacute;n de grupos destacando tipo de grupo"	// Okoteve traducción
+#elif L==7	// it
+	"Request selection of groups highlighting group type"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Request selection of groups highlighting group type"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request selection of groups highlighting group type"		// Precisa de tradução
+#elif L==10	// tr
+	"Request selection of groups highlighting group type"		// Çeviri lazim!
 #endif
 	,
 	[ActChgGrp] =
@@ -24812,7 +24835,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change maximum number of students in group"			// Çeviri lazim!
 #endif
 	,
-	[ActReqLnkGrp] =
+	[ActReqLnkAllGrp] =
 #if   L==1	// ca
 	"Copy link to groups"		// Necessita traducció
 #elif L==2	// de

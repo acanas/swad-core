@@ -28,9 +28,9 @@
 /** Uncomment one of the following installations of SWAD or create your own **/
 /*****************************************************************************/
 
-#define LOCALHOST_UBUNTU	// Comment this line if not applicable
+//#define LOCALHOST_UBUNTU	// Comment this line if not applicable
 //#define OPENSWAD_ORG		// Comment this line if not applicable
-//#define SWAD_UGR_ES		// Comment this line if not applicable
+#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define SWADBERRY_UGR_ES	// Comment this line if not applicable
 
 /*****************************************************************************/

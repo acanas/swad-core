@@ -121,6 +121,7 @@ static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
+						   long SelectedGrpTypCod,
                                                    unsigned *NumGrpsThisTypeIBelong);
 static void Grp_ListGrpsToAddOrRemUsrs (const struct GroupType *GrpTyp,long UsrCod);
 
@@ -1362,7 +1363,7 @@ static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args)
 
 static void Grp_PutIconToViewGroups (void)
   {
-   Ico_PutContextualIconToView (ActReqSelGrp,NULL,NULL,NULL);
+   Ico_PutContextualIconToView (ActReqSelAllGrp,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1757,6 +1758,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    Frm_PutForm_t PutFormToChangeGrps = Frm_CheckIfInside () ? Frm_DONT_PUT_FORM :	// Inside another form (record card)?
 							      Frm_PUT_FORM;
    Usr_Can_t ICanChangeMyGrps = Usr_CAN_NOT;
+   long SelectedGrpTypCod = ParCod_GetPar (ParCod_GrpTyp);
 
    if (Gbl.Crs.Grps.NumGrps) // This course has groups
      {
@@ -1789,7 +1791,8 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
 	    if (GrpTyp->NumGrps)	 // If there are groups of this type
 	      {
-	       if (Grp_ListGrpsForChangeMySelection (GrpTyp,&NumGrpsThisTypeIBelong) == Usr_CAN)
+	       if (Grp_ListGrpsForChangeMySelection (GrpTyp,SelectedGrpTypCod,
+						     &NumGrpsThisTypeIBelong) == Usr_CAN)
 		  ICanChangeMyGrps = Usr_CAN;
 	       NumGrpsIBelong += NumGrpsThisTypeIBelong;
 	      }
@@ -1832,11 +1835,12 @@ static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
       Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL,NULL);
 
    /***** Link to get resource link *****/
-   if ((Gbl.Action.Act == ActReqSelGrp ||
+   if ((Gbl.Action.Act == ActReqSelAllGrp ||
+	Gbl.Action.Act == ActReqSelOneGrpTyp ||
         Gbl.Action.Act == ActChgGrp ||
-        Gbl.Action.Act == ActReqLnkGrp) &&
+        Gbl.Action.Act == ActReqLnkAllGrp) &&
        Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkGrp,NULL,NULL,NULL);	// TODO: Parameters to select one group type
+      Ico_PutContextualIconToGetLink (ActReqLnkAllGrp,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1887,6 +1891,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 // Returns true if I can change my selection
 
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
+						   long SelectedGrpTypCod,
                                                    unsigned *NumGrpsThisTypeIBelong)
   {
    struct ListCodGrps LstGrpsIBelong;
@@ -1898,10 +1903,30 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
    Usr_Can_t ICanChangeMySelectionForThisGrp;
    HTM_Attributes_t Attributes;
    char StrGrpCod[32];
+   Lay_Highlight_t Highlight;
+   char *Anchor = NULL;
 
-   /***** Write heading *****/
-   HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (GrpTyp->GrpTypName);
+   if (SelectedGrpTypCod > 0)	// One group type will be highlighted
+     {
+      /***** Build anchor string *****/
+      Frm_SetAnchorStr (GrpTyp->GrpTypCod,&Anchor);
+
+      /***** Begin article *****/
+      HTM_ARTICLE_Begin (Anchor);
+
+      /***** Highlight this group type? *****/
+      Highlight = (GrpTyp->GrpTypCod == SelectedGrpTypCod) ? Lay_HIGHLIGHT :
+							     Lay_NO_HIGHLIGHT;
+     }
+   else
+      Highlight = Lay_NO_HIGHLIGHT;
+
+   /***** Begin fieldset *****/
+   if (Highlight == Lay_HIGHLIGHT)
+      HTM_FIELDSET_Begin ("class=\"HIGHLIGHT_%s\"",The_GetSuffix ());
+   else
+      HTM_FIELDSET_Begin (NULL);
+   HTM_LEGEND (GrpTyp->GrpTypName);
 
       /***** Alert with groups opening date *****/
       if (GrpTyp->MustBeOpened)
@@ -2100,9 +2125,20 @@ static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTy
 	 /***** Free memory with the list of groups a the that belongs the user *****/
 	 Grp_FreeListCodGrp (&LstGrpsIBelong);
 
+      /***** End table *****/
       HTM_TABLE_End ();
 
+   /***** End fieldset *****/
    HTM_FIELDSET_End ();
+
+   if (SelectedGrpTypCod > 0)	// One group type will be highlighted
+     {
+      /***** End article *****/
+      HTM_ARTICLE_End ();
+
+      /***** Free anchor string *****/
+      Frm_FreeAnchorStr (&Anchor);
+     }
 
    return ICanChangeMySelectionForThisGrpTyp;
   }

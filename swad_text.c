@@ -34301,6 +34301,144 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Ba&gbreve;lant&inodot; yok"
 #endif
 	,
+	[Rsc_TEACHING_GUIDE] =
+#if   L==1	// ca
+	"Guia"
+#elif L==2	// de
+	"Hinweise"
+#elif L==3	// en
+	"Guide"
+#elif L==4	// es
+	"Gu&iacute;a"
+#elif L==5	// fr
+	"Guide"
+#elif L==6	// gn
+	"Gu&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Guida"
+#elif L==8	// pl
+	"Podr&eogon;cznik"
+#elif L==9	// pt
+	"Guia"
+#elif L==10	// tr
+	"K&inodot;lavuz"
+#endif
+	,
+	[Rsc_BIBLIOGRAPHY] =
+#if   L==1	// ca
+	"Bibliografia"
+#elif L==2	// de
+	"Literatur"
+#elif L==3	// en
+	"Bibliography"
+#elif L==4	// es
+	"Bibliograf&iacute;a"
+#elif L==5	// fr
+	"Bibliographie"
+#elif L==6	// gn
+	"Arandukapurupyre"
+#elif L==7	// it
+	"Bibliografia"
+#elif L==8	// pl
+	"Bibliografia"
+#elif L==9	// pt
+	"Bibliografia"
+#elif L==10	// tr
+	"Bibliyografya"
+#endif
+	,
+	[Rsc_FAQ] =
+#if   L==1	// ca
+	"FAQ"
+#elif L==2	// de
+	"FAQ"
+#elif L==3	// en
+	"FAQ"
+#elif L==4	// es
+	"FAQ"
+#elif L==5	// fr
+	"FAQ"
+#elif L==6	// gn
+	"FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"FAQ"
+#elif L==8	// pl
+	"FAQ"
+#elif L==9	// pt
+	"FAQ"
+#elif L==10	// tr
+	"SSS"
+#endif
+	,
+	[Rsc_LINKS] =
+#if   L==1	// ca
+	"Enlla&ccedil;os"
+#elif L==2	// de
+	"Links"
+#elif L==3	// en
+	"Links"
+#elif L==4	// es
+	"Enlaces"
+#elif L==5	// fr
+	"Liens"
+#elif L==6	// gn
+	"Ambu&eacute;re joaju"
+#elif L==7	// it
+	"Link"
+#elif L==8	// pl
+	"Linki"
+#elif L==9	// pt
+	"Liga&ccedil;&otilde;es"
+#elif L==10	// tr
+	"Ba&gbreve;lant&inodot;lar"
+#endif
+	,
+	[Rsc_ASSESSMENT] =
+#if   L==1	// ca
+	"Avaluaci&oacute;"
+#elif L==2	// de
+	"Bewertung"
+#elif L==3	// en
+	"Assessment"
+#elif L==4	// es
+	"Evaluaci&oacute;n"
+#elif L==5	// fr
+	"&Eacute;valuation"
+#elif L==6	// gn
+	"Mbohepy"
+#elif L==7	// it
+	"Valutazione"
+#elif L==8	// pl
+	"Ocena"
+#elif L==9	// pt
+	"Avalia&ccedil;&atilde;o"
+#elif L==10	// tr
+	"De&gbreve; erlendirme"
+#endif
+	,
+	[Rsc_TIMETABLE] =
+#if   L==1	// ca
+	"Horari"
+#elif L==2	// de
+	"Stundenplan"
+#elif L==3	// en
+	"Timetable"
+#elif L==4	// es
+	"Horario"
+#elif L==5	// fr
+	"Horaire"
+#elif L==6	// gn
+	"Horario"	// Okoteve traducción
+#elif L==7	// it
+	"Orario"
+#elif L==8	// pl
+	"Plan"
+#elif L==9	// pt
+	"Hor&aacute;rio"
+#elif L==10	// tr
+	"Program&inodot;"
+#endif
+	,
 	[Rsc_ASSIGNMENT] =
 #if   L==1	// ca
 	"Activitat"
@@ -34313,7 +34451,7 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 #elif L==5	// fr
 	"Activit&eacute;"
 #elif L==6	// gn
-	"Actividad"	// Okoteve traducción
+	"Tar&eacute;a"
 #elif L==7	// it
 	"Attivit&agrave;"
 #elif L==8	// pl

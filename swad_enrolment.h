@@ -81,14 +81,14 @@ typedef enum
 
 void Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs (void);
 void Enr_PutButtonInlineToEnrolStds (long CrsCod,
-				        unsigned Level,const Lay_LastItem_t *IsLastItemInLevel,
-					Lay_Highlight_t Highlight);
+				     unsigned Level,const Lay_LastItem_t *IsLastItemInLevel,
+				     Lay_Highlight_t Highlight);
 
 void Enr_PutLinkToRequestSignUp (void);
 
 void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole);
 void Enr_EnrolUsrInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole,
-                                  Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
+                               Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (void));
 

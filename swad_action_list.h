@@ -1274,7 +1274,8 @@ typedef enum
 
    // Groups ------------------------------------------------------------------
 
-	ActReqSelGrp,
+	ActReqSelAllGrp,
+	ActReqSelOneGrpTyp,
 	ActChgGrp,
 	ActReqEdiGrp,
 	ActNewGrpTyp,
@@ -1295,7 +1296,7 @@ typedef enum
 	ActRenGrp,
 	ActChgGrpRoo,
 	ActChgMaxStdGrp,
-	ActReqLnkGrp,
+	ActReqLnkAllGrp,
 	ActReqLnkGrpTyp,
 
    // Students ----------------------------------------------------------------
@@ -1828,7 +1829,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		1994
+#define ActLst_MAX_ACTION_COD		1995
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

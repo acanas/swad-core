@@ -41,15 +41,16 @@
 #define Rsc_MAX_CHARS_RESOURCE_TITLE	(128 - 1)	// 127
 #define Rsc_MAX_BYTES_RESOURCE_TITLE	((Rsc_MAX_CHARS_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Rsc_NUM_TYPES 14
+#define Rsc_NUM_TYPES 20
 typedef enum
   {
   Rsc_NONE,
-  // gui TEACHING_GUIDE	// Link to teaching guide
-  // bib BIBLIOGRAPHY	// Link to bibliography
-  // faq FAQ		// Link to FAQ
-  // lnk LINKS		// Link to links
-  // tmt TIMETABLE	// Link to timetable
+  Rsc_TEACHING_GUIDE,	// Link to course teaching guide
+  Rsc_BIBLIOGRAPHY,	// Link to course bibliography
+  Rsc_FAQ,		// Link to course FAQ
+  Rsc_LINKS,		// Link to course links
+  Rsc_ASSESSMENT,	// Link to course assessment system
+  Rsc_TIMETABLE,	// Link to timetable
   Rsc_ASSIGNMENT,
   Rsc_PROJECT,
   Rsc_CALL_FOR_EXAM,

@@ -2186,15 +2186,6 @@ a:hover img.CENTER_PHOTO_SHOW
 	text-align: center;
 	overflow: hidden;
 	}
-.FRAME_SHADOW_WHITE,
-.FRAME_SHADOW_GREY,
-.FRAME_SHADOW_PURPLE,
-.FRAME_SHADOW_BLUE,
-.FRAME_SHADOW_YELLOW,
-.FRAME_SHADOW_PINK	{background-color: #ddecf1; animation: fadetowhite 2s linear forwards;}
-.FRAME_SHADOW_DARK	{background-color: #707070; animation: fadetodark 2s linear forwards;}
-@keyframes fadetowhite	{to {background-color: white;}}
-@keyframes fadetodark	{to {background-color: #383838;}}
 
 .FRAME_ICO
 	{
@@ -2515,6 +2506,16 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 	{
 	opacity: 1;
 	}
+
+.HIGHLIGHT_WHITE,
+.HIGHLIGHT_GREY,
+.HIGHLIGHT_PURPLE,
+.HIGHLIGHT_BLUE,
+.HIGHLIGHT_YELLOW,
+.HIGHLIGHT_PINK	{background-color: #ddecf1; animation: fadetowhite 2s linear forwards;}
+.HIGHLIGHT_DARK	{background-color: #707070; animation: fadetodark 2s linear forwards;}
+@keyframes fadetowhite	{to {background-color: white;}}
+@keyframes fadetodark	{to {background-color: #383838;}}
 
 /********************************* Form fonts ********************************/
 /* Inside white box */

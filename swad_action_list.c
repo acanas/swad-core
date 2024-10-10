@@ -1308,7 +1308,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // TabUsr ******************************************************************
    // Groups
-   [ActReqSelGrp	] = { 116, 0,TabUsr,NULL			,Grp_ShowLstGrpsToChgMyGrps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActReqSelAllGrp	] = { 116, 0,TabUsr,NULL			,Grp_ShowLstGrpsToChgMyGrps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActReqSelOneGrpTyp	] = {1995, 0,TabUsr,NULL			,Grp_ShowLstGrpsToChgMyGrps	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActChgGrp		] = { 118, 0,TabUsr,NULL			,Grp_ChangeMyGrpsAndShowChanges	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqEdiGrp	] = { 108, 0,TabUsr,NULL			,Grp_ReqEditGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewGrpTyp	] = { 174, 0,TabUsr,NULL			,Grp_ReceiveNewGrpTyp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1329,7 +1330,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRenGrp		] = { 121, 0,TabUsr,NULL			,Grp_RenameGroup		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgGrpRoo	] = {1752, 0,TabUsr,NULL			,Grp_ChangeGroupRoom		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgMaxStdGrp	] = { 106, 0,TabUsr,NULL			,Grp_ChangeMaxStdsGrp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActReqLnkGrp	] = {1993, 0,TabUsr,NULL			,GrpRsc_GetLinkToGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqLnkAllGrp	] = {1993, 0,TabUsr,NULL			,GrpRsc_GetLinkToGroups		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkGrpTyp	] = {1994, 0,TabUsr,NULL			,GrpRsc_GetLinkToGrpTyp		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Students
@@ -1945,7 +1946,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #113 (obsolete action)
 	ActUnk,			// #114 (obsolete action)
 	ActUnk,			// #115 (obsolete action)
-	ActReqSelGrp,		// #116
+	ActReqSelAllGrp,	// #116
 	ActUnk,			// #117 (obsolete action)
 	ActChgGrp,		// #118
 	ActSeeAccCrs,		// #119
@@ -3822,6 +3823,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkTst,		// #1990
 	ActReqTstOneTag,	// #1991
 	ActReqLnkTag,		// #1992
-	ActReqLnkGrp,		// #1993
+	ActReqLnkAllGrp,		// #1993
 	ActReqLnkGrpTyp,	// #1994
+	ActReqSelOneGrpTyp,	// #1995
   };
