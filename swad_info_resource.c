@@ -49,25 +49,25 @@ void InfRsc_GetLinkToInfo (void)
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    static Rsc_Type_t Types[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = Rsc_INFORMATION,
-      [Inf_TEACHING_GUIDE] = Rsc_TEACH_GUIDE,
-      [Inf_LECTURES      ] = Rsc_LECTURES,
-      [Inf_PRACTICALS    ] = Rsc_PRACTICALS,
-      [Inf_BIBLIOGRAPHY  ] = Rsc_BIBLIOGRAPHY,
-      [Inf_FAQ           ] = Rsc_FAQ,
-      [Inf_LINKS         ] = Rsc_LINKS,
-      [Inf_ASSESSMENT    ] = Rsc_ASSESSMENT,
+      [Inf_INFORMATION	] = Rsc_INFORMATION,
+      [Inf_TEACH_GUIDE	] = Rsc_TEACH_GUIDE,
+      [Inf_LECTURES	] = Rsc_LECTURES,
+      [Inf_PRACTICALS	] = Rsc_PRACTICALS,
+      [Inf_BIBLIOGRAPHY	] = Rsc_BIBLIOGRAPHY,
+      [Inf_FAQ		] = Rsc_FAQ,
+      [Inf_LINKS	] = Rsc_LINKS,
+      [Inf_ASSESSMENT	] = Rsc_ASSESSMENT,
      };
    static void (*FunctionToShowInfo[Inf_NUM_TYPES]) (void) =
      {
-      [Inf_INFORMATION   ] = Crs_ShowIntroduction,
-      [Inf_TEACHING_GUIDE] = Inf_ShowInfo,
-      [Inf_LECTURES      ] = Inf_ShowInfo,
-      [Inf_PRACTICALS    ] = Inf_ShowInfo,
-      [Inf_BIBLIOGRAPHY  ] = Inf_ShowInfo,
-      [Inf_FAQ           ] = Inf_ShowInfo,
-      [Inf_LINKS         ] = Inf_ShowInfo,
-      [Inf_ASSESSMENT    ] = Inf_ShowInfo,
+      [Inf_INFORMATION	] = Crs_ShowIntroduction,
+      [Inf_TEACH_GUIDE	] = Inf_ShowInfo,
+      [Inf_LECTURES	] = Inf_ShowInfo,
+      [Inf_PRACTICALS	] = Inf_ShowInfo,
+      [Inf_BIBLIOGRAPHY	] = Inf_ShowInfo,
+      [Inf_FAQ		] = Inf_ShowInfo,
+      [Inf_LINKS	] = Inf_ShowInfo,
+      [Inf_ASSESSMENT	] = Inf_ShowInfo,
      };
    struct Syl_Syllabus Syllabus;
 

@@ -1196,23 +1196,23 @@ int swad__getCourseInfo (struct soap *soap,
    int Result = SOAP_OK;
    const char *NamesInWSForInfoType[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = "introduction",
-      [Inf_TEACHING_GUIDE] = "guide",
-      [Inf_LECTURES      ] = "lectures",
-      [Inf_PRACTICALS    ] = "practicals",
-      [Inf_BIBLIOGRAPHY  ] = "bibliography",
-      [Inf_FAQ           ] = "FAQ",
-      [Inf_LINKS         ] = "links",
-      [Inf_ASSESSMENT    ] = "assessment",
+      [Inf_INFORMATION	] = "introduction",
+      [Inf_TEACH_GUIDE	] = "guide",
+      [Inf_LECTURES	] = "lectures",
+      [Inf_PRACTICALS	] = "practicals",
+      [Inf_BIBLIOGRAPHY	] = "bibliography",
+      [Inf_FAQ		] = "FAQ",
+      [Inf_LINKS	] = "links",
+      [Inf_ASSESSMENT	] = "assessment",
      };
    const char *NamesInWSForInfoSrc[Inf_NUM_SOURCES] =
      {
-      [Inf_NONE      ] = "none",
-      [Inf_EDITOR    ] = "editor",
-      [Inf_PLAIN_TEXT] = "plainText",
-      [Inf_RICH_TEXT ] = "richText",
-      [Inf_PAGE      ] = "page",
-      [Inf_URL       ] = "URL",
+      [Inf_NONE		] = "none",
+      [Inf_EDITOR	] = "editor",
+      [Inf_PLAIN_TEXT	] = "plainText",
+      [Inf_RICH_TEXT	] = "richText",
+      [Inf_PAGE		] = "page",
+      [Inf_URL		] = "URL",
      };
 
    /***** Initializations *****/

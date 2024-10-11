@@ -39,25 +39,25 @@
 #define Inf_NUM_TYPES 8
 typedef enum
   {
-   Inf_INFORMATION    = 0,
-   Inf_TEACHING_GUIDE = 1,
-   Inf_LECTURES       = 2,
-   Inf_PRACTICALS     = 3,
-   Inf_BIBLIOGRAPHY   = 4,
-   Inf_FAQ            = 5,
-   Inf_LINKS          = 6,
-   Inf_ASSESSMENT     = 7,
+   Inf_INFORMATION	= 0,
+   Inf_TEACH_GUIDE	= 1,
+   Inf_LECTURES		= 2,
+   Inf_PRACTICALS	= 3,
+   Inf_BIBLIOGRAPHY	= 4,
+   Inf_FAQ		= 5,
+   Inf_LINKS		= 6,
+   Inf_ASSESSMENT	= 7,
   } Inf_Type_t;
 
 #define Inf_NUM_SOURCES 6
 typedef enum
   {
-   Inf_NONE       = 0,
-   Inf_EDITOR     = 1,
-   Inf_PLAIN_TEXT = 2,
-   Inf_RICH_TEXT  = 3,
-   Inf_PAGE       = 4,
-   Inf_URL        = 5,
+   Inf_NONE		= 0,
+   Inf_EDITOR		= 1,
+   Inf_PLAIN_TEXT	= 2,
+   Inf_RICH_TEXT	= 3,
+   Inf_PAGE		= 4,
+   Inf_URL		= 5,
   } Inf_Src_t;
 
 struct Inf_Info

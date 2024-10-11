@@ -8735,6 +8735,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change first day of week of course timetable"				// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkCrsTT] =
+#if   L==1	// ca
+	"Copy link to the course timetable"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to the course timetable"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to the course timetable"
+#elif L==4	// es
+	"Copiar enlace al horario de la asignatura"
+#elif L==5	// fr
+	"Copy link to the course timetable"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace al horario de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to the course timetable"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to the course timetable"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to the course timetable"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to the course timetable"		// Çeviri lazim!
+#endif
+	,
 	[ActSeeAllAsg] =
 #if   L==1	// ca
 	"See assignments"	// Necessita traducció

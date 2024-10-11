@@ -42,24 +42,24 @@ extern struct Globals Gbl;
 
 static const char *Inf_DB_NamesForInfoType[Inf_NUM_TYPES] =
   {
-   [Inf_INFORMATION   ] = "intro",		// TODO: Change this to "inf"
-   [Inf_TEACHING_GUIDE] = "description",	// TODO: Change this to "gui"
-   [Inf_LECTURES      ] = "theory",		// TODO: Change this to "lec"
-   [Inf_PRACTICALS    ] = "practices",		// TODO: Change this to "pra"
-   [Inf_BIBLIOGRAPHY  ] = "bibliography",	// TODO: Change this to "bib"
-   [Inf_FAQ           ] = "FAQ",		// TODO: Change this to "faq"
-   [Inf_LINKS         ] = "links",		// TODO: Change this to "lnk"
-   [Inf_ASSESSMENT    ] = "assessment",		// TODO: Change this to "ass"
+   [Inf_INFORMATION	] = "intro",		// TODO: Change this to "inf"
+   [Inf_TEACH_GUIDE	] = "description",	// TODO: Change this to "gui"
+   [Inf_LECTURES	] = "theory",		// TODO: Change this to "lec"
+   [Inf_PRACTICALS	] = "practices",	// TODO: Change this to "pra"
+   [Inf_BIBLIOGRAPHY	] = "bibliography",	// TODO: Change this to "bib"
+   [Inf_FAQ		] = "FAQ",		// TODO: Change this to "faq"
+   [Inf_LINKS		] = "links",		// TODO: Change this to "lnk"
+   [Inf_ASSESSMENT	] = "assessment",	// TODO: Change this to "ass"
   };
 
 static const char *Inf_DB_NamesForInfoSrc[Inf_NUM_SOURCES] =
   {
-   [Inf_NONE      ] = "none",
-   [Inf_EDITOR    ] = "editor",
-   [Inf_PLAIN_TEXT] = "plain_text",
-   [Inf_RICH_TEXT ] = "rich_text",
-   [Inf_PAGE      ] = "page",
-   [Inf_URL       ] = "URL",
+   [Inf_NONE		] = "none",
+   [Inf_EDITOR		] = "editor",
+   [Inf_PLAIN_TEXT	] = "plain_text",
+   [Inf_RICH_TEXT	] = "rich_text",
+   [Inf_PAGE		] = "page",
+   [Inf_URL		] = "URL",
   };
 
 /*****************************************************************************/

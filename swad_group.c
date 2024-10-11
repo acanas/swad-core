@@ -4510,6 +4510,7 @@ Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
 	 case ActSeeCrsTT:	// Show course timetable
 	 case ActPrnCrsTT:	// Print course timetable
 	 case ActChgCrsTT1stDay:// Change first day of week in course timetable
+	 case ActReqLnkCrsTT:	// Get link to resource course timetable
 	 case ActSeeAllAsg:	// List assignments
 	 case ActSeeAllExa:	// List exams
 	 case ActSeeAllGam:	// List games
@@ -4520,7 +4521,7 @@ Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
 	    If I don't belong to this course ==> see all groups
 	    */
 	    MyAllGrpsDefault = (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG) ? Grp_MY_GROUPS :
-											   Grp_ALL_GROUPS;
+										       Grp_ALL_GROUPS;
 	    break;
 	 case ActSeeMyTT:	// Show my timetable
 	 case ActPrnMyTT:	// Print my timetable

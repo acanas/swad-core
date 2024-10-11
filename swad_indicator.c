@@ -648,29 +648,29 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_INFO_TITLE[Inf_LECTURES]       ,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_INFO_TITLE[Inf_PRACTICALS]     ,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACHING_GUIDE] ,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_Assignments                    ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Files_assignments              ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Files_works                    ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_Forum_threads                  ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Forum_posts                    ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Messages_sent_by_teachers      ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_Number_of_files_in_DOCUM_zones ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_Number_of_files_in_SHARE_zones ,HTM_HEAD_RIGHT );
-	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
-	       HTM_TH      (Txt_INFO_TITLE[Inf_ASSESSMENT]     ,HTM_HEAD_LEFT  );
-	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACHING_GUIDE] ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_INFO_TITLE[Inf_LECTURES]	,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_INFO_TITLE[Inf_PRACTICALS]	,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACH_GUIDE]	,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Assignments			,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Files_assignments		,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Files_works			,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Forum_threads			,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Forum_posts			,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Messages_sent_by_teachers	,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Number_of_files_in_DOCUM_zones	,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Number_of_files_in_SHARE_zones	,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_YES				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO				,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_INFO_TITLE[Inf_ASSESSMENT]	,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACH_GUIDE]	,HTM_HEAD_LEFT  );
 	    HTM_TR_End ();
 	 break;
 	}
@@ -1119,7 +1119,7 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    /***** Indicator #1: information about syllabus *****/
    IndicatorsCrs->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES);
    IndicatorsCrs->SyllabusPraSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_PRACTICALS);
-   IndicatorsCrs->TeachingGuideSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_TEACHING_GUIDE);
+   IndicatorsCrs->TeachingGuideSrc = Inf_GetInfoSrcFromDB (CrsCod,Inf_TEACH_GUIDE);
    IndicatorsCrs->ThereIsSyllabus = (IndicatorsCrs->SyllabusLecSrc   != Inf_NONE) ||
                                     (IndicatorsCrs->SyllabusPraSrc   != Inf_NONE) ||
                                     (IndicatorsCrs->TeachingGuideSrc != Inf_NONE);

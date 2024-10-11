@@ -99,6 +99,7 @@ struct Tmt_Timetable
      {
       bool PutIconEditCrsTT;
       bool PutIconEditOfficeHours;
+      bool PutIconGetLink;
       bool PutIconPrint;
      } ContextualIcons;
   };
@@ -117,7 +118,7 @@ struct Tmt_Column
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tmt_ShowClassTimeTable (void);
+void Tmt_ShowCrsTimeTable (void);
 void Tmt_EditCrsTimeTable (void);
 void Tmt_EditMyTutTimeTable (void);
 void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod);

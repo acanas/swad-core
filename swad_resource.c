@@ -466,7 +466,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
      {
       [Rsc_NONE		] = NULL,
       [Rsc_INFORMATION	] = &Txt_INFO_TITLE[Inf_INFORMATION	],
-      [Rsc_TEACH_GUIDE	] = &Txt_INFO_TITLE[Inf_TEACHING_GUIDE	],
+      [Rsc_TEACH_GUIDE	] = &Txt_INFO_TITLE[Inf_TEACH_GUIDE	],
       [Rsc_LECTURES	] = &Txt_INFO_TITLE[Inf_LECTURES	],
       [Rsc_PRACTICALS	] = &Txt_INFO_TITLE[Inf_PRACTICALS	],
       [Rsc_BIBLIOGRAPHY	] = &Txt_INFO_TITLE[Inf_BIBLIOGRAPHY	],

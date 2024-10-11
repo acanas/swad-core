@@ -43,6 +43,7 @@
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
+#include "swad_resource.h"
 #include "swad_setting.h"
 #include "swad_timetable.h"
 #include "swad_timetable_database.h"
@@ -305,7 +306,7 @@ static void Tmt_GetParsTimeTable (struct Tmt_Timetable *Timetable)
 /**************************** Show class timetable ***************************/
 /*****************************************************************************/
 
-void Tmt_ShowClassTimeTable (void)
+void Tmt_ShowCrsTimeTable (void)
   {
    extern const char *Hlp_COURSE_Timetable;
    extern const char *Hlp_PROFILE_Timetable;
@@ -335,6 +336,7 @@ void Tmt_ShowClassTimeTable (void)
       case ActSeeCrsTT:
       case ActPrnCrsTT:
       case ActChgCrsTT1stDay:
+      case ActReqLnkCrsTT:
          Timetable.Type = Tmt_COURSE_TIMETABLE;
 	 break;
       case ActSeeMyTT:
@@ -353,6 +355,7 @@ void Tmt_ShowClassTimeTable (void)
 	                                               ViewType == Vie_VIEW &&
                                                        (Gbl.Usrs.Me.Role.Available & (1 << Rol_TCH |
                                                 		                      1 << Rol_NET)));
+   Timetable.ContextualIcons.PutIconGetLink = (Rsc_CheckIfICanGetLink () == Usr_CAN);
    Timetable.ContextualIcons.PutIconPrint = (ViewType == Vie_VIEW);
 
    /***** Get whether to show only my groups or all groups *****/
@@ -361,6 +364,7 @@ void Tmt_ShowClassTimeTable (void)
    /***** Begin box *****/
    PutContextualIcons = Timetable.ContextualIcons.PutIconEditCrsTT ||
 			Timetable.ContextualIcons.PutIconEditOfficeHours ||
+			Timetable.ContextualIcons.PutIconGetLink ||
 			Timetable.ContextualIcons.PutIconPrint;
    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
 		 PutContextualIcons ? Tmt_PutContextualIcons :
@@ -427,6 +431,9 @@ static void Tmt_PutContextualIcons (void *Timetable)
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconEditOfficeHours)
 	 Ico_PutContextualIconToEdit (ActEdiTut,NULL,NULL,NULL);
+
+      if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconGetLink)
+	 Ico_PutContextualIconToGetLink (ActReqLnkCrsTT,NULL,NULL,NULL);
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconPrint)
 	 Ico_PutContextualIconToPrint (((struct Tmt_Timetable *) Timetable)->Type == Tmt_COURSE_TIMETABLE ? ActPrnCrsTT :
@@ -522,6 +529,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
      {
       case ActSeeCrsTT:		case ActChgCrsTT1stDay:
       case ActSeeMyTT:		case ActChgMyTT1stDay:
+      case ActReqLnkCrsTT:
       case ActSeeRecOneTch:
       case ActSeeRecSevTch:
 	 Timetable->View = Vie_VIEW;

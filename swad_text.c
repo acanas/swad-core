@@ -17789,7 +17789,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	"Bilgi"
 #endif
 	,
-	[Inf_TEACHING_GUIDE] =
+	[Inf_TEACH_GUIDE] =
 #if   L==1	// ca
 	"Guia docent"
 #elif L==2	// de
@@ -17814,48 +17814,48 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	,
 	[Inf_LECTURES] =
 #if   L==1	// ca
-	"Temari"
+	"Temari de teoria"
 #elif L==2	// de
-	"Studienplan"
+	"Theorie-Lehrplan"
 #elif L==3	// en
-	"Topics"
+	"Theory syllabus"
 #elif L==4	// es
-	"Temario"
+	"Temario de teor&iacute;a"
 #elif L==5	// fr
-	"Plan"
+	"Contenu th&eacute;orique"
 #elif L==6	// gn
-	"Temario"	// Okoteve traducción
+	"Temario de teor&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	"Temi"
+	"Contenuto teorico"
 #elif L==8	// pl
-	"Sylabus"
+	"Tre&sacute;&cacute; teoretyczna"
 #elif L==9	// pt
-	"Conte&uacute;do"
+	"Conte&uacute;do te&oacute;rico"
 #elif L==10	// tr
-	"Konular"
+	"Teorik i&ccedil;erik"
 #endif
 	,
 	[Inf_PRACTICALS] =
 #if   L==1	// ca
-	"Temari"
+	"Temari de pr&agrave;ctiques"
 #elif L==2	// de
-	"Studienplan"
+	"Praktischer Lehrplan"
 #elif L==3	// en
-	"Topics"
+	"Practical syllabus"
 #elif L==4	// es
-	"Temario"
+	"Temario de pr&aacute;cticas"
 #elif L==5	// fr
-	"Plan"
+	"Contenu pratique"
 #elif L==6	// gn
-	"Temario"	// Okoteve traducción
+	"Temario de pr&aacute;cticas"	// Okoteve traducción
 #elif L==7	// it
-	"Temi"
+	"Contenuti pratici"
 #elif L==8	// pl
-	"Sylabus"
+	"Praktyczna tre&sacute;&cacute;"
 #elif L==9	// pt
-	"Conte&uacute;do"
+	"Conte&uacute;do pr&aacute;tico"
 #elif L==10	// tr
-	"Konular"
+	"Pratik i&ccedil;erik"
 #endif
 	,
 	[Inf_BIBLIOGRAPHY] =

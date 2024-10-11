@@ -121,6 +121,7 @@
 #include "swad_timeline_share.h"
 #include "swad_timeline_who.h"
 #include "swad_timetable.h"
+#include "swad_timetable_resource.h"
 #include "swad_user_clipboard.h"
 #include "swad_zip.h"
 
@@ -579,11 +580,12 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqLnkAss	] = {2002, 7,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Timetable
-   [ActSeeCrsTT		] = {  25, 8,TabCrs,NULL			,Tmt_ShowClassTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActPrnCrsTT		] = { 152, 8,TabCrs,NULL			,Tmt_ShowClassTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_NEW},
+   [ActSeeCrsTT		] = {  25, 8,TabCrs,NULL			,Tmt_ShowCrsTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
+   [ActPrnCrsTT		] = { 152, 8,TabCrs,NULL			,Tmt_ShowCrsTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_NEW},
    [ActEdiCrsTT		] = {  45, 8,TabCrs,NULL			,Tmt_EditCrsTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgCrsTT		] = {  53, 8,TabCrs,NULL			,Tmt_EditCrsTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgCrsTT1stDay	] = {1486, 8,TabCrs,Cal_Change1stDayOfWeek	,Tmt_ShowClassTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgCrsTT1stDay	] = {1486, 8,TabCrs,Cal_Change1stDayOfWeek	,Tmt_ShowCrsTimeTable		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
+   [ActReqLnkCrsTT	] = {2003, 8,TabCrs,NULL			,TmtRsc_GetLinkToCrsTimeTable	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // TabAss ******************************************************************
    // Assignments
@@ -1764,11 +1766,11 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActMyCrs		] = { 987, 1,TabPrf,NULL			,Hie_SelOneNodeFromMyHierarchy	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
 
    // Timetable
-   [ActSeeMyTT		] = { 408, 2,TabPrf,NULL			,Tmt_ShowClassTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActPrnMyTT		] = { 409, 2,TabPrf,NULL			,Tmt_ShowClassTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_NEW},
+   [ActSeeMyTT		] = { 408, 2,TabPrf,NULL			,Tmt_ShowCrsTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActPrnMyTT		] = { 409, 2,TabPrf,NULL			,Tmt_ShowCrsTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_NEW},
    [ActEdiTut		] = {  65, 2,TabPrf,NULL			,Tmt_EditMyTutTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActChgTut		] = {  48, 2,TabPrf,NULL			,Tmt_EditMyTutTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActChgMyTT1stDay	] = {1487, 2,TabPrf,Cal_Change1stDayOfWeek	,Tmt_ShowClassTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
+   [ActChgMyTT1stDay	] = {1487, 2,TabPrf,Cal_Change1stDayOfWeek	,Tmt_ShowCrsTimeTable		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
 
    // Agenda
    [ActSeeMyAgd		] = {1602, 3,TabPrf,NULL			,Agd_GetParsAndShowMyAgenda	,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
@@ -3841,4 +3843,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkFAQ,		// #2000
 	ActReqLnkCrsLnk,	// #2001
 	ActReqLnkAss,		// #2002
+	ActReqLnkCrsTT,		// #2003
   };

@@ -61,71 +61,71 @@ extern struct Globals Gbl;
 
 static const char *Inf_FileNamesForInfoType[Inf_NUM_TYPES] =
   {
-   [Inf_INFORMATION   ] = Cfg_CRS_INFO_INFORMATION,
-   [Inf_TEACHING_GUIDE] = Cfg_CRS_INFO_TEACHING_GUIDE,
-   [Inf_LECTURES      ] = Cfg_CRS_INFO_LECTURES,
-   [Inf_PRACTICALS    ] = Cfg_CRS_INFO_PRACTICALS,
-   [Inf_BIBLIOGRAPHY  ] = Cfg_CRS_INFO_BIBLIOGRAPHY,
-   [Inf_FAQ           ] = Cfg_CRS_INFO_FAQ,
-   [Inf_LINKS         ] = Cfg_CRS_INFO_LINKS,
-   [Inf_ASSESSMENT    ] = Cfg_CRS_INFO_ASSESSMENT,
+   [Inf_INFORMATION	] = Cfg_CRS_INFO_INFORMATION,
+   [Inf_TEACH_GUIDE	] = Cfg_CRS_INFO_TEACHING_GUIDE,
+   [Inf_LECTURES	] = Cfg_CRS_INFO_LECTURES,
+   [Inf_PRACTICALS	] = Cfg_CRS_INFO_PRACTICALS,
+   [Inf_BIBLIOGRAPHY	] = Cfg_CRS_INFO_BIBLIOGRAPHY,
+   [Inf_FAQ		] = Cfg_CRS_INFO_FAQ,
+   [Inf_LINKS		] = Cfg_CRS_INFO_LINKS,
+   [Inf_ASSESSMENT	] = Cfg_CRS_INFO_ASSESSMENT,
   };
 
 static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
   {
-   [Inf_NONE      ][Inf_INFORMATION   ] = ActUnk,
-   [Inf_NONE      ][Inf_TEACHING_GUIDE] = ActUnk,
-   [Inf_NONE      ][Inf_LECTURES      ] = ActUnk,
-   [Inf_NONE      ][Inf_PRACTICALS    ] = ActUnk,
-   [Inf_NONE      ][Inf_BIBLIOGRAPHY  ] = ActUnk,
-   [Inf_NONE      ][Inf_FAQ           ] = ActUnk,
-   [Inf_NONE      ][Inf_LINKS         ] = ActUnk,
-   [Inf_NONE      ][Inf_ASSESSMENT    ] = ActUnk,
+   [Inf_NONE		][Inf_INFORMATION	] = ActUnk,
+   [Inf_NONE		][Inf_TEACH_GUIDE	] = ActUnk,
+   [Inf_NONE		][Inf_LECTURES		] = ActUnk,
+   [Inf_NONE		][Inf_PRACTICALS	] = ActUnk,
+   [Inf_NONE		][Inf_BIBLIOGRAPHY	] = ActUnk,
+   [Inf_NONE		][Inf_FAQ		] = ActUnk,
+   [Inf_NONE		][Inf_LINKS		] = ActUnk,
+   [Inf_NONE		][Inf_ASSESSMENT	] = ActUnk,
 
-   [Inf_EDITOR    ][Inf_INFORMATION   ] = ActEditorCrsInf,
-   [Inf_EDITOR    ][Inf_TEACHING_GUIDE] = ActEditorTchGui,
-   [Inf_EDITOR    ][Inf_LECTURES      ] = ActEditorSyl,
-   [Inf_EDITOR    ][Inf_PRACTICALS    ] = ActEditorSyl,
-   [Inf_EDITOR    ][Inf_BIBLIOGRAPHY  ] = ActEditorBib,
-   [Inf_EDITOR    ][Inf_FAQ           ] = ActEditorFAQ,
-   [Inf_EDITOR    ][Inf_LINKS         ] = ActEditorCrsLnk,
-   [Inf_EDITOR    ][Inf_ASSESSMENT    ] = ActEditorAss,
+   [Inf_EDITOR		][Inf_INFORMATION	] = ActEditorCrsInf,
+   [Inf_EDITOR		][Inf_TEACH_GUIDE	] = ActEditorTchGui,
+   [Inf_EDITOR		][Inf_LECTURES		] = ActEditorSyl,
+   [Inf_EDITOR		][Inf_PRACTICALS	] = ActEditorSyl,
+   [Inf_EDITOR		][Inf_BIBLIOGRAPHY	] = ActEditorBib,
+   [Inf_EDITOR		][Inf_FAQ		] = ActEditorFAQ,
+   [Inf_EDITOR		][Inf_LINKS		] = ActEditorCrsLnk,
+   [Inf_EDITOR		][Inf_ASSESSMENT	] = ActEditorAss,
 
-   [Inf_PLAIN_TEXT][Inf_INFORMATION   ] = ActPlaTxtEdiCrsInf,
-   [Inf_PLAIN_TEXT][Inf_TEACHING_GUIDE] = ActPlaTxtEdiTchGui,
-   [Inf_PLAIN_TEXT][Inf_LECTURES      ] = ActPlaTxtEdiSyl,
-   [Inf_PLAIN_TEXT][Inf_PRACTICALS    ] = ActPlaTxtEdiSyl,
-   [Inf_PLAIN_TEXT][Inf_BIBLIOGRAPHY  ] = ActPlaTxtEdiBib,
-   [Inf_PLAIN_TEXT][Inf_FAQ           ] = ActPlaTxtEdiFAQ,
-   [Inf_PLAIN_TEXT][Inf_LINKS         ] = ActPlaTxtEdiCrsLnk,
-   [Inf_PLAIN_TEXT][Inf_ASSESSMENT    ] = ActPlaTxtEdiAss,
+   [Inf_PLAIN_TEXT	][Inf_INFORMATION	] = ActPlaTxtEdiCrsInf,
+   [Inf_PLAIN_TEXT	][Inf_TEACH_GUIDE	] = ActPlaTxtEdiTchGui,
+   [Inf_PLAIN_TEXT	][Inf_LECTURES		] = ActPlaTxtEdiSyl,
+   [Inf_PLAIN_TEXT	][Inf_PRACTICALS	] = ActPlaTxtEdiSyl,
+   [Inf_PLAIN_TEXT	][Inf_BIBLIOGRAPHY	] = ActPlaTxtEdiBib,
+   [Inf_PLAIN_TEXT	][Inf_FAQ		] = ActPlaTxtEdiFAQ,
+   [Inf_PLAIN_TEXT	][Inf_LINKS		] = ActPlaTxtEdiCrsLnk,
+   [Inf_PLAIN_TEXT	][Inf_ASSESSMENT	] = ActPlaTxtEdiAss,
 
-   [Inf_RICH_TEXT ][Inf_INFORMATION   ] = ActRchTxtEdiCrsInf,
-   [Inf_RICH_TEXT ][Inf_TEACHING_GUIDE] = ActRchTxtEdiTchGui,
-   [Inf_RICH_TEXT ][Inf_LECTURES      ] = ActRchTxtEdiSyl,
-   [Inf_RICH_TEXT ][Inf_PRACTICALS    ] = ActRchTxtEdiSyl,
-   [Inf_RICH_TEXT ][Inf_BIBLIOGRAPHY  ] = ActRchTxtEdiBib,
-   [Inf_RICH_TEXT ][Inf_FAQ           ] = ActRchTxtEdiFAQ,
-   [Inf_RICH_TEXT ][Inf_LINKS         ] = ActRchTxtEdiCrsLnk,
-   [Inf_RICH_TEXT ][Inf_ASSESSMENT    ] = ActRchTxtEdiAss,
+   [Inf_RICH_TEXT	][Inf_INFORMATION	] = ActRchTxtEdiCrsInf,
+   [Inf_RICH_TEXT	][Inf_TEACH_GUIDE	] = ActRchTxtEdiTchGui,
+   [Inf_RICH_TEXT	][Inf_LECTURES		] = ActRchTxtEdiSyl,
+   [Inf_RICH_TEXT	][Inf_PRACTICALS	] = ActRchTxtEdiSyl,
+   [Inf_RICH_TEXT	][Inf_BIBLIOGRAPHY	] = ActRchTxtEdiBib,
+   [Inf_RICH_TEXT	][Inf_FAQ		] = ActRchTxtEdiFAQ,
+   [Inf_RICH_TEXT	][Inf_LINKS		] = ActRchTxtEdiCrsLnk,
+   [Inf_RICH_TEXT	][Inf_ASSESSMENT	] = ActRchTxtEdiAss,
 
-   [Inf_PAGE      ][Inf_INFORMATION   ] = ActRcvPagCrsInf,
-   [Inf_PAGE      ][Inf_TEACHING_GUIDE] = ActRcvPagTchGui,
-   [Inf_PAGE      ][Inf_LECTURES      ] = ActRcvPagSyl,
-   [Inf_PAGE      ][Inf_PRACTICALS    ] = ActRcvPagSyl,
-   [Inf_PAGE      ][Inf_BIBLIOGRAPHY  ] = ActRcvPagBib,
-   [Inf_PAGE      ][Inf_FAQ           ] = ActRcvPagFAQ,
-   [Inf_PAGE      ][Inf_LINKS         ] = ActRcvPagCrsLnk,
-   [Inf_PAGE      ][Inf_ASSESSMENT    ] = ActRcvPagAss,
+   [Inf_PAGE		][Inf_INFORMATION	] = ActRcvPagCrsInf,
+   [Inf_PAGE		][Inf_TEACH_GUIDE	] = ActRcvPagTchGui,
+   [Inf_PAGE		][Inf_LECTURES		] = ActRcvPagSyl,
+   [Inf_PAGE		][Inf_PRACTICALS	] = ActRcvPagSyl,
+   [Inf_PAGE		][Inf_BIBLIOGRAPHY	] = ActRcvPagBib,
+   [Inf_PAGE		][Inf_FAQ		] = ActRcvPagFAQ,
+   [Inf_PAGE		][Inf_LINKS		] = ActRcvPagCrsLnk,
+   [Inf_PAGE		][Inf_ASSESSMENT	] = ActRcvPagAss,
 
-   [Inf_URL       ][Inf_INFORMATION   ] = ActRcvURLCrsInf,
-   [Inf_URL       ][Inf_TEACHING_GUIDE] = ActRcvURLTchGui,
-   [Inf_URL       ][Inf_LECTURES      ] = ActRcvURLSyl,
-   [Inf_URL       ][Inf_PRACTICALS    ] = ActRcvURLSyl,
-   [Inf_URL       ][Inf_BIBLIOGRAPHY  ] = ActRcvURLBib,
-   [Inf_URL       ][Inf_FAQ           ] = ActRcvURLFAQ,
-   [Inf_URL       ][Inf_LINKS         ] = ActRcvURLCrsLnk,
-   [Inf_URL       ][Inf_ASSESSMENT    ] = ActRcvURLAss,
+   [Inf_URL		][Inf_INFORMATION	] = ActRcvURLCrsInf,
+   [Inf_URL		][Inf_TEACH_GUIDE	] = ActRcvURLTchGui,
+   [Inf_URL		][Inf_LECTURES		] = ActRcvURLSyl,
+   [Inf_URL		][Inf_PRACTICALS	] = ActRcvURLSyl,
+   [Inf_URL		][Inf_BIBLIOGRAPHY	] = ActRcvURLBib,
+   [Inf_URL		][Inf_FAQ		] = ActRcvURLFAQ,
+   [Inf_URL		][Inf_LINKS		] = ActRcvURLCrsLnk,
+   [Inf_URL		][Inf_ASSESSMENT	] = ActRcvURLAss,
   };
 
 /*****************************************************************************/
@@ -191,14 +191,14 @@ void Inf_ShowInfo (void)
      };
    static const char **Help[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_textual_information,
-      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide,
-      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus,
-      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus,
-      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography,
-      [Inf_FAQ           ] = &Hlp_COURSE_FAQ,
-      [Inf_LINKS         ] = &Hlp_COURSE_Links,
-      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment,
+      [Inf_INFORMATION	] = &Hlp_COURSE_Information_textual_information,
+      [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide,
+      [Inf_LECTURES	] = &Hlp_COURSE_Syllabus,
+      [Inf_PRACTICALS	] = &Hlp_COURSE_Syllabus,
+      [Inf_BIBLIOGRAPHY	] = &Hlp_COURSE_Bibliography,
+      [Inf_FAQ		] = &Hlp_COURSE_FAQ,
+      [Inf_LINKS	] = &Hlp_COURSE_Links,
+      [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment,
      };
 
    /***** Reset syllabus context *****/
@@ -265,7 +265,7 @@ void Inf_ShowInfo (void)
 		  ShowWarningNoInfo = !Syl_CheckAndShowSyllabus (&Syllabus);
 		  break;
 	       case Inf_INFORMATION:
-	       case Inf_TEACHING_GUIDE:
+	       case Inf_TEACH_GUIDE:
 	       case Inf_BIBLIOGRAPHY:
 	       case Inf_FAQ:
 	       case Inf_LINKS:
@@ -306,14 +306,14 @@ static void Inf_PutIconToViewInfo (void *Type)
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActSeeCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActSeeTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActSeeBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActSeeFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActSeeCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActSeeAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActSeeCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActSeeTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActSeeBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActSeeFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActSeeCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActSeeAss   ,NULL,NULL},
      };
 
    if (Type)
@@ -327,30 +327,31 @@ void Inf_PutIconToEditInfo (void *Type)
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    static struct Act_ActionFunc Inf_ActionsEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActEdiCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActEdiTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActEdiBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActEdiFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActEdiCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActEdiAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActEdiCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActEdiTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActEdiBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActEdiFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActEdiCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActEdiAss   ,NULL,NULL},
      };
    static struct Act_ActionFunc Inf_ActionsReqLnk[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActReqLnkCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActReqLnkTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActReqLnkBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActReqLnkFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActReqLnkCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActReqLnkAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActReqLnkCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActReqLnkTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActReqLnkBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActReqLnkFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActReqLnkCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActReqLnkAss   ,NULL,NULL},
      };
    Usr_Can_t ICanEdit;
 
    if (Type)
      {
+      /***** Icon to edit *****/
       ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
                         				    Usr_CAN_NOT;
@@ -359,7 +360,7 @@ void Inf_PutIconToEditInfo (void *Type)
 				      Inf_ActionsEdit[*((Inf_Type_t *) Type)].FuncPars,
 				      Inf_ActionsEdit[*((Inf_Type_t *) Type)].Args);
 
-      /***** Link to get resource link *****/
+      /***** Icon to get resource link *****/
       if (Rsc_CheckIfICanGetLink () == Usr_CAN)
 	 Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].NextAction,NULL,
 				         Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].FuncPars,
@@ -378,14 +379,14 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
    extern const char *Txt_Force_students_to_read_this_information;
    static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActChgFrcReaCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActChgFrcReaTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActChgFrcReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActChgFrcReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActChgFrcReaBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActChgFrcReaFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActChgFrcReaCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActChgFrcReaAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActChgFrcReaCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActChgFrcReaTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActChgFrcReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActChgFrcReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActChgFrcReaBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActChgFrcReaFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActChgFrcReaCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActChgFrcReaAss   ,NULL,NULL},
      };
 
    Lay_PutContextualCheckbox (Inf_Actions[Gbl.Crs.Info.Type].NextAction,
@@ -410,14 +411,14 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
    extern const char *Txt_I_have_read_this_information;
    static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActChgHavReaCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActChgHavReaTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActChgHavReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActChgHavReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActChgHavReaBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActChgHavReaFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActChgHavReaCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActChgHavReaAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActChgHavReaCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActChgHavReaTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActChgHavReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActChgHavReaSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActChgHavReaBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActChgHavReaFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActChgHavReaCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActChgHavReaAss   ,NULL,NULL},
      };
    bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo ();
 
@@ -482,14 +483,14 @@ void Inf_WriteMsgYouMustReadInfo (void)
    extern const char *Txt_You_should_read_the_following_information;
    static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActSeeCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActSeeTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActSeeBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActSeeFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActSeeCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActSeeAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActSeeCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActSeeTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActSeeBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActSeeFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActSeeCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActSeeAss   ,NULL,NULL},
      };
    Inf_Type_t InfoType;
    const char *TitleAction;
@@ -852,35 +853,35 @@ void Inf_FormsToSelSendInfo (void)
    bool InfoAvailable[Inf_NUM_SOURCES];
    static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = ActSelInfSrcCrsInf,
-      [Inf_TEACHING_GUIDE] = ActSelInfSrcTchGui,
-      [Inf_LECTURES      ] = ActSelInfSrcSyl,
-      [Inf_PRACTICALS    ] = ActSelInfSrcSyl,
-      [Inf_BIBLIOGRAPHY  ] = ActSelInfSrcBib,
-      [Inf_FAQ           ] = ActSelInfSrcFAQ,
-      [Inf_LINKS         ] = ActSelInfSrcCrsLnk,
-      [Inf_ASSESSMENT    ] = ActSelInfSrcAss,
+      [Inf_INFORMATION	] = ActSelInfSrcCrsInf,
+      [Inf_TEACH_GUIDE	] = ActSelInfSrcTchGui,
+      [Inf_LECTURES	] = ActSelInfSrcSyl,
+      [Inf_PRACTICALS	] = ActSelInfSrcSyl,
+      [Inf_BIBLIOGRAPHY	] = ActSelInfSrcBib,
+      [Inf_FAQ		] = ActSelInfSrcFAQ,
+      [Inf_LINKS	] = ActSelInfSrcCrsLnk,
+      [Inf_ASSESSMENT	] = ActSelInfSrcAss,
      };
    /* Functions to write forms in course edition (FAQ, links, etc.) */
    static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc) =
      {
-      [Inf_NONE      ] = NULL,
-      [Inf_EDITOR    ] = Inf_FormToEnterIntegratedEditor,
-      [Inf_PLAIN_TEXT] = Inf_FormToEnterPlainTextEditor,
-      [Inf_RICH_TEXT ] = Inf_FormToEnterRichTextEditor,
-      [Inf_PAGE      ] = Inf_FormToSendPage,
-      [Inf_URL       ] = Inf_FormToSendURL,
+      [Inf_NONE		] = NULL,
+      [Inf_EDITOR	] = Inf_FormToEnterIntegratedEditor,
+      [Inf_PLAIN_TEXT	] = Inf_FormToEnterPlainTextEditor,
+      [Inf_RICH_TEXT	] = Inf_FormToEnterRichTextEditor,
+      [Inf_PAGE		] = Inf_FormToSendPage,
+      [Inf_URL		] = Inf_FormToSendURL,
      };
    static const char **HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_edit,
-      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide_edit,
-      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography_edit,
-      [Inf_FAQ           ] = &Hlp_COURSE_FAQ_edit,
-      [Inf_LINKS         ] = &Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment_edit,
+      [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
+      [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES	] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS	] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY	] = &Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ		] = &Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS	] = &Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
@@ -1141,7 +1142,7 @@ void Inf_AsignInfoType (struct Inf_Info *Info,
          Info->Type = Inf_INFORMATION;
          break;
       case ActSeeTchGui:
-         Info->Type = Inf_TEACHING_GUIDE;
+         Info->Type = Inf_TEACH_GUIDE;
          break;
       case ActSeeSyl:
 	 Syllabus->WhichSyllabus = Syl_GetParWhichSyllabus ();
@@ -1258,7 +1259,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
                   FromDB->Src = Inf_NONE;
                break;
             case Inf_INFORMATION:
-            case Inf_TEACHING_GUIDE:
+            case Inf_TEACH_GUIDE:
             case Inf_BIBLIOGRAPHY:
             case Inf_FAQ:
             case Inf_LINKS:
@@ -1361,7 +1362,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       switch (Gbl.Crs.Info.Type)
 	{
 	 case Inf_INFORMATION:
-	 case Inf_TEACHING_GUIDE:
+	 case Inf_TEACH_GUIDE:
 	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
 	    break;
 	 default:
@@ -1432,7 +1433,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       switch (Gbl.Crs.Info.Type)
 	{
 	 case Inf_INFORMATION:
-	 case Inf_TEACHING_GUIDE:
+	 case Inf_TEACH_GUIDE:
 	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
 	    break;
 	 default:
@@ -1538,25 +1539,25 @@ void Inf_EditPlainTxtInfo (void)
    extern const char *Txt_Save_changes;
    static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActRcvPlaTxtCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActRcvPlaTxtTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActRcvPlaTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActRcvPlaTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActRcvPlaTxtBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActRcvPlaTxtFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActRcvPlaTxtCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActRcvPlaTxtAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActRcvPlaTxtCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActRcvPlaTxtTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActRcvPlaTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActRcvPlaTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActRcvPlaTxtBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActRcvPlaTxtFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActRcvPlaTxtCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActRcvPlaTxtAss   ,NULL,NULL},
      };
    static const char **HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_edit,
-      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide_edit,
-      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography_edit,
-      [Inf_FAQ           ] = &Hlp_COURSE_FAQ_edit,
-      [Inf_LINKS         ] = &Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment_edit,
+      [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
+      [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES	] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS	] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY	] = &Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ		] = &Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS	] = &Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment_edit,
      };
    struct Syl_Syllabus Syllabus;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -1577,7 +1578,7 @@ void Inf_EditPlainTxtInfo (void)
 	 switch (Gbl.Crs.Info.Type)
 	   {
 	    case Inf_INFORMATION:
-	    case Inf_TEACHING_GUIDE:
+	    case Inf_TEACH_GUIDE:
 	       Lay_WriteHeaderClassPhoto (Vie_VIEW);
 	       break;
 	    default:
@@ -1623,25 +1624,25 @@ void Inf_EditRichTxtInfo (void)
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = {ActRcvRchTxtCrsInf,NULL,NULL},
-      [Inf_TEACHING_GUIDE] = {ActRcvRchTxtTchGui,NULL,NULL},
-      [Inf_LECTURES      ] = {ActRcvRchTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS    ] = {ActRcvRchTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY  ] = {ActRcvRchTxtBib   ,NULL,NULL},
-      [Inf_FAQ           ] = {ActRcvRchTxtFAQ   ,NULL,NULL},
-      [Inf_LINKS         ] = {ActRcvRchTxtCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT    ] = {ActRcvRchTxtAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = {ActRcvRchTxtCrsInf,NULL,NULL},
+      [Inf_TEACH_GUIDE	] = {ActRcvRchTxtTchGui,NULL,NULL},
+      [Inf_LECTURES	] = {ActRcvRchTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS	] = {ActRcvRchTxtSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY	] = {ActRcvRchTxtBib   ,NULL,NULL},
+      [Inf_FAQ		] = {ActRcvRchTxtFAQ   ,NULL,NULL},
+      [Inf_LINKS	] = {ActRcvRchTxtCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT	] = {ActRcvRchTxtAss   ,NULL,NULL},
      };
    static const char **HelpEdit[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = &Hlp_COURSE_Information_edit,
-      [Inf_TEACHING_GUIDE] = &Hlp_COURSE_Guide_edit,
-      [Inf_LECTURES      ] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_PRACTICALS    ] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_BIBLIOGRAPHY  ] = &Hlp_COURSE_Bibliography_edit,
-      [Inf_FAQ           ] = &Hlp_COURSE_FAQ_edit,
-      [Inf_LINKS         ] = &Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment_edit,
+      [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
+      [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
+      [Inf_LECTURES	] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_PRACTICALS	] = &Hlp_COURSE_Syllabus_edit,
+      [Inf_BIBLIOGRAPHY	] = &Hlp_COURSE_Bibliography_edit,
+      [Inf_FAQ		] = &Hlp_COURSE_FAQ_edit,
+      [Inf_LINKS	] = &Hlp_COURSE_Links_edit,
+      [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment_edit,
      };
 
    /***** Reset syllabus context *****/
@@ -1660,7 +1661,7 @@ void Inf_EditRichTxtInfo (void)
       switch (Gbl.Crs.Info.Type)
 	{
 	 case Inf_INFORMATION:
-	 case Inf_TEACHING_GUIDE:
+	 case Inf_TEACH_GUIDE:
 	    Lay_WriteHeaderClassPhoto (Vie_VIEW);
 	    break;
 	 default:

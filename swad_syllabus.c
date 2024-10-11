@@ -504,14 +504,14 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
      };
    static Act_Action_t Inf_Actions[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION   ] = ActSeeCrsInf,
-      [Inf_TEACHING_GUIDE] = ActSeeTchGui,
-      [Inf_LECTURES      ] = ActSeeSyl,
-      [Inf_PRACTICALS    ] = ActSeeSyl,
-      [Inf_BIBLIOGRAPHY  ] = ActSeeBib,
-      [Inf_FAQ           ] = ActSeeFAQ,
-      [Inf_LINKS         ] = ActSeeCrsLnk,
-      [Inf_ASSESSMENT    ] = ActSeeAss,
+      [Inf_INFORMATION	] = ActSeeCrsInf,
+      [Inf_TEACH_GUIDE	] = ActSeeTchGui,
+      [Inf_LECTURES	] = ActSeeSyl,
+      [Inf_PRACTICALS	] = ActSeeSyl,
+      [Inf_BIBLIOGRAPHY	] = ActSeeBib,
+      [Inf_FAQ		] = ActSeeFAQ,
+      [Inf_LINKS	] = ActSeeCrsLnk,
+      [Inf_ASSESSMENT	] = ActSeeAss,
      };
    bool ShowRowInsertNewItem = (Gbl.Action.Act == ActInsIteSyl ||
                                 Gbl.Action.Act == ActModIteSyl ||
