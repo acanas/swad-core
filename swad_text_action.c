@@ -6916,6 +6916,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the teaching guide"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkTchGui] =
+#if   L==1	// ca
+	"Copy link to the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to the teaching guide"
+#elif L==4	// es
+	"Copiar enlace a la gu&iacute;a docente"
+#elif L==5	// fr
+	"Copy link to the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to the teaching guide"		// Çeviri lazim!
+#endif
+	,
 /*
 	[ActSeeSyl] =
 #if   L==1	// ca
@@ -7378,6 +7401,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the syllabus"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkSyl] =
+#if   L==1	// ca
+	"Copy link to the syllabus"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to the syllabus"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to the syllabus"
+#elif L==4	// es
+	"Copiar enlace a la gu&iacute;a docente"
+#elif L==5	// fr
+	"Copy link to the syllabus"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to the syllabus"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to the syllabus"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to the syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to the syllabus"		// Çeviri lazim!
+#endif
+	,
 	[ActSeeBib] =
 #if   L==1	// ca
 	"See the bibliography"		// Necessita traducció
@@ -7652,6 +7698,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the bibliography"			// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActReqLnkBib] =
+#if   L==1	// ca
+	"Copy link to the bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Copy link to the bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Copy link to the bibliography"
+#elif L==4	// es
+	"Copiar enlace a la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Copy link to the bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to the bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to the bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to the bibliography"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeFAQ] =
@@ -7930,6 +7999,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the FAQ"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkFAQ] =
+#if   L==1	// ca
+	"Copy link to the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to the FAQ"
+#elif L==4	// es
+	"Copiar enlace a la FAQ"
+#elif L==5	// fr
+	"Copy link to the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to the FAQ"		// Çeviri lazim!
+#endif
+	,
 	[ActSeeCrsLnk] =
 #if   L==1	// ca
 	"See the links related to the course"			// Necessita traducció
@@ -8206,6 +8298,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of course links"				// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkCrsLnk] =
+#if   L==1	// ca
+	"Copy link to course links"			// Necessita traducció
+#elif L==2	// de
+	"Copy link to course links"			// Need Übersetzung
+#elif L==3	// en
+	"Copy link to course links"
+#elif L==4	// es
+	"Copiar enlace a los enlaces de la asignatura"
+#elif L==5	// fr
+	"Copy link to course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to course links"			// Çeviri lazim!
+#endif
+	,
 	[ActSeeAss] =
 #if   L==1	// ca
 	"See assessment system"			// Necessita traducció
@@ -8480,6 +8595,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the assessment system"			// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActReqLnkAss] =
+#if   L==1	// ca
+	"Copy link to the assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to the assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to the assessment system"
+#elif L==4	// es
+	"Copiar enlace al sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Copy link to the assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace al sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to the assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to the assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to the assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to the assessment system"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeCrsTT] =

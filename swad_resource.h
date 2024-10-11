@@ -46,7 +46,7 @@ typedef enum
   {
   Rsc_NONE,
   Rsc_INFORMATION,	// Link to course information
-  Rsc_TEACHING_GUIDE,	// Link to course teaching guide
+  Rsc_TEACH_GUIDE,	// Link to course teaching guide
   Rsc_LECTURES,		// Link to course topics (lectures)
   Rsc_PRACTICALS,	// Link to course topics (practicals)
   Rsc_BIBLIOGRAPHY,	// Link to course bibliography
@@ -64,7 +64,7 @@ typedef enum
   Rsc_DOCUMENT,
   Rsc_MARKS,
   Rsc_GROUPS,
-  Rsc_ATTENDANCE_EVENT,
+  Rsc_ATT_EVENT,
   Rsc_FORUM_THREAD,
   Rsc_SURVEY,
   } Rsc_Type_t;

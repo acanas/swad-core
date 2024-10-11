@@ -51,7 +51,7 @@ void AttRsc_GetLinkToEvent (void)
       Att_GetEventDataByCod (&Event);
 
    /***** Copy link to attendance event into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_ATTENDANCE_EVENT,Event.AttCod);
+   Rsc_DB_CopyToClipboard (Rsc_ATT_EVENT,Event.AttCod);
 
    /***** Write sucess message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,

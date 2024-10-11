@@ -46,6 +46,7 @@
 #include "swad_info.h"
 #include "swad_info_database.h"
 #include "swad_parameter.h"
+#include "swad_resource.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -324,7 +325,7 @@ static void Inf_PutIconToViewInfo (void *Type)
 void Inf_PutIconToEditInfo (void *Type)
   {
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
-   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
+   static struct Act_ActionFunc Inf_ActionsEdit[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION   ] = {ActEdiCrsInf,NULL,NULL},
       [Inf_TEACHING_GUIDE] = {ActEdiTchGui,NULL,NULL},
@@ -335,11 +336,35 @@ void Inf_PutIconToEditInfo (void *Type)
       [Inf_LINKS         ] = {ActEdiCrsLnk,NULL,NULL},
       [Inf_ASSESSMENT    ] = {ActEdiAss   ,NULL,NULL},
      };
+   static struct Act_ActionFunc Inf_ActionsReqLnk[Inf_NUM_TYPES] =
+     {
+      [Inf_INFORMATION   ] = {ActReqLnkCrsInf,NULL,NULL},
+      [Inf_TEACHING_GUIDE] = {ActReqLnkTchGui,NULL,NULL},
+      [Inf_LECTURES      ] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+      [Inf_PRACTICALS    ] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+      [Inf_BIBLIOGRAPHY  ] = {ActReqLnkBib   ,NULL,NULL},
+      [Inf_FAQ           ] = {ActReqLnkFAQ   ,NULL,NULL},
+      [Inf_LINKS         ] = {ActReqLnkCrsLnk,NULL,NULL},
+      [Inf_ASSESSMENT    ] = {ActReqLnkAss   ,NULL,NULL},
+     };
+   Usr_Can_t ICanEdit;
 
    if (Type)
-      Ico_PutContextualIconToEdit (Inf_Actions[*((Inf_Type_t *) Type)].NextAction,NULL,
-				   Inf_Actions[*((Inf_Type_t *) Type)].FuncPars,
-				   Inf_Actions[*((Inf_Type_t *) Type)].Args);
+     {
+      ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+                        				    Usr_CAN_NOT;
+      if (ICanEdit)
+	 Ico_PutContextualIconToEdit (Inf_ActionsEdit[*((Inf_Type_t *) Type)].NextAction,NULL,
+				      Inf_ActionsEdit[*((Inf_Type_t *) Type)].FuncPars,
+				      Inf_ActionsEdit[*((Inf_Type_t *) Type)].Args);
+
+      /***** Link to get resource link *****/
+      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
+	 Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].NextAction,NULL,
+				         Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].FuncPars,
+				         Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].Args);
+     }
   }
 
 /*****************************************************************************/

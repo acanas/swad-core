@@ -34324,7 +34324,7 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Bilgi"
 #endif
 	,
-	[Rsc_TEACHING_GUIDE] =
+	[Rsc_TEACH_GUIDE] =
 #if   L==1	// ca
 	"Guia"
 #elif L==2	// de
@@ -34738,7 +34738,7 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Gruplar"
 #endif
 	,
-	[Rsc_ATTENDANCE_EVENT] =
+	[Rsc_ATT_EVENT] =
 #if   L==1	// ca
 	"Assist&egrave;ncia"
 #elif L==2	// de

@@ -50,7 +50,7 @@ void InfRsc_GetLinkToInfo (void)
    static Rsc_Type_t Types[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION   ] = Rsc_INFORMATION,
-      [Inf_TEACHING_GUIDE] = Rsc_TEACHING_GUIDE,
+      [Inf_TEACHING_GUIDE] = Rsc_TEACH_GUIDE,
       [Inf_LECTURES      ] = Rsc_LECTURES,
       [Inf_PRACTICALS    ] = Rsc_PRACTICALS,
       [Inf_BIBLIOGRAPHY  ] = Rsc_BIBLIOGRAPHY,

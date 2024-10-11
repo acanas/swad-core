@@ -428,6 +428,7 @@ typedef enum
 	ActRchTxtEdiTchGui,
 	ActRcvPlaTxtTchGui,
 	ActRcvRchTxtTchGui,
+	ActReqLnkTchGui,
 
    // Syllabus ----------------------------------------------------------------
 
@@ -450,6 +451,7 @@ typedef enum
 	ActRchTxtEdiSyl,
 	ActRcvPlaTxtSyl,
 	ActRcvRchTxtSyl,
+	ActReqLnkSyl,
 
    // Bibliography ------------------------------------------------------------
 
@@ -465,6 +467,7 @@ typedef enum
 	ActRchTxtEdiBib,
 	ActRcvPlaTxtBib,
 	ActRcvRchTxtBib,
+	ActReqLnkBib,
 
    // FAQ ---------------------------------------------------------------------
 
@@ -480,6 +483,7 @@ typedef enum
 	ActRchTxtEdiFAQ,
 	ActRcvPlaTxtFAQ,
 	ActRcvRchTxtFAQ,
+	ActReqLnkFAQ,
 
    // Links -------------------------------------------------------------------
 
@@ -495,6 +499,7 @@ typedef enum
 	ActRchTxtEdiCrsLnk,
 	ActRcvPlaTxtCrsLnk,
 	ActRcvRchTxtCrsLnk,
+	ActReqLnkCrsLnk,
 
    // Assessment --------------------------------------------------------------
 
@@ -510,6 +515,7 @@ typedef enum
 	ActRchTxtEdiAss,
 	ActRcvPlaTxtAss,
 	ActRcvRchTxtAss,
+	ActReqLnkAss,
 
    // Timetable ---------------------------------------------------------------
 
@@ -1830,7 +1836,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		1996
+#define ActLst_MAX_ACTION_COD		2002
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 
