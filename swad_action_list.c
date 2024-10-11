@@ -70,6 +70,7 @@
 #include "swad_holiday.h"
 #include "swad_ID.h"
 #include "swad_indicator.h"
+#include "swad_info_resource.h"
 #include "swad_institution_config.h"
 #include "swad_language.h"
 #include "swad_link.h"
@@ -443,6 +444,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRchTxtEdiCrsInf	] = {1093, 0,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtCrsInf	] = { 851, 0,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvRchTxtCrsInf	] = {1101, 0,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqLnkCrsInf	] = {1996, 4,TabAss,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Program
    [ActSeePrg		] = {1821, 1,TabCrs,NULL			,Prg_ShowCourseProgram		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -3823,7 +3825,8 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkTst,		// #1990
 	ActReqTstOneTag,	// #1991
 	ActReqLnkTag,		// #1992
-	ActReqLnkAllGrp,		// #1993
+	ActReqLnkAllGrp,	// #1993
 	ActReqLnkGrpTyp,	// #1994
 	ActReqSelOneGrpTyp,	// #1995
+	ActReqLnkCrsInf,	// #1996
   };

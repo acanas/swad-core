@@ -5858,6 +5858,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of course information"				// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkCrsInf] =
+#if   L==1	// ca
+	"Copy link to course information"			// Necessita traducció
+#elif L==2	// de
+	"Copy link to course information"			// Need Übersetzung
+#elif L==3	// en
+	"Copy link to course information"
+#elif L==4	// es
+	"Copiar enlace a informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Copy link to course information"			// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to course information"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to course information"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to course information"			// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to course information"			// Çeviri lazim!
+#endif
+	,
 	[ActSeePrg] =
 #if   L==1	// ca
 	"Veure programaci&oacute; did&agrave;ctica de l'assignatura"

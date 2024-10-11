@@ -150,8 +150,6 @@ static void Inf_ShowPage (const char *URL);
 
 static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
                                       Inf_Src_t InfoSrc);
-static void Inf_AsignInfoType (struct Inf_Info *Info,
-                               struct Syl_Syllabus *Syllabus);
 
 static bool Inf_CheckPlainTxt (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowPlainTxt (void);
@@ -1108,8 +1106,8 @@ void Inf_FormToSendURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc)
 /******** Returns bibliography, assessment, etc. from Gbl.Action.Act *********/
 /*****************************************************************************/
 
-static void Inf_AsignInfoType (struct Inf_Info *Info,
-                               struct Syl_Syllabus *Syllabus)
+void Inf_AsignInfoType (struct Inf_Info *Info,
+                        struct Syl_Syllabus *Syllabus)
   {
    Syllabus->WhichSyllabus = Syl_NONE;
    switch (Act_GetSuperAction (Gbl.Action.Act))
@@ -1513,8 +1511,6 @@ void Inf_EditPlainTxtInfo (void)
    extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
-   struct Syl_Syllabus Syllabus;
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION   ] = {ActRcvPlaTxtCrsInf,NULL,NULL},
@@ -1537,6 +1533,8 @@ void Inf_EditPlainTxtInfo (void)
       [Inf_LINKS         ] = &Hlp_COURSE_Links_edit,
       [Inf_ASSESSMENT    ] = &Hlp_COURSE_Assessment_edit,
      };
+   struct Syl_Syllabus Syllabus;
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);

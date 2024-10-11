@@ -62,7 +62,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_holiday_database.o swad_HTML.o \
        swad_icon.o swad_ID.o swad_ID_database.o swad_indicator.o \
        swad_indicator_database.o swad_info.o swad_info_database.o \
-       swad_institution.o swad_institution_config.o \
+       swad_info_resource.o swad_institution.o swad_institution_config.o \
        swad_institution_database.o \
        swad_language.o swad_layout.o swad_link.o swad_link_database.o \
        swad_log.o swad_log_database.o swad_logo.o \

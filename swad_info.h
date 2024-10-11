@@ -93,6 +93,8 @@ void Inf_FormToEnterPlainTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t Inf
 void Inf_FormToEnterRichTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 void Inf_FormToSendPage (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 void Inf_FormToSendURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
+void Inf_AsignInfoType (struct Inf_Info *Info,
+                        struct Syl_Syllabus *Syllabus);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
 Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
