@@ -292,15 +292,11 @@ void TmlUsr_PutIconFavSha (TmlUsr_FavSha_t FavSha,
    HTM_DIV_Begin ("class=\"Tml_ICO\"");
 
       /* Icon to fav/unfav or share/unshare this note/comment */
-      switch (Usr_ItsMe (UsrCod))
-        {
-	 case Usr_ME:		// I am the author ==> I can not fav/unfav or share/unshare
-	    TmlUsr_PutDisabledIconFavSha (FavSha,NumUsrs);
-	    break;
-	 case Usr_OTHER:	// I am not the author
-	    TmlFrm_PutFormToFavUnfShaUns (FavSha,Cod);
-	    break;
-        }
+      if (Usr_ItsMe (UsrCod) == Usr_OTHER)	// I am not the author
+	 TmlFrm_PutFormToFavUnfShaUns (FavSha,Cod);
+      else
+         // I can not fav/unfav or share/unshare
+         TmlUsr_PutDisabledIconFavSha (FavSha,NumUsrs);
 
    /* End container */
    HTM_DIV_End ();

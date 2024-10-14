@@ -427,7 +427,8 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
 
       /***** Form to write a new post *****/
       if (GlobalTimeline || Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) == Usr_ME)
-	 TmlPst_PutPhotoAndFormToWriteNewPost (Timeline);
+	 if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I can post only if I am enroled in any course
+	    TmlPst_PutPhotoAndFormToWriteNewPost (Timeline);
 
       /***** New publications refreshed dynamically via AJAX *****/
       if (GlobalTimeline)

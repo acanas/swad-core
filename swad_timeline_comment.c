@@ -765,6 +765,13 @@ static long TmlCom_ReceiveComm (void)
    struct TmlNot_Note Not;
    struct TmlPub_Publication Pub;
 
+   /***** I can post only if I am enroled in any course *****/
+   if (!Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
+     {
+      Err_NoPermission ();
+      return -1L;
+     }
+
    /***** Get data of note *****/
    Not.NotCod = ParCod_GetAndCheckPar (ParCod_Not);
    TmlNot_GetNoteDataByCod (&Not);

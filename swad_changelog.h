@@ -635,11 +635,17 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.16.4 (2024-10-11)"
+#define Log_PLATFORM_VERSION	"SWAD 24.17 (2024-10-14)"
 #define CSS_FILE		"swad24.15.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.16.4:  Oct 11, 2024  Program resource for course timetable. (338007 lines)
+	Version 24.17:    Oct 14, 2024  Users not enroled in any course can not post or comment in timeline. (338024 lines)
+	Version 24.16.5:  Oct 12, 2024  Fix icons in program resources. (338011 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/book-open.svg /var/www/html/swad/icon/
+sudo cp icon/info.svg /var/www/html/swad/icon/
+
+	Version 24.16.4:  Oct 12, 2024  Program resource for course timetable. (338007 lines)
 	Version 24.16.3:  Oct 11, 2024  New program resources. Not finished. (337905 lines)
 	Version 24.16.2:  Oct 11, 2024  New program resources. Not finished. (337688 lines)
 	Version 24.16.1:  Oct 11, 2024  New program resources. Not finished. (337560 lines)

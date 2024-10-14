@@ -766,7 +766,8 @@ static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
    TmlNot_WriteFavShaRemAndComms (Timeline,Not,UsrDat);
 
    /***** Put hidden form to write a new comment *****/
-   TmlCom_PutPhotoAndFormToWriteNewComm (Timeline,Not->NotCod,IdNewComm);
+   if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I can post only if I am enroled in any course
+      TmlCom_PutPhotoAndFormToWriteNewComm (Timeline,Not->NotCod,IdNewComm);
   }
 
 /*****************************************************************************/
@@ -781,10 +782,12 @@ static void TmlNot_WriteButtonToAddAComm (const struct Tml_Timeline *Timeline,
    HTM_DIV_Begin ("class=\"Tml_BOTTOM_LEFT\"");
 
       /***** Button to add a comment *****/
-      if (Not->Unavailable)	// Unavailable notes can not be commented
-	 TmlCom_PutIconCommDisabled ();
-      else
+      if (!Not->Unavailable &&			// Only available notes can be commented
+	  Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I can post only if I am enroled in any course
 	 TmlCom_PutIconToToggleComm (Timeline,IdNewComm);
+      else
+         // I can not comment
+	 TmlCom_PutIconCommDisabled ();
 
    /***** End container *****/
    HTM_DIV_End ();

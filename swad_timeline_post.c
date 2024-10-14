@@ -308,9 +308,16 @@ static long TmlPst_ReceivePost (void)
    long PstCod;
    struct TmlPub_Publication Pub;
 
+   /***** I can post only if I am enroled in any course *****/
+   if (!Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)
+     {
+      Err_NoPermission ();
+      return -1L;
+     }
+
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
-                              Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
+			      Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Content.Media);
@@ -322,7 +329,7 @@ static long TmlPst_ReceivePost (void)
    Med_GetMediaFromForm (-1L,-1L,-1,&Content.Media,NULL,NULL);
    Ale_ShowAlerts (NULL);
 
-   if (Content.Txt[0] ||			// Text not empty
+   if (Content.Txt[0] ||				// Text not empty
        Content.Media.Status == Med_PROCESSED)	// A media is attached
      {
       /***** Store media in filesystem and database *****/
@@ -338,7 +345,7 @@ static long TmlPst_ReceivePost (void)
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
      }
-   else	// Text and image are empty
+   else
       Pub.NotCod = -1L;
 
    /***** Free image *****/

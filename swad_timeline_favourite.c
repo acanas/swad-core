@@ -140,7 +140,7 @@ static void TmlFav_FavNote (struct TmlNot_Note *Not)
 
    /***** Trivial check: Have I faved this note? *****/
    if (TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FAV_UNF_NOTE,Not->NotCod,
-                                        Gbl.Usrs.Me.UsrDat.UsrCod))
+                                       Gbl.Usrs.Me.UsrDat.UsrCod))
       return;
 
    /***** Mark note as favourite in database *****/
