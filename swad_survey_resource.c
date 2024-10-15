@@ -58,7 +58,7 @@ void SvyRsc_GetLinkToSurvey (void)
    /***** Copy link to survey into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_SURVEY,Surveys.Svy.SvyCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Surveys.Svy.SvyCod > 0 ? Surveys.Svy.Title :
    					   Txt_Surveys);

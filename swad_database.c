@@ -2522,17 +2522,17 @@ mysql> DESCRIBE prg_items;
    /***** Table prg_resources *****/
 /*
 mysql> DESCRIBE prg_resources;
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
-| Field  | Type                                                                                                                                            | Null | Key | Default | Extra          |
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
-| RscCod | int                                                                                                                                             | NO   | PRI | NULL    | auto_increment |
-| ItmCod | int                                                                                                                                             | NO   | MUL | -1      |                |
-| RscInd | int                                                                                                                                             | NO   |     | 0       |                |
-| Hidden | enum('N','Y')                                                                                                                                   | NO   |     | N       |                |
-| Type   | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') | NO   |     | non     |                |
-| Cod    | int                                                                                                                                             | NO   |     | -1      |                |
-| Title  | varchar(2047)                                                                                                                                   | NO   |     | NULL    |                |
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                                                                                                                  | Null | Key | Default | Extra          |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| RscCod | int                                                                                                                                                   | NO   | PRI | NULL    | auto_increment |
+| ItmCod | int                                                                                                                                                   | NO   | MUL | -1      |                |
+| RscInd | int                                                                                                                                                   | NO   |     | 0       |                |
+| Hidden | enum('N','Y')                                                                                                                                         | NO   |     | N       |                |
+| Type   | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') | NO   |     | non     |                |
+| Cod    | int                                                                                                                                                   | NO   |     | -1      |                |
+| Title  | varchar(2047)                                                                                                                                         | NO   |     | NULL    |                |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
 7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_resources ("
@@ -2542,8 +2542,8 @@ mysql> DESCRIBE prg_resources;
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Type ENUM('non','inf','gui','lec','pra','bib','faq',"
 				  "'lnk','ass','tmt','asg','prj','cfe','tst',"
-				  "'exa','gam','rub','doc','mrk','grp','att',"
-				  "'for','svy') NOT NULL DEFAULT 'non',"
+				  "'exa','gam','rub','doc','mrk','grp','tch',"
+				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Title VARCHAR(2047) NOT NULL,"		// Rsc_MAX_BYTES_RESOURCE_TITLE
 		   "UNIQUE INDEX(RscCod),"
 		   "UNIQUE INDEX(ItmCod,RscInd))");
@@ -2749,15 +2749,15 @@ mysql> DESCRIBE roo_check_in;
    /***** Table rsc_clipboards *****/
 /*
 mysql> DESCRIBE rsc_clipboards;
-+----------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field    | Type                                                                                                                                            | Null | Key | Default | Extra |
-+----------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod   | int                                                                                                                                             | NO   | PRI | NULL    |       |
-| CrsCod   | int                                                                                                                                             | NO   | PRI | NULL    |       |
-| Type     | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') | NO   | PRI | non     |       |
-| Cod      | int                                                                                                                                             | NO   | PRI | -1      |       |
-| CopyTime | timestamp                                                                                                                                       | YES  | MUL | NULL    |       |
-+----------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field    | Type                                                                                                                                                  | Null | Key | Default | Extra |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| UsrCod   | int                                                                                                                                                   | NO   | PRI | NULL    |       |
+| CrsCod   | int                                                                                                                                                   | NO   | PRI | NULL    |       |
+| Type     | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') | NO   | PRI | non     |       |
+| Cod      | int                                                                                                                                                   | NO   | PRI | -1      |       |
+| CopyTime | timestamp                                                                                                                                             | YES  | MUL | NULL    |       |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
 5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rsc_clipboards ("
@@ -2765,8 +2765,8 @@ mysql> DESCRIBE rsc_clipboards;
 			"CrsCod INT NOT NULL,"
 			"Type ENUM('non','inf','gui','lec','pra','bib','faq',"
 				  "'lnk','ass','tmt','asg','prj','cfe','tst',"
-				  "'exa','gam','rub','doc','mrk','grp','att',"
-				  "'for','svy') NOT NULL DEFAULT 'non',"
+				  "'exa','gam','rub','doc','mrk','grp','tch',"
+				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Cod INT NOT NULL DEFAULT -1,"
 			"CopyTime TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),"
@@ -2776,19 +2776,19 @@ mysql> DESCRIBE rsc_clipboards;
    /***** Table rub_criteria *****/
 /*
 mysql> DESCRIBE rub_criteria;
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
-| Field  | Type                                                                                                                                            | Null | Key | Default | Extra          |
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
-| CriCod | int                                                                                                                                             | NO   | PRI | NULL    | auto_increment |
-| RubCod | int                                                                                                                                             | NO   | MUL | NULL    |                |
-| CriInd | int                                                                                                                                             | NO   |     | NULL    |                |
-| Type   | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') | NO   |     | non     |                |
-| Cod    | int                                                                                                                                             | NO   |     | -1      |                |
-| MinVal | double                                                                                                                                          | NO   |     | 0       |                |
-| MaxVal | double                                                                                                                                          | NO   |     | 1       |                |
-| Weight | double                                                                                                                                          | NO   |     | 1       |                |
-| Title  | varchar(2047)                                                                                                                                   | NO   |     | NULL    |                |
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                                                                                                                  | Null | Key | Default | Extra          |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
+| CriCod | int                                                                                                                                                   | NO   | PRI | NULL    | auto_increment |
+| RubCod | int                                                                                                                                                   | NO   | MUL | NULL    |                |
+| CriInd | int                                                                                                                                                   | NO   |     | NULL    |                |
+| Type   | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') | NO   |     | non     |                |
+| Cod    | int                                                                                                                                                   | NO   |     | -1      |                |
+| MinVal | double                                                                                                                                                | NO   |     | 0       |                |
+| MaxVal | double                                                                                                                                                | NO   |     | 1       |                |
+| Weight | double                                                                                                                                                | NO   |     | 1       |                |
+| Title  | varchar(2047)                                                                                                                                         | NO   |     | NULL    |                |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
 9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rub_criteria ("
@@ -2797,8 +2797,8 @@ mysql> DESCRIBE rub_criteria;
 			"CriInd INT NOT NULL,"
 			"Type ENUM('non','inf','gui','lec','pra','bib','faq',"
 				  "'lnk','ass','tmt','asg','prj','cfe','tst',"
-				  "'exa','gam','rub','doc','mrk','grp','att',"
-				  "'for','svy') NOT NULL DEFAULT 'non',"
+				  "'exa','gam','rub','doc','mrk','grp','tch',"
+				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Cod INT NOT NULL DEFAULT -1,"
 			"MinVal DOUBLE PRECISION NOT NULL DEFAULT 0,"
 			"MaxVal DOUBLE PRECISION NOT NULL DEFAULT 1,"
@@ -2833,23 +2833,23 @@ mysql> DESCRIBE rub_rubrics;
    /***** Table rub_scores *****/
 /*
 mysql> DESCRIBE rub_scores;
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field  | Type                                                                                                                                            | Null | Key | Default | Extra |
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| Type   | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','att','for','svy') | NO   | PRI | non     |       |
-| Cod    | int                                                                                                                                             | NO   | PRI | NULL    |       |
-| UsrCod | int                                                                                                                                             | NO   | PRI | -1      |       |
-| CriCod | int                                                                                                                                             | NO   | PRI | NULL    |       |
-| EvlCod | int                                                                                                                                             | NO   |     | -1      |       |
-| Score  | double                                                                                                                                          | NO   |     | 0       |       |
-+--------+-------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field  | Type                                                                                                                                                  | Null | Key | Default | Extra |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
+| Type   | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') | NO   | PRI | non     |       |
+| Cod    | int                                                                                                                                                   | NO   | PRI | NULL    |       |
+| UsrCod | int                                                                                                                                                   | NO   | PRI | -1      |       |
+| CriCod | int                                                                                                                                                   | NO   | PRI | NULL    |       |
+| EvlCod | int                                                                                                                                                   | NO   |     | -1      |       |
+| Score  | double                                                                                                                                                | NO   |     | 0       |       |
++--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
 6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rub_scores ("
 			"Type ENUM('non','inf','gui','lec','pra','bib','faq',"
 				  "'lnk','ass','tmt','asg','prj','cfe','tst',"
-				  "'exa','gam','rub','doc','mrk','grp','att',"
-				  "'for','svy') NOT NULL DEFAULT 'non',"
+				  "'exa','gam','rub','doc','mrk','grp','tch',"
+				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Cod INT NOT NULL,"
 			"UsrCod INT NOT NULL DEFAULT -1,"
 			"CriCod INT NOT NULL,"

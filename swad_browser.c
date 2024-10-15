@@ -8203,7 +8203,7 @@ void Brw_ChgFileMetadata (void)
 	       break;
 	   }
 
-      /***** Write sucess message *****/
+      /***** Write success message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_properties_of_file_X_have_been_saved,
 		     FileMetadata.FilFolLnk.Name);
      }

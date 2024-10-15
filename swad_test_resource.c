@@ -51,7 +51,7 @@ void TstRsc_GetLinkToTest (void)
    /***** Copy link to exam into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_TEST,TagCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  TagCod > 0 ? TagTxt :
    			       Txt_Test);

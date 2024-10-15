@@ -64,7 +64,7 @@ void AsgRsc_GetLinkToAssignment (void)
    /***** Copy link to assignment into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_ASSIGNMENT,Assignments.Asg.AsgCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Assignments.Asg.AsgCod > 0 ? Assignments.Asg.Title :
    					       Txt_Assignments);

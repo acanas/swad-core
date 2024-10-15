@@ -67,7 +67,7 @@ void CfeRsc_GetLinkToCallForExam (void)
    /***** Copy link to call for exam into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_CALL_FOR_EXAM,CallsForExams->ExaCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
 		  CallsForExams->ExaCod > 0 ? SessionAndDate :
 					      Txt_Calls_for_exams);

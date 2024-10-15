@@ -67,7 +67,7 @@ void RubRsc_GetLinkToRubric (void)
    /***** Copy link to rubric into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_RUBRIC,Rubrics.Rubric.RubCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Rubrics.Rubric.RubCod > 0 ? Rubrics.Rubric.Title :
    					      Txt_Rubrics);

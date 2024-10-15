@@ -43,7 +43,7 @@ void GrpRsc_GetLinkToGroups (void)
    /***** Copy link to tag into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_GROUPS,-1L);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Txt_Groups);
 
@@ -67,7 +67,7 @@ void GrpRsc_GetLinkToGrpTyp (void)
    /***** Copy link to tag into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_GROUPS,GrpTypCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  GrpTypName);
 

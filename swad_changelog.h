@@ -635,10 +635,18 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.17 (2024-10-14)"
-#define CSS_FILE		"swad24.15.css"
+#define Log_PLATFORM_VERSION	"SWAD 24.18 (2024-10-15)"
+#define CSS_FILE		"swad24.17.1.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.18:    Oct 15, 2024  New program resource teacher. Not finished. (338232 lines)
+					4 changes necessary in database:
+ALTER TABLE prg_resources CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rsc_clipboards CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_criteria CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non';
+ALTER TABLE rub_scores CHANGE COLUMN Type Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non';
+
+	Version 24.17.1:  Oct 14, 2024  Fixed issues in timeline. (338027 lines)
 	Version 24.17:    Oct 14, 2024  Users not enroled in any course can not post or comment in timeline. (338024 lines)
 	Version 24.16.5:  Oct 12, 2024  Fix icons in program resources. (338011 lines)
 					Copy the following icons to icon public directory:

@@ -61,7 +61,7 @@ void PrjRsc_GetLinkToProject (void)
    /***** Copy link to PROJECT into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_PROJECT,Projects.Prj.PrjCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Projects.Prj.PrjCod > 0 ? Projects.Prj.Title :
    					    Txt_Projects);

@@ -53,7 +53,7 @@ void AttRsc_GetLinkToEvent (void)
    /***** Copy link to attendance event into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_ATT_EVENT,Event.AttCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
                   Event.AttCod > 0 ? Event.Title :
                 	             Txt_Control_of_class_attendance);

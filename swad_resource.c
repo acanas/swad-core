@@ -54,6 +54,7 @@
 #include "swad_tag_database.h"
 #include "swad_theme.h"
 #include "swad_timetable.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -81,6 +82,7 @@ const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
    [Rsc_DOCUMENT	] = "doc",
    [Rsc_MARKS		] = "mrk",
    [Rsc_GROUPS		] = "grp",
+   [Rsc_TEACHER		] = "tch",
    [Rsc_ATT_EVENT	] = "att",
    [Rsc_FORUM_THREAD	] = "for",
    [Rsc_SURVEY		] = "svy",
@@ -108,6 +110,7 @@ const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
    [Rsc_DOCUMENT	] = "file.svg",
    [Rsc_MARKS		] = "list-alt.svg",
    [Rsc_GROUPS		] = "sitemap.svg",
+   [Rsc_TEACHER		] = "person-chalkboard.svg",
    [Rsc_ATT_EVENT	] = "calendar-check.svg",
    [Rsc_FORUM_THREAD	] = "comments.svg",
    [Rsc_SURVEY		] = "poll.svg",
@@ -271,6 +274,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       [Rsc_DOCUMENT	] = {NULL		,NULL			},
       [Rsc_MARKS	] = {NULL		,NULL			},
       [Rsc_GROUPS	] = {Frm_SetAnchorStr	,Frm_FreeAnchorStr	},
+      [Rsc_TEACHER	] = {NULL		,NULL			},
       [Rsc_ATT_EVENT	] = {NULL		,NULL			},
       [Rsc_FORUM_THREAD	] = {ForRsc_SetAnchorStr,ForRsc_FreeAnchorStr	},
       [Rsc_SURVEY	] = {NULL		,NULL			},
@@ -321,6 +325,8 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 			     {ActSeeAdmMrk	,NULL,NULL}},
       [Rsc_GROUPS	] = {{ActReqSelOneGrpTyp,NULL,NULL},
 			     {ActReqSelAllGrp	,NULL,NULL}},
+      [Rsc_TEACHER	] = {{ActSeeRecOneTch	,Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod},
+			     {ActLstTch		,NULL,NULL}},
       [Rsc_ATT_EVENT	] = {{ActSeeOneAtt	,NULL,NULL},
 			     {ActSeeAllAtt	,NULL,NULL}},
       [Rsc_FORUM_THREAD	] = {{ActSeePstForCrsUsr,NULL,NULL},
@@ -350,6 +356,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       [Rsc_DOCUMENT	] = ParCod_Fil,
       [Rsc_MARKS	] = ParCod_Fil,
       [Rsc_GROUPS	] = ParCod_GrpTyp,
+      [Rsc_TEACHER	] = ParCod_None,
       [Rsc_ATT_EVENT	] = ParCod_Att,
       [Rsc_FORUM_THREAD	] = ParCod_Thr,
       [Rsc_SURVEY	] = ParCod_Svy,
@@ -433,6 +440,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
    extern const char *Txt_Documents;
    extern const char *Txt_Marks_area;
    extern const char *Txt_Groups;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Control_of_class_attendance;
    extern const char *Txt_Course_forum;
    extern const char *Txt_Surveys;
@@ -458,6 +466,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       [Rsc_DOCUMENT	] = BrwRsc_GetFileTitle,
       [Rsc_MARKS	] = BrwRsc_GetFileTitle,
       [Rsc_GROUPS	] = Grp_DB_GetGrpTypTitle,
+      [Rsc_TEACHER	] = Usr_DB_GetUsrName,
       [Rsc_ATT_EVENT	] = Att_DB_GetEventTitle,
       [Rsc_FORUM_THREAD	] = For_DB_GetThreadTitle,
       [Rsc_SURVEY	] = Svy_DB_GetSurveyTitle,
@@ -484,6 +493,7 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       [Rsc_DOCUMENT	] = &Txt_Documents,
       [Rsc_MARKS	] = &Txt_Marks_area,
       [Rsc_GROUPS	] = &Txt_Groups,
+      [Rsc_TEACHER	] = &Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_ALL],
       [Rsc_ATT_EVENT	] = &Txt_Control_of_class_attendance,
       [Rsc_FORUM_THREAD	] = &Txt_Course_forum,
       [Rsc_SURVEY	] = &Txt_Surveys,

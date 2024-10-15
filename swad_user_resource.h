@@ -1,7 +1,7 @@
-// swad_game_resource.h: links to games as program resources
+// swad_user_resource.h: links to users as program resources
 
-#ifndef _SWAD_GAM_RSC
-#define _SWAD_GAM_RSC
+#ifndef _SWAD_USR_RSC
+#define _SWAD_USR_RSC
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,6 +27,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void GamRsc_GetLinkToGame (void);
+void UsrRsc_GetLinkToTch (void);
 
 #endif

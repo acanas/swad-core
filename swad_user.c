@@ -1557,7 +1557,7 @@ void Usr_PutParUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_S
 void Usr_GetParOtherUsrCodEncrypted (struct Usr_Data *UsrDat)
   {
    Par_GetParText ("OtherUsrCod",UsrDat->EnUsrCod,
-                     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+                   Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
    if (UsrDat->EnUsrCod[0])	// If parameter exists...
      {
       Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);

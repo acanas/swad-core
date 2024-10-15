@@ -58,7 +58,7 @@ void ForRsc_GetLinkToThread (void)
    /***** Copy link to thread into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_FORUM_THREAD,Thr.ThrCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Thr.ThrCod > 0 ? Thr.Subject :
    				   Txt_Course_forum);

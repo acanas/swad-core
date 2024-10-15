@@ -80,7 +80,7 @@ void InfRsc_GetLinkToInfo (void)
    /***** Copy link to exam into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Types[Gbl.Crs.Info.Type],-1L);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
 

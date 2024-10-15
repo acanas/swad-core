@@ -304,6 +304,22 @@ unsigned Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
   }
 
 /*****************************************************************************/
+/************************ Get user name from database ************************/
+/*****************************************************************************/
+// UsrDat->UsrCod must contain an existing user's code
+
+void Usr_DB_GetUsrName (long UsrCod,char *Title,size_t TitleSize)
+  {
+   DB_QuerySELECTString (Title,TitleSize,"can not get user name",
+		         "SELECT CONCAT(usr_data.FirstName,' ',"
+				       "usr_data.Surname1,' ',"
+				       "usr_data.Surname2)"
+			  " FROM usr_data"
+		         " WHERE UsrCod=%ld",
+		         UsrCod);
+  }
+
+/*****************************************************************************/
 /****** Check if a string is found in first name or surnames of anybody ******/
 /*****************************************************************************/
 

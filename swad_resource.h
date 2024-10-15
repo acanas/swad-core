@@ -41,7 +41,7 @@
 #define Rsc_MAX_CHARS_RESOURCE_TITLE	(128 - 1)	// 127
 #define Rsc_MAX_BYTES_RESOURCE_TITLE	((Rsc_MAX_CHARS_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Rsc_NUM_TYPES 23
+#define Rsc_NUM_TYPES 24
 typedef enum
   {
   Rsc_NONE,
@@ -54,19 +54,20 @@ typedef enum
   Rsc_LINKS,		// Link to course links
   Rsc_ASSESSMENT,	// Link to course assessment system
   Rsc_TIMETABLE,	// Link to timetable
-  Rsc_ASSIGNMENT,
-  Rsc_PROJECT,
-  Rsc_CALL_FOR_EXAM,
-  Rsc_TEST,
-  Rsc_EXAM,
-  Rsc_GAME,
-  Rsc_RUBRIC,
-  Rsc_DOCUMENT,
-  Rsc_MARKS,
-  Rsc_GROUPS,
-  Rsc_ATT_EVENT,
-  Rsc_FORUM_THREAD,
-  Rsc_SURVEY,
+  Rsc_ASSIGNMENT,	// Link to assigment
+  Rsc_PROJECT,		// Link to project
+  Rsc_CALL_FOR_EXAM,	// Link to call for exam
+  Rsc_TEST,		// Link to self-assessment test
+  Rsc_EXAM,		// Link to exam
+  Rsc_GAME,		// Link to game
+  Rsc_RUBRIC,		// Link to rubric
+  Rsc_DOCUMENT,		// Link to document file
+  Rsc_MARKS,		// Link to marks file
+  Rsc_GROUPS,		// Link to group type
+  Rsc_TEACHER,		// Link to teacher's record card
+  Rsc_ATT_EVENT,	// Link to attendance event
+  Rsc_FORUM_THREAD,	// Link to forum thread
+  Rsc_SURVEY,		// Link to survey
   } Rsc_Type_t;
 
 struct Rsc_Link

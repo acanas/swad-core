@@ -60,6 +60,7 @@
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_record_database.h"
+#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_role_database.h"
 #include "swad_setting.h"
@@ -2372,17 +2373,24 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user.svg",Ico_BLACK);
 
-	 /***** Button to view user's record card *****/
+	 /***** Buttons to view user's record card *and get resource link ****/
 	 if (Usr_CheckIfICanViewRecordStd (Rec_Record.UsrDat) == Usr_CAN)
 	    /* View student's records: common record card and course record card */
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
 	 else if (Usr_CheckIfICanViewRecordTch (Rec_Record.UsrDat) == Usr_CAN)
+	   {
 	    /* View teacher's record card and timetable */
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "address-card.svg",Ico_BLACK);
+
+	    /* Button to get resource link */
+	    if (Rsc_CheckIfICanGetLink () == Usr_CAN)
+	       Ico_PutContextualIconToGetLink (ActReqLnkOneTch,NULL,
+					       Rec_PutParUsrCodEncrypted,NULL);
+	   }
 
 	 /***** Button to view user's agenda *****/
 	 if (Agd_CheckIfICanViewUsrAgenda (Rec_Record.UsrDat) == Usr_CAN)

@@ -58,7 +58,7 @@ void GamRsc_GetLinkToGame (void)
    /***** Copy link to game into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_GAME,Games.Game.GamCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Games.Game.GamCod > 0 ? Games.Game.Title :
    					  Txt_Games);

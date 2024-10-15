@@ -59,7 +59,7 @@ void BrwRsc_GetLinkToDocFil (void)
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FileMetadata.FilCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
                   FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.Name :
                 			    Txt_Documents);
@@ -87,7 +87,7 @@ void BrwRsc_GetLinkToMrkFil (void)
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_MARKS,FileMetadata.FilCod);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
                   FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.Name :
                 			    Txt_Marks_area);

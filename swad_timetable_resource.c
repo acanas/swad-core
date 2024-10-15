@@ -41,7 +41,7 @@ void TmtRsc_GetLinkToCrsTimeTable (void)
    /***** Copy link to course timetable into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_TIMETABLE,-1L);
 
-   /***** Write sucess message *****/
+   /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Txt_TIMETABLE_TYPES[Tmt_COURSE_TIMETABLE]);
 

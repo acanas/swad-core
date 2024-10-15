@@ -9653,7 +9653,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_post =
 #elif L==5	// fr
 	"Voulez-vous vraiment supprimer le post suivant?";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar la siguiente publicaci&oacute;n?";	// Okoteve traducción
+	"&iquest;A&ntilde;eteh&aacute;pe piko remboguese ko post?";
 #elif L==7	// it
 	"Vuoi realmente rimuovere il seguente post?";
 #elif L==8	// pl
@@ -9661,7 +9661,7 @@ const char *Txt_Do_you_really_want_to_remove_the_following_post =
 #elif L==9	// pt
 	"Voc&ecirc; realmente deseja remover o seguinte post?";
 #elif L==10	// tr
-	"Do you really want to remove the following post?";			// Çeviri lazim!
+	"A&scedil;a&gbreve;&inodot;daki g&ouml;nderiyi ger&ccedil;ekten kald&inodot;rmak istiyor musunuz?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -34736,6 +34736,29 @@ const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =
 	"Grupos"
 #elif L==10	// tr
 	"Gruplar"
+#endif
+	,
+	[Rsc_TEACHER] =
+#if   L==1	// ca
+	"Professor/a"
+#elif L==2	// de
+	"Lehrkraft"
+#elif L==3	// en
+	"Teacher"
+#elif L==4	// es
+	"Profesor/a"
+#elif L==5	// fr
+	"Enseignant/e"
+#elif L==6	// gn
+	"Mbo'eh&aacute;ra"
+#elif L==7	// it
+	"Professore/ssa"
+#elif L==8	// pl
+	"Nauczyciel"
+#elif L==9	// pt
+	"Professor/a"
+#elif L==10	// tr
+	"&Ouml;&gbreve;retmen"
 #endif
 	,
 	[Rsc_ATT_EVENT] =

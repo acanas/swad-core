@@ -27388,6 +27388,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See a user's public agenda after change language"		// Çeviri lazim!
 #endif
 	,
+	[ActReqLnkAllTch] =
+#if   L==1	// ca
+	"Copy link to teachers"		// Necessita traducció
+#elif L==2	// de
+	"Copy link to teachers"		// Need Übersetzung
+#elif L==3	// en
+	"Copy link to teachers"
+#elif L==4	// es
+	"Copiar enlace a profesores"
+#elif L==5	// fr
+	"Copy link to teachers"		// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a profesores"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to teachers"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to teachers"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to teachers"		// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to teachers"		// Çeviri lazim!
+#endif
+	,
+	[ActReqLnkOneTch] =
+#if   L==1	// ca
+	"Copy link to a teacher"	// Necessita traducció
+#elif L==2	// de
+	"Copy link to a teacher"	// Need Übersetzung
+#elif L==3	// en
+	"Copy link to a teacher"
+#elif L==4	// es
+	"Copiar enlace a un profesor"
+#elif L==5	// fr
+	"Copy link to a teacher"	// Besoin de traduction
+#elif L==6	// gn
+	"Copiar enlace a un profesor"	// Okoteve traducción
+#elif L==7	// it
+	"Copy link to a teacher"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Copy link to a teacher"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Copy link to a teacher"	// Precisa de tradução
+#elif L==10	// tr
+	"Copy link to a teacher"	// Çeviri lazim!
+#endif
+	,
 	[ActLstOth] =
 #if   L==1	// ca
 	"Show class photo or list of guests"		// Necessita traducció

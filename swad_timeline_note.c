@@ -279,6 +279,7 @@ static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
 
    /***** Right top: author's name, time, and content *****/
    TmlNot_WriteAuthorTimeAndContent (Not,&UsrDat);
+   HTM_BR ();
 
    /***** Bottom: buttons and comments *****/
    TmlNot_WriteButtonsAndComms (Timeline,Not,&UsrDat);
@@ -1021,12 +1022,14 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
    TmlFrm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
 
    /* Show note */
-   Box_BoxBegin (NULL,NULL,NULL,NULL,Box_CLOSABLE);
-      HTM_DIV_Begin ("class=\"Tml_WIDTH\"");
-	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					     Tml_TOP_MESSAGE_NONE,
-					     -1L);
-      HTM_DIV_End ();
+   Box_BoxBegin (NULL,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+      HTM_UL_Begin ("class=\"Tml_LIST\"");
+	 HTM_LI_Begin ("class=\"Tml_WIDTH\"");
+	    TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+						Tml_TOP_MESSAGE_NONE,
+						-1L);
+	 HTM_LI_End ();
+      HTM_UL_End ();
    Box_BoxEnd ();
    HTM_BR ();
 
