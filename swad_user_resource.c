@@ -35,7 +35,7 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/***************************** Get link to game ******************************/
+/**************************** Get link to teacher ****************************/
 /*****************************************************************************/
 
 void UsrRsc_GetLinkToTch (void)
@@ -46,24 +46,24 @@ void UsrRsc_GetLinkToTch (void)
    /***** Get the selected teacher *****/
    Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
 
-   /***** Show the record *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
+      /***** Copy link to one teacher and show teacher's record *****/
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
 						   Usr_DONT_GET_PREFS,
 						   Usr_GET_ROLE_IN_CRS))
         {
 	 if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	   {
-	    /***** Copy link to teacher into resource clipboard *****/
+	    /* Copy link to teacher into resource clipboard */
 	    Rsc_DB_CopyToClipboard (Rsc_TEACHER,Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	    /***** Write success message *****/
+	    /* Write success message */
 	    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
 			   Gbl.Usrs.Other.UsrDat.FullName);
 
-	    /***** Show teacher again *****/
-	    // Gam_ListAllGames (&Games);
+	    /* Show teacher's record */
+	    Rec_ShowRecordOneTchCrs ();
 	    }
 	 else
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -73,14 +73,15 @@ void UsrRsc_GetLinkToTch (void)
      }
    else
      {
-      /***** Copy link to teachers into resource clipboard *****/
+      /***** Copy link to teachers and show teachers *****/
+      /* Copy link to teachers into resource clipboard */
       Rsc_DB_CopyToClipboard (Rsc_TEACHER,-1L);
 
-      /***** Write success message *****/
+      /* Write success message */
       Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
 		     Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_ALL]);
 
-      /***** Show teachers again *****/
-      // Gam_ListAllGames (&Games);
+      /* Show teachers */
+      Usr_SeeTeachers ();
      }
   }

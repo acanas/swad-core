@@ -139,6 +139,7 @@ void Rec_ListRecordsStdsShow (void);
 void Rec_ListRecordsStdsPrint (void);
 
 void Rec_GetUsrAndShowRecOneTchCrs (void);
+void Rec_ShowRecordOneTchCrs (void);
 void Rec_ListRecordsTchsShow (void);
 void Rec_ListRecordsTchsPrint (void);
 

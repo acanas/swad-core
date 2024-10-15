@@ -117,7 +117,6 @@ static void Rec_ShowRecordOneStdCrs (void);
 static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                                  Rec_CourseRecordViewType_t CrsTypeOfView);
 
-static void Rec_ShowRecordOneTchCrs (void);
 static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView);
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void);
@@ -1195,7 +1194,7 @@ void Rec_GetUsrAndShowRecOneTchCrs (void)
 /******************** Draw record of one unique teacher **********************/
 /*****************************************************************************/
 
-static void Rec_ShowRecordOneTchCrs (void)
+void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[Tmt_NUM_TIMETABLE_TYPES];
