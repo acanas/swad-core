@@ -88,6 +88,22 @@ bool Usr_DB_ChkIfUsrCodExists (long UsrCod)
   }
 
 /*****************************************************************************/
+/******** Get encrypted user's code from database using user's code **********/
+/*****************************************************************************/
+// Input: UsrDat->UsrCod must hold user's code
+
+void Usr_DB_GetEncryptedUsrCodFromUsrCod (long UsrCod,
+					  char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
+  {
+   DB_QuerySELECTString (EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64,
+			 "can not get encrypted user's code",
+		         "SELECT EncryptedUsrCod"
+		         " FROM usr_data"
+		         " WHERE UsrCod='%ld'",
+		         UsrCod);
+  }
+
+/*****************************************************************************/
 /******** Get user's code from database using encrypted user's code **********/
 /*****************************************************************************/
 // Input: UsrDat->EncryptedUsrCod must hold user's encrypted code

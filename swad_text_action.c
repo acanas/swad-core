@@ -25941,25 +25941,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeRecOneStd] =
 #if   L==1	// ca
-	"See the record of a student"	// Necessita traducció
+	"See student's record"		// Necessita traducció
 #elif L==2	// de
-	"See the record of a student"	// Need Übersetzung
+	"See student's record"		// Need Übersetzung
 #elif L==3	// en
-	"See the record of a student"
+	"See student's record"
 #elif L==4	// es
-	"Ver la ficha de estudiante"
+	"Ver ficha de estudiante"
 #elif L==5	// fr
-	"See the record of a student"	// Besoin de traduction
+	"See student's record"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver la ficha de estudiante"	// Okoteve traducción
+	"Ver ficha de estudiante"	// Okoteve traducción
 #elif L==7	// it
-	"See the record of a student"	// Bisogno di traduzione
+	"See student's record"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See the record of a student"	// Potrzebujesz tlumaczenie
+	"See student's record"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See the record of a student"	// Precisa de tradução
+	"See student's record"		// Precisa de tradução
 #elif L==10	// tr
-	"See the record of a student"	// Çeviri lazim!
+	"See student's record"		// Çeviri lazim!
 #endif
 	,
 	[ActReqEnrSevStd] =
@@ -27206,25 +27206,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeRecOneTch] =
 #if   L==1	// ca
-	"See the record of a teacher"	// Necessita traducció
+	"See teacher's record"		// Necessita traducció
 #elif L==2	// de
-	"See the record of a teacher"	// Need Übersetzung
+	"See teacher's record"		// Need Übersetzung
 #elif L==3	// en
-	"See the record of a teacher"
+	"See teacher's record"
 #elif L==4	// es
-	"Ver la ficha de profesor"
+	"Ver ficha de profesor"
 #elif L==5	// fr
-	"See the record of a teacher"	// Besoin de traduction
+	"See teacher's record"		// Besoin de traduction
 #elif L==6	// gn
-	"Ver la ficha de profesor"	// Okoteve traducción
+	"Ver ficha de profesor"		// Okoteve traducción
 #elif L==7	// it
-	"See the record of a teacher"	// Bisogno di traduzione
+	"See teacher's record"		// Bisogno di traduzione
 #elif L==8	// pl
-	"See the record of a teacher"	// Potrzebujesz tlumaczenie
+	"See teacher's record"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See the record of a teacher"	// Precisa de tradução
+	"See teacher's record"		// Precisa de tradução
 #elif L==10	// tr
-	"See the record of a teacher"	// Çeviri lazim!
+	"See teacher's record"		// Çeviri lazim!
 #endif
 	,
 	[ActReqEnrSevNET] =

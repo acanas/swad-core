@@ -43,6 +43,8 @@ void Usr_DB_UpdateMyOffice (void);
 void Usr_DB_UpdateMyOfficePhone (void);
 
 bool Usr_DB_ChkIfUsrCodExists (long UsrCod);
+void Usr_DB_GetEncryptedUsrCodFromUsrCod (long UsrCod,
+					  char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 long Usr_DB_GetUsrCodFromNick (const char *NickWithoutArr);
 long Usr_DB_GetUsrCodFromNickPwd (const char *NickWithoutArr,const char *Password);

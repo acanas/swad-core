@@ -391,9 +391,18 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 	    Frm_BeginForm (NextAction);
 
 	 /* Form hidden parameters */
-	 ParCod_PutPar (ParCod[Link->Type],Link->Cod);
 	 if (Link->Cod > 0)
 	   {
+	    switch (Link->Type)
+	      {
+	       case Rsc_TEACHER:
+		  Usr_DB_GetEncryptedUsrCodFromUsrCod (Link->Cod,
+						       Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		  break;
+	       default:
+		  ParCod_PutPar (ParCod[Link->Type],Link->Cod);
+		  break;
+	      }
 	    if (NextActions[Link->Type].IfCod.FuncPars)
 	       NextActions[Link->Type].IfCod.FuncPars (NextActions[Link->Type].IfCod.Args);
 	   }

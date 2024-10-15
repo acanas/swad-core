@@ -1181,8 +1181,14 @@ void Rec_GetUsrAndShowRecOneTchCrs (void)
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,	// Get teacher's data from database
                                                 Usr_DONT_GET_PREFS,
                                                 Usr_GET_ROLE_IN_CRS))
+     {
       if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	 Rec_ShowRecordOneTchCrs ();
+      else
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+     }
+   else
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
