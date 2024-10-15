@@ -9013,25 +9013,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkAsg] =
 #if   L==1	// ca
-	"Copy link to assignment"	// Necessita traducció
+	"Copy link to assignment(s)"	// Necessita traducció
 #elif L==2	// de
-	"Copy link to assignment"	// Need Übersetzung
+	"Copy link to assignment(s)"	// Need Übersetzung
 #elif L==3	// en
-	"Copy link to assignment"
+	"Copy link to assignment(s)"
 #elif L==4	// es
-	"Copiar enlace a actividad"
+	"Copiar enlace a actividad(es)"
 #elif L==5	// fr
-	"Copy link to assignment"	// Besoin de traduction
+	"Copy link to assignment(s)"	// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a actividad"	// Okoteve traducción
+	"Copiar enlace a actividad(es)"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to assignment"	// Bisogno di traduzione
+	"Copy link to assignment(s)"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to assignment"	// Potrzebujesz tlumaczenie
+	"Copy link to assignment(s)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to assignment"	// Precisa de tradução
+	"Copy link to assignment(s)"	// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to assignment"	// Çeviri lazim!
+	"Copy link to assignment(s)"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllPrj] =
@@ -9864,25 +9864,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkPrj] =
 #if   L==1	// ca
-	"Copy link to project"		// Necessita traducció
+	"Copy link to project(s)"		// Necessita traducció
 #elif L==2	// de
-	"Copy link to project"		// Need Übersetzung
+	"Copy link to project(s)"		// Need Übersetzung
 #elif L==3	// en
-	"Copy link to project"
+	"Copy link to project(s)"
 #elif L==4	// es
-	"Copiar enlace a proyecto"
+	"Copiar enlace a proyecto(s)"
 #elif L==5	// fr
-	"Copy link to project"		// Besoin de traduction
+	"Copy link to project(s)"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a proyecto"	// Okoteve traducción
+	"Copiar enlace a proyecto(s)"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to project"		// Bisogno di traduzione
+	"Copy link to project(s)"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to project"		// Potrzebujesz tlumaczenie
+	"Copy link to project(s)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to project"		// Precisa de tradução
+	"Copy link to project(s)"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to project"		// Çeviri lazim!
+	"Copy link to project(s)"		// Çeviri lazim!
 #endif
 	,
 	[ActAdmDocPrj] =
@@ -10991,25 +10991,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkCfe] =
 #if   L==1	// ca
-	"Copy link to exam announcement"		// Necessita traducció
+	"Copy link to exam announcement(s)"		// Necessita traducció
 #elif L==2	// de
-	"Copy link to exam announcement"		// Need Übersetzung
+	"Copy link to exam announcement(s)"		// Need Übersetzung
 #elif L==3	// en
-	"Copy link to exam announcement"
+	"Copy link to exam announcement(s)"
 #elif L==4	// es
-	"Copiar enlace a convocatoria de examen"
+	"Copiar enlace a convocatoria(s) de examen"
 #elif L==5	// fr
-	"Copy link to exam announcement"		// Besoin de traduction
+	"Copy link to exam announcement(s)"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a convocatoria de examen"	// Okoteve traducción
+	"Copiar enlace a convocatoria(s) de examen"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to exam announcement"		// Bisogno di traduzione
+	"Copy link to exam announcement(s)"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to exam announcement"		// Potrzebujesz tlumaczenie
+	"Copy link to exam announcement(s)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to exam announcement"		// Precisa de tradução
+	"Copy link to exam announcement(s)"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to exam announcement"		// Çeviri lazim!
+	"Copy link to exam announcement(s)"		// Çeviri lazim!
 #endif
 	,
 	[ActEdiTstQst] =
@@ -11957,25 +11957,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkExa] =
 #if   L==1	// ca
-	"Copy link to exam"		// Necessita traducció
+	"Copy link to exam(s)"				// Necessita traducció
 #elif L==2	// de
-	"Copy link to exam"		// Need Übersetzung
+	"Copy link to exam(s)"				// Need Übersetzung
 #elif L==3	// en
-	"Copy link to exam"
+	"Copy link to exam(s)"
 #elif L==4	// es
-	"Copiar enlace a examen"
+	"Copiar enlace a examen/ex&aacute;menes"
 #elif L==5	// fr
-	"Copy link to exam"		// Besoin de traduction
+	"Copy link to exam(s)"				// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a examen"	// Okoteve traducción
+	"Copiar enlace a examen/ex&aacute;menes"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to exam"		// Bisogno di traduzione
+	"Copy link to exam(s)"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to exam"		// Potrzebujesz tlumaczenie
+	"Copy link to exam(s)"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to exam"		// Precisa de tradução
+	"Copy link to exam(s)"				// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to exam"		// Çeviri lazim!
+	"Copy link to exam(s)"				// Çeviri lazim!
 #endif
 	,
 	[ActNewExaSet] =
@@ -13866,25 +13866,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkGam] =
 #if   L==1	// ca
-	"Copy link to game"	// Necessita traducció
+	"Copy link to game(s)"	// Necessita traducció
 #elif L==2	// de
-	"Copy link to game"	// Need Übersetzung
+	"Copy link to game(s)"	// Need Übersetzung
 #elif L==3	// en
-	"Copy link to game"
+	"Copy link to game(s)"
 #elif L==4	// es
-	"Copiar enlace a juego"
+	"Copiar enlace a juego(s)"
 #elif L==5	// fr
-	"Copy link to game"	// Besoin de traduction
+	"Copy link to game(s)"	// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a juego"	// Okoteve traducción
+	"Copiar enlace a juego(s)"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to game"	// Bisogno di traduzione
+	"Copy link to game(s)"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to game"	// Potrzebujesz tlumaczenie
+	"Copy link to game(s)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to game"	// Precisa de tradução
+	"Copy link to game(s)"	// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to game"	// Çeviri lazim!
+	"Copy link to game(s)"	// Çeviri lazim!
 #endif
 	,
 	[ActSeeAllRub] =
@@ -14073,25 +14073,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkRub] =
 #if   L==1	// ca
-	"Copiar enlla&ccedil; a r&uacute;brica"
+	"Copiar enlla&ccedil; a r&uacute;brica/r&uacute;briques"
 #elif L==2	// de
-	"Link zur Rubrik kopieren"
+	"Link zu(r) Rubrik(en) kopieren"
 #elif L==3	// en
-	"Copy link to rubric"
+	"Copy link to rubric(s)"
 #elif L==4	// es
-	"Copiar enlace a r&uacute;brica"
+	"Copiar enlace a r&uacute;brica(s)"
 #elif L==5	// fr
-	"Copier le lien vers la rubrique"
+	"Copier le lien vers la rubrique(s)"
 #elif L==6	// gn
 	"Ekopia enlace rubrica-pe"
 #elif L==7	// it
-	"Copiare il link alla rubrica"
+	"Copiare il collegamento alla/alle rubrica/rubriche"
 #elif L==8	// pl
-	"Skopiuj link do rubryki"
+	"Skopiuj link do rubryk(i)"
 #elif L==9	// pt
-	"Copiar link para rubrica"
+	"Copiar link para rubrica(s)"
 #elif L==10	// tr
-	"Ba&gbreve;lant&inodot;y&inodot; puan anahtar&inodot;na kopyala"
+	"Ba&gbreve;lant&inodot;y&inodot; puan anahtarlar&inodot;na kopyala"
 #endif
 	,
 	[ActSeeRscCli_InRub] =
@@ -27388,50 +27388,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See a user's public agenda after change language"		// Çeviri lazim!
 #endif
 	,
-	[ActReqLnkAllTch] =
+	[ActReqLnkTch] =
 #if   L==1	// ca
-	"Copy link to teachers"		// Necessita traducció
+	"Copy link to teacher(s)"		// Necessita traducció
 #elif L==2	// de
-	"Copy link to teachers"		// Need Übersetzung
+	"Copy link to teacher(s)"		// Need Übersetzung
 #elif L==3	// en
-	"Copy link to teachers"
+	"Copy link to teacher(s)"
 #elif L==4	// es
-	"Copiar enlace a profesores"
+	"Copiar enlace a profesor(es)"
 #elif L==5	// fr
-	"Copy link to teachers"		// Besoin de traduction
+	"Copy link to teacher(s)"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a profesores"	// Okoteve traducción
+	"Copiar enlace a profesor(es)"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to teachers"		// Bisogno di traduzione
+	"Copy link to teacher(s)"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to teachers"		// Potrzebujesz tlumaczenie
+	"Copy link to teacher(s)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to teachers"		// Precisa de tradução
+	"Copy link to teacher(s)"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to teachers"		// Çeviri lazim!
-#endif
-	,
-	[ActReqLnkOneTch] =
-#if   L==1	// ca
-	"Copy link to a teacher"	// Necessita traducció
-#elif L==2	// de
-	"Copy link to a teacher"	// Need Übersetzung
-#elif L==3	// en
-	"Copy link to a teacher"
-#elif L==4	// es
-	"Copiar enlace a un profesor"
-#elif L==5	// fr
-	"Copy link to a teacher"	// Besoin de traduction
-#elif L==6	// gn
-	"Copiar enlace a un profesor"	// Okoteve traducción
-#elif L==7	// it
-	"Copy link to a teacher"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Copy link to a teacher"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Copy link to a teacher"	// Precisa de tradução
-#elif L==10	// tr
-	"Copy link to a teacher"	// Çeviri lazim!
+	"Copy link to teacher(s)"		// Çeviri lazim!
 #endif
 	,
 	[ActLstOth] =
@@ -28724,25 +28701,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkAtt] =
 #if   L==1	// ca
-	"Copy link to attendance event"		// Necessita traducció
+	"Copy link to attendance event(s)"		// Necessita traducció
 #elif L==2	// de
-	"Copy link to attendance event"		// Need Übersetzung
+	"Copy link to attendance event(s)"		// Need Übersetzung
 #elif L==3	// en
-	"Copy link to attendance event"
+	"Copy link to attendance event(s)"
 #elif L==4	// es
-	"Copiar enlace a evento de asistencia"
+	"Copiar enlace a evento(s) de asistencia"
 #elif L==5	// fr
-	"Copy link to attendance event"		// Besoin de traduction
+	"Copy link to attendance event(s)"		// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a evento de asistencia"	// Okoteve traducción
+	"Copiar enlace a evento(s) de asistencia"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to attendance event"		// Bisogno di traduzione
+	"Copy link to attendance event(s)"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to attendance event"		// Potrzebujesz tlumaczenie
+	"Copy link to attendance event(s)"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to attendance event"		// Precisa de tradução
+	"Copy link to attendance event(s)"		// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to attendance event"		// Çeviri lazim!
+	"Copy link to attendance event(s)"		// Çeviri lazim!
 #endif
 	,
 	[ActRecAttStd] =
@@ -32335,25 +32312,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkForCrsUsr] =
 #if   L==1	// ca
-	"Copy link to thread of forum of users of course"			// Necessita traducció
+	"Copy link to forum of users of course"			// Necessita traducció
 #elif L==2	// de
-	"Copy link to thread of forum of users of course"			// Need Übersetzung
+	"Copy link to forum of users of course"			// Need Übersetzung
 #elif L==3	// en
-	"Copy link to thread of forum of users of course"
+	"Copy link to forum of users of course"
 #elif L==4	// es
-	"Copiar enlace a discusi&oacute;n del foro de usuarios de asignatura"
+	"Copiar enlace a foro de usuarios de asignatura"
 #elif L==5	// fr
-	"Copy link to thread of forum of users of course"			// Besoin de traduction
+	"Copy link to forum of users of course"			// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a discusi&oacute;n del foro de usuarios de asignatura"	// Okoteve traducción
+	"Copiar enlace a foro de usuarios de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to thread of forum of users of course"			// Bisogno di traduzione
+	"Copy link to forum of users of course"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to thread of forum of users of course"			// Potrzebujesz tlumaczenie
+	"Copy link to forum of users of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to thread of forum of users of course"			// Precisa de tradução
+	"Copy link to forum of users of course"			// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to thread of forum of users of course"			// Çeviri lazim!
+	"Copy link to forum of users of course"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeChtRms] =
@@ -33324,25 +33301,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqLnkSvy] =
 #if   L==1	// ca
-	"Get link to survey"		// Necessita traducció
+	"Copy link to survey(s)"	// Necessita traducció
 #elif L==2	// de
-	"Copy link to survey"		// Need Übersetzung
+	"Copy link to survey(s)"	// Need Übersetzung
 #elif L==3	// en
-	"Copy link to survey"
+	"Copy link to survey(s)"
 #elif L==4	// es
-	"Copiar enlace a encuesta"
+	"Copiar enlace a encuesta(s)"
 #elif L==5	// fr
-	"Copy link to survey"		// Besoin de traduction
+	"Copy link to survey(s)"	// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a encuesta"	// Okoteve traducción
+	"Copiar enlace a encuesta(s)"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to survey"		// Bisogno di traduzione
+	"Copy link to survey(s)"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to survey"		// Potrzebujesz tlumaczenie
+	"Copy link to survey(s)"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to survey"		// Precisa de tradução
+	"Copy link to survey(s)"	// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to survey"		// Çeviri lazim!
+	"Copy link to survey(s)"	// Çeviri lazim!
 #endif
 	,
 	[ActEdiOneSvyQst] =

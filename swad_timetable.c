@@ -530,8 +530,9 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
       case ActSeeCrsTT:		case ActChgCrsTT1stDay:
       case ActSeeMyTT:		case ActChgMyTT1stDay:
       case ActReqLnkCrsTT:
-      case ActSeeRecOneTch:	case ActReqLnkOneTch:
+      case ActSeeRecOneTch:
       case ActSeeRecSevTch:
+      case ActReqLnkTch:
 	 Timetable->View = Vie_VIEW;
 	 break;
       case ActEdiCrsTT:		case ActChgCrsTT:

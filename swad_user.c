@@ -5923,7 +5923,7 @@ static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
 
    /***** Put icon to get resource link *****/
    if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkAllTch,NULL,NULL,NULL);
+      Ico_PutContextualIconToGetLink (ActReqLnkTch,NULL,NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);

@@ -1448,8 +1448,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActFrmLogInUsrAgd	] = {1614, 2,TabUsr,NULL			,Agd_PutFormLogInToShowUsrAgenda,{{    0,    0},{0x001,0x001},{0x001,0x001},{0x001,0x001},{0x001,0x001},{0x001,0x001},{0x001,    0}},Act_NORM,Act_1ST},
    [ActLogInUsrAgd	] = {1615, 2,TabUsr,NULL			,Agd_ShowOtherAgendaAfterLogIn	,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
    [ActLogInUsrAgdLan	] = {1616, 2,TabUsr,NULL			,Agd_ShowOtherAgendaAfterLogIn	,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
-   [ActReqLnkAllTch	] = {2004, 2,TabUsr,NULL			,UsrRsc_GetLinkToTch		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActReqLnkOneTch	] = {2005, 2,TabUsr,NULL			,UsrRsc_GetLinkToTch		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqLnkTch	] = {2004, 2,TabUsr,NULL			,UsrRsc_GetLinkToTch		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Others
    [ActLstOth		] = {1186, 3,TabUsr,NULL			,Usr_ListDataAdms		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
@@ -3847,6 +3846,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkCrsLnk,	// #2001
 	ActReqLnkAss,		// #2002
 	ActReqLnkCrsTT,		// #2003
-	ActReqLnkAllTch,	// #2004
-	ActReqLnkOneTch,	// #2005
+	ActReqLnkTch,		// #2004
   };

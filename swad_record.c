@@ -2393,7 +2393,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 
 	    /* Button to get resource link */
 	    if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	       Ico_PutContextualIconToGetLink (ActReqLnkOneTch,NULL,
+	       Ico_PutContextualIconToGetLink (ActReqLnkTch,NULL,
 					       Rec_PutParUsrCodEncrypted,NULL);
 	   }
 
