@@ -58,7 +58,6 @@
 #include "swad_question.h"
 #include "swad_question_database.h"
 #include "swad_question_import.h"
-#include "swad_resource.h"
 #include "swad_tag_database.h"
 #include "swad_test.h"
 #include "swad_test_config.h"
@@ -499,14 +498,11 @@ void Tst_PutIconsTests (void *Questions)
      }
 
    /***** Link to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-     {
-      if (Questions)
-	 TagCod = ((struct Qst_Questions *) Questions)->Tags.PreselectedTagCod;
-      else
-	 TagCod = -1L;
-      Ico_PutContextualIconToGetLink (ActReqLnkTst,NULL,Tag_PutPars,&TagCod);
-     }
+   if (Questions)
+      TagCod = ((struct Qst_Questions *) Questions)->Tags.PreselectedTagCod;
+   else
+      TagCod = -1L;
+   Ico_PutContextualIconToGetLink (ActReqLnkTst,NULL,Tag_PutPars,&TagCod);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);

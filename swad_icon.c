@@ -43,6 +43,7 @@
 #include "swad_icon.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
+#include "swad_resource.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_user_database.h"
@@ -338,8 +339,9 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
 void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
                                      void (*FuncPars) (void *Args),void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
-				  "link.svg",Ico_BLACK);
+   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
+      Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
+				     "link.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,

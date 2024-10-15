@@ -679,8 +679,7 @@ static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
       Ico_PutContextualIconToAdd (ActEdiCfe,NULL,NULL,NULL);
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,NULL,NULL);
+   Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
@@ -1488,10 +1487,9 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 				    &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
-					 Cfe_PutParExaCod,
-					 &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
+      Ico_PutContextualIconToGetLink (ActReqLnkCfe,NULL,
+				      Cfe_PutParExaCod,
+				      &((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
      }
   }
 

@@ -1835,12 +1835,17 @@ static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
       Ico_PutContextualIconToEdit (ActReqEdiGrp,NULL,NULL,NULL);
 
    /***** Link to get resource link *****/
-   if ((Gbl.Action.Act == ActReqSelAllGrp ||
-	Gbl.Action.Act == ActReqSelOneGrpTyp ||
-        Gbl.Action.Act == ActChgGrp ||
-        Gbl.Action.Act == ActReqLnkAllGrp) &&
-       Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkAllGrp,NULL,NULL,NULL);
+   switch (Gbl.Action.Act)
+     {
+      case ActReqSelAllGrp:
+      case ActReqSelOneGrpTyp:
+      case ActChgGrp:
+      case ActReqLnkAllGrp:
+         Ico_PutContextualIconToGetLink (ActReqLnkAllGrp,NULL,NULL,NULL);
+         break;
+      default:
+	 break;
+     }
   }
 
 /*****************************************************************************/

@@ -51,7 +51,6 @@
 #include "swad_pagination.h"
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
-#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -307,12 +306,9 @@ static void Asg_PutIconsListAssignments (void *Assignments)
 	 Asg_PutIconToCreateNewAsg (Assignments);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	{
-         ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
-	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
-					 Asg_PutPars,Assignments);
-	}
+      ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
+      Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
+				      Asg_PutPars,Assignments);
      }
 
    /***** Put icon to show a figure *****/
@@ -771,9 +767,8 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 	                              Asg_PutPars,Assignments);
 
 	 /***** Link to get resource link *****/
-	 if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	    Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
-					    Asg_PutPars,Assignments);
+	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
+					 Asg_PutPars,Assignments);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:

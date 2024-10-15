@@ -60,7 +60,6 @@
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_record_database.h"
-#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_role_database.h"
 #include "swad_setting.h"
@@ -2392,9 +2391,8 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					   "address-card.svg",Ico_BLACK);
 
 	    /* Button to get resource link */
-	    if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	       Ico_PutContextualIconToGetLink (ActReqLnkTch,NULL,
-					       Rec_PutParUsrCodEncrypted,NULL);
+	    Ico_PutContextualIconToGetLink (ActReqLnkTch,NULL,
+					    Rec_PutParUsrCodEncrypted,NULL);
 	   }
 
 	 /***** Button to view user's agenda *****/

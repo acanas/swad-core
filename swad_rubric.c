@@ -276,9 +276,8 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
 	 Prg_PutIconToViewResourceClipboard ();
 	}
 
-      /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
+      /***** Put icon to get resource link *****/
+      Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_RUBRICS);
@@ -485,9 +484,8 @@ static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
       /***** Icon to edit rubric *****/
       Ico_PutContextualIconToEdit (ActEdiOneRub,NULL,Rub_PutPars,Rubrics);
 
-      /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
+      /***** Icon to get resource link *****/
+      Ico_PutContextualIconToGetLink (ActReqLnkRub,NULL,Rub_PutPars,Rubrics);
      }
   }
 

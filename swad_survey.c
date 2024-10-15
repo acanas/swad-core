@@ -312,8 +312,7 @@ static void Svy_PutIconsListSurveys (void *Surveys)
       Svy_PutIconToCreateNewSvy ((struct Svy_Surveys *) Surveys);
 
    /***** Put icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,Svy_PutPars,Surveys);
+   Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,Svy_PutPars,Surveys);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_SURVEYS);
@@ -845,8 +844,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Surveys,
      }
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,Svy_PutPars,Surveys);
+   Ico_PutContextualIconToGetLink (ActReqLnkSvy,NULL,Svy_PutPars,Surveys);
   }
 
 /*****************************************************************************/

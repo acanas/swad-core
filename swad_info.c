@@ -46,7 +46,6 @@
 #include "swad_info.h"
 #include "swad_info_database.h"
 #include "swad_parameter.h"
-#include "swad_resource.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -361,10 +360,9 @@ void Inf_PutIconToEditInfo (void *Type)
 				      Inf_ActionsEdit[*((Inf_Type_t *) Type)].Args);
 
       /***** Icon to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].NextAction,NULL,
-				         Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].FuncPars,
-				         Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].Args);
+      Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].NextAction,NULL,
+				      Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].FuncPars,
+				      Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].Args);
      }
   }
 

@@ -399,8 +399,7 @@ static void Gam_PutIconsListingGames (void *Games)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
+      Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_GAMES);
@@ -760,9 +759,7 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 					  Gam_PutPars,Games);
 
    /***** Link to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
-
+   Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
   }
 
 /*****************************************************************************/

@@ -1392,9 +1392,8 @@ void Prj_PutIconsListProjects (void *Projects)
 	                                   NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
-					 Prj_PutCurrentPars,Projects);
+      Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
+				      Prj_PutCurrentPars,Projects);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_PROJECTS);
@@ -3370,9 +3369,8 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Projects,
      }
 
    /***** Link to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
-				      Prj_PutCurrentPars,Projects);
+   Ico_PutContextualIconToGetLink (ActReqLnkPrj,NULL,
+				   Prj_PutCurrentPars,Projects);
   }
 
 /*****************************************************************************/

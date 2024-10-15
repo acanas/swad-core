@@ -352,8 +352,7 @@ static void Exa_PutIconsListExams (void *Exams)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
+      Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_EXAMS);
@@ -696,8 +695,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  Exa_PutPars,Exams);
 
    /***** Link to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
+   Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
   }
 
 /*****************************************************************************/

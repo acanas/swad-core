@@ -52,7 +52,6 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_QR.h"
-#include "swad_resource.h"
 #include "swad_setting.h"
 
 /*****************************************************************************/
@@ -372,9 +371,7 @@ static void Att_PutIconsInListOfEvents (void *Events)
 			       Usr_PutParMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
 
       /***** Put icon to get resource link *****/
-      if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-	 Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,
-					 Att_PutPars,Events);
+      Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,Att_PutPars,Events);
      }
   }
 
@@ -597,8 +594,7 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
      }
 
    /***** Icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,Att_PutPars,Events);
+   Ico_PutContextualIconToGetLink (ActReqLnkAtt,NULL,Att_PutPars,Events);
   }
 
 /*****************************************************************************/

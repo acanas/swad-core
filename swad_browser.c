@@ -3339,8 +3339,7 @@ static void Brw_PutIconsFileBrowser (__attribute__((unused)) void *Args)
      }
 
    /***** Put icon to get resource link *****/
-   if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk &&
-       Rsc_CheckIfICanGetLink () == Usr_CAN)
+   if (Brw_ActReqLnk[Gbl.FileBrowser.Type] != ActUnk)
       Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Gbl.FileBrowser.Type],NULL,
 				      NULL,NULL);
 

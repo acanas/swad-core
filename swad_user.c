@@ -85,7 +85,6 @@
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_record_database.h"
-#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_session.h"
 #include "swad_session_database.h"
@@ -5922,8 +5921,7 @@ static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
    UsrClp_PutIconToViewClipboardTchs ();
 
    /***** Put icon to get resource link *****/
-   if (Rsc_CheckIfICanGetLink () == Usr_CAN)
-      Ico_PutContextualIconToGetLink (ActReqLnkTch,NULL,NULL,NULL);
+   Ico_PutContextualIconToGetLink (ActReqLnkTch,NULL,NULL,NULL);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_USERS);
