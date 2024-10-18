@@ -3706,20 +3706,21 @@ legend {font-size: 12pt; font-weight: bold;}
 	}
 
 /*********************************** Exams ***********************************/
-.EXA_SET_TITLE
-	{
-	text-align: left;
-	vertical-align: middle;
-	color: black;
-	font-size: 16pt;
-	}
-.EXA_SET_NUM_QSTS
-	{
-	text-align: right;
-	vertical-align: middle;
-	color: #404040;
-	font-size: 12pt;
-	}
+.EXA_SET_TITLE_WHITE,
+.EXA_SET_TITLE_GREY,
+.EXA_SET_TITLE_PURPLE,
+.EXA_SET_TITLE_BLUE,
+.EXA_SET_TITLE_YELLOW,
+.EXA_SET_TITLE_PINK	{text-align: left; vertical-align: middle; color: black; font-size: 16pt;}
+.EXA_SET_TITLE_DARK	{text-align: left; vertical-align: middle; color: white; font-size: 16pt;}
+
+.EXA_SET_NUM_QSTS_WHITE,
+.EXA_SET_NUM_QSTS_GREY,
+.EXA_SET_NUM_QSTS_PURPLE,
+.EXA_SET_NUM_QSTS_BLUE,
+.EXA_SET_NUM_QSTS_YELLOW,
+.EXA_SET_NUM_QSTS_PINK	{text-align: right; vertical-align: middle; color: #404040; font-size: 12pt;}
+.EXA_SET_NUM_QSTS_DARK	{text-align: right; vertical-align: middle; color: #d0d0d0; font-size: 12pt;}
 
 .EXA_PRN_DESC
 	{

@@ -252,7 +252,7 @@ void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
 				 void (*FuncPars) (void *Args),void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
-				  "plus.svg",Ico_BLACK);
+				  "plus.svg",Ico_GREEN);
   }
 
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,

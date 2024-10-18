@@ -204,7 +204,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
 			    HTM_REQUIRED,
-			    "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
+			    "id=\"Title\" class=\"INPUT_FULL_NAME INPUT_%s\"",
 			    The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -633,13 +633,14 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
 					HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
 					"id=\"Title\""
-					" class=\"Frm_C2_INPUT INPUT_%s\"",
+					" class=\"INPUT_FULL_NAME INPUT_%s\"",
 					The_GetSuffix ());
 		     Frm_EndForm ();
 		    }
 		  else
 		    {
-		     HTM_SPAN_Begin ("class=\"EXA_SET_TITLE\"");
+		     HTM_SPAN_Begin ("class=\"EXA_SET_TITLE_%s\"",
+				     The_GetSuffix ());
 			HTM_Txt (Set.Title);
 		     HTM_SPAN_End ();
 		    }
@@ -648,7 +649,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 
 	    /***** Current number of questions in set *****/
 	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	       HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+	       HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS_%s\"",
+			       The_GetSuffix ());
 		  HTM_Unsigned (Exa_DB_GetNumQstsInSet (Set.SetCod));
 	       HTM_SPAN_End ();
 	    HTM_TD_End ();
@@ -668,7 +670,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		 }
 	       else
 		 {
-		  HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+		  HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS_%s\"",
+				  The_GetSuffix ());
 		     HTM_Unsigned (Set.NumQstsToPrint);
 		  HTM_SPAN_End ();
 		 }
@@ -1667,12 +1670,12 @@ void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set)
    HTM_TABLE_BeginWide ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"EXA_SET_TITLE\"");
+      HTM_TD_Begin ("class=\"EXA_SET_TITLE_%s\"",The_GetSuffix ());
 	 HTM_Txt (Set->Title);
       HTM_TD_End ();
 
       /***** Number of questions to appear in exam print *****/
-      HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+      HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Set->NumQstsToPrint);
 	 HTM_NBSP ();
 	 HTM_Txt (Set->NumQstsToPrint == 1 ? Txt_question :
