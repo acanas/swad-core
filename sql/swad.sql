@@ -1164,43 +1164,17 @@ CREATE TABLE IF NOT EXISTS plg_plugins (
 	IP CHAR(15) NOT NULL,
 	UNIQUE INDEX(PlgCod));
 --
--- Table prg_expanded: stores the items of the course program currently expanded for each user
---
-CREATE TABLE IF NOT EXISTS prg_expanded (
-	UsrCod INT NOT NULL,
-	ItmCod INT NOT NULL,
-	ClickTime DATETIME NOT NULL,
-	UNIQUE INDEX(UsrCod,ItmCod),
-	INDEX(ItmCod),
-	INDEX(ClickTime));
---
--- Table prg_items: stores the items of the course program
---
-CREATE TABLE IF NOT EXISTS prg_items (
-	ItmCod INT NOT NULL AUTO_INCREMENT,
-	CrsCod INT NOT NULL DEFAULT -1,
-	ItmInd INT NOT NULL DEFAULT 0,
-	Level INT NOT NULL DEFAULT 1,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	Title VARCHAR(2047) NOT NULL,
-	Txt TEXT NOT NULL,
-	UNIQUE INDEX(ItmCod),
-	UNIQUE INDEX(CrsCod,ItmInd));
---
 -- Table prg_resources: stores the resources of the course program
 --
 CREATE TABLE IF NOT EXISTS prg_resources (
 	RscCod INT NOT NULL AUTO_INCREMENT,
-	ItmCod INT NOT NULL DEFAULT -1,
+	NodCod INT NOT NULL DEFAULT -1,
 	RscInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
 	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(RscCod),
-	UNIQUE INDEX(ItmCod,RscInd));
+	UNIQUE INDEX(NodCod,RscInd));
 --
 -- Table prj_config: stores the configuration of projects for each course
 --
@@ -1566,6 +1540,32 @@ CREATE TABLE IF NOT EXISTS tml_timelines (
 	SessionId CHAR(43) NOT NULL,
 	NotCod BIGINT NOT NULL,
 	UNIQUE INDEX(SessionId,NotCod));
+--
+-- Table tre_expanded: stores the nodes of the course trees currently expanded for each user
+--
+CREATE TABLE IF NOT EXISTS tre_expanded (
+	UsrCod INT NOT NULL,
+	NodCod INT NOT NULL,
+	ClickTime DATETIME NOT NULL,
+	UNIQUE INDEX(UsrCod,NodCod),
+	INDEX(NodCod),
+	INDEX(ClickTime));
+--
+-- Table tre_nodes: stores the nodes of the course trees
+--
+CREATE TABLE IF NOT EXISTS tre_nodes (
+	NodCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	NodInd INT NOT NULL DEFAULT 0,
+	Level INT NOT NULL DEFAULT 1,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(NodCod),
+	UNIQUE INDEX(CrsCod,NodInd));
 --
 -- Table tst_answers: stores the answers to the questions in tests
 --

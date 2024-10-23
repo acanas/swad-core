@@ -635,10 +635,34 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.18.5 (2024-10-18)"
+#define Log_PLATFORM_VERSION	"SWAD 24.19.1 (2024-10-23)"
 #define CSS_FILE		"swad24.18.5.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.19.1:  Oct 23, 2024  Changes in course trees. (338506 lines)
+	Version 24.19:    Oct 21, 2024  New module swad_tree_database. (338325 lines)
+					18 changes necessary in database:
+RENAME TABLE prg_expanded TO tre_expanded;
+ALTER TABLE tre_expanded DROP INDEX UsrCod;
+ALTER TABLE tre_expanded DROP INDEX ItmCod;
+ALTER TABLE tre_expanded DROP INDEX ClickTime;
+ALTER TABLE tre_expanded CHANGE COLUMN ItmCod NodCod INT NOT NULL;
+ALTER TABLE tre_expanded ADD UNIQUE INDEX(UsrCod,NodCod);
+ALTER TABLE tre_expanded ADD INDEX(NodCod);
+ALTER TABLE tre_expanded ADD INDEX(ClickTime);
+
+RENAME TABLE prg_items TO tre_nodes;
+ALTER TABLE tre_nodes DROP INDEX CrsCod;
+ALTER TABLE tre_nodes CHANGE COLUMN ItmCod NodCod INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE tre_nodes CHANGE COLUMN ItmInd NodInd INT NOT NULL DEFAULT 0;
+ALTER TABLE tre_nodes ADD UNIQUE INDEX(NodCod);
+ALTER TABLE tre_nodes ADD UNIQUE INDEX(CrsCod,NodInd);
+ALTER TABLE tre_nodes DROP INDEX ItmCod;
+
+ALTER TABLE prg_resources DROP INDEX ItmCod;
+ALTER TABLE prg_resources CHANGE COLUMN ItmCod NodCod INT NOT NULL DEFAULT -1;
+ALTER TABLE prg_resources ADD UNIQUE INDEX(NodCod,RscInd);
+
 	Version 24.18.5:  Oct 18, 2024  Fixed colors and layout in exam sets. (338224 lines)
 	Version 24.18.4:  Oct 15, 2024  Code refactoring in program resources. (338220 lines)
 	Version 24.18.3:  Oct 15, 2024  Code refactoring in program resources. (338245 lines)

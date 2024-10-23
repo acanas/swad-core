@@ -130,6 +130,21 @@ static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                                    HTM_Attributes_t Attributes);
 
 /*****************************************************************************/
+/******************************* Reset resource ******************************/
+/*****************************************************************************/
+
+void Rsc_ResetResource (struct Rsc_Resource *Resource)
+  {
+   Resource->Hierarchy.RscCod = -1L;
+   Resource->Hierarchy.RscInd = 0;
+   Resource->Hierarchy.HiddenOrVisible = HidVis_VISIBLE;
+   Resource->Link.Type = Rsc_NONE;
+   Resource->Link.Cod  = -1L;
+   Resource->Title[0] = '\0';
+   Resource->Title[0] = '\0';
+  }
+
+/*****************************************************************************/
 /************************* Show resources clipboard **************************/
 /*****************************************************************************/
 
@@ -182,18 +197,15 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
       if (CurrentLink)	// Editing an existing element
 	{
          /***** Current link (empty or not) *****/
-	 Rsc_WriteRowClipboard (CurrentLink,
-				HTM_CHECKED);
+	 Rsc_WriteRowClipboard (CurrentLink,HTM_CHECKED);
 
 	 /***** Row with empty link to remove the current link *****/
 	 if (CurrentLink->Type != Rsc_NONE)
-	    Rsc_WriteRowClipboard (&EmptyLink,
-				   HTM_SUBMIT_ON_CLICK);
+	    Rsc_WriteRowClipboard (&EmptyLink,HTM_SUBMIT_ON_CLICK);
 	}
       else		// Inside form to create a new element
 	 /***** Row with empty link *****/
-	 Rsc_WriteRowClipboard (&EmptyLink,
-				HTM_CHECKED);
+	 Rsc_WriteRowClipboard (&EmptyLink,HTM_CHECKED);
 
       /***** Get links in clipboard from database and write them *****/
       NumLinks = Rsc_DB_GetClipboard (&mysql_res);

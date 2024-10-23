@@ -38,6 +38,13 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+struct Rsc_ResourceHierarchy
+  {
+   long RscCod;
+   unsigned RscInd;	// 1, 2, 3...
+   HidVis_HiddenOrVisible_t HiddenOrVisible;
+  };
+
 #define Rsc_MAX_CHARS_RESOURCE_TITLE	(128 - 1)	// 127
 #define Rsc_MAX_BYTES_RESOURCE_TITLE	((Rsc_MAX_CHARS_RESOURCE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
@@ -76,9 +83,18 @@ struct Rsc_Link
    long Cod;
   };
 
+struct Rsc_Resource
+  {
+   struct Rsc_ResourceHierarchy Hierarchy;
+   struct Rsc_Link Link;
+   char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
+
+void Rsc_ResetResource (struct Rsc_Resource *Resource);
 
 void Rsc_ShowClipboard (void);
 void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink);

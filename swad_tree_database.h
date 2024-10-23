@@ -1,7 +1,7 @@
-// swad_program_database.h: course program, operations with database
+// swad_tree_database.h: course tree, operations with database
 
-#ifndef _SWAD_PRG_DB
-#define _SWAD_PRG_DB
+#ifndef _SWAD_TRE_DB
+#define _SWAD_TRE_DB
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -36,27 +36,30 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-//------------------------------ Resources ------------------------------------
-long Prg_DB_CreateResource (const struct Tre_Node *Node);
+//---------------------------- Tree nodes -------------------------------------
+long Tre_DB_InsertNode (const struct Tre_Node *Node,const char *Txt);
+void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt);
+void Tre_DB_HideOrUnhideNode (long NodCod,
+			      HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Tre_DB_UpdateIndexRange (long Diff,long Begin,long End);
+void Tre_DB_LockTableNodes (void);
+void Tre_DB_MoveDownNodes (unsigned Index);
+void Tre_DB_MoveLeftRightNodeRange (const struct Tre_NodeRange *ToMove,
+                                    Tre_MoveLeftRight_t LeftRight);
 
-void Prg_DB_UpdateResourceTitle (long NodCod,long RscCod,
-                                 const char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1]);
+unsigned Tre_DB_GetListNodes (MYSQL_RES **mysql_res);
+unsigned Tre_DB_GetNodeDataByCod (MYSQL_RES **mysql_res,long NodCod);
+void Tre_DB_GetNodeTxt (long NodCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
-                                  bool ShowHiddenResources);
-unsigned Prg_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod);
+unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level);
+unsigned Tre_DB_GetNumNodes (Hie_Level_t Level);
 
-unsigned Prg_DB_GetRscIndBefore (long NodCod,unsigned RscInd);
-unsigned Prg_DB_GetRscIndAfter (long NodCod,unsigned RscInd);
-long Prg_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd);
+void Tre_DB_RemoveNodeRange (const struct Tre_NodeRange *ToRemove);
+void Tre_DB_RemoveCrsNodes (long CrsCod);
 
-void Prg_DB_RemoveResource (const struct Tre_Node *Node);
-
-void Prg_DB_HideOrUnhideResource (long RscCod,
-				  HidVis_HiddenOrVisible_t HiddenOrVisible);
-
-void Prg_DB_LockTableResources (void);
-void Prg_DB_UpdateRscInd (long RscCod,int RscInd);
-void Prg_DB_UpdateRscLink (const struct Tre_Node *Node);
+//--------------------------- Expanded tree nodes -----------------------------
+void Tre_DB_InsertNodeInExpandedNodes (long NodCod);
+ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod);
+void Tre_DB_RemoveNodeFromExpandedNodes (long NodCod);
 
 #endif

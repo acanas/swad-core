@@ -38,123 +38,117 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-struct Prg_ResourceHierarchy
+#define Tre_NUM_TYPES 1
+typedef enum
   {
-   long RscCod;
-   unsigned RscInd;	// 1, 2, 3...
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
-  };
+   Tre_PROGRAM,		// Course program
+  } Tre_TreeType_t;
 
-#define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
-#define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Tre_MAX_CHARS_NODE_TITLE	(128 - 1)	// 127
+#define Tre_MAX_BYTES_NODE_TITLE	((Tre_MAX_CHARS_NODE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-struct Prg_ItemHierarchy
+struct Tre_NodeHierarchy
   {
-   long ItmCod;
-   unsigned ItmInd;	// 1, 2, 3...
+   long NodCod;
+   unsigned NodInd;	// 1, 2, 3...
    unsigned Level;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
   };
 
-struct Prg_Item
+struct Tre_Node
   {
-   struct Prg_ItemHierarchy Hierarchy;
-   unsigned NumItem;
+   Tre_TreeType_t Type;
+   struct Tre_NodeHierarchy Hierarchy;
+   unsigned NumNode;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
-   char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
-   struct
-     {
-      struct Prg_ResourceHierarchy Hierarchy;
-      struct Rsc_Link Link;
-      char Title[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
-     } Resource;
+   char Title[Tre_MAX_BYTES_NODE_TITLE + 1];
+   struct Rsc_Resource Resource;
   };
 
-struct Prg_ItemRange
+struct Tre_NodeRange
   {
    unsigned Begin;	// Index of the first item in the subtree
    unsigned End;	// Index of the last item in the subtree
   };
 
-#define Prg_NUM_MOVEMENTS_LEFT_RIGHT 2
+#define Tre_NUM_MOVEMENTS_LEFT_RIGHT 2
 typedef enum
   {
-   Prg_MOVE_LEFT,
-   Prg_MOVE_RIGHT,
-  } Prg_MoveLeftRight_t;
+   Tre_MOVE_LEFT,
+   Tre_MOVE_RIGHT,
+  } Tre_MoveLeftRight_t;
 
-#define Prg_NUM_MOVEMENTS_EXPAND_CONTRACT 2
+#define Tre_NUM_MOVEMENTS_EXPAND_CONTRACT 2
 typedef enum
   {
-   Prg_EXPAND,
-   Prg_CONTRACT,
-  } Prg_ExpandContract_t;
+   Tre_EXPAND,
+   Tre_CONTRACT,
+  } Tre_ExpandContract_t;
 
-#define Prg_NUM_LISTING_TYPES 12
+#define Tre_NUM_LISTING_TYPES 12
 typedef enum
   {
-   Prg_PRINT,			// List items ready to be printed
-   Prg_VIEW,			// List items without any edition
+   Tre_PRINT,			// List nodes ready to be printed
+   Tre_VIEW,			// List nodes without any edition
 
-   Prg_EDIT_ITEMS,		// Buttons to edit list of items
-   Prg_FORM_NEW_END_ITEM,	// Form to create a new first level item at the end
-   Prg_FORM_NEW_CHILD_ITEM,	// Form to create a new child item
-   Prg_FORM_EDIT_ITEM,		// Form to edit a selected item
-   Prg_END_EDIT_ITEM,		// List item after edition
-   Prg_RECEIVE_ITEM,		// Receive item data after create/edit
+   Tre_EDIT_NODES,		// Buttons to edit list of nodes
+   Tre_FORM_NEW_END_NODE,	// Form to create a new first level node at the end
+   Tre_FORM_NEW_CHILD_NODE,	// Form to create a new child node
+   Tre_FORM_EDIT_NODE,		// Form to edit a selected node
+   Tre_END_EDIT_NODE,		// List node after edition
+   Tre_RECEIVE_NODE,		// Receive node data after create/edit
 
-   Prg_EDIT_RESOURCES,		// List resources of a selected item for edition
-   Prg_EDIT_RESOURCE_LINK,	// Show clipboard in a resource to select a link
-   Prg_CHANGE_RESOURCE_LINK,	// Change resource link
-   Prg_END_EDIT_RES,		// List resources of a selected item after edition
-  } Prg_ListingType_t;
+   Tre_EDIT_PRG_RESOURCES,	// List resources of a selected node for edition
+   Tre_EDIT_PRG_RESOURCE_LINK,	// Show clipboard in a resource to select a link
+   Tre_CHG_PRG_RESOURCE_LINK,	// Change resource link
+   Tre_END_EDIT_PRG_RESOURCES,	// List resources of a selected node after edition
+  } Tre_ListingType_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Prg_ShowCourseProgram (void);
-void Prg_EditCourseProgram (void);
-
-void Prg_ShowAllItems (Prg_ListingType_t ListingType,
+void Tre_ShowTree (void);
+void Tre_EditTree (void);
+void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
+		       Tre_ListingType_t ListingType,
                        long SelectedItmCod,long SelectedRscCod);
 
-Usr_Can_t Prg_CheckIfICanEditProgram (void);
+Usr_Can_t Tre_CheckIfICanEditTree (void);
 
-void Prg_PutParItmCod (void *ItmCod);
-void Prg_GetPars (struct Prg_Item *Item);
+void Tre_PutParNodCod (void *NodCod);
+void Tre_GetPars (struct Tre_Node *Node);
 
-void Prg_GetListItems (void);
-void Prg_FreeListItems (void);
+void Tre_GetListNodes (void);
+void Tre_FreeListNodes (void);
 
-void Prg_ResetItem (struct Prg_Item *Item);
-void Prg_ResetResource (struct Prg_Item *Item);
+void Tre_ResetNode (struct Tre_Node *Node);
 
-unsigned Prg_GetNumItemFromItmCod (long ItmCod);
-long Prg_GetItmCodFromNumItem (unsigned NumItem);
-unsigned Prg_GetItmIndFromNumItem (unsigned NumItem);
-unsigned Prg_GetLevelFromNumItem (unsigned NumItem);
+unsigned Tre_GetNumNodeFromNodCod (long NodCod);
+long Tre_GetNodCodFromNumNode (unsigned NumNode);
+unsigned Tre_GetNodIndFromNumNode (unsigned NumNode);
+unsigned Tre_GetLevelFromNumNode (unsigned NumNode);
 
-void Prg_ViewItemAfterEdit (void);
-void Prg_ReqChangeItem (void);
-void Prg_ReqCreateItem (void);
-void Prg_ReceiveChgItem (void);
-void Prg_ReceiveNewItem (void);
+void Tre_ViewNodeAfterEdit (void);
+void Tre_ReqChangeNode (void);
+void Tre_ReqCreateNode (void);
+void Tre_ReceiveChgNode (void);
+void Tre_ReceiveNewNode (void);
 
-void Prg_ReqRemItem (void);
-void Prg_RemoveItem (void);
-void Prg_HideItem (void);
-void Prg_UnhideItem (void);
+void Tre_ReqRemNode (void);
+void Tre_RemoveNode (void);
+void Tre_HideNode (void);
+void Tre_UnhideNode (void);
 
-void Prg_MoveUpItem (void);
-void Prg_MoveDownItem (void);
-void Prg_MoveLeftItem (void);
-void Prg_MoveRightItem (void);
+void Tre_MoveUpNode (void);
+void Tre_MoveDownNode (void);
+void Tre_MoveLeftNode (void);
+void Tre_MoveRightNode (void);
 
-void Prg_ExpandItem (void);
-void Prg_ContractItem (void);
+void Tre_ExpandNode (void);
+void Tre_ContractNode (void);
 
 //-------------------------------- Figures ------------------------------------
 void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule

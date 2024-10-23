@@ -50,7 +50,7 @@ typedef enum
    ParCod_GrpTyp,	// Group type code
    ParCod_Hld,		// Holiday code
    ParCod_Ins,		// Institution code
-   ParCod_Itm,		// Item code in course program
+   ParCod_Nod,		// Item code in course program
    ParCod_Lnk,		// Link code
    ParCod_Mai,		// Domain mail code
    ParCod_Mch,		// Match code in game

@@ -36,12 +36,12 @@
 void PrgRsc_ViewResourcesAfterEdit (void);
 void PrgRsc_EditResources (void);
 
-void PrgRsc_ListItemResources (Prg_ListingType_t ListingType,
-                               struct Prg_Item *Item,
-                               long SelectedItmCod,
+void PrgRsc_ListItemResources (Tre_ListingType_t ListingType,
+                               struct Tre_Node *Node,
+                               long SelectedNodCod,
                                long SelectedRscCod);
 
-void PrgRsc_GetResourceDataByCod (struct Prg_Item *Item);
+void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node);
 
 void PrgRsc_CreateResource (void);
 

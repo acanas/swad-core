@@ -2465,60 +2465,6 @@ mysql> DESCRIBE plg_plugins;
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
-   /***** Table prg_expanded *****/
-/*
-mysql> DESCRIBE prg_expanded;
-+-----------+----------+------+-----+---------+-------+
-| Field     | Type     | Null | Key | Default | Extra |
-+-----------+----------+------+-----+---------+-------+
-| UsrCod    | int      | NO   | PRI | NULL    |       |
-| ItmCod    | int      | NO   | PRI | NULL    |       |
-| ClickTime | datetime | NO   | MUL | NULL    |       |
-+-----------+----------+------+-----+---------+-------+
-3 rows in set (0,00 sec)
-
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_expanded ("
-			"UsrCod INT NOT NULL,"
-			"ItmCod INT NOT NULL,"
-			"ClickTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(UsrCod,ItmCod),"
-		   "INDEX(ItmCod),"
-		   "INDEX(ClickTime))");
-
-   /***** Table prg_items *****/
-/*
-mysql> DESCRIBE prg_items;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| ItmCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod    | int(11)       | NO   | MUL | -1      |                |
-| ItmInd    | int(11)       | NO   |     | 0       |                |
-| Level     | int(11)       | NO   |     | 1       |                |
-| Hidden    | enum('N','Y') | NO   |     | N       |                |
-| UsrCod    | int(11)       | NO   |     | NULL    |                |
-| StartTime | datetime      | NO   |     | NULL    |                |
-| EndTime   | datetime      | NO   |     | NULL    |                |
-| Title     | varchar(2047) | NO   |     | NULL    |                |
-| Txt       | text          | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_items ("
-			"ItmCod INT NOT NULL AUTO_INCREMENT,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"ItmInd INT NOT NULL DEFAULT 0,"
-			"Level INT NOT NULL DEFAULT 1,"
-			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"UsrCod INT NOT NULL,"
-			"StartTime DATETIME NOT NULL,"
-			"EndTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"		// Prg_MAX_BYTES_PROGRAM_ITEM_TITLE
-			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
-		   "UNIQUE INDEX(ItmCod),"
-		   "UNIQUE INDEX(CrsCod,ItmInd))");
-
    /***** Table prg_resources *****/
 /*
 mysql> DESCRIBE prg_resources;
@@ -2526,7 +2472,7 @@ mysql> DESCRIBE prg_resources;
 | Field  | Type                                                                                                                                                  | Null | Key | Default | Extra          |
 +--------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+----------------+
 | RscCod | int                                                                                                                                                   | NO   | PRI | NULL    | auto_increment |
-| ItmCod | int                                                                                                                                                   | NO   | MUL | -1      |                |
+| NodCod | int                                                                                                                                                   | NO   | MUL | -1      |                |
 | RscInd | int                                                                                                                                                   | NO   |     | 0       |                |
 | Hidden | enum('N','Y')                                                                                                                                         | NO   |     | N       |                |
 | Type   | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') | NO   |     | non     |                |
@@ -2537,7 +2483,7 @@ mysql> DESCRIBE prg_resources;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS prg_resources ("
 			"RscCod INT NOT NULL AUTO_INCREMENT,"
-			"ItmCod INT NOT NULL DEFAULT -1,"
+			"NodCod INT NOT NULL DEFAULT -1,"
 			"RscInd INT NOT NULL DEFAULT 0,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Type ENUM('non','inf','gui','lec','pra','bib','faq',"
@@ -2546,7 +2492,7 @@ mysql> DESCRIBE prg_resources;
 				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Title VARCHAR(2047) NOT NULL,"		// Rsc_MAX_BYTES_RESOURCE_TITLE
 		   "UNIQUE INDEX(RscCod),"
-		   "UNIQUE INDEX(ItmCod,RscInd))");
+		   "UNIQUE INDEX(NodCod,RscInd))");
 
    /***** Table prj_config *****/
 /*
@@ -3339,6 +3285,59 @@ mysql> DESCRIBE tml_timelines;
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"NotCod BIGINT NOT NULL,"
 		   "UNIQUE INDEX(SessionId,NotCod))");
+
+   /***** Table tre_expanded *****/
+/*
+mysql> DESCRIBE tre_expanded;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| UsrCod    | int      | NO   | PRI | NULL    |       |
+| NodCod    | int      | NO   | PRI | NULL    |       |
+| ClickTime | datetime | NO   | MUL | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tre_expanded ("
+			"UsrCod INT NOT NULL,"
+			"NodCod INT NOT NULL,"
+			"ClickTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,NodCod),"
+		   "INDEX(NodCod),"
+		   "INDEX(ClickTime))");
+
+   /***** Table tre_nodes *****/
+/*
+mysql> DESCRIBE tre_nodes;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| NodCod    | int           | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int           | NO   | MUL | -1      |                |
+| NodInd    | int           | NO   |     | 0       |                |
+| Level     | int           | NO   |     | 1       |                |
+| Hidden    | enum('N','Y') | NO   |     | N       |                |
+| UsrCod    | int           | NO   |     | NULL    |                |
+| StartTime | datetime      | NO   |     | NULL    |                |
+| EndTime   | datetime      | NO   |     | NULL    |                |
+| Title     | varchar(2047) | NO   |     | NULL    |                |
+| Txt       | text          | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+10 rows in set (0,01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tre_nodes ("
+			"NodCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"NodInd INT NOT NULL DEFAULT 0,"
+			"Level INT NOT NULL DEFAULT 1,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"		// Tre_MAX_BYTES_NODE_TITLE
+			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(NodCod),"
+		   "UNIQUE INDEX(CrsCod,NodInd))");
 
    /***** Table tst_answers *****/
 /*
