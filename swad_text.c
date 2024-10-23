@@ -27930,7 +27930,7 @@ const char *Txt_Number_of_BR_program_items =
 #elif L==2	// de
 	"Anzahl der Programmelemente";
 #elif L==3	// en
-	"Number of<br />program items";
+	"Number of<br />tree nodes";
 #elif L==4	// es
 	"N.&ordm; de<br />items en programas";
 #elif L==5	// fr
@@ -27944,7 +27944,7 @@ const char *Txt_Number_of_BR_program_items =
 #elif L==9	// pt
 	"N.&ordm; de<br />itens de programas";
 #elif L==10	// tr
-	"Number of<br />program items";		// Çeviri lazim!
+	"Number of<br />tree nodes";		// Çeviri lazim!
 #endif
 
 const char *Txt_Number_of_public_files =
@@ -28206,7 +28206,7 @@ const char *Txt_Number_of_BR_courses_with_BR_program_items =
 #elif L==2	// de
 	"Anzahl der<br />Kursen mit<br />Programmelemente";
 #elif L==3	// en
-	"Number of<br />courses with<br />program items";
+	"Number of<br />courses with<br />tree nodes";
 #elif L==4	// es
 	"N.&ordm; de<br />asignaturas con<br />items de programas";
 #elif L==5	// fr

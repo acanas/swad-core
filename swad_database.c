@@ -3309,25 +3309,27 @@ mysql> DESCRIBE tre_expanded;
    /***** Table tre_nodes *****/
 /*
 mysql> DESCRIBE tre_nodes;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| NodCod    | int           | NO   | PRI | NULL    | auto_increment |
-| CrsCod    | int           | NO   | MUL | -1      |                |
-| NodInd    | int           | NO   |     | 0       |                |
-| Level     | int           | NO   |     | 1       |                |
-| Hidden    | enum('N','Y') | NO   |     | N       |                |
-| UsrCod    | int           | NO   |     | NULL    |                |
-| StartTime | datetime      | NO   |     | NULL    |                |
-| EndTime   | datetime      | NO   |     | NULL    |                |
-| Title     | varchar(2047) | NO   |     | NULL    |                |
-| Txt       | text          | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-10 rows in set (0,01 sec)
++-----------+-------------------------------------------------------+------+-----+---------+----------------+
+| Field     | Type                                                  | Null | Key | Default | Extra          |
++-----------+-------------------------------------------------------+------+-----+---------+----------------+
+| NodCod    | int                                                   | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int                                                   | NO   | MUL | -1      |                |
+| Type      | enum('prg','gui','lec','pra','bib','faq','lnk','ass') | NO   |     | prg     |                |
+| NodInd    | int                                                   | NO   |     | 0       |                |
+| Level     | int                                                   | NO   |     | 1       |                |
+| Hidden    | enum('N','Y')                                         | NO   |     | N       |                |
+| UsrCod    | int                                                   | NO   |     | NULL    |                |
+| StartTime | datetime                                              | NO   |     | NULL    |                |
+| EndTime   | datetime                                              | NO   |     | NULL    |                |
+| Title     | varchar(2047)                                         | NO   |     | NULL    |                |
+| Txt       | text                                                  | NO   |     | NULL    |                |
++-----------+-------------------------------------------------------+------+-----+---------+----------------+
+11 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tre_nodes ("
 			"NodCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL,"
 			"NodInd INT NOT NULL DEFAULT 0,"
 			"Level INT NOT NULL DEFAULT 1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
@@ -3337,7 +3339,7 @@ mysql> DESCRIBE tre_nodes;
 			"Title VARCHAR(2047) NOT NULL,"		// Tre_MAX_BYTES_NODE_TITLE
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(NodCod),"
-		   "UNIQUE INDEX(CrsCod,NodInd))");
+		   "UNIQUE INDEX(CrsCod,Type,NodInd))");
 
    /***** Table tst_answers *****/
 /*

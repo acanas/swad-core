@@ -38,10 +38,17 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Tre_NUM_TYPES 1
+#define Tre_NUM_TYPES 8
 typedef enum
   {
    Tre_PROGRAM,		// Course program
+   Tre_GUIDE,
+   Tre_LECTURES,
+   Tre_PRACTICALS,
+   Tre_BIBLIOGRAPHY,
+   Tre_FAQ,
+   Tre_LINKS,
+   Tre_ASSESSMENT,
   } Tre_TreeType_t;
 
 #define Tre_MAX_CHARS_NODE_TITLE	(128 - 1)	// 127
@@ -57,7 +64,7 @@ struct Tre_NodeHierarchy
 
 struct Tre_Node
   {
-   Tre_TreeType_t Type;
+   Tre_TreeType_t TreeType;
    struct Tre_NodeHierarchy Hierarchy;
    unsigned NumNode;
    long UsrCod;
@@ -69,8 +76,8 @@ struct Tre_Node
 
 struct Tre_NodeRange
   {
-   unsigned Begin;	// Index of the first item in the subtree
-   unsigned End;	// Index of the last item in the subtree
+   unsigned Begin;	// Index of the first node in the subtree
+   unsigned End;	// Index of the last node in the subtree
   };
 
 #define Tre_NUM_MOVEMENTS_LEFT_RIGHT 2
@@ -121,7 +128,7 @@ Usr_Can_t Tre_CheckIfICanEditTree (void);
 void Tre_PutParNodCod (void *NodCod);
 void Tre_GetPars (struct Tre_Node *Node);
 
-void Tre_GetListNodes (void);
+void Tre_GetListNodes (Tre_TreeType_t TreeType);
 void Tre_FreeListNodes (void);
 
 void Tre_ResetNode (struct Tre_Node *Node);

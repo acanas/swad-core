@@ -122,7 +122,7 @@ static void Tre_PutIconToEditTree (void);
 static void Tre_PutIconToViewTree (void);
 static void Tre_PutIconToCreateNewNode (void);
 
-static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
+static void Tre_WriteRowNode (Tre_TreeType_t TreeType,Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedNodCod,
@@ -130,7 +130,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
                                                ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                                                Vie_ViewType_t ViewType);
-static void Tre_WriteNodeText (long NodCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Tre_WriteNodeText (Tre_TreeType_t TreeType,
+			       long NodCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void Tre_WriteRowToCreateNode (long ParentNodCod,unsigned FormLevel);
 static void Tre_SetTitleClass (char **TitleClass,unsigned Level);
 static void Tre_FreeTitleClass (char *TitleClass);
@@ -170,7 +171,8 @@ static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
 static void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown);
-static bool Tre_ExchangeNodeRanges (int NumNodeTop,int NumNodeBottom);
+static bool Tre_ExchangeNodeRanges (Tre_TreeType_t TreeType,
+				    int NumNodeTop,int NumNodeBottom);
 static int Tre_GetPrevBrother (int NumNode);
 static int Tre_GetNextBrother (int NumNode);
 
@@ -182,13 +184,14 @@ static void Tre_SetNodeRangeWithAllChildren (unsigned NumNode,struct Tre_NodeRan
 static unsigned Tre_GetLastChild (int NumNode);
 
 static void Tre_ShowFormToCreateNode (long ParentNodCod);
-static void Tre_ShowFormToChangeNode (long NodCod);
+static void Tre_ShowFormToChangeNode (Tre_TreeType_t TreeType,long NodCod);
 static void Tre_ParsFormNode (void *NodCod);
 static void Tre_ShowFormNode (const struct Tre_Node *Node,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 			      const char *Txt);
 
-static void Tre_InsertNode (const struct Tre_Node *ParentNode,
+static void Tre_InsertNode (Tre_TreeType_t TreeType,
+			    const struct Tre_Node *ParentNode,
 		            struct Tre_Node *Node,const char *Txt);
 
 /*****************************************************************************/
@@ -211,7 +214,7 @@ void Tre_ShowTree (void)
      }
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
 
    /***** Show course program without highlighting any node *****/
    Tre_ShowAllNodes (TreeType,Tre_VIEW,-1L,-1L);
@@ -236,7 +239,7 @@ void Tre_EditTree (void)
      }
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
 
    /***** Show course program without highlighting any node *****/
    Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
@@ -305,7 +308,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
       /***** Table *****/
       HTM_TABLE_Begin ("TBL_SCROLL");
 
-	 /***** Write all program items *****/
+	 /***** Write all tree nodes *****/
 	 for (NumNode = 0, The_ResetRowColor ();
 	      NumNode < Tre_Gbl.List.NumNodes;
 	      NumNode++)
@@ -322,7 +325,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 	    if (Tre_CheckIfAllHigherLevelsAreExpanded (Node.Hierarchy.Level))
 	      {
 	       /* Write row with this item */
-	       Tre_WriteRowNode (ListingType,NumNode,&Node,ContractedOrExpanded,
+	       Tre_WriteRowNode (TreeType,ListingType,NumNode,&Node,ContractedOrExpanded,
 				 SelectedNodCod,SelectedRscCod);
                The_ChangeRowColor ();
 
@@ -351,7 +354,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
   }
 
 /*****************************************************************************/
-/******************* Check if I can create program items *********************/
+/******************* Check if I can create tree nodes *********************/
 /*****************************************************************************/
 
 Usr_Can_t Tre_CheckIfICanEditTree (void)
@@ -455,7 +458,7 @@ static void Tre_PutIconToCreateNewNode (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
+static void Tre_WriteRowNode (Tre_TreeType_t TreeType,Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
                               ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                               long SelectedNodCod,
@@ -644,13 +647,13 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    /* Item text / form */
 	    if (ListingType == Tre_FORM_EDIT_NODE && HighlightNode)
 	       /* Form to change item title, dates and text */
-	       Tre_ShowFormToChangeNode (Node->Hierarchy.NodCod);
+	       Tre_ShowFormToChangeNode (TreeType,Node->Hierarchy.NodCod);
 	    else
 	       /* Text */
-	       Tre_WriteNodeText (Node->Hierarchy.NodCod,HiddenOrVisible);
+	       Tre_WriteNodeText (TreeType,Node->Hierarchy.NodCod,HiddenOrVisible);
 
 	    /* List of resources */
-	    PrgRsc_ListItemResources (ListingType,Node,SelectedNodCod,SelectedRscCod);
+	    PrgRsc_ListNodeResources (ListingType,Node,SelectedNodCod,SelectedRscCod);
 
 	    /* End text and resources */
 	    HTM_TD_End ();
@@ -693,13 +696,14 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
 /**************************** Show item text *********************************/
 /*****************************************************************************/
 
-static void Tre_WriteNodeText (long NodCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Tre_WriteNodeText (Tre_TreeType_t TreeType,
+			       long NodCod,HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char *HidVis_PrgClass[HidVis_NUM_HIDDEN_VISIBLE];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /* Text */
-   Tre_DB_GetNodeTxt (NodCod,Txt);
+   Tre_DB_GetNodeTxt (TreeType,NodCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -1143,7 +1147,7 @@ void Tre_GetPars (struct Tre_Node *Node)
    Tre_ResetNode (Node);
 
    /****** Parameters specific for each type of tree *****/
-   switch (Node->Type)
+   switch (Node->TreeType)
      {
       case Tre_PROGRAM:
 	 /***** Try to get node resource *****/
@@ -1165,10 +1169,10 @@ void Tre_GetPars (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************************** List all program items ***************************/
+/*************************** List all tree nodes *****************************/
 /*****************************************************************************/
 
-void Tre_GetListNodes (void)
+void Tre_GetListNodes (Tre_TreeType_t TreeType)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1177,15 +1181,15 @@ void Tre_GetListNodes (void)
    if (Tre_Gbl.List.IsRead)
       Tre_FreeListNodes ();
 
-   /***** Get list of program items from database *****/
-   if ((Tre_Gbl.List.NumNodes = Tre_DB_GetListNodes (&mysql_res))) // Items found...
+   /***** Get list of tree nodes from database *****/
+   if ((Tre_Gbl.List.NumNodes = Tre_DB_GetListNodes (TreeType,&mysql_res))) // Nodes found...
      {
-      /***** Create list of program items *****/
+      /***** Create list of tree nodes *****/
       if ((Tre_Gbl.List.Nodes = calloc (Tre_Gbl.List.NumNodes,
 				        sizeof (*Tre_Gbl.List.Nodes))) == NULL)
          Err_NotEnoughMemoryExit ();
 
-      /***** Get the program items codes *****/
+      /***** Get the tree nodes codes *****/
       for (NumItem = 0;
 	   NumItem < Tre_Gbl.List.NumNodes;
 	   NumItem++)
@@ -1225,7 +1229,7 @@ static void Tre_GetNodeDataByCod (struct Tre_Node *Node)
    if (Node->Hierarchy.NodCod > 0)
      {
       /***** Build query *****/
-      NumRows = Tre_DB_GetNodeDataByCod (&mysql_res,Node->Hierarchy.NodCod);
+      NumRows = Tre_DB_GetNodeDataByCod (Node,&mysql_res);
 
       /***** Get data of tree node *****/
       Tre_GetNodeDataFromRow (&mysql_res,Node,NumRows);
@@ -1317,7 +1321,7 @@ void Tre_FreeListNodes (void)
 
 void Tre_ResetNode (struct Tre_Node *Node)
   {
-   Node->Type = Tre_PROGRAM;
+   Node->TreeType = Tre_PROGRAM;
    Node->Hierarchy.NodCod = -1L;
    Node->Hierarchy.NodInd = 0;
    Node->Hierarchy.Level  = 0;
@@ -1327,7 +1331,7 @@ void Tre_ResetNode (struct Tre_Node *Node)
    Node->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Node->ClosedOrOpen = CloOpe_CLOSED;
    Node->Title[0] = '\0';
-   if (Node->Type == Tre_PROGRAM)
+   if (Node->TreeType == Tre_PROGRAM)
       Rsc_ResetResource (&Node->Resource);
   }
 
@@ -1403,8 +1407,8 @@ void Tre_ReqRemNode (void)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get program item *****/
    Tre_GetPars (&Node);
@@ -1420,7 +1424,7 @@ void Tre_ReqRemNode (void)
    /***** Show tree node highlighting subtree *****/
    Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -1446,8 +1450,8 @@ void Tre_RemoveNode (void)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get program item *****/
    Tre_GetPars (&Node);
@@ -1458,20 +1462,20 @@ void Tre_RemoveNode (void)
    Tre_SetNodeRangeWithAllChildren (Tre_GetNumNodeFromNodCod (Node.Hierarchy.NodCod),
 				    &ToRemove);
 
-   /***** Remove program items *****/
-   Tre_DB_RemoveNodeRange (&ToRemove);
+   /***** Remove tree nodes *****/
+   Tre_DB_RemoveNodeRange (TreeType,&ToRemove);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Node.Title);
 
-   /***** Update list of program items *****/
+   /***** Update list of tree nodes *****/
    Tre_FreeListNodes ();
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
 
    /***** Show course program without highlighting any item *****/
    Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -1505,8 +1509,8 @@ static void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get program item *****/
    Tre_GetPars (&Node);
@@ -1514,12 +1518,12 @@ static void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
       Err_WrongItemExit ();
 
    /***** Hide/unhide program item *****/
-   Tre_DB_HideOrUnhideNode (Node.Hierarchy.NodCod,HiddenOrVisible);
+   Tre_DB_HideOrUnhideNode (TreeType,Node.Hierarchy.NodCod,HiddenOrVisible);
 
-   /***** Show program items highlighting subtree *****/
+   /***** Show tree nodes highlighting subtree *****/
    Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -1561,8 +1565,8 @@ static void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get program item *****/
    Tre_GetPars (&Node);
@@ -1577,20 +1581,20 @@ static void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
       switch (UpDown)
         {
 	 case Tre_MOVE_UP:
-            Success = Tre_ExchangeNodeRanges (Tre_GetPrevBrother (NumNode),NumNode);
+            Success = Tre_ExchangeNodeRanges (TreeType,Tre_GetPrevBrother (NumNode),NumNode);
             break;
 	 case Tre_MOVE_DOWN:
-            Success = Tre_ExchangeNodeRanges (NumNode,Tre_GetNextBrother (NumNode));
+            Success = Tre_ExchangeNodeRanges (TreeType,NumNode,Tre_GetNextBrother (NumNode));
             break;
         }
      }
    if (Success)
      {
-      /* Update list of program items */
+      /* Update list of tree nodes */
       Tre_FreeListNodes ();
-      Tre_GetListNodes ();
+      Tre_GetListNodes (TreeType);
 
-      /* Show program items highlighting subtree */
+      /* Show tree nodes highlighting subtree */
       Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
@@ -1600,7 +1604,7 @@ static void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
       Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
      }
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -1609,7 +1613,8 @@ static void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
 /*****************************************************************************/
 // Return true if success
 
-static bool Tre_ExchangeNodeRanges (int NumNodeTop,int NumNodeBottom)
+static bool Tre_ExchangeNodeRanges (Tre_TreeType_t TreeType,
+				    int NumNodeTop,int NumNodeBottom)
   {
    struct Tre_NodeRange Top;
    struct Tre_NodeRange Bottom;
@@ -1653,17 +1658,20 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
       */
       /* Step 1: Change all indexes involved to negative,
 		 necessary to preserve unique index (CrsCod,NodInd) */
-      Tre_DB_UpdateIndexRange (  (long) 0            ,	// NodInd=-NodInd
+      Tre_DB_UpdateIndexRange (TreeType,
+				 (long) 0            ,	// NodInd=-NodInd
                                  (long) Top.Begin    ,
                                  (long) Bottom.End   );	// All indexes in both parts
 
       /* Step 2: Increase top indexes */
-      Tre_DB_UpdateIndexRange (  (long) DiffEnd      ,	// NodInd=-NodInd+DiffEnd
+      Tre_DB_UpdateIndexRange (TreeType,
+				 (long) DiffEnd      ,	// NodInd=-NodInd+DiffEnd
                                -((long) Top.End     ),
                                -((long) Top.Begin   ));	// All indexes in top part
 
       /* Step 3: Decrease bottom indexes */
-      Tre_DB_UpdateIndexRange (-((long) DiffBegin   ),	// NodInd=-NodInd-DiffBegin
+      Tre_DB_UpdateIndexRange (TreeType,
+			       -((long) DiffBegin   ),	// NodInd=-NodInd-DiffBegin
                                -((long) Bottom.End  ),
                                -((long) Bottom.Begin));	// All indexes in bottom part
 
@@ -1774,8 +1782,8 @@ static void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get program item *****/
    Tre_GetPars (&Node);
@@ -1790,13 +1798,13 @@ static void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
       Tre_SetNodeRangeWithAllChildren (NumNode,&ToMove);
 
       /* Move item and its children to left or right */
-      Tre_DB_MoveLeftRightNodeRange (&ToMove,LeftRight);
+      Tre_DB_MoveLeftRightNodeRange (TreeType,&ToMove,LeftRight);
 
-      /* Update list of program items */
+      /* Update list of tree nodes */
       Tre_FreeListNodes ();
-      Tre_GetListNodes ();
+      Tre_GetListNodes (TreeType);
 
-      /* Show program items highlighting subtree */
+      /* Show tree nodes highlighting subtree */
       Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
@@ -1806,7 +1814,7 @@ static void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
       Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
      }
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -1842,7 +1850,7 @@ static void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract)
      }
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
 
    /***** Get tree node *****/
    Tre_GetPars (&Node);
@@ -1875,7 +1883,7 @@ static void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract)
      }
    Tre_ShowAllNodes (TreeType,ListingType,Node.Hierarchy.NodCod,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -1922,7 +1930,7 @@ static unsigned Tre_GetLastChild (int NumNode)
   }
 
 /*****************************************************************************/
-/******** List program items when click on view an item after edition ********/
+/******** List tree nodes when click on view an item after edition ********/
 /*****************************************************************************/
 
 void Tre_ViewNodeAfterEdit (void)
@@ -1941,21 +1949,21 @@ void Tre_ViewNodeAfterEdit (void)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get tree node *****/
    Tre_GetPars (&Node);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (TreeType,Tre_END_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
 /*****************************************************************************/
-/*********** List program items with a form to change a given item ***********/
+/*********** List tree nodes with a form to change a given item ***********/
 /*****************************************************************************/
 
 void Tre_ReqChangeNode (void)
@@ -1974,8 +1982,8 @@ void Tre_ReqChangeNode (void)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get tree node *****/
    Tre_GetPars (&Node);
@@ -1984,10 +1992,10 @@ void Tre_ReqChangeNode (void)
    if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRACTED)	// If contracted...
       Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);			// ...expand it
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (TreeType,Tre_FORM_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -2012,7 +2020,7 @@ void Tre_ReqCreateNode (void)
      }
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
 
    /***** Get tree node *****/
    Tre_GetPars (&Node);
@@ -2070,7 +2078,7 @@ static void Tre_ShowFormToCreateNode (long ParentNodCod)
    Frm_EndFormTable (Btn_CREATE_BUTTON);
   }
 
-static void Tre_ShowFormToChangeNode (long NodCod)
+static void Tre_ShowFormToChangeNode (Tre_TreeType_t TreeType,long NodCod)
   {
    struct Tre_Node Node;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -2083,7 +2091,7 @@ static void Tre_ShowFormToChangeNode (long NodCod)
    /***** Get data of the program item from database *****/
    Node.Hierarchy.NodCod = NodCod;
    Tre_GetNodeDataByCod (&Node);
-   Tre_DB_GetNodeTxt (Node.Hierarchy.NodCod,Txt);
+   Tre_DB_GetNodeTxt (TreeType,Node.Hierarchy.NodCod,Txt);
 
    /***** Begin form to change *****/
    Frm_BeginFormTable (ActChgPrgItm,Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
@@ -2177,7 +2185,7 @@ void Tre_ReceiveChgNode (void)
      }
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
 
    /***** Get tree node *****/
    Tre_GetPars (&Node);
@@ -2232,8 +2240,8 @@ void Tre_ReceiveNewNode (void)
 	 break;
      }
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (TreeType);
 
    /***** Get tree node *****/
    Tre_GetPars (&Node);
@@ -2260,11 +2268,11 @@ void Tre_ReceiveNewNode (void)
       NewNode.TimeUTC[Dat_END_TIME] = NewNode.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Create a new tree node *****/
-   Tre_InsertNode (&Node,&NewNode,Description);
+   Tre_InsertNode (TreeType,&Node,&NewNode,Description);
 
    /* Update list of tree nodes */
    Tre_FreeListNodes ();
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
 
    /***** Show tree nodes highlighting the node just created *****/
    Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,NewNode.Hierarchy.NodCod,-1L);
@@ -2277,7 +2285,8 @@ void Tre_ReceiveNewNode (void)
 /*************** Insert a new node as a child of a parent node ***************/
 /*****************************************************************************/
 
-static void Tre_InsertNode (const struct Tre_Node *ParentNode,
+static void Tre_InsertNode (Tre_TreeType_t TreeType,
+			    const struct Tre_Node *ParentNode,
 		            struct Tre_Node *Node,const char *Txt)
   {
    unsigned NumNodeLastChild;
@@ -2286,7 +2295,7 @@ static void Tre_InsertNode (const struct Tre_Node *ParentNode,
    Tre_DB_LockTableNodes ();
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes ();
+   Tre_GetListNodes (TreeType);
    if (Tre_Gbl.List.NumNodes)	// There are nodes
      {
       if (ParentNode->Hierarchy.NodCod > 0)	// Parent specified
@@ -2299,7 +2308,7 @@ static void Tre_InsertNode (const struct Tre_Node *ParentNode,
 	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (NumNodeLastChild + 1);
 
 	    /***** Move down all indexes of after last child of parent *****/
-	    Tre_DB_MoveDownNodes (Node->Hierarchy.NodInd);
+	    Tre_DB_MoveDownNodes (TreeType,Node->Hierarchy.NodInd);
 	   }
 	 else
 	    /***** New node will be inserted at the end *****/
@@ -2350,7 +2359,7 @@ void Prg_GetAndShowCourseProgramStats (void)
    unsigned NumItems;
    unsigned NumCoursesWithItems;
 
-   /***** Get the number of program items from this location *****/
+   /***** Get the number of tree nodes from this location *****/
    if ((NumItems = Tre_DB_GetNumNodes (Gbl.Scope.Current)))
       NumCoursesWithItems = Tre_DB_GetNumCoursesWithNodes (Gbl.Scope.Current);
    else

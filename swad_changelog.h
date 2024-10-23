@@ -635,10 +635,16 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.19.1 (2024-10-23)"
+#define Log_PLATFORM_VERSION	"SWAD 24.19.3 (2024-10-23)"
 #define CSS_FILE		"swad24.18.5.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.19.3:  Oct 23, 2024  Changes in course trees. (338581 lines)
+					3 changes necessary in database:
+ALTER TABLE tre_nodes ADD COLUMN Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'prg' AFTER CrsCod;
+ALTER TABLE tre_nodes DROP INDEX CrsCod;
+ALTER TABLE tre_nodes ADD UNIQUE INDEX(CrsCod,Type,NodInd);
+
 	Version 24.19.2:  Oct 23, 2024  Code refactoring in resource clipboard. (338515 lines)
 	Version 24.19.1:  Oct 23, 2024  Changes in course trees. (338506 lines)
 	Version 24.19:    Oct 21, 2024  New module swad_tree_database. (338325 lines)
@@ -1022,7 +1028,7 @@ sudo cp icon/folder-closed-yellow-plus.png /var/www/html/swad/icon/
 	Version 22.120.16:Sep 10, 2023  Code refactoring in project visibility. (337575 lines)
 	Version 22.120.15:Sep 10, 2023  Code refactoring related to hidden-visible in projects. (337580 lines)
 	Version 22.120.14:Sep 10, 2023  Code refactoring related to hidden-visible in program resources. (337590 lines)
-	Version 22.120.13:Sep 10, 2023  Code refactoring related to hidden-visible in program items. (337587 lines)
+	Version 22.120.13:Sep 10, 2023  Code refactoring related to hidden-visible in tree nodes. (337587 lines)
 	Version 22.120.12:Sep 10, 2023  Code refactoring related to hidden-visible in games. (337584 lines)
 	Version 22.120.11:Sep 09, 2023  Code refactoring related to hidden-visible in exam sessions. (337594 lines)
 	Version 22.120.10:Sep 09, 2023  Code refactoring related to hidden-visible in exams. (337604 lines)
@@ -1150,7 +1156,7 @@ ALTER TABLE prj_scores ENGINE=MyISAM;
 	Version 22.101.9: Apr 21, 2023  Changes in edition of countries, links, banners, institutions, centers, places, degrees, degree types, buildings, rooms and courses. (337313 lines)
 	Version 22.101.8: Apr 20, 2023  Changes in edition of rubrics, degree types and departments. (337350 lines)
 	Version 22.101.7: Apr 20, 2023  Changes in edition of exams and games. (337342 lines)
-	Version 22.101.6: Apr 20, 2023  Changes in edition of program items. (337370 lines)
+	Version 22.101.6: Apr 20, 2023  Changes in edition of tree nodes. (337370 lines)
 	Version 22.101.5: Apr 20, 2023  Changes in edition of buildings and rooms. (337392 lines)
 	Version 22.101.4: Apr 20, 2023  Changes in edition of plugins. (337393 lines)
 	Version 22.101.3: Apr 20, 2023  Changes in edition of countries, institutions, centers, degrees and courses. (337338 lines)
@@ -1375,7 +1381,7 @@ sudo cp icon/thumbs-down.svg /var/www/html/swad/icon/
 sudo cp icon/thumbs-up.svg /var/www/html/swad/icon/
 
 	Version 22.41.1:  Oct 07, 2022  Fixed issue in main title. (332512 lines)
-	Version 22.41:    Oct 06, 2022  Changes in the behavior of the expansion/contraction of program items. (332511 lines)
+	Version 22.41:    Oct 06, 2022  Changes in the behavior of the expansion/contraction of tree nodes. (332511 lines)
 	Version 22.40:    Oct 04, 2022  Link in main title. (332514 lines)
 	Version 22.39.5:  Oct 03, 2022  Fixed bug in edition of course program. (332513 lines)
 	Version 22.39.4:  Oct 03, 2022  Fixed layout issues in projects. (332515 lines)
@@ -1425,7 +1431,7 @@ Copy the following icon to icon public directory:
 sudo cp icon/check-circle.svg /var/www/html/swad/icon/
 
 	Version 22.19:    Sep 22, 2022  Fixed bugs in program. (331843 lines)
-	Version 22.18:    Sep 22, 2022  Expand/contract program items. (331877 lines)
+	Version 22.18:    Sep 22, 2022  Expand/contract tree nodes. (331877 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS prg_expanded (UsrCod INT NOT NULL,ItmCod INT NOT NULL,ClickTime DATETIME NOT NULL,UNIQUE INDEX(UsrCod,ItmCod),INDEX(ItmCod),INDEX(ClickTime));
 					If you want to use MyISAM:
@@ -1438,8 +1444,8 @@ ALTER TABLE prg_expanded ENGINE=MyISAM;
 	Version 22.14:    Sep 21, 2022  An assignment is shown when clicking on its title. (331300 lines)
 	Version 22.13:    Sep 20, 2022  Links to course forum threads in program. (331234 lines)
 	Version 22.12.3:  Sep 20, 2022  Fixed bug in JavaScript related to dates. (331098 lines)
-	Version 22.12.2:  Sep 20, 2022  Changes in behaviour of program items. (331097 lines)
-	Version 22.12.1:  Sep 20, 2022  Changes in behaviour of program items. (331015 lines)
+	Version 22.12.2:  Sep 20, 2022  Changes in behaviour of tree nodes. (331097 lines)
+	Version 22.12.1:  Sep 20, 2022  Changes in behaviour of tree nodes. (331015 lines)
 	Version 22.12:    Sep 20, 2022  Links to marks file in program. (330985 lines)
 Copy the following icon to icon public directory:
 sudo cp icon/list-alt.svg /var/www/html/swad/icon/
@@ -1452,14 +1458,14 @@ sudo cp icon/list-alt.svg /var/www/html/swad/icon/
 	Version 22.8:     Sep 18, 2022  Links to games in program. (330355 lines)
 	Version 22.7:     Sep 18, 2022  Links to calls for exams in program.
 					Notification of a call for exam now links to the call. (330230 lines)
-	Version 22.6:     Sep 17, 2022  Changes in edition of program items. (330065 lines)
+	Version 22.6:     Sep 17, 2022  Changes in edition of tree nodes. (330065 lines)
 	Version 22.5:     Sep 16, 2022  Links to download documents in program. (330018 lines)
-	Version 22.4.2:   Sep 16, 2022  Changes in edition of program items. (329982 lines)
-	Version 22.4.1:   Sep 15, 2022  Changes in edition of program items. (329955 lines)
+	Version 22.4.2:   Sep 16, 2022  Changes in edition of tree nodes. (329982 lines)
+	Version 22.4.1:   Sep 15, 2022  Changes in edition of tree nodes. (329955 lines)
 Copy the following icon to icon public directory:
 sudo cp icon/link.svg /var/www/html/swad/icon/
 
-	Version 22.4:     Sep 15, 2022  Changes in edition of program items. (329940 lines)
+	Version 22.4:     Sep 15, 2022  Changes in edition of tree nodes. (329940 lines)
 	Version 22.3:     Sep 14, 2022  Listing program resource clipboard. (329918 lines)
 					4 changes necessary in database:
 ALTER TABLE prg_clipboards CHANGE COLUMN Type Type ENUM('non','asg','cfe','exa','gam','svy','doc','mrk','att','for') NOT NULL DEFAULT 'non';
@@ -1494,27 +1500,27 @@ sudo cp icon/iconset/nuvola/globe-americas.svg /var/www/html/swad/icon/iconset/n
 ALTER TABLE prg_resources ENGINE=MyISAM;
 
 	Version 21.116.1: Sep 08, 2022  Fixed bug updating institution status. (329215 lines)
-	Version 21.116:   Sep 02, 2022  Code refactoring in edition of program items. (329214 lines)
-	Version 21.115:   Sep 01, 2022  Code refactoring in edition of program items. (329212 lines)
+	Version 21.116:   Sep 02, 2022  Code refactoring in edition of tree nodes. (329214 lines)
+	Version 21.115:   Sep 01, 2022  Code refactoring in edition of tree nodes. (329212 lines)
 	Version 21.114.1: Jul 25, 2022  Fixed bug removing an item resource. (329264 lines)
 	Version 21.114:   Jul 25, 2022  New form and action to create item resource. (329258 lines)
 	Version 21.113:   Jul 22, 2022  New form and action to rename item resource. (329151 lines)
-	Version 21.112.1: Jul 22, 2022  Changes in edition of program items. (329058 lines)
+	Version 21.112.1: Jul 22, 2022  Changes in edition of tree nodes. (329058 lines)
 	Version 21.112:   Jul 21, 2022  Code refactoring in hide/unhide icons.
 					Fixed bugs in edition of banners.
 					Fixed bug hidding/unhiding exam sessions.
 					Fixed bug in notices.
 				        Code refactoring in surveys. (329064 lines)
-	Version 21.111:   Jul 21, 2022  Changes in edition of program items. (329115 lines)
-	Version 21.110:   Jul 19, 2022  Changes in edition of program items. (329031 lines)
-	Version 21.109:   Jul 19, 2022  Changes in edition of program items. (328975 lines)
-	Version 21.108:   Jul 18, 2022  Changes in edition of program items. (328908 lines)
+	Version 21.111:   Jul 21, 2022  Changes in edition of tree nodes. (329115 lines)
+	Version 21.110:   Jul 19, 2022  Changes in edition of tree nodes. (329031 lines)
+	Version 21.109:   Jul 19, 2022  Changes in edition of tree nodes. (328975 lines)
+	Version 21.108:   Jul 18, 2022  Changes in edition of tree nodes. (328908 lines)
 	Version 21.107.1: Jul 17, 2022  Changes in layout of resources of program item. (? lines)
 	Version 21.107:   Jul 15, 2022  Move up/down resource of program item. (328953 lines)
 	Version 21.106:   Jul 14, 2022  Hide/unhide resource of program item. (328816 lines)
 	Version 21.105:   Jul 14, 2022  Removing resource from program item. (328617 lines)
-	Version 21.104.1: Jul 13, 2022  Adding resources to program items. (328504 lines)
-	Version 21.104:   Jul 12, 2022  Adding resources to program items. (328263 lines)
+	Version 21.104.1: Jul 13, 2022  Adding resources to tree nodes. (328504 lines)
+	Version 21.104:   Jul 12, 2022  Adding resources to tree nodes. (328263 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS prg_resources (RscCod INT NOT NULL AUTO_INCREMENT,ItmCod INT NOT NULL DEFAULT -1,RscInd INT NOT NULL DEFAULT 0,Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',Title VARCHAR(2047) NOT NULL,UNIQUE INDEX(RscCod),UNIQUE INDEX(ItmCod,RscInd));
 
@@ -3463,7 +3469,7 @@ ALTER TABLE prg_items ADD COLUMN Level INT NOT NULL DEFAULT 1 AFTER ItmInd;
 	Version 19.134.4: Feb 26, 2020	Changes in course program. (281992 lines)
 	Version 19.134.3: Feb 26, 2020	Heading of course program table removed. (282008 lines)
 	Version 19.134.2: Feb 26, 2020	Fixed bug in syllabus editor. (282021 lines)
-	Version 19.134.1: Feb 26, 2020	Order course program items by indexes. (282022 lines)
+	Version 19.134.1: Feb 26, 2020	Order course tree nodes by indexes. (282022 lines)
 	Version 19.134:   Feb 26, 2020	Move up and down a course program item. Not finished. (281991 lines)
 					5 changes necessary in database:
 ALTER TABLE prg_items CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL AUTO_INCREMENT;
@@ -3477,7 +3483,7 @@ ALTER TABLE prg_grp ENGINE=MyISAM;
 	Version 19.133:   Feb 25, 2020	Removed icon to print a course program item.
 					New buttons to move up and down a course program item. (281608 lines)
 	Version 19.132.1: Feb 24, 2020	Change in columns of course program. (281427 lines)
-	Version 19.132:   Feb 24, 2020	Stats on course program items. (281426 lines)
+	Version 19.132:   Feb 24, 2020	Stats on course tree nodes. (281426 lines)
 	Version 19.131.1: Feb 24, 2020	Fixed bug in API. (281360 lines)
 	Version 19.131:   Feb 24, 2020	Code refactoring in API. (281350 lines)
 	Version 19.130.2: Feb 24, 2020	Fixed bugs in usage report. (281259 lines)

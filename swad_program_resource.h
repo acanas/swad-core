@@ -36,7 +36,7 @@
 void PrgRsc_ViewResourcesAfterEdit (void);
 void PrgRsc_EditResources (void);
 
-void PrgRsc_ListItemResources (Tre_ListingType_t ListingType,
+void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
                                struct Tre_Node *Node,
                                long SelectedNodCod,
                                long SelectedRscCod);

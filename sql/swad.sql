@@ -1171,7 +1171,7 @@ CREATE TABLE IF NOT EXISTS prg_resources (
 	NodCod INT NOT NULL DEFAULT -1,
 	RscInd INT NOT NULL DEFAULT 0,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	Type ENUM('non','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','att','for','svy') NOT NULL DEFAULT 'non',
+	Type ENUM('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') NOT NULL DEFAULT 'non',
 	Title VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(RscCod),
 	UNIQUE INDEX(NodCod,RscInd));
@@ -1556,6 +1556,7 @@ CREATE TABLE IF NOT EXISTS tre_expanded (
 CREATE TABLE IF NOT EXISTS tre_nodes (
 	NodCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
+	Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL,
 	NodInd INT NOT NULL DEFAULT 0,
 	Level INT NOT NULL DEFAULT 1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
@@ -1565,7 +1566,7 @@ CREATE TABLE IF NOT EXISTS tre_nodes (
 	Title VARCHAR(2047) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(NodCod),
-	UNIQUE INDEX(CrsCod,NodInd));
+	UNIQUE INDEX(CrsCod,Type,NodInd));
 --
 -- Table tst_answers: stores the answers to the questions in tests
 --

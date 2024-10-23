@@ -106,17 +106,17 @@ void PrgRsc_ViewResourcesAfterEdit (void)
   {
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get program item *****/
+   /***** Get tree node *****/
    Tre_GetPars (&Node);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_END_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -128,17 +128,17 @@ void PrgRsc_EditResources (void)
   {
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get program item *****/
    Tre_GetPars (&Node);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,-1L);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -146,7 +146,7 @@ void PrgRsc_EditResources (void)
 /****************************** List resources *******************************/
 /*****************************************************************************/
 
-void PrgRsc_ListItemResources (Tre_ListingType_t ListingType,
+void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
                                struct Tre_Node *Node,
                                long SelectedNodCod,
                                long SelectedRscCod)
@@ -613,8 +613,8 @@ void PrgRsc_CreateResource (void)
   {
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get parameters *****/
    /* Get program item */
@@ -626,11 +626,11 @@ void PrgRsc_CreateResource (void)
    /***** Create resource *****/
    Node.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Node);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -643,8 +643,8 @@ void PrgRsc_RenameResource (void)
    struct Tre_Node Node;
    char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get program item and resource *****/
    Tre_GetPars (&Node);
@@ -658,11 +658,11 @@ void PrgRsc_RenameResource (void)
    /* Update database changing old title by new title */
    Prg_DB_UpdateResourceTitle (Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod,NewTitle);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -675,8 +675,8 @@ void PrgRsc_ReqRemResource (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get program item and resource *****/
    Tre_GetPars (&Node);
@@ -688,11 +688,11 @@ void PrgRsc_ReqRemResource (void)
                     Txt_Do_you_really_want_to_remove_the_resource_X,
                     Node.Resource.Title);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -705,8 +705,8 @@ void PrgRsc_RemoveResource (void)
    extern const char *Txt_Resource_X_removed;
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get data of the item resource from database *****/
    Tre_GetPars (&Node);
@@ -720,11 +720,11 @@ void PrgRsc_RemoveResource (void)
    Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,
                     Txt_Resource_X_removed,Node.Resource.Title);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -746,8 +746,8 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
   {
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get program item and resource *****/
    Tre_GetPars (&Node);
@@ -757,11 +757,11 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
    /***** Hide/unhide item resource *****/
    Prg_DB_HideOrUnhideResource (Node.Resource.Hierarchy.RscCod,HiddenOrVisible);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -791,8 +791,8 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
       [PrgRsc_MOVE_DOWN] = Prg_DB_GetRscIndAfter,
      };
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get program item and resource *****/
    Tre_GetPars (&Node);
@@ -811,11 +811,11 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    if (!Success)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -931,19 +931,19 @@ void PrgRsc_EditProgramWithClipboard (void)
   {
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get program item and resource *****/
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCE_LINK,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }
 
@@ -955,8 +955,8 @@ void PrgRsc_ChangeLink (void)
   {
    struct Tre_Node Node;
 
-   /***** Get list of program items *****/
-   Tre_GetListNodes ();
+   /***** Get list of tree nodes *****/
+   Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get parameters *****/
    /* Get tree node and resource */
@@ -986,10 +986,10 @@ void PrgRsc_ChangeLink (void)
       Rsc_DB_RemoveLinkFromClipboard (&Node.Resource.Link);
      }
 
-   /***** Show current program items, if any *****/
+   /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCE_LINK,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
-   /***** Free list of program items *****/
+   /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
   }

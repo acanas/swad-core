@@ -36,25 +36,28 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-//---------------------------- Tree nodes -------------------------------------
+//----------------------------- Tree nodes ------------------------------------
 long Tre_DB_InsertNode (const struct Tre_Node *Node,const char *Txt);
 void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt);
-void Tre_DB_HideOrUnhideNode (long NodCod,
+void Tre_DB_HideOrUnhideNode (Tre_TreeType_t TreeType,long NodCod,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Tre_DB_UpdateIndexRange (long Diff,long Begin,long End);
+void Tre_DB_UpdateIndexRange (Tre_TreeType_t TreeType,long Diff,long Begin,long End);
 void Tre_DB_LockTableNodes (void);
-void Tre_DB_MoveDownNodes (unsigned Index);
-void Tre_DB_MoveLeftRightNodeRange (const struct Tre_NodeRange *ToMove,
+void Tre_DB_MoveDownNodes (Tre_TreeType_t TreeType,unsigned Index);
+void Tre_DB_MoveLeftRightNodeRange (Tre_TreeType_t TreeType,
+				    const struct Tre_NodeRange *ToMove,
                                     Tre_MoveLeftRight_t LeftRight);
 
-unsigned Tre_DB_GetListNodes (MYSQL_RES **mysql_res);
-unsigned Tre_DB_GetNodeDataByCod (MYSQL_RES **mysql_res,long NodCod);
-void Tre_DB_GetNodeTxt (long NodCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+unsigned Tre_DB_GetListNodes (Tre_TreeType_t TreeType,MYSQL_RES **mysql_res);
+unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_res);
+void Tre_DB_GetNodeTxt (Tre_TreeType_t TreeType,
+			long NodCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level);
 unsigned Tre_DB_GetNumNodes (Hie_Level_t Level);
 
-void Tre_DB_RemoveNodeRange (const struct Tre_NodeRange *ToRemove);
+void Tre_DB_RemoveNodeRange (Tre_TreeType_t TreeType,
+			     const struct Tre_NodeRange *ToRemove);
 void Tre_DB_RemoveCrsNodes (long CrsCod);
 
 //--------------------------- Expanded tree nodes -----------------------------

@@ -62,6 +62,8 @@ long Prg_DB_CreateResource (const struct Tre_Node *Node)
 void Prg_DB_UpdateResourceTitle (long NodCod,long RscCod,
                                  const char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
   {
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+
    DB_QueryUPDATE ("can not update the title of a resource",
 		   "UPDATE prg_resources,"
 		          "tre_nodes"
@@ -69,15 +71,17 @@ void Prg_DB_UpdateResourceTitle (long NodCod,long RscCod,
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.NodCod=%ld"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld",
+		     " AND tre_nodes.CrsCod=%ld"
+		     " AND tre_nodes.Type='%s'",
 	           NewTitle,
 	           RscCod,
 	           NodCod,
-	           Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	           Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	           Tre_DB_Types[Tre_PROGRAM]);
   }
 
 /*****************************************************************************/
-/****************** Get list of item resources from database *****************/
+/****************** Get list of node resources from database *****************/
 /*****************************************************************************/
 
 unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
@@ -90,7 +94,7 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
      };
 
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get item resources",
+   DB_QuerySELECT (mysql_res,"can not get node resources",
 		   "SELECT prg_resources.NodCod,"	// row[0]
 			  "prg_resources.RscCod,"	// row[1]
                           "prg_resources.RscInd,"	// row[2]
@@ -111,13 +115,13 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
   }
 
 /*****************************************************************************/
-/****************** Get item resource data using its code ********************/
+/******************** Get resource data using its code ***********************/
 /*****************************************************************************/
 
 unsigned Prg_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get item resource data",
+   DB_QuerySELECT (mysql_res,"can not get node resource data",
 		   "SELECT prg_resources.NodCod,"	// row[0]
 			  "prg_resources.RscCod,"	// row[1]
                           "prg_resources.RscInd,"	// row[2]
@@ -161,7 +165,7 @@ unsigned Prg_DB_GetRscIndAfter (long NodCod,unsigned RscInd)
   }
 
 /*****************************************************************************/
-/*********** Get resource code given item code and resource index ************/
+/*********** Get resource code given node code and resource index ************/
 /*****************************************************************************/
 
 long Prg_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd)
@@ -170,7 +174,7 @@ long Prg_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd)
    if (RscInd == 0)
       return -1L;
 
-   /***** Get resource code given item code and resource index *****/
+   /***** Get resource code given node code and resource index *****/
    return DB_QuerySELECTCode ("can not get resource code",
 			      "SELECT RscCod"
 			       " FROM prg_resources"
@@ -185,7 +189,7 @@ long Prg_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd)
 
 void Prg_DB_RemoveResource (const struct Tre_Node *Node)
   {
-   DB_QueryDELETE ("can not remove item resource",
+   DB_QueryDELETE ("can not remove node resource",
 		   "DELETE FROM prg_resources"
 		   " USING prg_resources,"
 		          "tre_nodes"
@@ -207,7 +211,7 @@ void Prg_DB_HideOrUnhideResource (long RscCod,
   {
    extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
-   DB_QueryUPDATE ("can not hide/unhide item resource",
+   DB_QueryUPDATE ("can not hide/unhide node resource",
 		   "UPDATE prg_resources"
 		     " SET Hidden='%c'"
 		   " WHERE RscCod=%ld",
