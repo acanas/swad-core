@@ -639,6 +639,7 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 #define CSS_FILE		"swad24.18.5.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.19.2:  Oct 23, 2024  Code refactoring in resource clipboard. (338515 lines)
 	Version 24.19.1:  Oct 23, 2024  Changes in course trees. (338506 lines)
 	Version 24.19:    Oct 21, 2024  New module swad_tree_database. (338325 lines)
 					18 changes necessary in database:

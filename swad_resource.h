@@ -96,6 +96,7 @@ struct Rsc_Resource
 
 void Rsc_ResetResource (struct Rsc_Resource *Resource);
 
+void Rsc_PutIconToViewClipboard (void);
 void Rsc_ShowClipboard (void);
 void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink);
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo);

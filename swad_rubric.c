@@ -61,7 +61,6 @@ extern struct Globals Gbl;
 
 static void Rub_PutIconsListRubrics (void *Rubrics);
 static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics);
-static void Prg_PutIconToViewResourceClipboard (void);
 static void Rub_PutParsToCreateNewRubric (void *Rubrics);
 
 static void Rub_PutIconsViewingOneRubric (void *Rubrics);
@@ -273,7 +272,7 @@ static void Rub_PutIconsListRubrics (void *Rubrics)
 	 Rub_PutIconToCreateNewRubric ((struct Rub_Rubrics *) Rubrics);
 
 	 /***** Put icon to view resource clipboard *****/
-	 Prg_PutIconToViewResourceClipboard ();
+	 Rsc_PutIconToViewClipboard ();
 	}
 
       /***** Put icon to get resource link *****/
@@ -292,15 +291,6 @@ static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics)
   {
    Ico_PutContextualIconToAdd (ActFrmNewRub,NULL,
                                Rub_PutParsToCreateNewRubric,Rubrics);
-  }
-
-/*****************************************************************************/
-/******************* Put icon to view resource clipboard *********************/
-/*****************************************************************************/
-
-static void Prg_PutIconToViewResourceClipboard (void)
-  {
-   Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InRub,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

@@ -36,6 +36,7 @@
 #include "swad_browser_resource.h"
 #include "swad_call_for_exam_resource.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_exam_database.h"
 #include "swad_forum_database.h"
 #include "swad_forum_resource.h"
@@ -142,6 +143,32 @@ void Rsc_ResetResource (struct Rsc_Resource *Resource)
    Resource->Link.Cod  = -1L;
    Resource->Title[0] = '\0';
    Resource->Title[0] = '\0';
+  }
+
+/*****************************************************************************/
+/******************* Put icon to view resource clipboard *********************/
+/*****************************************************************************/
+
+void Rsc_PutIconToViewClipboard (void)
+  {
+   Act_Action_t NextAction;
+
+   /***** Set next action *****/
+   switch (Act_GetSuperAction (Gbl.Action.Act))
+     {
+      case ActSeePrg:		// Called from program
+         NextAction = ActSeeRscCli_InPrg;
+         break;
+      case ActSeeAllRub:	// Called from rubrics
+         NextAction = ActSeeRscCli_InRub;
+         break;
+      default:
+	 NextAction = ActUnk;
+	 Err_WrongActionExit ();
+	 break;
+     }
+
+   Ico_PutContextualIconToViewClipboard (NextAction,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

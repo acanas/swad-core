@@ -121,7 +121,6 @@ static void Tre_PutIconsEditNodes (__attribute__((unused)) void *Args);
 static void Tre_PutIconToEditTree (void);
 static void Tre_PutIconToViewTree (void);
 static void Tre_PutIconToCreateNewNode (void);
-static void Prg_PutIconToViewResourceClipboard (void);
 
 static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
                               unsigned NumNode,struct Tre_Node *Node,
@@ -401,7 +400,7 @@ static void Tre_PutIconsEditNodes (__attribute__((unused)) void *Args)
       Tre_PutIconToCreateNewNode ();
 
       /***** Put icon to view resource clipboard *****/
-      Prg_PutIconToViewResourceClipboard ();
+      Rsc_PutIconToViewClipboard ();
      }
 
    /***** Put icon to show a figure *****/
@@ -437,7 +436,7 @@ static void Tre_PutIconToViewTree (void)
   }
 
 /*****************************************************************************/
-/****************** Put icon to create a new program item ********************/
+/******************** Put icon to create a new tree node *********************/
 /*****************************************************************************/
 
 static void Tre_PutIconToCreateNewNode (void)
@@ -450,15 +449,6 @@ static void Tre_PutIconToCreateNewNode (void)
 
    Ico_PutContextualIconToAdd (NextAction[Tre_PROGRAM],Tre_NODE_SECTION_ID,
                                Tre_PutParNodCod,&NodCod);
-  }
-
-/*****************************************************************************/
-/******************* Put icon to view resource clipboard *********************/
-/*****************************************************************************/
-
-static void Prg_PutIconToViewResourceClipboard (void)
-  {
-   Ico_PutContextualIconToViewClipboard (ActSeeRscCli_InPrg,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/
