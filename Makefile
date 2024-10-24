@@ -102,7 +102,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_action_list.o \
        swad_timeline_notification.o swad_timeline_post.o \
        swad_timeline_publication.o swad_timeline_share.o swad_timeline_user.o \
        swad_timeline_who.o swad_timetable.o swad_timetable_database.o \
-       swad_timetable_resource.o swad_tree_database.o \
+       swad_timetable_resource.o swad_tree.o swad_tree_database.o \
        swad_user.o swad_user_clipboard.o swad_user_database.o \
        swad_user_resource.o \
        swad_xml.o \

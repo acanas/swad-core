@@ -110,6 +110,7 @@ void PrgRsc_ViewResourcesAfterEdit (void)
    Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get tree node *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
@@ -131,7 +132,8 @@ void PrgRsc_EditResources (void)
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get program item *****/
+   /***** Get tree node *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
@@ -335,13 +337,14 @@ void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node)
       if (Prg_DB_GetResourceDataByCod (&mysql_res,Node->Resource.Hierarchy.RscCod))
          PrgRsc_GetResourceDataFromRow (mysql_res,Node);
       else
+	 /* Clear all node data except type */
          Tre_ResetNode (Node);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      /***** Clear all item resource data *****/
+      /***** Clear all node data except type *****/
       Tre_ResetNode (Node);
   }
 
@@ -365,14 +368,14 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    Cod		row[5]
    Title	row[6]
    */
-   /***** Get code of the program item (row[0]) *****/
+   /***** Get code of the tree node (row[0]) *****/
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get code and index of the item resource (row[1], row[2]) *****/
    Node->Resource.Hierarchy.RscCod = Str_ConvertStrCodToLongCod (row[1]);
    Node->Resource.Hierarchy.RscInd = Str_ConvertStrToUnsigned (row[2]);
 
-   /***** Get whether the program item is hidden (row(3)) *****/
+   /***** Get whether the tree node is hidden (row(3)) *****/
    Node->Resource.Hierarchy.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
    /***** Get link type and code (row[4], row[5]) *****/
@@ -529,7 +532,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
   }
 
 /*****************************************************************************/
-/**************** Put a link (form) to edit one program item *****************/
+/**************** Put a link (form) to edit one tree node *****************/
 /*****************************************************************************/
 
 static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
@@ -617,7 +620,8 @@ void PrgRsc_CreateResource (void)
    Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get parameters *****/
-   /* Get program item */
+   /* Get tree node */
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
 
    /* Get the new title for the new resource */
@@ -646,7 +650,8 @@ void PrgRsc_RenameResource (void)
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get program item and resource *****/
+   /***** Get tree node and resource *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -678,7 +683,8 @@ void PrgRsc_ReqRemResource (void)
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get program item and resource *****/
+   /***** Get tree node and resource *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -709,6 +715,7 @@ void PrgRsc_RemoveResource (void)
    Tre_GetListNodes (Tre_PROGRAM);
 
    /***** Get data of the item resource from database *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -729,7 +736,7 @@ void PrgRsc_RemoveResource (void)
   }
 
 /*****************************************************************************/
-/***************************** Hide a program item ***************************/
+/***************************** Hide a tree node ***************************/
 /*****************************************************************************/
 
 void PrgRsc_HideResource (void)
@@ -749,7 +756,8 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get program item and resource *****/
+   /***** Get tree node and resource *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -794,7 +802,8 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get program item and resource *****/
+   /***** Get tree node and resource *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -934,7 +943,8 @@ void PrgRsc_EditProgramWithClipboard (void)
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get program item and resource *****/
+   /***** Get tree node and resource *****/
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -960,6 +970,7 @@ void PrgRsc_ChangeLink (void)
 
    /***** Get parameters *****/
    /* Get tree node and resource */
+   Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();

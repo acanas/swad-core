@@ -503,7 +503,7 @@ ALTER TABLE prj_scores ENGINE=MyISAM;
 							</dd>
 		<dt>Version 22.101:   Apr 20, 2023</dt>
 							<dd>
-							Removed buttons to create new elements: a new place, new holiday, new link, new banner, new plugin, new building, new room, new program item, new assignment, new project, new call for exam, new question, new exam, new set of questions, new exam session, new game, new match, new rubric, new criterion, new group, new type of group, new attendance event, new record field, new announcement, new notice, new message, new forum thread, new forum post, new survey, new survey question, new agenda event, new email domain. (337332 lines)
+							Removed buttons to create new elements: a new place, new holiday, new link, new banner, new plugin, new building, new room, new tree node, new assignment, new project, new call for exam, new question, new exam, new set of questions, new exam session, new game, new match, new rubric, new criterion, new group, new type of group, new attendance event, new record field, new announcement, new notice, new message, new forum thread, new forum post, new survey, new survey question, new agenda event, new email domain. (337332 lines)
 							</dd>
 		<dt>Version 22.100.4: Apr 19, 2023</dt>
 							<dd>
@@ -1565,19 +1565,19 @@ ALTER TABLE prg_resources ENGINE=MyISAM;
 							</dd>
 		<dt>Version 21.107.1: Jul 17, 2022</dt>
 							<dd>
-							Changes in layout of resources of program item. (? lines)
+							Changes in layout of resources of tree node. (? lines)
 							</dd>
 		<dt>Version 21.107:   Jul 15, 2022</dt>
 							<dd>
-							Move up/down resource of program item. (328953 lines)
+							Move up/down resource of tree node. (328953 lines)
 							</dd>
 		<dt>Version 21.106:   Jul 14, 2022</dt>
 							<dd>
-							Hide/unhide resource of program item. (328816 lines)
+							Hide/unhide resource of tree node. (328816 lines)
 							</dd>
 		<dt>Version 21.105:   Jul 14, 2022</dt>
 							<dd>
-							Removing resource from program item. (328617 lines)
+							Removing resource from tree node. (328617 lines)
 							</dd>
 		<dt>Version 21.104.1: Jul 13, 2022</dt>
 							<dd>
@@ -6672,7 +6672,7 @@ ALTER TABLE prg_items ADD COLUMN Level INT NOT NULL DEFAULT 1 AFTER ItmInd;
 							</dd>
 		<dt>Version 19.134:   Feb 26, 2020</dt>
 							<dd>
-							Move up and down a course program item. Not finished. (281991 lines)<br />
+							Move up and down a course tree node. Not finished. (281991 lines)<br />
 							5 changes necessary in database:<br />
 							<small><code>
 ALTER TABLE prg_items CHANGE COLUMN PrgIteCod ItmCod INT NOT NULL AUTO_INCREMENT;<br />
@@ -6689,8 +6689,8 @@ ALTER TABLE prg_grp ENGINE=MyISAM;
 							</dd>
 		<dt>Version 19.133:   Feb 25, 2020</dt>
 							<dd>
-							Removed icon to print a course program item.<br />
-							New buttons to move up and down a course program item. (281608 lines)
+							Removed icon to print a course tree node.<br />
+							New buttons to move up and down a course tree node. (281608 lines)
 							</dd>
 		<dt>Version 19.132.1: Feb 24, 2020</dt>
 							<dd>

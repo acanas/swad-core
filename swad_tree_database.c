@@ -107,7 +107,7 @@ void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt)
 /*************************** Hide/unhide a tree node *************************/
 /*****************************************************************************/
 
-void Tre_DB_HideOrUnhideNode (Tre_TreeType_t TreeType,long NodCod,
+void Tre_DB_HideOrUnhideNode (const struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
@@ -119,9 +119,9 @@ void Tre_DB_HideOrUnhideNode (Tre_TreeType_t TreeType,long NodCod,
 		     " AND CrsCod=%ld"	// Extra check
 		     " AND Type='%s'",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
-		   NodCod,
+		   Node->Hierarchy.NodCod,
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[TreeType]);
+		   Tre_DB_Types[Node->TreeType]);
   }
 
 /*****************************************************************************/
@@ -271,7 +271,7 @@ void Tre_DB_GetNodeTxt (Tre_TreeType_t TreeType,
 // Returns the number of courses with tree nodes
 // in this location (all the platform, current degree or current course)
 
-unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level)
+unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
   {
    /***** Get number of courses with tree nodes from database *****/
    switch (Level)
@@ -281,7 +281,9 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
                         "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM tre_nodes"
-			" WHERE CrsCod>0");
+			" WHERE CrsCod>0"
+			  " AND TreeType='%s'",
+			Tre_DB_Types[TreeType]);
        case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -295,8 +297,10 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level)
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			Tre_DB_Types[TreeType]);
        case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -308,8 +312,10 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level)
 			 " WHERE ctr_centers.InsCod=%ld"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			Tre_DB_Types[TreeType]);
       case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -319,8 +325,10 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level)
 			        "tre_nodes"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			Tre_DB_Types[TreeType]);
       case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -328,15 +336,19 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level)
 			  " FROM crs_courses,"
 			        "tre_nodes"
 			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+			Tre_DB_Types[TreeType]);
       case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
                          "SELECT COUNT(DISTINCT CrsCod)"
 			  " FROM tre_nodes"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 " WHERE CrsCod=%ld"
+			   " AND TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			Tre_DB_Types[TreeType]);
       default:
 	 return 0;
      }
@@ -347,7 +359,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level)
 /*****************************************************************************/
 // Returns the number of tree nodes in a hierarchy scope
 
-unsigned Tre_DB_GetNumNodes (Hie_Level_t Level)
+unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
   {
    switch (Level)
      {
@@ -356,7 +368,9 @@ unsigned Tre_DB_GetNumNodes (Hie_Level_t Level)
          DB_QueryCOUNT ("can not get number of tree nodes",
                          "SELECT COUNT(*)"
 			  " FROM tre_nodes"
-			 " WHERE CrsCod>0");
+			 " WHERE CrsCod>0"
+			   " AND TreeType='%s'",
+			Tre_DB_Types[TreeType]);
       case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -370,8 +384,10 @@ unsigned Tre_DB_GetNumNodes (Hie_Level_t Level)
 			   " AND ins_instits.InsCod=ctr_centers.InsCod"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			Tre_DB_Types[TreeType]);
       case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -383,8 +399,10 @@ unsigned Tre_DB_GetNumNodes (Hie_Level_t Level)
 			 " WHERE ctr_centers.InsCod=%ld"
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			Tre_DB_Types[TreeType]);
       case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -394,8 +412,10 @@ unsigned Tre_DB_GetNumNodes (Hie_Level_t Level)
 			        "tre_nodes"
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			Tre_DB_Types[TreeType]);
       case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -403,15 +423,19 @@ unsigned Tre_DB_GetNumNodes (Hie_Level_t Level)
 			  " FROM crs_courses,"
 			        "tre_nodes"
 			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=tre_nodes.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
+			   " AND tre_nodes.TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+			Tre_DB_Types[TreeType]);
       case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
                          "SELECT COUNT(*)"
 			  " FROM tre_nodes"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 " WHERE CrsCod=%ld"
+			   " AND TreeType='%s'",
+                        Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			Tre_DB_Types[TreeType]);
       default:
          Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached

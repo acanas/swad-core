@@ -39,7 +39,7 @@
 //----------------------------- Tree nodes ------------------------------------
 long Tre_DB_InsertNode (const struct Tre_Node *Node,const char *Txt);
 void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt);
-void Tre_DB_HideOrUnhideNode (Tre_TreeType_t TreeType,long NodCod,
+void Tre_DB_HideOrUnhideNode (const struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Tre_DB_UpdateIndexRange (Tre_TreeType_t TreeType,long Diff,long Begin,long End);
 void Tre_DB_LockTableNodes (void);
@@ -53,8 +53,8 @@ unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_
 void Tre_DB_GetNodeTxt (Tre_TreeType_t TreeType,
 			long NodCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-unsigned Tre_DB_GetNumCoursesWithNodes (Hie_Level_t Level);
-unsigned Tre_DB_GetNumNodes (Hie_Level_t Level);
+unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Level);
+unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level);
 
 void Tre_DB_RemoveNodeRange (Tre_TreeType_t TreeType,
 			     const struct Tre_NodeRange *ToRemove);

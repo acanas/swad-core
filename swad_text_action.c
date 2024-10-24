@@ -5929,71 +5929,71 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeePrgItm] =
 #if   L==1	// ca
-	"See program item"			// Necessita traducció
+	"See tree node"			// Necessita traducció
 #elif L==2	// de
-	"See program item"			// Need Übersetzung
+	"See tree node"			// Need Übersetzung
 #elif L==3	// en
-	"See program item"
+	"See tree node"
 #elif L==4	// es
 	"Ver &iacute;tem del programa"
 #elif L==5	// fr
-	"See program item"			// Besoin de traduction
+	"See tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Ver &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"See program item"			// Bisogno di traduzione
+	"See tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"See program item"			// Potrzebujesz tlumaczenie
+	"See tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See program item"			// Precisa de tradução
+	"See tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"See program item"			// Çeviri lazim!
+	"See tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActFrmChgPrgItm] =
 #if   L==1	// ca
-	"Edit program item"			// Necessita traducció
+	"Edit tree node"			// Necessita traducció
 #elif L==2	// de
-	"Edit program item"			// Need Übersetzung
+	"Edit tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Edit program item"
+	"Edit tree node"
 #elif L==4	// es
 	"Editar &iacute;tem del programa"
 #elif L==5	// fr
-	"Edit program item"			// Besoin de traduction
+	"Edit tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Editar &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Edit program item"			// Bisogno di traduzione
+	"Edit tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit program item"			// Potrzebujesz tlumaczenie
+	"Edit tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit program item"			// Precisa de tradução
+	"Edit tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Edit program item"			// Çeviri lazim!
+	"Edit tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActFrmNewPrgItm] =
 #if   L==1	// ca
-	"Request new program item"			// Necessita traducció
+	"Request new tree node"			// Necessita traducció
 #elif L==2	// de
-	"Request new program item"			// Need Übersetzung
+	"Request new tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Request new program item"
+	"Request new tree node"
 #elif L==4	// es
 	"Solicitar nuevo &iacute;tem del programa"
 #elif L==5	// fr
-	"Request new program item"			// Besoin de traduction
+	"Request new tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar nuevo &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Request new program item"			// Bisogno di traduzione
+	"Request new tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request new program item"			// Potrzebujesz tlumaczenie
+	"Request new tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request new program item"			// Precisa de tradução
+	"Request new tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Request new program item"			// Çeviri lazim!
+	"Request new tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActChgPrgItm] =
@@ -6002,7 +6002,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==2	// de
 	"Programmpunkt &auml;ndern"
 #elif L==3	// en
-	"Change program item"
+	"Change tree node"
 #elif L==4	// es
 	"Cambiar &iacute;tem del programa"
 #elif L==5	// fr
@@ -6025,7 +6025,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==2	// de
 	"Programmpunkt erstellen"
 #elif L==3	// en
-	"Create program item"
+	"Create tree node"
 #elif L==4	// es
 	"Crear &iacute;tem del programa"
 #elif L==5	// fr
@@ -6044,25 +6044,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqRemPrgItm] =
 #if   L==1	// ca
-	"Request removal of program item"				// Necessita traducció
+	"Request removal of tree node"				// Necessita traducció
 #elif L==2	// de
-	"Request removal of program item"				// Need Übersetzung
+	"Request removal of tree node"				// Need Übersetzung
 #elif L==3	// en
-	"Request removal of program item"
+	"Request removal of tree node"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de &iacute;tem del programa"
 #elif L==5	// fr
-	"Request removal of program item"				// Besoin de traduction
+	"Request removal of tree node"				// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of program item"				// Bisogno di traduzione
+	"Request removal of tree node"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of program item"				// Potrzebujesz tlumaczenie
+	"Request removal of tree node"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of program item"				// Precisa de tradução
+	"Request removal of tree node"				// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of program item"				// Çeviri lazim!
+	"Request removal of tree node"				// Çeviri lazim!
 #endif
 	,
 	[ActRemPrgItm] =
@@ -6071,7 +6071,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==2	// de
 	"Programmelement entfernen"
 #elif L==3	// en
-	"Remove program item"
+	"Remove tree node"
 #elif L==4	// es
 	"Eliminar &iacute;tem del programa"
 #elif L==5	// fr
@@ -6090,232 +6090,232 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActHidPrgItm] =
 #if   L==1	// ca
-	"Hide program item"			// Necessita traducció
+	"Hide tree node"			// Necessita traducció
 #elif L==2	// de
-	"Hide program item"			// Need Übersetzung
+	"Hide tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Hide program item"
+	"Hide tree node"
 #elif L==4	// es
 	"Ocultar &iacute;tem del programa"
 #elif L==5	// fr
-	"Hide program item"			// Besoin de traduction
+	"Hide tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Ocultar &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Hide program item"			// Bisogno di traduzione
+	"Hide tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Hide program item"			// Potrzebujesz tlumaczenie
+	"Hide tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Hide program item"			// Precisa de tradução
+	"Hide tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Hide program item"			// Çeviri lazim!
+	"Hide tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActUnhPrgItm] =
 #if   L==1	// ca
-	"Show program item"			// Necessita traducció
+	"Show tree node"			// Necessita traducció
 #elif L==2	// de
-	"Show program item"			// Need Übersetzung
+	"Show tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Show program item"
+	"Show tree node"
 #elif L==4	// es
 	"Mostrar &iacute;tem del programa"
 #elif L==5	// fr
-	"Show program item"			// Besoin de traduction
+	"Show tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Mostrar &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Show program item"			// Bisogno di traduzione
+	"Show tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Show program item"			// Potrzebujesz tlumaczenie
+	"Show tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show program item"			// Precisa de tradução
+	"Show tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Show program item"			// Çeviri lazim!
+	"Show tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActUp_PrgItm] =
 #if   L==1	// ca
-	"Move up program item"			// Necessita traducció
+	"Move up tree node"			// Necessita traducció
 #elif L==2	// de
-	"Move up program item"			// Need Übersetzung
+	"Move up tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Move up program item"
+	"Move up tree node"
 #elif L==4	// es
 	"Subir &iacute;tem del programa"
 #elif L==5	// fr
-	"Move up program item"			// Besoin de traduction
+	"Move up tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Subir &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Move up program item"			// Bisogno di traduzione
+	"Move up tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Move up program item"			// Potrzebujesz tlumaczenie
+	"Move up tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Move up program item"			// Precisa de tradução
+	"Move up tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Move up program item"			// Çeviri lazim!
+	"Move up tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActDwnPrgItm] =
 #if   L==1	// ca
-	"Move down program item"		// Necessita traducció
+	"Move down tree node"		// Necessita traducció
 #elif L==2	// de
-	"Move down program item"		// Need Übersetzung
+	"Move down tree node"		// Need Übersetzung
 #elif L==3	// en
-	"Move down program item"
+	"Move down tree node"
 #elif L==4	// es
 	"Bajar &iacute;tem del programa"
 #elif L==5	// fr
-	"Move down program item"		// Besoin de traduction
+	"Move down tree node"		// Besoin de traduction
 #elif L==6	// gn
 	"Bajar &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Move down program item"		// Bisogno di traduzione
+	"Move down tree node"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Move down program item"		// Potrzebujesz tlumaczenie
+	"Move down tree node"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Move down program item"		// Precisa de tradução
+	"Move down tree node"		// Precisa de tradução
 #elif L==10	// tr
-	"Move down program item"		// Çeviri lazim!
+	"Move down tree node"		// Çeviri lazim!
 #endif
 	,
 	[ActLftPrgItm] =
 #if   L==1	// ca
-	"Move left program item"			// Necessita traducció
+	"Move left tree node"			// Necessita traducció
 #elif L==2	// de
-	"Move left program item"			// Need Übersetzung
+	"Move left tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Move left program item"
+	"Move left tree node"
 #elif L==4	// es
 	"Mover a la izquierda &iacute;tem del programa"
 #elif L==5	// fr
-	"Move left program item"			// Besoin de traduction
+	"Move left tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Mover a la izquierda &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Move left program item"			// Bisogno di traduzione
+	"Move left tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Move left program item"			// Potrzebujesz tlumaczenie
+	"Move left tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Move left program item"			// Precisa de tradução
+	"Move left tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Move left program item"			// Çeviri lazim!
+	"Move left tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActRgtPrgItm] =
 #if   L==1	// ca
-	"Move right program item"			// Necessita traducció
+	"Move right tree node"			// Necessita traducció
 #elif L==2	// de
-	"Move right program item"			// Need Übersetzung
+	"Move right tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Move right program item"
+	"Move right tree node"
 #elif L==4	// es
 	"Mover a la derecha &iacute;tem del programa"
 #elif L==5	// fr
-	"Move right program item"			// Besoin de traduction
+	"Move right tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Mover a la derecha &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Move right program item"			// Bisogno di traduzione
+	"Move right tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Move right program item"			// Potrzebujesz tlumaczenie
+	"Move right tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Move right program item"			// Precisa de tradução
+	"Move right tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Move right program item"			// Çeviri lazim!
+	"Move right tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActExpSeePrgItm] =
 #if   L==1	// ca
-	"Expand program item"			// Necessita traducció
+	"Expand tree node"			// Necessita traducció
 #elif L==2	// de
-	"Expand program item"			// Need Übersetzung
+	"Expand tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Expand program item"
+	"Expand tree node"
 #elif L==4	// es
 	"Expandir &iacute;tem del programa"
 #elif L==5	// fr
-	"Expand program item"			// Besoin de traduction
+	"Expand tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Expandir &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Expand program item"			// Bisogno di traduzione
+	"Expand tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Expand program item"			// Potrzebujesz tlumaczenie
+	"Expand tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Expand program item"			// Precisa de tradução
+	"Expand tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Expand program item"			// Çeviri lazim!
+	"Expand tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActConSeePrgItm] =
 #if   L==1	// ca
-	"Contract program item"			// Necessita traducció
+	"Contract tree node"			// Necessita traducció
 #elif L==2	// de
-	"Contract program item"			// Need Übersetzung
+	"Contract tree node"			// Need Übersetzung
 #elif L==3	// en
-	"Contract program item"
+	"Contract tree node"
 #elif L==4	// es
 	"Contraer &iacute;tem del programa"
 #elif L==5	// fr
-	"Contract program item"			// Besoin de traduction
+	"Contract tree node"			// Besoin de traduction
 #elif L==6	// gn
 	"Contraer &iacute;tem del programa"	// Okoteve traducción
 #elif L==7	// it
-	"Contract program item"			// Bisogno di traduzione
+	"Contract tree node"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Contract program item"			// Potrzebujesz tlumaczenie
+	"Contract tree node"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Contract program item"			// Precisa de tradução
+	"Contract tree node"			// Precisa de tradução
 #elif L==10	// tr
-	"Contract program item"			// Çeviri lazim!
+	"Contract tree node"			// Çeviri lazim!
 #endif
 	,
 	[ActExpEdiPrgItm] =
 #if   L==1	// ca
-	"Expand program item when editing"		// Necessita traducció
+	"Expand tree node when editing"		// Necessita traducció
 #elif L==2	// de
-	"Expand program item when editing"		// Need Übersetzung
+	"Expand tree node when editing"		// Need Übersetzung
 #elif L==3	// en
-	"Expand program item when editing"
+	"Expand tree node when editing"
 #elif L==4	// es
 	"Expandir &iacute;tem del programa editando"
 #elif L==5	// fr
-	"Expand program item when editing"		// Besoin de traduction
+	"Expand tree node when editing"		// Besoin de traduction
 #elif L==6	// gn
 	"Expandir &iacute;tem del programa editando"	// Okoteve traducción
 #elif L==7	// it
-	"Expand program item when editing"		// Bisogno di traduzione
+	"Expand tree node when editing"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Expand program item when editing"		// Potrzebujesz tlumaczenie
+	"Expand tree node when editing"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Expand program item when editing"		// Precisa de tradução
+	"Expand tree node when editing"		// Precisa de tradução
 #elif L==10	// tr
-	"Expand program item when editing"		// Çeviri lazim!
+	"Expand tree node when editing"		// Çeviri lazim!
 #endif
 	,
 	[ActConEdiPrgItm] =
 #if   L==1	// ca
-	"Contract program item when editing"		// Necessita traducció
+	"Contract tree node when editing"		// Necessita traducció
 #elif L==2	// de
-	"Contract program item when editing"		// Need Übersetzung
+	"Contract tree node when editing"		// Need Übersetzung
 #elif L==3	// en
-	"Contract program item when editing"
+	"Contract tree node when editing"
 #elif L==4	// es
 	"Contraer &iacute;tem del programa editando"
 #elif L==5	// fr
-	"Contract program item when editing"		// Besoin de traduction
+	"Contract tree node when editing"		// Besoin de traduction
 #elif L==6	// gn
 	"Contraer &iacute;tem del programa editando"	// Okoteve traducción
 #elif L==7	// it
-	"Contract program item when editing"		// Bisogno di traduzione
+	"Contract tree node when editing"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Contract program item when editing"		// Potrzebujesz tlumaczenie
+	"Contract tree node when editing"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Contract program item when editing"		// Precisa de tradução
+	"Contract tree node when editing"		// Precisa de tradução
 #elif L==10	// tr
-	"Contract program item when editing"		// Çeviri lazim!
+	"Contract tree node when editing"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeRscCli_InPrg] =
