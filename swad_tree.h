@@ -38,17 +38,18 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Tre_NUM_TYPES 8
+#define Tre_NUM_TYPES 9
 typedef enum
   {
-   Tre_PROGRAM,		// Course program
-   Tre_GUIDE,
-   Tre_LECTURES,
-   Tre_PRACTICALS,
-   Tre_BIBLIOGRAPHY,
-   Tre_FAQ,
-   Tre_LINKS,
-   Tre_ASSESSMENT,
+   Tre_UNKNOWN,		// Not assigned, unknown
+   Tre_PROGRAM,		// Program
+   Tre_GUIDE,		// Teaching guide
+   Tre_LECTURES,	// Syllabus (lectures)
+   Tre_PRACTICALS,	// Syllabus (practicals)
+   Tre_BIBLIOGRAPHY,	// Bibliography
+   Tre_FAQ,		// FAQ
+   Tre_LINKS,		// Links
+   Tre_ASSESSMENT,	// Assessment system
   } Tre_TreeType_t;
 
 #define Tre_MAX_CHARS_NODE_TITLE	(128 - 1)	// 127

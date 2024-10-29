@@ -42,6 +42,7 @@ extern struct Globals Gbl;
 
 const char *Tre_DB_Types[Tre_NUM_TYPES] =
   {
+   [Tre_UNKNOWN		] = NULL,
    [Tre_PROGRAM		] = "prg",
    [Tre_GUIDE		] = "gui",
    [Tre_LECTURES	] = "lec",

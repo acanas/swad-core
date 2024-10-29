@@ -163,33 +163,33 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
    char *Title;
    static Vie_ViewType_t ViewingOrEditing[Tre_NUM_LISTING_TYPES] =
      {
-      [Tre_PRINT               ] = Vie_VIEW,
-      [Tre_VIEW                ] = Vie_VIEW,
-      [Tre_EDIT_NODES          ] = Vie_EDIT,
-      [Tre_FORM_NEW_END_NODE   ] = Vie_EDIT,
-      [Tre_FORM_NEW_CHILD_NODE ] = Vie_EDIT,
-      [Tre_FORM_EDIT_NODE      ] = Vie_EDIT,
-      [Tre_END_EDIT_NODE       ] = Vie_EDIT,
-      [Tre_RECEIVE_NODE        ] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCES      ] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK  ] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES        ] = Vie_EDIT,
+      [Tre_PRINT			] = Vie_VIEW,
+      [Tre_VIEW				] = Vie_VIEW,
+      [Tre_EDIT_NODES			] = Vie_EDIT,
+      [Tre_FORM_NEW_END_NODE		] = Vie_EDIT,
+      [Tre_FORM_NEW_CHILD_NODE		] = Vie_EDIT,
+      [Tre_FORM_EDIT_NODE		] = Vie_EDIT,
+      [Tre_END_EDIT_NODE		] = Vie_EDIT,
+      [Tre_RECEIVE_NODE			] = Vie_EDIT,
+      [Tre_EDIT_PRG_RESOURCES		] = Vie_EDIT,
+      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
+      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
+      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_EDIT,
      };
    static Vie_ViewType_t ViewingOrEditingRes[Tre_NUM_LISTING_TYPES] =
      {
-      [Tre_PRINT               ] = Vie_VIEW,
-      [Tre_VIEW                ] = Vie_VIEW,
-      [Tre_EDIT_NODES          ] = Vie_VIEW,
-      [Tre_FORM_NEW_END_NODE   ] = Vie_VIEW,
-      [Tre_FORM_NEW_CHILD_NODE ] = Vie_VIEW,
-      [Tre_FORM_EDIT_NODE      ] = Vie_VIEW,
-      [Tre_END_EDIT_NODE       ] = Vie_VIEW,
-      [Tre_RECEIVE_NODE        ] = Vie_VIEW,
-      [Tre_EDIT_PRG_RESOURCES      ] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK  ] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES        ] = Vie_VIEW,
+      [Tre_PRINT			] = Vie_VIEW,
+      [Tre_VIEW				] = Vie_VIEW,
+      [Tre_EDIT_NODES			] = Vie_VIEW,
+      [Tre_FORM_NEW_END_NODE		] = Vie_VIEW,
+      [Tre_FORM_NEW_CHILD_NODE		] = Vie_VIEW,
+      [Tre_FORM_EDIT_NODE		] = Vie_VIEW,
+      [Tre_END_EDIT_NODE		] = Vie_VIEW,
+      [Tre_RECEIVE_NODE			] = Vie_VIEW,
+      [Tre_EDIT_PRG_RESOURCES		] = Vie_EDIT,
+      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
+      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
+      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_VIEW,
      };
    static void (*PrgRsc_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *NodCod) =
      {
@@ -201,7 +201,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
    if (Node->Hierarchy.NodCod <= 0)
       return;
 
-   /***** Get list of item resources from database *****/
+   /***** Get list of node resources from database *****/
    NumResources = Prg_DB_GetListResources (&mysql_res,Node->Hierarchy.NodCod,
                                            ViewingOrEditingRes[ListingType] == Vie_EDIT);
 
@@ -248,15 +248,15 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	 /***** Table *****/
 	 HTM_TABLE_BeginWidePadding (2);
 
-	    /***** Write all item resources *****/
-	    for (NumRsc = 0, The_ResetRowColor1 (1);
+	    /***** Write all resources of this node *****/
+	    for (NumRsc = 0;
 		 NumRsc < NumResources;
-		 NumRsc++, The_ChangeRowColor1 (1))
+		 NumRsc++)
 	      {
-	       /* Get data of this item resource */
+	       /* Get data of this resource */
 	       PrgRsc_GetResourceDataFromRow (mysql_res,Node);
 
-	       /* Show item */
+	       /* Show resource */
 	       switch (ViewingOrEditingResOfThisItem)
 		 {
 		  case Vie_VIEW:
@@ -300,12 +300,11 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
   }
 
 /*****************************************************************************/
-/************** Put contextual icons in list of item resources ***************/
+/************** Put contextual icons in list of node resources ***************/
 /*****************************************************************************/
 
 static void PrgRsc_PutIconsViewRes (void *NodCod)
   {
-   /***** Put icon to create a new item resource *****/
    if (NodCod)
       if (*(long *) NodCod > 0)
 	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
@@ -315,7 +314,6 @@ static void PrgRsc_PutIconsViewRes (void *NodCod)
 
 static void PrgRsc_PutIconsEditRes (void *NodCod)
   {
-   /***** Put icon to create a new item resource *****/
    if (NodCod)
       if (*(long *) NodCod > 0)
 	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
@@ -333,7 +331,7 @@ void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node)
 
    if (Node->Resource.Hierarchy.RscCod > 0)
      {
-      /***** Get data of item resource *****/
+      /***** Get data of resource *****/
       if (Prg_DB_GetResourceDataByCod (&mysql_res,Node->Resource.Hierarchy.RscCod))
          PrgRsc_GetResourceDataFromRow (mysql_res,Node);
       else
@@ -349,7 +347,7 @@ void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************************* Get item resource data ****************************/
+/**************************** Get resource data ******************************/
 /*****************************************************************************/
 
 static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
@@ -371,7 +369,7 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    /***** Get code of the tree node (row[0]) *****/
    Node->Hierarchy.NodCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /***** Get code and index of the item resource (row[1], row[2]) *****/
+   /***** Get code and index of the resource (row[1], row[2]) *****/
    Node->Resource.Hierarchy.RscCod = Str_ConvertStrCodToLongCod (row[1]);
    Node->Resource.Hierarchy.RscInd = Str_ConvertStrToUnsigned (row[2]);
 
@@ -382,12 +380,12 @@ static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
    Node->Resource.Link.Type = Rsc_GetTypeFromString (row[4]);
    Node->Resource.Link.Cod  = Str_ConvertStrCodToLongCod (row[5]);
 
-   /***** Get the title of the item resource (row[6]) *****/
+   /***** Get the title of the resource (row[6]) *****/
    Str_Copy (Node->Resource.Title,row[6],sizeof (Node->Resource.Title) - 1);
   }
 
 /*****************************************************************************/
-/************************** Show one item resource ***************************/
+/***************************** Show one resource *****************************/
 /*****************************************************************************/
 
 static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
@@ -397,14 +395,12 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
    HTM_TR_Begin (NULL);
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT %s\"",
-                    The_GetSuffix (),The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_NUM PRG_RSC_%s RT\"",The_GetSuffix ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
 	 HTM_Txt (Node->Resource.Title);
 	 HTM_BR ();
 	 Rsc_WriteLinkName (&Node->Resource.Link,Frm_PUT_FORM);
@@ -415,7 +411,7 @@ static void PrgRsc_WriteRowViewResource (unsigned NumRsc,
   }
 
 /*****************************************************************************/
-/************************** Edit one item resource ***************************/
+/***************************** Edit one resource *****************************/
 /*****************************************************************************/
 
 static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
@@ -425,20 +421,18 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-      /***** Forms to remove/edit this item resource *****/
-      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
+      /***** Forms to remove/edit this resource *****/
+      HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT\"");
          PrgRsc_PutFormsToRemEditOneResource (Node,NumRsc,NumResources);
       HTM_TD_End ();
 
       /***** Resource number *****/
-      HTM_TD_Begin ("class=\"PRG_NUM LT PRG_RSC_%s RT %s\"",
-                    The_GetSuffix (),The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_NUM LT PRG_RSC_%s RT\"",The_GetSuffix ());
 	 HTM_Unsigned (NumRsc + 1);
       HTM_TD_End ();
 
       /***** Title and link/clipboard *****/
-      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"PRG_MAIN LT PRG_RSC_%s\"",The_GetSuffix ());
 
          /* Title */
 	 Frm_BeginFormAnchor (ActRenPrgRsc,PrgRsc_RESOURCE_SECTION_ID);
@@ -477,7 +471,7 @@ static void PrgRsc_WriteRowEditResource (unsigned NumRsc,unsigned NumResources,
   }
 
 /*****************************************************************************/
-/************************* Edit a new item resource **************************/
+/**************************** Edit a new resource ****************************/
 /*****************************************************************************/
 
 static void PrgRsc_WriteRowNewResource (unsigned NumResources,
@@ -489,7 +483,7 @@ static void PrgRsc_WriteRowNewResource (unsigned NumResources,
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-      /***** Forms to remove/edit this item resource *****/
+      /***** Forms to remove/edit this resource *****/
       HTM_TD_Begin ("class=\"PRG_RSC_COL1 LT %s\"",The_GetColorRows1 (1));
 	 PrgRsc_PutFormsToRemEditOneResource (Node,NumResources,NumResources);
       HTM_TD_End ();
@@ -551,14 +545,14 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 /***** Icon to remove item resource *****/
+	 /***** Icon to remove resource *****/
 	 if (NumRsc < NumResources)
 	    Ico_PutContextualIconToRemove (ActReqRemPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 					   PrgRsc_PutParRscCod,&Node->Resource.Hierarchy.RscCod);
 	 else
 	    Ico_PutIconRemovalNotAllowed ();
 
-	 /***** Icon to hide/unhide item resource *****/
+	 /***** Icon to hide/unhide resource *****/
 	 if (NumRsc < NumResources)
 	    Ico_PutContextualIconToHideUnhide (ActionHideUnhide,PrgRsc_RESOURCE_SECTION_ID,
 					       PrgRsc_PutParRscCod,&Node->Resource.Hierarchy.RscCod,
@@ -566,7 +560,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
 	 else
 	    Ico_PutIconOff ("eye.svg",Ico_GREEN,Txt_Visible);
 
-	 /***** Put icon to edit the item resource *****/
+	 /***** Put icon to edit the resource *****/
 	 if (NumRsc < NumResources)
 	    Ico_PutContextualIconToEdit (ActFrmChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 					 PrgRsc_PutParRscCod,&Node->Resource.Hierarchy.RscCod);
@@ -574,7 +568,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
 	    Ico_PutContextualIconToEdit (ActFrmChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 					 Tre_PutParNodCod,&Node->Hierarchy.NodCod);
 
-	 /***** Icon to move up the item resource *****/
+	 /***** Icon to move up the resource *****/
 	 if (NumRsc > 0 && NumRsc < NumResources)
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                   PrgRsc_PutParRscCod,&Node->Resource.Hierarchy.RscCod,
@@ -582,7 +576,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
-	 /***** Put icon to move down the item resource *****/
+	 /***** Put icon to move down the resource *****/
 	 if (NumRsc < NumResources - 1)
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
 	                                   PrgRsc_PutParRscCod,&Node->Resource.Hierarchy.RscCod,
@@ -672,7 +666,7 @@ void PrgRsc_RenameResource (void)
   }
 
 /*****************************************************************************/
-/************ Ask for confirmation of removing an item resource **************/
+/*************** Ask for confirmation of removing a resource *****************/
 /*****************************************************************************/
 
 void PrgRsc_ReqRemResource (void)
@@ -689,7 +683,7 @@ void PrgRsc_ReqRemResource (void)
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
 
-   /***** Create alert to remove the item resource *****/
+   /***** Create alert to remove the resource *****/
    Ale_CreateAlert (Ale_QUESTION,PrgRsc_RESOURCE_SECTION_ID,
                     Txt_Do_you_really_want_to_remove_the_resource_X,
                     Node.Resource.Title);
@@ -703,7 +697,7 @@ void PrgRsc_ReqRemResource (void)
   }
 
 /*****************************************************************************/
-/**************************** Remove an item resource ************************/
+/******************************* Remove a resource ***************************/
 /*****************************************************************************/
 
 void PrgRsc_RemoveResource (void)
@@ -714,7 +708,7 @@ void PrgRsc_RemoveResource (void)
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Tre_PROGRAM);
 
-   /***** Get data of the item resource from database *****/
+   /***** Get data of the resource from database *****/
    Node.TreeType = Tre_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
@@ -723,7 +717,7 @@ void PrgRsc_RemoveResource (void)
    /***** Remove resource *****/
    Prg_DB_RemoveResource (&Node);
 
-   /***** Create alert to remove the item resource *****/
+   /***** Create alert to remove the resource *****/
    Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,
                     Txt_Resource_X_removed,Node.Resource.Title);
 
@@ -762,7 +756,7 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
 
-   /***** Hide/unhide item resource *****/
+   /***** Hide/unhide resource *****/
    Prg_DB_HideOrUnhideResource (Node.Resource.Hierarchy.RscCod,HiddenOrVisible);
 
    /***** Show current tree nodes, if any *****/
@@ -981,10 +975,9 @@ void PrgRsc_ChangeLink (void)
       /***** Is it an existing resource? *****/
       if (Node.Resource.Hierarchy.RscCod <= 0)
 	{
-	 /* No resource selected, so it's a new resource at the end of the item */
+	 /* No resource selected, so it's a new resource at the end of the node */
 	 /* Get the new title for the new resource from link title */
-	 Rsc_GetResourceTitleFromLink (&Node.Resource.Link,
-	                               Node.Resource.Title);
+	 Rsc_GetResourceTitleFromLink (&Node.Resource.Link,Node.Resource.Title);
 
 	 /***** Create resource *****/
 	 Node.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Node);

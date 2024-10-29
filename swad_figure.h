@@ -33,9 +33,10 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Fig_NUM_FIGURES 33
+#define Fig_NUM_FIGURES 34
 typedef enum
   {
+   Fig_UNKNOWN,
    Fig_USERS,			// Number of users
    Fig_USERS_RANKING,		// Users' ranking
    Fig_HIERARCHY,		// Number of countries, institutions, centers, degrees and courses

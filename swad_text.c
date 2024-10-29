@@ -44417,6 +44417,8 @@ const char *Txt_STAT_TYPE_COUNT_SMALL[Sta_NUM_COUNT_TYPES] =
 
 const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	{
+	[Fig_UNKNOWN] =
+	"",
 	[Fig_USERS] =
 #if   L==1	// ca
 	"Usuaris"

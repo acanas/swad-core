@@ -196,24 +196,15 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
 			    const struct Tre_Node *ParentNode,
 		            struct Tre_Node *Node,const char *Txt);
 
+static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void);
+
 /*****************************************************************************/
 /**************************** List all tree nodes ****************************/
 /*****************************************************************************/
 
 void Tre_ShowTree (void)
   {
-   Tre_TreeType_t TreeType;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -227,18 +218,7 @@ void Tre_ShowTree (void)
 
 void Tre_EditTree (void)
   {
-   Tre_TreeType_t TreeType;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -260,6 +240,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_COURSE_program;
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    long ParentNodCod = -1L;	// Initialized to avoid warning
    unsigned NumNode;
    unsigned FormLevel = 0;	// Initialized to avoid warning
@@ -268,7 +249,15 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
    char *Title;
    static const char **Titles[Tre_NUM_TYPES] =
      {
-      [Tre_PROGRAM] = &Txt_COURSE_program,
+      [Tre_UNKNOWN	] = NULL,
+      [Tre_PROGRAM	] = &Txt_COURSE_program,
+      [Tre_GUIDE	] = &Txt_INFO_TITLE[Inf_TEACH_GUIDE	],
+      [Tre_LECTURES	] = &Txt_INFO_TITLE[Inf_LECTURES	],
+      [Tre_PRACTICALS	] = &Txt_INFO_TITLE[Inf_PRACTICALS	],
+      [Tre_BIBLIOGRAPHY	] = &Txt_INFO_TITLE[Inf_BIBLIOGRAPHY	],
+      [Tre_FAQ		] = &Txt_INFO_TITLE[Inf_FAQ		],
+      [Tre_LINKS	] = &Txt_INFO_TITLE[Inf_LINKS		],
+      [Tre_ASSESSMENT	] = &Txt_INFO_TITLE[Inf_ASSESSMENT	],
      };
    static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (void *Args) =
      {
@@ -285,6 +274,11 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
       [Tre_CHG_PRG_RESOURCE_LINK	] = Tre_PutIconsEditNodes,
       [Tre_END_EDIT_PRG_RESOURCES	] = Tre_PutIconsEditNodes,
      };
+
+   /***** Trivial check: tree type must be valid *****/
+   if (TreeType < (Tre_TreeType_t) 1 ||
+       TreeType > (Tre_TreeType_t) (Tre_NUM_TYPES - 1))
+      Err_WrongTypeExit ();
 
    /***** Create numbers and hidden levels *****/
    Tre_SetMaxNodeLevel (Tre_CalculateMaxNodeLevel ());
@@ -303,7 +297,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
    if (asprintf (&Title,*Titles[TreeType],
 		 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,FunctionToDrawContextualIcons[ListingType],NULL,
+   Box_BoxBegin (Title,FunctionToDrawContextualIcons[ListingType],&TreeType,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -371,19 +365,36 @@ Usr_Can_t Tre_CheckIfICanEditTree (void)
 /**************** Put contextual icons in list of tree nodes *****************/
 /*****************************************************************************/
 
-static void Tre_PutIconsListNodes (__attribute__((unused)) void *Args)
+static void Tre_PutIconsListNodes (void *TreeType)
   {
    static Fig_FigureType_t FigureType[Tre_NUM_TYPES] =
      {
-      [Tre_PROGRAM] = Fig_COURSE_PROGRAMS,
+      [Tre_UNKNOWN	] = Fig_UNKNOWN,
+      [Tre_PROGRAM	] = Fig_COURSE_PROGRAMS,
+      [Tre_GUIDE	] = Fig_UNKNOWN,
+      [Tre_LECTURES	] = Fig_UNKNOWN,
+      [Tre_PRACTICALS	] = Fig_UNKNOWN,
+      [Tre_BIBLIOGRAPHY	] = Fig_UNKNOWN,
+      [Tre_FAQ		] = Fig_UNKNOWN,
+      [Tre_LINKS	] = Fig_UNKNOWN,
+      [Tre_ASSESSMENT	] = Fig_UNKNOWN,
      };
 
-   /***** Put icon to edit tree *****/
-   if (Tre_CheckIfICanEditTree () == Usr_CAN)
-      Tre_PutIconToEditTree ();
+   if (TreeType)
+     {
+      /***** Trivial check: tree type must be valid *****/
+      if (*((Tre_TreeType_t *) TreeType) < (Tre_TreeType_t) 1 ||
+	  *((Tre_TreeType_t *) TreeType) > (Tre_TreeType_t) (Tre_NUM_TYPES - 1))
+	 Err_WrongTypeExit ();
 
-   /***** Put icon to show a figure *****/
-   Fig_PutIconToShowFigure (FigureType[Tre_PROGRAM]);
+      /***** Put icon to edit tree *****/
+      if (Tre_CheckIfICanEditTree () == Usr_CAN)
+	 Tre_PutIconToEditTree ();
+
+      /***** Put icon to show a figure *****/
+      if (FigureType[*((Tre_TreeType_t *) TreeType)])
+         Fig_PutIconToShowFigure (FigureType[*((Tre_TreeType_t *) TreeType)]);
+     }
   }
 
 /*****************************************************************************/
@@ -1400,19 +1411,8 @@ inline unsigned Tre_GetLevelFromNumNode (unsigned NumNode)
 void Tre_ReqRemNode (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();
    struct Tre_Node Node;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -1443,20 +1443,9 @@ void Tre_ReqRemNode (void)
 void Tre_RemoveNode (void)
   {
    extern const char *Txt_Item_X_removed;
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
    struct Tre_NodeRange ToRemove;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -1504,19 +1493,8 @@ void Tre_UnhideNode (void)
 
 static void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -1554,7 +1532,7 @@ void Tre_MoveDownNode (void)
 static void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
    unsigned NumNode;
    bool Success = false;
@@ -1563,17 +1541,6 @@ static void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
       [Tre_MOVE_UP  ] = Tre_CheckIfMoveUpIsAllowed,
       [Tre_MOVE_DOWN] = Tre_CheckIfMoveDownIsAllowed,
      };
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -1772,7 +1739,7 @@ void Tre_MoveRightNode (void)
 static void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
   {
    extern const char *Txt_Movement_not_allowed;
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
    unsigned NumNode;
    struct Tre_NodeRange ToMove;
@@ -1781,17 +1748,6 @@ static void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
       [Tre_MOVE_LEFT ] = Tre_CheckIfMoveLeftIsAllowed,
       [Tre_MOVE_RIGHT] = Tre_CheckIfMoveRightIsAllowed,
      };
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -1846,20 +1802,9 @@ void Tre_ContractNode (void)
 
 static void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract)
   {
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
    Tre_ListingType_t ListingType;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -1948,19 +1893,8 @@ static unsigned Tre_GetLastChild (int NumNode)
 
 void Tre_ViewNodeAfterEdit (void)
   {
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -1982,19 +1916,8 @@ void Tre_ViewNodeAfterEdit (void)
 
 void Tre_ReqChangeNode (void)
   {
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -2020,19 +1943,8 @@ void Tre_ReqChangeNode (void)
 
 void Tre_ReqCreateNode (void)
   {
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -2188,20 +2100,9 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
 
 void Tre_ReceiveChgNode (void)
   {
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;
    char Description[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -2244,21 +2145,10 @@ void Tre_ReceiveChgNode (void)
 
 void Tre_ReceiveNewNode (void)
   {
-   Tre_TreeType_t TreeType;
+   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
    struct Tre_Node Node;		// Parent node
    struct Tre_Node NewNode;		// Node data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
-
-   /***** Set tree type *****/
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         TreeType = Tre_PROGRAM;
-         break;
-      default:
-	 Err_WrongActionExit ();
-	 break;
-     }
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (TreeType);
@@ -2365,4 +2255,33 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
 
    /***** Free list items *****/
    Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/**************** Get tree type depending on current action ******************/
+/*****************************************************************************/
+
+static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void)
+  {
+   switch (Act_GetSuperAction (Gbl.Action.Act))
+     {
+      case ActSeePrg:
+         return Tre_PROGRAM;
+      case ActSeeTchGui:
+	 return Tre_GUIDE;
+      case ActSeeSyl:
+	 // TODO: Get if lectures or practicals
+	 return Tre_LECTURES;
+      case ActSeeBib:
+	 return Tre_BIBLIOGRAPHY;
+      case ActSeeFAQ:
+	 return Tre_FAQ;
+      case ActSeeCrsLnk:
+	 return Tre_LINKS;
+      case ActSeeAss:
+	 return Tre_ASSESSMENT;
+      default:
+	 Err_WrongActionExit ();
+	 return Tre_UNKNOWN;
+     }
   }

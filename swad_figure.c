@@ -132,7 +132,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 				    "name=\"FigureType\""
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
-		     for (FigType  = (Fig_FigureType_t) 0;
+		     for (FigType  = (Fig_FigureType_t) 1;
 			  FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
 			  FigType++)
 		       {
@@ -215,46 +215,47 @@ void Fig_ShowFigures (void)
   {
    static void (*Fig_Function[Fig_NUM_FIGURES])(void) =	// Array of pointers to functions
      {
-      [Fig_USERS            ] = Usr_GetAndShowUsersStats,
-      [Fig_USERS_RANKING    ] = Usr_GetAndShowUsersRanking,
-      [Fig_HIERARCHY        ] = Hie_GetAndShowHierarchyStats,
-      [Fig_INSTITS          ] = Ins_GetAndShowInstitutionsStats,
-      [Fig_DEGREE_TYPES     ] = DegTyp_GetAndShowDegTypesStats,
-      [Fig_FOLDERS_AND_FILES] = Brw_GetAndShowFileBrowsersStats,
-      [Fig_OER              ] = Brw_GetAndShowOERsStats,
-      [Fig_COURSE_PROGRAMS  ] = Prg_GetAndShowCourseProgramStats,
-      [Fig_ASSIGNMENTS      ] = Asg_GetAndShowAssignmentsStats,
-      [Fig_PROJECTS         ] = Prj_GetAndShowProjectsStats,
-      [Fig_TESTS            ] = Tst_GetAndShowTestsStats,
-      [Fig_EXAMS            ] = Exa_GetAndShowExamsStats,
-      [Fig_GAMES            ] = Gam_GetAndShowGamesStats,
-      [Fig_RUBRICS          ] = Rub_GetAndShowRubricsStats,
-      [Fig_TIMELINE         ] = Tml_GetAndShowTimelineActivityStats,
-      [Fig_FOLLOW           ] = Fol_GetAndShowFollowStats,
-      [Fig_FORUMS           ] = For_GetAndShowForumStats,
-      [Fig_NOTIFY_EVENTS    ] = Ntf_GetAndShowNumUsrsPerNotifyEvent,
-      [Fig_NOTICES          ] = Not_GetAndShowNoticesStats,
-      [Fig_MESSAGES         ] = Msg_GetAndShowMsgsStats,
-      [Fig_SURVEYS          ] = Svy_GetAndShowSurveysStats,
-      [Fig_AGENDAS          ] = Agd_GetAndShowAgendasStats,
-      [Fig_SOCIAL_NETWORKS  ] = Net_ShowWebAndSocialNetworksStats,
-      [Fig_LANGUAGES        ] = Lan_GetAndShowNumUsrsPerLanguage,
-      [Fig_FIRST_DAY_OF_WEEK] = Cal_GetAndShowNumUsrsPerFirstDayOfWeek,
-      [Fig_DATE_FORMAT      ] = Dat_GetAndShowNumUsrsPerDateFormat,
-      [Fig_ICON_SETS        ] = Ico_GetAndShowNumUsrsPerIconSet,
-      [Fig_MENUS            ] = Mnu_GetAndShowNumUsrsPerMenu,
-      [Fig_THEMES           ] = The_GetAndShowNumUsrsPerTheme,
-      [Fig_SIDE_COLUMNS     ] = Lay_GetAndShowNumUsrsPerSideColumns,
-      [Fig_PHOTO_SHAPES     ] = PhoSha_GetAndShowNumUsrsPerPhotoShape,
-      [Fig_PRIVACY          ] = Pri_GetAndShowNumUsrsPerPrivacy,
-      [Fig_COOKIES          ] = Coo_GetAndShowNumUsrsPerCookies,
+      [Fig_UNKNOWN		] = NULL,
+      [Fig_USERS		] = Usr_GetAndShowUsersStats,
+      [Fig_USERS_RANKING	] = Usr_GetAndShowUsersRanking,
+      [Fig_HIERARCHY		] = Hie_GetAndShowHierarchyStats,
+      [Fig_INSTITS		] = Ins_GetAndShowInstitutionsStats,
+      [Fig_DEGREE_TYPES		] = DegTyp_GetAndShowDegTypesStats,
+      [Fig_FOLDERS_AND_FILES	] = Brw_GetAndShowFileBrowsersStats,
+      [Fig_OER			] = Brw_GetAndShowOERsStats,
+      [Fig_COURSE_PROGRAMS	] = Prg_GetAndShowCourseProgramStats,
+      [Fig_ASSIGNMENTS		] = Asg_GetAndShowAssignmentsStats,
+      [Fig_PROJECTS		] = Prj_GetAndShowProjectsStats,
+      [Fig_TESTS		] = Tst_GetAndShowTestsStats,
+      [Fig_EXAMS		] = Exa_GetAndShowExamsStats,
+      [Fig_GAMES		] = Gam_GetAndShowGamesStats,
+      [Fig_RUBRICS		] = Rub_GetAndShowRubricsStats,
+      [Fig_TIMELINE		] = Tml_GetAndShowTimelineActivityStats,
+      [Fig_FOLLOW		] = Fol_GetAndShowFollowStats,
+      [Fig_FORUMS		] = For_GetAndShowForumStats,
+      [Fig_NOTIFY_EVENTS	] = Ntf_GetAndShowNumUsrsPerNotifyEvent,
+      [Fig_NOTICES		] = Not_GetAndShowNoticesStats,
+      [Fig_MESSAGES		] = Msg_GetAndShowMsgsStats,
+      [Fig_SURVEYS		] = Svy_GetAndShowSurveysStats,
+      [Fig_AGENDAS		] = Agd_GetAndShowAgendasStats,
+      [Fig_SOCIAL_NETWORKS	] = Net_ShowWebAndSocialNetworksStats,
+      [Fig_LANGUAGES		] = Lan_GetAndShowNumUsrsPerLanguage,
+      [Fig_FIRST_DAY_OF_WEEK	] = Cal_GetAndShowNumUsrsPerFirstDayOfWeek,
+      [Fig_DATE_FORMAT		] = Dat_GetAndShowNumUsrsPerDateFormat,
+      [Fig_ICON_SETS		] = Ico_GetAndShowNumUsrsPerIconSet,
+      [Fig_MENUS		] = Mnu_GetAndShowNumUsrsPerMenu,
+      [Fig_THEMES		] = The_GetAndShowNumUsrsPerTheme,
+      [Fig_SIDE_COLUMNS		] = Lay_GetAndShowNumUsrsPerSideColumns,
+      [Fig_PHOTO_SHAPES		] = PhoSha_GetAndShowNumUsrsPerPhotoShape,
+      [Fig_PRIVACY		] = Pri_GetAndShowNumUsrsPerPrivacy,
+      [Fig_COOKIES		] = Coo_GetAndShowNumUsrsPerCookies,
      };
    Fig_FigureType_t SelectedFigureType;
 
    /***** Get the type of figure ******/
    SelectedFigureType = (Fig_FigureType_t)
 		        Par_GetParUnsignedLong ("FigureType",
-						0,
+						1,
 						Fig_NUM_FIGURES - 1,
 						(unsigned long) Fig_FIGURE_TYPE_DEF);
 
