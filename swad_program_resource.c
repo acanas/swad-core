@@ -757,7 +757,7 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
       Err_WrongResourceExit ();
 
    /***** Hide/unhide resource *****/
-   Prg_DB_HideOrUnhideResource (Node.Resource.Hierarchy.RscCod,HiddenOrVisible);
+   Prg_DB_HideOrUnhideResource (&Node,HiddenOrVisible);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,

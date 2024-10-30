@@ -52,7 +52,7 @@ long Prg_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd);
 
 void Prg_DB_RemoveResource (const struct Tre_Node *Node);
 
-void Prg_DB_HideOrUnhideResource (long RscCod,
+void Prg_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 				  HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Prg_DB_LockTableResources (void);

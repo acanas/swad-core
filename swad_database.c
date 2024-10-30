@@ -3329,7 +3329,7 @@ mysql> DESCRIBE tre_nodes;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tre_nodes ("
 			"NodCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
-			"Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL,"
+			"Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'prg',"
 			"NodInd INT NOT NULL DEFAULT 0,"
 			"Level INT NOT NULL DEFAULT 1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"

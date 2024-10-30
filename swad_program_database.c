@@ -71,8 +71,8 @@ void Prg_DB_UpdateResourceTitle (long NodCod,long RscCod,
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.NodCod=%ld"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld"
-		     " AND tre_nodes.Type='%s'",
+		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
 	           NewTitle,
 	           RscCod,
 	           NodCod,
@@ -108,10 +108,12 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 		       "%s"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
 		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'"		// Extra check
 		   " ORDER BY prg_resources.RscInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenResources],
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Tre_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -133,9 +135,11 @@ unsigned Prg_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
 		          "tre_nodes"
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.NodCod=tre_nodes.NodCod"
-		     " AND tre_nodes.CrsCod=%ld",	// Extra check
+		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
 		   RscCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Tre_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -196,27 +200,37 @@ void Prg_DB_RemoveResource (const struct Tre_Node *Node)
 		   " WHERE prg_resources.RscCod=%ld"
 		     " AND prg_resources.NodCod=%ld"
                      " AND prg_resources.NodCod=tre_nodes.NodCod"
-                     " AND tre_nodes.CrsCod=%ld",	// Extra check
+                     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
 		   Node->Resource.Hierarchy.RscCod,
 		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Tre_PROGRAM]);
   }
 
 /*****************************************************************************/
 /************************ Hide/unhide a node resource ************************/
 /*****************************************************************************/
 
-void Prg_DB_HideOrUnhideResource (long RscCod,
+void Prg_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 				  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
 
    DB_QueryUPDATE ("can not hide/unhide node resource",
-		   "UPDATE prg_resources"
-		     " SET Hidden='%c'"
-		   " WHERE RscCod=%ld",
+		   "UPDATE prg_resources,"
+		          "tre_nodes"
+		     " SET prg_resources.Hidden='%c'"
+		   " WHERE prg_resources.RscCod=%ld"
+		     " AND prg_resources.NodCod=%ld"
+		     " AND prg_resources.NodCod=tre_nodes.NodCod"
+		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
 		   HidVis_YN[HiddenOrVisible],
-		   RscCod);
+		   Node->Resource.Hierarchy.RscCod,
+		   Node->Hierarchy.NodCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Tre_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -236,6 +250,7 @@ void Prg_DB_LockTableResources (void)
 
 void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
   {
+   // TODO: Extra check course and tree type?
    DB_QueryUPDATE ("can not update index of resource",
 		   "UPDATE prg_resources"
 		     " SET RscInd=%d"
@@ -252,6 +267,7 @@ void Prg_DB_UpdateRscLink (const struct Tre_Node *Node)
   {
    extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
 
+   // TODO: Extra check course and tree type?
    DB_QueryUPDATE ("can not update link of resource",
 		   "UPDATE prg_resources"
 		     " SET Type='%s',"
