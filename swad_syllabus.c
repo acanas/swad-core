@@ -54,6 +54,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+// Necessary to make pointer as argument of functions
 Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS] =
   {
    [Syl_NONE      ] = Syl_NONE,
@@ -154,8 +155,14 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
 
 Syl_WhichSyllabus_t Syl_GetParWhichSyllabus (void)
   {
-   /***** Get which syllabus I want to see *****/
-   return (Syl_WhichSyllabus_t)
+   static Syl_WhichSyllabus_t WhichSyllabusCached = Syl_NONE;
+
+   /***** If already got ==> don't search parameter again *****/
+   if (WhichSyllabusCached != Syl_NONE)
+      return WhichSyllabusCached;
+
+   /***** If not yet got ==> search parameter *****/
+   return WhichSyllabusCached = (Syl_WhichSyllabus_t)
 	  Par_GetParUnsignedLong ("WhichSyllabus",
 				  0,
 				  Syl_NUM_WHICH_SYLLABUS - 1,
@@ -346,7 +353,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 
    /***** Go to the start of the list of items *****/
    if (!Str_FindStrInFile (XML,"<lista>",Str_NO_SKIP_HTML_COMMENTS))
-      Err_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusExit ();
 
    /***** Save the position of the start of the list *****/
    PostBeginList = ftell (XML);
@@ -394,7 +401,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	{
 	 /* Go to the start of the item */
 	 if (!Str_FindStrInFile (XML,"<item",Str_NO_SKIP_HTML_COMMENTS))
-	    Err_WrongSyllabusFormatExit ();
+	    Err_WrongSyllabusExit ();
 
 	 /* Get the level */
 	 Syl_LstItemsSyllabus.Lst[NumItem].Level = Syl_ReadLevelItemSyllabus (XML);
@@ -419,10 +426,10 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 	 if (Result == 0) // Str too long
 	   {
 	    if (!Str_FindStrInFile (XML,"</item>",Str_NO_SKIP_HTML_COMMENTS)) // End the search
-	       Err_WrongSyllabusFormatExit ();
+	       Err_WrongSyllabusExit ();
 	   }
 	 else if (Result == -1)
-	    Err_WrongSyllabusFormatExit ();
+	    Err_WrongSyllabusExit ();
 	}
 
    /***** Close the file with the syllabus *****/
@@ -472,12 +479,12 @@ int Syl_ReadLevelItemSyllabus (FILE *XML)
    char StrlLevel[11 + 1];
 
    if (!Str_FindStrInFile (XML,"nivel=\"",Str_NO_SKIP_HTML_COMMENTS))
-      Err_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusExit ();
    if (Str_ReadFileUntilBoundaryStr (XML,StrlLevel,"\"",1,
    	                             (unsigned long long) (11 + 1)) != 1)
-      Err_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusExit ();
    if (sscanf (StrlLevel,"%d",&Level) != 1)
-      Err_WrongSyllabusFormatExit ();
+      Err_WrongSyllabusExit ();
    Str_FindStrInFile (XML,">",Str_NO_SKIP_HTML_COMMENTS);
    if (Level < 1)
       Level = 1;

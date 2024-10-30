@@ -392,7 +392,7 @@ static void Tre_PutIconsListNodes (void *TreeType)
 	 Tre_PutIconToEditTree ();
 
       /***** Put icon to show a figure *****/
-      if (FigureType[*((Tre_TreeType_t *) TreeType)])
+      if (FigureType[*((Tre_TreeType_t *) TreeType)] != Fig_UNKNOWN)
          Fig_PutIconToShowFigure (FigureType[*((Tre_TreeType_t *) TreeType)]);
      }
   }
@@ -2263,6 +2263,8 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
 
 static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void)
   {
+   Syl_WhichSyllabus_t WhichSyllabus;
+
    switch (Act_GetSuperAction (Gbl.Action.Act))
      {
       case ActSeePrg:
@@ -2270,8 +2272,18 @@ static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void)
       case ActSeeTchGui:
 	 return Tre_GUIDE;
       case ActSeeSyl:
-	 // TODO: Get if lectures or practicals
-	 return Tre_LECTURES;
+	 WhichSyllabus = Syl_GetParWhichSyllabus ();
+	 switch (WhichSyllabus)
+	   {
+	    case Syl_LECTURES:
+	       return Tre_LECTURES;
+	    case Syl_PRACTICALS:
+	       return Tre_LECTURES;
+	    case Syl_NONE:
+	    default:
+	       Err_WrongSyllabusExit ();
+	       return Tre_UNKNOWN;	// Not reached
+	   }
       case ActSeeBib:
 	 return Tre_BIBLIOGRAPHY;
       case ActSeeFAQ:
@@ -2282,6 +2294,6 @@ static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void)
 	 return Tre_ASSESSMENT;
       default:
 	 Err_WrongActionExit ();
-	 return Tre_UNKNOWN;
+	 return Tre_UNKNOWN;	// Not reached
      }
   }

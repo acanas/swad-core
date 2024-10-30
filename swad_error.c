@@ -186,12 +186,12 @@ void Err_WrongResourceExit (void)
   }
 
 /*****************************************************************************/
-/********** Write error message and exit when wrong syllabus format **********/
+/************** Write error message and exit when wrong syllabus *************/
 /*****************************************************************************/
 
-void Err_WrongSyllabusFormatExit (void)
+void Err_WrongSyllabusExit (void)
   {
-   Err_ShowErrorAndExit ("Wrong syllabus format.");
+   Err_ShowErrorAndExit ("Wrong syllabus.");
   }
 
 /*****************************************************************************/
