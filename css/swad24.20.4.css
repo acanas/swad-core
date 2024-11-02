@@ -1786,40 +1786,40 @@ a:hover img.CENTER_PHOTO_SHOW
 .PRG_TIT_1_PURPLE,
 .PRG_TIT_1_BLUE,
 .PRG_TIT_1_YELLOW,
-.PRG_TIT_1_PINK		{color: #4d88a1; font-size: 16pt; font-weight: bold;}
-.PRG_TIT_1_DARK		{color: #afc4cc; font-size: 16pt; font-weight: bold;}
+.PRG_TIT_1_PINK		{color: black; font-size: 20pt; font-weight: bold;}
+.PRG_TIT_1_DARK		{color: white; font-size: 20pt; font-weight: bold;}
 
 .PRG_TIT_2_WHITE,
 .PRG_TIT_2_GREY,
 .PRG_TIT_2_PURPLE,
 .PRG_TIT_2_BLUE,
 .PRG_TIT_2_YELLOW,
-.PRG_TIT_2_PINK		{color: #4d88a1; font-size: 15pt; font-weight: bold;}
-.PRG_TIT_2_DARK		{color: #afc4cc; font-size: 15pt; font-weight: bold;}
+.PRG_TIT_2_PINK		{color: black; font-size: 18pt; font-weight: bold;}
+.PRG_TIT_2_DARK		{color: white; font-size: 18pt; font-weight: bold;}
 
 .PRG_TIT_3_WHITE,
 .PRG_TIT_3_GREY,
 .PRG_TIT_3_PURPLE,
 .PRG_TIT_3_BLUE,
 .PRG_TIT_3_YELLOW,
-.PRG_TIT_3_PINK		{color: #4d88a1; font-size: 14pt; font-weight: bold;}
-.PRG_TIT_3_DARK		{color: #afc4cc; font-size: 14pt; font-weight: bold;}
+.PRG_TIT_3_PINK		{color: black; font-size: 16pt; font-weight: bold;}
+.PRG_TIT_3_DARK		{color: white; font-size: 16pt; font-weight: bold;}
 
 .PRG_TIT_4_WHITE,
 .PRG_TIT_4_GREY,
 .PRG_TIT_4_PURPLE,
 .PRG_TIT_4_BLUE,
 .PRG_TIT_4_YELLOW,
-.PRG_TIT_4_PINK		{color: #4d88a1; font-size: 13pt; font-weight: bold;}
-.PRG_TIT_4_DARK		{color: #afc4cc; font-size: 13pt; font-weight: bold;}
+.PRG_TIT_4_PINK		{color: black; font-size: 14pt; font-weight: bold;}
+.PRG_TIT_4_DARK		{color: white; font-size: 14pt; font-weight: bold;}
 
 .PRG_TIT_5_WHITE,
 .PRG_TIT_5_GREY,
 .PRG_TIT_5_PURPLE,
 .PRG_TIT_5_BLUE,
 .PRG_TIT_5_YELLOW,
-.PRG_TIT_5_PINK		{color: #4d88a1; font-size: 12pt; font-weight: bold;}
-.PRG_TIT_5_DARK		{color: #afc4cc; font-size: 12pt; font-weight: bold;}
+.PRG_TIT_5_PINK		{color: black; font-size: 12pt; font-weight: bold;}
+.PRG_TIT_5_DARK		{color: white; font-size: 12pt; font-weight: bold;}
 
 .PRG_TXT_WHITE,
 .PRG_TXT_GREY,

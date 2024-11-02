@@ -41,7 +41,6 @@
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_program.h"
-#include "swad_program_database.h"
 #include "swad_resource_database.h"
 #include "swad_view.h"
 
@@ -202,7 +201,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
       return;
 
    /***** Get list of node resources from database *****/
-   NumResources = Prg_DB_GetListResources (&mysql_res,Node->Hierarchy.NodCod,
+   NumResources = Rsc_DB_GetListResources (&mysql_res,Node->Hierarchy.NodCod,
                                            ViewingOrEditingRes[ListingType] == Vie_EDIT);
 
    if (NumResources || ViewingOrEditing[ListingType] == Vie_EDIT)
@@ -332,7 +331,7 @@ void PrgRsc_GetResourceDataByCod (struct Tre_Node *Node)
    if (Node->Resource.Hierarchy.RscCod > 0)
      {
       /***** Get data of resource *****/
-      if (Prg_DB_GetResourceDataByCod (&mysql_res,Node->Resource.Hierarchy.RscCod))
+      if (Rsc_DB_GetResourceDataByCod (&mysql_res,Node->Resource.Hierarchy.RscCod))
          PrgRsc_GetResourceDataFromRow (mysql_res,Node);
       else
 	 /* Clear all node data except type */
@@ -622,7 +621,7 @@ void PrgRsc_CreateResource (void)
    Par_GetParText ("Title",Node.Resource.Title,Rsc_MAX_BYTES_RESOURCE_TITLE);
 
    /***** Create resource *****/
-   Node.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Node);
+   Node.Resource.Hierarchy.RscCod = Rsc_DB_CreateResource (&Node);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
@@ -655,7 +654,7 @@ void PrgRsc_RenameResource (void)
    Par_GetParText ("Title",NewTitle,Rsc_MAX_BYTES_RESOURCE_TITLE);
 
    /* Update database changing old title by new title */
-   Prg_DB_UpdateResourceTitle (Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod,NewTitle);
+   Rsc_DB_UpdateResourceTitle (Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod,NewTitle);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
@@ -715,7 +714,7 @@ void PrgRsc_RemoveResource (void)
       Err_WrongResourceExit ();
 
    /***** Remove resource *****/
-   Prg_DB_RemoveResource (&Node);
+   Rsc_DB_RemoveResource (&Node);
 
    /***** Create alert to remove the resource *****/
    Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,
@@ -757,7 +756,7 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
       Err_WrongResourceExit ();
 
    /***** Hide/unhide resource *****/
-   Prg_DB_HideOrUnhideResource (&Node,HiddenOrVisible);
+   Rsc_DB_HideOrUnhideResource (&Node,HiddenOrVisible);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
@@ -789,8 +788,8 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    bool Success = false;
    static unsigned (*GetOtherRscInd[PrgRsc_NUM_MOVEMENTS_UP_DOWN])(const struct Tre_Node *Node) =
      {
-      [PrgRsc_MOVE_UP  ] = Prg_DB_GetRscIndBefore,
-      [PrgRsc_MOVE_DOWN] = Prg_DB_GetRscIndAfter,
+      [PrgRsc_MOVE_UP  ] = Rsc_DB_GetRscIndBefore,
+      [PrgRsc_MOVE_DOWN] = Rsc_DB_GetRscIndAfter,
      };
 
    /***** Get list of tree nodes *****/
@@ -806,7 +805,7 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    if ((Rsc2.RscInd = GetOtherRscInd[UpDown] (&Node)))	// 0 ==> movement not allowed
      {
       /* Get the other resource code */
-      Rsc2.RscCod = Prg_DB_GetRscCodFromRscInd (Node.Hierarchy.NodCod,Rsc2.RscInd);
+      Rsc2.RscCod = Rsc_DB_GetRscCodFromRscInd (Node.Hierarchy.NodCod,Rsc2.RscInd);
 
       /* Exchange subtrees */
       Success = PrgRsc_ExchangeResources (&Node,&Rsc2);
@@ -836,7 +835,7 @@ static bool PrgRsc_ExchangeResources (const struct Tre_Node *Node,
        Rsc2->RscInd > 0)
      {
       /***** Lock tables to make the move atomic *****/
-      Prg_DB_LockTableResources ();
+      Rsc_DB_LockTableResources ();
 
       /***** Exchange indexes of items *****/
       // This implementation works with non continuous indexes
@@ -854,13 +853,13 @@ static bool PrgRsc_ExchangeResources (const struct Tre_Node *Node,
       */
       /* Step 1: Change second index to negative,
 		 necessary to preserve unique index (NodCod,RscInd) */
-      Prg_DB_UpdateRscInd (Node,Rsc2->RscCod,-(int) Rsc2->RscInd);
+      Rsc_DB_UpdateRscInd (Node,Rsc2->RscCod,-(int) Rsc2->RscInd);
 
       /* Step 2: Change first index */
-      Prg_DB_UpdateRscInd (Node,Rsc1->RscCod, (int) Rsc2->RscInd);
+      Rsc_DB_UpdateRscInd (Node,Rsc1->RscCod, (int) Rsc2->RscInd);
 
       /* Step 3: Change second index */
-      Prg_DB_UpdateRscInd (Node,Rsc2->RscCod, (int) Rsc1->RscInd);
+      Rsc_DB_UpdateRscInd (Node,Rsc2->RscCod, (int) Rsc1->RscInd);
 
       /***** Unlock tables *****/
       DB_UnlockTables ();
@@ -982,11 +981,11 @@ void PrgRsc_ChangeLink (void)
 	 Rsc_GetResourceTitleFromLink (&Node.Resource.Link,Node.Resource.Title);
 
 	 /***** Create resource *****/
-	 Node.Resource.Hierarchy.RscCod = Prg_DB_CreateResource (&Node);
+	 Node.Resource.Hierarchy.RscCod = Rsc_DB_CreateResource (&Node);
 	}
 
       /***** Update resource link *****/
-      Prg_DB_UpdateRscLink (&Node);
+      Rsc_DB_UpdateRscLink (&Node);
 
       /***** Remove link from clipboard *****/
       Rsc_DB_RemoveLinkFromClipboard (&Node.Resource.Link);
