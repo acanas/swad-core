@@ -352,7 +352,7 @@ void Rub_DB_RemoveCrsRubrics (long CrsCod)
 
 long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
    long CriCod;
 
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
@@ -366,7 +366,7 @@ long Rub_DB_CreateCriterion (const struct RubCri_Criterion *Criterion)
 				RubCri_ValuesFields[RubCri_MAX],
 				Criterion->RubCod,
 				Criterion->CriInd,
-				Rsc_ResourceTypesDB[Criterion->Link.Type],
+				Rsc_DB_Types[Criterion->Link.Type],
 				Criterion->Link.Cod,
 				Criterion->Values[RubCri_MIN],
 				Criterion->Values[RubCri_MAX],
@@ -399,14 +399,14 @@ void Rub_DB_UpdateCriterionTitle (const struct RubCri_Criterion *Criterion)
 
 void Rub_DB_UpdateCriterionLink (const struct RubCri_Criterion *Criterion)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update link of criterion",
 		   "UPDATE rub_criteria"
 		     " SET Type='%s',"
 		          "Cod=%ld"
 		   " WHERE CriCod=%ld",
-		   Rsc_ResourceTypesDB[Criterion->Link.Type],
+		   Rsc_DB_Types[Criterion->Link.Type],
 		   Criterion->Link.Cod,
 		   Criterion->CriCod);
   }
@@ -833,7 +833,7 @@ void Rub_DB_RemoveCrsRubricCriteria (long CrsCod)
 void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
                          double Score)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
 
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryREPLACE ("can not save score",
@@ -841,7 +841,7 @@ void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
                     " (Type,Cod,UsrCod,CriCod,EvlCod,Score)"
                     " VALUES"
                     " ('%s',%ld,%ld,%ld,%ld,%.15lg)",
-                    Rsc_ResourceTypesDB[Type],Cod,UsrCod,CriCod,
+                    Rsc_DB_Types[Type],Cod,UsrCod,CriCod,
                     Gbl.Usrs.Me.UsrDat.UsrCod,Score);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
@@ -852,7 +852,7 @@ void Rub_DB_UpdateScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod,
 
 double Rub_DB_GetScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
 
    return DB_QuerySELECTDouble ("can not get score",
 				"SELECT Score"
@@ -861,7 +861,7 @@ double Rub_DB_GetScore (Rsc_Type_t Type,long Cod,long UsrCod,long CriCod)
 				  " AND Cod=%ld"
                                   " AND UsrCod=%ld"
 				  " AND CriCod=%ld",
-				Rsc_ResourceTypesDB[Type],
+				Rsc_DB_Types[Type],
 				Cod,
 				UsrCod,
 				CriCod);

@@ -36,13 +36,43 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+const char *Rsc_DB_Types[Rsc_NUM_TYPES] =
+  {
+   [Rsc_NONE		] = "non",
+   [Rsc_INFORMATION	] = "inf",
+   [Rsc_TEACH_GUIDE	] = "gui",
+   [Rsc_LECTURES	] = "lec",
+   [Rsc_PRACTICALS	] = "pra",
+   [Rsc_BIBLIOGRAPHY	] = "bib",
+   [Rsc_FAQ		] = "faq",
+   [Rsc_LINKS		] = "lnk",
+   [Rsc_ASSESSMENT	] = "ass",
+   [Rsc_TIMETABLE	] = "tmt",
+   [Rsc_ASSIGNMENT	] = "asg",
+   [Rsc_PROJECT		] = "prj",
+   [Rsc_CALL_FOR_EXAM	] = "cfe",
+   [Rsc_TEST		] = "tst",
+   [Rsc_EXAM		] = "exa",
+   [Rsc_GAME		] = "gam",
+   [Rsc_RUBRIC		] = "rub",
+   [Rsc_DOCUMENT	] = "doc",
+   [Rsc_MARKS		] = "mrk",
+   [Rsc_GROUPS		] = "grp",
+   [Rsc_TEACHER		] = "tch",
+   [Rsc_ATT_EVENT	] = "att",
+   [Rsc_FORUM_THREAD	] = "for",
+   [Rsc_SURVEY		] = "svy",
+  };
+
+/*****************************************************************************/
 /********************** Copy link to resource into clipboard *****************/
 /*****************************************************************************/
 
 void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
-
    DB_QueryREPLACE ("can not copy link to resource clipboard",
 		    "REPLACE INTO rsc_clipboards"
 		    " (UsrCod,CrsCod,Type,Cod,CopyTime)"
@@ -50,7 +80,7 @@ void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
 		    " (%ld,%ld,'%s',%ld,NOW())",
 		    Gbl.Usrs.Me.UsrDat.UsrCod,
 		    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		    Rsc_ResourceTypesDB[Type],
+		    Rsc_DB_Types[Type],
 		    Cod);
   }
 
@@ -108,8 +138,6 @@ void Rsc_DB_RemoveClipboard (void)
 
 void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
-
    DB_QueryDELETE ("can not remove link from clipboard",
 		   "DELETE FROM rsc_clipboards"
 		   " WHERE UsrCod=%ld"
@@ -118,6 +146,6 @@ void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
 		     " AND Cod=%ld",
  		   Gbl.Usrs.Me.UsrDat.UsrCod,
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Rsc_ResourceTypesDB[Link->Type],
+		   Rsc_DB_Types[Link->Type],
 		   Link->Cod);
   }

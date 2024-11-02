@@ -61,34 +61,6 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES] =
-  {
-   [Rsc_NONE		] = "non",
-   [Rsc_INFORMATION	] = "inf",
-   [Rsc_TEACH_GUIDE	] = "gui",
-   [Rsc_LECTURES	] = "lec",
-   [Rsc_PRACTICALS	] = "pra",
-   [Rsc_BIBLIOGRAPHY	] = "bib",
-   [Rsc_FAQ		] = "faq",
-   [Rsc_LINKS		] = "lnk",
-   [Rsc_ASSESSMENT	] = "ass",
-   [Rsc_TIMETABLE	] = "tmt",
-   [Rsc_ASSIGNMENT	] = "asg",
-   [Rsc_PROJECT		] = "prj",
-   [Rsc_CALL_FOR_EXAM	] = "cfe",
-   [Rsc_TEST		] = "tst",
-   [Rsc_EXAM		] = "exa",
-   [Rsc_GAME		] = "gam",
-   [Rsc_RUBRIC		] = "rub",
-   [Rsc_DOCUMENT	] = "doc",
-   [Rsc_MARKS		] = "mrk",
-   [Rsc_GROUPS		] = "grp",
-   [Rsc_TEACHER		] = "tch",
-   [Rsc_ATT_EVENT	] = "att",
-   [Rsc_FORUM_THREAD	] = "for",
-   [Rsc_SURVEY		] = "svy",
-  };
-
 const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES] =
   {
    [Rsc_NONE		] = "link-slash.svg",
@@ -258,6 +230,8 @@ void Rsc_ShowClipboardToChangeLink (const struct Rsc_Link *CurrentLink)
 static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
                                    HTM_Attributes_t Attributes)
   {
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
+
    /***** Begin list row *****/
    HTM_LI_Begin ("class=\"PRG_RSC_%s\"",The_GetSuffix ());
       HTM_LABEL_Begin (NULL);
@@ -266,7 +240,7 @@ static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 	 HTM_INPUT_RADIO ("Link",
 			  Attributes,
 			  "value=\"%s_%ld\"",
-			  Rsc_ResourceTypesDB[Link->Type],Link->Cod);
+			  Rsc_DB_Types[Link->Type],Link->Cod);
 
 	 /***** Name *****/
          Rsc_WriteLinkName (Link,Frm_DONT_PUT_FORM);
@@ -597,13 +571,14 @@ void Rsc_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct Rsc_Link *Link)
 
 Rsc_Type_t Rsc_GetTypeFromString (const char *Str)
   {
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
    Rsc_Type_t Type;
 
    /***** Compare string with all string types *****/
    for (Type  = (Rsc_Type_t) 0;
 	Type <= (Rsc_Type_t) (Rsc_NUM_TYPES - 1);
 	Type++)
-      if (!strcmp (Rsc_ResourceTypesDB[Type],Str))
+      if (!strcmp (Rsc_DB_Types[Type],Str))
 	 return Type;
 
    return Rsc_NONE;

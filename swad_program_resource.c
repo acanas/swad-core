@@ -92,7 +92,7 @@ static void PrgRsc_PutParRscCod (void *RscCod);
 static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown);
-static bool PrgRsc_ExchangeResources (const struct Rsc_ResourceHierarchy *Rsc1,
+static bool PrgRsc_ExchangeResources (const struct Tre_Node *Node,
                                       const struct Rsc_ResourceHierarchy *Rsc2);
 
 static void PrgRsc_ShowClipboard (void);
@@ -787,7 +787,7 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
    struct Tre_Node Node;
    struct Rsc_ResourceHierarchy Rsc2;
    bool Success = false;
-   static unsigned (*GetOtherRscInd[PrgRsc_NUM_MOVEMENTS_UP_DOWN])(long NodCod,unsigned RscInd) =
+   static unsigned (*GetOtherRscInd[PrgRsc_NUM_MOVEMENTS_UP_DOWN])(const struct Tre_Node *Node) =
      {
       [PrgRsc_MOVE_UP  ] = Prg_DB_GetRscIndBefore,
       [PrgRsc_MOVE_DOWN] = Prg_DB_GetRscIndAfter,
@@ -803,13 +803,13 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
       Err_WrongResourceExit ();
 
    /***** Move up/down resource *****/
-   if ((Rsc2.RscInd = GetOtherRscInd[UpDown] (Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscInd)))	// 0 ==> movement not allowed
+   if ((Rsc2.RscInd = GetOtherRscInd[UpDown] (&Node)))	// 0 ==> movement not allowed
      {
       /* Get the other resource code */
       Rsc2.RscCod = Prg_DB_GetRscCodFromRscInd (Node.Hierarchy.NodCod,Rsc2.RscInd);
 
       /* Exchange subtrees */
-      Success = PrgRsc_ExchangeResources (&Node.Resource.Hierarchy,&Rsc2);
+      Success = PrgRsc_ExchangeResources (&Node,&Rsc2);
      }
    if (!Success)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
@@ -827,13 +827,15 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
 /*****************************************************************************/
 // Return true if success
 
-static bool PrgRsc_ExchangeResources (const struct Rsc_ResourceHierarchy *Rsc1,
+static bool PrgRsc_ExchangeResources (const struct Tre_Node *Node,
                                       const struct Rsc_ResourceHierarchy *Rsc2)
   {
+   const struct Rsc_ResourceHierarchy *Rsc1 = &Node->Resource.Hierarchy;
+
    if (Rsc1->RscInd > 0 &&	// Indexes should be in the range [1, 2,...]
        Rsc2->RscInd > 0)
      {
-      /***** Lock table to make the move atomic *****/
+      /***** Lock tables to make the move atomic *****/
       Prg_DB_LockTableResources ();
 
       /***** Exchange indexes of items *****/
@@ -852,15 +854,15 @@ static bool PrgRsc_ExchangeResources (const struct Rsc_ResourceHierarchy *Rsc1,
       */
       /* Step 1: Change second index to negative,
 		 necessary to preserve unique index (NodCod,RscInd) */
-      Prg_DB_UpdateRscInd (Rsc2->RscCod,-(int) Rsc2->RscInd);
+      Prg_DB_UpdateRscInd (Node,Rsc2->RscCod,-(int) Rsc2->RscInd);
 
       /* Step 2: Change first index */
-      Prg_DB_UpdateRscInd (Rsc1->RscCod, (int) Rsc2->RscInd);
+      Prg_DB_UpdateRscInd (Node,Rsc1->RscCod, (int) Rsc2->RscInd);
 
       /* Step 3: Change second index */
-      Prg_DB_UpdateRscInd (Rsc2->RscCod, (int) Rsc1->RscInd);
+      Prg_DB_UpdateRscInd (Node,Rsc2->RscCod, (int) Rsc1->RscInd);
 
-      /***** Unlock table *****/
+      /***** Unlock tables *****/
       DB_UnlockTables ();
 
       return true;	// Success

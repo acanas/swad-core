@@ -87,6 +87,7 @@ void Prg_DB_UpdateResourceTitle (long NodCod,long RscCod,
 unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources)
   {
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
    static const char *HiddenSubQuery[2] =
      {
       [false] = " AND prg_resources.Hidden='N'",
@@ -122,6 +123,8 @@ unsigned Prg_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 
 unsigned Prg_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
   {
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node resource data",
 		   "SELECT prg_resources.NodCod,"	// row[0]
@@ -146,7 +149,7 @@ unsigned Prg_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
 /************* Get the resource index before/after a given one ***************/
 /*****************************************************************************/
 
-unsigned Prg_DB_GetRscIndBefore (long NodCod,unsigned RscInd)
+unsigned Prg_DB_GetRscIndBefore (const struct Tre_Node *Node)
   {
    return
    DB_QuerySELECTUnsigned ("can not get the resource before",
@@ -154,10 +157,11 @@ unsigned Prg_DB_GetRscIndBefore (long NodCod,unsigned RscInd)
 			    " FROM prg_resources"
 			   " WHERE NodCod=%ld"
 			     " AND RscInd<%u",
-			   NodCod,RscInd);
+			   Node->Hierarchy.NodCod,
+			   Node->Resource.Hierarchy.RscInd);
   }
 
-unsigned Prg_DB_GetRscIndAfter (long NodCod,unsigned RscInd)
+unsigned Prg_DB_GetRscIndAfter (const struct Tre_Node *Node)
   {
    return
    DB_QuerySELECTUnsigned ("can not get the resource after",
@@ -165,7 +169,8 @@ unsigned Prg_DB_GetRscIndAfter (long NodCod,unsigned RscInd)
 			    " FROM prg_resources"
 			   " WHERE NodCod=%ld"
 			     " AND RscInd>%u",
-			   NodCod,RscInd);
+			   Node->Hierarchy.NodCod,
+			   Node->Resource.Hierarchy.RscInd);
   }
 
 /*****************************************************************************/
@@ -193,6 +198,8 @@ long Prg_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd)
 
 void Prg_DB_RemoveResource (const struct Tre_Node *Node)
   {
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+
    DB_QueryDELETE ("can not remove node resource",
 		   "DELETE FROM prg_resources"
 		   " USING prg_resources,"
@@ -216,6 +223,7 @@ void Prg_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 				  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
 
    DB_QueryUPDATE ("can not hide/unhide node resource",
 		   "UPDATE prg_resources,"
@@ -239,8 +247,9 @@ void Prg_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 
 void Prg_DB_LockTableResources (void)
   {
-   DB_Query ("can not lock table",
-	     "LOCK TABLES prg_resources WRITE");
+   DB_Query ("can not lock tables",
+	     "LOCK TABLES prg_resources WRITE,"
+			 "tre_nodes READ");
    DB_SetThereAreLockedTables ();
   }
 
@@ -248,15 +257,24 @@ void Prg_DB_LockTableResources (void)
 /************* Update the index of a resource given its code *****************/
 /*****************************************************************************/
 
-void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
+void Prg_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd)
   {
-   // TODO: Extra check course and tree type?
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+
    DB_QueryUPDATE ("can not update index of resource",
-		   "UPDATE prg_resources"
-		     " SET RscInd=%d"
-		   " WHERE RscCod=%ld",
+		   "UPDATE prg_resources,"
+		          "tre_nodes"
+		     " SET prg_resources.RscInd=%d"
+		   " WHERE prg_resources.RscCod=%ld"
+		     " AND prg_resources.NodCod=%ld"
+		     " AND prg_resources.NodCod=tre_nodes.NodCod"
+		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
 		   RscInd,
-		   RscCod);
+		   RscCod,
+		   Node->Hierarchy.NodCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Tre_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -265,15 +283,23 @@ void Prg_DB_UpdateRscInd (long RscCod,int RscInd)
 
 void Prg_DB_UpdateRscLink (const struct Tre_Node *Node)
   {
-   extern const char *Rsc_ResourceTypesDB[Rsc_NUM_TYPES];
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
 
-   // TODO: Extra check course and tree type?
    DB_QueryUPDATE ("can not update link of resource",
-		   "UPDATE prg_resources"
-		     " SET Type='%s',"
-		          "Cod=%ld"
-		   " WHERE RscCod=%ld",
-		   Rsc_ResourceTypesDB[Node->Resource.Link.Type],
+		   "UPDATE prg_resources,"
+		          "tre_nodes"
+		     " SET prg_resources.Type='%s',"
+		          "prg_resources.Cod=%ld"
+		   " WHERE prg_resources.RscCod=%ld"
+		     " AND prg_resources.NodCod=%ld"
+		     " AND prg_resources.NodCod=tre_nodes.NodCod"
+		     " AND tre_nodes.CrsCod=%ld"	// Extra check
+		     " AND tre_nodes.Type='%s'",	// Extra check
+		   Rsc_DB_Types[Node->Resource.Link.Type],
 		   Node->Resource.Link.Cod,
-		   Node->Resource.Hierarchy.RscCod);
+		   Node->Resource.Hierarchy.RscCod,
+		   Node->Hierarchy.NodCod,
+		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Tre_DB_Types[Tre_PROGRAM]);
   }
