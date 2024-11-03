@@ -612,7 +612,7 @@ mysql> DESCRIBE cht_rooms;
 +----------+-------------+------+-----+---------+-------+
 2 rows in set (0,00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS chat ("\
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS cht_rooms ("\
 			"RoomCode VARCHAR(16) NOT NULL,"	// Cht_MAX_BYTES_ROOM_CODE
 			"NumUsrs INT NOT NULL,"
 		   "UNIQUE INDEX(RoomCode))");
@@ -648,79 +648,6 @@ mysql> DESCRIBE crs_courses;
 		   "UNIQUE INDEX(CrsCod),"
 		   "INDEX(DegCod,Year),"
 		   "INDEX(Status))");
-
-   /***** Table grp_groups *****/
-/*
-mysql> DESCRIBE grp_groups;
-+-------------+---------------+------+-----+---------+----------------+
-| Field       | Type          | Null | Key | Default | Extra          |
-+-------------+---------------+------+-----+---------+----------------+
-| GrpCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
-| GrpTypCod   | int(11)       | NO   | MUL | NULL    |                |
-| GrpName     | varchar(2047) | NO   |     | NULL    |                |
-| RooCod      | int(11)       | NO   | MUL | -1      |                |
-| MaxStudents | int(11)       | NO   |     | NULL    |                |
-| Open        | enum('N','Y') | NO   |     | N       |                |
-| FileZones   | enum('N','Y') | NO   |     | N       |                |
-+-------------+---------------+------+-----+---------+----------------+
-7 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_groups ("
-			"GrpCod INT NOT NULL AUTO_INCREMENT,"
-			"GrpTypCod INT NOT NULL,"
-			"GrpName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME
-			"MaxStudents INT NOT NULL,"
-			"RooCod INT NOT NULL DEFAULT -1,"
-			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
-		   "UNIQUE INDEX(GrpCod),"
-		   "INDEX(GrpTypCod),"
-		   "INDEX(RooCod))");
-
-   /***** Table grp_types *****/
-/*
-mysql> DESCRIBE grp_types;
-+--------------+---------------+------+-----+---------+----------------+
-| Field        | Type          | Null | Key | Default | Extra          |
-+--------------+---------------+------+-----+---------+----------------+
-| GrpTypCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod       | int(11)       | NO   | MUL | -1      |                |
-| GrpTypName   | varchar(2047) | NO   |     | NULL    |                |
-| Mandatory    | enum('N','Y') | NO   |     | NULL    |                |
-| Multiple     | enum('N','Y') | NO   |     | NULL    |                |
-| MustBeOpened | enum('N','Y') | NO   |     | N       |                |
-| OpenTime     | datetime      | NO   |     | NULL    |                |
-+--------------+---------------+------+-----+---------+----------------+
-7 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_types ("
-			"GrpTypCod INT NOT NULL AUTO_INCREMENT,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"GrpTypName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_TYPE_NAME
-			"Mandatory ENUM('N','Y') NOT NULL,"
-			"Multiple ENUM('N','Y') NOT NULL,"
-			"MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"OpenTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(GrpTypCod),"
-		   "INDEX(CrsCod))");
-
-   /***** Table grp_users *****/
-/*
-mysql> DESCRIBE grp_users;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-| UsrCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_users ("
-			"GrpCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-		   "UNIQUE INDEX(GrpCod,UsrCod),"
-		   "INDEX(GrpCod),"
-		   "INDEX(UsrCod))");
 
    /***** Table crs_info_read *****/
 /*
@@ -1054,21 +981,21 @@ mysql> DESCRIBE cty_countrs;
 		   "INDEX(Name_pt),"
 		   "INDEX(Name_tr))");	// ISO 3166-1 country codes
 
-   /***** Table deg_types *****/
+   /***** Table dbg_debug *****/
 /*
-mysql> DESCRIBE deg_types;
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| DegTypCod  | int(11)      | NO   | PRI | NULL    | auto_increment |
-| DegTypName | varchar(511) | NO   |     | NULL    |                |
-+------------+--------------+------+-----+---------+----------------+
-2 rows in set (0,00 sec)
+mysql> DESCRIBE dbg_debug;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| DebugTime | datetime | NO   | MUL | NULL    |       |
+| Txt       | text     | NO   |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+2 rows in set (0,01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_types ("
-			"DegTypCod INT NOT NULL AUTO_INCREMENT,"
-			"DegTypName VARCHAR(511) NOT NULL,"	// Deg_MAX_BYTES_DEGREE_TYPE_NAME
-		   "UNIQUE INDEX(DegTypCod))");
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS dbg_debug ("
+			"DebugTime DATETIME NOT NULL,"
+			"Txt TEXT NOT NULL,"
+		   "INDEX(DebugTime))");
 
    /***** Table deg_degrees *****/
 /*
@@ -1101,6 +1028,22 @@ mysql> DESCRIBE deg_degrees;
 		   "INDEX(DegTypCod),"
 		   "INDEX(Status))");
 
+   /***** Table deg_types *****/
+/*
+mysql> DESCRIBE deg_types;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| DegTypCod  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| DegTypName | varchar(511) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+2 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_types ("
+			"DegTypCod INT NOT NULL AUTO_INCREMENT,"
+			"DegTypName VARCHAR(511) NOT NULL,"	// Deg_MAX_BYTES_DEGREE_TYPE_NAME
+		   "UNIQUE INDEX(DegTypCod))");
+
    /***** Table dpt_departments *****/
 /*
 mysql> DESCRIBE dpt_departments;
@@ -1123,22 +1066,6 @@ mysql> DESCRIBE dpt_departments;
 			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(DptCod),"
 		   "INDEX(InsCod))");
-
-   /***** Table exa_groups *****/
-/*
-mysql> DESCRIBE exa_groups;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| SesCod | int(11) | NO   | PRI | NULL    |       |
-| GrpCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_groups ("
-			"SesCod INT NOT NULL,"
-			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(SesCod,GrpCod))");
 
    /***** Table exa_exams *****/
 /*
@@ -1168,6 +1095,22 @@ mysql> DESCRIBE exa_exams;
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(ExaCod),"
 		   "INDEX(CrsCod))");
+
+   /***** Table exa_groups *****/
+/*
+mysql> DESCRIBE exa_groups;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| SesCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_groups ("
+			"SesCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(SesCod,GrpCod))");
 
    /***** Table exa_log *****/
 /*
@@ -1630,178 +1573,78 @@ mysql> DESCRIBE gam_questions;
 		   "UNIQUE INDEX(GamCod,QstInd),"
 		   "UNIQUE INDEX(GamCod,QstCod))");
 
-   /***** Table mch_answers *****/
+   /***** Table grp_groups *****/
 /*
-mysql> DESCRIBE mch_answers;
-+--------+------------+------+-----+---------+-------+
-| Field  | Type       | Null | Key | Default | Extra |
-+--------+------------+------+-----+---------+-------+
-| MchCod | int(11)    | NO   | PRI | NULL    |       |
-| UsrCod | int(11)    | NO   | PRI | NULL    |       |
-| QstInd | int(11)    | NO   | PRI | NULL    |       |
-| NumOpt | tinyint(4) | NO   |     | NULL    |       |
-| AnsInd | tinyint(4) | NO   |     | NULL    |       |
-+--------+------------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
+mysql> DESCRIBE grp_groups;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| GrpCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| GrpTypCod   | int(11)       | NO   | MUL | NULL    |                |
+| GrpName     | varchar(2047) | NO   |     | NULL    |                |
+| RooCod      | int(11)       | NO   | MUL | -1      |                |
+| MaxStudents | int(11)       | NO   |     | NULL    |                |
+| Open        | enum('N','Y') | NO   |     | N       |                |
+| FileZones   | enum('N','Y') | NO   |     | N       |                |
++-------------+---------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_answers ("
-			"MchCod INT NOT NULL,"
-	                "UsrCod INT NOT NULL,"
-			"QstInd INT NOT NULL,"
-			"NumOpt TINYINT NOT NULL,"	// Number of button on screen (Always ordered: 0,1,2,3)
-			"AnsInd TINYINT NOT NULL,"	// Answer index (Can be shuffled: 0,3,1,2)
-		   "UNIQUE INDEX(MchCod,UsrCod,QstInd))");
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_groups ("
+			"GrpCod INT NOT NULL AUTO_INCREMENT,"
+			"GrpTypCod INT NOT NULL,"
+			"GrpName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME
+			"MaxStudents INT NOT NULL,"
+			"RooCod INT NOT NULL DEFAULT -1,"
+			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(GrpCod),"
+		   "INDEX(GrpTypCod),"
+		   "INDEX(RooCod))");
 
-   /***** Table mch_groups *****/
+   /***** Table grp_types *****/
 /*
-mysql> DESCRIBE mch_groups;
+mysql> DESCRIBE grp_types;
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| GrpTypCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod       | int(11)       | NO   | MUL | -1      |                |
+| GrpTypName   | varchar(2047) | NO   |     | NULL    |                |
+| Mandatory    | enum('N','Y') | NO   |     | NULL    |                |
+| Multiple     | enum('N','Y') | NO   |     | NULL    |                |
+| MustBeOpened | enum('N','Y') | NO   |     | N       |                |
+| OpenTime     | datetime      | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_types ("
+			"GrpTypCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"GrpTypName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_TYPE_NAME
+			"Mandatory ENUM('N','Y') NOT NULL,"
+			"Multiple ENUM('N','Y') NOT NULL,"
+			"MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"OpenTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(GrpTypCod),"
+		   "INDEX(CrsCod))");
+
+   /***** Table grp_users *****/
+/*
+mysql> DESCRIBE grp_users;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
-| MchCod | int(11) | NO   | PRI | NULL    |       |
 | GrpCod | int(11) | NO   | PRI | NULL    |       |
+| UsrCod | int(11) | NO   | PRI | NULL    |       |
 +--------+---------+------+-----+---------+-------+
-2 rows in set (0.01 sec)
+2 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_groups ("
-			"MchCod INT NOT NULL,"
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS grp_users ("
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(MchCod,GrpCod))");
-
-   /***** Table mch_matches *****/
-/*
-mysql> DESCRIBE mch_matches;
-+----------------+------------------------------------------------+------+-----+---------+----------------+
-| Field          | Type                                           | Null | Key | Default | Extra          |
-+----------------+------------------------------------------------+------+-----+---------+----------------+
-| MchCod         | int(11)                                        | NO   | PRI | NULL    | auto_increment |
-| GamCod         | int(11)                                        | NO   | MUL | NULL    |                |
-| UsrCod         | int(11)                                        | NO   |     | NULL    |                |
-| StartTime      | datetime                                       | NO   |     | NULL    |                |
-| EndTime        | datetime                                       | NO   |     | NULL    |                |
-| Title          | varchar(2047)                                  | NO   |     | NULL    |                |
-| QstInd         | int(11)                                        | NO   |     | 0       |                |
-| QstCod         | int(11)                                        | NO   |     | -1      |                |
-| Showing        | enum('start','stem','answers','results','end') | NO   |     | start   |                |
-| Countdown      | int(11)                                        | NO   |     | -1      |                |
-| NumCols        | int(11)                                        | NO   |     | 1       |                |
-| ShowQstResults | enum('N','Y')                                  | NO   |     | N       |                |
-| ShowUsrResults | enum('N','Y')                                  | NO   |     | N       |                |
-+----------------+------------------------------------------------+------+-----+---------+----------------+
-13 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_matches ("
-			"MchCod INT NOT NULL AUTO_INCREMENT,"
-			"GamCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
-			"StartTime DATETIME NOT NULL,"
-			"EndTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"	// Mch_MAX_BYTES_TITLE
-			"QstInd INT NOT NULL DEFAULT 0,"
-			"QstCod INT NOT NULL DEFAULT -1,"
-			"Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',"
-			"Countdown INT NOT NULL DEFAULT -1,"
-		        "NumCols INT NOT NULL DEFAULT 1,"
-			"ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
-		   "UNIQUE INDEX(MchCod),"
-		   "INDEX(GamCod))");
-
-   /***** Table mch_playing *****/
-/*
-mysql> DESCRIBE mch_playing;
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| Field  | Type      | Null | Key | Default           | Extra                       |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| MchCod | int(11)   | NO   | PRI | NULL              |                             |
-| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-2 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_playing ("
-			"MchCod INT NOT NULL,"
-		        "TS TIMESTAMP,"
-		   "UNIQUE INDEX(MchCod))");
-
-   /***** Table mch_players *****/
-/*
-mysql> DESCRIBE mch_players;
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| Field  | Type      | Null | Key | Default           | Extra                       |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| MchCod | int(11)   | NO   | PRI | NULL              |                             |
-| UsrCod | int(11)   | NO   | PRI | NULL              |                             |
-| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_players ("
-			"MchCod INT NOT NULL,"
-	                "UsrCod INT NOT NULL,"
-		        "TS TIMESTAMP,"
-		   "UNIQUE INDEX(MchCod,UsrCod))");
-
-   /***** Table mch_indexes *****/
-/*
-mysql> DESCRIBE mch_indexes;
-+---------+---------+------+-----+---------+-------+
-| Field   | Type    | Null | Key | Default | Extra |
-+---------+---------+------+-----+---------+-------+
-| MchCod  | int(11) | NO   | PRI | NULL    |       |
-| QstInd  | int(11) | NO   | PRI | NULL    |       |
-| Indexes | text    | NO   |     | NULL    |       |
-+---------+---------+------+-----+---------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_indexes ("
-			"MchCod INT NOT NULL,"
-			"QstInd INT NOT NULL,"
-			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
-		   "UNIQUE INDEX(MchCod,QstInd))");
-
-   /***** Table mch_results *****/
-/*
-mysql> DESCRIBE mch_results;
-+-----------------+----------+------+-----+---------+-------+
-| Field           | Type     | Null | Key | Default | Extra |
-+-----------------+----------+------+-----+---------+-------+
-| MchCod          | int(11)  | NO   | PRI | NULL    |       |
-| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
-| StartTime       | datetime | NO   |     | NULL    |       |
-| EndTime         | datetime | NO   |     | NULL    |       |
-| NumQsts         | int(11)  | NO   |     | 0       |       |
-| NumQstsNotBlank | int(11)  | NO   |     | 0       |       |
-| Score           | double   | NO   |     | 0       |       |
-+-----------------+----------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_results ("
-			"MchCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-			"StartTime DATETIME NOT NULL,"	// Time this user started to answer
-			"EndTime DATETIME NOT NULL,"	// Time this user finished to answer
-			"NumQsts INT NOT NULL DEFAULT 0,"
-			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
-			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(MchCod,UsrCod))");
-
-      /***** Table mch_times *****/
-/*
-mysql> DESCRIBE mch_times;
-+-------------+---------+------+-----+----------+-------+
-| Field       | Type    | Null | Key | Default  | Extra |
-+-------------+---------+------+-----+----------+-------+
-| MchCod      | int(11) | NO   | PRI | NULL     |       |
-| QstInd      | int(11) | NO   | PRI | NULL     |       |
-| ElapsedTime | time    | NO   |     | 00:00:00 |       |
-+-------------+---------+------+-----+----------+-------+
-3 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_times ("
-			"MchCod INT NOT NULL,"
-			"QstInd INT NOT NULL,"
-			"ElapsedTime TIME NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(MchCod,QstInd))");
+		   "UNIQUE INDEX(GrpCod,UsrCod),"
+		   "INDEX(GrpCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table hld_holidays *****/
 /*
@@ -2096,24 +1939,178 @@ mysql> DESCRIBE log_search;
 			"SearchStr VARCHAR(2047) NOT NULL,"	// Sch_MAX_BYTES_STRING_TO_FIND
 		   "UNIQUE INDEX(LogCod))");
 
-   /***** Table ntf_mail_domains *****/
+   /***** Table mch_answers *****/
 /*
-mysql> DESCRIBE ntf_mail_domains;
-+--------+---------------+------+-----+---------+----------------+
-| Field  | Type          | Null | Key | Default | Extra          |
-+--------+---------------+------+-----+---------+----------------+
-| MaiCod | int(11)       | NO   | PRI | NULL    | auto_increment |
-| Domain | varchar(255)  | NO   | UNI | NULL    |                |
-| Info   | varchar(2047) | NO   |     | NULL    |                |
-+--------+---------------+------+-----+---------+----------------+
-3 rows in set (0,00 sec)
+mysql> DESCRIBE mch_answers;
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| MchCod | int(11)    | NO   | PRI | NULL    |       |
+| UsrCod | int(11)    | NO   | PRI | NULL    |       |
+| QstInd | int(11)    | NO   | PRI | NULL    |       |
+| NumOpt | tinyint(4) | NO   |     | NULL    |       |
+| AnsInd | tinyint(4) | NO   |     | NULL    |       |
++--------+------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ntf_mail_domains ("
-			"MaiCod INT NOT NULL AUTO_INCREMENT,"
-			"Domain VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_EMAIL_ADDRESS
-			"Info VARCHAR(2047) NOT NULL,"	// Mai_MAX_BYTES_MAIL_INFO
-		   "UNIQUE INDEX(MaiCod),"
-		   "UNIQUE INDEX(Domain))");
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_answers ("
+			"MchCod INT NOT NULL,"
+	                "UsrCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"NumOpt TINYINT NOT NULL,"	// Number of button on screen (Always ordered: 0,1,2,3)
+			"AnsInd TINYINT NOT NULL,"	// Answer index (Can be shuffled: 0,3,1,2)
+		   "UNIQUE INDEX(MchCod,UsrCod,QstInd))");
+
+   /***** Table mch_groups *****/
+/*
+mysql> DESCRIBE mch_groups;
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| MchCod | int(11) | NO   | PRI | NULL    |       |
+| GrpCod | int(11) | NO   | PRI | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_groups ("
+			"MchCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(MchCod,GrpCod))");
+
+   /***** Table mch_indexes *****/
+/*
+mysql> DESCRIBE mch_indexes;
++---------+---------+------+-----+---------+-------+
+| Field   | Type    | Null | Key | Default | Extra |
++---------+---------+------+-----+---------+-------+
+| MchCod  | int(11) | NO   | PRI | NULL    |       |
+| QstInd  | int(11) | NO   | PRI | NULL    |       |
+| Indexes | text    | NO   |     | NULL    |       |
++---------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_indexes ("
+			"MchCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
+		   "UNIQUE INDEX(MchCod,QstInd))");
+
+   /***** Table mch_matches *****/
+/*
+mysql> DESCRIBE mch_matches;
++----------------+------------------------------------------------+------+-----+---------+----------------+
+| Field          | Type                                           | Null | Key | Default | Extra          |
++----------------+------------------------------------------------+------+-----+---------+----------------+
+| MchCod         | int(11)                                        | NO   | PRI | NULL    | auto_increment |
+| GamCod         | int(11)                                        | NO   | MUL | NULL    |                |
+| UsrCod         | int(11)                                        | NO   |     | NULL    |                |
+| StartTime      | datetime                                       | NO   |     | NULL    |                |
+| EndTime        | datetime                                       | NO   |     | NULL    |                |
+| Title          | varchar(2047)                                  | NO   |     | NULL    |                |
+| QstInd         | int(11)                                        | NO   |     | 0       |                |
+| QstCod         | int(11)                                        | NO   |     | -1      |                |
+| Showing        | enum('start','stem','answers','results','end') | NO   |     | start   |                |
+| Countdown      | int(11)                                        | NO   |     | -1      |                |
+| NumCols        | int(11)                                        | NO   |     | 1       |                |
+| ShowQstResults | enum('N','Y')                                  | NO   |     | N       |                |
+| ShowUsrResults | enum('N','Y')                                  | NO   |     | N       |                |
++----------------+------------------------------------------------+------+-----+---------+----------------+
+13 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_matches ("
+			"MchCod INT NOT NULL AUTO_INCREMENT,"
+			"GamCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// Mch_MAX_BYTES_TITLE
+			"QstInd INT NOT NULL DEFAULT 0,"
+			"QstCod INT NOT NULL DEFAULT -1,"
+			"Showing ENUM('start','stem','answers','results','end') NOT NULL DEFAULT 'start',"
+			"Countdown INT NOT NULL DEFAULT -1,"
+		        "NumCols INT NOT NULL DEFAULT 1,"
+			"ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(MchCod),"
+		   "INDEX(GamCod))");
+
+   /***** Table mch_players *****/
+/*
+mysql> DESCRIBE mch_players;
++--------+-----------+------+-----+-------------------+-----------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                       |
++--------+-----------+------+-----+-------------------+-----------------------------+
+| MchCod | int(11)   | NO   | PRI | NULL              |                             |
+| UsrCod | int(11)   | NO   | PRI | NULL              |                             |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_players ("
+			"MchCod INT NOT NULL,"
+	                "UsrCod INT NOT NULL,"
+		        "TS TIMESTAMP,"
+		   "UNIQUE INDEX(MchCod,UsrCod))");
+
+   /***** Table mch_playing *****/
+/*
+mysql> DESCRIBE mch_playing;
++--------+-----------+------+-----+-------------------+-----------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                       |
++--------+-----------+------+-----+-------------------+-----------------------------+
+| MchCod | int(11)   | NO   | PRI | NULL              |                             |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------+
+2 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_playing ("
+			"MchCod INT NOT NULL,"
+		        "TS TIMESTAMP,"
+		   "UNIQUE INDEX(MchCod))");
+
+   /***** Table mch_results *****/
+/*
+mysql> DESCRIBE mch_results;
++-----------------+----------+------+-----+---------+-------+
+| Field           | Type     | Null | Key | Default | Extra |
++-----------------+----------+------+-----+---------+-------+
+| MchCod          | int(11)  | NO   | PRI | NULL    |       |
+| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
+| StartTime       | datetime | NO   |     | NULL    |       |
+| EndTime         | datetime | NO   |     | NULL    |       |
+| NumQsts         | int(11)  | NO   |     | 0       |       |
+| NumQstsNotBlank | int(11)  | NO   |     | 0       |       |
+| Score           | double   | NO   |     | 0       |       |
++-----------------+----------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_results ("
+			"MchCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"	// Time this user started to answer
+			"EndTime DATETIME NOT NULL,"	// Time this user finished to answer
+			"NumQsts INT NOT NULL DEFAULT 0,"
+			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
+			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(MchCod,UsrCod))");
+
+      /***** Table mch_times *****/
+/*
+mysql> DESCRIBE mch_times;
++-------------+---------+------+-----+----------+-------+
+| Field       | Type    | Null | Key | Default  | Extra |
++-------------+---------+------+-----+----------+-------+
+| MchCod      | int(11) | NO   | PRI | NULL     |       |
+| QstInd      | int(11) | NO   | PRI | NULL     |       |
+| ElapsedTime | time    | NO   |     | 00:00:00 |       |
++-------------+---------+------+-----+----------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_times ("
+			"MchCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"ElapsedTime TIME NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(MchCod,QstInd))");
 
    /***** Table med_media *****/
 /*
@@ -2379,6 +2376,25 @@ mysql> DESCRIBE not_notices;
 		   "INDEX(CreatTime),"
 		   "INDEX(Status))");
 
+   /***** Table ntf_mail_domains *****/
+/*
+mysql> DESCRIBE ntf_mail_domains;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| MaiCod | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Domain | varchar(255)  | NO   | UNI | NULL    |                |
+| Info   | varchar(2047) | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+3 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS ntf_mail_domains ("
+			"MaiCod INT NOT NULL AUTO_INCREMENT,"
+			"Domain VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_EMAIL_ADDRESS
+			"Info VARCHAR(2047) NOT NULL,"	// Mai_MAX_BYTES_MAIL_INFO
+		   "UNIQUE INDEX(MaiCod),"
+		   "UNIQUE INDEX(Domain))");
+
    /***** Table ntf_notifications *****/
 /*
 mysql> DESCRIBE ntf_notifications;
@@ -2599,6 +2615,45 @@ mysql> DESCRIBE prj_users;
 			"UsrCod INT NOT NULL,"
 			"UNIQUE INDEX(PrjCod,RoleInProject,UsrCod))");
 
+   /***** Table roo_check_in *****/
+/*
+mysql> DESCRIBE roo_check_in;
++-------------+----------+------+-----+---------+----------------+
+| Field       | Type     | Null | Key | Default | Extra          |
++-------------+----------+------+-----+---------+----------------+
+| ChkCod      | int(11)  | NO   | PRI | NULL    | auto_increment |
+| UsrCod      | int(11)  | NO   | MUL | NULL    |                |
+| RooCod      | int(11)  | NO   |     | NULL    |                |
+| CheckInTime | datetime | NO   | MUL | NULL    |                |
++-------------+----------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS roo_check_in ("
+			"ChkCod INT NOT NULL AUTO_INCREMENT,"
+			"UsrCod INT NOT NULL,"
+			"RooCod INT NOT NULL,"
+			"CheckInTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(ChkCod),"
+		   "INDEX(UsrCod,CheckInTime),"
+		   "INDEX(CheckInTime))");
+
+   /***** Table roo_macs *****/
+/*
+mysql> DESCRIBE roo_macs;
++--------+--------+------+-----+---------+----------------+
+| Field  | Type   | Null | Key | Default | Extra          |
++--------+--------+------+-----+---------+----------------+
+| RooCod | int    | NO   | PRI | NULL    | auto_increment |
+| MAC    | bigint | NO   | PRI | NULL    |                |
++--------+--------+------+-----+---------+----------------+
+2 rows in set (0.01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS roo_macs ("
+			"RooCod INT NOT NULL,"
+			"MAC BIGINT NOT NULL,"	// 12 digits hexadecimal number
+		   "UNIQUE INDEX(RooCod,MAC),"
+		   "UNIQUE INDEX(MAC,RooCod))");
+
    /***** Table roo_rooms *****/
 /*
 mysql> DESCRIBE roo_rooms;
@@ -2652,45 +2707,6 @@ mysql> DESCRIBE roo_rooms;
 			"Capacity INT NOT NULL,"
 		   "UNIQUE INDEX(RooCod),"
 		   "INDEX(CtrCod,BldCod,Floor))");
-
-   /***** Table roo_macs *****/
-/*
-mysql> DESCRIBE roo_macs;
-+--------+--------+------+-----+---------+----------------+
-| Field  | Type   | Null | Key | Default | Extra          |
-+--------+--------+------+-----+---------+----------------+
-| RooCod | int    | NO   | PRI | NULL    | auto_increment |
-| MAC    | bigint | NO   | PRI | NULL    |                |
-+--------+--------+------+-----+---------+----------------+
-2 rows in set (0.01 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS roo_macs ("
-			"RooCod INT NOT NULL,"
-			"MAC BIGINT NOT NULL,"	// 12 digits hexadecimal number
-		   "UNIQUE INDEX(RooCod,MAC),"
-		   "UNIQUE INDEX(MAC,RooCod))");
-
-   /***** Table roo_check_in *****/
-/*
-mysql> DESCRIBE roo_check_in;
-+-------------+----------+------+-----+---------+----------------+
-| Field       | Type     | Null | Key | Default | Extra          |
-+-------------+----------+------+-----+---------+----------------+
-| ChkCod      | int(11)  | NO   | PRI | NULL    | auto_increment |
-| UsrCod      | int(11)  | NO   | MUL | NULL    |                |
-| RooCod      | int(11)  | NO   |     | NULL    |                |
-| CheckInTime | datetime | NO   | MUL | NULL    |                |
-+-------------+----------+------+-----+---------+----------------+
-4 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS roo_check_in ("
-			"ChkCod INT NOT NULL AUTO_INCREMENT,"
-			"UsrCod INT NOT NULL,"
-			"RooCod INT NOT NULL,"
-			"CheckInTime DATETIME NOT NULL,"
-		   "UNIQUE INDEX(ChkCod),"
-		   "INDEX(UsrCod,CheckInTime),"
-		   "INDEX(CheckInTime))");
 
    /***** Table rsc_clipboards *****/
 /*
@@ -2987,7 +3003,7 @@ mysql> DESCRIBE svy_comments;
 			"QstCod INT NOT NULL,"
 			"Comments TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(ComCod),"
-		   "INDEX(QstCod,ComCod)");
+		   "INDEX(QstCod,ComCod))");
 
    /***** Table svy_groups *****/
 /*
@@ -3025,7 +3041,7 @@ mysql> DESCRIBE svy_questions;
 			"SvyCod INT NOT NULL,"
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,"
-			"CommentsAllowed ENUM('N','Y') NOT NULL DEFAULT 'N'"
+			"CommentsAllowed ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Stem TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(QstCod),"
 		   "INDEX(SvyCod))");
@@ -3082,54 +3098,6 @@ mysql> DESCRIBE svy_users;
 			"SvyCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(SvyCod,UsrCod))");
-
-   /***** Table tmt_courses *****/
-/*
-mysql> DESCRIBE tmt_courses;
-+-----------+------------------------------------+------+-----+---------+-------+
-| Field     | Type                               | Null | Key | Default | Extra |
-+-----------+------------------------------------+------+-----+---------+-------+
-| CrsCod    | int(11)                            | NO   | MUL | -1      |       |
-| GrpCod    | int(11)                            | NO   |     | -1      |       |
-| Weekday   | tinyint(4)                         | NO   |     | NULL    |       |
-| StartTime | time                               | NO   |     | NULL    |       |
-| Duration  | time                               | NO   |     | NULL    |       |
-| ClassType | enum('free','lecture','practical') | NO   |     | NULL    |       |
-| Info      | varchar(2047)                      | NO   |     |         |       |
-+-----------+------------------------------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tmt_courses ("
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"GrpCod INT NOT NULL DEFAULT -1,"
-			"Weekday TINYINT NOT NULL,"	// 0=Monday...6=Sunday
-			"StartTime TIME NOT NULL,"
-			"Duration TIME NOT NULL,"
-			"ClassType ENUM('free','lecture','practical') NOT NULL,"
-			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
-		   "INDEX(CrsCod,GrpCod))");
-
-   /***** Table tmt_tutoring *****/
-/*
-mysql> DESCRIBE tmt_tutoring;
-+-----------+---------------+------+-----+---------+-------+
-| Field     | Type          | Null | Key | Default | Extra |
-+-----------+---------------+------+-----+---------+-------+
-| UsrCod    | int(11)       | NO   | MUL | NULL    |       |
-| Weekday   | tinyint(4)    | NO   |     | NULL    |       |
-| StartTime | time          | NO   |     | NULL    |       |
-| Duration  | time          | NO   |     | NULL    |       |
-| Info      | varchar(2047) | NO   |     |         |       |
-+-----------+---------------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tmt_tutoring ("
-			"UsrCod INT NOT NULL,"
-			"Weekday TINYINT NOT NULL,"	// 0=Monday...6=Sunday
-			"StartTime TIME NOT NULL,"
-			"Duration TIME NOT NULL,"
-			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
-		   "INDEX(UsrCod))");
 
    /***** Table tml_comments *****/
 /*
@@ -3285,6 +3253,54 @@ mysql> DESCRIBE tml_timelines;
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"NotCod BIGINT NOT NULL,"
 		   "UNIQUE INDEX(SessionId,NotCod))");
+
+   /***** Table tmt_courses *****/
+/*
+mysql> DESCRIBE tmt_courses;
++-----------+------------------------------------+------+-----+---------+-------+
+| Field     | Type                               | Null | Key | Default | Extra |
++-----------+------------------------------------+------+-----+---------+-------+
+| CrsCod    | int(11)                            | NO   | MUL | -1      |       |
+| GrpCod    | int(11)                            | NO   |     | -1      |       |
+| Weekday   | tinyint(4)                         | NO   |     | NULL    |       |
+| StartTime | time                               | NO   |     | NULL    |       |
+| Duration  | time                               | NO   |     | NULL    |       |
+| ClassType | enum('free','lecture','practical') | NO   |     | NULL    |       |
+| Info      | varchar(2047)                      | NO   |     |         |       |
++-----------+------------------------------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tmt_courses ("
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"GrpCod INT NOT NULL DEFAULT -1,"
+			"Weekday TINYINT NOT NULL,"	// 0=Monday...6=Sunday
+			"StartTime TIME NOT NULL,"
+			"Duration TIME NOT NULL,"
+			"ClassType ENUM('free','lecture','practical') NOT NULL,"
+			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
+		   "INDEX(CrsCod,GrpCod))");
+
+   /***** Table tmt_tutoring *****/
+/*
+mysql> DESCRIBE tmt_tutoring;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| UsrCod    | int(11)       | NO   | MUL | NULL    |       |
+| Weekday   | tinyint(4)    | NO   |     | NULL    |       |
+| StartTime | time          | NO   |     | NULL    |       |
+| Duration  | time          | NO   |     | NULL    |       |
+| Info      | varchar(2047) | NO   |     |         |       |
++-----------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tmt_tutoring ("
+			"UsrCod INT NOT NULL,"
+			"Weekday TINYINT NOT NULL,"	// 0=Monday...6=Sunday
+			"StartTime TIME NOT NULL,"
+			"Duration TIME NOT NULL,"
+			"Info VARCHAR(2047) NOT NULL DEFAULT '',"	// Tmt_MAX_BYTES_INFO
+		   "INDEX(UsrCod))");
 
    /***** Table tre_expanded *****/
 /*

@@ -1323,7 +1323,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
                                             struct Syl_Syllabus *Syllabus,
                                             char **HTMLBuffer)
   {
-   extern struct LstItemsSyllabus Syl_LstItemsSyllabus;
+   // extern struct LstItemsSyllabus Syl_LstItemsSyllabus;
    char FileNameHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
    size_t Length;
@@ -1334,7 +1334,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
    /***** Load syllabus from XML file to list of items in memory *****/
    Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   if (Syl_LstItemsSyllabus.NumItems)
+   if (Syllabus->LstItems.NumItems)
      {
       /***** Create a unique name for the file *****/
       snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_syllabus.html",
@@ -1343,14 +1343,14 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
 	{
-         Syl_FreeListItemsSyllabus ();
+         Syl_FreeListItemsSyllabus (Syllabus);
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
                                      "Can not create temporary file");
 	}
 
       /***** Write syllabus in HTML into a temporary file *****/
-      Syl_WriteSyllabusIntoHTMLTmpFile (FileHTMLTmp);
+      Syl_WriteSyllabusIntoHTMLTmpFile (Syllabus,FileHTMLTmp);
 
       /***** Write syllabus from list of items in memory to text buffer *****/
       /* Compute length of file */
@@ -1361,7 +1361,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);
-         Syl_FreeListItemsSyllabus ();
+         Syl_FreeListItemsSyllabus (Syllabus);
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
                                      "Not enough memory for buffer");
@@ -1373,7 +1373,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);
-         Syl_FreeListItemsSyllabus ();
+         Syl_FreeListItemsSyllabus (Syllabus);
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
                                      "Error reading file into buffer");
@@ -1386,7 +1386,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
      }
 
    /***** Free list of items *****/
-   Syl_FreeListItemsSyllabus ();
+   Syl_FreeListItemsSyllabus (Syllabus);
 
    return SOAP_OK;
   }

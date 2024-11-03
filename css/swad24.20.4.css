@@ -84,10 +84,9 @@ form
 	display: inline;
 	margin: 0;
 	}
-address
-	{
-	font-style: normal;
-	}
+li	{text-align: left;}
+
+address	{font-style: normal;}
 
 /*********************** Text decoration of links ****************************/
 .BODY_WHITE a,

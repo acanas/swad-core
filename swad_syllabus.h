@@ -55,12 +55,35 @@ typedef enum
    Syl_DECREASE_LEVEL,
   } Syl_ChangeLevelItem_t;
 
+#define Syl_MAX_LEVELS_SYLLABUS		  10
+
+#define Syl_MAX_CHARS_TEXT_ITEM		(1024 - 1)	// 1023
+#define Syl_MAX_BYTES_TEXT_ITEM		((Syl_MAX_CHARS_TEXT_ITEM + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
+
+struct ItemSyllabus
+  {
+   int Level;
+   int CodItem[1 + Syl_MAX_LEVELS_SYLLABUS];
+   bool HasChildren;
+   char Text[Syl_MAX_BYTES_TEXT_ITEM + 1];
+  };
+
 struct LstItemsSyllabus
   {
    struct ItemSyllabus *Lst;		// List of items of a syllabus
    unsigned NumItems;			// Number of items in the list
    unsigned NumItemsWithChildren;	// Number of items with children
    int NumLevels;			// Number of levels in the list
+  };
+
+struct Syl_Syllabus
+  {
+   struct LstItemsSyllabus LstItems;
+   char PathDir[PATH_MAX + 1];
+   unsigned NumItem;	// Item being edited
+   unsigned ParNumItem;	// Used as parameter in forms
+   Vie_ViewType_t ViewType;
+   Syl_WhichSyllabus_t WhichSyllabus;
   };
 
 // Structure used to get the limits (number of items) of the subtrees to exchange in a syllabus
@@ -71,15 +94,6 @@ struct MoveSubtrees
       unsigned Ini,End;
      } ToGetUp,ToGetDown; // Number of initial and ending items of the two subtrees to get up and get down
    bool MovAllowed;
-  };
-
-struct Syl_Syllabus
-  {
-   char PathDir[PATH_MAX + 1];
-   unsigned NumItem;	// Item being edited
-   unsigned ParNumItem;	// Used as parameter in forms
-   Vie_ViewType_t ViewType;
-   Syl_WhichSyllabus_t WhichSyllabus;
   };
 
 /*****************************************************************************/
@@ -98,18 +112,23 @@ void Syl_EditSyllabus (void);
 
 void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
                                           long CrsCod);
-void Syl_FreeListItemsSyllabus (void);
+void Syl_FreeListItemsSyllabus (struct Syl_Syllabus *Syllabus);
 
 int Syl_ReadLevelItemSyllabus (FILE *XML);
 
-void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp);
+void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
+				       FILE *FileHTMLTmp);
 
 void Syl_RemoveItemSyllabus (void);
 void Syl_UpItemSyllabus (void);
 void Syl_DownItemSyllabus (void);
 
-void Syl_CalculateUpSubtreeSyllabus (struct MoveSubtrees *Subtree,unsigned NumItem);
-void Syl_CalculateDownSubtreeSyllabus (struct MoveSubtrees *Subtree,unsigned NumItem);
+void Syl_CalculateUpSubtreeSyllabus (const struct Syl_Syllabus *Syllabus,
+				     struct MoveSubtrees *Subtree,
+				     unsigned NumItem);
+void Syl_CalculateDownSubtreeSyllabus (const struct Syl_Syllabus *Syllabus,
+				       struct MoveSubtrees *Subtree,
+				       unsigned NumItem);
 void Syl_RightItemSyllabus (void);
 void Syl_LeftItemSyllabus (void);
 
@@ -118,8 +137,11 @@ void Syl_ModifyItemSyllabus (void);
 void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
                                 char PathFile[PATH_MAX + 1]);
 void Syl_WriteStartFileSyllabus (FILE *FileSyllabus);
-void Syl_WriteAllItemsFileSyllabus (FILE *FileSyllabus);
+void Syl_WriteAllItemsFileSyllabus (const struct Syl_Syllabus *Syllabus,
+				    FILE *FileSyllabus);
 void Syl_WriteItemFileSyllabus (FILE *FileSyllabus,int Level,const char *Text);
 void Syl_WriteEndFileSyllabus (FILE *FileSyllabus);
+
+void Syl_GetAllSyllabus (void);
 
 #endif
