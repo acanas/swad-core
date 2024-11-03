@@ -49,7 +49,6 @@
 #include "swad_parameter_code.h"
 #include "swad_photo.h"
 #include "swad_program.h"
-#include "swad_program_database.h"
 #include "swad_program_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
@@ -483,18 +482,18 @@ static void Tre_WriteRowNode (Tre_TreeType_t TreeType,Tre_ListingType_t ListingT
    static unsigned UniqueId = 0;
    static Vie_ViewType_t ViewingOrEditingProgram[Tre_NUM_LISTING_TYPES] =
      {
-      [Tre_PRINT               ] = Vie_VIEW,
-      [Tre_VIEW                ] = Vie_VIEW,
-      [Tre_EDIT_NODES          ] = Vie_EDIT,
-      [Tre_FORM_NEW_END_NODE   ] = Vie_EDIT,
-      [Tre_FORM_NEW_CHILD_NODE ] = Vie_EDIT,
-      [Tre_FORM_EDIT_NODE      ] = Vie_EDIT,
-      [Tre_END_EDIT_NODE       ] = Vie_EDIT,
-      [Tre_RECEIVE_NODE        ] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCES      ] = Vie_EDIT,
-      [Tre_EDIT_PRG_RESOURCE_LINK  ] = Vie_EDIT,
-      [Tre_CHG_PRG_RESOURCE_LINK] = Vie_EDIT,
-      [Tre_END_EDIT_PRG_RESOURCES        ] = Vie_EDIT,
+      [Tre_PRINT			] = Vie_VIEW,
+      [Tre_VIEW				] = Vie_VIEW,
+      [Tre_EDIT_NODES			] = Vie_EDIT,
+      [Tre_FORM_NEW_END_NODE		] = Vie_EDIT,
+      [Tre_FORM_NEW_CHILD_NODE		] = Vie_EDIT,
+      [Tre_FORM_EDIT_NODE		] = Vie_EDIT,
+      [Tre_END_EDIT_NODE		] = Vie_EDIT,
+      [Tre_RECEIVE_NODE			] = Vie_EDIT,
+      [Tre_EDIT_PRG_RESOURCES		] = Vie_EDIT,
+      [Tre_EDIT_PRG_RESOURCE_LINK	] = Vie_EDIT,
+      [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
+      [Tre_END_EDIT_PRG_RESOURCES	] = Vie_EDIT,
      };
    static const char *RowSpan[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
@@ -640,12 +639,12 @@ static void Tre_WriteRowNode (Tre_TreeType_t TreeType,Tre_ListingType_t ListingT
 
       HTM_TR_End ();
 
-      /***** Second row (text and resources) *****/
+      /***** Second row (text and specific content) *****/
       if (ContractedOrExpanded == ConExp_EXPANDED)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    /* Begin text and resources */
+	    /* Begin text and specific content */
 	    ColSpan++;
 	    switch (ListingType)
 	      {
@@ -666,10 +665,22 @@ static void Tre_WriteRowNode (Tre_TreeType_t TreeType,Tre_ListingType_t ListingT
 	       /* Text */
 	       Tre_WriteNodeText (TreeType,Node->Hierarchy.NodCod,HiddenOrVisible);
 
-	    /* List of resources */
-	    PrgRsc_ListNodeResources (ListingType,Node,SelectedNodCod,SelectedRscCod);
+	    /* Specific content depending on the tree type */
+	    switch (TreeType)
+	      {
+	       case Tre_UNKNOWN:
+		  Err_WrongTypeExit ();
+		  break;
+	       case Tre_PROGRAM:
+		  /* List of resources of this tree node */
+		  PrgRsc_ListNodeResources (ListingType,Node,
+					    SelectedNodCod,SelectedRscCod);
+		  break;
+	       default:
+		  break;
+	      }
 
-	    /* End text and resources */
+	    /* End text and specific content */
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

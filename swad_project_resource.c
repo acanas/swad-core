@@ -29,7 +29,6 @@
 #include "swad_alert.h"
 #include "swad_error.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
 #include "swad_project.h"
 #include "swad_project_database.h"
 #include "swad_project_resource.h"

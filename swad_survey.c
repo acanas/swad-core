@@ -50,7 +50,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter_code.h"
 #include "swad_program.h"
-#include "swad_program_database.h"
+#include "swad_resource.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_survey.h"

@@ -50,7 +50,6 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
-#include "swad_program_database.h"
 #include "swad_QR.h"
 #include "swad_RSS.h"
 #include "swad_string.h"

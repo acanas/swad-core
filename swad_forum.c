@@ -59,7 +59,6 @@
 #include "swad_parameter_code.h"
 #include "swad_profile.h"
 #include "swad_profile_database.h"
-#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"

@@ -56,7 +56,6 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
-#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_test.h"
 #include "swad_test_visibility.h"
