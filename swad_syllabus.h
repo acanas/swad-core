@@ -142,6 +142,8 @@ void Syl_WriteAllItemsFileSyllabus (const struct Syl_Syllabus *Syllabus,
 void Syl_WriteItemFileSyllabus (FILE *FileSyllabus,int Level,const char *Text);
 void Syl_WriteEndFileSyllabus (FILE *FileSyllabus);
 
-void Syl_GetAllSyllabus (void);
+//--------------------- Convert syllabus from file to tree --------------------
+void Syl_PutLinkToConvertSyllabus (void);
+void Syl_ConvertAllSyllabus (void);
 
 #endif

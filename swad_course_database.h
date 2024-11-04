@@ -37,6 +37,7 @@
 
 void Crs_DB_CreateCourse (struct Hie_Node *Crs,Hie_Status_t Status);
 
+unsigned Crs_DB_GetAllCrss (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod);
 unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res);

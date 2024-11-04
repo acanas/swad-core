@@ -274,6 +274,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActSetUp		] = { 840, 5,TabSys,NULL			,Mtn_SetUp			,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActReqRemOldCrs	] = {1109, 5,TabSys,NULL			,Mtn_RemoveOldCrss		,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActRemOldCrs	] = {1110, 5,TabSys,NULL			,Crs_RemoveOldCrss		,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActCvtSyl		] = {2005, 5,TabSys,NULL			,Syl_ConvertAllSyllabus		,{{    0,    0},{0x200,0x200},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
 
    // TabCty ******************************************************************
    // Country info
@@ -3848,4 +3849,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkAss,		// #2002
 	ActReqLnkCrsTT,		// #2003
 	ActReqLnkTch,		// #2004
+	ActCvtSyl,		// #2005
   };

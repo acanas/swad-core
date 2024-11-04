@@ -71,6 +71,19 @@ void Crs_DB_CreateCourse (struct Hie_Node *Crs,Hie_Status_t Status)
 /******************* Get courses of a degree from database *******************/
 /*****************************************************************************/
 
+unsigned Crs_DB_GetAllCrss (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get courses",
+		   "SELECT CrsCod"
+		    " FROM crs_courses"
+		   " ORDER BY CrsCod");
+  }
+
+/*****************************************************************************/
+/******************* Get courses of a degree from database *******************/
+/*****************************************************************************/
+
 unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod)
   {
    return (unsigned)

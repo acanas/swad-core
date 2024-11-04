@@ -39,6 +39,7 @@
 #include "swad_box.h"
 #include "swad_changelog.h"
 #include "swad_config.h"
+#include "swad_course_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
@@ -1438,24 +1439,92 @@ void Syl_WriteEndFileSyllabus (FILE *FileSyllabus)
   }
 
 /*****************************************************************************/
-/****************************** Get all syllabus *****************************/
+/************************ Put link to convert syllabus ***********************/
 /*****************************************************************************/
 
-void Syl_GetAllSyllabus (void)
+void Syl_PutLinkToConvertSyllabus (void)
   {
-   struct Syl_Syllabus Syllabus;
-   long CrsCod = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+   extern const char *Txt_Convert_syllabus;
 
-   if (CrsCod > 0)
-     {
-      /***** Load syllabus from XML file to memory *****/
-      Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,CrsCod);
-
-      /***** Write number of items *****/
-      HTM_TxtF ("Syllabus.LstItems.NumItems = %u",Syllabus.LstItems.NumItems);
-
-      /***** Free memory used to store items *****/
-      Syl_FreeListItemsSyllabus (&Syllabus);
-     }
+   /***** Put form to set up platform *****/
+   Lay_PutContextualLinkIconText (ActCvtSyl,NULL,
+                                  NULL,NULL,
+				  "file-export.svg",Ico_BLACK,
+				  Txt_Convert_syllabus,NULL);
   }
 
+/*****************************************************************************/
+/**************** Convert all syllabus from files to database ****************/
+/*****************************************************************************/
+
+void Syl_ConvertAllSyllabus (void)
+  {
+   struct Syl_Syllabus Syllabus;
+   MYSQL_RES *mysql_res_crs;
+   MYSQL_ROW row;
+   unsigned NumCrss;
+   unsigned NumCrs;
+   long CrsCod;
+   unsigned NumItem;
+   char StrItemCod[Syl_MAX_LEVELS_SYLLABUS * (10 + 1)];
+   int Level;
+
+   /***** Get all courses from database *****/
+   NumCrss = Crs_DB_GetAllCrss (&mysql_res_crs);
+   HTM_OL_Begin ();
+   for (NumCrs = 0;
+	NumCrs < NumCrss;
+	NumCrs++)
+     {
+      /* Get next course */
+      row = mysql_fetch_row (mysql_res_crs);
+
+      /* Get course code (row[0]) */
+      if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	{
+	 for (Syllabus.WhichSyllabus  = Syl_LECTURES;
+	      Syllabus.WhichSyllabus <= Syl_PRACTICALS;
+	      Syllabus.WhichSyllabus++)
+	   {
+	    /***** Load syllabus from XML file to memory *****/
+	    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,CrsCod);
+
+	    if (Syllabus.LstItems.NumItems)
+	      {
+	       /***** Write number of items *****/
+	       HTM_LI_Begin (NULL);
+		  HTM_TxtF ("CrsCod: %ld; NumItems: %u",
+			    CrsCod,Syllabus.LstItems.NumItems);
+
+		  /***** Loop writing all items of the syllabus *****/
+		  HTM_UL_Begin (NULL);
+
+		  for (NumItem = 0;
+		       NumItem < Syllabus.LstItems.NumItems;
+		       NumItem++)
+		    {
+		     HTM_LI_Begin (NULL);
+
+			Level = Syllabus.LstItems.Lst[NumItem].Level;
+			Syl_WriteNumItem (StrItemCod,NULL,Level,Syllabus.LstItems.Lst[NumItem].CodItem);
+			HTM_TxtColonNBSP (StrItemCod);
+			HTM_Txt (Syllabus.LstItems.Lst[NumItem].Text);
+
+		     HTM_LI_End ();
+		    }
+
+		  HTM_UL_End ();
+
+	       HTM_LI_End ();
+	      }
+
+	    /***** Free memory used to store items *****/
+	    Syl_FreeListItemsSyllabus (&Syllabus);
+	   }
+	}
+     }
+   HTM_OL_End ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res_crs);
+  }
