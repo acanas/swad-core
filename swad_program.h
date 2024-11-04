@@ -27,6 +27,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Prg_ShowProgram (void);
+
 //-------------------------------- Figures ------------------------------------
 void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule
 

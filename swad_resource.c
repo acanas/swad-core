@@ -129,10 +129,10 @@ void Rsc_PutIconToViewClipboard (void)
    switch (Act_GetSuperAction (Gbl.Action.Act))
      {
       case ActSeePrg:		// Called from program
-         NextAction = ActSeeRscCli_InPrg;
+         NextAction = ActSeeRscCliPrg;
          break;
       case ActSeeAllRub:	// Called from rubrics
-         NextAction = ActSeeRscCli_InRub;
+         NextAction = ActSeeRscCliRub;
          break;
       default:
 	 NextAction = ActUnk;

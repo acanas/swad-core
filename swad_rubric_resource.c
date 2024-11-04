@@ -116,7 +116,7 @@ static void RubRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
    /***** Put icon to remove resource clipboard in rubrics *****/
    if (Rub_CheckIfICanEditRubrics () == Usr_CAN)
       if (Rsc_DB_GetNumResourcesInClipboard ())	// Only if there are resources
-	 Ico_PutContextualIconToRemove (ActRemRscCli_InRub,NULL,
+	 Ico_PutContextualIconToRemove (ActRemRscCliRub,NULL,
 					NULL,NULL);
   }
 

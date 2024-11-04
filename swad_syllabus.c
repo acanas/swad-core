@@ -49,6 +49,7 @@
 #include "swad_info_database.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_tree.h"
 #include "swad_xml.h"
 
 /*****************************************************************************/
@@ -1459,6 +1460,8 @@ void Syl_PutLinkToConvertSyllabus (void)
 
 void Syl_ConvertAllSyllabus (void)
   {
+   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   Tre_TreeType_t TreeType;
    struct Syl_Syllabus Syllabus;
    MYSQL_RES *mysql_res_crs;
    MYSQL_ROW row;
@@ -1468,6 +1471,22 @@ void Syl_ConvertAllSyllabus (void)
    unsigned NumItem;
    char StrItemCod[Syl_MAX_LEVELS_SYLLABUS * (10 + 1)];
    int Level;
+   struct Tre_Node Node;
+   static Tre_TreeType_t TreeTypes[Syl_NUM_WHICH_SYLLABUS] =
+     {
+      [Syl_NONE		] = Tre_UNKNOWN,
+      [Syl_LECTURES	] = Tre_LECTURES,
+      [Syl_PRACTICALS	] = Tre_PRACTICALS,
+     };
+
+   /***** Remove all syllabus from database *****/
+   for (TreeType  = Tre_LECTURES;
+	TreeType <= Tre_PRACTICALS;
+	TreeType++)
+      DB_QueryDELETE ("can not remove tree nodes",
+		      "DELETE FROM tre_nodes"
+		      " WHERE Type='%s'",
+		      Tre_DB_Types[TreeType]);
 
    /***** Get all courses from database *****/
    NumCrss = Crs_DB_GetAllCrss (&mysql_res_crs);
@@ -1511,6 +1530,53 @@ void Syl_ConvertAllSyllabus (void)
 			HTM_Txt (Syllabus.LstItems.Lst[NumItem].Text);
 
 		     HTM_LI_End ();
+
+		     /***** Insert new tree node *****/
+		     Node.TreeType = TreeTypes[Syllabus.WhichSyllabus];
+		     Tre_ResetNode (&Node);
+		     Node.Hierarchy.NodInd = NumItem + 1;	// 1, 2, 3...
+		     Node.Hierarchy.Level = (unsigned) Syllabus.LstItems.Lst[NumItem].Level;
+		     Str_Copy (Node.Title,Syllabus.LstItems.Lst[NumItem].Text,Tre_MAX_BYTES_NODE_TITLE);
+		     if (strlen (Syllabus.LstItems.Lst[NumItem].Text) <= Tre_MAX_BYTES_NODE_TITLE)
+		        Syllabus.LstItems.Lst[NumItem].Text[0] = '\0';	// If text can be stored in title, don't store text
+		     /*
+		     Ale_ShowAlert (Ale_INFO,
+				    "INSERT INTO tre_nodes"
+					       " (CrsCod,Type,NodInd,Level,UsrCod,"
+						 "StartTime,EndTime,"
+						 "Title,Txt)"
+				        " VALUES"
+					       " (%ld,'%s',%u,%u,%ld,"
+						 "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+						 "'%s','%s')",
+				     CrsCod,
+				     Tre_DB_Types[Node.TreeType],
+				     Node.Hierarchy.NodInd,
+				     Node.Hierarchy.Level,
+				     -1L,
+				     Node.TimeUTC[Dat_STR_TIME],
+				     Node.TimeUTC[Dat_END_TIME],
+				     Node.Title,
+				     Syllabus.LstItems.Lst[NumItem].Text);
+		     */
+		     Node.Hierarchy.NodCod =
+		     DB_QueryINSERTandReturnCode ("can not create new tree node",
+						  "INSERT INTO tre_nodes"
+							     " (CrsCod,Type,NodInd,Level,UsrCod,"
+							       "StartTime,EndTime,"
+							       "Title,Txt)"
+						      " VALUES (%ld,'%s',%u,%u,%ld,"
+							       "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+							       "'%s','%s')",
+						   CrsCod,
+						   Tre_DB_Types[Node.TreeType],
+						   Node.Hierarchy.NodInd,
+						   Node.Hierarchy.Level,
+						   -1L,
+						   Node.TimeUTC[Dat_STR_TIME],
+						   Node.TimeUTC[Dat_END_TIME],
+						   Node.Title,
+						   Syllabus.LstItems.Lst[NumItem].Text);
 		    }
 
 		  HTM_UL_End ();

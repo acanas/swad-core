@@ -47,6 +47,7 @@
 #include "swad_info_database.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_tree.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -261,7 +262,8 @@ void Inf_ShowInfo (void)
 	      {
 	       case Inf_LECTURES:
 	       case Inf_PRACTICALS:
-		  ShowWarningNoInfo = !Syl_CheckAndShowSyllabus (&Syllabus);
+		  // ShowWarningNoInfo = !Syl_CheckAndShowSyllabus (&Syllabus);
+		  ShowWarningNoInfo = (Tre_ShowTree () == 0);
 		  break;
 	       case Inf_INFORMATION:
 	       case Inf_TEACH_GUIDE:

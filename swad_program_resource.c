@@ -71,8 +71,8 @@ static const char *PrgRsc_RESOURCE_SECTION_ID = "rsc_section";
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsViewRes (void *NodCod);
-static void PrgRsc_PutIconsEditRes (void *NodCod);
+static void PrgRsc_PutIconsViewRes (void *Node);
+static void PrgRsc_PutIconsEditRes (void *Node);
 
 static void PrgRsc_GetResourceDataFromRow (MYSQL_RES *mysql_res,
                                            struct Tre_Node *Node);
@@ -190,7 +190,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
       [Tre_CHG_PRG_RESOURCE_LINK	] = Vie_EDIT,
       [Tre_END_EDIT_PRG_RESOURCES	] = Vie_VIEW,
      };
-   static void (*PrgRsc_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *NodCod) =
+   static void (*PrgRsc_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *Node) =
      {
       [Vie_VIEW] = PrgRsc_PutIconsEditRes,
       [Vie_EDIT] = PrgRsc_PutIconsViewRes,
@@ -235,7 +235,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin (Title,
 			  PrgRsc_PutIconsRes[ViewingOrEditingResOfThisItem],
-			  &Node->Hierarchy.NodCod,
+			  &Node,
 			  Hlp_COURSE_Program_resources,Box_NOT_CLOSABLE);
 	    free (Title);
 	    break;
@@ -302,22 +302,22 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 /************** Put contextual icons in list of node resources ***************/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsViewRes (void *NodCod)
+static void PrgRsc_PutIconsViewRes (void *Node)
   {
-   if (NodCod)
-      if (*(long *) NodCod > 0)
+   if (Node)
+      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
 	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
 	    Ico_PutContextualIconToView (ActFrmSeePrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Tre_PutParNodCod,NodCod);
+					 Tre_PutPars,Node);
   }
 
-static void PrgRsc_PutIconsEditRes (void *NodCod)
+static void PrgRsc_PutIconsEditRes (void *Node)
   {
-   if (NodCod)
-      if (*(long *) NodCod > 0)
+   if (Node)
+      if (((struct Tre_Node *) Node)->Hierarchy.NodCod > 0)
 	 if (Tre_CheckIfICanEditTree () == Usr_CAN)
 	    Ico_PutContextualIconToEdit (ActFrmEdiPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Tre_PutParNodCod,NodCod);
+					 Tre_PutPars,Node);
   }
 
 /*****************************************************************************/
@@ -565,7 +565,7 @@ static void PrgRsc_PutFormsToRemEditOneResource (struct Tre_Node *Node,
 					 PrgRsc_PutParRscCod,&Node->Resource.Hierarchy.RscCod);
 	 else
 	    Ico_PutContextualIconToEdit (ActFrmChgLnkPrgRsc,PrgRsc_RESOURCE_SECTION_ID,
-					 Tre_PutParNodCod,&Node->Hierarchy.NodCod);
+					 Tre_PutPars,&Node);
 
 	 /***** Icon to move up the resource *****/
 	 if (NumRsc > 0 && NumRsc < NumResources)
@@ -907,7 +907,7 @@ static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
    /***** Put icon to remove resource clipboard in program *****/
    if (Tre_CheckIfICanEditTree () == Usr_CAN)
       if (Rsc_DB_GetNumResourcesInClipboard ())	// Only if there are resources
-	 Ico_PutContextualIconToRemove (ActRemRscCli_InPrg,NULL,
+	 Ico_PutContextualIconToRemove (ActRemRscCliPrg,NULL,
 					NULL,NULL);
   }
 

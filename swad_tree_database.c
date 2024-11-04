@@ -252,8 +252,8 @@ unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_
 /********************* Get tree node text from database **********************/
 /*****************************************************************************/
 
-void Tre_DB_GetNodeTxt (Tre_TreeType_t TreeType,
-			long NodCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
+			char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get tree node text",
 		         "SELECT Txt"
@@ -261,9 +261,9 @@ void Tre_DB_GetNodeTxt (Tre_TreeType_t TreeType,
 		         " WHERE NodCod=%ld"
 			   " AND CrsCod=%ld"	// Extra check
 			   " AND Type='%s'",	// Extra check
-		         NodCod,
+		         Node->Hierarchy.NodCod,
 		         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		         Tre_DB_Types[TreeType]);
+		         Tre_DB_Types[Node->TreeType]);
   }
 
 /*****************************************************************************/

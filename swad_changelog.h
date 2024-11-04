@@ -635,10 +635,15 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.22 (2024-11-04)"
+#define Log_PLATFORM_VERSION	"SWAD 24.23 (2024-11-05)"
 #define CSS_FILE		"swad24.20.4.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.23:    Nov 05, 2024  Converting syllabus from files to database. Not finished. (339514 lines)
+					2 changes necessary in database:
+ALTER TABLE tre_nodes CHANGE COLUMN StartTime StartTime DATETIME NOT NULL DEFAULT '1970-01-01 01:00:00';
+ALTER TABLE tre_nodes CHANGE COLUMN EndTime EndTime DATETIME NOT NULL DEFAULT '1970-01-01 01:00:00';
+
 	Version 24.22:    Nov 04, 2024  Converting syllabus from files to database. Not finished. (338812 lines)
 	Version 24.21.1:  Nov 03, 2024  Fixed issues in creation of database tables. (338688 lines)
 	Version 24.21:    Nov 03, 2024  Code refactoring in syllabus. (338656 lines)

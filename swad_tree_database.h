@@ -50,8 +50,8 @@ void Tre_DB_MoveLeftRightNodeRange (Tre_TreeType_t TreeType,
 
 unsigned Tre_DB_GetListNodes (Tre_TreeType_t TreeType,MYSQL_RES **mysql_res);
 unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_res);
-void Tre_DB_GetNodeTxt (Tre_TreeType_t TreeType,
-			long NodCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
+			char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Level);
 unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level);

@@ -93,7 +93,7 @@
 #include "swad_plugin.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
-// #include "swad_program.h"
+#include "swad_program.h"
 #include "swad_program_resource.h"
 #include "swad_project.h"
 #include "swad_project_config.h"
@@ -451,27 +451,27 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqLnkCrsInf	] = {1996, 0,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Program
-   [ActSeePrg		] = {1821, 1,TabCrs,NULL			,Tre_ShowTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActEdiPrg		] = {1926, 1,TabCrs,NULL			,Tre_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActSeePrgItm	] = {1927, 1,TabCrs,NULL			,Tre_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmChgPrgItm	] = {1823, 1,TabCrs,NULL			,Tre_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmNewPrgItm	] = {1822, 1,TabCrs,NULL			,Tre_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgPrgItm	] = {1826, 1,TabCrs,NULL			,Tre_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActNewPrgItm	] = {1825, 1,TabCrs,NULL			,Tre_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActReqRemPrgItm	] = {1827, 1,TabCrs,NULL			,Tre_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemPrgItm	] = {1828, 1,TabCrs,NULL			,Tre_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActHidPrgItm	] = {1829, 1,TabCrs,NULL			,Tre_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActUnhPrgItm	] = {1830, 1,TabCrs,NULL			,Tre_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActUp_PrgItm	] = {1831, 1,TabCrs,NULL			,Tre_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActDwnPrgItm	] = {1832, 1,TabCrs,NULL			,Tre_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActLftPrgItm	] = {1834, 1,TabCrs,NULL			,Tre_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRgtPrgItm	] = {1833, 1,TabCrs,NULL			,Tre_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActExpSeePrgItm	] = {1944, 1,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActConSeePrgItm	] = {1945, 1,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActExpEdiPrgItm	] = {1946, 1,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActConEdiPrgItm	] = {1947, 1,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActSeeRscCli_InPrg	] = {1970, 1,TabCrs,NULL			,PrgRsc_ViewResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemRscCli_InPrg	] = {1971, 1,TabCrs,NULL			,PrgRsc_RemoveResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeePrg		] = {1821, 1,TabCrs,NULL			,Prg_ShowProgram		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActEdiTrePrg	] = {1926, 1,TabCrs,NULL			,Tre_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodPrg	] = {1927, 1,TabCrs,NULL			,Tre_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodPrg	] = {1823, 1,TabCrs,NULL			,Tre_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodPrg	] = {1822, 1,TabCrs,NULL			,Tre_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodPrg	] = {1826, 1,TabCrs,NULL			,Tre_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodPrg	] = {1825, 1,TabCrs,NULL			,Tre_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodPrg	] = {1827, 1,TabCrs,NULL			,Tre_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodPrg	] = {1828, 1,TabCrs,NULL			,Tre_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodPrg	] = {1829, 1,TabCrs,NULL			,Tre_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodPrg	] = {1830, 1,TabCrs,NULL			,Tre_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodPrg	] = {1831, 1,TabCrs,NULL			,Tre_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodPrg	] = {1832, 1,TabCrs,NULL			,Tre_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodPrg	] = {1834, 1,TabCrs,NULL			,Tre_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodPrg	] = {1833, 1,TabCrs,NULL			,Tre_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodPrg	] = {1944, 1,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodPrg	] = {1945, 1,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodPrg	] = {1946, 1,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodPrg	] = {1947, 1,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeRscCliPrg	] = {1970, 1,TabCrs,NULL			,PrgRsc_ViewResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemRscCliPrg	] = {1971, 1,TabCrs,NULL			,PrgRsc_RemoveResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmSeePrgRsc	] = {1925, 1,TabCrs,NULL			,PrgRsc_ViewResourcesAfterEdit	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmEdiPrgRsc	] = {1918, 1,TabCrs,NULL			,PrgRsc_EditResources		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewPrgRsc	] = {1929, 1,TabCrs,NULL			,PrgRsc_CreateResource		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -503,6 +503,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Syllabus
    [ActSeeSyl		] = {1242, 3,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActEdiSyl		] = {  44, 3,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActEdiTreSyl	] = {2006, 3,TabCrs,NULL			,Tre_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodSyl	] = {2007, 3,TabCrs,NULL			,Tre_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodSyl	] = {2008, 3,TabCrs,NULL			,Tre_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodSyl	] = {2009, 3,TabCrs,NULL			,Tre_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodSyl	] = {2010, 3,TabCrs,NULL			,Tre_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodSyl	] = {2011, 3,TabCrs,NULL			,Tre_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodSyl	] = {2012, 3,TabCrs,NULL			,Tre_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodSyl	] = {2013, 3,TabCrs,NULL			,Tre_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodSyl	] = {2014, 3,TabCrs,NULL			,Tre_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodSyl	] = {2015, 3,TabCrs,NULL			,Tre_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodSyl	] = {2016, 3,TabCrs,NULL			,Tre_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodSyl	] = {2017, 3,TabCrs,NULL			,Tre_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodSyl	] = {2018, 3,TabCrs,NULL			,Tre_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodSyl	] = {2019, 3,TabCrs,NULL			,Tre_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodSyl	] = {2020, 3,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodSyl	] = {2021, 3,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodSyl	] = {2022, 3,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodSyl	] = {2023, 3,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActDelItmSyl	] = { 218, 3,TabCrs,NULL			,Syl_RemoveItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUp_IteSyl	] = { 221, 3,TabCrs,NULL			,Syl_UpItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActDwnIteSyl	] = { 220, 3,TabCrs,NULL			,Syl_DownItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -838,8 +858,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqRemRub	] = {1957, 7,TabAss,NULL			,Rub_AskRemRubric		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemRub		] = {1958, 7,TabAss,NULL			,Rub_RemoveRubric		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkRub	] = {1969, 7,TabAss,NULL			,RubRsc_GetLinkToRubric		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActSeeRscCli_InRub	] = {1972, 7,TabAss,NULL			,RubRsc_ViewResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemRscCli_InRub	] = {1973, 7,TabAss,NULL			,RubRsc_RemoveResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeRscCliRub	] = {1972, 7,TabAss,NULL			,RubRsc_ViewResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemRscCliRub	] = {1973, 7,TabAss,NULL			,RubRsc_RemoveResourceClipboard	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActNewRubCri	] = {1959, 7,TabAss,NULL			,RubCri_ReceiveCriterion	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqRemRubCri	] = {1960, 7,TabAss,NULL			,RubCri_ReqRemCriterion		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemRubCri	] = {1961, 7,TabAss,NULL			,RubCri_RemoveCriterion		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -3666,19 +3686,19 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActPrnSysInf,		// #1819
 	ActMtn,			// #1820
 	ActSeePrg,		// #1821
-	ActFrmNewPrgItm,	// #1822
-	ActFrmChgPrgItm,	// #1823
+	ActFrmNewTreNodPrg,	// #1822
+	ActFrmChgTreNodPrg,	// #1823
 	ActUnk,			// #1824
-	ActNewPrgItm,		// #1825
-	ActChgPrgItm,		// #1826
-	ActReqRemPrgItm,	// #1827
-	ActRemPrgItm,		// #1828
-	ActHidPrgItm,		// #1829
-	ActUnhPrgItm,		// #1830
-	ActUp_PrgItm,		// #1832
-	ActDwnPrgItm,		// #1833
-	ActRgtPrgItm,		// #1833
-	ActLftPrgItm,		// #1834
+	ActNewTreNodPrg,	// #1825
+	ActChgTreNodPrg,	// #1826
+	ActReqRemTreNodPrg,	// #1827
+	ActRemTreNodPrg,	// #1828
+	ActHidTreNodPrg,	// #1829
+	ActUnhTreNodPrg,	// #1830
+	ActUp_TreNodPrg,	// #1832
+	ActDwnTreNodPrg,	// #1833
+	ActRgtTreNodPrg,	// #1833
+	ActLftTreNodPrg,	// #1834
 	ActReqRemSevTstQst,	// #1835
 	ActRemSevTstQst,	// #1836
 	ActReqAssTst,		// #1837
@@ -3770,8 +3790,8 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUp_PrgRsc,		// #1923
 	ActDwnPrgRsc,		// #1924
 	ActFrmSeePrgRsc,	// #1925
-	ActEdiPrg,		// #1926
-	ActSeePrgItm,		// #1927
+	ActEdiTrePrg,		// #1926
+	ActSeeTreNodPrg,	// #1927
 	ActRenPrgRsc,		// #1928
 	ActNewPrgRsc,		// #1929
 	ActReqLnkSeeDocCrs,	// #1930
@@ -3788,10 +3808,10 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkForCrsUsr,	// #1941
 	ActSeeOneAsg,		// #1942
 	ActReqLnkAsg,		// #1943
-	ActExpSeePrgItm,	// #1944
-	ActConSeePrgItm,	// #1945
-	ActExpEdiPrgItm,	// #1946
-	ActConEdiPrgItm,	// #1947
+	ActExpSeeTreNodPrg,	// #1944
+	ActConSeeTreNodPrg,	// #1945
+	ActExpEdiTreNodPrg,	// #1946
+	ActConEdiTreNodPrg,	// #1947
 	ActReqLnkPrj,		// #1948
 	ActSeeOnePrj,		// #1949
 	ActChgPrjRev,		// #1950
@@ -3814,10 +3834,10 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgWeiRubCri,	// #1967
 	ActChgLnkRubCri,	// #1968
 	ActReqLnkRub,		// #1969
-	ActSeeRscCli_InPrg,	// #1970
-	ActRemRscCli_InPrg,	// #1971
-	ActSeeRscCli_InRub,	// #1972
-	ActRemRscCli_InRub,	// #1973
+	ActSeeRscCliPrg,	// #1970
+	ActRemRscCliPrg,	// #1971
+	ActSeeRscCliRub,	// #1972
+	ActRemRscCliRub,	// #1973
 	ActChgPrjSco,		// #1974
 	ActChgTstQst,		// #1975
 	ActChgSvyQst,		// #1976
@@ -3850,4 +3870,22 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActReqLnkCrsTT,		// #2003
 	ActReqLnkTch,		// #2004
 	ActCvtSyl,		// #2005
+	ActEdiTreSyl,		// #2006
+	ActSeeTreNodSyl,	// #2007
+	ActFrmChgTreNodSyl,	// #2008
+	ActFrmNewTreNodSyl,	// #2009
+	ActChgTreNodSyl,	// #2010
+	ActNewTreNodSyl,	// #2011
+	ActReqRemTreNodSyl,	// #2012
+	ActRemTreNodSyl,	// #2013
+	ActHidTreNodSyl,	// #2014
+	ActUnhTreNodSyl,	// #2015
+	ActUp_TreNodSyl,	// #2016
+	ActDwnTreNodSyl,	// #2017
+	ActLftTreNodSyl,	// #2018
+	ActRgtTreNodSyl,	// #2019
+	ActExpSeeTreNodSyl,	// #2020
+	ActConSeeTreNodSyl,	// #2021
+	ActExpEdiTreNodSyl,	// #2022
+	ActConEdiTreNodSyl,	// #2023
   };

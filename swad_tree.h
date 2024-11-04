@@ -67,7 +67,6 @@ struct Tre_Node
   {
    Tre_TreeType_t TreeType;
    struct Tre_NodeHierarchy Hierarchy;
-   unsigned NumNode;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    CloOpe_ClosedOrOpen_t ClosedOrOpen;
@@ -118,7 +117,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Tre_ShowTree (void);
+unsigned Tre_ShowTree (void);
 void Tre_EditTree (void);
 void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 		       Tre_ListingType_t ListingType,
@@ -126,7 +125,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 
 Usr_Can_t Tre_CheckIfICanEditTree (void);
 
-void Tre_PutParNodCod (void *NodCod);
+void Tre_PutPars (void *Node);
 void Tre_GetPars (struct Tre_Node *Node);
 
 void Tre_GetListNodes (Tre_TreeType_t TreeType);
