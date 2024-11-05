@@ -28,6 +28,24 @@
 /*****************************************************************************/
 
 void Prg_ShowProgram (void);
+void Prg_EditProgram (void);
+void Prg_ViewNodeAfterEdit (void);
+void Prg_ReqChangeNode (void);
+void Prg_ReqCreateNode (void);
+void Prg_ReceiveChgNode (void);
+void Prg_ReceiveNewNode (void);
+void Prg_ReqRemNode (void);
+void Prg_RemoveNode (void);
+void Prg_HideNode (void);
+void Prg_UnhideNode (void);
+void Prg_MoveUpNode (void);
+void Prg_MoveDownNode (void);
+void Prg_MoveLeftNode (void);
+void Prg_MoveRightNode (void);
+void Prg_ExpandNodeSeeing (void);
+void Prg_ContractNodeSeeing (void);
+void Prg_ExpandNodeEditing (void);
+void Prg_ContractNodeEditing (void);
 
 //-------------------------------- Figures ------------------------------------
 void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule

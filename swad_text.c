@@ -6225,27 +6225,27 @@ const char *Txt_Course_forum =
 	"Kurs forumu";
 #endif
 
-const char *Txt_COURSE_program =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_COURSE_program =
 #if   L==1	// ca
-	"Programa de %s";
+	"Programa";
 #elif L==2	// de
-	"Programm %s";
+	"Programm";
 #elif L==3	// en
-	"%s program";
+	"Program";
 #elif L==4	// es
-	"Programa de %s";
+	"Programa";
 #elif L==5	// fr
-	"Programme de %s";
+	"Programme";
 #elif L==6	// gn
-	"Programa de %s";	// Okoteve traducción
+	"Programa";
 #elif L==7	// it
-	"Programma di %s";
+	"Programma";
 #elif L==8	// pl
-	"Program %s";
+	"Program";
 #elif L==9	// pt
-	"Programa de %s";
+	"Programa";
 #elif L==10	// tr
-	"%s program&inodot;";
+	"Program&inodot;";
 #endif
 
 const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =

@@ -263,7 +263,7 @@ void Inf_ShowInfo (void)
 	       case Inf_LECTURES:
 	       case Inf_PRACTICALS:
 		  // ShowWarningNoInfo = !Syl_CheckAndShowSyllabus (&Syllabus);
-		  ShowWarningNoInfo = (Tre_ShowTree () == 0);
+		  ShowWarningNoInfo = !Tre_ShowTree ();
 		  break;
 	       case Inf_INFORMATION:
 	       case Inf_TEACH_GUIDE:

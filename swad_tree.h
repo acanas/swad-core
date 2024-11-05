@@ -87,6 +87,13 @@ typedef enum
    Tre_MOVE_RIGHT,
   } Tre_MoveLeftRight_t;
 
+#define Tre_NUM_MOVEMENTS_UP_DOWN 2
+typedef enum
+  {
+   Tre_MOVE_UP,
+   Tre_MOVE_DOWN,
+  } Tre_MoveUpDown_t;
+
 #define Tre_NUM_MOVEMENTS_EXPAND_CONTRACT 2
 typedef enum
   {
@@ -124,6 +131,9 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
                        long SelectedItmCod,long SelectedRscCod);
 
 Usr_Can_t Tre_CheckIfICanEditTree (void);
+void Tre_PutIconToEditTree (struct Tre_Node *Node);
+void Tre_PutIconToViewTree (struct Tre_Node *Node);
+void Tre_PutIconToCreateNewNode (struct Tre_Node *Node);
 
 void Tre_PutPars (void *Node);
 void Tre_GetPars (struct Tre_Node *Node);
@@ -146,15 +156,22 @@ void Tre_ReceiveNewNode (void);
 
 void Tre_ReqRemNode (void);
 void Tre_RemoveNode (void);
+
 void Tre_HideNode (void);
 void Tre_UnhideNode (void);
+void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 void Tre_MoveUpNode (void);
 void Tre_MoveDownNode (void);
+void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown);
+
 void Tre_MoveLeftNode (void);
 void Tre_MoveRightNode (void);
+void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight);
 
 void Tre_ExpandNode (void);
 void Tre_ContractNode (void);
+void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
+			     Tre_ListingType_t ListingType);
 
 #endif

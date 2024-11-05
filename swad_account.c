@@ -156,7 +156,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_Skip_this_step;
 
    /***** Begin box *****/
-   Box_BoxBegin (Title, NULL,NULL,Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
+   Box_BoxBegin (Title,NULL,NULL,Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
       /***** Help alert *****/
       Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
