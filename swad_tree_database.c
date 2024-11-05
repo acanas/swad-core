@@ -283,7 +283,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
                         "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM tre_nodes"
 			" WHERE CrsCod>0"
-			  " AND TreeType='%s'",
+			  " AND Type='%s'",
 			Tre_DB_Types[TreeType]);
        case Hie_CTY:
          return (unsigned)
@@ -299,7 +299,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			Tre_DB_Types[TreeType]);
        case Hie_INS:
@@ -314,7 +314,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			Tre_DB_Types[TreeType]);
       case Hie_CTR:
@@ -327,7 +327,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			Tre_DB_Types[TreeType]);
       case Hie_DEG:
@@ -338,7 +338,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			        "tre_nodes"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			Tre_DB_Types[TreeType]);
       case Hie_CRS:
@@ -347,7 +347,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
                          "SELECT COUNT(DISTINCT CrsCod)"
 			  " FROM tre_nodes"
 			 " WHERE CrsCod=%ld"
-			   " AND TreeType='%s'",
+			   " AND Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			Tre_DB_Types[TreeType]);
       default:
@@ -370,7 +370,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
                          "SELECT COUNT(*)"
 			  " FROM tre_nodes"
 			 " WHERE CrsCod>0"
-			   " AND TreeType='%s'",
+			   " AND Type='%s'",
 			Tre_DB_Types[TreeType]);
       case Hie_CTY:
          return (unsigned)
@@ -386,7 +386,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			Tre_DB_Types[TreeType]);
       case Hie_INS:
@@ -401,7 +401,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			Tre_DB_Types[TreeType]);
       case Hie_CTR:
@@ -414,7 +414,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			Tre_DB_Types[TreeType]);
       case Hie_DEG:
@@ -425,7 +425,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			        "tre_nodes"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
-			   " AND tre_nodes.TreeType='%s'",
+			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			Tre_DB_Types[TreeType]);
       case Hie_CRS:
@@ -434,7 +434,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
                          "SELECT COUNT(*)"
 			  " FROM tre_nodes"
 			 " WHERE CrsCod=%ld"
-			   " AND TreeType='%s'",
+			   " AND Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			Tre_DB_Types[TreeType]);
       default:
