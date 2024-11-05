@@ -437,7 +437,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRenCrsFulCfg	] = {1600, 0,TabCrs,CrsCfg_RenameCourseFull	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActChgInsCrsCodCfg	] = {1024, 0,TabCrs,CrsCfg_ChangeInsCrsCod	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgCrsYeaCfg	] = {1573, 0,TabCrs,CrsCfg_ChangeCrsYear	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActEdiCrsInf	] = { 848, 0,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgCrsInf	] = { 848, 0,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaCrsInf	] = { 877, 0,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaCrsInf	] = { 878, 0,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcCrsInf	] = { 849, 0,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -487,7 +487,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Teaching guide
    [ActSeeTchGui	] = { 784, 2,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActEdiTchGui	] = { 785, 2,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgTchGui	] = { 785, 2,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaTchGui	] = { 870, 2,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaTchGui	] = { 886, 2,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcTchGui	] = { 789, 2,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -502,26 +502,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Syllabus
    [ActSeeSyl		] = {1242, 3,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActEdiSyl		] = {  44, 3,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgSyl		] = {  44, 3,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActEdiTreSyl	] = {2006, 3,TabCrs,NULL			,Tre_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActSeeTreNodSyl	] = {2007, 3,TabCrs,NULL			,Tre_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmChgTreNodSyl	] = {2008, 3,TabCrs,NULL			,Tre_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActFrmNewTreNodSyl	] = {2009, 3,TabCrs,NULL			,Tre_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgTreNodSyl	] = {2010, 3,TabCrs,NULL			,Tre_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActNewTreNodSyl	] = {2011, 3,TabCrs,NULL			,Tre_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActReqRemTreNodSyl	] = {2012, 3,TabCrs,NULL			,Tre_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemTreNodSyl	] = {2013, 3,TabCrs,NULL			,Tre_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActHidTreNodSyl	] = {2014, 3,TabCrs,NULL			,Tre_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActUnhTreNodSyl	] = {2015, 3,TabCrs,NULL			,Tre_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActUp_TreNodSyl	] = {2016, 3,TabCrs,NULL			,Tre_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActDwnTreNodSyl	] = {2017, 3,TabCrs,NULL			,Tre_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActLftTreNodSyl	] = {2018, 3,TabCrs,NULL			,Tre_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRgtTreNodSyl	] = {2019, 3,TabCrs,NULL			,Tre_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActExpSeeTreNodSyl	] = {2020, 3,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActConSeeTreNodSyl	] = {2021, 3,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActExpEdiTreNodSyl	] = {2022, 3,TabCrs,NULL			,Tre_ExpandNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActConEdiTreNodSyl	] = {2023, 3,TabCrs,NULL			,Tre_ContractNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiTreSyl	] = {2006, 3,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodSyl	] = {2007, 3,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodSyl	] = {2008, 3,TabCrs,NULL			,Inf_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodSyl	] = {2009, 3,TabCrs,NULL			,Inf_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodSyl	] = {2010, 3,TabCrs,NULL			,Inf_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodSyl	] = {2011, 3,TabCrs,NULL			,Inf_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodSyl	] = {2012, 3,TabCrs,NULL			,Inf_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodSyl	] = {2013, 3,TabCrs,NULL			,Inf_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodSyl	] = {2014, 3,TabCrs,NULL			,Inf_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodSyl	] = {2015, 3,TabCrs,NULL			,Inf_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodSyl	] = {2016, 3,TabCrs,NULL			,Inf_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodSyl	] = {2017, 3,TabCrs,NULL			,Inf_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodSyl	] = {2018, 3,TabCrs,NULL			,Inf_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodSyl	] = {2019, 3,TabCrs,NULL			,Inf_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodSyl	] = {2020, 3,TabCrs,NULL			,Inf_ExpandNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodSyl	] = {2021, 3,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodSyl	] = {2022, 3,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodSyl	] = {2023, 3,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActDelItmSyl	] = { 218, 3,TabCrs,NULL			,Syl_RemoveItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActUp_IteSyl	] = { 221, 3,TabCrs,NULL			,Syl_UpItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -544,7 +544,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Bibliography
    [ActSeeBib		] = {  32, 4,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActEdiBib		] = {  76, 4,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgBib		] = {  76, 4,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaBib	] = { 873, 4,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaBib	] = { 884, 4,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcBib	] = { 370, 4,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -559,7 +559,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // FAQ
    [ActSeeFAQ		] = {  54, 5,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActEdiFAQ		] = { 109, 5,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgFAQ		] = { 109, 5,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaFAQ	] = { 874, 5,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaFAQ	] = { 879, 5,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcFAQ	] = { 380, 5,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -574,7 +574,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Links
    [ActSeeCrsLnk	] = {   9, 6,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActEdiCrsLnk	] = {  96, 6,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgCrsLnk	] = {  96, 6,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaCrsLnk	] = { 875, 6,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaCrsLnk	] = { 885, 6,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcCrsLnk	] = { 385, 6,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -589,7 +589,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Assessment
    [ActSeeAss		] = {  15, 7,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
-   [ActEdiAss		] = {  69, 7,TabCrs,NULL			,Inf_FormsToSelSendInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgAss		] = {  69, 7,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaAss	] = { 883, 7,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaAss	] = { 898, 7,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcAss	] = { 384, 7,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1908,7 +1908,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #41 (obsolete action)
 	ActLstStdAll,		// #42
 	ActUnk,			// #43 (obsolete action)
-	ActEdiSyl,		// #44
+	ActCfgSyl,		// #44
 	ActEdiCrsTT,		// #45
 	ActUnk,			// #46 (obsolete action)
 	ActUnk,			// #47 (obsolete action)
@@ -1933,14 +1933,14 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #66 (obsolete action)
 	ActUnk,			// #67 (obsolete action)
 	ActUnk,			// #68 (obsolete action)
-	ActEdiAss,		// #69
+	ActCfgAss,		// #69
 	ActSeeSntMsg,		// #70
 	ActUnk,			// #71 (obsolete action)
 	ActUnk,			// #72 (obsolete action)
 	ActRemNot,		// #73
 	ActUnk,			// #74 (obsolete action)
 	ActUnk,			// #75 (obsolete action)
-	ActEdiBib,		// #76
+	ActCfgBib,		// #76
 	ActUnk,			// #77 (obsolete action)
 	ActUnk,			// #78 (obsolete action)
 	ActSeeAccGbl,		// #79
@@ -1960,7 +1960,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #93 (obsolete action)
 	ActUnk,			// #94 (obsolete action)
 	ActSeeFor,		// #95
-	ActEdiCrsLnk,		// #96
+	ActCfgCrsLnk,		// #96
 	ActUnk,			// #97 (obsolete action)
 	ActAssTst,		// #98
 	ActUnk,			// #99 (obsolete action)
@@ -1973,7 +1973,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgMaxStdGrp,	// #106
 	ActReqRemGrp,		// #107
 	ActReqEdiGrp,		// #108
-	ActEdiFAQ,		// #109
+	ActCfgFAQ,		// #109
 	ActRcvCfe,		// #110
 	ActPrnRecSevStd,	// #111
 	ActUnk,			// #112 (obsolete action)
@@ -2649,7 +2649,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenPlg,		// #782
 	ActChgPlgURL,		// #783
 	ActSeeTchGui,		// #784
-	ActEdiTchGui,		// #785
+	ActCfgTchGui,		// #785
 	ActEditorTchGui,	// #786
 	ActPlaTxtEdiTchGui,	// #787
 	ActRcvPagTchGui,	// #788
@@ -2712,7 +2712,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRefCon,		// #845
 	ActRcvFilAsgCrsCla,	// #846
 	ActSeeCrsInf,		// #847
-	ActEdiCrsInf,		// #848
+	ActCfgCrsInf,		// #848
 	ActSelInfSrcCrsInf,	// #849
 	ActPlaTxtEdiCrsInf,	// #850
 	ActRcvPlaTxtCrsInf,	// #851

@@ -1582,16 +1582,6 @@ void Tre_RemoveNode (void)
 /***************************** Hide a tree node ***************************/
 /*****************************************************************************/
 
-void Tre_HideNode (void)
-  {
-   Tre_HideOrUnhideNode (HidVis_HIDDEN);
-  }
-
-void Tre_UnhideNode (void)
-  {
-   Tre_HideOrUnhideNode (HidVis_VISIBLE);
-  }
-
 void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
@@ -1619,16 +1609,6 @@ void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
 /*****************************************************************************/
 /*********** Move up/down position of a subtree in a course tree *************/
 /*****************************************************************************/
-
-void Tre_MoveUpNode (void)
-  {
-   Tre_MoveUpDownNode (Tre_MOVE_UP);
-  }
-
-void Tre_MoveDownNode (void)
-  {
-   Tre_MoveUpDownNode (Tre_MOVE_DOWN);
-  }
 
 void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
   {
@@ -1827,16 +1807,6 @@ static int Tre_GetNextBrother (int NumNode)
 /************** Move a subtree to left/right in a course program *************/
 /*****************************************************************************/
 
-void Tre_MoveLeftNode (void)
-  {
-   Tre_MoveLeftRightNode (Tre_MOVE_LEFT);
-  }
-
-void Tre_MoveRightNode (void)
-  {
-   Tre_MoveLeftRightNode (Tre_MOVE_RIGHT);
-  }
-
 void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
   {
    extern const char *Txt_Movement_not_allowed;
@@ -1890,16 +1860,6 @@ void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
 /*****************************************************************************/
 /*************** Move a subtree to left/right in a course tree ***************/
 /*****************************************************************************/
-
-void Tre_ExpandNode (void)
-  {
-   Tre_ExpandContractNode (Tre_EXPAND,Tre_VIEW);	// TODO: Use also Tre_EDIT_NODES
-  }
-
-void Tre_ContractNode (void)
-  {
-   Tre_ExpandContractNode (Tre_CONTRACT,Tre_VIEW);	// TODO: Use also Tre_EDIT_NODES
-  }
 
 void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType)

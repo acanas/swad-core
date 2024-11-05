@@ -153,24 +153,11 @@ void Tre_ReqChangeNode (void);
 void Tre_ReqCreateNode (void);
 void Tre_ReceiveChgNode (void);
 void Tre_ReceiveNewNode (void);
-
 void Tre_ReqRemNode (void);
 void Tre_RemoveNode (void);
-
-void Tre_HideNode (void);
-void Tre_UnhideNode (void);
 void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible);
-
-void Tre_MoveUpNode (void);
-void Tre_MoveDownNode (void);
 void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown);
-
-void Tre_MoveLeftNode (void);
-void Tre_MoveRightNode (void);
 void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight);
-
-void Tre_ExpandNode (void);
-void Tre_ContractNode (void);
 void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType);
 

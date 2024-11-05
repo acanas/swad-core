@@ -129,10 +129,55 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
   };
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
+
+static struct Act_ActionFunc Inf_ActionsSee[Inf_NUM_TYPES] =
+  {
+   [Inf_INFORMATION	] = {ActSeeCrsInf,NULL,NULL},
+   [Inf_TEACH_GUIDE	] = {ActSeeTchGui,NULL,NULL},
+   [Inf_LECTURES	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+   [Inf_PRACTICALS	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+   [Inf_BIBLIOGRAPHY	] = {ActSeeBib   ,NULL,NULL},
+   [Inf_FAQ		] = {ActSeeFAQ   ,NULL,NULL},
+   [Inf_LINKS		] = {ActSeeCrsLnk,NULL,NULL},
+   [Inf_ASSESSMENT	] = {ActSeeAss   ,NULL,NULL},
+  };
+
+static struct Act_ActionFunc Inf_ActionsCfg[Inf_NUM_TYPES] =
+  {
+   [Inf_INFORMATION	] = {ActCfgCrsInf,NULL,NULL},
+   [Inf_TEACH_GUIDE	] = {ActCfgTchGui,NULL,NULL},
+   [Inf_LECTURES	] = {ActCfgSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+   [Inf_PRACTICALS	] = {ActCfgSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+   [Inf_BIBLIOGRAPHY	] = {ActCfgBib   ,NULL,NULL},
+   [Inf_FAQ		] = {ActCfgFAQ   ,NULL,NULL},
+   [Inf_LINKS		] = {ActCfgCrsLnk,NULL,NULL},
+   [Inf_ASSESSMENT	] = {ActCfgAss   ,NULL,NULL},
+  };
+
+static struct Act_ActionFunc Inf_ActionsReqLnk[Inf_NUM_TYPES] =
+  {
+   [Inf_INFORMATION	] = {ActReqLnkCrsInf,NULL,NULL},
+   [Inf_TEACH_GUIDE	] = {ActReqLnkTchGui,NULL,NULL},
+   [Inf_LECTURES	] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
+   [Inf_PRACTICALS	] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
+   [Inf_BIBLIOGRAPHY	] = {ActReqLnkBib   ,NULL,NULL},
+   [Inf_FAQ		] = {ActReqLnkFAQ   ,NULL,NULL},
+   [Inf_LINKS		] = {ActReqLnkCrsLnk,NULL,NULL},
+   [Inf_ASSESSMENT	] = {ActReqLnkAss   ,NULL,NULL},
+  };
+
+/*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Inf_PutIconToViewInfo (void *Type);
+static void Inf_BeforeTree (void);
+static void Inf_AfterTree (void);
+
+static void Inf_PutIconsToViewInfo (void *Type);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
 						HTM_Attributes_t Attributes);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
@@ -175,20 +220,7 @@ void Inf_ShowInfo (void)
    extern const char *Txt_No_information;
    struct Syl_Syllabus Syllabus;
    struct Inf_FromDB FromDB;
-   Usr_Can_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-                        					   Usr_CAN_NOT;
    bool ShowWarningNoInfo = false;
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
-     {
-      [Usr_CAN_NOT] = NULL,
-      [Usr_CAN    ] = Inf_PutIconToEditInfo,
-     };
-   static void *Args[Usr_NUM_CAN] =
-     {
-      [Usr_CAN_NOT] = NULL,
-      [Usr_CAN    ] = &Gbl.Crs.Info.Type,
-     };
    static const char **Help[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION	] = &Hlp_COURSE_Information_textual_information,
@@ -246,7 +278,7 @@ void Inf_ShowInfo (void)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 FunctionToDrawContextualIcons[ICanEdit],Args[ICanEdit],
+		 Inf_PutIconsToEditInfo,&Gbl.Crs.Info.Type,
 		 *Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
       /****** Form to select syllabus *****/
@@ -299,73 +331,238 @@ void Inf_ShowInfo (void)
   }
 
 /*****************************************************************************/
-/************************ Put icon to edit course info ***********************/
+/*************************** Before and after tree ***************************/
 /*****************************************************************************/
 
-static void Inf_PutIconToViewInfo (void *Type)
+static void Inf_BeforeTree (void)
   {
-   extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
-   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
+   extern const char *Hlp_COURSE_Information_textual_information;
+   extern const char *Hlp_COURSE_Guide;
+   extern const char *Hlp_COURSE_Syllabus;
+   extern const char *Hlp_COURSE_Bibliography;
+   extern const char *Hlp_COURSE_FAQ;
+   extern const char *Hlp_COURSE_Links;
+   extern const char *Hlp_COURSE_Assessment;
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
+   struct Syl_Syllabus Syllabus;
+   static const char **Help[Inf_NUM_TYPES] =
      {
-      [Inf_INFORMATION	] = {ActSeeCrsInf,NULL,NULL},
-      [Inf_TEACH_GUIDE	] = {ActSeeTchGui,NULL,NULL},
-      [Inf_LECTURES	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS	] = {ActSeeSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY	] = {ActSeeBib   ,NULL,NULL},
-      [Inf_FAQ		] = {ActSeeFAQ   ,NULL,NULL},
-      [Inf_LINKS	] = {ActSeeCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT	] = {ActSeeAss   ,NULL,NULL},
+      [Inf_INFORMATION	] = &Hlp_COURSE_Information_textual_information,
+      [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide,
+      [Inf_LECTURES	] = &Hlp_COURSE_Syllabus,
+      [Inf_PRACTICALS	] = &Hlp_COURSE_Syllabus,
+      [Inf_BIBLIOGRAPHY	] = &Hlp_COURSE_Bibliography,
+      [Inf_FAQ		] = &Hlp_COURSE_FAQ,
+      [Inf_LINKS	] = &Hlp_COURSE_Links,
+      [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment,
      };
 
-   if (Type)
-      Ico_PutContextualIconToView (Inf_Actions[*((Inf_Type_t *) Type)].NextAction,NULL,
-				   Inf_Actions[*((Inf_Type_t *) Type)].FuncPars,
-				   Inf_Actions[*((Inf_Type_t *) Type)].Args);
+   /***** Reset syllabus context *****/
+   Syl_ResetSyllabus (&Syllabus);
+
+   /***** Set info type *****/
+   Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
+
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+		 Inf_PutIconsToViewInfo,&Gbl.Crs.Info.Type,
+		 *Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+
+      /****** Form to select syllabus *****/
+      Syl_PutFormWhichSyllabus (Syllabus.WhichSyllabus);
   }
 
-void Inf_PutIconToEditInfo (void *Type)
+static void Inf_AfterTree (void)
   {
-   extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
-   static struct Act_ActionFunc Inf_ActionsEdit[Inf_NUM_TYPES] =
-     {
-      [Inf_INFORMATION	] = {ActEdiCrsInf,NULL,NULL},
-      [Inf_TEACH_GUIDE	] = {ActEdiTchGui,NULL,NULL},
-      [Inf_LECTURES	] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS	] = {ActEdiSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY	] = {ActEdiBib   ,NULL,NULL},
-      [Inf_FAQ		] = {ActEdiFAQ   ,NULL,NULL},
-      [Inf_LINKS	] = {ActEdiCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT	] = {ActEdiAss   ,NULL,NULL},
-     };
-   static struct Act_ActionFunc Inf_ActionsReqLnk[Inf_NUM_TYPES] =
-     {
-      [Inf_INFORMATION	] = {ActReqLnkCrsInf,NULL,NULL},
-      [Inf_TEACH_GUIDE	] = {ActReqLnkTchGui,NULL,NULL},
-      [Inf_LECTURES	] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]},
-      [Inf_PRACTICALS	] = {ActReqLnkSyl   ,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]},
-      [Inf_BIBLIOGRAPHY	] = {ActReqLnkBib   ,NULL,NULL},
-      [Inf_FAQ		] = {ActReqLnkFAQ   ,NULL,NULL},
-      [Inf_LINKS	] = {ActReqLnkCrsLnk,NULL,NULL},
-      [Inf_ASSESSMENT	] = {ActReqLnkAss   ,NULL,NULL},
-     };
-   Usr_Can_t ICanEdit;
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/******** Show course info (theory, practices, bibliography, etc.) ***********/
+/*****************************************************************************/
+
+void Inf_EditTree (void)
+  {
+   Inf_BeforeTree ();
+      Tre_EditTree ();
+   Inf_AfterTree ();
+  }
+
+void Inf_ViewNodeAfterEdit (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ViewNodeAfterEdit ();
+   Inf_AfterTree ();
+  }
+
+void Inf_ReqChangeNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ReqChangeNode ();
+   Inf_AfterTree ();
+  }
+
+void Inf_ReqCreateNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ReqCreateNode ();
+   Inf_AfterTree ();
+  }
+
+void Inf_ReceiveChgNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ReceiveChgNode ();
+   Inf_AfterTree ();
+  }
+
+void Inf_ReceiveNewNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ReceiveNewNode ();
+   Inf_AfterTree ();
+  }
+
+void Inf_ReqRemNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ReqRemNode ();
+   Inf_AfterTree ();
+  }
+
+void Inf_RemoveNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_RemoveNode ();
+   Inf_AfterTree ();
+  }
+
+void Inf_HideNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_HideOrUnhideNode (HidVis_HIDDEN);
+   Inf_AfterTree ();
+  }
+
+void Inf_UnhideNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_HideOrUnhideNode (HidVis_VISIBLE);
+   Inf_AfterTree ();
+  }
+
+void Inf_MoveUpNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_MoveUpDownNode (Tre_MOVE_UP);
+   Inf_AfterTree ();
+  }
+
+void Inf_MoveDownNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_MoveUpDownNode (Tre_MOVE_DOWN);
+   Inf_AfterTree ();
+  }
+
+void Inf_MoveLeftNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_MoveLeftRightNode (Tre_MOVE_LEFT);
+   Inf_AfterTree ();
+  }
+
+void Inf_MoveRightNode (void)
+  {
+   Inf_BeforeTree ();
+      Tre_MoveLeftRightNode (Tre_MOVE_RIGHT);
+   Inf_AfterTree ();
+  }
+
+void Inf_ExpandNodeSeeing (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ExpandContractNode (Tre_EXPAND,Tre_VIEW);
+   Inf_AfterTree ();
+  }
+
+void Inf_ContractNodeSeeing (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ExpandContractNode (Tre_CONTRACT,Tre_VIEW);
+   Inf_AfterTree ();
+  }
+
+void Inf_ExpandNodeEditing (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ExpandContractNode (Tre_EXPAND,Tre_EDIT_NODES);
+   Inf_AfterTree ();
+  }
+
+void Inf_ContractNodeEditing (void)
+  {
+   Inf_BeforeTree ();
+      Tre_ExpandContractNode (Tre_CONTRACT,Tre_EDIT_NODES);
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/*********************** Put icons to edit course info ***********************/
+/*****************************************************************************/
+
+static void Inf_PutIconsToViewInfo (void *Type)
+  {
+   Usr_Can_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+			 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+                        					   Usr_CAN_NOT;
 
    if (Type)
      {
-      /***** Icon to edit *****/
-      ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
-                        				    Usr_CAN_NOT;
-      if (ICanEdit)
-	 Ico_PutContextualIconToEdit (Inf_ActionsEdit[*((Inf_Type_t *) Type)].NextAction,NULL,
-				      Inf_ActionsEdit[*((Inf_Type_t *) Type)].FuncPars,
-				      Inf_ActionsEdit[*((Inf_Type_t *) Type)].Args);
+      Ico_PutContextualIconToView (Inf_ActionsSee[*((Inf_Type_t *) Type)].NextAction,NULL,
+				   Inf_ActionsSee[*((Inf_Type_t *) Type)].FuncPars,
+				   Inf_ActionsSee[*((Inf_Type_t *) Type)].Args);
 
-      /***** Icon to get resource link *****/
-      Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].NextAction,NULL,
-				      Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].FuncPars,
-				      Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].Args);
+      if (ICanEdit)
+        {
+	 /***** Icon to configure *****/
+	 Ico_PutContextualIconToConfigure (Inf_ActionsCfg[*((Inf_Type_t *) Type)].NextAction,NULL,
+					   Inf_ActionsCfg[*((Inf_Type_t *) Type)].FuncPars,
+					   Inf_ActionsCfg[*((Inf_Type_t *) Type)].Args);
+
+	 /***** Icon to get resource link *****/
+	 Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].NextAction,NULL,
+					 Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].FuncPars,
+					 Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].Args);
+        }
      }
+  }
+
+void Inf_PutIconsToEditInfo (void *Type)
+  {
+   Usr_Can_t ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+			 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? Usr_CAN :
+								   Usr_CAN_NOT;
+
+   if (Type)
+      if (ICanEdit)
+        {
+	 /***** Icon to edit *****/
+	 Ico_PutContextualIconToEdit (ActEdiTreSyl,NULL,
+				      Inf_ActionsCfg[*((Inf_Type_t *) Type)].FuncPars,
+				      Inf_ActionsCfg[*((Inf_Type_t *) Type)].Args);
+
+	 /***** Icon to configure *****/
+	 Ico_PutContextualIconToConfigure (Inf_ActionsCfg[*((Inf_Type_t *) Type)].NextAction,NULL,
+					   Inf_ActionsCfg[*((Inf_Type_t *) Type)].FuncPars,
+					   Inf_ActionsCfg[*((Inf_Type_t *) Type)].Args);
+
+	 /***** Icon to get resource link *****/
+	 Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].NextAction,NULL,
+					 Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].FuncPars,
+					 Inf_ActionsReqLnk[*((Inf_Type_t *) Type)].Args);
+        }
   }
 
 /*****************************************************************************/
@@ -835,7 +1032,7 @@ void Inf_SetInfoSrc (void)
 /************** Select course info source and send course info ***************/
 /*****************************************************************************/
 
-void Inf_FormsToSelSendInfo (void)
+void Inf_ConfigInfo (void)
   {
    extern const char *Hlp_COURSE_Information_edit;
    extern const char *Hlp_COURSE_Guide_edit;
@@ -914,7 +1111,7 @@ void Inf_FormsToSelSendInfo (void)
    /***** Form to choice between alternatives *****/
    /* Begin box and table */
    Box_BoxTableBegin (Txt_Source_of_information,
-                      Inf_PutIconToViewInfo,&Gbl.Crs.Info.Type,
+                      Inf_PutIconsToViewInfo,&Gbl.Crs.Info.Type,
                       *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
       /* Options */
@@ -1723,7 +1920,7 @@ void Inf_RecAndChangePlainTxtInfo (void)
       Inf_ShowInfo ();
    else
       /***** Show again the form to select and send course info *****/
-      Inf_FormsToSelSendInfo ();
+      Inf_ConfigInfo ();
   }
 
 /*****************************************************************************/
@@ -1762,7 +1959,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
       Inf_ShowInfo ();
    else
       /***** Show again the form to select and send course info *****/
-      Inf_FormsToSelSendInfo ();
+      Inf_ConfigInfo ();
   }
 
 /*****************************************************************************/
@@ -1821,7 +2018,7 @@ void Inf_ReceiveURLInfo (void)
       Inf_DB_SetInfoSrc (Inf_NONE);
 
       /***** Show again the form to select and send course info *****/
-      Inf_FormsToSelSendInfo ();
+      Inf_ConfigInfo ();
      }
   }
 
@@ -1958,7 +2155,7 @@ void Inf_ReceivePagInfo (void)
       Inf_DB_SetInfoSrc (Inf_NONE);
 
       /***** Show again the form to select and send course info *****/
-      Inf_FormsToSelSendInfo ();
+      Inf_ConfigInfo ();
      }
   }
 
@@ -1973,7 +2170,7 @@ void Inf_EditorCourseInfo (void)
    Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
-   Inf_FormsToSelSendInfo ();
+   Inf_ConfigInfo ();
   }
 
 /*****************************************************************************/
@@ -1987,7 +2184,7 @@ void Inf_EditorTeachingGuide (void)
    Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
-   Inf_FormsToSelSendInfo ();
+   Inf_ConfigInfo ();
   }
 
 /*****************************************************************************/
@@ -2001,7 +2198,7 @@ void Inf_EditorBibliography (void)
    Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
-   Inf_FormsToSelSendInfo ();
+   Inf_ConfigInfo ();
   }
 
 /*****************************************************************************/
@@ -2015,7 +2212,7 @@ void Inf_EditorFAQ (void)
    Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
-   Inf_FormsToSelSendInfo ();
+   Inf_ConfigInfo ();
   }
 
 /*****************************************************************************/
@@ -2029,7 +2226,7 @@ void Inf_EditorLinks (void)
    Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
-   Inf_FormsToSelSendInfo ();
+   Inf_ConfigInfo ();
   }
 
 /*****************************************************************************/
@@ -2043,5 +2240,5 @@ void Inf_EditorAssessment (void)
    Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
-   Inf_FormsToSelSendInfo ();
+   Inf_ConfigInfo ();
   }

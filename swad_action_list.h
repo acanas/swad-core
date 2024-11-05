@@ -366,7 +366,7 @@ typedef enum
 	ActRenCrsFulCfg,
 	ActChgInsCrsCodCfg,
 	ActChgCrsYeaCfg,
-	ActEdiCrsInf,
+	ActCfgCrsInf,
 	ActChgFrcReaCrsInf,
 	ActChgHavReaCrsInf,
 	ActSelInfSrcCrsInf,
@@ -418,7 +418,7 @@ typedef enum
    // Teaching guide ----------------------------------------------------------
 
 	ActSeeTchGui,
-	ActEdiTchGui,
+	ActCfgTchGui,
 	ActChgFrcReaTchGui,
 	ActChgHavReaTchGui,
 	ActSelInfSrcTchGui,
@@ -434,7 +434,7 @@ typedef enum
    // Syllabus ----------------------------------------------------------------
 
 	ActSeeSyl,
-	ActEdiSyl,
+	ActCfgSyl,
 	ActEdiTreSyl,
 	ActSeeTreNodSyl,
 	ActFrmChgTreNodSyl,
@@ -475,7 +475,7 @@ typedef enum
    // Bibliography ------------------------------------------------------------
 
 	ActSeeBib,
-	ActEdiBib,
+	ActCfgBib,
 	ActChgFrcReaBib,
 	ActChgHavReaBib,
 	ActSelInfSrcBib,
@@ -491,7 +491,7 @@ typedef enum
    // FAQ ---------------------------------------------------------------------
 
 	ActSeeFAQ,
-	ActEdiFAQ,
+	ActCfgFAQ,
 	ActChgFrcReaFAQ,
 	ActChgHavReaFAQ,
 	ActSelInfSrcFAQ,
@@ -507,7 +507,7 @@ typedef enum
    // Links -------------------------------------------------------------------
 
 	ActSeeCrsLnk,
-	ActEdiCrsLnk,
+	ActCfgCrsLnk,
 	ActChgFrcReaCrsLnk,
 	ActChgHavReaCrsLnk,
 	ActSelInfSrcCrsLnk,
@@ -523,7 +523,7 @@ typedef enum
    // Assessment --------------------------------------------------------------
 
 	ActSeeAss,
-	ActEdiAss,
+	ActCfgAss,
 	ActChgFrcReaAss,
 	ActChgHavReaAss,
 	ActSelInfSrcAss,

@@ -79,7 +79,26 @@ struct Inf_FromDB
 /*****************************************************************************/
 
 void Inf_ShowInfo (void);
-void Inf_PutIconToEditInfo (void *Type);
+void Inf_EditTree (void);
+void Inf_ViewNodeAfterEdit (void);
+void Inf_ReqChangeNode (void);
+void Inf_ReqCreateNode (void);
+void Inf_ReceiveChgNode (void);
+void Inf_ReceiveNewNode (void);
+void Inf_ReqRemNode (void);
+void Inf_RemoveNode (void);
+void Inf_HideNode (void);
+void Inf_UnhideNode (void);
+void Inf_MoveUpNode (void);
+void Inf_MoveDownNode (void);
+void Inf_MoveLeftNode (void);
+void Inf_MoveRightNode (void);
+void Inf_ExpandNodeSeeing (void);
+void Inf_ContractNodeSeeing (void);
+void Inf_ExpandNodeEditing (void);
+void Inf_ContractNodeEditing (void);
+
+void Inf_PutIconsToEditInfo (void *Type);
 void Inf_WriteMsgYouMustReadInfo (void);
 void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
@@ -87,7 +106,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
-void Inf_FormsToSelSendInfo (void);
+void Inf_ConfigInfo (void);
 void Inf_FormToEnterIntegratedEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 void Inf_FormToEnterPlainTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 void Inf_FormToEnterRichTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);

@@ -5605,27 +5605,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change year/semester of course in its configuration"			// Çeviri lazim!
 #endif
 	,
-	[ActEdiCrsInf] =
+	[ActCfgCrsInf] =
 #if   L==1	// ca
-	"Edit information about the course"		// Necessita traducció
+	"Configure information about the course"		// Necessita traducció
 #elif L==2	// de
-	"Edit information about the course"		// Need Übersetzung
+	"Configure information about the course"		// Need Übersetzung
 #elif L==3	// en
-	"Edit information about the course"
+	"Configure information about the course"
 #elif L==4	// es
-	"Editar la informaci&oacute;n de la asignatura"
+	"Configurar la informaci&oacute;n de la asignatura"
 #elif L==5	// fr
-	"Edit information about the course"		// Besoin de traduction
+	"Configure information about the course"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar la informaci&oacute;n de la asignatura"	// Okoteve traducción
+	"Configurar la informaci&oacute;n de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Edit information about the course"		// Bisogno di traduzione
+	"Configure information about the course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit information about the course"		// Potrzebujesz tlumaczenie
+	"Configure information about the course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit information about the course"		// Precisa de tradução
+	"Configure information about the course"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit information about the course"		// Çeviri lazim!
+	"Configure information about the course"		// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaCrsInf] =
@@ -6249,27 +6249,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the teaching guide of course"		// Çeviri lazim!
 #endif
 	,
-	[ActEdiTchGui] =
+	[ActCfgTchGui] =
 #if   L==1	// ca
-	"Edit teaching guide of course"				// Necessita traducció
+	"Configure teaching guide of course"			// Necessita traducció
 #elif L==2	// de
-	"Edit teaching guide of course"				// Need Übersetzung
+	"Configure teaching guide of course"			// Need Übersetzung
 #elif L==3	// en
-	"Edit teaching guide of course"
+	"Configure teaching guide of course"
 #elif L==4	// es
-	"Editar la gu&iacute;a docente de la asignatura"
+	"Configurar la gu&iacute;a docente de la asignatura"
 #elif L==5	// fr
-	"Edit teaching guide of course"				// Besoin de traduction
+	"Configure teaching guide of course"			// Besoin de traduction
 #elif L==6	// gn
-	"Editar la gu&iacute;a docente de la asignatura"	// Okoteve traducción
+	"Configurar la gu&iacute;a docente de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Edit teaching guide of course"				// Bisogno di traduzione
+	"Configure teaching guide of course"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit teaching guide of course"				// Potrzebujesz tlumaczenie
+	"Configure teaching guide of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit teaching guide of course"				// Precisa de tradução
+	"Configure teaching guide of course"			// Precisa de tradução
 #elif L==10	// tr
-	"Edit teaching guide of course"				// Çeviri lazim!
+	"Configure teaching guide of course"			// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaTchGui] =
@@ -6573,27 +6573,50 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the syllabus"	// Çeviri lazim!
 #endif
 	,
-	[ActEdiSyl] =
+	[ActCfgSyl] =
 #if   L==1	// ca
-	"Edit syllabus"		// Necessita traducció
+	"Configure syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Edit syllabus"		// Need Übersetzung
+	"Configure syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Edit syllabus"
+	"Configure syllabus"
 #elif L==4	// es
-	"Editar temario"
+	"Configurar temario"
 #elif L==5	// fr
-	"Edit syllabus"		// Besoin de traduction
+	"Configure syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar temario"	// Okoteve traducción
+	"Configurar temario"		// Okoteve traducción
 #elif L==7	// it
-	"Edit syllabus"		// Bisogno di traduzione
+	"Configure syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit syllabus"		// Potrzebujesz tlumaczenie
+	"Configure syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit syllabus"		// Precisa de tradução
+	"Configure syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit syllabus"		// Çeviri lazim!
+	"Configure syllabus"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiTreSyl] =
+#if   L==1	// ca
+	"Edit tree in syllabus"			// Necessita traducció
+#elif L==2	// de
+	"Edit tree in syllabus"			// Need Übersetzung
+#elif L==3	// en
+	"Edit tree in syllabus"
+#elif L==4	// es
+	"Editar &aacute;rbol en temario"
+#elif L==5	// fr
+	"Edit tree in syllabus"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar &aacute;rbol en temario"	// Okoteve traducción
+#elif L==7	// it
+	"Edit tree in syllabus"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit tree in syllabus"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit tree in syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit tree in syllabus"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeTreNodSyl] =
@@ -7447,27 +7470,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the bibliography"		// Çeviri lazim!
 #endif
 	,
-	[ActEdiBib] =
+	[ActCfgBib] =
 #if   L==1	// ca
-	"Edit bibliography"		// Necessita traducció
+	"Configure bibliography"		// Necessita traducció
 #elif L==2	// de
-	"Edit bibliography"		// Need Übersetzung
+	"Configure bibliography"		// Need Übersetzung
 #elif L==3	// en
-	"Edit bibliography"
+	"Configure bibliography"
 #elif L==4	// es
-	"Editar la bibliograf&iacute;a"
+	"Configurar bibliograf&iacute;a"
 #elif L==5	// fr
-	"Edit bibliography"		// Besoin de traduction
+	"Configure bibliography"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar la bibliograf&iacute;a"	// Okoteve traducción
+	"Configurar bibliograf&iacute;a"	// Okoteve traducción
 #elif L==7	// it
-	"Edit bibliography"		// Bisogno di traduzione
+	"Configure bibliography"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit bibliography"		// Potrzebujesz tlumaczenie
+	"Configure bibliography"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit bibliography"		// Precisa de tradução
+	"Configure bibliography"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit bibliography"		// Çeviri lazim!
+	"Configure bibliography"		// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaBib] =
@@ -7746,27 +7769,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the FAQ"	// Çeviri lazim!
 #endif
 	,
-	[ActEdiFAQ] =
+	[ActCfgFAQ] =
 #if   L==1	// ca
-	"Edit FAQ"		// Necessita traducció
+	"Configure FAQ"		// Necessita traducció
 #elif L==2	// de
-	"Edit FAQ"		// Need Übersetzung
+	"Configure FAQ"		// Need Übersetzung
 #elif L==3	// en
-	"Edit FAQ"
+	"Configure FAQ"
 #elif L==4	// es
-	"Editar la FAQ"
+	"Configurar FAQ"
 #elif L==5	// fr
-	"Edit FAQ"		// Besoin de traduction
+	"Configure FAQ"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar la FAQ"		// Okoteve traducción
+	"Configurar FAQ"	// Okoteve traducción
 #elif L==7	// it
-	"Edit FAQ"		// Bisogno di traduzione
+	"Configure FAQ"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit FAQ"		// Potrzebujesz tlumaczenie
+	"Configure FAQ"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit FAQ"		// Precisa de tradução
+	"Configure FAQ"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit FAQ"		// Çeviri lazim!
+	"Configure FAQ"		// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaFAQ] =
@@ -8045,27 +8068,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See the links related to the course"			// Çeviri lazim!
 #endif
 	,
-	[ActEdiCrsLnk] =
+	[ActCfgCrsLnk] =
 #if   L==1	// ca
-	"Edit course links"			// Necessita traducció
+	"Configure course links"			// Necessita traducció
 #elif L==2	// de
-	"Edit course links"			// Need Übersetzung
+	"Configure course links"			// Need Übersetzung
 #elif L==3	// en
-	"Edit course links"
+	"Configure course links"
 #elif L==4	// es
-	"Editar los enlaces de la asignatura"
+	"Configurar enlaces de la asignatura"
 #elif L==5	// fr
-	"Edit course links"			// Besoin de traduction
+	"Configure course links"			// Besoin de traduction
 #elif L==6	// gn
-	"Editar los enlaces de la asignatura"	// Okoteve traducción
+	"Configurar enlaces de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Edit course links"			// Bisogno di traduzione
+	"Configure course links"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit course links"			// Potrzebujesz tlumaczenie
+	"Configure course links"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit course links"			// Precisa de tradução
+	"Configure course links"			// Precisa de tradução
 #elif L==10	// tr
-	"Edit course links"			// Çeviri lazim!
+	"Configure course links"			// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaCrsLnk] =
@@ -8344,27 +8367,27 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See assessment system"			// Çeviri lazim!
 #endif
 	,
-	[ActEdiAss] =
+	[ActCfgAss] =
 #if   L==1	// ca
-	"Edit assessment system"		// Necessita traducció
+	"Configure assessment system"		// Necessita traducció
 #elif L==2	// de
-	"Edit assessment system"		// Need Übersetzung
+	"Configure assessment system"		// Need Übersetzung
 #elif L==3	// en
-	"Edit assessment system"
+	"Configure assessment system"
 #elif L==4	// es
-	"Editar sistema de evaluaci&oacute;n"
+	"Configurar sistema de evaluaci&oacute;n"
 #elif L==5	// fr
-	"Edit assessment system"		// Besoin de traduction
+	"Configure assessment system"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar sistema de evaluaci&oacute;n"	// Okoteve traducción
+	"Configurar sistema de evaluaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Edit assessment system"		// Bisogno di traduzione
+	"Configure assessment system"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit assessment system"		// Potrzebujesz tlumaczenie
+	"Configure assessment system"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit assessment system"		// Precisa de tradução
+	"Configure assessment system"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit assessment system"		// Çeviri lazim!
+	"Configure assessment system"		// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaAss] =
@@ -8622,25 +8645,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActEdiTrePrg] =
 #if   L==1	// ca
-	"Edit educational schedule of course"				// Necessita traducció
+	"Edit tree in program"			// Necessita traducció
 #elif L==2	// de
-	"Edit educational schedule of course"				// Need Übersetzung
+	"Edit tree in program"			// Need Übersetzung
 #elif L==3	// en
-	"Edit educational schedule of course"
+	"Edit tree in program"
 #elif L==4	// es
-	"Editar programaci&oacute;n did&aacute;ctica de la asignatura"
+	"Editar &aacute;rbol en programa"
 #elif L==5	// fr
-	"Edit educational schedule of course"				// Besoin de traduction
+	"Edit tree in program"			// Besoin de traduction
 #elif L==6	// gn
-	"Editar programaci&oacute;n did&aacute;ctica de la asignatura"	// Okoteve traducción
+	"Editar &aacute;rbol en programa"	// Okoteve traducción
 #elif L==7	// it
-	"Edit educational schedule of course"				// Bisogno di traduzione
+	"Edit tree in program"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit educational schedule of course"				// Potrzebujesz tlumaczenie
+	"Edit tree in program"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit educational schedule of course"				// Precisa de tradução
+	"Edit tree in program"			// Precisa de tradução
 #elif L==10	// tr
-	"Edit educational schedule of course"				// Çeviri lazim!
+	"Edit tree in program"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeTreNodPrg] =
