@@ -84,8 +84,8 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_EDITOR		][Inf_INFORMATION	] = ActEditorCrsInf,
    [Inf_EDITOR		][Inf_TEACH_GUIDE	] = ActEditorTchGui,
-   [Inf_EDITOR		][Inf_LECTURES		] = ActEditorSyl,
-   [Inf_EDITOR		][Inf_PRACTICALS	] = ActEditorSyl,
+   [Inf_EDITOR		][Inf_LECTURES		] = ActEdiTreSyl,
+   [Inf_EDITOR		][Inf_PRACTICALS	] = ActEdiTreSyl,
    [Inf_EDITOR		][Inf_BIBLIOGRAPHY	] = ActEditorBib,
    [Inf_EDITOR		][Inf_FAQ		] = ActEditorFAQ,
    [Inf_EDITOR		][Inf_LINKS		] = ActEditorCrsLnk,

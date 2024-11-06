@@ -523,19 +523,19 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodSyl	] = {2022, 3,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodSyl	] = {2023, 3,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActDelItmSyl	] = { 218, 3,TabCrs,NULL			,Syl_RemoveItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActUp_IteSyl	] = { 221, 3,TabCrs,NULL			,Syl_UpItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActDwnIteSyl	] = { 220, 3,TabCrs,NULL			,Syl_DownItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRgtIteSyl	] = { 223, 3,TabCrs,NULL			,Syl_RightItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActLftIteSyl	] = { 222, 3,TabCrs,NULL			,Syl_LeftItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActInsIteSyl	] = { 217, 3,TabCrs,NULL			,Syl_InsertItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActModIteSyl	] = { 211, 3,TabCrs,NULL			,Syl_ModifyItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActDelItmSyl	] = { 218, 3,TabCrs,NULL			,Syl_RemoveItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActUp_IteSyl	] = { 221, 3,TabCrs,NULL			,Syl_UpItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActDwnIteSyl	] = { 220, 3,TabCrs,NULL			,Syl_DownItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActRgtIteSyl	] = { 223, 3,TabCrs,NULL			,Syl_RightItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActLftIteSyl	] = { 222, 3,TabCrs,NULL			,Syl_LeftItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActInsIteSyl	] = { 217, 3,TabCrs,NULL			,Syl_InsertItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActModIteSyl	] = { 211, 3,TabCrs,NULL			,Syl_ModifyItemSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaSyl	] = { 871, 3,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaSyl	] = { 880, 3,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcSyl	] = { 378, 3,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvURLSyl	] = { 403, 3,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagSyl	] = { 381, 3,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
-   [ActEditorSyl	] = { 372, 3,TabCrs,NULL			,Syl_EditSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   // [ActEditorSyl	] = { 372, 3,TabCrs,NULL			,Syl_EditSyllabus		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActPlaTxtEdiSyl	] = { 379, 3,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRchTxtEdiSyl	] = {1095, 3,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtSyl	] = { 394, 3,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -2075,19 +2075,19 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRenFolWrkCrs,	// #208
 	ActRemFilWrkCrs,	// #209
 	ActRemFolWrkCrs,	// #210
-	ActModIteSyl,		// #211
+	ActUnk,			// #211 (obsolete action)
 	ActUnk,			// #212 (obsolete action)
 	ActUnk,			// #213 (obsolete action)
 	ActUnk,			// #214 (obsolete action)
 	ActUnk,			// #215 (obsolete action)
 	ActUnk,			// #216 (obsolete action)
-	ActInsIteSyl,		// #217
-	ActDelItmSyl,		// #218
+	ActUnk,			// #217 (obsolete action)
+	ActUnk,			// #218 (obsolete action)
 	ActRcvPagFAQ,		// #219
-	ActDwnIteSyl,		// #220
-	ActUp_IteSyl,		// #221
-	ActLftIteSyl,		// #222
-	ActRgtIteSyl,		// #223
+	ActUnk,			// #220 (obsolete action)
+	ActUnk,			// #221 (obsolete action)
+	ActUnk,			// #222 (obsolete action)
+	ActUnk,			// #223 (obsolete action)
 	ActRcvURLBib,		// #224
 	ActUnk,			// #225 (obsolete action)
 	ActUnk,			// #226 (obsolete action)
@@ -2236,7 +2236,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #369 (obsolete action)
 	ActSelInfSrcBib,	// #370
 	ActUnk,			// #371 (obsolete action)
-	ActEditorSyl,		// #372
+	ActUnk,			// #372 (obsolete action)
 	ActUnk,			// #373 (obsolete action)
 	ActUnk,			// #374 (obsolete action)
 	ActUnk,			// #375 (obsolete action)

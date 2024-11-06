@@ -6598,25 +6598,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActEdiTreSyl] =
 #if   L==1	// ca
-	"Edit tree in syllabus"			// Necessita traducció
+	"Edit syllabus"		// Necessita traducció
 #elif L==2	// de
-	"Edit tree in syllabus"			// Need Übersetzung
+	"Edit syllabus"		// Need Übersetzung
 #elif L==3	// en
-	"Edit tree in syllabus"
+	"Edit syllabus"
 #elif L==4	// es
-	"Editar &aacute;rbol en temario"
+	"Editar temario"
 #elif L==5	// fr
-	"Edit tree in syllabus"			// Besoin de traduction
+	"Edit syllabus"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar &aacute;rbol en temario"	// Okoteve traducción
+	"Editar temario"	// Okoteve traducción
 #elif L==7	// it
-	"Edit tree in syllabus"			// Bisogno di traduzione
+	"Edit syllabus"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit tree in syllabus"			// Potrzebujesz tlumaczenie
+	"Edit syllabus"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit tree in syllabus"			// Precisa de tradução
+	"Edit syllabus"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit tree in syllabus"			// Çeviri lazim!
+	"Edit syllabus"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeTreNodSyl] =
@@ -7010,6 +7010,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract tree node in syllabus when editing"		// Çeviri lazim!
 #endif
 	,
+/*
 	[ActDelItmSyl] =
 #if   L==1	// ca
 	"Remove item from syllabus"		// Necessita traducció
@@ -7171,6 +7172,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change item in the syllabus"		// Çeviri lazim!
 #endif
 	,
+*/
 	[ActChgFrcReaSyl] =
 #if   L==1	// ca
 	"Change whether students are forced to read the syllabus"	// Necessita traducció
@@ -7286,6 +7288,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Create web page in the syllabus"		// Çeviri lazim!
 #endif
 	,
+/*
 	[ActEditorSyl] =
 #if   L==1	// ca
 	"Integrated editor of the syllabus"	// Necessita traducció
@@ -7309,6 +7312,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of the syllabus"	// Çeviri lazim!
 #endif
 	,
+*/
 	[ActPlaTxtEdiSyl] =
 #if   L==1	// ca
 	"Plain text editor of the syllabus"	// Necessita traducció
@@ -8645,25 +8649,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActEdiTrePrg] =
 #if   L==1	// ca
-	"Edit tree in program"			// Necessita traducció
+	"Edit program"		// Necessita traducció
 #elif L==2	// de
-	"Edit tree in program"			// Need Übersetzung
+	"Edit program"		// Need Übersetzung
 #elif L==3	// en
-	"Edit tree in program"
+	"Edit program"
 #elif L==4	// es
-	"Editar &aacute;rbol en programa"
+	"Editar programa"
 #elif L==5	// fr
-	"Edit tree in program"			// Besoin de traduction
+	"Edit program"		// Besoin de traduction
 #elif L==6	// gn
-	"Editar &aacute;rbol en programa"	// Okoteve traducción
+	"Editar programa"	// Okoteve traducción
 #elif L==7	// it
-	"Edit tree in program"			// Bisogno di traduzione
+	"Edit program"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Edit tree in program"			// Potrzebujesz tlumaczenie
+	"Edit program"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Edit tree in program"			// Precisa de tradução
+	"Edit program"		// Precisa de tradução
 #elif L==10	// tr
-	"Edit tree in program"			// Çeviri lazim!
+	"Edit program"		// Çeviri lazim!
 #endif
 	,
 	[ActSeeTreNodPrg] =

@@ -107,8 +107,8 @@ void Syl_PutParWhichSyllabus (void *SyllabusSelected);
 void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus);
 
 bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod);
-bool Syl_CheckAndShowSyllabus (struct Syl_Syllabus *Syllabus);
-void Syl_EditSyllabus (void);
+// bool Syl_CheckAndShowSyllabus (struct Syl_Syllabus *Syllabus);
+// void Syl_EditSyllabus (void);
 
 void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
                                           long CrsCod);
@@ -119,21 +119,21 @@ int Syl_ReadLevelItemSyllabus (FILE *XML);
 void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
 				       FILE *FileHTMLTmp);
 
-void Syl_RemoveItemSyllabus (void);
-void Syl_UpItemSyllabus (void);
-void Syl_DownItemSyllabus (void);
+// void Syl_RemoveItemSyllabus (void);
+// void Syl_UpItemSyllabus (void);
+// void Syl_DownItemSyllabus (void);
 
-void Syl_CalculateUpSubtreeSyllabus (const struct Syl_Syllabus *Syllabus,
-				     struct MoveSubtrees *Subtree,
-				     unsigned NumItem);
-void Syl_CalculateDownSubtreeSyllabus (const struct Syl_Syllabus *Syllabus,
-				       struct MoveSubtrees *Subtree,
-				       unsigned NumItem);
-void Syl_RightItemSyllabus (void);
-void Syl_LeftItemSyllabus (void);
+// void Syl_CalculateUpSubtreeSyllabus (const struct Syl_Syllabus *Syllabus,
+//				     struct MoveSubtrees *Subtree,
+//				     unsigned NumItem);
+//void Syl_CalculateDownSubtreeSyllabus (const struct Syl_Syllabus *Syllabus,
+//				       struct MoveSubtrees *Subtree,
+//				       unsigned NumItem);
+// void Syl_RightItemSyllabus (void);
+// void Syl_LeftItemSyllabus (void);
 
-void Syl_InsertItemSyllabus (void);
-void Syl_ModifyItemSyllabus (void);
+// void Syl_InsertItemSyllabus (void);
+// void Syl_ModifyItemSyllabus (void);
 void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
                                 char PathFile[PATH_MAX + 1]);
 void Syl_WriteStartFileSyllabus (FILE *FileSyllabus);
