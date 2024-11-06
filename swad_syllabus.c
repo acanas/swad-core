@@ -534,13 +534,6 @@ void Syl_WriteStartFileSyllabus (FILE *FileSyllabus)
    fprintf (FileSyllabus,"<lista>%s",Txt_NEW_LINE);
   }
 
-void Syl_WriteItemFileSyllabus (FILE *FileSyllabus,int Level,const char *Text)
-  {
-   extern const char *Txt_NEW_LINE;
-
-   fprintf (FileSyllabus,"<item nivel=\"%d\">%s</item>%s",Level,Text,Txt_NEW_LINE);
-  }
-
 void Syl_WriteEndFileSyllabus (FILE *FileSyllabus)
   {
    extern const char *Txt_NEW_LINE;

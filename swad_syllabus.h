@@ -121,6 +121,7 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
 void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,
                                 char PathFile[PATH_MAX + 1]);
 void Syl_WriteStartFileSyllabus (FILE *FileSyllabus);
+void Syl_WriteEndFileSyllabus (FILE *FileSyllabus);
 
 //--------------------- Convert syllabus from file to tree --------------------
 void Syl_PutLinkToConvertSyllabus (void);
