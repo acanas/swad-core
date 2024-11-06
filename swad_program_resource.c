@@ -880,7 +880,7 @@ void PrgRsc_ViewResourceClipboard (void)
    PrgRsc_ShowClipboard ();
 
    /***** Edit course program *****/
-   Tre_EditTree ();
+   Prg_EditTree ();
   }
 
 /*****************************************************************************/

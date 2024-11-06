@@ -174,7 +174,7 @@ static struct Act_ActionFunc Inf_ActionsReqLnk[Inf_NUM_TYPES] =
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Inf_BeforeTree (void);
+static void Inf_BeforeTree (Tre_ListingType_t ListingType);
 static void Inf_AfterTree (void);
 
 static void Inf_PutIconsToViewInfo (void *Type);
@@ -204,10 +204,10 @@ static bool Inf_CheckRichTxt (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowRichTxt (void);
 
 /*****************************************************************************/
-/******** Show course info (theory, practices, bibliography, etc.) ***********/
+/*************************** Before and after tree ***************************/
 /*****************************************************************************/
 
-void Inf_ShowInfo (void)
+static void Inf_BeforeTree (Tre_ListingType_t ListingType)
   {
    extern const char *Hlp_COURSE_Information_textual_information;
    extern const char *Hlp_COURSE_Guide;
@@ -217,10 +217,12 @@ void Inf_ShowInfo (void)
    extern const char *Hlp_COURSE_Links;
    extern const char *Hlp_COURSE_Assessment;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   extern const char *Txt_No_information;
    struct Syl_Syllabus Syllabus;
-   struct Inf_FromDB FromDB;
-   bool ShowWarningNoInfo = false;
+   static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (void *Args) =
+     {
+      [Tre_VIEW		] = Inf_PutIconsToEditInfo,
+      [Tre_EDIT_NODES	] = Inf_PutIconsToViewInfo,
+     };
    static const char **Help[Inf_NUM_TYPES] =
      {
       [Inf_INFORMATION	] = &Hlp_COURSE_Information_textual_information,
@@ -239,50 +241,71 @@ void Inf_ShowInfo (void)
    /***** Set info type *****/
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
-   /***** Get info source from database *****/
-   Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-                                 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                                 Gbl.Crs.Info.Type,
-                                 &FromDB);
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-         if (FromDB.MustBeRead)
-           {
-            /***** Contextual menu *****/
-            Mnu_ContextMenuBegin ();
-	       Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
-							// ...I have read this couse info
-            Mnu_ContextMenuEnd ();
-           }
-         break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         if (FromDB.Src != Inf_NONE)
-           {
-            /***** Contextual menu *****/
-            // Checkbox to force students to read this couse info
-            Mnu_ContextMenuBegin ();
-               // Non-editing teachers can not change the status of checkbox
-	       Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,
-						   (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
-											  HTM_NO_ATTR);
-            Mnu_ContextMenuEnd ();
-           }
-         break;
-      default:
-         break;
-     }
-
    /***** Begin box *****/
    Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 Inf_PutIconsToEditInfo,&Gbl.Crs.Info.Type,
+		 FunctionToDrawContextualIcons[ListingType],&Gbl.Crs.Info.Type,
 		 *Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
       /****** Form to select syllabus *****/
       Syl_PutFormWhichSyllabus (Syllabus.WhichSyllabus);
+  }
+
+static void Inf_AfterTree (void)
+  {
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/******** Show course info (theory, practices, bibliography, etc.) ***********/
+/*****************************************************************************/
+
+void Inf_ShowInfo (void)
+  {
+   extern const char *Txt_No_information;
+   struct Syl_Syllabus Syllabus;
+   struct Inf_FromDB FromDB;
+   bool ShowWarningNoInfo = false;
+
+   /***** Begin box *****/
+   Inf_BeforeTree (Tre_VIEW);
+
+      /***** Get info source from database *****/
+      Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
+				    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				    Gbl.Crs.Info.Type,
+				    &FromDB);
+
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    if (FromDB.MustBeRead)
+	      {
+	       /***** Contextual menu *****/
+	       Mnu_ContextMenuBegin ();
+		  Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
+							   // ...I have read this couse info
+	       Mnu_ContextMenuEnd ();
+	      }
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    if (FromDB.Src != Inf_NONE)
+	      {
+	       /***** Contextual menu *****/
+	       // Checkbox to force students to read this couse info
+	       Mnu_ContextMenuBegin ();
+		  // Non-editing teachers can not change the status of checkbox
+		  Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,
+						      (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
+											     HTM_NO_ATTR);
+	       Mnu_ContextMenuEnd ();
+	      }
+	    break;
+	 default:
+	    break;
+	}
 
       switch (FromDB.Src)
 	{
@@ -327,183 +350,167 @@ void Inf_ShowInfo (void)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_information);
 
    /***** End box *****/
-   Box_BoxEnd ();
+   Inf_AfterTree ();
   }
 
 /*****************************************************************************/
-/*************************** Before and after tree ***************************/
-/*****************************************************************************/
-
-static void Inf_BeforeTree (void)
-  {
-   extern const char *Hlp_COURSE_Information_textual_information;
-   extern const char *Hlp_COURSE_Guide;
-   extern const char *Hlp_COURSE_Syllabus;
-   extern const char *Hlp_COURSE_Bibliography;
-   extern const char *Hlp_COURSE_FAQ;
-   extern const char *Hlp_COURSE_Links;
-   extern const char *Hlp_COURSE_Assessment;
-   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   struct Syl_Syllabus Syllabus;
-   static const char **Help[Inf_NUM_TYPES] =
-     {
-      [Inf_INFORMATION	] = &Hlp_COURSE_Information_textual_information,
-      [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide,
-      [Inf_LECTURES	] = &Hlp_COURSE_Syllabus,
-      [Inf_PRACTICALS	] = &Hlp_COURSE_Syllabus,
-      [Inf_BIBLIOGRAPHY	] = &Hlp_COURSE_Bibliography,
-      [Inf_FAQ		] = &Hlp_COURSE_FAQ,
-      [Inf_LINKS	] = &Hlp_COURSE_Links,
-      [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment,
-     };
-
-   /***** Reset syllabus context *****/
-   Syl_ResetSyllabus (&Syllabus);
-
-   /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 Inf_PutIconsToViewInfo,&Gbl.Crs.Info.Type,
-		 *Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
-
-      /****** Form to select syllabus *****/
-      Syl_PutFormWhichSyllabus (Syllabus.WhichSyllabus);
-  }
-
-static void Inf_AfterTree (void)
-  {
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/******** Show course info (theory, practices, bibliography, etc.) ***********/
+/******** Edit course info (theory, practices, bibliography, etc.) ***********/
 /*****************************************************************************/
 
 void Inf_EditTree (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_EditTree ();
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/********* List tree nodes when click on view a node after edition ***********/
+/*****************************************************************************/
+
 void Inf_ViewNodeAfterEdit (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ViewNodeAfterEdit ();
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/*********** List tree nodes with a form to change/create a node *************/
+/*****************************************************************************/
+
 void Inf_ReqChangeNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ReqChangeNode ();
    Inf_AfterTree ();
   }
 
 void Inf_ReqCreateNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ReqCreateNode ();
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/*************** Receive form to change/create a tree node *******************/
+/*****************************************************************************/
+
 void Inf_ReceiveChgNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ReceiveChgNode ();
    Inf_AfterTree ();
   }
 
 void Inf_ReceiveNewNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ReceiveNewNode ();
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/******************** Remove a tree node and its children ********************/
+/*****************************************************************************/
+
 void Inf_ReqRemNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ReqRemNode ();
    Inf_AfterTree ();
   }
 
 void Inf_RemoveNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_RemoveNode ();
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/*************************** Hide/unhide a tree node *************************/
+/*****************************************************************************/
+
 void Inf_HideNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_HideOrUnhideNode (HidVis_HIDDEN);
    Inf_AfterTree ();
   }
 
 void Inf_UnhideNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_HideOrUnhideNode (HidVis_VISIBLE);
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/*********** Move up/down position of a subtree in a course tree *************/
+/*****************************************************************************/
+
 void Inf_MoveUpNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveUpDownNode (Tre_MOVE_UP);
    Inf_AfterTree ();
   }
 
 void Inf_MoveDownNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveUpDownNode (Tre_MOVE_DOWN);
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/************** Move a subtree to left/right in a course program *************/
+/*****************************************************************************/
+
 void Inf_MoveLeftNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveLeftRightNode (Tre_MOVE_LEFT);
    Inf_AfterTree ();
   }
 
 void Inf_MoveRightNode (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveLeftRightNode (Tre_MOVE_RIGHT);
    Inf_AfterTree ();
   }
 
+/*****************************************************************************/
+/****************** Expand/contract a node in a course tree ******************/
+/*****************************************************************************/
+
 void Inf_ExpandNodeSeeing (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_VIEW);
       Tre_ExpandContractNode (Tre_EXPAND,Tre_VIEW);
    Inf_AfterTree ();
   }
 
 void Inf_ContractNodeSeeing (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_VIEW);
       Tre_ExpandContractNode (Tre_CONTRACT,Tre_VIEW);
    Inf_AfterTree ();
   }
 
 void Inf_ExpandNodeEditing (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ExpandContractNode (Tre_EXPAND,Tre_EDIT_NODES);
    Inf_AfterTree ();
   }
 
 void Inf_ContractNodeEditing (void)
   {
-   Inf_BeforeTree ();
+   Inf_BeforeTree (Tre_EDIT_NODES);
       Tre_ExpandContractNode (Tre_CONTRACT,Tre_EDIT_NODES);
    Inf_AfterTree ();
   }
@@ -1437,7 +1444,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** If info is empty, return Inf_INFO_SRC_NONE *****/
+   /***** If info is empty, return Inf_NONE *****/
    switch (FromDB->Src)
      {
       case Inf_NONE:

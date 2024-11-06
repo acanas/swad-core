@@ -28,7 +28,7 @@
 /*****************************************************************************/
 
 void Prg_ShowProgram (void);
-void Prg_EditProgram (void);
+void Prg_EditTree (void);
 void Prg_ViewNodeAfterEdit (void);
 void Prg_ReqChangeNode (void);
 void Prg_ReqCreateNode (void);

@@ -42,8 +42,37 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_PutIconsListNodes (__attribute__((unused)) void *Args);
-static void Prg_PutIconsEditNodes (__attribute__((unused)) void *Args);
+static void Prg_BeforeTree (Tre_ListingType_t ListingType);
+static void Prg_AfterTree (void);
+
+static void Prg_PutIconsToEditNodes (__attribute__((unused)) void *Args);
+static void Prg_PutIconsToViewNodes (__attribute__((unused)) void *Args);
+
+/*****************************************************************************/
+/*************************** Before and after tree ***************************/
+/*****************************************************************************/
+
+static void Prg_BeforeTree (Tre_ListingType_t ListingType)
+  {
+   extern const char *Hlp_COURSE_Program;
+   extern const char *Txt_COURSE_program;
+   static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (void *Args) =
+     {
+      [Tre_VIEW		] = Prg_PutIconsToEditNodes,
+      [Tre_EDIT_NODES	] = Prg_PutIconsToViewNodes,
+     };
+
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_COURSE_program,
+		 FunctionToDrawContextualIcons[ListingType],NULL,
+                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
+  }
+
+static void Prg_AfterTree (void)
+  {
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
 
 /*****************************************************************************/
 /******************************* Show program ********************************/
@@ -51,16 +80,8 @@ static void Prg_PutIconsEditNodes (__attribute__((unused)) void *Args);
 
 void Prg_ShowProgram (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsListNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_VIEW);
       (void) Tre_ShowTree ();
-
-   /***** End box *****/
    Box_BoxEnd ();
   }
 
@@ -68,19 +89,11 @@ void Prg_ShowProgram (void)
 /******************************* Edit program ********************************/
 /*****************************************************************************/
 
-void Prg_EditProgram (void)
+void Prg_EditTree (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_EditTree ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
@@ -89,131 +102,63 @@ void Prg_EditProgram (void)
 
 void Prg_ViewNodeAfterEdit (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_ViewNodeAfterEdit ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
-/************ List tree nodes with a form to change a given node *************/
+/*********** List tree nodes with a form to change/create a node *************/
 /*****************************************************************************/
 
 void Prg_ReqChangeNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_ReqChangeNode ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
-
-/*****************************************************************************/
-/************* List tree nodes with a form to create a new node **************/
-/*****************************************************************************/
 
 void Prg_ReqCreateNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_ReqCreateNode ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
-/*************** Receive form to change an existing tree node ****************/
+/*************** Receive form to change/create a tree node *******************/
 /*****************************************************************************/
 
 void Prg_ReceiveChgNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_ReceiveChgNode ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
-
-/*****************************************************************************/
-/******************* Receive form to create a new tree node ******************/
-/*****************************************************************************/
 
 void Prg_ReceiveNewNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_ReceiveNewNode ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
-  }
-
-/*****************************************************************************/
-/*************** Ask for confirmation of removing a tree node ****************/
-/*****************************************************************************/
-
-void Prg_ReqRemNode (void)
-  {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
-      Tre_ReqRemNode ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
 /******************** Remove a tree node and its children ********************/
 /*****************************************************************************/
 
+void Prg_ReqRemNode (void)
+  {
+   Prg_BeforeTree (Tre_EDIT_NODES);
+      Tre_ReqRemNode ();
+   Prg_AfterTree ();
+  }
+
 void Prg_RemoveNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_RemoveNode ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
@@ -222,32 +167,16 @@ void Prg_RemoveNode (void)
 
 void Prg_HideNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_HideOrUnhideNode (HidVis_HIDDEN);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 void Prg_UnhideNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_HideOrUnhideNode (HidVis_VISIBLE);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
@@ -256,32 +185,16 @@ void Prg_UnhideNode (void)
 
 void Prg_MoveUpNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveUpDownNode (Tre_MOVE_UP);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 void Prg_MoveDownNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveUpDownNode (Tre_MOVE_DOWN);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
@@ -290,103 +203,55 @@ void Prg_MoveDownNode (void)
 
 void Prg_MoveLeftNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveLeftRightNode (Tre_MOVE_LEFT);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 void Prg_MoveRightNode (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_MoveLeftRightNode (Tre_MOVE_RIGHT);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
-/*************** Move a subtree to left/right in a course tree ***************/
+/****************** Expand/contract a node in a course tree ******************/
 /*****************************************************************************/
 
 void Prg_ExpandNodeSeeing (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsListNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_VIEW);
       Tre_ExpandContractNode (Tre_EXPAND,Tre_VIEW);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 void Prg_ContractNodeSeeing (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsListNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_VIEW);
       Tre_ExpandContractNode (Tre_CONTRACT,Tre_VIEW);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 void Prg_ExpandNodeEditing (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_ExpandContractNode (Tre_EXPAND,Tre_EDIT_NODES);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 void Prg_ContractNodeEditing (void)
   {
-   extern const char *Hlp_COURSE_Program;
-   extern const char *Txt_COURSE_program;
-
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_COURSE_program,Prg_PutIconsEditNodes,NULL,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-
+   Prg_BeforeTree (Tre_EDIT_NODES);
       Tre_ExpandContractNode (Tre_CONTRACT,Tre_EDIT_NODES);
-
-   /***** End box *****/
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/
 /**************** Put contextual icons in list of tree nodes *****************/
 /*****************************************************************************/
 
-static void Prg_PutIconsListNodes (__attribute__((unused)) void *Args)
+static void Prg_PutIconsToEditNodes (__attribute__((unused)) void *Args)
   {
    struct Tre_Node Node;
 
@@ -405,7 +270,7 @@ static void Prg_PutIconsListNodes (__attribute__((unused)) void *Args)
 /*************** Put contextual icons in list of tree nodes ******************/
 /*****************************************************************************/
 
-static void Prg_PutIconsEditNodes (__attribute__((unused)) void *Args)
+static void Prg_PutIconsToViewNodes (__attribute__((unused)) void *Args)
   {
    struct Tre_Node Node;
 

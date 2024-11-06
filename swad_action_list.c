@@ -452,7 +452,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // Program
    [ActSeePrg		] = {1821, 1,TabCrs,NULL			,Prg_ShowProgram		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActEdiTrePrg	] = {1926, 1,TabCrs,NULL			,Prg_EditProgram		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiTrePrg	] = {1926, 1,TabCrs,NULL			,Prg_EditTree		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodPrg	] = {1927, 1,TabCrs,NULL			,Prg_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmChgTreNodPrg	] = {1823, 1,TabCrs,NULL			,Prg_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmNewTreNodPrg	] = {1822, 1,TabCrs,NULL			,Prg_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
