@@ -639,7 +639,7 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 #define CSS_FILE		"swad24.20.4.css"
 #define JS_FILE			"swad23.89.js"
 /*
-	Version 24.28:    Nov 06, 2024  Removed unused code in syllabus. (338866 lines)
+	Version 24.28:    Nov 06, 2024  Removed unused code in syllabus. (338853 lines)
 	Version 24.27:    Nov 06, 2024  Unused code in syllabus is commented. (339887 lines)
 	Version 24.26:    Nov 06, 2024  Code refactoring in program and syllabus. (339846 lines)
 	Version 24.25:    Nov 06, 2024  Code refactoring in program and syllabus. (339923 lines)

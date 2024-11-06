@@ -534,17 +534,6 @@ void Syl_WriteStartFileSyllabus (FILE *FileSyllabus)
    fprintf (FileSyllabus,"<lista>%s",Txt_NEW_LINE);
   }
 
-void Syl_WriteAllItemsFileSyllabus (const struct Syl_Syllabus *Syllabus,
-				    FILE *FileSyllabus)
-  {
-   unsigned NumItem;
-
-   for (NumItem = 0;
-	NumItem < Syllabus->LstItems.NumItems;
-	NumItem++)
-      Syl_WriteItemFileSyllabus (FileSyllabus,Syllabus->LstItems.Lst[NumItem].Level,Syllabus->LstItems.Lst[NumItem].Text);
-  }
-
 void Syl_WriteItemFileSyllabus (FILE *FileSyllabus,int Level,const char *Text)
   {
    extern const char *Txt_NEW_LINE;
