@@ -117,7 +117,6 @@ void Inf_AsignInfoType (struct Inf_Info *Info,
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
 Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
-                                   long CrsCod,
                                    Inf_Type_t InfoType,
                                    struct Inf_FromDB *FromDB);
 

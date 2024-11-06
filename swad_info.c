@@ -272,7 +272,6 @@ void Inf_ShowInfo (void)
 
       /***** Get info source from database *****/
       Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-				    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 				    Gbl.Crs.Info.Type,
 				    &FromDB);
 
@@ -1096,7 +1095,6 @@ void Inf_ConfigInfo (void)
 
    /***** Get current info source from database *****/
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-                                 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                                  Gbl.Crs.Info.Type,
                                  &FromDB);
 
@@ -1191,10 +1189,10 @@ static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
            {
             case Inf_LECTURES:
 	       Syllabus->WhichSyllabus = Syl_LECTURES;
-               return Syl_CheckSyllabus (Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+               return Syl_CheckSyllabus (Tre_LECTURES);
             case Inf_PRACTICALS:
 	       Syllabus->WhichSyllabus = Syl_PRACTICALS;
-               return Syl_CheckSyllabus (Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+               return Syl_CheckSyllabus (Tre_PRACTICALS);
             default:
                return false;
            }
@@ -1419,7 +1417,6 @@ Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType)
 /*****************************************************************************/
 
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
-                                   long CrsCod,
                                    Inf_Type_t InfoType,
                                    struct Inf_FromDB *FromDB)
   {
@@ -1431,7 +1428,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
    FromDB->MustBeRead = false;
 
    /***** Get info source for a specific type of info from database *****/
-   if (Inf_DB_GetInfoSrcAndMustBeRead (&mysql_res,CrsCod,InfoType) == 1)
+   if (Inf_DB_GetInfoSrcAndMustBeRead (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType) == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1454,12 +1451,12 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
            {
             case Inf_LECTURES:
 	       Syllabus->WhichSyllabus = Syl_LECTURES;
-               if (!Syl_CheckSyllabus (Syllabus,CrsCod))
+               if (!Syl_CheckSyllabus (Tre_LECTURES))
                   FromDB->Src = Inf_NONE;
                break;
             case Inf_PRACTICALS:
 	       Syllabus->WhichSyllabus = Syl_PRACTICALS;
-               if (!Syl_CheckSyllabus (Syllabus,CrsCod))
+               if (!Syl_CheckSyllabus (Tre_PRACTICALS))
                   FromDB->Src = Inf_NONE;
                break;
             case Inf_INFORMATION:
@@ -1473,19 +1470,19 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
            }
          break;
       case Inf_PLAIN_TEXT:
-	 if (!Inf_CheckPlainTxt (CrsCod,InfoType))
+	 if (!Inf_CheckPlainTxt (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType))
             FromDB->Src = Inf_NONE;
          break;
       case Inf_RICH_TEXT:
-	 if (!Inf_CheckRichTxt (CrsCod,InfoType))
+	 if (!Inf_CheckRichTxt (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType))
             FromDB->Src = Inf_NONE;
          break;
       case Inf_PAGE:
-	 if (!Inf_CheckPage (CrsCod,InfoType))
+	 if (!Inf_CheckPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType))
 	    FromDB->Src = Inf_NONE;
          break;
       case Inf_URL:
-	 if (!Inf_CheckURL (CrsCod,InfoType))
+	 if (!Inf_CheckURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType))
 	    FromDB->Src = Inf_NONE;
          break;
      }

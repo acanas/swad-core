@@ -1268,7 +1268,6 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Unknown requested info type");
    Gbl.Crs.Info.Type = InfoType;
    Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-                                 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                                  Gbl.Crs.Info.Type,
                                  &FromDB);
    Length = strlen (NamesInWSForInfoSrc[FromDB.Src]);
