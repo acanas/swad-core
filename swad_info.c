@@ -274,36 +274,9 @@ void Inf_ShowInfo (void)
    /***** Begin box *****/
    Inf_BeforeTree (Vie_VIEW,Inf_NONE);
 
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    if (Gbl.Crs.Info.FromDB.MustBeRead)
-	      {
-	       /***** Contextual menu *****/
-	       Mnu_ContextMenuBegin ();
-		  Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
-								// ...I have read this couse info
-	       Mnu_ContextMenuEnd ();
-	      }
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    if (Gbl.Crs.Info.FromDB.Src != Inf_NONE)
-	      {
-	       /***** Contextual menu *****/
-	       // Checkbox to force students to read this couse info
-	       Mnu_ContextMenuBegin ();
-		  // Non-editing teachers can not change the status of checkbox
-		  Inf_PutCheckboxForceStdsToReadInfo (Gbl.Crs.Info.FromDB.MustBeRead,
-						      (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
-											     HTM_NO_ATTR);
-	       Mnu_ContextMenuEnd ();
-	      }
-	    break;
-	 default:
-	    break;
-	}
+      if (Gbl.Crs.Info.FromDB.MustBeRead && Gbl.Usrs.Me.Role.Logged == Rol_STD)
+	 Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
+							// ...I have read this couse info
 
       switch (Gbl.Crs.Info.FromDB.Src)
 	{
@@ -625,14 +598,16 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
      };
    bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo ();
 
-   Lay_PutContextualCheckbox (Inf_Actions[Gbl.Crs.Info.Type].NextAction,
-                              Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
-                              Inf_Actions[Gbl.Crs.Info.Type].Args,
-                              "IHaveRead",
-                              (IHaveRead ? HTM_CHECKED :
-                        		   HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
-                              Txt_I_have_read_this_information,
-                              Txt_I_have_read_this_information);
+   Mnu_ContextMenuBegin ();
+      Lay_PutContextualCheckbox (Inf_Actions[Gbl.Crs.Info.Type].NextAction,
+				 Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
+				 Inf_Actions[Gbl.Crs.Info.Type].Args,
+				 "IHaveRead",
+				 (IHaveRead ? HTM_CHECKED :
+					      HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
+				 Txt_I_have_read_this_information,
+				 Txt_I_have_read_this_information);
+   Mnu_ContextMenuEnd ();
   }
 
 /*****************************************************************************/
@@ -1041,13 +1016,7 @@ void Inf_SetInfoSrc (void)
 
 void Inf_ConfigInfo (void)
   {
-   extern const char *Hlp_COURSE_Information_edit;
-   extern const char *Hlp_COURSE_Guide_edit;
-   extern const char *Hlp_COURSE_Syllabus_edit;
-   extern const char *Hlp_COURSE_Bibliography_edit;
-   extern const char *Hlp_COURSE_FAQ_edit;
-   extern const char *Hlp_COURSE_Links_edit;
-   extern const char *Hlp_COURSE_Assessment_edit;
+   extern const char *Txt_Force_students_to_read_this_information;
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -1075,17 +1044,6 @@ void Inf_ConfigInfo (void)
       [Inf_PAGE		] = Inf_FormToEnterSendingPage,
       [Inf_URL		] = Inf_FormToEnterSendingURL,
      };
-   static const char **HelpEdit[Inf_NUM_TYPES] =
-     {
-      [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
-      [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
-      [Inf_LECTURES	] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_PRACTICALS	] = &Hlp_COURSE_Syllabus_edit,
-      [Inf_BIBLIOGRAPHY	] = &Hlp_COURSE_Bibliography_edit,
-      [Inf_FAQ		] = &Hlp_COURSE_FAQ_edit,
-      [Inf_LINKS	] = &Hlp_COURSE_Links_edit,
-      [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment_edit,
-     };
 
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
@@ -1111,64 +1069,95 @@ void Inf_ConfigInfo (void)
       Inf_DB_SetInfoSrc (Inf_NONE);
      }
 
-   /***** Form to choice between alternatives *****/
-   /* Begin box and table */
-   Box_BoxTableBegin (Txt_Source_of_information,
-                      Inf_PutIconsToViewInfo,&Gbl.Crs.Info,
-                      *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
+   /***** Begin box *****/
+   Inf_BeforeTree (Vie_EDIT,Inf_NONE);
 
-      /* Options */
-      for (InfoSrc  = (Inf_Src_t) 0;
-	   InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
-	   InfoSrc++)
-	{
-	 HTM_TR_Begin (NULL);
+      /***** Force students to read info? *****/
+      HTM_FIELDSET_Begin (NULL);
+	 HTM_LEGEND (Txt_Force_students_to_read_this_information);
+	    switch (Gbl.Usrs.Me.Role.Logged)
+	      {
+	       case Rol_NET:
+	       case Rol_TCH:
+	       case Rol_SYS_ADM:
+		  if (Gbl.Crs.Info.FromDB.Src != Inf_NONE)
+		    {
+		     // Checkbox to force students to read this couse info
+		     Mnu_ContextMenuBegin ();
+			// Non-editing teachers can not change the status of checkbox
+			Inf_PutCheckboxForceStdsToReadInfo (Gbl.Crs.Info.FromDB.MustBeRead,
+							    (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
+												   HTM_NO_ATTR);
+		     Mnu_ContextMenuEnd ();
+		    }
+		  break;
+	       default:
+		  break;
+	      }
+      HTM_FIELDSET_End ();
 
-	    /* Select info source */
-	    HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
-			  InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
-							       "");
-	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
-	          Syl_PutParWhichSyllabus (&Syllabus.WhichSyllabus);
-		  HTM_INPUT_RADIO ("InfoSrc",
-				   ((InfoSrc == Gbl.Crs.Info.FromDB.Src) ? HTM_CHECKED :
-	        							   HTM_NO_ATTR) |
-	        		   ((InfoSrc == Inf_NONE ||
-	        		    InfoAvailable[InfoSrc]) ? HTM_NO_ATTR :
-							      HTM_DISABLED) |
-	        		   ((InfoSrc != Gbl.Crs.Info.FromDB.Src &&
-				    (InfoSrc == Inf_NONE ||
-				    InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
-						               HTM_NO_ATTR),
-				   "id=\"InfoSrc%u\" value=\"%u\"",
-				   (unsigned) InfoSrc,(unsigned) InfoSrc);
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+      /***** Information source *****/
+      HTM_FIELDSET_Begin (NULL);
+	 HTM_LEGEND (Txt_Source_of_information);
+	 HTM_TABLE_BeginPadding (2);
 
-	    /* Form for this info source */
-	    HTM_TD_Begin ("class=\"LT%s\"",
-			  InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
-							       "");
-	       HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"FORM_IN_%s\"",
-				(unsigned) InfoSrc,The_GetSuffix ());
-		  HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
-	       HTM_LABEL_End ();
-	       if (Txt_INFO_SRC_HELP[InfoSrc])
-		 {
-		  HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		     HTM_BR ();
-		     HTM_Txt (Txt_INFO_SRC_HELP[InfoSrc]);
-		  HTM_SPAN_End ();
-		 }
-	       if (Inf_FormsForEditionTypes[InfoSrc])
-		  Inf_FormsForEditionTypes[InfoSrc] (&Syllabus,InfoSrc);
-	    HTM_TD_End ();
+	    /* Options */
+	    for (InfoSrc  = (Inf_Src_t) 0;
+		 InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
+		 InfoSrc++)
+	      {
+	       HTM_TR_Begin (NULL);
 
-	 HTM_TR_End ();
-	}
+		  /* Select info source */
+		  HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
+				InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
+								     "");
+		     Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
+			Syl_PutParWhichSyllabus (&Syllabus.WhichSyllabus);
+			HTM_INPUT_RADIO ("InfoSrc",
+					 ((InfoSrc == Gbl.Crs.Info.FromDB.Src) ? HTM_CHECKED :
+										 HTM_NO_ATTR) |
+					 ((InfoSrc == Inf_NONE ||
+					  InfoAvailable[InfoSrc]) ? HTM_NO_ATTR :
+								    HTM_DISABLED) |
+					 ((InfoSrc != Gbl.Crs.Info.FromDB.Src &&
+					  (InfoSrc == Inf_NONE ||
+					  InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
+								     HTM_NO_ATTR),
+					 "id=\"InfoSrc%u\" value=\"%u\"",
+					 (unsigned) InfoSrc,(unsigned) InfoSrc);
+		     Frm_EndForm ();
+		  HTM_TD_End ();
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+		  /* Form for this info source */
+		  HTM_TD_Begin ("class=\"LT%s\"",
+				InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
+								     "");
+		     HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"FORM_IN_%s\"",
+				      (unsigned) InfoSrc,The_GetSuffix ());
+			HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+		     HTM_LABEL_End ();
+		     if (Txt_INFO_SRC_HELP[InfoSrc])
+		       {
+			HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+			   HTM_BR ();
+			   HTM_Txt (Txt_INFO_SRC_HELP[InfoSrc]);
+			HTM_SPAN_End ();
+		       }
+		     if (Inf_FormsForEditionTypes[InfoSrc])
+			Inf_FormsForEditionTypes[InfoSrc] (&Syllabus,InfoSrc);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+	      }
+
+	HTM_TABLE_End ();
+      HTM_FIELDSET_End ();
+
+   // /***** End box *****/
+   // Box_BoxEnd ();
+   /***** End box *****/
+   Inf_AfterTree ();
   }
 
 /*****************************************************************************/

@@ -43057,7 +43057,7 @@ const char *Txt_Source_of_information =
 #elif L==9	// pt
 	"Fonte de informa&ccedil;&atilde;o";
 #elif L==10	// tr
-	"Source of information";	// Çeviri lazim!
+	"Bilgi kayna&gbreve;&inodot;";
 #endif
 
 const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =
