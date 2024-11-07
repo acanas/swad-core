@@ -83,7 +83,6 @@ struct Syl_Syllabus
    char PathDir[PATH_MAX + 1];
    unsigned NumItem;	// Item being edited
    unsigned ParNumItem;	// Used as parameter in forms
-   Vie_ViewType_t ViewType;
    Syl_WhichSyllabus_t WhichSyllabus;
   };
 

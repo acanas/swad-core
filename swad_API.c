@@ -1192,7 +1192,6 @@ int swad__getCourseInfo (struct soap *soap,
    struct Syl_Syllabus Syllabus;
    Inf_Type_t InfoType;
    size_t Length;
-   struct Inf_FromDB FromDB;
    int Result = SOAP_OK;
    const char *NamesInWSForInfoType[Inf_NUM_TYPES] =
      {
@@ -1267,16 +1266,14 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
    Gbl.Crs.Info.Type = InfoType;
-   Inf_GetAndCheckInfoSrcFromDB (&Syllabus,
-                                 Gbl.Crs.Info.Type,
-                                 &FromDB);
-   Length = strlen (NamesInWSForInfoSrc[FromDB.Src]);
+   Inf_GetAndCheckInfoSrcFromDB (&Gbl.Crs.Info,&Syllabus);
+   Length = strlen (NamesInWSForInfoSrc[Gbl.Crs.Info.FromDB.Src]);
    getCourseInfo->infoSrc = soap_malloc (soap,Length + 1);
-   Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[FromDB.Src],Length);
+   Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[Gbl.Crs.Info.FromDB.Src],Length);
 
    /***** Get info text *****/
    getCourseInfo->infoTxt = NULL;
-   switch (FromDB.Src)
+   switch (Gbl.Crs.Info.FromDB.Src)
      {
       case Inf_NONE:		// No info available
          break;

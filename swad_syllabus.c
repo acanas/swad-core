@@ -98,8 +98,7 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
   {
    Syllabus->PathDir[0] = '\0';
    Syllabus->NumItem = 0;
-   Syllabus->ViewType = Vie_VIEW;
-   Syllabus->WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
+   Syllabus->WhichSyllabus = Syl_NONE;
   }
 
 /*****************************************************************************/
@@ -184,12 +183,8 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
 
 bool Syl_CheckSyllabus (Tre_TreeType_t TreeType)
   {
-   bool InfoAvailable;
-
    /***** Number of nodes > 0 ==> info available *****/
-   InfoAvailable = (Tre_DB_GetNumNodes (TreeType,Hie_CRS) != 0);
-
-   return InfoAvailable;
+   return (Tre_DB_GetNumNodes (TreeType,Hie_CRS) != 0);
   }
 
 /*****************************************************************************/

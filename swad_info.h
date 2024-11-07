@@ -60,18 +60,19 @@ typedef enum
    Inf_URL		= 5,
   } Inf_Src_t;
 
-struct Inf_Info
-  {
-   Inf_Type_t Type;
-   char URL[WWW_MAX_BYTES_WWW + 1];
-   bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
-   bool ShowMsgMustBeRead;
-  };
-
 struct Inf_FromDB
   {
    Inf_Src_t Src;	// Info source
    bool MustBeRead;	// Must be read by students?
+  };
+
+struct Inf_Info
+  {
+   Inf_Type_t Type;
+   struct Inf_FromDB FromDB;
+   char URL[WWW_MAX_BYTES_WWW + 1];
+   bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
+   bool ShowMsgMustBeRead;
   };
 
 /*****************************************************************************/
@@ -98,7 +99,6 @@ void Inf_ContractNodeSeeing (void);
 void Inf_ExpandNodeEditing (void);
 void Inf_ContractNodeEditing (void);
 
-void Inf_PutIconsToEditInfo (void *Type);
 void Inf_WriteMsgYouMustReadInfo (void);
 void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
@@ -110,15 +110,14 @@ void Inf_ConfigInfo (void);
 void Inf_FormToEnterIntegratedEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 void Inf_FormToEnterPlainTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 void Inf_FormToEnterRichTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
-void Inf_FormToSendPage (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
-void Inf_FormToSendURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
+void Inf_FormToEnterSendingPage (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
+void Inf_FormToEnterSendingURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
 void Inf_AsignInfoType (struct Inf_Info *Info,
                         struct Syl_Syllabus *Syllabus);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
 Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
-void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
-                                   Inf_Type_t InfoType,
-                                   struct Inf_FromDB *FromDB);
+void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info,
+				   struct Syl_Syllabus *Syllabus);
 
 void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
@@ -126,10 +125,15 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
 
 void Inf_EditPlainTxtInfo (void);
 void Inf_EditRichTxtInfo (void);
-void Inf_RecAndChangePlainTxtInfo (void);
-void Inf_RecAndChangeRichTxtInfo (void);
-void Inf_ReceiveURLInfo (void);
+
+void Inf_ReceivePlainTxtInfo (void);
+void Inf_ReceiveRichTxtInfo (void);
+
+void Inf_EditPagInfo (void);
 void Inf_ReceivePagInfo (void);
+
+void Inf_EditURLInfo (void);
+void Inf_ReceiveURLInfo (void);
 
 void Inf_EditorCourseInfo (void);
 void Inf_EditorTeachingGuide (void);

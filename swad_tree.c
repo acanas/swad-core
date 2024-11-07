@@ -222,44 +222,11 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 		       Tre_ListingType_t ListingType,
                        long SelectedNodCod,long SelectedRscCod)
   {
-   // extern const char *Hlp_COURSE_Program;
-   // extern const char *Txt_COURSE_program;
-   // extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    long ParentNodCod = -1L;	// Initialized to avoid warning
    unsigned NumNode;
    unsigned FormLevel = 0;	// Initialized to avoid warning
    struct Tre_Node Node;
    ConExp_ContractedOrExpanded_t ContractedOrExpanded;
-   /*
-   char *Title;
-   static const char **Titles[Tre_NUM_TYPES] =
-     {
-      [Tre_UNKNOWN	] = NULL,
-      [Tre_PROGRAM	] = &Txt_COURSE_program,
-      [Tre_GUIDE	] = &Txt_INFO_TITLE[Inf_TEACH_GUIDE	],
-      [Tre_LECTURES	] = &Txt_INFO_TITLE[Inf_LECTURES	],
-      [Tre_PRACTICALS	] = &Txt_INFO_TITLE[Inf_PRACTICALS	],
-      [Tre_BIBLIOGRAPHY	] = &Txt_INFO_TITLE[Inf_BIBLIOGRAPHY	],
-      [Tre_FAQ		] = &Txt_INFO_TITLE[Inf_FAQ		],
-      [Tre_LINKS	] = &Txt_INFO_TITLE[Inf_LINKS		],
-      [Tre_ASSESSMENT	] = &Txt_INFO_TITLE[Inf_ASSESSMENT	],
-     };
-   static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (void *Args) =
-     {
-      [Tre_PRINT			] = NULL,
-      [Tre_VIEW				] = Tre_PutIconsListNodes,
-      [Tre_EDIT_NODES			] = Tre_PutIconsEditNodes,
-      [Tre_FORM_NEW_END_NODE		] = Tre_PutIconsEditNodes,
-      [Tre_FORM_NEW_CHILD_NODE		] = Tre_PutIconsEditNodes,
-      [Tre_FORM_EDIT_NODE		] = Tre_PutIconsEditNodes,
-      [Tre_END_EDIT_NODE		] = Tre_PutIconsEditNodes,
-      [Tre_RECEIVE_NODE			] = Tre_PutIconsEditNodes,
-      [Tre_EDIT_PRG_RESOURCES		] = Tre_PutIconsEditNodes,
-      [Tre_EDIT_PRG_RESOURCE_LINK	] = Tre_PutIconsEditNodes,
-      [Tre_CHG_PRG_RESOURCE_LINK	] = Tre_PutIconsEditNodes,
-      [Tre_END_EDIT_PRG_RESOURCES	] = Tre_PutIconsEditNodes,
-     };
-   */
 
    /***** Trivial check: tree type must be valid *****/
    if (TreeType < (Tre_TreeType_t) 1 ||
@@ -278,16 +245,6 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
       SelectedNodCod = Tre_GetNodCodFromNumNode (Tre_GetLastChild (NumNode));
       FormLevel = Tre_GetLevelFromNumNode (NumNode) + 1;
      }
-
-   /***** Begin box *****/
-   /*
-   if (asprintf (&Title,*Titles[TreeType],
-		 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
-      Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,FunctionToDrawContextualIcons[ListingType],&TreeType,
-                 Hlp_COURSE_Program,Box_NOT_CLOSABLE);
-   free (Title);
-   */
 
    /***** Table *****/
    HTM_TABLE_Begin ("TBL_SCROLL");
@@ -330,9 +287,6 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 
       /***** End table *****/
    HTM_TABLE_End ();
-
-   /***** End box *****/
-   // Box_BoxEnd ();
 
    /***** Free hidden levels and numbers *****/
    Tre_FreeLevels ();
@@ -522,8 +476,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 HTM_TD_Begin ("class=\"PRG_NUM %s\"%s",
 	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
 	    HTM_DIV_Begin ("class=\"RT %s%s\"",
-			   TitleClass,
-			   HidVis_PrgClass[HiddenOrVisible]);
+			   TitleClass,HidVis_PrgClass[HiddenOrVisible]);
 	       Tre_WriteNumNode (Node->Hierarchy.Level);
 	    HTM_DIV_End ();
 	 HTM_TD_End ();
@@ -545,13 +498,15 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    if (HighlightNode)
 	       HTM_ARTICLE_Begin (Tre_NODE_SECTION_ID);
 	    HTM_DIV_Begin ("class=\"LT %s%s\"",
-			   TitleClass,
-			   HidVis_PrgClass[HiddenOrVisible]);
+			   TitleClass,HidVis_PrgClass[HiddenOrVisible]);
 	       HTM_Txt (Node->Title);
 	    HTM_DIV_End ();
 	    if (HighlightNode)
 	       HTM_ARTICLE_End ();
 	 HTM_TD_End ();
+
+	 /* Free title CSS class */
+	 Tre_FreeTitleClass (TitleClass);
 
 	 /* Start/end date/time */
 	 switch (ListingType)
@@ -563,30 +518,36 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       HTM_TD_Begin ("class=\"PRG_DATE RT %s\"",The_GetColorRows ());
 	       break;
 	   }
-	 UniqueId++;
-	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	      StartEndTime++)
-	   {
-	    if (asprintf (&Id,"prg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
-			   Id,
-			   CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBLE],The_GetSuffix (),
-			   HidVis_PrgClass[HiddenOrVisible]);
-	       Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
-					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					     Dat_WRITE_TODAY |
-					     Dat_WRITE_DATE_ON_SAME_DAY |
-					     Dat_WRITE_HOUR |
-					     Dat_WRITE_MINUTE);
-	    HTM_DIV_End ();
-	    free (Id);
-	   }
-	 HTM_TD_End ();
 
-	 /* Free title CSS class */
-	 Tre_FreeTitleClass (TitleClass);
+	 switch (Node->TreeType)
+	   {
+	    case Tre_PROGRAM:
+	       UniqueId++;
+	       for (StartEndTime  = (Dat_StartEndTime_t) 0;
+		    StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+		    StartEndTime++)
+		 {
+		  if (asprintf (&Id,"prg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
+				 Id,
+				 CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBLE],The_GetSuffix (),
+				 HidVis_PrgClass[HiddenOrVisible]);
+		     Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
+						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						   Dat_WRITE_TODAY |
+						   Dat_WRITE_DATE_ON_SAME_DAY |
+						   Dat_WRITE_HOUR |
+						   Dat_WRITE_MINUTE);
+		  HTM_DIV_End ();
+		  free (Id);
+		 }
+	       break;
+	    default:
+	       break;
+	   }
+
+	 HTM_TD_End ();
 
       HTM_TR_End ();
 
@@ -619,9 +580,6 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    /* Specific content depending on the tree type */
 	    switch (Node->TreeType)
 	      {
-	       case Tre_UNKNOWN:
-		  Err_WrongTypeExit ();
-		  break;
 	       case Tre_PROGRAM:
 		  /* List of resources of this tree node */
 		  PrgRsc_ListNodeResources (ListingType,Node,

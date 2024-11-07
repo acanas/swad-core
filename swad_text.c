@@ -18121,117 +18121,117 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 	NULL,
 	[Inf_EDITOR] =
 #if   L==1	// ca
-	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"	// Necessita traducció
+	"Editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas."	// Necessita traducció
 #elif L==2	// de
-	"Interner Editor, nur f&uuml;r Studienplan (Vorlesung und &Uuml;bungen)"
+	"Interner Editor, nur f&uuml;r Studienplan (Vorlesung und &Uuml;bungen)."
 #elif L==3	// en
-	"internal editor, only for syllabus (lectures and practicals)"
+	"Internal editor, only for syllabus (lectures and practicals)."
 #elif L==4	// es
-	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"
+	"Editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas."
 #elif L==5	// fr
-	"&eacute;diteur interne, que pour les plans (th&eacute;orie et pratique)"
+	"&Eacute;diteur interne, que pour les plans (th&eacute;orie et pratique)."
 #elif L==6	// gn
-	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"	// Okoteve traducción
+	"Editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas."	// Okoteve traducción
 #elif L==7	// it
-	"editor interno, solo per programmi di teoria e di pratica"
+	"Editor interno, solo per programmi di teoria e di pratica."
 #elif L==8	// pl
-	"Wewnetrzny edytor, tylko program (wyklady i practicals)"
+	"Wewnetrzny edytor, tylko program (wyklady i practicals)."
 #elif L==9	// pt
-	"interno editor, apenas para programas de teoria y pr&aacute;tica"
+	"Interno editor, apenas para programas de teoria y pr&aacute;tica."
 #elif L==10	// tr
-	"internal editor, only for syllabus (lectures and practicals)"			// Çeviri lazim!
+	"Internal editor, only for syllabus (lectures and practicals)."			// Çeviri lazim!
 #endif
 	,
 	[Inf_PLAIN_TEXT] =
 #if   L==1	// ca
-	"editor de text sense format"
+	"Editor de text sense format."
 #elif L==2	// de
-	"Plain Text Editor"
+	"Plain Text Editor."
 #elif L==3	// en
-	"plain text editor"
+	"Plain text editor."
 #elif L==4	// es
-	"editor de texto sin formato"
+	"Editor de texto sin formato."
 #elif L==5	// fr
-	"&eacute;diteur de texte simple"
+	"&Eacute;diteur de texte simple."
 #elif L==6	// gn
-	"editor de texto sin formato"	// Okoteve traducción
+	"Editor de texto sin formato."	// Okoteve traducción
 #elif L==7	// it
-	"editor di testo normale"
+	"Editor di testo normale."
 #elif L==8	// pl
-	"edytor tekstu zwyk&lstrok;y"
+	"Edytor tekstu zwyk&lstrok;y."
 #elif L==9	// pt
-	"editor de texto simples"
+	"Editor de texto simples."
 #elif L==10	// tr
-	"plain text editor"		// Çeviri lazim!
+	"Plain text editor."		// Çeviri lazim!
 #endif
 	,
 	[Inf_RICH_TEXT] =
 #if   L==1	// ca
-	"editor de text enriquit"
+	"Editor de text enriquit."
 #elif L==2	// de
-	"Rich Text Editor"
+	"Rich Text Editor."
 #elif L==3	// en
-	"rich text editor"
+	"Rich text editor."
 #elif L==4	// es
-	"editor de texto enriquecido"
+	"Editor de texto enriquecido."
 #elif L==5	// fr
-	"&eacute;diteur de texte enrichi"
+	"&Eacute;diteur de texte enrichi."
 #elif L==6	// gn
-	"editor de texto enriquecido"	// Okoteve traducción
+	"Editor de texto enriquecido."	// Okoteve traducción
 #elif L==7	// it
-	"editor di testo formattato"
+	"Editor di testo formattato."
 #elif L==8	// pl
-	"edytor tekstu sformatowany"
+	"Edytor tekstu sformatowany."
 #elif L==9	// pt
-	"editor de texto rico"
+	"Editor de texto rico."
 #elif L==10	// tr
-	"rich text editor"		// Çeviri lazim!
+	"Rich text editor."		// Çeviri lazim!
 #endif
 	,
 	[Inf_PAGE] =
 #if   L==1	// ca
-	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Necessita traducció
+	"Env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes."// Necessita traducció
 #elif L==2	// de
-	"senden Sie eine HTML-Datei, oder als ZIP-Datei mit einer Datei index.html / index.htm und Bild-Dateien"
+	"Senden Sie eine HTML-Datei, oder als ZIP-Datei mit einer Datei index.html / index.htm und Bild-Dateien."
 #elif L==3	// en
-	"send an HTML file, or a ZIP file containing a file index.html / index.htm and image files"
+	"Send an HTML file, or a ZIP file containing a file index.html / index.htm and image files."
 #elif L==4	// es
-	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"
+	"Env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes."
 #elif L==5	// fr
-	"envoyer un fichier HTML, ou un fichier ZIP contenant un fichier index.html / index.htm et les fichiers d'images"
+	"Envoyer un fichier HTML, ou un fichier ZIP contenant un fichier index.html / index.htm et les fichiers d'images."
 #elif L==6	// gn
-	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Okoteve traducción
+	"Env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes."// Okoteve traducción
 #elif L==7	// it
-	"inviare un file HTML, o un file ZIP contenente un file index.html / index.htm e file di immagine"
+	"Inviare un file HTML, o un file ZIP contenente un file index.html / index.htm e file di immagine."
 #elif L==8	// pl
-	"wyslac plik HTML lub plik ZIP zawierajacy plik index.html / index.htm i pliki graficzne"
+	"Wyslac plik HTML lub plik ZIP zawierajacy plik index.html / index.htm i pliki graficzne."
 #elif L==9	// pt
-	"enviar um arquivo HTML, ou um arquivo ZIP que cont&eacute;m um arquivo index.html / index.htm e limas da imagem"
+	"Enviar um arquivo HTML, ou um arquivo ZIP que cont&eacute;m um arquivo index.html / index.htm e limas da imagem."
 #elif L==10	// tr
-	"send an HTML file, or a ZIP file containing a file index.html / index.htm and image files"					// Çeviri lazim!
+	"Send an HTML file, or a ZIP file containing a file index.html / index.htm and image files."					// Çeviri lazim!
 #endif
 	,
 	[Inf_URL] =
 #if   L==1	// ca
-	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Necessita traducció
+	"Escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor."	// Necessita traducció
 #elif L==2	// de
-	"Geben Sie die Adresse einer Web-Seite geleitet werden, der sich auf einem anderen Server"
+	"Geben Sie die Adresse einer Web-Seite geleitet werden, der sich auf einem anderen Server."
 #elif L==3	// en
-	"enter the address of a web page that is hosted on another server"
+	"Enter the address of a web page that is hosted on another server."
 #elif L==4	// es
-	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"
+	"Escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor."
 #elif L==5	// fr
-	"entrer l'adresse d'une page Web qui est h&eacute;berg&eacute;e sur un autre serveur"
+	"Entrer l'adresse d'une page Web qui est h&eacute;berg&eacute;e sur un autre serveur."
 #elif L==6	// gn
-	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Okoteve traducción
+	"Escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor."	// Okoteve traducción
 #elif L==7	// it
-	"immettere l'indirizzo di una pagina web che &egrave; ospitata su un altro server"
+	"Immettere l'indirizzo di una pagina web che &egrave; ospitata su un altro server."
 #elif L==8	// pl
-	"wprowadzic adres strony internetowej, kt&oacute;ra znajduje sie na innym serwerze"
+	"Wprowadzic adres strony internetowej, kt&oacute;ra znajduje sie na innym serwerze."
 #elif L==9	// pt
-	"introduza o endere&ccedil;o de uma p&aacute;gina Web que est&aacute; hospedada em outro servidor"
+	"Introduza o endere&ccedil;o de uma p&aacute;gina Web que est&aacute; hospedada em outro servidor."
 #elif L==10	// tr
-	"enter the address of a web page that is hosted on another server"					// Çeviri lazim!
+	"Enter the address of a web page that is hosted on another server."					// Çeviri lazim!
 #endif
 	};
 

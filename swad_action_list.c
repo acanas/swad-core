@@ -441,18 +441,20 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgFrcReaCrsInf	] = { 877, 0,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaCrsInf	] = { 878, 0,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcCrsInf	] = { 849, 0,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvURLCrsInf	] = { 854, 0,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPagCrsInf	] = { 853, 0,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEditorCrsInf	] = { 852, 0,TabCrs,NULL			,Inf_EditorCourseInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActPlaTxtEdiCrsInf	] = { 850, 0,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRchTxtEdiCrsInf	] = {1093, 0,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPlaTxtCrsInf	] = { 851, 0,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtCrsInf	] = {1101, 0,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPlaTxtCrsInf	] = { 850, 0,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPlaTxtCrsInf	] = { 851, 0,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiRchTxtCrsInf	] = {1093, 0,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtCrsInf	] = {1101, 0,TabCrs,NULL			,Inf_ReceiveRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPagCrsInf	] = {2024, 0,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPagCrsInf	] = { 853, 0,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
+   [ActEdiURLCrsInf	] = {2031, 0,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvURLCrsInf	] = { 854, 0,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkCrsInf	] = {1996, 0,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Program
    [ActSeePrg		] = {1821, 1,TabCrs,NULL			,Prg_ShowProgram		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActEdiTrePrg	] = {1926, 1,TabCrs,NULL			,Prg_EditTree		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiTrePrg	] = {1926, 1,TabCrs,NULL			,Prg_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodPrg	] = {1927, 1,TabCrs,NULL			,Prg_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmChgTreNodPrg	] = {1823, 1,TabCrs,NULL			,Prg_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmNewTreNodPrg	] = {1822, 1,TabCrs,NULL			,Prg_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -491,13 +493,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgFrcReaTchGui	] = { 870, 2,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaTchGui	] = { 886, 2,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcTchGui	] = { 789, 2,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvURLTchGui	] = { 791, 2,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPagTchGui	] = { 788, 2,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEditorTchGui	] = { 786, 2,TabCrs,NULL			,Inf_EditorTeachingGuide	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActPlaTxtEdiTchGui	] = { 787, 2,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRchTxtEdiTchGui	] = {1094, 2,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPlaTxtTchGui	] = { 790, 2,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtTchGui	] = {1102, 2,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPlaTxtTchGui	] = { 787, 2,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPlaTxtTchGui	] = { 790, 2,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiRchTxtTchGui	] = {1094, 2,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtTchGui	] = {1102, 2,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPagTchGui	] = {2025, 2,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPagTchGui	] = { 788, 2,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
+   [ActEdiURLTchGui	] = {2032, 2,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvURLTchGui	] = { 791, 2,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkTchGui	] = {1997, 2,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Syllabus
@@ -526,12 +530,14 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgFrcReaSyl	] = { 871, 3,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaSyl	] = { 880, 3,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcSyl	] = { 378, 3,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvURLSyl	] = { 403, 3,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPlaTxtSyl	] = { 379, 3,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPlaTxtSyl	] = { 394, 3,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiRchTxtSyl	] = {1095, 3,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtSyl	] = {1103, 3,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPagSyl	] = {2026, 3,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagSyl	] = { 381, 3,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
-   [ActPlaTxtEdiSyl	] = { 379, 3,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRchTxtEdiSyl	] = {1095, 3,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPlaTxtSyl	] = { 394, 3,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtSyl	] = {1103, 3,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiURLSyl	] = {2033, 3,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvURLSyl	] = { 403, 3,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkSyl	] = {1998, 3,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Bibliography
@@ -540,13 +546,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgFrcReaBib	] = { 873, 4,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaBib	] = { 884, 4,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcBib	] = { 370, 4,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvURLBib	] = { 224, 4,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPagBib	] = { 185, 4,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEditorBib	] = { 376, 4,TabCrs,NULL			,Inf_EditorBibliography		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActPlaTxtEdiBib	] = { 377, 4,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRchTxtEdiBib	] = {1097, 4,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPlaTxtBib	] = { 398, 4,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtBib	] = {1105, 4,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPlaTxtBib	] = { 377, 4,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPlaTxtBib	] = { 398, 4,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiRchTxtBib	] = {1097, 4,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtBib	] = {1105, 4,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPagBib	] = {2027, 4,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPagBib	] = { 185, 4,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
+   [ActEdiURLBib	] = {2034, 4,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvURLBib	] = { 224, 4,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkBib	] = {1999, 4,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // FAQ
@@ -555,13 +563,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgFrcReaFAQ	] = { 874, 5,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaFAQ	] = { 879, 5,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcFAQ	] = { 380, 5,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvURLFAQ	] = { 234, 5,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPagFAQ	] = { 219, 5,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEditorFAQ	] = { 404, 5,TabCrs,NULL			,Inf_EditorFAQ			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActPlaTxtEdiFAQ	] = { 405, 5,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRchTxtEdiFAQ	] = {1098, 5,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPlaTxtFAQ	] = { 406, 5,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtFAQ	] = {1106, 5,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPlaTxtFAQ	] = { 405, 5,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPlaTxtFAQ	] = { 406, 5,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiRchTxtFAQ	] = {1098, 5,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtFAQ	] = {1106, 5,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPagFAQ	] = {2028, 5,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPagFAQ	] = { 219, 5,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
+   [ActEdiURLFAQ	] = {2035, 5,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvURLFAQ	] = { 234, 5,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkFAQ	] = {2000, 5,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Links
@@ -570,13 +580,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgFrcReaCrsLnk	] = { 875, 6,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaCrsLnk	] = { 885, 6,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcCrsLnk	] = { 385, 6,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvURLCrsLnk	] = { 182, 6,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPagCrsLnk	] = { 164, 6,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEditorCrsLnk	] = { 388, 6,TabCrs,NULL			,Inf_EditorLinks		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActPlaTxtEdiCrsLnk	] = { 400, 6,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRchTxtEdiCrsLnk	] = {1099, 6,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPlaTxtCrsLnk	] = { 401, 6,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtCrsLnk	] = {1107, 6,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPlaTxtCrsLnk	] = { 400, 6,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPlaTxtCrsLnk	] = { 401, 6,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiRchTxtCrsLnk	] = {1099, 6,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtCrsLnk	] = {1107, 6,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPagCrsLnk	] = {2029, 6,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPagCrsLnk	] = { 164, 6,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
+   [ActEdiURLCrsLnk	] = {2036, 6,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvURLCrsLnk	] = { 182, 6,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkCrsLnk	] = {2001, 6,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Assessment
@@ -585,13 +597,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgFrcReaAss	] = { 883, 7,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaAss	] = { 898, 7,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcAss	] = { 384, 7,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvURLAss	] = { 235, 7,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPagAss	] = { 184, 7,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEditorAss	] = { 386, 7,TabCrs,NULL			,Inf_EditorAssessment		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActPlaTxtEdiAss	] = { 387, 7,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRchTxtEdiAss	] = {1100, 7,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvPlaTxtAss	] = { 397, 7,TabCrs,NULL			,Inf_RecAndChangePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtAss	] = {1108, 7,TabCrs,NULL			,Inf_RecAndChangeRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPlaTxtAss	] = { 387, 7,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPlaTxtAss	] = { 397, 7,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiRchTxtAss	] = {1100, 7,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtAss	] = {1108, 7,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActEdiPagAss	] = {2030, 7,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvPagAss	] = { 184, 7,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
+   [ActEdiURLAss	] = {2037, 7,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvURLAss	] = { 235, 7,TabCrs,NULL			,Inf_ReceiveURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkAss	] = {2002, 7,TabCrs,NULL			,InfRsc_GetLinkToInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // Timetable
@@ -2233,9 +2247,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #374 (obsolete action)
 	ActUnk,			// #375 (obsolete action)
 	ActEditorBib,		// #376
-	ActPlaTxtEdiBib,	// #377
+	ActEdiPlaTxtBib,	// #377
 	ActSelInfSrcSyl,	// #378
-	ActPlaTxtEdiSyl,	// #379
+	ActEdiPlaTxtSyl,	// #379
 	ActSelInfSrcFAQ,	// #380
 	ActRcvPagSyl,		// #381
 	ActUnk,			// #382 (obsolete action)
@@ -2243,7 +2257,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSelInfSrcAss,	// #384
 	ActSelInfSrcCrsLnk,	// #385
 	ActEditorAss,		// #386
-	ActPlaTxtEdiAss,	// #387
+	ActEdiPlaTxtAss,	// #387
 	ActEditorCrsLnk,	// #388
 	ActUnk,			// #389 (obsolete action)
 	ActUnk,			// #390 (obsolete action)
@@ -2256,12 +2270,12 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRcvPlaTxtAss,	// #397
 	ActRcvPlaTxtBib,	// #398
 	ActUnk,			// #399 (obsolete action)
-	ActPlaTxtEdiCrsLnk,	// #400
+	ActEdiPlaTxtCrsLnk,	// #400
 	ActRcvPlaTxtCrsLnk,	// #401
 	ActUnk,			// #402 (obsolete action)
 	ActRcvURLSyl,		// #403
 	ActEditorFAQ,		// #404
-	ActPlaTxtEdiFAQ,	// #405
+	ActEdiPlaTxtFAQ,	// #405
 	ActRcvPlaTxtFAQ,	// #406
 	ActUnk,			// #407 (obsolete action)
 	ActSeeMyTT,		// #408
@@ -2643,7 +2657,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeTchGui,		// #784
 	ActCfgTchGui,		// #785
 	ActEditorTchGui,	// #786
-	ActPlaTxtEdiTchGui,	// #787
+	ActEdiPlaTxtTchGui,	// #787
 	ActRcvPagTchGui,	// #788
 	ActSelInfSrcTchGui,	// #789
 	ActRcvPlaTxtTchGui,	// #790
@@ -2706,7 +2720,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSeeCrsInf,		// #847
 	ActCfgCrsInf,		// #848
 	ActSelInfSrcCrsInf,	// #849
-	ActPlaTxtEdiCrsInf,	// #850
+	ActEdiPlaTxtCrsInf,	// #850
 	ActRcvPlaTxtCrsInf,	// #851
 	ActEditorCrsInf,	// #852
 	ActRcvPagCrsInf,	// #853
@@ -2949,14 +2963,14 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemMyMai,		// #1090
 	ActCnfMai,		// #1091
 	ActChgIco,		// #1092
-	ActRchTxtEdiCrsInf,	// #1093
-	ActRchTxtEdiTchGui,	// #1094
-	ActRchTxtEdiSyl,	// #1095
+	ActEdiRchTxtCrsInf,	// #1093
+	ActEdiRchTxtTchGui,	// #1094
+	ActEdiRchTxtSyl,	// #1095
 	ActUnk,			// #1096 (obsolete action)
-	ActRchTxtEdiBib,	// #1097
-	ActRchTxtEdiFAQ,	// #1098
-	ActRchTxtEdiCrsLnk,	// #1099
-	ActRchTxtEdiAss,	// #1100
+	ActEdiRchTxtBib,	// #1097
+	ActEdiRchTxtFAQ,	// #1098
+	ActEdiRchTxtCrsLnk,	// #1099
+	ActEdiRchTxtAss,	// #1100
 	ActRcvRchTxtCrsInf,	// #1101
 	ActRcvRchTxtTchGui,	// #1102
 	ActRcvRchTxtSyl,	// #1103
@@ -3880,4 +3894,19 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActConSeeTreNodSyl,	// #2021
 	ActExpEdiTreNodSyl,	// #2022
 	ActConEdiTreNodSyl,	// #2023
+	ActEdiPagCrsInf,	// #2024
+	ActEdiPagTchGui,	// #2025
+	ActEdiPagSyl,		// #2026
+	ActEdiPagBib,		// #2027
+	ActEdiPagFAQ,		// #2028
+	ActEdiPagCrsLnk,	// #2029
+	ActEdiPagAss,		// #2030
+	ActEdiURLCrsInf,	// #2031
+	ActEdiURLTchGui,	// #2032
+	ActEdiURLSyl,		// #2033
+	ActEdiURLBib,		// #2034
+	ActEdiURLFAQ,		// #2035
+	ActEdiURLCrsLnk,	// #2036
+	ActEdiURLAss,		// #2037
+
   };

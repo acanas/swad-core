@@ -5697,52 +5697,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the course information"				// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLCrsInf] =
-#if   L==1	// ca
-	"Create URL in the course information"				// Necessita traducció
-#elif L==2	// de
-	"Create URL in the course information"				// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the course information"
-#elif L==4	// es
-	"Crear una URL en la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Create URL in the course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the course information"				// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagCrsInf] =
-#if   L==1	// ca
-	"Create web page in the course information"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the course information"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the course information"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Create web page in the course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the course information"				// Çeviri lazim!
-#endif
-	,
 	[ActEditorCrsInf] =
 #if   L==1	// ca
 	"Integrated editor of course information"			// Necessita traducció
@@ -5766,7 +5720,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of course information"			// Çeviri lazim!
 #endif
 	,
-	[ActPlaTxtEdiCrsInf] =
+	[ActEdiPlaTxtCrsInf] =
 #if   L==1	// ca
 	"Plain text editor of course information"				// Necessita traducció
 #elif L==2	// de
@@ -5787,29 +5741,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of course information"				// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of course information"				// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiCrsInf] =
-#if   L==1	// ca
-	"Rich text editor of course information"				// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of course information"				// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of course information"
-#elif L==4	// es
-	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"
-#elif L==5	// fr
-	"Rich text editor of course information"				// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of course information"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of course information"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of course information"				// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of course information"				// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtCrsInf] =
@@ -5835,6 +5766,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of course information"			// Çeviri lazim!
 #endif
 	,
+	[ActEdiRchTxtCrsInf] =
+#if   L==1	// ca
+	"Rich text editor of course information"				// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of course information"				// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of course information"
+#elif L==4	// es
+	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Rich text editor of course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of course information"				// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtCrsInf] =
 #if   L==1	// ca
 	"Change rich text of course information"				// Necessita traducció
@@ -5856,6 +5810,98 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of course information"				// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of course information"				// Çeviri lazim!
+#endif
+	,
+	[ActEdiPagCrsInf] =
+#if   L==1	// ca
+	"Form to create web page in the course information"					// Necessita traducció
+#elif L==2	// de
+	"Form to create web page in the course information"					// Need Übersetzung
+#elif L==3	// en
+	"Form to create web page in the course information"
+#elif L==4	// es
+	"Formulario para crear p&aacute;gina web en la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Form to create web page in the course information"					// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear p&aacute;gina web en la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create web page in the course information"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create web page in the course information"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create web page in the course information"					// Precisa de tradução
+#elif L==10	// tr
+	"Form to create web page in the course information"					// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagCrsInf] =
+#if   L==1	// ca
+	"Create web page in the course information"				// Necessita traducció
+#elif L==2	// de
+	"Create web page in the course information"				// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the course information"
+#elif L==4	// es
+	"Crear p&aacute;gina web en la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Create web page in the course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear p&aacute;gina web en la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the course information"				// Çeviri lazim!
+#endif
+	,
+	[ActEdiURLCrsInf] =
+#if   L==1	// ca
+	"Form to create URL in the course information"				// Necessita traducció
+#elif L==2	// de
+	"Form to create URL in the course information"				// Need Übersetzung
+#elif L==3	// en
+	"Form to create URL in the course information"
+#elif L==4	// es
+	"Fomulario para crear URL en la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Form to create URL in the course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Fomulario para crear URL en la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create URL in the course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create URL in the course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create URL in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Form to create URL in the course information"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLCrsInf] =
+#if   L==1	// ca
+	"Create URL in the course information"				// Necessita traducció
+#elif L==2	// de
+	"Create URL in the course information"				// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the course information"
+#elif L==4	// es
+	"Crear una URL en la informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Create URL in the course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the course information"				// Çeviri lazim!
 #endif
 	,
 	[ActReqLnkCrsInf] =
@@ -6341,52 +6387,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the teaching guide"			// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLTchGui] =
-#if   L==1	// ca
-	"Create URL in the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the teaching guide"
-#elif L==4	// es
-	"Crear una URL en la gu&iacute;a docente"
-#elif L==5	// fr
-	"Create URL in the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the teaching guide"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagTchGui] =
-#if   L==1	// ca
-	"Create web page in the teaching guide"			// Necessita traducció
-#elif L==2	// de
-	"Create web page in the teaching guide"			// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the teaching guide"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la gu&iacute;a docente"
-#elif L==5	// fr
-	"Create web page in the teaching guide"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the teaching guide"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the teaching guide"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the teaching guide"			// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the teaching guide"			// Çeviri lazim!
-#endif
-	,
 	[ActEditorTchGui] =
 #if   L==1	// ca
 	"Integrated editor of the teaching guide"	// Necessita traducció
@@ -6410,7 +6410,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of the teaching guide"	// Çeviri lazim!
 #endif
 	,
-	[ActPlaTxtEdiTchGui] =
+	[ActEdiPlaTxtTchGui] =
 #if   L==1	// ca
 	"Plain text editor of the teaching guide"		// Necessita traducció
 #elif L==2	// de
@@ -6431,29 +6431,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of the teaching guide"		// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of the teaching guide"		// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiTchGui] =
-#if   L==1	// ca
-	"Rich text editor of the teaching guide"		// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the teaching guide"		// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the teaching guide"
-#elif L==4	// es
-	"Editor de texto enriquecido de la gu&iacute;a docente"
-#elif L==5	// fr
-	"Rich text editor of the teaching guide"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la gu&iacute;a docente"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the teaching guide"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the teaching guide"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the teaching guide"		// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the teaching guide"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtTchGui] =
@@ -6479,6 +6456,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of the teaching guide"	// Çeviri lazim!
 #endif
 	,
+	[ActEdiRchTxtTchGui] =
+#if   L==1	// ca
+	"Rich text editor of the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the teaching guide"
+#elif L==4	// es
+	"Editor de texto enriquecido de la gu&iacute;a docente"
+#elif L==5	// fr
+	"Rich text editor of the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the teaching guide"		// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtTchGui] =
 #if   L==1	// ca
 	"Change rich text of the teaching guide"		// Necessita traducció
@@ -6500,6 +6500,98 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the teaching guide"		// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiPagTchGui] =
+#if   L==1	// ca
+	"Form to create web page in the teaching guide"				// Necessita traducció
+#elif L==2	// de
+	"Form to create web page in the teaching guide"				// Need Übersetzung
+#elif L==3	// en
+	"Form to create web page in the teaching guide"
+#elif L==4	// es
+	"Formulario para crear p&aacute;gina web en la gu&iacute;a docente"
+#elif L==5	// fr
+	"Form to create web page in the teaching guide"				// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear p&aacute;gina web en la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create web page in the teaching guide"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create web page in the teaching guide"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create web page in the teaching guide"				// Precisa de tradução
+#elif L==10	// tr
+	"Form to create web page in the teaching guide"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagTchGui] =
+#if   L==1	// ca
+	"Create web page in the teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Create web page in the teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the teaching guide"
+#elif L==4	// es
+	"Crear p&aacute;gina web en la gu&iacute;a docente"
+#elif L==5	// fr
+	"Create web page in the teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear p&aacute;gina web en la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiURLTchGui] =
+#if   L==1	// ca
+	"Form to create URL in the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Form to create URL in the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Form to create URL in the teaching guide"
+#elif L==4	// es
+	"Formulario para crear URL en la gu&iacute;a docente"
+#elif L==5	// fr
+	"Form to create URL in the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear URL en la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create URL in the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create URL in the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create URL in the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Form to create URL in the teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLTchGui] =
+#if   L==1	// ca
+	"Create URL in the teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the teaching guide"
+#elif L==4	// es
+	"Crear una URL en la gu&iacute;a docente"
+#elif L==5	// fr
+	"Create URL in the teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the teaching guide"		// Çeviri lazim!
 #endif
 	,
 	[ActReqLnkTchGui] =
@@ -6673,11 +6765,11 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==3	// en
 	"Request new tree node in syllabus"
 #elif L==4	// es
-	"Solicitar nuevo nodo del &aacute;rbol en temario"
+	"Solicitar nuevo nodo del &aacute;rbol en el temario"
 #elif L==5	// fr
 	"Request new tree node in syllabus"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar nuevo nodo del &aacute;rbol en temario"	// Okoteve traducción
+	"Solicitar nuevo nodo del &aacute;rbol en el temario"	// Okoteve traducción
 #elif L==7	// it
 	"Request new tree node in syllabus"			// Bisogno di traduzione
 #elif L==8	// pl
@@ -7079,53 +7171,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the syllabus"			// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLSyl] =
-#if   L==1	// ca
-	"Create URL in the syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the syllabus"
-#elif L==4	// es
-	"Crear una URL en el programa"
-#elif L==5	// fr
-	"Create URL in the syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en el programa"		// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagSyl] =
-#if   L==1	// ca
-	"Create web page in the syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Create web page in the syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the syllabus"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en el programa"
-#elif L==5	// fr
-	"Create web page in the syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en el programa"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the syllabus"		// Çeviri lazim!
-#endif
-	,
-	[ActPlaTxtEdiSyl] =
+	[ActEdiPlaTxtSyl] =
 #if   L==1	// ca
 	"Plain text editor of the syllabus"	// Necessita traducció
 #elif L==2	// de
@@ -7146,29 +7192,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of the syllabus"	// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of the syllabus"	// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiSyl] =
-#if   L==1	// ca
-	"Rich text editor of the syllabus"		// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the syllabus"		// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the syllabus"
-#elif L==4	// es
-	"Editor de texto enriquecido del programa"
-#elif L==5	// fr
-	"Rich text editor of the syllabus"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido del programa"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the syllabus"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the syllabus"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the syllabus"		// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the syllabus"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtSyl] =
@@ -7194,6 +7217,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of the syllabus"	// Çeviri lazim!
 #endif
 	,
+	[ActEdiRchTxtSyl] =
+#if   L==1	// ca
+	"Rich text editor of the syllabus"		// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the syllabus"		// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the syllabus"
+#elif L==4	// es
+	"Editor de texto enriquecido del programa"
+#elif L==5	// fr
+	"Rich text editor of the syllabus"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido del programa"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the syllabus"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the syllabus"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the syllabus"		// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtSyl] =
 #if   L==1	// ca
 	"Change rich text of the syllabus"		// Necessita traducció
@@ -7217,27 +7263,119 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the syllabus"		// Çeviri lazim!
 #endif
 	,
+	[ActEdiPagSyl] =
+#if   L==1	// ca
+	"Form to create web page in the syllabus"			// Necessita traducció
+#elif L==2	// de
+	"Form to create web page in the syllabus"			// Need Übersetzung
+#elif L==3	// en
+	"Form to create web page in the syllabus"
+#elif L==4	// es
+	"Formulario para crear p&aacute;gina web en el programa"
+#elif L==5	// fr
+	"Form to create web page in the syllabus"			// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear p&aacute;gina web en el programa"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create web page in the syllabus"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create web page in the syllabus"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create web page in the syllabus"			// Precisa de tradução
+#elif L==10	// tr
+	"Form to create web page in the syllabus"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagSyl] =
+#if   L==1	// ca
+	"Create web page in the syllabus"		// Necessita traducció
+#elif L==2	// de
+	"Create web page in the syllabus"		// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the syllabus"
+#elif L==4	// es
+	"Crear p&aacute;gina web en el programa"
+#elif L==5	// fr
+	"Create web page in the syllabus"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear p&aacute;gina web en el programa"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the syllabus"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the syllabus"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the syllabus"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiURLSyl] =
+#if   L==1	// ca
+	"Form to create URL in the syllabus"		// Necessita traducció
+#elif L==2	// de
+	"Form to create URL in the syllabus"		// Need Übersetzung
+#elif L==3	// en
+	"Form to create URL in the syllabus"
+#elif L==4	// es
+	"Formulario para crear URL en el programa"
+#elif L==5	// fr
+	"Form to create URL in the syllabus"		// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear URL en el programa"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create URL in the syllabus"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create URL in the syllabus"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create URL in the syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	"Form to create URL in the syllabus"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLSyl] =
+#if   L==1	// ca
+	"Create URL in the syllabus"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the syllabus"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the syllabus"
+#elif L==4	// es
+	"Crear una URL en el programa"
+#elif L==5	// fr
+	"Create URL in the syllabus"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en el programa"		// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the syllabus"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the syllabus"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the syllabus"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the syllabus"		// Çeviri lazim!
+#endif
+	,
 	[ActReqLnkSyl] =
 #if   L==1	// ca
-	"Copy link to the syllabus"		// Necessita traducció
+	"Copy link to the syllabus"	// Necessita traducció
 #elif L==2	// de
-	"Copy link to the syllabus"		// Need Übersetzung
+	"Copy link to the syllabus"	// Need Übersetzung
 #elif L==3	// en
 	"Copy link to the syllabus"
 #elif L==4	// es
-	"Copiar enlace a la gu&iacute;a docente"
+	"Copiar enlace al temario"
 #elif L==5	// fr
-	"Copy link to the syllabus"		// Besoin de traduction
+	"Copy link to the syllabus"	// Besoin de traduction
 #elif L==6	// gn
-	"Copiar enlace a la gu&iacute;a docente"	// Okoteve traducción
+	"Copiar enlace al temario"	// Okoteve traducción
 #elif L==7	// it
-	"Copy link to the syllabus"		// Bisogno di traduzione
+	"Copy link to the syllabus"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Copy link to the syllabus"		// Potrzebujesz tlumaczenie
+	"Copy link to the syllabus"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Copy link to the syllabus"		// Precisa de tradução
+	"Copy link to the syllabus"	// Precisa de tradução
 #elif L==10	// tr
-	"Copy link to the syllabus"		// Çeviri lazim!
+	"Copy link to the syllabus"	// Çeviri lazim!
 #endif
 	,
 	[ActCvtSyl] =
@@ -7378,52 +7516,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the bibliography"			// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLBib] =
-#if   L==1	// ca
-	"Create URL in the bibliography"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the bibliography"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the bibliography"
-#elif L==4	// es
-	"Crear una URL en la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Create URL in the bibliography"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the bibliography"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the bibliography"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the bibliography"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the bibliography"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagBib] =
-#if   L==1	// ca
-	"Create web page in the bibliography"			// Necessita traducció
-#elif L==2	// de
-	"Create web page in the bibliography"			// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the bibliography"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Create web page in the bibliography"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the bibliography"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the bibliography"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the bibliography"			// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the bibliography"			// Çeviri lazim!
-#endif
-	,
 	[ActEditorBib] =
 #if   L==1	// ca
 	"Integrated editor of the bibliography"		// Necessita traducció
@@ -7447,7 +7539,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of the bibliography"		// Çeviri lazim!
 #endif
 	,
-	[ActPlaTxtEdiBib] =
+	[ActEdiPlaTxtBib] =
 #if   L==1	// ca
 	"Plain text editor of the bibliography"			// Necessita traducció
 #elif L==2	// de
@@ -7468,29 +7560,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of the bibliography"			// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of the bibliography"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiBib] =
-#if   L==1	// ca
-	"Rich text editor of the bibliography"			// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the bibliography"			// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the bibliography"
-#elif L==4	// es
-	"Editor de texto enriquecido de la bibliograf&iacute;a"
-#elif L==5	// fr
-	"Rich text editor of the bibliography"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la bibliograf&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the bibliography"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the bibliography"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the bibliography"			// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the bibliography"			// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtBib] =
@@ -7516,6 +7585,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of the bibliography"		// Çeviri lazim!
 #endif
 	,
+	[ActEdiRchTxtBib] =
+#if   L==1	// ca
+	"Rich text editor of the bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the bibliography"
+#elif L==4	// es
+	"Editor de texto enriquecido de la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Rich text editor of the bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the bibliography"			// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtBib] =
 #if   L==1	// ca
 	"Change rich text of the bibliography"			// Necessita traducció
@@ -7537,6 +7629,98 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the bibliography"			// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiPagBib] =
+#if   L==1	// ca
+	"Form to create web page in the bibliography"				// Necessita traducció
+#elif L==2	// de
+	"Form to create web page in the bibliography"				// Need Übersetzung
+#elif L==3	// en
+	"Form to create web page in the bibliography"
+#elif L==4	// es
+	"Formulario para crear p&aacute;gina web en la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Form to create web page in the bibliography"				// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear p&aacute;gina web en la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create web page in the bibliography"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create web page in the bibliography"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create web page in the bibliography"				// Precisa de tradução
+#elif L==10	// tr
+	"Form to create web page in the bibliography"				// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagBib] =
+#if   L==1	// ca
+	"Create web page in the bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Create web page in the bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the bibliography"
+#elif L==4	// es
+	"Crear p&aacute;gina web en la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Create web page in the bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear p&aacute;gina web en la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiURLBib] =
+#if   L==1	// ca
+	"Form to create URL in the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Form to create URL in the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Form to create URL in the bibliography"
+#elif L==4	// es
+	"Formulario para crear URL en la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Form to create URL in the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear URL en la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create URL in the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create URL in the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create URL in the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Form to create URL in the bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLBib] =
+#if   L==1	// ca
+	"Create URL in the bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the bibliography"
+#elif L==4	// es
+	"Crear una URL en la bibliograf&iacute;a"
+#elif L==5	// fr
+	"Create URL in the bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the bibliography"		// Çeviri lazim!
 #endif
 	,
 	[ActReqLnkBib] =
@@ -7677,52 +7861,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the FAQ"		// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLFAQ] =
-#if   L==1	// ca
-	"Create URL in the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the FAQ"
-#elif L==4	// es
-	"Crear una URL en la FAQ"
-#elif L==5	// fr
-	"Create URL in the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagFAQ] =
-#if   L==1	// ca
-	"Create web page in the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Create web page in the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the FAQ"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en la FAQ"
-#elif L==5	// fr
-	"Create web page in the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the FAQ"		// Çeviri lazim!
-#endif
-	,
 	[ActEditorFAQ] =
 #if   L==1	// ca
 	"Integrated editor of the FAQ"	// Necessita traducció
@@ -7746,7 +7884,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of the FAQ"	// Çeviri lazim!
 #endif
 	,
-	[ActPlaTxtEdiFAQ] =
+	[ActEdiPlaTxtFAQ] =
 #if   L==1	// ca
 	"Plain text editor of the FAQ"		// Necessita traducció
 #elif L==2	// de
@@ -7767,29 +7905,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of the FAQ"		// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of the FAQ"		// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiFAQ] =
-#if   L==1	// ca
-	"Rich text editor of the FAQ"		// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the FAQ"		// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the FAQ"
-#elif L==4	// es
-	"Editor de texto enriquecido de la FAQ"
-#elif L==5	// fr
-	"Rich text editor of the FAQ"		// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de la FAQ"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the FAQ"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the FAQ"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the FAQ"		// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the FAQ"		// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtFAQ] =
@@ -7815,6 +7930,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of the FAQ"	// Çeviri lazim!
 #endif
 	,
+	[ActEdiRchTxtFAQ] =
+#if   L==1	// ca
+	"Rich text editor of the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the FAQ"
+#elif L==4	// es
+	"Editor de texto enriquecido de la FAQ"
+#elif L==5	// fr
+	"Rich text editor of the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the FAQ"		// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtFAQ] =
 #if   L==1	// ca
 	"Change rich text of the FAQ"		// Necessita traducció
@@ -7836,6 +7974,98 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the FAQ"		// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiPagFAQ] =
+#if   L==1	// ca
+	"Form to create web page in the FAQ"			// Necessita traducció
+#elif L==2	// de
+	"Form to create web page in the FAQ"			// Need Übersetzung
+#elif L==3	// en
+	"Form to create web page in the FAQ"
+#elif L==4	// es
+	"Formulario para crear p&aacute;gina web en la FAQ"
+#elif L==5	// fr
+	"Form to create web page in the FAQ"			// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear p&aacute;gina web en la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create web page in the FAQ"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create web page in the FAQ"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create web page in the FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	"Form to create web page in the FAQ"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagFAQ] =
+#if   L==1	// ca
+	"Create web page in the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Create web page in the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the FAQ"
+#elif L==4	// es
+	"Crear p&aacute;gina web en la FAQ"
+#elif L==5	// fr
+	"Create web page in the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear p&aacute;gina web en la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiURLFAQ] =
+#if   L==1	// ca
+	"Form to create URL in the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Form to create URL in the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Form to create URL in the FAQ"
+#elif L==4	// es
+	"Formulario para crear URL en la FAQ"
+#elif L==5	// fr
+	"Form to create URL in the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear URL en la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create URL in the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create URL in the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create URL in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Form to create URL in the FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLFAQ] =
+#if   L==1	// ca
+	"Create URL in the FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the FAQ"
+#elif L==4	// es
+	"Crear una URL en la FAQ"
+#elif L==5	// fr
+	"Create URL in the FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en la FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the FAQ"		// Çeviri lazim!
 #endif
 	,
 	[ActReqLnkFAQ] =
@@ -7976,52 +8206,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the course links"				// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLCrsLnk] =
-#if   L==1	// ca
-	"Create URL in the course links"		// Necessita traducció
-#elif L==2	// de
-	"Create URL in the course links"		// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the course links"
-#elif L==4	// es
-	"Crear una URL en los enlaces de la asignatura"
-#elif L==5	// fr
-	"Create URL in the course links"		// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the course links"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the course links"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the course links"		// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the course links"		// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagCrsLnk] =
-#if   L==1	// ca
-	"Create web page in the course links"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the course links"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the course links"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en los enlaces de la asignatura"
-#elif L==5	// fr
-	"Create web page in the course links"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the course links"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the course links"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the course links"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the course links"				// Çeviri lazim!
-#endif
-	,
 	[ActEditorCrsLnk] =
 #if   L==1	// ca
 	"Integrated editor of course links"			// Necessita traducció
@@ -8045,7 +8229,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of course links"			// Çeviri lazim!
 #endif
 	,
-	[ActPlaTxtEdiCrsLnk] =
+	[ActEdiPlaTxtCrsLnk] =
 #if   L==1	// ca
 	"Plain text editor of course links"			// Necessita traducció
 #elif L==2	// de
@@ -8066,29 +8250,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of course links"			// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of course links"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiCrsLnk] =
-#if   L==1	// ca
-	"Rich text editor of course links"				// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of course links"				// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of course links"
-#elif L==4	// es
-	"Editor de texto enriquecido de los enlaces de la asignatura"
-#elif L==5	// fr
-	"Rich text editor of course links"				// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido de los enlaces de la asignatura"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of course links"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of course links"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of course links"				// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of course links"				// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtCrsLnk] =
@@ -8114,6 +8275,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of course links"			// Çeviri lazim!
 #endif
 	,
+	[ActEdiRchTxtCrsLnk] =
+#if   L==1	// ca
+	"Rich text editor of course links"				// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of course links"				// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of course links"
+#elif L==4	// es
+	"Editor de texto enriquecido de los enlaces de la asignatura"
+#elif L==5	// fr
+	"Rich text editor of course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido de los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of course links"				// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtCrsLnk] =
 #if   L==1	// ca
 	"Change rich text of course links"				// Necessita traducció
@@ -8135,6 +8319,98 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of course links"				// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of course links"				// Çeviri lazim!
+#endif
+	,
+	[ActEdiPagCrsLnk] =
+#if   L==1	// ca
+	"Form to create web page in the course links"					// Necessita traducció
+#elif L==2	// de
+	"Form to create web page in the course links"					// Need Übersetzung
+#elif L==3	// en
+	"Form to create web page in the course links"
+#elif L==4	// es
+	"Formulario para crear p&aacute;gina web en los enlaces de la asignatura"
+#elif L==5	// fr
+	"Form to create web page in the course links"					// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear p&aacute;gina web en los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create web page in the course links"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create web page in the course links"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create web page in the course links"					// Precisa de tradução
+#elif L==10	// tr
+	"Form to create web page in the course links"					// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagCrsLnk] =
+#if   L==1	// ca
+	"Create web page in the course links"				// Necessita traducció
+#elif L==2	// de
+	"Create web page in the course links"				// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the course links"
+#elif L==4	// es
+	"Crear p&aacute;gina web en los enlaces de la asignatura"
+#elif L==5	// fr
+	"Create web page in the course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear p&aacute;gina web en los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the course links"				// Çeviri lazim!
+#endif
+	,
+	[ActEdiURLCrsLnk] =
+#if   L==1	// ca
+	"Form to create URL in the course links"			// Necessita traducció
+#elif L==2	// de
+	"Form to create URL in the course links"			// Need Übersetzung
+#elif L==3	// en
+	"Form to create URL in the course links"
+#elif L==4	// es
+	"Formulario para crear URL en los enlaces de la asignatura"
+#elif L==5	// fr
+	"Form to create URL in the course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear URL en los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create URL in the course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create URL in the course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create URL in the course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Form to create URL in the course links"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLCrsLnk] =
+#if   L==1	// ca
+	"Create URL in the course links"		// Necessita traducció
+#elif L==2	// de
+	"Create URL in the course links"		// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the course links"
+#elif L==4	// es
+	"Crear una URL en los enlaces de la asignatura"
+#elif L==5	// fr
+	"Create URL in the course links"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en los enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the course links"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the course links"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the course links"		// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the course links"		// Çeviri lazim!
 #endif
 	,
 	[ActReqLnkCrsLnk] =
@@ -8275,52 +8551,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Select the type of information shown in the assessment system"				// Çeviri lazim!
 #endif
 	,
-	[ActRcvURLAss] =
-#if   L==1	// ca
-	"Create URL in the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Create URL in the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Create URL in the assessment system"
-#elif L==4	// es
-	"Crear una URL en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Create URL in the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Crear una URL en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Create URL in the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Create URL in the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create URL in the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Create URL in the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRcvPagAss] =
-#if   L==1	// ca
-	"Create web page in the assessment system"				// Necessita traducció
-#elif L==2	// de
-	"Create web page in the assessment system"				// Need Übersetzung
-#elif L==3	// en
-	"Create web page in the assessment system"
-#elif L==4	// es
-	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Create web page in the assessment system"				// Besoin de traduction
-#elif L==6	// gn
-	"Crear una p&aacute;gina web en el sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Create web page in the assessment system"				// Bisogno di traduzione
-#elif L==8	// pl
-	"Create web page in the assessment system"				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Create web page in the assessment system"				// Precisa de tradução
-#elif L==10	// tr
-	"Create web page in the assessment system"				// Çeviri lazim!
-#endif
-	,
 	[ActEditorAss] =
 #if   L==1	// ca
 	"Integrated editor of the assessment system"		// Necessita traducció
@@ -8344,7 +8574,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Integrated editor of the assessment system"		// Çeviri lazim!
 #endif
 	,
-	[ActPlaTxtEdiAss] =
+	[ActEdiPlaTxtAss] =
 #if   L==1	// ca
 	"Plain text editor of the assessment system"			// Necessita traducció
 #elif L==2	// de
@@ -8365,29 +8595,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Plain text editor of the assessment system"			// Precisa de tradução
 #elif L==10	// tr
 	"Plain text editor of the assessment system"			// Çeviri lazim!
-#endif
-	,
-	[ActRchTxtEdiAss] =
-#if   L==1	// ca
-	"Rich text editor of the assessment system"			// Necessita traducció
-#elif L==2	// de
-	"Rich text editor of the assessment system"			// Need Übersetzung
-#elif L==3	// en
-	"Rich text editor of the assessment system"
-#elif L==4	// es
-	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"
-#elif L==5	// fr
-	"Rich text editor of the assessment system"			// Besoin de traduction
-#elif L==6	// gn
-	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
-#elif L==7	// it
-	"Rich text editor of the assessment system"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Rich text editor of the assessment system"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Rich text editor of the assessment system"			// Precisa de tradução
-#elif L==10	// tr
-	"Rich text editor of the assessment system"			// Çeviri lazim!
 #endif
 	,
 	[ActRcvPlaTxtAss] =
@@ -8413,6 +8620,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change plain text of the assessment system"		// Çeviri lazim!
 #endif
 	,
+	[ActEdiRchTxtAss] =
+#if   L==1	// ca
+	"Rich text editor of the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Rich text editor of the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Rich text editor of the assessment system"
+#elif L==4	// es
+	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Rich text editor of the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Editor de texto enriquecido del sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Rich text editor of the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Rich text editor of the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Rich text editor of the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Rich text editor of the assessment system"			// Çeviri lazim!
+#endif
+	,
 	[ActRcvRchTxtAss] =
 #if   L==1	// ca
 	"Change rich text of the assessment system"			// Necessita traducció
@@ -8434,6 +8664,98 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Change rich text of the assessment system"			// Precisa de tradução
 #elif L==10	// tr
 	"Change rich text of the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiPagAss] =
+#if   L==1	// ca
+	"Form to create web page in the assessment system"					// Necessita traducció
+#elif L==2	// de
+	"Form to create web page in the assessment system"					// Need Übersetzung
+#elif L==3	// en
+	"Form to create web page in the assessment system"
+#elif L==4	// es
+	"Formulario para crear p&aacute;gina web en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Form to create web page in the assessment system"					// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear p&aacute;gina web en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create web page in the assessment system"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create web page in the assessment system"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create web page in the assessment system"					// Precisa de tradução
+#elif L==10	// tr
+	"Form to create web page in the assessment system"					// Çeviri lazim!
+#endif
+	,
+	[ActRcvPagAss] =
+#if   L==1	// ca
+	"Create web page in the assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Create web page in the assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Create web page in the assessment system"
+#elif L==4	// es
+	"Crear p&aacute;gina web en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Create web page in the assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear p&aacute;gina web en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Create web page in the assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create web page in the assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create web page in the assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Create web page in the assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActEdiURLAss] =
+#if   L==1	// ca
+	"Form to create URL in the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Form to create URL in the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Form to create URL in the assessment system"
+#elif L==4	// es
+	"Formulario para crear URL en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Form to create URL in the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Formulario para crear URL en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Form to create URL in the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Form to create URL in the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Form to create URL in the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Form to create URL in the assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActRcvURLAss] =
+#if   L==1	// ca
+	"Create URL in the assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Create URL in the assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Create URL in the assessment system"
+#elif L==4	// es
+	"Crear una URL en el sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Create URL in the assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear una URL en el sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Create URL in the assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create URL in the assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create URL in the assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Create URL in the assessment system"			// Çeviri lazim!
 #endif
 	,
 	[ActReqLnkAss] =
@@ -8530,25 +8852,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActFrmNewTreNodPrg] =
 #if   L==1	// ca
-	"Request new tree node"			// Necessita traducció
+	"Request new tree node in program"			// Necessita traducció
 #elif L==2	// de
-	"Request new tree node"			// Need Übersetzung
+	"Request new tree node in program"			// Need Übersetzung
 #elif L==3	// en
-	"Request new tree node"
+	"Request new tree node in program"
 #elif L==4	// es
-	"Solicitar nuevo nodo del &aacute;rbol"
+	"Solicitar nuevo nodo del &aacute;rbol en el programa"
 #elif L==5	// fr
-	"Request new tree node"			// Besoin de traduction
+	"Request new tree node in program"			// Besoin de traduction
 #elif L==6	// gn
-	"Solicitar nuevo nodo del &aacute;rbol"	// Okoteve traducción
+	"Solicitar nuevo nodo del &aacute;rbol en el programa"	// Okoteve traducción
 #elif L==7	// it
-	"Request new tree node"			// Bisogno di traduzione
+	"Request new tree node in program"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request new tree node"			// Potrzebujesz tlumaczenie
+	"Request new tree node in program"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request new tree node"			// Precisa de tradução
+	"Request new tree node in program"			// Precisa de tradução
 #elif L==10	// tr
-	"Request new tree node"			// Çeviri lazim!
+	"Request new tree node in program"			// Çeviri lazim!
 #endif
 	,
 	[ActChgTreNodPrg] =
