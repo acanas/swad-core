@@ -314,8 +314,8 @@ void Tre_PutIconToEditTree (struct Tre_Node *Node)
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActEdiTrePrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActEdiTreSyl,
-      [Tre_PRACTICALS	] = ActEdiTreSyl,
+      [Tre_SYLLABUS_LEC	] = ActEdiTreSyl,
+      [Tre_SYLLABUS_PRA	] = ActEdiTreSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -337,8 +337,8 @@ void Tre_PutIconToViewTree (struct Tre_Node *Node)
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActSeePrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActSeeSyl,
-      [Tre_PRACTICALS	] = ActSeeSyl,
+      [Tre_SYLLABUS_LEC	] = ActSeeSyl,
+      [Tre_SYLLABUS_PRA	] = ActSeeSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -360,8 +360,8 @@ void Tre_PutIconToCreateNewNode (struct Tre_Node *Node)
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActFrmNewTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActFrmNewTreNodSyl,
-      [Tre_PRACTICALS	] = ActFrmNewTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActFrmNewTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActFrmNewTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -612,15 +612,15 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
       [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodPrg,	// Expanded  , Not editing ==> action to contract
       [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodPrg,	// Expanded  ,     Editing ==> action to contract
 
-      [Tre_LECTURES	][ConExp_CONTRACTED][Vie_VIEW] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Tre_LECTURES	][ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
-      [Tre_LECTURES	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
-      [Tre_LECTURES	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_VIEW] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
+      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
 
-      [Tre_PRACTICALS	][ConExp_CONTRACTED][Vie_VIEW] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Tre_PRACTICALS	][ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
-      [Tre_PRACTICALS	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
-      [Tre_PRACTICALS	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_VIEW] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
+      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
      };
    static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (Act_Action_t NextAction,const char *Anchor,
 								     void (*FuncPars) (void *Args),void *Args) =
@@ -934,8 +934,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActReqRemTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActReqRemTreNodSyl,
-      [Tre_PRACTICALS	] = ActReqRemTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActReqRemTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActReqRemTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -945,18 +945,18 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
      {
       [Tre_PROGRAM	][HidVis_HIDDEN ] = ActUnhTreNodPrg,	// Hidden ==> action to unhide
       [Tre_PROGRAM	][HidVis_VISIBLE] = ActHidTreNodPrg,	// Visible ==> action to hide
-      [Tre_LECTURES	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
-      [Tre_LECTURES	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
-      [Tre_PRACTICALS	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
-      [Tre_PRACTICALS	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
+      [Tre_SYLLABUS_LEC	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
+      [Tre_SYLLABUS_LEC	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
+      [Tre_SYLLABUS_PRA	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
+      [Tre_SYLLABUS_PRA	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
      };
    static Act_Action_t ActionSee[Tre_NUM_TYPES] =
      {
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActSeeTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActSeeTreNodSyl,
-      [Tre_PRACTICALS	] = ActSeeTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActSeeTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActSeeTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -967,8 +967,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActFrmChgTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActFrmChgTreNodSyl,
-      [Tre_PRACTICALS	] = ActFrmChgTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActFrmChgTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActFrmChgTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -979,8 +979,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActFrmNewTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActFrmNewTreNodSyl,
-      [Tre_PRACTICALS	] = ActFrmNewTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActFrmNewTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActFrmNewTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -991,8 +991,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActUp_TreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActUp_TreNodSyl,
-      [Tre_PRACTICALS	] = ActUp_TreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActUp_TreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActUp_TreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -1003,8 +1003,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActDwnTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActDwnTreNodSyl,
-      [Tre_PRACTICALS	] = ActDwnTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActDwnTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActDwnTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -1015,8 +1015,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActLftTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActLftTreNodSyl,
-      [Tre_PRACTICALS	] = ActLftTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActLftTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActLftTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -1027,8 +1027,8 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActRgtTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActRgtTreNodSyl,
-      [Tre_PRACTICALS	] = ActRgtTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActRgtTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActRgtTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -1182,20 +1182,20 @@ static bool Tre_CheckIfMoveRightIsAllowed (unsigned NumNode)
 
 void Tre_PutPars (void *Node)
   {
-   Syl_WhichSyllabus_t WhichSyllabus;
+   static Inf_Type_t InfoType;
 
    if (Node)
      {
       ParCod_PutPar (ParCod_Nod,((struct Tre_Node *) Node)->Hierarchy.NodCod);
       switch (((struct Tre_Node *) Node)->TreeType)
 	{
-	 case Tre_LECTURES:
-	    WhichSyllabus = Syl_LECTURES;
-	    Syl_PutParWhichSyllabus (&WhichSyllabus);
+	 case Tre_SYLLABUS_LEC:
+	    InfoType = Inf_SYLLABUS_LEC;
+	    Inf_PutParInfoType (&InfoType);
 	    break;
-	 case Tre_PRACTICALS:
-	    WhichSyllabus = Syl_PRACTICALS;
-	    Syl_PutParWhichSyllabus (&WhichSyllabus);
+	 case Tre_SYLLABUS_PRA:
+	    InfoType = Inf_SYLLABUS_PRA;
+	    Inf_PutParInfoType (&InfoType);
 	    break;
 	 default:
 	    break;
@@ -1463,8 +1463,8 @@ void Tre_ReqRemNode (void)
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActRemTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActRemTreNodSyl,
-      [Tre_PRACTICALS	] = ActRemTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActRemTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActRemTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -1992,8 +1992,8 @@ static void Tre_ShowFormToCreateNode (Tre_TreeType_t TreeType,long ParentNodCod)
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActNewTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActNewTreNodSyl,
-      [Tre_PRACTICALS	] = ActNewTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActNewTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActNewTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -2040,8 +2040,8 @@ static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
       [Tre_UNKNOWN	] = ActUnk,
       [Tre_PROGRAM	] = ActChgTreNodPrg,
       [Tre_GUIDE	] = ActUnk,
-      [Tre_LECTURES	] = ActChgTreNodSyl,
-      [Tre_PRACTICALS	] = ActChgTreNodSyl,
+      [Tre_SYLLABUS_LEC	] = ActChgTreNodSyl,
+      [Tre_SYLLABUS_PRA	] = ActChgTreNodSyl,
       [Tre_BIBLIOGRAPHY	] = ActUnk,
       [Tre_FAQ		] = ActUnk,
       [Tre_LINKS	] = ActUnk,
@@ -2291,8 +2291,6 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
 
 static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void)
   {
-   Syl_WhichSyllabus_t WhichSyllabus;
-
    switch (Act_GetSuperAction (Gbl.Action.Act))
      {
       case ActSeePrg:
@@ -2300,14 +2298,12 @@ static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void)
       case ActSeeTchGui:
 	 return Tre_GUIDE;
       case ActSeeSyl:
-	 WhichSyllabus = Syl_GetParWhichSyllabus ();
-	 switch (WhichSyllabus)
+	 switch (Inf_GetParInfoType ())
 	   {
-	    case Syl_LECTURES:
-	       return Tre_LECTURES;
-	    case Syl_PRACTICALS:
-	       return Tre_PRACTICALS;
-	    case Syl_NONE:
+	    case Inf_SYLLABUS_LEC:
+	       return Tre_SYLLABUS_LEC;
+	    case Inf_SYLLABUS_PRA:
+	       return Tre_SYLLABUS_PRA;
 	    default:
 	       Err_WrongSyllabusExit ();
 	       return Tre_UNKNOWN;	// Not reached

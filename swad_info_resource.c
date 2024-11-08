@@ -49,10 +49,11 @@ void InfRsc_GetLinkToInfo (void)
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    static Rsc_Type_t Types[Inf_NUM_TYPES] =
      {
+      [Inf_UNKNOWN_TYPE	] = Rsc_NONE,
       [Inf_INFORMATION	] = Rsc_INFORMATION,
       [Inf_TEACH_GUIDE	] = Rsc_TEACH_GUIDE,
-      [Inf_LECTURES	] = Rsc_LECTURES,
-      [Inf_PRACTICALS	] = Rsc_PRACTICALS,
+      [Inf_SYLLABUS_LEC	] = Rsc_LECTURES,
+      [Inf_SYLLABUS_PRA	] = Rsc_PRACTICALS,
       [Inf_BIBLIOGRAPHY	] = Rsc_BIBLIOGRAPHY,
       [Inf_FAQ		] = Rsc_FAQ,
       [Inf_LINKS	] = Rsc_LINKS,
@@ -60,22 +61,19 @@ void InfRsc_GetLinkToInfo (void)
      };
    static void (*FunctionToShowInfo[Inf_NUM_TYPES]) (void) =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = Crs_ShowIntroduction,
       [Inf_TEACH_GUIDE	] = Inf_ShowInfo,
-      [Inf_LECTURES	] = Inf_ShowInfo,
-      [Inf_PRACTICALS	] = Inf_ShowInfo,
+      [Inf_SYLLABUS_LEC	] = Inf_ShowInfo,
+      [Inf_SYLLABUS_PRA	] = Inf_ShowInfo,
       [Inf_BIBLIOGRAPHY	] = Inf_ShowInfo,
       [Inf_FAQ		] = Inf_ShowInfo,
       [Inf_LINKS	] = Inf_ShowInfo,
       [Inf_ASSESSMENT	] = Inf_ShowInfo,
      };
-   struct Syl_Syllabus Syllabus;
-
-   /***** Reset syllabus context *****/
-   Syl_ResetSyllabus (&Syllabus);
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
+   Inf_AsignInfoType (&Gbl.Crs.Info);
 
    /***** Copy link to exam into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Types[Gbl.Crs.Info.Type],-1L);

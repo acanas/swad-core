@@ -138,6 +138,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_search.h"
 #include "swad_session_database.h"
 #include "swad_setting_database.h"
+#include "swad_syllabus.h"
 #include "swad_tag_database.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
@@ -252,9 +253,7 @@ static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
                                     char *NewPlainPassword,		// Input
                                     char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);	// Output
 
-static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
-                                            struct Syl_Syllabus *Syllabus,
-                                            char **HTMLBuffer);
+static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,char **HTMLBuffer);
 static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
                                              char **HTMLBuffer);
 static int API_WritePageIntoHTMLBuffer (struct soap *soap,
@@ -1189,16 +1188,16 @@ int swad__getCourseInfo (struct soap *soap,
                          struct swad__getCourseInfoOutput *getCourseInfo)	// output
   {
    int ReturnCode;
-   struct Syl_Syllabus Syllabus;
    Inf_Type_t InfoType;
    size_t Length;
    int Result = SOAP_OK;
    const char *NamesInWSForInfoType[Inf_NUM_TYPES] =
      {
+      [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = "introduction",
       [Inf_TEACH_GUIDE	] = "guide",
-      [Inf_LECTURES	] = "lectures",
-      [Inf_PRACTICALS	] = "practicals",
+      [Inf_SYLLABUS_LEC	] = "lectures",
+      [Inf_SYLLABUS_PRA	] = "practicals",
       [Inf_BIBLIOGRAPHY	] = "bibliography",
       [Inf_FAQ		] = "FAQ",
       [Inf_LINKS	] = "links",
@@ -1206,7 +1205,7 @@ int swad__getCourseInfo (struct soap *soap,
      };
    const char *NamesInWSForInfoSrc[Inf_NUM_SOURCES] =
      {
-      [Inf_NONE		] = "none",
+      [Inf_SRC_NONE	] = "none",
       [Inf_EDITOR	] = "editor",
       [Inf_PLAIN_TEXT	] = "plainText",
       [Inf_RICH_TEXT	] = "richText",
@@ -1252,11 +1251,8 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
 
-   /***** Reset syllabus context *****/
-   Syl_ResetSyllabus (&Syllabus);
-
    /***** Get info source *****/
-   for (InfoType  = (Inf_Type_t) 0;
+   for (InfoType  = (Inf_Type_t) 1;
 	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 	InfoType++)
       if (!strcmp (infoType,NamesInWSForInfoType[InfoType]))
@@ -1266,7 +1262,8 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
    Gbl.Crs.Info.Type = InfoType;
-   Inf_GetAndCheckInfoSrcFromDB (&Gbl.Crs.Info,&Syllabus);
+   Inf_GetAndCheckInfoSrcFromDB (&Gbl.Crs.Info);
+
    Length = strlen (NamesInWSForInfoSrc[Gbl.Crs.Info.FromDB.Src]);
    getCourseInfo->infoSrc = soap_malloc (soap,Length + 1);
    Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[Gbl.Crs.Info.FromDB.Src],Length);
@@ -1275,14 +1272,14 @@ int swad__getCourseInfo (struct soap *soap,
    getCourseInfo->infoTxt = NULL;
    switch (Gbl.Crs.Info.FromDB.Src)
      {
-      case Inf_NONE:		// No info available
+      case Inf_SRC_NONE:	// No info available
          break;
       case Inf_EDITOR:		// Internal editor (only for syllabus)
 	 switch (Gbl.Crs.Info.Type)
 	   {
-	    case Inf_LECTURES:		// Syllabus (lectures)
-	    case Inf_PRACTICALS:	// Syllabys (practicals)
-	       Result = API_WriteSyllabusIntoHTMLBuffer (soap,&Syllabus,&(getCourseInfo->infoTxt));
+	    case Inf_SYLLABUS_LEC:		// Syllabus (lectures)
+	    case Inf_SYLLABUS_PRA:	// Syllabys (practicals)
+	       Result = API_WriteSyllabusIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
 	       break;
 	    default:
                break;
@@ -1315,11 +1312,9 @@ int swad__getCourseInfo (struct soap *soap,
 /************** Write the syllabus into a temporary HTML file ****************/
 /*****************************************************************************/
 
-static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
-                                            struct Syl_Syllabus *Syllabus,
-                                            char **HTMLBuffer)
+static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,char **HTMLBuffer)
   {
-   // extern struct LstItemsSyllabus Syl_LstItemsSyllabus;
+   struct Syl_Syllabus Syllabus;
    char FileNameHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
    size_t Length;
@@ -1328,9 +1323,10 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
    *HTMLBuffer = NULL;
 
    /***** Load syllabus from XML file to list of items in memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Syllabus,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Crs.Info.Type,
+					Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
-   if (Syllabus->LstItems.NumItems)
+   if (Syllabus.LstItems.NumItems)
      {
       /***** Create a unique name for the file *****/
       snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_syllabus.html",
@@ -1339,14 +1335,14 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
 	{
-         Syl_FreeListItemsSyllabus (Syllabus);
+         Syl_FreeListItemsSyllabus (&Syllabus);
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
                                      "Can not create temporary file");
 	}
 
       /***** Write syllabus in HTML into a temporary file *****/
-      Syl_WriteSyllabusIntoHTMLTmpFile (Syllabus,FileHTMLTmp);
+      Syl_WriteSyllabusIntoHTMLTmpFile (&Syllabus,FileHTMLTmp);
 
       /***** Write syllabus from list of items in memory to text buffer *****/
       /* Compute length of file */
@@ -1357,7 +1353,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);
-         Syl_FreeListItemsSyllabus (Syllabus);
+         Syl_FreeListItemsSyllabus (&Syllabus);
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
                                      "Not enough memory for buffer");
@@ -1369,7 +1365,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);
-         Syl_FreeListItemsSyllabus (Syllabus);
+         Syl_FreeListItemsSyllabus (&Syllabus);
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
                                      "Error reading file into buffer");
@@ -1382,7 +1378,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
      }
 
    /***** Free list of items *****/
-   Syl_FreeListItemsSyllabus (Syllabus);
+   Syl_FreeListItemsSyllabus (&Syllabus);
 
    return SOAP_OK;
   }

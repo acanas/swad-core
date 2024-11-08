@@ -110,6 +110,7 @@
 #include "swad_setting.h"
 #include "swad_survey.h"
 #include "swad_survey_resource.h"
+#include "swad_syllabus.h"
 #include "swad_system_config.h"
 #include "swad_tab.h"
 #include "swad_tag.h"

@@ -44,8 +44,8 @@ typedef enum
    Tre_UNKNOWN,		// Not assigned, unknown
    Tre_PROGRAM,		// Program
    Tre_GUIDE,		// Teaching guide
-   Tre_LECTURES,	// Syllabus (lectures)
-   Tre_PRACTICALS,	// Syllabus (practicals)
+   Tre_SYLLABUS_LEC,	// Syllabus (lectures)
+   Tre_SYLLABUS_PRA,	// Syllabus (practicals)
    Tre_BIBLIOGRAPHY,	// Bibliography
    Tre_FAQ,		// FAQ
    Tre_LINKS,		// Links

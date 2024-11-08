@@ -27,21 +27,13 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_info.h"
 #include "swad_tree.h"
 #include "swad_view.h"
 
 /*****************************************************************************/
 /************************ Public constants and types *************************/
 /*****************************************************************************/
-
-#define Syl_NUM_WHICH_SYLLABUS 3
-typedef enum
-  {
-   Syl_NONE		= 0,
-   Syl_LECTURES		= 1,
-   Syl_PRACTICALS	= 2,
-  } Syl_WhichSyllabus_t;	// Which syllabus I want to see
-#define Syl_DEFAULT_WHICH_SYLLABUS Syl_LECTURES
 
 #define Syl_NUM_CHANGE_POS_ITEM 2
 typedef enum
@@ -83,7 +75,6 @@ struct Syl_Syllabus
    char PathDir[PATH_MAX + 1];
    unsigned NumItem;	// Item being edited
    unsigned ParNumItem;	// Used as parameter in forms
-   Syl_WhichSyllabus_t WhichSyllabus;
   };
 
 // Structure used to get the limits (number of items) of the subtrees to exchange in a syllabus
@@ -102,13 +93,13 @@ struct MoveSubtrees
 
 void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 
-Syl_WhichSyllabus_t Syl_GetParWhichSyllabus (void);
-void Syl_PutParWhichSyllabus (void *SyllabusSelected);
-void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus);
+void Inf_PutParInfoType (void *InfoType);
+void Syl_PutFormWhichSyllabus (void);
 
 bool Syl_CheckSyllabus (Tre_TreeType_t TreeType);
 
 void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
+					  Inf_Type_t InfoType,
                                           long CrsCod);
 void Syl_FreeListItemsSyllabus (struct Syl_Syllabus *Syllabus);
 

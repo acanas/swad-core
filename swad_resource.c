@@ -257,8 +257,8 @@ static void Rsc_WriteRowClipboard (const struct Rsc_Link *Link,
 
 void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
   {
+   extern Inf_Type_t Inf_Types[Inf_NUM_TYPES];
    extern const char *Rsc_ResourceTypesIcons[Rsc_NUM_TYPES];
-   extern Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS];
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
    extern const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES];
    static struct
@@ -305,9 +305,9 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
       [Rsc_TEACH_GUIDE	] = {{ActUnk		,NULL,NULL},
 			     {ActSeeTchGui	,NULL,NULL}},
       [Rsc_LECTURES	] = {{ActUnk		,NULL,NULL},
-			     {ActSeeSyl		,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_LECTURES  ]}},
+			     {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]}},
       [Rsc_PRACTICALS	] = {{ActUnk		,NULL,NULL},
-			     {ActSeeSyl		,Syl_PutParWhichSyllabus,&Syl_WhichSyllabus[Syl_PRACTICALS]}},
+			     {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]}},
       [Rsc_BIBLIOGRAPHY	] = {{ActUnk		,NULL,NULL},
 			     {ActSeeBib		,NULL,NULL}},
       [Rsc_FAQ		] = {{ActUnk		,NULL,NULL},
@@ -498,8 +498,8 @@ void Rsc_GetResourceTitleFromLink (const struct Rsc_Link *Link,
       [Rsc_NONE		] = NULL,
       [Rsc_INFORMATION	] = &Txt_INFO_TITLE[Inf_INFORMATION	],
       [Rsc_TEACH_GUIDE	] = &Txt_INFO_TITLE[Inf_TEACH_GUIDE	],
-      [Rsc_LECTURES	] = &Txt_INFO_TITLE[Inf_LECTURES	],
-      [Rsc_PRACTICALS	] = &Txt_INFO_TITLE[Inf_PRACTICALS	],
+      [Rsc_LECTURES	] = &Txt_INFO_TITLE[Inf_SYLLABUS_LEC	],
+      [Rsc_PRACTICALS	] = &Txt_INFO_TITLE[Inf_SYLLABUS_PRA	],
       [Rsc_BIBLIOGRAPHY	] = &Txt_INFO_TITLE[Inf_BIBLIOGRAPHY	],
       [Rsc_FAQ		] = &Txt_INFO_TITLE[Inf_FAQ		],
       [Rsc_LINKS	] = &Txt_INFO_TITLE[Inf_LINKS		],

@@ -42,10 +42,11 @@ extern struct Globals Gbl;
 
 static const char *Inf_DB_NamesForInfoType[Inf_NUM_TYPES] =
   {
+   [Inf_UNKNOWN_TYPE	] = "unk",
    [Inf_INFORMATION	] = "intro",		// TODO: Change this to "inf"
    [Inf_TEACH_GUIDE	] = "description",	// TODO: Change this to "gui"
-   [Inf_LECTURES	] = "theory",		// TODO: Change this to "lec"
-   [Inf_PRACTICALS	] = "practices",	// TODO: Change this to "pra"
+   [Inf_SYLLABUS_LEC	] = "theory",		// TODO: Change this to "lec"
+   [Inf_SYLLABUS_PRA	] = "practices",	// TODO: Change this to "pra"
    [Inf_BIBLIOGRAPHY	] = "bibliography",	// TODO: Change this to "bib"
    [Inf_FAQ		] = "FAQ",		// TODO: Change this to "faq"
    [Inf_LINKS		] = "links",		// TODO: Change this to "lnk"
@@ -54,7 +55,7 @@ static const char *Inf_DB_NamesForInfoType[Inf_NUM_TYPES] =
 
 static const char *Inf_DB_NamesForInfoSrc[Inf_NUM_SOURCES] =
   {
-   [Inf_NONE		] = "none",
+   [Inf_SRC_NONE	] = "none",
    [Inf_EDITOR		] = "editor",
    [Inf_PLAIN_TEXT	] = "plain_text",
    [Inf_RICH_TEXT	] = "rich_text",
@@ -67,7 +68,7 @@ static const char *Inf_DB_NamesForInfoSrc[Inf_NUM_SOURCES] =
 /*****************************************************************************/
 
 /*****************************************************************************/
-/*** Convert a string with info type in database to a Inf_InfoType_t value ***/
+/***** Convert a string with info type in database to a Inf_Type_t value *****/
 /*****************************************************************************/
 
 Inf_Type_t Inf_DB_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB)
@@ -80,7 +81,7 @@ Inf_Type_t Inf_DB_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB)
       if (!strcmp (StrInfoTypeDB,Inf_DB_NamesForInfoType[InfoType]))
          return InfoType;
 
-   return (Inf_Type_t) 0;
+   return (Inf_Type_t) Inf_UNKNOWN_TYPE;
   }
 
 /*****************************************************************************/
@@ -99,14 +100,14 @@ void Inf_DB_SetInfoSrc (Inf_Src_t InfoSrc)
 		      Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]))
       // Info is already stored in database, so update it
      {	// Update info source
-      if (InfoSrc == Inf_NONE)
+      if (InfoSrc == Inf_SRC_NONE)
          DB_QueryUPDATE ("can not update info source",
 			 "UPDATE crs_info_src"
 			   " SET InfoSrc='%s',"
 			        "MustBeRead='N'"
 			 " WHERE CrsCod=%ld"
 			   " AND InfoType='%s'",
-                         Inf_DB_NamesForInfoSrc[Inf_NONE],
+                         Inf_DB_NamesForInfoSrc[Inf_SRC_NONE],
                          Gbl.Hierarchy.Node[Hie_CRS].HieCod,
                          Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
       else	// MustBeRead remains unchanged
@@ -180,7 +181,7 @@ Inf_Src_t Inf_DB_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
       if (!strcmp (StrInfoSrcDB,Inf_DB_NamesForInfoSrc[InfoSrc]))
          return InfoSrc;
 
-   return Inf_NONE;
+   return Inf_SRC_NONE;
   }
 
 /*****************************************************************************/

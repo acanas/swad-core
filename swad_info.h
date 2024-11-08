@@ -30,29 +30,30 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_constant.h"
-#include "swad_syllabus.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Inf_NUM_TYPES 8
+#define Inf_NUM_TYPES 9
 typedef enum
   {
-   Inf_INFORMATION	= 0,
-   Inf_TEACH_GUIDE	= 1,
-   Inf_LECTURES		= 2,
-   Inf_PRACTICALS	= 3,
-   Inf_BIBLIOGRAPHY	= 4,
-   Inf_FAQ		= 5,
-   Inf_LINKS		= 6,
-   Inf_ASSESSMENT	= 7,
+   Inf_UNKNOWN_TYPE	= 0,
+   Inf_INFORMATION	= 1,
+   Inf_TEACH_GUIDE	= 2,
+   Inf_SYLLABUS_LEC	= 3,
+   Inf_SYLLABUS_PRA	= 4,
+   Inf_BIBLIOGRAPHY	= 5,
+   Inf_FAQ		= 6,
+   Inf_LINKS		= 7,
+   Inf_ASSESSMENT	= 8,
   } Inf_Type_t;
+#define Inf_DEFAULT_WHICH_SYLLABUS Inf_SYLLABUS_LEC
 
 #define Inf_NUM_SOURCES 6
 typedef enum
   {
-   Inf_NONE		= 0,
+   Inf_SRC_NONE		= 0,
    Inf_EDITOR		= 1,
    Inf_PLAIN_TEXT	= 2,
    Inf_RICH_TEXT	= 3,
@@ -107,17 +108,12 @@ void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
 void Inf_ConfigInfo (void);
-void Inf_FormToEnterIntegratedEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
-void Inf_FormToEnterPlainTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
-void Inf_FormToEnterRichTextEditor (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
-void Inf_FormToEnterSendingPage (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
-void Inf_FormToEnterSendingURL (struct Syl_Syllabus *Syllabus,Inf_Src_t InfoSrc);
-void Inf_AsignInfoType (struct Inf_Info *Info,
-                        struct Syl_Syllabus *Syllabus);
+void Inf_AsignInfoType (struct Inf_Info *Info);
+Inf_Type_t Inf_GetParInfoType (void);
+void Inf_PutParInfoType (void *InfoType);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
 Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
-void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info,
-				   struct Syl_Syllabus *Syllabus);
+void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info);
 
 void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],

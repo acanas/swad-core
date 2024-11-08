@@ -17789,6 +17789,8 @@ const char *Txt_Info =
 
 const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	{
+	[Inf_UNKNOWN_TYPE] =
+	NULL,
 	[Inf_INFORMATION] =
 #if   L==1	// ca
 	"Informaci&oacute;"
@@ -17835,7 +17837,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	"Teaching guide"	// Çeviri lazim!
 #endif
 	,
-	[Inf_LECTURES] =
+	[Inf_SYLLABUS_LEC] =
 #if   L==1	// ca
 	"Temari de teoria"
 #elif L==2	// de
@@ -17858,7 +17860,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	"Teorik i&ccedil;erik"
 #endif
 	,
-	[Inf_PRACTICALS] =
+	[Inf_SYLLABUS_PRA] =
 #if   L==1	// ca
 	"Temari de pr&agrave;ctiques"
 #elif L==2	// de
@@ -17976,7 +17978,7 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 
 const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 	{
-	[Inf_NONE] =
+	[Inf_SRC_NONE] =
 #if   L==1	// ca
 	"No oferir cap informaci&oacute;"
 #elif L==2	// de
@@ -18117,7 +18119,7 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES] =
 
 const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 	{
-	[Inf_NONE] =
+	[Inf_SRC_NONE] =
 	NULL,
 	[Inf_EDITOR] =
 #if   L==1	// ca
@@ -18237,7 +18239,7 @@ const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES] =
 
 const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_SOURCES] =
 	{
-	[Inf_NONE] =
+	[Inf_SRC_NONE] =
 #if   L==1	// ca
 	"Cap informaci&oacute;"
 #elif L==2	// de
@@ -33073,6 +33075,29 @@ const char *Txt_Real_number_between_A_and_B_2 =	// Must start by space
 	" and";	// Çeviri lazim!
 #endif
 
+const char *Txt_Reading =
+#if   L==1	// ca
+	"Lectura";
+#elif L==2	// de
+	"Lekt&uuml;re";
+#elif L==3	// en
+	"Reading";
+#elif L==4	// es
+	"Lectura";
+#elif L==5	// fr
+	"Lecture";
+#elif L==6	// gn
+	"Mo&ntilde;e'&etilde;r&atilde;";
+#elif L==7	// it
+	"Lettura";
+#elif L==8	// pl
+	"Czytanie";
+#elif L==9	// pt
+	"Leitura";
+#elif L==10	// tr
+	"Okuma";
+#endif
+
 const char *Txt_Recommended_aspect_ratio =
 #if   L==1	// ca
 	"Relaci&oacute; d'aspecte recomanada";
@@ -45917,58 +45942,6 @@ const char *Txt_Syllabus_of_the_course =
 #elif L==10	// tr
 	"Syllabus of the course";	// Çeviri lazim!
 #endif
-
-const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS] =
-	{
-	[Syl_NONE] =
-	""
-	,
-	[Syl_LECTURES] =
-#if   L==1	// ca
-	"Teoria"
-#elif L==2	// de
-	"Vorlesung"
-#elif L==3	// en
-	"Lectures"
-#elif L==4	// es
-	"Teor&iacute;a"
-#elif L==5	// fr
-	"Th&eacute;orie"
-#elif L==6	// gn
-	"Teor&iacute;a"	// Okoteve traducción
-#elif L==7	// it
-	"Teoria"
-#elif L==8	// pl
-	"Wyklady"
-#elif L==9	// pt
-	"Teoria"
-#elif L==10	// tr
-	"Lectures"	// Çeviri lazim!
-#endif
-	,
-	[Syl_PRACTICALS] =
-#if   L==1	// ca
-	"Pr&agrave;ctiques"
-#elif L==2	// de
-	"&Uuml;bung"
-#elif L==3	// en
-	"Practicals"
-#elif L==4	// es
-	"Pr&aacute;cticas"
-#elif L==5	// fr
-	"Pratique"
-#elif L==6	// gn
-	"Pr&aacute;cticas"	// Okoteve traducción
-#elif L==7	// it
-	"Pratica"
-#elif L==8	// pl
-	"Praktyki"
-#elif L==9	// pt
-	"Pr&aacute;tica"
-#elif L==10	// tr
-	"Practicals"		// Çeviri lazim!
-#endif
-	};
 
 /*
 const char *Txt_Platform =

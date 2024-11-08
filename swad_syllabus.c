@@ -49,21 +49,10 @@
 #include "swad_info_database.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_syllabus.h"
 #include "swad_tree.h"
 #include "swad_tree_database.h"
 #include "swad_xml.h"
-
-/*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-// Necessary to make pointer as argument of functions
-Syl_WhichSyllabus_t Syl_WhichSyllabus[Syl_NUM_WHICH_SYLLABUS] =
-  {
-   [Syl_NONE      ] = Syl_NONE,
-   [Syl_LECTURES  ] = Syl_LECTURES,
-   [Syl_PRACTICALS] = Syl_PRACTICALS
-  };
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -96,57 +85,29 @@ static void Syl_CloseXMLFile (FILE **XML);
 
 void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
   {
+   Syllabus->LstItems.Lst = NULL;
+   Syllabus->LstItems.NumItems = 0;
+   Syllabus->LstItems.NumItemsWithChildren = 0;
+   Syllabus->LstItems.NumLevels = 0;
    Syllabus->PathDir[0] = '\0';
    Syllabus->NumItem = 0;
-   Syllabus->WhichSyllabus = Syl_NONE;
-  }
-
-/*****************************************************************************/
-/************* Get parameter about which syllabus I want to see **************/
-/*****************************************************************************/
-
-Syl_WhichSyllabus_t Syl_GetParWhichSyllabus (void)
-  {
-   static Syl_WhichSyllabus_t WhichSyllabusCached = Syl_NONE;
-
-   /***** If already got ==> don't search parameter again *****/
-   if (WhichSyllabusCached != Syl_NONE)
-      return WhichSyllabusCached;
-
-   /***** If not yet got ==> search parameter *****/
-   return WhichSyllabusCached = (Syl_WhichSyllabus_t)
-	  Par_GetParUnsignedLong ("WhichSyllabus",
-				  0,
-				  Syl_NUM_WHICH_SYLLABUS - 1,
-				  (unsigned long) Syl_DEFAULT_WHICH_SYLLABUS);
-  }
-
-/*****************************************************************************/
-/****************** Put parameter with type of syllabus **********************/
-/*****************************************************************************/
-
-void Syl_PutParWhichSyllabus (void *SyllabusSelected)
-  {
-   if (SyllabusSelected)
-      if (*((Syl_WhichSyllabus_t *) SyllabusSelected) != Syl_NONE)
-         Par_PutParUnsigned (NULL,"WhichSyllabus",
-                             (unsigned) *((Syl_WhichSyllabus_t *) SyllabusSelected));
+   Syllabus->ParNumItem = 0;
   }
 
 /*****************************************************************************/
 /************************ Write form to select syllabus **********************/
 /*****************************************************************************/
 
-void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
+void Syl_PutFormWhichSyllabus (void)
   {
-   extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
-   Syl_WhichSyllabus_t WhichSyl;
+   extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
+   Inf_Type_t Type;
 
    /***** If no syllabus ==> nothing to do *****/
    switch (Gbl.Crs.Info.Type)
      {
-      case Inf_LECTURES:
-      case Inf_PRACTICALS:
+      case Inf_SYLLABUS_LEC:
+      case Inf_SYLLABUS_PRA:
 	 break;
       default:	// Nothing to do
 	 return;
@@ -157,20 +118,21 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t WhichSyllabus)
       HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
 	 HTM_UL_Begin (NULL);
 
-	 for (WhichSyl  = (Syl_WhichSyllabus_t) 1;
-	      WhichSyl <= (Syl_WhichSyllabus_t) (Syl_NUM_WHICH_SYLLABUS - 1);
-	      WhichSyl++)
-	   {
-	    HTM_LI_Begin (NULL);
-	       HTM_LABEL_Begin (NULL);
-		  HTM_INPUT_RADIO ("WhichSyllabus",
-				   ((WhichSyl == WhichSyllabus) ? HTM_CHECKED :
-								  HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
-				   "value=\"%u\"",(unsigned) WhichSyl);
-		  HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);
-	       HTM_LABEL_End ();
-	    HTM_LI_End ();
-	   }
+	    for (Type  = Inf_SYLLABUS_LEC;
+		 Type <= Inf_SYLLABUS_PRA;
+		 Type++)
+	      {
+	       HTM_LI_Begin (NULL);
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO ("WhichSyllabus",
+				      ((Type == Gbl.Crs.Info.Type) ? HTM_CHECKED :
+								     HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+				      "value=\"%u\"",(unsigned) Type);
+		     HTM_Txt (Txt_INFO_TITLE[Type]);
+		  HTM_LABEL_End ();
+	       HTM_LI_End ();
+	      }
+
 	 HTM_UL_End ();
       HTM_DIV_End ();
    Frm_EndForm ();
@@ -192,9 +154,11 @@ bool Syl_CheckSyllabus (Tre_TreeType_t TreeType)
 /*****************************************************************************/
 
 void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
+					  Inf_Type_t InfoType,
                                           long CrsCod)
   {
    char PathFile[PATH_MAX + 1];
+   const char *Folder;
    FILE *XML = NULL;	// XML file for syllabus
    long PostBeginList;
    unsigned NumItem = 0;
@@ -203,11 +167,23 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
    int Result;
    unsigned NumItemsWithChildren = 0;
 
-   /* Path of the private directory for the XML file with the syllabus */
+   /***** Trivial check: syllabus should be lectures or practicals *****/
+   switch (InfoType)
+     {
+      case Inf_SYLLABUS_LEC:
+	 Folder = Cfg_SYLLABUS_FOLDER_LECTURES;
+	 break;
+      case Inf_SYLLABUS_PRA:
+	 Folder = Cfg_SYLLABUS_FOLDER_PRACTICALS;
+	 break;
+      default:
+	 Syl_ResetSyllabus (Syllabus);
+	 return;
+     }
+
+   /***** Path of the private directory for the XML file with the syllabus *****/
    snprintf (Syllabus->PathDir,sizeof (Syllabus->PathDir),"%s/%ld/%s",
-	     Cfg_PATH_CRS_PRIVATE,CrsCod,
-	     Syllabus->WhichSyllabus == Syl_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
-		                                       Cfg_SYLLABUS_FOLDER_PRACTICALS);
+	     Cfg_PATH_CRS_PRIVATE,CrsCod,Folder);
 
    /***** Open the file with the syllabus *****/
    Syl_OpenSyllabusFile (Syllabus,PathFile,&XML);
@@ -325,6 +301,8 @@ void Syl_FreeListItemsSyllabus (struct Syl_Syllabus *Syllabus)
       free (Syllabus->LstItems.Lst);
       Syllabus->LstItems.Lst = NULL;
       Syllabus->LstItems.NumItems = 0;
+      Syllabus->LstItems.NumItemsWithChildren = 0;
+      Syllabus->LstItems.NumLevels = 0;
      }
   }
 
@@ -560,6 +538,7 @@ void Syl_ConvertAllSyllabus (void)
   {
    extern const char *Tre_DB_Types[Tre_NUM_TYPES];
    Tre_TreeType_t TreeType;
+   Inf_Type_t InfoType;
    struct Syl_Syllabus Syllabus;
    MYSQL_RES *mysql_res_crs;
    MYSQL_ROW row;
@@ -570,16 +549,22 @@ void Syl_ConvertAllSyllabus (void)
    char StrItemCod[Syl_MAX_LEVELS_SYLLABUS * (10 + 1)];
    int Level;
    struct Tre_Node Node;
-   static Tre_TreeType_t TreeTypes[Syl_NUM_WHICH_SYLLABUS] =
+   static Tre_TreeType_t TreeTypes[Inf_NUM_TYPES] =
      {
-      [Syl_NONE		] = Tre_UNKNOWN,
-      [Syl_LECTURES	] = Tre_LECTURES,
-      [Syl_PRACTICALS	] = Tre_PRACTICALS,
+      [Inf_UNKNOWN_TYPE	] = Tre_UNKNOWN,
+      [Inf_INFORMATION	] = Tre_UNKNOWN,
+      [Inf_TEACH_GUIDE	] = Tre_UNKNOWN,
+      [Inf_SYLLABUS_LEC	] = Tre_SYLLABUS_LEC,
+      [Inf_SYLLABUS_PRA	] = Tre_SYLLABUS_PRA,
+      [Inf_BIBLIOGRAPHY	] = Tre_UNKNOWN,
+      [Inf_FAQ		] = Tre_UNKNOWN,
+      [Inf_LINKS	] = Tre_UNKNOWN,
+      [Inf_ASSESSMENT	] = Tre_UNKNOWN,
      };
 
    /***** Remove all syllabus from database *****/
-   for (TreeType  = Tre_LECTURES;
-	TreeType <= Tre_PRACTICALS;
+   for (TreeType  = Tre_SYLLABUS_LEC;
+	TreeType <= Tre_SYLLABUS_PRA;
 	TreeType++)
       DB_QueryDELETE ("can not remove tree nodes",
 		      "DELETE FROM tre_nodes"
@@ -599,12 +584,12 @@ void Syl_ConvertAllSyllabus (void)
       /* Get course code (row[0]) */
       if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	{
-	 for (Syllabus.WhichSyllabus  = Syl_LECTURES;
-	      Syllabus.WhichSyllabus <= Syl_PRACTICALS;
-	      Syllabus.WhichSyllabus++)
+	 for (InfoType  = Inf_SYLLABUS_LEC;
+	      InfoType <= Inf_SYLLABUS_PRA;
+	      InfoType++)
 	   {
 	    /***** Load syllabus from XML file to memory *****/
-	    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,CrsCod);
+	    Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,InfoType,CrsCod);
 
 	    if (Syllabus.LstItems.NumItems)
 	      {
@@ -630,7 +615,7 @@ void Syl_ConvertAllSyllabus (void)
 		     HTM_LI_End ();
 
 		     /***** Insert new tree node *****/
-		     Node.TreeType = TreeTypes[Syllabus.WhichSyllabus];
+		     Node.TreeType = TreeTypes[InfoType];
 		     Tre_ResetNode (&Node);
 		     Node.Hierarchy.NodInd = NumItem + 1;	// 1, 2, 3...
 		     Node.Hierarchy.Level = (unsigned) Syllabus.LstItems.Lst[NumItem].Level;
