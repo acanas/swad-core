@@ -94,7 +94,7 @@ struct MoveSubtrees
 void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 
 void Inf_PutParInfoType (void *InfoType);
-void Syl_PutFormWhichSyllabus (void);
+void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType);
 
 bool Syl_CheckSyllabus (Tre_TreeType_t TreeType);
 

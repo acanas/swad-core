@@ -883,17 +883,21 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    const char *HelpLink;
    static const char *ClassCallForExam[Vie_NUM_VIEW_TYPES][Cfe_NUM_STATUS] =
      {
-      [Vie_VIEW ][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
-      [Vie_VIEW ][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_HIDDEN",
-      [Vie_VIEW ][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
+      [Vie_VIEW		][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
+      [Vie_VIEW		][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_HIDDEN",
+      [Vie_VIEW		][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
 
-      [Vie_EDIT ][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
-      [Vie_EDIT ][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
-      [Vie_EDIT ][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
+      [Vie_EDIT		][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
+      [Vie_EDIT		][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
+      [Vie_EDIT		][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
 
-      [Vie_PRINT][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
-      [Vie_PRINT][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
-      [Vie_PRINT][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
+      [Vie_CONFIG	][Cfe_VISIBLE_CALL_FOR_EXAM] = NULL,	// Not applicable here
+      [Vie_CONFIG	][Cfe_HIDDEN_CALL_FOR_EXAM ] = NULL,	// Not applicable here
+      [Vie_CONFIG	][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
+
+      [Vie_PRINT	][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
+      [Vie_PRINT	][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
+      [Vie_PRINT	][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
      };
 
    /***** Build anchor string *****/

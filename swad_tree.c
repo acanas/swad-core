@@ -607,20 +607,32 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
   {
    static Act_Action_t NextAction[Tre_NUM_TYPES][ConExp_NUM_CONTRACTED_EXPANDED][Vie_NUM_VIEW_TYPES] =
      {
-      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_VIEW] = ActExpSeeTreNodPrg,	// Contracted, Not editing ==> action to expand
-      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiTreNodPrg,	// Contracted,     Editing ==> action to expand
-      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodPrg,	// Expanded  , Not editing ==> action to contract
-      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodPrg,	// Expanded  ,     Editing ==> action to contract
+      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodPrg,	// Contracted, Not editing ==> action to expand
+      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodPrg,	// Contracted,     Editing ==> action to expand
+      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
+      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
+      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodPrg,	// Expanded  , Not editing ==> action to contract
+      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodPrg,	// Expanded  ,     Editing ==> action to contract
+      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
+      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
 
-      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_VIEW] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
-      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
-      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
+      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
+      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
+      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
+      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
 
-      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_VIEW] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_EDIT] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
-      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_VIEW] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
-      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_EDIT] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
+      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
+      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
+      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
+      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
      };
    static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (Act_Action_t NextAction,const char *Anchor,
 								     void (*FuncPars) (void *Args),void *Args) =

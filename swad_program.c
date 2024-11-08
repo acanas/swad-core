@@ -45,8 +45,8 @@ extern struct Globals Gbl;
 static void Prg_BeforeTree (Tre_ListingType_t ListingType);
 static void Prg_AfterTree (void);
 
-static void Prg_PutIconsToEditNodes (__attribute__((unused)) void *Args);
-static void Prg_PutIconsToViewNodes (__attribute__((unused)) void *Args);
+static void Prg_PutIconsWhenViewing (__attribute__((unused)) void *Args);
+static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
 /*************************** Before and after tree ***************************/
@@ -58,8 +58,8 @@ static void Prg_BeforeTree (Tre_ListingType_t ListingType)
    extern const char *Txt_COURSE_program;
    static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (void *Args) =
      {
-      [Tre_VIEW		] = Prg_PutIconsToEditNodes,
-      [Tre_EDIT_NODES	] = Prg_PutIconsToViewNodes,
+      [Tre_VIEW		] = Prg_PutIconsWhenViewing,
+      [Tre_EDIT_NODES	] = Prg_PutIconsWhenEditing,
      };
 
    /***** Begin box *****/
@@ -251,7 +251,7 @@ void Prg_ContractNodeEditing (void)
 /**************** Put contextual icons in list of tree nodes *****************/
 /*****************************************************************************/
 
-static void Prg_PutIconsToEditNodes (__attribute__((unused)) void *Args)
+static void Prg_PutIconsWhenViewing (__attribute__((unused)) void *Args)
   {
    struct Tre_Node Node;
 
@@ -270,7 +270,7 @@ static void Prg_PutIconsToEditNodes (__attribute__((unused)) void *Args)
 /*************** Put contextual icons in list of tree nodes ******************/
 /*****************************************************************************/
 
-static void Prg_PutIconsToViewNodes (__attribute__((unused)) void *Args)
+static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args)
   {
    struct Tre_Node Node;
 

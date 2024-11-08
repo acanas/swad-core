@@ -201,6 +201,7 @@ void Inf_DB_SetInfoTxt (const char *InfoTxtHTML,const char *InfoTxtMD)
 		    InfoTxtHTML,
 		    InfoTxtMD);
   }
+
 /*****************************************************************************/
 /********** Get info text for a type of course info from database ************/
 /*****************************************************************************/

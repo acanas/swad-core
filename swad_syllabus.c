@@ -98,9 +98,16 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
 /************************ Write form to select syllabus **********************/
 /*****************************************************************************/
 
-void Syl_PutFormWhichSyllabus (void)
+void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
+   static Act_Action_t Actions[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW		] = ActSeeSyl,
+      [Vie_EDIT		] = ActEdiTreSyl,
+      [Vie_CONFIG	] = ActCfgSyl,
+      [Vie_PRINT	] = ActUnk,
+     };
    Inf_Type_t Type;
 
    /***** If no syllabus ==> nothing to do *****/
@@ -114,7 +121,7 @@ void Syl_PutFormWhichSyllabus (void)
      }
 
    /***** Form to select which syllabus I want to see (lectures/practicals) *****/
-   Frm_BeginForm (ActSeeSyl);
+   Frm_BeginForm (Actions[ViewType]);
       HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE DAT_%s\"",The_GetSuffix ());
 	 HTM_UL_Begin (NULL);
 

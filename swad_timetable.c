@@ -1019,9 +1019,10 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
    unsigned ContinuousFreeMinicolumns;
    static const char *TableClass[Vie_NUM_VIEW_TYPES] =
      {
-      [Vie_VIEW ] = "TBL_SCROLL",
-      [Vie_EDIT ] = "TBL_SCROLL",
-      [Vie_PRINT] = "TT",
+      [Vie_VIEW		] = "TBL_SCROLL",
+      [Vie_EDIT		] = "TBL_SCROLL",
+      [Vie_CONFIG	] = NULL,
+      [Vie_PRINT	] = "TT",
     };
 
    /***** Begin table *****/

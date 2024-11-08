@@ -192,8 +192,10 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
      };
    static void (*PrgRsc_PutIconsRes[Vie_NUM_VIEW_TYPES]) (void *Node) =
      {
-      [Vie_VIEW] = PrgRsc_PutIconsEditRes,
-      [Vie_EDIT] = PrgRsc_PutIconsViewRes,
+      [Vie_VIEW		] = PrgRsc_PutIconsEditRes,
+      [Vie_EDIT		] = PrgRsc_PutIconsViewRes,
+      [Vie_CONFIG	] = NULL,
+      [Vie_PRINT	] = NULL,
      };
 
    /***** Trivial check *****/

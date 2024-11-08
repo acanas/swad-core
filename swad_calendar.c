@@ -254,9 +254,22 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    char ParsStr[Frm_MAX_BYTES_PARAMS_STR + 1];
    static const char *Print[Vie_NUM_VIEW_TYPES] =
      {
-      [Vie_VIEW ] = "false",
-      [Vie_PRINT] = "true",
+      [Vie_VIEW		] = "false",
+      [Vie_EDIT		] = NULL,
+      [Vie_CONFIG	] = NULL,
+      [Vie_PRINT	] = "true",
      };
+
+   /***** Trivial check: view type should be view or print *****/
+   switch (ViewType)
+     {
+      case Vie_VIEW:
+      case Vie_PRINT:
+	 break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
+     }
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,FunctionToDrawContextualIcons,Args,

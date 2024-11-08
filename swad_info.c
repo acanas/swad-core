@@ -199,8 +199,9 @@ static Act_Action_t Inf_ActionsReqLnk[Inf_NUM_TYPES] =
 static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc);
 static void Inf_AfterTree (void);
 
-static void Inf_PutIconsToViewInfo (void *Info);
-static void Inf_PutIconsToEditInfo (void *Info);
+static void Inf_PutIconsWhenViewing (void *Info);
+static void Inf_PutIconsWhenEditing (void *Info);
+static void Inf_PutIconsWhenConfiguring (void *Info);
 
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
 						HTM_Attributes_t Attributes);
@@ -248,8 +249,9 @@ static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    static void (*FunctionToDrawContextualIcons[Vie_NUM_VIEW_TYPES]) (void *Args) =
      {
-      [Vie_VIEW		] = Inf_PutIconsToEditInfo,
-      [Vie_EDIT		] = Inf_PutIconsToViewInfo,
+      [Vie_VIEW		] = Inf_PutIconsWhenViewing,
+      [Vie_EDIT		] = Inf_PutIconsWhenEditing,
+      [Vie_CONFIG	] = Inf_PutIconsWhenConfiguring,
       [Vie_PRINT	] = NULL,
      };
    static const char **Help[Inf_NUM_TYPES] =
@@ -281,7 +283,7 @@ static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
 		 *Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
       /***** Form to select syllabus *****/
-      Syl_PutFormWhichSyllabus ();
+      Syl_PutFormWhichSyllabus (ViewType);
 
       /***** Only for students: Have I read this information? ******/
       if (Gbl.Crs.Info.FromDB.MustBeRead && Gbl.Usrs.Me.Role.Logged == Rol_STD)
@@ -523,7 +525,33 @@ void Inf_ContractNodeEditing (void)
 /******************** Put icons to view/edit course info *********************/
 /*****************************************************************************/
 
-static void Inf_PutIconsToViewInfo (void *Info)
+static void Inf_PutIconsWhenViewing (void *Info)
+  {
+   struct Tre_Node Node;
+   Act_Action_t ActionEdit;
+
+   if (Info)
+      if (Tre_CheckIfICanEditTree () == Usr_CAN)
+        {
+	 Node.TreeType = Inf_TreeTypes[((struct Inf_Info *) Info)->Type];
+	 Tre_ResetNode (&Node);
+
+	 /***** Icon to edit *****/
+	 ActionEdit = Inf_ActionsInfo[((struct Inf_Info *) Info)->FromDB.Src][((struct Inf_Info *) Info)->Type];
+	 if (ActionEdit != ActUnk)
+	    Ico_PutContextualIconToEdit (ActionEdit,NULL,Tre_PutPars,&Node);
+
+	 /***** Icon to configure *****/
+	 Ico_PutContextualIconToConfigure (Inf_ActionsCfg[((struct Inf_Info *) Info)->Type],NULL,
+					   Tre_PutPars,&Node);
+
+	 /***** Icon to get resource link *****/
+	 Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[((struct Inf_Info *) Info)->Type],NULL,
+					 Tre_PutPars,&Node);
+        }
+  }
+
+static void Inf_PutIconsWhenEditing (void *Info)
   {
    struct Tre_Node Node;
 
@@ -552,30 +580,31 @@ static void Inf_PutIconsToViewInfo (void *Info)
      }
   }
 
-static void Inf_PutIconsToEditInfo (void *Info)
+static void Inf_PutIconsWhenConfiguring (void *Info)
   {
    struct Tre_Node Node;
    Act_Action_t ActionEdit;
 
    if (Info)
+     {
+      Node.TreeType = Inf_TreeTypes[((struct Inf_Info *) Info)->Type];
+      Tre_ResetNode (&Node);
+
+      /***** Put icon to view program *****/
+      Tre_PutIconToViewTree (&Node);
+
       if (Tre_CheckIfICanEditTree () == Usr_CAN)
         {
-	 Node.TreeType = Inf_TreeTypes[((struct Inf_Info *) Info)->Type];
-	 Tre_ResetNode (&Node);
-
 	 /***** Icon to edit *****/
 	 ActionEdit = Inf_ActionsInfo[((struct Inf_Info *) Info)->FromDB.Src][((struct Inf_Info *) Info)->Type];
 	 if (ActionEdit != ActUnk)
 	    Ico_PutContextualIconToEdit (ActionEdit,NULL,Tre_PutPars,&Node);
 
-	 /***** Icon to configure *****/
-	 Ico_PutContextualIconToConfigure (Inf_ActionsCfg[((struct Inf_Info *) Info)->Type],NULL,
-					   Tre_PutPars,&Node);
-
 	 /***** Icon to get resource link *****/
 	 Ico_PutContextualIconToGetLink (Inf_ActionsReqLnk[((struct Inf_Info *) Info)->Type],NULL,
 					 Tre_PutPars,&Node);
         }
+     }
   }
 
 /*****************************************************************************/
@@ -1014,9 +1043,13 @@ static void Inf_ShowPage (const char *URL)
 
 void Inf_SetInfoSrc (void)
   {
-   Inf_Src_t InfoSrcSelected = Inf_GetInfoSrcFromForm ();
+   Inf_Src_t InfoSrcSelected;
+
+   /***** Set info type *****/
+   Inf_AsignInfoType (&Gbl.Crs.Info);
 
    /***** Set info source into database *****/
+   InfoSrcSelected = Inf_GetInfoSrcFromForm ();
    Inf_DB_SetInfoSrc (InfoSrcSelected);
 
    /***** Show the selected info *****/
@@ -1058,26 +1091,23 @@ void Inf_ConfigInfo (void)
       [Inf_URL		] = Inf_FormToEnterSendingURL,
      };
 
-   /***** Get current info source from database *****/
-   Inf_GetAndCheckInfoSrcFromDB (&Gbl.Crs.Info);
-
-   /***** Check if info available *****/
-   for (InfoSrc  = (Inf_Src_t) 0;
-	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
-	InfoSrc++)
-      InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (InfoSrc);
-
-   /***** Set info source to none
-          when no info available for the current source *****/
-   if (Gbl.Crs.Info.FromDB.Src != Inf_SRC_NONE &&
-       !InfoAvailable[Gbl.Crs.Info.FromDB.Src])
-     {
-      Gbl.Crs.Info.FromDB.Src = Inf_SRC_NONE;
-      Inf_DB_SetInfoSrc (Inf_SRC_NONE);
-     }
-
    /***** Begin box *****/
-   Inf_BeforeTree (Vie_EDIT,Inf_SRC_NONE);
+   Inf_BeforeTree (Vie_CONFIG,Inf_SRC_NONE);
+
+      /***** Check if info available *****/
+      for (InfoSrc  = (Inf_Src_t) 0;
+	   InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
+	   InfoSrc++)
+	 InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (InfoSrc);
+
+      /***** Set info source to none
+	     when no info available for the current source *****/
+      if (Gbl.Crs.Info.FromDB.Src != Inf_SRC_NONE &&
+	  !InfoAvailable[Gbl.Crs.Info.FromDB.Src])
+	{
+	 Gbl.Crs.Info.FromDB.Src = Inf_SRC_NONE;
+	 Inf_DB_SetInfoSrc (Inf_SRC_NONE);
+	}
 
       /***** Force students to read info? *****/
       HTM_FIELDSET_Begin (NULL);
@@ -1858,6 +1888,9 @@ void Inf_ReceivePlainTxtInfo (void)
    char Txt_HTMLFormat    [Cns_MAX_BYTES_LONG_TEXT + 1];
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
 
+   /***** Set info type *****/
+   Inf_AsignInfoType (&Gbl.Crs.Info);
+
    /***** Get text with course information from form *****/
    Par_GetPar (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
 	       Cns_MAX_BYTES_LONG_TEXT,NULL);
@@ -1889,6 +1922,9 @@ void Inf_ReceiveRichTxtInfo (void)
   {
    char Txt_HTMLFormat    [Cns_MAX_BYTES_LONG_TEXT + 1];
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
+
+   /***** Set info type *****/
+   Inf_AsignInfoType (&Gbl.Crs.Info);
 
    /***** Get text with course information from form *****/
    Par_GetPar (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
@@ -1983,6 +2019,9 @@ void Inf_ReceivePagInfo (void)
    char StrUnzip[128 + PATH_MAX + 1 + NAME_MAX + 1 + PATH_MAX + 1];
    bool WrongType = false;
    bool FileIsOK = false;
+
+   /***** Set info type *****/
+   Inf_AsignInfoType (&Gbl.Crs.Info);
 
    /***** First of all, store in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -2158,13 +2197,9 @@ void Inf_EditURLInfo (void)
 void Inf_ReceiveURLInfo (void)
   {
    extern const char *Txt_The_URL_X_has_been_updated;
-   struct Syl_Syllabus Syllabus;
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
    bool URLIsOK = false;
-
-   /***** Reset syllabus context *****/
-   Syl_ResetSyllabus (&Syllabus);
 
    /***** Set info type *****/
    Inf_AsignInfoType (&Gbl.Crs.Info);
