@@ -433,6 +433,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Course info
    [ActSeeCrsInf	] = { 847, 0,TabCrs,NULL			,Crs_ShowIntroduction		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActPrnCrsInf	] = {1028, 0,TabCrs,NULL			,CrsCfg_PrintConfiguration	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_NEW},
+
+   [ActEdiTreInf	] = {2038, 0,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodInf	] = {2039, 0,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodInf	] = {2040, 0,TabCrs,NULL			,Inf_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodInf	] = {2041, 0,TabCrs,NULL			,Inf_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodInf	] = {2042, 0,TabCrs,NULL			,Inf_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodInf	] = {2043, 0,TabCrs,NULL			,Inf_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodInf	] = {2044, 0,TabCrs,NULL			,Inf_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodInf	] = {2045, 0,TabCrs,NULL			,Inf_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodInf	] = {2046, 0,TabCrs,NULL			,Inf_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodInf	] = {2047, 0,TabCrs,NULL			,Inf_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodInf	] = {2048, 0,TabCrs,NULL			,Inf_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodInf	] = {2049, 0,TabCrs,NULL			,Inf_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodInf	] = {2050, 0,TabCrs,NULL			,Inf_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodInf	] = {2051, 0,TabCrs,NULL			,Inf_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodInf	] = {2052, 0,TabCrs,NULL			,Inf_ExpandNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodInf	] = {2053, 0,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodInf	] = {2054, 0,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodInf	] = {2055, 0,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActChgCrsDegCfg	] = {1587, 0,TabCrs,CrsCfg_ChangeCrsDeg		,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380}},Act_NORM,Act_1ST},
    [ActRenCrsShoCfg	] = {1601, 0,TabCrs,CrsCfg_RenameCourseShrt	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActRenCrsFulCfg	] = {1600, 0,TabCrs,CrsCfg_RenameCourseFull	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
@@ -491,6 +511,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Teaching guide
    [ActSeeTchGui	] = { 784, 2,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCfgTchGui	] = { 785, 2,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActEdiTreGui	] = {2056, 2,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodGui	] = {2057, 2,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodGui	] = {2058, 2,TabCrs,NULL			,Inf_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodGui	] = {2059, 2,TabCrs,NULL			,Inf_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodGui	] = {2060, 2,TabCrs,NULL			,Inf_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodGui	] = {2061, 2,TabCrs,NULL			,Inf_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodGui	] = {2062, 2,TabCrs,NULL			,Inf_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodGui	] = {2063, 2,TabCrs,NULL			,Inf_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodGui	] = {2064, 2,TabCrs,NULL			,Inf_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodGui	] = {2065, 2,TabCrs,NULL			,Inf_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodGui	] = {2066, 2,TabCrs,NULL			,Inf_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodGui	] = {2067, 2,TabCrs,NULL			,Inf_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodGui	] = {2068, 2,TabCrs,NULL			,Inf_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodGui	] = {2069, 2,TabCrs,NULL			,Inf_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodGui	] = {2070, 2,TabCrs,NULL			,Inf_ExpandNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodGui	] = {2071, 2,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodGui	] = {2072, 2,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodGui	] = {2073, 2,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActChgFrcReaTchGui	] = { 870, 2,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaTchGui	] = { 886, 2,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcTchGui	] = { 789, 2,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -544,6 +584,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Bibliography
    [ActSeeBib		] = {  32, 4,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCfgBib		] = {  76, 4,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActEdiTreBib	] = {2074, 4,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodBib	] = {2075, 4,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodBib	] = {2076, 4,TabCrs,NULL			,Inf_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodBib	] = {2077, 4,TabCrs,NULL			,Inf_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodBib	] = {2078, 4,TabCrs,NULL			,Inf_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodBib	] = {2079, 4,TabCrs,NULL			,Inf_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodBib	] = {2080, 4,TabCrs,NULL			,Inf_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodBib	] = {2081, 4,TabCrs,NULL			,Inf_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodBib	] = {2082, 4,TabCrs,NULL			,Inf_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodBib	] = {2083, 4,TabCrs,NULL			,Inf_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodBib	] = {2084, 4,TabCrs,NULL			,Inf_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodBib	] = {2085, 4,TabCrs,NULL			,Inf_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodBib	] = {2086, 4,TabCrs,NULL			,Inf_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodBib	] = {2087, 4,TabCrs,NULL			,Inf_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodBib	] = {2088, 4,TabCrs,NULL			,Inf_ExpandNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodBib	] = {2089, 4,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodBib	] = {2090, 4,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodBib	] = {2091, 4,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActChgFrcReaBib	] = { 873, 4,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaBib	] = { 884, 4,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcBib	] = { 370, 4,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -561,6 +621,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // FAQ
    [ActSeeFAQ		] = {  54, 5,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCfgFAQ		] = { 109, 5,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActEdiTreFAQ	] = {2092, 5,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodFAQ	] = {2093, 5,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodFAQ	] = {2094, 5,TabCrs,NULL			,Inf_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodFAQ	] = {2095, 5,TabCrs,NULL			,Inf_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodFAQ	] = {2096, 5,TabCrs,NULL			,Inf_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodFAQ	] = {2097, 5,TabCrs,NULL			,Inf_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodFAQ	] = {2098, 5,TabCrs,NULL			,Inf_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodFAQ	] = {2099, 5,TabCrs,NULL			,Inf_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodFAQ	] = {2100, 5,TabCrs,NULL			,Inf_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodFAQ	] = {2101, 5,TabCrs,NULL			,Inf_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodFAQ	] = {2102, 5,TabCrs,NULL			,Inf_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodFAQ	] = {2103, 5,TabCrs,NULL			,Inf_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodFAQ	] = {2104, 5,TabCrs,NULL			,Inf_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodFAQ	] = {2105, 5,TabCrs,NULL			,Inf_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodFAQ	] = {2106, 5,TabCrs,NULL			,Inf_ExpandNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodFAQ	] = {2107, 5,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodFAQ	] = {2108, 5,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodFAQ	] = {2109, 5,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActChgFrcReaFAQ	] = { 874, 5,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaFAQ	] = { 879, 5,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcFAQ	] = { 380, 5,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -578,6 +658,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Links
    [ActSeeCrsLnk	] = {   9, 6,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCfgCrsLnk	] = {  96, 6,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActEdiTreLnk	] = {2110, 6,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodLnk	] = {2111, 6,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodLnk	] = {2112, 6,TabCrs,NULL			,Inf_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodLnk	] = {2113, 6,TabCrs,NULL			,Inf_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodLnk	] = {2114, 6,TabCrs,NULL			,Inf_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodLnk	] = {2115, 6,TabCrs,NULL			,Inf_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodLnk	] = {2116, 6,TabCrs,NULL			,Inf_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodLnk	] = {2117, 6,TabCrs,NULL			,Inf_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodLnk	] = {2118, 6,TabCrs,NULL			,Inf_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodLnk	] = {2119, 6,TabCrs,NULL			,Inf_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodLnk	] = {2120, 6,TabCrs,NULL			,Inf_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodLnk	] = {2121, 6,TabCrs,NULL			,Inf_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodLnk	] = {2122, 6,TabCrs,NULL			,Inf_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodLnk	] = {2123, 6,TabCrs,NULL			,Inf_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodLnk	] = {2124, 6,TabCrs,NULL			,Inf_ExpandNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodLnk	] = {2125, 6,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodLnk	] = {2126, 6,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodLnk	] = {2127, 6,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActChgFrcReaCrsLnk	] = { 875, 6,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaCrsLnk	] = { 885, 6,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcCrsLnk	] = { 385, 6,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -595,6 +695,26 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Assessment
    [ActSeeAss		] = {  15, 7,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCfgAss		] = {  69, 7,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActEdiTreAss	] = {2128, 7,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActSeeTreNodAss	] = {2129, 7,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmChgTreNodAss	] = {2130, 7,TabCrs,NULL			,Inf_ReqChangeNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActFrmNewTreNodAss	] = {2131, 7,TabCrs,NULL			,Inf_ReqCreateNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgTreNodAss	] = {2132, 7,TabCrs,NULL			,Inf_ReceiveChgNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActNewTreNodAss	] = {2133, 7,TabCrs,NULL			,Inf_ReceiveNewNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActReqRemTreNodAss	] = {2134, 7,TabCrs,NULL			,Inf_ReqRemNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemTreNodAss	] = {2135, 7,TabCrs,NULL			,Inf_RemoveNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActHidTreNodAss	] = {2136, 7,TabCrs,NULL			,Inf_HideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUnhTreNodAss	] = {2137, 7,TabCrs,NULL			,Inf_UnhideNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActUp_TreNodAss	] = {2138, 7,TabCrs,NULL			,Inf_MoveUpNode			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActDwnTreNodAss	] = {2139, 7,TabCrs,NULL			,Inf_MoveDownNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActLftTreNodAss	] = {2140, 7,TabCrs,NULL			,Inf_MoveLeftNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRgtTreNodAss	] = {2141, 7,TabCrs,NULL			,Inf_MoveRightNode		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActExpSeeTreNodAss	] = {2142, 7,TabCrs,NULL			,Inf_ExpandNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActConSeeTreNodAss	] = {2143, 7,TabCrs,NULL			,Inf_ContractNodeSeeing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActExpEdiTreNodAss	] = {2144, 7,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActConEdiTreNodAss	] = {2145, 7,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActChgFrcReaAss	] = { 883, 7,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaAss	] = { 898, 7,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActSelInfSrcAss	] = { 384, 7,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -3909,5 +4029,112 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActEdiURLFAQ,		// #2035
 	ActEdiURLCrsLnk,	// #2036
 	ActEdiURLAss,		// #2037
-
+	ActEdiTreInf,		// #2038
+	ActSeeTreNodInf,	// #2039
+	ActFrmChgTreNodInf,	// #2040
+	ActFrmNewTreNodInf,	// #2041
+	ActChgTreNodInf,	// #2042
+	ActNewTreNodInf,	// #2043
+	ActReqRemTreNodInf,	// #2044
+	ActRemTreNodInf,	// #2045
+	ActHidTreNodInf,	// #2046
+	ActUnhTreNodInf,	// #2047
+	ActUp_TreNodInf,	// #2048
+	ActDwnTreNodInf,	// #2049
+	ActLftTreNodInf,	// #2050
+	ActRgtTreNodInf,	// #2051
+	ActExpSeeTreNodInf,	// #2052
+	ActConSeeTreNodInf,	// #2053
+	ActExpEdiTreNodInf,	// #2054
+	ActConEdiTreNodInf,	// #2055
+	ActEdiTreGui,		// #2056
+	ActSeeTreNodGui,	// #2057
+	ActFrmChgTreNodGui,	// #2058
+	ActFrmNewTreNodGui,	// #2059
+	ActChgTreNodGui,	// #2060
+	ActNewTreNodGui,	// #2061
+	ActReqRemTreNodGui,	// #2062
+	ActRemTreNodGui,	// #2063
+	ActHidTreNodGui,	// #2064
+	ActUnhTreNodGui,	// #2065
+	ActUp_TreNodGui,	// #2066
+	ActDwnTreNodGui,	// #2067
+	ActLftTreNodGui,	// #2068
+	ActRgtTreNodGui,	// #2069
+	ActExpSeeTreNodGui,	// #2070
+	ActConSeeTreNodGui,	// #2071
+	ActExpEdiTreNodGui,	// #2072
+	ActConEdiTreNodGui,	// #2073
+	ActEdiTreBib,		// #2074
+	ActSeeTreNodBib,	// #2075
+	ActFrmChgTreNodBib,	// #2076
+	ActFrmNewTreNodBib,	// #2077
+	ActChgTreNodBib,	// #2078
+	ActNewTreNodBib,	// #2079
+	ActReqRemTreNodBib,	// #2080
+	ActRemTreNodBib,	// #2081
+	ActHidTreNodBib,	// #2082
+	ActUnhTreNodBib,	// #2083
+	ActUp_TreNodBib,	// #2084
+	ActDwnTreNodBib,	// #2085
+	ActLftTreNodBib,	// #2086
+	ActRgtTreNodBib,	// #2087
+	ActExpSeeTreNodBib,	// #2088
+	ActConSeeTreNodBib,	// #2089
+	ActExpEdiTreNodBib,	// #2090
+	ActConEdiTreNodBib,	// #2091
+	ActEdiTreFAQ,		// #2092
+	ActSeeTreNodFAQ,	// #2093
+	ActFrmChgTreNodFAQ,	// #2094
+	ActFrmNewTreNodFAQ,	// #2095
+	ActChgTreNodFAQ,	// #2096
+	ActNewTreNodFAQ,	// #2097
+	ActReqRemTreNodFAQ,	// #2098
+	ActRemTreNodFAQ,	// #2099
+	ActHidTreNodFAQ,	// #2100
+	ActUnhTreNodFAQ,	// #2101
+	ActUp_TreNodFAQ,	// #2102
+	ActDwnTreNodFAQ,	// #2103
+	ActLftTreNodFAQ,	// #2104
+	ActRgtTreNodFAQ,	// #2105
+	ActExpSeeTreNodFAQ,	// #2106
+	ActConSeeTreNodFAQ,	// #2107
+	ActExpEdiTreNodFAQ,	// #2108
+	ActConEdiTreNodFAQ,	// #2109
+	ActEdiTreLnk,		// #2110
+	ActSeeTreNodLnk,	// #2111
+	ActFrmChgTreNodLnk,	// #2112
+	ActFrmNewTreNodLnk,	// #2113
+	ActChgTreNodLnk,	// #2114
+	ActNewTreNodLnk,	// #2115
+	ActReqRemTreNodLnk,	// #2116
+	ActRemTreNodLnk,	// #2117
+	ActHidTreNodLnk,	// #2118
+	ActUnhTreNodLnk,	// #2119
+	ActUp_TreNodLnk,	// #2120
+	ActDwnTreNodLnk,	// #2121
+	ActLftTreNodLnk,	// #2122
+	ActRgtTreNodLnk,	// #2123
+	ActExpSeeTreNodLnk,	// #2124
+	ActConSeeTreNodLnk,	// #2125
+	ActExpEdiTreNodLnk,	// #2126
+	ActConEdiTreNodLnk,	// #2127
+	ActEdiTreAss,		// #2128
+	ActSeeTreNodAss,	// #2129
+	ActFrmChgTreNodAss,	// #2130
+	ActFrmNewTreNodAss,	// #2131
+	ActChgTreNodAss,	// #2132
+	ActNewTreNodAss,	// #2133
+	ActReqRemTreNodAss,	// #2134
+	ActRemTreNodAss,	// #2135
+	ActHidTreNodAss,	// #2136
+	ActUnhTreNodAss,	// #2137
+	ActUp_TreNodAss,	// #2138
+	ActDwnTreNodAss,	// #2139
+	ActLftTreNodAss,	// #2140
+	ActRgtTreNodAss,	// #2141
+	ActExpSeeTreNodAss,	// #2142
+	ActConSeeTreNodAss,	// #2143
+	ActExpEdiTreNodAss,	// #2144
+	ActConEdiTreNodAss,	// #2145
   };

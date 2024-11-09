@@ -60,7 +60,7 @@ void InfRsc_GetLinkToInfo (void)
       [Inf_LINKS	] = Rsc_LINKS,
       [Inf_ASSESSMENT	] = Rsc_ASSESSMENT,
      };
-   static void (*FunctionToShowInfo[Inf_NUM_TYPES]) (void) =
+   static void (*FunctionsToShowInfo[Inf_NUM_TYPES]) (void) =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = Crs_ShowIntroduction,
@@ -85,5 +85,5 @@ void InfRsc_GetLinkToInfo (void)
    		  Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
 
    /***** Show test again *****/
-   FunctionToShowInfo[Gbl.Crs.Info.Type] ();
+   FunctionsToShowInfo[Gbl.Crs.Info.Type] ();
   }

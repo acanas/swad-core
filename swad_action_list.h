@@ -361,6 +361,24 @@ typedef enum
 
 	ActSeeCrsInf,
 	ActPrnCrsInf,
+	ActEdiTreInf,		// #2038
+	ActSeeTreNodInf,	// #2039
+	ActFrmChgTreNodInf,	// #2040
+	ActFrmNewTreNodInf,	// #2041
+	ActChgTreNodInf,	// #2042
+	ActNewTreNodInf,	// #2043
+	ActReqRemTreNodInf,	// #2044
+	ActRemTreNodInf,	// #2045
+	ActHidTreNodInf,	// #2046
+	ActUnhTreNodInf,	// #2047
+	ActUp_TreNodInf,	// #2048
+	ActDwnTreNodInf,	// #2049
+	ActLftTreNodInf,	// #2050
+	ActRgtTreNodInf,	// #2051
+	ActExpSeeTreNodInf,	// #2052
+	ActConSeeTreNodInf,	// #2053
+	ActExpEdiTreNodInf,	// #2054
+	ActConEdiTreNodInf,	// #2055
 	ActChgCrsDegCfg,
 	ActRenCrsShoCfg,
 	ActRenCrsFulCfg,
@@ -421,6 +439,24 @@ typedef enum
 
 	ActSeeTchGui,
 	ActCfgTchGui,
+	ActEdiTreGui,		// #2056
+	ActSeeTreNodGui,	// #2057
+	ActFrmChgTreNodGui,	// #2058
+	ActFrmNewTreNodGui,	// #2059
+	ActChgTreNodGui,	// #2060
+	ActNewTreNodGui,	// #2061
+	ActReqRemTreNodGui,	// #2062
+	ActRemTreNodGui,	// #2063
+	ActHidTreNodGui,	// #2064
+	ActUnhTreNodGui,	// #2065
+	ActUp_TreNodGui,	// #2066
+	ActDwnTreNodGui,	// #2067
+	ActLftTreNodGui,	// #2068
+	ActRgtTreNodGui,	// #2069
+	ActExpSeeTreNodGui,	// #2070
+	ActConSeeTreNodGui,	// #2071
+	ActExpEdiTreNodGui,	// #2072
+	ActConEdiTreNodGui,	// #2073
 	ActChgFrcReaTchGui,
 	ActChgHavReaTchGui,
 	ActSelInfSrcTchGui,
@@ -474,6 +510,24 @@ typedef enum
 
 	ActSeeBib,
 	ActCfgBib,
+	ActEdiTreBib,		// #2074
+	ActSeeTreNodBib,	// #2075
+	ActFrmChgTreNodBib,	// #2076
+	ActFrmNewTreNodBib,	// #2077
+	ActChgTreNodBib,	// #2078
+	ActNewTreNodBib,	// #2079
+	ActReqRemTreNodBib,	// #2080
+	ActRemTreNodBib,	// #2081
+	ActHidTreNodBib,	// #2082
+	ActUnhTreNodBib,	// #2083
+	ActUp_TreNodBib,	// #2084
+	ActDwnTreNodBib,	// #2085
+	ActLftTreNodBib,	// #2086
+	ActRgtTreNodBib,	// #2087
+	ActExpSeeTreNodBib,	// #2088
+	ActConSeeTreNodBib,	// #2089
+	ActExpEdiTreNodBib,	// #2090
+	ActConEdiTreNodBib,	// #2091
 	ActChgFrcReaBib,
 	ActChgHavReaBib,
 	ActSelInfSrcBib,
@@ -492,6 +546,24 @@ typedef enum
 
 	ActSeeFAQ,
 	ActCfgFAQ,
+	ActEdiTreFAQ,		// #2092
+	ActSeeTreNodFAQ,	// #2093
+	ActFrmChgTreNodFAQ,	// #2094
+	ActFrmNewTreNodFAQ,	// #2095
+	ActChgTreNodFAQ,	// #2096
+	ActNewTreNodFAQ,	// #2097
+	ActReqRemTreNodFAQ,	// #2098
+	ActRemTreNodFAQ,	// #2099
+	ActHidTreNodFAQ,	// #2100
+	ActUnhTreNodFAQ,	// #2101
+	ActUp_TreNodFAQ,	// #2102
+	ActDwnTreNodFAQ,	// #2103
+	ActLftTreNodFAQ,	// #2104
+	ActRgtTreNodFAQ,	// #2105
+	ActExpSeeTreNodFAQ,	// #2106
+	ActConSeeTreNodFAQ,	// #2107
+	ActExpEdiTreNodFAQ,	// #2108
+	ActConEdiTreNodFAQ,	// #2109
 	ActChgFrcReaFAQ,
 	ActChgHavReaFAQ,
 	ActSelInfSrcFAQ,
@@ -510,6 +582,24 @@ typedef enum
 
 	ActSeeCrsLnk,
 	ActCfgCrsLnk,
+	ActEdiTreLnk,		// #2110
+	ActSeeTreNodLnk,	// #2111
+	ActFrmChgTreNodLnk,	// #2112
+	ActFrmNewTreNodLnk,	// #2113
+	ActChgTreNodLnk,	// #2114
+	ActNewTreNodLnk,	// #2115
+	ActReqRemTreNodLnk,	// #2116
+	ActRemTreNodLnk,	// #2117
+	ActHidTreNodLnk,	// #2118
+	ActUnhTreNodLnk,	// #2119
+	ActUp_TreNodLnk,	// #2120
+	ActDwnTreNodLnk,	// #2121
+	ActLftTreNodLnk,	// #2122
+	ActRgtTreNodLnk,	// #2123
+	ActExpSeeTreNodLnk,	// #2124
+	ActConSeeTreNodLnk,	// #2125
+	ActExpEdiTreNodLnk,	// #2126
+	ActConEdiTreNodLnk,	// #2127
 	ActChgFrcReaCrsLnk,
 	ActChgHavReaCrsLnk,
 	ActSelInfSrcCrsLnk,
@@ -528,6 +618,24 @@ typedef enum
 
 	ActSeeAss,
 	ActCfgAss,
+	ActEdiTreAss,		// #2128
+	ActSeeTreNodAss,	// #2129
+	ActFrmChgTreNodAss,	// #2130
+	ActFrmNewTreNodAss,	// #2131
+	ActChgTreNodAss,	// #2132
+	ActNewTreNodAss,	// #2133
+	ActReqRemTreNodAss,	// #2134
+	ActRemTreNodAss,	// #2135
+	ActHidTreNodAss,	// #2136
+	ActUnhTreNodAss,	// #2137
+	ActUp_TreNodAss,	// #2138
+	ActDwnTreNodAss,	// #2139
+	ActLftTreNodAss,	// #2140
+	ActRgtTreNodAss,	// #2141
+	ActExpSeeTreNodAss,	// #2142
+	ActConSeeTreNodAss,	// #2143
+	ActExpEdiTreNodAss,	// #2144
+	ActConEdiTreNodAss,	// #2145
 	ActChgFrcReaAss,
 	ActChgHavReaAss,
 	ActSelInfSrcAss,
@@ -1863,7 +1971,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2037
+#define ActLst_MAX_ACTION_COD		2145
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

@@ -883,13 +883,13 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
 						HTM_Attributes_t Attributes)
   {
    extern const char *Txt_Force_students_to_read_this_information;
-   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
+   static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActChgFrcReaCrsInf	,NULL,NULL},
       [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActChgFrcReaTchGui	,NULL,NULL},
-      [Inf_SYLLABUS_LEC	] = {ActChgFrcReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
+      [Inf_SYLLABUS_LEC	] = {ActChgFrcReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActChgFrcReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
       [Inf_BIBLIOGRAPHY	] = {ActChgFrcReaBib	,NULL,NULL},
       [Inf_FAQ		] = {ActChgFrcReaFAQ	,NULL,NULL},
@@ -897,9 +897,9 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
       [Inf_ASSESSMENT	] = {ActChgFrcReaAss	,NULL,NULL},
      };
 
-   Lay_PutContextualCheckbox (Inf_Actions[Gbl.Crs.Info.Type].NextAction,
-                              Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
-                              Inf_Actions[Gbl.Crs.Info.Type].Args,
+   Lay_PutContextualCheckbox (Actions[Gbl.Crs.Info.Type].NextAction,
+                              Actions[Gbl.Crs.Info.Type].FuncPars,
+                              Actions[Gbl.Crs.Info.Type].Args,
                               "MustBeRead",
                               Attributes |
                               (MustBeRead ? HTM_CHECKED :
@@ -916,13 +916,13 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
   {
    extern const char *Txt_I_have_read_this_information;
-   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
+   static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActChgHavReaCrsInf	,NULL,NULL},
       [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActChgHavReaTchGui	,NULL,NULL},
-      [Inf_SYLLABUS_LEC	] = {ActChgHavReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
+      [Inf_SYLLABUS_LEC	] = {ActChgHavReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActChgHavReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
       [Inf_BIBLIOGRAPHY	] = {ActChgHavReaBib	,NULL,NULL},
       [Inf_FAQ		] = {ActChgHavReaFAQ	,NULL,NULL},
@@ -932,9 +932,9 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
    bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo ();
 
    Mnu_ContextMenuBegin ();
-      Lay_PutContextualCheckbox (Inf_Actions[Gbl.Crs.Info.Type].NextAction,
-				 Inf_Actions[Gbl.Crs.Info.Type].FuncPars,
-				 Inf_Actions[Gbl.Crs.Info.Type].Args,
+      Lay_PutContextualCheckbox (Actions[Gbl.Crs.Info.Type].NextAction,
+				 Actions[Gbl.Crs.Info.Type].FuncPars,
+				 Actions[Gbl.Crs.Info.Type].Args,
 				 "IHaveRead",
 				 (IHaveRead ? HTM_CHECKED :
 					      HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
@@ -991,13 +991,13 @@ void Inf_WriteMsgYouMustReadInfo (void)
   {
    extern const char *Txt_Required_reading;
    extern const char *Txt_You_should_read_the_following_information;
-   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
+   static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActSeeCrsInf	,NULL,NULL},
       [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActSeeTchGui	,NULL,NULL},
-      [Inf_SYLLABUS_LEC	] = {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
+      [Inf_SYLLABUS_LEC	] = {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
       [Inf_BIBLIOGRAPHY	] = {ActSeeBib		,NULL,NULL},
       [Inf_FAQ		] = {ActSeeFAQ		,NULL,NULL},
@@ -1022,10 +1022,10 @@ void Inf_WriteMsgYouMustReadInfo (void)
 	       if (Gbl.Crs.Info.MustBeRead[InfoType])
 		 {
 		  HTM_LI_Begin (NULL);
-		     Frm_BeginForm (Inf_Actions[InfoType].NextAction);
-			if (Inf_Actions[InfoType].FuncPars)
-			   Inf_Actions[InfoType].FuncPars (Inf_Actions[InfoType].Args);
-		        TitleAction = Act_GetTitleAction (Inf_Actions[InfoType].NextAction);
+		     Frm_BeginForm (Actions[InfoType].NextAction);
+			if (Actions[InfoType].FuncPars)
+			   Actions[InfoType].FuncPars (Actions[InfoType].Args);
+		        TitleAction = Act_GetTitleAction (Actions[InfoType].NextAction);
 			HTM_BUTTON_Submit_Begin (TitleAction,
 						 "class=\"BT_LINK FORM_IN_%s\"",
 						 The_GetSuffix ());
@@ -1114,7 +1114,7 @@ static void Inf_ConfigInfoSource (void)
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
    Inf_Src_t InfoSrc;
    bool InfoAvailable[Inf_NUM_SOURCES];
-   static Act_Action_t Inf_ActionsSelecInfoSrc[Inf_NUM_TYPES] =
+   static Act_Action_t Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
       [Inf_INFORMATION	] = ActSelInfSrcCrsInf,
@@ -1168,7 +1168,7 @@ static void Inf_ConfigInfoSource (void)
 	       HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
 			     InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
 								  "");
-		  Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
+		  Frm_BeginForm (Actions[Gbl.Crs.Info.Type]);
 		     Inf_PutParInfoType (&Gbl.Crs.Info.Type);
 		     HTM_INPUT_RADIO ("InfoSrc",
 				      ((InfoSrc == Gbl.Crs.Info.FromDB.Src) ? HTM_CHECKED :
@@ -1711,13 +1711,13 @@ void Inf_EditPlainTxtInfo (void)
    extern const char *Hlp_COURSE_Assessment_edit;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
-   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
+   static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActRcvPlaTxtCrsInf	,NULL,NULL},
       [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActRcvPlaTxtTchGui	,NULL,NULL},
-      [Inf_SYLLABUS_LEC	] = {ActRcvPlaTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
+      [Inf_SYLLABUS_LEC	] = {ActRcvPlaTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActRcvPlaTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
       [Inf_BIBLIOGRAPHY	] = {ActRcvPlaTxtBib	,NULL,NULL},
       [Inf_FAQ		] = {ActRcvPlaTxtFAQ	,NULL,NULL},
@@ -1743,9 +1743,9 @@ void Inf_EditPlainTxtInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info);
 
    /***** Begin form and box *****/
-   Frm_BeginForm (Inf_Actions[Gbl.Crs.Info.Type].NextAction);
-      if (Inf_Actions[Gbl.Crs.Info.Type].FuncPars)
-	 Inf_Actions[Gbl.Crs.Info.Type].FuncPars (Inf_Actions[Gbl.Crs.Info.Type].Args);
+   Frm_BeginForm (Actions[Gbl.Crs.Info.Type].NextAction);
+      if (Actions[Gbl.Crs.Info.Type].FuncPars)
+	 Actions[Gbl.Crs.Info.Type].FuncPars (Actions[Gbl.Crs.Info.Type].Args);
       Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
 		    *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
@@ -1795,13 +1795,13 @@ void Inf_EditRichTxtInfo (void)
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   static struct Act_ActionFunc Inf_Actions[Inf_NUM_TYPES] =
+   static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActRcvRchTxtCrsInf	,NULL,NULL},
       [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActRcvRchTxtTchGui	,NULL,NULL},
-      [Inf_SYLLABUS_LEC	] = {ActRcvRchTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
+      [Inf_SYLLABUS_LEC	] = {ActRcvRchTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC]},
       [Inf_SYLLABUS_PRA	] = {ActRcvRchTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
       [Inf_BIBLIOGRAPHY	] = {ActRcvRchTxtBib	,NULL,NULL},
       [Inf_FAQ		] = {ActRcvRchTxtFAQ	,NULL,NULL},
@@ -1823,9 +1823,9 @@ void Inf_EditRichTxtInfo (void)
      };
 
    /***** Begin form and box *****/
-   Frm_BeginForm (Inf_Actions[Gbl.Crs.Info.Type].NextAction);
-      if (Inf_Actions[Gbl.Crs.Info.Type].FuncPars)
-	 Inf_Actions[Gbl.Crs.Info.Type].FuncPars (Inf_Actions[Gbl.Crs.Info.Type].Args);
+   Frm_BeginForm (Actions[Gbl.Crs.Info.Type].NextAction);
+      if (Actions[Gbl.Crs.Info.Type].FuncPars)
+	 Actions[Gbl.Crs.Info.Type].FuncPars (Actions[Gbl.Crs.Info.Type].Args);
       Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
 		    *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 

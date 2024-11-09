@@ -265,7 +265,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
      {
       void (*Set) (long Cod,char **Anchor);
       void (*Free) (char **Anchor);
-     } FuncAnchor[Rsc_NUM_TYPES] =
+     } FuncsAnchor[Rsc_NUM_TYPES] =
      {
       [Rsc_NONE		] = {NULL		,NULL			},
       [Rsc_INFORMATION	] = {NULL		,NULL			},
@@ -394,11 +394,11 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 	 /* Begin form to go to resource */
 	 NextAction = (Link->Cod > 0) ? NextActions[Link->Type].IfCod.NextAction :	// Resource specified
 					NextActions[Link->Type].IfNotCod.NextAction;	// All resources of this type
-	 if (FuncAnchor[Link->Type].Set)
+	 if (FuncsAnchor[Link->Type].Set)
 	   {
-	    FuncAnchor[Link->Type].Set (Link->Cod,&Anchor);
+	    FuncsAnchor[Link->Type].Set (Link->Cod,&Anchor);
 	    Frm_BeginFormAnchor (NextAction,Anchor);
-	    FuncAnchor[Link->Type].Free (&Anchor);
+	    FuncsAnchor[Link->Type].Free (&Anchor);
 	   }
 	 else
 	    Frm_BeginForm (NextAction);

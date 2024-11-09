@@ -1191,7 +1191,7 @@ int swad__getCourseInfo (struct soap *soap,
    Inf_Type_t InfoType;
    size_t Length;
    int Result = SOAP_OK;
-   const char *NamesInWSForInfoType[Inf_NUM_TYPES] =
+   static const char *NamesInWSForInfoType[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = "introduction",
@@ -1204,7 +1204,7 @@ int swad__getCourseInfo (struct soap *soap,
       [Inf_LINKS	] = "links",
       [Inf_ASSESSMENT	] = "assessment",
      };
-   const char *NamesInWSForInfoSrc[Inf_NUM_SOURCES] =
+   static const char *NamesInWSForInfoSrc[Inf_NUM_SOURCES] =
      {
       [Inf_SRC_NONE	] = "none",
       [Inf_EDITOR	] = "editor",
