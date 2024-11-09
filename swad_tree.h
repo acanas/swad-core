@@ -32,25 +32,12 @@
 
 #include "swad_database.h"
 #include "swad_date.h"
+#include "swad_info.h"
 #include "swad_resource.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define Tre_NUM_TYPES 9
-typedef enum
-  {
-   Tre_UNKNOWN,		// Not assigned, unknown
-   Tre_PROGRAM,		// Program
-   Tre_GUIDE,		// Teaching guide
-   Tre_SYLLABUS_LEC,	// Syllabus (lectures)
-   Tre_SYLLABUS_PRA,	// Syllabus (practicals)
-   Tre_BIBLIOGRAPHY,	// Bibliography
-   Tre_FAQ,		// FAQ
-   Tre_LINKS,		// Links
-   Tre_ASSESSMENT,	// Assessment system
-  } Tre_TreeType_t;
 
 #define Tre_MAX_CHARS_NODE_TITLE	(128 - 1)	// 127
 #define Tre_MAX_BYTES_NODE_TITLE	((Tre_MAX_CHARS_NODE_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
@@ -65,7 +52,7 @@ struct Tre_NodeHierarchy
 
 struct Tre_Node
   {
-   Tre_TreeType_t TreeType;
+   Inf_Type_t InfoType;
    struct Tre_NodeHierarchy Hierarchy;
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
@@ -126,7 +113,7 @@ typedef enum
 
 unsigned Tre_ShowTree (void);
 void Tre_EditTree (void);
-void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
+void Tre_ShowAllNodes (Inf_Type_t InfoType,
 		       Tre_ListingType_t ListingType,
                        long SelectedItmCod,long SelectedRscCod);
 
@@ -138,7 +125,7 @@ void Tre_PutIconToCreateNewNode (struct Tre_Node *Node);
 void Tre_PutPars (void *Node);
 void Tre_GetPars (struct Tre_Node *Node);
 
-void Tre_GetListNodes (Tre_TreeType_t TreeType);
+void Tre_GetListNodes (Inf_Type_t InfoType);
 void Tre_FreeListNodes (void);
 
 void Tre_ResetNode (struct Tre_Node *Node);

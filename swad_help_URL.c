@@ -1032,6 +1032,29 @@ const char *Hlp_COURSE_Program =
 	"COURSE.Program.en";
 #endif
 
+const char *Hlp_COURSE_Program_edit =
+#if   L==1	// ca
+	"COURSE.Program.es#editar";
+#elif L==2	// de
+	"COURSE.Program.en#edit";
+#elif L==3	// en
+	"COURSE.Program.en#edit";
+#elif L==4	// es
+	"COURSE.Program.es#editar";
+#elif L==5	// fr
+	"COURSE.Program.en#edit";
+#elif L==6	// gn
+	"COURSE.Program.es#editar";
+#elif L==7	// it
+	"COURSE.Program.en#edit";
+#elif L==8	// pl
+	"COURSE.Program.en#edit";
+#elif L==9	// pt
+	"COURSE.Program.en#edit";
+#elif L==10	// tr
+	"COURSE.Program.en#edit";
+#endif
+
 const char *Hlp_COURSE_Program_resources =
 #if   L==1	// ca
 	"COURSE.Program.es#recursos";

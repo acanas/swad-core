@@ -146,17 +146,6 @@ void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType)
   }
 
 /*****************************************************************************/
-/********************** Check if syllabus is not empty ***********************/
-/*****************************************************************************/
-// Return true if info available
-
-bool Syl_CheckSyllabus (Tre_TreeType_t TreeType)
-  {
-   /***** Number of nodes > 0 ==> info available *****/
-   return (Tre_DB_GetNumNodes (TreeType,Hie_CRS) != 0);
-  }
-
-/*****************************************************************************/
 /*** Read from XML and load in memory a syllabus of lectures or practicals ***/
 /*****************************************************************************/
 
@@ -543,8 +532,7 @@ void Syl_PutLinkToConvertSyllabus (void)
 
 void Syl_ConvertAllSyllabus (void)
   {
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
-   Tre_TreeType_t TreeType;
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
    Inf_Type_t InfoType;
    struct Syl_Syllabus Syllabus;
    MYSQL_RES *mysql_res_crs;
@@ -556,27 +544,15 @@ void Syl_ConvertAllSyllabus (void)
    char StrItemCod[Syl_MAX_LEVELS_SYLLABUS * (10 + 1)];
    int Level;
    struct Tre_Node Node;
-   static Tre_TreeType_t TreeTypes[Inf_NUM_TYPES] =
-     {
-      [Inf_UNKNOWN_TYPE	] = Tre_UNKNOWN,
-      [Inf_INFORMATION	] = Tre_UNKNOWN,
-      [Inf_TEACH_GUIDE	] = Tre_UNKNOWN,
-      [Inf_SYLLABUS_LEC	] = Tre_SYLLABUS_LEC,
-      [Inf_SYLLABUS_PRA	] = Tre_SYLLABUS_PRA,
-      [Inf_BIBLIOGRAPHY	] = Tre_UNKNOWN,
-      [Inf_FAQ		] = Tre_UNKNOWN,
-      [Inf_LINKS	] = Tre_UNKNOWN,
-      [Inf_ASSESSMENT	] = Tre_UNKNOWN,
-     };
 
    /***** Remove all syllabus from database *****/
-   for (TreeType  = Tre_SYLLABUS_LEC;
-	TreeType <= Tre_SYLLABUS_PRA;
-	TreeType++)
+   for (InfoType  = Inf_SYLLABUS_LEC;
+	InfoType <= Inf_SYLLABUS_PRA;
+	InfoType++)
       DB_QueryDELETE ("can not remove tree nodes",
 		      "DELETE FROM tre_nodes"
 		      " WHERE Type='%s'",
-		      Tre_DB_Types[TreeType]);
+		      Tre_DB_Types[InfoType]);
 
    /***** Get all courses from database *****/
    NumCrss = Crs_DB_GetAllCrss (&mysql_res_crs);
@@ -622,7 +598,7 @@ void Syl_ConvertAllSyllabus (void)
 		     HTM_LI_End ();
 
 		     /***** Insert new tree node *****/
-		     Node.TreeType = TreeTypes[InfoType];
+		     Node.InfoType = InfoType;
 		     Tre_ResetNode (&Node);
 		     Node.Hierarchy.NodInd = NumItem + 1;	// 1, 2, 3...
 		     Node.Hierarchy.Level = (unsigned) Syllabus.LstItems.Lst[NumItem].Level;
@@ -640,7 +616,7 @@ void Syl_ConvertAllSyllabus (void)
 							       "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 							       "'%s','%s')",
 						   CrsCod,
-						   Tre_DB_Types[Node.TreeType],
+						   Tre_DB_Types[Node.InfoType],
 						   Node.Hierarchy.NodInd,
 						   Node.Hierarchy.Level,
 						   -1L,

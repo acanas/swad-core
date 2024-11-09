@@ -3325,27 +3325,27 @@ mysql> DESCRIBE tre_expanded;
    /***** Table tre_nodes *****/
 /*
 mysql> DESCRIBE tre_nodes;
-+-----------+-------------------------------------------------------+------+-----+---------+----------------+
-| Field     | Type                                                  | Null | Key | Default | Extra          |
-+-----------+-------------------------------------------------------+------+-----+---------+----------------+
-| NodCod    | int                                                   | NO   | PRI | NULL    | auto_increment |
-| CrsCod    | int                                                   | NO   | MUL | -1      |                |
-| Type      | enum('prg','gui','lec','pra','bib','faq','lnk','ass') | NO   |     | prg     |                |
-| NodInd    | int                                                   | NO   |     | 0       |                |
-| Level     | int                                                   | NO   |     | 1       |                |
-| Hidden    | enum('N','Y')                                         | NO   |     | N       |                |
-| UsrCod    | int                                                   | NO   |     | NULL    |                |
-| StartTime | datetime                                              | NO   |     | NULL    |                |
-| EndTime   | datetime                                              | NO   |     | NULL    |                |
-| Title     | varchar(2047)                                         | NO   |     | NULL    |                |
-| Txt       | text                                                  | NO   |     | NULL    |                |
-+-----------+-------------------------------------------------------+------+-----+---------+----------------+
++-----------+-------------------------------------------------------------------+------+-----+---------------------+----------------+
+| Field     | Type                                                              | Null | Key | Default             | Extra          |
++-----------+-------------------------------------------------------------------+------+-----+---------------------+----------------+
+| NodCod    | int                                                               | NO   | PRI | NULL                | auto_increment |
+| CrsCod    | int                                                               | NO   | MUL | -1                  |                |
+| Type      | enum('unk','inf','prg','gui','lec','pra','bib','faq','lnk','ass') | NO   |     | unk                 |                |
+| NodInd    | int                                                               | NO   |     | 0                   |                |
+| Level     | int                                                               | NO   |     | 1                   |                |
+| Hidden    | enum('N','Y')                                                     | NO   |     | N                   |                |
+| UsrCod    | int                                                               | NO   |     | NULL                |                |
+| StartTime | datetime                                                          | NO   |     | 1970-01-01 01:00:00 |                |
+| EndTime   | datetime                                                          | NO   |     | 1970-01-01 01:00:00 |                |
+| Title     | varchar(2047)                                                     | NO   |     | NULL                |                |
+| Txt       | text                                                              | NO   |     | NULL                |                |
++-----------+-------------------------------------------------------------------+------+-----+---------------------+----------------+
 11 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tre_nodes ("
 			"NodCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
-			"Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'prg',"
+			"Type ENUM('unk','inf','prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'unk',"
 			"NodInd INT NOT NULL DEFAULT 0,"
 			"Level INT NOT NULL DEFAULT 1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"

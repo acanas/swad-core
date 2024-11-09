@@ -106,14 +106,14 @@ void PrgRsc_ViewResourcesAfterEdit (void)
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get tree node *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_END_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_END_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -129,14 +129,14 @@ void PrgRsc_EditResources (void)
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get tree node *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -612,11 +612,11 @@ void PrgRsc_CreateResource (void)
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get parameters *****/
    /* Get tree node */
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
 
    /* Get the new title for the new resource */
@@ -626,7 +626,7 @@ void PrgRsc_CreateResource (void)
    Node.Resource.Hierarchy.RscCod = Rsc_DB_CreateResource (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/
@@ -643,10 +643,10 @@ void PrgRsc_RenameResource (void)
    char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1];
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get tree node and resource *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -659,7 +659,7 @@ void PrgRsc_RenameResource (void)
    Rsc_DB_UpdateResourceTitle (Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod,NewTitle);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/
@@ -676,10 +676,10 @@ void PrgRsc_ReqRemResource (void)
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get tree node and resource *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -690,7 +690,7 @@ void PrgRsc_ReqRemResource (void)
                     Node.Resource.Title);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/
@@ -707,10 +707,10 @@ void PrgRsc_RemoveResource (void)
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get data of the resource from database *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -723,7 +723,7 @@ void PrgRsc_RemoveResource (void)
                     Txt_Resource_X_removed,Node.Resource.Title);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/
@@ -749,10 +749,10 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get tree node and resource *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -761,7 +761,7 @@ static void PrgRsc_HideOrUnhideResource (HidVis_HiddenOrVisible_t HiddenOrVisibl
    Rsc_DB_HideOrUnhideResource (&Node,HiddenOrVisible);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/
@@ -795,10 +795,10 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
      };
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get tree node and resource *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -816,7 +816,7 @@ static void PrgRsc_MoveUpDownResource (PrgRsc_MoveUpDown_t UpDown)
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCES,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/
@@ -938,16 +938,16 @@ void PrgRsc_EditProgramWithClipboard (void)
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get tree node and resource *****/
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCE_LINK,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCE_LINK,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/
@@ -963,11 +963,11 @@ void PrgRsc_ChangeLink (void)
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (Tre_PROGRAM);
+   Tre_GetListNodes (Inf_PROGRAM);
 
    /***** Get parameters *****/
    /* Get tree node and resource */
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongResourceExit ();
@@ -994,7 +994,7 @@ void PrgRsc_ChangeLink (void)
      }
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (Tre_PROGRAM,Tre_EDIT_PRG_RESOURCE_LINK,
+   Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCE_LINK,
 		     Node.Hierarchy.NodCod,Node.Resource.Hierarchy.RscCod);
 
    /***** Free list of tree nodes *****/

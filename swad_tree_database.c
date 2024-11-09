@@ -40,17 +40,18 @@ extern struct Globals Gbl;
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-const char *Tre_DB_Types[Tre_NUM_TYPES] =
+const char *Tre_DB_Types[Inf_NUM_TYPES] =
   {
-   [Tre_UNKNOWN		] = NULL,
-   [Tre_PROGRAM		] = "prg",
-   [Tre_GUIDE		] = "gui",
-   [Tre_SYLLABUS_LEC	] = "lec",
-   [Tre_SYLLABUS_PRA	] = "pra",
-   [Tre_BIBLIOGRAPHY	] = "bib",
-   [Tre_FAQ		] = "faq",
-   [Tre_LINKS		] = "lnk",
-   [Tre_ASSESSMENT	] = "ass",
+   [Inf_UNKNOWN_TYPE	] = NULL,
+   [Inf_INFORMATION	] = "inf",
+   [Inf_PROGRAM		] = "prg",
+   [Inf_TEACH_GUIDE	] = "gui",
+   [Inf_SYLLABUS_LEC	] = "lec",
+   [Inf_SYLLABUS_PRA	] = "pra",
+   [Inf_BIBLIOGRAPHY	] = "bib",
+   [Inf_FAQ		] = "faq",
+   [Inf_LINKS		] = "lnk",
+   [Inf_ASSESSMENT	] = "ass",
   };
 
 /*****************************************************************************/
@@ -70,7 +71,7 @@ long Tre_DB_InsertNode (const struct Tre_Node *Node,const char *Txt)
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s')",
 			        Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				Tre_DB_Types[Node->TreeType],
+				Tre_DB_Types[Node->InfoType],
 			        Node->Hierarchy.NodInd,
 			        Node->Hierarchy.Level,
 			        Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -101,7 +102,7 @@ void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt)
                    Txt,
                    Node->Hierarchy.NodCod,
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Node->TreeType]);
+		   Tre_DB_Types[Node->InfoType]);
   }
 
 /*****************************************************************************/
@@ -122,14 +123,14 @@ void Tre_DB_HideOrUnhideNode (const struct Tre_Node *Node,
 		   HidVis_YN[HiddenOrVisible],
 		   Node->Hierarchy.NodCod,
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Node->TreeType]);
+		   Tre_DB_Types[Node->InfoType]);
   }
 
 /*****************************************************************************/
 /********************* Change index of a node in a tree **********************/
 /*****************************************************************************/
 
-void Tre_DB_UpdateIndexRange (Tre_TreeType_t TreeType,long Diff,long Begin,long End)
+void Tre_DB_UpdateIndexRange (Inf_Type_t InfoType,long Diff,long Begin,long End)
   {
    DB_QueryUPDATE ("can not exchange indexes of tree nodes",
 		   "UPDATE tre_nodes"
@@ -140,7 +141,7 @@ void Tre_DB_UpdateIndexRange (Tre_TreeType_t TreeType,long Diff,long Begin,long 
 		     " AND NodInd<=%ld",
 		   Diff,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[TreeType],
+		   Tre_DB_Types[InfoType],
 		   Begin,
 		   End);
   }
@@ -160,7 +161,7 @@ void Tre_DB_LockTableNodes (void)
 /************ Move down all indexes of after last child of parent ************/
 /*****************************************************************************/
 
-void Tre_DB_MoveDownNodes (Tre_TreeType_t TreeType,unsigned Index)
+void Tre_DB_MoveDownNodes (Inf_Type_t InfoType,unsigned Index)
   {
    DB_QueryUPDATE ("can not move down tree nodes",
 		   "UPDATE tre_nodes"
@@ -170,7 +171,7 @@ void Tre_DB_MoveDownNodes (Tre_TreeType_t TreeType,unsigned Index)
 		     " AND NodInd>=%u"
 		   " ORDER BY NodInd DESC",	// Necessary to not create duplicate key (CrsCod,NodInd)
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[TreeType],
+		   Tre_DB_Types[InfoType],
 		   Index);
   }
 
@@ -178,7 +179,7 @@ void Tre_DB_MoveDownNodes (Tre_TreeType_t TreeType,unsigned Index)
 /**************** Move node and its children to left or right ****************/
 /*****************************************************************************/
 
-void Tre_DB_MoveLeftRightNodeRange (Tre_TreeType_t TreeType,
+void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 				    const struct Tre_NodeRange *ToMove,
                                     Tre_MoveLeftRight_t LeftRight)
   {
@@ -197,7 +198,7 @@ void Tre_DB_MoveLeftRightNodeRange (Tre_TreeType_t TreeType,
 		     " AND NodInd<=%u",
 		   IncDec[LeftRight],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[TreeType],
+		   Tre_DB_Types[InfoType],
 		   ToMove->Begin,
 		   ToMove->End);
   }
@@ -206,7 +207,7 @@ void Tre_DB_MoveLeftRightNodeRange (Tre_TreeType_t TreeType,
 /******************** Get list of tree nodes from database *******************/
 /*****************************************************************************/
 
-unsigned Tre_DB_GetListNodes (Tre_TreeType_t TreeType,MYSQL_RES **mysql_res)
+unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get tree nodes",
@@ -219,7 +220,7 @@ unsigned Tre_DB_GetListNodes (Tre_TreeType_t TreeType,MYSQL_RES **mysql_res)
 		     " AND Type='%s'"
 		   " ORDER BY NodInd",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[TreeType]);
+		   Tre_DB_Types[InfoType]);
   }
 
 /*****************************************************************************/
@@ -245,7 +246,7 @@ unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_
 		     " AND Type='%s'",	// Extra check
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Node->TreeType]);
+		   Tre_DB_Types[Node->InfoType]);
   }
 
 /*****************************************************************************/
@@ -263,7 +264,7 @@ void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 			   " AND Type='%s'",	// Extra check
 		         Node->Hierarchy.NodCod,
 		         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		         Tre_DB_Types[Node->TreeType]);
+		         Tre_DB_Types[Node->InfoType]);
   }
 
 /*****************************************************************************/
@@ -272,7 +273,7 @@ void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 // Returns the number of courses with tree nodes
 // in this location (all the platform, current degree or current course)
 
-unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
+unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t Level)
   {
    /***** Get number of courses with tree nodes from database *****/
    switch (Level)
@@ -284,7 +285,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			 " FROM tre_nodes"
 			" WHERE CrsCod>0"
 			  " AND Type='%s'",
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
        case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -301,7 +302,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
        case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -316,7 +317,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -329,7 +330,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -340,7 +341,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with tree nodes",
@@ -349,7 +350,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 			 " WHERE CrsCod=%ld"
 			   " AND Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       default:
 	 return 0;
      }
@@ -360,7 +361,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Leve
 /*****************************************************************************/
 // Returns the number of tree nodes in a hierarchy scope
 
-unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
+unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t Level)
   {
    switch (Level)
      {
@@ -371,7 +372,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			  " FROM tre_nodes"
 			 " WHERE CrsCod>0"
 			   " AND Type='%s'",
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -388,7 +389,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -403,7 +404,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -416,7 +417,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -427,7 +428,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
                         Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of tree nodes",
@@ -436,7 +437,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 			 " WHERE CrsCod=%ld"
 			   " AND Type='%s'",
                         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-			Tre_DB_Types[TreeType]);
+			Tre_DB_Types[InfoType]);
       default:
          Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -447,7 +448,7 @@ unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level)
 /******************** Remove a tree node and its children ********************/
 /*****************************************************************************/
 
-void Tre_DB_RemoveNodeRange (Tre_TreeType_t TreeType,
+void Tre_DB_RemoveNodeRange (Inf_Type_t InfoType,
 			     const struct Tre_NodeRange *ToRemove)
   {
    DB_QueryDELETE ("can not remove tree node range",
@@ -457,7 +458,7 @@ void Tre_DB_RemoveNodeRange (Tre_TreeType_t TreeType,
 		     " AND NodInd>=%u"
 		     " AND NodInd<=%u",
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                   Tre_DB_Types[TreeType],
+                   Tre_DB_Types[InfoType],
 		   ToRemove->Begin,
 		   ToRemove->End);
   }

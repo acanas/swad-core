@@ -96,8 +96,6 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 void Inf_PutParInfoType (void *InfoType);
 void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType);
 
-bool Syl_CheckSyllabus (Tre_TreeType_t TreeType);
-
 void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 					  Inf_Type_t InfoType,
                                           long CrsCod);

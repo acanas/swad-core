@@ -1556,7 +1556,7 @@ CREATE TABLE IF NOT EXISTS tre_expanded (
 CREATE TABLE IF NOT EXISTS tre_nodes (
 	NodCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
-	Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'prg',
+	Type ENUM('unk','inf','prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'unk',
 	NodInd INT NOT NULL DEFAULT 0,
 	Level INT NOT NULL DEFAULT 1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',

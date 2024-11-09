@@ -255,7 +255,7 @@ static void Prg_PutIconsWhenViewing (__attribute__((unused)) void *Args)
   {
    struct Tre_Node Node;
 
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_ResetNode (&Node);
 
    /***** Put icon to edit tree *****/
@@ -274,7 +274,7 @@ static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args)
   {
    struct Tre_Node Node;
 
-   Node.TreeType = Tre_PROGRAM;
+   Node.InfoType = Inf_PROGRAM;
    Tre_ResetNode (&Node);
 
    /***** Put icon to view program *****/
@@ -308,8 +308,8 @@ void Prg_GetAndShowCourseProgramStats (void)
    unsigned NumCoursesWithNodes;
 
    /***** Get the number of tree nodes from this location *****/
-   if ((NumNodes = Tre_DB_GetNumNodes (Tre_PROGRAM,Gbl.Scope.Current)))
-      NumCoursesWithNodes = Tre_DB_GetNumCoursesWithNodes (Tre_PROGRAM,Gbl.Scope.Current);
+   if ((NumNodes = Tre_DB_GetNumNodes (Inf_PROGRAM,Gbl.Scope.Current)))
+      NumCoursesWithNodes = Tre_DB_GetNumCoursesWithNodes (Inf_PROGRAM,Gbl.Scope.Current);
    else
       NumCoursesWithNodes = 0;
 

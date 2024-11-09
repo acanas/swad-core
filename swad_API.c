@@ -1195,6 +1195,7 @@ int swad__getCourseInfo (struct soap *soap,
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = "introduction",
+      [Inf_PROGRAM	] = "program",	// Not used yet
       [Inf_TEACH_GUIDE	] = "guide",
       [Inf_SYLLABUS_LEC	] = "lectures",
       [Inf_SYLLABUS_PRA	] = "practicals",

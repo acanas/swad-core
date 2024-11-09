@@ -41,22 +41,22 @@ long Tre_DB_InsertNode (const struct Tre_Node *Node,const char *Txt);
 void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt);
 void Tre_DB_HideOrUnhideNode (const struct Tre_Node *Node,
 			      HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Tre_DB_UpdateIndexRange (Tre_TreeType_t TreeType,long Diff,long Begin,long End);
+void Tre_DB_UpdateIndexRange (Inf_Type_t InfoType,long Diff,long Begin,long End);
 void Tre_DB_LockTableNodes (void);
-void Tre_DB_MoveDownNodes (Tre_TreeType_t TreeType,unsigned Index);
-void Tre_DB_MoveLeftRightNodeRange (Tre_TreeType_t TreeType,
+void Tre_DB_MoveDownNodes (Inf_Type_t InfoType,unsigned Index);
+void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 				    const struct Tre_NodeRange *ToMove,
                                     Tre_MoveLeftRight_t LeftRight);
 
-unsigned Tre_DB_GetListNodes (Tre_TreeType_t TreeType,MYSQL_RES **mysql_res);
+unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res);
 unsigned Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,MYSQL_RES **mysql_res);
 void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 			char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-unsigned Tre_DB_GetNumCoursesWithNodes (Tre_TreeType_t TreeType,Hie_Level_t Level);
-unsigned Tre_DB_GetNumNodes (Tre_TreeType_t TreeType,Hie_Level_t Level);
+unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t Level);
+unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t Level);
 
-void Tre_DB_RemoveNodeRange (Tre_TreeType_t TreeType,
+void Tre_DB_RemoveNodeRange (Inf_Type_t InfoType,
 			     const struct Tre_NodeRange *ToRemove);
 void Tre_DB_RemoveCrsNodes (long CrsCod);
 

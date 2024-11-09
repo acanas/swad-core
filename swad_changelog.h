@@ -635,10 +635,14 @@ Me sale este error, no sé si por no recordar yo la sintaxis apropiada para manda
 TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de tutorías.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 24.30.2 (2024-11-09)"
+#define Log_PLATFORM_VERSION	"SWAD 24.31 (2024-11-09)"
 #define CSS_FILE		"swad24.20.4.css"
 #define JS_FILE			"swad23.89.js"
 /*
+	Version 24.31:    Nov 09, 2024  Changes in course trees. (339208 lines)
+					1 change necessary in database:
+ALTER TABLE tre_nodes CHANGE COLUMN Type Type ENUM('unk','inf','prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'unk';
+
 	Version 24.30.2:  Nov 09, 2024  Code refactoring in configuration of course information. (339224 lines)
 	Version 24.30.1:  Nov 09, 2024  Fixed issues in course information. (339217 lines)
 	Version 24.30:    Nov 08, 2024  Code refactoing in course information. (339159 lines)
@@ -670,10 +674,11 @@ ALTER TABLE tre_nodes CHANGE COLUMN EndTime EndTime DATETIME NOT NULL DEFAULT '1
 	Version 24.20.1:  Oct 29, 2024  Changes in course trees. (338622 lines)
 	Version 24.20:    Oct 24, 2024  New module swad_tree. (338695 lines)
 	Version 24.19.3:  Oct 23, 2024  Changes in course trees. (338581 lines)
-					3 changes necessary in database:
+					4 changes necessary in database:
 ALTER TABLE tre_nodes ADD COLUMN Type ENUM('prg','gui','lec','pra','bib','faq','lnk','ass') NOT NULL DEFAULT 'prg' AFTER CrsCod;
 ALTER TABLE tre_nodes DROP INDEX CrsCod;
 ALTER TABLE tre_nodes ADD UNIQUE INDEX(CrsCod,Type,NodInd);
+UPDATE tre_nodes SET Type='prg' WHERE Type NOT IN ('gui','lec','pra','bib','faq','lnk','ass');
 
 	Version 24.19.2:  Oct 23, 2024  Code refactoring in resource clipboard. (338515 lines)
 	Version 24.19.1:  Oct 23, 2024  Changes in course trees. (338506 lines)

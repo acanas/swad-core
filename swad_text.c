@@ -17814,6 +17814,29 @@ const char *Txt_INFO_TITLE[Inf_NUM_TYPES] =
 	"Bilgi"
 #endif
 	,
+	[Inf_PROGRAM] =
+#if   L==1	// ca
+	"Programa"
+#elif L==2	// de
+	"Programm"
+#elif L==3	// en
+	"Program"
+#elif L==4	// es
+	"Programa"
+#elif L==5	// fr
+	"Programme"
+#elif L==6	// gn
+	"Programa"
+#elif L==7	// it
+	"Programma"
+#elif L==8	// pl
+	"Program"
+#elif L==9	// pt
+	"Programa"
+#elif L==10	// tr
+	"Program&inodot;"
+#endif
+	,
 	[Inf_TEACH_GUIDE] =
 #if   L==1	// ca
 	"Guia docent"
@@ -21302,7 +21325,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5	// fr
 	"Programme"
 #elif L==6	// gn
-	"Programa"	// Okoteve traducción
+	"Programa"
 #elif L==7	// it
 	"Programma"
 #elif L==8	// pl
@@ -44640,7 +44663,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==5	// fr
 	"Programme"
 #elif L==6	// gn
-	"Programa"	// Okoteve traducción
+	"Programa"
 #elif L==7	// it
 	"Programma"
 #elif L==8	// pl
@@ -45897,29 +45920,6 @@ const char *Txt_Surveys =
 	"Anketler";
 #endif
 
-const char *Txt_Syllabus =
-#if   L==1	// ca
-	"Programa";
-#elif L==2	// de
-	"Studienplan";
-#elif L==3	// en
-	"Syllabus";
-#elif L==4	// es
-	"Programa";
-#elif L==5	// fr
-	"Plan";
-#elif L==6	// gn
-	"Programa";	// Okoteve traducción
-#elif L==7	// it
-	"Programma";
-#elif L==8	// pl
-	"Program";
-#elif L==9	// pt
-	"Programa";
-#elif L==10	// tr
-	"M&uuml;fredat";
-#endif
-
 const char *Txt_Syllabus_of_the_course =
 #if   L==1	// ca
 	"Programa de l'assignatura";
@@ -45928,7 +45928,7 @@ const char *Txt_Syllabus_of_the_course =
 #elif L==3	// en
 	"Syllabus of the course";
 #elif L==4	// es
-	"Programa de la asignatura";
+	"Temario de la asignatura";
 #elif L==5	// fr
 	"Plan de la mati&egrave;re";
 #elif L==6	// gn

@@ -35,18 +35,19 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Inf_NUM_TYPES 9
+#define Inf_NUM_TYPES 10
 typedef enum
   {
    Inf_UNKNOWN_TYPE	= 0,
    Inf_INFORMATION	= 1,
-   Inf_TEACH_GUIDE	= 2,
-   Inf_SYLLABUS_LEC	= 3,
-   Inf_SYLLABUS_PRA	= 4,
-   Inf_BIBLIOGRAPHY	= 5,
-   Inf_FAQ		= 6,
-   Inf_LINKS		= 7,
-   Inf_ASSESSMENT	= 8,
+   Inf_PROGRAM		= 2,
+   Inf_TEACH_GUIDE	= 3,
+   Inf_SYLLABUS_LEC	= 4,
+   Inf_SYLLABUS_PRA	= 5,
+   Inf_BIBLIOGRAPHY	= 6,
+   Inf_FAQ		= 7,
+   Inf_LINKS		= 8,
+   Inf_ASSESSMENT	= 9,
   } Inf_Type_t;
 #define Inf_DEFAULT_WHICH_SYLLABUS Inf_SYLLABUS_LEC
 

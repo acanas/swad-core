@@ -177,7 +177,7 @@ long Rsc_DB_CreateResource (const struct Tre_Node *Node)
 void Rsc_DB_UpdateResourceTitle (long NodCod,long RscCod,
                                  const char NewTitle[Rsc_MAX_BYTES_RESOURCE_TITLE + 1])
   {
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update the title of a resource",
 		   "UPDATE prg_resources,"
@@ -192,7 +192,7 @@ void Rsc_DB_UpdateResourceTitle (long NodCod,long RscCod,
 	           RscCod,
 	           NodCod,
 	           Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	           Tre_DB_Types[Tre_PROGRAM]);
+	           Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -202,7 +202,7 @@ void Rsc_DB_UpdateResourceTitle (long NodCod,long RscCod,
 unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
                                   bool ShowHiddenResources)
   {
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
    static const char *HiddenSubQuery[2] =
      {
       [false] = " AND prg_resources.Hidden='N'",
@@ -229,7 +229,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenResources],
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Tre_PROGRAM]);
+		   Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -238,7 +238,7 @@ unsigned Rsc_DB_GetListResources (MYSQL_RES **mysql_res,long NodCod,
 
 unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
   {
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get node resource data",
@@ -257,7 +257,7 @@ unsigned Rsc_DB_GetResourceDataByCod (MYSQL_RES **mysql_res,long RscCod)
 		     " AND tre_nodes.Type='%s'",	// Extra check
 		   RscCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Tre_PROGRAM]);
+		   Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -313,7 +313,7 @@ long Rsc_DB_GetRscCodFromRscInd (long NodCod,unsigned RscInd)
 
 void Rsc_DB_RemoveResource (const struct Tre_Node *Node)
   {
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryDELETE ("can not remove node resource",
 		   "DELETE FROM prg_resources"
@@ -327,7 +327,7 @@ void Rsc_DB_RemoveResource (const struct Tre_Node *Node)
 		   Node->Resource.Hierarchy.RscCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Tre_PROGRAM]);
+		   Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -338,7 +338,7 @@ void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 				  HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    extern const char HidVis_YN[HidVis_NUM_HIDDEN_VISIBLE];
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not hide/unhide node resource",
 		   "UPDATE prg_resources,"
@@ -353,7 +353,7 @@ void Rsc_DB_HideOrUnhideResource (const struct Tre_Node *Node,
 		   Node->Resource.Hierarchy.RscCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Tre_PROGRAM]);
+		   Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -374,7 +374,7 @@ void Rsc_DB_LockTableResources (void)
 
 void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd)
   {
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update index of resource",
 		   "UPDATE prg_resources,"
@@ -389,7 +389,7 @@ void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd)
 		   RscCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Tre_PROGRAM]);
+		   Tre_DB_Types[Inf_PROGRAM]);
   }
 
 /*****************************************************************************/
@@ -399,7 +399,7 @@ void Rsc_DB_UpdateRscInd (const struct Tre_Node *Node,long RscCod,int RscInd)
 void Rsc_DB_UpdateRscLink (const struct Tre_Node *Node)
   {
    extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
-   extern const char *Tre_DB_Types[Tre_NUM_TYPES];
+   extern const char *Tre_DB_Types[Inf_NUM_TYPES];
 
    DB_QueryUPDATE ("can not update link of resource",
 		   "UPDATE prg_resources,"
@@ -416,5 +416,5 @@ void Rsc_DB_UpdateRscLink (const struct Tre_Node *Node)
 		   Node->Resource.Hierarchy.RscCod,
 		   Node->Hierarchy.NodCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Tre_DB_Types[Tre_PROGRAM]);
+		   Tre_DB_Types[Inf_PROGRAM]);
   }

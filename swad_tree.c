@@ -119,7 +119,7 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
                                                Vie_ViewType_t ViewType);
 static void Tre_WriteNodeText (const struct Tre_Node *Node,
 			       HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void Tre_WriteRowToCreateNode (Tre_TreeType_t TreeType,
+static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
 				      long ParentNodCod,unsigned FormLevel);
 static void Tre_SetTitleClass (char **TitleClass,unsigned Level);
 static void Tre_FreeTitleClass (char *TitleClass);
@@ -156,7 +156,7 @@ static void Tre_GetNodeDataFromRow (MYSQL_RES **mysql_res,
                                     struct Tre_Node *Node,
                                     unsigned NumRows);
 
-static bool Tre_ExchangeNodeRanges (Tre_TreeType_t TreeType,
+static bool Tre_ExchangeNodeRanges (Inf_Type_t InfoType,
 				    int NumNodeTop,int NumNodeBottom);
 static int Tre_GetPrevBrother (int NumNode);
 static int Tre_GetNextBrother (int NumNode);
@@ -164,18 +164,18 @@ static int Tre_GetNextBrother (int NumNode);
 static void Tre_SetNodeRangeWithAllChildren (unsigned NumNode,struct Tre_NodeRange *NodeRange);
 static unsigned Tre_GetLastChild (int NumNode);
 
-static void Tre_ShowFormToCreateNode (Tre_TreeType_t TreeType,long ParentNodCod);
+static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod);
 static void Tre_ShowFormToChangeNode (struct Tre_Node *Node);
 static void Tre_ParsFormNode (void *NodCod);
 static void Tre_ShowFormNode (const struct Tre_Node *Node,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 			      const char *Txt);
 
-static void Tre_InsertNode (Tre_TreeType_t TreeType,
+static void Tre_InsertNode (Inf_Type_t InfoType,
 			    const struct Tre_Node *ParentNode,
 		            struct Tre_Node *Node,const char *Txt);
 
-static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void);
+static Inf_Type_t Tre_GetInfoTypeFromCurrentAction (void);
 
 /*****************************************************************************/
 /**************************** List all tree nodes ****************************/
@@ -184,15 +184,15 @@ static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void);
 
 unsigned Tre_ShowTree (void)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();
    unsigned NumNodes;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
    NumNodes = Tre_Gbl.List.NumNodes;
 
    /***** Show course program without highlighting any node *****/
-   Tre_ShowAllNodes (TreeType,Tre_VIEW,-1L,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_VIEW,-1L,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -202,13 +202,13 @@ unsigned Tre_ShowTree (void)
 
 void Tre_EditTree (void)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Show course program without highlighting any node *****/
-   Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -218,7 +218,7 @@ void Tre_EditTree (void)
 /*************************** Show all tree nodes *****************************/
 /*****************************************************************************/
 
-void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
+void Tre_ShowAllNodes (Inf_Type_t InfoType,
 		       Tre_ListingType_t ListingType,
                        long SelectedNodCod,long SelectedRscCod)
   {
@@ -229,8 +229,8 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
    ConExp_ContractedOrExpanded_t ContractedOrExpanded;
 
    /***** Trivial check: tree type must be valid *****/
-   if (TreeType < (Tre_TreeType_t) 1 ||
-       TreeType > (Tre_TreeType_t) (Tre_NUM_TYPES - 1))
+   if (InfoType < (Inf_Type_t) 1 ||
+       InfoType > (Inf_Type_t) (Inf_NUM_TYPES - 1))
       Err_WrongTypeExit ();
 
    /***** Create numbers and hidden levels *****/
@@ -255,7 +255,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 	   NumNode++)
 	{
 	 /* Get data of this tree node */
-	 Node.TreeType = TreeType;
+	 Node.InfoType = InfoType;
 	 Node.Hierarchy.NodCod = Tre_GetNodCodFromNumNode (NumNode);
 	 Tre_GetNodeDataByCod (&Node);
 
@@ -275,7 +275,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 	    if (ListingType == Tre_FORM_NEW_CHILD_NODE &&
 		Node.Hierarchy.NodCod == SelectedNodCod)
 	      {
-	       Tre_WriteRowToCreateNode (TreeType,ParentNodCod,FormLevel);
+	       Tre_WriteRowToCreateNode (InfoType,ParentNodCod,FormLevel);
 	       The_ChangeRowColor ();
 	      }
 	   }
@@ -283,7 +283,7 @@ void Tre_ShowAllNodes (Tre_TreeType_t TreeType,
 
       /***** Create node at the end? *****/
       if (ListingType == Tre_FORM_NEW_END_NODE)
-	 Tre_WriteRowToCreateNode (TreeType,-1L,1);
+	 Tre_WriteRowToCreateNode (InfoType,-1L,1);
 
       /***** End table *****/
    HTM_TABLE_End ();
@@ -309,20 +309,21 @@ Usr_Can_t Tre_CheckIfICanEditTree (void)
 
 void Tre_PutIconToEditTree (struct Tre_Node *Node)
   {
-   static Act_Action_t NextAction[Tre_NUM_TYPES] =
+   static Act_Action_t NextAction[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActEdiTrePrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActEdiTreSyl,
-      [Tre_SYLLABUS_PRA	] = ActEdiTreSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActEdiTrePrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActEdiTreSyl,
+      [Inf_SYLLABUS_PRA	] = ActEdiTreSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
 
-   Ico_PutContextualIconToEdit (NextAction[Node->TreeType],NULL,
+   Ico_PutContextualIconToEdit (NextAction[Node->InfoType],NULL,
 				Tre_PutPars,Node);
   }
 
@@ -332,20 +333,21 @@ void Tre_PutIconToEditTree (struct Tre_Node *Node)
 
 void Tre_PutIconToViewTree (struct Tre_Node *Node)
   {
-   static Act_Action_t NextAction[Tre_NUM_TYPES] =
+   static Act_Action_t NextAction[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActSeePrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActSeeSyl,
-      [Tre_SYLLABUS_PRA	] = ActSeeSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActSeePrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActSeeSyl,
+      [Inf_SYLLABUS_PRA	] = ActSeeSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
 
-   Ico_PutContextualIconToView (NextAction[Node->TreeType],NULL,
+   Ico_PutContextualIconToView (NextAction[Node->InfoType],NULL,
 				Tre_PutPars,Node);
   }
 
@@ -355,20 +357,21 @@ void Tre_PutIconToViewTree (struct Tre_Node *Node)
 
 void Tre_PutIconToCreateNewNode (struct Tre_Node *Node)
   {
-   static Act_Action_t NextAction[Tre_NUM_TYPES] =
+   static Act_Action_t NextAction[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActFrmNewTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActFrmNewTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActFrmNewTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActFrmNewTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActFrmNewTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActFrmNewTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
 
-   Ico_PutContextualIconToAdd (NextAction[Node->TreeType],Tre_NODE_SECTION_ID,
+   Ico_PutContextualIconToAdd (NextAction[Node->InfoType],Tre_NODE_SECTION_ID,
                                Tre_PutPars,Node);
   }
 
@@ -519,9 +522,9 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       break;
 	   }
 
-	 switch (Node->TreeType)
+	 switch (Node->InfoType)
 	   {
-	    case Tre_PROGRAM:
+	    case Inf_PROGRAM:
 	       UniqueId++;
 	       for (StartEndTime  = (Dat_StartEndTime_t) 0;
 		    StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
@@ -578,9 +581,9 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       Tre_WriteNodeText (Node,HiddenOrVisible);
 
 	    /* Specific content depending on the tree type */
-	    switch (Node->TreeType)
+	    switch (Node->InfoType)
 	      {
-	       case Tre_PROGRAM:
+	       case Inf_PROGRAM:
 		  /* List of resources of this tree node */
 		  PrgRsc_ListNodeResources (ListingType,Node,
 					    SelectedNodCod,SelectedRscCod);
@@ -605,34 +608,34 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
                                                ConExp_ContractedOrExpanded_t ContractedOrExpanded,
                                                Vie_ViewType_t ViewType)
   {
-   static Act_Action_t NextAction[Tre_NUM_TYPES][ConExp_NUM_CONTRACTED_EXPANDED][Vie_NUM_VIEW_TYPES] =
+   static Act_Action_t NextAction[Inf_NUM_TYPES][ConExp_NUM_CONTRACTED_EXPANDED][Vie_NUM_VIEW_TYPES] =
      {
-      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodPrg,	// Contracted, Not editing ==> action to expand
-      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodPrg,	// Contracted,     Editing ==> action to expand
-      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
-      [Tre_PROGRAM	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
-      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodPrg,	// Expanded  , Not editing ==> action to contract
-      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodPrg,	// Expanded  ,     Editing ==> action to contract
-      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
-      [Tre_PROGRAM	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
+      [Inf_PROGRAM	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodPrg,	// Contracted, Not editing ==> action to expand
+      [Inf_PROGRAM	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodPrg,	// Contracted,     Editing ==> action to expand
+      [Inf_PROGRAM	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
+      [Inf_PROGRAM	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
+      [Inf_PROGRAM	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodPrg,	// Expanded  , Not editing ==> action to contract
+      [Inf_PROGRAM	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodPrg,	// Expanded  ,     Editing ==> action to contract
+      [Inf_PROGRAM	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
+      [Inf_PROGRAM	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
 
-      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
-      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
-      [Tre_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
-      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
-      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
-      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
-      [Tre_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
+      [Inf_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Inf_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Inf_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
+      [Inf_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
+      [Inf_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
+      [Inf_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Inf_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
+      [Inf_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
 
-      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
-      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
-      [Tre_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
-      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
-      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
-      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
-      [Tre_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
+      [Inf_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Inf_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Inf_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_CONFIG	] = ActUnk,
+      [Inf_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_PRINT	] = ActUnk,
+      [Inf_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
+      [Inf_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
+      [Inf_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_CONFIG	] = ActUnk,
+      [Inf_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_PRINT	] = ActUnk,
      };
    static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (Act_Action_t NextAction,const char *Anchor,
 								     void (*FuncPars) (void *Args),void *Args) =
@@ -642,7 +645,7 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
      };
 
    /***** Icon to hide/unhide tree node *****/
-   PutContextualIcon[ContractedOrExpanded] (NextAction[Node->TreeType][ContractedOrExpanded][ViewType],
+   PutContextualIcon[ContractedOrExpanded] (NextAction[Node->InfoType][ContractedOrExpanded][ViewType],
 					    // Prg_HIGHLIGHTED_SECTION_ID,
 					    Tre_NODE_SECTION_ID,
 					    Tre_PutPars,Node);
@@ -673,7 +676,7 @@ static void Tre_WriteNodeText (const struct Tre_Node *Node,
 /**************************** Show node form *********************************/
 /*****************************************************************************/
 
-static void Tre_WriteRowToCreateNode (Tre_TreeType_t TreeType,
+static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
 				      long ParentNodCod,unsigned FormLevel)
   {
    char *TitleClass;
@@ -715,7 +718,7 @@ static void Tre_WriteRowToCreateNode (Tre_TreeType_t TreeType,
 		    ColSpan,The_GetColorRows ());
          /* Form for node data */
 	 HTM_ARTICLE_Begin (Tre_NODE_SECTION_ID);
-	    Tre_ShowFormToCreateNode (TreeType,ParentNodCod);
+	    Tre_ShowFormToCreateNode (InfoType,ParentNodCod);
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
 
@@ -941,110 +944,118 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
                                           bool HighlightNode)
   {
    extern const char *Txt_Movement_not_allowed;
-   static Act_Action_t ActionReqRem[Tre_NUM_TYPES] =
+   static Act_Action_t ActionReqRem[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActReqRemTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActReqRemTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActReqRemTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActReqRemTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActReqRemTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActReqRemTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   static Act_Action_t ActionHideUnhide[Tre_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
+   static Act_Action_t ActionHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Tre_PROGRAM	][HidVis_HIDDEN ] = ActUnhTreNodPrg,	// Hidden ==> action to unhide
-      [Tre_PROGRAM	][HidVis_VISIBLE] = ActHidTreNodPrg,	// Visible ==> action to hide
-      [Tre_SYLLABUS_LEC	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
-      [Tre_SYLLABUS_LEC	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
-      [Tre_SYLLABUS_PRA	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
-      [Tre_SYLLABUS_PRA	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
+      [Inf_PROGRAM	][HidVis_HIDDEN ] = ActUnhTreNodPrg,	// Hidden ==> action to unhide
+      [Inf_PROGRAM	][HidVis_VISIBLE] = ActHidTreNodPrg,	// Visible ==> action to hide
+      [Inf_SYLLABUS_LEC	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
+      [Inf_SYLLABUS_LEC	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
+      [Inf_SYLLABUS_PRA	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
+      [Inf_SYLLABUS_PRA	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
      };
-   static Act_Action_t ActionSee[Tre_NUM_TYPES] =
+   static Act_Action_t ActionSee[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActSeeTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActSeeTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActSeeTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActSeeTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActSeeTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActSeeTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   static Act_Action_t ActionFrmChg[Tre_NUM_TYPES] =
+   static Act_Action_t ActionFrmChg[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActFrmChgTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActFrmChgTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActFrmChgTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActFrmChgTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActFrmChgTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActFrmChgTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   static Act_Action_t ActionFrmNew[Tre_NUM_TYPES] =
+   static Act_Action_t ActionFrmNew[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActFrmNewTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActFrmNewTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActFrmNewTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActFrmNewTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActFrmNewTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActFrmNewTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   static Act_Action_t ActionUp_[Tre_NUM_TYPES] =
+   static Act_Action_t ActionUp_[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActUp_TreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActUp_TreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActUp_TreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActUp_TreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActUp_TreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActUp_TreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   static Act_Action_t ActionDwn[Tre_NUM_TYPES] =
+   static Act_Action_t ActionDwn[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActDwnTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActDwnTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActDwnTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActDwnTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActDwnTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActDwnTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   static Act_Action_t ActionLft[Tre_NUM_TYPES] =
+   static Act_Action_t ActionLft[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActLftTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActLftTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActLftTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActLftTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActLftTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActLftTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   static Act_Action_t ActionRgt[Tre_NUM_TYPES] =
+   static Act_Action_t ActionRgt[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActRgtTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActRgtTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActRgtTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActRgtTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActRgtTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActRgtTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
    char StrItemIndex[Cns_MAX_DIGITS_UINT + 1];
 
@@ -1056,31 +1067,31 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Icon to remove tree node *****/
-	 Ico_PutContextualIconToRemove (ActionReqRem[Node->TreeType],NULL,
+	 Ico_PutContextualIconToRemove (ActionReqRem[Node->InfoType],NULL,
 	                                Tre_PutPars,Node);
 
 	 /***** Icon to hide/unhide tree node *****/
-	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide[Node->TreeType],Tre_NODE_SECTION_ID /*Prg_HIGHLIGHTED_SECTION_ID */,
+	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide[Node->InfoType],Tre_NODE_SECTION_ID /*Prg_HIGHLIGHTED_SECTION_ID */,
 					    Tre_PutPars,Node,
 					    Node->Hierarchy.HiddenOrVisible);
 
 	 /***** Icon to edit tree node *****/
 	 if (ListingType == Tre_FORM_EDIT_NODE && HighlightNode)
-	    Ico_PutContextualIconToView (ActionSee[Node->TreeType],Tre_NODE_SECTION_ID,
+	    Ico_PutContextualIconToView (ActionSee[Node->InfoType],Tre_NODE_SECTION_ID,
 					 Tre_PutPars,Node);
 	 else
-	    Ico_PutContextualIconToEdit (ActionFrmChg[Node->TreeType],Tre_NODE_SECTION_ID,
+	    Ico_PutContextualIconToEdit (ActionFrmChg[Node->InfoType],Tre_NODE_SECTION_ID,
 					 Tre_PutPars,Node);
 
 	 /***** Icon to add a new child node inside this node *****/
-	 Ico_PutContextualIconToAdd (ActionFrmNew[Node->TreeType],Tre_NODE_SECTION_ID,
+	 Ico_PutContextualIconToAdd (ActionFrmNew[Node->InfoType],Tre_NODE_SECTION_ID,
 	                             Tre_PutPars,Node);
 
 	 HTM_BR ();
 
 	 /***** Icon to move up the node *****/
 	 if (Tre_CheckIfMoveUpIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionUp_[Node->TreeType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionUp_[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Tre_PutPars,Node,
 					   "arrow-up.svg",Ico_BLACK);
 	 else
@@ -1088,7 +1099,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 
 	 /***** Icon to move down the node *****/
 	 if (Tre_CheckIfMoveDownIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionDwn[Node->TreeType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionDwn[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Tre_PutPars,Node,
 					   "arrow-down.svg",Ico_BLACK);
 	 else
@@ -1096,7 +1107,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 
 	 /***** Icon to move left node (increase level) *****/
 	 if (Tre_CheckIfMoveLeftIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionLft[Node->TreeType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionLft[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Tre_PutPars,Node,
 					   "arrow-left.svg",Ico_BLACK);
 	 else
@@ -1104,7 +1115,7 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
 
 	 /***** Icon to move right node (indent, decrease level) *****/
 	 if (Tre_CheckIfMoveRightIsAllowed (NumNode))
-	    Lay_PutContextualLinkOnlyIcon (ActionRgt[Node->TreeType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+	    Lay_PutContextualLinkOnlyIcon (ActionRgt[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
 	                                   Tre_PutPars,Node,
 					   "arrow-right.svg",Ico_BLACK);
 	 else
@@ -1199,13 +1210,13 @@ void Tre_PutPars (void *Node)
    if (Node)
      {
       ParCod_PutPar (ParCod_Nod,((struct Tre_Node *) Node)->Hierarchy.NodCod);
-      switch (((struct Tre_Node *) Node)->TreeType)
+      switch (((struct Tre_Node *) Node)->InfoType)
 	{
-	 case Tre_SYLLABUS_LEC:
+	 case Inf_SYLLABUS_LEC:
 	    InfoType = Inf_SYLLABUS_LEC;
 	    Inf_PutParInfoType (&InfoType);
 	    break;
-	 case Tre_SYLLABUS_PRA:
+	 case Inf_SYLLABUS_PRA:
 	    InfoType = Inf_SYLLABUS_PRA;
 	    Inf_PutParInfoType (&InfoType);
 	    break;
@@ -1222,9 +1233,9 @@ void Tre_GetPars (struct Tre_Node *Node)
    Tre_ResetNode (Node);
 
    /****** Parameters specific for each type of tree *****/
-   switch (Node->TreeType)
+   switch (Node->InfoType)
      {
-      case Tre_PROGRAM:
+      case Inf_PROGRAM:
 	 /***** Try to get node resource *****/
 	 Node->Resource.Hierarchy.RscCod = ParCod_GetPar (ParCod_Rsc);
 
@@ -1247,7 +1258,7 @@ void Tre_GetPars (struct Tre_Node *Node)
 /*************************** List all tree nodes *****************************/
 /*****************************************************************************/
 
-void Tre_GetListNodes (Tre_TreeType_t TreeType)
+void Tre_GetListNodes (Inf_Type_t InfoType)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1257,7 +1268,7 @@ void Tre_GetListNodes (Tre_TreeType_t TreeType)
       Tre_FreeListNodes ();
 
    /***** Get list of tree nodes from database *****/
-   if ((Tre_Gbl.List.NumNodes = Tre_DB_GetListNodes (TreeType,&mysql_res))) // Nodes found...
+   if ((Tre_Gbl.List.NumNodes = Tre_DB_GetListNodes (InfoType,&mysql_res))) // Nodes found...
      {
       /***** Create list of tree nodes *****/
       if ((Tre_Gbl.List.Nodes = calloc (Tre_Gbl.List.NumNodes,
@@ -1398,7 +1409,7 @@ void Tre_FreeListNodes (void)
 
 void Tre_ResetNode (struct Tre_Node *Node)
   {
-   // Node->TreeType is not reset
+   // Node->InfoType is not reset
    Node->Hierarchy.NodCod = -1L;
    Node->Hierarchy.NodInd = 0;
    Node->Hierarchy.Level  = 0;
@@ -1408,7 +1419,7 @@ void Tre_ResetNode (struct Tre_Node *Node)
    Node->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Node->ClosedOrOpen = CloOpe_CLOSED;
    Node->Title[0] = '\0';
-   if (Node->TreeType == Tre_PROGRAM)
+   if (Node->InfoType == Inf_PROGRAM)
       Rsc_ResetResource (&Node->Resource);
   }
 
@@ -1470,38 +1481,39 @@ inline unsigned Tre_GetLevelFromNumNode (unsigned NumNode)
 void Tre_ReqRemNode (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
-   static Act_Action_t NextAction[Tre_NUM_TYPES] =
+   static Act_Action_t NextAction[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActRemTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActRemTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActRemTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActRemTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActRemTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActRemTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
 
    /***** Show question and button to remove the tree node *****/
-   Ale_ShowAlertRemove (NextAction[TreeType],NULL,
+   Ale_ShowAlertRemove (NextAction[InfoType],NULL,
                         Tre_PutPars,&Node,
 			Txt_Do_you_really_want_to_remove_the_item_X,
                         Node.Title);
 
    /***** Show tree node highlighting subtree *****/
-   Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1514,15 +1526,15 @@ void Tre_ReqRemNode (void)
 void Tre_RemoveNode (void)
   {
    extern const char *Txt_Item_X_removed;
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
    struct Tre_NodeRange ToRemove;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
@@ -1532,17 +1544,17 @@ void Tre_RemoveNode (void)
 				    &ToRemove);
 
    /***** Remove tree nodes *****/
-   Tre_DB_RemoveNodeRange (TreeType,&ToRemove);
+   Tre_DB_RemoveNodeRange (InfoType,&ToRemove);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Node.Title);
 
    /***** Update list of tree nodes *****/
    Tre_FreeListNodes ();
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Show course program without highlighting any node *****/
-   Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1554,14 +1566,14 @@ void Tre_RemoveNode (void)
 
 void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
@@ -1570,7 +1582,7 @@ void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Tre_DB_HideOrUnhideNode (&Node,HiddenOrVisible);
 
    /***** Show tree nodes highlighting subtree *****/
-   Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1583,7 +1595,7 @@ void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
 void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
    unsigned NumNode;
    bool Success = false;
@@ -1594,10 +1606,10 @@ void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
      };
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
@@ -1610,10 +1622,10 @@ void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
       switch (UpDown)
         {
 	 case Tre_MOVE_UP:
-            Success = Tre_ExchangeNodeRanges (TreeType,Tre_GetPrevBrother (NumNode),NumNode);
+            Success = Tre_ExchangeNodeRanges (InfoType,Tre_GetPrevBrother (NumNode),NumNode);
             break;
 	 case Tre_MOVE_DOWN:
-            Success = Tre_ExchangeNodeRanges (TreeType,NumNode,Tre_GetNextBrother (NumNode));
+            Success = Tre_ExchangeNodeRanges (InfoType,NumNode,Tre_GetNextBrother (NumNode));
             break;
         }
      }
@@ -1621,16 +1633,16 @@ void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
      {
       /* Update list of tree nodes */
       Tre_FreeListNodes ();
-      Tre_GetListNodes (TreeType);
+      Tre_GetListNodes (InfoType);
 
       /* Show tree nodes highlighting subtree */
-      Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
+      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
      {
       /* Show course program without highlighting any node */
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
+      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
      }
 
    /***** Free list of tree nodes *****/
@@ -1642,7 +1654,7 @@ void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
 /*****************************************************************************/
 // Return true if success
 
-static bool Tre_ExchangeNodeRanges (Tre_TreeType_t TreeType,
+static bool Tre_ExchangeNodeRanges (Inf_Type_t InfoType,
 				    int NumNodeTop,int NumNodeBottom)
   {
    struct Tre_NodeRange Top;
@@ -1687,19 +1699,19 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
       */
       /* Step 1: Change all indexes involved to negative,
 		 necessary to preserve unique index (CrsCod,NodInd) */
-      Tre_DB_UpdateIndexRange (TreeType,
+      Tre_DB_UpdateIndexRange (InfoType,
 				 (long) 0            ,	// NodInd=-NodInd
                                  (long) Top.Begin    ,
                                  (long) Bottom.End   );	// All indexes in both parts
 
       /* Step 2: Increase top indexes */
-      Tre_DB_UpdateIndexRange (TreeType,
+      Tre_DB_UpdateIndexRange (InfoType,
 				 (long) DiffEnd      ,	// NodInd=-NodInd+DiffEnd
                                -((long) Top.End     ),
                                -((long) Top.Begin   ));	// All indexes in top part
 
       /* Step 3: Decrease bottom indexes */
-      Tre_DB_UpdateIndexRange (TreeType,
+      Tre_DB_UpdateIndexRange (InfoType,
 			       -((long) DiffBegin   ),	// NodInd=-NodInd-DiffBegin
                                -((long) Bottom.End  ),
                                -((long) Bottom.Begin));	// All indexes in bottom part
@@ -1780,7 +1792,7 @@ static int Tre_GetNextBrother (int NumNode)
 void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
   {
    extern const char *Txt_Movement_not_allowed;
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
    unsigned NumNode;
    struct Tre_NodeRange ToMove;
@@ -1791,10 +1803,10 @@ void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
      };
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
@@ -1807,20 +1819,20 @@ void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
       Tre_SetNodeRangeWithAllChildren (NumNode,&ToMove);
 
       /* Move node and its children to left or right */
-      Tre_DB_MoveLeftRightNodeRange (TreeType,&ToMove,LeftRight);
+      Tre_DB_MoveLeftRightNodeRange (InfoType,&ToMove,LeftRight);
 
       /* Update list of tree nodes */
       Tre_FreeListNodes ();
-      Tre_GetListNodes (TreeType);
+      Tre_GetListNodes (InfoType);
 
       /* Show tree nodes highlighting subtree */
-      Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
+      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
      {
       /* Show course program without highlighting any node */
       Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
-      Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,-1L,-1L);
+      Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,-1L,-1L);
      }
 
    /***** Free list of tree nodes *****/
@@ -1834,14 +1846,14 @@ void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
 void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
@@ -1858,7 +1870,7 @@ void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
      }
 
    /***** Show tree nodes highlighting subtree *****/
-   Tre_ShowAllNodes (TreeType,ListingType,Node.Hierarchy.NodCod,-1L);
+   Tre_ShowAllNodes (InfoType,ListingType,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1912,18 +1924,18 @@ static unsigned Tre_GetLastChild (int NumNode)
 
 void Tre_ViewNodeAfterEdit (void)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (TreeType,Tre_END_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_END_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1935,14 +1947,14 @@ void Tre_ViewNodeAfterEdit (void)
 
 void Tre_ReqChangeNode (void)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
 
    /***** If node is contracted ==> expand it *****/
@@ -1950,7 +1962,7 @@ void Tre_ReqChangeNode (void)
       Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (TreeType,Tre_FORM_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_FORM_EDIT_NODE,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -1962,14 +1974,14 @@ void Tre_ReqChangeNode (void)
 
 void Tre_ReqCreateNode (void)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
 
    /***** Add node to table of expanded nodes
@@ -1977,7 +1989,7 @@ void Tre_ReqCreateNode (void)
    Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);
 
    /***** Show current tree nodes, if any *****/
-   Tre_ShowAllNodes (TreeType,
+   Tre_ShowAllNodes (InfoType,
 		     Node.Hierarchy.NodCod > 0 ? Tre_FORM_NEW_CHILD_NODE :
 	                                         Tre_FORM_NEW_END_NODE,
 	             Node.Hierarchy.NodCod,-1L);
@@ -1990,7 +2002,7 @@ void Tre_ReqCreateNode (void)
 /***************** Put a form to create a new tree node *******************/
 /*****************************************************************************/
 
-static void Tre_ShowFormToCreateNode (Tre_TreeType_t TreeType,long ParentNodCod)
+static void Tre_ShowFormToCreateNode (Inf_Type_t InfoType,long ParentNodCod)
   {
    struct Tre_Node ParentNode;	// Parent node
    struct Tre_Node Node;
@@ -1999,26 +2011,27 @@ static void Tre_ShowFormToCreateNode (Tre_TreeType_t TreeType,long ParentNodCod)
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
-   static Act_Action_t NextAction[Tre_NUM_TYPES] =
+   static Act_Action_t NextAction[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActNewTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActNewTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActNewTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActNewTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActNewTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActNewTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
 
    /***** Get data of the parent tree node from database *****/
-   ParentNode.TreeType = TreeType;
+   ParentNode.InfoType = InfoType;
    ParentNode.Hierarchy.NodCod = ParentNodCod;
    Tre_GetNodeDataByCod (&ParentNode);
 
    /***** Initialize to empty node *****/
-   Node.TreeType = ParentNode.TreeType;
+   Node.InfoType = ParentNode.InfoType;
    Tre_ResetNode (&Node);	// Clear all node data except type
    Node.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
    Node.TimeUTC[Dat_END_TIME] = Node.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
@@ -2028,7 +2041,7 @@ static void Tre_ShowFormToCreateNode (Tre_TreeType_t TreeType,long ParentNodCod)
    Ale_ShowAlerts (NULL);
 
    /***** Begin form to create *****/
-   Frm_BeginFormTable (NextAction[TreeType],NULL,
+   Frm_BeginFormTable (NextAction[InfoType],NULL,
                        Tre_ParsFormNode,&ParentNode.Hierarchy.NodCod,
                        "TBL_WIDE");
 
@@ -2047,17 +2060,18 @@ static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
-   static Act_Action_t NextAction[Tre_NUM_TYPES] =
+   static Act_Action_t NextAction[Inf_NUM_TYPES] =
      {
-      [Tre_UNKNOWN	] = ActUnk,
-      [Tre_PROGRAM	] = ActChgTreNodPrg,
-      [Tre_GUIDE	] = ActUnk,
-      [Tre_SYLLABUS_LEC	] = ActChgTreNodSyl,
-      [Tre_SYLLABUS_PRA	] = ActChgTreNodSyl,
-      [Tre_BIBLIOGRAPHY	] = ActUnk,
-      [Tre_FAQ		] = ActUnk,
-      [Tre_LINKS	] = ActUnk,
-      [Tre_ASSESSMENT	] = ActUnk,
+      [Inf_UNKNOWN_TYPE	] = ActUnk,
+      [Inf_INFORMATION	] = ActUnk,
+      [Inf_PROGRAM	] = ActChgTreNodPrg,
+      [Inf_TEACH_GUIDE	] = ActUnk,
+      [Inf_SYLLABUS_LEC	] = ActChgTreNodSyl,
+      [Inf_SYLLABUS_PRA	] = ActChgTreNodSyl,
+      [Inf_BIBLIOGRAPHY	] = ActUnk,
+      [Inf_FAQ		] = ActUnk,
+      [Inf_LINKS	] = ActUnk,
+      [Inf_ASSESSMENT	] = ActUnk,
      };
 
    /***** Get data of the tree node from database *****/
@@ -2065,7 +2079,7 @@ static void Tre_ShowFormToChangeNode (struct Tre_Node *Node)
    Tre_DB_GetNodeTxt (Node,Txt);
 
    /***** Begin form to change *****/
-   Frm_BeginFormTable (NextAction[Node->TreeType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
+   Frm_BeginFormTable (NextAction[Node->InfoType],Tre_NODE_SECTION_ID /* Prg_HIGHLIGHTED_SECTION_ID */,
                        Tre_ParsFormNode,&Node->Hierarchy.NodCod,"TBL_WIDE");
 
       /***** Show form *****/
@@ -2140,15 +2154,15 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
 
 void Tre_ReceiveChgNode (void)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
@@ -2173,7 +2187,7 @@ void Tre_ReceiveChgNode (void)
    Tre_DB_UpdateNode (&Node,Description);
 
    /***** Show tree nodes highlighting the node just changed *****/
-   Tre_ShowAllNodes (TreeType,Tre_RECEIVE_NODE,Node.Hierarchy.NodCod,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_RECEIVE_NODE,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -2185,16 +2199,16 @@ void Tre_ReceiveChgNode (void)
 
 void Tre_ReceiveNewNode (void)
   {
-   Tre_TreeType_t TreeType = Tre_GetTreeTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
    struct Tre_Node Node;		// Parent node
    struct Tre_Node NewNode;		// Node data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Get tree node *****/
-   Node.TreeType = TreeType;
+   Node.InfoType = InfoType;
    Tre_GetPars (&Node);
    // If node code <= 0 ==> this is the first node in the program
 
@@ -2219,14 +2233,14 @@ void Tre_ReceiveNewNode (void)
       NewNode.TimeUTC[Dat_END_TIME] = NewNode.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Create a new tree node *****/
-   Tre_InsertNode (TreeType,&Node,&NewNode,Description);
+   Tre_InsertNode (InfoType,&Node,&NewNode,Description);
 
    /* Update list of tree nodes */
    Tre_FreeListNodes ();
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
 
    /***** Show tree nodes highlighting the node just created *****/
-   Tre_ShowAllNodes (TreeType,Tre_EDIT_NODES,NewNode.Hierarchy.NodCod,-1L);
+   Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,NewNode.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
@@ -2236,7 +2250,7 @@ void Tre_ReceiveNewNode (void)
 /*************** Insert a new node as a child of a parent node ***************/
 /*****************************************************************************/
 
-static void Tre_InsertNode (Tre_TreeType_t TreeType,
+static void Tre_InsertNode (Inf_Type_t InfoType,
 			    const struct Tre_Node *ParentNode,
 		            struct Tre_Node *Node,const char *Txt)
   {
@@ -2246,7 +2260,7 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
    Tre_DB_LockTableNodes ();
 
    /***** Get list of tree nodes *****/
-   Tre_GetListNodes (TreeType);
+   Tre_GetListNodes (InfoType);
    if (Tre_Gbl.List.NumNodes)	// There are nodes
      {
       if (ParentNode->Hierarchy.NodCod > 0)	// Parent specified
@@ -2259,7 +2273,7 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
 	    Node->Hierarchy.NodInd = Tre_GetNodIndFromNumNode (NumNodeLastChild + 1);
 
 	    /***** Move down all indexes of after last child of parent *****/
-	    Tre_DB_MoveDownNodes (TreeType,Node->Hierarchy.NodInd);
+	    Tre_DB_MoveDownNodes (InfoType,Node->Hierarchy.NodInd);
 	   }
 	 else
 	    /***** New node will be inserted at the end *****/
@@ -2287,7 +2301,7 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
      }
 
    /***** Insert new tree node *****/
-   Node->TreeType = TreeType;
+   Node->InfoType = InfoType;
    Node->Hierarchy.NodCod = Tre_DB_InsertNode (Node,Txt);
 
    /***** Unlock table *****/
@@ -2301,35 +2315,35 @@ static void Tre_InsertNode (Tre_TreeType_t TreeType,
 /**************** Get tree type depending on current action ******************/
 /*****************************************************************************/
 
-static Tre_TreeType_t Tre_GetTreeTypeFromCurrentAction (void)
+static Inf_Type_t Tre_GetInfoTypeFromCurrentAction (void)
   {
    switch (Act_GetSuperAction (Gbl.Action.Act))
      {
       case ActSeePrg:
-         return Tre_PROGRAM;
+         return Inf_PROGRAM;
       case ActSeeTchGui:
-	 return Tre_GUIDE;
+	 return Inf_TEACH_GUIDE;
       case ActSeeSyl:
 	 switch (Inf_GetParInfoType ())
 	   {
 	    case Inf_SYLLABUS_LEC:
-	       return Tre_SYLLABUS_LEC;
+	       return Inf_SYLLABUS_LEC;
 	    case Inf_SYLLABUS_PRA:
-	       return Tre_SYLLABUS_PRA;
+	       return Inf_SYLLABUS_PRA;
 	    default:
 	       Err_WrongSyllabusExit ();
-	       return Tre_UNKNOWN;	// Not reached
+	       return Inf_UNKNOWN_TYPE;	// Not reached
 	   }
       case ActSeeBib:
-	 return Tre_BIBLIOGRAPHY;
+	 return Inf_BIBLIOGRAPHY;
       case ActSeeFAQ:
-	 return Tre_FAQ;
+	 return Inf_FAQ;
       case ActSeeCrsLnk:
-	 return Tre_LINKS;
+	 return Inf_LINKS;
       case ActSeeAss:
-	 return Tre_ASSESSMENT;
+	 return Inf_ASSESSMENT;
       default:
 	 Err_WrongActionExit ();
-	 return Tre_UNKNOWN;	// Not reached
+	 return Inf_UNKNOWN_TYPE;	// Not reached
      }
   }

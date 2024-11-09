@@ -49,6 +49,7 @@
 #include "swad_string.h"
 #include "swad_syllabus.h"
 #include "swad_tree.h"
+#include "swad_tree_database.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -58,6 +59,7 @@ Inf_Type_t Inf_Types[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = Inf_UNKNOWN_TYPE,
    [Inf_INFORMATION	] = Inf_INFORMATION,
+   [Inf_PROGRAM		] = Inf_PROGRAM,	// Not used yet
    [Inf_TEACH_GUIDE	] = Inf_TEACH_GUIDE,
    [Inf_SYLLABUS_LEC	] = Inf_SYLLABUS_LEC,
    [Inf_SYLLABUS_PRA	] = Inf_SYLLABUS_PRA,
@@ -77,23 +79,11 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static Tre_TreeType_t Inf_TreeTypes[Inf_NUM_TYPES] =
-  {
-   [Inf_UNKNOWN_TYPE	] = Tre_UNKNOWN,
-   [Inf_INFORMATION	] = Tre_UNKNOWN,
-   [Inf_TEACH_GUIDE	] = Tre_GUIDE,
-   [Inf_SYLLABUS_LEC	] = Tre_SYLLABUS_LEC,
-   [Inf_SYLLABUS_PRA	] = Tre_SYLLABUS_PRA,
-   [Inf_BIBLIOGRAPHY	] = Tre_BIBLIOGRAPHY,
-   [Inf_FAQ		] = Tre_FAQ,
-   [Inf_LINKS		] = Tre_LINKS,
-   [Inf_ASSESSMENT	] = Tre_ASSESSMENT,
-  };
-
 static const char *Inf_FileNamesForInfoType[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = NULL,
    [Inf_INFORMATION	] = Cfg_CRS_INFO_INFORMATION,
+   [Inf_PROGRAM		] = NULL,	// Not used yet
    [Inf_TEACH_GUIDE	] = Cfg_CRS_INFO_TEACHING_GUIDE,
    [Inf_SYLLABUS_LEC	] = Cfg_CRS_INFO_LECTURES,
    [Inf_SYLLABUS_PRA	] = Cfg_CRS_INFO_PRACTICALS,
@@ -107,6 +97,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
   {
    [Inf_SRC_NONE	][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_SRC_NONE	][Inf_INFORMATION	] = ActUnk,
+   [Inf_SRC_NONE	][Inf_PROGRAM		] = ActUnk,
    [Inf_SRC_NONE	][Inf_TEACH_GUIDE	] = ActUnk,
    [Inf_SRC_NONE	][Inf_SYLLABUS_LEC	] = ActUnk,
    [Inf_SRC_NONE	][Inf_SYLLABUS_PRA	] = ActUnk,
@@ -117,6 +108,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_EDITOR		][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_EDITOR		][Inf_INFORMATION	] = ActEditorCrsInf,
+   [Inf_EDITOR		][Inf_PROGRAM		] = ActEdiTrePrg,
    [Inf_EDITOR		][Inf_TEACH_GUIDE	] = ActEditorTchGui,
    [Inf_EDITOR		][Inf_SYLLABUS_LEC	] = ActEdiTreSyl,
    [Inf_EDITOR		][Inf_SYLLABUS_PRA	] = ActEdiTreSyl,
@@ -127,6 +119,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_PLAIN_TEXT	][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_PLAIN_TEXT	][Inf_INFORMATION	] = ActEdiPlaTxtCrsInf,
+   [Inf_PLAIN_TEXT	][Inf_PROGRAM		] = ActUnk,	// Not used yet
    [Inf_PLAIN_TEXT	][Inf_TEACH_GUIDE	] = ActEdiPlaTxtTchGui,
    [Inf_PLAIN_TEXT	][Inf_SYLLABUS_LEC	] = ActEdiPlaTxtSyl,
    [Inf_PLAIN_TEXT	][Inf_SYLLABUS_PRA	] = ActEdiPlaTxtSyl,
@@ -137,6 +130,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_RICH_TEXT	][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_RICH_TEXT	][Inf_INFORMATION	] = ActEdiRchTxtCrsInf,
+   [Inf_RICH_TEXT	][Inf_PROGRAM		] = ActUnk,	// Not used yet
    [Inf_RICH_TEXT	][Inf_TEACH_GUIDE	] = ActEdiRchTxtTchGui,
    [Inf_RICH_TEXT	][Inf_SYLLABUS_LEC	] = ActEdiRchTxtSyl,
    [Inf_RICH_TEXT	][Inf_SYLLABUS_PRA	] = ActEdiRchTxtSyl,
@@ -147,6 +141,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_PAGE		][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_PAGE		][Inf_INFORMATION	] = ActEdiPagCrsInf,
+   [Inf_PAGE		][Inf_PROGRAM		] = ActUnk,	// Not used yet
    [Inf_PAGE		][Inf_TEACH_GUIDE	] = ActEdiPagTchGui,
    [Inf_PAGE		][Inf_SYLLABUS_LEC	] = ActEdiPagSyl,
    [Inf_PAGE		][Inf_SYLLABUS_PRA	] = ActEdiPagSyl,
@@ -157,6 +152,7 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
 
    [Inf_URL		][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_URL		][Inf_INFORMATION	] = ActEdiURLCrsInf,
+   [Inf_URL		][Inf_PROGRAM		] = ActUnk,	// Not used yet
    [Inf_URL		][Inf_TEACH_GUIDE	] = ActEdiURLTchGui,
    [Inf_URL		][Inf_SYLLABUS_LEC	] = ActEdiURLSyl,
    [Inf_URL		][Inf_SYLLABUS_PRA	] = ActEdiURLSyl,
@@ -170,6 +166,7 @@ static Act_Action_t Inf_ActionsCfg[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_INFORMATION	] = ActCfgCrsInf,
+   [Inf_PROGRAM		] = ActUnk,	// Not used yet
    [Inf_TEACH_GUIDE	] = ActCfgTchGui,
    [Inf_SYLLABUS_LEC	] = ActCfgSyl,
    [Inf_SYLLABUS_PRA	] = ActCfgSyl,
@@ -183,6 +180,7 @@ static Act_Action_t Inf_ActionsReqLnk[Inf_NUM_TYPES] =
   {
    [Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_INFORMATION	] = ActReqLnkCrsInf,
+   [Inf_PROGRAM		] = ActUnk,	// Not used yet
    [Inf_TEACH_GUIDE	] = ActReqLnkTchGui,
    [Inf_SYLLABUS_LEC	] = ActReqLnkSyl,
    [Inf_SYLLABUS_PRA	] = ActReqLnkSyl,
@@ -245,6 +243,7 @@ static bool Inf_CheckAndShowRichTxt (void);
 static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
   {
    extern const char *Hlp_COURSE_Information_textual_information;
+   extern const char *Hlp_COURSE_Program;
    extern const char *Hlp_COURSE_Guide;
    extern const char *Hlp_COURSE_Syllabus;
    extern const char *Hlp_COURSE_Bibliography;
@@ -263,6 +262,7 @@ static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = &Hlp_COURSE_Information_textual_information,
+      [Inf_PROGRAM	] = &Hlp_COURSE_Program,
       [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide,
       [Inf_SYLLABUS_LEC	] = &Hlp_COURSE_Syllabus,
       [Inf_SYLLABUS_PRA	] = &Hlp_COURSE_Syllabus,
@@ -538,7 +538,7 @@ static void Inf_PutIconsWhenViewing (void *Info)
    if (Info)
       if (Tre_CheckIfICanEditTree () == Usr_CAN)
         {
-	 Node.TreeType = Inf_TreeTypes[((struct Inf_Info *) Info)->Type];
+	 Node.InfoType = ((struct Inf_Info *) Info)->Type;
 	 Tre_ResetNode (&Node);
 
 	 /***** Icon to edit *****/
@@ -562,7 +562,7 @@ static void Inf_PutIconsWhenEditing (void *Info)
 
    if (Info)
      {
-      Node.TreeType = Inf_TreeTypes[((struct Inf_Info *) Info)->Type];
+      Node.InfoType = ((struct Inf_Info *) Info)->Type;
       Tre_ResetNode (&Node);
 
       /***** Put icon to view program *****/
@@ -592,7 +592,7 @@ static void Inf_PutIconsWhenConfiguring (void *Info)
 
    if (Info)
      {
-      Node.TreeType = Inf_TreeTypes[((struct Inf_Info *) Info)->Type];
+      Node.InfoType = ((struct Inf_Info *) Info)->Type;
       Tre_ResetNode (&Node);
 
       /***** Put icon to view program *****/
@@ -887,6 +887,7 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActChgFrcReaCrsInf	,NULL,NULL},
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActChgFrcReaTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActChgFrcReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
       [Inf_SYLLABUS_PRA	] = {ActChgFrcReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -919,6 +920,7 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActChgHavReaCrsInf	,NULL,NULL},
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActChgHavReaTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActChgHavReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
       [Inf_SYLLABUS_PRA	] = {ActChgHavReaSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -993,6 +995,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActSeeCrsInf	,NULL,NULL},
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActSeeTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
       [Inf_SYLLABUS_PRA	] = {ActSeeSyl		,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1115,6 +1118,7 @@ static void Inf_ConfigInfoSource (void)
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
       [Inf_INFORMATION	] = ActSelInfSrcCrsInf,
+      [Inf_PROGRAM	] = ActUnk,	// Not used yet
       [Inf_TEACH_GUIDE	] = ActSelInfSrcTchGui,
       [Inf_SYLLABUS_LEC	] = ActSelInfSrcSyl,
       [Inf_SYLLABUS_PRA	] = ActSelInfSrcSyl,
@@ -1220,10 +1224,10 @@ static bool Inf_CheckIfInfoAvailable (Inf_Src_t InfoSrc)
       case Inf_EDITOR:
          switch (Gbl.Crs.Info.Type)
            {
+            case Inf_PROGRAM:
             case Inf_SYLLABUS_LEC:
-               return Syl_CheckSyllabus (Tre_SYLLABUS_LEC);
             case Inf_SYLLABUS_PRA:
-               return Syl_CheckSyllabus (Tre_SYLLABUS_PRA);
+               return (Tre_DB_GetNumNodes (Gbl.Crs.Info.Type,Hie_CRS) != 0);
             default:
                return false;
            }
@@ -1452,50 +1456,9 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** If info is empty, return Inf_NONE *****/
-   switch (Info->FromDB.Src)
-     {
-      case Inf_SRC_NONE:
-         break;
-      case Inf_EDITOR:
-         switch (Info->Type)
-           {
-            case Inf_SYLLABUS_LEC:
-               if (!Syl_CheckSyllabus (Tre_SYLLABUS_LEC))
-                  Info->FromDB.Src = Inf_SRC_NONE;
-               break;
-            case Inf_SYLLABUS_PRA:
-               if (!Syl_CheckSyllabus (Tre_SYLLABUS_PRA))
-                  Info->FromDB.Src = Inf_SRC_NONE;
-               break;
-            case Inf_UNKNOWN_TYPE:
-            case Inf_INFORMATION:
-            case Inf_TEACH_GUIDE:
-            case Inf_BIBLIOGRAPHY:
-            case Inf_FAQ:
-            case Inf_LINKS:
-            case Inf_ASSESSMENT:
-               Info->FromDB.Src = Inf_SRC_NONE;
-	       break;	// Internal editor is not yet available
-           }
-         break;
-      case Inf_PLAIN_TEXT:
-	 if (!Inf_CheckPlainTxt (Info->Type))
-            Info->FromDB.Src = Inf_SRC_NONE;
-         break;
-      case Inf_RICH_TEXT:
-	 if (!Inf_CheckRichTxt (Info->Type))
-            Info->FromDB.Src = Inf_SRC_NONE;
-         break;
-      case Inf_PAGE:
-	 if (!Inf_CheckPage (Info->Type))
-	    Info->FromDB.Src = Inf_SRC_NONE;
-         break;
-      case Inf_URL:
-	 if (!Inf_CheckURL (Info->Type))
-	    Info->FromDB.Src = Inf_SRC_NONE;
-         break;
-     }
+   /***** Check if info is available or empty *****/
+   if (!Inf_CheckIfInfoAvailable (Info->FromDB.Src))
+      Info->FromDB.Src = Inf_SRC_NONE;
 
    if (Info->FromDB.Src == Inf_SRC_NONE)
       Info->FromDB.MustBeRead = false;
@@ -1739,6 +1702,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 void Inf_EditPlainTxtInfo (void)
   {
    extern const char *Hlp_COURSE_Information_edit;
+   extern const char *Hlp_COURSE_Program_edit;
    extern const char *Hlp_COURSE_Guide_edit;
    extern const char *Hlp_COURSE_Syllabus_edit;
    extern const char *Hlp_COURSE_Bibliography_edit;
@@ -1751,6 +1715,7 @@ void Inf_EditPlainTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActRcvPlaTxtCrsInf	,NULL,NULL},
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActRcvPlaTxtTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActRcvPlaTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
       [Inf_SYLLABUS_PRA	] = {ActRcvPlaTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1763,6 +1728,7 @@ void Inf_EditPlainTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
+      [Inf_PROGRAM	] = &Hlp_COURSE_Program_edit,	// Not used yet
       [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
       [Inf_SYLLABUS_LEC	] = &Hlp_COURSE_Syllabus_edit,
       [Inf_SYLLABUS_PRA	] = &Hlp_COURSE_Syllabus_edit,
@@ -1819,6 +1785,7 @@ void Inf_EditPlainTxtInfo (void)
 void Inf_EditRichTxtInfo (void)
   {
    extern const char *Hlp_COURSE_Information_edit;
+   extern const char *Hlp_COURSE_Program_edit;
    extern const char *Hlp_COURSE_Guide_edit;
    extern const char *Hlp_COURSE_Syllabus_edit;
    extern const char *Hlp_COURSE_Bibliography_edit;
@@ -1832,6 +1799,7 @@ void Inf_EditRichTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
       [Inf_INFORMATION	] = {ActRcvRchTxtCrsInf	,NULL,NULL},
+      [Inf_PROGRAM	] = {ActUnk		,NULL,NULL},	// Not used yet
       [Inf_TEACH_GUIDE	] = {ActRcvRchTxtTchGui	,NULL,NULL},
       [Inf_SYLLABUS_LEC	] = {ActRcvRchTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_LEC  ]},
       [Inf_SYLLABUS_PRA	] = {ActRcvRchTxtSyl	,Inf_PutParInfoType,&Inf_Types[Inf_SYLLABUS_PRA]},
@@ -1844,6 +1812,7 @@ void Inf_EditRichTxtInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = NULL,
       [Inf_INFORMATION	] = &Hlp_COURSE_Information_edit,
+      [Inf_PROGRAM	] = &Hlp_COURSE_Program_edit,	// Not used yet
       [Inf_TEACH_GUIDE	] = &Hlp_COURSE_Guide_edit,
       [Inf_SYLLABUS_LEC	] = &Hlp_COURSE_Syllabus_edit,
       [Inf_SYLLABUS_PRA	] = &Hlp_COURSE_Syllabus_edit,
@@ -1972,6 +1941,7 @@ void Inf_EditPagInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
       [Inf_INFORMATION	] = ActRcvPagCrsInf,
+      [Inf_PROGRAM	] = ActUnk,	// Not used yet
       [Inf_TEACH_GUIDE	] = ActRcvPagTchGui,
       [Inf_SYLLABUS_LEC	] = ActRcvPagSyl,
       [Inf_SYLLABUS_PRA	] = ActRcvPagSyl,
@@ -2154,6 +2124,7 @@ void Inf_EditURLInfo (void)
      {
       [Inf_UNKNOWN_TYPE	] = ActUnk,
       [Inf_INFORMATION	] = ActRcvURLCrsInf,
+      [Inf_PROGRAM	] = ActUnk,	// Not used yet
       [Inf_TEACH_GUIDE	] = ActRcvURLTchGui,
       [Inf_SYLLABUS_LEC	] = ActRcvURLSyl,
       [Inf_SYLLABUS_PRA	] = ActRcvURLSyl,
