@@ -203,12 +203,6 @@ static void Inf_PutIconsWhenViewing (void *Info);
 static void Inf_PutIconsWhenEditing (void *Info);
 static void Inf_PutIconsWhenConfiguring (void *Info);
 
-static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
-						HTM_Attributes_t Attributes);
-static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
-static bool Inf_GetMustBeReadFromForm (void);
-static bool Inf_GetIfIHaveReadFromForm (void);
-
 static bool Inf_CheckPage (Inf_Type_t InfoType);
 static bool Inf_CheckAndShowPage (void);
 
@@ -218,6 +212,17 @@ static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1]);
 
 static void Inf_ShowPage (const char *URL);
+
+//---------------------- Force students to read info? -------------------------
+static void Inf_ConfigInfoReading (void);
+static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
+						HTM_Attributes_t Attributes);
+static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
+static bool Inf_GetMustBeReadFromForm (void);
+static bool Inf_GetIfIHaveReadFromForm (void);
+
+//-----------------------------------------------------------------------------
+static void Inf_ConfigInfoSource (void);
 
 static bool Inf_CheckIfInfoAvailable (Inf_Src_t InfoSrc);
 
@@ -608,6 +613,269 @@ static void Inf_PutIconsWhenConfiguring (void *Info)
   }
 
 /*****************************************************************************/
+/************************** Check if exists a page ***************************/
+/*****************************************************************************/
+// Return true if info available
+
+static bool Inf_CheckPage (Inf_Type_t InfoType)
+  {
+   char PathRelDirHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
+
+   // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
+   //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
+
+   /***** Build path of directory containing web page *****/
+   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		      InfoType,PathRelDirHTML);
+
+   /***** Open file with web page *****/
+   /* 1. Check if index.html exists */
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
+	     PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+      return true;
+
+   /* 2. If index.html does not exist, try index.htm */
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
+	     PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+      return true;
+
+   return false;
+  }
+
+/*****************************************************************************/
+/**************** Check if exists and show link to a page ********************/
+/*****************************************************************************/
+// Return true if info available
+
+static bool Inf_CheckAndShowPage (void)
+  {
+   char PathRelDirHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
+   char URL[PATH_MAX + 1];
+
+   // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
+   //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
+
+   /***** Build path of directory containing web page *****/
+   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+		      PathRelDirHTML);
+
+   /***** Open file with web page *****/
+   /* 1. Check if index.html exists */
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
+	     PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+     {
+      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.html",
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
+      Inf_ShowPage (URL);
+
+      return true;
+     }
+
+   /* 2. If index.html does not exist, try index.htm */
+   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
+	     PathRelDirHTML);
+   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
+     {
+      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.htm",
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
+      Inf_ShowPage (URL);
+
+      return true;
+     }
+
+   return false;
+  }
+
+/*****************************************************************************/
+/* Build path inside a course for a given a info type to store web page file */
+/*****************************************************************************/
+
+void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
+  {
+   snprintf (PathDir,PATH_MAX + 1,"%s/%ld/%s",
+             Cfg_PATH_CRS_PUBLIC,CrsCod,Inf_FileNamesForInfoType[InfoType]);
+  }
+
+/*****************************************************************************/
+/********************* Check if exists link to a page ************************/
+/*****************************************************************************/
+// Return true if info available
+
+static bool Inf_CheckURL (Inf_Type_t InfoType)
+  {
+   char PathFile[PATH_MAX + 1];
+   FILE *FileURL;
+
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,PathFile);
+
+   /***** Check if file with URL exists *****/
+   if ((FileURL = fopen (PathFile,"rb")))
+     {
+      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
+	 Gbl.Crs.Info.URL[0] = '\0';
+      /* File is not longer needed  ==> close it */
+      fclose (FileURL);
+
+      if (Gbl.Crs.Info.URL[0])
+         return true;
+     }
+
+   return false;
+  }
+
+/*****************************************************************************/
+/**************** Check if exists and show link to a page ********************/
+/*****************************************************************************/
+// Return true if info available
+
+static bool Inf_CheckAndShowURL (void)
+  {
+   char PathFile[PATH_MAX + 1];
+   FILE *FileURL;
+
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+		     PathFile);
+
+   /***** Check if file with URL exists *****/
+   if ((FileURL = fopen (PathFile,"rb")))
+     {
+      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
+	 Gbl.Crs.Info.URL[0] = '\0';
+      /* File is not longer needed  ==> close it */
+      fclose (FileURL);
+
+      if (Gbl.Crs.Info.URL[0])
+	{
+	 Inf_ShowPage (Gbl.Crs.Info.URL);
+         return true;
+	}
+     }
+
+   return false;
+  }
+
+/*****************************************************************************/
+/*** Build path inside a course for a given a info type to store URL file ****/
+/*****************************************************************************/
+
+static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
+                              char PathFile[PATH_MAX + 1])
+  {
+   snprintf (PathFile,PATH_MAX + 1,"%s/%ld/%s.url",
+	     Cfg_PATH_CRS_PRIVATE,CrsCod,Inf_FileNamesForInfoType[InfoType]);
+  }
+
+/*****************************************************************************/
+/************* Check if exists and write URL into text buffer ****************/
+/*****************************************************************************/
+// This function is called only from web service
+
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1])
+  {
+   char PathFile[PATH_MAX + 1];
+   FILE *FileURL;
+
+   /***** Initialize buffer *****/
+   TxtBuffer[0] = '\0';
+
+   /***** Build path to file containing URL *****/
+   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+		     PathFile);
+
+   /***** Check if file with URL exists *****/
+   if ((FileURL = fopen (PathFile,"rb")))
+     {
+      if (fgets (TxtBuffer,WWW_MAX_BYTES_WWW,FileURL) == NULL)
+	 TxtBuffer[0] = '\0';
+      /* File is not longer needed  ==> close it */
+      fclose (FileURL);
+     }
+  }
+
+/*****************************************************************************/
+/*************** Show link to a internal or external a page ******************/
+/*****************************************************************************/
+
+static void Inf_ShowPage (const char *URL)
+  {
+   extern const char *Txt_View_in_a_new_window;
+
+   /***** Link to view in a new window *****/
+   HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FORM_OUT_%s BOLD\"",
+		URL,The_GetSuffix ());
+      Ico_PutIconTextLink ("expand-arrows-alt.svg",Ico_BLACK,
+			   Txt_View_in_a_new_window);
+   HTM_A_End ();
+  }
+
+/*****************************************************************************/
+/************************** Set course info source ***************************/
+/*****************************************************************************/
+
+void Inf_SetInfoSrc (void)
+  {
+   Inf_Src_t InfoSrcSelected;
+
+   /***** Set info type *****/
+   Inf_AsignInfoType (&Gbl.Crs.Info);
+
+   /***** Set info source into database *****/
+   InfoSrcSelected = Inf_GetInfoSrcFromForm ();
+   Inf_DB_SetInfoSrc (InfoSrcSelected);
+
+   /***** Show the selected info *****/
+   Inf_ShowInfo ();
+  }
+
+/*****************************************************************************/
+/************** Configure course info (reading and info source) **************/
+/*****************************************************************************/
+
+void Inf_ConfigInfo (void)
+  {
+   /***** Begin box *****/
+   Inf_BeforeTree (Vie_CONFIG,Inf_SRC_NONE);
+
+      /***** Force students to read info? *****/
+      Inf_ConfigInfoReading ();
+
+      /***** Information source *****/
+      Inf_ConfigInfoSource ();
+
+   /***** End box *****/
+   Inf_AfterTree ();
+  }
+
+/*****************************************************************************/
+/********** Configure info reading (force students to read info?) ************/
+/*****************************************************************************/
+
+static void Inf_ConfigInfoReading (void)
+  {
+   extern const char *Txt_Reading;
+
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Reading);
+	 // Checkbox to force students to read this couse info
+	 Mnu_ContextMenuBegin ();
+	    // Non-editing teachers can not change the status of checkbox
+	    Inf_PutCheckboxForceStdsToReadInfo (Gbl.Crs.Info.FromDB.MustBeRead,
+						(Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
+										       HTM_NO_ATTR);
+	 Mnu_ContextMenuEnd ();
+   HTM_FIELDSET_End ();
+  }
+
+/*****************************************************************************/
 /********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
@@ -833,236 +1101,11 @@ static bool Inf_GetIfIHaveReadFromForm (void)
   }
 
 /*****************************************************************************/
-/************************** Check if exists a page ***************************/
+/************************** Configure info source ****************************/
 /*****************************************************************************/
-// Return true if info available
 
-static bool Inf_CheckPage (Inf_Type_t InfoType)
+static void Inf_ConfigInfoSource (void)
   {
-   char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
-
-   // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
-   //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
-
-   /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		      InfoType,PathRelDirHTML);
-
-   /***** Open file with web page *****/
-   /* 1. Check if index.html exists */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
-	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
-      return true;
-
-   /* 2. If index.html does not exist, try index.htm */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
-	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
-      return true;
-
-   return false;
-  }
-
-/*****************************************************************************/
-/**************** Check if exists and show link to a page ********************/
-/*****************************************************************************/
-// Return true if info available
-
-static bool Inf_CheckAndShowPage (void)
-  {
-   char PathRelDirHTML[PATH_MAX + 1];
-   char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
-   char URL[PATH_MAX + 1];
-
-   // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
-   //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
-
-   /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
-		      PathRelDirHTML);
-
-   /***** Open file with web page *****/
-   /* 1. Check if index.html exists */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
-	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
-     {
-      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.html",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
-      Inf_ShowPage (URL);
-
-      return true;
-     }
-
-   /* 2. If index.html does not exist, try index.htm */
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
-	     PathRelDirHTML);
-   if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
-     {
-      snprintf (URL,sizeof (URL),"%s/%ld/%s/index.htm",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
-      Inf_ShowPage (URL);
-
-      return true;
-     }
-
-   return false;
-  }
-
-/*****************************************************************************/
-/* Build path inside a course for a given a info type to store web page file */
-/*****************************************************************************/
-
-void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1])
-  {
-   snprintf (PathDir,PATH_MAX + 1,"%s/%ld/%s",
-             Cfg_PATH_CRS_PUBLIC,CrsCod,Inf_FileNamesForInfoType[InfoType]);
-  }
-
-/*****************************************************************************/
-/********************* Check if exists link to a page ************************/
-/*****************************************************************************/
-// Return true if info available
-
-static bool Inf_CheckURL (Inf_Type_t InfoType)
-  {
-   char PathFile[PATH_MAX + 1];
-   FILE *FileURL;
-
-   /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,PathFile);
-
-   /***** Check if file with URL exists *****/
-   if ((FileURL = fopen (PathFile,"rb")))
-     {
-      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
-	 Gbl.Crs.Info.URL[0] = '\0';
-      /* File is not longer needed  ==> close it */
-      fclose (FileURL);
-
-      if (Gbl.Crs.Info.URL[0])
-         return true;
-     }
-
-   return false;
-  }
-
-/*****************************************************************************/
-/**************** Check if exists and show link to a page ********************/
-/*****************************************************************************/
-// Return true if info available
-
-static bool Inf_CheckAndShowURL (void)
-  {
-   char PathFile[PATH_MAX + 1];
-   FILE *FileURL;
-
-   /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
-		     PathFile);
-
-   /***** Check if file with URL exists *****/
-   if ((FileURL = fopen (PathFile,"rb")))
-     {
-      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
-	 Gbl.Crs.Info.URL[0] = '\0';
-      /* File is not longer needed  ==> close it */
-      fclose (FileURL);
-
-      if (Gbl.Crs.Info.URL[0])
-	{
-	 Inf_ShowPage (Gbl.Crs.Info.URL);
-         return true;
-	}
-     }
-
-   return false;
-  }
-
-/*****************************************************************************/
-/*** Build path inside a course for a given a info type to store URL file ****/
-/*****************************************************************************/
-
-static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
-                              char PathFile[PATH_MAX + 1])
-  {
-   snprintf (PathFile,PATH_MAX + 1,"%s/%ld/%s.url",
-	     Cfg_PATH_CRS_PRIVATE,CrsCod,Inf_FileNamesForInfoType[InfoType]);
-  }
-
-/*****************************************************************************/
-/************* Check if exists and write URL into text buffer ****************/
-/*****************************************************************************/
-// This function is called only from web service
-
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1])
-  {
-   char PathFile[PATH_MAX + 1];
-   FILE *FileURL;
-
-   /***** Initialize buffer *****/
-   TxtBuffer[0] = '\0';
-
-   /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
-		     PathFile);
-
-   /***** Check if file with URL exists *****/
-   if ((FileURL = fopen (PathFile,"rb")))
-     {
-      if (fgets (TxtBuffer,WWW_MAX_BYTES_WWW,FileURL) == NULL)
-	 TxtBuffer[0] = '\0';
-      /* File is not longer needed  ==> close it */
-      fclose (FileURL);
-     }
-  }
-
-/*****************************************************************************/
-/*************** Show link to a internal or external a page ******************/
-/*****************************************************************************/
-
-static void Inf_ShowPage (const char *URL)
-  {
-   extern const char *Txt_View_in_a_new_window;
-
-   /***** Link to view in a new window *****/
-   HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FORM_OUT_%s BOLD\"",
-		URL,The_GetSuffix ());
-      Ico_PutIconTextLink ("expand-arrows-alt.svg",Ico_BLACK,
-			   Txt_View_in_a_new_window);
-   HTM_A_End ();
-  }
-
-/*****************************************************************************/
-/************************** Set course info source ***************************/
-/*****************************************************************************/
-
-void Inf_SetInfoSrc (void)
-  {
-   Inf_Src_t InfoSrcSelected;
-
-   /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
-
-   /***** Set info source into database *****/
-   InfoSrcSelected = Inf_GetInfoSrcFromForm ();
-   Inf_DB_SetInfoSrc (InfoSrcSelected);
-
-   /***** Show the selected info *****/
-   Inf_ShowInfo ();
-  }
-
-/*****************************************************************************/
-/************** Select course info source and send course info ***************/
-/*****************************************************************************/
-
-void Inf_ConfigInfo (void)
-  {
-   extern const char *Txt_Reading;
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -1091,110 +1134,77 @@ void Inf_ConfigInfo (void)
       [Inf_URL		] = Inf_FormToEnterSendingURL,
      };
 
-   /***** Begin box *****/
-   Inf_BeforeTree (Vie_CONFIG,Inf_SRC_NONE);
+   /***** Check if info available *****/
+   for (InfoSrc  = (Inf_Src_t) 0;
+	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
+	InfoSrc++)
+      InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (InfoSrc);
 
-      /***** Check if info available *****/
-      for (InfoSrc  = (Inf_Src_t) 0;
-	   InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
-	   InfoSrc++)
-	 InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (InfoSrc);
+   /***** Set info source to none
+	  when no info available for the current source *****/
+   if (Gbl.Crs.Info.FromDB.Src != Inf_SRC_NONE &&
+       !InfoAvailable[Gbl.Crs.Info.FromDB.Src])
+     {
+      Gbl.Crs.Info.FromDB.Src = Inf_SRC_NONE;
+      Inf_DB_SetInfoSrc (Inf_SRC_NONE);
+     }
 
-      /***** Set info source to none
-	     when no info available for the current source *****/
-      if (Gbl.Crs.Info.FromDB.Src != Inf_SRC_NONE &&
-	  !InfoAvailable[Gbl.Crs.Info.FromDB.Src])
-	{
-	 Gbl.Crs.Info.FromDB.Src = Inf_SRC_NONE;
-	 Inf_DB_SetInfoSrc (Inf_SRC_NONE);
-	}
+   HTM_FIELDSET_Begin (NULL);
+      HTM_LEGEND (Txt_Source_of_information);
+      HTM_TABLE_BeginPadding (2);
 
-      /***** Force students to read info? *****/
-      HTM_FIELDSET_Begin (NULL);
-	 HTM_LEGEND (Txt_Reading);
-	    switch (Gbl.Usrs.Me.Role.Logged)
-	      {
-	       case Rol_NET:
-	       case Rol_TCH:
-	       case Rol_SYS_ADM:
-		  if (Gbl.Crs.Info.FromDB.Src != Inf_SRC_NONE)
+	 /* Options */
+	 for (InfoSrc  = (Inf_Src_t) 0;
+	      InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
+	      InfoSrc++)
+	   {
+	    HTM_TR_Begin (NULL);
+
+	       /* Select info source */
+	       HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
+			     InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
+								  "");
+		  Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
+		     Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+		     HTM_INPUT_RADIO ("InfoSrc",
+				      ((InfoSrc == Gbl.Crs.Info.FromDB.Src) ? HTM_CHECKED :
+									      HTM_NO_ATTR) |
+				      ((InfoSrc == Inf_SRC_NONE ||
+				       InfoAvailable[InfoSrc]) ? HTM_NO_ATTR :
+								 HTM_DISABLED) |
+				      ((InfoSrc != Gbl.Crs.Info.FromDB.Src &&
+				       (InfoSrc == Inf_SRC_NONE ||
+				       InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
+								  HTM_NO_ATTR),
+				      "id=\"InfoSrc%u\" value=\"%u\"",
+				      (unsigned) InfoSrc,(unsigned) InfoSrc);
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+
+	       /* Form for this info source */
+	       HTM_TD_Begin ("class=\"LT%s\"",
+			     InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
+								  "");
+		  HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"FORM_IN_%s\"",
+				   (unsigned) InfoSrc,The_GetSuffix ());
+		     HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+		  HTM_LABEL_End ();
+		  if (Txt_INFO_SRC_HELP[InfoSrc])
 		    {
-		     // Checkbox to force students to read this couse info
-		     Mnu_ContextMenuBegin ();
-			// Non-editing teachers can not change the status of checkbox
-			Inf_PutCheckboxForceStdsToReadInfo (Gbl.Crs.Info.FromDB.MustBeRead,
-							    (Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
-												   HTM_NO_ATTR);
-		     Mnu_ContextMenuEnd ();
+		     HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
+			HTM_BR ();
+			HTM_Txt (Txt_INFO_SRC_HELP[InfoSrc]);
+		     HTM_SPAN_End ();
 		    }
-		  break;
-	       default:
-		  break;
-	      }
-      HTM_FIELDSET_End ();
+		  if (Inf_FormsForEditionTypes[InfoSrc])
+		     Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
+	       HTM_TD_End ();
 
-      /***** Information source *****/
-      HTM_FIELDSET_Begin (NULL);
-	 HTM_LEGEND (Txt_Source_of_information);
-	 HTM_TABLE_BeginPadding (2);
+	    HTM_TR_End ();
+	   }
 
-	    /* Options */
-	    for (InfoSrc  = (Inf_Src_t) 0;
-		 InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
-		 InfoSrc++)
-	      {
-	       HTM_TR_Begin (NULL);
-
-		  /* Select info source */
-		  HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
-				InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
-								     "");
-		     Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
-			Inf_PutParInfoType (&Gbl.Crs.Info.Type);
-			HTM_INPUT_RADIO ("InfoSrc",
-					 ((InfoSrc == Gbl.Crs.Info.FromDB.Src) ? HTM_CHECKED :
-										 HTM_NO_ATTR) |
-					 ((InfoSrc == Inf_SRC_NONE ||
-					  InfoAvailable[InfoSrc]) ? HTM_NO_ATTR :
-								    HTM_DISABLED) |
-					 ((InfoSrc != Gbl.Crs.Info.FromDB.Src &&
-					  (InfoSrc == Inf_SRC_NONE ||
-					  InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
-								     HTM_NO_ATTR),
-					 "id=\"InfoSrc%u\" value=\"%u\"",
-					 (unsigned) InfoSrc,(unsigned) InfoSrc);
-		     Frm_EndForm ();
-		  HTM_TD_End ();
-
-		  /* Form for this info source */
-		  HTM_TD_Begin ("class=\"LT%s\"",
-				InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
-								     "");
-		     HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"FORM_IN_%s\"",
-				      (unsigned) InfoSrc,The_GetSuffix ());
-			HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
-		     HTM_LABEL_End ();
-		     if (Txt_INFO_SRC_HELP[InfoSrc])
-		       {
-			HTM_SPAN_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-			   HTM_BR ();
-			   HTM_Txt (Txt_INFO_SRC_HELP[InfoSrc]);
-			HTM_SPAN_End ();
-		       }
-		     if (Inf_FormsForEditionTypes[InfoSrc])
-			Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
-		  HTM_TD_End ();
-
-	       HTM_TR_End ();
-	      }
-
-	HTM_TABLE_End ();
-      HTM_FIELDSET_End ();
-
-   // /***** End box *****/
-   // Box_BoxEnd ();
-   /***** End box *****/
-   Inf_AfterTree ();
+     HTM_TABLE_End ();
+   HTM_FIELDSET_End ();
   }
 
 /*****************************************************************************/
