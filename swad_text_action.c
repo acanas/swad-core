@@ -1695,48 +1695,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeSysInf] =
 #if   L==1	// ca
-	"Show information on the platform"			// Necessita traducció
+	"Show platform information"			// Necessita traducció
 #elif L==2	// de
-	"Show information on the platform"			// Need Übersetzung
+	"Show platform information"			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the platform"
+	"Show platform information"
 #elif L==4	// es
-	"Mostrar informaci&oacute;n sobre la plataforma"
+	"Mostrar informaci&oacute;n de la plataforma"
 #elif L==5	// fr
-	"Show information on the platform"			// Besoin de traduction
+	"Show platform information"			// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar informaci&oacute;n sobre la plataforma"	// Okoteve traducción
+	"Mostrar informaci&oacute;n de la plataforma"	// Okoteve traducción
 #elif L==7	// it
-	"Show information on the platform"			// Bisogno di traduzione
+	"Show platform information"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Show information on the platform"			// Potrzebujesz tlumaczenie
+	"Show platform information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show information on the platform"			// Precisa de tradução
+	"Show platform information"			// Precisa de tradução
 #elif L==10	// tr
-	"Show information on the platform"			// Çeviri lazim!
+	"Show platform information"			// Çeviri lazim!
 #endif
 	,
 	[ActPrnSysInf] =
 #if   L==1	// ca
-	"Print information on the platform"			// Necessita traducció
+	"Print platform information"			// Necessita traducció
 #elif L==2	// de
-	"Print information on the platform"			// Need Übersetzung
+	"Print platform information"			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the platform"
+	"Print platform information"
 #elif L==4	// es
-	"Imprimir informaci&oacute;n sobre la plataforma"
+	"Imprimir informaci&oacute;n de la plataforma"
 #elif L==5	// fr
-	"Print information on the platform"			// Besoin de traduction
+	"Print platform information"			// Besoin de traduction
 #elif L==6	// gn
-	"Imprimir informaci&oacute;n sobre la plataforma"	// Okoteve traducción
+	"Imprimir informaci&oacute;n de la plataforma"	// Okoteve traducción
 #elif L==7	// it
-	"Print information on the platform"			// Bisogno di traduzione
+	"Print platform information"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Print information on the platform"			// Potrzebujesz tlumaczenie
+	"Print platform information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Print information on the platform"			// Precisa de tradução
+	"Print platform information"			// Precisa de tradução
 #elif L==10	// tr
-	"Print information on the platform"			// Çeviri lazim!
+	"Print platform information"			// Çeviri lazim!
 #endif
 	,
 	[ActSeeCty] =
@@ -2638,48 +2638,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeCtyInf] =
 #if   L==1	// ca
-	"Show information on the country"			// Necessita traducció
+	"Show country information"			// Necessita traducció
 #elif L==2	// de
-	"Show information on the country"			// Need Übersetzung
+	"Show country information"			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the country"
+	"Show country information"
 #elif L==4	// es
-	"Mostrar informaci&oacute;n sobre el pa&iacute;s"
+	"Mostrar informaci&oacute;n del pa&iacute;s"
 #elif L==5	// fr
-	"Show information on the country"			// Besoin de traduction
+	"Show country information"			// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar informaci&oacute;n sobre el pa&iacute;s"	// Okoteve traducción
+	"Mostrar informaci&oacute;n del pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	"Show information on the country"			// Bisogno di traduzione
+	"Show country information"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Show information on the country"			// Potrzebujesz tlumaczenie
+	"Show country information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show information on the country"			// Precisa de tradução
+	"Show country information"			// Precisa de tradução
 #elif L==10	// tr
-	"Show information on the country"			// Çeviri lazim!
+	"Show country information"			// Çeviri lazim!
 #endif
 	,
 	[ActPrnCtyInf] =
 #if   L==1	// ca
-	"Print information on the country"			// Necessita traducció
+	"Print country information"			// Necessita traducció
 #elif L==2	// de
-	"Print information on the country"			// Need Übersetzung
+	"Print country information"			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the country"
+	"Print country information"
 #elif L==4	// es
-	"Imprimir informaci&oacute;n sobre el pa&iacute;s"
+	"Imprimir informaci&oacute;n del pa&iacute;s"
 #elif L==5	// fr
-	"Print information on the country"			// Besoin de traduction
+	"Print country information"			// Besoin de traduction
 #elif L==6	// gn
-	"Imprimir informaci&oacute;n sobre el pa&iacute;s"	// Okoteve traducción
+	"Imprimir informaci&oacute;n del pa&iacute;s"	// Okoteve traducción
 #elif L==7	// it
-	"Print information on the country"			// Bisogno di traduzione
+	"Print country information"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Print information on the country"			// Potrzebujesz tlumaczenie
+	"Print country information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Print information on the country"			// Precisa de tradução
+	"Print country information"			// Precisa de tradução
 #elif L==10	// tr
-	"Print information on the country"			// Çeviri lazim!
+	"Print country information"			// Çeviri lazim!
 #endif
 	,
 	[ActChgCtyMapAtt] =
@@ -2914,48 +2914,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeInsInf] =
 #if   L==1	// ca
-	"Show information on the institution"			// Necessita traducció
+	"Show institution information"				// Necessita traducció
 #elif L==2	// de
-	"Show information on the institution"			// Need Übersetzung
+	"Show institution information"				// Need Übersetzung
 #elif L==3	// en
-	"Show information on the institution"
+	"Show institution information"
 #elif L==4	// es
-	"Mostrar informaci&oacute;n sobre la instituci&oacute;n"
+	"Mostrar informaci&oacute;n de la instituci&oacute;n"
 #elif L==5	// fr
-	"Show information on the institution"			// Besoin de traduction
+	"Show institution information"				// Besoin de traduction
 #elif L==6	// gn
-	"Show information on the institution"			// Okoteve traducción
+	"Mostrar informaci&oacute;n de la instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Show information on the institution"			// Bisogno di traduzione
+	"Show institution information"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Show information on the institution"			// Potrzebujesz tlumaczenie
+	"Show institution information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show information on the institution"			// Precisa de tradução
+	"Show institution information"				// Precisa de tradução
 #elif L==10	// tr
-	"Show information on the institution"			// Çeviri lazim!
+	"Show institution information"				// Çeviri lazim!
 #endif
 	,
 	[ActPrnInsInf] =
 #if   L==1	// ca
-	"Print information on the institution"				// Necessita traducció
+	"Print institution information"				// Necessita traducció
 #elif L==2	// de
-	"Print information on the institution"				// Need Übersetzung
+	"Print institution information"				// Need Übersetzung
 #elif L==3	// en
-	"Print information on the institution"
+	"Print institution information"
 #elif L==4	// es
-	"Imprimir informaci&oacute;n sobre la instituci&oacute;n"
+	"Imprimir informaci&oacute;n de la instituci&oacute;n"
 #elif L==5	// fr
-	"Print information on the institution"				// Besoin de traduction
+	"Print institution information"				// Besoin de traduction
 #elif L==6	// gn
-	"Imprimir informaci&oacute;n sobre la instituci&oacute;n"	// Okoteve traducción
+	"Imprimir informaci&oacute;n de la instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Print information on the institution"				// Bisogno di traduzione
+	"Print institution information"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Print information on the institution"				// Potrzebujesz tlumaczenie
+	"Print institution information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Print information on the institution"				// Precisa de tradução
+	"Print institution information"				// Precisa de tradução
 #elif L==10	// tr
-	"Print information on the institution"				// Çeviri lazim!
+	"Print institution information"				// Çeviri lazim!
 #endif
 	,
 	[ActChgInsCtyCfg] =
@@ -3882,48 +3882,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeCtrInf] =
 #if   L==1	// ca
-	"Show information on the center"		// Necessita traducció
+	"Show center information"		// Necessita traducció
 #elif L==2	// de
-	"Show information on the center"		// Need Übersetzung
+	"Show center information"		// Need Übersetzung
 #elif L==3	// en
-	"Show information on the center"
+	"Show center information"
 #elif L==4	// es
-	"Mostrar informaci&oacute;n sobre el centro"
+	"Mostrar informaci&oacute;n del centro"
 #elif L==5	// fr
-	"Show information on the center"		// Besoin de traduction
+	"Show center information"		// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar informaci&oacute;n sobre el centro"	// Okoteve traducción
+	"Mostrar informaci&oacute;n del centro"	// Okoteve traducción
 #elif L==7	// it
-	"Show information on the center"		// Bisogno di traduzione
+	"Show center information"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Show information on the center"		// Potrzebujesz tlumaczenie
+	"Show center information"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show information on the center"		// Precisa de tradução
+	"Show center information"		// Precisa de tradução
 #elif L==10	// tr
-	"Show information on the center"		// Çeviri lazim!
+	"Show center information"		// Çeviri lazim!
 #endif
 	,
 	[ActPrnCtrInf] =
 #if   L==1	// ca
-	"Print information on the center"		// Necessita traducció
+	"Print center information"		// Necessita traducció
 #elif L==2	// de
-	"Print information on the center"		// Need Übersetzung
+	"Print center information"		// Need Übersetzung
 #elif L==3	// en
-	"Print information on the center"
+	"Print center information"
 #elif L==4	// es
-	"Imprimir informaci&oacute;n sobre el centro"
+	"Imprimir informaci&oacute;n del centro"
 #elif L==5	// fr
-	"Print information on the center"		// Besoin de traduction
+	"Print center information"		// Besoin de traduction
 #elif L==6	// gn
-	"Imprimir informaci&oacute;n sobre el centro"	// Okoteve traducción
+	"Imprimir informaci&oacute;n del centro"	// Okoteve traducción
 #elif L==7	// it
-	"Print information on the center"		// Bisogno di traduzione
+	"Print center information"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Print information on the center"		// Potrzebujesz tlumaczenie
+	"Print center information"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Print information on the center"		// Precisa de tradução
+	"Print center information"		// Precisa de tradução
 #elif L==10	// tr
-	"Print information on the center"		// Çeviri lazim!
+	"Print center information"		// Çeviri lazim!
 #endif
 	,
 	[ActChgCtrInsCfg] =
@@ -4996,7 +4996,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Change type of room"		// Besoin de traduction
 #elif L==6	// gn
-	"Cambiar tipo de sala"	// Okoteve traducción
+	"Cambiar tipo de sala"		// Okoteve traducción
 #elif L==7	// it
 	"Change type of room"		// Bisogno di traduzione
 #elif L==8	// pl
@@ -5009,48 +5009,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeDegInf] =
 #if   L==1	// ca
-	"Show information on the degree"			// Necessita traducció
+	"Show degree information"				// Necessita traducció
 #elif L==2	// de
-	"Show information on the degree"			// Need Übersetzung
+	"Show degree information"				// Need Übersetzung
 #elif L==3	// en
-	"Show information on the degree"
+	"Show degree information"
 #elif L==4	// es
-	"Mostrar informaci&oacute;n sobre la titulaci&oacute;n"
+	"Mostrar informaci&oacute;n de la titulaci&oacute;n"
 #elif L==5	// fr
-	"Show information on the degree"			// Besoin de traduction
+	"Show degree information"				// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar informaci&oacute;n sobre la titulaci&oacute;n"	// Okoteve traducción
+	"Mostrar informaci&oacute;n de la titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Show information on the degree"			// Bisogno di traduzione
+	"Show degree information"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Show information on the degree"			// Potrzebujesz tlumaczenie
+	"Show degree information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show information on the degree"			// Precisa de tradução
+	"Show degree information"				// Precisa de tradução
 #elif L==10	// tr
-	"Show information on the degree"			// Çeviri lazim!
+	"Show degree information"				// Çeviri lazim!
 #endif
 	,
 	[ActPrnDegInf] =
 #if   L==1	// ca
-	"Print information on the degree"				// Necessita traducció
+	"Print degree information"				// Necessita traducció
 #elif L==2	// de
-	"Print information on the degree"				// Need Übersetzung
+	"Print degree information"				// Need Übersetzung
 #elif L==3	// en
-	"Print information on the degree"
+	"Print degree information"
 #elif L==4	// es
-	"Imprimir informaci&oacute;n sobre la titulaci&oacute;n"
+	"Imprimir informaci&oacute;n de la titulaci&oacute;n"
 #elif L==5	// fr
-	"Print information on the degree"				// Besoin de traduction
+	"Print degree information"				// Besoin de traduction
 #elif L==6	// gn
-	"Imprimir informaci&oacute;n sobre la titulaci&oacute;n"	// Okoteve traducción
+	"Imprimir informaci&oacute;n de la titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Print information on the degree"				// Bisogno di traduzione
+	"Print degree information"				// Bisogno di traduzione
 #elif L==8	// pl
-	"Print information on the degree"				// Potrzebujesz tlumaczenie
+	"Print degree information"				// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Print information on the degree"				// Precisa de tradução
+	"Print degree information"				// Precisa de tradução
 #elif L==10	// tr
-	"Print information on the degree"				// Çeviri lazim!
+	"Print degree information"				// Çeviri lazim!
 #endif
 	,
 	[ActChgDegCtrCfg] =
@@ -5446,48 +5446,462 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeCrsInf] =
 #if   L==1	// ca
-	"Show information on the course"			// Necessita traducció
+	"Show course information"			// Necessita traducció
 #elif L==2	// de
-	"Show information on the course"			// Need Übersetzung
+	"Show course information"			// Need Übersetzung
 #elif L==3	// en
-	"Show information on the course"
+	"Show course information"
 #elif L==4	// es
-	"Mostrar informaci&oacute;n sobre la asignatura"
+	"Mostrar informaci&oacute;n de la asignatura"
 #elif L==5	// fr
-	"Show information on the course"			// Besoin de traduction
+	"Show course information"			// Besoin de traduction
 #elif L==6	// gn
-	"Mostrar informaci&oacute;n sobre la asignatura"	// Okoteve traducción
+	"Mostrar informaci&oacute;n de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Show information on the course"			// Bisogno di traduzione
+	"Show course information"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Show information on the course"			// Potrzebujesz tlumaczenie
+	"Show course information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Show information on the course"			// Precisa de tradução
+	"Show course information"			// Precisa de tradução
 #elif L==10	// tr
-	"Show information on the course"			// Çeviri lazim!
+	"Show course information"			// Çeviri lazim!
 #endif
 	,
 	[ActPrnCrsInf] =
 #if   L==1	// ca
-	"Print information on the course"			// Necessita traducció
+	"Print course information"			// Necessita traducció
 #elif L==2	// de
-	"Print information on the course"			// Need Übersetzung
+	"Print course information"			// Need Übersetzung
 #elif L==3	// en
-	"Print information on the course"
+	"Print course information"
 #elif L==4	// es
-	"Imprimir informaci&oacute;n sobre la asignatura"
+	"Imprimir informaci&oacute;n de la asignatura"
 #elif L==5	// fr
-	"Print information on the course"			// Besoin de traduction
+	"Print course information"			// Besoin de traduction
 #elif L==6	// gn
-	"Imprimir informaci&oacute;n sobre la asignatura"	// Okoteve traducción
+	"Imprimir informaci&oacute;n de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Print information on the course"			// Bisogno di traduzione
+	"Print course information"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Print information on the course"			// Potrzebujesz tlumaczenie
+	"Print course information"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Print information on the course"			// Precisa de tradução
+	"Print course information"			// Precisa de tradução
 #elif L==10	// tr
-	"Print information on the course"			// Çeviri lazim!
+	"Print course information"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiTreInf] =
+#if   L==1	// ca
+	"Edit course information"			// Necessita traducció
+#elif L==2	// de
+	"Edit course information"			// Need Übersetzung
+#elif L==3	// en
+	"Edit course information"
+#elif L==4	// es
+	"Editar informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Edit course information"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit course information"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit course information"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit course information"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit course information"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeTreNodInf] =
+#if   L==1	// ca
+	"See tree node in course information"					// Necessita traducció
+#elif L==2	// de
+	"See tree node in course information"					// Need Übersetzung
+#elif L==3	// en
+	"See tree node in course information"
+#elif L==4	// es
+	"Ver nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"See tree node in course information"					// Besoin de traduction
+#elif L==6	// gn
+	"Ver nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See tree node in course information"					// Bisogno di traduzione
+#elif L==8	// pl
+	"See tree node in course information"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See tree node in course information"					// Precisa de tradução
+#elif L==10	// tr
+	"See tree node in course information"					// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgTreNodInf] =
+#if   L==1	// ca
+	"Edit tree node in course information"					// Necessita traducció
+#elif L==2	// de
+	"Edit tree node in course information"					// Need Übersetzung
+#elif L==3	// en
+	"Edit tree node in course information"
+#elif L==4	// es
+	"Editar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Edit tree node in course information"					// Besoin de traduction
+#elif L==6	// gn
+	"Editar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit tree node in course information"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit tree node in course information"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit tree node in course information"					// Precisa de tradução
+#elif L==10	// tr
+	"Edit tree node in course information"					// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewTreNodInf] =
+#if   L==1	// ca
+	"Request new tree node in course information"					// Necessita traducció
+#elif L==2	// de
+	"Request new tree node in course information"					// Need Übersetzung
+#elif L==3	// en
+	"Request new tree node in course information"
+#elif L==4	// es
+	"Solicitar nuevo nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Request new tree node in course information"					// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar nuevo nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request new tree node in course information"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Request new tree node in course information"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request new tree node in course information"					// Precisa de tradução
+#elif L==10	// tr
+	"Request new tree node in course information"					// Çeviri lazim!
+#endif
+	,
+	[ActChgTreNodInf] =
+#if   L==1	// ca
+	"Change tree node in course information"				// Necessita traducció
+#elif L==2	// de
+	"Change tree node in course information"				// Need Übersetzung
+#elif L==3	// en
+	"Change tree node in course information"
+#elif L==4	// es
+	"Cambiar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Change tree node in course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change tree node in course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Change tree node in course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change tree node in course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Change tree node in course information"				// Çeviri lazim!
+#endif
+	,
+	[ActNewTreNodInf] =
+#if   L==1	// ca
+	"Create tree node in course information"				// Necessita traducció
+#elif L==2	// de
+	"Create tree node in course information"				// Need Übersetzung
+#elif L==3	// en
+	"Create tree node in course information"
+#elif L==4	// es
+	"Crear nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Create tree node in course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create tree node in course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create tree node in course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create tree node in course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Create tree node in course information"				// Çeviri lazim!
+#endif
+	,
+	[ActReqRemTreNodInf] =
+#if   L==1	// ca
+	"Request removal of tree node in course information"						// Necessita traducció
+#elif L==2	// de
+	"Request removal of tree node in course information"						// Need Übersetzung
+#elif L==3	// en
+	"Request removal of tree node in course information"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Request removal of tree node in course information"						// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of tree node in course information"						// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of tree node in course information"						// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of tree node in course information"						// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of tree node in course information"						// Çeviri lazim!
+#endif
+	,
+	[ActRemTreNodInf] =
+#if   L==1	// ca
+	"Remove tree node in course information"				// Necessita traducció
+#elif L==2	// de
+	"Remove tree node in course information"				// Need Übersetzung
+#elif L==3	// en
+	"Remove tree node in course information"
+#elif L==4	// es
+	"Eliminar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Remove tree node in course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Remove tree node in course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove tree node in course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove tree node in course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Remove tree node in course information"				// Çeviri lazim!
+#endif
+	,
+	[ActHidTreNodInf] =
+#if   L==1	// ca
+	"Hide tree node in course information"					// Necessita traducció
+#elif L==2	// de
+	"Hide tree node in course information"					// Need Übersetzung
+#elif L==3	// en
+	"Hide tree node in course information"
+#elif L==4	// es
+	"Ocultar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Hide tree node in course information"					// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Hide tree node in course information"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide tree node in course information"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide tree node in course information"					// Precisa de tradução
+#elif L==10	// tr
+	"Hide tree node in course information"					// Çeviri lazim!
+#endif
+	,
+	[ActUnhTreNodInf] =
+#if   L==1	// ca
+	"Show tree node in course information"					// Necessita traducció
+#elif L==2	// de
+	"Show tree node in course information"					// Need Übersetzung
+#elif L==3	// en
+	"Show tree node in course information"
+#elif L==4	// es
+	"Mostrar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Show tree node in course information"					// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Show tree node in course information"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Show tree node in course information"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show tree node in course information"					// Precisa de tradução
+#elif L==10	// tr
+	"Show tree node in course information"					// Çeviri lazim!
+#endif
+	,
+	[ActUp_TreNodInf] =
+#if   L==1	// ca
+	"Move up tree node in course information"			// Necessita traducció
+#elif L==2	// de
+	"Move up tree node in course information"				// Need Übersetzung
+#elif L==3	// en
+	"Move up tree node in course information"
+#elif L==4	// es
+	"Subir nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Move up tree node in course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Subir nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move up tree node in course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up tree node in course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up tree node in course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Move up tree node in course information"				// Çeviri lazim!
+#endif
+	,
+	[ActDwnTreNodInf] =
+#if   L==1	// ca
+	"Move down tree node in course information"				// Necessita traducció
+#elif L==2	// de
+	"Move down tree node in course information"				// Need Übersetzung
+#elif L==3	// en
+	"Move down tree node in course information"
+#elif L==4	// es
+	"Bajar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Move down tree node in course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Bajar nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move down tree node in course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down tree node in course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down tree node in course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Move down tree node in course information"				// Çeviri lazim!
+#endif
+	,
+	[ActLftTreNodInf] =
+#if   L==1	// ca
+	"Move left tree node in course information"						// Necessita traducció
+#elif L==2	// de
+	"Move left tree node in course information"						// Need Übersetzung
+#elif L==3	// en
+	"Move left tree node in course information"
+#elif L==4	// es
+	"Mover a la izquierda nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Move left tree node in course information"						// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la izquierda nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move left tree node in course information"						// Bisogno di traduzione
+#elif L==8	// pl
+	"Move left tree node in course information"						// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move left tree node in course information"						// Precisa de tradução
+#elif L==10	// tr
+	"Move left tree node in course information"						// Çeviri lazim!
+#endif
+	,
+	[ActRgtTreNodInf] =
+#if   L==1	// ca
+	"Move right tree node in course information"						// Necessita traducció
+#elif L==2	// de
+	"Move right tree node in course information"						// Need Übersetzung
+#elif L==3	// en
+	"Move right tree node in course information"
+#elif L==4	// es
+	"Mover a la derecha nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Move right tree node in course information"						// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la derecha nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move right tree node in course information"						// Bisogno di traduzione
+#elif L==8	// pl
+	"Move right tree node in course information"						// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move right tree node in course information"						// Precisa de tradução
+#elif L==10	// tr
+	"Move right tree node in course information"						// Çeviri lazim!
+#endif
+	,
+	[ActExpSeeTreNodInf] =
+#if   L==1	// ca
+	"Expand tree node in course information"				// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in course information"				// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in course information"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Expand tree node in course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in course information"				// Çeviri lazim!
+#endif
+	,
+	[ActConSeeTreNodInf] =
+#if   L==1	// ca
+	"Contract tree node in course information"				// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in course information"				// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in course information"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en informaci&oacute;n de la asignatura"
+#elif L==5	// fr
+	"Contract tree node in course information"				// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en informaci&oacute;n de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in course information"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in course information"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in course information"				// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in course information"				// Çeviri lazim!
+#endif
+	,
+	[ActExpEdiTreNodInf] =
+#if   L==1	// ca
+	"Expand tree node in course information when editing"					// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in course information when editing"					// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in course information when editing"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en informaci&oacute;n de la asignatura editando"
+#elif L==5	// fr
+	"Expand tree node in course information when editing"					// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en informaci&oacute;n de la asignatura editando"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in course information when editing"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in course information when editing"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in course information when editing"					// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in course information when editing"					// Çeviri lazim!
+#endif
+	,
+	[ActConEdiTreNodInf] =
+#if   L==1	// ca
+	"Contract tree node in course information when editing"					// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in course information when editing"					// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in course information when editing"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en informaci&oacute;n de la asignatura editando"
+#elif L==5	// fr
+	"Contract tree node in course information when editing"					// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en informaci&oacute;n de la asignatura editando"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in course information when editing"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in course information when editing"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in course information when editing"					// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in course information when editing"					// Çeviri lazim!
 #endif
 	,
 	[ActChgCrsDegCfg] =
@@ -6090,25 +6504,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActReqRemPrgRsc] =
 #if   L==1	// ca
-	"Request removal of resource"	// Necessita traducció
+	"Request removal of resource"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of resource"	// Need Übersetzung
+	"Request removal of resource"			// Need Übersetzung
 #elif L==3	// en
 	"Request removal of resource"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de recurso"
 #elif L==5	// fr
-	"Request removal of resource"	// Besoin de traduction
+	"Request removal of resource"			// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de recurso"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of resource"	// Bisogno di traduzione
+	"Request removal of resource"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of resource"	// Potrzebujesz tlumaczenie
+	"Request removal of resource"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of resource"	// Precisa de tradução
+	"Request removal of resource"			// Precisa de tradução
 #elif L==10	// tr
-	"Request removal of resource"	// Çeviri lazim!
+	"Request removal of resource"			// Çeviri lazim!
 #endif
 	,
 	[ActRemPrgRsc] =
@@ -6274,48 +6688,462 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActSeeTchGui] =
 #if   L==1	// ca
-	"See the teaching guide of course"		// Necessita traducció
+	"See the teaching guide"	// Necessita traducció
 #elif L==2	// de
-	"See the teaching guide of course"		// Need Übersetzung
+	"See the teaching guide"	// Need Übersetzung
 #elif L==3	// en
-	"See the teaching guide of course"
+	"See the teaching guide"
 #elif L==4	// es
-	"Ver la gu&iacute;a docente de la asignatura"
+	"Ver la gu&iacute;a docente"
 #elif L==5	// fr
-	"See the teaching guide of course"		// Besoin de traduction
+	"See the teaching guide"	// Besoin de traduction
 #elif L==6	// gn
-	"Ver la gu&iacute;a docente de la asignatura"	// Okoteve traducción
+	"Ver la gu&iacute;a docente"	// Okoteve traducción
 #elif L==7	// it
-	"See the teaching guide of course"		// Bisogno di traduzione
+	"See the teaching guide"	// Bisogno di traduzione
 #elif L==8	// pl
-	"See the teaching guide of course"		// Potrzebujesz tlumaczenie
+	"See the teaching guide"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"See the teaching guide of course"		// Precisa de tradução
+	"See the teaching guide"	// Precisa de tradução
 #elif L==10	// tr
-	"See the teaching guide of course"		// Çeviri lazim!
+	"See the teaching guide"	// Çeviri lazim!
 #endif
 	,
 	[ActCfgTchGui] =
 #if   L==1	// ca
-	"Configure teaching guide of course"			// Necessita traducció
+	"Configure teaching guide"		// Necessita traducció
 #elif L==2	// de
-	"Configure teaching guide of course"			// Need Übersetzung
+	"Configure teaching guide"		// Need Übersetzung
 #elif L==3	// en
-	"Configure teaching guide of course"
+	"Configure teaching guide"
 #elif L==4	// es
-	"Configurar la gu&iacute;a docente de la asignatura"
+	"Configurar la gu&iacute;a docente"
 #elif L==5	// fr
-	"Configure teaching guide of course"			// Besoin de traduction
+	"Configure teaching guide"		// Besoin de traduction
 #elif L==6	// gn
-	"Configurar la gu&iacute;a docente de la asignatura"	// Okoteve traducción
+	"Configurar la gu&iacute;a docente"	// Okoteve traducción
 #elif L==7	// it
-	"Configure teaching guide of course"			// Bisogno di traduzione
+	"Configure teaching guide"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Configure teaching guide of course"			// Potrzebujesz tlumaczenie
+	"Configure teaching guide"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Configure teaching guide of course"			// Precisa de tradução
+	"Configure teaching guide"		// Precisa de tradução
 #elif L==10	// tr
-	"Configure teaching guide of course"			// Çeviri lazim!
+	"Configure teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiTreGui] =
+#if   L==1	// ca
+	"Edit teaching guide"		// Necessita traducció
+#elif L==2	// de
+	"Edit teaching guide"		// Need Übersetzung
+#elif L==3	// en
+	"Edit teaching guide"
+#elif L==4	// es
+	"Editar gu&iacute;a docente"
+#elif L==5	// fr
+	"Edit teaching guide"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Edit teaching guide"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit teaching guide"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit teaching guide"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit teaching guide"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeTreNodGui] =
+#if   L==1	// ca
+	"See tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"See tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"See tree node in teaching guide"
+#elif L==4	// es
+	"Ver nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"See tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"See tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"See tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgTreNodGui] =
+#if   L==1	// ca
+	"Edit tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Edit tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Edit tree node in teaching guide"
+#elif L==4	// es
+	"Editar nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Edit tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Edit tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewTreNodGui] =
+#if   L==1	// ca
+	"Request new tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Request new tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Request new tree node in teaching guide"
+#elif L==4	// es
+	"Solicitar nuevo nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Request new tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar nuevo nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Request new tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request new tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request new tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Request new tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActChgTreNodGui] =
+#if   L==1	// ca
+	"Change tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Change tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Change tree node in teaching guide"
+#elif L==4	// es
+	"Cambiar nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Change tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Change tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Change tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActNewTreNodGui] =
+#if   L==1	// ca
+	"Create tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Create tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Create tree node in teaching guide"
+#elif L==4	// es
+	"Crear nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Create tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Create tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Create tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActReqRemTreNodGui] =
+#if   L==1	// ca
+	"Request removal of tree node in teaching guide"				// Necessita traducció
+#elif L==2	// de
+	"Request removal of tree node in teaching guide"				// Need Übersetzung
+#elif L==3	// en
+	"Request removal of tree node in teaching guide"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Request removal of tree node in teaching guide"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of tree node in teaching guide"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of tree node in teaching guide"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of tree node in teaching guide"				// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of tree node in teaching guide"				// Çeviri lazim!
+#endif
+	,
+	[ActRemTreNodGui] =
+#if   L==1	// ca
+	"Remove tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Remove tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Remove tree node in teaching guide"
+#elif L==4	// es
+	"Eliminar nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Remove tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Remove tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActHidTreNodGui] =
+#if   L==1	// ca
+	"Hide tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Hide tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Hide tree node in teaching guide"
+#elif L==4	// es
+	"Ocultar nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Hide tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Hide tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Hide tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActUnhTreNodGui] =
+#if   L==1	// ca
+	"Show tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Show tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Show tree node in teaching guide"
+#elif L==4	// es
+	"Mostrar nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Show tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Show tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Show tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActUp_TreNodGui] =
+#if   L==1	// ca
+	"Move up tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Move up tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Move up tree node in teaching guide"
+#elif L==4	// es
+	"Subir nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Move up tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Subir nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Move up tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Move up tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActDwnTreNodGui] =
+#if   L==1	// ca
+	"Move down tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Move down tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Move down tree node in teaching guide"
+#elif L==4	// es
+	"Bajar nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Move down tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Bajar nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Move down tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Move down tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActLftTreNodGui] =
+#if   L==1	// ca
+	"Move left tree node in teaching guide"					// Necessita traducció
+#elif L==2	// de
+	"Move left tree node in teaching guide"					// Need Übersetzung
+#elif L==3	// en
+	"Move left tree node in teaching guide"
+#elif L==4	// es
+	"Mover a la izquierda nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Move left tree node in teaching guide"					// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la izquierda nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Move left tree node in teaching guide"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Move left tree node in teaching guide"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move left tree node in teaching guide"					// Precisa de tradução
+#elif L==10	// tr
+	"Move left tree node in teaching guide"					// Çeviri lazim!
+#endif
+	,
+	[ActRgtTreNodGui] =
+#if   L==1	// ca
+	"Move right tree node in teaching guide"				// Necessita traducció
+#elif L==2	// de
+	"Move right tree node in teaching guide"				// Need Übersetzung
+#elif L==3	// en
+	"Move right tree node in teaching guide"
+#elif L==4	// es
+	"Mover a la derecha nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Move right tree node in teaching guide"				// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la derecha nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Move right tree node in teaching guide"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Move right tree node in teaching guide"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move right tree node in teaching guide"				// Precisa de tradução
+#elif L==10	// tr
+	"Move right tree node in teaching guide"				// Çeviri lazim!
+#endif
+	,
+	[ActExpSeeTreNodGui] =
+#if   L==1	// ca
+	"Expand tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in teaching guide"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Expand tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in teaching guide"			// Çeviri lazim!
+#endif
+	,
+	[ActConSeeTreNodGui] =
+#if   L==1	// ca
+	"Contract tree node in teaching guide"			// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in teaching guide"			// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in teaching guide"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en gu&iacute;a docente"
+#elif L==5	// fr
+	"Contract tree node in teaching guide"			// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en gu&iacute;a docente"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in teaching guide"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in teaching guide"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in teaching guide"			// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in teaching guide"				// Çeviri lazim!
+#endif
+	,
+	[ActExpEdiTreNodGui] =
+#if   L==1	// ca
+	"Expand tree node in teaching guide when editing"			// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in teaching guide when editing"			// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in teaching guide when editing"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en gu&iacute;a docente editando"
+#elif L==5	// fr
+	"Expand tree node in teaching guide when editing"			// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en gu&iacute;a docente editando"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in teaching guide when editing"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in teaching guide when editing"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in teaching guide when editing"			// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in teaching guide when editing"			// Çeviri lazim!
+#endif
+	,
+	[ActConEdiTreNodGui] =
+#if   L==1	// ca
+	"Contract tree node in teaching guide when editing"			// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in teaching guide when editing"			// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in teaching guide when editing"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en gu&iacute;a docente editando"
+#elif L==5	// fr
+	"Contract tree node in teaching guide when editing"			// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en gu&iacute;a docente editando"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in teaching guide when editing"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in teaching guide when editing"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in teaching guide when editing"			// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in teaching guide when editing"			// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaTchGui] =
@@ -6617,31 +7445,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to the teaching guide"		// Çeviri lazim!
 #endif
 	,
-/*
-	[ActSeeSyl] =
-#if   L==1	// ca
-	"See the syllabus (lectures or practicals)"		// Necessita traducció
-#elif L==2	// de
-	"See the syllabus (lectures or practicals)"		// Need Übersetzung
-#elif L==3	// en
-	"See the syllabus (lectures or practicals)"
-#elif L==4	// es
-	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"
-#elif L==5	// fr
-	"See the syllabus (lectures or practicals)"		// Besoin de traduction
-#elif L==6	// gn
-	"Ver el temario (teor&iacute;a o pr&aacute;cticas)"	// Okoteve traducción
-#elif L==7	// it
-	"See the syllabus (lectures or practicals)"		// Bisogno di traduzione
-#elif L==8	// pl
-	"See the syllabus (lectures or practicals)"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"See the syllabus (lectures or practicals)"		// Precisa de tradução
-#elif L==10	// tr
-	"See the syllabus (lectures or practicals)"		// Çeviri lazim!
-#endif
-	,
-*/
 	[ActSeeSyl] =
 #if   L==1	// ca
 	"See the syllabus"	// Necessita traducció
@@ -7447,6 +8250,420 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Configure bibliography"		// Çeviri lazim!
 #endif
 	,
+	[ActEdiTreBib] =
+#if   L==1	// ca
+	"Edit bibliography"		// Necessita traducció
+#elif L==2	// de
+	"Edit bibliography"		// Need Übersetzung
+#elif L==3	// en
+	"Edit bibliography"
+#elif L==4	// es
+	"Editar bibliograf&iacute;a"
+#elif L==5	// fr
+	"Edit bibliography"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Edit bibliography"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit bibliography"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit bibliography"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit bibliography"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeTreNodBib] =
+#if   L==1	// ca
+	"See tree node in bibliography"				// Necessita traducció
+#elif L==2	// de
+	"See tree node in bibliography"				// Need Übersetzung
+#elif L==3	// en
+	"See tree node in bibliography"
+#elif L==4	// es
+	"Ver nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"See tree node in bibliography"				// Besoin de traduction
+#elif L==6	// gn
+	"Ver nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"See tree node in bibliography"				// Bisogno di traduzione
+#elif L==8	// pl
+	"See tree node in bibliography"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See tree node in bibliography"				// Precisa de tradução
+#elif L==10	// tr
+	"See tree node in bibliography"				// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgTreNodBib] =
+#if   L==1	// ca
+	"Edit tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Edit tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Edit tree node in bibliography"
+#elif L==4	// es
+	"Editar nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Edit tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Edit tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewTreNodBib] =
+#if   L==1	// ca
+	"Request new tree node in bibliography"				// Necessita traducció
+#elif L==2	// de
+	"Request new tree node in bibliography"				// Need Übersetzung
+#elif L==3	// en
+	"Request new tree node in bibliography"
+#elif L==4	// es
+	"Solicitar nuevo nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Request new tree node in bibliography"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar nuevo nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Request new tree node in bibliography"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request new tree node in bibliography"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request new tree node in bibliography"				// Precisa de tradução
+#elif L==10	// tr
+	"Request new tree node in bibliography"				// Çeviri lazim!
+#endif
+	,
+	[ActChgTreNodBib] =
+#if   L==1	// ca
+	"Change tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Change tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Change tree node in bibliography"
+#elif L==4	// es
+	"Cambiar nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Change tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Change tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Change tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Change tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActNewTreNodBib] =
+#if   L==1	// ca
+	"Create tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Create tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Create tree node in bibliography"
+#elif L==4	// es
+	"Crear nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Create tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Crear nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Create tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Create tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Create tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActReqRemTreNodBib] =
+#if   L==1	// ca
+	"Request removal of tree node in bibliography"					// Necessita traducció
+#elif L==2	// de
+	"Request removal of tree node in bibliography"					// Need Übersetzung
+#elif L==3	// en
+	"Request removal of tree node in bibliography"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Request removal of tree node in bibliography"					// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of tree node in bibliography"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of tree node in bibliography"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of tree node in bibliography"					// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of tree node in bibliography"					// Çeviri lazim!
+#endif
+	,
+	[ActRemTreNodBib] =
+#if   L==1	// ca
+	"Remove tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Remove tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Remove tree node in bibliography"
+#elif L==4	// es
+	"Eliminar nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Remove tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Remove tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActHidTreNodBib] =
+#if   L==1	// ca
+	"Hide tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Hide tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Hide tree node in bibliography"
+#elif L==4	// es
+	"Ocultar nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Hide tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Hide tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Hide tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActUnhTreNodBib] =
+#if   L==1	// ca
+	"Show tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Show tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Show tree node in bibliography"
+#elif L==4	// es
+	"Mostrar nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Show tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Show tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Show tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActUp_TreNodBib] =
+#if   L==1	// ca
+	"Move up tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Move up tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Move up tree node in bibliography"
+#elif L==4	// es
+	"Subir nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Move up tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Subir nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Move up tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Move up tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActDwnTreNodBib] =
+#if   L==1	// ca
+	"Move down tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Move down tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Move down tree node in bibliography"
+#elif L==4	// es
+	"Bajar nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Move down tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Bajar nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Move down tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Move down tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActLftTreNodBib] =
+#if   L==1	// ca
+	"Move left tree node in bibliography"					// Necessita traducció
+#elif L==2	// de
+	"Move left tree node in bibliography"					// Need Übersetzung
+#elif L==3	// en
+	"Move left tree node in bibliography"
+#elif L==4	// es
+	"Mover a la izquierda nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Move left tree node in bibliography"					// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la izquierda nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Move left tree node in bibliography"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Move left tree node in bibliography"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move left tree node in bibliography"					// Precisa de tradução
+#elif L==10	// tr
+	"Move left tree node in bibliography"					// Çeviri lazim!
+#endif
+	,
+	[ActRgtTreNodBib] =
+#if   L==1	// ca
+	"Move right tree node in bibliography"					// Necessita traducció
+#elif L==2	// de
+	"Move right tree node in bibliography"					// Need Übersetzung
+#elif L==3	// en
+	"Move right tree node in bibliography"
+#elif L==4	// es
+	"Mover a la derecha nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Move right tree node in bibliography"					// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la derecha nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Move right tree node in bibliography"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Move right tree node in bibliography"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move right tree node in bibliography"					// Precisa de tradução
+#elif L==10	// tr
+	"Move right tree node in bibliography"					// Çeviri lazim!
+#endif
+	,
+	[ActExpSeeTreNodBib] =
+#if   L==1	// ca
+	"Expand tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in bibliography"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Expand tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActConSeeTreNodBib] =
+#if   L==1	// ca
+	"Contract tree node in bibliography"			// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in bibliography"			// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in bibliography"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en bibliograf&iacute;a"
+#elif L==5	// fr
+	"Contract tree node in bibliography"			// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en bibliograf&iacute;a"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in bibliography"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in bibliography"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in bibliography"			// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in bibliography"			// Çeviri lazim!
+#endif
+	,
+	[ActExpEdiTreNodBib] =
+#if   L==1	// ca
+	"Expand tree node in bibliography when editing"				// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in bibliography when editing"				// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in bibliography when editing"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en bibliograf&iacute;a editando"
+#elif L==5	// fr
+	"Expand tree node in bibliography when editing"				// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en bibliograf&iacute;a editando"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in bibliography when editing"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in bibliography when editing"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in bibliography when editing"				// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in bibliography when editing"				// Çeviri lazim!
+#endif
+	,
+	[ActConEdiTreNodBib] =
+#if   L==1	// ca
+	"Contract tree node in bibliography when editing"			// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in bibliography when editing"			// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in bibliography when editing"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en bibliograf&iacute;a editando"
+#elif L==5	// fr
+	"Contract tree node in bibliography when editing"			// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en bibliograf&iacute;a editando"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in bibliography when editing"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in bibliography when editing"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in bibliography when editing"			// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in bibliography when editing"			// Çeviri lazim!
+#endif
+	,
 	[ActChgFrcReaBib] =
 #if   L==1	// ca
 	"Change whether students are forced to read the bibliography"		// Necessita traducció
@@ -7792,6 +9009,420 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Configure FAQ"		// Çeviri lazim!
 #endif
 	,
+	[ActEdiTreFAQ] =
+#if   L==1	// ca
+	"Edit FAQ"	// Necessita traducció
+#elif L==2	// de
+	"Edit FAQ"	// Need Übersetzung
+#elif L==3	// en
+	"Edit FAQ"
+#elif L==4	// es
+	"Editar FAQ"
+#elif L==5	// fr
+	"Edit FAQ"	// Besoin de traduction
+#elif L==6	// gn
+	"Editar FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Edit FAQ"	// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit FAQ"	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit FAQ"	// Precisa de tradução
+#elif L==10	// tr
+	"Edit FAQ"	// Çeviri lazim!
+#endif
+	,
+	[ActSeeTreNodFAQ] =
+#if   L==1	// ca
+	"See tree node in FAQ"			// Necessita traducció
+#elif L==2	// de
+	"See tree node in FAQ"			// Need Übersetzung
+#elif L==3	// en
+	"See tree node in FAQ"
+#elif L==4	// es
+	"Ver nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"See tree node in FAQ"			// Besoin de traduction
+#elif L==6	// gn
+	"Ver nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"See tree node in FAQ"			// Bisogno di traduzione
+#elif L==8	// pl
+	"See tree node in FAQ"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See tree node in FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	"See tree node in FAQ"			// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgTreNodFAQ] =
+#if   L==1	// ca
+	"Edit tree node in FAQ"			// Necessita traducció
+#elif L==2	// de
+	"Edit tree node in FAQ"			// Need Übersetzung
+#elif L==3	// en
+	"Edit tree node in FAQ"
+#elif L==4	// es
+	"Editar nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Edit tree node in FAQ"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Edit tree node in FAQ"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit tree node in FAQ"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit tree node in FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit tree node in FAQ"			// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewTreNodFAQ] =
+#if   L==1	// ca
+	"Request new tree node in FAQ"			// Necessita traducció
+#elif L==2	// de
+	"Request new tree node in FAQ"			// Need Übersetzung
+#elif L==3	// en
+	"Request new tree node in FAQ"
+#elif L==4	// es
+	"Solicitar nuevo nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Request new tree node in FAQ"			// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar nuevo nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Request new tree node in FAQ"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Request new tree node in FAQ"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request new tree node in FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	"Request new tree node in FAQ"			// Çeviri lazim!
+#endif
+	,
+	[ActChgTreNodFAQ] =
+#if   L==1	// ca
+	"Change tree node in FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Change tree node in FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Change tree node in FAQ"
+#elif L==4	// es
+	"Cambiar nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Change tree node in FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Change tree node in FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Change tree node in FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change tree node in FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Change tree node in FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActNewTreNodFAQ] =
+#if   L==1	// ca
+	"Create tree node in FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Create tree node in FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Create tree node in FAQ"
+#elif L==4	// es
+	"Crear nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Create tree node in FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Crear nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Create tree node in FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Create tree node in FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create tree node in FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Create tree node in FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActReqRemTreNodFAQ] =
+#if   L==1	// ca
+	"Request removal of tree node in FAQ"				// Necessita traducció
+#elif L==2	// de
+	"Request removal of tree node in FAQ"				// Need Übersetzung
+#elif L==3	// en
+	"Request removal of tree node in FAQ"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Request removal of tree node in FAQ"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of tree node in FAQ"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of tree node in FAQ"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of tree node in FAQ"				// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of tree node in FAQ"				// Çeviri lazim!
+#endif
+	,
+	[ActRemTreNodFAQ] =
+#if   L==1	// ca
+	"Remove tree node in FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Remove tree node in FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Remove tree node in FAQ"
+#elif L==4	// es
+	"Eliminar nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Remove tree node in FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Remove tree node in FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove tree node in FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove tree node in FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Remove tree node in FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActHidTreNodFAQ] =
+#if   L==1	// ca
+	"Hide tree node in FAQ"			// Necessita traducció
+#elif L==2	// de
+	"Hide tree node in FAQ"			// Need Übersetzung
+#elif L==3	// en
+	"Hide tree node in FAQ"
+#elif L==4	// es
+	"Ocultar nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Hide tree node in FAQ"			// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Hide tree node in FAQ"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide tree node in FAQ"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide tree node in FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	"Hide tree node in FAQ"			// Çeviri lazim!
+#endif
+	,
+	[ActUnhTreNodFAQ] =
+#if   L==1	// ca
+	"Show tree node in FAQ"			// Necessita traducció
+#elif L==2	// de
+	"Show tree node in FAQ"			// Need Übersetzung
+#elif L==3	// en
+	"Show tree node in FAQ"
+#elif L==4	// es
+	"Mostrar nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Show tree node in FAQ"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Show tree node in FAQ"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show tree node in FAQ"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show tree node in FAQ"			// Precisa de tradução
+#elif L==10	// tr
+	"Show tree node in FAQ"			// Çeviri lazim!
+#endif
+	,
+	[ActUp_TreNodFAQ] =
+#if   L==1	// ca
+	"Move up tree node in FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Move up tree node in FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Move up tree node in FAQ"
+#elif L==4	// es
+	"Subir nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Move up tree node in FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Subir nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Move up tree node in FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up tree node in FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up tree node in FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Move up tree node in FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActDwnTreNodFAQ] =
+#if   L==1	// ca
+	"Move down tree node in FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Move down tree node in FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Move down tree node in FAQ"
+#elif L==4	// es
+	"Bajar nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Move down tree node in FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Bajar nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Move down tree node in FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down tree node in FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down tree node in FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Move down tree node in FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActLftTreNodFAQ] =
+#if   L==1	// ca
+	"Move left tree node in FAQ"				// Necessita traducció
+#elif L==2	// de
+	"Move left tree node in FAQ"				// Need Übersetzung
+#elif L==3	// en
+	"Move left tree node in FAQ"
+#elif L==4	// es
+	"Mover a la izquierda nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Move left tree node in FAQ"				// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la izquierda nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Move left tree node in FAQ"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Move left tree node in FAQ"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move left tree node in FAQ"				// Precisa de tradução
+#elif L==10	// tr
+	"Move left tree node in FAQ"				// Çeviri lazim!
+#endif
+	,
+	[ActRgtTreNodFAQ] =
+#if   L==1	// ca
+	"Move right tree node in FAQ"				// Necessita traducció
+#elif L==2	// de
+	"Move right tree node in FAQ"				// Need Übersetzung
+#elif L==3	// en
+	"Move right tree node in FAQ"
+#elif L==4	// es
+	"Mover a la derecha nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Move right tree node in FAQ"				// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la derecha nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Move right tree node in FAQ"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Move right tree node in FAQ"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move right tree node in FAQ"				// Precisa de tradução
+#elif L==10	// tr
+	"Move right tree node in FAQ"				// Çeviri lazim!
+#endif
+	,
+	[ActExpSeeTreNodFAQ] =
+#if   L==1	// ca
+	"Expand tree node in FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in FAQ"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Expand tree node in FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActConSeeTreNodFAQ] =
+#if   L==1	// ca
+	"Contract tree node in FAQ"		// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in FAQ"		// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in FAQ"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en FAQ"
+#elif L==5	// fr
+	"Contract tree node in FAQ"		// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en FAQ"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in FAQ"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in FAQ"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in FAQ"		// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in FAQ"		// Çeviri lazim!
+#endif
+	,
+	[ActExpEdiTreNodFAQ] =
+#if   L==1	// ca
+	"Expand tree node in FAQ when editing"			// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in FAQ when editing"			// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in FAQ when editing"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en FAQ editando"
+#elif L==5	// fr
+	"Expand tree node in FAQ when editing"			// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en FAQ editando"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in FAQ when editing"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in FAQ when editing"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in FAQ when editing"			// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in FAQ when editing"			// Çeviri lazim!
+#endif
+	,
+	[ActConEdiTreNodFAQ] =
+#if   L==1	// ca
+	"Contract tree node in FAQ when editing"		// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in FAQ when editing"		// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in FAQ when editing"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en FAQ editando"
+#elif L==5	// fr
+	"Contract tree node in FAQ when editing"		// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en FAQ editando"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in FAQ when editing"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in FAQ when editing"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in FAQ when editing"		// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in FAQ when editing"		// Çeviri lazim!
+#endif
+	,
 	[ActChgFrcReaFAQ] =
 #if   L==1	// ca
 	"Change force students to read FAQ"			// Necessita traducció
@@ -8116,25 +9747,439 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActCfgCrsLnk] =
 #if   L==1	// ca
-	"Configure course links"			// Necessita traducció
+	"Configure course links"		// Necessita traducció
 #elif L==2	// de
-	"Configure course links"			// Need Übersetzung
+	"Configure course links"		// Need Übersetzung
 #elif L==3	// en
 	"Configure course links"
 #elif L==4	// es
 	"Configurar enlaces de la asignatura"
 #elif L==5	// fr
-	"Configure course links"			// Besoin de traduction
+	"Configure course links"		// Besoin de traduction
 #elif L==6	// gn
 	"Configurar enlaces de la asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Configure course links"			// Bisogno di traduzione
+	"Configure course links"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Configure course links"			// Potrzebujesz tlumaczenie
+	"Configure course links"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Configure course links"			// Precisa de tradução
+	"Configure course links"		// Precisa de tradução
 #elif L==10	// tr
-	"Configure course links"			// Çeviri lazim!
+	"Configure course links"		// Çeviri lazim!
+#endif
+	,
+	[ActEdiTreLnk] =
+#if   L==1	// ca
+	"Edit course links"			// Necessita traducció
+#elif L==2	// de
+	"Edit course links"			// Need Übersetzung
+#elif L==3	// en
+	"Edit course links"
+#elif L==4	// es
+	"Editar enlaces de la asignatura"
+#elif L==5	// fr
+	"Edit course links"			// Besoin de traduction
+#elif L==6	// gn
+	"Editar enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit course links"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit course links"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit course links"			// Precisa de tradução
+#elif L==10	// tr
+	"Edit course links"			// Çeviri lazim!
+#endif
+	,
+	[ActSeeTreNodLnk] =
+#if   L==1	// ca
+	"See tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"See tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"See tree node in course links"
+#elif L==4	// es
+	"Ver nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"See tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Ver nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"See tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"See tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"See tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgTreNodLnk] =
+#if   L==1	// ca
+	"Edit tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Edit tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Edit tree node in course links"
+#elif L==4	// es
+	"Editar nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Edit tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Editar nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Edit tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Edit tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewTreNodLnk] =
+#if   L==1	// ca
+	"Request new tree node in course links"					// Necessita traducció
+#elif L==2	// de
+	"Request new tree node in course links"					// Need Übersetzung
+#elif L==3	// en
+	"Request new tree node in course links"
+#elif L==4	// es
+	"Solicitar nuevo nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Request new tree node in course links"					// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar nuevo nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request new tree node in course links"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Request new tree node in course links"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request new tree node in course links"					// Precisa de tradução
+#elif L==10	// tr
+	"Request new tree node in course links"					// Çeviri lazim!
+#endif
+	,
+	[ActChgTreNodLnk] =
+#if   L==1	// ca
+	"Change tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Change tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Change tree node in course links"
+#elif L==4	// es
+	"Cambiar nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Change tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Change tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Change tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Change tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActNewTreNodLnk] =
+#if   L==1	// ca
+	"Create tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Create tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Create tree node in course links"
+#elif L==4	// es
+	"Crear nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Create tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Create tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Create tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActReqRemTreNodLnk] =
+#if   L==1	// ca
+	"Request removal of tree node in course links"						// Necessita traducció
+#elif L==2	// de
+	"Request removal of tree node in course links"						// Need Übersetzung
+#elif L==3	// en
+	"Request removal of tree node in course links"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Request removal of tree node in course links"						// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of tree node in course links"						// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of tree node in course links"						// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of tree node in course links"						// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of tree node in course links"						// Çeviri lazim!
+#endif
+	,
+	[ActRemTreNodLnk] =
+#if   L==1	// ca
+	"Remove tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Remove tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Remove tree node in course links"
+#elif L==4	// es
+	"Eliminar nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Remove tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Remove tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Remove tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActHidTreNodLnk] =
+#if   L==1	// ca
+	"Hide tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Hide tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Hide tree node in course links"
+#elif L==4	// es
+	"Ocultar nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Hide tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Hide tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Hide tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActUnhTreNodLnk] =
+#if   L==1	// ca
+	"Show tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Show tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Show tree node in course links"
+#elif L==4	// es
+	"Mostrar nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Show tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Show tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Show tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Show tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActUp_TreNodLnk] =
+#if   L==1	// ca
+	"Move up tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Move up tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Move up tree node in course links"
+#elif L==4	// es
+	"Subir nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Move up tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Subir nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move up tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Move up tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActDwnTreNodLnk] =
+#if   L==1	// ca
+	"Move down tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Move down tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Move down tree node in course links"
+#elif L==4	// es
+	"Bajar nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Move down tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Bajar nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move down tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Move down tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActLftTreNodLnk] =
+#if   L==1	// ca
+	"Move left tree node in course links"						// Necessita traducció
+#elif L==2	// de
+	"Move left tree node in course links"						// Need Übersetzung
+#elif L==3	// en
+	"Move left tree node in course links"
+#elif L==4	// es
+	"Mover a la izquierda nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Move left tree node in course links"						// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la izquierda nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move left tree node in course links"						// Bisogno di traduzione
+#elif L==8	// pl
+	"Move left tree node in course links"						// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move left tree node in course links"						// Precisa de tradução
+#elif L==10	// tr
+	"Move left tree node in course links"						// Çeviri lazim!
+#endif
+	,
+	[ActRgtTreNodLnk] =
+#if   L==1	// ca
+	"Move right tree node in course links"					// Necessita traducció
+#elif L==2	// de
+	"Move right tree node in course links"					// Need Übersetzung
+#elif L==3	// en
+	"Move right tree node in course links"
+#elif L==4	// es
+	"Mover a la derecha nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Move right tree node in course links"					// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la derecha nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Move right tree node in course links"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Move right tree node in course links"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move right tree node in course links"					// Precisa de tradução
+#elif L==10	// tr
+	"Move right tree node in course links"					// Çeviri lazim!
+#endif
+	,
+	[ActExpSeeTreNodLnk] =
+#if   L==1	// ca
+	"Expand tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in course links"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Expand tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActConSeeTreNodLnk] =
+#if   L==1	// ca
+	"Contract tree node in course links"				// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in course links"				// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in course links"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en enlaces de la asignatura"
+#elif L==5	// fr
+	"Contract tree node in course links"				// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en enlaces de la asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in course links"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in course links"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in course links"				// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in course links"				// Çeviri lazim!
+#endif
+	,
+	[ActExpEdiTreNodLnk] =
+#if   L==1	// ca
+	"Expand tree node in course links when editing"				// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in course links when editing"				// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in course links when editing"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en enlaces de la asignatura editando"
+#elif L==5	// fr
+	"Expand tree node in course links when editing"				// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en enlaces de la asignatura editando"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in course links when editing"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in course links when editing"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in course links when editing"				// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in course links when editing"				// Çeviri lazim!
+#endif
+	,
+	[ActConEdiTreNodLnk] =
+#if   L==1	// ca
+	"Contract tree node in course links when editing"			// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in course links when editing"			// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in course links when editing"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en enlaces de la asignatura editando"
+#elif L==5	// fr
+	"Contract tree node in course links when editing"			// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en enlaces de la asignatura editando"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in course links when editing"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in course links when editing"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in course links when editing"			// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in course links when editing"			// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaCrsLnk] =
@@ -8461,25 +10506,439 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActCfgAss] =
 #if   L==1	// ca
-	"Configure assessment system"		// Necessita traducció
+	"Configure assessment system"			// Necessita traducció
 #elif L==2	// de
-	"Configure assessment system"		// Need Übersetzung
+	"Configure assessment system"			// Need Übersetzung
 #elif L==3	// en
 	"Configure assessment system"
 #elif L==4	// es
 	"Configurar sistema de evaluaci&oacute;n"
 #elif L==5	// fr
-	"Configure assessment system"		// Besoin de traduction
+	"Configure assessment system"			// Besoin de traduction
 #elif L==6	// gn
 	"Configurar sistema de evaluaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Configure assessment system"		// Bisogno di traduzione
+	"Configure assessment system"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Configure assessment system"		// Potrzebujesz tlumaczenie
+	"Configure assessment system"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Configure assessment system"		// Precisa de tradução
+	"Configure assessment system"			// Precisa de tradução
 #elif L==10	// tr
-	"Configure assessment system"		// Çeviri lazim!
+	"Configure assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActEdiTreAss] =
+#if   L==1	// ca
+	"Edit assessment system"		// Necessita traducció
+#elif L==2	// de
+	"Edit assessment system"		// Need Übersetzung
+#elif L==3	// en
+	"Edit assessment system"
+#elif L==4	// es
+	"Editar sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Edit assessment system"		// Besoin de traduction
+#elif L==6	// gn
+	"Editar sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Edit assessment system"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit assessment system"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit assessment system"		// Precisa de tradução
+#elif L==10	// tr
+	"Edit assessment system"		// Çeviri lazim!
+#endif
+	,
+	[ActSeeTreNodAss] =
+#if   L==1	// ca
+	"See tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"See tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"See tree node in assessment system"
+#elif L==4	// es
+	"Ver nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"See tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Ver nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"See tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"See tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"See tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"See tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActFrmChgTreNodAss] =
+#if   L==1	// ca
+	"Edit tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Edit tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Edit tree node in assessment system"
+#elif L==4	// es
+	"Editar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Edit tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Editar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Edit tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Edit tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Edit tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Edit tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActFrmNewTreNodAss] =
+#if   L==1	// ca
+	"Request new tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Request new tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Request new tree node in assessment system"
+#elif L==4	// es
+	"Solicitar nuevo nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Request new tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar nuevo nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Request new tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Request new tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request new tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Request new tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActChgTreNodAss] =
+#if   L==1	// ca
+	"Change tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Change tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Change tree node in assessment system"
+#elif L==4	// es
+	"Cambiar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Change tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Cambiar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Change tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Change tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Change tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Change tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActNewTreNodAss] =
+#if   L==1	// ca
+	"Create tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Create tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Create tree node in assessment system"
+#elif L==4	// es
+	"Crear nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Create tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Crear nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Create tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Create tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Create tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Create tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActReqRemTreNodAss] =
+#if   L==1	// ca
+	"Request removal of tree node in assessment system"					// Necessita traducció
+#elif L==2	// de
+	"Request removal of tree node in assessment system"					// Need Übersetzung
+#elif L==3	// en
+	"Request removal of tree node in assessment system"
+#elif L==4	// es
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Request removal of tree node in assessment system"					// Besoin de traduction
+#elif L==6	// gn
+	"Solicitar eliminaci&oacute;n de nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Request removal of tree node in assessment system"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Request removal of tree node in assessment system"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Request removal of tree node in assessment system"					// Precisa de tradução
+#elif L==10	// tr
+	"Request removal of tree node in assessment system"					// Çeviri lazim!
+#endif
+	,
+	[ActRemTreNodAss] =
+#if   L==1	// ca
+	"Remove tree node in assessment system"					// Necessita traducció
+#elif L==2	// de
+	"Remove tree node in assessment system"					// Need Übersetzung
+#elif L==3	// en
+	"Remove tree node in assessment system"
+#elif L==4	// es
+	"Eliminar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Remove tree node in assessment system"					// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Remove tree node in assessment system"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove tree node in assessment system"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove tree node in assessment system"					// Precisa de tradução
+#elif L==10	// tr
+	"Remove tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActHidTreNodAss] =
+#if   L==1	// ca
+	"Hide tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Hide tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Hide tree node in assessment system"
+#elif L==4	// es
+	"Ocultar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Hide tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Ocultar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Hide tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Hide tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Hide tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Hide tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActUnhTreNodAss] =
+#if   L==1	// ca
+	"Show tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Show tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Show tree node in assessment system"
+#elif L==4	// es
+	"Mostrar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Show tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Show tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Show tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Show tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActUp_TreNodAss] =
+#if   L==1	// ca
+	"Move up tree node in assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Move up tree node in assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Move up tree node in assessment system"
+#elif L==4	// es
+	"Subir nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Move up tree node in assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Subir nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Move up tree node in assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move up tree node in assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move up tree node in assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Move up tree node in assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActDwnTreNodAss] =
+#if   L==1	// ca
+	"Move down tree node in assessment system"			// Necessita traducció
+#elif L==2	// de
+	"Move down tree node in assessment system"			// Need Übersetzung
+#elif L==3	// en
+	"Move down tree node in assessment system"
+#elif L==4	// es
+	"Bajar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Move down tree node in assessment system"			// Besoin de traduction
+#elif L==6	// gn
+	"Bajar nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Move down tree node in assessment system"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Move down tree node in assessment system"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move down tree node in assessment system"			// Precisa de tradução
+#elif L==10	// tr
+	"Move down tree node in assessment system"			// Çeviri lazim!
+#endif
+	,
+	[ActLftTreNodAss] =
+#if   L==1	// ca
+	"Move left tree node in assessment system"					// Necessita traducció
+#elif L==2	// de
+	"Move left tree node in assessment system"					// Need Übersetzung
+#elif L==3	// en
+	"Move left tree node in assessment system"
+#elif L==4	// es
+	"Mover a la izquierda nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Move left tree node in assessment system"					// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la izquierda nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Move left tree node in assessment system"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Move left tree node in assessment system"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move left tree node in assessment system"					// Precisa de tradução
+#elif L==10	// tr
+	"Move left tree node in assessment system"					// Çeviri lazim!
+#endif
+	,
+	[ActRgtTreNodAss] =
+#if   L==1	// ca
+	"Move right tree node in assessment system"					// Necessita traducció
+#elif L==2	// de
+	"Move right tree node in assessment system"					// Need Übersetzung
+#elif L==3	// en
+	"Move right tree node in assessment system"
+#elif L==4	// es
+	"Mover a la derecha nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Move right tree node in assessment system"					// Besoin de traduction
+#elif L==6	// gn
+	"Mover a la derecha nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Move right tree node in assessment system"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Move right tree node in assessment system"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Move right tree node in assessment system"					// Precisa de tradução
+#elif L==10	// tr
+	"Move right tree node in assessment system"					// Çeviri lazim!
+#endif
+	,
+	[ActExpSeeTreNodAss] =
+#if   L==1	// ca
+	"Expand tree node in assessment system"					// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in assessment system"					// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in assessment system"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Expand tree node in assessment system"					// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in assessment system"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in assessment system"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in assessment system"					// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in assessment system"					// Çeviri lazim!
+#endif
+	,
+	[ActConSeeTreNodAss] =
+#if   L==1	// ca
+	"Contract tree node in assessment system"				// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in assessment system"				// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in assessment system"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en sistema de evaluaci&oacute;n"
+#elif L==5	// fr
+	"Contract tree node in assessment system"				// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en sistema de evaluaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in assessment system"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in assessment system"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in assessment system"				// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in assessment system"				// Çeviri lazim!
+#endif
+	,
+	[ActExpEdiTreNodAss] =
+#if   L==1	// ca
+	"Expand tree node in assessment system when editing"				// Necessita traducció
+#elif L==2	// de
+	"Expand tree node in assessment system when editing"				// Need Übersetzung
+#elif L==3	// en
+	"Expand tree node in assessment system when editing"
+#elif L==4	// es
+	"Expandir nodo del &aacute;rbol en sistema de evaluaci&oacute;n editando"
+#elif L==5	// fr
+	"Expand tree node in assessment system when editing"				// Besoin de traduction
+#elif L==6	// gn
+	"Expandir nodo del &aacute;rbol en sistema de evaluaci&oacute;n editando"	// Okoteve traducción
+#elif L==7	// it
+	"Expand tree node in assessment system when editing"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Expand tree node in assessment system when editing"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Expand tree node in assessment system when editing"				// Precisa de tradução
+#elif L==10	// tr
+	"Expand tree node in assessment system when editing"				// Çeviri lazim!
+#endif
+	,
+	[ActConEdiTreNodAss] =
+#if   L==1	// ca
+	"Contract tree node in assessment system when editing"				// Necessita traducció
+#elif L==2	// de
+	"Contract tree node in assessment system when editing"				// Need Übersetzung
+#elif L==3	// en
+	"Contract tree node in assessment system when editing"
+#elif L==4	// es
+	"Contraer nodo del &aacute;rbol en sistema de evaluaci&oacute;n editando"
+#elif L==5	// fr
+	"Contract tree node in assessment system when editing"				// Besoin de traduction
+#elif L==6	// gn
+	"Contraer nodo del &aacute;rbol en sistema de evaluaci&oacute;n editando"	// Okoteve traducción
+#elif L==7	// it
+	"Contract tree node in assessment system when editing"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Contract tree node in assessment system when editing"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Contract tree node in assessment system when editing"				// Precisa de tradução
+#elif L==10	// tr
+	"Contract tree node in assessment system when editing"				// Çeviri lazim!
 #endif
 	,
 	[ActChgFrcReaAss] =

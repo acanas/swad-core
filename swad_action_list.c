@@ -458,6 +458,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRenCrsFulCfg	] = {1600, 0,TabCrs,CrsCfg_RenameCourseFull	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
    [ActChgInsCrsCodCfg	] = {1024, 0,TabCrs,CrsCfg_ChangeInsCrsCod	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgCrsYeaCfg	] = {1573, 0,TabCrs,CrsCfg_ChangeCrsYear	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
    [ActCfgCrsInf	] = { 848, 0,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgFrcReaCrsInf	] = { 877, 0,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgHavReaCrsInf	] = { 878, 0,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
