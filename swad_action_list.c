@@ -433,6 +433,15 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Course info
    [ActSeeCrsInf	] = { 847, 0,TabCrs,NULL			,Crs_ShowIntroduction		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActPrnCrsInf	] = {1028, 0,TabCrs,NULL			,CrsCfg_PrintConfiguration	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_NEW},
+   [ActChgCrsDegCfg	] = {1587, 0,TabCrs,CrsCfg_ChangeCrsDeg		,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380}},Act_NORM,Act_1ST},
+   [ActRenCrsShoCfg	] = {1601, 0,TabCrs,CrsCfg_RenameCourseShrt	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
+   [ActRenCrsFulCfg	] = {1600, 0,TabCrs,CrsCfg_RenameCourseFull	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
+   [ActChgInsCrsCodCfg	] = {1024, 0,TabCrs,CrsCfg_ChangeInsCrsCod	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgCrsYeaCfg	] = {1573, 0,TabCrs,CrsCfg_ChangeCrsYear	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActCfgCrsInf	] = { 848, 0,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFrcReaCrsInf	] = { 877, 0,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgHavReaCrsInf	] = { 878, 0,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActSelInfSrcCrsInf	] = { 849, 0,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiTreInf	] = {2038, 0,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodInf	] = {2039, 0,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -453,17 +462,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodInf	] = {2054, 0,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodInf	] = {2055, 0,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActChgCrsDegCfg	] = {1587, 0,TabCrs,CrsCfg_ChangeCrsDeg		,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380}},Act_NORM,Act_1ST},
-   [ActRenCrsShoCfg	] = {1601, 0,TabCrs,CrsCfg_RenameCourseShrt	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActRenCrsFulCfg	] = {1600, 0,TabCrs,CrsCfg_RenameCourseFull	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0}},Act_NORM,Act_1ST},
-   [ActChgInsCrsCodCfg	] = {1024, 0,TabCrs,CrsCfg_ChangeInsCrsCod	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgCrsYeaCfg	] = {1573, 0,TabCrs,CrsCfg_ChangeCrsYear	,CrsCfg_ContEditAfterChgCrs	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-
-   [ActCfgCrsInf	] = { 848, 0,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgFrcReaCrsInf	] = { 877, 0,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgHavReaCrsInf	] = { 878, 0,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActSelInfSrcCrsInf	] = { 849, 0,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActEditorCrsInf	] = { 852, 0,TabCrs,NULL			,Inf_EditorCourseInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPlaTxtCrsInf	] = { 850, 0,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtCrsInf	] = { 851, 0,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtCrsInf	] = {1093, 0,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -512,6 +510,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Teaching guide
    [ActSeeTchGui	] = { 784, 2,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCfgTchGui	] = { 785, 2,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFrcReaTchGui	] = { 870, 2,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgHavReaTchGui	] = { 886, 2,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActSelInfSrcTchGui	] = { 789, 2,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiTreGui	] = {2056, 2,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodGui	] = {2057, 2,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -532,14 +533,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodGui	] = {2072, 2,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodGui	] = {2073, 2,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActChgFrcReaTchGui	] = { 870, 2,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgHavReaTchGui	] = { 886, 2,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActSelInfSrcTchGui	] = { 789, 2,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActEditorTchGui	] = { 786, 2,TabCrs,NULL			,Inf_EditorTeachingGuide	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPlaTxtTchGui	] = { 787, 2,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtTchGui	] = { 790, 2,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtTchGui	] = {1094, 2,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtTchGui	] = {1102, 2,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtTchGui	] = {1102, 2,TabCrs,NULL			,Inf_ReceiveRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPagTchGui	] = {2025, 2,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagTchGui	] = { 788, 2,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEdiURLTchGui	] = {2032, 2,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -549,6 +546,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Syllabus
    [ActSeeSyl		] = {1242, 3,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCfgSyl		] = {  44, 3,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+
+   [ActChgFrcReaSyl	] = { 871, 3,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgHavReaSyl	] = { 880, 3,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActSelInfSrcSyl	] = { 378, 3,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiTreSyl	] = {2006, 3,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodSyl	] = {2007, 3,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -569,13 +570,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodSyl	] = {2022, 3,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodSyl	] = {2023, 3,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActChgFrcReaSyl	] = { 871, 3,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgHavReaSyl	] = { 880, 3,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActSelInfSrcSyl	] = { 378, 3,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPlaTxtSyl	] = { 379, 3,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtSyl	] = { 394, 3,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtSyl	] = {1095, 3,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtSyl	] = {1103, 3,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtSyl	] = {1103, 3,TabCrs,NULL			,Inf_ReceiveRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPagSyl	] = {2026, 3,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagSyl	] = { 381, 3,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEdiURLSyl	] = {2033, 3,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -585,6 +583,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Bibliography
    [ActSeeBib		] = {  32, 4,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCfgBib		] = {  76, 4,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFrcReaBib	] = { 873, 4,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgHavReaBib	] = { 884, 4,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActSelInfSrcBib	] = { 370, 4,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiTreBib	] = {2074, 4,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodBib	] = {2075, 4,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -605,14 +606,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodBib	] = {2090, 4,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodBib	] = {2091, 4,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActChgFrcReaBib	] = { 873, 4,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgHavReaBib	] = { 884, 4,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActSelInfSrcBib	] = { 370, 4,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActEditorBib	] = { 376, 4,TabCrs,NULL			,Inf_EditorBibliography		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPlaTxtBib	] = { 377, 4,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtBib	] = { 398, 4,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtBib	] = {1097, 4,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtBib	] = {1105, 4,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtBib	] = {1105, 4,TabCrs,NULL			,Inf_ReceiveRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPagBib	] = {2027, 4,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagBib	] = { 185, 4,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEdiURLBib	] = {2034, 4,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -622,6 +619,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // FAQ
    [ActSeeFAQ		] = {  54, 5,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCfgFAQ		] = { 109, 5,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFrcReaFAQ	] = { 874, 5,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgHavReaFAQ	] = { 879, 5,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActSelInfSrcFAQ	] = { 380, 5,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiTreFAQ	] = {2092, 5,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodFAQ	] = {2093, 5,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -642,14 +642,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodFAQ	] = {2108, 5,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodFAQ	] = {2109, 5,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActChgFrcReaFAQ	] = { 874, 5,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgHavReaFAQ	] = { 879, 5,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActSelInfSrcFAQ	] = { 380, 5,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActEditorFAQ	] = { 404, 5,TabCrs,NULL			,Inf_EditorFAQ			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPlaTxtFAQ	] = { 405, 5,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtFAQ	] = { 406, 5,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtFAQ	] = {1098, 5,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtFAQ	] = {1106, 5,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtFAQ	] = {1106, 5,TabCrs,NULL			,Inf_ReceiveRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPagFAQ	] = {2028, 5,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagFAQ	] = { 219, 5,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEdiURLFAQ	] = {2035, 5,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -659,6 +655,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Links
    [ActSeeCrsLnk	] = {   9, 6,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCfgCrsLnk	] = {  96, 6,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFrcReaCrsLnk	] = { 875, 6,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgHavReaCrsLnk	] = { 885, 6,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActSelInfSrcCrsLnk	] = { 385, 6,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiTreLnk	] = {2110, 6,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodLnk	] = {2111, 6,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -679,14 +678,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodLnk	] = {2126, 6,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodLnk	] = {2127, 6,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActChgFrcReaCrsLnk	] = { 875, 6,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgHavReaCrsLnk	] = { 885, 6,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActSelInfSrcCrsLnk	] = { 385, 6,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActEditorCrsLnk	] = { 388, 6,TabCrs,NULL			,Inf_EditorLinks		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPlaTxtCrsLnk	] = { 400, 6,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtCrsLnk	] = { 401, 6,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtCrsLnk	] = {1099, 6,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtCrsLnk	] = {1107, 6,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtCrsLnk	] = {1107, 6,TabCrs,NULL			,Inf_ReceiveRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPagCrsLnk	] = {2029, 6,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagCrsLnk	] = { 164, 6,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEdiURLCrsLnk	] = {2036, 6,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -696,6 +691,9 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Assessment
    [ActSeeAss		] = {  15, 7,TabCrs,NULL			,Inf_ShowInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActCfgAss		] = {  69, 7,TabCrs,NULL			,Inf_ConfigInfo			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgFrcReaAss	] = { 883, 7,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgHavReaAss	] = { 898, 7,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActSelInfSrcAss	] = { 384, 7,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActEdiTreAss	] = {2128, 7,TabCrs,NULL			,Inf_EditTree			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActSeeTreNodAss	] = {2129, 7,TabCrs,NULL			,Inf_ViewNodeAfterEdit		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -716,14 +714,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActExpEdiTreNodAss	] = {2144, 7,TabCrs,NULL			,Inf_ExpandNodeEditing		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActConEdiTreNodAss	] = {2145, 7,TabCrs,NULL			,Inf_ContractNodeEditing	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
-   [ActChgFrcReaAss	] = { 883, 7,TabCrs,NULL			,Inf_ChangeForceReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActChgHavReaAss	] = { 898, 7,TabCrs,NULL			,Inf_ChangeIHaveReadInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActSelInfSrcAss	] = { 384, 7,TabCrs,NULL			,Inf_SetInfoSrc			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActEditorAss	] = { 386, 7,TabCrs,NULL			,Inf_EditorAssessment		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPlaTxtAss	] = { 387, 7,TabCrs,NULL			,Inf_EditPlainTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPlaTxtAss	] = { 397, 7,TabCrs,NULL			,Inf_ReceivePlainTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiRchTxtAss	] = {1100, 7,TabCrs,NULL			,Inf_EditRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRcvRchTxtAss	] = {1108, 7,TabCrs,NULL			,Inf_ReceiveRichTxtInfo	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRcvRchTxtAss	] = {1108, 7,TabCrs,NULL			,Inf_ReceiveRichTxtInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActEdiPagAss	] = {2030, 7,TabCrs,NULL			,Inf_EditPagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRcvPagAss	] = { 184, 7,TabCrs,NULL			,Inf_ReceivePagInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_DATA,Act_1ST},
    [ActEdiURLAss	] = {2037, 7,TabCrs,NULL			,Inf_EditURLInfo		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -2368,7 +2362,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #373 (obsolete action)
 	ActUnk,			// #374 (obsolete action)
 	ActUnk,			// #375 (obsolete action)
-	ActEditorBib,		// #376
+	ActUnk,			// #376 (obsolete action)
 	ActEdiPlaTxtBib,	// #377
 	ActSelInfSrcSyl,	// #378
 	ActEdiPlaTxtSyl,	// #379
@@ -2378,9 +2372,9 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #383 (obsolete action)
 	ActSelInfSrcAss,	// #384
 	ActSelInfSrcCrsLnk,	// #385
-	ActEditorAss,		// #386
+	ActUnk,			// #386 (obsolete action)
 	ActEdiPlaTxtAss,	// #387
-	ActEditorCrsLnk,	// #388
+	ActUnk,			// #388 (obsolete action)
 	ActUnk,			// #389 (obsolete action)
 	ActUnk,			// #390 (obsolete action)
 	ActUnk,			// #391 (obsolete action)
@@ -2396,7 +2390,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRcvPlaTxtCrsLnk,	// #401
 	ActUnk,			// #402 (obsolete action)
 	ActRcvURLSyl,		// #403
-	ActEditorFAQ,		// #404
+	ActUnk,			// #404 (obsolete action)
 	ActEdiPlaTxtFAQ,	// #405
 	ActRcvPlaTxtFAQ,	// #406
 	ActUnk,			// #407 (obsolete action)
@@ -2778,7 +2772,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActChgPlgURL,		// #783
 	ActSeeTchGui,		// #784
 	ActCfgTchGui,		// #785
-	ActEditorTchGui,	// #786
+	ActUnk,			// #786 (obsolete action)
 	ActEdiPlaTxtTchGui,	// #787
 	ActRcvPagTchGui,	// #788
 	ActSelInfSrcTchGui,	// #789
@@ -2844,7 +2838,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActSelInfSrcCrsInf,	// #849
 	ActEdiPlaTxtCrsInf,	// #850
 	ActRcvPlaTxtCrsInf,	// #851
-	ActEditorCrsInf,	// #852
+	ActUnk,			// #852 (obsolete action)
 	ActRcvPagCrsInf,	// #853
 	ActRcvURLCrsInf,	// #854
 	ActSeeMai,		// #855

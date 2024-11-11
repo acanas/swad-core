@@ -107,15 +107,15 @@ static Act_Action_t Inf_ActionsInfo[Inf_NUM_SOURCES][Inf_NUM_TYPES] =
    [Inf_SRC_NONE	][Inf_ASSESSMENT	] = ActUnk,
 
    [Inf_EDITOR		][Inf_UNKNOWN_TYPE	] = ActUnk,
-   [Inf_EDITOR		][Inf_INFORMATION	] = ActEditorCrsInf,
+   [Inf_EDITOR		][Inf_INFORMATION	] = ActEdiTreInf,
    [Inf_EDITOR		][Inf_PROGRAM		] = ActEdiTrePrg,
-   [Inf_EDITOR		][Inf_TEACH_GUIDE	] = ActEditorTchGui,
+   [Inf_EDITOR		][Inf_TEACH_GUIDE	] = ActEdiTreGui,
    [Inf_EDITOR		][Inf_SYLLABUS_LEC	] = ActEdiTreSyl,
    [Inf_EDITOR		][Inf_SYLLABUS_PRA	] = ActEdiTreSyl,
-   [Inf_EDITOR		][Inf_BIBLIOGRAPHY	] = ActEditorBib,
-   [Inf_EDITOR		][Inf_FAQ		] = ActEditorFAQ,
-   [Inf_EDITOR		][Inf_LINKS		] = ActEditorCrsLnk,
-   [Inf_EDITOR		][Inf_ASSESSMENT	] = ActEditorAss,
+   [Inf_EDITOR		][Inf_BIBLIOGRAPHY	] = ActEdiTreBib,
+   [Inf_EDITOR		][Inf_FAQ		] = ActEdiTreFAQ,
+   [Inf_EDITOR		][Inf_LINKS		] = ActEdiTreLnk,
+   [Inf_EDITOR		][Inf_ASSESSMENT	] = ActEdiTreAss,
 
    [Inf_PLAIN_TEXT	][Inf_UNKNOWN_TYPE	] = ActUnk,
    [Inf_PLAIN_TEXT	][Inf_INFORMATION	] = ActEdiPlaTxtCrsInf,
@@ -2225,88 +2225,4 @@ void Inf_ReceiveURLInfo (void)
       /***** Show again the form to select and send course info *****/
       Inf_ConfigInfo ();
      }
-  }
-
-/*****************************************************************************/
-/******************* Integrated editor for introduction **********************/
-/*****************************************************************************/
-
-void Inf_EditorCourseInfo (void)
-  {
-   extern const char *Txt_The_integrated_editor_is_not_yet_available;
-
-   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
-
-   /***** Show again the form to select and send course info *****/
-   Inf_ConfigInfo ();
-  }
-
-/*****************************************************************************/
-/****************** Integrated editor for teaching guide *********************/
-/*****************************************************************************/
-
-void Inf_EditorTeachingGuide (void)
-  {
-   extern const char *Txt_The_integrated_editor_is_not_yet_available;
-
-   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
-
-   /***** Show again the form to select and send course info *****/
-   Inf_ConfigInfo ();
-  }
-
-/*****************************************************************************/
-/******************* Integrated editor for bibliography **********************/
-/*****************************************************************************/
-
-void Inf_EditorBibliography (void)
-  {
-   extern const char *Txt_The_integrated_editor_is_not_yet_available;
-
-   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
-
-   /***** Show again the form to select and send course info *****/
-   Inf_ConfigInfo ();
-  }
-
-/*****************************************************************************/
-/*********************** Integrated editor for FAQ ***************************/
-/*****************************************************************************/
-
-void Inf_EditorFAQ (void)
-  {
-   extern const char *Txt_The_integrated_editor_is_not_yet_available;
-
-   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
-
-   /***** Show again the form to select and send course info *****/
-   Inf_ConfigInfo ();
-  }
-
-/*****************************************************************************/
-/********************* Integrated editor for links ***************************/
-/*****************************************************************************/
-
-void Inf_EditorLinks (void)
-  {
-   extern const char *Txt_The_integrated_editor_is_not_yet_available;
-
-   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
-
-   /***** Show again the form to select and send course info *****/
-   Inf_ConfigInfo ();
-  }
-
-/*****************************************************************************/
-/****************** Integrated editor for assessment system ******************/
-/*****************************************************************************/
-
-void Inf_EditorAssessment (void)
-  {
-   extern const char *Txt_The_integrated_editor_is_not_yet_available;
-
-   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
-
-   /***** Show again the form to select and send course info *****/
-   Inf_ConfigInfo ();
   }

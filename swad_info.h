@@ -135,11 +135,4 @@ void Inf_ReceivePagInfo (void);
 void Inf_EditURLInfo (void);
 void Inf_ReceiveURLInfo (void);
 
-void Inf_EditorCourseInfo (void);
-void Inf_EditorTeachingGuide (void);
-void Inf_EditorBibliography (void);
-void Inf_EditorFAQ (void);
-void Inf_EditorLinks (void);
-void Inf_EditorAssessment (void);
-
 #endif

@@ -361,24 +361,6 @@ typedef enum
 
 	ActSeeCrsInf,
 	ActPrnCrsInf,
-	ActEdiTreInf,		// #2038
-	ActSeeTreNodInf,	// #2039
-	ActFrmChgTreNodInf,	// #2040
-	ActFrmNewTreNodInf,	// #2041
-	ActChgTreNodInf,	// #2042
-	ActNewTreNodInf,	// #2043
-	ActReqRemTreNodInf,	// #2044
-	ActRemTreNodInf,	// #2045
-	ActHidTreNodInf,	// #2046
-	ActUnhTreNodInf,	// #2047
-	ActUp_TreNodInf,	// #2048
-	ActDwnTreNodInf,	// #2049
-	ActLftTreNodInf,	// #2050
-	ActRgtTreNodInf,	// #2051
-	ActExpSeeTreNodInf,	// #2052
-	ActConSeeTreNodInf,	// #2053
-	ActExpEdiTreNodInf,	// #2054
-	ActConEdiTreNodInf,	// #2055
 	ActChgCrsDegCfg,
 	ActRenCrsShoCfg,
 	ActRenCrsFulCfg,
@@ -388,15 +370,32 @@ typedef enum
 	ActChgFrcReaCrsInf,
 	ActChgHavReaCrsInf,
 	ActSelInfSrcCrsInf,
-	ActEdiPagCrsInf,
-	ActRcvPagCrsInf,
-	ActEdiURLCrsInf,
-	ActRcvURLCrsInf,
-	ActEditorCrsInf,
+	ActEdiTreInf,
+	ActSeeTreNodInf,
+	ActFrmChgTreNodInf,
+	ActFrmNewTreNodInf,
+	ActChgTreNodInf,
+	ActNewTreNodInf,
+	ActReqRemTreNodInf,
+	ActRemTreNodInf,
+	ActHidTreNodInf,
+	ActUnhTreNodInf,
+	ActUp_TreNodInf,
+	ActDwnTreNodInf,
+	ActLftTreNodInf,
+	ActRgtTreNodInf,
+	ActExpSeeTreNodInf,
+	ActConSeeTreNodInf,
+	ActExpEdiTreNodInf,
+	ActConEdiTreNodInf,
 	ActEdiPlaTxtCrsInf,
 	ActRcvPlaTxtCrsInf,
 	ActEdiRchTxtCrsInf,
 	ActRcvRchTxtCrsInf,
+	ActEdiPagCrsInf,
+	ActRcvPagCrsInf,
+	ActEdiURLCrsInf,
+	ActRcvURLCrsInf,
 	ActReqLnkCrsInf,
 
    // Program -----------------------------------------------------------------
@@ -439,42 +438,44 @@ typedef enum
 
 	ActSeeTchGui,
 	ActCfgTchGui,
-	ActEdiTreGui,		// #2056
-	ActSeeTreNodGui,	// #2057
-	ActFrmChgTreNodGui,	// #2058
-	ActFrmNewTreNodGui,	// #2059
-	ActChgTreNodGui,	// #2060
-	ActNewTreNodGui,	// #2061
-	ActReqRemTreNodGui,	// #2062
-	ActRemTreNodGui,	// #2063
-	ActHidTreNodGui,	// #2064
-	ActUnhTreNodGui,	// #2065
-	ActUp_TreNodGui,	// #2066
-	ActDwnTreNodGui,	// #2067
-	ActLftTreNodGui,	// #2068
-	ActRgtTreNodGui,	// #2069
-	ActExpSeeTreNodGui,	// #2070
-	ActConSeeTreNodGui,	// #2071
-	ActExpEdiTreNodGui,	// #2072
-	ActConEdiTreNodGui,	// #2073
 	ActChgFrcReaTchGui,
 	ActChgHavReaTchGui,
 	ActSelInfSrcTchGui,
-	ActEdiPagTchGui,
-	ActRcvPagTchGui,
-	ActEdiURLTchGui,
-	ActRcvURLTchGui,
-	ActEditorTchGui,
+	ActEdiTreGui,
+	ActSeeTreNodGui,
+	ActFrmChgTreNodGui,
+	ActFrmNewTreNodGui,
+	ActChgTreNodGui,
+	ActNewTreNodGui,
+	ActReqRemTreNodGui,
+	ActRemTreNodGui,
+	ActHidTreNodGui,
+	ActUnhTreNodGui,
+	ActUp_TreNodGui,
+	ActDwnTreNodGui,
+	ActLftTreNodGui,
+	ActRgtTreNodGui,
+	ActExpSeeTreNodGui,
+	ActConSeeTreNodGui,
+	ActExpEdiTreNodGui,
+	ActConEdiTreNodGui,
 	ActEdiPlaTxtTchGui,
 	ActRcvPlaTxtTchGui,
 	ActEdiRchTxtTchGui,
 	ActRcvRchTxtTchGui,
+	ActEdiPagTchGui,
+	ActRcvPagTchGui,
+	ActEdiURLTchGui,
+	ActRcvURLTchGui,
 	ActReqLnkTchGui,
 
    // Syllabus ----------------------------------------------------------------
 
 	ActSeeSyl,
 	ActCfgSyl,
+	ActChgFrcReaSyl,
+	ActChgHavReaSyl,
+	ActSelInfSrcSyl,
 	ActEdiTreSyl,
 	ActSeeTreNodSyl,
 	ActFrmChgTreNodSyl,
@@ -493,161 +494,154 @@ typedef enum
 	ActConSeeTreNodSyl,
 	ActExpEdiTreNodSyl,
 	ActConEdiTreNodSyl,
-	ActChgFrcReaSyl,
-	ActChgHavReaSyl,
-	ActSelInfSrcSyl,
-	ActEdiPagSyl,
-	ActRcvPagSyl,
-	ActEdiURLSyl,
-	ActRcvURLSyl,
 	ActEdiPlaTxtSyl,
 	ActRcvPlaTxtSyl,
 	ActEdiRchTxtSyl,
 	ActRcvRchTxtSyl,
+	ActEdiPagSyl,
+	ActRcvPagSyl,
+	ActEdiURLSyl,
+	ActRcvURLSyl,
 	ActReqLnkSyl,
 
    // Bibliography ------------------------------------------------------------
 
 	ActSeeBib,
 	ActCfgBib,
-	ActEdiTreBib,		// #2074
-	ActSeeTreNodBib,	// #2075
-	ActFrmChgTreNodBib,	// #2076
-	ActFrmNewTreNodBib,	// #2077
-	ActChgTreNodBib,	// #2078
-	ActNewTreNodBib,	// #2079
-	ActReqRemTreNodBib,	// #2080
-	ActRemTreNodBib,	// #2081
-	ActHidTreNodBib,	// #2082
-	ActUnhTreNodBib,	// #2083
-	ActUp_TreNodBib,	// #2084
-	ActDwnTreNodBib,	// #2085
-	ActLftTreNodBib,	// #2086
-	ActRgtTreNodBib,	// #2087
-	ActExpSeeTreNodBib,	// #2088
-	ActConSeeTreNodBib,	// #2089
-	ActExpEdiTreNodBib,	// #2090
-	ActConEdiTreNodBib,	// #2091
 	ActChgFrcReaBib,
 	ActChgHavReaBib,
 	ActSelInfSrcBib,
-	ActEdiPagBib,
-	ActRcvPagBib,
-	ActEdiURLBib,
-	ActRcvURLBib,
-	ActEditorBib,
+	ActEdiTreBib,
+	ActSeeTreNodBib,
+	ActFrmChgTreNodBib,
+	ActFrmNewTreNodBib,
+	ActChgTreNodBib,
+	ActNewTreNodBib,
+	ActReqRemTreNodBib,
+	ActRemTreNodBib,
+	ActHidTreNodBib,
+	ActUnhTreNodBib,
+	ActUp_TreNodBib,
+	ActDwnTreNodBib,
+	ActLftTreNodBib,
+	ActRgtTreNodBib,
+	ActExpSeeTreNodBib,
+	ActConSeeTreNodBib,
+	ActExpEdiTreNodBib,
+	ActConEdiTreNodBib,
 	ActEdiPlaTxtBib,
 	ActRcvPlaTxtBib,
 	ActEdiRchTxtBib,
 	ActRcvRchTxtBib,
+	ActEdiPagBib,
+	ActRcvPagBib,
+	ActEdiURLBib,
+	ActRcvURLBib,
 	ActReqLnkBib,
 
    // FAQ ---------------------------------------------------------------------
 
 	ActSeeFAQ,
 	ActCfgFAQ,
-	ActEdiTreFAQ,		// #2092
-	ActSeeTreNodFAQ,	// #2093
-	ActFrmChgTreNodFAQ,	// #2094
-	ActFrmNewTreNodFAQ,	// #2095
-	ActChgTreNodFAQ,	// #2096
-	ActNewTreNodFAQ,	// #2097
-	ActReqRemTreNodFAQ,	// #2098
-	ActRemTreNodFAQ,	// #2099
-	ActHidTreNodFAQ,	// #2100
-	ActUnhTreNodFAQ,	// #2101
-	ActUp_TreNodFAQ,	// #2102
-	ActDwnTreNodFAQ,	// #2103
-	ActLftTreNodFAQ,	// #2104
-	ActRgtTreNodFAQ,	// #2105
-	ActExpSeeTreNodFAQ,	// #2106
-	ActConSeeTreNodFAQ,	// #2107
-	ActExpEdiTreNodFAQ,	// #2108
-	ActConEdiTreNodFAQ,	// #2109
 	ActChgFrcReaFAQ,
 	ActChgHavReaFAQ,
 	ActSelInfSrcFAQ,
-	ActEdiPagFAQ,
-	ActRcvPagFAQ,
-	ActEdiURLFAQ,
-	ActRcvURLFAQ,
-	ActEditorFAQ,
+	ActEdiTreFAQ,
+	ActSeeTreNodFAQ,
+	ActFrmChgTreNodFAQ,
+	ActFrmNewTreNodFAQ,
+	ActChgTreNodFAQ,
+	ActNewTreNodFAQ,
+	ActReqRemTreNodFAQ,
+	ActRemTreNodFAQ,
+	ActHidTreNodFAQ,
+	ActUnhTreNodFAQ,
+	ActUp_TreNodFAQ,
+	ActDwnTreNodFAQ,
+	ActLftTreNodFAQ,
+	ActRgtTreNodFAQ,
+	ActExpSeeTreNodFAQ,
+	ActConSeeTreNodFAQ,
+	ActExpEdiTreNodFAQ,
+	ActConEdiTreNodFAQ,
 	ActEdiPlaTxtFAQ,
 	ActRcvPlaTxtFAQ,
 	ActEdiRchTxtFAQ,
 	ActRcvRchTxtFAQ,
+	ActEdiPagFAQ,
+	ActRcvPagFAQ,
+	ActEdiURLFAQ,
+	ActRcvURLFAQ,
 	ActReqLnkFAQ,
 
    // Links -------------------------------------------------------------------
 
 	ActSeeCrsLnk,
 	ActCfgCrsLnk,
-	ActEdiTreLnk,		// #2110
-	ActSeeTreNodLnk,	// #2111
-	ActFrmChgTreNodLnk,	// #2112
-	ActFrmNewTreNodLnk,	// #2113
-	ActChgTreNodLnk,	// #2114
-	ActNewTreNodLnk,	// #2115
-	ActReqRemTreNodLnk,	// #2116
-	ActRemTreNodLnk,	// #2117
-	ActHidTreNodLnk,	// #2118
-	ActUnhTreNodLnk,	// #2119
-	ActUp_TreNodLnk,	// #2120
-	ActDwnTreNodLnk,	// #2121
-	ActLftTreNodLnk,	// #2122
-	ActRgtTreNodLnk,	// #2123
-	ActExpSeeTreNodLnk,	// #2124
-	ActConSeeTreNodLnk,	// #2125
-	ActExpEdiTreNodLnk,	// #2126
-	ActConEdiTreNodLnk,	// #2127
 	ActChgFrcReaCrsLnk,
 	ActChgHavReaCrsLnk,
 	ActSelInfSrcCrsLnk,
-	ActEdiPagCrsLnk,
-	ActRcvPagCrsLnk,
-	ActEdiURLCrsLnk,
-	ActRcvURLCrsLnk,
-	ActEditorCrsLnk,
+	ActEdiTreLnk,
+	ActSeeTreNodLnk,
+	ActFrmChgTreNodLnk,
+	ActFrmNewTreNodLnk,
+	ActChgTreNodLnk,
+	ActNewTreNodLnk,
+	ActReqRemTreNodLnk,
+	ActRemTreNodLnk,
+	ActHidTreNodLnk,
+	ActUnhTreNodLnk,
+	ActUp_TreNodLnk,
+	ActDwnTreNodLnk,
+	ActLftTreNodLnk,
+	ActRgtTreNodLnk,
+	ActExpSeeTreNodLnk,
+	ActConSeeTreNodLnk,
+	ActExpEdiTreNodLnk,
+	ActConEdiTreNodLnk,
 	ActEdiPlaTxtCrsLnk,
 	ActRcvPlaTxtCrsLnk,
 	ActEdiRchTxtCrsLnk,
 	ActRcvRchTxtCrsLnk,
+	ActEdiPagCrsLnk,
+	ActRcvPagCrsLnk,
+	ActEdiURLCrsLnk,
+	ActRcvURLCrsLnk,
 	ActReqLnkCrsLnk,
 
    // Assessment --------------------------------------------------------------
 
 	ActSeeAss,
 	ActCfgAss,
-	ActEdiTreAss,		// #2128
-	ActSeeTreNodAss,	// #2129
-	ActFrmChgTreNodAss,	// #2130
-	ActFrmNewTreNodAss,	// #2131
-	ActChgTreNodAss,	// #2132
-	ActNewTreNodAss,	// #2133
-	ActReqRemTreNodAss,	// #2134
-	ActRemTreNodAss,	// #2135
-	ActHidTreNodAss,	// #2136
-	ActUnhTreNodAss,	// #2137
-	ActUp_TreNodAss,	// #2138
-	ActDwnTreNodAss,	// #2139
-	ActLftTreNodAss,	// #2140
-	ActRgtTreNodAss,	// #2141
-	ActExpSeeTreNodAss,	// #2142
-	ActConSeeTreNodAss,	// #2143
-	ActExpEdiTreNodAss,	// #2144
-	ActConEdiTreNodAss,	// #2145
 	ActChgFrcReaAss,
 	ActChgHavReaAss,
 	ActSelInfSrcAss,
-	ActEdiPagAss,
-	ActRcvPagAss,
-	ActEdiURLAss,
-	ActRcvURLAss,
-	ActEditorAss,
+	ActEdiTreAss,
+	ActSeeTreNodAss,
+	ActFrmChgTreNodAss,
+	ActFrmNewTreNodAss,
+	ActChgTreNodAss,
+	ActNewTreNodAss,
+	ActReqRemTreNodAss,
+	ActRemTreNodAss,
+	ActHidTreNodAss,
+	ActUnhTreNodAss,
+	ActUp_TreNodAss,
+	ActDwnTreNodAss,
+	ActLftTreNodAss,
+	ActRgtTreNodAss,
+	ActExpSeeTreNodAss,
+	ActConSeeTreNodAss,
+	ActExpEdiTreNodAss,
+	ActConEdiTreNodAss,
 	ActEdiPlaTxtAss,
 	ActRcvPlaTxtAss,
 	ActEdiRchTxtAss,
 	ActRcvRchTxtAss,
+	ActEdiPagAss,
+	ActRcvPagAss,
+	ActEdiURLAss,
+	ActRcvURLAss,
 	ActReqLnkAss,
 
    // Timetable ---------------------------------------------------------------
