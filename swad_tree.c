@@ -175,8 +175,6 @@ static void Tre_InsertNode (Inf_Type_t InfoType,
 			    const struct Tre_Node *ParentNode,
 		            struct Tre_Node *Node,const char *Txt);
 
-static Inf_Type_t Tre_GetInfoTypeFromCurrentAction (void);
-
 /*****************************************************************************/
 /**************************** List all tree nodes ****************************/
 /*****************************************************************************/
@@ -184,7 +182,7 @@ static Inf_Type_t Tre_GetInfoTypeFromCurrentAction (void);
 
 unsigned Tre_ShowTree (void)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    unsigned NumNodes;
 
    /***** Get list of tree nodes *****/
@@ -202,7 +200,7 @@ unsigned Tre_ShowTree (void)
 
 void Tre_EditTree (void)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
@@ -1512,7 +1510,7 @@ void Tre_ReqRemNode (void)
       [Inf_LINKS	] = ActRemTreNodLnk,
       [Inf_ASSESSMENT	] = ActRemTreNodAss,
      };
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1544,7 +1542,7 @@ void Tre_ReqRemNode (void)
 void Tre_RemoveNode (void)
   {
    extern const char *Txt_Item_X_removed;
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    struct Tre_NodeRange ToRemove;
 
@@ -1584,7 +1582,7 @@ void Tre_RemoveNode (void)
 
 void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1613,7 +1611,7 @@ void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
 void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    unsigned NumNode;
    bool Success = false;
@@ -1810,7 +1808,7 @@ static int Tre_GetNextBrother (int NumNode)
 void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
   {
    extern const char *Txt_Movement_not_allowed;
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    unsigned NumNode;
    struct Tre_NodeRange ToMove;
@@ -1864,7 +1862,7 @@ void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
 void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1942,7 +1940,7 @@ static unsigned Tre_GetLastChild (int NumNode)
 
 void Tre_ViewNodeAfterEdit (void)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1965,7 +1963,7 @@ void Tre_ViewNodeAfterEdit (void)
 
 void Tre_ReqChangeNode (void)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1992,7 +1990,7 @@ void Tre_ReqChangeNode (void)
 
 void Tre_ReqCreateNode (void)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -2172,7 +2170,7 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
 
 void Tre_ReceiveChgNode (void)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2217,7 +2215,7 @@ void Tre_ReceiveChgNode (void)
 
 void Tre_ReceiveNewNode (void)
   {
-   Inf_Type_t InfoType = Tre_GetInfoTypeFromCurrentAction ();;
+   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;		// Parent node
    struct Tre_Node NewNode;		// Node data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -2327,41 +2325,4 @@ static void Tre_InsertNode (Inf_Type_t InfoType,
 
    /***** Free list items *****/
    Tre_FreeListNodes ();
-  }
-
-/*****************************************************************************/
-/**************** Get tree type depending on current action ******************/
-/*****************************************************************************/
-
-static Inf_Type_t Tre_GetInfoTypeFromCurrentAction (void)
-  {
-   switch (Act_GetSuperAction (Gbl.Action.Act))
-     {
-      case ActSeePrg:
-         return Inf_PROGRAM;
-      case ActSeeTchGui:
-	 return Inf_TEACH_GUIDE;
-      case ActSeeSyl:
-	 switch (Inf_GetParInfoType ())
-	   {
-	    case Inf_SYLLABUS_LEC:
-	       return Inf_SYLLABUS_LEC;
-	    case Inf_SYLLABUS_PRA:
-	       return Inf_SYLLABUS_PRA;
-	    default:
-	       Err_WrongSyllabusExit ();
-	       return Inf_UNKNOWN_TYPE;	// Not reached
-	   }
-      case ActSeeBib:
-	 return Inf_BIBLIOGRAPHY;
-      case ActSeeFAQ:
-	 return Inf_FAQ;
-      case ActSeeCrsLnk:
-	 return Inf_LINKS;
-      case ActSeeAss:
-	 return Inf_ASSESSMENT;
-      default:
-	 Err_WrongActionExit ();
-	 return Inf_UNKNOWN_TYPE;	// Not reached
-     }
   }

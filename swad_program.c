@@ -62,6 +62,9 @@ static void Prg_BeforeTree (Tre_ListingType_t ListingType)
       [Tre_EDIT_NODES	] = Prg_PutIconsWhenEditing,
      };
 
+   /***** Set info type *****/
+   Gbl.Crs.Info.Type = Inf_PROGRAM;
+
    /***** Begin box *****/
    Box_BoxBegin (Txt_COURSE_program,
 		 FunctionToDrawContextualIcons[ListingType],NULL,

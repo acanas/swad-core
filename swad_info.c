@@ -277,7 +277,7 @@ static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
 
    /***** Set info source in database *****/
    if (InfoSrc != Inf_SRC_NONE)
-      Inf_DB_SetInfoSrc (Gbl.Crs.Info.FromDB.Src = InfoSrc);
+      Inf_DB_SetInfoSrc (InfoSrc);
 
    /***** Get info source and check if info must be read from database *****/
    Inf_GetAndCheckInfoSrcFromDB (&Gbl.Crs.Info);
@@ -1324,6 +1324,9 @@ void Inf_AsignInfoType (struct Inf_Info *Info)
       case ActSeeCrsInf:
          Info->Type = Inf_INFORMATION;
          break;
+      case ActSeePrg:
+         Info->Type = Inf_PROGRAM;
+         break;
       case ActSeeTchGui:
          Info->Type = Inf_TEACH_GUIDE;
          break;
@@ -1449,19 +1452,12 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
       row = mysql_fetch_row (mysql_res);
 
       /* Get info source (row[0]) and if students must read info (row[1]) */
-      Info->FromDB.Src        = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
+      Info->FromDB.Src = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
       Info->FromDB.MustBeRead = (row[1][0] == 'Y');
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   /***** Check if info is available or empty *****/
-   if (!Inf_CheckIfInfoAvailable (Info->FromDB.Src))
-      Info->FromDB.Src = Inf_SRC_NONE;
-
-   if (Info->FromDB.Src == Inf_SRC_NONE)
-      Info->FromDB.MustBeRead = false;
   }
 
 /*****************************************************************************/
