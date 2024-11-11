@@ -191,10 +191,20 @@ static Act_Action_t Inf_ActionsReqLnk[Inf_NUM_TYPES] =
   };
 
 /*****************************************************************************/
+/************************* Private global variables **************************/
+/*****************************************************************************/
+
+static struct
+  {
+   bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
+   bool ShowMsgMustBeRead;
+  } Inf_InfoMustBeRead;
+
+/*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc);
+static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Src_t InfoSrc);
 static void Inf_AfterTree (void);
 
 static void Inf_PutIconsWhenViewing (void *Info);
@@ -202,45 +212,45 @@ static void Inf_PutIconsWhenEditing (void *Info);
 static void Inf_PutIconsWhenConfiguring (void *Info);
 
 static bool Inf_CheckPage (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowPage (void);
+static bool Inf_CheckAndShowPage (Inf_Type_t InfoType);
 
 static bool Inf_CheckURL (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowURL (void);
+static bool Inf_CheckAndShowURL (Inf_Type_t InfoType);
 static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
                               char PathFile[PATH_MAX + 1]);
 
 static void Inf_ShowPage (const char *URL);
 
 //---------------------- Force students to read info? -------------------------
-static void Inf_ConfigInfoReading (void);
-static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
+static void Inf_ConfigInfoReading (const struct Inf_Info *Info);
+static void Inf_PutCheckboxForceStdsToReadInfo (const struct Inf_Info *Info,
 						HTM_Attributes_t Attributes);
-static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
+static void Inf_PutCheckboxConfirmIHaveReadInfo (Inf_Type_t InfoType);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
 
 //-----------------------------------------------------------------------------
-static void Inf_ConfigInfoSource (void);
+static void Inf_ConfigInfoSource (struct Inf_Info *Info);
 
-static bool Inf_CheckIfInfoAvailable (Inf_Src_t InfoSrc);
+static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
 
-static void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc);
-static void Inf_FormToEnterPlainTextEditor (Inf_Src_t InfoSrc);
-static void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc);
-static void Inf_FormToEnterSendingPage (Inf_Src_t InfoSrc);
-static void Inf_FormToEnterSendingURL (Inf_Src_t InfoSrc);
+static void Inf_FormToEnterIntegratedEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
+static void Inf_FormToEnterPlainTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
+static void Inf_FormToEnterRichTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
+static void Inf_FormToEnterSendingPage (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
+static void Inf_FormToEnterSendingURL (Inf_Type_t InfoType,Inf_Src_t InfoSrc);
 
 static bool Inf_CheckPlainTxt (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowPlainTxt (void);
+static bool Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType);
 
 static bool Inf_CheckRichTxt (Inf_Type_t InfoType);
-static bool Inf_CheckAndShowRichTxt (void);
+static bool Inf_CheckAndShowRichTxt (Inf_Type_t InfoType);
 
 /*****************************************************************************/
 /*************************** Before and after tree ***************************/
 /*****************************************************************************/
 
-static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
+static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
   {
    extern const char *Hlp_COURSE_Information_textual_information;
    extern const char *Hlp_COURSE_Program;
@@ -273,27 +283,27 @@ static void Inf_BeforeTree (Vie_ViewType_t ViewType,Inf_Src_t InfoSrc)
      };
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   Info->Type = Inf_AsignInfoType ();
 
    /***** Set info source in database *****/
    if (InfoSrc != Inf_SRC_NONE)
-      Inf_DB_SetInfoSrc (InfoSrc);
+      Inf_DB_SetInfoSrc (Info->Type,InfoSrc);
 
    /***** Get info source and check if info must be read from database *****/
-   Inf_GetAndCheckInfoSrcFromDB (&Gbl.Crs.Info);
+   Inf_GetAndCheckInfoSrcFromDB (Info);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-		 FunctionToDrawContextualIcons[ViewType],&Gbl.Crs.Info,
-		 *Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+   Box_BoxBegin (Txt_INFO_TITLE[Info->Type],
+		 FunctionToDrawContextualIcons[ViewType],Info,
+		 *Help[Info->Type],Box_NOT_CLOSABLE);
 
       /***** Form to select syllabus *****/
-      Syl_PutFormWhichSyllabus (ViewType);
+      Syl_PutFormWhichSyllabus (Info->Type,ViewType);
 
       /***** Only for students: Have I read this information? ******/
-      if (Gbl.Crs.Info.FromDB.MustBeRead && Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	 Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
-							// ...I have read this couse info
+      if (Info->FromDB.MustBeRead && Gbl.Usrs.Me.Role.Logged == Rol_STD)
+	 Inf_PutCheckboxConfirmIHaveReadInfo (Info->Type);	// Checkbox to confirm that...
+								// ...I have read this couse info
 
   }
 
@@ -310,22 +320,23 @@ static void Inf_AfterTree (void)
 void Inf_ShowInfo (void)
   {
    extern const char *Txt_No_information;
+   struct Inf_Info Info;
    bool ShowWarningNoInfo = false;
 
    /***** Begin box *****/
-   Inf_BeforeTree (Vie_VIEW,Inf_SRC_NONE);
+   Inf_BeforeTree (&Info,Vie_VIEW,Inf_SRC_NONE);
 
-      switch (Gbl.Crs.Info.FromDB.Src)
+      switch (Info.FromDB.Src)
 	{
 	 case Inf_SRC_NONE:
 	    ShowWarningNoInfo = true;
 	    break;
 	 case Inf_EDITOR:
-	    switch (Gbl.Crs.Info.Type)
+	    switch (Info.Type)
 	      {
 	       case Inf_SYLLABUS_LEC:
 	       case Inf_SYLLABUS_PRA:
-		  ShowWarningNoInfo = !Tre_ShowTree ();
+		  ShowWarningNoInfo = !Tre_ShowTree (Info.Type);
 		  break;
 	       case Inf_INFORMATION:
 	       case Inf_TEACH_GUIDE:
@@ -342,18 +353,18 @@ void Inf_ShowInfo (void)
 	      }
 	    break;
 	 case Inf_PLAIN_TEXT:
-	    ShowWarningNoInfo = !Inf_CheckAndShowPlainTxt ();
+	    ShowWarningNoInfo = !Inf_CheckAndShowPlainTxt (Info.Type);
 	    break;
 	 case Inf_RICH_TEXT:
-	    ShowWarningNoInfo = !Inf_CheckAndShowRichTxt ();
+	    ShowWarningNoInfo = !Inf_CheckAndShowRichTxt (Info.Type);
 	    break;
 	 case Inf_PAGE:
 	    /***** Open file with web page *****/
-	    ShowWarningNoInfo = !Inf_CheckAndShowPage ();
+	    ShowWarningNoInfo = !Inf_CheckAndShowPage (Info.Type);
 	    break;
 	 case Inf_URL:
 	    /***** Check if file with URL exists *****/
-	    ShowWarningNoInfo = !Inf_CheckAndShowURL ();
+	    ShowWarningNoInfo = !Inf_CheckAndShowURL (Info.Type);
 	    break;
 	}
 
@@ -370,8 +381,10 @@ void Inf_ShowInfo (void)
 
 void Inf_EditTree (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_EditTree ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_EditTree (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -381,8 +394,10 @@ void Inf_EditTree (void)
 
 void Inf_ViewNodeAfterEdit (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ViewNodeAfterEdit ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ViewNodeAfterEdit (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -392,15 +407,19 @@ void Inf_ViewNodeAfterEdit (void)
 
 void Inf_ReqChangeNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ReqChangeNode ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ReqChangeNode (Info.Type);
    Inf_AfterTree ();
   }
 
 void Inf_ReqCreateNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ReqCreateNode ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ReqCreateNode (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -410,15 +429,19 @@ void Inf_ReqCreateNode (void)
 
 void Inf_ReceiveChgNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ReceiveChgNode ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ReceiveChgNode (Info.Type);
    Inf_AfterTree ();
   }
 
 void Inf_ReceiveNewNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ReceiveNewNode ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ReceiveNewNode (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -428,15 +451,19 @@ void Inf_ReceiveNewNode (void)
 
 void Inf_ReqRemNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ReqRemNode ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ReqRemNode (Info.Type);
    Inf_AfterTree ();
   }
 
 void Inf_RemoveNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_RemoveNode ();
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_RemoveNode (Info.Type);
    Inf_AfterTree ();
   }
 
@@ -446,15 +473,19 @@ void Inf_RemoveNode (void)
 
 void Inf_HideNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_HideOrUnhideNode (HidVis_HIDDEN);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_HideOrUnhideNode (Info.Type,HidVis_HIDDEN);
    Inf_AfterTree ();
   }
 
 void Inf_UnhideNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_HideOrUnhideNode (HidVis_VISIBLE);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_HideOrUnhideNode (Info.Type,HidVis_VISIBLE);
    Inf_AfterTree ();
   }
 
@@ -464,15 +495,19 @@ void Inf_UnhideNode (void)
 
 void Inf_MoveUpNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_MoveUpDownNode (Tre_MOVE_UP);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_MoveUpDownNode (Info.Type,Tre_MOVE_UP);
    Inf_AfterTree ();
   }
 
 void Inf_MoveDownNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_MoveUpDownNode (Tre_MOVE_DOWN);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_MoveUpDownNode (Info.Type,Tre_MOVE_DOWN);
    Inf_AfterTree ();
   }
 
@@ -482,15 +517,19 @@ void Inf_MoveDownNode (void)
 
 void Inf_MoveLeftNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_MoveLeftRightNode (Tre_MOVE_LEFT);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_MoveLeftRightNode (Info.Type,Tre_MOVE_LEFT);
    Inf_AfterTree ();
   }
 
 void Inf_MoveRightNode (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_MoveLeftRightNode (Tre_MOVE_RIGHT);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_MoveLeftRightNode (Info.Type,Tre_MOVE_RIGHT);
    Inf_AfterTree ();
   }
 
@@ -500,29 +539,37 @@ void Inf_MoveRightNode (void)
 
 void Inf_ExpandNodeSeeing (void)
   {
-   Inf_BeforeTree (Vie_VIEW,Inf_EDITOR);
-      Tre_ExpandContractNode (Tre_EXPAND,Tre_VIEW);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_VIEW,Inf_EDITOR);
+      Tre_ExpandContractNode (Info.Type,Tre_EXPAND,Tre_VIEW);
    Inf_AfterTree ();
   }
 
 void Inf_ContractNodeSeeing (void)
   {
-   Inf_BeforeTree (Vie_VIEW,Inf_EDITOR);
-      Tre_ExpandContractNode (Tre_CONTRACT,Tre_VIEW);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_VIEW,Inf_EDITOR);
+      Tre_ExpandContractNode (Info.Type,Tre_CONTRACT,Tre_VIEW);
    Inf_AfterTree ();
   }
 
 void Inf_ExpandNodeEditing (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ExpandContractNode (Tre_EXPAND,Tre_EDIT_NODES);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ExpandContractNode (Info.Type,Tre_EXPAND,Tre_EDIT_NODES);
    Inf_AfterTree ();
   }
 
 void Inf_ContractNodeEditing (void)
   {
-   Inf_BeforeTree (Vie_EDIT,Inf_EDITOR);
-      Tre_ExpandContractNode (Tre_CONTRACT,Tre_EDIT_NODES);
+   struct Inf_Info Info;
+
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
+      Tre_ExpandContractNode (Info.Type,Tre_CONTRACT,Tre_EDIT_NODES);
    Inf_AfterTree ();
   }
 
@@ -650,7 +697,7 @@ static bool Inf_CheckPage (Inf_Type_t InfoType)
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckAndShowPage (void)
+static bool Inf_CheckAndShowPage (Inf_Type_t InfoType)
   {
    char PathRelDirHTML[PATH_MAX + 1];
    char PathRelFileHTML[PATH_MAX + 1 + 10 + 1];
@@ -660,7 +707,7 @@ static bool Inf_CheckAndShowPage (void)
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
 		      PathRelDirHTML);
 
    /***** Open file with web page *****/
@@ -671,7 +718,7 @@ static bool Inf_CheckAndShowPage (void)
      {
       snprintf (URL,sizeof (URL),"%s/%ld/%s/index.html",
 	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
+	        Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
       return true;
@@ -684,7 +731,7 @@ static bool Inf_CheckAndShowPage (void)
      {
       snprintf (URL,sizeof (URL),"%s/%ld/%s/index.htm",
 	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-	        Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
+	        Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
       return true;
@@ -710,6 +757,7 @@ void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 
 
 static bool Inf_CheckURL (Inf_Type_t InfoType)
   {
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
 
@@ -719,12 +767,12 @@ static bool Inf_CheckURL (Inf_Type_t InfoType)
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
-	 Gbl.Crs.Info.URL[0] = '\0';
+      if (fgets (URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
+	 URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
 
-      if (Gbl.Crs.Info.URL[0])
+      if (URL[0])
          return true;
      }
 
@@ -736,26 +784,26 @@ static bool Inf_CheckURL (Inf_Type_t InfoType)
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckAndShowURL (void)
+static bool Inf_CheckAndShowURL (Inf_Type_t InfoType)
   {
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
-		     PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,PathFile);
 
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
-	 Gbl.Crs.Info.URL[0] = '\0';
+      if (fgets (URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
+	 URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
 
-      if (Gbl.Crs.Info.URL[0])
+      if (URL[0])
 	{
-	 Inf_ShowPage (Gbl.Crs.Info.URL);
+	 Inf_ShowPage (URL);
          return true;
 	}
      }
@@ -779,7 +827,8 @@ static void Inf_BuildPathURL (long CrsCod,Inf_Type_t InfoType,
 /*****************************************************************************/
 // This function is called only from web service
 
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1])
+void Inf_WriteURLIntoTxtBuffer (Inf_Type_t InfoType,
+				char TxtBuffer[WWW_MAX_BYTES_WWW + 1])
   {
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
@@ -788,7 +837,7 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1])
    TxtBuffer[0] = '\0';
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
 		     PathFile);
 
    /***** Check if file with URL exists *****/
@@ -823,14 +872,15 @@ static void Inf_ShowPage (const char *URL)
 
 void Inf_SetInfoSrc (void)
   {
+   struct Inf_Info Info;
    Inf_Src_t InfoSrcSelected;
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   Info.Type = Inf_AsignInfoType ();
 
    /***** Set info source into database *****/
    InfoSrcSelected = Inf_GetInfoSrcFromForm ();
-   Inf_DB_SetInfoSrc (InfoSrcSelected);
+   Inf_DB_SetInfoSrc (Info.Type,InfoSrcSelected);
 
    /***** Show the selected info *****/
    Inf_ShowInfo ();
@@ -842,14 +892,16 @@ void Inf_SetInfoSrc (void)
 
 void Inf_ConfigInfo (void)
   {
+   struct Inf_Info Info;
+
    /***** Begin box *****/
-   Inf_BeforeTree (Vie_CONFIG,Inf_SRC_NONE);
+   Inf_BeforeTree (&Info,Vie_CONFIG,Inf_SRC_NONE);
 
       /***** Force students to read info? *****/
-      Inf_ConfigInfoReading ();
+      Inf_ConfigInfoReading (&Info);
 
       /***** Information source *****/
-      Inf_ConfigInfoSource ();
+      Inf_ConfigInfoSource (&Info);
 
    /***** End box *****/
    Inf_AfterTree ();
@@ -859,7 +911,7 @@ void Inf_ConfigInfo (void)
 /********** Configure info reading (force students to read info?) ************/
 /*****************************************************************************/
 
-static void Inf_ConfigInfoReading (void)
+static void Inf_ConfigInfoReading (const struct Inf_Info *Info)
   {
    extern const char *Txt_Reading;
 
@@ -868,7 +920,7 @@ static void Inf_ConfigInfoReading (void)
 	 // Checkbox to force students to read this couse info
 	 Mnu_ContextMenuBegin ();
 	    // Non-editing teachers can not change the status of checkbox
-	    Inf_PutCheckboxForceStdsToReadInfo (Gbl.Crs.Info.FromDB.MustBeRead,
+	    Inf_PutCheckboxForceStdsToReadInfo (Info,
 						(Gbl.Usrs.Me.Role.Logged == Rol_NET) ? HTM_DISABLED :
 										       HTM_NO_ATTR);
 	 Mnu_ContextMenuEnd ();
@@ -879,7 +931,7 @@ static void Inf_ConfigInfoReading (void)
 /********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
-static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
+static void Inf_PutCheckboxForceStdsToReadInfo (const struct Inf_Info *Info,
 						HTM_Attributes_t Attributes)
   {
    extern const char *Txt_Force_students_to_read_this_information;
@@ -897,13 +949,13 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
       [Inf_ASSESSMENT	] = {ActChgFrcReaAss	,NULL,NULL},
      };
 
-   Lay_PutContextualCheckbox (Actions[Gbl.Crs.Info.Type].NextAction,
-                              Actions[Gbl.Crs.Info.Type].FuncPars,
-                              Actions[Gbl.Crs.Info.Type].Args,
+   Lay_PutContextualCheckbox (Actions[Info->Type].NextAction,
+                              Actions[Info->Type].FuncPars,
+                              Actions[Info->Type].Args,
                               "MustBeRead",
                               Attributes |
-                              (MustBeRead ? HTM_CHECKED :
-                        		    HTM_NO_ATTR) |
+                              (Info->FromDB.MustBeRead ? HTM_CHECKED :
+                        				 HTM_NO_ATTR) |
                               HTM_SUBMIT_ON_CHANGE,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
@@ -913,7 +965,7 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,
 /********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
-static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
+static void Inf_PutCheckboxConfirmIHaveReadInfo (Inf_Type_t InfoType)
   {
    extern const char *Txt_I_have_read_this_information;
    static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
@@ -929,12 +981,12 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
       [Inf_LINKS	] = {ActChgHavReaCrsLnk	,NULL,NULL},
       [Inf_ASSESSMENT	] = {ActChgHavReaAss	,NULL,NULL},
      };
-   bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo ();
+   bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo (InfoType);
 
    Mnu_ContextMenuBegin ();
-      Lay_PutContextualCheckbox (Actions[Gbl.Crs.Info.Type].NextAction,
-				 Actions[Gbl.Crs.Info.Type].FuncPars,
-				 Actions[Gbl.Crs.Info.Type].Args,
+      Lay_PutContextualCheckbox (Actions[InfoType].NextAction,
+				 Actions[InfoType].FuncPars,
+				 Actions[InfoType].Args,
 				 "IHaveRead",
 				 (IHaveRead ? HTM_CHECKED :
 					      HTM_NO_ATTR) | HTM_SUBMIT_ON_CHANGE,
@@ -947,7 +999,7 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
 /********* Get if students must read any info about current course ***********/
 /*****************************************************************************/
 
-bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
+void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -959,7 +1011,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    for (InfoType  = (Inf_Type_t) 0;
 	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
 	InfoType++)
-      Gbl.Crs.Info.MustBeRead[InfoType] = false;
+      Inf_InfoMustBeRead.MustBeRead[InfoType] = false;
 
    /***** Get info types where students must read info *****/
    NumInfos = Inf_DB_GetInfoTypesfIMustReadInfo (&mysql_res);
@@ -974,13 +1026,13 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       /* Get info type (row[0]) */
       InfoType = Inf_DB_ConvertFromStrDBToInfoType (row[0]);
 
-      Gbl.Crs.Info.MustBeRead[InfoType] = true;
+      Inf_InfoMustBeRead.MustBeRead[InfoType] = true;
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return (NumInfos != 0);
+   Inf_InfoMustBeRead.ShowMsgMustBeRead = (NumInfos != 0);
   }
 
 /*****************************************************************************/
@@ -1007,38 +1059,41 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Inf_Type_t InfoType;
    const char *TitleAction;
 
-   /***** Begin box *****/
-   Box_BoxBegin (Txt_Required_reading,NULL,NULL,NULL,Box_CLOSABLE);
+   if (Inf_InfoMustBeRead.ShowMsgMustBeRead)
+     {
+      /***** Begin box *****/
+      Box_BoxBegin (Txt_Required_reading,NULL,NULL,NULL,Box_CLOSABLE);
 
-      /***** Write message *****/
-      Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
+	 /***** Write message *****/
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
 
-      /***** Write every information I must read *****/
-      HTM_DIV_Begin ("class=\"CM\"");
-	 HTM_UL_Begin ("class=\"LIST_I_MUST_READ\"");
-	    for (InfoType  = (Inf_Type_t) 0;
-		 InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
-		 InfoType++)
-	       if (Gbl.Crs.Info.MustBeRead[InfoType])
-		 {
-		  HTM_LI_Begin (NULL);
-		     Frm_BeginForm (Actions[InfoType].NextAction);
-			if (Actions[InfoType].FuncPars)
-			   Actions[InfoType].FuncPars (Actions[InfoType].Args);
-		        TitleAction = Act_GetTitleAction (Actions[InfoType].NextAction);
-			HTM_BUTTON_Submit_Begin (TitleAction,
-						 "class=\"BT_LINK FORM_IN_%s\"",
-						 The_GetSuffix ());
-			   HTM_Txt (TitleAction);
-			HTM_BUTTON_End ();
-		     Frm_EndForm ();
-		  HTM_LI_End ();
-		 }
-	 HTM_UL_End ();
-      HTM_DIV_End ();
+	 /***** Write every information I must read *****/
+	 HTM_DIV_Begin ("class=\"CM\"");
+	    HTM_UL_Begin ("class=\"LIST_I_MUST_READ\"");
+	       for (InfoType  = (Inf_Type_t) 0;
+		    InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
+		    InfoType++)
+		  if (Inf_InfoMustBeRead.MustBeRead[InfoType])
+		    {
+		     HTM_LI_Begin (NULL);
+			Frm_BeginForm (Actions[InfoType].NextAction);
+			   if (Actions[InfoType].FuncPars)
+			      Actions[InfoType].FuncPars (Actions[InfoType].Args);
+			   TitleAction = Act_GetTitleAction (Actions[InfoType].NextAction);
+			   HTM_BUTTON_Submit_Begin (TitleAction,
+						    "class=\"BT_LINK FORM_IN_%s\"",
+						    The_GetSuffix ());
+			      HTM_Txt (TitleAction);
+			   HTM_BUTTON_End ();
+			Frm_EndForm ();
+		     HTM_LI_End ();
+		    }
+	    HTM_UL_End ();
+	 HTM_DIV_End ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
+     }
   }
 
 /*****************************************************************************/
@@ -1049,10 +1104,17 @@ void Inf_ChangeForceReadInfo (void)
   {
    extern const char *Txt_Students_now_are_required_to_read_this_information;
    extern const char *Txt_Students_are_no_longer_obliged_to_read_this_information;
-   bool MustBeRead = Inf_GetMustBeReadFromForm ();
+   Inf_Type_t InfoType;
+   bool MustBeRead;
+
+   /***** Set info type *****/
+   InfoType = Inf_AsignInfoType ();
+
+   /***** Set whether info must be read by students *****/
+   MustBeRead = Inf_GetMustBeReadFromForm ();
 
    /***** Set status (if info must be read or not) into database *****/
-   Inf_DB_SetForceRead (MustBeRead);
+   Inf_DB_SetForceRead (InfoType,MustBeRead);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,
@@ -1071,10 +1133,17 @@ void Inf_ChangeIHaveReadInfo (void)
   {
    extern const char *Txt_You_have_confirmed_that_you_have_read_this_information;
    extern const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information;
-   bool IHaveRead = Inf_GetIfIHaveReadFromForm ();
+   Inf_Type_t InfoType;
+   bool IHaveRead;
+
+   /***** Set info type *****/
+   InfoType = Inf_AsignInfoType ();
+
+   /***** Set whether I have read information *****/
+   IHaveRead = Inf_GetIfIHaveReadFromForm ();
 
    /***** Set status (if I have read or not a information) into database *****/
-   Inf_DB_SetIHaveRead (IHaveRead);
+   Inf_DB_SetIHaveRead (InfoType,IHaveRead);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,
@@ -1107,7 +1176,7 @@ static bool Inf_GetIfIHaveReadFromForm (void)
 /************************** Configure info source ****************************/
 /*****************************************************************************/
 
-static void Inf_ConfigInfoSource (void)
+static void Inf_ConfigInfoSource (struct Inf_Info *Info)
   {
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
@@ -1128,7 +1197,7 @@ static void Inf_ConfigInfoSource (void)
       [Inf_ASSESSMENT	] = ActSelInfSrcAss,
      };
    /* Functions to write forms in course edition (FAQ, links, etc.) */
-   static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(Inf_Src_t InfoSrc) =
+   static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(Inf_Type_t InfoType,Inf_Src_t InfoSrc) =
      {
       [Inf_SRC_NONE	] = NULL,
       [Inf_EDITOR	] = Inf_FormToEnterIntegratedEditor,
@@ -1142,15 +1211,15 @@ static void Inf_ConfigInfoSource (void)
    for (InfoSrc  = (Inf_Src_t) 0;
 	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
 	InfoSrc++)
-      InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (InfoSrc);
+      InfoAvailable[InfoSrc] = Inf_CheckIfInfoAvailable (Info->Type,InfoSrc);
 
    /***** Set info source to none
 	  when no info available for the current source *****/
-   if (Gbl.Crs.Info.FromDB.Src != Inf_SRC_NONE &&
-       !InfoAvailable[Gbl.Crs.Info.FromDB.Src])
+   if (Info->FromDB.Src != Inf_SRC_NONE &&
+       !InfoAvailable[Info->FromDB.Src])
      {
-      Gbl.Crs.Info.FromDB.Src = Inf_SRC_NONE;
-      Inf_DB_SetInfoSrc (Inf_SRC_NONE);
+      Info->FromDB.Src = Inf_SRC_NONE;
+      Inf_DB_SetInfoSrc (Info->Type,Inf_SRC_NONE);
      }
 
    HTM_FIELDSET_Begin (NULL);
@@ -1166,17 +1235,17 @@ static void Inf_ConfigInfoSource (void)
 
 	       /* Select info source */
 	       HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
-			     InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
+			     InfoSrc == Info->FromDB.Src ? " BG_HIGHLIGHT" :
 								  "");
-		  Frm_BeginForm (Actions[Gbl.Crs.Info.Type]);
-		     Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+		  Frm_BeginForm (Actions[Info->Type]);
+		     Inf_PutParInfoType (&Info->Type);
 		     HTM_INPUT_RADIO ("InfoSrc",
-				      ((InfoSrc == Gbl.Crs.Info.FromDB.Src) ? HTM_CHECKED :
-									      HTM_NO_ATTR) |
+				      ((InfoSrc == Info->FromDB.Src) ? HTM_CHECKED :
+								       HTM_NO_ATTR) |
 				      ((InfoSrc == Inf_SRC_NONE ||
 				       InfoAvailable[InfoSrc]) ? HTM_NO_ATTR :
 								 HTM_DISABLED) |
-				      ((InfoSrc != Gbl.Crs.Info.FromDB.Src &&
+				      ((InfoSrc != Info->FromDB.Src &&
 				       (InfoSrc == Inf_SRC_NONE ||
 				       InfoAvailable[InfoSrc])) ? HTM_SUBMIT_ON_CLICK :
 								  HTM_NO_ATTR),
@@ -1187,8 +1256,8 @@ static void Inf_ConfigInfoSource (void)
 
 	       /* Form for this info source */
 	       HTM_TD_Begin ("class=\"LT%s\"",
-			     InfoSrc == Gbl.Crs.Info.FromDB.Src ? " BG_HIGHLIGHT" :
-								  "");
+			     InfoSrc == Info->FromDB.Src ? " BG_HIGHLIGHT" :
+							   "");
 		  HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"FORM_IN_%s\"",
 				   (unsigned) InfoSrc,The_GetSuffix ());
 		     HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
@@ -1201,7 +1270,7 @@ static void Inf_ConfigInfoSource (void)
 		     HTM_SPAN_End ();
 		    }
 		  if (Inf_FormsForEditionTypes[InfoSrc])
-		     Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
+		     Inf_FormsForEditionTypes[InfoSrc] (Info->Type,InfoSrc);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -1215,31 +1284,31 @@ static void Inf_ConfigInfoSource (void)
 /* Check if there is info available for current info type and a given source */
 /*****************************************************************************/
 
-static bool Inf_CheckIfInfoAvailable (Inf_Src_t InfoSrc)
+static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
    switch (InfoSrc)
      {
       case Inf_SRC_NONE:
 	 return false;
       case Inf_EDITOR:
-         switch (Gbl.Crs.Info.Type)
+         switch (InfoType)
            {
             case Inf_PROGRAM:
             case Inf_SYLLABUS_LEC:
             case Inf_SYLLABUS_PRA:
-               return (Tre_DB_GetNumNodes (Gbl.Crs.Info.Type,Hie_CRS) != 0);
+               return (Tre_DB_GetNumNodes (InfoType,Hie_CRS) != 0);
             default:
                return false;
            }
          return false;	// Not reached
       case Inf_PLAIN_TEXT:
-         return Inf_CheckPlainTxt (Gbl.Crs.Info.Type);
+         return Inf_CheckPlainTxt (InfoType);
       case Inf_RICH_TEXT:
-         return Inf_CheckRichTxt (Gbl.Crs.Info.Type);
+         return Inf_CheckRichTxt (InfoType);
       case Inf_PAGE:
-	 return Inf_CheckPage (Gbl.Crs.Info.Type);
+	 return Inf_CheckPage (InfoType);
       case Inf_URL:
-	 return Inf_CheckURL (Gbl.Crs.Info.Type);
+	 return Inf_CheckURL (InfoType);
      }
 
    return false;	// Not reached
@@ -1249,11 +1318,11 @@ static bool Inf_CheckIfInfoAvailable (Inf_Src_t InfoSrc)
 /****************** Form to enter in integrated editor ***********************/
 /*****************************************************************************/
 
-static void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc)
+static void Inf_FormToEnterIntegratedEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-      Inf_PutParInfoType (&Gbl.Crs.Info.Type);
-      Btn_PutConfirmButton (Act_GetActionText (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]));
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
+      Inf_PutParInfoType (&InfoType);
+      Btn_PutConfirmButton (Act_GetActionText (Inf_ActionsInfo[InfoSrc][InfoType]));
    Frm_EndForm ();
   }
 
@@ -1261,12 +1330,12 @@ static void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc)
 /****************** Form to enter in plain text editor ***********************/
 /*****************************************************************************/
 
-static void Inf_FormToEnterPlainTextEditor (Inf_Src_t InfoSrc)
+static void Inf_FormToEnterPlainTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
    extern const char *Txt_Edit_plain_text;
 
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-      Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
+      Inf_PutParInfoType (&InfoType);
       Btn_PutConfirmButton (Txt_Edit_plain_text);
    Frm_EndForm ();
   }
@@ -1275,12 +1344,12 @@ static void Inf_FormToEnterPlainTextEditor (Inf_Src_t InfoSrc)
 /******************* Form to enter in rich text editor ***********************/
 /*****************************************************************************/
 
-static void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc)
+static void Inf_FormToEnterRichTextEditor (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
    extern const char *Txt_Edit_rich_text;
 
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-      Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
+      Inf_PutParInfoType (&InfoType);
       Btn_PutConfirmButton (Txt_Edit_rich_text);
    Frm_EndForm ();
   }
@@ -1289,12 +1358,12 @@ static void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc)
 /******************* Form to upload a file with a page ***********************/
 /*****************************************************************************/
 
-static void Inf_FormToEnterSendingPage (Inf_Src_t InfoSrc)
+static void Inf_FormToEnterSendingPage (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
    extern const char *Txt_Upload_file;
 
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-      Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
+      Inf_PutParInfoType (&InfoType);
       Btn_PutConfirmButton (Txt_Upload_file);
    Frm_EndForm ();
   }
@@ -1303,12 +1372,12 @@ static void Inf_FormToEnterSendingPage (Inf_Src_t InfoSrc)
 /********************* Form to send a link to a web page *********************/
 /*****************************************************************************/
 
-static void Inf_FormToEnterSendingURL (Inf_Src_t InfoSrc)
+static void Inf_FormToEnterSendingURL (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
    extern const char *Txt_Send_URL;
 
-   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-      Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+   Frm_BeginForm (Inf_ActionsInfo[InfoSrc][InfoType]);
+      Inf_PutParInfoType (&InfoType);
       Btn_PutConfirmButton (Txt_Send_URL);
    Frm_EndForm ();
   }
@@ -1317,37 +1386,30 @@ static void Inf_FormToEnterSendingURL (Inf_Src_t InfoSrc)
 /******** Returns bibliography, assessment, etc. from Gbl.Action.Act *********/
 /*****************************************************************************/
 
-void Inf_AsignInfoType (struct Inf_Info *Info)
+Inf_Type_t Inf_AsignInfoType (void)
   {
    switch (Act_GetSuperAction (Gbl.Action.Act))
      {
       case ActSeeCrsInf:
-         Info->Type = Inf_INFORMATION;
-         break;
+         return Inf_INFORMATION;
       case ActSeePrg:
-         Info->Type = Inf_PROGRAM;
-         break;
+         return Inf_PROGRAM;
       case ActSeeTchGui:
-         Info->Type = Inf_TEACH_GUIDE;
-         break;
+         return Inf_TEACH_GUIDE;
       case ActSeeSyl:
-	 Info->Type = Inf_GetParInfoType ();
-	 break;
+	 return Inf_GetParInfoType ();
       case ActSeeBib:
-         Info->Type = Inf_BIBLIOGRAPHY;
-         break;
+         return Inf_BIBLIOGRAPHY;
       case ActSeeFAQ:
-         Info->Type = Inf_FAQ;
-         break;
+         return Inf_FAQ;
       case ActSeeCrsLnk:
-         Info->Type = Inf_LINKS;
-         break;
+         return Inf_LINKS;
       case ActSeeAss:
-         Info->Type = Inf_ASSESSMENT;
+         return Inf_ASSESSMENT;
          break;
       default:
 	 Err_WrongActionExit ();
-	 break;
+	 return Inf_UNKNOWN_TYPE;	// Not reached
      }
   }
 
@@ -1518,18 +1580,18 @@ static bool Inf_CheckPlainTxt (Inf_Type_t InfoType)
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckAndShowPlainTxt (void)
+static bool Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,NULL);
 
    if (TxtHTML[0])
      {
-      switch (Gbl.Crs.Info.Type)
+      switch (InfoType)
 	{
 	 case Inf_INFORMATION:
 	 case Inf_TEACH_GUIDE:
@@ -1580,7 +1642,7 @@ static bool Inf_CheckRichTxt (Inf_Type_t InfoType)
 /*****************************************************************************/
 // Return true if info available
 
-static bool Inf_CheckAndShowRichTxt (void)
+static bool Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -1595,12 +1657,12 @@ static bool Inf_CheckAndShowRichTxt (void)
    int ReturnCode;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,TxtMD);
 
    if (TxtMD[0])
      {
-      switch (Gbl.Crs.Info.Type)
+      switch (InfoType)
 	{
 	 case Inf_INFORMATION:
 	 case Inf_TEACH_GUIDE:
@@ -1733,19 +1795,20 @@ void Inf_EditPlainTxtInfo (void)
       [Inf_LINKS	] = &Hlp_COURSE_Links_edit,
       [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment_edit,
      };
+   Inf_Type_t InfoType;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   InfoType = Inf_AsignInfoType ();
 
    /***** Begin form and box *****/
-   Frm_BeginForm (Actions[Gbl.Crs.Info.Type].NextAction);
-      if (Actions[Gbl.Crs.Info.Type].FuncPars)
-	 Actions[Gbl.Crs.Info.Type].FuncPars (Actions[Gbl.Crs.Info.Type].Args);
-      Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
-		    *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+   Frm_BeginForm (Actions[InfoType].NextAction);
+      if (Actions[InfoType].FuncPars)
+	 Actions[InfoType].FuncPars (Actions[InfoType].Args);
+      Box_BoxBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
+		    *HelpEdit[InfoType],Box_NOT_CLOSABLE);
 
-	 switch (Gbl.Crs.Info.Type)
+	 switch (InfoType)
 	   {
 	    case Inf_INFORMATION:
 	    case Inf_TEACH_GUIDE:
@@ -1756,7 +1819,7 @@ void Inf_EditPlainTxtInfo (void)
 	   }
 
 	 /***** Get info text from database *****/
-	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
 			       TxtHTML,NULL);
 
 	 /***** Edition area *****/
@@ -1790,7 +1853,6 @@ void Inf_EditRichTxtInfo (void)
    extern const char *Hlp_COURSE_Assessment_edit;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    static struct Act_ActionFunc Actions[Inf_NUM_TYPES] =
      {
       [Inf_UNKNOWN_TYPE	] = {ActUnk		,NULL,NULL},
@@ -1817,15 +1879,20 @@ void Inf_EditRichTxtInfo (void)
       [Inf_LINKS	] = &Hlp_COURSE_Links_edit,
       [Inf_ASSESSMENT	] = &Hlp_COURSE_Assessment_edit,
      };
+   Inf_Type_t InfoType;
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
+
+   /***** Set info type *****/
+   InfoType = Inf_AsignInfoType ();
 
    /***** Begin form and box *****/
-   Frm_BeginForm (Actions[Gbl.Crs.Info.Type].NextAction);
-      if (Actions[Gbl.Crs.Info.Type].FuncPars)
-	 Actions[Gbl.Crs.Info.Type].FuncPars (Actions[Gbl.Crs.Info.Type].Args);
-      Box_BoxBegin (Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,NULL,
-		    *HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+   Frm_BeginForm (Actions[InfoType].NextAction);
+      if (Actions[InfoType].FuncPars)
+	 Actions[InfoType].FuncPars (Actions[InfoType].Args);
+      Box_BoxBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
+		    *HelpEdit[InfoType],Box_NOT_CLOSABLE);
 
-      switch (Gbl.Crs.Info.Type)
+      switch (InfoType)
 	{
 	 case Inf_INFORMATION:
 	 case Inf_TEACH_GUIDE:
@@ -1836,7 +1903,7 @@ void Inf_EditRichTxtInfo (void)
 	}
 
       /***** Get info text from database *****/
-      Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+      Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
 			    TxtHTML,NULL);
 
       /***** Edition area *****/
@@ -1860,11 +1927,12 @@ void Inf_EditRichTxtInfo (void)
 
 void Inf_ReceivePlainTxtInfo (void)
   {
+   Inf_Type_t InfoType;
    char Txt_HTMLFormat    [Cns_MAX_BYTES_LONG_TEXT + 1];
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   InfoType = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
    Par_GetPar (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
@@ -1876,11 +1944,11 @@ void Inf_ReceivePlainTxtInfo (void)
                      Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_DB_SetInfoTxt (Txt_HTMLFormat,Txt_MarkdownFormat);
+   Inf_DB_SetInfoTxt (InfoType,Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "plain text" in database *****/
-   Inf_DB_SetInfoSrc (Txt_HTMLFormat[0] ? Inf_PLAIN_TEXT :
-	                                  Inf_SRC_NONE);
+   Inf_DB_SetInfoSrc (InfoType,Txt_HTMLFormat[0] ? Inf_PLAIN_TEXT :
+						   Inf_SRC_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -1895,11 +1963,12 @@ void Inf_ReceivePlainTxtInfo (void)
 
 void Inf_ReceiveRichTxtInfo (void)
   {
+   Inf_Type_t InfoType;
    char Txt_HTMLFormat    [Cns_MAX_BYTES_LONG_TEXT + 1];
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   InfoType = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
    Par_GetPar (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
@@ -1911,11 +1980,11 @@ void Inf_ReceiveRichTxtInfo (void)
                      Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,Str_REMOVE_SPACES);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_DB_SetInfoTxt (Txt_HTMLFormat,Txt_MarkdownFormat);
+   Inf_DB_SetInfoTxt (InfoType,Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "rich text" in database *****/
-   Inf_DB_SetInfoSrc (Txt_HTMLFormat[0] ? Inf_RICH_TEXT :
-	                                  Inf_SRC_NONE);
+   Inf_DB_SetInfoSrc (InfoType,Txt_HTMLFormat[0] ? Inf_RICH_TEXT :
+						   Inf_SRC_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -1946,13 +2015,14 @@ void Inf_EditPagInfo (void)
       [Inf_LINKS	] = ActRcvPagCrsLnk,
       [Inf_ASSESSMENT	] = ActRcvPagAss,
      };
+   struct Inf_Info Info;
 
    /***** Begin box *****/
-   Inf_BeforeTree (Vie_EDIT,Inf_PAGE);
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_PAGE);
 
       /***** Begin form *****/
-      Frm_BeginForm (Actions[Gbl.Crs.Info.Type]);
-	 Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+      Frm_BeginForm (Actions[Info.Type]);
+	 Inf_PutParInfoType (&Info.Type);
 
 	 /***** Help *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_INFO_SRC_HELP[Inf_PAGE]);
@@ -1986,6 +2056,7 @@ void Inf_ReceivePagInfo (void)
    extern const char *Txt_Found_an_index_html_file;
    extern const char *Txt_No_file_index_html_found_within_the_ZIP_file;
    extern const char *Txt_The_file_type_should_be_HTML_or_ZIP;
+   Inf_Type_t InfoType;
    struct Par_Param *Par;
    char SourceFileName[PATH_MAX + 1];
    char PathRelDirHTML[PATH_MAX + 1];
@@ -1997,7 +2068,7 @@ void Inf_ReceivePagInfo (void)
    bool FileIsOK = false;
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   InfoType = Inf_AsignInfoType ();
 
    /***** First of all, store in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -2019,7 +2090,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** Build path of directory containing web page *****/
-      Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+      Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
 			 PathRelDirHTML);
 
       /***** End the reception of the data *****/
@@ -2044,7 +2115,7 @@ void Inf_ReceivePagInfo (void)
          Fil_CreateDirIfNotExists (PathRelDirHTML);
          snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),"%s/%s.zip",
                    Gbl.Crs.Path.AbsPriv,
-                   Inf_FileNamesForInfoType[Gbl.Crs.Info.Type]);
+                   Inf_FileNamesForInfoType[InfoType]);
 
          if (Fil_EndReceptionOfFile (PathRelFileZIP,Par))
            {
@@ -2091,7 +2162,7 @@ void Inf_ReceivePagInfo (void)
    if (FileIsOK)
      {
       /***** Change info source to page in database *****/
-      Inf_DB_SetInfoSrc (Inf_PAGE);
+      Inf_DB_SetInfoSrc (InfoType,Inf_PAGE);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2099,7 +2170,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_DB_SetInfoSrc (Inf_SRC_NONE);
+      Inf_DB_SetInfoSrc (InfoType,Inf_SRC_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_ConfigInfo ();
@@ -2114,6 +2185,7 @@ void Inf_EditURLInfo (void)
   {
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
    static Act_Action_t Actions[Inf_NUM_TYPES] =
@@ -2129,33 +2201,34 @@ void Inf_EditURLInfo (void)
       [Inf_LINKS	] = ActRcvURLCrsLnk,
       [Inf_ASSESSMENT	] = ActRcvURLAss,
      };
+   struct Inf_Info Info;
 
    /***** Begin box *****/
-   Inf_BeforeTree (Vie_EDIT,Inf_URL);
+   Inf_BeforeTree (&Info,Vie_EDIT,Inf_URL);
 
       /***** Build path to file containing URL *****/
-      Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+      Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Info.Type,
 			PathFile);
 
       /***** Begin form *****/
-      Frm_BeginForm (Actions[Gbl.Crs.Info.Type]);
-	 Inf_PutParInfoType (&Gbl.Crs.Info.Type);
+      Frm_BeginForm (Actions[Info.Type]);
+	 Inf_PutParInfoType (&Info.Type);
 
 	 /***** Link *****/
 	 if ((FileURL = fopen (PathFile,"rb")) != NULL)
 	   {
-	    if (fgets (Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
-	       Gbl.Crs.Info.URL[0] = '\0';
+	    if (fgets (URL,WWW_MAX_BYTES_WWW,FileURL) == NULL)
+	       URL[0] = '\0';
 	    /* File is not longer needed. Close it */
 	    fclose (FileURL);
 	   }
 	 else
-	    Gbl.Crs.Info.URL[0] = '\0';
+	    URL[0] = '\0';
 
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	       HTM_TxtColonNBSP (Txt_URL);
-	       HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,
+	       HTM_INPUT_URL ("InfoSrcURL",URL,
 			      HTM_NO_ATTR,	// TODO: Required?
 			      "size=\"50\" class=\"INPUT_%s\"",The_GetSuffix ());
 	    HTM_LABEL_End ();
@@ -2174,32 +2247,33 @@ void Inf_EditURLInfo (void)
 void Inf_ReceiveURLInfo (void)
   {
    extern const char *Txt_The_URL_X_has_been_updated;
+   struct Inf_Info Info;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
    bool URLIsOK = false;
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   Info.Type = Inf_AsignInfoType ();
 
    /***** Get parameter with URL *****/
-   Par_GetParText ("InfoSrcURL",Gbl.Crs.Info.URL,WWW_MAX_BYTES_WWW);
+   Par_GetParText ("InfoSrcURL",URL,WWW_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Info.Type,
 		     PathFile);
 
    /***** Open file with URL *****/
    if ((FileURL = fopen (PathFile,"wb")) != NULL)
      {
       /***** Write URL *****/
-      fprintf (FileURL,"%s",Gbl.Crs.Info.URL);
+      fprintf (FileURL,"%s",URL);
 
       /***** Close file *****/
       fclose (FileURL);
 
       /***** Write message *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_URL_X_has_been_updated,
-                     Gbl.Crs.Info.URL);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_URL_X_has_been_updated,URL);
       URLIsOK = true;
      }
    else
@@ -2208,7 +2282,7 @@ void Inf_ReceiveURLInfo (void)
    if (URLIsOK)
      {
       /***** Change info source to URL in database *****/
-      Inf_DB_SetInfoSrc (Inf_URL);
+      Inf_DB_SetInfoSrc (Info.Type,Inf_URL);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2216,7 +2290,7 @@ void Inf_ReceiveURLInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_DB_SetInfoSrc (Inf_SRC_NONE);
+      Inf_DB_SetInfoSrc (Info.Type,Inf_SRC_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_ConfigInfo ();

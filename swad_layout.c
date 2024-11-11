@@ -384,8 +384,7 @@ void Lay_WriteStartOfPage (void)
 		  HTM_MAIN_Begin ("MAIN_ZONE_CANVAS");
 
 		     /* If it is mandatory to read any information about course */
-		     if (Gbl.Crs.Info.ShowMsgMustBeRead)
-			Inf_WriteMsgYouMustReadInfo ();
+		     Inf_WriteMsgYouMustReadInfo ();
 
 		     Gbl.Layout.WritingHTMLStart = false;
 		     Gbl.Layout.HTMLStartWritten = true;

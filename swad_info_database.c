@@ -89,7 +89,7 @@ Inf_Type_t Inf_DB_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB)
 /********* Set info source for a type of course info from database ***********/
 /*****************************************************************************/
 
-void Inf_DB_SetInfoSrc (Inf_Src_t InfoSrc)
+void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
   {
    /***** Get if info source is already stored in database *****/
    if (DB_QueryCOUNT ("can not get if info source is already stored in database",
@@ -98,7 +98,7 @@ void Inf_DB_SetInfoSrc (Inf_Src_t InfoSrc)
 		      " WHERE CrsCod=%ld"
 		        " AND InfoType='%s'",
 		      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		      Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]))
+		      Inf_DB_NamesForInfoType[InfoType]))
       // Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_SRC_NONE)
@@ -110,7 +110,7 @@ void Inf_DB_SetInfoSrc (Inf_Src_t InfoSrc)
 			   " AND InfoType='%s'",
                          Inf_DB_NamesForInfoSrc[Inf_SRC_NONE],
                          Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                         Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
+                         Inf_DB_NamesForInfoType[InfoType]);
       else	// MustBeRead remains unchanged
          DB_QueryUPDATE ("can not update info source",
 			 "UPDATE crs_info_src"
@@ -119,7 +119,7 @@ void Inf_DB_SetInfoSrc (Inf_Src_t InfoSrc)
 		           " AND InfoType='%s'",
 		         Inf_DB_NamesForInfoSrc[InfoSrc],
 		         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		         Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
+		         Inf_DB_NamesForInfoType[InfoType]);
      }
    else		// Info is not stored in database, so insert it
       DB_QueryINSERT ("can not insert info source",
@@ -128,7 +128,7 @@ void Inf_DB_SetInfoSrc (Inf_Src_t InfoSrc)
 		      " VALUES"
 		      " (%ld,'%s','%s','N')",
 		      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		      Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type],
+		      Inf_DB_NamesForInfoType[InfoType],
 		      Inf_DB_NamesForInfoSrc[InfoSrc]);
   }
 
@@ -189,7 +189,8 @@ Inf_Src_t Inf_DB_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
 /********** Set info text for a type of course info from database ************/
 /*****************************************************************************/
 
-void Inf_DB_SetInfoTxt (const char *InfoTxtHTML,const char *InfoTxtMD)
+void Inf_DB_SetInfoTxt (Inf_Type_t InfoType,
+			const char *InfoTxtHTML,const char *InfoTxtMD)
   {
    /***** Insert or replace info source for a specific type of course information *****/
    DB_QueryREPLACE ("can not update info text",
@@ -198,7 +199,7 @@ void Inf_DB_SetInfoTxt (const char *InfoTxtHTML,const char *InfoTxtMD)
 		    " VALUES"
 		    " (%ld,'%s','%s','%s')",
 		    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		    Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type],
+		    Inf_DB_NamesForInfoType[InfoType],
 		    InfoTxtHTML,
 		    InfoTxtMD);
   }
@@ -225,7 +226,7 @@ unsigned Inf_DB_GetInfoTxt (MYSQL_RES **mysql_res,
 /***************** Set if students must read course info *********************/
 /*****************************************************************************/
 
-void Inf_DB_SetForceRead (bool MustBeRead)
+void Inf_DB_SetForceRead (Inf_Type_t InfoType,bool MustBeRead)
   {
    DB_QueryUPDATE ("can not update if info must be read",
 		   "UPDATE crs_info_src"
@@ -235,14 +236,14 @@ void Inf_DB_SetForceRead (bool MustBeRead)
                    MustBeRead ? 'Y' :
         	                'N',
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
+		   Inf_DB_NamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
 /********************* Set if I have read course info ************************/
 /*****************************************************************************/
 
-void Inf_DB_SetIHaveRead (bool IHaveRead)
+void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,bool IHaveRead)
   {
    if (IHaveRead)
       /***** Insert I have read course information *****/
@@ -253,7 +254,7 @@ void Inf_DB_SetIHaveRead (bool IHaveRead)
 		       " (%ld,%ld,'%s')",
                        Gbl.Usrs.Me.UsrDat.UsrCod,
                        Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                       Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
+                       Inf_DB_NamesForInfoType[InfoType]);
    else
       /***** Remove I have read course information *****/
       DB_QueryDELETE ("can not set that I have not read course info",
@@ -263,14 +264,14 @@ void Inf_DB_SetIHaveRead (bool IHaveRead)
 		        " AND InfoType='%s'",
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		      Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
+		      Inf_DB_NamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/
 /******************** Check I have read a course info ************************/
 /*****************************************************************************/
 
-bool Inf_DB_CheckIfIHaveReadInfo (void)
+bool Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType)
   {
    return
    DB_QueryEXISTS ("can not check if I have read course info",
@@ -282,7 +283,7 @@ bool Inf_DB_CheckIfIHaveReadInfo (void)
 		      " AND InfoType='%s')",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
+		   Inf_DB_NamesForInfoType[InfoType]);
   }
 
 /*****************************************************************************/

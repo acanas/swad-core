@@ -184,7 +184,6 @@ struct Globals
 	 char URLPubl[PATH_MAX + 1];	// Abolute URL to the public part of the course
         } Path;
       struct Grp_Groups Grps;
-      struct Inf_Info Info;
       struct
 	{
 	 struct RecordField Field;

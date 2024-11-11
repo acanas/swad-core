@@ -111,8 +111,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned Tre_ShowTree (void);
-void Tre_EditTree (void);
+unsigned Tre_ShowTree (Inf_Type_t InfoType);
+void Tre_EditTree (Inf_Type_t InfoType);
 void Tre_ShowAllNodes (Inf_Type_t InfoType,
 		       Tre_ListingType_t ListingType,
                        long SelectedItmCod,long SelectedRscCod);
@@ -135,17 +135,19 @@ long Tre_GetNodCodFromNumNode (unsigned NumNode);
 unsigned Tre_GetNodIndFromNumNode (unsigned NumNode);
 unsigned Tre_GetLevelFromNumNode (unsigned NumNode);
 
-void Tre_ViewNodeAfterEdit (void);
-void Tre_ReqChangeNode (void);
-void Tre_ReqCreateNode (void);
-void Tre_ReceiveChgNode (void);
-void Tre_ReceiveNewNode (void);
-void Tre_ReqRemNode (void);
-void Tre_RemoveNode (void);
-void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible);
-void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown);
-void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight);
-void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
+void Tre_ViewNodeAfterEdit (Inf_Type_t InfoType);
+void Tre_ReqChangeNode (Inf_Type_t InfoType);
+void Tre_ReqCreateNode (Inf_Type_t InfoType);
+void Tre_ReceiveChgNode (Inf_Type_t InfoType);
+void Tre_ReceiveNewNode (Inf_Type_t InfoType);
+void Tre_ReqRemNode (Inf_Type_t InfoType);
+void Tre_RemoveNode (Inf_Type_t InfoType);
+void Tre_HideOrUnhideNode (Inf_Type_t InfoType,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible);
+void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown);
+void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_MoveLeftRight_t LeftRight);
+void Tre_ExpandContractNode (Inf_Type_t InfoType,
+			     Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType);
 
 #endif

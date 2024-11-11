@@ -62,19 +62,14 @@ typedef enum
    Inf_URL		= 5,
   } Inf_Src_t;
 
-struct Inf_FromDB
-  {
-   Inf_Src_t Src;	// Info source
-   bool MustBeRead;	// Must be read by students?
-  };
-
 struct Inf_Info
   {
    Inf_Type_t Type;
-   struct Inf_FromDB FromDB;
-   char URL[WWW_MAX_BYTES_WWW + 1];
-   bool MustBeRead[Inf_NUM_TYPES];	// Students must read info?
-   bool ShowMsgMustBeRead;
+   struct Inf_FromDB
+     {
+      Inf_Src_t Src;	// Info source
+      bool MustBeRead;	// Must be read by students?
+     } FromDB;
   };
 
 /*****************************************************************************/
@@ -102,17 +97,18 @@ void Inf_ExpandNodeEditing (void);
 void Inf_ContractNodeEditing (void);
 
 //---------------------- Force students to read info? -------------------------
-bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
+void Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_WriteMsgYouMustReadInfo (void);
 void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
 
 //-----------------------------------------------------------------------------
 void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[WWW_MAX_BYTES_WWW + 1]);
+void Inf_WriteURLIntoTxtBuffer (Inf_Type_t InfoType,
+				char TxtBuffer[WWW_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
 void Inf_ConfigInfo (void);
-void Inf_AsignInfoType (struct Inf_Info *Info);
+Inf_Type_t Inf_AsignInfoType (void);
 Inf_Type_t Inf_GetParInfoType (void);
 void Inf_PutParInfoType (void *InfoType);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);

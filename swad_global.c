@@ -159,8 +159,6 @@ void Gbl_InitializeGlobals (void)
    /***** Reset current hierarchy *****/
    Hie_ResetHierarchy ();
 
-   Gbl.Crs.Info.ShowMsgMustBeRead = 0;
-
    Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
 
    Gbl.Crs.Grps.NumGrps = 0;

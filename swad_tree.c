@@ -180,9 +180,8 @@ static void Tre_InsertNode (Inf_Type_t InfoType,
 /*****************************************************************************/
 // Return number of ndes in tree
 
-unsigned Tre_ShowTree (void)
+unsigned Tre_ShowTree (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    unsigned NumNodes;
 
    /***** Get list of tree nodes *****/
@@ -198,10 +197,8 @@ unsigned Tre_ShowTree (void)
    return NumNodes;
   }
 
-void Tre_EditTree (void)
+void Tre_EditTree (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
-
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (InfoType);
 
@@ -1440,7 +1437,7 @@ void Tre_ResetNode (struct Tre_Node *Node)
   }
 
 /*****************************************************************************/
-/************* Get number of tree node in list from node code ****************/
+/************* Get number of item inlist from node code ****************/
 /*****************************************************************************/
 
 unsigned Tre_GetNumNodeFromNodCod (long NodCod)
@@ -1494,7 +1491,7 @@ inline unsigned Tre_GetLevelFromNumNode (unsigned NumNode)
 /*************** Ask for confirmation of removing a tree node ****************/
 /*****************************************************************************/
 
-void Tre_ReqRemNode (void)
+void Tre_ReqRemNode (Inf_Type_t InfoType)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
    static Act_Action_t Actions[Inf_NUM_TYPES] =
@@ -1510,7 +1507,6 @@ void Tre_ReqRemNode (void)
       [Inf_LINKS	] = ActRemTreNodLnk,
       [Inf_ASSESSMENT	] = ActRemTreNodAss,
      };
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1528,7 +1524,7 @@ void Tre_ReqRemNode (void)
 			Txt_Do_you_really_want_to_remove_the_item_X,
                         Node.Title);
 
-   /***** Show tree node highlighting subtree *****/
+   /***** Show item highlighting subtree *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -1539,10 +1535,9 @@ void Tre_ReqRemNode (void)
 /******************** Remove a tree node and its children ********************/
 /*****************************************************************************/
 
-void Tre_RemoveNode (void)
+void Tre_RemoveNode (Inf_Type_t InfoType)
   {
    extern const char *Txt_Item_X_removed;
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    struct Tre_NodeRange ToRemove;
 
@@ -1559,7 +1554,7 @@ void Tre_RemoveNode (void)
    Tre_SetNodeRangeWithAllChildren (Tre_GetNumNodeFromNodCod (Node.Hierarchy.NodCod),
 				    &ToRemove);
 
-   /***** Remove tree nodes *****/
+   /***** Remove items *****/
    Tre_DB_RemoveNodeRange (InfoType,&ToRemove);
 
    /***** Write message to show the change made *****/
@@ -1577,12 +1572,12 @@ void Tre_RemoveNode (void)
   }
 
 /*****************************************************************************/
-/***************************** Hide a tree node ***************************/
+/************************** Hide/unhide a tree node **************************/
 /*****************************************************************************/
 
-void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
+void Tre_HideOrUnhideNode (Inf_Type_t InfoType,
+			   HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1597,7 +1592,7 @@ void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
    /***** Hide/unhide tree node *****/
    Tre_DB_HideOrUnhideNode (&Node,HiddenOrVisible);
 
-   /***** Show tree nodes highlighting subtree *****/
+   /***** Show items highlighting subtree *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -1608,10 +1603,9 @@ void Tre_HideOrUnhideNode (HidVis_HiddenOrVisible_t HiddenOrVisible)
 /*********** Move up/down position of a subtree in a course tree *************/
 /*****************************************************************************/
 
-void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
+void Tre_MoveUpDownNode (Inf_Type_t InfoType,Tre_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    unsigned NumNode;
    bool Success = false;
@@ -1651,7 +1645,7 @@ void Tre_MoveUpDownNode (Tre_MoveUpDown_t UpDown)
       Tre_FreeListNodes ();
       Tre_GetListNodes (InfoType);
 
-      /* Show tree nodes highlighting subtree */
+      /* Show items highlighting subtree */
       Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
@@ -1805,10 +1799,9 @@ static int Tre_GetNextBrother (int NumNode)
 /************** Move a subtree to left/right in a course program *************/
 /*****************************************************************************/
 
-void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
+void Tre_MoveLeftRightNode (Inf_Type_t InfoType,Tre_MoveLeftRight_t LeftRight)
   {
    extern const char *Txt_Movement_not_allowed;
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    unsigned NumNode;
    struct Tre_NodeRange ToMove;
@@ -1841,7 +1834,7 @@ void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
       Tre_FreeListNodes ();
       Tre_GetListNodes (InfoType);
 
-      /* Show tree nodes highlighting subtree */
+      /* Show items highlighting subtree */
       Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,Node.Hierarchy.NodCod,-1L);
      }
    else
@@ -1859,10 +1852,10 @@ void Tre_MoveLeftRightNode (Tre_MoveLeftRight_t LeftRight)
 /*************** Move a subtree to left/right in a course tree ***************/
 /*****************************************************************************/
 
-void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
+void Tre_ExpandContractNode (Inf_Type_t InfoType,
+			     Tre_ExpandContract_t ExpandContract,
 			     Tre_ListingType_t ListingType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1885,7 +1878,7 @@ void Tre_ExpandContractNode (Tre_ExpandContract_t ExpandContract,
 	 break;
      }
 
-   /***** Show tree nodes highlighting subtree *****/
+   /***** Show items highlighting subtree *****/
    Tre_ShowAllNodes (InfoType,ListingType,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -1938,9 +1931,8 @@ static unsigned Tre_GetLastChild (int NumNode)
 /********* List tree nodes when click on view a node after edition ***********/
 /*****************************************************************************/
 
-void Tre_ViewNodeAfterEdit (void)
+void Tre_ViewNodeAfterEdit (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1961,9 +1953,8 @@ void Tre_ViewNodeAfterEdit (void)
 /************ List tree nodes with a form to change a given node *************/
 /*****************************************************************************/
 
-void Tre_ReqChangeNode (void)
+void Tre_ReqChangeNode (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -1988,9 +1979,8 @@ void Tre_ReqChangeNode (void)
 /************* List tree nodes with a form to create a new node **************/
 /*****************************************************************************/
 
-void Tre_ReqCreateNode (void)
+void Tre_ReqCreateNode (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -2168,9 +2158,8 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
 /*************** Receive form to change an existing tree node ****************/
 /*****************************************************************************/
 
-void Tre_ReceiveChgNode (void)
+void Tre_ReceiveChgNode (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
@@ -2202,7 +2191,7 @@ void Tre_ReceiveChgNode (void)
    /***** Update existing node *****/
    Tre_DB_UpdateNode (&Node,Description);
 
-   /***** Show tree nodes highlighting the node just changed *****/
+   /***** Show items highlighting the node just changed *****/
    Tre_ShowAllNodes (InfoType,Tre_RECEIVE_NODE,Node.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/
@@ -2213,9 +2202,8 @@ void Tre_ReceiveChgNode (void)
 /******************* Receive form to create a new tree node ******************/
 /*****************************************************************************/
 
-void Tre_ReceiveNewNode (void)
+void Tre_ReceiveNewNode (Inf_Type_t InfoType)
   {
-   Inf_Type_t InfoType = Gbl.Crs.Info.Type;
    struct Tre_Node Node;		// Parent node
    struct Tre_Node NewNode;		// Node data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
@@ -2255,7 +2243,7 @@ void Tre_ReceiveNewNode (void)
    Tre_FreeListNodes ();
    Tre_GetListNodes (InfoType);
 
-   /***** Show tree nodes highlighting the node just created *****/
+   /***** Show items highlighting the node just created *****/
    Tre_ShowAllNodes (InfoType,Tre_EDIT_NODES,NewNode.Hierarchy.NodCod,-1L);
 
    /***** Free list of tree nodes *****/

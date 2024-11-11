@@ -253,10 +253,14 @@ static int API_CheckParsNewAccount (char *NewNickWithArr,		// Input
                                     char *NewPlainPassword,		// Input
                                     char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);	// Output
 
-static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,char **HTMLBuffer);
+static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
+					    Inf_Type_t InfoType,
+					    char **HTMLBuffer);
 static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
+					     Inf_Type_t InfoType,
                                              char **HTMLBuffer);
 static int API_WritePageIntoHTMLBuffer (struct soap *soap,
+				        Inf_Type_t InfoType,
                                         char **HTMLBuffer);
 
 static void API_CopyListUsers (struct soap *soap,
@@ -1188,6 +1192,7 @@ int swad__getCourseInfo (struct soap *soap,
                          struct swad__getCourseInfoOutput *getCourseInfo)	// output
   {
    int ReturnCode;
+   struct Inf_Info Info;
    Inf_Type_t InfoType;
    size_t Length;
    int Result = SOAP_OK;
@@ -1262,25 +1267,25 @@ int swad__getCourseInfo (struct soap *soap,
       return soap_receiver_fault (soap,
 	                          "Bad info type",
 	                          "Unknown requested info type");
-   Gbl.Crs.Info.Type = InfoType;
-   Inf_GetAndCheckInfoSrcFromDB (&Gbl.Crs.Info);
+   Info.Type = InfoType;
+   Inf_GetAndCheckInfoSrcFromDB (&Info);
 
-   Length = strlen (NamesInWSForInfoSrc[Gbl.Crs.Info.FromDB.Src]);
+   Length = strlen (NamesInWSForInfoSrc[Info.FromDB.Src]);
    getCourseInfo->infoSrc = soap_malloc (soap,Length + 1);
-   Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[Gbl.Crs.Info.FromDB.Src],Length);
+   Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[Info.FromDB.Src],Length);
 
    /***** Get info text *****/
    getCourseInfo->infoTxt = NULL;
-   switch (Gbl.Crs.Info.FromDB.Src)
+   switch (Info.FromDB.Src)
      {
       case Inf_SRC_NONE:	// No info available
          break;
       case Inf_EDITOR:		// Internal editor (only for syllabus)
-	 switch (Gbl.Crs.Info.Type)
+	 switch (InfoType)
 	   {
-	    case Inf_SYLLABUS_LEC:		// Syllabus (lectures)
+	    case Inf_SYLLABUS_LEC:	// Syllabus (lectures)
 	    case Inf_SYLLABUS_PRA:	// Syllabys (practicals)
-	       Result = API_WriteSyllabusIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
+	       Result = API_WriteSyllabusIntoHTMLBuffer (soap,Info.Type,&(getCourseInfo->infoTxt));
 	       break;
 	    default:
                break;
@@ -1288,14 +1293,14 @@ int swad__getCourseInfo (struct soap *soap,
 	 break;
       case Inf_PLAIN_TEXT:	// Plain text
       case Inf_RICH_TEXT:	// Rich text (not yet available)
-	 Result = API_WritePlainTextIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
+	 Result = API_WritePlainTextIntoHTMLBuffer (soap,Info.Type,&(getCourseInfo->infoTxt));
          break;
       case Inf_PAGE:		// Web page hosted in SWAD server
-	 Result = API_WritePageIntoHTMLBuffer (soap,&(getCourseInfo->infoTxt));
+	 Result = API_WritePageIntoHTMLBuffer (soap,Info.Type,&(getCourseInfo->infoTxt));
          break;
       case Inf_URL:		// Link to a web page
          getCourseInfo->infoTxt = soap_malloc (soap,WWW_MAX_BYTES_WWW + 1);
-         Inf_WriteURLIntoTxtBuffer (getCourseInfo->infoTxt);
+         Inf_WriteURLIntoTxtBuffer (InfoType,getCourseInfo->infoTxt);
          break;
      }
 
@@ -1313,7 +1318,9 @@ int swad__getCourseInfo (struct soap *soap,
 /************** Write the syllabus into a temporary HTML file ****************/
 /*****************************************************************************/
 
-static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,char **HTMLBuffer)
+static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
+					    Inf_Type_t InfoType,
+					    char **HTMLBuffer)
   {
    struct Syl_Syllabus Syllabus;
    char FileNameHTMLTmp[PATH_MAX + 1];
@@ -1324,7 +1331,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Load syllabus from XML file to list of items in memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,Gbl.Crs.Info.Type,
+   Syl_LoadListItemsSyllabusIntoMemory (&Syllabus,InfoType,
 					Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    if (Syllabus.LstItems.NumItems)
@@ -1343,7 +1350,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,char **HTMLBuffer)
 	}
 
       /***** Write syllabus in HTML into a temporary file *****/
-      Syl_WriteSyllabusIntoHTMLTmpFile (&Syllabus,FileHTMLTmp);
+      Syl_WriteSyllabusIntoHTMLTmpFile (&Syllabus,InfoType,FileHTMLTmp);
 
       /***** Write syllabus from list of items in memory to text buffer *****/
       /* Compute length of file */
@@ -1389,6 +1396,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,char **HTMLBuffer)
 /*****************************************************************************/
 
 static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
+					     Inf_Type_t InfoType,
                                              char **HTMLBuffer)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
@@ -1401,7 +1409,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
    *HTMLBuffer = NULL;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,NULL);
 
    if (TxtHTML[0])
@@ -1417,7 +1425,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
                                      "Can not create temporary file");
 
       /***** Write start of HTML code *****/
-      Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
+      Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[InfoType]);
       fprintf (FileHTMLTmp,"<body>\n"
                            "<div class=\"LM DAT_%s\">\n",The_GetSuffix ());
 
@@ -1473,6 +1481,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
 /*****************************************************************************/
 
 static int API_WritePageIntoHTMLBuffer (struct soap *soap,
+				        Inf_Type_t InfoType,
                                         char **HTMLBuffer)
   {
    char PathRelDirHTML[PATH_MAX + 1];
@@ -1485,7 +1494,7 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
    *HTMLBuffer = NULL;
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Gbl.Crs.Info.Type,PathRelDirHTML);
+   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,PathRelDirHTML);
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */

@@ -62,9 +62,6 @@ static void Prg_BeforeTree (Tre_ListingType_t ListingType)
       [Tre_EDIT_NODES	] = Prg_PutIconsWhenEditing,
      };
 
-   /***** Set info type *****/
-   Gbl.Crs.Info.Type = Inf_PROGRAM;
-
    /***** Begin box *****/
    Box_BoxBegin (Txt_COURSE_program,
 		 FunctionToDrawContextualIcons[ListingType],NULL,
@@ -84,7 +81,7 @@ static void Prg_AfterTree (void)
 void Prg_ShowProgram (void)
   {
    Prg_BeforeTree (Tre_VIEW);
-      (void) Tre_ShowTree ();
+      (void) Tre_ShowTree (Inf_PROGRAM);
    Box_BoxEnd ();
   }
 
@@ -95,7 +92,7 @@ void Prg_ShowProgram (void)
 void Prg_EditTree (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_EditTree ();
+      Tre_EditTree (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
@@ -106,7 +103,7 @@ void Prg_EditTree (void)
 void Prg_ViewNodeAfterEdit (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ViewNodeAfterEdit ();
+      Tre_ViewNodeAfterEdit (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
@@ -117,14 +114,14 @@ void Prg_ViewNodeAfterEdit (void)
 void Prg_ReqChangeNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ReqChangeNode ();
+      Tre_ReqChangeNode (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
 void Prg_ReqCreateNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ReqCreateNode ();
+      Tre_ReqCreateNode (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
@@ -135,14 +132,14 @@ void Prg_ReqCreateNode (void)
 void Prg_ReceiveChgNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ReceiveChgNode ();
+      Tre_ReceiveChgNode (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
 void Prg_ReceiveNewNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ReceiveNewNode ();
+      Tre_ReceiveNewNode (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
@@ -153,14 +150,14 @@ void Prg_ReceiveNewNode (void)
 void Prg_ReqRemNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ReqRemNode ();
+      Tre_ReqRemNode (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
 void Prg_RemoveNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_RemoveNode ();
+      Tre_RemoveNode (Inf_PROGRAM);
    Prg_AfterTree ();
   }
 
@@ -171,14 +168,14 @@ void Prg_RemoveNode (void)
 void Prg_HideNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_HideOrUnhideNode (HidVis_HIDDEN);
+      Tre_HideOrUnhideNode (Inf_PROGRAM,HidVis_HIDDEN);
    Prg_AfterTree ();
   }
 
 void Prg_UnhideNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_HideOrUnhideNode (HidVis_VISIBLE);
+      Tre_HideOrUnhideNode (Inf_PROGRAM,HidVis_VISIBLE);
    Prg_AfterTree ();
   }
 
@@ -189,14 +186,14 @@ void Prg_UnhideNode (void)
 void Prg_MoveUpNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_MoveUpDownNode (Tre_MOVE_UP);
+      Tre_MoveUpDownNode (Inf_PROGRAM,Tre_MOVE_UP);
    Prg_AfterTree ();
   }
 
 void Prg_MoveDownNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_MoveUpDownNode (Tre_MOVE_DOWN);
+      Tre_MoveUpDownNode (Inf_PROGRAM,Tre_MOVE_DOWN);
    Prg_AfterTree ();
   }
 
@@ -207,14 +204,14 @@ void Prg_MoveDownNode (void)
 void Prg_MoveLeftNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_MoveLeftRightNode (Tre_MOVE_LEFT);
+      Tre_MoveLeftRightNode (Inf_PROGRAM,Tre_MOVE_LEFT);
    Prg_AfterTree ();
   }
 
 void Prg_MoveRightNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_MoveLeftRightNode (Tre_MOVE_RIGHT);
+      Tre_MoveLeftRightNode (Inf_PROGRAM,Tre_MOVE_RIGHT);
    Prg_AfterTree ();
   }
 
@@ -225,28 +222,28 @@ void Prg_MoveRightNode (void)
 void Prg_ExpandNodeSeeing (void)
   {
    Prg_BeforeTree (Tre_VIEW);
-      Tre_ExpandContractNode (Tre_EXPAND,Tre_VIEW);
+      Tre_ExpandContractNode (Inf_PROGRAM,Tre_EXPAND,Tre_VIEW);
    Prg_AfterTree ();
   }
 
 void Prg_ContractNodeSeeing (void)
   {
    Prg_BeforeTree (Tre_VIEW);
-      Tre_ExpandContractNode (Tre_CONTRACT,Tre_VIEW);
+      Tre_ExpandContractNode (Inf_PROGRAM,Tre_CONTRACT,Tre_VIEW);
    Prg_AfterTree ();
   }
 
 void Prg_ExpandNodeEditing (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ExpandContractNode (Tre_EXPAND,Tre_EDIT_NODES);
+      Tre_ExpandContractNode (Inf_PROGRAM,Tre_EXPAND,Tre_EDIT_NODES);
    Prg_AfterTree ();
   }
 
 void Prg_ContractNodeEditing (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_ExpandContractNode (Tre_CONTRACT,Tre_EDIT_NODES);
+      Tre_ExpandContractNode (Inf_PROGRAM,Tre_CONTRACT,Tre_EDIT_NODES);
    Prg_AfterTree ();
   }
 

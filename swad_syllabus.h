@@ -94,7 +94,7 @@ struct MoveSubtrees
 void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus);
 
 void Inf_PutParInfoType (void *InfoType);
-void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType);
+void Syl_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewType);
 
 void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 					  Inf_Type_t InfoType,
@@ -104,6 +104,7 @@ void Syl_FreeListItemsSyllabus (struct Syl_Syllabus *Syllabus);
 int Syl_ReadLevelItemSyllabus (FILE *XML);
 
 void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
+				       Inf_Type_t InfoType,
 				       FILE *FileHTMLTmp);
 
 void Syl_BuildPathFileSyllabus (const struct Syl_Syllabus *Syllabus,

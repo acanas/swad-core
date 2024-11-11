@@ -98,7 +98,7 @@ void Syl_ResetSyllabus (struct Syl_Syllabus *Syllabus)
 /************************ Write form to select syllabus **********************/
 /*****************************************************************************/
 
-void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType)
+void Syl_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewType)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    static Act_Action_t Actions[Vie_NUM_VIEW_TYPES] =
@@ -111,7 +111,7 @@ void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType)
    Inf_Type_t Type;
 
    /***** If no syllabus ==> nothing to do *****/
-   switch (Gbl.Crs.Info.Type)
+   switch (InfoType)
      {
       case Inf_SYLLABUS_LEC:
       case Inf_SYLLABUS_PRA:
@@ -132,8 +132,8 @@ void Syl_PutFormWhichSyllabus (Vie_ViewType_t ViewType)
 	       HTM_LI_Begin (NULL);
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO ("WhichSyllabus",
-				      ((Type == Gbl.Crs.Info.Type) ? HTM_CHECKED :
-								     HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
+				      ((Type == InfoType) ? HTM_CHECKED :
+							    HTM_NO_ATTR) | HTM_SUBMIT_ON_CLICK,
 				      "value=\"%u\"",(unsigned) Type);
 		     HTM_Txt (Txt_INFO_TITLE[Type]);
 		  HTM_LABEL_End ();
@@ -333,6 +333,7 @@ int Syl_ReadLevelItemSyllabus (FILE *XML)
 /*****************************************************************************/
 
 void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
+				       Inf_Type_t InfoType,
 				       FILE *FileHTMLTmp)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
@@ -340,7 +341,7 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (struct Syl_Syllabus *Syllabus,
    int i;
 
    /***** Write start of HTML code *****/
-   Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
+   Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[InfoType]);
    fprintf (FileHTMLTmp,"<body>\n"
                         "<table>\n");
 

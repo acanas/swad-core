@@ -73,17 +73,18 @@ void InfRsc_GetLinkToInfo (void)
       [Inf_LINKS	] = Inf_ShowInfo,
       [Inf_ASSESSMENT	] = Inf_ShowInfo,
      };
+   Inf_Type_t InfoType;
 
    /***** Set info type *****/
-   Inf_AsignInfoType (&Gbl.Crs.Info);
+   InfoType = Inf_AsignInfoType ();
 
    /***** Copy link to exam into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Types[Gbl.Crs.Info.Type],-1L);
+   Rsc_DB_CopyToClipboard (Types[InfoType],-1L);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
+   		  Txt_INFO_TITLE[InfoType]);
 
    /***** Show test again *****/
-   FunctionsToShowInfo[Gbl.Crs.Info.Type] ();
+   FunctionsToShowInfo[InfoType] ();
   }
