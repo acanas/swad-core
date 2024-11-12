@@ -127,6 +127,7 @@ static void Tre_FreeTitleClass (char *TitleClass);
 static void Tre_SetMaxNodeLevel (unsigned Level);
 static unsigned Tre_GetMaxNodeLevel (void);
 static unsigned Tre_CalculateMaxNodeLevel (void);
+// static bool Tre_GetIfNodeHasChildren (unsigned NumNode);
 static void Tre_CreateLevels (void);
 static void Tre_FreeLevels (void);
 static void Tre_IncreaseNumberInLevel (unsigned Level);
@@ -456,10 +457,11 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	   }
 
 	 /* Expand/contract this tree node */
-	 HTM_TD_Begin ("class=\"LT %s\"%s",
+	 HTM_TD_Begin ("class=\"RT %s\"%s",
 	               The_GetColorRows (),RowSpan[ContractedOrExpanded]);
-	    Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
-					       ViewingOrEditingProgram[ListingType]);
+	    // if (Tre_GetIfNodeHasChildren (NumNode))
+	       Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
+						  ViewingOrEditingProgram[ListingType]);
 	 HTM_TD_End ();
 
 	 /* Forms to remove/edit this tree node */
@@ -795,6 +797,20 @@ static unsigned Tre_CalculateMaxNodeLevel (void)
   }
 
 /*****************************************************************************/
+/************************* Get if a node has children ************************/
+/*****************************************************************************/
+
+//static bool Tre_GetIfNodeHasChildren (unsigned NumNode)
+//  {
+//   /***** Check 1. If node is the last in list ==> node has no children *****/
+//   if (NumNode == Tre_Gbl.List.NumNodes - 1)
+//      return false;
+//
+//   /***** Check 2. If next node is in next level ==> node has children *****/
+//   return (Tre_GetLevelFromNumNode (NumNode + 1) > Tre_GetLevelFromNumNode (NumNode));
+//  }
+
+/*****************************************************************************/
 /********************* Allocate memory for node numbers **********************/
 /*****************************************************************************/
 
@@ -973,12 +989,26 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
      };
    static Act_Action_t ActionsHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
+      [Inf_UNKNOWN_TYPE	][HidVis_HIDDEN ] = ActUnk,
+      [Inf_UNKNOWN_TYPE	][HidVis_VISIBLE] = ActUnk,
+      [Inf_INFORMATION	][HidVis_HIDDEN ] = ActUnhTreNodInf,	// Hidden ==> action to unhide
+      [Inf_INFORMATION	][HidVis_VISIBLE] = ActHidTreNodInf,	// Visible ==> action to hide
       [Inf_PROGRAM	][HidVis_HIDDEN ] = ActUnhTreNodPrg,	// Hidden ==> action to unhide
       [Inf_PROGRAM	][HidVis_VISIBLE] = ActHidTreNodPrg,	// Visible ==> action to hide
+      [Inf_TEACH_GUIDE	][HidVis_HIDDEN ] = ActUnhTreNodGui,	// Hidden ==> action to unhide
+      [Inf_TEACH_GUIDE	][HidVis_VISIBLE] = ActHidTreNodGui,	// Visible ==> action to hide
       [Inf_SYLLABUS_LEC	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
       [Inf_SYLLABUS_LEC	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
       [Inf_SYLLABUS_PRA	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
       [Inf_SYLLABUS_PRA	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
+      [Inf_BIBLIOGRAPHY	][HidVis_HIDDEN ] = ActUnhTreNodBib,	// Hidden ==> action to unhide
+      [Inf_BIBLIOGRAPHY	][HidVis_VISIBLE] = ActHidTreNodBib,	// Visible ==> action to hide
+      [Inf_FAQ		][HidVis_HIDDEN ] = ActUnhTreNodFAQ,	// Hidden ==> action to unhide
+      [Inf_FAQ		][HidVis_VISIBLE] = ActHidTreNodFAQ,	// Visible ==> action to hide
+      [Inf_LINKS	][HidVis_HIDDEN ] = ActUnhTreNodLnk,	// Hidden ==> action to unhide
+      [Inf_LINKS	][HidVis_VISIBLE] = ActHidTreNodLnk,	// Visible ==> action to hide
+      [Inf_ASSESSMENT	][HidVis_HIDDEN ] = ActUnhTreNodAss,	// Hidden ==> action to unhide
+      [Inf_ASSESSMENT	][HidVis_VISIBLE] = ActHidTreNodAss,	// Visible ==> action to hide
      };
    static Act_Action_t ActionsSee[Inf_NUM_TYPES] =
      {

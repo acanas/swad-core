@@ -158,7 +158,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
    MYSQL_RES *mysql_res;
    unsigned NumRsc;
    unsigned NumResources;
-   Vie_ViewType_t ViewingOrEditingResOfThisItem;
+   Vie_ViewType_t ViewingOrEditingResOfThisNode;
    char *Title;
    static Vie_ViewType_t ViewingOrEditing[Tre_NUM_LISTING_TYPES] =
      {
@@ -224,7 +224,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	}
 
       /***** Begin box *****/
-      ViewingOrEditingResOfThisItem = (ViewingOrEditingRes[ListingType] == Vie_EDIT &&
+      ViewingOrEditingResOfThisNode = (ViewingOrEditingRes[ListingType] == Vie_EDIT &&
 				       Node->Hierarchy.NodCod == SelectedNodCod) ? Vie_EDIT :
 										   Vie_VIEW;
       switch (ViewingOrEditing[ListingType])
@@ -236,8 +236,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	    if (asprintf (&Title,Txt_Resources_of_X,Node->Title) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    Box_BoxBegin (Title,
-			  PrgRsc_PutIconsRes[ViewingOrEditingResOfThisItem],
-			  &Node,
+			  PrgRsc_PutIconsRes[ViewingOrEditingResOfThisNode],Node,
 			  Hlp_COURSE_Program_resources,Box_NOT_CLOSABLE);
 	    free (Title);
 	    break;
@@ -258,7 +257,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	       PrgRsc_GetResourceDataFromRow (mysql_res,Node);
 
 	       /* Show resource */
-	       switch (ViewingOrEditingResOfThisItem)
+	       switch (ViewingOrEditingResOfThisNode)
 		 {
 		  case Vie_VIEW:
 		     PrgRsc_WriteRowViewResource (NumRsc,Node);
@@ -276,7 +275,7 @@ void PrgRsc_ListNodeResources (Tre_ListingType_t ListingType,
 	      }
 
 	    /***** Form to create a new resource *****/
-	    if (ViewingOrEditingResOfThisItem == Vie_EDIT)
+	    if (ViewingOrEditingResOfThisNode == Vie_EDIT)
 	      {
 	       Rsc_ResetResource (&(Node->Resource));
 	       PrgRsc_WriteRowNewResource (NumResources,Node,
