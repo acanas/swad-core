@@ -170,7 +170,8 @@ static void Tre_ParsFormNode (void *NodCod);
 static void Tre_ShowFormNode (const struct Tre_Node *Node,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 			      const char *Txt);
-
+static void Tre_GetNodeDataFromForm (struct Tre_Node *Node,
+				     char Description[Cns_MAX_BYTES_TEXT + 1]);
 static void Tre_InsertNode (Inf_Type_t InfoType,
 			    const struct Tre_Node *ParentNode,
 		            struct Tre_Node *Node,const char *Txt);
@@ -2129,9 +2130,10 @@ static void Tre_ShowFormNode (const struct Tre_Node *Node,
    HTM_TR_End ();
 
    /***** Node start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Node->TimeUTC,
-					    Dat_FORM_SECONDS_ON,
-					    SetHMS);
+   if (Node->InfoType == Inf_PROGRAM)
+      Dat_PutFormStartEndClientLocalDateTimes (Node->TimeUTC,
+					       Dat_FORM_SECONDS_ON,
+					       SetHMS);
 
    /***** Node text *****/
    HTM_TR_Begin (NULL);
@@ -2172,21 +2174,8 @@ void Tre_ReceiveChgNode (Inf_Type_t InfoType)
    if (Node.Hierarchy.NodCod <= 0)
       Err_WrongItemExit ();
 
-   /***** Get start/end date-times *****/
-   Node.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
-   Node.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
-
-   /***** Get node title *****/
-   Par_GetParText ("Title",Node.Title,Tre_MAX_BYTES_NODE_TITLE);
-
-   /***** Get node text *****/
-   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-   /***** Adjust dates *****/
-   if (Node.TimeUTC[Dat_STR_TIME] == 0)
-      Node.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-   if (Node.TimeUTC[Dat_END_TIME] == 0)
-      Node.TimeUTC[Dat_END_TIME] = Node.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
+   /***** Get node data from form *****/
+   Tre_GetNodeDataFromForm (&Node,Description);
 
    /***** Update existing node *****/
    Tre_DB_UpdateNode (&Node,Description);
@@ -2220,26 +2209,13 @@ void Tre_ReceiveNewNode (Inf_Type_t InfoType)
    NewNode.Hierarchy.NodCod = -1L;
    NewNode.Hierarchy.Level = Node.Hierarchy.Level + 1;	// Create as child
 
-   /***** Get start/end date-times *****/
-   NewNode.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
-   NewNode.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
-
-   /***** Get node title *****/
-   Par_GetParText ("Title",NewNode.Title,Tre_MAX_BYTES_NODE_TITLE);
-
-   /***** Get node text *****/
-   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-   /***** Adjust dates *****/
-   if (NewNode.TimeUTC[Dat_STR_TIME] == 0)
-      NewNode.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-   if (NewNode.TimeUTC[Dat_END_TIME] == 0)
-      NewNode.TimeUTC[Dat_END_TIME] = NewNode.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
+   /***** Get node data from form *****/
+   Tre_GetNodeDataFromForm (&NewNode,Description);
 
    /***** Create a new tree node *****/
    Tre_InsertNode (InfoType,&Node,&NewNode,Description);
 
-   /* Update list of tree nodes */
+   /***** Update list of tree nodes *****/
    Tre_FreeListNodes ();
    Tre_GetListNodes (InfoType);
 
@@ -2248,6 +2224,36 @@ void Tre_ReceiveNewNode (Inf_Type_t InfoType)
 
    /***** Free list of tree nodes *****/
    Tre_FreeListNodes ();
+  }
+
+/*****************************************************************************/
+/**************************** Get node data from form ************************/
+/*****************************************************************************/
+
+static void Tre_GetNodeDataFromForm (struct Tre_Node *Node,
+				     char Description[Cns_MAX_BYTES_TEXT + 1])
+  {
+   /***** Get start/end date-times *****/
+   if (Node->InfoType == Inf_PROGRAM)
+     {
+      Node->TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm (Dat_STR_TIME);
+      Node->TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm (Dat_END_TIME);
+
+      /* Adjust dates */
+      if (Node->TimeUTC[Dat_STR_TIME] == 0)
+	 Node->TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+      if (Node->TimeUTC[Dat_END_TIME] == 0)
+	 Node->TimeUTC[Dat_END_TIME] = Node->TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
+     }
+   else
+      Node->TimeUTC[Dat_STR_TIME] =
+      Node->TimeUTC[Dat_END_TIME] = (time_t) 0;
+
+   /***** Get node title *****/
+   Par_GetParText ("Title",Node->Title,Tre_MAX_BYTES_NODE_TITLE);
+
+   /***** Get node text *****/
+   Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
   }
 
 /*****************************************************************************/

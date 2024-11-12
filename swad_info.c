@@ -334,19 +334,18 @@ void Inf_ShowInfo (void)
 	 case Inf_EDITOR:
 	    switch (Info.Type)
 	      {
-	       case Inf_SYLLABUS_LEC:
-	       case Inf_SYLLABUS_PRA:
-		  ShowWarningNoInfo = !Tre_ShowTree (Info.Type);
-		  break;
 	       case Inf_INFORMATION:
 	       case Inf_TEACH_GUIDE:
+	       case Inf_SYLLABUS_LEC:
+	       case Inf_SYLLABUS_PRA:
 	       case Inf_BIBLIOGRAPHY:
 	       case Inf_FAQ:
 	       case Inf_LINKS:
 	       case Inf_ASSESSMENT:
-		  ShowWarningNoInfo = true;
+		  ShowWarningNoInfo = !Tre_ShowTree (Info.Type);
 		  break;
 	       case Inf_UNKNOWN_TYPE:
+	       case Inf_PROGRAM:
 	       default:
 		  Err_WrongTypeExit ();
 		  break;
@@ -1236,7 +1235,7 @@ static void Inf_ConfigInfoSource (struct Inf_Info *Info)
 	       /* Select info source */
 	       HTM_TD_Begin ("class=\"LT DAT_%s%s\"",The_GetSuffix (),
 			     InfoSrc == Info->FromDB.Src ? " BG_HIGHLIGHT" :
-								  "");
+							   "");
 		  Frm_BeginForm (Actions[Info->Type]);
 		     Inf_PutParInfoType (&Info->Type);
 		     HTM_INPUT_RADIO ("InfoSrc",
@@ -1291,16 +1290,7 @@ static bool Inf_CheckIfInfoAvailable (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
       case Inf_SRC_NONE:
 	 return false;
       case Inf_EDITOR:
-         switch (InfoType)
-           {
-            case Inf_PROGRAM:
-            case Inf_SYLLABUS_LEC:
-            case Inf_SYLLABUS_PRA:
-               return (Tre_DB_GetNumNodes (InfoType,Hie_CRS) != 0);
-            default:
-               return false;
-           }
-         return false;	// Not reached
+         return (Tre_DB_GetNumNodes (InfoType,Hie_CRS) != 0);
       case Inf_PLAIN_TEXT:
          return Inf_CheckPlainTxt (InfoType);
       case Inf_RICH_TEXT:
