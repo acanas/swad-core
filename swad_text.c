@@ -34324,27 +34324,27 @@ const char *Txt_Reset_survey =
 	"S&inodot;f&inodot;rla";
 #endif
 
-const char *Txt_Resource_X_removed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Resource_removed =
 #if   L==1	// ca
-	"Recurs <strong>%s</strong> eliminat.";
+	"Recurs eliminat.";
 #elif L==2	// de
-	"Ressource <strong>%s</strong> entfernt.";
+	"Ressource entfernt.";
 #elif L==3	// en
-	"Resource <strong>%s</strong> removed.";
+	"Resource removed.";
 #elif L==4	// es
-	"Recurso <strong>%s</strong> eliminado.";
+	"Recurso eliminado.";
 #elif L==5	// fr
-	"Ressource <strong>%s</strong> supprim&eacute;e.";
+	"Ressource supprim&eacute;e.";
 #elif L==6	// gn
-	"Recurso <strong>%s</strong> eliminado.";	// Okoteve traducción
+	"Recurso eliminado.";	// Okoteve traducción
 #elif L==7	// it
-	"Risorsa <strong>%s</strong> rimossa.";
+	"Risorsa rimossa.";
 #elif L==8	// pl
-	"Usuni&eogon;to zas&oacute;b <strong>%s</strong>.";
+	"Usuni&eogon;to zas&oacute;b.";
 #elif L==9	// pt
-	"Recurso <strong>%s</strong> removido.";
+	"Recurso removido.";
 #elif L==10	// tr
-	"Kaynak <strong>s</strong> kald&inodot;r&inodot;ld&inodot;.";
+	"Kaynak kald&inodot;r&inodot;ld&inodot;.";
 #endif
 
 const char *Txt_RESOURCE_TYPES[Rsc_NUM_TYPES] =

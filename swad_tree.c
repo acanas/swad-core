@@ -1292,6 +1292,13 @@ void Tre_GetPars (struct Tre_Node *Node)
 	 /***** Get data of the tree node from database *****/
 	 PrgRsc_GetResourceDataByCod (Node);
 	 break;
+      case Inf_FAQ:
+	 /***** Try to get node question&answer *****/
+	 Node->QaA.Hierarchy.QaACod = ParCod_GetPar (ParCod_QaA);
+
+	 /***** Get data of the tree node from database *****/
+	 FAQ_GetQaADataByCod (Node);
+	 break;
       default:
 	 break;
      }

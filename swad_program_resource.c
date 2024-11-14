@@ -698,7 +698,7 @@ void PrgRsc_ReqRemResource (void)
 
 void PrgRsc_RemoveResource (void)
   {
-   extern const char *Txt_Resource_X_removed;
+   extern const char *Txt_Resource_removed;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -713,9 +713,8 @@ void PrgRsc_RemoveResource (void)
    /***** Remove resource *****/
    Rsc_DB_RemoveResource (&Node);
 
-   /***** Create alert to remove the resource *****/
-   Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,
-                    Txt_Resource_X_removed,Node.Resource.Title);
+   /***** Create success alert *****/
+   Ale_CreateAlert (Ale_SUCCESS,PrgRsc_RESOURCE_SECTION_ID,Txt_Resource_removed);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Inf_PROGRAM,Tre_EDIT_PRG_RESOURCES,

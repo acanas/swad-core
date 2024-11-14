@@ -391,9 +391,9 @@ static void FAQ_GetQaADataFromRow (MYSQL_RES *mysql_res,struct Tre_Node *Node)
    /***** Get whether the tree node is hidden (row(3)) *****/
    Node->QaA.Hierarchy.HiddenOrVisible = HidVid_GetHiddenOrVisible (row[3][0]);
 
-   /***** Get the question of the question&answer (row[4]) *****/
+   /***** Get the questionand the answer of the question&answer (row[4], row[5]) *****/
    Str_Copy (Node->QaA.Question,row[4],sizeof (Node->QaA.Question) - 1);
-   Str_Copy (Node->QaA.Answer,row[5],sizeof (Node->QaA.Answer) - 1);
+   Str_Copy (Node->QaA.Answer  ,row[5],sizeof (Node->QaA.Answer  ) - 1);
   }
 
 /*****************************************************************************/
@@ -445,8 +445,8 @@ static void FAQ_WriteRowEditQaA (unsigned NumQaA,unsigned NumQaAs,
 
          /* Question */
 	 Frm_BeginFormAnchor (ActRenFAQQaA,FAQ_QaA_SECTION_ID);
-	    ParCod_PutPar (ParCod_Rsc,Node->QaA.Hierarchy.QaACod);
-	    HTM_INPUT_TEXT ("Title",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
+	    ParCod_PutPar (ParCod_QaA,Node->QaA.Hierarchy.QaACod);
+	    HTM_INPUT_TEXT ("Question",FAQ_MAX_CHARS_QUESTION,Node->QaA.Question,
 			    HTM_SUBMIT_ON_CHANGE,
 			    "class=\"PRG_RSC_INPUT INPUT_%s\"",
 			    The_GetSuffix ());
@@ -485,7 +485,7 @@ static void FAQ_WriteRowNewQaA (unsigned NumQaAs,struct Tre_Node *Node)
 	 HTM_Unsigned (NumQaAs + 1);
       HTM_TD_End ();
 
-      /***** Title and link/clipboard *****/
+      /***** Question and answer *****/
       HTM_TD_Begin ("class=\"PRG_MAIN LT %s\"",The_GetColorRows1 (1));
 
          /* Question */
@@ -617,7 +617,7 @@ void FAQ_CreateQaA (void)
 void FAQ_RenameQaA (void)
   {
    struct Tre_Node Node;
-   char NewTitle[FAQ_MAX_BYTES_QUESTION + 1];
+   char NewQuestion[FAQ_MAX_BYTES_QUESTION + 1];
 
    /***** Get list of tree nodes *****/
    Tre_GetListNodes (Inf_FAQ);
@@ -630,10 +630,10 @@ void FAQ_RenameQaA (void)
 
    /***** Rename question&answer *****/
    /* Get the new question for the question&answer */
-   Par_GetParText ("Question",NewTitle,FAQ_MAX_BYTES_QUESTION);
+   Par_GetParText ("Question",NewQuestion,FAQ_MAX_BYTES_QUESTION);
 
    /* Update database changing old title by new title */
-   FAQ_DB_UpdateQaAQuestion (Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod,NewTitle);
+   FAQ_DB_UpdateQaAQuestion (Node.Hierarchy.NodCod,Node.QaA.Hierarchy.QaACod,NewQuestion);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
@@ -649,7 +649,7 @@ void FAQ_RenameQaA (void)
 
 void FAQ_ReqRemQaA (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_resource_X;
+   extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -663,7 +663,7 @@ void FAQ_ReqRemQaA (void)
 
    /***** Create alert to remove the question&answer *****/
    Ale_CreateAlert (Ale_QUESTION,FAQ_QaA_SECTION_ID,
-                    Txt_Do_you_really_want_to_remove_the_resource_X,
+                    Txt_Do_you_really_want_to_remove_the_question_X,
                     Node.QaA.Question);
 
    /***** Show current tree nodes, if any *****/
@@ -680,7 +680,7 @@ void FAQ_ReqRemQaA (void)
 
 void FAQ_RemoveQaA (void)
   {
-   extern const char *Txt_Resource_X_removed;
+   extern const char *Txt_Question_removed;
    struct Tre_Node Node;
 
    /***** Get list of tree nodes *****/
@@ -695,9 +695,8 @@ void FAQ_RemoveQaA (void)
    /***** Remove question&answer *****/
    FAQ_DB_RemoveQaA (&Node);
 
-   /***** Create alert to remove the question&answer *****/
-   Ale_CreateAlert (Ale_SUCCESS,FAQ_QaA_SECTION_ID,
-                    Txt_Resource_X_removed,Node.QaA.Question);
+   /***** Create success alert *****/
+   Ale_CreateAlert (Ale_SUCCESS,FAQ_QaA_SECTION_ID,Txt_Question_removed);
 
    /***** Show current tree nodes, if any *****/
    Tre_ShowAllNodes (Inf_FAQ,Tre_EDIT_PRG_RESOURCES,
